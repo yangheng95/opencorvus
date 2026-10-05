@@ -41,3 +41,5 @@
 - [Current-version product experience and functional repair](2026-10-04-product-experience.md)
 
 The connection authority record also indexes the continued actual Sol sequential Edit/Composer checkpoint and pending causal Review repair. The Skill record indexes preserved ordinary diagnostic failures and actual04/05 Skills-first unconnected qualification; original19.456s latency remains unresolved.
+
+The connection authority record now indexes recorded-comparison repair and actual Sol04 first-input/live/reopened/Chinese qualification, preserved follow-up budget failure and the next directory/BOM/download/audit proposals.

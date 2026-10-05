@@ -3,6 +3,7 @@ import { createHash } from "node:crypto"
 import { loadConversationArtifactContent } from "../src/services/conversation-artifact"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest } from "../src/services/host-transport"
+import { createTauriTransport } from "../src/services/tauri-transport"
 import { setBoardStore } from "../src/store/board"
 import { applySettings, DEFAULT_SETTINGS, setSettingsStore } from "../src/store/settings"
 
@@ -18,6 +19,7 @@ test("all exact resource chunks retain the initial directory while the selected 
   const sha256 = createHash("sha256").update(text).digest("hex")
   const requests: TransportRequest[] = []
   __setHostTransportForTest({
+    ...createTauriTransport("browser"),
     kind: "browser",
     async request(request) {
       requests.push(request)

@@ -1,0 +1,108 @@
+import { afterAll, beforeAll, beforeEach, expect, test } from "bun:test"
+import {
+  applyEvent,
+  commitPreparedConversationView,
+  prepareConversationView,
+  projectedConversationMessageFacts,
+  resetWriter,
+} from "../src/services/tree-writer"
+import { publishedCardTreeVersion } from "../src/store/card-tree"
+import { getLocale, setLocaleData } from "../src/utils/i18n"
+import english from "../src/i18n/en-US.json"
+import chinese from "../src/i18n/zh-CN.json"
+
+const originalFrame = globalThis.requestAnimationFrame
+const originalCancelFrame = globalThis.cancelAnimationFrame
+let sequence = 0
+const frames = new Map<number, FrameRequestCallback>()
+beforeAll(() => {
+  setLocaleData(getLocale(), getLocale() === "zh-CN" ? chinese : english)
+  globalThis.requestAnimationFrame = (callback) => {
+    frames.set(++sequence, callback)
+    return sequence
+  }
+  globalThis.cancelAnimationFrame = (id) => { frames.delete(id) }
+})
+afterAll(() => {
+  if (originalFrame) globalThis.requestAnimationFrame = originalFrame
+  else Reflect.deleteProperty(globalThis, "requestAnimationFrame")
+  if (originalCancelFrame) globalThis.cancelAnimationFrame = originalCancelFrame
+  else Reflect.deleteProperty(globalThis, "cancelAnimationFrame")
+})
+function settlePublication() {
+  while (frames.size) {
+    const callbacks = [...frames.values()]
+    frames.clear()
+    for (const callback of callbacks) callback(0)
+  }
+}
+beforeEach(() => {
+  resetWriter({ cause: "message-facts-data-contract" })
+  settlePublication()
+})
+function info(id: string, sessionID = "ses_facts", created = 1000) {
+  return {
+    id, sessionID, role: "assistant", author: "assistant", agent: "assistant",
+    agentID: "assistant", sessionAgentID: "assistant", resolvedRole: "assistant",
+    channel: "assistant", originSource: "", parentSessionID: "", parentID: "msg_input",
+    orderKey: `v1:${String(created).padStart(16, "0")}:0000000000000030:0000000000000000:message:${id}`,
+    time: { created },
+  }
+}
+function update(message: Omit<ReturnType<typeof info>, "time"> & { time: { created: number; completed?: number } } & Record<string, unknown>) {
+  applyEvent({ type: "message.updated", orderKey: message.orderKey, properties: { info: message } })
+}
+
+test("live snapshots preserve all intervening canonical messages and actual qualification facts", () => {
+  const accepted = ["msg_input"]
+  update({ ...info("msg_edit"), acceptedInputMessageIDs: accepted, time: { created: 1000, completed: 1100 }, finish: "tool-calls" })
+  update({ ...info("msg_read", "ses_facts", 1200), acceptedInputMessageIDs: ["msg_input"], finish: "stop", error: { name: "SessionError" } })
+  update(info("msg_other", "ses_other", 1300))
+  accepted.push("external_mutation")
+  const facts = projectedConversationMessageFacts(["ses_facts", "ses_facts"])
+  expect(facts.map((fact) => fact.id)).toEqual(["msg_edit", "msg_read"])
+  expect(facts[0]).toEqual({
+    id: "msg_edit", sessionID: "ses_facts", sessionAgentID: "assistant", agentID: "assistant",
+    role: "assistant", orderKey: info("msg_edit").orderKey, time: 1000,
+    acceptedInputMessageIDs: ["msg_input"], completed: 1100, finish: "tool-calls", hasError: false,
+  })
+  expect(facts[1].hasError).toBe(true)
+  const copiedIDs = facts[0].acceptedInputMessageIDs as string[]
+  copiedIDs.push("snapshot_mutation")
+  expect(projectedConversationMessageFacts(["ses_facts"])[0].acceptedInputMessageIDs).toEqual(["msg_input"])
+  expect(projectedConversationMessageFacts(["ses_other"])[0].id).toBe("msg_other")
+})
+
+test("metadata-only completion is published by the existing visible revision", () => {
+  update(info("msg_pending"))
+  settlePublication()
+  const initialVersion = publishedCardTreeVersion()
+  expect(projectedConversationMessageFacts(["ses_facts"])[0]).toMatchObject({ completed: undefined, acceptedInputMessageIDs: undefined, hasError: false })
+  update({ ...info("msg_pending"), time: { created: 1000, completed: 1500 }, acceptedInputMessageIDs: [], finish: "stop" })
+  settlePublication()
+  expect(publishedCardTreeVersion()).toBeGreaterThan(initialVersion)
+  expect(projectedConversationMessageFacts(["ses_facts"])[0]).toMatchObject({ completed: 1500, acceptedInputMessageIDs: [], finish: "stop", hasError: false })
+})
+
+test("history hydration supplies the same actual facts through its existing adapter", () => {
+  const message = { ...info("msg_history"), acceptedInputMessageIDs: ["msg_input"], time: { created: 1000, completed: 1700 }, finish: "tool-calls" }
+  const view = {
+    messages: [{ messageID: message.id, inputMessageID: "msg_input", sessionID: message.sessionID, sessionAgentID: "assistant", agentID: "assistant", stage: "assistant", parentSessionID: "", orderKey: message.orderKey, time: 1000 }],
+    sessions: [{ sessionID: message.sessionID, agentID: "assistant" }],
+  }
+  commitPreparedConversationView(prepareConversationView(view, [{ info: message, parts: [] }]))
+  settlePublication()
+  expect(projectedConversationMessageFacts(["ses_facts"])[0]).toMatchObject({ id: "msg_history", acceptedInputMessageIDs: ["msg_input"], completed: 1700, finish: "tool-calls", hasError: false })
+})
+
+test("removal and reset expose the current canonical session membership", () => {
+  update(info("msg_first"))
+  update(info("msg_second", "ses_facts", 2000))
+  applyEvent({ type: "message.removed", properties: { sessionID: "ses_facts", messageID: "msg_first" } })
+  settlePublication()
+  expect(projectedConversationMessageFacts(["ses_facts"]).map((fact) => fact.id)).toEqual(["msg_second"])
+  resetWriter({ cause: "message-facts-new-selection" })
+  update(info("msg_new", "ses_new", 3000))
+  settlePublication()
+  expect(projectedConversationMessageFacts(["ses_facts", "ses_new"]).map((fact) => fact.id)).toEqual(["msg_new"])
+})

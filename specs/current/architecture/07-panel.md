@@ -12,6 +12,44 @@ Active-work Stop retains precedence and only its existing stopping state disable
 it. Availability is a derived presentation value, not a second state, model owner
 or dispatch policy; directory-free Chat remains a valid ready context.
 
+## File comparison evidence
+
+One current diff service and Tool reducer project recorded comparisons. FileChange
+declares complete evidence or a typed incomplete reason, original source receipts,
+optional producer-owned physical status and nullable line counts. Undefined body
+or object reference is unknown; explicit verified immutable null is absence. Empty
+text cannot establish creation/deletion. Binary evidence has no text-line counts.
+Tool, saved Session, immutable Build and path coverage intervals retain distinct
+subjects. The shared summary counts unique known paths and leaves unknown or
+overlapping comparison totals null; all Review, conversation, inline Tool and
+Environment surfaces consume that same derivation.
+
+Normal multi-Edit composition requires the same real accepted input batch,
+Session/actor, exact endpoint lineage and completed normal step controls with
+unique completed Tool membership. Message placement and clocks do not establish
+mutation causality. Missing/deferred/control/error/changed-batch or unsupported
+lifecycle evidence remains explicitly incomplete; a single actual completed Tool
+comparison remains separately inspectable. Write path coverage supplies no invented
+after text. Canonical deferred mutation receipts remain visible even with no known
+path. Current saved Session Snapshot DTO lacks binary/absence flags and is therefore
+incomplete; current Build nullable object evidence is validated at its sole adapter.
+
+Tree-writer retains actual qualification/control facts in the existing Message
+owner, with a readonly transient snapshot for the reducer. Full history validates
+canonical membership including control-only Messages. Authoritative incoming
+bundles retire only their exact old projected Message before replacement, preserving
+other Messages and older loaded pages. Real Part removal validates its original
+Session/Message/Part/type before mutation; no new projection owner is introduced.
+
+Review selection is exact group/path. Material request identity includes endpoints,
+objects, evidence and receipts in memory; ambiguous shorthand is a precise error.
+Loading/failure cannot present a previous preview. The existing logical immutable
+read captures one API authority and directory for both sides/all chunks and validates
+the original authority before returning. Known non-text filtering excludes only
+isText=false; unknown records stay inspectable. Incomplete prose wraps within its
+pane; genuine text diffs retain native two-axis scrolling. Status chips remain
+nonshrinking horizontal metadata in the three existing shared consumers.
+
 ## File editor language support
 
 Every accepted explicit file-open request advances the existing reveal revision,

@@ -1,0 +1,21 @@
+{
+  "extends": "../packages/overlay/tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "types": ["../packages/overlay/node_modules/vite/client", "../node_modules/.bun/bun-types@1.3.14/node_modules/bun-types"]
+  },
+  "include": [
+    "../packages/overlay/src/**/*.ts",
+    "../packages/overlay/src/**/*.tsx",
+    "../packages/overlay/src/**/*.js",
+    "../packages/overlay/test/binary-api-error-services.test.ts",
+    "../packages/overlay/test/diff-resolution.test.ts",
+    "../packages/overlay/test/conversation-artifact-scope.test.ts",
+    "../packages/overlay/test/projection-prerequisite-recovery.test.ts",
+    "../packages/overlay/test/conversation-artifact-compound-authority.test.ts",
+    "../packages/overlay/test/tree-writer-message-facts.test.ts",
+    "../packages/overlay/test/file-change-evidence-reducer.test.ts",
+    "../packages/overlay/test/immutable-diff-evidence.test.ts"
+  ],
+  "exclude": []
+}

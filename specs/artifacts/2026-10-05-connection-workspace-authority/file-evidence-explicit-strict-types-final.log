@@ -1,0 +1,106 @@
+packages/overlay/src/components/Board.tsx(153,34): error TS7006: Parameter 'goal' implicitly has an 'any' type.
+packages/overlay/src/components/Board.tsx(159,34): error TS7006: Parameter 'goal' implicitly has an 'any' type.
+packages/overlay/src/components/BrowserPreviewPanel.tsx(343,21): error TS18048: 'resolved' is possibly 'undefined'.
+packages/overlay/src/components/ChatComposer.tsx(1679,27): error TS7006: Parameter 'element' implicitly has an 'any' type.
+packages/overlay/src/components/ConfigDialogHost.tsx(283,59): error TS2345: Argument of type '() => { width?: undefined; "min-width"?: undefined; } | { width: string; "min-width": string; }' is not assignable to parameter of type 'EffectFunction<Record<string, string> | undefined, Record<string, string>>'.
+  Type '{ width?: undefined; "min-width"?: undefined; } | { width: string; "min-width": string; }' is not assignable to type 'Record<string, string>'.
+    Type '{ width?: undefined; "min-width"?: undefined; }' is not assignable to type 'Record<string, string>'.
+      Property 'width' is incompatible with index signature.
+        Type 'undefined' is not assignable to type 'string'.
+packages/overlay/src/components/Conversation.tsx(760,66): error TS2339: Property 'title' does not exist on type 'NonNullable<"" | TaskSelectionError>'.
+  Property 'title' does not exist on type '""'.
+packages/overlay/src/components/Conversation.tsx(760,83): error TS2339: Property 'taskID' does not exist on type 'NonNullable<"" | TaskSelectionError>'.
+  Property 'taskID' does not exist on type '""'.
+packages/overlay/src/components/Conversation.tsx(761,69): error TS2339: Property 'details' does not exist on type 'NonNullable<"" | TaskSelectionError>'.
+  Property 'details' does not exist on type '""'.
+packages/overlay/src/components/ImagePreview.tsx(589,33): error TS7006: Parameter 'event' implicitly has an 'any' type.
+packages/overlay/src/components/interactive-artifact/DashboardArtifact.tsx(13,52): error TS2537: Type '{ field: string; id: string; label: string; values: (string | number | boolean | null)[]; }[] | undefined' has no matching index signature for type 'number'.
+packages/overlay/src/components/interactive-artifact/DashboardArtifact.tsx(139,33): error TS7006: Parameter 'value' implicitly has an 'any' type.
+packages/overlay/src/components/interactive-artifact/DashboardArtifact.tsx(139,40): error TS7006: Parameter 'index' implicitly has an 'any' type.
+packages/overlay/src/components/interactive-artifact/DashboardArtifact.tsx(168,7): error TS18048: 'props.payload.filters' is possibly 'undefined'.
+packages/overlay/src/components/interactive-artifact/DashboardArtifact.tsx(178,21): error TS18048: 'props.payload.metrics' is possibly 'undefined'.
+packages/overlay/src/components/interactive-artifact/DashboardArtifact.tsx(201,21): error TS18048: 'props.payload.filters' is possibly 'undefined'.
+packages/overlay/src/components/interactive-artifact/NetworkArtifact.tsx(105,18): error TS2345: Argument of type '{ name: "cose"; animate: boolean; fit: boolean; padding: number; nodeDimensionsIncludeLabels: boolean; idealEdgeLength: number; nodeRepulsion: number; componentSpacing: number; } | { name: "circle" | ... 3 more ... | undefined; ... 6 more ...; componentSpacing?: undefined; }' is not assignable to parameter of type 'LayoutOptions'.
+  Type '{ name: "circle" | "grid" | "breadthfirst" | "concentric" | undefined; animate: boolean; fit: boolean; padding: number; nodeDimensionsIncludeLabels?: undefined; idealEdgeLength?: undefined; nodeRepulsion?: undefined; componentSpacing?: undefined; }' is not assignable to type 'LayoutOptions'.
+    Type '{ name: "circle" | "grid" | "breadthfirst" | "concentric" | undefined; animate: boolean; fit: boolean; padding: number; nodeDimensionsIncludeLabels?: undefined; idealEdgeLength?: undefined; nodeRepulsion?: undefined; componentSpacing?: undefined; }' is not assignable to type 'BaseLayoutOptions | GridLayoutOptions | CircleLayoutOptions | ConcentricLayoutOptions | BreadthFirstLayoutOptions'.
+      Type '{ name: "circle" | "grid" | "breadthfirst" | "concentric" | undefined; animate: boolean; fit: boolean; padding: number; nodeDimensionsIncludeLabels?: undefined; idealEdgeLength?: undefined; nodeRepulsion?: undefined; componentSpacing?: undefined; }' is not assignable to type 'BreadthFirstLayoutOptions'.
+        Types of property 'name' are incompatible.
+          Type '"circle" | "grid" | "breadthfirst" | "concentric" | undefined' is not assignable to type '"breadthfirst"'.
+            Type 'undefined' is not assignable to type '"breadthfirst"'.
+packages/overlay/src/components/interactive-artifact/PresentationArtifact.tsx(13,39): error TS2344: Type 'string | undefined' does not satisfy the constraint 'string | number | symbol'.
+  Type 'undefined' is not assignable to type 'string | number | symbol'.
+packages/overlay/src/components/interactive-artifact/PresentationArtifact.tsx(28,48): error TS2538: Type 'undefined' cannot be used as an index type.
+packages/overlay/src/components/MailboxPanel.tsx(687,48): error TS7006: Parameter 'selected' implicitly has an 'any' type.
+packages/overlay/src/components/MissionCreateDialog.tsx(677,34): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/ChannelsPanel.tsx(234,43): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+packages/overlay/src/components/settings/ChannelsPanel.tsx(505,38): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/ConversationCapabilityPanel.tsx(226,50): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/ConversationCapabilityPanel.tsx(265,50): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/ExpertSquadPanel.tsx(1199,42): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/GeneralPanel.tsx(132,32): error TS7006: Parameter 'enabled' implicitly has an 'any' type.
+packages/overlay/src/components/settings/NetworkPanel.tsx(303,26): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/NetworkPanel.tsx(320,26): error TS7006: Parameter 'checked' implicitly has an 'any' type.
+packages/overlay/src/components/settings/ScheduledAutomationsPanel.tsx(260,22): error TS2345: Argument of type '() => HTMLElement | null | undefined' is not assignable to parameter of type '() => HTMLElement | undefined'.
+  Type 'HTMLElement | null | undefined' is not assignable to type 'HTMLElement | undefined'.
+    Type 'null' is not assignable to type 'HTMLElement | undefined'.
+packages/overlay/src/components/SideChatPanel.tsx(291,11): error TS2322: Type 'SideChatSession | undefined' is not assignable to type 'SideChatSession | null'.
+  Type 'undefined' is not assignable to type 'SideChatSession | null'.
+packages/overlay/src/components/SubagentConversationPanel.tsx(127,5): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'AgentOption[]'.
+packages/overlay/src/components/TaskDirBar.tsx(1791,33): error TS7006: Parameter 'event' implicitly has an 'any' type.
+packages/overlay/src/main.tsx(1942,44): error TS2454: Variable 'promise' is used before being assigned.
+packages/overlay/src/services/app-dialog.ts(184,79): error TS18048: 'dialogStore.app.inputValue' is possibly 'undefined'.
+packages/overlay/src/services/app-dialog.ts(208,37): error TS2322: Type 'string | null | undefined' is not assignable to type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.
+packages/overlay/src/services/artifact-export.ts(115,30): error TS18048: 'cell.outputs' is possibly 'undefined'.
+packages/overlay/src/services/artifact-export.ts(134,15): error TS18048: 'cell.outputs' is possibly 'undefined'.
+packages/overlay/src/services/composer-expert-squad-catalog.ts(101,9): error TS2352: Conversion of type '{ skills: { assigned_refs: never[]; installed: never[]; }; }' to type 'ChatCapabilitySettings' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ skills: { assigned_refs: never[]; installed: never[]; }; }' is missing the following properties from type 'ChatCapabilitySettings': agent_id, mcp, scope, tools
+packages/overlay/src/services/config-load.ts(126,29): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/config-load.ts(135,30): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/config-load.ts(174,29): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/config-load.ts(184,30): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/config-load.ts(235,30): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/config.ts(454,111): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/extensions.ts(206,29): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/extensions.ts(208,29): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/extensions.ts(439,29): error TS2345: Argument of type 'ApiAuthority | undefined' is not assignable to parameter of type 'ApiAuthority'.
+  Type 'undefined' is not assignable to type 'ApiAuthority'.
+packages/overlay/src/services/selected-task-recovery.ts(275,43): error TS2454: Variable 'run' is used before being assigned.
+packages/overlay/src/services/tree-writer.ts(3501,54): error TS7006: Parameter 'message' implicitly has an 'any' type.
+packages/overlay/src/solid/hotkey.ts(70,40): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(type: string, listener: EventListener | EventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(e: KeyboardEvent) => void' is not assignable to parameter of type 'EventListener | EventListenerObject'.
+      Type '(e: KeyboardEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'e' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'KeyboardEvent': altKey, charCode, code, ctrlKey, and 17 more.
+  Overload 2 of 2, '(type: string, callback: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(e: KeyboardEvent) => void' is not assignable to parameter of type 'EventListenerOrEventListenerObject | null'.
+      Type '(e: KeyboardEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'e' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'KeyboardEvent': altKey, charCode, code, ctrlKey, and 17 more.
+packages/overlay/src/solid/hotkey.ts(71,59): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(type: string, listener: EventListener | EventListenerObject, options?: boolean | EventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(e: KeyboardEvent) => void' is not assignable to parameter of type 'EventListener | EventListenerObject'.
+      Type '(e: KeyboardEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'e' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'KeyboardEvent': altKey, charCode, code, ctrlKey, and 17 more.
+  Overload 2 of 2, '(type: string, callback: EventListenerOrEventListenerObject | null, options?: boolean | EventListenerOptions | undefined): void', gave the following error.
+    Argument of type '(e: KeyboardEvent) => void' is not assignable to parameter of type 'EventListenerOrEventListenerObject | null'.
+      Type '(e: KeyboardEvent) => void' is not assignable to type 'EventListener'.
+        Types of parameters 'e' and 'evt' are incompatible.
+          Type 'Event' is missing the following properties from type 'KeyboardEvent': altKey, charCode, code, ctrlKey, and 17 more.
+packages/overlay/src/utils/screenshot-browser.ts(431,6): error TS7006: Parameter 'part' implicitly has an 'any' type.
+packages/overlay/src/utils/tool.ts(29,22): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: {}): string[]', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type '{}'.
+  Overload 2 of 2, '(o: object): string[]', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'object'.

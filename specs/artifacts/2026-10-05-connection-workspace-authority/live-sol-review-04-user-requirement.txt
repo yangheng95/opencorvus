@@ -1,0 +1,10 @@
+In this isolated project C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/project, perform exactly these six genuine file operations, sequentially, one tool call at a time:
+1. Write actual-review-result.txt with exactly these two lines and a final newline:
+marker: 6670944b-ad78-42b4-be70-624672ddfe62
+state: initial
+2. Read that actual file.
+3. Edit only "state: initial" to "state: middle".
+4. Read that actual file again.
+5. Edit only "state: middle" to "state: final".
+6. Read that actual file again.
+Use the genuine Write, Read, Edit, Read, Edit, Read tools in this order. Keep the marker and final newline. After the final Read, report its observed marker and state briefly. This is an isolated product acceptance workflow; keep all file operations inside the named project.

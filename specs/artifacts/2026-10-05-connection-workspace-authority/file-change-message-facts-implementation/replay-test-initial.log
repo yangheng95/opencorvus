@@ -1,0 +1,32 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\tree-writer-message-facts.test.ts:
+(pass) live snapshots preserve all intervening canonical messages and actual qualification facts [7.49ms]
+(pass) metadata-only completion is published by the existing visible revision [1.50ms]
+(pass) history hydration supplies the same actual facts through its existing adapter [1.49ms]
+(pass) step-first pending facts promote and preserve actual whole-message Tool membership [4.41ms]
+(pass) moved authoritative bundle supplies its current exact owner and replaces observed Parts [1.07ms]
+(pass) full history retains an actual nondisplay intervening message and empty Tool bundle [0.35ms]
+(pass) history coverage and actor integrity have precise preparation errors [1.06ms]
+(pass) retained Part identity and Session drift produce explicit integrity errors [0.41ms]
+(pass) authoritative replay retires the incoming display member while retaining shared-card and older members [3.14ms]
+1570 |   }
+1571 |   const session = sessions.get(sessionID)
+1572 |   const cardID = session?.messageCardIDs.get(messageID)
+1573 |   const message = messages.get(messageID)
+1574 |   if (!session || !cardID || !message) {
+1575 |     throw new Error(`persisted message ${messageID} was not projected before part ${partID}`)
+                                                                                                   ^
+error: persisted message msg_single was not projected before part prt_single_start
+      at projectPersistedConversationPart (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:1575:93)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:1018:7)
+      at ingestPersistedConversationMessage (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:1006:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\tree-writer-message-facts.test.ts:210:3)
+(fail) single persisted full bundle replaces current facts and validates owner before mutation [0.86ms]
+(pass) retained control removal validates its actual Message and Part type [0.55ms]
+(pass) removal and reset expose the current canonical session membership [1.39ms]
+
+ 11 pass
+ 1 fail
+ 32 expect() calls
+Ran 12 tests across 1 file. [1.52s]

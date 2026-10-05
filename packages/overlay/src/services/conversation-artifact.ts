@@ -1,4 +1,4 @@
-import { ApiError, apiRequest } from "./api"
+import { ApiError, apiRequest, assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api"
 import { activeProjectDirectory } from "./project-directory"
 import { taskScopedPath } from "./task-path"
 
@@ -71,6 +71,7 @@ function parseDisposition(value: string): { attachment: boolean; filename?: stri
 }
 
 async function readChunk(input: {
+  authority: ApiAuthority
   directory: string
   taskID: string
   locator: ArtifactReadLocator
@@ -86,6 +87,7 @@ async function readChunk(input: {
       max_bytes: READ_CHUNK_BYTES,
     }),
     responseKind: "binary",
+    authority: input.authority,
     signal: input.signal,
   })
   if (!response.ok) throw new ApiError(response.status, "Conversation Artifact read", response.body, response.headers)
@@ -109,6 +111,7 @@ export async function loadConversationArtifactContent(input: {
   locator: ArtifactReadLocator
   signal?: AbortSignal
 }): Promise<ConversationArtifactContent> {
+  const authority = captureApiAuthority()
   const directory = activeProjectDirectory()
   let offset = 0
   let mediaType = ""
@@ -117,7 +120,7 @@ export async function loadConversationArtifactContent(input: {
   const text: string[] = []
   for (;;) {
     input.signal?.throwIfAborted()
-    const chunk = await readChunk({ ...input, directory, byteOffset: offset })
+    const chunk = await readChunk({ ...input, authority, directory, byteOffset: offset })
     if (chunk.byteStart !== offset) throw new Error("Artifact read returned a discontinuous byte range")
     if (!mediaType) mediaType = chunk.mediaType
     if (!sha256) sha256 = chunk.sha256
@@ -129,6 +132,7 @@ export async function loadConversationArtifactContent(input: {
       if (chunk.byteStart !== 0 || chunk.byteEnd !== totalBytes || !chunk.filename) {
         throw new Error("Binary Artifact read is incomplete")
       }
+      assertApiAuthorityCurrent(authority)
       return {
         locator: input.locator,
         mediaType,
@@ -144,6 +148,7 @@ export async function loadConversationArtifactContent(input: {
       if (new TextEncoder().encode(value).byteLength !== totalBytes) {
         throw new Error("Text Artifact bytes do not match their declared total")
       }
+      assertApiAuthorityCurrent(authority)
       return { locator: input.locator, mediaType, sha256, totalBytes, text: value }
     }
     if (chunk.byteEnd <= offset) throw new Error("Artifact read did not advance")

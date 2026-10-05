@@ -1,0 +1,408 @@
+.file-changes-view {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.file-changes-view__heading {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-md);
+  margin-bottom: var(--ui-gap-sm);
+  color: var(--text-strong);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.file-changes-view__heading-icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.changes-summary {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--ui-gap-3xs);
+  font-size: var(--ui-font-body);
+  color: var(--text-soft);
+}
+
+.changes-review-workspace {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+  overflow: hidden;
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.changes-diff-pane,
+.changes-file-pane {
+  min-width: 0;
+  min-height: 0;
+}
+
+.changes-diff-pane {
+  display: flex;
+  overflow: hidden;
+  background: var(--chat-canvas);
+}
+
+.changes-diff-pane .diff-preview-panel {
+  width: 100%;
+  min-width: 0;
+}
+
+.changes-file-pane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--chat-canvas);
+}
+
+.changes-diff-pane .diff-preview-panel > .oc-panel__header {
+  min-height: calc(36px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
+}
+
+.changes-diff-pane .diff-preview-panel > .oc-panel__body {
+  min-width: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-thumb) var(--session-scrollbar-track);
+}
+
+.changes-diff-pane .diff-preview-panel > .oc-panel__body::-webkit-scrollbar {
+  width: var(--session-scrollbar-size);
+  height: var(--session-scrollbar-size);
+}
+
+.changes-diff-pane .diff-preview-panel > .oc-panel__body::-webkit-scrollbar-track {
+  background: var(--session-scrollbar-track);
+  border-radius: var(--oc-radius-pill);
+}
+
+.changes-diff-pane .diff-preview-panel > .oc-panel__body::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: calc(2px * var(--ui-scale)) solid transparent;
+  border-radius: var(--oc-radius-pill);
+  background-clip: padding-box;
+}
+
+.changes-diff-pane .diff-preview-panel > .oc-panel__body::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+.changes-diff-pane .diff-preview-body {
+  width: max-content;
+  min-width: 100%;
+  padding: 0;
+}
+
+.changes-total {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-md);
+  font-variant-numeric: tabular-nums;
+}
+
+.changes-commit {
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.changes-total [data-tone="add"] {
+  color: var(--diff-add-fg);
+}
+
+.changes-total [data-tone="del"] {
+  color: var(--bad);
+}
+
+.changes-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+  margin: var(--ui-gap-md) var(--ui-gap-md) var(--ui-gap-sm);
+}
+
+.changes-filter-field.search-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.changes-status-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 var(--ui-gap-md) var(--ui-gap-sm);
+}
+
+.changes-status-filter-group {
+  min-width: 0;
+}
+
+.changes-status-filter-group > .changes-status-filter {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+}
+
+.changes-status-strip .oc-segmented__item[data-ui="file-changes-status-filter-option"] {
+  padding-inline: var(--ui-gap-md);
+  gap: var(--ui-gap-xs);
+  font: var(--ui-font-weight-medium) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
+  font-size: var(--ui-font-body);
+  text-transform: none;
+}
+
+.changes-status-strip
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="added"][data-pressed] {
+  background: color-mix(in srgb, var(--diff-add-fg) 12%, transparent);
+}
+
+.changes-status-strip
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="deleted"][data-pressed] {
+  background: color-mix(in srgb, var(--diff-del-fg) 12%, transparent);
+}
+
+.changes-status-option-label,
+.changes-status-option-count {
+  white-space: nowrap;
+}
+
+.changes-status-option-count {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.changes-status-strip
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-pressed]
+  .changes-status-option-count,
+.changes-status-strip
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-highlighted]
+  .changes-status-option-count,
+.changes-status-strip
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"]:hover
+  .changes-status-option-count,
+.changes-status-strip
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"]:focus-visible
+  .changes-status-option-count {
+  color: var(--text-soft);
+}
+
+.changes-non-text-filter {
+  align-self: flex-start;
+  flex: 0 0 auto;
+  min-height: calc(22px * var(--ui-scale));
+  padding: 0 var(--ui-gap-md);
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-tight);
+  white-space: nowrap;
+}
+
+.changes-list {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.changes-list[data-virtualized="true"] {
+  display: block;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.changes-list-virtual-window {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.changes-list-virtual-item {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding-bottom: 0;
+}
+
+.changes-list-group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.changes-group-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--ui-z-decoration);
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-sm);
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 55%, transparent);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  color: var(--text-soft);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.changes-group-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.changes-group-meta {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.changes-group-commit {
+  font-family: var(--mono);
+}
+
+.change-row {
+  --oc-file-row-height: calc(32px * var(--ui-scale));
+  --oc-file-row-padding-start: calc(8px * var(--ui-scale));
+  --oc-file-row-padding-end: calc(8px * var(--ui-scale));
+
+  box-shadow: none;
+}
+
+.change-row[data-clickable="false"] {
+  cursor: default;
+}
+
+.change-row[data-clickable="false"]:hover {
+  background: transparent;
+}
+
+.change-row:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1px * var(--ui-scale));
+}
+
+/* inline-block, not inline: max-width has no effect on a non-replaced inline
+ * box, so the 92px cap never applied and a long agent or session id took its
+ * full width — squeezing the filename beside it into an early ellipsis, which
+ * is the exact outcome the cap was written to prevent. */
+.change-scope {
+  display: inline-block;
+  max-width: calc(92px * var(--ui-scale));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.change-row[data-selected] .change-scope,
+.change-row[data-selected] .oc-file-row__detail {
+  color: var(--text-soft);
+}
+
+.change-row .oc-file-row__trailing {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The split file tree prioritizes file identity at the canonical Dock width;
+   aggregate counts remain visible in the Review summary and diff header. */
+.changes-file-pane .change-row .diff-dialog-stat {
+  display: none;
+}
+
+.changes-file-pane .change-row .oc-file-row__name {
+  flex: 1 1 auto;
+}
+
+.changes-file-pane .change-row .oc-file-row__detail {
+  flex: 0 1 38%;
+  max-width: 38%;
+}
+
+.change-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(16px * var(--ui-scale));
+  padding: 0 var(--ui-gap-sm);
+  border-radius: var(--oc-radius-soft);
+  border: 0;
+  background: transparent;
+  color: var(--text-soft);
+  text-transform: none;
+  letter-spacing: var(--ui-letter-spacing-normal);
+  font-weight: var(--ui-font-weight-strong);
+  font-size: var(--ui-font-caption);
+}
+
+/* The three chips below carry their tone through background + text only,
+ * matching the .oc-badge primitive. They used to also set border-color,
+ * which never rendered: the base rule above sets `border: 0`. */
+.change-status[data-status="added"] {
+  color: var(--diff-add-fg);
+  background: var(--diff-add-bg);
+}
+
+.change-status[data-status="deleted"] {
+  color: var(--diff-del-fg);
+  background: var(--diff-del-bg);
+}
+
+.change-status[data-status="modified"] {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.change-row[data-selected] .change-status[data-status="modified"] {
+  color: color-mix(in srgb, var(--accent) 62%, var(--text-strong));
+}
+
+.changes-empty-hint {
+  margin: var(--ui-gap-lg) var(--ui-gap-sm);
+}
+
+.file-changes-panel .empty-hint {
+  font-size: var(--ui-font-body);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Changes list chunk visibility toggle (extracted 2026-05-04).
+   ───────────────────────────────────────────────────────────── */
+
+.changes-list-chunk[data-active="false"] {
+  display: none;
+}
+.changes-list-chunk[data-active="true"] {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}

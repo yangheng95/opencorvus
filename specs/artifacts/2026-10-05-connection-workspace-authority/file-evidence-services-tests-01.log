@@ -1,0 +1,33 @@
+bun test v1.3.14 (0d9b296a)
+
+test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [5.75ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.52ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [0.91ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [0.75ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.88ms]
+
+test\diff-resolution.test.ts:
+(pass) diff resolution > resolves the selected live group from the visible change collection [0.20ms]
+
+test\immutable-diff-evidence.test.ts:
+137 |     if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
+138 |     const bytes = response.body
+139 |     textChunks.push(decoder.decode(bytes, { stream: offset + bytes.byteLength < input.object.bytes }))
+140 |     offset += bytes.byteLength
+141 |     if (bytes.byteLength !== length) {
+142 |       throw new Error(
+                      ^
+error: Build observation art_evidence returned 0 bytes for requested 262144-byte range
+      at readObservedTextSide (D:\myhexin-local\opencorvus\packages\overlay\src\services\diff.ts:142:17)
+      at async resolveDiff (D:\myhexin-local\opencorvus\packages\overlay\src\services\diff.ts:103:41)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\immutable-diff-evidence.test.ts:31:24)
+(fail) both immutable sides and all chunks keep original logical directory [2.48ms]
+(pass) a retired logical read yields exact current authority error [0.40ms]
+(pass) binary refs, absent sides and empty existing objects retain explicit evidence [0.34ms]
+(pass) ambiguous shorthand selection returns typed observed-group error [0.22ms]
+
+ 9 pass
+ 1 fail
+ 44 expect() calls
+Ran 10 tests across 3 files. [291.00ms]

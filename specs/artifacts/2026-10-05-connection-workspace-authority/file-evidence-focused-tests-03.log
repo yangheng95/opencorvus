@@ -1,0 +1,33 @@
+bun test v1.3.14 (0d9b296a)
+
+test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [4.07ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.50ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [0.87ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [0.79ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.62ms]
+
+test\diff-resolution.test.ts:
+(pass) diff resolution > resolves the selected live group from the visible change collection [0.15ms]
+
+test\file-change-evidence-reducer.test.ts:
+(pass) individual completed comparison preserves empty existing after and original receipt [1.24ms]
+(pass) normal cross-assistant original controls and intervening Read compose exact net interval [1.90ms]
+(pass) Write receipt and multiple step observations preserve the recorded two-Edit interval [0.33ms]
+(pass) exact replay deduplicates while conflicting receipt is explicit incomplete [0.48ms]
+(pass) unqualified batch, controls, step membership, branch and endpoint have precise incomplete reasons [1.10ms]
+(pass) canonical Patch keeps path-only coverage independently of exact Edit interval [0.42ms]
+(pass) actual deferred mutation without observed path retains unknown receipts [0.19ms]
+(pass) distinct saved/live intervals retain honest flags and revision includes endpoint changes [0.58ms]
+(pass) separate actual Session and actor scopes retain their own recorded endpoints [0.19ms]
+
+test\immutable-diff-evidence.test.ts:
+(pass) both immutable sides and all chunks keep original logical directory [1.84ms]
+(pass) a retired logical read yields exact current authority error [0.44ms]
+(pass) binary refs, absent sides and empty existing objects retain explicit evidence [0.30ms]
+(pass) ambiguous shorthand selection returns typed observed-group error [0.23ms]
+
+ 19 pass
+ 0 fail
+ 73 expect() calls
+Ran 19 tests across 4 files. [221.00ms]

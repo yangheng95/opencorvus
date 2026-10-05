@@ -1,0 +1,2677 @@
+diff --git a/packages/overlay/src/components/ChangesPanel.tsx b/packages/overlay/src/components/ChangesPanel.tsx
+index d6472943..a371f0e6 100644
+--- a/packages/overlay/src/components/ChangesPanel.tsx
++++ b/packages/overlay/src/components/ChangesPanel.tsx
+@@ -4,7 +4,7 @@
+ // result inline below the row.
+ 
+ import { createMemo, createResource } from "solid-js"
+-import { boardStore, activeTaskID } from "../store/board"
++import { activeTaskID } from "../store/board"
+ import {
+   changeGroupsRevisionKey,
+   currentChangeGroups,
+@@ -12,14 +12,11 @@ import {
+   type ChangeGroup,
+ } from "../services/diff"
+ import { currentConversationAgentChangeGroups, mergeChangeGroups } from "../utils/file-change-summary"
+-import type { FileChange } from "./DiffView"
+ import { FileChangesView } from "./FileChangesView"
+ 
+ // ── ChangesPanel ──
+ 
+ export interface ChangesPanelProps {
+-  /** File changes to display. If omitted, the shared diff service supplies board-derived groups. */
+-  changes?: FileChange[]
+   /** Whether a task is currently selected (affects empty-state messaging). */
+   hasSelectedTask?: boolean
+   /** Whether the file changes surface is visible enough to run broad card-tree projections. */
+@@ -36,41 +33,28 @@ export function ChangesPanel(props: ChangesPanelProps) {
+ 
+   const sourceGroups = createMemo<ChangeGroup[]>(() => {
+     if (!panelActive()) return []
+-    if (props.changes === undefined) return currentChangeGroups()
+-    const changes = props.changes
+-    return [
+-      {
+-        id: "props",
+-        additions: changes.reduce((sum, item) => sum + (item.additions ?? 0), 0),
+-        deletions: changes.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
+-        changes,
+-      },
+-    ]
++    return currentChangeGroups()
+   })
+ 
+   const requestKey = createMemo(() => {
+     if (!panelActive()) return false
+     const groups = sourceGroups()
+     const agentKey = changeGroupsRevisionKey(agentGroups())
+-    return props.changes !== undefined
+-      ? `props:${groups[0]?.changes.length ?? 0}`
+-      : `${activeTaskID()}:${agentKey}:${changeGroupsRevisionKey(groups)}`
++    return `${activeTaskID()}:${agentKey}:${changeGroupsRevisionKey(groups)}`
+   })
+ 
+-  const [resolvedGroups] = createResource(requestKey, async () => {
++  const [resolvedGroups] = createResource(requestKey, async (key) => ({
++    key,
++    groups: await resolveCurrentChangeGroups(),
++  }))
++
++  const groups = createMemo<ChangeGroup[]>(() => {
+     if (!panelActive()) return []
+-    if (props.changes !== undefined) return sourceGroups()
+-    return resolveCurrentChangeGroups()
++    const resolved = resolvedGroups()
++    const source = resolved?.key === requestKey() ? resolved.groups : sourceGroups()
++    return mergeChangeGroups([...agentGroups(), ...source])
+   })
+ 
+-  const groups = createMemo<ChangeGroup[]>(() =>
+-    !panelActive()
+-      ? []
+-      : props.changes === undefined
+-        ? mergeChangeGroups([...agentGroups(), ...(resolvedGroups() || sourceGroups())])
+-        : sourceGroups().filter((group) => group.changes.length > 0),
+-  )
+-
+   return (
+     <FileChangesView
+       groups={groups()}
+diff --git a/packages/overlay/src/components/ConversationArtifactSummary.tsx b/packages/overlay/src/components/ConversationArtifactSummary.tsx
+index 5c12d861..a3a3ac1d 100644
+--- a/packages/overlay/src/components/ConversationArtifactSummary.tsx
++++ b/packages/overlay/src/components/ConversationArtifactSummary.tsx
+@@ -1,7 +1,12 @@
+ import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
+ 
+ import { activeTaskID, boardStore, isTaskTerminal } from "../store/board"
+-import { currentChangeGroups, type ChangeGroup } from "../services/diff"
++import {
++  currentChangeGroups,
++  savedSessionChangeGroups,
++  summarizeChangeGroups,
++  type ChangeGroup,
++} from "../services/diff"
+ import { requestReviewFocus, requestReviewPanel } from "../services/review-focus"
+ import {
+   conversationArtifactFileRows,
+@@ -12,24 +17,14 @@ import { t, tc } from "../utils/i18n"
+ import { Button } from "./ui/Button"
+ import { Icon } from "./ui/Icon"
+ import { FileRowContent } from "./ui/FileRow"
+-import type { FileChange } from "./DiffView"
++import { ChangeLineStats } from "./DiffView"
+ 
+ const DEFAULT_VISIBLE_FILE_COUNT = 3
+ 
+ function persistedSourceGroups(): ChangeGroup[] {
+   const board = boardStore.board as any
+   if (board?.kind === "session") {
+-    const changes = Array.isArray(board.changes) ? (board.changes as FileChange[]) : []
+-    return changes.length
+-      ? [
+-          {
+-            id: `session:${String(board.sessionID || "")}`,
+-            additions: changes.reduce((sum, change) => sum + (change.additions ?? 0), 0),
+-            deletions: changes.reduce((sum, change) => sum + (change.deletions ?? 0), 0),
+-            changes,
+-          },
+-        ]
+-      : []
++    return savedSessionChangeGroups(board.changes, String(board.sessionID || ""))
+   }
+   return currentChangeGroups()
+ }
+@@ -46,15 +41,12 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
+   const [expanded, setExpanded] = createSignal(false)
+   const groups = createMemo(() => {
+     const persisted = persistedSourceGroups()
+-    const sessionOwnsCompleteDiff = (boardStore.board as any)?.kind === "session" && persisted.length > 0
+-    if (sessionOwnsCompleteDiff) return persisted
+     return mergeChangeGroups([...currentConversationAgentChangeGroups(), ...persisted])
+   })
+   const fileRows = createMemo(() => conversationArtifactFileRows(groups()))
+   const visibleFiles = createMemo(() => (expanded() ? fileRows() : fileRows().slice(0, DEFAULT_VISIBLE_FILE_COUNT)))
+   const remaining = createMemo(() => Math.max(0, fileRows().length - DEFAULT_VISIBLE_FILE_COUNT))
+-  const additions = createMemo(() => fileRows().reduce((sum, row) => sum + row.additions, 0))
+-  const deletions = createMemo(() => fileRows().reduce((sum, row) => sum + row.deletions, 0))
++  const totals = createMemo(() => summarizeChangeGroups(groups()))
+ 
+   createEffect(() => {
+     void boardStore.selectedSource?.id
+@@ -62,12 +54,13 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
+   })
+   createEffect(() => {
+     void fileRows().length
++    void totals().hasUnresolvedChanges
+     void expanded()
+     props.onContentChanged?.()
+   })
+ 
+   return (
+-    <Show when={conversationSettled() && fileRows().length > 0}>
++    <Show when={conversationSettled() && (fileRows().length > 0 || totals().hasUnresolvedChanges)}>
+       <section class="conversation-artifact-summary" data-ui="conversation-file-change-summary">
+         <header class="conversation-artifact-summary__header">
+           <span class="conversation-artifact-summary__icon" aria-hidden="true">
+@@ -75,20 +68,16 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
+           </span>
+           <div class="conversation-artifact-summary__identity">
+             <span class="conversation-artifact-summary__eyebrow">{t("chat.artifacts.files")}</span>
+-            <strong>{tc("files.changed", fileRows().length)}</strong>
++            <strong>{totals().files > 0 ? tc("files.changed", totals().files) : t("diff.unresolved_title")}</strong>
+             <span
+               class="conversation-artifact-summary__totals"
+-              aria-label={t("chat.artifacts.totals", {
+-                additions: additions(),
+-                deletions: deletions(),
+-              })}
++              aria-label={
++                totals().additions === null || totals().deletions === null
++                  ? t("diff.counts_unavailable_detail")
++                  : t("chat.artifacts.totals", { additions: totals().additions, deletions: totals().deletions })
++              }
+             >
+-              <Show when={additions() > 0}>
+-                <span data-tone="add">+{additions()}</span>
+-              </Show>
+-              <Show when={deletions() > 0}>
+-                <span data-tone="del">-{deletions()}</span>
+-              </Show>
++              <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
+             </span>
+           </div>
+           <Button
+@@ -102,6 +91,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
+             {t("chat.artifacts.review")}
+           </Button>
+         </header>
++        <Show when={totals().hasUnresolvedChanges}>
++          <p class="empty-hint">{t("diff.unresolved_changes")}</p>
++        </Show>
+         <div class="conversation-artifact-summary__section">
+           <div class="conversation-artifact-summary__files">
+             <For each={visibleFiles()}>
+@@ -126,12 +118,7 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
+                     icon="file-document"
+                     trailing={
+                       <span class="conversation-artifact-summary__file-stats">
+-                        <Show when={row.additions > 0}>
+-                          <span data-tone="add">+{row.additions}</span>
+-                        </Show>
+-                        <Show when={row.deletions > 0}>
+-                          <span data-tone="del">-{row.deletions}</span>
+-                        </Show>
++                        <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
+                       </span>
+                     }
+                   />
+diff --git a/packages/overlay/src/components/DiffPreviewPanel.tsx b/packages/overlay/src/components/DiffPreviewPanel.tsx
+index d15880bb..1fbfc175 100644
+--- a/packages/overlay/src/components/DiffPreviewPanel.tsx
++++ b/packages/overlay/src/components/DiffPreviewPanel.tsx
+@@ -5,8 +5,8 @@
+ // through the shared DiffView component.
+ 
+ import { createResource, createMemo, Show } from "solid-js"
+-import { DiffView, changeStatusLabel, type FileChange } from "./DiffView"
+-import { resolveDiff, type ChangeGroup, type DiffTarget } from "../services/diff"
++import { ChangeLineStats, DiffView, changeStatusLabel, type FileChange } from "./DiffView"
++import { hasDiffBody, isKnownTextDiff, resolveDiff, type ChangeGroup, type DiffTarget } from "../services/diff"
+ import { Panel } from "./ui/Panel"
+ import { t } from "../utils/i18n"
+ import type { JSX } from "solid-js"
+@@ -46,8 +46,9 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
+     },
+   )
+ 
+-  const item = createMemo(() => change())
++  const item = createMemo(() => (change.loading || change.error ? null : (change() ?? null)))
+   const loading = () => change.loading
++  const errorMessage = () => (change.error instanceof Error ? change.error.message : t("diff.load_failed"))
+ 
+   // Compute header content in a memo so Panel's Show reads a stable reference,
+   // avoiding double-creation of DOM nodes from the ternary getter.
+@@ -68,12 +69,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
+             <span class="change-status" data-status={item()!.status}>
+               {changeStatusLabel(item()!.status)}
+             </span>
+-            <span class="diff-dialog-stat" data-tone="add">
+-              +{item()!.additions}
+-            </span>
+-            <span class="diff-dialog-stat" data-tone="del">
+-              -{item()!.deletions}
+-            </span>
++            <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />
+           </span>
+         </Show>
+       </>
+@@ -99,16 +95,33 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
+           }
+         >
+           <Show
+-            when={item()}
++            when={!change.error}
+             fallback={
+               <div class="diff-preview-empty">
+-                <p class="empty-hint">{t("diff.no_preview")}</p>
++                <p class="empty-hint" role="alert">
++                  {errorMessage()}
++                </p>
+               </div>
+             }
+           >
+-            <div class="diff-preview-body">
+-              <DiffView item={item()!} />
+-            </div>
++            <Show
++              when={item()}
++              fallback={
++                <div class="diff-preview-empty">
++                  <p class="empty-hint">{t("diff.no_preview")}</p>
++                </div>
++              }
++            >
++              <div
++                class="diff-preview-body"
++                classList={{
++                  "diff-preview-body--text":
++                    hasDiffBody(item()) && isKnownTextDiff(item()) && item()!.before !== item()!.after,
++                }}
++              >
++                <DiffView item={item()!} />
++              </div>
++            </Show>
+           </Show>
+         </Show>
+       </Show>
+diff --git a/packages/overlay/src/components/DiffView.tsx b/packages/overlay/src/components/DiffView.tsx
+index 1e003b17..83165859 100644
+--- a/packages/overlay/src/components/DiffView.tsx
++++ b/packages/overlay/src/components/DiffView.tsx
+@@ -9,11 +9,35 @@ import { t, tc } from "../utils/i18n"
+ 
+ // ── Types ──
+ 
++export type FileChangeReceipt =
++  | { sessionID: string; messageID: string; partID: string; fileIndex?: number }
++  | { artifactID: string; fileIndex: number }
++  | { sessionID: string; fileIndex: number }
++
++export type FileChangeIncompleteReason =
++  | "missing_endpoints"
++  | "saved_session_flags_missing"
++  | "path_only"
++  | "deferred"
++  | "missing_message_facts"
++  | "ambiguous_tool_step"
++  | "non_normal_step"
++  | "changed_input_batch"
++  | "endpoint_discontinuity"
++  | "unsupported_lifecycle"
++  | "conflicting_receipt"
++  | "unknown_resource"
++
++export type FileChangeEvidence =
++  | { kind: "complete"; receipts: readonly FileChangeReceipt[] }
++  | { kind: "incomplete"; reason: FileChangeIncompleteReason; receipts: readonly FileChangeReceipt[] }
++
+ export interface FileChange {
+   file: string
+-  status: "added" | "deleted" | "modified"
+-  additions: number
+-  deletions: number
++  status?: "added" | "deleted" | "modified"
++  additions: number | null
++  deletions: number | null
++  evidence: FileChangeEvidence
+   before?: string
+   after?: string
+   isText?: boolean
+@@ -31,22 +55,20 @@ interface DiffOp {
+ 
+ // ── Diff helpers ──
+ 
+-function splitDiffLines(text: string | undefined): string[] {
+-  const value = String(text || "")
+-    .replace(/\r\n/g, "\n")
+-    .replace(/\r/g, "\n")
++function splitDiffLines(text: string): string[] {
++  const value = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
+   if (!value) return []
+   const lines = value.split("\n")
+   if (lines[lines.length - 1] === "") lines.pop()
+   return lines
+ }
+ 
+-function buildDiffOps(before: string | undefined, after: string | undefined): DiffOp[] {
++function buildDiffOps(before: string, after: string): DiffOp[] {
+   const ops: DiffOp[] = []
+   let leftLine = 1
+   let rightLine = 1
+ 
+-  for (const part of diffLines(String(before || ""), String(after || ""))) {
++  for (const part of diffLines(before, after)) {
+     const lines = splitDiffLines(part.value)
+     if (part.added) {
+       for (const text of lines) {
+@@ -100,10 +122,34 @@ function collapseDiffOps(ops: DiffOp[]): DiffOp[] {
+ 
+ // ── Status label helper ──
+ 
+-export function changeStatusLabel(status: "added" | "deleted" | "modified" | string): string {
++export function changeStatusLabel(status: FileChange["status"]): string {
+   if (status === "added") return t("files.status.added")
+   if (status === "deleted") return t("files.status.deleted")
+-  return t("files.status.modified")
++  if (status === "modified") return t("files.status.modified")
++  return t("files.status.changed")
++}
++
++export function ChangeLineStats(props: { additions: number | null; deletions: number | null; isText?: boolean }) {
++  return (
++    <Show
++      when={props.additions !== null && props.deletions !== null}
++      fallback={
++        <span
++          class="diff-dialog-stat"
++          title={props.isText === false ? t("diff.non_text") : t("diff.counts_unavailable_detail")}
++        >
++          {props.isText === false ? t("diff.non_text_short") : t("diff.counts_unavailable")}
++        </span>
++      }
++    >
++      <span class="diff-dialog-stat" data-tone="add">
++        +{props.additions?.toLocaleString()}
++      </span>
++      <span class="diff-dialog-stat" data-tone="del">
++        -{props.deletions?.toLocaleString()}
++      </span>
++    </Show>
++  )
+ }
+ 
+ // ── DiffView component ──
+@@ -113,22 +159,22 @@ interface DiffViewProps {
+ }
+ 
+ export function DiffView(props: DiffViewProps) {
+-  const ops = createMemo(() => collapseDiffOps(buildDiffOps(props.item.before, props.item.after)))
+-
+-  const hasChanges = createMemo(() => {
+-    if (props.item.before == null && props.item.after == null) return false
+-    if (!props.item.before && !props.item.after) return false
+-    return ops().some((op) => op.kind === "add" || op.kind === "del")
++  const ops = createMemo(() => {
++    const item = props.item
++    if (
++      item.evidence.kind !== "complete" ||
++      item.isText !== true ||
++      typeof item.before !== "string" ||
++      typeof item.after !== "string"
++    )
++      return []
++    return collapseDiffOps(buildDiffOps(item.before, item.after))
+   })
+-
+-  // Differentiate the "no preview" cause so the operator knows whether
+-  // the file was deleted, intentionally empty, or just missing a server
+-  // payload. Keep the translation keys explicit at the decision points.
++  const hasChanges = createMemo(() => ops().some((op) => op.kind === "add" || op.kind === "del"))
+   const emptyMessage = createMemo(() => {
+     const it = props.item
++    if (it.evidence.kind === "incomplete") return t(`diff.incomplete.${it.evidence.reason}`)
+     if (it.isText === false) return t("diff.non_text")
+-    if (it.status === "deleted" && !it.after) return t("diff.empty_deleted")
+-    if (it.status === "added" && it.before === undefined && it.after === undefined) return t("diff.empty_added")
+     if (typeof it.before === "string" && typeof it.after === "string" && it.before === it.after) {
+       return t("diff.empty_unchanged")
+     }
+diff --git a/packages/overlay/src/components/FileChangesView.tsx b/packages/overlay/src/components/FileChangesView.tsx
+index 1e1327ee..32a226b5 100644
+--- a/packages/overlay/src/components/FileChangesView.tsx
++++ b/packages/overlay/src/components/FileChangesView.tsx
+@@ -6,9 +6,9 @@ import {
+   type CustomItemComponentProps,
+   type VirtualizerHandle,
+ } from "virtua/solid"
+-import { isKnownTextDiff, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
++import { summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
+ import { t, tc } from "../utils/i18n"
+-import { changeStatusLabel, type FileChange } from "./DiffView"
++import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
+ import { Icon } from "./ui/Icon"
+ import { Button } from "./ui/Button"
+ import { FileRowContent } from "./ui/FileRow"
+@@ -37,9 +37,9 @@ const VIRTUAL_CHANGE_ROW_THRESHOLD = 80
+ const ESTIMATED_CHANGE_ROW_HEIGHT = 28
+ const VIRTUAL_CHANGE_ROW_BUFFER_PIXELS = ESTIMATED_CHANGE_ROW_HEIGHT * 10
+ 
+-type ChangeStatusFilter = "all" | FileChange["status"]
++type ChangeStatusFilter = "all" | "changed" | NonNullable<FileChange["status"]>
+ 
+-const CHANGE_STATUS_FILTERS: ChangeStatusFilter[] = ["all", "modified", "added", "deleted"]
++const CHANGE_STATUS_FILTERS: ChangeStatusFilter[] = ["all", "changed", "modified", "added", "deleted"]
+ 
+ interface ChangeRowModel {
+   group: ChangeGroup
+@@ -88,7 +88,9 @@ function shortCommit(ref: string | undefined): string {
+ }
+ 
+ function groupLabel(group: ChangeGroup): string {
+-  return group.agentID || group.sessionID || group.artifactID || group.id.replace(/^(agent|node|artifact):/, "")
++  const owner = group.agentID || group.sessionID || group.artifactID
++  const source = t(`diff.source.${group.observationKind}`)
++  return owner ? `${source} · ${owner}` : source
+ }
+ 
+ function groupTitle(group: ChangeGroup): string {
+@@ -113,12 +115,11 @@ function ChangeRowContent(props: { row: ChangeRowModel; showScope: boolean }) {
+           <span class="change-status" data-status={props.row.item.status}>
+             {changeStatusLabel(props.row.item.status)}
+           </span>
+-          <span class="diff-dialog-stat" data-tone="add">
+-            +{props.row.item.additions ?? 0}
+-          </span>
+-          <span class="diff-dialog-stat" data-tone="del">
+-            -{props.row.item.deletions ?? 0}
+-          </span>
++          <ChangeLineStats
++            additions={props.row.item.additions}
++            deletions={props.row.item.deletions}
++            isText={props.row.item.isText}
++          />
+         </>
+       }
+     />
+@@ -211,7 +212,9 @@ export function FileChangesView(props: FileChangesViewProps) {
+     ),
+   )
+ 
+-  const groups = createMemo<ChangeGroup[]>(() => props.groups.filter((group) => group.changes.length > 0))
++  const groups = createMemo<ChangeGroup[]>(() =>
++    props.groups.filter((group) => group.changes.length > 0 || (group.unavailableReceipts?.length ?? 0) > 0),
++  )
+   const files = createMemo<FileChange[]>(() => groups().flatMap((group) => group.changes))
+   const summary = createMemo(() => summarizeChangeGroups(groups()))
+   const hasGroupLabels = createMemo(
+@@ -255,8 +258,8 @@ export function FileChangesView(props: FileChangesViewProps) {
+     const query = filterQuery().trim().toLowerCase()
+     const status = statusFilter()
+     return allRows().filter((row) => {
+-      if (status !== "all" && row.item.status !== status) return false
+-      if (hideNonTextFiles() && !isKnownTextDiff(row.item)) return false
++      if (status !== "all" && (row.item.status ?? "changed") !== status) return false
++      if (hideNonTextFiles() && row.item.isText === false) return false
+       if (query && !row.searchText.includes(query)) return false
+       return true
+     })
+@@ -277,13 +280,14 @@ export function FileChangesView(props: FileChangesViewProps) {
+   const statusCounts = createMemo<Record<ChangeStatusFilter, number>>(() => {
+     const counts: Record<ChangeStatusFilter, number> = {
+       all: 0,
++      changed: 0,
+       modified: 0,
+       added: 0,
+       deleted: 0,
+     }
+     for (const row of allRows()) {
+       counts.all += 1
+-      counts[row.item.status] += 1
++      counts[row.item.status ?? "changed"] += 1
+     }
+     return counts
+   })
+@@ -296,7 +300,7 @@ export function FileChangesView(props: FileChangesViewProps) {
+     return row ? diffTargetFromRow(row) : null
+   })
+   const statusFilterLabel = (status: ChangeStatusFilter): string =>
+-    status === "all" ? t("files.status.all") : changeStatusLabel(status)
++    status === "all" ? t("files.status.all") : changeStatusLabel(status === "changed" ? undefined : status)
+   const statusFilterOptions = createMemo<SegmentedControlOption<ChangeStatusFilter>[]>(() =>
+     CHANGE_STATUS_FILTERS.map((status) => ({
+       value: status,
+@@ -321,7 +325,8 @@ export function FileChangesView(props: FileChangesViewProps) {
+       return
+     }
+     if (current && rows.some((row) => row.key === current)) return
+-    setSelectedRowKey(rows[0]!.key)
++    const initial = rows.find((row) => row.item.evidence.kind === "complete" && row.item.isText === true) ?? rows[0]!
++    setSelectedRowKey(initial.key)
+   })
+ 
+   const selectRow = (row: ChangeRowModel) => setSelectedRowKey(row.key)
+@@ -414,17 +419,19 @@ export function FileChangesView(props: FileChangesViewProps) {
+           {t("files.focus_unavailable", { file: reviewFocusFailure()!.target.filePath })}
+         </p>
+       </Show>
++      <Show when={summary().hasUnresolvedChanges}>
++        <p class="empty-hint">{t("diff.unresolved_changes")}</p>
++      </Show>
+       <Show when={files().length > 0}>
+         <div class="changes-summary">
+-          <span>{tc("files.changed", files().length)}</span>
++          <span>{tc("files.changed", summary().files)}</span>
+           <span class="changes-total">
+             <Show when={summaryCommitRef()}>
+               <span class="changes-commit" title={`commit ${summaryCommitRef()}`}>
+                 commit {shortCommit(summaryCommitRef())}
+               </span>
+             </Show>
+-            <span data-tone="add">+{summary().additions}</span>
+-            <span data-tone="del">-{summary().deletions}</span>
++            <ChangeLineStats additions={summary().additions} deletions={summary().deletions} />
+           </span>
+         </div>
+ 
+@@ -578,7 +585,7 @@ export function FileChangesView(props: FileChangesViewProps) {
+           </aside>
+         </div>
+       </Show>
+-      <Show when={files().length === 0}>
++      <Show when={files().length === 0 && !summary().hasUnresolvedChanges}>
+         <p class="empty-hint">{props.hasSelectedTask ? t("files.none") : t("files.select_target")}</p>
+       </Show>
+     </div>
+diff --git a/packages/overlay/src/components/InlineToolPart.tsx b/packages/overlay/src/components/InlineToolPart.tsx
+index 30050551..60504ee5 100644
+--- a/packages/overlay/src/components/InlineToolPart.tsx
++++ b/packages/overlay/src/components/InlineToolPart.tsx
+@@ -1,5 +1,6 @@
+ import { createMemo, createResource, For, Show } from "solid-js"
+-import { DiffView, changeStatusLabel } from "./DiffView"
++import { ChangeLineStats, DiffView, changeStatusLabel } from "./DiffView"
++import { summarizeFileChanges } from "../services/diff"
+ import { describeToolCall, displayToolDetail, toolNameKey, stripAnsi } from "../utils/tool"
+ import { extToLang, renderCodeBlock } from "../utils/markdown"
+ import { boardStore, selectedTaskDirectory } from "../store/board"
+@@ -293,22 +294,14 @@ function parseReadOutput(output: string): ParsedReadOutput | null {
+ }
+ 
+ function ToolDiffList(props: { items: ToolFileChange[] }) {
+-  const totals = () => ({
+-    additions: props.items.reduce((sum, item) => sum + (item.additions ?? 0), 0),
+-    deletions: props.items.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
+-  })
++  const totals = () => summarizeFileChanges(props.items)
+ 
+   return (
+     <section class="msg-tool-diffs">
+       <div class="msg-tool-diffs__summary">
+         <span class="msg-tool-diffs__count">{tc("files.changed", props.items.length)}</span>
+         <span class="msg-tool-diffs__meta">
+-          <span class="diff-dialog-stat" data-tone="add">
+-            +{totals().additions}
+-          </span>
+-          <span class="diff-dialog-stat" data-tone="del">
+-            -{totals().deletions}
+-          </span>
++          <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
+         </span>
+       </div>
+       <For each={props.items}>
+@@ -332,12 +325,7 @@ function ToolDiffList(props: { items: ToolFileChange[] }) {
+                 </span>
+               </div>
+               <div class="msg-tool-diff-card__meta">
+-                <span class="diff-dialog-stat" data-tone="add">
+-                  +{item.additions}
+-                </span>
+-                <span class="diff-dialog-stat" data-tone="del">
+-                  -{item.deletions}
+-                </span>
++                <ChangeLineStats additions={item.additions} deletions={item.deletions} isText={item.isText} />
+               </div>
+             </header>
+             <div class="msg-tool-diff-card__body">
+@@ -434,7 +422,17 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
+   })
+   const toolDiffs = createMemo(() => {
+     if (status() !== "completed") return null
+-    const changes = toolFileChangesFromState(state(), selectedTaskDirectory())
++    const source = part()
++    const context =
++      typeof source.sessionID === "string" &&
++      source.sessionID &&
++      typeof source.messageID === "string" &&
++      source.messageID &&
++      typeof source.id === "string" &&
++      source.id
++        ? { sessionID: source.sessionID, messageID: source.messageID, partID: source.id }
++        : undefined
++    const changes = toolFileChangesFromState(state(), selectedTaskDirectory(), context)
+     return changes.length > 0 ? changes : null
+   })
+   const browserEvidenceScreenshotUrl = createMemo(() =>
+diff --git a/packages/overlay/src/components/TaskDirBar.tsx b/packages/overlay/src/components/TaskDirBar.tsx
+index 5d6cdc19..e3f08191 100644
+--- a/packages/overlay/src/components/TaskDirBar.tsx
++++ b/packages/overlay/src/components/TaskDirBar.tsx
+@@ -48,6 +48,7 @@ import { focusGoalSummary } from "../services/goal-summary-focus"
+ import { formatErrorDetails, reportError } from "../services/diagnostics"
+ import { cardTreeStore } from "../store/card-tree"
+ import { Icon } from "./ui/Icon"
++import { ChangeLineStats } from "./DiffView"
+ import { Avatar } from "./Avatar"
+ import { DropdownMenu } from "./ui/DropdownMenu"
+ import { FilePart } from "./FilePart"
+@@ -264,7 +265,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+   const changedFileCount = createMemo(
+     () => new Set(visibleChangeGroups().flatMap((group) => group.changes.map((change) => change.file))).size,
+   )
+-  const hasLineChanges = () => changeTotals().additions > 0 || changeTotals().deletions > 0
++  const hasLineChanges = () => {
++    const totals = changeTotals()
++    return totals.additions === null || totals.deletions === null || totals.additions > 0 || totals.deletions > 0
++  }
+   const requestSources = createMemo(() => {
+     const attachments = (boardStore.board as any)?.task?.attachments
+     return Array.isArray(attachments) ? attachments : []
+@@ -1379,8 +1383,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+         <Show when={!panelExpanded() && changedFileCount() > 0}>
+           <span class="project-runtime-change-totals project-runtime-collapsed-totals">
+             <Show when={hasLineChanges()} fallback={<span>{tc("files.changed", changedFileCount())}</span>}>
+-              <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
+-              <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
++              <ChangeLineStats additions={changeTotals().additions} deletions={changeTotals().deletions} />
+             </Show>
+           </span>
+         </Show>
+@@ -1403,8 +1406,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+                 <span>{t("project_runtime.task_changes")}</span>
+                 <span class="project-runtime-change-totals">
+                   <Show when={hasLineChanges()} fallback={<span>{tc("files.changed", changedFileCount())}</span>}>
+-                    <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
+-                    <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
++                    <ChangeLineStats additions={changeTotals().additions} deletions={changeTotals().deletions} />
+                   </Show>
+                 </span>
+               </Button>
+diff --git a/packages/overlay/src/i18n/en-US.json b/packages/overlay/src/i18n/en-US.json
+index 5472376c..25197095 100644
+--- a/packages/overlay/src/i18n/en-US.json
++++ b/packages/overlay/src/i18n/en-US.json
+@@ -802,10 +802,30 @@
+   "dialog.notice": "Notice",
+   "diff.loading": "Loading diff…",
+   "diff.no_preview": "No preview available for this file.",
++  "diff.load_failed": "This change could not be loaded.",
++  "diff.unresolved_title": "Change data unavailable",
++  "diff.unresolved_changes": "Some recorded changes cannot be previewed reliably. Inspect the original results for details.",
++  "diff.source.tool_interval": "Tool edits",
++  "diff.source.saved_session_interval": "Saved comparison",
++  "diff.source.immutable_build_interval": "Build comparison",
++  "diff.source.path_coverage": "Affected paths",
++  "diff.counts_unavailable": "Lines unknown",
++  "diff.counts_unavailable_detail": "Line counts are unavailable for this comparison. Open the file to inspect its recorded changes.",
++  "diff.incomplete.missing_endpoints": "Before and after contents are not available for this change.",
++  "diff.incomplete.saved_session_flags_missing": "This saved change does not provide enough information for a reliable text preview.",
++  "diff.incomplete.path_only": "Only the affected path was recorded. Inspect the original tool result for details.",
++  "diff.incomplete.deferred": "Expand the original tool result to load its recorded change.",
++  "diff.incomplete.missing_message_facts": "The recorded edits cannot be combined reliably. Inspect their individual tool results.",
++  "diff.incomplete.ambiguous_tool_step": "These operations share a step without a verified order. Inspect their individual tool results.",
++  "diff.incomplete.non_normal_step": "The execution did not provide a complete sequence for combining these edits. Inspect their individual tool results.",
++  "diff.incomplete.changed_input_batch": "These edits belong to separate requests. Inspect their individual tool results.",
++  "diff.incomplete.endpoint_discontinuity": "The recorded edits do not form a continuous before-and-after comparison.",
++  "diff.incomplete.unsupported_lifecycle": "These file operations do not have a verified combined comparison. Inspect their individual tool results.",
++  "diff.incomplete.conflicting_receipt": "The recorded results disagree for this change. Inspect the original tool results.",
++  "diff.incomplete.unknown_resource": "The saved content references are incomplete. A reliable preview is unavailable.",
+   "diff.non_text": "This file is not a text diff.",
+-  "diff.empty_deleted": "This file was deleted — nothing to preview.",
+-  "diff.empty_added": "New file — server hasn't sent its contents yet.",
+-  "diff.empty_unchanged": "No changes between before and after.",
++  "diff.non_text_short": "Non-text",
++  "diff.empty_unchanged": "No text differences in this recorded comparison.",
+   "diff.select_file": "Select a file to view its diff.",
+   "diff.unchanged_hidden": {
+     "one": "{{count}} unchanged line hidden",
+@@ -890,6 +910,7 @@
+   "files.status.added": "Added",
+   "files.status.deleted": "Deleted",
+   "files.status.modified": "Modified",
++  "files.status.changed": "Changed",
+   "git.init": "Init Git",
+   "git.init_done": "Git initialized in {{dir}}",
+   "git.init_exists": "Git already exists in {{dir}}",
+diff --git a/packages/overlay/src/i18n/zh-CN.json b/packages/overlay/src/i18n/zh-CN.json
+index bea8af15..98ebc395 100644
+--- a/packages/overlay/src/i18n/zh-CN.json
++++ b/packages/overlay/src/i18n/zh-CN.json
+@@ -801,11 +801,31 @@
+   "dialog.input_required": "请输入内容后再继续。",
+   "dialog.notice": "提示",
+   "diff.loading": "正在加载差异…",
+-  "diff.no_preview": "该文件不支持预览。",
++  "diff.no_preview": "此文件暂无可用预览。",
++  "diff.load_failed": "无法加载此项修改。",
++  "diff.unresolved_title": "修改信息不可用",
++  "diff.unresolved_changes": "部分修改记录无法提供可靠预览。请查看原始结果了解详情。",
++  "diff.source.tool_interval": "工具编辑",
++  "diff.source.saved_session_interval": "已保存的比较",
++  "diff.source.immutable_build_interval": "构建比较",
++  "diff.source.path_coverage": "受影响的路径",
++  "diff.counts_unavailable": "行数未知",
++  "diff.counts_unavailable_detail": "此项比较的行数无法确定。打开文件查看已记录的修改。",
++  "diff.incomplete.missing_endpoints": "此项修改缺少修改前或修改后的内容。",
++  "diff.incomplete.saved_session_flags_missing": "已保存的修改信息不足，无法提供可靠的文本预览。",
++  "diff.incomplete.path_only": "仅记录了受影响的路径。请查看原始工具结果了解详情。",
++  "diff.incomplete.deferred": "展开原始工具结果以加载已记录的修改。",
++  "diff.incomplete.missing_message_facts": "无法可靠合并已记录的编辑。请分别查看原始工具结果。",
++  "diff.incomplete.ambiguous_tool_step": "这些操作位于同一步骤，但先后顺序无法确认。请分别查看原始工具结果。",
++  "diff.incomplete.non_normal_step": "执行记录未提供可用于合并编辑的完整顺序。请分别查看原始工具结果。",
++  "diff.incomplete.changed_input_batch": "这些编辑属于不同请求。请分别查看原始工具结果。",
++  "diff.incomplete.endpoint_discontinuity": "已记录的编辑无法形成连续的修改前后比较。",
++  "diff.incomplete.unsupported_lifecycle": "这些文件操作缺少可靠的合并比较。请分别查看原始工具结果。",
++  "diff.incomplete.conflicting_receipt": "此项修改的记录相互冲突。请查看原始工具结果。",
++  "diff.incomplete.unknown_resource": "已保存的内容引用不完整，无法提供可靠预览。",
+   "diff.non_text": "该文件不是文本差异。",
+-  "diff.empty_deleted": "文件已删除 — 无内容可预览。",
+-  "diff.empty_added": "新文件 — 服务端尚未发送内容。",
+-  "diff.empty_unchanged": "前后无差异。",
++  "diff.non_text_short": "非文本",
++  "diff.empty_unchanged": "此项比较的文本内容没有差异。",
+   "diff.select_file": "选择文件查看差异。",
+   "diff.unchanged_hidden": {
+     "one": "已折叠 {{count}} 行未变更内容",
+@@ -889,6 +909,7 @@
+   "files.status.added": "新增",
+   "files.status.deleted": "已删除",
+   "files.status.modified": "已修改",
++  "files.status.changed": "有修改",
+   "git.init": "初始化 Git",
+   "git.init_done": "已在 {{dir}} 初始化 Git",
+   "git.init_exists": "{{dir}} 已有 Git 仓库",
+diff --git a/packages/overlay/src/services/conversation-artifact.ts b/packages/overlay/src/services/conversation-artifact.ts
+index 0e7da756..e0babc6d 100644
+--- a/packages/overlay/src/services/conversation-artifact.ts
++++ b/packages/overlay/src/services/conversation-artifact.ts
+@@ -1,4 +1,4 @@
+-import { ApiError, apiRequest } from "./api"
++import { ApiError, apiRequest, assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api"
+ import { activeProjectDirectory } from "./project-directory"
+ import { taskScopedPath } from "./task-path"
+ 
+@@ -71,6 +71,7 @@ function parseDisposition(value: string): { attachment: boolean; filename?: stri
+ }
+ 
+ async function readChunk(input: {
++  authority: ApiAuthority
+   directory: string
+   taskID: string
+   locator: ArtifactReadLocator
+@@ -86,6 +87,7 @@ async function readChunk(input: {
+       max_bytes: READ_CHUNK_BYTES,
+     }),
+     responseKind: "binary",
++    authority: input.authority,
+     signal: input.signal,
+   })
+   if (!response.ok) throw new ApiError(response.status, "Conversation Artifact read", response.body, response.headers)
+@@ -109,6 +111,7 @@ export async function loadConversationArtifactContent(input: {
+   locator: ArtifactReadLocator
+   signal?: AbortSignal
+ }): Promise<ConversationArtifactContent> {
++  const authority = captureApiAuthority()
+   const directory = activeProjectDirectory()
+   let offset = 0
+   let mediaType = ""
+@@ -117,7 +120,7 @@ export async function loadConversationArtifactContent(input: {
+   const text: string[] = []
+   for (;;) {
+     input.signal?.throwIfAborted()
+-    const chunk = await readChunk({ ...input, directory, byteOffset: offset })
++    const chunk = await readChunk({ ...input, authority, directory, byteOffset: offset })
+     if (chunk.byteStart !== offset) throw new Error("Artifact read returned a discontinuous byte range")
+     if (!mediaType) mediaType = chunk.mediaType
+     if (!sha256) sha256 = chunk.sha256
+@@ -129,6 +132,7 @@ export async function loadConversationArtifactContent(input: {
+       if (chunk.byteStart !== 0 || chunk.byteEnd !== totalBytes || !chunk.filename) {
+         throw new Error("Binary Artifact read is incomplete")
+       }
++      assertApiAuthorityCurrent(authority)
+       return {
+         locator: input.locator,
+         mediaType,
+@@ -144,6 +148,7 @@ export async function loadConversationArtifactContent(input: {
+       if (new TextEncoder().encode(value).byteLength !== totalBytes) {
+         throw new Error("Text Artifact bytes do not match their declared total")
+       }
++      assertApiAuthorityCurrent(authority)
+       return { locator: input.locator, mediaType, sha256, totalBytes, text: value }
+     }
+     if (chunk.byteEnd <= offset) throw new Error("Artifact read did not advance")
+diff --git a/packages/overlay/src/services/diff.ts b/packages/overlay/src/services/diff.ts
+index 2784bd63..24e58a33 100644
+--- a/packages/overlay/src/services/diff.ts
++++ b/packages/overlay/src/services/diff.ts
+@@ -1,24 +1,20 @@
+-// Task change projection from immutable Build Host observations.
+-// Session and Artifact identities own physical execution provenance; Delivery
+-// Slice subjects never own a diff or a runtime lifecycle.
+-
++// Observed comparison evidence and immutable content authority.
+ import { boardStore } from "../store/board"
+-import type { FileChange } from "../components/DiffView"
+-import { apiRequest, ApiError } from "./api"
++import type { FileChange, FileChangeReceipt } from "../components/DiffView"
++import { apiRequest, ApiError, captureApiAuthority, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+ import { taskScopedPath } from "./task-path"
+ import { taskOwningDirectory } from "./task-directory"
+-
++import { diffLines } from "diff"
+ const BUILD_OBSERVATION_CONTENT_CHUNK_BYTES = 256 * 1024
+-
+ export interface DiffTarget {
+   filePath: string
+   groupID?: string
+   sessionID?: string
+   agentID?: string
+ }
+-
+ export interface ChangeGroup {
+   id: string
++  observationKind: "tool_interval" | "saved_session_interval" | "immutable_build_interval" | "path_coverage"
+   taskID?: string
+   artifactID?: string
+   sessionID?: string
+@@ -27,176 +23,256 @@ export interface ChangeGroup {
+   publishedCommitRef?: string
+   diffBaseRef?: string
+   diffHeadRef?: string
+-  additions: number
+-  deletions: number
++  additions: number | null
++  deletions: number | null
+   changes: FileChange[]
++  unavailableReceipts?: readonly FileChangeReceipt[]
+ }
+-
+ export interface ChangeSummary {
+   files: number
+-  additions: number
+-  deletions: number
++  additions: number | null
++  deletions: number | null
++  hasUnresolvedChanges: boolean
+ }
+-
+-function sumAdditions(changes: readonly FileChange[]): number {
+-  return changes.reduce((sum, item) => sum + (item.additions ?? 0), 0)
+-}
+-
+-function sumDeletions(changes: readonly FileChange[]): number {
+-  return changes.reduce((sum, item) => sum + (item.deletions ?? 0), 0)
++export function textComparisonCounts(before: string, after: string): { additions: number; deletions: number } {
++  const counts = { additions: 0, deletions: 0 }
++  for (const change of diffLines(before, after)) {
++    if (change.added) counts.additions += change.count ?? 0
++    if (change.removed) counts.deletions += change.count ?? 0
++  }
++  return counts
+ }
+-
+-export function summarizeChangeGroups(groups: readonly ChangeGroup[]): ChangeSummary {
+-  const changes = groups.flatMap((group) => group.changes)
++export function summarizeFileChanges(changes: readonly FileChange[]): ChangeSummary {
++  const overlapping = new Set(changes.map((change) => change.file)).size !== changes.length
++  const known =
++    !overlapping &&
++    changes.every(
++      (change) => change.evidence.kind === "complete" && change.additions !== null && change.deletions !== null,
++    )
+   return {
+-    files: changes.length,
+-    additions: sumAdditions(changes),
+-    deletions: sumDeletions(changes),
++    files: new Set(changes.map((change) => change.file)).size,
++    hasUnresolvedChanges: changes.some((change) => change.evidence.kind === "incomplete"),
++    additions: known ? changes.reduce((sum, change) => sum + change.additions!, 0) : null,
++    deletions: known ? changes.reduce((sum, change) => sum + change.deletions!, 0) : null,
+   }
+ }
+-
+-export function changeGroupsRevisionKey(groups: ChangeGroup[]): string {
+-  return groups
+-    .map((group) =>
+-      [
+-        group.id,
+-        group.artifactID ?? "",
+-        group.sessionID ?? "",
+-        group.agentID ?? "",
+-        group.commitRef ?? "",
+-        group.publishedCommitRef ?? "",
+-        group.diffBaseRef ?? "",
+-        group.diffHeadRef ?? "",
+-        ...group.changes.map((change) =>
+-          [change.file, change.status, change.additions ?? 0, change.deletions ?? 0].join(","),
+-        ),
+-      ].join(":"),
+-    )
+-    .join("|")
++export function summarizeChangeGroups(groups: readonly ChangeGroup[]): ChangeSummary {
++  const summary = summarizeFileChanges(groups.flatMap((group) => group.changes))
++  return groups.some((group) => (group.unavailableReceipts?.length ?? 0) > 0)
++    ? { ...summary, additions: null, deletions: null, hasUnresolvedChanges: true }
++    : summary
++}
++export function changeGroupsRevisionKey(groups: readonly ChangeGroup[]): string {
++  return JSON.stringify(groups)
+ }
+-
+ function text(value: unknown): string | undefined {
+   return typeof value === "string" && value.trim() ? value.trim() : undefined
+ }
+-
+-function artifactChangeGroups(): ChangeGroup[] {
+-  const board = boardStore.board as any
+-  const artifacts = Array.isArray(board?.artifacts) ? board.artifacts : []
+-  const nodes = Array.isArray(board?.sessionInvocationTopology?.nodes) ? board.sessionInvocationTopology.nodes : []
+-  return artifacts
+-    .filter((artifact: any) => artifact?.kind === "build_host_observation")
+-    .map((artifact: any) => {
+-      const payload = artifact?.payload && typeof artifact.payload === "object" ? artifact.payload : {}
+-      const sessionID = text(payload.session_id)
+-      const node = sessionID
+-        ? nodes.find((candidate: any) => String(candidate?.sessionID || "") === sessionID)
+-        : undefined
+-      const changes = (Array.isArray(payload.diffs) ? payload.diffs : [])
+-        .filter((item: any) => item && typeof item.file === "string")
+-        .map(
+-          (item: any): FileChange => ({
+-            file: String(item.file).replace(/^[ab]\//, ""),
+-            status:
+-              item.status === "added" || item.status === "deleted" || item.status === "modified"
+-                ? item.status
+-                : "modified",
+-            additions: Number.isFinite(Number(item.additions)) ? Number(item.additions) : 0,
+-            deletions: Number.isFinite(Number(item.deletions)) ? Number(item.deletions) : 0,
+-            isText: item.is_binary !== true,
+-            beforeObject:
+-              item.before && typeof item.before.oid === "string" && Number.isInteger(item.before.bytes)
+-                ? { oid: item.before.oid, bytes: item.before.bytes }
+-                : null,
+-            afterObject:
+-              item.after && typeof item.after.oid === "string" && Number.isInteger(item.after.bytes)
+-                ? { oid: item.after.oid, bytes: item.after.bytes }
+-                : null,
+-          }),
+-        )
+-        .sort((left: FileChange, right: FileChange) => left.file.localeCompare(right.file))
+-      return {
+-        id: `artifact:${String(artifact.id)}`,
+-        taskID: text(payload.task_id) ?? text(board?.task?.id),
+-        artifactID: String(artifact.id),
+-        sessionID,
+-        agentID: text(node?.agent),
+-        commitRef: text(payload.contribution_commit_ref),
+-        publishedCommitRef: text(payload.published_commit_ref),
+-        diffBaseRef: text(payload.diff_base_ref),
+-        diffHeadRef: text(payload.diff_head_ref),
+-        additions: sumAdditions(changes),
+-        deletions: sumDeletions(changes),
+-        changes,
+-      } satisfies ChangeGroup
+-    })
+-    .filter((group: ChangeGroup) => group.changes.length > 0)
++function record(value: unknown): value is Record<string, any> {
++  return !!value && typeof value === "object" && !Array.isArray(value)
++}
++function status(value: unknown): FileChange["status"] {
++  return value === "added" || value === "deleted" || value === "modified" ? value : undefined
++}
++function incomplete(
++  file: string,
++  receipts: readonly FileChangeReceipt[],
++  reason: "saved_session_flags_missing" | "unknown_resource",
++): FileChange {
++  return { file, additions: null, deletions: null, evidence: { kind: "incomplete", reason, receipts } }
++}
++export function savedSessionChangeGroups(raw: unknown, sessionID: string): ChangeGroup[] {
++  if (!Array.isArray(raw)) return []
++  const changes = raw.flatMap((item, fileIndex): FileChange[] =>
++    record(item) && text(item.file)
++      ? [
++          {
++            ...incomplete(item.file, [{ sessionID, fileIndex }], "saved_session_flags_missing"),
++            status: status(item.status),
++          },
++        ]
++      : [],
++  )
++  return changes.length
++    ? [
++        {
++          id: `session:${sessionID}:saved`,
++          sessionID,
++          observationKind: "saved_session_interval",
++          ...summarizeFileChanges(changes),
++          changes,
++        },
++      ]
++    : []
++}
++function object(value: unknown): { oid: string; bytes: number } | null | undefined {
++  if (value === null) return null
++  if (
++    record(value) &&
++    typeof value.oid === "string" &&
++    /^[a-f0-9]{40,64}$/.test(value.oid) &&
++    Number.isSafeInteger(value.bytes) &&
++    value.bytes >= 0
++  )
++    return { oid: value.oid, bytes: value.bytes }
++  return undefined
++}
++export function immutableBuildChangeGroups(board: unknown): ChangeGroup[] {
++  if (!record(board) || !Array.isArray(board.artifacts)) return []
++  const nodes = Array.isArray(board.sessionInvocationTopology?.nodes) ? board.sessionInvocationTopology.nodes : []
++  return board.artifacts.flatMap((artifact: any): ChangeGroup[] => {
++    if (
++      !record(artifact) ||
++      artifact.kind !== "build_host_observation" ||
++      !text(artifact.id) ||
++      !record(artifact.payload)
++    )
++      return []
++    const payload = artifact.payload
++    const sessionID = text(payload.session_id)
++    const node = nodes.find((candidate: any) => candidate.sessionID === sessionID)
++    const changes: FileChange[] = (Array.isArray(payload.diffs) ? payload.diffs : []).flatMap(
++      (item: any, fileIndex: number): FileChange[] => {
++        if (!record(item) || !text(item.file)) return []
++        const file = item.file
++        const receipts = [{ artifactID: artifact.id, fileIndex }]
++        const beforeObject = object(item.before),
++          afterObject = object(item.after),
++          physical = status(item.status)
++        const validSides =
++          physical === "added"
++            ? beforeObject === null && !!afterObject
++            : physical === "deleted"
++              ? !!beforeObject && afterObject === null
++              : physical === "modified" && !!beforeObject && !!afterObject
++        if (!validSides || typeof item.is_binary !== "boolean")
++          return [{ ...incomplete(file, receipts, "unknown_resource"), status: physical }]
++        const isText = !item.is_binary
++        if (isText && ![item.additions, item.deletions].every((count) => Number.isSafeInteger(count) && count >= 0))
++          return [{ ...incomplete(file, receipts, "unknown_resource"), status: physical }]
++        return [
++          {
++            file,
++            status: physical,
++            isText,
++            beforeObject,
++            afterObject,
++            additions: isText ? item.additions : null,
++            deletions: isText ? item.deletions : null,
++            evidence: { kind: "complete", receipts },
++          },
++        ]
++      },
++    )
++    return changes.length
++      ? [
++          {
++            id: `artifact:${artifact.id}`,
++            observationKind: "immutable_build_interval",
++            taskID: text(payload.task_id) ?? text(board.task?.id),
++            artifactID: artifact.id,
++            sessionID,
++            agentID: text(node?.agent),
++            commitRef: text(payload.contribution_commit_ref),
++            publishedCommitRef: text(payload.published_commit_ref),
++            diffBaseRef: text(payload.diff_base_ref),
++            diffHeadRef: text(payload.diff_head_ref),
++            ...summarizeFileChanges(changes),
++            changes,
++          },
++        ]
++      : []
++  })
+ }
+-
+ export function currentChangeGroups(): ChangeGroup[] {
+-  const artifactGroups = artifactChangeGroups()
+-  if (artifactGroups.length > 0) return artifactGroups
+-  if (Array.isArray(boardStore.changes) && boardStore.changes.length > 0) {
+-    const changes = boardStore.changes as FileChange[]
+-    return [{ id: "store-changes", additions: sumAdditions(changes), deletions: sumDeletions(changes), changes }]
+-  }
+-  const raw = (boardStore.board as any)?.changes
+-  if (!Array.isArray(raw) || raw.length === 0) return []
+-  const changes = raw as FileChange[]
+-  return [{ id: "board-changes", additions: sumAdditions(changes), deletions: sumDeletions(changes), changes }]
++  const board = boardStore.board as any
++  const artifacts = immutableBuildChangeGroups(board)
++  if (artifacts.length) return artifacts
++  return board?.kind === "session" && text(board.sessionID)
++    ? savedSessionChangeGroups(board.changes, board.sessionID)
++    : []
+ }
+-
+ export async function resolveCurrentChangeGroups(): Promise<ChangeGroup[]> {
+   return currentChangeGroups()
+ }
+-
+ export function hasDiffBody(change: FileChange | null | undefined): boolean {
+-  return !!change && (change.before !== undefined || change.after !== undefined)
++  return (
++    !!change &&
++    change.evidence.kind === "complete" &&
++    typeof change.before === "string" &&
++    typeof change.after === "string"
++  )
+ }
+-
+ export function isKnownTextDiff(change: FileChange | null | undefined): boolean {
+-  return change?.isText !== false
++  return change?.evidence.kind === "complete" && change.isText === true
++}
++export class DiffSelectionError extends Error {
++  constructor(readonly reason: "ambiguous_group" | "ambiguous_path") {
++    super(`Observed diff selection is ambiguous: ${reason}`)
++    this.name = "DiffSelectionError"
++  }
+ }
+-
+ export async function resolveDiff(
+   target: DiffTarget,
+   groups: readonly ChangeGroup[] = currentChangeGroups(),
+ ): Promise<FileChange | null> {
+-  const group = target.groupID
+-    ? groups.find((candidate) => candidate.id === target.groupID)
+-    : target.sessionID
+-      ? groups.find((candidate) => candidate.sessionID === target.sessionID)
+-      : target.agentID
+-        ? groups.find((candidate) => candidate.agentID === target.agentID)
+-        : groups.find((candidate) => candidate.changes.some((change) => change.file === target.filePath))
+-  const change = group?.changes.find((candidate) => candidate.file === target.filePath) ?? null
+-  if (!change || hasDiffBody(change) || !group?.artifactID || !group.taskID || change.isText === false) return change
+-  const [before, after] = await Promise.all([
+-    readObservedTextSide({
+-      taskID: group.taskID,
+-      artifactID: group.artifactID,
++  const matching = groups.filter((group) =>
++    target.groupID
++      ? group.id === target.groupID
++      : target.sessionID
++        ? group.sessionID === target.sessionID
++        : target.agentID
++          ? group.agentID === target.agentID
++          : group.changes.some((change) => change.file === target.filePath),
++  )
++  if (matching.length > 1) throw new DiffSelectionError("ambiguous_group")
++  const group = matching[0]
++  const matches = group?.changes.filter((change) => change.file === target.filePath) ?? []
++  if (matches.length > 1) throw new DiffSelectionError("ambiguous_path")
++  const change = matches[0] ?? null
++  if (!change || change.evidence.kind === "incomplete" || hasDiffBody(change) || change.isText !== true) return change
++  if (
++    group?.observationKind !== "immutable_build_interval" ||
++    !group.artifactID ||
++    !group.taskID ||
++    change.beforeObject === undefined ||
++    change.afterObject === undefined
++  )
++    return {
+       file: change.file,
+-      side: "before",
+-      object: change.beforeObject,
+-    }),
+-    readObservedTextSide({
+-      taskID: group.taskID,
+-      artifactID: group.artifactID,
+-      file: change.file,
+-      side: "after",
+-      object: change.afterObject,
+-    }),
+-  ])
++      status: change.status,
++      additions: null,
++      deletions: null,
++      evidence: { kind: "incomplete", reason: "unknown_resource", receipts: change.evidence.receipts },
++    }
++  const authority = captureApiAuthority()
++  const directory = taskOwningDirectory(group.taskID)
++  const [before, after] = await Promise.all(
++    ["before", "after"].map((side) =>
++      readObservedTextSide({
++        taskID: group.taskID!,
++        artifactID: group.artifactID!,
++        file: change.file,
++        side: side as "before" | "after",
++        object: (side === "before" ? change.beforeObject : change.afterObject)!,
++        authority,
++        directory,
++      }),
++    ),
++  )
++  assertApiAuthorityCurrent(authority)
+   return { ...change, before, after }
+ }
+-
+ async function readObservedTextSide(input: {
+   taskID: string
+   artifactID: string
+   file: string
+   side: "before" | "after"
+-  object: { oid: string; bytes: number } | null | undefined
++  object: { oid: string; bytes: number } | null
++  authority: ApiAuthority
++  directory: string
+ }): Promise<string> {
+-  if (!input.object) return ""
++  if (input.object === null) return ""
+   const decoder = new TextDecoder("utf-8", { fatal: true })
+   const textChunks: string[] = []
+   let offset = 0
+@@ -211,10 +287,10 @@ async function readObservedTextSide(input: {
+     const response = await apiRequest<Uint8Array>(
+       taskScopedPath(
+         input.taskID,
+-        taskOwningDirectory(input.taskID),
++        input.directory,
+         `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
+       ),
+-      { responseKind: "binary" },
++      { responseKind: "binary", authority: input.authority },
+     )
+     if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
+     const bytes = response.body
+diff --git a/packages/overlay/src/services/tree-writer.ts b/packages/overlay/src/services/tree-writer.ts
+index 5ae302fa..6c0dae8f 100644
+--- a/packages/overlay/src/services/tree-writer.ts
++++ b/packages/overlay/src/services/tree-writer.ts
+@@ -311,7 +311,135 @@ interface SessionInfo {
+   topLevelVisible: boolean
+ }
+ 
+-interface MessageInfo {
++export interface ProjectedMessageFacts {
++  readonly id: string
++  readonly sessionID: string
++  readonly sessionAgentID: string
++  readonly agentID: string
++  readonly role: string
++  readonly orderKey: string
++  readonly time: number
++  readonly acceptedInputMessageIDs?: readonly string[]
++  readonly completed?: number
++  readonly finish?: string
++  readonly hasError?: boolean
++  readonly stepParts?: readonly ProjectedStepPartFacts[]
++  readonly toolParts?: readonly ProjectedToolPartFacts[]
++}
++
++export interface ProjectedStepPartFacts {
++  readonly id: string
++  readonly orderKey: string
++  readonly type: "step-start" | "step-finish"
++  readonly reason?: string
++}
++
++export interface ProjectedToolPartFacts {
++  readonly id: string
++  readonly orderKey: string
++  readonly tool: string
++  readonly status?: string
++  readonly start?: number
++  readonly end?: number
++}
++
++function retainActualPartFact(owner: Pick<MessageInfo, "id" | "sessionID" | "stepParts" | "toolParts">, part: any): void {
++  if (part.type !== "step-start" && part.type !== "step-finish" && part.type !== "tool") return
++  if (part.messageID !== owner.id || part.sessionID !== owner.sessionID || typeof part.id !== "string" || !part.id) {
++    throw new Error(`message part facts ownership mismatch for ${owner.id}`)
++  }
++  const orderKey = requireTimelineOrderKeyDomain(part.orderKey, `message part facts ${part.id}`, "part")
++  if (part.type === "tool") {
++    if (typeof part.tool !== "string" || !part.tool) throw new Error(`message Tool facts ${part.id} missing tool`)
++    const prior = owner.toolParts?.find((fact) => fact.id === part.id)
++    if (owner.stepParts?.some((fact) => fact.id === part.id)) throw new Error(`message part facts ${part.id} type drift`)
++    if (prior && (prior.orderKey !== orderKey || prior.tool !== part.tool)) throw new Error(`message part facts ${part.id} identity drift`)
++    const fact: ProjectedToolPartFacts = {
++      id: part.id, orderKey, tool: part.tool,
++      status: typeof part.state?.status === "string" ? part.state.status : undefined,
++      start: typeof part.state?.time?.start === "number" ? part.state.time.start : undefined,
++      end: typeof part.state?.time?.end === "number" ? part.state.time.end : undefined,
++    }
++    owner.toolParts = [...(owner.toolParts ?? []).filter((item) => item.id !== fact.id), fact]
++  } else {
++    if (owner.toolParts?.some((fact) => fact.id === part.id)) throw new Error(`message part facts ${part.id} type drift`)
++    const prior = owner.stepParts?.find((fact) => fact.id === part.id)
++    if (prior && (prior.orderKey !== orderKey || prior.type !== part.type)) throw new Error(`message part facts ${part.id} identity drift`)
++    const fact: ProjectedStepPartFacts = { id: part.id, orderKey, type: part.type, reason: typeof part.reason === "string" ? part.reason : undefined }
++    owner.stepParts = [...(owner.stepParts ?? []).filter((item) => item.id !== fact.id), fact]
++  }
++}
++
++function replaceActualPartFacts(owner: Pick<MessageInfo, "id" | "sessionID" | "stepParts" | "toolParts">, parts: any[]): void {
++  owner.stepParts = []
++  owner.toolParts = []
++  for (const part of parts) retainActualPartFact(owner, part)
++}
++
++function validateIncomingFullMessage(info: any, parts: any[], admittedSourceSessionID?: string): void {
++  const id = String(info?.id || ""), sessionID = String(info?.sessionID || "")
++  if (!id || !sessionID || !Array.isArray(parts)) throw new Error("Full Message replay missing actual identity or Parts bundle")
++  const origin = requireMessageOrigin(info, id)
++  requireCanonicalMessageAgentID(info.agentID, origin, id)
++  if (!String(info.sessionAgentID || "").trim() || typeof info.role !== "string" || !info.role || typeof info.resolvedRole !== "string" || !info.resolvedRole) {
++    throw new Error(`Full Message replay ${id} missing canonical actor or role`)
++  }
++  if (typeof info.time?.created !== "number" || !Number.isFinite(info.time.created) || info.time.created <= 0) throw new Error(`Full Message replay ${id} missing actual created time`)
++  requireTimelineOrderKeyDomain(info.orderKey, `Full Message replay ${id}`, "message")
++  const ids = new Set<string>()
++  for (const part of parts) {
++    if (!part || typeof part.id !== "string" || !part.id || part.messageID !== id || part.sessionID !== sessionID) throw new Error(`Full Message replay ${id} Part ownership mismatch`)
++    if (ids.has(part.id)) throw new Error(`Full Message replay ${id} duplicate Part ${part.id}`)
++    ids.add(part.id)
++    requireTimelineOrderKeyDomain(part.orderKey, `Full Message replay Part ${part.id}`, "part")
++  }
++  replaceActualPartFacts({ id, sessionID }, parts)
++  const existing = messages.get(id) ?? pendingPartFirstMessages.get(id)
++  if (!existing) return
++  if (existing.sessionID !== sessionID && existing.sessionID !== admittedSourceSessionID) throw new Error(`Full Message replay ${id} current Session owner mismatch`)
++  if (existing.orderKey !== info.orderKey) throw new Error(`Full Message replay ${id} current orderKey mismatch`)
++  const session = requireSessionProjection(existing.sessionID, "Full Message replay")
++  if (messages.has(id) && !session.messageIDs.has(id)) throw new Error(`Full Message replay ${id} current membership mismatch`)
++  const cardID = session.messageCardIDs.get(id)
++  if (!cardID && !existing.metadataOnly) throw new Error(`Full Message replay ${id} current display owner missing`)
++  if (cardID) {
++    const card = cardTreeStore.cards[cardID]
++    if (!card || card.sessionID !== existing.sessionID) throw new Error(`Full Message replay ${id} current Card owner mismatch`)
++    for (const part of card.parts ?? []) {
++      if (part.messageID !== id || isBoundaryMessagePart(part)) continue
++      const target = session.partIndex.get(String(part.id || ""))
++      if (!target || target.cardID !== cardID || card.parts?.[target.index]?.id !== part.id) throw new Error(`Full Message replay ${id} current Part owner mismatch`)
++    }
++  }
++}
++
++function retireIncomingFullMessage(info: any): void {
++  if (!messages.has(info.id) && !pendingPartFirstMessages.has(info.id)) return
++  handleMessageRemoved({ type: "message.removed", properties: { sessionID: info.sessionID, messageID: info.id } })
++}
++
++function actualMessageQualificationFacts(info: any): Pick<
++  ProjectedMessageFacts,
++  "acceptedInputMessageIDs" | "completed" | "finish" | "hasError"
++> {
++  const accepted = info.acceptedInputMessageIDs
++  const completed = info.time?.completed
++  return {
++    acceptedInputMessageIDs:
++      Array.isArray(accepted) && accepted.every((id) => typeof id === "string" && id.length > 0)
++        ? [...accepted]
++        : undefined,
++    completed: typeof completed === "number" && Number.isFinite(completed) && completed > 0 ? completed : undefined,
++    finish: typeof info.finish === "string" ? info.finish : undefined,
++    hasError: info.error !== undefined && info.error !== null,
++  }
++}
++
++interface MessageInfo extends ProjectedMessageFacts {
++  stepParts?: readonly ProjectedStepPartFacts[]
++  toolParts?: readonly ProjectedToolPartFacts[]
++  /** Actual metadata retained without a display-card projection. */
++  metadataOnly?: boolean
+   id: string
+   sessionID: string
+   /** Canonical execution-session owner projected by the backend bridge. */
+@@ -600,6 +728,36 @@ export function hasProjectedPart(sessionID: string, partID: string): boolean {
+   return sessions.get(sessionID)?.partIndex.has(partID) === true
+ }
+ 
++/** Transient copies from the sole message owner. The collector subscribes to
++ * publishedCardTreeVersion before deriving; this getter never publishes. */
++export function projectedConversationMessageFacts(sessionIDs: readonly string[]): ProjectedMessageFacts[] {
++  const result: ProjectedMessageFacts[] = []
++  for (const sessionID of new Set(sessionIDs)) {
++    const session = sessions.get(sessionID)
++    if (!session) continue
++    for (const id of session.messageIDs) {
++      const message = messages.get(id)
++      if (!message || message.sessionID !== sessionID) continue
++      result.push({
++        id: message.id,
++        sessionID: message.sessionID,
++        sessionAgentID: message.sessionAgentID,
++        agentID: message.agentID,
++        role: message.role,
++        orderKey: message.orderKey,
++        time: message.time,
++        acceptedInputMessageIDs: message.acceptedInputMessageIDs ? [...message.acceptedInputMessageIDs] : undefined,
++        completed: message.completed,
++        finish: message.finish,
++        hasError: message.hasError,
++        stepParts: message.stepParts?.map((part) => ({ ...part })),
++        toolParts: message.toolParts?.map((part) => ({ ...part })),
++      })
++    }
++  }
++  return result
++}
++
+ export function projectedConversationPartSnapshot(
+   sessionID: string,
+   partID: string,
+@@ -844,14 +1002,20 @@ export function ingestPersistedConversationMessage(input: { info: any; parts: an
+   if (!Array.isArray(input.parts)) {
+     throw new Error(`ingestPersistedConversationMessage: message ${input.info.id} missing parts array`)
+   }
++  validateIncomingFullMessage(input.info, input.parts)
+   batch(() => {
+-    applyEvent({
++    flushBufferedPartDeltas()
++    retireIncomingFullMessage(input.info)
++    applyVisibleCardTreeEvent(() => handleMessageUpdated({
+       type: "message.updated",
+       orderKey: input.info.orderKey,
+       properties: { info: input.info },
+-    })
++    }, { metadataOnly: !transcriptMessageHasDisplay(input) }))
++    const owner = messages.get(String(input.info.id))
++    if (!owner) throw new Error(`ingestPersistedConversationMessage: message ${input.info.id} missing canonical owner`)
++    replaceActualPartFacts(owner, input.parts)
+     for (const part of input.parts) {
+-      if (!part) continue
++      if (!conversationPartIsProjectable(part)) continue
+       projectPersistedConversationPart(input.info, part)
+     }
+   })
+@@ -981,7 +1145,7 @@ function interactionCardID(messageID: string): string {
+ 
+ // ── Handlers ──
+ 
+-function handleMessageUpdated(event: any): void {
++function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = {}): void {
+   const info = propsOf(event).info
+   if (!info || typeof info !== "object") throw new Error("message.updated missing info")
+ 
+@@ -1023,10 +1187,12 @@ function handleMessageUpdated(event: any): void {
+   }
+   const orderKey = envelopeOrderKey
+   const existingMessage = messages.get(id)
++  if (existingMessage && existingMessage.sessionID !== sessionID) throw new Error(`message.updated ${id} Session owner drift`)
+   if (existingMessage && existingMessage.orderKey !== orderKey) {
+     throw new Error(`message.updated ${id} orderKey drift from existing message owner`)
+   }
+   const pendingPartFirstMessage = pendingPartFirstMessages.get(id)
++  if (pendingPartFirstMessage && pendingPartFirstMessage.sessionID !== sessionID) throw new Error(`message.updated ${id} pending Session owner drift`)
+   if (pendingPartFirstMessage && pendingPartFirstMessage.orderKey !== orderKey) {
+     throw new Error(`message.updated ${id} orderKey drift from pending part-first owner`)
+   }
+@@ -1038,6 +1204,10 @@ function handleMessageUpdated(event: any): void {
+   const stage = deriveSessionStage(origin)
+   const displayRole = displayRoleForResolvedRole(rawResolvedRole)
+   const nextMessageInfo: MessageInfo = {
++    ...actualMessageQualificationFacts(info),
++    stepParts: (existingMessage ?? pendingPartFirstMessage)?.stepParts,
++    toolParts: (existingMessage ?? pendingPartFirstMessage)?.toolParts,
++    metadataOnly: options.metadataOnly ?? (existingMessage ?? pendingPartFirstMessage)?.metadataOnly,
+     id,
+     sessionID,
+     sessionAgentID,
+@@ -1068,15 +1238,17 @@ function handleMessageUpdated(event: any): void {
+ 
+   // Index the message.
+   messages.set(id, nextMessageInfo)
+-  if (!latestTimelineMessage || messageTimeOrder(latestTimelineMessage, nextMessageInfo) <= 0) {
++  if (!nextMessageInfo.metadataOnly && (!latestTimelineMessage || messageTimeOrder(latestTimelineMessage, nextMessageInfo) <= 0)) {
+     latestTimelineMessage = nextMessageInfo
+-  } else if (latestTimelineMessage.id === id) {
+-    latestTimelineMessage = [...messages.values()].sort(messageTimeOrder).at(-1)
++  } else if (latestTimelineMessage?.id === id) {
++    latestTimelineMessage = [...messages.values()].filter((message) => !message.metadataOnly).sort(messageTimeOrder).at(-1)
+   }
+ 
+   const priorMessageCount = session.messageIDs.size
+   session.messageIDs.add(id)
+ 
++  if (nextMessageInfo.metadataOnly && !session.messageCardIDs.has(id)) return
++
+   const messageCardID = ensureMessageTurnProjection(session, id, {
+     stage,
+     agentID: isUserStage(stage) ? undefined : canonicalAgentID,
+@@ -1225,6 +1397,7 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta
+   let displayRole = ""
+   const existingMessage = messages.get(messageID)
+   if (existingMessage) {
++    if (existingMessage.sessionID !== sessionID) throw new Error(`message.part.updated ${messageID} Session owner drift`)
+     if (existingMessage.orderKey !== routeOrderKey) {
+       throw new Error(`message.part.updated ${messageID} orderKey drift from existing message owner`)
+     }
+@@ -1232,6 +1405,7 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta
+   } else {
+     const pendingMessage = pendingPartFirstMessages.get(messageID)
+     if (pendingMessage) {
++      if (pendingMessage.sessionID !== sessionID) throw new Error(`message.part.updated ${messageID} pending Session owner drift`)
+       if (pendingMessage.orderKey !== routeOrderKey) {
+         throw new Error(`message.part.updated ${messageID} orderKey drift from pending part-first owner`)
+       }
+@@ -1242,6 +1416,29 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta
+   if (!displayRole && eventResolvedRole) displayRole = displayRoleForResolvedRole(eventResolvedRole)
+   let route: ReturnType<typeof requirePartEventRouteMeta> | undefined
+ 
++  if (part.type === "step-start" || part.type === "step-finish") {
++    let owner = existingMessage ?? pendingPartFirstMessages.get(messageID)
++    if (!owner) {
++      const meta = requirePartEventRouteMeta(opts.routeMeta, messageID)
++      ensureSessionProjection(sessionID, {
++        agentID: isUserStage(deriveRuntimeSessionStage(meta.channel)) ? undefined : meta.sessionAgentID,
++        stage: deriveRuntimeSessionStage(meta.channel), parentSessionID: meta.parentSessionID,
++      })
++      owner = {
++        id: messageID, sessionID, sessionAgentID: meta.sessionAgentID, agentID: meta.agentID,
++        role: meta.role, author: meta.author, channel: meta.channel, source: meta.source,
++        resolvedRole: displayRoleForResolvedRole(meta.resolvedRole), agent: meta.resolvedRole,
++        stage: deriveSessionStage(meta), parentSessionID: meta.parentSessionID, parentMessageID: meta.parentMessageID,
++        orderKey: meta.orderKey, time: messageOrderKeyTime("message.part.updated", messageID, meta.orderKey),
++        serverTimeConfirmed: false, delegatedContext: isDelegatedContextMessage(meta), pendingPartFirst: true,
++        metadataOnly: true,
++      } as PendingPartFirstMessageInfo
++      pendingPartFirstMessages.set(messageID, owner as PendingPartFirstMessageInfo)
++    }
++    retainActualPartFact(owner, part)
++    return null
++  }
++
+   if (!session || !cardID) {
+     // Bridge stamps channel/parentSessionID onto the event payload.
+     // A part can arrive before its message.updated (saveMessage is silent;
+@@ -1272,7 +1469,9 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta
+     if (!route) route = requirePartEventRouteMeta(opts.routeMeta, messageID)
+     const turnStage = deriveSessionStage(route)
+     const messageTime = messageOrderKeyTime("message.part.updated", messageID, route.orderKey)
+-    pendingPartFirstMessages.set(messageID, {
++    if (!existingMessage) pendingPartFirstMessages.set(messageID, {
++      stepParts: pendingPartFirstMessages.get(messageID)?.stepParts,
++      toolParts: pendingPartFirstMessages.get(messageID)?.toolParts,
+       id: messageID,
+       sessionID,
+       sessionAgentID: route.sessionAgentID,
+@@ -1307,6 +1506,12 @@ function ensurePartProjection(part: any, opts: { routeMeta?: PartEventRouteMeta
+ 
+   if (!conversationPartIsProjectable(part)) return null
+ 
++  const factOwner = messages.get(messageID) ?? pendingPartFirstMessages.get(messageID)
++  if (factOwner) {
++    factOwner.metadataOnly = false
++    retainActualPartFact(factOwner, part)
++  }
++
+   upsertPart(session, messageID, cardID, partID, { ...part, orderKey: partOrderKey })
+   if (!displayRole) {
+     throw new Error(
+@@ -1550,13 +1755,20 @@ function handleMessageRemoved(event: any): void {
+   if (!sessionID || !messageID) throw new Error("message.removed missing sessionID/messageID")
+ 
+   const session = requireSessionProjection(sessionID, "message.removed")
+-  const cardID = requireMessageCardProjection(session, messageID, "message.removed")
++  const metadataOnly = messages.get(messageID)?.metadataOnly || pendingPartFirstMessages.get(messageID)?.metadataOnly
++  const cardID = metadataOnly ? session.messageCardIDs.get(messageID) : requireMessageCardProjection(session, messageID, "message.removed")
+ 
+   session.messageIDs.delete(messageID)
+   session.messageCardIDs.delete(messageID)
+   messages.delete(messageID)
+   pendingPartFirstMessages.delete(messageID)
+ 
++  if (latestTimelineMessage?.id === messageID) {
++    latestTimelineMessage = [...messages.values()].filter((message) => !message.metadataOnly).sort(messageTimeOrder).at(-1)
++  }
++
++  if (!cardID) return
++
+   removeIndexedParts(session, cardID, (part) => String(part?.messageID || "") === messageID)
+ 
+   if (!cardStillOwnsSessionMessage(session, cardID)) {
+@@ -1580,6 +1792,7 @@ function handleMessageMoved(event: any): void {
+   if (sourceSessionID === targetSessionID) {
+     throw new Error(`message.moved ${messageID} source and target Session must differ`)
+   }
++  validateIncomingFullMessage(info, parts, sourceSessionID)
+ 
+   const existing = messages.get(messageID)
+   if (existing?.sessionID === sourceSessionID) {
+@@ -1587,13 +1800,21 @@ function handleMessageMoved(event: any): void {
+       type: "message.removed",
+       properties: { sessionID: sourceSessionID, messageID },
+     })
++  } else if (existing?.sessionID === targetSessionID) {
++    handleMessageRemoved({ type: "message.removed", properties: { sessionID: targetSessionID, messageID } })
+   } else if (existing && existing.sessionID !== targetSessionID) {
+     throw new Error(
+       `message.moved ${messageID} existing owner ${existing.sessionID} is neither source ${sourceSessionID} nor target ${targetSessionID}`,
+     )
+   }
+ 
+-  handleMessageUpdated({ ...event, type: "message.updated", properties: { ...p, info } })
++  handleMessageUpdated(
++    { ...event, type: "message.updated", properties: { ...p, info } },
++    { metadataOnly: !transcriptMessageHasDisplay({ info, parts }) },
++  )
++  const movedOwner = messages.get(messageID)
++  if (!movedOwner) throw new Error(`message.moved ${messageID} missing canonical metadata owner`)
++  replaceActualPartFacts(movedOwner, parts)
+   for (const part of parts) {
+     handlePartUpdated({
+       ...event,
+@@ -1607,10 +1828,31 @@ function handlePartRemoved(event: any): void {
+   const p = propsOf(event)
+   const sessionID = String(p.sessionID || "")
+   const partID = String(p.partID || "")
+-  if (!sessionID || !partID) throw new Error("message.part.removed missing sessionID/partID")
++  const messageID = String(p.messageID || ""), partType = String(p.partType || "")
++  if (!sessionID || !partID || !messageID || !partType) throw new Error("message.part.removed missing actual Session/Message/Part/type identity")
++
++  const owners = [...messages.values(), ...pendingPartFirstMessages.values()].filter(
++    (owner) => owner.sessionID === sessionID && owner.stepParts?.some((part) => part.id === partID),
++  )
++  if (owners.length > 1) throw new Error(`message.part.removed ${partID} ambiguous metadata owner`)
++  if (owners[0]) {
++    const fact = owners[0].stepParts!.find((part) => part.id === partID)!
++    if (owners[0].id !== messageID || fact.type !== partType) throw new Error(`message.part.removed ${partID} retained owner/type mismatch`)
++    owners[0].stepParts = owners[0].stepParts?.filter((part) => part.id !== partID)
++    return
++  }
+ 
+   const session = requireSessionProjection(sessionID, "message.part.removed")
+   const target = requirePartProjection(session, partID, "message.part.removed")
++  const actual = cardTreeStore.cards[target.cardID]?.parts?.[target.index]
++  if (actual?.messageID !== messageID || actual?.sessionID !== sessionID || actual?.type !== partType) throw new Error(`message.part.removed ${partID} display owner/type mismatch`)
++
++  for (const owner of messages.values()) {
++    if (owner.sessionID === sessionID) owner.toolParts = owner.toolParts?.filter((part) => part.id !== partID)
++  }
++  for (const owner of pendingPartFirstMessages.values()) {
++    if (owner.sessionID === sessionID) owner.toolParts = owner.toolParts?.filter((part) => part.id !== partID)
++  }
+ 
+   removeIndexedParts(session, target.cardID, (_part, index) => index === target.index)
+   syncSessionTopLevelVisibility(session)
+@@ -2880,7 +3122,7 @@ function regroupTimelineSegments(opts: { deferHierarchy?: boolean } = {}): void
+   for (const message of pendingPartFirstMessages.values()) timelineMessages.set(message.id, message)
+   for (const message of messages.values()) timelineMessages.set(message.id, message)
+   const ordered = [...timelineMessages.values()]
+-    .filter((message) => sessions.has(message.sessionID))
++    .filter((message) => sessions.has(message.sessionID) && !message.metadataOnly)
+     .sort(messageTimeOrder)
+   if (ordered.length === 0) return
+   const projectionItems: TimelineProjectionItem[] = []
+@@ -3106,6 +3348,7 @@ export interface HydrateMessageMeta {
+ export interface PreparedConversationView {
+   transcriptByMessageID: Map<string, any>
+   ordered: HydrateMessageMeta[]
++  metadataOnlyMessages: MessageInfo[]
+ }
+ 
+ function hydrateMessageMetaOrder(left: HydrateMessageMeta, right: HydrateMessageMeta): number {
+@@ -3173,6 +3416,7 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
+     viewMessageIDs.add(meta.messageID)
+   }
+   const sessionAgentIDs = new Map<string, string>()
++  const expectedMessageIDs = new Set<string>()
+   for (const rawSession of Array.isArray(view?.sessions) ? view.sessions : []) {
+     const sessionID = String(rawSession?.sessionID || "")
+     const agentID = String(rawSession?.agentID || "").trim()
+@@ -3184,6 +3428,48 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
+       throw new Error(`hydrateConversationView: view session ${sessionID} agentID drift: ${existing} -> ${agentID}`)
+     }
+     sessionAgentIDs.set(sessionID, agentID)
++    if (!Array.isArray(rawSession.messageIDs)) throw new Error(`hydrateConversationView: view session ${sessionID} missing messageIDs`)
++    for (const messageID of rawSession.messageIDs) {
++      if (typeof messageID !== "string" || !messageID) throw new Error(`hydrateConversationView: view session ${sessionID} invalid messageID`)
++      const payload = transcriptByMessageID.get(messageID)
++      if (!payload || payload.info?.sessionID !== sessionID) throw new Error(`hydrateConversationView: expected message ${messageID} missing matching transcript payload`)
++      if (expectedMessageIDs.has(messageID)) throw new Error(`hydrateConversationView: expected message ${messageID} duplicate membership`)
++      expectedMessageIDs.add(messageID)
++    }
++  }
++  const metadataOnlyMessages: MessageInfo[] = []
++  const partOwners = new Map<string, string>()
++  for (const [id, payload] of transcriptByMessageID) {
++    if (!expectedMessageIDs.has(id)) throw new Error(`hydrateConversationView: transcript message ${id} missing session membership`)
++    if (viewMessageIDs.has(id)) continue
++    const info = payload.info
++    const origin = requireMessageOrigin(info, id)
++    const agentID = requireCanonicalMessageAgentID(info.agentID, origin, id)
++    const sessionID = String(info.sessionID || "")
++    const sessionAgentID = String(info.sessionAgentID || "").trim()
++    if (!sessionAgentID || sessionAgentID !== sessionAgentIDs.get(sessionID)) throw new Error(`hydrateConversationView: message ${id} missing canonical session actor`)
++    if (typeof info.role !== "string" || !info.role || typeof info.resolvedRole !== "string" || !info.resolvedRole) throw new Error(`hydrateConversationView: message ${id} missing canonical role`)
++    const time = Number(info.time?.created)
++    if (!Number.isFinite(time) || time <= 0) throw new Error(`hydrateConversationView: message ${id} missing positive created time`)
++    if (!Array.isArray(payload.parts)) throw new Error(`hydrateConversationView: message ${id} missing actual Parts bundle`)
++    for (const part of payload.parts) {
++      const partID = String(part?.id || "")
++      if (!partID || part.messageID !== id || part.sessionID !== sessionID) throw new Error(`hydrateConversationView: message ${id} invalid actual Part ownership`)
++      requireTimelineOrderKeyDomain(part.orderKey, `persisted message part ${partID}`, "part")
++      const partOwnerKey = `${sessionID}\u0000${partID}`
++      if (partOwners.has(partOwnerKey)) throw new Error(`hydrateConversationView: duplicate part ${partID} in session ${sessionID}`)
++      partOwners.set(partOwnerKey, id)
++    }
++    const metadata: MessageInfo = {
++      ...actualMessageQualificationFacts(info), id, sessionID, sessionAgentID, agentID, role: info.role,
++      orderKey: requireTimelineOrderKeyDomain(info.orderKey, `hydrateConversationView message ${id}`, "message"), time,
++      stage: deriveSessionStage(origin), author: origin.author, channel: origin.channel, source: origin.source,
++      resolvedRole: displayRoleForResolvedRole(info.resolvedRole), agent: typeof info.agent === "string" ? info.agent : "",
++      parentSessionID: String(info.parentSessionID || ""), parentMessageID: String(info.parentID || ""),
++      serverTimeConfirmed: true, delegatedContext: isDelegatedContextMessage(origin), metadataOnly: true,
++    }
++    replaceActualPartFacts(metadata, payload.parts)
++    metadataOnlyMessages.push(metadata)
+   }
+   for (const meta of ordered) {
+     const sessionAgentID = sessionAgentIDs.get(meta.sessionID)
+@@ -3218,7 +3504,6 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
+       throw new Error(`hydrateConversationView: display transcript message ${messageID} missing from view.messages`)
+     }
+   }
+-  const partOwners = new Map<string, string>()
+   for (const meta of ordered) {
+     const message = transcriptByMessageID.get(meta.messageID)
+     const info = message?.info
+@@ -3252,7 +3537,9 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
+     if (transcriptOrderKey && transcriptOrderKey !== meta.orderKey) {
+       throw new Error(`hydrateConversationView: message ${messageID} orderKey drift between transcript and view`)
+     }
+-    for (const part of Array.isArray(message?.parts) ? message.parts : []) {
++    if (!Array.isArray(message.parts)) throw new Error(`hydrateConversationView: message ${messageID} missing actual Parts bundle`)
++    replaceActualPartFacts({ id: messageID, sessionID }, message.parts)
++    for (const part of message.parts) {
+       const partID = String(part?.id || "")
+       if (!partID) {
+         throw new Error(`hydrateConversationView: message ${messageID} contains part without id`)
+@@ -3273,7 +3560,7 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
+       requireTimelineOrderKeyDomain(part.orderKey, `persisted message part ${partID}`, "part")
+     }
+   }
+-  return { transcriptByMessageID, ordered }
++  return { transcriptByMessageID, ordered, metadataOnlyMessages }
+ }
+ 
+ /** Replay a validated persisted task into the exact same visible card identity
+@@ -3283,6 +3570,19 @@ export function prepareConversationView(view: any, transcript: any[]): PreparedC
+ export function commitPreparedConversationView(prepared: PreparedConversationView): void {
+   const { transcriptByMessageID, ordered } = prepared
+   const touched = new Set<string>()
++  for (const message of transcriptByMessageID.values()) validateIncomingFullMessage(message.info, message.parts)
++  flushBufferedPartDeltas()
++  for (const message of transcriptByMessageID.values()) retireIncomingFullMessage(message.info)
++  for (const message of prepared.metadataOnlyMessages) {
++    const session = ensureSessionProjection(message.sessionID, {
++      agentID: isUserStage(deriveRuntimeSessionStage(message.channel)) ? undefined : message.sessionAgentID,
++      stage: deriveRuntimeSessionStage(message.channel), parentSessionID: message.parentSessionID,
++    })
++    pendingPartFirstMessages.delete(message.id)
++    messages.set(message.id, message)
++    session.messageIDs.add(message.id)
++    touched.add(message.sessionID)
++  }
+   for (const meta of ordered) {
+     const message = transcriptByMessageID.get(meta.messageID)
+     if (!message) {
+@@ -3335,7 +3635,9 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
+       stage: runtimeStage,
+       parentSessionID,
+     })
++    pendingPartFirstMessages.delete(messageID)
+     messages.set(messageID, {
++      ...actualMessageQualificationFacts(info),
+       id: messageID,
+       sessionID,
+       sessionAgentID: meta.sessionAgentID,
+@@ -3356,6 +3658,7 @@ export function commitPreparedConversationView(prepared: PreparedConversationVie
+       delegatedContext: isDelegatedContextMessage(origin),
+     })
+     session.messageIDs.add(messageID)
++    replaceActualPartFacts(messages.get(messageID)!, message.parts)
+     const cardID = ensureMessageTurnProjection(session, messageID, {
+       stage,
+       agentID: isUserStage(stage) ? undefined : canonicalAgentID,
+diff --git a/packages/overlay/src/styles/surfaces/changes.css b/packages/overlay/src/styles/surfaces/changes.css
+index 36b28a65..adfae297 100644
+--- a/packages/overlay/src/styles/surfaces/changes.css
++++ b/packages/overlay/src/styles/surfaces/changes.css
+@@ -104,9 +104,14 @@
+ }
+ 
+ .changes-diff-pane .diff-preview-body {
++  width: 100%;
++  min-width: 0;
++  padding: 0;
++}
++
++.changes-diff-pane .diff-preview-body--text {
+   width: max-content;
+   min-width: 100%;
+-  padding: 0;
+ }
+ 
+ .changes-total {
+@@ -350,8 +355,10 @@
+ 
+ .change-status {
+   display: inline-flex;
++  flex: 0 0 auto;
+   align-items: center;
+   justify-content: center;
++  white-space: nowrap;
+   min-height: calc(16px * var(--ui-scale));
+   padding: 0 var(--ui-gap-sm);
+   border-radius: var(--oc-radius-soft);
+diff --git a/packages/overlay/src/utils/file-change-summary.ts b/packages/overlay/src/utils/file-change-summary.ts
+index fdf1597f..f756bcdd 100644
+--- a/packages/overlay/src/utils/file-change-summary.ts
++++ b/packages/overlay/src/utils/file-change-summary.ts
+@@ -1,267 +1,494 @@
+-import { cardTreeStore, type CardNode } from "../store/card-tree"
++import { cardTreeStore, publishedCardTreeVersion, type CardNode } from "../store/card-tree"
+ import { boardStore } from "../store/board"
+-import type { FileChange } from "../components/DiffView"
+-import type { ChangeGroup } from "../services/diff"
++import type { FileChange, FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
++import { summarizeFileChanges, textComparisonCounts, type ChangeGroup } from "../services/diff"
+ import { relativePathFrom } from "./tool"
++import { projectedConversationMessageFacts, type ProjectedMessageFacts } from "../services/tree-writer"
++import { conversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
+ 
+ export interface ToolFileChange extends FileChange {
+   openPath: string
+   displayPath: string
+ }
+-
+ export interface AgentFileChange extends ToolFileChange {
+   agentID: string
+   sources: number
+ }
+-
+ export interface ArtifactFileRow {
+   groupID: string
+   targetPath: string
+   file: string
+-  additions: number
+-  deletions: number
++  additions: number | null
++  deletions: number | null
++  isText?: boolean
+ }
+-
+-function isRecord(value: unknown): value is Record<string, unknown> {
+-  return !!value && typeof value === "object" && !Array.isArray(value)
++export interface ToolReceiptContext {
++  sessionID: string
++  messageID: string
++  partID: string
+ }
+-
+-function asText(value: unknown): string | undefined {
+-  return typeof value === "string" && value.trim() ? value.trim() : undefined
++export interface FileChangeInput {
++  part: unknown
++  agentID: string
++  sessionID?: string
+ }
+-
+-function asString(value: unknown): string | undefined {
+-  return typeof value === "string" ? value : undefined
++function record(value: unknown): value is Record<string, any> {
++  return !!value && typeof value === "object" && !Array.isArray(value)
+ }
+-
+-function asCount(value: unknown): number {
+-  return typeof value === "number" && Number.isFinite(value) ? value : 0
++function text(value: unknown): string | undefined {
++  return typeof value === "string" && value.trim() ? value : undefined
+ }
+-
+ function displayPath(path: string, base: string): string {
+-  const normalized = path.replace(/\\/g, "/")
+-  const normalizedBase = base.replace(/\\/g, "/").replace(/\/+$/, "")
+-  const rel = relativePathFrom(normalizedBase, normalized)
+-  return rel || normalized
++  return relativePathFrom(base.replaceAll("\\", "/").replace(/\/+$/, ""), path.replaceAll("\\", "/")) || path
+ }
+-
+-function diffStatus(raw: unknown, before?: string, after?: string): FileChange["status"] {
+-  const value = String(raw || "")
+-    .trim()
+-    .toLowerCase()
+-  if (value === "add" || value === "added") return "added"
+-  if (value === "delete" || value === "deleted" || value === "remove" || value === "removed") return "deleted"
+-  if (before === "" && typeof after === "string" && after.length > 0) return "added"
+-  if (after === "" && typeof before === "string" && before.length > 0) return "deleted"
+-  return "modified"
++function receiptsUnique(receipts: readonly FileChangeReceipt[]): FileChangeReceipt[] {
++  return [...new Map(receipts.map((receipt) => [JSON.stringify(receipt), receipt])).values()]
+ }
+-
+-function normalizeToolDiff(raw: unknown, base: string): ToolFileChange | null {
+-  if (!isRecord(raw)) return null
+-  const before = asString(raw.before) ?? asString(raw.oldContent)
+-  const after = asString(raw.after) ?? asString(raw.newContent)
+-  const sourcePath = asText(raw.file) ?? asText(raw.filePath) ?? asText(raw.path)
+-  const targetPath = asText(raw.movePath) ?? sourcePath
+-  if (!targetPath) return null
+-
+-  const sourceDisplay = sourcePath ? displayPath(sourcePath, base) : ""
+-  const targetDisplay = asText(raw.relativePath) ?? displayPath(targetPath, base)
+-  const renderedPath =
+-    sourcePath && targetPath !== sourcePath ? `${sourceDisplay || sourcePath} -> ${targetDisplay}` : targetDisplay
+-
++function unavailable(
++  change: ToolFileChange,
++  reason: FileChangeIncompleteReason,
++  receipts = change.evidence.receipts,
++): ToolFileChange {
+   return {
+-    file: renderedPath,
+-    status: diffStatus(raw.type, before, after),
+-    additions: asCount(raw.additions),
+-    deletions: asCount(raw.deletions),
+-    before,
+-    after,
+-    openPath: targetPath,
+-    displayPath: renderedPath,
++    file: change.file,
++    openPath: change.openPath,
++    displayPath: change.displayPath,
++    status: change.status,
++    additions: null,
++    deletions: null,
++    evidence: { kind: "incomplete", reason, receipts: receiptsUnique(receipts) },
+   }
+ }
+-
+-export function toolFileChangesFromState(state: unknown, base: string): ToolFileChange[] {
+-  if (!isRecord(state)) return []
+-  const meta = isRecord(state.metadata) ? state.metadata : {}
+-  const files = Array.isArray(meta.files)
+-    ? meta.files.map((item) => normalizeToolDiff(item, base)).filter((item): item is ToolFileChange => !!item)
+-    : []
+-  if (files.length > 0) return files
+-
+-  const single = normalizeToolDiff(meta.filediff, base)
+-  return single ? [single] : []
++function comparison(
++  raw: Record<string, any>,
++  base: string,
++  kind: "edit" | "patch",
++  receipts: FileChangeReceipt[],
++): ToolFileChange | null {
++  const source = text(kind === "edit" ? raw.file : raw.filePath)
++  if (!source) return null
++  const target = kind === "patch" ? (text(raw.movePath) ?? source) : source
++  const file =
++    target !== source ? `${displayPath(source, base)} -> ${displayPath(target, base)}` : displayPath(target, base)
++  const status =
++    kind === "patch"
++      ? raw.type === "add"
++        ? "added"
++        : raw.type === "delete"
++          ? "deleted"
++          : raw.type === "update" || raw.type === "move"
++            ? "modified"
++            : undefined
++      : undefined
++  const change: ToolFileChange = {
++    file,
++    openPath: target,
++    displayPath: file,
++    status,
++    additions: null,
++    deletions: null,
++    evidence: { kind: "incomplete", reason: "missing_endpoints", receipts },
++  }
++  if (typeof raw.before !== "string" || typeof raw.after !== "string") return change
++  return {
++    ...change,
++    isText: true,
++    before: raw.before,
++    after: raw.after,
++    ...textComparisonCounts(raw.before, raw.after),
++    evidence: { kind: "complete", receipts },
++  }
+ }
+-
+-function toolPartFileChanges(part: unknown, base: string): ToolFileChange[] {
+-  if (!isRecord(part)) return []
+-  const state = isRecord(part.state) ? part.state : {}
+-  if (String(state.status || "").toLowerCase() !== "completed") return []
+-  return toolFileChangesFromState(state, base)
++export function toolFileChangesFromState(state: unknown, base: string, context?: ToolReceiptContext): ToolFileChange[] {
++  if (!record(state) || state.status !== "completed" || !record(state.metadata)) return []
++  const receipt = (fileIndex: number): FileChangeReceipt[] => (context ? [{ ...context, fileIndex }] : [])
++  const meta = state.metadata
++  if (Array.isArray(meta.files))
++    return meta.files.flatMap((raw, index) => {
++      const change = record(raw) ? comparison(raw, base, "patch", receipt(index)) : null
++      return change ? [change] : []
++    })
++  const change = record(meta.filediff) ? comparison(meta.filediff, base, "edit", receipt(0)) : null
++  return change ? [change] : []
+ }
+-
+-function patchPartFileChanges(part: unknown, base: string): ToolFileChange[] {
+-  if (!isRecord(part) || part.type !== "patch" || !Array.isArray(part.files)) return []
+-  return part.files.map((file) => normalizeToolDiff(file, base)).filter((change): change is ToolFileChange => !!change)
++function context(part: Record<string, any>): ToolReceiptContext | undefined {
++  return text(part.sessionID) && text(part.messageID) && text(part.id)
++    ? { sessionID: part.sessionID, messageID: part.messageID, partID: part.id }
++    : undefined
+ }
+-
+-function mergeFileChange(map: Map<string, AgentFileChange>, change: ToolFileChange, agentID: string): void {
+-  const key = `${agentID}\0${change.openPath.replace(/\\/g, "/")}`
+-  const current = map.get(key)
+-  if (!current) {
+-    map.set(key, { ...change, agentID, sources: 1 })
+-    return
++function receiptKey(change: ToolFileChange): string | undefined {
++  return change.evidence.receipts.length ? JSON.stringify(change.evidence.receipts) : undefined
++}
++function equalBatch(left: ProjectedMessageFacts, right: ProjectedMessageFacts): boolean {
++  return (
++    Array.isArray(left.acceptedInputMessageIDs) &&
++    left.acceptedInputMessageIDs.length > 0 &&
++    JSON.stringify(left.acceptedInputMessageIDs) === JSON.stringify(right.acceptedInputMessageIDs)
++  )
++}
++function normalRelation(
++  left: Record<string, any>,
++  right: Record<string, any>,
++  facts: readonly ProjectedMessageFacts[],
++  actor: string,
++): FileChangeIncompleteReason | undefined {
++  const timeline = facts
++    .filter((fact) => fact.sessionID === left.sessionID)
++    .sort((a, b) => a.orderKey.localeCompare(b.orderKey))
++  const a = timeline.findIndex((fact) => fact.id === left.messageID),
++    b = timeline.findIndex((fact) => fact.id === right.messageID)
++  if (a < 0 || b < 0) return "missing_message_facts"
++  if (a >= b) return "ambiguous_tool_step"
++  const first = timeline[a],
++    last = timeline[b]
++  if (first.agentID !== actor || first.agentID !== last.agentID || first.sessionAgentID !== last.sessionAgentID)
++    return "non_normal_step"
++  if (!equalBatch(first, last)) return "changed_input_batch"
++  let priorCompletion: number | undefined
++  for (const fact of timeline.slice(a, b + 1)) {
++    if (
++      fact.role !== "assistant" ||
++      fact.agentID !== first.agentID ||
++      fact.sessionAgentID !== first.sessionAgentID ||
++      fact.hasError !== false ||
++      typeof fact.completed !== "number" ||
++      fact.finish !== "tool-calls"
++    )
++      return "non_normal_step"
++    if (!equalBatch(first, fact)) return "changed_input_batch"
++    if (!fact.stepParts || !fact.toolParts) return "missing_message_facts"
++    const starts = fact.stepParts.filter((part) => part.type === "step-start"),
++      finishes = fact.stepParts.filter((part) => part.type === "step-finish")
++    if (starts.length !== 1 || finishes.length !== 1 || finishes[0].reason !== "tool-calls") return "non_normal_step"
++    if (fact.toolParts.length !== 1) return "ambiguous_tool_step"
++    const tool = fact.toolParts[0]
++    if (tool.tool !== "edit" && tool.tool !== "read") return "non_normal_step"
++    if (
++      tool.status !== "completed" ||
++      typeof tool.start !== "number" ||
++      typeof tool.end !== "number" ||
++      tool.start > tool.end ||
++      tool.end > fact.completed ||
++      (priorCompletion !== undefined && tool.start < priorCompletion)
++    )
++      return "non_normal_step"
++    if (!(starts[0].orderKey < tool.orderKey && tool.orderKey < finishes[0].orderKey)) return "non_normal_step"
++    if ((fact.id === left.messageID && tool.id !== left.id) || (fact.id === right.messageID && tool.id !== right.id))
++      return "missing_message_facts"
++    const endpointPart = fact.id === left.messageID ? left : fact.id === right.messageID ? right : undefined
++    if (endpointPart && (tool.start !== endpointPart.state?.time?.start || tool.end !== endpointPart.state?.time?.end))
++      return "non_normal_step"
++    priorCompletion = fact.completed
+   }
+-  current.sources += 1
+-  current.additions += change.additions
+-  current.deletions += change.deletions
+-  if (current.status === "modified") current.status = change.status
+-  if (current.before === undefined && change.before !== undefined) current.before = change.before
+-  if (current.after === undefined && change.after !== undefined) current.after = change.after
++  return undefined
+ }
+-
+-function collectFromNode(node: CardNode, base: string, out: Map<string, AgentFileChange>, seen: Set<string>): void {
+-  if (seen.has(node.id)) return
+-  seen.add(node.id)
+-  const agentID = asText(node.agentID)
+-  for (const part of node.parts ?? []) {
+-    if (isRecord(part) && part.type === "tool") {
+-      for (const change of toolPartFileChanges(part, base)) {
+-        if (!agentID) throw new Error(`file-change-summary: card ${node.id} produced changes without exact agentID`)
+-        mergeFileChange(out, change, agentID)
++export function reduceToolFileChangeGroups(
++  inputs: readonly FileChangeInput[],
++  facts: readonly ProjectedMessageFacts[],
++  base: string,
++): ChangeGroup[] {
++  type Entry = {
++    part: Record<string, any>
++    agentID: string
++    sessionID: string
++    change: ToolFileChange
++    edit: boolean
++    coverage: boolean
++  }
++  const entries: Entry[] = []
++  const unavailableGroups = new Map<string, ChangeGroup>()
++  for (const input of inputs) {
++    const part = input.part
++    if (!record(part)) continue
++    const sessionID = text(part.sessionID) ?? input.sessionID ?? ""
++    const actor = input.agentID
++    const add = (change: ToolFileChange, edit: boolean, coverage: boolean) =>
++      entries.push({ part, sessionID, agentID: actor, change, edit, coverage })
++    if (part.type === "patch" && Array.isArray(part.files)) {
++      for (const [fileIndex, file] of part.files.entries()) {
++        if (!text(file)) continue
++        const ctx = context(part)
++        const receipts: FileChangeReceipt[] = ctx ? [{ ...ctx, fileIndex }] : []
++        add(
++          {
++            file: displayPath(file, base),
++            openPath: file,
++            displayPath: displayPath(file, base),
++            additions: null,
++            deletions: null,
++            evidence: { kind: "incomplete", reason: "path_only", receipts },
++          },
++          false,
++          true,
++        )
+       }
+     }
+-    for (const change of patchPartFileChanges(part, base)) {
+-      if (!agentID) throw new Error(`file-change-summary: card ${node.id} produced changes without exact agentID`)
+-      mergeFileChange(out, change, agentID)
++    if (part.type !== "tool") continue
++    if (conversationDeferredToolState(part.state?.metadata)) {
++      if (part.tool === "edit" || part.tool === "apply_patch" || part.tool === "write") {
++        const known = toolFileChangesFromState(part.state, base, context(part))
++        if (part.tool === "write" && text(part.state.metadata.filepath)) {
++          const path = part.state.metadata.filepath,
++            ctx = context(part)
++          known.push({
++            file: displayPath(path, base),
++            openPath: path,
++            displayPath: displayPath(path, base),
++            additions: null,
++            deletions: null,
++            evidence: { kind: "incomplete", reason: "deferred", receipts: ctx ? [ctx] : [] },
++          })
++        }
++        for (const change of known) add(unavailable(change, "deferred"), false, true)
++        if (!known.length) {
++          const ctx = context(part)
++          if (ctx) {
++            const id = `path_coverage:${sessionID}:${actor}:unavailable`
++            const group = unavailableGroups.get(id) ?? {
++              id,
++              sessionID,
++              agentID: actor,
++              observationKind: "path_coverage",
++              changes: [],
++              additions: null,
++              deletions: null,
++            }
++            group.unavailableReceipts = receiptsUnique([...(group.unavailableReceipts ?? []), ctx])
++            unavailableGroups.set(id, group)
++          }
++        }
++      }
++      continue
+     }
++    for (const change of toolFileChangesFromState(part.state, base, context(part)))
++      add(change, part.tool === "edit", false)
+   }
+-  for (const childID of node.childIDs ?? []) {
+-    const child = cardTreeStore.cards[childID]
+-    if (!child) throw new Error(`file-change-summary: card ${node.id} references missing child ${childID}`)
+-    collectFromNode(child, base, out, seen)
++  const originalReceipts = new Map<string, Entry>()
++  for (const entry of entries) {
++    const key = receiptKey(entry.change)
++    if (!key) continue
++    const previous = originalReceipts.get(key)
++    if (
++      previous &&
++      (JSON.stringify(previous.change) !== JSON.stringify(entry.change) || previous.agentID !== entry.agentID)
++    ) {
++      previous.change = unavailable(previous.change, "conflicting_receipt")
++      entry.change = unavailable(entry.change, "conflicting_receipt")
++    } else if (!previous) originalReceipts.set(key, entry)
+   }
+-}
+-
+-export function collectAgentFileChanges(node: CardNode, base: string): AgentFileChange[] {
+-  const out = new Map<string, AgentFileChange>()
+-  collectFromNode(node, base, out, new Set())
+-  return [...out.values()].sort((a, b) => a.displayPath.localeCompare(b.displayPath))
+-}
+-
+-function groupMergeKey(group: ChangeGroup): string {
+-  const agent = group.agentID ? `:agent:${group.agentID}` : ""
+-  if (group.sessionID) return `session:${group.sessionID}${agent}`
+-  if (group.artifactID) return `artifact:${group.artifactID}${agent}`
+-  return group.id
+-}
+-
+-function changeMergeKey(change: FileChange): string {
+-  return change.file.replace(/\\/g, "/")
+-}
+-
+-function mergeChange(left: FileChange, right: FileChange): FileChange {
+-  return {
+-    ...left,
+-    ...right,
+-    status: left.status === "modified" ? right.status : left.status,
+-    additions: Math.max(left.additions ?? 0, right.additions ?? 0),
+-    deletions: Math.max(left.deletions ?? 0, right.deletions ?? 0),
+-    before: left.before !== undefined ? left.before : right.before,
+-    after: left.after !== undefined ? left.after : right.after,
++  const buckets = new Map<string, Entry[]>()
++  for (const entry of entries) {
++    const key = JSON.stringify([entry.coverage, entry.sessionID, entry.agentID, entry.change.openPath])
++    buckets.set(key, [...(buckets.get(key) ?? []), entry])
+   }
+-}
+-
+-function mergeGroup(left: ChangeGroup, right: ChangeGroup): ChangeGroup {
+-  const changes = new Map<string, FileChange>()
+-  for (const change of [...left.changes, ...right.changes]) {
+-    const key = changeMergeKey(change)
+-    const current = changes.get(key)
+-    changes.set(key, current ? mergeChange(current, change) : change)
++  const groups = new Map<string, ChangeGroup>()
++  for (const bucket of buckets.values()) {
++    const replay = new Map<string, Entry>()
++    const deduplicated: Entry[] = []
++    let conflict = false
++    for (const entry of bucket) {
++      const key = receiptKey(entry.change)
++      if (!key) {
++        deduplicated.push(entry)
++        continue
++      }
++      const old = replay.get(key)
++      if (old) {
++        if (JSON.stringify(old.change) !== JSON.stringify(entry.change)) conflict = true
++        continue
++      }
++      replay.set(key, entry)
++      deduplicated.push(entry)
++    }
++    const timeline = facts
++      .filter((fact) => fact.sessionID === bucket[0].sessionID)
++      .sort((a, b) => a.orderKey.localeCompare(b.orderKey))
++    const located = (part: Record<string, any>) => timeline.findIndex((fact) => fact.id === part.messageID)
++    deduplicated.sort((a, b) => located(a.part) - located(b.part))
++    const first = deduplicated[0]
++    let change = first.change
++    const receipts = receiptsUnique(bucket.flatMap((entry) => entry.change.evidence.receipts))
++    if (conflict) change = unavailable(change, "conflicting_receipt", receipts)
++    else if (deduplicated.length > 1 && !first.coverage) {
++      let reason: FileChangeIncompleteReason | undefined
++      for (let index = 1; index < deduplicated.length; index++) {
++        const previous = deduplicated[index - 1],
++          next = deduplicated[index]
++        if (previous.change.evidence.kind === "incomplete" || next.change.evidence.kind === "incomplete") {
++          reason =
++            previous.change.evidence.kind === "incomplete"
++              ? previous.change.evidence.reason
++              : next.change.evidence.kind === "incomplete"
++                ? next.change.evidence.reason
++                : "missing_endpoints"
++          break
++        }
++        if (!previous.edit || !next.edit || previous.change.status !== undefined || next.change.status !== undefined) {
++          reason = "unsupported_lifecycle"
++          break
++        }
++        reason = normalRelation(previous.part, next.part, facts, previous.agentID)
++        if (reason) break
++        if (previous.change.after !== next.change.before) {
++          reason = "endpoint_discontinuity"
++          break
++        }
++      }
++      change = reason
++        ? unavailable(change, reason, receipts)
++        : {
++            ...change,
++            after: deduplicated.at(-1)!.change.after,
++            ...textComparisonCounts(change.before!, deduplicated.at(-1)!.change.after!),
++            evidence: { kind: "complete", receipts },
++          }
++    } else change = { ...change, evidence: { ...change.evidence, receipts } }
++    const kind = first.coverage ? "path_coverage" : "tool_interval"
++    const id = `${kind}:${first.sessionID}:${first.agentID}`
++    const group = groups.get(id) ?? {
++      id,
++      observationKind: kind,
++      sessionID: first.sessionID || undefined,
++      agentID: first.agentID,
++      additions: null,
++      deletions: null,
++      changes: [],
++    }
++    group.changes.push(change)
++    groups.set(id, group)
+   }
+-  const mergedChanges = [...changes.values()].sort((a, b) => a.file.localeCompare(b.file))
+-  return {
+-    ...left,
+-    ...right,
+-    additions: mergedChanges.reduce((sum, item) => sum + (item.additions ?? 0), 0),
+-    deletions: mergedChanges.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
+-    changes: mergedChanges,
++  return [
++    ...[...groups.values()].map((group) => ({ ...group, ...summarizeFileChanges(group.changes) })),
++    ...unavailableGroups.values(),
++  ]
++}
++function treeInputs(nodes: readonly CardNode[]): FileChangeInput[] {
++  const inputs: FileChangeInput[] = []
++  const seen = new Set<string>()
++  const visit = (node: CardNode) => {
++    if (seen.has(node.id)) return
++    seen.add(node.id)
++    for (const part of [...(node.parts ?? []), ...(node.toolPart ? [node.toolPart] : [])]) {
++      if (!node.agentID && record(part) && (part.type === "tool" || part.type === "patch"))
++        throw new Error(`File change Card ${node.id} lacks its actual agent owner`)
++      inputs.push({ part, agentID: node.agentID ?? "", sessionID: node.sessionID })
++    }
++    for (const id of node.childIDs ?? []) {
++      const child = cardTreeStore.cards[id]
++      if (!child) throw new Error(`File change Card ${id} is missing`)
++      visit(child)
++    }
+   }
++  nodes.forEach(visit)
++  return inputs
++}
++export function collectAgentFileChanges(node: CardNode, base: string): AgentFileChange[] {
++  const inputs = treeInputs([node])
++  const facts = projectedConversationMessageFacts([
++    ...new Set(
++      inputs.flatMap((input) => (record(input.part) && text(input.part.sessionID) ? [input.part.sessionID] : [])),
++    ),
++  ])
++  return reduceToolFileChangeGroups(inputs, facts, base).flatMap((group) =>
++    group.changes.map((change) => ({
++      ...change,
++      openPath: (change as ToolFileChange).openPath,
++      displayPath: (change as ToolFileChange).displayPath,
++      agentID: group.agentID!,
++      sources: change.evidence.receipts.length,
++    })),
++  )
+ }
+-
+ export function mergeChangeGroups(groups: ChangeGroup[]): ChangeGroup[] {
+-  const merged = new Map<string, ChangeGroup>()
++  const map = new Map<string, ChangeGroup>()
+   for (const group of groups) {
+-    const key = groupMergeKey(group)
+-    const current = merged.get(key)
+-    merged.set(key, current ? mergeGroup(current, group) : group)
++    const key = JSON.stringify([
++      group.observationKind,
++      group.id,
++      group.taskID,
++      group.artifactID,
++      group.sessionID,
++      group.agentID,
++      group.diffBaseRef,
++      group.diffHeadRef,
++      group.commitRef,
++      group.publishedCommitRef,
++    ])
++    const old = map.get(key)
++    if (!old) {
++      map.set(key, group)
++      continue
++    }
++    const changes = new Map(old.changes.map((change) => [change.file, change]))
++    for (const change of group.changes) {
++      const previous = changes.get(change.file)
++      if (!previous) {
++        changes.set(change.file, change)
++        continue
++      }
++      if (JSON.stringify(previous) === JSON.stringify(change)) continue
++      changes.set(change.file, {
++        file: change.file,
++        status: change.status,
++        additions: null,
++        deletions: null,
++        evidence: {
++          kind: "incomplete",
++          reason: "conflicting_receipt",
++          receipts: receiptsUnique([...previous.evidence.receipts, ...change.evidence.receipts]),
++        },
++      })
++    }
++    const list = [...changes.values()],
++      unavailableReceipts = receiptsUnique([...(old.unavailableReceipts ?? []), ...(group.unavailableReceipts ?? [])])
++    map.set(key, {
++      ...group,
++      changes: list,
++      ...summarizeFileChanges(list),
++      ...(unavailableReceipts.length ? { unavailableReceipts, additions: null, deletions: null } : {}),
++    })
+   }
+-  return [...merged.values()]
+-    .filter((group) => group.changes.length > 0)
+-    .sort((left, right) => left.id.localeCompare(right.id))
++  return [...map.values()]
+ }
+-
+ export function collectAgentFileChangeGroups(node: CardNode, base: string, goals: unknown): ChangeGroup[] {
+   return collectAgentFileChangeGroupsFromNodes([node], base, goals)
+ }
+-
+-export function collectAgentFileChangeGroupsFromNodes(nodes: CardNode[], base: string, goals: unknown): ChangeGroup[] {
+-  void goals
+-  const grouped = new Map<string, { agentID: string; changes: AgentFileChange[] }>()
+-  const changes = new Map<string, AgentFileChange>()
+-  const seen = new Set<string>()
+-  for (const node of nodes) {
+-    collectFromNode(node, base, changes, seen)
+-  }
+-  for (const change of [...changes.values()].sort((a, b) => a.displayPath.localeCompare(b.displayPath))) {
+-    const groupID = change.agentID
+-    const bucket = grouped.get(groupID) ?? { agentID: change.agentID, changes: [] }
+-    bucket.changes.push(change)
+-    grouped.set(groupID, bucket)
+-  }
+-  return [...grouped.values()]
+-    .map((bucket) => {
+-      const changes = bucket.changes
+-      return {
+-        id: `agent:${bucket.agentID}`,
+-        agentID: bucket.agentID,
+-        additions: changes.reduce((sum, item) => sum + (item.additions ?? 0), 0),
+-        deletions: changes.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
+-        changes,
+-      } satisfies ChangeGroup
+-    })
+-    .sort((left, right) => left.id.localeCompare(right.id))
++export function collectAgentFileChangeGroupsFromNodes(nodes: CardNode[], base: string, _goals: unknown): ChangeGroup[] {
++  const inputs = treeInputs(nodes)
++  const sessionIDs = [
++    ...new Set(
++      inputs.flatMap((input) =>
++        record(input.part) && text(input.part.sessionID)
++          ? [input.part.sessionID]
++          : input.sessionID
++            ? [input.sessionID]
++            : [],
++      ),
++    ),
++  ]
++  return reduceToolFileChangeGroups(inputs, projectedConversationMessageFacts(sessionIDs), base)
+ }
+-
+-/** Collect live structured file-change evidence for the selected conversation.
+- * Persisted Chat/Mission evidence remains board-owned and is merged by each
+- * presentation surface through the shared ChangeGroup merger. */
+ export function currentConversationAgentChangeGroups(): ChangeGroup[] {
++  publishedCardTreeVersion()
+   const board = boardStore.board as any
+   const roots = cardTreeStore.order.map((id) => cardTreeStore.cards[id]).filter((node): node is CardNode => !!node)
+-  const base = String(board?.task?.directory || board?.directory || "")
+-  return collectAgentFileChangeGroupsFromNodes(roots, base, board?.goals)
++  return collectAgentFileChangeGroupsFromNodes(
++    roots,
++    String(board?.task?.directory || board?.directory || ""),
++    board?.goals,
++  )
+ }
+-
+-/** Flatten canonical change groups without discarding the exact group/path
+- * target needed by Review. A path changed by two groups remains two truthful
+- * rows because an aggregated row would not identify one resolvable diff. */
+ export function conversationArtifactFileRows(groups: readonly ChangeGroup[]): ArtifactFileRow[] {
+-  const rows: ArtifactFileRow[] = []
+-  for (const group of groups) {
+-    for (const change of group.changes) {
+-      const key = String(change.file || "")
+-        .replace(/\\/g, "/")
+-        .replace(/^\.?\//, "")
+-      if (!key) continue
+-      rows.push({
++  return groups
++    .flatMap((group) =>
++      group.changes.map((change) => ({
+         groupID: group.id,
+         targetPath: change.file,
+-        file: key,
+-        additions: change.additions ?? 0,
+-        deletions: change.deletions ?? 0,
+-      })
+-    }
+-  }
+-  return rows.sort((left, right) => left.file.localeCompare(right.file) || left.groupID.localeCompare(right.groupID))
++        file: change.file.replaceAll("\\", "/").replace(/^\.\//, ""),
++        additions: change.additions,
++        deletions: change.deletions,
++        isText: change.isText,
++      })),
++    )
++    .sort((a, b) => a.file.localeCompare(b.file) || a.groupID.localeCompare(b.groupID))
+ }
+diff --git a/packages/overlay/test/binary-api-error-services.test.ts b/packages/overlay/test/binary-api-error-services.test.ts
+index de82d3e6..c0d6204e 100644
+--- a/packages/overlay/test/binary-api-error-services.test.ts
++++ b/packages/overlay/test/binary-api-error-services.test.ts
+@@ -12,8 +12,8 @@ const directory = "D:/binary-error-contract"
+ const taskID = "tsk_binarycontract"
+ const originalFetch = globalThis.fetch
+ const groups: ChangeGroup[] = [{
+-  id: "artifact:art_binary", taskID, artifactID: "art_binary", additions: 1, deletions: 0,
+-  changes: [{ file: "report.txt", status: "added", additions: 1, deletions: 0, isText: true, beforeObject: null, afterObject: { oid: "blob-report", bytes: 6 } }],
++  id: "artifact:art_binary", observationKind: "immutable_build_interval", taskID, artifactID: "art_binary", additions: 1, deletions: 0,
++  changes: [{ file: "report.txt", status: "added", additions: 1, deletions: 0, isText: true, evidence: { kind: "complete", receipts: [{ artifactID: "art_binary", fileIndex: 0 }] }, beforeObject: null, afterObject: { oid: "a".repeat(40), bytes: 6 } }],
+ }]
+ 
+ beforeEach(() => {
+diff --git a/packages/overlay/test/conversation-artifact-scope.test.ts b/packages/overlay/test/conversation-artifact-scope.test.ts
+index 1bfe543a..1c4b608d 100644
+--- a/packages/overlay/test/conversation-artifact-scope.test.ts
++++ b/packages/overlay/test/conversation-artifact-scope.test.ts
+@@ -3,6 +3,7 @@ import { createHash } from "node:crypto"
+ import { loadConversationArtifactContent } from "../src/services/conversation-artifact"
+ import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
+ import type { HostTransport, TransportRequest } from "../src/services/host-transport"
++import { createTauriTransport } from "../src/services/tauri-transport"
+ import { setBoardStore } from "../src/store/board"
+ import { applySettings, DEFAULT_SETTINGS, setSettingsStore } from "../src/store/settings"
+ 
+@@ -18,6 +19,7 @@ test("all exact resource chunks retain the initial directory while the selected
+   const sha256 = createHash("sha256").update(text).digest("hex")
+   const requests: TransportRequest[] = []
+   __setHostTransportForTest({
++    ...createTauriTransport("browser"),
+     kind: "browser",
+     async request(request) {
+       requests.push(request)
+diff --git a/packages/overlay/test/diff-resolution.test.ts b/packages/overlay/test/diff-resolution.test.ts
+index e3fa3ff1..aafd59ea 100644
+--- a/packages/overlay/test/diff-resolution.test.ts
++++ b/packages/overlay/test/diff-resolution.test.ts
+@@ -8,12 +8,15 @@ describe("diff resolution", () => {
+       {
+         id: "agent:planner",
+         agentID: "planner",
++        observationKind: "tool_interval",
+         additions: 1,
+         deletions: 1,
+         changes: [
+           {
+             file: "specs/README.md",
+             status: "modified",
++            isText: true,
++            evidence: { kind: "complete", receipts: [] },
+             additions: 1,
+             deletions: 1,
+             before: "planner before",
+@@ -24,12 +27,15 @@ describe("diff resolution", () => {
+       {
+         id: "agent:chat",
+         agentID: "chat",
++        observationKind: "tool_interval",
+         additions: 1,
+         deletions: 1,
+         changes: [
+           {
+             file: "specs/README.md",
+             status: "modified",
++            isText: true,
++            evidence: { kind: "complete", receipts: [] },
+             additions: 1,
+             deletions: 1,
+             before: "chat before",
+diff --git a/packages/overlay/test/projection-prerequisite-recovery.test.ts b/packages/overlay/test/projection-prerequisite-recovery.test.ts
+index 3a553eb4..e0eb624f 100644
+--- a/packages/overlay/test/projection-prerequisite-recovery.test.ts
++++ b/packages/overlay/test/projection-prerequisite-recovery.test.ts
+@@ -87,7 +87,7 @@ afterEach(() => {
+   setBoardStore({ selectedSource: null, board: null, taskSequence: 0 })
+ })
+ 
+-test("Session, Message, and Part route failures each recover once without advancing the live sequence", async () => {
++test("each missing projection prerequisite restores the canonical message at its accepted snapshot sequence", async () => {
+   const cases = [
+     {
+       name: "Session",
+@@ -116,7 +116,7 @@ test("Session, Message, and Part route failures each recover once without advanc
+         type: "message.part.removed",
+         taskID,
+         sequence: 8,
+-        properties: { sessionID, partID: "part_missing" },
++        properties: { sessionID, messageID, partID: "part_missing", partType: "text" },
+       },
+     },
+   ] as const
+@@ -181,7 +181,7 @@ test("Session, Message, and Part prerequisites share one structured protocol ind
+     try {
+       applyEvent({
+         type: "message.part.removed",
+-        properties: { sessionID, partID: "part_missing" },
++        properties: { sessionID, messageID, partID: "part_missing", partType: "text" },
+       })
+     } catch (error) {
+       return error

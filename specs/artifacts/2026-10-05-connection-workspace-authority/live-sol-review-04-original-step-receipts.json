@@ -1,0 +1,291 @@
+{
+  "source": "live-sol-review-04-observed-functional-messages.json",
+  "steps": [
+    {
+      "messageID": "msg_g0VXDRzlq00RI8Sk2Ogx",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238451234,
+        "completed": 1791238458020
+      },
+      "finish": "tool-calls",
+      "controls": [
+        {
+          "id": "prt_g0VXDRzu300wiB9Tv4Xq",
+          "orderKey": "v1:0001791238451743:0000000000000031:0000000000000000:part:prt_g0VXDRzu300wiB9Tv4Xq",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDS1WL00VitxAR2E3",
+          "orderKey": "v1:0001791238457961:0000000000000031:0000000000000000:part:prt_g0VXDS1WL00VitxAR2E3",
+          "type": "step-finish",
+          "reason": "tool-calls"
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXDS10300kEXTeLHia",
+          "callID": "call_bALpELFW2PKj1djrQlWx6NaQ",
+          "tool": "write",
+          "status": "completed",
+          "orderKey": "v1:0001791238457627:0000000000000031:0000000000000000:part:prt_g0VXDS10300kEXTeLHia",
+          "time": {
+            "start": 1791238455959,
+            "end": 1791238457667
+          }
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXDS1YF00xLegbc7LV",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238458079,
+        "completed": 1791238464208
+      },
+      "finish": "tool-calls",
+      "controls": [
+        {
+          "id": "prt_g0VXDS1cg00vQMcK9APp",
+          "orderKey": "v1:0001791238458354:0000000000000031:0000000000000000:part:prt_g0VXDS1cg00vQMcK9APp",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDS38G00z3idh4trS",
+          "orderKey": "v1:0001791238464156:0000000000000031:0000000000000000:part:prt_g0VXDS38G00z3idh4trS",
+          "type": "step-finish",
+          "reason": "tool-calls"
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXDS2lN00emRp5XpJe",
+          "callID": "call_mXlTPCZICEAUh7hRlZGzlGCY",
+          "tool": "read",
+          "status": "completed",
+          "orderKey": "v1:0001791238463981:0000000000000031:0000000000000000:part:prt_g0VXDS2lN00emRp5XpJe",
+          "time": {
+            "start": 1791238462737,
+            "end": 1791238464003
+          },
+          "readPreview": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: initial"
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXDS39d00yMZN2FpRw",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238464241,
+        "completed": 1791238473168
+      },
+      "finish": "tool-calls",
+      "controls": [
+        {
+          "id": "prt_g0VXDS3Ei00wqgrvdMb0",
+          "orderKey": "v1:0001791238464557:0000000000000031:0000000000000000:part:prt_g0VXDS3Ei00wqgrvdMb0",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDS5Sm00w0PcgIC2k",
+          "orderKey": "v1:0001791238473116:0000000000000031:0000000000000000:part:prt_g0VXDS5Sm00w0PcgIC2k",
+          "type": "step-finish",
+          "reason": "tool-calls"
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXDS4dj00I6O1rRXXM",
+          "callID": "call_RoaI5oNKoRZAWzLLoVC5OwAr",
+          "tool": "edit",
+          "status": "completed",
+          "orderKey": "v1:0001791238472912:0000000000000031:0000000000000000:part:prt_g0VXDS4dj00I6O1rRXXM",
+          "time": {
+            "start": 1791238469951,
+            "end": 1791238472956
+          },
+          "filediff": {
+            "file": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/project/actual-review-result.txt",
+            "before": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: initial\n",
+            "after": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: middle\n",
+            "additions": 1,
+            "deletions": 1
+          }
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXDS5V300fjmHZLq0J",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238473257,
+        "completed": 1791238479856
+      },
+      "finish": "tool-calls",
+      "controls": [
+        {
+          "id": "prt_g0VXDS5Zq00G3oabab83",
+          "orderKey": "v1:0001791238473555:0000000000000031:0000000000000000:part:prt_g0VXDS5Zq00G3oabab83",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDS7Cd00t0zui7ss4",
+          "orderKey": "v1:0001791238479803:0000000000000031:0000000000000000:part:prt_g0VXDS7Cd00t0zui7ss4",
+          "type": "step-finish",
+          "reason": "tool-calls"
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXDS6aX003BKay4DPg",
+          "callID": "call_2zyWvrhCZRlfmuaHuRb966zu",
+          "tool": "read",
+          "status": "completed",
+          "orderKey": "v1:0001791238479717:0000000000000031:0000000000000000:part:prt_g0VXDS6aX003BKay4DPg",
+          "time": {
+            "start": 1791238477441,
+            "end": 1791238479734
+          },
+          "readPreview": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: middle"
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXDS7Ed00y8NNeT018",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238479927,
+        "completed": 1791238485916
+      },
+      "finish": "tool-calls",
+      "controls": [
+        {
+          "id": "prt_g0VXDS7J600wWt57uD3c",
+          "orderKey": "v1:0001791238480204:0000000000000031:0000000000000000:part:prt_g0VXDS7J600wWt57uD3c",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDS8ll00F02VPJHrL",
+          "orderKey": "v1:0001791238485825:0000000000000031:0000000000000000:part:prt_g0VXDS8ll00F02VPJHrL",
+          "type": "step-finish",
+          "reason": "tool-calls"
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXDS8J300Rk7THdKzH",
+          "callID": "call_f4EwBdtNqC7v0WJDIpGJP0Au",
+          "tool": "edit",
+          "status": "completed",
+          "orderKey": "v1:0001791238485537:0000000000000031:0000000000000000:part:prt_g0VXDS8J300Rk7THdKzH",
+          "time": {
+            "start": 1791238484045,
+            "end": 1791238485578
+          },
+          "filediff": {
+            "file": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/project/actual-review-result.txt",
+            "before": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: middle\n",
+            "after": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: final\n",
+            "additions": 1,
+            "deletions": 1
+          }
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXDS8nl0073nR6HkMv",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238485949,
+        "completed": 1791238491585
+      },
+      "finish": "tool-calls",
+      "controls": [
+        {
+          "id": "prt_g0VXDS8sD002KsxG0Szw",
+          "orderKey": "v1:0001791238486225:0000000000000031:0000000000000000:part:prt_g0VXDS8sD002KsxG0Szw",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDSAF3007JMUADsO4",
+          "orderKey": "v1:0001791238491485:0000000000000031:0000000000000000:part:prt_g0VXDSAF3007JMUADsO4",
+          "type": "step-finish",
+          "reason": "tool-calls"
+        }
+      ],
+      "tools": [
+        {
+          "partID": "prt_g0VXDS9qG000O5cpcjnr",
+          "callID": "call_qqz5RjVuyFWjgwh1KC6q9qyw",
+          "tool": "read",
+          "status": "completed",
+          "orderKey": "v1:0001791238491234:0000000000000031:0000000000000000:part:prt_g0VXDS9qG000O5cpcjnr",
+          "time": {
+            "start": 1791238489948,
+            "end": 1791238491254
+          },
+          "readPreview": "marker: 6670944b-ad78-42b4-be70-624672ddfe62\nstate: final"
+        }
+      ]
+    },
+    {
+      "messageID": "msg_g0VXDSAHJ00gTJyxDoQr",
+      "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "author": "work",
+      "agent": "work",
+      "acceptedInputMessageIDs": [
+        "msg_32dae60b-559b-4ada-a16f-2093d8b20168"
+      ],
+      "time": {
+        "created": 1791238491625,
+        "completed": 1791238496235
+      },
+      "finish": "stop",
+      "controls": [
+        {
+          "id": "prt_g0VXDSAMY00EZz91Jz7g",
+          "orderKey": "v1:0001791238491950:0000000000000031:0000000000000000:part:prt_g0VXDSAMY00EZz91Jz7g",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VXDSBSP00g7XSpKTp7",
+          "orderKey": "v1:0001791238496157:0000000000000031:0000000000000000:part:prt_g0VXDSBSP00g7XSpKTp7",
+          "type": "step-finish",
+          "reason": "stop"
+        }
+      ],
+      "tools": []
+    }
+  ],
+  "boundary": "Derived copies of actual public original Message/Part facts only; these are not inferred physical Provider request associations or active owner observations"
+}

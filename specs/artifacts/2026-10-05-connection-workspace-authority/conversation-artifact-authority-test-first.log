@@ -1,0 +1,24 @@
+bun test v1.3.14 (0d9b296a)
+
+test\conversation-artifact-compound-authority.test.ts:
+(pass) one artifact read retains entry directory, authority and exact complete data across chunks [5.14ms]
+(pass) retains entry authority when renewal occurs between accepted chunks [0.57ms]
+(pass) retains entry authority when ABA occurs between accepted chunks [0.19ms]
+(pass) an admitted late chunk preserves its original response in typed retirement [0.37ms]
+(pass) final %s attachment decision checks the original read authority [0.33ms]
+(pass) final %s attachment decision checks the original read authority [0.26ms]
+(pass) current artifact byte rejection retains actual status and decoded body [0.49ms]
+
+ 7 pass
+ 0 fail
+ 18 expect() calls
+Ran 7 tests across 1 file. [218.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\conversation-artifact-scope.test.ts:
+(pass) all exact resource chunks retain the initial directory while the selected project changes [4.62ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [186.00ms]

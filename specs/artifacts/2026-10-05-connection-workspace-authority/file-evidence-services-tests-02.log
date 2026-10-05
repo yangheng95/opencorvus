@@ -1,0 +1,22 @@
+bun test v1.3.14 (0d9b296a)
+
+test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [8.16ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.55ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [0.88ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [0.94ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.87ms]
+
+test\diff-resolution.test.ts:
+(pass) diff resolution > resolves the selected live group from the visible change collection [0.24ms]
+
+test\immutable-diff-evidence.test.ts:
+(pass) both immutable sides and all chunks keep original logical directory [2.62ms]
+(pass) a retired logical read yields exact current authority error [0.37ms]
+(pass) binary refs, absent sides and empty existing objects retain explicit evidence [0.32ms]
+(pass) ambiguous shorthand selection returns typed observed-group error [0.22ms]
+
+ 10 pass
+ 0 fail
+ 46 expect() calls
+Ran 10 tests across 3 files. [218.00ms]

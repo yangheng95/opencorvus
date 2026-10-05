@@ -1,5 +1,6 @@
 import { createMemo, createResource, For, Show } from "solid-js"
-import { DiffView, changeStatusLabel } from "./DiffView"
+import { ChangeLineStats, DiffView, changeStatusLabel } from "./DiffView"
+import { summarizeFileChanges } from "../services/diff"
 import { describeToolCall, displayToolDetail, toolNameKey, stripAnsi } from "../utils/tool"
 import { extToLang, renderCodeBlock } from "../utils/markdown"
 import { boardStore, selectedTaskDirectory } from "../store/board"
@@ -293,22 +294,14 @@ function parseReadOutput(output: string): ParsedReadOutput | null {
 }
 
 function ToolDiffList(props: { items: ToolFileChange[] }) {
-  const totals = () => ({
-    additions: props.items.reduce((sum, item) => sum + (item.additions ?? 0), 0),
-    deletions: props.items.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
-  })
+  const totals = () => summarizeFileChanges(props.items)
 
   return (
     <section class="msg-tool-diffs">
       <div class="msg-tool-diffs__summary">
         <span class="msg-tool-diffs__count">{tc("files.changed", props.items.length)}</span>
         <span class="msg-tool-diffs__meta">
-          <span class="diff-dialog-stat" data-tone="add">
-            +{totals().additions}
-          </span>
-          <span class="diff-dialog-stat" data-tone="del">
-            -{totals().deletions}
-          </span>
+          <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
         </span>
       </div>
       <For each={props.items}>
@@ -332,12 +325,7 @@ function ToolDiffList(props: { items: ToolFileChange[] }) {
                 </span>
               </div>
               <div class="msg-tool-diff-card__meta">
-                <span class="diff-dialog-stat" data-tone="add">
-                  +{item.additions}
-                </span>
-                <span class="diff-dialog-stat" data-tone="del">
-                  -{item.deletions}
-                </span>
+                <ChangeLineStats additions={item.additions} deletions={item.deletions} isText={item.isText} />
               </div>
             </header>
             <div class="msg-tool-diff-card__body">
@@ -434,7 +422,17 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   })
   const toolDiffs = createMemo(() => {
     if (status() !== "completed") return null
-    const changes = toolFileChangesFromState(state(), selectedTaskDirectory())
+    const source = part()
+    const context =
+      typeof source.sessionID === "string" &&
+      source.sessionID &&
+      typeof source.messageID === "string" &&
+      source.messageID &&
+      typeof source.id === "string" &&
+      source.id
+        ? { sessionID: source.sessionID, messageID: source.messageID, partID: source.id }
+        : undefined
+    const changes = toolFileChangesFromState(state(), selectedTaskDirectory(), context)
     return changes.length > 0 ? changes : null
   })
   const browserEvidenceScreenshotUrl = createMemo(() =>

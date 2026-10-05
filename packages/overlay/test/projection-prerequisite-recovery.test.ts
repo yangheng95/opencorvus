@@ -87,7 +87,7 @@ afterEach(() => {
   setBoardStore({ selectedSource: null, board: null, taskSequence: 0 })
 })
 
-test("Session, Message, and Part route failures each recover once without advancing the live sequence", async () => {
+test("each missing projection prerequisite restores the canonical message at its accepted snapshot sequence", async () => {
   const cases = [
     {
       name: "Session",
@@ -116,7 +116,7 @@ test("Session, Message, and Part route failures each recover once without advanc
         type: "message.part.removed",
         taskID,
         sequence: 8,
-        properties: { sessionID, partID: "part_missing" },
+        properties: { sessionID, messageID, partID: "part_missing", partType: "text" },
       },
     },
   ] as const
@@ -181,7 +181,7 @@ test("Session, Message, and Part prerequisites share one structured protocol ind
     try {
       applyEvent({
         type: "message.part.removed",
-        properties: { sessionID, partID: "part_missing" },
+        properties: { sessionID, messageID, partID: "part_missing", partType: "text" },
       })
     } catch (error) {
       return error

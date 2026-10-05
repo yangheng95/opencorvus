@@ -6,9 +6,9 @@ import {
   type CustomItemComponentProps,
   type VirtualizerHandle,
 } from "virtua/solid"
-import { isKnownTextDiff, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
+import { summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
 import { t, tc } from "../utils/i18n"
-import { changeStatusLabel, type FileChange } from "./DiffView"
+import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { FileRowContent } from "./ui/FileRow"
@@ -37,9 +37,9 @@ const VIRTUAL_CHANGE_ROW_THRESHOLD = 80
 const ESTIMATED_CHANGE_ROW_HEIGHT = 28
 const VIRTUAL_CHANGE_ROW_BUFFER_PIXELS = ESTIMATED_CHANGE_ROW_HEIGHT * 10
 
-type ChangeStatusFilter = "all" | FileChange["status"]
+type ChangeStatusFilter = "all" | "changed" | NonNullable<FileChange["status"]>
 
-const CHANGE_STATUS_FILTERS: ChangeStatusFilter[] = ["all", "modified", "added", "deleted"]
+const CHANGE_STATUS_FILTERS: ChangeStatusFilter[] = ["all", "changed", "modified", "added", "deleted"]
 
 interface ChangeRowModel {
   group: ChangeGroup
@@ -88,7 +88,9 @@ function shortCommit(ref: string | undefined): string {
 }
 
 function groupLabel(group: ChangeGroup): string {
-  return group.agentID || group.sessionID || group.artifactID || group.id.replace(/^(agent|node|artifact):/, "")
+  const owner = group.agentID || group.sessionID || group.artifactID
+  const source = t(`diff.source.${group.observationKind}`)
+  return owner ? `${source} · ${owner}` : source
 }
 
 function groupTitle(group: ChangeGroup): string {
@@ -113,12 +115,11 @@ function ChangeRowContent(props: { row: ChangeRowModel; showScope: boolean }) {
           <span class="change-status" data-status={props.row.item.status}>
             {changeStatusLabel(props.row.item.status)}
           </span>
-          <span class="diff-dialog-stat" data-tone="add">
-            +{props.row.item.additions ?? 0}
-          </span>
-          <span class="diff-dialog-stat" data-tone="del">
-            -{props.row.item.deletions ?? 0}
-          </span>
+          <ChangeLineStats
+            additions={props.row.item.additions}
+            deletions={props.row.item.deletions}
+            isText={props.row.item.isText}
+          />
         </>
       }
     />
@@ -211,7 +212,9 @@ export function FileChangesView(props: FileChangesViewProps) {
     ),
   )
 
-  const groups = createMemo<ChangeGroup[]>(() => props.groups.filter((group) => group.changes.length > 0))
+  const groups = createMemo<ChangeGroup[]>(() =>
+    props.groups.filter((group) => group.changes.length > 0 || (group.unavailableReceipts?.length ?? 0) > 0),
+  )
   const files = createMemo<FileChange[]>(() => groups().flatMap((group) => group.changes))
   const summary = createMemo(() => summarizeChangeGroups(groups()))
   const hasGroupLabels = createMemo(
@@ -255,8 +258,8 @@ export function FileChangesView(props: FileChangesViewProps) {
     const query = filterQuery().trim().toLowerCase()
     const status = statusFilter()
     return allRows().filter((row) => {
-      if (status !== "all" && row.item.status !== status) return false
-      if (hideNonTextFiles() && !isKnownTextDiff(row.item)) return false
+      if (status !== "all" && (row.item.status ?? "changed") !== status) return false
+      if (hideNonTextFiles() && row.item.isText === false) return false
       if (query && !row.searchText.includes(query)) return false
       return true
     })
@@ -277,13 +280,14 @@ export function FileChangesView(props: FileChangesViewProps) {
   const statusCounts = createMemo<Record<ChangeStatusFilter, number>>(() => {
     const counts: Record<ChangeStatusFilter, number> = {
       all: 0,
+      changed: 0,
       modified: 0,
       added: 0,
       deleted: 0,
     }
     for (const row of allRows()) {
       counts.all += 1
-      counts[row.item.status] += 1
+      counts[row.item.status ?? "changed"] += 1
     }
     return counts
   })
@@ -296,7 +300,7 @@ export function FileChangesView(props: FileChangesViewProps) {
     return row ? diffTargetFromRow(row) : null
   })
   const statusFilterLabel = (status: ChangeStatusFilter): string =>
-    status === "all" ? t("files.status.all") : changeStatusLabel(status)
+    status === "all" ? t("files.status.all") : changeStatusLabel(status === "changed" ? undefined : status)
   const statusFilterOptions = createMemo<SegmentedControlOption<ChangeStatusFilter>[]>(() =>
     CHANGE_STATUS_FILTERS.map((status) => ({
       value: status,
@@ -321,7 +325,8 @@ export function FileChangesView(props: FileChangesViewProps) {
       return
     }
     if (current && rows.some((row) => row.key === current)) return
-    setSelectedRowKey(rows[0]!.key)
+    const initial = rows.find((row) => row.item.evidence.kind === "complete" && row.item.isText === true) ?? rows[0]!
+    setSelectedRowKey(initial.key)
   })
 
   const selectRow = (row: ChangeRowModel) => setSelectedRowKey(row.key)
@@ -414,17 +419,19 @@ export function FileChangesView(props: FileChangesViewProps) {
           {t("files.focus_unavailable", { file: reviewFocusFailure()!.target.filePath })}
         </p>
       </Show>
+      <Show when={summary().hasUnresolvedChanges}>
+        <p class="empty-hint">{t("diff.unresolved_changes")}</p>
+      </Show>
       <Show when={files().length > 0}>
         <div class="changes-summary">
-          <span>{tc("files.changed", files().length)}</span>
+          <span>{tc("files.changed", summary().files)}</span>
           <span class="changes-total">
             <Show when={summaryCommitRef()}>
               <span class="changes-commit" title={`commit ${summaryCommitRef()}`}>
                 commit {shortCommit(summaryCommitRef())}
               </span>
             </Show>
-            <span data-tone="add">+{summary().additions}</span>
-            <span data-tone="del">-{summary().deletions}</span>
+            <ChangeLineStats additions={summary().additions} deletions={summary().deletions} />
           </span>
         </div>
 
@@ -578,7 +585,7 @@ export function FileChangesView(props: FileChangesViewProps) {
           </aside>
         </div>
       </Show>
-      <Show when={files().length === 0}>
+      <Show when={files().length === 0 && !summary().hasUnresolvedChanges}>
         <p class="empty-hint">{props.hasSelectedTask ? t("files.none") : t("files.select_target")}</p>
       </Show>
     </div>

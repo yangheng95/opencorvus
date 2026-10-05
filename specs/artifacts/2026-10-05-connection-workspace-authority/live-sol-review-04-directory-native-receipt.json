@@ -1,0 +1,159 @@
+{
+  "observedAtUtc": "2026-10-05T22:49:45.3062939Z",
+  "occurrence": "live-sol-review-04-e19601a3-d206-4063-ba34-096b7dd27631",
+  "owner": {
+    "ProcessId": 35192,
+    "ParentProcessId": 52120,
+    "CreationDate": "2026-10-06T06:10:53.281658+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\startup.json 17957 live-sol-review-04-e19601a3-d206-4063-ba34-096b7dd27631 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\functional-selection.json"
+  },
+  "method": "GET",
+  "url": "http://127.0.0.1:17957/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-06%5Clive-sol-review-04%5Cproject",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\project",
+  "status": 200,
+  "response": {
+    "id": "ses_-zUSmY0NLzz5W92TdJ0R",
+    "slug": "jolly-cabin",
+    "projectID": "prj_hNQeZQj68ipEoFfbpR2l",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\project",
+    "title": "In this isolated project C:/Users/hengu/.codex/opencorvus-product-iteration/2...",
+    "version": "local",
+    "kind": "assistant",
+    "metadata": {
+      "conversation": {
+        "experience": "work",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "openai/gpt-6.1-sol"
+      }
+    },
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "permission": [
+      {
+        "permission": "delegate_agent",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_query_task",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_query_task_artifacts",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_create_task",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_wake_mission",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_wake_work",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_send_task_message",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_respond_interaction",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_cancel_task",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_update_checks",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_select_workspace",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_update_goal",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "panel_delete_goal",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "bash",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "read",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "glob",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "search_code",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "edit",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "write",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "apply_patch",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "todo",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "schedule",
+        "pattern": "*",
+        "action": "allow"
+      }
+    ],
+    "time": {
+      "created": 1791238450665,
+      "updated": 1791239234001
+    }
+  }
+}

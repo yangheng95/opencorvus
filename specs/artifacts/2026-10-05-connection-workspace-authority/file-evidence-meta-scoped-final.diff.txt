@@ -1,0 +1,1689 @@
+--- packages/overlay/src/utils/file-change-summary.ts (before)
++++ packages/overlay/src/utils/file-change-summary.ts
+@@ -1,267 +1,494 @@
+-import { cardTreeStore, type CardNode } from "../store/card-tree"
++import { cardTreeStore, publishedCardTreeVersion, type CardNode } from "../store/card-tree"
+ import { boardStore } from "../store/board"
+-import type { FileChange } from "../components/DiffView"
+-import type { ChangeGroup } from "../services/diff"
++import type { FileChange, FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
++import { summarizeFileChanges, textComparisonCounts, type ChangeGroup } from "../services/diff"
+ import { relativePathFrom } from "./tool"
++import { projectedConversationMessageFacts, type ProjectedMessageFacts } from "../services/tree-writer"
++import { conversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
+ 
+ export interface ToolFileChange extends FileChange {
+   openPath: string
+   displayPath: string
+ }
+-
+ export interface AgentFileChange extends ToolFileChange {
+   agentID: string
+   sources: number
+ }
+-
+ export interface ArtifactFileRow {
+   groupID: string
+   targetPath: string
+   file: string
+-  additions: number
+-  deletions: number
+-}
+-
+-function isRecord(value: unknown): value is Record<string, unknown> {
++  additions: number | null
++  deletions: number | null
++  isText?: boolean
++}
++export interface ToolReceiptContext {
++  sessionID: string
++  messageID: string
++  partID: string
++}
++export interface FileChangeInput {
++  part: unknown
++  agentID: string
++  sessionID?: string
++}
++function record(value: unknown): value is Record<string, any> {
+   return !!value && typeof value === "object" && !Array.isArray(value)
+ }
+-
+-function asText(value: unknown): string | undefined {
+-  return typeof value === "string" && value.trim() ? value.trim() : undefined
+-}
+-
+-function asString(value: unknown): string | undefined {
+-  return typeof value === "string" ? value : undefined
+-}
+-
+-function asCount(value: unknown): number {
+-  return typeof value === "number" && Number.isFinite(value) ? value : 0
+-}
+-
++function text(value: unknown): string | undefined {
++  return typeof value === "string" && value.trim() ? value : undefined
++}
+ function displayPath(path: string, base: string): string {
+-  const normalized = path.replace(/\\/g, "/")
+-  const normalizedBase = base.replace(/\\/g, "/").replace(/\/+$/, "")
+-  const rel = relativePathFrom(normalizedBase, normalized)
+-  return rel || normalized
+-}
+-
+-function diffStatus(raw: unknown, before?: string, after?: string): FileChange["status"] {
+-  const value = String(raw || "")
+-    .trim()
+-    .toLowerCase()
+-  if (value === "add" || value === "added") return "added"
+-  if (value === "delete" || value === "deleted" || value === "remove" || value === "removed") return "deleted"
+-  if (before === "" && typeof after === "string" && after.length > 0) return "added"
+-  if (after === "" && typeof before === "string" && before.length > 0) return "deleted"
+-  return "modified"
+-}
+-
+-function normalizeToolDiff(raw: unknown, base: string): ToolFileChange | null {
+-  if (!isRecord(raw)) return null
+-  const before = asString(raw.before) ?? asString(raw.oldContent)
+-  const after = asString(raw.after) ?? asString(raw.newContent)
+-  const sourcePath = asText(raw.file) ?? asText(raw.filePath) ?? asText(raw.path)
+-  const targetPath = asText(raw.movePath) ?? sourcePath
+-  if (!targetPath) return null
+-
+-  const sourceDisplay = sourcePath ? displayPath(sourcePath, base) : ""
+-  const targetDisplay = asText(raw.relativePath) ?? displayPath(targetPath, base)
+-  const renderedPath =
+-    sourcePath && targetPath !== sourcePath ? `${sourceDisplay || sourcePath} -> ${targetDisplay}` : targetDisplay
+-
++  return relativePathFrom(base.replaceAll("\\", "/").replace(/\/+$/, ""), path.replaceAll("\\", "/")) || path
++}
++function receiptsUnique(receipts: readonly FileChangeReceipt[]): FileChangeReceipt[] {
++  return [...new Map(receipts.map((receipt) => [JSON.stringify(receipt), receipt])).values()]
++}
++function unavailable(
++  change: ToolFileChange,
++  reason: FileChangeIncompleteReason,
++  receipts = change.evidence.receipts,
++): ToolFileChange {
+   return {
+-    file: renderedPath,
+-    status: diffStatus(raw.type, before, after),
+-    additions: asCount(raw.additions),
+-    deletions: asCount(raw.deletions),
+-    before,
+-    after,
+-    openPath: targetPath,
+-    displayPath: renderedPath,
+-  }
+-}
+-
+-export function toolFileChangesFromState(state: unknown, base: string): ToolFileChange[] {
+-  if (!isRecord(state)) return []
+-  const meta = isRecord(state.metadata) ? state.metadata : {}
+-  const files = Array.isArray(meta.files)
+-    ? meta.files.map((item) => normalizeToolDiff(item, base)).filter((item): item is ToolFileChange => !!item)
+-    : []
+-  if (files.length > 0) return files
+-
+-  const single = normalizeToolDiff(meta.filediff, base)
+-  return single ? [single] : []
+-}
+-
+-function toolPartFileChanges(part: unknown, base: string): ToolFileChange[] {
+-  if (!isRecord(part)) return []
+-  const state = isRecord(part.state) ? part.state : {}
+-  if (String(state.status || "").toLowerCase() !== "completed") return []
+-  return toolFileChangesFromState(state, base)
+-}
+-
+-function patchPartFileChanges(part: unknown, base: string): ToolFileChange[] {
+-  if (!isRecord(part) || part.type !== "patch" || !Array.isArray(part.files)) return []
+-  return part.files.map((file) => normalizeToolDiff(file, base)).filter((change): change is ToolFileChange => !!change)
+-}
+-
+-function mergeFileChange(map: Map<string, AgentFileChange>, change: ToolFileChange, agentID: string): void {
+-  const key = `${agentID}\0${change.openPath.replace(/\\/g, "/")}`
+-  const current = map.get(key)
+-  if (!current) {
+-    map.set(key, { ...change, agentID, sources: 1 })
+-    return
+-  }
+-  current.sources += 1
+-  current.additions += change.additions
+-  current.deletions += change.deletions
+-  if (current.status === "modified") current.status = change.status
+-  if (current.before === undefined && change.before !== undefined) current.before = change.before
+-  if (current.after === undefined && change.after !== undefined) current.after = change.after
+-}
+-
+-function collectFromNode(node: CardNode, base: string, out: Map<string, AgentFileChange>, seen: Set<string>): void {
+-  if (seen.has(node.id)) return
+-  seen.add(node.id)
+-  const agentID = asText(node.agentID)
+-  for (const part of node.parts ?? []) {
+-    if (isRecord(part) && part.type === "tool") {
+-      for (const change of toolPartFileChanges(part, base)) {
+-        if (!agentID) throw new Error(`file-change-summary: card ${node.id} produced changes without exact agentID`)
+-        mergeFileChange(out, change, agentID)
+-      }
+-    }
+-    for (const change of patchPartFileChanges(part, base)) {
+-      if (!agentID) throw new Error(`file-change-summary: card ${node.id} produced changes without exact agentID`)
+-      mergeFileChange(out, change, agentID)
+-    }
+-  }
+-  for (const childID of node.childIDs ?? []) {
+-    const child = cardTreeStore.cards[childID]
+-    if (!child) throw new Error(`file-change-summary: card ${node.id} references missing child ${childID}`)
+-    collectFromNode(child, base, out, seen)
+-  }
+-}
+-
++    file: change.file,
++    openPath: change.openPath,
++    displayPath: change.displayPath,
++    status: change.status,
++    additions: null,
++    deletions: null,
++    evidence: { kind: "incomplete", reason, receipts: receiptsUnique(receipts) },
++  }
++}
++function comparison(
++  raw: Record<string, any>,
++  base: string,
++  kind: "edit" | "patch",
++  receipts: FileChangeReceipt[],
++): ToolFileChange | null {
++  const source = text(kind === "edit" ? raw.file : raw.filePath)
++  if (!source) return null
++  const target = kind === "patch" ? (text(raw.movePath) ?? source) : source
++  const file =
++    target !== source ? `${displayPath(source, base)} -> ${displayPath(target, base)}` : displayPath(target, base)
++  const status =
++    kind === "patch"
++      ? raw.type === "add"
++        ? "added"
++        : raw.type === "delete"
++          ? "deleted"
++          : raw.type === "update" || raw.type === "move"
++            ? "modified"
++            : undefined
++      : undefined
++  const change: ToolFileChange = {
++    file,
++    openPath: target,
++    displayPath: file,
++    status,
++    additions: null,
++    deletions: null,
++    evidence: { kind: "incomplete", reason: "missing_endpoints", receipts },
++  }
++  if (typeof raw.before !== "string" || typeof raw.after !== "string") return change
++  return {
++    ...change,
++    isText: true,
++    before: raw.before,
++    after: raw.after,
++    ...textComparisonCounts(raw.before, raw.after),
++    evidence: { kind: "complete", receipts },
++  }
++}
++export function toolFileChangesFromState(state: unknown, base: string, context?: ToolReceiptContext): ToolFileChange[] {
++  if (!record(state) || state.status !== "completed" || !record(state.metadata)) return []
++  const receipt = (fileIndex: number): FileChangeReceipt[] => (context ? [{ ...context, fileIndex }] : [])
++  const meta = state.metadata
++  if (Array.isArray(meta.files))
++    return meta.files.flatMap((raw, index) => {
++      const change = record(raw) ? comparison(raw, base, "patch", receipt(index)) : null
++      return change ? [change] : []
++    })
++  const change = record(meta.filediff) ? comparison(meta.filediff, base, "edit", receipt(0)) : null
++  return change ? [change] : []
++}
++function context(part: Record<string, any>): ToolReceiptContext | undefined {
++  return text(part.sessionID) && text(part.messageID) && text(part.id)
++    ? { sessionID: part.sessionID, messageID: part.messageID, partID: part.id }
++    : undefined
++}
++function receiptKey(change: ToolFileChange): string | undefined {
++  return change.evidence.receipts.length ? JSON.stringify(change.evidence.receipts) : undefined
++}
++function equalBatch(left: ProjectedMessageFacts, right: ProjectedMessageFacts): boolean {
++  return (
++    Array.isArray(left.acceptedInputMessageIDs) &&
++    left.acceptedInputMessageIDs.length > 0 &&
++    JSON.stringify(left.acceptedInputMessageIDs) === JSON.stringify(right.acceptedInputMessageIDs)
++  )
++}
++function normalRelation(
++  left: Record<string, any>,
++  right: Record<string, any>,
++  facts: readonly ProjectedMessageFacts[],
++  actor: string,
++): FileChangeIncompleteReason | undefined {
++  const timeline = facts
++    .filter((fact) => fact.sessionID === left.sessionID)
++    .sort((a, b) => a.orderKey.localeCompare(b.orderKey))
++  const a = timeline.findIndex((fact) => fact.id === left.messageID),
++    b = timeline.findIndex((fact) => fact.id === right.messageID)
++  if (a < 0 || b < 0) return "missing_message_facts"
++  if (a >= b) return "ambiguous_tool_step"
++  const first = timeline[a],
++    last = timeline[b]
++  if (first.agentID !== actor || first.agentID !== last.agentID || first.sessionAgentID !== last.sessionAgentID)
++    return "non_normal_step"
++  if (!equalBatch(first, last)) return "changed_input_batch"
++  let priorCompletion: number | undefined
++  for (const fact of timeline.slice(a, b + 1)) {
++    if (
++      fact.role !== "assistant" ||
++      fact.agentID !== first.agentID ||
++      fact.sessionAgentID !== first.sessionAgentID ||
++      fact.hasError !== false ||
++      typeof fact.completed !== "number" ||
++      fact.finish !== "tool-calls"
++    )
++      return "non_normal_step"
++    if (!equalBatch(first, fact)) return "changed_input_batch"
++    if (!fact.stepParts || !fact.toolParts) return "missing_message_facts"
++    const starts = fact.stepParts.filter((part) => part.type === "step-start"),
++      finishes = fact.stepParts.filter((part) => part.type === "step-finish")
++    if (starts.length !== 1 || finishes.length !== 1 || finishes[0].reason !== "tool-calls") return "non_normal_step"
++    if (fact.toolParts.length !== 1) return "ambiguous_tool_step"
++    const tool = fact.toolParts[0]
++    if (tool.tool !== "edit" && tool.tool !== "read") return "non_normal_step"
++    if (
++      tool.status !== "completed" ||
++      typeof tool.start !== "number" ||
++      typeof tool.end !== "number" ||
++      tool.start > tool.end ||
++      tool.end > fact.completed ||
++      (priorCompletion !== undefined && tool.start < priorCompletion)
++    )
++      return "non_normal_step"
++    if (!(starts[0].orderKey < tool.orderKey && tool.orderKey < finishes[0].orderKey)) return "non_normal_step"
++    if ((fact.id === left.messageID && tool.id !== left.id) || (fact.id === right.messageID && tool.id !== right.id))
++      return "missing_message_facts"
++    const endpointPart = fact.id === left.messageID ? left : fact.id === right.messageID ? right : undefined
++    if (endpointPart && (tool.start !== endpointPart.state?.time?.start || tool.end !== endpointPart.state?.time?.end))
++      return "non_normal_step"
++    priorCompletion = fact.completed
++  }
++  return undefined
++}
++export function reduceToolFileChangeGroups(
++  inputs: readonly FileChangeInput[],
++  facts: readonly ProjectedMessageFacts[],
++  base: string,
++): ChangeGroup[] {
++  type Entry = {
++    part: Record<string, any>
++    agentID: string
++    sessionID: string
++    change: ToolFileChange
++    edit: boolean
++    coverage: boolean
++  }
++  const entries: Entry[] = []
++  const unavailableGroups = new Map<string, ChangeGroup>()
++  for (const input of inputs) {
++    const part = input.part
++    if (!record(part)) continue
++    const sessionID = text(part.sessionID) ?? input.sessionID ?? ""
++    const actor = input.agentID
++    const add = (change: ToolFileChange, edit: boolean, coverage: boolean) =>
++      entries.push({ part, sessionID, agentID: actor, change, edit, coverage })
++    if (part.type === "patch" && Array.isArray(part.files)) {
++      for (const [fileIndex, file] of part.files.entries()) {
++        if (!text(file)) continue
++        const ctx = context(part)
++        const receipts: FileChangeReceipt[] = ctx ? [{ ...ctx, fileIndex }] : []
++        add(
++          {
++            file: displayPath(file, base),
++            openPath: file,
++            displayPath: displayPath(file, base),
++            additions: null,
++            deletions: null,
++            evidence: { kind: "incomplete", reason: "path_only", receipts },
++          },
++          false,
++          true,
++        )
++      }
++    }
++    if (part.type !== "tool") continue
++    if (conversationDeferredToolState(part.state?.metadata)) {
++      if (part.tool === "edit" || part.tool === "apply_patch" || part.tool === "write") {
++        const known = toolFileChangesFromState(part.state, base, context(part))
++        if (part.tool === "write" && text(part.state.metadata.filepath)) {
++          const path = part.state.metadata.filepath,
++            ctx = context(part)
++          known.push({
++            file: displayPath(path, base),
++            openPath: path,
++            displayPath: displayPath(path, base),
++            additions: null,
++            deletions: null,
++            evidence: { kind: "incomplete", reason: "deferred", receipts: ctx ? [ctx] : [] },
++          })
++        }
++        for (const change of known) add(unavailable(change, "deferred"), false, true)
++        if (!known.length) {
++          const ctx = context(part)
++          if (ctx) {
++            const id = `path_coverage:${sessionID}:${actor}:unavailable`
++            const group = unavailableGroups.get(id) ?? {
++              id,
++              sessionID,
++              agentID: actor,
++              observationKind: "path_coverage",
++              changes: [],
++              additions: null,
++              deletions: null,
++            }
++            group.unavailableReceipts = receiptsUnique([...(group.unavailableReceipts ?? []), ctx])
++            unavailableGroups.set(id, group)
++          }
++        }
++      }
++      continue
++    }
++    for (const change of toolFileChangesFromState(part.state, base, context(part)))
++      add(change, part.tool === "edit", false)
++  }
++  const originalReceipts = new Map<string, Entry>()
++  for (const entry of entries) {
++    const key = receiptKey(entry.change)
++    if (!key) continue
++    const previous = originalReceipts.get(key)
++    if (
++      previous &&
++      (JSON.stringify(previous.change) !== JSON.stringify(entry.change) || previous.agentID !== entry.agentID)
++    ) {
++      previous.change = unavailable(previous.change, "conflicting_receipt")
++      entry.change = unavailable(entry.change, "conflicting_receipt")
++    } else if (!previous) originalReceipts.set(key, entry)
++  }
++  const buckets = new Map<string, Entry[]>()
++  for (const entry of entries) {
++    const key = JSON.stringify([entry.coverage, entry.sessionID, entry.agentID, entry.change.openPath])
++    buckets.set(key, [...(buckets.get(key) ?? []), entry])
++  }
++  const groups = new Map<string, ChangeGroup>()
++  for (const bucket of buckets.values()) {
++    const replay = new Map<string, Entry>()
++    const deduplicated: Entry[] = []
++    let conflict = false
++    for (const entry of bucket) {
++      const key = receiptKey(entry.change)
++      if (!key) {
++        deduplicated.push(entry)
++        continue
++      }
++      const old = replay.get(key)
++      if (old) {
++        if (JSON.stringify(old.change) !== JSON.stringify(entry.change)) conflict = true
++        continue
++      }
++      replay.set(key, entry)
++      deduplicated.push(entry)
++    }
++    const timeline = facts
++      .filter((fact) => fact.sessionID === bucket[0].sessionID)
++      .sort((a, b) => a.orderKey.localeCompare(b.orderKey))
++    const located = (part: Record<string, any>) => timeline.findIndex((fact) => fact.id === part.messageID)
++    deduplicated.sort((a, b) => located(a.part) - located(b.part))
++    const first = deduplicated[0]
++    let change = first.change
++    const receipts = receiptsUnique(bucket.flatMap((entry) => entry.change.evidence.receipts))
++    if (conflict) change = unavailable(change, "conflicting_receipt", receipts)
++    else if (deduplicated.length > 1 && !first.coverage) {
++      let reason: FileChangeIncompleteReason | undefined
++      for (let index = 1; index < deduplicated.length; index++) {
++        const previous = deduplicated[index - 1],
++          next = deduplicated[index]
++        if (previous.change.evidence.kind === "incomplete" || next.change.evidence.kind === "incomplete") {
++          reason =
++            previous.change.evidence.kind === "incomplete"
++              ? previous.change.evidence.reason
++              : next.change.evidence.kind === "incomplete"
++                ? next.change.evidence.reason
++                : "missing_endpoints"
++          break
++        }
++        if (!previous.edit || !next.edit || previous.change.status !== undefined || next.change.status !== undefined) {
++          reason = "unsupported_lifecycle"
++          break
++        }
++        reason = normalRelation(previous.part, next.part, facts, previous.agentID)
++        if (reason) break
++        if (previous.change.after !== next.change.before) {
++          reason = "endpoint_discontinuity"
++          break
++        }
++      }
++      change = reason
++        ? unavailable(change, reason, receipts)
++        : {
++            ...change,
++            after: deduplicated.at(-1)!.change.after,
++            ...textComparisonCounts(change.before!, deduplicated.at(-1)!.change.after!),
++            evidence: { kind: "complete", receipts },
++          }
++    } else change = { ...change, evidence: { ...change.evidence, receipts } }
++    const kind = first.coverage ? "path_coverage" : "tool_interval"
++    const id = `${kind}:${first.sessionID}:${first.agentID}`
++    const group = groups.get(id) ?? {
++      id,
++      observationKind: kind,
++      sessionID: first.sessionID || undefined,
++      agentID: first.agentID,
++      additions: null,
++      deletions: null,
++      changes: [],
++    }
++    group.changes.push(change)
++    groups.set(id, group)
++  }
++  return [
++    ...[...groups.values()].map((group) => ({ ...group, ...summarizeFileChanges(group.changes) })),
++    ...unavailableGroups.values(),
++  ]
++}
++function treeInputs(nodes: readonly CardNode[]): FileChangeInput[] {
++  const inputs: FileChangeInput[] = []
++  const seen = new Set<string>()
++  const visit = (node: CardNode) => {
++    if (seen.has(node.id)) return
++    seen.add(node.id)
++    for (const part of [...(node.parts ?? []), ...(node.toolPart ? [node.toolPart] : [])]) {
++      if (!node.agentID && record(part) && (part.type === "tool" || part.type === "patch"))
++        throw new Error(`File change Card ${node.id} lacks its actual agent owner`)
++      inputs.push({ part, agentID: node.agentID ?? "", sessionID: node.sessionID })
++    }
++    for (const id of node.childIDs ?? []) {
++      const child = cardTreeStore.cards[id]
++      if (!child) throw new Error(`File change Card ${id} is missing`)
++      visit(child)
++    }
++  }
++  nodes.forEach(visit)
++  return inputs
++}
+ export function collectAgentFileChanges(node: CardNode, base: string): AgentFileChange[] {
+-  const out = new Map<string, AgentFileChange>()
+-  collectFromNode(node, base, out, new Set())
+-  return [...out.values()].sort((a, b) => a.displayPath.localeCompare(b.displayPath))
+-}
+-
+-function groupMergeKey(group: ChangeGroup): string {
+-  const agent = group.agentID ? `:agent:${group.agentID}` : ""
+-  if (group.sessionID) return `session:${group.sessionID}${agent}`
+-  if (group.artifactID) return `artifact:${group.artifactID}${agent}`
+-  return group.id
+-}
+-
+-function changeMergeKey(change: FileChange): string {
+-  return change.file.replace(/\\/g, "/")
+-}
+-
+-function mergeChange(left: FileChange, right: FileChange): FileChange {
+-  return {
+-    ...left,
+-    ...right,
+-    status: left.status === "modified" ? right.status : left.status,
+-    additions: Math.max(left.additions ?? 0, right.additions ?? 0),
+-    deletions: Math.max(left.deletions ?? 0, right.deletions ?? 0),
+-    before: left.before !== undefined ? left.before : right.before,
+-    after: left.after !== undefined ? left.after : right.after,
+-  }
+-}
+-
+-function mergeGroup(left: ChangeGroup, right: ChangeGroup): ChangeGroup {
+-  const changes = new Map<string, FileChange>()
+-  for (const change of [...left.changes, ...right.changes]) {
+-    const key = changeMergeKey(change)
+-    const current = changes.get(key)
+-    changes.set(key, current ? mergeChange(current, change) : change)
+-  }
+-  const mergedChanges = [...changes.values()].sort((a, b) => a.file.localeCompare(b.file))
+-  return {
+-    ...left,
+-    ...right,
+-    additions: mergedChanges.reduce((sum, item) => sum + (item.additions ?? 0), 0),
+-    deletions: mergedChanges.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
+-    changes: mergedChanges,
+-  }
+-}
+-
++  const inputs = treeInputs([node])
++  const facts = projectedConversationMessageFacts([
++    ...new Set(
++      inputs.flatMap((input) => (record(input.part) && text(input.part.sessionID) ? [input.part.sessionID] : [])),
++    ),
++  ])
++  return reduceToolFileChangeGroups(inputs, facts, base).flatMap((group) =>
++    group.changes.map((change) => ({
++      ...change,
++      openPath: (change as ToolFileChange).openPath,
++      displayPath: (change as ToolFileChange).displayPath,
++      agentID: group.agentID!,
++      sources: change.evidence.receipts.length,
++    })),
++  )
++}
+ export function mergeChangeGroups(groups: ChangeGroup[]): ChangeGroup[] {
+-  const merged = new Map<string, ChangeGroup>()
++  const map = new Map<string, ChangeGroup>()
+   for (const group of groups) {
+-    const key = groupMergeKey(group)
+-    const current = merged.get(key)
+-    merged.set(key, current ? mergeGroup(current, group) : group)
+-  }
+-  return [...merged.values()]
+-    .filter((group) => group.changes.length > 0)
+-    .sort((left, right) => left.id.localeCompare(right.id))
+-}
+-
++    const key = JSON.stringify([
++      group.observationKind,
++      group.id,
++      group.taskID,
++      group.artifactID,
++      group.sessionID,
++      group.agentID,
++      group.diffBaseRef,
++      group.diffHeadRef,
++      group.commitRef,
++      group.publishedCommitRef,
++    ])
++    const old = map.get(key)
++    if (!old) {
++      map.set(key, group)
++      continue
++    }
++    const changes = new Map(old.changes.map((change) => [change.file, change]))
++    for (const change of group.changes) {
++      const previous = changes.get(change.file)
++      if (!previous) {
++        changes.set(change.file, change)
++        continue
++      }
++      if (JSON.stringify(previous) === JSON.stringify(change)) continue
++      changes.set(change.file, {
++        file: change.file,
++        status: change.status,
++        additions: null,
++        deletions: null,
++        evidence: {
++          kind: "incomplete",
++          reason: "conflicting_receipt",
++          receipts: receiptsUnique([...previous.evidence.receipts, ...change.evidence.receipts]),
++        },
++      })
++    }
++    const list = [...changes.values()],
++      unavailableReceipts = receiptsUnique([...(old.unavailableReceipts ?? []), ...(group.unavailableReceipts ?? [])])
++    map.set(key, {
++      ...group,
++      changes: list,
++      ...summarizeFileChanges(list),
++      ...(unavailableReceipts.length ? { unavailableReceipts, additions: null, deletions: null } : {}),
++    })
++  }
++  return [...map.values()]
++}
+ export function collectAgentFileChangeGroups(node: CardNode, base: string, goals: unknown): ChangeGroup[] {
+   return collectAgentFileChangeGroupsFromNodes([node], base, goals)
+ }
+-
+-export function collectAgentFileChangeGroupsFromNodes(nodes: CardNode[], base: string, goals: unknown): ChangeGroup[] {
+-  void goals
+-  const grouped = new Map<string, { agentID: string; changes: AgentFileChange[] }>()
+-  const changes = new Map<string, AgentFileChange>()
+-  const seen = new Set<string>()
+-  for (const node of nodes) {
+-    collectFromNode(node, base, changes, seen)
+-  }
+-  for (const change of [...changes.values()].sort((a, b) => a.displayPath.localeCompare(b.displayPath))) {
+-    const groupID = change.agentID
+-    const bucket = grouped.get(groupID) ?? { agentID: change.agentID, changes: [] }
+-    bucket.changes.push(change)
+-    grouped.set(groupID, bucket)
+-  }
+-  return [...grouped.values()]
+-    .map((bucket) => {
+-      const changes = bucket.changes
+-      return {
+-        id: `agent:${bucket.agentID}`,
+-        agentID: bucket.agentID,
+-        additions: changes.reduce((sum, item) => sum + (item.additions ?? 0), 0),
+-        deletions: changes.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
+-        changes,
+-      } satisfies ChangeGroup
+-    })
+-    .sort((left, right) => left.id.localeCompare(right.id))
+-}
+-
+-/** Collect live structured file-change evidence for the selected conversation.
+- * Persisted Chat/Mission evidence remains board-owned and is merged by each
+- * presentation surface through the shared ChangeGroup merger. */
++export function collectAgentFileChangeGroupsFromNodes(nodes: CardNode[], base: string, _goals: unknown): ChangeGroup[] {
++  const inputs = treeInputs(nodes)
++  const sessionIDs = [
++    ...new Set(
++      inputs.flatMap((input) =>
++        record(input.part) && text(input.part.sessionID)
++          ? [input.part.sessionID]
++          : input.sessionID
++            ? [input.sessionID]
++            : [],
++      ),
++    ),
++  ]
++  return reduceToolFileChangeGroups(inputs, projectedConversationMessageFacts(sessionIDs), base)
++}
+ export function currentConversationAgentChangeGroups(): ChangeGroup[] {
++  publishedCardTreeVersion()
+   const board = boardStore.board as any
+   const roots = cardTreeStore.order.map((id) => cardTreeStore.cards[id]).filter((node): node is CardNode => !!node)
+-  const base = String(board?.task?.directory || board?.directory || "")
+-  return collectAgentFileChangeGroupsFromNodes(roots, base, board?.goals)
+-}
+-
+-/** Flatten canonical change groups without discarding the exact group/path
+- * target needed by Review. A path changed by two groups remains two truthful
+- * rows because an aggregated row would not identify one resolvable diff. */
++  return collectAgentFileChangeGroupsFromNodes(
++    roots,
++    String(board?.task?.directory || board?.directory || ""),
++    board?.goals,
++  )
++}
+ export function conversationArtifactFileRows(groups: readonly ChangeGroup[]): ArtifactFileRow[] {
+-  const rows: ArtifactFileRow[] = []
+-  for (const group of groups) {
+-    for (const change of group.changes) {
+-      const key = String(change.file || "")
+-        .replace(/\\/g, "/")
+-        .replace(/^\.?\//, "")
+-      if (!key) continue
+-      rows.push({
++  return groups
++    .flatMap((group) =>
++      group.changes.map((change) => ({
+         groupID: group.id,
+         targetPath: change.file,
+-        file: key,
+-        additions: change.additions ?? 0,
+-        deletions: change.deletions ?? 0,
+-      })
+-    }
+-  }
+-  return rows.sort((left, right) => left.file.localeCompare(right.file) || left.groupID.localeCompare(right.groupID))
+-}
++        file: change.file.replaceAll("\\", "/").replace(/^\.\//, ""),
++        additions: change.additions,
++        deletions: change.deletions,
++        isText: change.isText,
++      })),
++    )
++    .sort((a, b) => a.file.localeCompare(b.file) || a.groupID.localeCompare(b.groupID))
++}
+--- packages/overlay/src/services/diff.ts (before)
++++ packages/overlay/src/services/diff.ts
+@@ -1,24 +1,20 @@
+-// Task change projection from immutable Build Host observations.
+-// Session and Artifact identities own physical execution provenance; Delivery
+-// Slice subjects never own a diff or a runtime lifecycle.
+-
++// Observed comparison evidence and immutable content authority.
+ import { boardStore } from "../store/board"
+-import type { FileChange } from "../components/DiffView"
+-import { apiRequest, ApiError } from "./api"
++import type { FileChange, FileChangeReceipt } from "../components/DiffView"
++import { apiRequest, ApiError, captureApiAuthority, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+ import { taskScopedPath } from "./task-path"
+ import { taskOwningDirectory } from "./task-directory"
+-
++import { diffLines } from "diff"
+ const BUILD_OBSERVATION_CONTENT_CHUNK_BYTES = 256 * 1024
+-
+ export interface DiffTarget {
+   filePath: string
+   groupID?: string
+   sessionID?: string
+   agentID?: string
+ }
+-
+ export interface ChangeGroup {
+   id: string
++  observationKind: "tool_interval" | "saved_session_interval" | "immutable_build_interval" | "path_coverage"
+   taskID?: string
+   artifactID?: string
+   sessionID?: string
+@@ -27,176 +23,256 @@
+   publishedCommitRef?: string
+   diffBaseRef?: string
+   diffHeadRef?: string
+-  additions: number
+-  deletions: number
++  additions: number | null
++  deletions: number | null
+   changes: FileChange[]
+-}
+-
++  unavailableReceipts?: readonly FileChangeReceipt[]
++}
+ export interface ChangeSummary {
+   files: number
+-  additions: number
+-  deletions: number
+-}
+-
+-function sumAdditions(changes: readonly FileChange[]): number {
+-  return changes.reduce((sum, item) => sum + (item.additions ?? 0), 0)
+-}
+-
+-function sumDeletions(changes: readonly FileChange[]): number {
+-  return changes.reduce((sum, item) => sum + (item.deletions ?? 0), 0)
+-}
+-
++  additions: number | null
++  deletions: number | null
++  hasUnresolvedChanges: boolean
++}
++export function textComparisonCounts(before: string, after: string): { additions: number; deletions: number } {
++  const counts = { additions: 0, deletions: 0 }
++  for (const change of diffLines(before, after)) {
++    if (change.added) counts.additions += change.count ?? 0
++    if (change.removed) counts.deletions += change.count ?? 0
++  }
++  return counts
++}
++export function summarizeFileChanges(changes: readonly FileChange[]): ChangeSummary {
++  const overlapping = new Set(changes.map((change) => change.file)).size !== changes.length
++  const known =
++    !overlapping &&
++    changes.every(
++      (change) => change.evidence.kind === "complete" && change.additions !== null && change.deletions !== null,
++    )
++  return {
++    files: new Set(changes.map((change) => change.file)).size,
++    hasUnresolvedChanges: changes.some((change) => change.evidence.kind === "incomplete"),
++    additions: known ? changes.reduce((sum, change) => sum + change.additions!, 0) : null,
++    deletions: known ? changes.reduce((sum, change) => sum + change.deletions!, 0) : null,
++  }
++}
+ export function summarizeChangeGroups(groups: readonly ChangeGroup[]): ChangeSummary {
+-  const changes = groups.flatMap((group) => group.changes)
+-  return {
+-    files: changes.length,
+-    additions: sumAdditions(changes),
+-    deletions: sumDeletions(changes),
+-  }
+-}
+-
+-export function changeGroupsRevisionKey(groups: ChangeGroup[]): string {
+-  return groups
+-    .map((group) =>
+-      [
+-        group.id,
+-        group.artifactID ?? "",
+-        group.sessionID ?? "",
+-        group.agentID ?? "",
+-        group.commitRef ?? "",
+-        group.publishedCommitRef ?? "",
+-        group.diffBaseRef ?? "",
+-        group.diffHeadRef ?? "",
+-        ...group.changes.map((change) =>
+-          [change.file, change.status, change.additions ?? 0, change.deletions ?? 0].join(","),
+-        ),
+-      ].join(":"),
+-    )
+-    .join("|")
+-}
+-
++  const summary = summarizeFileChanges(groups.flatMap((group) => group.changes))
++  return groups.some((group) => (group.unavailableReceipts?.length ?? 0) > 0)
++    ? { ...summary, additions: null, deletions: null, hasUnresolvedChanges: true }
++    : summary
++}
++export function changeGroupsRevisionKey(groups: readonly ChangeGroup[]): string {
++  return JSON.stringify(groups)
++}
+ function text(value: unknown): string | undefined {
+   return typeof value === "string" && value.trim() ? value.trim() : undefined
+ }
+-
+-function artifactChangeGroups(): ChangeGroup[] {
++function record(value: unknown): value is Record<string, any> {
++  return !!value && typeof value === "object" && !Array.isArray(value)
++}
++function status(value: unknown): FileChange["status"] {
++  return value === "added" || value === "deleted" || value === "modified" ? value : undefined
++}
++function incomplete(
++  file: string,
++  receipts: readonly FileChangeReceipt[],
++  reason: "saved_session_flags_missing" | "unknown_resource",
++): FileChange {
++  return { file, additions: null, deletions: null, evidence: { kind: "incomplete", reason, receipts } }
++}
++export function savedSessionChangeGroups(raw: unknown, sessionID: string): ChangeGroup[] {
++  if (!Array.isArray(raw)) return []
++  const changes = raw.flatMap((item, fileIndex): FileChange[] =>
++    record(item) && text(item.file)
++      ? [
++          {
++            ...incomplete(item.file, [{ sessionID, fileIndex }], "saved_session_flags_missing"),
++            status: status(item.status),
++          },
++        ]
++      : [],
++  )
++  return changes.length
++    ? [
++        {
++          id: `session:${sessionID}:saved`,
++          sessionID,
++          observationKind: "saved_session_interval",
++          ...summarizeFileChanges(changes),
++          changes,
++        },
++      ]
++    : []
++}
++function object(value: unknown): { oid: string; bytes: number } | null | undefined {
++  if (value === null) return null
++  if (
++    record(value) &&
++    typeof value.oid === "string" &&
++    /^[a-f0-9]{40,64}$/.test(value.oid) &&
++    Number.isSafeInteger(value.bytes) &&
++    value.bytes >= 0
++  )
++    return { oid: value.oid, bytes: value.bytes }
++  return undefined
++}
++export function immutableBuildChangeGroups(board: unknown): ChangeGroup[] {
++  if (!record(board) || !Array.isArray(board.artifacts)) return []
++  const nodes = Array.isArray(board.sessionInvocationTopology?.nodes) ? board.sessionInvocationTopology.nodes : []
++  return board.artifacts.flatMap((artifact: any): ChangeGroup[] => {
++    if (
++      !record(artifact) ||
++      artifact.kind !== "build_host_observation" ||
++      !text(artifact.id) ||
++      !record(artifact.payload)
++    )
++      return []
++    const payload = artifact.payload
++    const sessionID = text(payload.session_id)
++    const node = nodes.find((candidate: any) => candidate.sessionID === sessionID)
++    const changes: FileChange[] = (Array.isArray(payload.diffs) ? payload.diffs : []).flatMap(
++      (item: any, fileIndex: number): FileChange[] => {
++        if (!record(item) || !text(item.file)) return []
++        const file = item.file
++        const receipts = [{ artifactID: artifact.id, fileIndex }]
++        const beforeObject = object(item.before),
++          afterObject = object(item.after),
++          physical = status(item.status)
++        const validSides =
++          physical === "added"
++            ? beforeObject === null && !!afterObject
++            : physical === "deleted"
++              ? !!beforeObject && afterObject === null
++              : physical === "modified" && !!beforeObject && !!afterObject
++        if (!validSides || typeof item.is_binary !== "boolean")
++          return [{ ...incomplete(file, receipts, "unknown_resource"), status: physical }]
++        const isText = !item.is_binary
++        if (isText && ![item.additions, item.deletions].every((count) => Number.isSafeInteger(count) && count >= 0))
++          return [{ ...incomplete(file, receipts, "unknown_resource"), status: physical }]
++        return [
++          {
++            file,
++            status: physical,
++            isText,
++            beforeObject,
++            afterObject,
++            additions: isText ? item.additions : null,
++            deletions: isText ? item.deletions : null,
++            evidence: { kind: "complete", receipts },
++          },
++        ]
++      },
++    )
++    return changes.length
++      ? [
++          {
++            id: `artifact:${artifact.id}`,
++            observationKind: "immutable_build_interval",
++            taskID: text(payload.task_id) ?? text(board.task?.id),
++            artifactID: artifact.id,
++            sessionID,
++            agentID: text(node?.agent),
++            commitRef: text(payload.contribution_commit_ref),
++            publishedCommitRef: text(payload.published_commit_ref),
++            diffBaseRef: text(payload.diff_base_ref),
++            diffHeadRef: text(payload.diff_head_ref),
++            ...summarizeFileChanges(changes),
++            changes,
++          },
++        ]
++      : []
++  })
++}
++export function currentChangeGroups(): ChangeGroup[] {
+   const board = boardStore.board as any
+-  const artifacts = Array.isArray(board?.artifacts) ? board.artifacts : []
+-  const nodes = Array.isArray(board?.sessionInvocationTopology?.nodes) ? board.sessionInvocationTopology.nodes : []
+-  return artifacts
+-    .filter((artifact: any) => artifact?.kind === "build_host_observation")
+-    .map((artifact: any) => {
+-      const payload = artifact?.payload && typeof artifact.payload === "object" ? artifact.payload : {}
+-      const sessionID = text(payload.session_id)
+-      const node = sessionID
+-        ? nodes.find((candidate: any) => String(candidate?.sessionID || "") === sessionID)
+-        : undefined
+-      const changes = (Array.isArray(payload.diffs) ? payload.diffs : [])
+-        .filter((item: any) => item && typeof item.file === "string")
+-        .map(
+-          (item: any): FileChange => ({
+-            file: String(item.file).replace(/^[ab]\//, ""),
+-            status:
+-              item.status === "added" || item.status === "deleted" || item.status === "modified"
+-                ? item.status
+-                : "modified",
+-            additions: Number.isFinite(Number(item.additions)) ? Number(item.additions) : 0,
+-            deletions: Number.isFinite(Number(item.deletions)) ? Number(item.deletions) : 0,
+-            isText: item.is_binary !== true,
+-            beforeObject:
+-              item.before && typeof item.before.oid === "string" && Number.isInteger(item.before.bytes)
+-                ? { oid: item.before.oid, bytes: item.before.bytes }
+-                : null,
+-            afterObject:
+-              item.after && typeof item.after.oid === "string" && Number.isInteger(item.after.bytes)
+-                ? { oid: item.after.oid, bytes: item.after.bytes }
+-                : null,
+-          }),
+-        )
+-        .sort((left: FileChange, right: FileChange) => left.file.localeCompare(right.file))
+-      return {
+-        id: `artifact:${String(artifact.id)}`,
+-        taskID: text(payload.task_id) ?? text(board?.task?.id),
+-        artifactID: String(artifact.id),
+-        sessionID,
+-        agentID: text(node?.agent),
+-        commitRef: text(payload.contribution_commit_ref),
+-        publishedCommitRef: text(payload.published_commit_ref),
+-        diffBaseRef: text(payload.diff_base_ref),
+-        diffHeadRef: text(payload.diff_head_ref),
+-        additions: sumAdditions(changes),
+-        deletions: sumDeletions(changes),
+-        changes,
+-      } satisfies ChangeGroup
+-    })
+-    .filter((group: ChangeGroup) => group.changes.length > 0)
+-}
+-
+-export function currentChangeGroups(): ChangeGroup[] {
+-  const artifactGroups = artifactChangeGroups()
+-  if (artifactGroups.length > 0) return artifactGroups
+-  if (Array.isArray(boardStore.changes) && boardStore.changes.length > 0) {
+-    const changes = boardStore.changes as FileChange[]
+-    return [{ id: "store-changes", additions: sumAdditions(changes), deletions: sumDeletions(changes), changes }]
+-  }
+-  const raw = (boardStore.board as any)?.changes
+-  if (!Array.isArray(raw) || raw.length === 0) return []
+-  const changes = raw as FileChange[]
+-  return [{ id: "board-changes", additions: sumAdditions(changes), deletions: sumDeletions(changes), changes }]
+-}
+-
++  const artifacts = immutableBuildChangeGroups(board)
++  if (artifacts.length) return artifacts
++  return board?.kind === "session" && text(board.sessionID)
++    ? savedSessionChangeGroups(board.changes, board.sessionID)
++    : []
++}
+ export async function resolveCurrentChangeGroups(): Promise<ChangeGroup[]> {
+   return currentChangeGroups()
+ }
+-
+ export function hasDiffBody(change: FileChange | null | undefined): boolean {
+-  return !!change && (change.before !== undefined || change.after !== undefined)
+-}
+-
++  return (
++    !!change &&
++    change.evidence.kind === "complete" &&
++    typeof change.before === "string" &&
++    typeof change.after === "string"
++  )
++}
+ export function isKnownTextDiff(change: FileChange | null | undefined): boolean {
+-  return change?.isText !== false
+-}
+-
++  return change?.evidence.kind === "complete" && change.isText === true
++}
++export class DiffSelectionError extends Error {
++  constructor(readonly reason: "ambiguous_group" | "ambiguous_path") {
++    super(`Observed diff selection is ambiguous: ${reason}`)
++    this.name = "DiffSelectionError"
++  }
++}
+ export async function resolveDiff(
+   target: DiffTarget,
+   groups: readonly ChangeGroup[] = currentChangeGroups(),
+ ): Promise<FileChange | null> {
+-  const group = target.groupID
+-    ? groups.find((candidate) => candidate.id === target.groupID)
+-    : target.sessionID
+-      ? groups.find((candidate) => candidate.sessionID === target.sessionID)
+-      : target.agentID
+-        ? groups.find((candidate) => candidate.agentID === target.agentID)
+-        : groups.find((candidate) => candidate.changes.some((change) => change.file === target.filePath))
+-  const change = group?.changes.find((candidate) => candidate.file === target.filePath) ?? null
+-  if (!change || hasDiffBody(change) || !group?.artifactID || !group.taskID || change.isText === false) return change
+-  const [before, after] = await Promise.all([
+-    readObservedTextSide({
+-      taskID: group.taskID,
+-      artifactID: group.artifactID,
++  const matching = groups.filter((group) =>
++    target.groupID
++      ? group.id === target.groupID
++      : target.sessionID
++        ? group.sessionID === target.sessionID
++        : target.agentID
++          ? group.agentID === target.agentID
++          : group.changes.some((change) => change.file === target.filePath),
++  )
++  if (matching.length > 1) throw new DiffSelectionError("ambiguous_group")
++  const group = matching[0]
++  const matches = group?.changes.filter((change) => change.file === target.filePath) ?? []
++  if (matches.length > 1) throw new DiffSelectionError("ambiguous_path")
++  const change = matches[0] ?? null
++  if (!change || change.evidence.kind === "incomplete" || hasDiffBody(change) || change.isText !== true) return change
++  if (
++    group?.observationKind !== "immutable_build_interval" ||
++    !group.artifactID ||
++    !group.taskID ||
++    change.beforeObject === undefined ||
++    change.afterObject === undefined
++  )
++    return {
+       file: change.file,
+-      side: "before",
+-      object: change.beforeObject,
+-    }),
+-    readObservedTextSide({
+-      taskID: group.taskID,
+-      artifactID: group.artifactID,
+-      file: change.file,
+-      side: "after",
+-      object: change.afterObject,
+-    }),
+-  ])
++      status: change.status,
++      additions: null,
++      deletions: null,
++      evidence: { kind: "incomplete", reason: "unknown_resource", receipts: change.evidence.receipts },
++    }
++  const authority = captureApiAuthority()
++  const directory = taskOwningDirectory(group.taskID)
++  const [before, after] = await Promise.all(
++    ["before", "after"].map((side) =>
++      readObservedTextSide({
++        taskID: group.taskID!,
++        artifactID: group.artifactID!,
++        file: change.file,
++        side: side as "before" | "after",
++        object: (side === "before" ? change.beforeObject : change.afterObject)!,
++        authority,
++        directory,
++      }),
++    ),
++  )
++  assertApiAuthorityCurrent(authority)
+   return { ...change, before, after }
+ }
+-
+ async function readObservedTextSide(input: {
+   taskID: string
+   artifactID: string
+   file: string
+   side: "before" | "after"
+-  object: { oid: string; bytes: number } | null | undefined
++  object: { oid: string; bytes: number } | null
++  authority: ApiAuthority
++  directory: string
+ }): Promise<string> {
+-  if (!input.object) return ""
++  if (input.object === null) return ""
+   const decoder = new TextDecoder("utf-8", { fatal: true })
+   const textChunks: string[] = []
+   let offset = 0
+@@ -211,10 +287,10 @@
+     const response = await apiRequest<Uint8Array>(
+       taskScopedPath(
+         input.taskID,
+-        taskOwningDirectory(input.taskID),
++        input.directory,
+         `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
+       ),
+-      { responseKind: "binary" },
++      { responseKind: "binary", authority: input.authority },
+     )
+     if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
+     const bytes = response.body
+--- packages/overlay/test/diff-resolution.test.ts (before)
++++ packages/overlay/test/diff-resolution.test.ts
+@@ -8,12 +8,15 @@
+       {
+         id: "agent:planner",
+         agentID: "planner",
++        observationKind: "tool_interval",
+         additions: 1,
+         deletions: 1,
+         changes: [
+           {
+             file: "specs/README.md",
+             status: "modified",
++            isText: true,
++            evidence: { kind: "complete", receipts: [] },
+             additions: 1,
+             deletions: 1,
+             before: "planner before",
+@@ -24,12 +27,15 @@
+       {
+         id: "agent:chat",
+         agentID: "chat",
++        observationKind: "tool_interval",
+         additions: 1,
+         deletions: 1,
+         changes: [
+           {
+             file: "specs/README.md",
+             status: "modified",
++            isText: true,
++            evidence: { kind: "complete", receipts: [] },
+             additions: 1,
+             deletions: 1,
+             before: "chat before",
+--- packages/overlay/test/binary-api-error-services.test.ts (before)
++++ packages/overlay/test/binary-api-error-services.test.ts
+@@ -12,8 +12,8 @@
+ const taskID = "tsk_binarycontract"
+ const originalFetch = globalThis.fetch
+ const groups: ChangeGroup[] = [{
+-  id: "artifact:art_binary", taskID, artifactID: "art_binary", additions: 1, deletions: 0,
+-  changes: [{ file: "report.txt", status: "added", additions: 1, deletions: 0, isText: true, beforeObject: null, afterObject: { oid: "blob-report", bytes: 6 } }],
++  id: "artifact:art_binary", observationKind: "immutable_build_interval", taskID, artifactID: "art_binary", additions: 1, deletions: 0,
++  changes: [{ file: "report.txt", status: "added", additions: 1, deletions: 0, isText: true, evidence: { kind: "complete", receipts: [{ artifactID: "art_binary", fileIndex: 0 }] }, beforeObject: null, afterObject: { oid: "a".repeat(40), bytes: 6 } }],
+ }]
+ 
+ beforeEach(() => {
+--- /dev/null
++++ packages/overlay/test/file-change-evidence-reducer.test.ts
+@@ -0,0 +1,284 @@
++import { expect, test } from "bun:test"
++import {
++  reduceToolFileChangeGroups,
++  toolFileChangesFromState,
++  mergeChangeGroups,
++  conversationArtifactFileRows,
++} from "../src/utils/file-change-summary"
++import { summarizeChangeGroups, savedSessionChangeGroups, changeGroupsRevisionKey } from "../src/services/diff"
++import type { ProjectedMessageFacts } from "../src/services/tree-writer"
++import {
++  CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
++  CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
++} from "@opencorvus-ai/transport-protocol"
++const base = "D:/project",
++  file = "D:/project/value.txt"
++function tool(index: number, before: string, after: string) {
++  return {
++    type: "tool",
++    tool: "edit",
++    id: `part_${index}`,
++    sessionID: "ses_owner",
++    messageID: `msg_${index}`,
++    state: {
++      status: "completed",
++      input: { filePath: file, oldString: before, newString: after },
++      time: { start: index * 100 + 10, end: index * 100 + 20 },
++      output: "Edit applied successfully.",
++      metadata: { filediff: { file, before, after, additions: 1, deletions: 1 } },
++    },
++  }
++}
++function fact(index: number, toolName = "edit"): ProjectedMessageFacts {
++  return {
++    id: `msg_${index}`,
++    sessionID: "ses_owner",
++    sessionAgentID: "ses_owner",
++    agentID: "work",
++    role: "assistant",
++    orderKey: `${index}`,
++    time: index * 100,
++    completed: index * 100 + 30,
++    finish: "tool-calls",
++    hasError: false,
++    acceptedInputMessageIDs: ["msg_user"],
++    stepParts: [
++      { id: `start_${index}`, orderKey: `${index}:1`, type: "step-start" },
++      { id: `finish_${index}`, orderKey: `${index}:3`, type: "step-finish", reason: "tool-calls" },
++    ],
++    toolParts: [
++      {
++        id: `part_${index}`,
++        orderKey: `${index}:2`,
++        tool: toolName,
++        status: "completed",
++        start: index * 100 + 10,
++        end: index * 100 + 20,
++      },
++    ],
++  }
++}
++function inputs(...parts: unknown[]) {
++  return parts.map((part) => ({ part, agentID: "work" }))
++}
++function marker() {
++  return {
++    [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: {
++      kind: "deferred",
++      outputBytes: 100,
++      stateBytes: CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES + 1,
++      stateSha256: "a".repeat(64),
++    },
++  }
++}
++test("individual completed comparison preserves empty existing after and original receipt", () => {
++  const part = tool(0, "value=1\n", "")
++  const changes = toolFileChangesFromState(part.state, base, {
++    sessionID: part.sessionID,
++    messageID: part.messageID,
++    partID: part.id,
++  })
++  expect(changes[0]).toEqual({
++    file: "value.txt",
++    openPath: file,
++    displayPath: "value.txt",
++    status: undefined,
++    isText: true,
++    before: "value=1\n",
++    after: "",
++    additions: 0,
++    deletions: 1,
++    evidence: {
++      kind: "complete",
++      receipts: [{ sessionID: "ses_owner", messageID: "msg_0", partID: "part_0", fileIndex: 0 }],
++    },
++  })
++})
++test("normal cross-assistant original controls and intervening Read compose exact net interval", () => {
++  const groups = reduceToolFileChangeGroups(
++    inputs(tool(0, "value=0\n", "value=1\n"), tool(2, "value=1\n", "value=2\n")),
++    [fact(0), fact(1, "read"), fact(2)],
++    base,
++  )
++  expect(groups[0]).toMatchObject({
++    observationKind: "tool_interval",
++    additions: 1,
++    deletions: 1,
++    changes: [{ before: "value=0\n", after: "value=2\n", evidence: { kind: "complete" } }],
++  })
++  expect(groups[0].changes[0].evidence.receipts).toHaveLength(2)
++})
++test("Write receipt and multiple step observations preserve the recorded two-Edit interval", () => {
++  const write = {
++    ...tool(0, "", "one\n"),
++    tool: "write",
++    state: {
++      status: "completed",
++      input: { filePath: file, content: "one\n" },
++      metadata: { filepath: file, exists: false },
++      output: "Wrote file successfully.",
++      time: { start: 10, end: 20 },
++    },
++  }
++  const groups = reduceToolFileChangeGroups(
++    inputs(write, tool(1, "one\n", "two\n"), tool(3, "two\n", "three\n")),
++    [fact(0, "write"), fact(1), fact(2, "read"), fact(3)],
++    base,
++  )
++  expect(groups).toHaveLength(1)
++  expect(groups[0].changes[0]).toMatchObject({
++    before: "one\n",
++    after: "three\n",
++    additions: 1,
++    deletions: 1,
++    evidence: {
++      kind: "complete",
++      receipts: [
++        { sessionID: "ses_owner", messageID: "msg_1", partID: "part_1", fileIndex: 0 },
++        { sessionID: "ses_owner", messageID: "msg_3", partID: "part_3", fileIndex: 0 },
++      ],
++    },
++  })
++})
++test("exact replay deduplicates while conflicting receipt is explicit incomplete", () => {
++  const original = tool(0, "one\n", "two\n")
++  expect(
++    reduceToolFileChangeGroups(inputs(original, structuredClone(original)), [], base)[0].changes[0].evidence.receipts,
++  ).toHaveLength(1)
++  const result = reduceToolFileChangeGroups(inputs(original, tool(0, "one\n", "three\n")), [], base)[0].changes[0]
++  expect(result).toMatchObject({
++    additions: null,
++    deletions: null,
++    evidence: { kind: "incomplete", reason: "conflicting_receipt" },
++  })
++  const conflictingPath = structuredClone(original)
++  conflictingPath.state.metadata.filediff.file = "D:/project/other.txt"
++  expect(
++    reduceToolFileChangeGroups(inputs(original, conflictingPath), [], base)[0].changes.map((change) => change.evidence),
++  ).toEqual([
++    {
++      kind: "incomplete",
++      reason: "conflicting_receipt",
++      receipts: [{ sessionID: "ses_owner", messageID: "msg_0", partID: "part_0", fileIndex: 0 }],
++    },
++    {
++      kind: "incomplete",
++      reason: "conflicting_receipt",
++      receipts: [{ sessionID: "ses_owner", messageID: "msg_0", partID: "part_0", fileIndex: 0 }],
++    },
++  ])
++})
++test("unqualified batch, controls, step membership, branch and endpoint have precise incomplete reasons", () => {
++  const parts = inputs(tool(0, "one\n", "two\n"), tool(2, "two\n", "three\n"))
++  const cases: [ProjectedMessageFacts[], string][] = [
++    [[{ ...fact(0), stepParts: undefined }, fact(1, "read"), fact(2)], "missing_message_facts"],
++    [[fact(0), fact(1, "read"), { ...fact(2), acceptedInputMessageIDs: ["another_input"] }], "changed_input_batch"],
++    [[fact(0), { ...fact(1, "read"), hasError: true }, fact(2)], "non_normal_step"],
++    [[fact(0), fact(1, "delegate_agent"), fact(2)], "non_normal_step"],
++    [
++      [
++        fact(0),
++        {
++          ...fact(1, "read"),
++          toolParts: [...fact(1, "read").toolParts!, { ...fact(1, "read").toolParts![0], id: "extra" }],
++        },
++        fact(2),
++      ],
++      "ambiguous_tool_step",
++    ],
++    [[{ ...fact(0), stepParts: [] }, fact(1, "read"), fact(2)], "non_normal_step"],
++  ]
++  for (const [facts, reason] of cases)
++    expect(reduceToolFileChangeGroups(parts, facts, base)[0].changes[0]).toMatchObject({
++      additions: null,
++      deletions: null,
++      evidence: { kind: "incomplete", reason },
++    })
++  expect(
++    reduceToolFileChangeGroups(
++      inputs(tool(0, "one\n", "two\n"), tool(2, "wrong\n", "three\n")),
++      [fact(0), fact(1, "read"), fact(2)],
++      base,
++    )[0].changes[0].evidence,
++  ).toMatchObject({ kind: "incomplete", reason: "endpoint_discontinuity" })
++})
++test("canonical Patch keeps path-only coverage independently of exact Edit interval", () => {
++  const patch = { id: "patch_0", type: "patch", sessionID: "ses_owner", messageID: "msg_0", files: [file] }
++  const groups = reduceToolFileChangeGroups(inputs(tool(0, "one\n", "two\n"), patch), [], base)
++  expect(groups.map((group) => group.observationKind)).toEqual(["tool_interval", "path_coverage"])
++  expect(summarizeChangeGroups(groups)).toEqual({
++    files: 1,
++    additions: null,
++    deletions: null,
++    hasUnresolvedChanges: true,
++  })
++  expect(conversationArtifactFileRows(groups)).toHaveLength(2)
++})
++test("actual deferred mutation without observed path retains unknown receipts", () => {
++  const edit = { ...tool(0, "one", "two"), state: { ...tool(0, "one", "two").state, metadata: marker() } }
++  const groups = reduceToolFileChangeGroups(inputs(edit), [], base)
++  expect(groups[0]).toMatchObject({
++    observationKind: "path_coverage",
++    changes: [],
++    additions: null,
++    deletions: null,
++    unavailableReceipts: [{ sessionID: "ses_owner", messageID: "msg_0", partID: "part_0" }],
++  })
++  expect(summarizeChangeGroups(groups)).toEqual({
++    files: 0,
++    additions: null,
++    deletions: null,
++    hasUnresolvedChanges: true,
++  })
++})
++test("distinct saved/live intervals retain honest flags and revision includes endpoint changes", () => {
++  const live = reduceToolFileChangeGroups(inputs(tool(0, "one\n", "two\n")), [], base)
++  const saved = savedSessionChangeGroups(
++    [{ file: "value.txt", before: "", after: "binary-erased", additions: 0, deletions: 0 }],
++    "ses_owner",
++  )
++  const groups = mergeChangeGroups([...live, ...saved, ...live])
++  expect(groups.map((group) => group.observationKind)).toEqual(["tool_interval", "saved_session_interval"])
++  expect(saved[0].changes[0].evidence).toMatchObject({ kind: "incomplete", reason: "saved_session_flags_missing" })
++  expect(summarizeChangeGroups(groups)).toMatchObject({ files: 1, additions: null, deletions: null })
++  const other = reduceToolFileChangeGroups(inputs(tool(0, "one\n", "six\n")), [], base)
++  const identity = (after: string) => [
++    {
++      id: "tool_interval:ses_owner:work",
++      observationKind: "tool_interval",
++      sessionID: "ses_owner",
++      agentID: "work",
++      changes: [
++        {
++          file: "value.txt",
++          before: "one\n",
++          after,
++          additions: 1,
++          deletions: 1,
++          evidence: {
++            kind: "complete",
++            receipts: [{ sessionID: "ses_owner", messageID: "msg_0", partID: "part_0", fileIndex: 0 }],
++          },
++        },
++      ],
++    },
++  ]
++  expect(JSON.parse(changeGroupsRevisionKey(live))).toMatchObject(identity("two\n"))
++  expect(JSON.parse(changeGroupsRevisionKey(other))).toMatchObject(identity("six\n"))
++})
++test("separate actual Session and actor scopes retain their own recorded endpoints", () => {
++  const one = tool(0, "one\n", "two\n"),
++    two = { ...tool(0, "old\n", "new\n"), sessionID: "ses_second" }
++  const groups = reduceToolFileChangeGroups([...inputs(one), { part: two, agentID: "second" }], [], base)
++  expect(
++    groups.map((group) => ({
++      session: group.sessionID,
++      actor: group.agentID,
++      before: group.changes[0].before,
++      after: group.changes[0].after,
++    })),
++  ).toEqual([
++    { session: "ses_owner", actor: "work", before: "one\n", after: "two\n" },
++    { session: "ses_second", actor: "second", before: "old\n", after: "new\n" },
++  ])
++})
+--- /dev/null
++++ packages/overlay/test/immutable-diff-evidence.test.ts
+@@ -0,0 +1,135 @@
++import { afterEach, expect, test } from "bun:test"
++import { ApiAuthorityChangedError, configure, captureApiAuthority } from "../src/services/api"
++import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
++import { createTauriTransport } from "../src/services/tauri-transport"
++import { setBoardStore } from "../src/store/board"
++import { resolveDiff, immutableBuildChangeGroups, DiffSelectionError, type ChangeGroup } from "../src/services/diff"
++const taskID = "tsk_evidence"
++function groups(before: number | null, after: number | null, binary = false): ChangeGroup[] {
++  return immutableBuildChangeGroups({
++    task: { id: taskID },
++    artifacts: [
++      {
++        id: "art_evidence",
++        kind: "build_host_observation",
++        payload: {
++          task_id: taskID,
++          diffs: [
++            {
++              file: "file.txt",
++              status: before === null ? "added" : after === null ? "deleted" : "modified",
++              is_binary: binary,
++              before: before === null ? null : { oid: "a".repeat(40), bytes: before },
++              after: after === null ? null : { oid: "b".repeat(40), bytes: after },
++              additions: after === null || after === 0 ? 0 : 1,
++              deletions: before === null || before === 0 ? 0 : 1,
++            },
++          ],
++        },
++      },
++    ],
++  })
++}
++function begin() {
++  configure({ serverUrl: "http://127.0.0.1:17800", directory: "D:/owned-a" })
++  setBoardStore({ selectedSource: { kind: "task", id: taskID, directory: "D:/owned-a" }, board: null, tasks: [] })
++}
++afterEach(() => {
++  __setHostTransportForTest(undefined)
++  configure({ directory: "" })
++  setBoardStore({ selectedSource: null, board: null })
++})
++test("both immutable sides and all chunks keep original logical directory", async () => {
++  begin()
++  const before = "a".repeat(256 * 1024 + 3),
++    after = "b".repeat(256 * 1024 + 4)
++  const paths: string[] = []
++  __setHostTransportForTest({
++    ...createTauriTransport("browser"),
++    async request(request) {
++      paths.push(String(request.query?.directory))
++      const value = request.query?.side === "before" ? before : after
++      const offset = Number(request.query?.offset),
++        length = Number(request.query?.length)
++      configure({ directory: "D:/selected-b" })
++      setBoardStore({ selectedSource: { kind: "task", id: "tsk_new", directory: "D:/selected-b" } })
++      return {
++        ok: true,
++        status: 200,
++        headers: {},
++        body: new TextEncoder().encode(value.slice(offset, offset + length)),
++      } as any
++    },
++  })
++  const result = await resolveDiff(
++    { filePath: "file.txt", groupID: "artifact:art_evidence" },
++    groups(before.length, after.length),
++  )
++  expect(result).toEqual({ ...groups(before.length, after.length)[0].changes[0], before, after })
++  expect(paths).toEqual(["D:/owned-a", "D:/owned-a", "D:/owned-a", "D:/owned-a"])
++})
++test("a retired logical read yields exact current authority error", async () => {
++  begin()
++  const authority = captureApiAuthority()
++  __setHostTransportForTest({
++    ...createTauriTransport("browser"),
++    async request() {
++      configure({ serverUrl: "http://127.0.0.1:17801" })
++      return { ok: true, status: 200, headers: {}, body: new TextEncoder().encode("x") } as any
++    },
++  })
++  const result = await resolveDiff({ filePath: "file.txt", groupID: "artifact:art_evidence" }, groups(null, 1)).catch(
++    (error) => error,
++  )
++  expect(result).toBeInstanceOf(ApiAuthorityChangedError)
++  expect(result.expectedRevision).toBe(authority.revision)
++  expect(result.currentRevision).toBe(captureApiAuthority().revision)
++})
++test("binary refs, absent sides and empty existing objects retain explicit evidence", async () => {
++  begin()
++  expect(groups(null, 0)[0].changes[0]).toMatchObject({
++    evidence: { kind: "complete" },
++    beforeObject: null,
++    afterObject: { bytes: 0 },
++    isText: true,
++  })
++  const empty = await resolveDiff({ filePath: "file.txt", groupID: "artifact:art_evidence" }, groups(null, 0))
++  expect(empty).toMatchObject({ before: "", after: "", evidence: { kind: "complete" } })
++  expect(groups(3, 4, true)[0].changes[0]).toMatchObject({
++    evidence: { kind: "complete" },
++    isText: false,
++    additions: null,
++    deletions: null,
++  })
++  const unknown = immutableBuildChangeGroups({
++    task: { id: taskID },
++    artifacts: [
++      {
++        id: "art_missing",
++        kind: "build_host_observation",
++        payload: {
++          diffs: [{ file: "file.txt", status: "modified", is_binary: false, after: { oid: "a".repeat(40), bytes: 0 } }],
++        },
++      },
++    ],
++  })
++  expect(unknown[0].changes[0]).toEqual({
++    file: "file.txt",
++    status: "modified",
++    additions: null,
++    deletions: null,
++    evidence: {
++      kind: "incomplete",
++      reason: "unknown_resource",
++      receipts: [{ artifactID: "art_missing", fileIndex: 0 }],
++    },
++  })
++})
++test("ambiguous shorthand selection returns typed observed-group error", async () => {
++  const result = await resolveDiff({ filePath: "file.txt" }, [
++    ...groups(null, 0),
++    { ...groups(null, 0)[0], id: "artifact:other" },
++  ]).catch((error) => error)
++  expect(result).toBeInstanceOf(DiffSelectionError)
++  expect(result.reason).toBe("ambiguous_group")
++})
+--- DiffView.tsx TYPE ONLY (before)
++++ DiffView.tsx TYPE ONLY (after)
+@@ -1,8 +1,32 @@
++export type FileChangeReceipt =
++  | { sessionID: string; messageID: string; partID: string; fileIndex?: number }
++  | { artifactID: string; fileIndex: number }
++  | { sessionID: string; fileIndex: number }
++
++export type FileChangeIncompleteReason =
++  | "missing_endpoints"
++  | "saved_session_flags_missing"
++  | "path_only"
++  | "deferred"
++  | "missing_message_facts"
++  | "ambiguous_tool_step"
++  | "non_normal_step"
++  | "changed_input_batch"
++  | "endpoint_discontinuity"
++  | "unsupported_lifecycle"
++  | "conflicting_receipt"
++  | "unknown_resource"
++
++export type FileChangeEvidence =
++  | { kind: "complete"; receipts: readonly FileChangeReceipt[] }
++  | { kind: "incomplete"; reason: FileChangeIncompleteReason; receipts: readonly FileChangeReceipt[] }
++
+ export interface FileChange {
+   file: string
+-  status: "added" | "deleted" | "modified"
+-  additions: number
+-  deletions: number
++  status?: "added" | "deleted" | "modified"
++  additions: number | null
++  deletions: number | null
++  evidence: FileChangeEvidence
+   before?: string
+   after?: string
+   isText?: boolean

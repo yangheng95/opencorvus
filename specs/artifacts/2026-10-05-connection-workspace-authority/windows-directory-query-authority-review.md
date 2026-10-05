@@ -1,0 +1,55 @@
+# Windows directory query authority review
+
+## Recall and evidence boundary
+
+Root reports the same owned liveSol04 GET /session returning an empty array for a forward-slash project directory and returning the real Session for launcher-native backslashes. Read only the two saved public list artifacts and production directory/Instance/Project/Session/Task/Mission/query helpers, related architecture and test definitions. No runtime/HTTP/database/credential/Git/source/test/index action or delegation. File-comparison implementation remains frozen. Root owns further implementation and actual verification.
+
+`live-sol-review-04-observed-session-list.json` is exactly an empty array. `live-sol-review-04-observed-native-directory-sessions.json` includes Session `ses_-zUSmY0NLzz5W92TdJ0R`, Project `prj_hNQeZQj68ipEoFfbpR2l`, native-backslash directory ending `live-sol-review-04\\project`, parent null, created 1791238450665 and updated 1791238496182. The spelling of each request and same-service ownership are Root's actual reported observations; these two array files do not themselves include request URLs/headers/process receipts. Empty output supplies no alternate Project ID and is not proof that a second Project exists. No private directory was inspected, no database opened and no title/model explanation used as cause.
+
+## Direct source cause
+
+The middleware and filter use different representations of the same request directory:
+
+1. `server/directory.ts:1–8` selects a nonblank query directory ahead of the header, retaining its original string.
+2. `server/server.ts:890–918` resolves selectedDirectory through Filesystem.resolve before entering persisted/identity/runtime project context. It does not replace the validated route query payload.
+3. `server/routes/session.ts:786–787` passes **query.directory** to Session.list.
+4. `session/index.ts:1049–1060` first scopes by Instance.project.id, then adds SQL equality `SessionTable.directory == input.directory` using the raw filter string. listGlobal repeats the same raw equality (`:1088–1101`). The Session directory column is plain nonnull text (`session/session.sql.ts:151`), without a Windows path comparison contract.
+5. Session creation persists Instance.directory (`session/index.ts:377`; related copy/create paths also use the current or original actual directory). The actual returned Sol04 row has native separators.
+
+Filesystem.resolve (`util/filesystem.ts:401–422`) validates cross-platform path forms and runs pathResolve(windowsPath(...)), producing native path separators on Windows; normalizeWindowsPath strips extended namespace prefixes, not arbitrary slash/case normalization on its own (`:359–364`). Thus request runtime selection can resolve the forward/native spellings to the same Instance key, while the additional **unresolved query** cannot equal the saved native-backslash text. This directly explains the observed slash-specific empty list without inferring a different Project or broken runtime/auth. The old Instance boundary normalization does not fix it because raw route query is reused afterward.
+
+## Horizontal production audit
+
+| Current surface | Actual current directory authority and risk |
+| --- | --- |
+| Scoped Session list | Instance Project scope plus raw directory SQL predicate; reproduced class above |
+| Global Session list | Raw directory SQL predicate without Instance Project scope; same source-level lexical mismatch |
+| Mission lists | `mission/session.ts:350–369` missionSessionConditions adds raw directory SQL equality; local/global list callers (`:423–459`) pass input unchanged; `server/routes/mission.ts:253` passes query.directory to global listing |
+| Exact Mission get/create | normalizeDirectory (`mission/session.ts:311–312`) uses Filesystem.resolve; get/create paths `:404,412` normalize before exact ownership lookup. Internal SQL equality is safe only to the extent its caller supplies the established directory representation; do not classify every Mission query as raw |
+| Global Task board | `task-api/index.ts:2245` passes opts.directory; `engine/store.ts:1293` joins Task root Session directory and filters `item.directory === input.directory`. Same raw-string mismatch class, implemented in JavaScript rather than SQL |
+| Project Task board/search | engine/store.ts:1257/1285 scopes by actual project_id, not raw directory equality. This particular list is not proven to have the raw-filter bug |
+| Task/Mission/Session ID operations | Runtime or persisted context owns Project/directory; TaskRootDirectory reads the root Session's saved directory (`engine/task-directory.ts`). Many equality checks verify already-established exact participant/owner records; replacing every equality blindly would weaken meaningful integrity checks |
+| Frontend query helper | `overlay/services/task-path.ts:1–10` trims and URL-encodes the supplied directory without OS interpretation. Its taskScopedPath simply reuses it. This is appropriate transport preservation but cannot repair a backend semantic filter split |
+| API authority/selection | api-state checks directory presence; it is not a filesystem identity resolver. A selected source/epoch cannot canonicalize an otherwise raw backend SQL filter |
+
+Existing Session.list callers in CLI export/session and expert-squad route omit the directory filter; their current behavior is not evidence that filtered lists work. Both directory-free/global and project-scoped entries must preserve their own owner contracts. Optional directory absence must retain the established all-in-scope behavior, not become an implicit current selected directory.
+
+## Windows case and physical aliases are different limits
+
+Instance.provide resolves incoming directory (`instance.ts:1256–1259`) and instanceCacheKey lowercases on win32 (`:273–274`). Project.samePath (`project.ts:283–289`) normalizes native separators/trailing separators and lowercases on win32. Registered-directory lookup uses that predicate (`:1052` onward), returning actual registered directory metadata. ProjectDirectoryAdmission.key (`directory-admission.ts:122–149`) additionally resolves physical/nearest-existing-parent aliases and lowercases the normalized admission key. Filesystem.normalizePath (`filesystem.ts:341–350`) can use native realpath; Filesystem.resolve itself does not call it and does not canonicalize physical casing.
+
+These existing contracts distinguish lexical request path, registered Project identity, cached execution directory and physical directory occurrence. Raw exact list filters bypass those distinctions. Case variants can therefore also mismatch persisted text by source analysis even where the Instance cache regards them as equal; no actual case-variant Sol04 request was captured here. Symlink/junction aliases, UNC/extended namespace forms, case-sensitive Windows directory settings, missing directories and relocated legacy rows are not exercised by the two artifacts. Do not claim they are repaired or expand the present slash reproduction into universal physical-directory alias equivalence. Project admission's physical owner comparison must not be replaced by a query-string workaround, and a list filter must not expand to every sibling directory of a Project merely because its project_id matches.
+
+## Architecture, definitions and related tests read
+
+Current architecture 02-data establishes Session/root directory and durable Project/physical occurrence authority, and warns against second ownership sources or fallback. 03-control describes exact Project/directory ownership; 07-panel requires source/directory/accepted-epoch identity at presentation boundaries. The proposed repair must maintain that separation rather than create a frontend canonical-directory registry.
+
+Read source definitions/callers in server/server, server/directory, routes/session/mission, session/index/sql, project/instance/project/directory-admission, server/persisted-project-context, mission/session, engine/store/task-directory, task-api/index and overlay task-path/api-state. Full source searches establish the scoped/global distinctions in the table. Related read-only test definitions: overlay `task-path.test.ts` positively asserts forward-slash URL encoding; `workspace-directory-persistence.test.ts` concerns selection persistence; backend `project-filesystem-identity.test.ts`, `project-identity-convergence.test.ts`, `project-directory-exact-occurrence.test.ts` and `project-instance-lock-liveness.test.ts` concern identity/physical lifecycle. Their existence is not an executed Session/Task/Mission filtered-list acceptance. No UI automated test or checker was run.
+
+## Minimal next plan before implementation
+
+First admit one current backend directory-filter contract reused by Session local/global, Mission local/global and global Task listing. It must interpret a supplied OS-valid directory once using existing filesystem/Project authority primitives; retain optional absence semantics and exact directory scope. Do not mutate request strings in the frontend, retry a second spelling, drop the filter, add another directory cache or infer identity from session titles. A narrowly bounded separator fix can resolve filter input with Filesystem.resolve at the actual shared filter boundary; that is sufficient for this native persisted row's forward-slash reproduction, but **alone does not establish case or physical alias equivalence**. Root must explicitly choose and verify the full intended comparison semantics before claiming the shared mechanism repaired. Reuse existing samePath/registered/physical identity contracts where appropriate; do not invent a new lowercased durable identity or migrate stored directories without a separate actual data analysis/authorization.
+
+Focused positive backend contracts should persist a real root Session in an owned Windows fixture, then obtain the same exact Session ID for native and forward spellings; verify local/global Session, Mission and Task filtered results retain exact directory scope with a real distinct sibling directory and Project. Include the chosen case/trailing/UNC/alias/error contracts as affirmative outputs or explicit typed errors, and POSIX behavior under its separate platform contract. Exact ID-based Task/Mission integrity checks and saved root-directory authority must retain their normal positive results. Exercise caller-direct APIs as well as route middleware so route-only normalization cannot conceal raw library inputs. No negative absence/hash test or mock-only claim substitutes for those real store/API outcomes.
+
+Root's actual same-owned dev service should then repeat the two original requests using the same process/Session/source receipt and save request identity plus response IDs. This read-only review authorizes no HTTP call, migration or runtime control. Current evidence conclusively identifies the source-level raw-filter split explaining the slash reproduction; wider physical alias behavior, real Task/Mission/case effects and the final repair remain unverified.

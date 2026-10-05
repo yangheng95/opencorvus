@@ -1,0 +1,20 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\tree-writer-message-facts.test.ts:
+(pass) live snapshots preserve all intervening canonical messages and actual qualification facts [6.56ms]
+(pass) metadata-only completion is published by the existing visible revision [1.96ms]
+(pass) history hydration supplies the same actual facts through its existing adapter [1.48ms]
+(pass) step-first pending facts promote and preserve actual whole-message Tool membership [4.40ms]
+(pass) moved authoritative bundle supplies its current exact owner and replaces observed Parts [1.04ms]
+(pass) full history retains an actual nondisplay intervening message and empty Tool bundle [0.40ms]
+(pass) history coverage and actor integrity have precise preparation errors [1.07ms]
+(pass) retained Part identity and Session drift produce explicit integrity errors [0.44ms]
+(pass) authoritative replay retires the incoming display member while retaining shared-card and older members [3.25ms]
+(pass) single persisted full bundle replaces current facts and validates owner before mutation [0.60ms]
+(pass) retained control removal validates its actual Message and Part type [0.42ms]
+(pass) removal and reset expose the current canonical session membership [1.90ms]
+
+ 12 pass
+ 0 fail
+ 38 expect() calls
+Ran 12 tests across 1 file. [1.52s]

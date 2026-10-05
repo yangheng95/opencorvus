@@ -5,8 +5,8 @@
 // through the shared DiffView component.
 
 import { createResource, createMemo, Show } from "solid-js"
-import { DiffView, changeStatusLabel, type FileChange } from "./DiffView"
-import { resolveDiff, type ChangeGroup, type DiffTarget } from "../services/diff"
+import { ChangeLineStats, DiffView, changeStatusLabel, type FileChange } from "./DiffView"
+import { hasDiffBody, isKnownTextDiff, resolveDiff, type ChangeGroup, type DiffTarget } from "../services/diff"
 import { Panel } from "./ui/Panel"
 import { t } from "../utils/i18n"
 import type { JSX } from "solid-js"
@@ -46,8 +46,9 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
     },
   )
 
-  const item = createMemo(() => change())
+  const item = createMemo(() => (change.loading || change.error ? null : (change() ?? null)))
   const loading = () => change.loading
+  const errorMessage = () => (change.error instanceof Error ? change.error.message : t("diff.load_failed"))
 
   // Compute header content in a memo so Panel's Show reads a stable reference,
   // avoiding double-creation of DOM nodes from the ternary getter.
@@ -68,12 +69,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
             <span class="change-status" data-status={item()!.status}>
               {changeStatusLabel(item()!.status)}
             </span>
-            <span class="diff-dialog-stat" data-tone="add">
-              +{item()!.additions}
-            </span>
-            <span class="diff-dialog-stat" data-tone="del">
-              -{item()!.deletions}
-            </span>
+            <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />
           </span>
         </Show>
       </>
@@ -99,16 +95,33 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
           }
         >
           <Show
-            when={item()}
+            when={!change.error}
             fallback={
               <div class="diff-preview-empty">
-                <p class="empty-hint">{t("diff.no_preview")}</p>
+                <p class="empty-hint" role="alert">
+                  {errorMessage()}
+                </p>
               </div>
             }
           >
-            <div class="diff-preview-body">
-              <DiffView item={item()!} />
-            </div>
+            <Show
+              when={item()}
+              fallback={
+                <div class="diff-preview-empty">
+                  <p class="empty-hint">{t("diff.no_preview")}</p>
+                </div>
+              }
+            >
+              <div
+                class="diff-preview-body"
+                classList={{
+                  "diff-preview-body--text":
+                    hasDiffBody(item()) && isKnownTextDiff(item()) && item()!.before !== item()!.after,
+                }}
+              >
+                <DiffView item={item()!} />
+              </div>
+            </Show>
           </Show>
         </Show>
       </Show>

@@ -2,6 +2,9 @@
 
 This directory contains current architecture authority for live subsystem contracts.
 
+The current panel authority also defines recorded file-comparison evidence,
+normal Edit composition, exact history replacement and logical immutable read scope.
+
 Every file in this directory is a current fact source and is listed below. The
 index is the authority graph's entry point, so a document that exists here and
 is not listed is unreachable authority — `bun run check:architecture-index`

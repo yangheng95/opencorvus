@@ -1,0 +1,35 @@
+export type FileChangeReceipt =
+  | { sessionID: string; messageID: string; partID: string; fileIndex?: number }
+  | { artifactID: string; fileIndex: number }
+  | { sessionID: string; fileIndex: number }
+
+export type FileChangeIncompleteReason =
+  | "missing_endpoints"
+  | "saved_session_flags_missing"
+  | "path_only"
+  | "deferred"
+  | "missing_message_facts"
+  | "ambiguous_tool_step"
+  | "non_normal_step"
+  | "changed_input_batch"
+  | "endpoint_discontinuity"
+  | "unsupported_lifecycle"
+  | "conflicting_receipt"
+  | "unknown_resource"
+
+export type FileChangeEvidence =
+  | { kind: "complete"; receipts: readonly FileChangeReceipt[] }
+  | { kind: "incomplete"; reason: FileChangeIncompleteReason; receipts: readonly FileChangeReceipt[] }
+
+export interface FileChange {
+  file: string
+  status?: "added" | "deleted" | "modified"
+  additions: number | null
+  deletions: number | null
+  evidence: FileChangeEvidence
+  before?: string
+  after?: string
+  isText?: boolean
+  beforeObject?: { oid: string; bytes: number } | null
+  afterObject?: { oid: string; bytes: number } | null
+}

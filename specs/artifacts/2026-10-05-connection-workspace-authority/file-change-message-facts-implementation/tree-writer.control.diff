@@ -1,0 +1,469 @@
+===================================================================
+--- tree-writer.control-before
++++ packages/overlay/src/services/tree-writer.ts
+@@ -322,10 +322,61 @@
+   readonly acceptedInputMessageIDs?: readonly string[]
+   readonly completed?: number
+   readonly finish?: string
+   readonly hasError?: boolean
++  readonly stepParts?: readonly ProjectedStepPartFacts[]
++  readonly toolParts?: readonly ProjectedToolPartFacts[]
+ }
+ 
++export interface ProjectedStepPartFacts {
++  readonly id: string
++  readonly orderKey: string
++  readonly type: "step-start" | "step-finish"
++  readonly reason?: string
++}
++
++export interface ProjectedToolPartFacts {
++  readonly id: string
++  readonly orderKey: string
++  readonly tool: string
++  readonly status?: string
++  readonly start?: number
++  readonly end?: number
++}
++
++function retainActualPartFact(owner: Pick<MessageInfo, "id" | "sessionID" | "stepParts" | "toolParts">, part: any): void {
++  if (part.type !== "step-start" && part.type !== "step-finish" && part.type !== "tool") return
++  if (part.messageID !== owner.id || part.sessionID !== owner.sessionID || typeof part.id !== "string" || !part.id) {
++    throw new Error(`message part facts ownership mismatch for ${owner.id}`)
++  }
++  const orderKey = requireTimelineOrderKeyDomain(part.orderKey, `message part facts ${part.id}`, "part")
++  if (part.type === "tool") {
++    if (typeof part.tool !== "string" || !part.tool) throw new Error(`message Tool facts ${part.id} missing tool`)
++    const prior = owner.toolParts?.find((fact) => fact.id === part.id)
++    if (owner.stepParts?.some((fact) => fact.id === part.id)) throw new Error(`message part facts ${part.id} type drift`)
++    if (prior && (prior.orderKey !== orderKey || prior.tool !== part.tool)) throw new Error(`message part facts ${part.id} identity drift`)
++    const fact: ProjectedToolPartFacts = {
++      id: part.id, orderKey, tool: part.tool,
++      status: typeof part.state?.status === "string" ? part.state.status : undefined,
++      start: typeof part.state?.time?.start === "number" ? part.state.time.start : undefined,
++      end: typeof part.state?.time?.end === "number" ? part.state.time.end : undefined,
++    }
++    owner.toolParts = [...(owner.toolParts ?? []).filter((item) => item.id !== fact.id), fact]
++  } else {
++    if (owner.toolParts?.some((fact) => fact.id === part.id)) throw new Error(`message part facts ${part.id} type drift`)
++    const prior = owner.stepParts?.find((fact) => fact.id === part.id)
++    if (prior && (prior.orderKey !== orderKey || prior.type !== part.type)) throw new Error(`message part facts ${part.id} identity drift`)
++    const fact: ProjectedStepPartFacts = { id: part.id, orderKey, type: part.type, reason: typeof part.reason === "string" ? part.reason : undefined }
++    owner.stepParts = [...(owner.stepParts ?? []).filter((item) => item.id !== fact.id), fact]
++  }
++}
++
++function replaceActualPartFacts(owner: Pick<MessageInfo, "id" | "sessionID" | "stepParts" | "toolParts">, parts: any[]): void {
++  owner.stepParts = []
++  owner.toolParts = []
++  for (const part of parts) retainActualPartFact(owner, part)
++}
++
+ function actualMessageQualificationFacts(info: any): Pick<
+   ProjectedMessageFacts,
+   "acceptedInputMessageIDs" | "completed" | "finish" | "hasError"
+ > {
+@@ -342,8 +393,12 @@
+   }
+ }
+ 
+ interface MessageInfo extends ProjectedMessageFacts {
++  stepParts?: readonly ProjectedStepPartFacts[]
++  toolParts?: readonly ProjectedToolPartFacts[]
++  /** Actual metadata retained without a display-card projection. */
++  metadataOnly?: boolean
+   id: string
+   sessionID: string
+   /** Canonical execution-session owner projected by the backend bridge. */
+   sessionAgentID: string
+@@ -652,8 +707,10 @@
+         acceptedInputMessageIDs: message.acceptedInputMessageIDs ? [...message.acceptedInputMessageIDs] : undefined,
+         completed: message.completed,
+         finish: message.finish,
+         hasError: message.hasError,
++        stepParts: message.stepParts?.map((part) => ({ ...part })),
++        toolParts: message.toolParts?.map((part) => ({ ...part })),
+       })
+     }
+   }
+   return result
+@@ -908,8 +965,11 @@
+       type: "message.updated",
+       orderKey: input.info.orderKey,
+       properties: { info: input.info },
+     })
++    const owner = messages.get(String(input.info.id))
++    if (!owner) throw new Error(`ingestPersistedConversationMessage: message ${input.info.id} missing canonical owner`)
++    replaceActualPartFacts(owner, input.parts)
+     for (const part of input.parts) {
+       if (!part) continue
+       projectPersistedConversationPart(input.info, part)
+     }
+@@ -1039,9 +1099,9 @@
+ }
+ 
+ // ── Handlers ──
+ 
+-function handleMessageUpdated(event: any): void {
++function handleMessageUpdated(event: any, options: { metadataOnly?: boolean } = {}): void {
+   const info = propsOf(event).info
+   if (!info || typeof info !== "object") throw new Error("message.updated missing info")
+ 
+   const id = String(info.id || "")
+@@ -1081,12 +1141,14 @@
+     throw new Error(`message.updated ${id} orderKey drift between envelope and info`)
+   }
+   const orderKey = envelopeOrderKey
+   const existingMessage = messages.get(id)
++  if (existingMessage && existingMessage.sessionID !== sessionID) throw new Error(`message.updated ${id} Session owner drift`)
+   if (existingMessage && existingMessage.orderKey !== orderKey) {
+     throw new Error(`message.updated ${id} orderKey drift from existing message owner`)
+   }
+   const pendingPartFirstMessage = pendingPartFirstMessages.get(id)
++  if (pendingPartFirstMessage && pendingPartFirstMessage.sessionID !== sessionID) throw new Error(`message.updated ${id} pending Session owner drift`)
+   if (pendingPartFirstMessage && pendingPartFirstMessage.orderKey !== orderKey) {
+     throw new Error(`message.updated ${id} orderKey drift from pending part-first owner`)
+   }
+   pendingPartFirstMessages.delete(id)
+@@ -1097,8 +1159,11 @@
+   const stage = deriveSessionStage(origin)
+   const displayRole = displayRoleForResolvedRole(rawResolvedRole)
+   const nextMessageInfo: MessageInfo = {
+     ...actualMessageQualificationFacts(info),
++    stepParts: (existingMessage ?? pendingPartFirstMessage)?.stepParts,
++    toolParts: (existingMessage ?? pendingPartFirstMessage)?.toolParts,
++    metadataOnly: options.metadataOnly ?? (existingMessage ?? pendingPartFirstMessage)?.metadataOnly,
+     id,
+     sessionID,
+     sessionAgentID,
+     agentID: canonicalAgentID,
+@@ -1127,17 +1192,19 @@
+     !existingMessage && latestTimelineMessage ? messageTimeOrder(nextMessageInfo, latestTimelineMessage) < 0 : false
+ 
+   // Index the message.
+   messages.set(id, nextMessageInfo)
+-  if (!latestTimelineMessage || messageTimeOrder(latestTimelineMessage, nextMessageInfo) <= 0) {
++  if (!nextMessageInfo.metadataOnly && (!latestTimelineMessage || messageTimeOrder(latestTimelineMessage, nextMessageInfo) <= 0)) {
+     latestTimelineMessage = nextMessageInfo
+-  } else if (latestTimelineMessage.id === id) {
+-    latestTimelineMessage = [...messages.values()].sort(messageTimeOrder).at(-1)
++  } else if (latestTimelineMessage?.id === id) {
++    latestTimelineMessage = [...messages.values()].filter((message) => !message.metadataOnly).sort(messageTimeOrder).at(-1)
+   }
+ 
+   const priorMessageCount = session.messageIDs.size
+   session.messageIDs.add(id)
+ 
++  if (nextMessageInfo.metadataOnly && !session.messageCardIDs.has(id)) return
++
+   const messageCardID = ensureMessageTurnProjection(session, id, {
+     stage,
+     agentID: isUserStage(stage) ? undefined : canonicalAgentID,
+     collapseContext: nextMessageInfo.delegatedContext,
+@@ -1284,15 +1351,17 @@
+   let createdMessageTurn = false
+   let displayRole = ""
+   const existingMessage = messages.get(messageID)
+   if (existingMessage) {
++    if (existingMessage.sessionID !== sessionID) throw new Error(`message.part.updated ${messageID} Session owner drift`)
+     if (existingMessage.orderKey !== routeOrderKey) {
+       throw new Error(`message.part.updated ${messageID} orderKey drift from existing message owner`)
+     }
+     displayRole = existingMessage.resolvedRole
+   } else {
+     const pendingMessage = pendingPartFirstMessages.get(messageID)
+     if (pendingMessage) {
++      if (pendingMessage.sessionID !== sessionID) throw new Error(`message.part.updated ${messageID} pending Session owner drift`)
+       if (pendingMessage.orderKey !== routeOrderKey) {
+         throw new Error(`message.part.updated ${messageID} orderKey drift from pending part-first owner`)
+       }
+       displayRole = pendingMessage.resolvedRole
+@@ -1301,8 +1370,31 @@
+   const eventResolvedRole = typeof opts.routeMeta?.resolvedRole === "string" ? opts.routeMeta.resolvedRole.trim() : ""
+   if (!displayRole && eventResolvedRole) displayRole = displayRoleForResolvedRole(eventResolvedRole)
+   let route: ReturnType<typeof requirePartEventRouteMeta> | undefined
+ 
++  if (part.type === "step-start" || part.type === "step-finish") {
++    let owner = existingMessage ?? pendingPartFirstMessages.get(messageID)
++    if (!owner) {
++      const meta = requirePartEventRouteMeta(opts.routeMeta, messageID)
++      ensureSessionProjection(sessionID, {
++        agentID: isUserStage(deriveRuntimeSessionStage(meta.channel)) ? undefined : meta.sessionAgentID,
++        stage: deriveRuntimeSessionStage(meta.channel), parentSessionID: meta.parentSessionID,
++      })
++      owner = {
++        id: messageID, sessionID, sessionAgentID: meta.sessionAgentID, agentID: meta.agentID,
++        role: meta.role, author: meta.author, channel: meta.channel, source: meta.source,
++        resolvedRole: displayRoleForResolvedRole(meta.resolvedRole), agent: meta.resolvedRole,
++        stage: deriveSessionStage(meta), parentSessionID: meta.parentSessionID, parentMessageID: meta.parentMessageID,
++        orderKey: meta.orderKey, time: messageOrderKeyTime("message.part.updated", messageID, meta.orderKey),
++        serverTimeConfirmed: false, delegatedContext: isDelegatedContextMessage(meta), pendingPartFirst: true,
++        metadataOnly: true,
++      } as PendingPartFirstMessageInfo
++      pendingPartFirstMessages.set(messageID, owner as PendingPartFirstMessageInfo)
++    }
++    retainActualPartFact(owner, part)
++    return null
++  }
++
+   if (!session || !cardID) {
+     // Bridge stamps channel/parentSessionID onto the event payload.
+     // A part can arrive before its message.updated (saveMessage is silent;
+     // updatePart fires before updateMessage). Because messageID is already
+@@ -1331,9 +1423,11 @@
+     }
+     if (!route) route = requirePartEventRouteMeta(opts.routeMeta, messageID)
+     const turnStage = deriveSessionStage(route)
+     const messageTime = messageOrderKeyTime("message.part.updated", messageID, route.orderKey)
+-    pendingPartFirstMessages.set(messageID, {
++    if (!existingMessage) pendingPartFirstMessages.set(messageID, {
++      stepParts: pendingPartFirstMessages.get(messageID)?.stepParts,
++      toolParts: pendingPartFirstMessages.get(messageID)?.toolParts,
+       id: messageID,
+       sessionID,
+       sessionAgentID: route.sessionAgentID,
+       agentID: route.agentID,
+@@ -1366,8 +1460,14 @@
+   }
+ 
+   if (!conversationPartIsProjectable(part)) return null
+ 
++  const factOwner = messages.get(messageID) ?? pendingPartFirstMessages.get(messageID)
++  if (factOwner) {
++    factOwner.metadataOnly = false
++    retainActualPartFact(factOwner, part)
++  }
++
+   upsertPart(session, messageID, cardID, partID, { ...part, orderKey: partOrderKey })
+   if (!displayRole) {
+     throw new Error(
+       `message.part.updated for ${messageID} could not resolve display role from message or event metadata`,
+@@ -1609,15 +1709,18 @@
+   const messageID = String(p.messageID || "")
+   if (!sessionID || !messageID) throw new Error("message.removed missing sessionID/messageID")
+ 
+   const session = requireSessionProjection(sessionID, "message.removed")
+-  const cardID = requireMessageCardProjection(session, messageID, "message.removed")
++  const metadataOnly = messages.get(messageID)?.metadataOnly || pendingPartFirstMessages.get(messageID)?.metadataOnly
++  const cardID = metadataOnly ? session.messageCardIDs.get(messageID) : requireMessageCardProjection(session, messageID, "message.removed")
+ 
+   session.messageIDs.delete(messageID)
+   session.messageCardIDs.delete(messageID)
+   messages.delete(messageID)
+   pendingPartFirstMessages.delete(messageID)
+ 
++  if (!cardID) return
++
+   removeIndexedParts(session, cardID, (part) => String(part?.messageID || "") === messageID)
+ 
+   if (!cardStillOwnsSessionMessage(session, cardID)) {
+     removeCardReferences(cardID)
+@@ -1646,15 +1749,23 @@
+     handleMessageRemoved({
+       type: "message.removed",
+       properties: { sessionID: sourceSessionID, messageID },
+     })
++  } else if (existing?.sessionID === targetSessionID) {
++    handleMessageRemoved({ type: "message.removed", properties: { sessionID: targetSessionID, messageID } })
+   } else if (existing && existing.sessionID !== targetSessionID) {
+     throw new Error(
+       `message.moved ${messageID} existing owner ${existing.sessionID} is neither source ${sourceSessionID} nor target ${targetSessionID}`,
+     )
+   }
+ 
+-  handleMessageUpdated({ ...event, type: "message.updated", properties: { ...p, info } })
++  handleMessageUpdated(
++    { ...event, type: "message.updated", properties: { ...p, info } },
++    { metadataOnly: !transcriptMessageHasDisplay({ info, parts }) },
++  )
++  const movedOwner = messages.get(messageID)
++  if (!movedOwner) throw new Error(`message.moved ${messageID} missing canonical metadata owner`)
++  replaceActualPartFacts(movedOwner, parts)
+   for (const part of parts) {
+     handlePartUpdated({
+       ...event,
+       type: "message.part.updated",
+@@ -1668,11 +1779,27 @@
+   const sessionID = String(p.sessionID || "")
+   const partID = String(p.partID || "")
+   if (!sessionID || !partID) throw new Error("message.part.removed missing sessionID/partID")
+ 
++  const owners = [...messages.values(), ...pendingPartFirstMessages.values()].filter(
++    (owner) => owner.sessionID === sessionID && owner.stepParts?.some((part) => part.id === partID),
++  )
++  if (owners.length > 1) throw new Error(`message.part.removed ${partID} ambiguous metadata owner`)
++  if (owners[0]) {
++    owners[0].stepParts = owners[0].stepParts?.filter((part) => part.id !== partID)
++    return
++  }
++
+   const session = requireSessionProjection(sessionID, "message.part.removed")
+   const target = requirePartProjection(session, partID, "message.part.removed")
+ 
++  for (const owner of messages.values()) {
++    if (owner.sessionID === sessionID) owner.toolParts = owner.toolParts?.filter((part) => part.id !== partID)
++  }
++  for (const owner of pendingPartFirstMessages.values()) {
++    if (owner.sessionID === sessionID) owner.toolParts = owner.toolParts?.filter((part) => part.id !== partID)
++  }
++
+   removeIndexedParts(session, target.cardID, (_part, index) => index === target.index)
+   syncSessionTopLevelVisibility(session)
+ }
+ 
+@@ -2939,9 +3066,9 @@
+   const timelineMessages = new Map<string, MessageInfo>()
+   for (const message of pendingPartFirstMessages.values()) timelineMessages.set(message.id, message)
+   for (const message of messages.values()) timelineMessages.set(message.id, message)
+   const ordered = [...timelineMessages.values()]
+-    .filter((message) => sessions.has(message.sessionID))
++    .filter((message) => sessions.has(message.sessionID) && !message.metadataOnly)
+     .sort(messageTimeOrder)
+   if (ordered.length === 0) return
+   const projectionItems: TimelineProjectionItem[] = []
+   for (const message of ordered) {
+@@ -3165,8 +3292,9 @@
+ 
+ export interface PreparedConversationView {
+   transcriptByMessageID: Map<string, any>
+   ordered: HydrateMessageMeta[]
++  metadataOnlyMessages: MessageInfo[]
+ }
+ 
+ function hydrateMessageMetaOrder(left: HydrateMessageMeta, right: HydrateMessageMeta): number {
+   return compareTimelineOrderKeys(left.orderKey, right.orderKey, "hydrate message")
+@@ -3232,8 +3360,9 @@
+     }
+     viewMessageIDs.add(meta.messageID)
+   }
+   const sessionAgentIDs = new Map<string, string>()
++  const expectedMessageIDs = new Set<string>()
+   for (const rawSession of Array.isArray(view?.sessions) ? view.sessions : []) {
+     const sessionID = String(rawSession?.sessionID || "")
+     const agentID = String(rawSession?.agentID || "").trim()
+     if (!sessionID || !agentID) {
+@@ -3243,9 +3372,51 @@
+     if (existing && existing !== agentID) {
+       throw new Error(`hydrateConversationView: view session ${sessionID} agentID drift: ${existing} -> ${agentID}`)
+     }
+     sessionAgentIDs.set(sessionID, agentID)
++    if (!Array.isArray(rawSession.messageIDs)) throw new Error(`hydrateConversationView: view session ${sessionID} missing messageIDs`)
++    for (const messageID of rawSession.messageIDs) {
++      if (typeof messageID !== "string" || !messageID) throw new Error(`hydrateConversationView: view session ${sessionID} invalid messageID`)
++      const payload = transcriptByMessageID.get(messageID)
++      if (!payload || payload.info?.sessionID !== sessionID) throw new Error(`hydrateConversationView: expected message ${messageID} missing matching transcript payload`)
++      if (expectedMessageIDs.has(messageID)) throw new Error(`hydrateConversationView: expected message ${messageID} duplicate membership`)
++      expectedMessageIDs.add(messageID)
++    }
+   }
++  const metadataOnlyMessages: MessageInfo[] = []
++  const partOwners = new Map<string, string>()
++  for (const [id, payload] of transcriptByMessageID) {
++    if (!expectedMessageIDs.has(id)) throw new Error(`hydrateConversationView: transcript message ${id} missing session membership`)
++    if (viewMessageIDs.has(id)) continue
++    const info = payload.info
++    const origin = requireMessageOrigin(info, id)
++    const agentID = requireCanonicalMessageAgentID(info.agentID, origin, id)
++    const sessionID = String(info.sessionID || "")
++    const sessionAgentID = String(info.sessionAgentID || "").trim()
++    if (!sessionAgentID || sessionAgentID !== sessionAgentIDs.get(sessionID)) throw new Error(`hydrateConversationView: message ${id} missing canonical session actor`)
++    if (typeof info.role !== "string" || !info.role || typeof info.resolvedRole !== "string" || !info.resolvedRole) throw new Error(`hydrateConversationView: message ${id} missing canonical role`)
++    const time = Number(info.time?.created)
++    if (!Number.isFinite(time) || time <= 0) throw new Error(`hydrateConversationView: message ${id} missing positive created time`)
++    if (!Array.isArray(payload.parts)) throw new Error(`hydrateConversationView: message ${id} missing actual Parts bundle`)
++    for (const part of payload.parts) {
++      const partID = String(part?.id || "")
++      if (!partID || part.messageID !== id || part.sessionID !== sessionID) throw new Error(`hydrateConversationView: message ${id} invalid actual Part ownership`)
++      requireTimelineOrderKeyDomain(part.orderKey, `persisted message part ${partID}`, "part")
++      const partOwnerKey = `${sessionID}\u0000${partID}`
++      if (partOwners.has(partOwnerKey)) throw new Error(`hydrateConversationView: duplicate part ${partID} in session ${sessionID}`)
++      partOwners.set(partOwnerKey, id)
++    }
++    const metadata: MessageInfo = {
++      ...actualMessageQualificationFacts(info), id, sessionID, sessionAgentID, agentID, role: info.role,
++      orderKey: requireTimelineOrderKeyDomain(info.orderKey, `hydrateConversationView message ${id}`, "message"), time,
++      stage: deriveSessionStage(origin), author: origin.author, channel: origin.channel, source: origin.source,
++      resolvedRole: displayRoleForResolvedRole(info.resolvedRole), agent: typeof info.agent === "string" ? info.agent : "",
++      parentSessionID: String(info.parentSessionID || ""), parentMessageID: String(info.parentID || ""),
++      serverTimeConfirmed: true, delegatedContext: isDelegatedContextMessage(origin), metadataOnly: true,
++    }
++    replaceActualPartFacts(metadata, payload.parts)
++    metadataOnlyMessages.push(metadata)
++  }
+   for (const meta of ordered) {
+     const sessionAgentID = sessionAgentIDs.get(meta.sessionID)
+     if (!sessionAgentID) {
+       throw new Error(`hydrateConversationView: view message ${meta.messageID} missing session identity`)
+@@ -3277,9 +3448,8 @@
+     if (!viewDisplayMessageIDs.has(messageID)) {
+       throw new Error(`hydrateConversationView: display transcript message ${messageID} missing from view.messages`)
+     }
+   }
+-  const partOwners = new Map<string, string>()
+   for (const meta of ordered) {
+     const message = transcriptByMessageID.get(meta.messageID)
+     const info = message?.info
+     const messageID = String(info?.id || "")
+@@ -3311,9 +3481,11 @@
+     )
+     if (transcriptOrderKey && transcriptOrderKey !== meta.orderKey) {
+       throw new Error(`hydrateConversationView: message ${messageID} orderKey drift between transcript and view`)
+     }
+-    for (const part of Array.isArray(message?.parts) ? message.parts : []) {
++    if (!Array.isArray(message.parts)) throw new Error(`hydrateConversationView: message ${messageID} missing actual Parts bundle`)
++    replaceActualPartFacts({ id: messageID, sessionID }, message.parts)
++    for (const part of message.parts) {
+       const partID = String(part?.id || "")
+       if (!partID) {
+         throw new Error(`hydrateConversationView: message ${messageID} contains part without id`)
+       }
+@@ -3332,9 +3504,9 @@
+       partOwners.set(partOwnerKey, messageID)
+       requireTimelineOrderKeyDomain(part.orderKey, `persisted message part ${partID}`, "part")
+     }
+   }
+-  return { transcriptByMessageID, ordered }
++  return { transcriptByMessageID, ordered, metadataOnlyMessages }
+ }
+ 
+ /** Replay a validated persisted task into the exact same visible card identity
+  *  the live SSE stream would have built. Display message metadata comes from
+@@ -3342,8 +3514,18 @@
+  *  role/model/usage fields. */
+ export function commitPreparedConversationView(prepared: PreparedConversationView): void {
+   const { transcriptByMessageID, ordered } = prepared
+   const touched = new Set<string>()
++  for (const message of prepared.metadataOnlyMessages) {
++    const session = ensureSessionProjection(message.sessionID, {
++      agentID: isUserStage(deriveRuntimeSessionStage(message.channel)) ? undefined : message.sessionAgentID,
++      stage: deriveRuntimeSessionStage(message.channel), parentSessionID: message.parentSessionID,
++    })
++    pendingPartFirstMessages.delete(message.id)
++    messages.set(message.id, message)
++    session.messageIDs.add(message.id)
++    touched.add(message.sessionID)
++  }
+   for (const meta of ordered) {
+     const message = transcriptByMessageID.get(meta.messageID)
+     if (!message) {
+       throw new Error(`hydrateConversationView: view message ${meta.messageID} missing transcript payload`)
+@@ -3394,8 +3576,9 @@
+       agentID: isUserStage(runtimeStage) ? undefined : meta.sessionAgentID,
+       stage: runtimeStage,
+       parentSessionID,
+     })
++    pendingPartFirstMessages.delete(messageID)
+     messages.set(messageID, {
+       ...actualMessageQualificationFacts(info),
+       id: messageID,
+       sessionID,
+@@ -3416,8 +3599,9 @@
+       settlement: assistantMessageSettlement(info),
+       delegatedContext: isDelegatedContextMessage(origin),
+     })
+     session.messageIDs.add(messageID)
++    replaceActualPartFacts(messages.get(messageID)!, message.parts)
+     const cardID = ensureMessageTurnProjection(session, messageID, {
+       stage,
+       agentID: isUserStage(stage) ? undefined : canonicalAgentID,
+       collapseContext: isDelegatedContextMessage(origin),

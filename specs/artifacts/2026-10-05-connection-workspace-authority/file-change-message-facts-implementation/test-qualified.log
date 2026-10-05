@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+test\tree-writer-message-facts.test.ts:
+(pass) live snapshots preserve all intervening canonical messages and actual qualification facts [7.03ms]
+(pass) metadata-only completion is published by the existing visible revision [1.50ms]
+(pass) history hydration supplies the same actual facts through its existing adapter [1.19ms]
+(pass) removal and reset expose the current canonical session membership [1.43ms]
+
+ 4 pass
+ 0 fail
+ 11 expect() calls
+Ran 4 tests across 1 file. [219.00ms]

@@ -1,0 +1,94 @@
+===================================================================
+--- test.replay-before
++++ packages/overlay/test/tree-writer-message-facts.test.ts
+@@ -3,11 +3,13 @@
+   applyEvent,
+   commitPreparedConversationView,
+   prepareConversationView,
+   projectedConversationMessageFacts,
++  projectedConversationPartSnapshot,
++  ingestPersistedConversationMessage,
+   resetWriter,
+ } from "../src/services/tree-writer"
+-import { publishedCardTreeVersion } from "../src/store/card-tree"
++import { cardTreeStore, publishedCardTreeVersion } from "../src/store/card-tree"
+ import { getLocale, setLocaleData } from "../src/utils/i18n"
+ import english from "../src/i18n/en-US.json"
+ import chinese from "../src/i18n/zh-CN.json"
+ 
+@@ -127,9 +129,9 @@
+   expect(fact.completed).toBe(1060)
+   expect(fact.toolParts?.[0].end).toBe(1030)
+   ;(fact.stepParts![0] as { reason?: string }).reason = "external-copy-change"
+   expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.[0].reason).toBeUndefined()
+-  applyEvent({ type: "message.part.removed", properties: { sessionID: message.sessionID, partID: "prt_start", partType: "step-start" } })
++  applyEvent({ type: "message.part.removed", properties: { sessionID: message.sessionID, messageID: message.id, partID: "prt_start", partType: "step-start" } })
+   settlePublication()
+   expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.map((step) => step.id)).toEqual(["prt_finish"])
+ })
+ 
+@@ -172,8 +174,64 @@
+   expect(() => partUpdate(message, part(message, "prt_identity", "step-start", 1020))).toThrow("identity drift")
+   expect(() => update(info(message.id, "ses_wrong"))).toThrow("Session owner drift")
+ })
+ 
++function preparedBundle(message: ReturnType<typeof info>, parts: ReturnType<typeof part>[], display: boolean) {
++  const view = {
++    messages: display ? [{ messageID: message.id, inputMessageID: "msg_input", sessionID: message.sessionID, sessionAgentID: "assistant", agentID: "assistant", stage: "assistant", parentSessionID: "", orderKey: message.orderKey, time: message.time.created }] : [],
++    sessions: [{ sessionID: message.sessionID, agentID: "assistant", messageIDs: [message.id] }],
++  }
++  return prepareConversationView(view, [{ info: message, parts }])
++}
++
++test("authoritative replay retires the incoming display member while retaining shared-card and older members", () => {
++  const older = info("msg_older", "ses_facts", 900)
++  const current = info("msg_replay", "ses_facts", 1000)
++  const peer = info("msg_peer", "ses_facts", 1100)
++  for (const message of [older, current, peer]) {
++    ingestPersistedConversationMessage({ info: message, parts: [part(message, `prt_${message.id}`, "text", message.time.created + 1, { text: message.id })] })
++  }
++  const control = part(current, "prt_replay_control", "step-start", 1001)
++  commitPreparedConversationView(preparedBundle(current, [control], false))
++  settlePublication()
++  expect(projectedConversationMessageFacts([current.sessionID]).map((fact) => fact.id).sort()).toEqual([older.id, current.id, peer.id].sort())
++  expect(projectedConversationMessageFacts([current.sessionID]).find((fact) => fact.id === current.id)).toMatchObject({ toolParts: [], stepParts: [{ id: control.id, orderKey: control.orderKey, type: "step-start", reason: undefined }] })
++  expect(projectedConversationPartSnapshot(peer.sessionID, `prt_${peer.id}`)?.text).toBe(peer.id)
++  expect(projectedConversationPartSnapshot(older.sessionID, `prt_${older.id}`)?.text).toBe(older.id)
++  const actualTexts = () => Object.values(cardTreeStore.cards).flatMap((card) => card.parts ?? [])
++    .filter((value) => value.type === "text").map((value) => ({ id: value.id, text: value.text })).sort((a, b) => a.id.localeCompare(b.id))
++  expect(actualTexts()).toEqual([{ id: `prt_${older.id}`, text: older.id }, { id: `prt_${peer.id}`, text: peer.id }])
++  const replacement = part(current, "prt_replay_current", "text", 1002, { text: "current replacement" })
++  commitPreparedConversationView(preparedBundle(current, [replacement], true))
++  settlePublication()
++  expect(projectedConversationPartSnapshot(current.sessionID, replacement.id)?.text).toBe("current replacement")
++  expect(projectedConversationMessageFacts([current.sessionID]).find((fact) => fact.id === current.id)).toMatchObject({ stepParts: [], toolParts: [] })
++  expect(projectedConversationPartSnapshot(peer.sessionID, `prt_${peer.id}`)?.text).toBe(peer.id)
++  expect(actualTexts()).toEqual([
++    { id: `prt_${older.id}`, text: older.id }, { id: `prt_${peer.id}`, text: peer.id },
++    { id: replacement.id, text: "current replacement" },
++  ].sort((a, b) => a.id.localeCompare(b.id)))
++})
++
++test("single persisted full bundle replaces current facts and validates owner before mutation", () => {
++  const message = info("msg_single")
++  ingestPersistedConversationMessage({ info: message, parts: [part(message, "prt_single_start", "step-start", 1001)] })
++  ingestPersistedConversationMessage({ info: message, parts: [part(message, "prt_single_text", "text", 1002, { text: "fresh single bundle" })] })
++  expect(projectedConversationMessageFacts([message.sessionID])[0]).toMatchObject({ stepParts: [], toolParts: [] })
++  expect(projectedConversationPartSnapshot(message.sessionID, "prt_single_text")?.text).toBe("fresh single bundle")
++  const wrong = info(message.id, "ses_wrong")
++  expect(() => ingestPersistedConversationMessage({ info: wrong, parts: [] })).toThrow("current Session owner mismatch")
++  expect(projectedConversationPartSnapshot(message.sessionID, "prt_single_text")?.text).toBe("fresh single bundle")
++})
++
++test("retained control removal validates its actual Message and Part type", () => {
++  const message = info("msg_control_remove")
++  update(message)
++  partUpdate(message, part(message, "prt_remove", "step-start", 1010))
++  expect(() => applyEvent({ type: "message.part.removed", properties: { sessionID: message.sessionID, messageID: "msg_wrong", partID: "prt_remove", partType: "step-start" } })).toThrow("retained owner/type mismatch")
++  expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.[0].type).toBe("step-start")
++})
++
+ test("removal and reset expose the current canonical session membership", () => {
+   update(info("msg_first"))
+   update(info("msg_second", "ses_facts", 2000))
+   applyEvent({ type: "message.removed", properties: { sessionID: "ses_facts", messageID: "msg_first" } })

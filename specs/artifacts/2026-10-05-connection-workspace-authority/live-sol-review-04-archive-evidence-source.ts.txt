@@ -1,0 +1,55 @@
+import assert from "node:assert/strict"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { CredentialRedactor } from "../packages/opencorvus/script/real-provider-audit"
+
+// Root-owned evidence IO only: no runtime imports, process, HTTP or Provider call.
+const run = process.argv[2]
+const prefix = process.argv[3]
+assert(run && prefix && /^[a-z0-9-]+$/.test(prefix), "Exact owned run and evidence prefix are required")
+const owner = JSON.parse(await fs.readFile(path.join(run, "launch-owner.json"), "utf8"))
+assert.equal(path.resolve(owner.runRoot), path.resolve(run))
+assert.equal(owner.evidencePrefix, prefix)
+const evidence = "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority"
+const redactor = new CredentialRedactor()
+redactor.collect(JSON.parse(await fs.readFile(path.join(run, "runtime/data/auth.json"), "utf8")))
+const text = await fs.readFile(path.join(run, "runtime/log/dev.log"), "utf8")
+const safe = redactor.redact(text)
+assert.equal(redactor.containsCredential(safe), false)
+const rows = safe.split(/\r?\n/).flatMap((line) => {
+  try { return [JSON.parse(line)] } catch { return [] }
+})
+const phases = rows.filter((row) => row.service === "skill-read-diagnostics" ||
+  (row.service === "server" && row.message === "request" && row.path === "/skill/mounts"))
+const timings = rows.filter((row) => row.service === "server" && row.message === "request" &&
+  row.path === "/skill/mounts" && row.status === "completed").map(({requestID,statusCode,duration,time}) => ({requestID,statusCode,duration,time}))
+if (process.argv[4] === "terminal") {
+  const original = await fs.readFile(path.join(evidence, `${prefix}-runtime-redacted.log`), "utf8")
+  assert(safe.startsWith(original), "Actual terminal log must retain the earlier exact diagnostic snapshot prefix")
+  const tail = safe.slice(original.length)
+  await fs.writeFile(path.join(evidence,`${prefix}-runtime-terminal-tail-redacted.log`),tail,{flag:"wx"})
+  await fs.writeFile(path.join(evidence,`${prefix}-terminal-log-review.json`),JSON.stringify({
+    observedAt:new Date().toISOString(), source:path.join(run,"runtime/log/dev.log"),
+    exactEarlierSnapshotPrefix:true, appendedUtf8Bytes:Buffer.byteLength(tail), totalParsedRows:rows.length,
+    knownCredentialInSaved:false, boundary:"Actual append following original pre-shutdown snapshot; authority still confined to sanitizer memory before copied-pair cleanup",
+  },null,2),{flag:"wx"})
+  console.log(JSON.stringify({terminalAppendBytes:Buffer.byteLength(tail),totalRows:rows.length}))
+  process.exit(0)
+}
+await fs.writeFile(path.join(evidence, `${prefix}-runtime-redacted.log`), safe, { flag: "wx" })
+await fs.writeFile(path.join(evidence, `${prefix}-skill-phases.json`), JSON.stringify(phases,null,2), {flag:"wx"})
+await fs.writeFile(path.join(evidence, `${prefix}-log-review.json`), JSON.stringify({
+  source: path.join(run,"runtime/log/dev.log"), observedAt: new Date().toISOString(),
+  rows: rows.length, phaseRows: phases.length, skillRequests: timings,
+  knownCredentialInOriginal: redactor.containsCredential(text), knownCredentialInSaved: false,
+  qualification: "Existing known-value sanitizer; copied OpenAI authority read only in memory; no credential/catalog content archived, no Provider call; actual raw times preserved",
+},null,2), {flag:"wx"})
+for (const name of ["launch-owner.json","startup.json","stdout.log","stderr.log"]) {
+  await fs.writeFile(path.join(evidence,`${prefix}-${name}`),redactor.redact(await fs.readFile(path.join(run,name),"utf8")),{flag:"wx"})
+}
+for (const name of await fs.readdir(path.join(run,"evidence"))) {
+  assert(/^(provider-|streams-).+\.json$/.test(name) ||
+    ["authority-ready.json","preflight-ready.json","functional-complete.json","failed.json"].includes(name))
+  await fs.writeFile(path.join(evidence,`${prefix}-${name}`),redactor.redact(await fs.readFile(path.join(run,"evidence",name),"utf8")),{flag:"wx"})
+}
+console.log(JSON.stringify({rows:rows.length,phaseRows:phases.length,skillRequests:timings}))

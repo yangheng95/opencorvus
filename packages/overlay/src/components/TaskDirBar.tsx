@@ -48,6 +48,7 @@ import { focusGoalSummary } from "../services/goal-summary-focus"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { cardTreeStore } from "../store/card-tree"
 import { Icon } from "./ui/Icon"
+import { ChangeLineStats } from "./DiffView"
 import { Avatar } from "./Avatar"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { FilePart } from "./FilePart"
@@ -264,7 +265,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const changedFileCount = createMemo(
     () => new Set(visibleChangeGroups().flatMap((group) => group.changes.map((change) => change.file))).size,
   )
-  const hasLineChanges = () => changeTotals().additions > 0 || changeTotals().deletions > 0
+  const hasLineChanges = () => {
+    const totals = changeTotals()
+    return totals.additions === null || totals.deletions === null || totals.additions > 0 || totals.deletions > 0
+  }
   const requestSources = createMemo(() => {
     const attachments = (boardStore.board as any)?.task?.attachments
     return Array.isArray(attachments) ? attachments : []
@@ -1379,8 +1383,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         <Show when={!panelExpanded() && changedFileCount() > 0}>
           <span class="project-runtime-change-totals project-runtime-collapsed-totals">
             <Show when={hasLineChanges()} fallback={<span>{tc("files.changed", changedFileCount())}</span>}>
-              <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
-              <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
+              <ChangeLineStats additions={changeTotals().additions} deletions={changeTotals().deletions} />
             </Show>
           </span>
         </Show>
@@ -1403,8 +1406,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 <span>{t("project_runtime.task_changes")}</span>
                 <span class="project-runtime-change-totals">
                   <Show when={hasLineChanges()} fallback={<span>{tc("files.changed", changedFileCount())}</span>}>
-                    <span data-tone="good">+{changeTotals().additions.toLocaleString()}</span>
-                    <span data-tone="bad">-{changeTotals().deletions.toLocaleString()}</span>
+                    <ChangeLineStats additions={changeTotals().additions} deletions={changeTotals().deletions} />
                   </Show>
                 </span>
               </Button>

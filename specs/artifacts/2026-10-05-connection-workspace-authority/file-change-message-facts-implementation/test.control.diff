@@ -1,0 +1,107 @@
+===================================================================
+--- test.control-before
++++ packages/overlay/test/tree-writer-message-facts.test.ts
+@@ -64,8 +64,9 @@
+   expect(facts[0]).toEqual({
+     id: "msg_edit", sessionID: "ses_facts", sessionAgentID: "assistant", agentID: "assistant",
+     role: "assistant", orderKey: info("msg_edit").orderKey, time: 1000,
+     acceptedInputMessageIDs: ["msg_input"], completed: 1100, finish: "tool-calls", hasError: false,
++    stepParts: undefined, toolParts: undefined,
+   })
+   expect(facts[1].hasError).toBe(true)
+   const copiedIDs = facts[0].acceptedInputMessageIDs as string[]
+   copiedIDs.push("snapshot_mutation")
+@@ -87,15 +88,92 @@
+ test("history hydration supplies the same actual facts through its existing adapter", () => {
+   const message = { ...info("msg_history"), acceptedInputMessageIDs: ["msg_input"], time: { created: 1000, completed: 1700 }, finish: "tool-calls" }
+   const view = {
+     messages: [{ messageID: message.id, inputMessageID: "msg_input", sessionID: message.sessionID, sessionAgentID: "assistant", agentID: "assistant", stage: "assistant", parentSessionID: "", orderKey: message.orderKey, time: 1000 }],
+-    sessions: [{ sessionID: message.sessionID, agentID: "assistant" }],
++    sessions: [{ sessionID: message.sessionID, agentID: "assistant", messageIDs: [message.id] }],
+   }
+   commitPreparedConversationView(prepareConversationView(view, [{ info: message, parts: [] }]))
+   settlePublication()
+   expect(projectedConversationMessageFacts(["ses_facts"])[0]).toMatchObject({ id: "msg_history", acceptedInputMessageIDs: ["msg_input"], completed: 1700, finish: "tool-calls", hasError: false })
+ })
+ 
++function part(message: ReturnType<typeof info>, id: string, type: string, time: number, extra: Record<string, unknown> = {}) {
++  return { id, type, sessionID: message.sessionID, messageID: message.id,
++    orderKey: `v1:${String(time).padStart(16, "0")}:0000000000000031:0000000000000000:part:${id}`, ...extra }
++}
++function partUpdate(message: ReturnType<typeof info>, value: ReturnType<typeof part>) {
++  applyEvent({ type: "message.part.updated", orderKey: message.orderKey, properties: { ...message, part: value } })
++}
++
++test("step-first pending facts promote and preserve actual whole-message Tool membership", () => {
++  const message = info("msg_steps")
++  const start = part(message, "prt_start", "step-start", 1010)
++  partUpdate(message, start)
++  update({ ...message, acceptedInputMessageIDs: ["msg_input"] })
++  const edit = part(message, "prt_edit", "tool", 1020, { tool: "edit", state: { status: "completed", time: { start: 1021, end: 1030 }, metadata: {} } })
++  partUpdate(message, edit)
++  partUpdate(message, edit)
++  partUpdate(message, part(message, "prt_read", "tool", 1035, { tool: "read", state: { status: "completed", time: { start: 1036, end: 1040 }, metadata: {} } }))
++  partUpdate(message, part(message, "prt_finish", "step-finish", 1050, { reason: "tool-calls" }))
++  update({ ...message, acceptedInputMessageIDs: ["msg_input"], time: { created: 1000, completed: 1060 }, finish: "tool-calls" })
++  settlePublication()
++  const fact = projectedConversationMessageFacts([message.sessionID])[0]
++  expect(fact.stepParts).toEqual([
++    { id: "prt_start", orderKey: start.orderKey, type: "step-start", reason: undefined },
++    { id: "prt_finish", orderKey: part(message, "prt_finish", "step-finish", 1050).orderKey, type: "step-finish", reason: "tool-calls" },
++  ])
++  expect(fact.toolParts?.map((tool) => ({ id: tool.id, tool: tool.tool, status: tool.status }))).toEqual([
++    { id: "prt_edit", tool: "edit", status: "completed" }, { id: "prt_read", tool: "read", status: "completed" },
++  ])
++  expect(fact.completed).toBe(1060)
++  expect(fact.toolParts?.[0].end).toBe(1030)
++  ;(fact.stepParts![0] as { reason?: string }).reason = "external-copy-change"
++  expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.[0].reason).toBeUndefined()
++  applyEvent({ type: "message.part.removed", properties: { sessionID: message.sessionID, partID: "prt_start", partType: "step-start" } })
++  settlePublication()
++  expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.map((step) => step.id)).toEqual(["prt_finish"])
++})
++
++test("moved authoritative bundle supplies its current exact owner and replaces observed Parts", () => {
++  const original = info("msg_move")
++  update(original)
++  partUpdate(original, part(original, "prt_old", "step-start", 1010))
++  const moved = info("msg_move", "ses_target")
++  const end = part(moved, "prt_target_finish", "step-finish", 1100, { reason: "stop" })
++  applyEvent({ type: "message.moved", orderKey: moved.orderKey, properties: { sourceSessionID: original.sessionID, info: moved, parts: [end] } })
++  settlePublication()
++  expect(projectedConversationMessageFacts([original.sessionID, moved.sessionID]).map((fact) => ({ id: fact.id, sessionID: fact.sessionID, steps: fact.stepParts?.map((step) => step.id), tools: fact.toolParts }))).toEqual([
++    { id: moved.id, sessionID: moved.sessionID, steps: ["prt_target_finish"], tools: [] },
++  ])
++})
++
++test("full history retains an actual nondisplay intervening message and empty Tool bundle", () => {
++  const message = info("msg_control")
++  const control = part(message, "prt_control", "step-start", 1010)
++  const view = { messages: [], sessions: [{ sessionID: message.sessionID, agentID: "assistant", messageIDs: [message.id] }] }
++  commitPreparedConversationView(prepareConversationView(view, [{ info: message, parts: [control] }]))
++  settlePublication()
++  expect(projectedConversationMessageFacts([message.sessionID])[0]).toMatchObject({
++    id: message.id, agentID: "assistant", toolParts: [], stepParts: [{ id: control.id, orderKey: control.orderKey, type: "step-start", reason: undefined }],
++  })
++})
++
++test("history coverage and actor integrity have precise preparation errors", () => {
++  const message = info("msg_missing")
++  const view = { messages: [], sessions: [{ sessionID: message.sessionID, agentID: "assistant", messageIDs: [message.id] }] }
++  expect(() => prepareConversationView(view, [])).toThrow("expected message msg_missing missing matching transcript payload")
++  expect(() => prepareConversationView(view, [{ info: { ...message, sessionAgentID: "" }, parts: [] }])).toThrow("message msg_missing missing canonical session actor")
++})
++
++test("retained Part identity and Session drift produce explicit integrity errors", () => {
++  const message = info("msg_identity")
++  update(message)
++  const start = part(message, "prt_identity", "step-start", 1010)
++  partUpdate(message, start)
++  expect(() => partUpdate(message, part(message, "prt_identity", "step-start", 1020))).toThrow("identity drift")
++  expect(() => update(info(message.id, "ses_wrong"))).toThrow("Session owner drift")
++})
++
+ test("removal and reset expose the current canonical session membership", () => {
+   update(info("msg_first"))
+   update(info("msg_second", "ses_facts", 2000))
+   applyEvent({ type: "message.removed", properties: { sessionID: "ses_facts", messageID: "msg_first" } })

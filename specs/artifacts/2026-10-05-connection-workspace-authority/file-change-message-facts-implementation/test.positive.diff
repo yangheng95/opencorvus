@@ -1,0 +1,20 @@
+===================================================================
+--- test.positive-before
++++ packages/overlay/test/tree-writer-message-facts.test.ts
+@@ -127,10 +127,14 @@
+     { id: "prt_edit", tool: "edit", status: "completed" }, { id: "prt_read", tool: "read", status: "completed" },
+   ])
+   expect(fact.completed).toBe(1060)
+   expect(fact.toolParts?.[0].end).toBe(1030)
+-  ;(fact.stepParts![0] as { reason?: string }).reason = "external-copy-change"
+-  expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.[0].reason).toBeUndefined()
++  const copiedFinish = fact.stepParts![1] as { id: string }
++  copiedFinish.id = "external-copy-change"
++  expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.[1]).toEqual({
++    id: "prt_finish", orderKey: part(message, "prt_finish", "step-finish", 1050).orderKey,
++    type: "step-finish", reason: "tool-calls",
++  })
+   applyEvent({ type: "message.part.removed", properties: { sessionID: message.sessionID, messageID: message.id, partID: "prt_start", partType: "step-start" } })
+   settlePublication()
+   expect(projectedConversationMessageFacts([message.sessionID])[0].stepParts?.map((step) => step.id)).toEqual(["prt_finish"])
+ })

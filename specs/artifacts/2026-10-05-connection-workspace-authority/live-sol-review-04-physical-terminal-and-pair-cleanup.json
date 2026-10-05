@@ -1,0 +1,46 @@
+{
+  "physicalCompletion": true,
+  "occurrence": "live-sol-review-04-e19601a3-d206-4063-ba34-096b7dd27631",
+  "chain": [
+    {
+      "expected": {
+        "ProcessId": 76412,
+        "ParentProcessId": 35192,
+        "CreationDate": "2026-10-06T06:10:53.293245+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 35192,
+        "ParentProcessId": 52120,
+        "CreationDate": "2026-10-06T06:10:53.281658+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\startup.json 17957 live-sol-review-04-e19601a3-d206-4063-ba34-096b7dd27631 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\functional-selection.json"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write",
+  "observedAtUtc": "2026-10-05T22:51:46.9087215Z",
+  "listeners": null,
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2082,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\runtime\\data\\models.json"
+    }
+  ]
+}

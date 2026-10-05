@@ -2500,3 +2500,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Rand/PHF candidate plan](artifacts/2026-10-05-dependency-remediation/rand-phf-candidate-plan.md): unique parent source/API and true native lookup acceptance; proposed source replacement remains pending Root.
 - [GLib backport candidate plan](artifacts/2026-10-05-dependency-remediation/glib-backport-candidate-plan.md): official iterator correction and coherent Linux delivery/qualification; no implementation or platform pass.
 - [Compatible Quick-XML parent plan](artifacts/2026-10-05-dependency-remediation/quick-xml-compatible-parent-plan.md): exact released-source/parent compatibility and bounded lock/checker preparation; actual native/platform acceptance pending.
+
+- [Recorded comparison repair and actual Sol04](artifacts/2026-10-05-connection-workspace-authority/root-file-change-qualification.md): complete original six-op/normal Edit Review, manual unknown/Chinese repairs, positive local contracts and precise unqualified boundaries; next proposals remain pending.

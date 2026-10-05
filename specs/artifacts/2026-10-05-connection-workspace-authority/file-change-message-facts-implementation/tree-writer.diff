@@ -1,0 +1,102 @@
+===================================================================
+--- tree-writer.before.ts
++++ tree-writer.after.ts
+@@ -310,9 +310,40 @@
+    *  changes do not alter whether this session has a visible turn card. */
+   topLevelVisible: boolean
+ }
+ 
+-interface MessageInfo {
++export interface ProjectedMessageFacts {
++  readonly id: string
++  readonly sessionID: string
++  readonly sessionAgentID: string
++  readonly agentID: string
++  readonly role: string
++  readonly orderKey: string
++  readonly time: number
++  readonly acceptedInputMessageIDs?: readonly string[]
++  readonly completed?: number
++  readonly finish?: string
++  readonly hasError?: boolean
++}
++
++function actualMessageQualificationFacts(info: any): Pick<
++  ProjectedMessageFacts,
++  "acceptedInputMessageIDs" | "completed" | "finish" | "hasError"
++> {
++  const accepted = info.acceptedInputMessageIDs
++  const completed = info.time?.completed
++  return {
++    acceptedInputMessageIDs:
++      Array.isArray(accepted) && accepted.every((id) => typeof id === "string" && id.length > 0)
++        ? [...accepted]
++        : undefined,
++    completed: typeof completed === "number" && Number.isFinite(completed) && completed > 0 ? completed : undefined,
++    finish: typeof info.finish === "string" ? info.finish : undefined,
++    hasError: info.error !== undefined && info.error !== null,
++  }
++}
++
++interface MessageInfo extends ProjectedMessageFacts {
+   id: string
+   sessionID: string
+   /** Canonical execution-session owner projected by the backend bridge. */
+   sessionAgentID: string
+@@ -599,8 +630,36 @@
+ export function hasProjectedPart(sessionID: string, partID: string): boolean {
+   return sessions.get(sessionID)?.partIndex.has(partID) === true
+ }
+ 
++/** Transient copies from the sole message owner. The collector subscribes to
++ * publishedCardTreeVersion before deriving; this getter never publishes. */
++export function projectedConversationMessageFacts(sessionIDs: readonly string[]): ProjectedMessageFacts[] {
++  const result: ProjectedMessageFacts[] = []
++  for (const sessionID of new Set(sessionIDs)) {
++    const session = sessions.get(sessionID)
++    if (!session) continue
++    for (const id of session.messageIDs) {
++      const message = messages.get(id)
++      if (!message || message.sessionID !== sessionID) continue
++      result.push({
++        id: message.id,
++        sessionID: message.sessionID,
++        sessionAgentID: message.sessionAgentID,
++        agentID: message.agentID,
++        role: message.role,
++        orderKey: message.orderKey,
++        time: message.time,
++        acceptedInputMessageIDs: message.acceptedInputMessageIDs ? [...message.acceptedInputMessageIDs] : undefined,
++        completed: message.completed,
++        finish: message.finish,
++        hasError: message.hasError,
++      })
++    }
++  }
++  return result
++}
++
+ export function projectedConversationPartSnapshot(
+   sessionID: string,
+   partID: string,
+ ): Record<string, unknown> | undefined {
+@@ -1037,8 +1096,9 @@
+   // channel is a bridge bug, not a case we silently accommodate.
+   const stage = deriveSessionStage(origin)
+   const displayRole = displayRoleForResolvedRole(rawResolvedRole)
+   const nextMessageInfo: MessageInfo = {
++    ...actualMessageQualificationFacts(info),
+     id,
+     sessionID,
+     sessionAgentID,
+     agentID: canonicalAgentID,
+@@ -3335,8 +3395,9 @@
+       stage: runtimeStage,
+       parentSessionID,
+     })
+     messages.set(messageID, {
++      ...actualMessageQualificationFacts(info),
+       id: messageID,
+       sessionID,
+       sessionAgentID: meta.sessionAgentID,
+       agentID: canonicalAgentID,

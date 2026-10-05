@@ -9,11 +9,35 @@ import { t, tc } from "../utils/i18n"
 
 // ── Types ──
 
+export type FileChangeReceipt =
+  | { sessionID: string; messageID: string; partID: string; fileIndex?: number }
+  | { artifactID: string; fileIndex: number }
+  | { sessionID: string; fileIndex: number }
+
+export type FileChangeIncompleteReason =
+  | "missing_endpoints"
+  | "saved_session_flags_missing"
+  | "path_only"
+  | "deferred"
+  | "missing_message_facts"
+  | "ambiguous_tool_step"
+  | "non_normal_step"
+  | "changed_input_batch"
+  | "endpoint_discontinuity"
+  | "unsupported_lifecycle"
+  | "conflicting_receipt"
+  | "unknown_resource"
+
+export type FileChangeEvidence =
+  | { kind: "complete"; receipts: readonly FileChangeReceipt[] }
+  | { kind: "incomplete"; reason: FileChangeIncompleteReason; receipts: readonly FileChangeReceipt[] }
+
 export interface FileChange {
   file: string
-  status: "added" | "deleted" | "modified"
-  additions: number
-  deletions: number
+  status?: "added" | "deleted" | "modified"
+  additions: number | null
+  deletions: number | null
+  evidence: FileChangeEvidence
   before?: string
   after?: string
   isText?: boolean
@@ -31,22 +55,20 @@ interface DiffOp {
 
 // ── Diff helpers ──
 
-function splitDiffLines(text: string | undefined): string[] {
-  const value = String(text || "")
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
+function splitDiffLines(text: string): string[] {
+  const value = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
   if (!value) return []
   const lines = value.split("\n")
   if (lines[lines.length - 1] === "") lines.pop()
   return lines
 }
 
-function buildDiffOps(before: string | undefined, after: string | undefined): DiffOp[] {
+function buildDiffOps(before: string, after: string): DiffOp[] {
   const ops: DiffOp[] = []
   let leftLine = 1
   let rightLine = 1
 
-  for (const part of diffLines(String(before || ""), String(after || ""))) {
+  for (const part of diffLines(before, after)) {
     const lines = splitDiffLines(part.value)
     if (part.added) {
       for (const text of lines) {
@@ -100,10 +122,34 @@ function collapseDiffOps(ops: DiffOp[]): DiffOp[] {
 
 // ── Status label helper ──
 
-export function changeStatusLabel(status: "added" | "deleted" | "modified" | string): string {
+export function changeStatusLabel(status: FileChange["status"]): string {
   if (status === "added") return t("files.status.added")
   if (status === "deleted") return t("files.status.deleted")
-  return t("files.status.modified")
+  if (status === "modified") return t("files.status.modified")
+  return t("files.status.changed")
+}
+
+export function ChangeLineStats(props: { additions: number | null; deletions: number | null; isText?: boolean }) {
+  return (
+    <Show
+      when={props.additions !== null && props.deletions !== null}
+      fallback={
+        <span
+          class="diff-dialog-stat"
+          title={props.isText === false ? t("diff.non_text") : t("diff.counts_unavailable_detail")}
+        >
+          {props.isText === false ? t("diff.non_text_short") : t("diff.counts_unavailable")}
+        </span>
+      }
+    >
+      <span class="diff-dialog-stat" data-tone="add">
+        +{props.additions?.toLocaleString()}
+      </span>
+      <span class="diff-dialog-stat" data-tone="del">
+        -{props.deletions?.toLocaleString()}
+      </span>
+    </Show>
+  )
 }
 
 // ── DiffView component ──
@@ -113,22 +159,22 @@ interface DiffViewProps {
 }
 
 export function DiffView(props: DiffViewProps) {
-  const ops = createMemo(() => collapseDiffOps(buildDiffOps(props.item.before, props.item.after)))
-
-  const hasChanges = createMemo(() => {
-    if (props.item.before == null && props.item.after == null) return false
-    if (!props.item.before && !props.item.after) return false
-    return ops().some((op) => op.kind === "add" || op.kind === "del")
+  const ops = createMemo(() => {
+    const item = props.item
+    if (
+      item.evidence.kind !== "complete" ||
+      item.isText !== true ||
+      typeof item.before !== "string" ||
+      typeof item.after !== "string"
+    )
+      return []
+    return collapseDiffOps(buildDiffOps(item.before, item.after))
   })
-
-  // Differentiate the "no preview" cause so the operator knows whether
-  // the file was deleted, intentionally empty, or just missing a server
-  // payload. Keep the translation keys explicit at the decision points.
+  const hasChanges = createMemo(() => ops().some((op) => op.kind === "add" || op.kind === "del"))
   const emptyMessage = createMemo(() => {
     const it = props.item
+    if (it.evidence.kind === "incomplete") return t(`diff.incomplete.${it.evidence.reason}`)
     if (it.isText === false) return t("diff.non_text")
-    if (it.status === "deleted" && !it.after) return t("diff.empty_deleted")
-    if (it.status === "added" && it.before === undefined && it.after === undefined) return t("diff.empty_added")
     if (typeof it.before === "string" && typeof it.after === "string" && it.before === it.after) {
       return t("diff.empty_unchanged")
     }

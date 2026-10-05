@@ -104,9 +104,14 @@
 }
 
 .changes-diff-pane .diff-preview-body {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+}
+
+.changes-diff-pane .diff-preview-body--text {
   width: max-content;
   min-width: 100%;
-  padding: 0;
 }
 
 .changes-total {
@@ -350,8 +355,10 @@
 
 .change-status {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
   min-height: calc(16px * var(--ui-scale));
   padding: 0 var(--ui-gap-sm);
   border-radius: var(--oc-radius-soft);

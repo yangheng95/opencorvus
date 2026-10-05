@@ -4,7 +4,7 @@
 // result inline below the row.
 
 import { createMemo, createResource } from "solid-js"
-import { boardStore, activeTaskID } from "../store/board"
+import { activeTaskID } from "../store/board"
 import {
   changeGroupsRevisionKey,
   currentChangeGroups,
@@ -12,14 +12,11 @@ import {
   type ChangeGroup,
 } from "../services/diff"
 import { currentConversationAgentChangeGroups, mergeChangeGroups } from "../utils/file-change-summary"
-import type { FileChange } from "./DiffView"
 import { FileChangesView } from "./FileChangesView"
 
 // ── ChangesPanel ──
 
 export interface ChangesPanelProps {
-  /** File changes to display. If omitted, the shared diff service supplies board-derived groups. */
-  changes?: FileChange[]
   /** Whether a task is currently selected (affects empty-state messaging). */
   hasSelectedTask?: boolean
   /** Whether the file changes surface is visible enough to run broad card-tree projections. */
@@ -36,40 +33,27 @@ export function ChangesPanel(props: ChangesPanelProps) {
 
   const sourceGroups = createMemo<ChangeGroup[]>(() => {
     if (!panelActive()) return []
-    if (props.changes === undefined) return currentChangeGroups()
-    const changes = props.changes
-    return [
-      {
-        id: "props",
-        additions: changes.reduce((sum, item) => sum + (item.additions ?? 0), 0),
-        deletions: changes.reduce((sum, item) => sum + (item.deletions ?? 0), 0),
-        changes,
-      },
-    ]
+    return currentChangeGroups()
   })
 
   const requestKey = createMemo(() => {
     if (!panelActive()) return false
     const groups = sourceGroups()
     const agentKey = changeGroupsRevisionKey(agentGroups())
-    return props.changes !== undefined
-      ? `props:${groups[0]?.changes.length ?? 0}`
-      : `${activeTaskID()}:${agentKey}:${changeGroupsRevisionKey(groups)}`
+    return `${activeTaskID()}:${agentKey}:${changeGroupsRevisionKey(groups)}`
   })
 
-  const [resolvedGroups] = createResource(requestKey, async () => {
+  const [resolvedGroups] = createResource(requestKey, async (key) => ({
+    key,
+    groups: await resolveCurrentChangeGroups(),
+  }))
+
+  const groups = createMemo<ChangeGroup[]>(() => {
     if (!panelActive()) return []
-    if (props.changes !== undefined) return sourceGroups()
-    return resolveCurrentChangeGroups()
+    const resolved = resolvedGroups()
+    const source = resolved?.key === requestKey() ? resolved.groups : sourceGroups()
+    return mergeChangeGroups([...agentGroups(), ...source])
   })
-
-  const groups = createMemo<ChangeGroup[]>(() =>
-    !panelActive()
-      ? []
-      : props.changes === undefined
-        ? mergeChangeGroups([...agentGroups(), ...(resolvedGroups() || sourceGroups())])
-        : sourceGroups().filter((group) => group.changes.length > 0),
-  )
 
   return (
     <FileChangesView

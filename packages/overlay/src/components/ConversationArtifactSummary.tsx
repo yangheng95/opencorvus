@@ -1,7 +1,12 @@
 import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
 
 import { activeTaskID, boardStore, isTaskTerminal } from "../store/board"
-import { currentChangeGroups, type ChangeGroup } from "../services/diff"
+import {
+  currentChangeGroups,
+  savedSessionChangeGroups,
+  summarizeChangeGroups,
+  type ChangeGroup,
+} from "../services/diff"
 import { requestReviewFocus, requestReviewPanel } from "../services/review-focus"
 import {
   conversationArtifactFileRows,
@@ -12,24 +17,14 @@ import { t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { FileRowContent } from "./ui/FileRow"
-import type { FileChange } from "./DiffView"
+import { ChangeLineStats } from "./DiffView"
 
 const DEFAULT_VISIBLE_FILE_COUNT = 3
 
 function persistedSourceGroups(): ChangeGroup[] {
   const board = boardStore.board as any
   if (board?.kind === "session") {
-    const changes = Array.isArray(board.changes) ? (board.changes as FileChange[]) : []
-    return changes.length
-      ? [
-          {
-            id: `session:${String(board.sessionID || "")}`,
-            additions: changes.reduce((sum, change) => sum + (change.additions ?? 0), 0),
-            deletions: changes.reduce((sum, change) => sum + (change.deletions ?? 0), 0),
-            changes,
-          },
-        ]
-      : []
+    return savedSessionChangeGroups(board.changes, String(board.sessionID || ""))
   }
   return currentChangeGroups()
 }
@@ -46,15 +41,12 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
   const [expanded, setExpanded] = createSignal(false)
   const groups = createMemo(() => {
     const persisted = persistedSourceGroups()
-    const sessionOwnsCompleteDiff = (boardStore.board as any)?.kind === "session" && persisted.length > 0
-    if (sessionOwnsCompleteDiff) return persisted
     return mergeChangeGroups([...currentConversationAgentChangeGroups(), ...persisted])
   })
   const fileRows = createMemo(() => conversationArtifactFileRows(groups()))
   const visibleFiles = createMemo(() => (expanded() ? fileRows() : fileRows().slice(0, DEFAULT_VISIBLE_FILE_COUNT)))
   const remaining = createMemo(() => Math.max(0, fileRows().length - DEFAULT_VISIBLE_FILE_COUNT))
-  const additions = createMemo(() => fileRows().reduce((sum, row) => sum + row.additions, 0))
-  const deletions = createMemo(() => fileRows().reduce((sum, row) => sum + row.deletions, 0))
+  const totals = createMemo(() => summarizeChangeGroups(groups()))
 
   createEffect(() => {
     void boardStore.selectedSource?.id
@@ -62,12 +54,13 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
   })
   createEffect(() => {
     void fileRows().length
+    void totals().hasUnresolvedChanges
     void expanded()
     props.onContentChanged?.()
   })
 
   return (
-    <Show when={conversationSettled() && fileRows().length > 0}>
+    <Show when={conversationSettled() && (fileRows().length > 0 || totals().hasUnresolvedChanges)}>
       <section class="conversation-artifact-summary" data-ui="conversation-file-change-summary">
         <header class="conversation-artifact-summary__header">
           <span class="conversation-artifact-summary__icon" aria-hidden="true">
@@ -75,20 +68,16 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
           </span>
           <div class="conversation-artifact-summary__identity">
             <span class="conversation-artifact-summary__eyebrow">{t("chat.artifacts.files")}</span>
-            <strong>{tc("files.changed", fileRows().length)}</strong>
+            <strong>{totals().files > 0 ? tc("files.changed", totals().files) : t("diff.unresolved_title")}</strong>
             <span
               class="conversation-artifact-summary__totals"
-              aria-label={t("chat.artifacts.totals", {
-                additions: additions(),
-                deletions: deletions(),
-              })}
+              aria-label={
+                totals().additions === null || totals().deletions === null
+                  ? t("diff.counts_unavailable_detail")
+                  : t("chat.artifacts.totals", { additions: totals().additions, deletions: totals().deletions })
+              }
             >
-              <Show when={additions() > 0}>
-                <span data-tone="add">+{additions()}</span>
-              </Show>
-              <Show when={deletions() > 0}>
-                <span data-tone="del">-{deletions()}</span>
-              </Show>
+              <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
             </span>
           </div>
           <Button
@@ -102,6 +91,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
             {t("chat.artifacts.review")}
           </Button>
         </header>
+        <Show when={totals().hasUnresolvedChanges}>
+          <p class="empty-hint">{t("diff.unresolved_changes")}</p>
+        </Show>
         <div class="conversation-artifact-summary__section">
           <div class="conversation-artifact-summary__files">
             <For each={visibleFiles()}>
@@ -126,12 +118,7 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                     icon="file-document"
                     trailing={
                       <span class="conversation-artifact-summary__file-stats">
-                        <Show when={row.additions > 0}>
-                          <span data-tone="add">+{row.additions}</span>
-                        </Show>
-                        <Show when={row.deletions > 0}>
-                          <span data-tone="del">-{row.deletions}</span>
-                        </Show>
+                        <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
                       </span>
                     }
                   />

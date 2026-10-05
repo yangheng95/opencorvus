@@ -1,0 +1,143 @@
+===================================================================
+--- tree-writer.replay-before
++++ packages/overlay/src/services/tree-writer.ts
+@@ -375,8 +375,50 @@
+   owner.toolParts = []
+   for (const part of parts) retainActualPartFact(owner, part)
+ }
+ 
++function validateIncomingFullMessage(info: any, parts: any[], admittedSourceSessionID?: string): void {
++  const id = String(info?.id || ""), sessionID = String(info?.sessionID || "")
++  if (!id || !sessionID || !Array.isArray(parts)) throw new Error("Full Message replay missing actual identity or Parts bundle")
++  const origin = requireMessageOrigin(info, id)
++  requireCanonicalMessageAgentID(info.agentID, origin, id)
++  if (!String(info.sessionAgentID || "").trim() || typeof info.role !== "string" || !info.role || typeof info.resolvedRole !== "string" || !info.resolvedRole) {
++    throw new Error(`Full Message replay ${id} missing canonical actor or role`)
++  }
++  if (typeof info.time?.created !== "number" || !Number.isFinite(info.time.created) || info.time.created <= 0) throw new Error(`Full Message replay ${id} missing actual created time`)
++  requireTimelineOrderKeyDomain(info.orderKey, `Full Message replay ${id}`, "message")
++  const ids = new Set<string>()
++  for (const part of parts) {
++    if (!part || typeof part.id !== "string" || !part.id || part.messageID !== id || part.sessionID !== sessionID) throw new Error(`Full Message replay ${id} Part ownership mismatch`)
++    if (ids.has(part.id)) throw new Error(`Full Message replay ${id} duplicate Part ${part.id}`)
++    ids.add(part.id)
++    requireTimelineOrderKeyDomain(part.orderKey, `Full Message replay Part ${part.id}`, "part")
++  }
++  replaceActualPartFacts({ id, sessionID }, parts)
++  const existing = messages.get(id) ?? pendingPartFirstMessages.get(id)
++  if (!existing) return
++  if (existing.sessionID !== sessionID && existing.sessionID !== admittedSourceSessionID) throw new Error(`Full Message replay ${id} current Session owner mismatch`)
++  if (existing.orderKey !== info.orderKey) throw new Error(`Full Message replay ${id} current orderKey mismatch`)
++  const session = requireSessionProjection(existing.sessionID, "Full Message replay")
++  if (messages.has(id) && !session.messageIDs.has(id)) throw new Error(`Full Message replay ${id} current membership mismatch`)
++  const cardID = session.messageCardIDs.get(id)
++  if (!cardID && !existing.metadataOnly) throw new Error(`Full Message replay ${id} current display owner missing`)
++  if (cardID) {
++    const card = cardTreeStore.cards[cardID]
++    if (!card || card.sessionID !== existing.sessionID) throw new Error(`Full Message replay ${id} current Card owner mismatch`)
++    for (const part of card.parts ?? []) {
++      if (part.messageID !== id || isBoundaryMessagePart(part)) continue
++      const target = session.partIndex.get(String(part.id || ""))
++      if (!target || target.cardID !== cardID || card.parts?.[target.index]?.id !== part.id) throw new Error(`Full Message replay ${id} current Part owner mismatch`)
++    }
++  }
++}
++
++function retireIncomingFullMessage(info: any): void {
++  if (!messages.has(info.id) && !pendingPartFirstMessages.has(info.id)) return
++  handleMessageRemoved({ type: "message.removed", properties: { sessionID: info.sessionID, messageID: info.id } })
++}
++
+ function actualMessageQualificationFacts(info: any): Pick<
+   ProjectedMessageFacts,
+   "acceptedInputMessageIDs" | "completed" | "finish" | "hasError"
+ > {
+@@ -959,19 +1001,22 @@
+   }
+   if (!Array.isArray(input.parts)) {
+     throw new Error(`ingestPersistedConversationMessage: message ${input.info.id} missing parts array`)
+   }
++  validateIncomingFullMessage(input.info, input.parts)
+   batch(() => {
+-    applyEvent({
++    flushBufferedPartDeltas()
++    retireIncomingFullMessage(input.info)
++    applyVisibleCardTreeEvent(() => handleMessageUpdated({
+       type: "message.updated",
+       orderKey: input.info.orderKey,
+       properties: { info: input.info },
+-    })
++    }, { metadataOnly: !transcriptMessageHasDisplay(input) }))
+     const owner = messages.get(String(input.info.id))
+     if (!owner) throw new Error(`ingestPersistedConversationMessage: message ${input.info.id} missing canonical owner`)
+     replaceActualPartFacts(owner, input.parts)
+     for (const part of input.parts) {
+-      if (!part) continue
++      if (!conversationPartIsProjectable(part)) continue
+       projectPersistedConversationPart(input.info, part)
+     }
+   })
+ }
+@@ -1717,8 +1762,12 @@
+   session.messageCardIDs.delete(messageID)
+   messages.delete(messageID)
+   pendingPartFirstMessages.delete(messageID)
+ 
++  if (latestTimelineMessage?.id === messageID) {
++    latestTimelineMessage = [...messages.values()].filter((message) => !message.metadataOnly).sort(messageTimeOrder).at(-1)
++  }
++
+   if (!cardID) return
+ 
+   removeIndexedParts(session, cardID, (part) => String(part?.messageID || "") === messageID)
+ 
+@@ -1742,8 +1791,9 @@
+   }
+   if (sourceSessionID === targetSessionID) {
+     throw new Error(`message.moved ${messageID} source and target Session must differ`)
+   }
++  validateIncomingFullMessage(info, parts, sourceSessionID)
+ 
+   const existing = messages.get(messageID)
+   if (existing?.sessionID === sourceSessionID) {
+     handleMessageRemoved({
+@@ -1777,21 +1827,26 @@
+ function handlePartRemoved(event: any): void {
+   const p = propsOf(event)
+   const sessionID = String(p.sessionID || "")
+   const partID = String(p.partID || "")
+-  if (!sessionID || !partID) throw new Error("message.part.removed missing sessionID/partID")
++  const messageID = String(p.messageID || ""), partType = String(p.partType || "")
++  if (!sessionID || !partID || !messageID || !partType) throw new Error("message.part.removed missing actual Session/Message/Part/type identity")
+ 
+   const owners = [...messages.values(), ...pendingPartFirstMessages.values()].filter(
+     (owner) => owner.sessionID === sessionID && owner.stepParts?.some((part) => part.id === partID),
+   )
+   if (owners.length > 1) throw new Error(`message.part.removed ${partID} ambiguous metadata owner`)
+   if (owners[0]) {
++    const fact = owners[0].stepParts!.find((part) => part.id === partID)!
++    if (owners[0].id !== messageID || fact.type !== partType) throw new Error(`message.part.removed ${partID} retained owner/type mismatch`)
+     owners[0].stepParts = owners[0].stepParts?.filter((part) => part.id !== partID)
+     return
+   }
+ 
+   const session = requireSessionProjection(sessionID, "message.part.removed")
+   const target = requirePartProjection(session, partID, "message.part.removed")
++  const actual = cardTreeStore.cards[target.cardID]?.parts?.[target.index]
++  if (actual?.messageID !== messageID || actual?.sessionID !== sessionID || actual?.type !== partType) throw new Error(`message.part.removed ${partID} display owner/type mismatch`)
+ 
+   for (const owner of messages.values()) {
+     if (owner.sessionID === sessionID) owner.toolParts = owner.toolParts?.filter((part) => part.id !== partID)
+   }
+@@ -3514,8 +3569,11 @@
+  *  role/model/usage fields. */
+ export function commitPreparedConversationView(prepared: PreparedConversationView): void {
+   const { transcriptByMessageID, ordered } = prepared
+   const touched = new Set<string>()
++  for (const message of transcriptByMessageID.values()) validateIncomingFullMessage(message.info, message.parts)
++  flushBufferedPartDeltas()
++  for (const message of transcriptByMessageID.values()) retireIncomingFullMessage(message.info)
+   for (const message of prepared.metadataOnlyMessages) {
+     const session = ensureSessionProjection(message.sessionID, {
+       agentID: isUserStage(deriveRuntimeSessionStage(message.channel)) ? undefined : message.sessionAgentID,
+       stage: deriveRuntimeSessionStage(message.channel), parentSessionID: message.parentSessionID,
