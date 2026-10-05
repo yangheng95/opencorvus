@@ -216,7 +216,7 @@ async function readObservedTextSide(input: {
       ),
       { responseKind: "binary" },
     )
-    if (!response.ok) throw new ApiError(response.status, "build observation content", response.body)
+    if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
     const bytes = response.body
     textChunks.push(decoder.decode(bytes, { stream: offset + bytes.byteLength < input.object.bytes }))
     offset += bytes.byteLength

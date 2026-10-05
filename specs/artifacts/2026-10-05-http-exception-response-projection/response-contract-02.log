@@ -1,0 +1,36 @@
+$ bun script/run-tests.ts test/server/http-exception-response.test.ts "test/security-p0-contracts.test.ts"
+[1/2] START test/server/http-exception-response.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) authored HTTP exception responses > projects the actual Basic Auth public response and challenge [5.83ms]
+(pass) authored HTTP exception responses > retains supplied entity and semantic headers with the canonical context identity [1.01ms]
+(pass) authored HTTP exception responses > projects the current message-authored 400 envelope [0.72ms]
+(pass) authored HTTP exception responses > projects the current message-authored 404 envelope [0.46ms]
+(pass) authored HTTP exception responses > projects the current message-authored 403 envelope [0.31ms]
+(pass) authored HTTP exception responses > projects the current message-authored 503 envelope [0.27ms]
+
+ 6 pass
+ 0 fail
+ 23 expect() calls
+Ran 6 tests across 1 file. [1193.00ms]
+[1/2] DONE test/server/http-exception-response.test.ts exit=0 duration=1.35s
+[2/2] START test/security-p0-contracts.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) P0 security contract repairs > capability projection uses the latest explicit allow or deny rule [0.41ms]
+(pass) P0 security contract repairs > LLM telemetry keeps operational metadata without input or output capture [0.06ms]
+(pass) P0 security contract repairs > OAuth log fields expose flow metadata only [0.15ms]
+(pass) P0 security contract repairs > public unknown errors use a generic body and request-id header [3.32ms]
+(pass) P0 security contract repairs > explicit HTTP errors preserve their public status and message [0.61ms]
+(pass) P0 security contract repairs > frontmatter uses the configured YAML codec for parse and stringify [4.03ms]
+(pass) P0 security contract repairs > MCP debug credentials report presence without token material [0.07ms]
+(pass) P0 security contract repairs > same-iteration metric dependencies have deterministic evaluation order [1.96ms]
+(pass) P0 security contract repairs > query evaluator config is a typed named projection [0.09ms]
+
+ 9 pass
+ 0 fail
+ 26 expect() calls
+Ran 9 tests across 1 file. [1.60s]
+[2/2] DONE test/security-p0-contracts.test.ts exit=0 duration=1.76s

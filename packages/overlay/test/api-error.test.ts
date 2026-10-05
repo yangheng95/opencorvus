@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import { apiHeaders, apiJson, apiJsonWithTimeout, ApiError, configure } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { formatErrorDetails } from "../src/utils/error-details"
+import { downloadZipArchive } from "../src/services/project-archive"
 
 // What this pins
 // ----------------
@@ -43,6 +45,48 @@ afterEach(() => {
 })
 
 describe("apiJson + ApiError", () => {
+  test.each(["x-opencorvus-request-id", "X-OpenCorvus-Request-ID"])(
+    "preserves the actual %s response correlation in complete diagnostics",
+    async (headerName) => {
+      const requestID = "8433fb94-caeb-4a6e-bff6-b6995a771b66"
+      const body = { name: "UnknownError", data: { message: "Public explanation" } }
+      __setHostTransportForTest(
+        fakeTransport(() => ({ status: 500, ok: false, headers: { [headerName]: ` ${requestID} ` }, body })),
+      )
+      const error = await apiJson("attachment").catch((reason: unknown) => reason)
+      expect(error).toBeInstanceOf(ApiError)
+      const typed = error as ApiError
+      expect(typed.requestID).toBe(requestID)
+      expect(typed.status).toBe(500)
+      expect(typed.path).toBe("attachment")
+      expect(typed.body).toBe(body)
+      expect(typed.message).toBe("API 500 attachment: Public explanation")
+      expect(typed.summary).toBe("API 500: Public explanation")
+      typed.stack = "ApiError: fixture stack"
+      expect(formatErrorDetails(typed)).toBe(
+        `HTTP 500 attachment\n\nRequest ID: ${requestID}\n\nApiError: fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
+      )
+    },
+  )
+
+  test("binary archive failure preserves decoded public body and its response correlation", async () => {
+    const body = { message: "Archive is unavailable" }
+    __setHostTransportForTest(
+      fakeTransport(() => ({
+        status: 409,
+        ok: false,
+        headers: { "x-opencorvus-request-id": "archive-response-1" },
+        body: new TextEncoder().encode(JSON.stringify(body)),
+      })),
+    )
+    const error = await downloadZipArchive({ path: "project/archive" }).catch((reason: unknown) => reason)
+    expect(error).toBeInstanceOf(ApiError)
+    const typed = error as ApiError
+    expect(typed.requestID).toBe("archive-response-1")
+    expect(typed.body).toEqual(body)
+    expect(typed.message).toBe("API 409 project/archive: Archive is unavailable")
+  })
+
   test.each([
     {
       status: 500,
@@ -69,7 +113,7 @@ describe("apiJson + ApiError", () => {
       message: "API 503 attachment?directory=D%3A%2Fproject",
     },
   ])("derives a concise summary and preserves the complete $status diagnostic", ({ status, body, summary, message }) => {
-    const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body)
+    const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body, {})
     expect(error.summary).toBe(summary)
     expect(error.message).toBe(message)
     expect(error.status).toBe(status)
@@ -177,7 +221,7 @@ describe("apiJson + ApiError", () => {
       fakeTransport(() => ({
         status: 400,
         ok: false,
-        headers: {},
+        headers: { "x-opencorvus-request-id": "timed-response-1" },
         body: { message: "provider config failed before model list loaded" },
       })),
     )
@@ -194,6 +238,7 @@ describe("apiJson + ApiError", () => {
     expect(err.status).toBe(400)
     expect(err.path).toBe("config/providers")
     expect(err.body).toEqual({ message: "provider config failed before model list loaded" })
+    expect(err.requestID).toBe("timed-response-1")
     expect(err.message).toContain("provider config failed")
   })
 })

@@ -1,0 +1,75 @@
+{
+  "phase": "real_http_contract",
+  "caseID": "f799d300-c773-4c94-aa61-a3509a12b7c2",
+  "port": 61830,
+  "parent": {
+    "pid": 40088,
+    "processInstanceID": "win32:639267849584278264",
+    "occurrenceID": "5769d5c2-f1f9-4968-8142-3a4450ec8a1e"
+  },
+  "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-zVJ1dt\\runner-40088-giql8K\\auth-server",
+  "project": "C:\\WINDOWS\\temp\\opencorvus-test-run-zVJ1dt\\runner-40088-giql8K\\auth-server\\project",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "61830",
+    "--startup-receipt",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-startup-timeout-01.result.json.startup.json",
+    "--startup-occurrence",
+    "f799d300-c773-4c94-aa61-a3509a12b7c2",
+    "--parent-pid",
+    "40088",
+    "--parent-process-instance-id",
+    "win32:639267849584278264",
+    "--print-logs"
+  ],
+  "startupTimeoutMs": 1,
+  "credentialSource": "fresh disposable in-memory test pair",
+  "providerUse": "none",
+  "logPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-startup-timeout-01.result.json.server.log",
+  "childPID": 40756,
+  "owner": {
+    "pid": 40756,
+    "processInstanceID": "win32:639267849587297039",
+    "occurrenceID": "2348a59d-52da-436d-87b2-f51c90e9dc00"
+  },
+  "status": "failed",
+  "error": {
+    "name": "HTTPExceptionProbeStartupTimeoutError",
+    "message": "Owned development server did not publish its startup receipt within 1ms",
+    "code": "HTTP_EXCEPTION_PROBE_STARTUP_TIMEOUT",
+    "timeoutMilliseconds": 1
+  },
+  "disposal": {
+    "occurrenceID": "f799d300-c773-4c94-aa61-a3509a12b7c2",
+    "pid": 40756,
+    "reason": "terminated",
+    "exitCode": 1,
+    "signal": null
+  },
+  "settlement": {
+    "occurrenceID": "f799d300-c773-4c94-aa61-a3509a12b7c2",
+    "pid": 40756,
+    "reason": "terminated",
+    "exitCode": 1,
+    "signal": null
+  },
+  "logFile": "closed",
+  "exit": {
+    "code": 1,
+    "signal": null
+  },
+  "finalPhysicalOwner": "dead_or_reused",
+  "cleanup": {
+    "outcome": "settled",
+    "errors": []
+  },
+  "output": {
+    "outcome": "drained",
+    "errors": []
+  }
+}

@@ -80,7 +80,7 @@ export async function discoverArtifactBinaryPaths(root: string): Promise<string[
   return [...discovered].sort((left, right) => left.localeCompare(right))
 }
 
-export function artifactEmbeddedExecutablePaths(root: string, os = process.platform): string[] {
+export function artifactEmbeddedExecutablePaths(root: string, os: string = process.platform): string[] {
   return artifactEmbeddedExecutableRelativePaths(os).map((relativePath) => path.join(root, relativePath))
 }
 

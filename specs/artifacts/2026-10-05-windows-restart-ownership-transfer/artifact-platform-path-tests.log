@@ -1,0 +1,22 @@
+$ bun script/run-tests.ts test/script/runtime-executable-contract.test.ts
+[1/1] START test/script/runtime-executable-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) source runtime reports the non-compiled execution identity [0.09ms]
+(pass) artifact builds project one shared compiled execution identity [6.24ms]
+(pass) standalone build owns one launcher entrypoint with its inspector child path bundled by import [0.10ms]
+(pass) runtime executable discovery reads native binaries below a namespaced long path [23.60ms]
+(pass) embedded executable paths project host and package OS aliases [3.77ms]
+(pass) runtime executable discovery retries one transient artifact visibility gap [37.40ms]
+(pass) Windows permission normalization validates the complete embedded executable set for win32 [10.47ms]
+(pass) Windows permission normalization validates the complete embedded executable set for windows [11.51ms]
+(pass) Windows permission normalization validates the complete embedded executable set for windows-x64 [10.88ms]
+(skip) POSIX permission normalization keeps executables 0755 and shared libraries 0644
+
+ 9 pass
+ 1 skip
+ 0 fail
+ 27 expect() calls
+Ran 10 tests across 1 file. [1354.00ms]
+[1/1] DONE test/script/runtime-executable-contract.test.ts exit=0 duration=1.53s

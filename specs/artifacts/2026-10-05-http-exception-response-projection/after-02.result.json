@@ -1,0 +1,32 @@
+{
+  "phase": "real_http_contract",
+  "caseID": "58f660fc-cb88-499f-be61-703aac35609f",
+  "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-2JLs8G\\runner-72972-G4zMFw\\auth-server",
+  "project": "C:\\WINDOWS\\temp\\opencorvus-test-run-2JLs8G\\runner-72972-G4zMFw\\auth-server\\project",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "59472",
+    "--startup-receipt",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-after-02.result.json.startup.json",
+    "--startup-occurrence",
+    "58f660fc-cb88-499f-be61-703aac35609f",
+    59472,
+    "--print-logs"
+  ],
+  "childPID": 75880,
+  "credentialSource": "fresh disposable in-memory test pair",
+  "providerUse": "none",
+  "logPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-after-02.result.json.server.log",
+  "status": "failed",
+  "error": "Owned development server exited during startup: {\"code\":1,\"signal\":null}",
+  "exit": {
+    "code": 1,
+    "signal": null
+  },
+  "finalPhysicalOwner": "unavailable"
+}

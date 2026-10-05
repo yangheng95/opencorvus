@@ -1,5 +1,10 @@
 # Specs Storage Index
 
+- [HTTP exception response projection and authentication challenge](records/2026-10/2026-10-05-http-exception-response-projection.md)
+- [HTTP exception response evidence](artifacts/2026-10-05-http-exception-response-projection/README.md)
+- [Timeline selection theme](records/2026-10/2026-10-05-timeline-selection-theme.md)
+- [Timeline selection theme evidence](artifacts/2026-10-05-timeline-selection-theme/README.md)
+
 - [Inactive workspace paint isolation with retained geometry](records/2026-10/2026-10-05-inactive-workspace-paint-isolation.md)
 
 - [Diagram work surface: intrinsic width and product typography](records/2026-10/2026-10-05-diagram-work-surface.md)

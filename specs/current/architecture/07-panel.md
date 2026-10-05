@@ -1185,7 +1185,9 @@ type, surface, axis, grid, legend, and interaction values used by the mature
 renderer libraries. Chart and Dashboard share its Vega-Lite configuration;
 Network consumes its library style values and Diagram passes its product font
 to Mermaid. Timeline's existing stylesheet projects product tokens into the
-vis-timeline surface. Diagram's fullscreen SVG relinquishes Mermaid's compact
+vis-timeline surface, including explicit selected foreground/background for
+point and other supported item shapes; authored inline colors keep their
+existing payload precedence. Diagram's fullscreen SVG relinquishes Mermaid's compact
 intrinsic width cap while retaining the original mounted viewBox and graph.
 This keeps data semantics in the durable payload while making visual
 hierarchy a deterministic product responsibility rather than model-authored

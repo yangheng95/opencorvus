@@ -1,0 +1,53 @@
+{
+  "phase": "real_http_before",
+  "port": 17884,
+  "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-MFTiaJ\\http-auth-probe-18556-nGnW6v\\auth-server",
+  "project": "C:\\WINDOWS\\temp\\opencorvus-test-run-MFTiaJ\\http-auth-probe-18556-nGnW6v\\auth-server\\project",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "17884",
+    "--startup-receipt",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-auth-before-01\\startup.json",
+    "--startup-occurrence",
+    "http-auth-before-01",
+    "--print-logs"
+  ],
+  "childPID": 39544,
+  "credentialSource": "fresh disposable in-memory test pair",
+  "providerUse": "none",
+  "logPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-auth-before-01\\server.log",
+  "startupReceipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "http-auth-before-01",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17884",
+    "pid": 39544
+  },
+  "status": "failed",
+  "error": "Expected values to be strictly equal:\n\nundefined !== 0\n",
+  "shutdown": {
+    "method": "POST",
+    "pathname": "/shutdown",
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "b5b4198a-0814-4d7a-9786-136a0c480d98",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VX9s1pC00dJBoJ2hXu\"}"
+  },
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "finalPhysicalOwner": "unavailable"
+}

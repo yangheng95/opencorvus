@@ -1,5 +1,8 @@
 # 2026-10 Records
 
+- [HTTP exception response projection and authentication challenge](2026-10-05-http-exception-response-projection.md)
+- [Timeline selection theme](2026-10-05-timeline-selection-theme.md)
+
 - [Inactive workspace paint isolation with retained geometry](2026-10-05-inactive-workspace-paint-isolation.md)
 
 - [Diagram work surface: intrinsic width and product typography](2026-10-05-diagram-work-surface.md)

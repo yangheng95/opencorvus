@@ -1,0 +1,11 @@
+
+running 6 tests
+test actual_phf_010_generator_returns_exact_deterministic_lookups ... ok
+test actual_phf_011_generator_returns_exact_deterministic_lookups ... ok
+test actual_tauri_runner_config_serializes_and_round_trips_exactly ... ok
+test key_value_map_empty_map_returns_the_serialization_error ... ok
+test key_value_map_empty_sequence_returns_the_serialization_error ... ok
+test key_value_map_returns_the_exact_sequence_mapping ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

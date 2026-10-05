@@ -1,0 +1,202 @@
+{
+  "phase": "real_http_contract",
+  "profile": "packaged-http",
+  "caseID": "4d447b22-5bde-434b-bae5-bec380205bd9",
+  "port": 49938,
+  "parent": {
+    "pid": 71204,
+    "processInstanceID": "win32:639267856744539576",
+    "occurrenceID": "f3a7e14e-65d9-4b0a-8ec1-ee285c964cb2"
+  },
+  "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-7hWgdD\\runner-71204-JFftlB\\auth-server",
+  "project": "C:\\WINDOWS\\temp\\opencorvus-test-run-7hWgdD\\runner-71204-JFftlB\\auth-server\\project",
+  "executable": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus-process-supervisor.exe",
+  "args": [
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "49938",
+    "--startup-receipt",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-after-packaged-01.result.json.startup.json",
+    "--startup-occurrence",
+    "4d447b22-5bde-434b-bae5-bec380205bd9",
+    "--parent-pid",
+    "71204",
+    "--parent-process-instance-id",
+    "win32:639267856744539576",
+    "--print-logs"
+  ],
+  "startupTimeoutMs": 35000,
+  "credentialSource": "fresh disposable in-memory test pair",
+  "providerUse": "none",
+  "logPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-after-packaged-01.result.json.server.log",
+  "package": {
+    "name": "opencorvus-overlay-server-windows-x64",
+    "version": "0.0.0-main-202610050816",
+    "os": [
+      "win32"
+    ],
+    "cpu": [
+      "x64"
+    ]
+  },
+  "packageManifest": {
+    "path": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\work-artifact-target-package-manifest.json",
+    "phase": "final",
+    "target": {
+      "os": "win32",
+      "arch": "x64"
+    }
+  },
+  "childPID": 47276,
+  "owner": {
+    "pid": 47276,
+    "processInstanceID": "win32:639267856747212777",
+    "occurrenceID": "1af233b3-215e-47b0-b3f6-aa8cd960875d"
+  },
+  "startupReceipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "4d447b22-5bde-434b-bae5-bec380205bd9",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:49938",
+    "pid": 47276
+  },
+  "baseURL": "http://127.0.0.1:49938",
+  "actualExecutable": {
+    "ProcessId": 47276,
+    "ParentProcessId": 70140,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+    "CreationDate": "/Date(1791188874721)/",
+    "identity": {
+      "pid": 47276,
+      "processInstanceID": "win32:639267856747212777",
+      "occurrenceID": "1af233b3-215e-47b0-b3f6-aa8cd960875d"
+    }
+  },
+  "actualHelper": {
+    "ProcessId": 70140,
+    "ParentProcessId": 71204,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus-process-supervisor.exe",
+    "CreationDate": "/Date(1791188874685)/",
+    "identity": {
+      "pid": 70140,
+      "processInstanceID": "win32:639267856746857332",
+      "occurrenceID": "e84e0bd8-a05c-47e1-bd5b-ac8aad627666"
+    }
+  },
+  "unauthenticated": {
+    "method": "GET",
+    "pathname": "/global/health",
+    "status": 401,
+    "headers": {
+      "content-type": "application/octet-stream",
+      "www-authenticate": "Basic realm=\"Secure Area\"",
+      "x-opencorvus-request-id": "82630c57-9a0c-4ba5-9da7-0dd027b67ec5",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": null,
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "Unauthorized"
+  },
+  "authenticated": {
+    "method": "GET",
+    "pathname": "/global/health",
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "19a3e6cc-de08-4ad8-a4bc-18be4c4b1314",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "{\"healthy\":true,\"version\":\"0.0.0-main-202610050816\",\"paths\":{\"database\":\"C:\\\\WINDOWS\\\\temp\\\\opencorvus-test-run-7hWgdD\\\\runner-71204-JFftlB\\\\auth-server\\\\data\\\\opencorvus.db\",\"data\":\"C:\\\\WINDOWS\\\\temp\\\\opencorvus-test-run-7hWgdD\\\\runner-71204-JFftlB\\\\auth-server\\\\data\",\"home\":\"C:\\\\WINDOWS\\\\temp\\\\opencorvus-test-run-7hWgdD\\\\runner-71204-JFftlB\\\\auth-server\"}}"
+  },
+  "embeddedUI": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "asset": "main-xDfjxawi.js"
+  },
+  "options": {
+    "method": "OPTIONS",
+    "pathname": "/global/health",
+    "status": 204,
+    "headers": {
+      "content-type": null,
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "8493b122-c328-45b8-a66a-61e9a030a128",
+      "access-control-allow-origin": "http://127.0.0.1:17885",
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": "GET,HEAD,PUT,POST,DELETE,PATCH,QUERY",
+      "access-control-allow-headers": "authorization"
+    },
+    "body": ""
+  },
+  "status": "passed",
+  "shutdown": {
+    "method": "POST",
+    "pathname": "/shutdown",
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "1f9d09d9-cf2c-4fcd-97ab-2410def6ca53",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VXA5znN00IbSGPR9dg\"}"
+  },
+  "disposal": {
+    "occurrenceID": "4d447b22-5bde-434b-bae5-bec380205bd9",
+    "pid": 47276,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "settlement": {
+    "occurrenceID": "4d447b22-5bde-434b-bae5-bec380205bd9",
+    "pid": 47276,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "logFile": "closed",
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "finalPhysicalOwner": "dead_or_reused",
+  "finalPhysicalHelper": "dead_or_reused",
+  "cleanup": {
+    "outcome": "settled",
+    "errors": []
+  },
+  "output": {
+    "outcome": "drained",
+    "errors": []
+  },
+  "errorLogReceipt": {
+    "level": "error",
+    "time": "2026-10-05T08:27:59.037Z",
+    "service": "server",
+    "requestID": "82630c57-9a0c-4ba5-9da7-0dd027b67ec5",
+    "method": "GET",
+    "path": "/global/health",
+    "statusCode": 401,
+    "error": {
+      "type": "HTTPException",
+      "message": "",
+      "stack": "Error\n    at basicAuth2 (B:/~BUN/root/overlay-launcher.js:738974:28)\n    at dispatch (B:/~BUN/root/overlay-launcher.js:737427:30)\n    at <anonymous> (B:/~BUN/root/overlay-launcher.js:738097:40)",
+      "res": {},
+      "status": 401
+    },
+    "logDomain": "non-session",
+    "message": "request failed"
+  }
+}

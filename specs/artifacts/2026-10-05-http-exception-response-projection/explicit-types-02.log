@@ -1,0 +1,15 @@
+packages/opencorvus/script/http-exception-response-real.ts(63,39): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(string | number)[]' is not assignable to parameter of type 'readonly string[]'.
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+packages/opencorvus/script/http-exception-response-real.ts(82,9): error TS2339: Property 'once' does not exist on type 'never'.
+  The intersection 'ChildProcessWithoutNullStreams & ChildProcessByStdio<Writable, Readable, Readable> & ... 7 more ... & ChildProcess' was reduced to 'never' because property 'stdin' has conflicting types in some constituents.
+packages/opencorvus/script/http-exception-response-real.ts(86,9): error TS2339: Property 'once' does not exist on type 'never'.
+  The intersection 'ChildProcessWithoutNullStreams & ChildProcessByStdio<Writable, Readable, Readable> & ... 7 more ... & ChildProcess' was reduced to 'never' because property 'stdin' has conflicting types in some constituents.
+packages/opencorvus/script/http-exception-response-real.ts(98,19): error TS2339: Property 'pid' does not exist on type 'never'.
+  The intersection 'ChildProcessWithoutNullStreams & ChildProcessByStdio<Writable, Readable, Readable> & ... 7 more ... & ChildProcess' was reduced to 'never' because property 'stdin' has conflicting types in some constituents.
+packages/opencorvus/script/http-exception-response-real.ts(134,39): error TS2339: Property 'pid' does not exist on type 'never'.
+  The intersection 'ChildProcessWithoutNullStreams & ChildProcessByStdio<Writable, Readable, Readable> & ... 7 more ... & ChildProcess' was reduced to 'never' because property 'stdin' has conflicting types in some constituents.
+packages/opencorvus/script/http-exception-response-real.ts(148,43): error TS2339: Property 'pid' does not exist on type 'never'.
+  The intersection 'ChildProcessWithoutNullStreams & ChildProcessByStdio<Writable, Readable, Readable> & ... 7 more ... & ChildProcess' was reduced to 'never' because property 'stdin' has conflicting types in some constituents.

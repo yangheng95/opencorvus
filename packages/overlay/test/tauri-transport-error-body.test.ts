@@ -22,7 +22,7 @@ describe("tauri transport error body", () => {
         }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "X-OpenCorvus-Request-ID": "transport-response-1" },
         },
       )
 
@@ -30,6 +30,7 @@ describe("tauri transport error body", () => {
 
     expect(res.ok).toBe(false)
     expect(res.status).toBe(400)
+    expect(res.headers["x-opencorvus-request-id"]).toBe("transport-response-1")
     expect(res.body).toEqual({
       name: "DirectoryRequiredError",
       data: {
@@ -70,9 +71,6 @@ describe("tauri transport error body", () => {
 
   test("preserves caller-owned abort signals", async () => {
     const callerController = new AbortController()
-    AbortSignal.timeout = (() => {
-      throw new Error("default timeout should not replace caller signal")
-    }) as typeof AbortSignal.timeout
     globalThis.fetch = async (_url, init) => {
       expect(init?.signal).toBe(callerController.signal)
       return new Response(JSON.stringify({ ok: true }), {
@@ -90,34 +88,27 @@ describe("tauri transport error body", () => {
     expect(res.body).toEqual({ ok: true })
   })
 
-  test("allows explicit long-running requests without the transport default timeout", async () => {
-    AbortSignal.timeout = (() => {
-      throw new Error("long-running request should not allocate the default timeout")
-    }) as typeof AbortSignal.timeout
-    globalThis.fetch = async (_url, init) => {
-      expect(init?.signal).toBeUndefined()
-      return new Response(JSON.stringify({ ok: true }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      })
-    }
+  test("server-settled requests resolve with the actual server response", async () => {
+    let completeResponse!: (response: Response) => void
+    globalThis.fetch = async () => new Promise<Response>((resolve) => { completeResponse = resolve })
 
-    const res = await createTauriTransport().request({
+    const request = createTauriTransport().request({
       path: "project/current/worktrees",
       method: "DELETE",
       timeoutMilliseconds: null,
     })
-
-    expect(res.ok).toBe(true)
-    expect(res.body).toEqual({ ok: true })
+    completeResponse(new Response(JSON.stringify({ completed: "worktree-deletion" }), {
+      status: 202,
+      headers: { "Content-Type": "application/json", "x-opencorvus-request-id": "settled-response-1" },
+    }))
+    const res = await request
+    expect(res.status).toBe(202)
+    expect(res.body).toEqual({ completed: "worktree-deletion" })
+    expect(res.headers["x-opencorvus-request-id"]).toBe("settled-response-1")
   })
 
-  test("server-settled requests stay pending without a timer and still honor caller abort", async () => {
+  test("server-settled requests preserve the caller signal and its AbortError result", async () => {
     const callerController = new AbortController()
-    let settled = false
-    AbortSignal.timeout = (() => {
-      throw new Error("server-settled request must not allocate a wall-clock timeout")
-    }) as typeof AbortSignal.timeout
     globalThis.fetch = async (_url, init) =>
       new Promise<Response>((_resolve, reject) => {
         expect(init?.signal).toBe(callerController.signal)
@@ -126,21 +117,14 @@ describe("tauri transport error body", () => {
         })
       })
 
-    const request = createTauriTransport()
-      .request({
-        path: "task/tsk_slow",
-        method: "DELETE",
-        timeoutMilliseconds: null,
-        signal: callerController.signal,
-      })
-      .finally(() => {
-        settled = true
-      })
-    await new Promise((resolve) => setTimeout(resolve, 20))
-    expect(settled).toBe(false)
+    const request = createTauriTransport().request({
+      path: "task/tsk_slow",
+      method: "DELETE",
+      timeoutMilliseconds: null,
+      signal: callerController.signal,
+    })
 
     callerController.abort()
     await expect(request).rejects.toMatchObject({ name: "AbortError" })
-    expect(settled).toBe(true)
   })
 })

@@ -1,0 +1,121 @@
+{
+  "phase": "real_http_contract",
+  "caseID": "9f2e4920-3683-4ac3-a877-5334b298ec1e",
+  "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-mJgWHV\\http-auth-probe-72420-SAvlYl\\auth-server",
+  "project": "C:\\WINDOWS\\temp\\opencorvus-test-run-mJgWHV\\http-auth-probe-72420-SAvlYl\\auth-server\\project",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "0",
+    "--startup-receipt",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-after-01.result.json.startup.json",
+    "--startup-occurrence",
+    "9f2e4920-3683-4ac3-a877-5334b298ec1e",
+    "--print-logs"
+  ],
+  "childPID": 69556,
+  "credentialSource": "fresh disposable in-memory test pair",
+  "providerUse": "none",
+  "logPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-exception-response-real-after-01.result.json.server.log",
+  "startupReceipt": {
+    "schemaVersion": 1,
+    "occurrenceID": "9f2e4920-3683-4ac3-a877-5334b298ec1e",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:7878",
+    "pid": 69556
+  },
+  "baseURL": "http://127.0.0.1:7878",
+  "owner": {
+    "pid": 69556,
+    "processInstanceID": "win32:639267840568377124",
+    "occurrenceID": "c886bb01-9841-48b3-af17-b7e7f06ea8ee"
+  },
+  "unauthenticated": {
+    "method": "GET",
+    "pathname": "/global/health",
+    "status": 401,
+    "headers": {
+      "content-type": "application/octet-stream",
+      "www-authenticate": "Basic realm=\"Secure Area\"",
+      "x-opencorvus-request-id": "fbc148aa-6bad-4eb0-9459-2663a022c665",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": null,
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "Unauthorized"
+  },
+  "authenticated": {
+    "method": "GET",
+    "pathname": "/global/health",
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "a0503e0d-d206-49f3-a045-637ae67ff1a6",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "{\"healthy\":true,\"version\":\"local\",\"paths\":{\"database\":\"C:\\\\WINDOWS\\\\temp\\\\opencorvus-test-run-mJgWHV\\\\http-auth-probe-72420-SAvlYl\\\\auth-server\\\\data\\\\opencorvus.db\",\"data\":\"C:\\\\WINDOWS\\\\temp\\\\opencorvus-test-run-mJgWHV\\\\http-auth-probe-72420-SAvlYl\\\\auth-server\\\\data\",\"home\":\"C:\\\\WINDOWS\\\\temp\\\\opencorvus-test-run-mJgWHV\\\\http-auth-probe-72420-SAvlYl\\\\auth-server\"}}"
+  },
+  "options": {
+    "method": "OPTIONS",
+    "pathname": "/global/health",
+    "status": 204,
+    "headers": {
+      "content-type": null,
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "6507c6eb-1819-4add-a6fd-ecaf811556c4",
+      "access-control-allow-origin": "http://127.0.0.1:17885",
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": "GET,HEAD,PUT,POST,DELETE,PATCH,QUERY",
+      "access-control-allow-headers": "authorization"
+    },
+    "body": ""
+  },
+  "status": "passed",
+  "shutdown": {
+    "method": "POST",
+    "pathname": "/shutdown",
+    "status": 200,
+    "headers": {
+      "content-type": "application/json",
+      "www-authenticate": null,
+      "x-opencorvus-request-id": "7f2d12b7-bb92-4f62-a3ff-63fdb6b3fee4",
+      "access-control-allow-origin": null,
+      "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "access-control-allow-methods": null,
+      "access-control-allow-headers": null
+    },
+    "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VX9zDUn00Gk47DNiKf\"}"
+  },
+  "exit": {
+    "code": 0,
+    "signal": null
+  },
+  "finalPhysicalOwner": "dead_or_reused",
+  "errorLogReceipt": {
+    "level": "error",
+    "time": "2026-10-05T08:01:03.305Z",
+    "service": "server",
+    "requestID": "fbc148aa-6bad-4eb0-9459-2663a022c665",
+    "method": "GET",
+    "path": "/global/health",
+    "statusCode": 401,
+    "error": {
+      "type": "HTTPException",
+      "message": "",
+      "stack": "Error\n    at basicAuth2 (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\middleware\\basic-auth\\index.js:61:15)\n    at dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\compose.js:22:23)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\hono-base.js:308:31)",
+      "res": {},
+      "status": 401
+    },
+    "logDomain": "non-session",
+    "message": "request failed"
+  }
+}

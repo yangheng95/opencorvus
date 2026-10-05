@@ -14,6 +14,27 @@ runtime event coalescing can omit that final notification. Observation stops
 on the validated receipt, failure, or caller cancellation; each launch keeps
 its own directory and occurrence identity. Startup deadlines remain unchanged.
 
+## Public HTTP response boundary
+
+HTTP (Hypertext Transfer Protocol) failures enter the shared server error
+handler. Named errors and message-authored HTTP exceptions retain the current
+JSON (JavaScript Object Notation) envelopes, including400/404 mapping and the
+masked unknown500 message. An explicitly response-authored HTTPException is
+already a public response: its original body, exception status and protocol
+headers are materialized through Hono's response API and merged with the
+existing context. This retains Basic Auth's Unauthorized body and
+WWW-Authenticate challenge without a second error message or body parser.
+
+The server owns one opaque x-opencorvus-request-id for the real Request and
+its log records. The existing CORS (Cross-Origin Resource Sharing) exposure
+policy includes that header; Overlay ApiError retains only that selected value
+from the real transport response and its existing detail formatter projects it.
+Authentication/origin ordering is unchanged: early authentication or blocked
+network responses can remain unreadable across origins, so a client must not
+invent a response ID or assume every error has one.
+
+## Standalone restart
+
 Standalone restart first observes the exact current launch boundary. The public
 route returns an admitted lifecycle occurrence or a named503 refusal; managed
 parents, PID1 and inherited non-independent containment retain their launcher's

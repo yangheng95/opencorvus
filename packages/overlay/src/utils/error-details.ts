@@ -7,10 +7,11 @@ export function formatErrorDetails(err: unknown): string {
   if (err == null) return ""
   if (err instanceof Error) {
     const parts: string[] = []
-    const meta = err as Error & { status?: unknown; path?: unknown; body?: unknown }
+    const meta = err as Error & { status?: unknown; path?: unknown; body?: unknown; requestID?: unknown }
     if (typeof meta.status === "number" && typeof meta.path === "string") {
       parts.push(`HTTP ${meta.status} ${meta.path}`)
     }
+    if (typeof meta.requestID === "string" && meta.requestID) parts.push(`Request ID: ${meta.requestID}`)
     parts.push(err.stack || `${err.name}: ${err.message}`)
     if (meta.body !== undefined) {
       let rendered: string

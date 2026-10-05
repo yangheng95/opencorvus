@@ -88,7 +88,7 @@ async function readChunk(input: {
     responseKind: "binary",
     signal: input.signal,
   })
-  if (!response.ok) throw new ApiError(response.status, "Conversation Artifact read", response.body)
+  if (!response.ok) throw new ApiError(response.status, "Conversation Artifact read", response.body, response.headers)
   const range = parseContentRange(responseHeader(response.headers, "Content-Range"))
   const disposition = parseDisposition(responseHeader(response.headers, "Content-Disposition"))
   const bytes = response.body

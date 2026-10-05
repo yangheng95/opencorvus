@@ -1,0 +1,52 @@
+{
+  "qualification": "passed packaged HTTP and exact owned physical settlement",
+  "caseID": "4d447b22-5bde-434b-bae5-bec380205bd9",
+  "scope": "C:\\WINDOWS\\temp\\opencorvus-test-run-7hWgdD\\runner-71204-JFftlB",
+  "actualExecutable": {
+    "ProcessId": 47276,
+    "ParentProcessId": 70140,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+    "CreationDate": "2026-10-05T08:27:54.721Z",
+    "identity": {
+      "pid": 47276,
+      "processInstanceID": "win32:639267856747212777",
+      "occurrenceID": "1af233b3-215e-47b0-b3f6-aa8cd960875d"
+    }
+  },
+  "actualHelper": {
+    "ProcessId": 70140,
+    "ParentProcessId": 71204,
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus-process-supervisor.exe",
+    "CreationDate": "2026-10-05T08:27:54.685Z",
+    "identity": {
+      "pid": 70140,
+      "processInstanceID": "win32:639267856746857332",
+      "occurrenceID": "e84e0bd8-a05c-47e1-bd5b-ac8aad627666"
+    }
+  },
+  "parent": {
+    "pid": 71204,
+    "processInstanceID": "win32:639267856744539576",
+    "occurrenceID": "f3a7e14e-65d9-4b0a-8ec1-ee285c964cb2"
+  },
+  "embeddedUI": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "asset": "main-xDfjxawi.js"
+  },
+  "responseRequestID": "82630c57-9a0c-4ba5-9da7-0dd027b67ec5",
+  "logRequestID": "82630c57-9a0c-4ba5-9da7-0dd027b67ec5",
+  "settlement": {
+    "occurrenceID": "4d447b22-5bde-434b-bae5-bec380205bd9",
+    "pid": 47276,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "finalPhysicalOwner": "dead_or_reused",
+  "finalPhysicalHelper": "dead_or_reused",
+  "actualScopedProcesses": [],
+  "actualPortListeners": [],
+  "observedUtc": "2026-10-05T08:28:45.9137382Z",
+  "limitations": "Windows overlay-server binary only; no GUI/native login/browser CORS qualification. Source and startup fault profiles are retained prior qualification, not rerun."
+}

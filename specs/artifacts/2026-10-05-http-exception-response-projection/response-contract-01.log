@@ -1,0 +1,47 @@
+$ bun script/run-tests.ts test/server/http-exception-response.test.ts
+[1/1] START test/server/http-exception-response.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+10 |       .use(basicAuth({ username: "contract", password: crypto.randomUUID() }))
+11 |       .get("/protected", (c) => c.text("authorized"))
+12 |     const response = await app.request("/protected")
+13 |     expect(response.status).toBe(401)
+14 |     expect(response.headers.get("WWW-Authenticate")).toBe('Basic realm="Secure Area"')
+15 |     expect(response.headers.get("Content-Type")).toBe("text/plain;charset=UTF-8")
+                                                      ^
+error: expect(received).toBe(expected)
+
+Expected: "text/plain;charset=UTF-8"
+Received: null
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\http-exception-response.test.ts:15:50)
+(fail) authored HTTP exception responses > projects the actual Basic Auth public response and challenge [6.78ms]
+34 |           headers: { "Retry-After": "17", "x-opencorvus-request-id": "producer-value" },
+35 |         }) })
+36 |       })
+37 |     const response = await app.request("/limited")
+38 |     expect(response.status).toBe(429)
+39 |     expect(response.headers.get("Content-Type")).toBe("application/json")
+                                                      ^
+error: expect(received).toBe(expected)
+
+Expected: "application/json"
+Received: "application/json;charset=utf-8"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\http-exception-response.test.ts:39:50)
+(fail) authored HTTP exception responses > retains supplied entity and semantic headers with the canonical context identity [1.33ms]
+(pass) authored HTTP exception responses > projects the current message-authored 400 envelope [0.89ms]
+(pass) authored HTTP exception responses > projects the current message-authored 404 envelope [0.63ms]
+(pass) authored HTTP exception responses > projects the current message-authored 403 envelope [0.42ms]
+(pass) authored HTTP exception responses > projects the current message-authored 503 envelope [0.34ms]
+
+ 4 pass
+ 2 fail
+ 17 expect() calls
+Ran 6 tests across 1 file. [1458.00ms]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\http-exception-response.test.ts
+[1/1] DONE test/server/http-exception-response.test.ts exit=1 duration=1.65s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\http-exception-response.test.ts
+error: script "test" exited with code 1

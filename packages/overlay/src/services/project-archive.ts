@@ -40,7 +40,7 @@ export async function downloadZipArchive(input: { path: string }): Promise<boole
     timeoutMilliseconds: ZIP_ARCHIVE_DOWNLOAD_TIMEOUT_MILLISECONDS,
   })
   if (!response.ok) {
-    throw new ApiError(response.status, input.path, decodeBinaryErrorBody(response.body))
+    throw new ApiError(response.status, input.path, decodeBinaryErrorBody(response.body), response.headers)
   }
   const filename = contentDispositionFilename(
     response.headers["content-disposition"] || response.headers["Content-Disposition"],

@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+test\overlay-artifact-names.test.ts:
+(pass) overlay artifact names > normalizes host platforms to opencorvus artifact names [2.05ms]
+(pass) overlay artifact names > normalizes Rust triples to opencorvus artifact names [0.30ms]
+(pass) overlay artifact names > uses overlay-server artifact directory for embedded server payload [0.20ms]
+(pass) overlay artifact names > docker build script mounts the overlay-server artifact directory [0.88ms]
+
+ 4 pass
+ 0 fail
+ 21 expect() calls
+Ran 4 tests across 1 file. [140.00ms]

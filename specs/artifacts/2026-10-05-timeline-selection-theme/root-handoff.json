@@ -1,0 +1,38 @@
+{
+  "handoffTo": "root",
+  "url": "http://127.0.0.1:17883/ui/",
+  "asset": "main-xDfjxawi.js",
+  "sessionID": "ses_hl4wopDBLw9jbz7WDSkG",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data\\projects\\2026\\10\\05\\f938842b-e4fb-4391-a987-307e759623a7",
+  "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home",
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home"
+    }
+  },
+  "listener": {
+    "ProcessId": 67824,
+    "ParentProcessId": 71496,
+    "CreationDate": "2026-10-05T15:31:38.425422+08:00",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" ./src/index.ts serve --hostname 127.0.0.1 --port 17883 --project-dir C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data\\projects\\2026\\10\\05\\f938842b-e4fb-4391-a987-307e759623a7 --print-logs",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe"
+  },
+  "parent": null,
+  "launcher": {
+    "ProcessId": 67824,
+    "ParentProcessId": 71496,
+    "CreationDate": "2026-10-05T15:31:38.425422+08:00",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" ./src/index.ts serve --hostname 127.0.0.1 --port 17883 --project-dir C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data\\projects\\2026\\10\\05\\f938842b-e4fb-4391-a987-307e759623a7 --print-logs",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe"
+  },
+  "authFilePresent": false,
+  "modelsFilePresent": false,
+  "browser": "Chrome241798709 closed",
+  "themePreference": "Follow System restored through actual Appearance control",
+  "pending": "Root supplemental IAB fullscreen/Close/hover and public shutdown plus physical terminal review",
+  "observedUtc": "2026-10-05T07:36:39.9536048Z"
+}

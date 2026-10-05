@@ -369,7 +369,7 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
         clearBoardRetry()
         return
       }
-      if (!res.ok) throw new ApiError(res.status, boardPath, res.body)
+      if (!res.ok) throw new ApiError(res.status, boardPath, res.body, res.headers)
       const etag = res.headers["etag"] || res.headers["ETag"]
       if (etag) setBoardEtag(etag)
       const data = res.body

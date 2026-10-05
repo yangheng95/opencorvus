@@ -9,7 +9,7 @@ import {
   inspectArtifactExecutableClosure,
   normalizeArtifactExecutablePermissions,
 } from "../../script/runtime-executable-contract"
-import { artifactCompileDefines, artifactEntrypoints } from "../../script/build-artifact"
+import { artifactCompileDefines, artifactEmbeddedExecutableRelativePaths, artifactEntrypoints } from "../../script/build-artifact"
 import { isCompiledBinaryRuntime } from "../../src/runtime/compiled-binary"
 
 test("source runtime reports the non-compiled execution identity", () => {
@@ -64,10 +64,21 @@ test("runtime executable discovery reads native binaries below a namespaced long
   }
 })
 
+test("embedded executable paths project host and package OS aliases", () => {
+  const windows = ["opencorvus.exe", "bin/rg.exe", "bin/officecli.exe", "browser-mcp-node/node.exe", "opencorvus-process-supervisor.exe"]
+  const posix = ["opencorvus", "bin/rg", "bin/officecli", "browser-mcp-node/node"]
+  const root = path.resolve(os.tmpdir(), "artifact-path-contract")
+  for (const platform of ["win32", "windows", "windows-x64", "linux", "darwin"]) {
+    const expected = platform === "linux" || platform === "darwin" ? posix : windows
+    expect(artifactEmbeddedExecutableRelativePaths(platform).map((entry) => entry.replaceAll("\\", "/"))).toEqual(expected)
+    expect(artifactEmbeddedExecutablePaths(root, platform)).toEqual(expected.map((entry) => path.join(root, entry)))
+  }
+})
+
 test("runtime executable discovery retries one transient artifact visibility gap", async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-contract-"))
-  const candidate = path.join(root, "runtime.js")
-  await fs.writeFile(candidate, "export {}")
+  const candidate = path.join(root, "runtime-binary")
+  await fs.writeFile(candidate, Buffer.from([0x4d, 0x5a, 0, 0]))
   const originalOpen = nodefs.promises.open
   let attempts = 0
   nodefs.promises.open = (async (...args: Parameters<typeof nodefs.promises.open>) => {
@@ -79,7 +90,7 @@ test("runtime executable discovery retries one transient artifact visibility gap
     return originalOpen(...args)
   }) as typeof nodefs.promises.open
   try {
-    await expect(discoverArtifactBinaryPaths(root)).resolves.toEqual([])
+    await expect(discoverArtifactBinaryPaths(root)).resolves.toEqual([candidate])
     expect(attempts).toBe(2)
   } finally {
     nodefs.promises.open = originalOpen
@@ -87,19 +98,27 @@ test("runtime executable discovery retries one transient artifact visibility gap
   }
 })
 
-test("Windows permission normalization validates the complete embedded executable set", async () => {
+test.each(["win32", "windows", "windows-x64"])("Windows permission normalization validates the complete embedded executable set for %s", async (platform) => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-contract-"))
-  const executables = artifactEmbeddedExecutablePaths(root, "win32")
+  const executables = artifactEmbeddedExecutablePaths(root, platform)
   for (const executable of executables) {
     await fs.mkdir(path.dirname(executable), { recursive: true })
     await fs.writeFile(executable, Buffer.from([0x4d, 0x5a, 0, 0]))
   }
   try {
-    const normalized = await normalizeArtifactExecutablePermissions({ root, os: "win32" })
+    const normalized = await normalizeArtifactExecutablePermissions({ root, os: platform })
     expect(normalized).toEqual(executables.toSorted((left, right) => left.localeCompare(right)))
     await expect(Promise.all(normalized.map((executable) => fs.stat(executable).then((entry) => entry.isFile())))).resolves.toEqual(
       normalized.map(() => true),
     )
+    const closure = await inspectArtifactExecutableClosure({ root, os: platform })
+    expect(closure.map((entry) => ({ path: path.relative(root, entry.path).replaceAll("\\", "/"), kind: entry.kind }))).toEqual([
+      { path: "bin/officecli.exe", kind: "executable" },
+      { path: "bin/rg.exe", kind: "executable" },
+      { path: "browser-mcp-node/node.exe", kind: "executable" },
+      { path: "opencorvus-process-supervisor.exe", kind: "executable" },
+      { path: "opencorvus.exe", kind: "executable" },
+    ])
   } finally {
     await fs.rm(path.toNamespacedPath(root), { recursive: true, force: true })
   }

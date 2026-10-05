@@ -89,24 +89,24 @@ export function artifactSourcemap(): "none" {
   return "none"
 }
 
-export function artifactBrowserMcpNodeExecutableName(os = process.platform): string {
+export function artifactBrowserMcpNodeExecutableName(os: string = process.platform): string {
   return os === "win32" || os.startsWith("windows") ? "node.exe" : "node"
 }
 
-export function artifactExecutableName(os = process.platform): string {
+export function artifactExecutableName(os: string = process.platform): string {
   return os === "win32" || os.startsWith("windows") ? "opencorvus.exe" : "opencorvus"
 }
 
-export function artifactRipgrepExecutableName(os = process.platform): string {
+export function artifactRipgrepExecutableName(os: string = process.platform): string {
   return os === "win32" || os.startsWith("windows") ? "rg.exe" : "rg"
 }
 
 // CLI means Command-Line Interface.
-export function artifactOfficeCliExecutableName(os = process.platform): string {
+export function artifactOfficeCliExecutableName(os: string = process.platform): string {
   return os === "win32" || os.startsWith("windows") ? "officecli.exe" : "officecli"
 }
 
-export function artifactEmbeddedExecutableRelativePaths(os = process.platform): string[] {
+export function artifactEmbeddedExecutableRelativePaths(os: string = process.platform): string[] {
   const executables = [
     artifactExecutableName(os),
     path.join("bin", artifactRipgrepExecutableName(os)),

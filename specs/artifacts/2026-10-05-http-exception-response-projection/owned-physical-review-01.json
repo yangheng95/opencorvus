@@ -1,0 +1,81 @@
+{
+  "qualifiedNormalHttp": "passed",
+  "qualifiedExpectedStartupTimeout": "typed_error_and_owned_physical_settlement",
+  "cases": [
+    {
+      "caseID": "7a1984dd-9318-4aec-87f8-27313cdfacf8",
+      "status": "passed",
+      "error": null,
+      "scope": "C:\\WINDOWS\\temp\\opencorvus-test-run-ytpZLS\\runner-68272-NZGIyz",
+      "owners": [
+        68272,
+        76100
+      ],
+      "recordedOwner": {
+        "pid": 76100,
+        "processInstanceID": "win32:639267849384876275",
+        "occurrenceID": "0ccd4372-74bb-4aeb-b01c-b3d334922e6d"
+      },
+      "disposal": {
+        "occurrenceID": "7a1984dd-9318-4aec-87f8-27313cdfacf8",
+        "pid": 76100,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "settlement": {
+        "occurrenceID": "7a1984dd-9318-4aec-87f8-27313cdfacf8",
+        "pid": 76100,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "finalPhysicalOwner": "dead_or_reused",
+      "actualScopedProcesses": [],
+      "actualPortListeners": [],
+      "logFile": "closed",
+      "output": "drained"
+    },
+    {
+      "caseID": "f799d300-c773-4c94-aa61-a3509a12b7c2",
+      "status": "failed",
+      "error": {
+        "name": "HTTPExceptionProbeStartupTimeoutError",
+        "message": "Owned development server did not publish its startup receipt within 1ms",
+        "code": "HTTP_EXCEPTION_PROBE_STARTUP_TIMEOUT",
+        "timeoutMilliseconds": 1
+      },
+      "scope": "C:\\WINDOWS\\temp\\opencorvus-test-run-zVJ1dt\\runner-40088-giql8K",
+      "owners": [
+        40088,
+        40756
+      ],
+      "recordedOwner": {
+        "pid": 40756,
+        "processInstanceID": "win32:639267849587297039",
+        "occurrenceID": "2348a59d-52da-436d-87b2-f51c90e9dc00"
+      },
+      "disposal": {
+        "occurrenceID": "f799d300-c773-4c94-aa61-a3509a12b7c2",
+        "pid": 40756,
+        "reason": "terminated",
+        "exitCode": 1,
+        "signal": null
+      },
+      "settlement": {
+        "occurrenceID": "f799d300-c773-4c94-aa61-a3509a12b7c2",
+        "pid": 40756,
+        "reason": "terminated",
+        "exitCode": 1,
+        "signal": null
+      },
+      "finalPhysicalOwner": "dead_or_reused",
+      "actualScopedProcesses": [],
+      "actualPortListeners": [],
+      "logFile": "closed",
+      "output": "drained"
+    }
+  ],
+  "observedUtc": "2026-10-05T08:16:36.1921172Z",
+  "limits": "Windows source HTTP only. Native adapter validates same-request active-zero receipt and removes its request root during settled; this review does not invent deleted per-helper marker identities."
+}

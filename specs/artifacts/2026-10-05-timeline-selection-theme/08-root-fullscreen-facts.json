@@ -1,0 +1,31 @@
+{
+  "scripts": [
+    "http://127.0.0.1:17883/ui/assets/main-xDfjxawi.js"
+  ],
+  "timeline": [
+    {
+      "height": 865.84375,
+      "ready": "true",
+      "selected": [
+        {
+          "background": "color(srgb 0.175686 0.207059 0.268549)",
+          "classes": "vis-item vis-point vis-selected vis-readonly",
+          "color": "rgb(238, 238, 236)",
+          "text": "升级依赖"
+        },
+        {
+          "background": "color(srgb 0.175686 0.207059 0.268549)",
+          "classes": "vis-item vis-dot vis-selected vis-readonly",
+          "color": "rgb(238, 238, 236)",
+          "text": ""
+        }
+      ],
+      "width": 1936
+    }
+  ],
+  "url": "http://127.0.0.1:17883/ui/",
+  "viewport": {
+    "height": 1048,
+    "width": 1936
+  }
+}

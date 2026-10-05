@@ -868,7 +868,7 @@ export namespace Server {
               return isAllowedCorsOrigin(input) ? input : undefined
             },
             // ETag means Entity Tag, the immutable digest validator for the returned Artifact bytes.
-            exposeHeaders: ["Content-Disposition", "Content-Range", "ETag"],
+            exposeHeaders: ["Content-Disposition", "Content-Range", "ETag", "x-opencorvus-request-id"],
           }),
         )
         .route("/global", GlobalRoutes())

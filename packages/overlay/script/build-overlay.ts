@@ -17,6 +17,7 @@
  *   bun run build:overlay --target <triple>              # cross-compile to triple (e.g. aarch64-pc-windows-msvc)
  *   bun run build:overlay --skip-tauri                   # UI only (step 1)
  *   bun run build:overlay --skip-dist-copy               # keep target/release only for an installer bundle
+ *   bun run build:overlay --cargo-message-format-json    # locked Cargo artifact diagnostics for native checks
  *
  * Stop any running overlay before invoking this script. Cargo links into
  * `target/release/deps/opencorvus_overlay.exe` and hardlinks that out to
@@ -55,6 +56,7 @@ const tauri = path.resolve(dir, "src-tauri")
 const argv = process.argv.slice(2)
 const skipTauri = argv.includes("--skip-tauri")
 const skipDistCopy = argv.includes("--skip-dist-copy")
+const cargoMessageFormatJson = argv.includes("--cargo-message-format-json")
 const targetTripleArg = (() => {
   const i = argv.indexOf("--target")
   return i >= 0 ? argv[i + 1] : undefined
@@ -281,7 +283,8 @@ for (const stale of lockedBuildBinaries()) {
 // a cross-compile. Host builds skip the flag so cargo writes to
 // target/release and reuses the existing fingerprint cache.
 const tauriTargetArgs = useExplicitTarget ? ["--target", triple] : []
-await $`tauri build --no-bundle ${tauriTargetArgs} ${tauriArgs()}`.cwd(dir).env({
+const cargoDiagnosticArgs = cargoMessageFormatJson ? ["--", "--locked", "--message-format=json-render-diagnostics"] : []
+await $`tauri build --no-bundle ${tauriTargetArgs} ${tauriArgs()} ${cargoDiagnosticArgs}`.cwd(dir).env({
   ...process.env,
   CARGO_TARGET_DIR: target,
   OPENCORVUS_EMBED_PATH: distServerDir,

@@ -241,6 +241,8 @@ describe("Conversation Artifact byte route", () => {
     expect(response.headers.get("content-range")).toBe(`bytes 0-${expected.byteLength - 1}/${expected.byteLength}`)
     expect(response.headers.get("content-type")).toBe("image/png")
     expect(response.headers.get("etag")).toBe(`"sha256:${resource.sha256}"`)
-    expect(response.headers.get("access-control-expose-headers")).toBe("Content-Disposition,Content-Range,ETag")
+    expect(response.headers.get("access-control-expose-headers")).toBe(
+      "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    )
   })
 })

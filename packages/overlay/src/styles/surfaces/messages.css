@@ -1932,8 +1932,11 @@
     color-mix(in srgb, var(--text-strong) 7%, transparent);
 }
 
-.msg-artifact-timeline .vis-item.vis-selected {
+.msg-artifact-timeline .vis-item.vis-selected,
+.msg-artifact-timeline .vis-item.vis-point.vis-selected {
   border-color: var(--accent-ring);
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
   box-shadow: 0 0 0 calc(2 * var(--oc-border-width)) color-mix(in srgb, var(--accent) 40%, transparent);
 }
 

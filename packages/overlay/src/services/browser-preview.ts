@@ -95,7 +95,8 @@ export async function loadTaskBrowserPreviewEvidenceCaptureObjectUrl(input: {
     responseKind: "binary",
     signal: input.signal,
   })
-  if (!response.ok) throw new ApiError(response.status, path, decodeBinaryBrowserPreviewErrorBody(response.body))
+  if (!response.ok)
+    throw new ApiError(response.status, path, decodeBinaryBrowserPreviewErrorBody(response.body), response.headers)
   const contentType = response.headers["content-type"] || response.headers["Content-Type"] || "image/png"
   return URL.createObjectURL(new Blob([bytesToArrayBuffer(response.body)], { type: contentType }))
 }

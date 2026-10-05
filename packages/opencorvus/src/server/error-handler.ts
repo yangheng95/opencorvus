@@ -153,6 +153,11 @@ export function serverErrorResponse(err: Error | unknown, c: Context): Response 
     return c.json(normalized.toObject(), { status })
   }
   if (normalized instanceof HTTPException) {
+    if (normalized.res) {
+      const response = normalized.getResponse()
+      response.headers.set("x-opencorvus-request-id", id)
+      return c.newResponse(response.body, { status: normalized.status, headers: response.headers })
+    }
     const message = normalized.message
     if (normalized.status === 400) {
       return c.json(badRequestBody(message), { status: 400 })

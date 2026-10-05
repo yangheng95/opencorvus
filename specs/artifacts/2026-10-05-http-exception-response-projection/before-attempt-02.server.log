@@ -1,0 +1,14 @@
+{"level":"info","time":"2026-10-05T07:32:29.856Z","service":"default","version":"local","args":["serve","--hostname","127.0.0.1","--port","17884","--startup-receipt","D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\http-auth-before-01\\startup.json","--startup-occurrence","http-auth-before-01","--print-logs"],"logDomain":"non-session","message":"opencorvus"}
+{"level":"info","time":"2026-10-05T07:32:29.944Z","service":"db","path":"C:\\WINDOWS\\temp\\opencorvus-test-run-MFTiaJ\\http-auth-probe-18556-nGnW6v\\auth-server\\data\\opencorvus.db","logDomain":"non-session","message":"opening database"}
+{"level":"info","time":"2026-10-05T07:32:30.070Z","service":"db","logDomain":"non-session","message":"schema applied"}
+{"level":"info","time":"2026-10-05T07:32:30.096Z","service":"automation-service","logDomain":"non-session","message":"global automation service initialized"}
+opencorvus server listening on http://127.0.0.1:17884
+[serve] runtime project recovery attempted=0 initialized=0 mission_attempted=0 mission_woken=0 mission_completed=0 failures=0
+{"level":"info","time":"2026-10-05T07:32:30.130Z","service":"runtime.memory","pid":39544,"uptimeMs":4239,"process":{"rss":639512576,"heapUsed":186517959,"heapTotal":203447296,"external":38150551,"arrayBuffers":2162901},"providers":{"host-mcp":{"projects":0,"connected":0,"local":0,"remote":0,"localStdioTransports":0,"connecting":0,"failedAwaitingReconnect":0},"trace":{"eventsWritten":0,"bytesWritten":0,"boundedEvents":0,"blobRefs":0,"truncatedPayloads":0,"blobBytesWritten":0},"session-compaction":{"neverCompacted":0,"noCoveredHistory":0,"invalidBoundary":0,"prunedParts":0},"supervised-processes":{"live":0,"owners":{}}},"logDomain":"non-session","message":"runtime.memory.metrics"}
+overlay UI available at http://127.0.0.1:17884/ui/
+{"level":"info","time":"2026-10-05T07:32:30.193Z","service":"server","requestID":"b5b4198a-0814-4d7a-9786-136a0c480d98","method":"POST","path":"/shutdown","status":"started","logDomain":"non-session","message":"request"}
+{"level":"info","time":"2026-10-05T07:32:30.314Z","service":"server","source":"http-client","occurrenceID":"cal_g0VX9s1pC00dJBoJ2hXu","logDomain":"non-session","message":"shutdown admitted"}
+{"level":"info","time":"2026-10-05T07:32:30.314Z","service":"server","requestID":"b5b4198a-0814-4d7a-9786-136a0c480d98","method":"POST","path":"/shutdown","status":"completed","statusCode":200,"duration":121,"logDomain":"non-session","message":"request"}
+[serve] shutdown requested via http-client: http.shutdown
+{"level":"info","time":"2026-10-05T07:32:30.361Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+[serve] settled process-owned prompts sessions=0 toolParts=0

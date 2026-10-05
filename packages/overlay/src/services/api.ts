@@ -126,12 +126,14 @@ export class ApiError extends Error {
   readonly status: number
   readonly path: string
   readonly body: unknown
-  constructor(status: number, path: string, body: unknown) {
+  readonly requestID: string | undefined
+  constructor(status: number, path: string, body: unknown, responseHeaders: Readonly<Record<string, string>>) {
     super(formatApiErrorMessage(status, path, body))
     this.name = "ApiError"
     this.status = status
     this.path = path
     this.body = body
+    this.requestID = pickHeader(responseHeaders, "x-opencorvus-request-id")?.trim() || undefined
   }
 
   get summary(): string {
@@ -218,7 +220,7 @@ export async function apiJson<T = any>(path: string, init?: ApiJsonInit): Promis
     responseKind: "json",
   })
   if (!res.ok) {
-    const error = new ApiError(res.status, path, res.body)
+    const error = new ApiError(res.status, path, res.body, res.headers)
     publishApiError(error)
     throw error
   }

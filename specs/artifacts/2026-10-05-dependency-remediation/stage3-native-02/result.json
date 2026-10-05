@@ -1,0 +1,1050 @@
+{
+  "status": "failed",
+  "output": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-dependency-remediation\\stage3-native-02",
+  "startedAt": "2026-10-05T07:59:49.694Z",
+  "commands": [
+    {
+      "label": "rustc-version",
+      "executable": "rustc",
+      "args": [
+        "-vV"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri",
+      "exitCode": 0
+    },
+    {
+      "label": "cargo-version",
+      "executable": "cargo",
+      "args": [
+        "--version"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri",
+      "exitCode": 0
+    },
+    {
+      "label": "metadata",
+      "executable": "cargo",
+      "args": [
+        "metadata",
+        "--manifest-path",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.toml",
+        "--locked",
+        "--format-version",
+        "1",
+        "--filter-platform",
+        "x86_64-pc-windows-msvc"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri",
+      "exitCode": 0
+    },
+    {
+      "label": "canonical-build",
+      "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "args": [
+        "run",
+        "build:overlay",
+        "--cargo-message-format-json"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\overlay",
+      "exitCode": 0
+    },
+    {
+      "label": "compile-contract",
+      "executable": "rustc",
+      "args": [
+        "--test",
+        "--edition=2021",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\script\\fixture\\rust-dependency-contract.rs",
+        "--extern",
+        "tauri_utils=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libtauri_utils-ffb25b4398e66312.rlib",
+        "--extern",
+        "serde=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde-c9aeedbe2eff744b.rlib",
+        "--extern",
+        "serde_json=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_json-051c5fd70fa7bb7f.rlib",
+        "--extern",
+        "serde_with=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_with-4f5948924af3d759.rlib",
+        "--extern",
+        "phf_generator_010=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-e5e996768a95008d.rlib",
+        "--extern",
+        "phf_shared_010=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-7199f14b87fe50aa.rlib",
+        "--extern",
+        "phf_generator_011=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-92f6af5f1bd2be0c.rlib",
+        "--extern",
+        "phf_shared_011=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-5ed7de5924fc51dd.rlib",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\proc-macro2-b2527bb903344312",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\quote-8ca5edfe62759ddc",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\serde_core-6ed1ab462fa299d4",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\zerocopy-1ee21eda3dfbdf47",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\icu_normalizer_data-58ee1ae79e7d69b8",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\icu_properties_data-f8cdca36a648533c",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\thiserror-8d39d442736a213b",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\parking_lot_core-7b8bb14a53695f11",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\zmij-4c66330c8a0493e6",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\serde_core-7b1cbda0bd7f3043",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\serde-1a25b9a2df83f4e6",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\getrandom-e1f18dbdc453be04",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\typeid-8d013c062f015b9d",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\thiserror-b2fada3173e58cc4",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\getrandom-eb2538f4c9fd4287",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\syn-f2de2ee296595024",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\erased-serde-5b84a2429a224054",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\proc-macro-hack-e574e2be56eaa802",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\anyhow-b2f10f8438db686e",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\serde_json-dcab108366ddb3c0",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\web_atoms-f618ee1285d59465",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\cssparser-27a901f5d13d35d3",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\selectors-4c059de615174bf7",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\selectors-246f5e7e099d4f9d",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\indexmap-2fe6acd6106bdfb7",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\camino-b0e6d0ac4f8f0c10",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\windows_x86_64_msvc-f97ad180560de3c9",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\schemars-556392506e8bf8cc",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\libc-8938e8f63c00afb0",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\serde-093519beed1f3d99",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\vswhom-sys-bc10a9551c3e1202",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\crc32fast-bbdd02aa4987a5ec",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\typenum-9ff1a824b193eed5",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\generic-array-3293b4a4d03e9f0e",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\serde_json-fcd522d899fa9dd4",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\crossbeam-utils-7ab5929c69c13c70",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\webview2-com-sys-a70758a1c54b54ae",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\cookie-59d4fb60997dd7d2",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\getrandom-4d2d84ff78471e92",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\wry-bb0517499ff980b3",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-runtime-597fa93958b8623f",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-runtime-wry-00e6e807eb0980af",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\ring-af718f075d2523fa",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\windows_x86_64_msvc-d09b2508fbb498e7",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\httparse-1f19572e0359fc75",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\rustls-bab20694dc753e14",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\num-traits-f4cc8a3407330149",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\rfd-9447e5b6015251e2",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\markup5ever-429bd76006b21f21",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-b98100b44ce7f93d",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-clipboard-manager-9c273ba63a3758ee",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-dialog-35e277f0e5442e34",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-updater-e55ea93fed5572f9",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-notification-bd61e556da3bf342",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-deep-link-3626a0b740d8a5d0",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-opener-78a05da85519cb63",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\tauri-plugin-fs-1f77d9ac68abef26",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\opencorvus-overlay-52b516eb4ccfc84a",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release",
+        "-L",
+        "native=C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\windows_x86_64_msvc-0.52.6\\lib",
+        "-L",
+        "native=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\vswhom-sys-02b5c610457783ff\\out",
+        "-L",
+        "native=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\webview2-com-sys-4e794dd509bbef70\\out\\x64",
+        "-L",
+        "native=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\ring-613456f2252fcd23\\out",
+        "-L",
+        "native=C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\windows_x86_64_msvc-0.53.1\\lib",
+        "-L",
+        "native=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\build\\opencorvus-overlay-9820880387e611c4\\out",
+        "-o",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-dependency-remediation\\stage3-native-02\\rust-dependency-contract.exe"
+      ],
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri",
+      "exitCode": 1
+    }
+  ],
+  "qualification": "Current Windows native Tauri serializer/PHF consumers plus separately labelled repaired KeyValueMap API; no GUI or model execution.",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-pc-windows-msvc\nrelease: 1.98.1\nLLVM version: 22.1.8",
+  "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)",
+  "host": "x86_64-pc-windows-msvc",
+  "targetDirectory": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target",
+  "selectedGraph": [
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#darling@0.23.0",
+      "dependencies": [
+        "registry+https://github.com/rust-lang/crates.io-index#darling_core@0.23.0",
+        "registry+https://github.com/rust-lang/crates.io-index#darling_macro@0.23.0"
+      ],
+      "deps": [
+        {
+          "name": "darling_core",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#darling_core@0.23.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "darling_macro",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#darling_macro@0.23.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        }
+      ],
+      "features": [
+        "default",
+        "suggestions"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#darling_core@0.23.0",
+      "dependencies": [
+        "registry+https://github.com/rust-lang/crates.io-index#ident_case@1.0.1",
+        "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.106",
+        "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",
+        "registry+https://github.com/rust-lang/crates.io-index#strsim@0.11.1",
+        "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.117"
+      ],
+      "deps": [
+        {
+          "name": "ident_case",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#ident_case@1.0.1",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "proc_macro2",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.106",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "quote",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "strsim",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#strsim@0.11.1",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "syn",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.117",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        }
+      ],
+      "features": [
+        "strsim",
+        "suggestions"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#darling_macro@0.23.0",
+      "dependencies": [
+        "registry+https://github.com/rust-lang/crates.io-index#darling_core@0.23.0",
+        "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",
+        "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.117"
+      ],
+      "deps": [
+        {
+          "name": "darling_core",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#darling_core@0.23.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "quote",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "syn",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.117",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        }
+      ],
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#rand@0.8.6",
+      "dependencies": [
+        "registry+https://github.com/rust-lang/crates.io-index#rand_chacha@0.3.1",
+        "registry+https://github.com/rust-lang/crates.io-index#rand_core@0.6.4"
+      ],
+      "deps": [
+        {
+          "name": "rand_chacha",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#rand_chacha@0.3.1",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "rand_core",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#rand_core@0.6.4",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        }
+      ],
+      "features": [
+        "alloc",
+        "default",
+        "getrandom",
+        "libc",
+        "rand_chacha",
+        "small_rng",
+        "std",
+        "std_rng"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_with@3.21.0",
+      "dependencies": [
+        "registry+https://github.com/rust-lang/crates.io-index#base64@0.22.1",
+        "registry+https://github.com/rust-lang/crates.io-index#bs58@0.5.1",
+        "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
+        "registry+https://github.com/rust-lang/crates.io-index#hex@0.4.3",
+        "registry+https://github.com/rust-lang/crates.io-index#indexmap@1.9.3",
+        "registry+https://github.com/rust-lang/crates.io-index#indexmap@2.13.0",
+        "registry+https://github.com/rust-lang/crates.io-index#schemars@0.9.0",
+        "registry+https://github.com/rust-lang/crates.io-index#schemars@1.2.1",
+        "registry+https://github.com/rust-lang/crates.io-index#serde_core@1.0.228",
+        "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.149",
+        "registry+https://github.com/rust-lang/crates.io-index#serde_with_macros@3.21.0",
+        "registry+https://github.com/rust-lang/crates.io-index#time@0.3.47"
+      ],
+      "deps": [
+        {
+          "name": "base64",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#base64@0.22.1",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "bs58",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#bs58@0.5.1",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "chrono_0_4",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "hex",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#hex@0.4.3",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "indexmap_1",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#indexmap@1.9.3",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "indexmap_2",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#indexmap@2.13.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "schemars_0_9",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#schemars@0.9.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "schemars_1",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#schemars@1.2.1",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "serde_core",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#serde_core@1.0.228",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "serde_json",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.149",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "serde_with_macros",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#serde_with_macros@3.21.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "time_0_3",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#time@0.3.47",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        }
+      ],
+      "features": [
+        "alloc",
+        "default",
+        "macros",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_with_macros@3.21.0",
+      "dependencies": [
+        "registry+https://github.com/rust-lang/crates.io-index#darling@0.23.0",
+        "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.106",
+        "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",
+        "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.117"
+      ],
+      "deps": [
+        {
+          "name": "darling",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#darling@0.23.0",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "proc_macro2",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.106",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "quote",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        },
+        {
+          "name": "syn",
+          "pkg": "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.117",
+          "dep_kinds": [
+            {
+              "kind": null,
+              "target": null
+            }
+          ]
+        }
+      ],
+      "features": []
+    }
+  ],
+  "residuals": [
+    {
+      "name": "rand",
+      "version": "0.7.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "windowsResolved": true
+    },
+    {
+      "name": "glib",
+      "version": "0.18.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "windowsResolved": false
+    }
+  ],
+  "profiles": {
+    "runtime": {
+      "opt_level": "s",
+      "debuginfo": 0,
+      "debug_assertions": false,
+      "overflow_checks": false,
+      "test": false
+    },
+    "host": {
+      "opt_level": "0",
+      "debuginfo": 0,
+      "debug_assertions": false,
+      "overflow_checks": false,
+      "test": false
+    }
+  },
+  "bindings": [
+    {
+      "alias": "tauri_utils",
+      "name": "tauri-utils",
+      "version": "2.9.1",
+      "role": "runtime",
+      "features": [
+        "brotli",
+        "compression",
+        "resources",
+        "walkdir"
+      ],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#tauri-utils@2.9.1",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\tauri-utils-2.9.1\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "tauri_utils",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\tauri-utils-2.9.1\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "brotli",
+          "compression",
+          "resources",
+          "walkdir"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libtauri_utils-ffb25b4398e66312.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libtauri_utils-ffb25b4398e66312.rmeta"
+        ],
+        "executable": null,
+        "fresh": false
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libtauri_utils-ffb25b4398e66312.rlib"
+    },
+    {
+      "alias": "serde",
+      "name": "serde",
+      "version": "1.0.228",
+      "role": "runtime",
+      "features": [
+        "alloc",
+        "default",
+        "derive",
+        "rc",
+        "serde_derive",
+        "std"
+      ],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde-1.0.228\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "serde",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde-1.0.228\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "alloc",
+          "default",
+          "derive",
+          "rc",
+          "serde_derive",
+          "std"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde-c9aeedbe2eff744b.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde-c9aeedbe2eff744b.rmeta"
+        ],
+        "executable": null,
+        "fresh": true
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde-c9aeedbe2eff744b.rlib"
+    },
+    {
+      "alias": "serde_json",
+      "name": "serde_json",
+      "version": "1.0.149",
+      "role": "runtime",
+      "features": [
+        "alloc",
+        "default",
+        "raw_value",
+        "std"
+      ],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.149",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_json-1.0.149\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "serde_json",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_json-1.0.149\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "alloc",
+          "default",
+          "raw_value",
+          "std"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_json-051c5fd70fa7bb7f.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_json-051c5fd70fa7bb7f.rmeta"
+        ],
+        "executable": null,
+        "fresh": true
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_json-051c5fd70fa7bb7f.rlib"
+    },
+    {
+      "alias": "serde_with",
+      "name": "serde_with",
+      "version": "3.21.0",
+      "role": "runtime",
+      "features": [
+        "alloc",
+        "default",
+        "macros",
+        "std"
+      ],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#serde_with@3.21.0",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_with-3.21.0\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "serde_with",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_with-3.21.0\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "alloc",
+          "default",
+          "macros",
+          "std"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_with-4f5948924af3d759.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_with-4f5948924af3d759.rmeta"
+        ],
+        "executable": null,
+        "fresh": false
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libserde_with-4f5948924af3d759.rlib"
+    },
+    {
+      "alias": "phf_generator_010",
+      "name": "phf_generator",
+      "version": "0.10.0",
+      "role": "host",
+      "features": [],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#phf_generator@0.10.0",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_generator-0.10.0\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "phf_generator",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_generator-0.10.0\\src\\lib.rs",
+          "edition": "2018",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-e5e996768a95008d.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-e5e996768a95008d.rmeta"
+        ],
+        "executable": null,
+        "fresh": false
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-e5e996768a95008d.rlib"
+    },
+    {
+      "alias": "phf_shared_010",
+      "name": "phf_shared",
+      "version": "0.10.0",
+      "role": "host",
+      "features": [
+        "std"
+      ],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#phf_shared@0.10.0",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_shared-0.10.0\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "phf_shared",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_shared-0.10.0\\src\\lib.rs",
+          "edition": "2018",
+          "doc": true,
+          "doctest": true,
+          "test": false
+        },
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "std"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-7199f14b87fe50aa.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-7199f14b87fe50aa.rmeta"
+        ],
+        "executable": null,
+        "fresh": true
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-7199f14b87fe50aa.rlib"
+    },
+    {
+      "alias": "phf_generator_011",
+      "name": "phf_generator",
+      "version": "0.11.3",
+      "role": "host",
+      "features": [],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#phf_generator@0.11.3",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_generator-0.11.3\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "phf_generator",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_generator-0.11.3\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": true
+        },
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-92f6af5f1bd2be0c.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-92f6af5f1bd2be0c.rmeta"
+        ],
+        "executable": null,
+        "fresh": false
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_generator-92f6af5f1bd2be0c.rlib"
+    },
+    {
+      "alias": "phf_shared_011",
+      "name": "phf_shared",
+      "version": "0.11.3",
+      "role": "host",
+      "features": [
+        "default",
+        "std"
+      ],
+      "artifact": {
+        "reason": "compiler-artifact",
+        "package_id": "registry+https://github.com/rust-lang/crates.io-index#phf_shared@0.11.3",
+        "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_shared-0.11.3\\Cargo.toml",
+        "target": {
+          "kind": [
+            "lib"
+          ],
+          "crate_types": [
+            "lib"
+          ],
+          "name": "phf_shared",
+          "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\phf_shared-0.11.3\\src\\lib.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": true,
+          "test": false
+        },
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "std"
+        ],
+        "filenames": [
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-5ed7de5924fc51dd.rlib",
+          "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-5ed7de5924fc51dd.rmeta"
+        ],
+        "executable": null,
+        "fresh": true
+      },
+      "library": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\libphf_shared-5ed7de5924fc51dd.rlib"
+    }
+  ],
+  "macro": {
+    "reason": "compiler-artifact",
+    "package_id": "registry+https://github.com/rust-lang/crates.io-index#serde_with_macros@3.21.0",
+    "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_with_macros-3.21.0\\Cargo.toml",
+    "target": {
+      "kind": [
+        "proc-macro"
+      ],
+      "crate_types": [
+        "proc-macro"
+      ],
+      "name": "serde_with_macros",
+      "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_with_macros-3.21.0\\src\\lib.rs",
+      "edition": "2021",
+      "doc": true,
+      "doctest": true,
+      "test": true
+    },
+    "profile": {
+      "opt_level": "0",
+      "debuginfo": 0,
+      "debug_assertions": false,
+      "overflow_checks": false,
+      "test": false
+    },
+    "features": [],
+    "filenames": [
+      "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\serde_with_macros-7a30682673b8c51d.dll",
+      "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\serde_with_macros-7a30682673b8c51d.dll.lib",
+      "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\serde_with_macros-7a30682673b8c51d.dll.exp",
+      "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\release\\deps\\serde_with_macros-7a30682673b8c51d.pdb"
+    ],
+    "executable": null,
+    "fresh": false
+  },
+  "error": {
+    "name": "AssertionError",
+    "message": "AssertionError [ERR_ASSERTION]: compile-contract failed; exact stdout/stderr retained in D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-dependency-remediation\\stage3-native-02\n\n1 !== 0\n"
+  },
+  "completedAt": "2026-10-05T08:08:48.683Z"
+}

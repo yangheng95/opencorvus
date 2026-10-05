@@ -1,0 +1,44 @@
+{
+  "project": {
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\d6189674-f9a5-430d-a2f0-ddced70ab700",
+    "project": {
+      "id": "prj_hxHF8mJZxxERGqqYLFL9",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\d6189674-f9a5-430d-a2f0-ddced70ab700",
+      "time": {
+        "created": 1791185569419,
+        "updated": 1791185569419
+      },
+      "sandboxes": []
+    }
+  },
+  "processes": [
+    {
+      "ProcessId": 63584,
+      "ParentProcessId": 44884,
+      "CreationDate": "2026-10-05T15:31:22.361063+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+    },
+    {
+      "ProcessId": 74748,
+      "ParentProcessId": 18556,
+      "CreationDate": "2026-10-05T15:33:43.6163+08:00",
+      "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" D:/myhexin-local/opencorvus/.tmp-product-experience/http-correlation-20261005/observer.cjs"
+    }
+  ],
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "launcher": 58676,
+  "marker": "owned-correlation-obstacle-20261005",
+  "proxy": 74748,
+  "initialApproval": "Combined command rejected blocked by policy; safer sequential receipt inspection and exact literal-path fixture plus standalone observer start succeeded",
+  "listener": 63584,
+  "obstacle": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\projects\\2026\\10\\05\\d6189674-f9a5-430d-a2f0-ddced70ab700\\.opencorvus\\.r\\project\\attachments",
+  "bundle": "main-xDfjxawi.js"
+}
