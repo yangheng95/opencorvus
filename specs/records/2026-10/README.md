@@ -1,5 +1,11 @@
 # 2026-10 Records
 
+- [Settings search preserves the active authoring page](2026-10-05-settings-search-authoring-lifetime.md)
+
+- [Binary API error projection](2026-10-05-binary-api-error-projection.md)
+
+- [Connection recovery entry](2026-10-05-connection-recovery-entry.md)
+
 - [HTTP exception response projection and authentication challenge](2026-10-05-http-exception-response-projection.md)
 - [Timeline selection theme](2026-10-05-timeline-selection-theme.md)
 

@@ -24,23 +24,13 @@ function saveBytesAsDownload(bytes: Uint8Array, filename: string): void {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-function decodeBinaryErrorBody(body: Uint8Array): unknown {
-  const text = new TextDecoder().decode(body).trim()
-  if (!text) return body
-  try {
-    return JSON.parse(text)
-  } catch {
-    return text
-  }
-}
-
 export async function downloadZipArchive(input: { path: string }): Promise<boolean> {
   const response = await apiRequest<Uint8Array>(input.path, {
     responseKind: "binary",
     timeoutMilliseconds: ZIP_ARCHIVE_DOWNLOAD_TIMEOUT_MILLISECONDS,
   })
   if (!response.ok) {
-    throw new ApiError(response.status, input.path, decodeBinaryErrorBody(response.body), response.headers)
+    throw new ApiError(response.status, input.path, response.body, response.headers)
   }
   const filename = contentDispositionFilename(
     response.headers["content-disposition"] || response.headers["Content-Disposition"],

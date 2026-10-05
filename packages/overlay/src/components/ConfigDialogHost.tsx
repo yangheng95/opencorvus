@@ -322,22 +322,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       `${t(tab.labelKey)} ${tab.id} ${(tab.searchTerms ?? []).join(" ")}`.toLowerCase().includes(query),
     )
   })
-  const visibleConfigTabIDs = createMemo(() => new Set(visibleConfigTabs().map((tab) => tab.id)))
-  const visibleConfigGroups = createMemo(() => {
-    return CONFIG_NAV_GROUPS.map((group) => ({
-      ...group,
-      tabs: group.tabs.filter((tab) => visibleConfigTabIDs().has(tab.id)),
-    })).filter((group) => group.tabs.length > 0)
-  })
-  const effectiveActiveTab = createMemo<ConfigDialogTab | null>(() => {
-    const visible = visibleConfigTabs()
-    const active = activeConfigTab()
-    return visible.some((tab) => tab.id === active) ? active : (visible[0]?.id ?? null)
-  })
-  const activeConfigTitle = createMemo(() => {
-    const active = effectiveActiveTab()
-    return active ? t(CONFIG_TAB_BY_ID.get(active)!.labelKey) : t("config.title")
-  })
+  const visibleConfigTabIDs = createMemo(() => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]))
+  const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
   const closeSettings = closeConfigDialog
   let page: HTMLElement | undefined
   let returnFocus: HTMLElement | undefined
@@ -553,7 +539,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         }}
       >
         <Tabs
-          value={effectiveActiveTab() ?? activeConfigTab()}
+          value={activeConfigTab()}
           onValueChange={switchConfigTab}
           orientation="vertical"
           class="config-dialog-layout"
@@ -581,12 +567,17 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               onClear={() => setSettingsSearch("")}
               clearDataUI="config-search-clear"
             />
+            <Show when={normalizedSettingsSearch() && visibleConfigTabs().length === 0}>
+              <div role="status">
+                <SettingsEmpty>{t("settings.search_no_results")}</SettingsEmpty>
+              </div>
+            </Show>
             <TabList size="md" tone="neutral" data-ui="settings-dialog-tablist">
-              <For each={visibleConfigGroups()}>
+              <For each={CONFIG_NAV_GROUPS}>
                 {(group) => (
-                  <>
+                  <Show when={group.tabs.some((tab) => visibleConfigTabIDs().has(tab.id))}>
                     <div class="config-nav-group-title oc-section-heading">{t(group.labelKey)}</div>
-                    <For each={group.tabs}>
+                    <For each={group.tabs.filter((tab) => visibleConfigTabIDs().has(tab.id))}>
                       {(tab) => (
                         <Tab
                           value={tab.id}
@@ -604,7 +595,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                         </Tab>
                       )}
                     </For>
-                  </>
+                  </Show>
                 )}
               </For>
               <For each={PRODUCT_INFO_TABS.filter((tab) => visibleConfigTabIDs().has(tab.id))}>
@@ -641,10 +632,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
           />
           <div class="config-content" id="configContent">
             <h1 class="config-page-title">{activeConfigTitle()}</h1>
-            <Show
-              when={effectiveActiveTab()}
-              fallback={<SettingsEmpty>{t("settings.search_no_results")}</SettingsEmpty>}
-            >
+            <Show when={activeConfigTab()}>
               {(active) => (
                 <TabPanel
                   value={active()}

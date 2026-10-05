@@ -1,0 +1,32 @@
+{
+  "launcher": 76652,
+  "listener": {
+    "ProcessId": 72740,
+    "ParentProcessId": 31516,
+    "CreationDate": "2026-10-05T17:01:25.498283+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "parent": {
+    "ProcessId": 31516,
+    "ParentProcessId": 76652,
+    "CreationDate": "2026-10-05T17:01:25.457643+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "uiAsset": "main-CtHsra8c.js",
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project",
+  "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui",
+  "stdout": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui/settings-shared.stdout.log",
+  "stderr": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui/settings-shared.stderr.log",
+  "authExists": false,
+  "modelsExists": false,
+  "handoff": "Retain until root authorizes cleanup; root new IAB + functional read-only HTTP"
+}

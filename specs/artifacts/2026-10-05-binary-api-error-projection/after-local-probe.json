@@ -1,0 +1,284 @@
+{
+  "qualification": "local actual module + fixture Response only; not network/visual E2E",
+  "observations": [
+    {
+      "input": {
+        "name": "named-json",
+        "status": 404,
+        "contentType": "application/json",
+        "text": "{\"name\":\"NotFoundError\",\"data\":{\"message\":\"原产物不可用\"}}"
+      },
+      "transport": {
+        "status": 404,
+        "bodyType": "Uint8Array",
+        "bytes": [
+          123,
+          34,
+          110,
+          97,
+          109,
+          101,
+          34,
+          58,
+          34,
+          78,
+          111,
+          116,
+          70,
+          111,
+          117,
+          110,
+          100,
+          69,
+          114,
+          114,
+          111,
+          114,
+          34,
+          44,
+          34,
+          100,
+          97,
+          116,
+          97,
+          34,
+          58,
+          123,
+          34,
+          109,
+          101,
+          115,
+          115,
+          97,
+          103,
+          101,
+          34,
+          58,
+          34,
+          229,
+          142,
+          159,
+          228,
+          186,
+          167,
+          231,
+          137,
+          169,
+          228,
+          184,
+          141,
+          229,
+          143,
+          175,
+          231,
+          148,
+          168,
+          34,
+          125,
+          125
+        ]
+      },
+      "direct": {
+        "message": "API 404 Conversation Artifact read: 原产物不可用",
+        "summary": "API 404: 原产物不可用",
+        "requestID": "local-fixture-response-1",
+        "body": {
+          "name": "NotFoundError",
+          "data": {
+            "message": "原产物不可用"
+          }
+        },
+        "details": "HTTP 404 Conversation Artifact read\n\nRequest ID: local-fixture-response-1\n\nApiError: local fixture stack\n\nresponse body:\n{\n  \"name\": \"NotFoundError\",\n  \"data\": {\n    \"message\": \"原产物不可用\"\n  }\n}"
+      },
+      "archive": {
+        "message": "API 404 global/health: 原产物不可用",
+        "summary": "API 404: 原产物不可用",
+        "body": {
+          "name": "NotFoundError",
+          "data": {
+            "message": "原产物不可用"
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "basic-auth-actual-wire-shape",
+        "status": 401,
+        "contentType": "application/octet-stream",
+        "text": "Unauthorized"
+      },
+      "transport": {
+        "status": 401,
+        "bodyType": "Uint8Array",
+        "bytes": [
+          85,
+          110,
+          97,
+          117,
+          116,
+          104,
+          111,
+          114,
+          105,
+          122,
+          101,
+          100
+        ]
+      },
+      "direct": {
+        "message": "API 401 Conversation Artifact read: Unauthorized",
+        "summary": "API 401: Unauthorized",
+        "requestID": "local-fixture-response-1",
+        "body": "Unauthorized",
+        "details": "HTTP 401 Conversation Artifact read\n\nRequest ID: local-fixture-response-1\n\nApiError: local fixture stack\n\nresponse body:\nUnauthorized"
+      },
+      "archive": {
+        "message": "API 401 global/health: Unauthorized",
+        "summary": "API 401: Unauthorized",
+        "body": "Unauthorized"
+      }
+    },
+    {
+      "input": {
+        "name": "problem-json",
+        "status": 429,
+        "contentType": "application/problem+json",
+        "text": "{\"detail\":\"Read limit reached\"}"
+      },
+      "transport": {
+        "status": 429,
+        "bodyType": "Uint8Array",
+        "bytes": [
+          123,
+          34,
+          100,
+          101,
+          116,
+          97,
+          105,
+          108,
+          34,
+          58,
+          34,
+          82,
+          101,
+          97,
+          100,
+          32,
+          108,
+          105,
+          109,
+          105,
+          116,
+          32,
+          114,
+          101,
+          97,
+          99,
+          104,
+          101,
+          100,
+          34,
+          125
+        ]
+      },
+      "direct": {
+        "message": "API 429 Conversation Artifact read: Read limit reached",
+        "summary": "API 429: Read limit reached",
+        "requestID": "local-fixture-response-1",
+        "body": {
+          "detail": "Read limit reached"
+        },
+        "details": "HTTP 429 Conversation Artifact read\n\nRequest ID: local-fixture-response-1\n\nApiError: local fixture stack\n\nresponse body:\n{\n  \"detail\": \"Read limit reached\"\n}"
+      },
+      "archive": {
+        "message": "API 429 global/health: Read limit reached",
+        "summary": "API 429: Read limit reached",
+        "body": {
+          "detail": "Read limit reached"
+        }
+      }
+    },
+    {
+      "input": {
+        "name": "malformed-json",
+        "status": 502,
+        "contentType": "application/json",
+        "text": "upstream response unavailable"
+      },
+      "transport": {
+        "status": 502,
+        "bodyType": "Uint8Array",
+        "bytes": [
+          117,
+          112,
+          115,
+          116,
+          114,
+          101,
+          97,
+          109,
+          32,
+          114,
+          101,
+          115,
+          112,
+          111,
+          110,
+          115,
+          101,
+          32,
+          117,
+          110,
+          97,
+          118,
+          97,
+          105,
+          108,
+          97,
+          98,
+          108,
+          101
+        ]
+      },
+      "direct": {
+        "message": "API 502 Conversation Artifact read: upstream response unavailable",
+        "summary": "API 502: upstream response unavailable",
+        "requestID": "local-fixture-response-1",
+        "body": "upstream response unavailable",
+        "details": "HTTP 502 Conversation Artifact read\n\nRequest ID: local-fixture-response-1\n\nApiError: local fixture stack\n\nresponse body:\nupstream response unavailable"
+      },
+      "archive": {
+        "message": "API 502 global/health: upstream response unavailable",
+        "summary": "API 502: upstream response unavailable",
+        "body": "upstream response unavailable"
+      }
+    },
+    {
+      "input": {
+        "name": "empty",
+        "status": 503,
+        "contentType": "text/plain",
+        "text": ""
+      },
+      "transport": {
+        "status": 503,
+        "bodyType": "Uint8Array",
+        "bytes": []
+      },
+      "direct": {
+        "message": "API 503 Conversation Artifact read",
+        "summary": "API 503",
+        "requestID": "local-fixture-response-1",
+        "body": "",
+        "details": "HTTP 503 Conversation Artifact read\n\nRequest ID: local-fixture-response-1\n\nApiError: local fixture stack"
+      },
+      "archive": {
+        "message": "API 503 global/health",
+        "summary": "API 503",
+        "body": ""
+      }
+    }
+  ]
+}

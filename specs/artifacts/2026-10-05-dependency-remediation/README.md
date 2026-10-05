@@ -1,5 +1,7 @@
 # Dependency remediation evidence
 
+- [Stage4 standard RustSec audit](stage4-rustsec-audit/README.md): owned official tool installation and full audit of both physical Cargo locks, with every vulnerability/warning and original exit result retained. This is investigation, not an authorized dependency repair.
+
 - [Exact open Dependabot alerts](dependency-github-alerts-before.json): seven repository alerts read through the configured GitHub CLI; package, dependency relationship, affected range and official advisory facts. No credential contents were read or captured.
 - [Actual Bun audit baseline](dependency-audit-before.json): exit code 1, original stderr and all 39 advisory entries across 12 packages (18 high, 17 moderate, 4 low). This is a retained failure, not a passing acceptance report.
 - [Official advisory details](dependency-advisory-details.json): each npm advisory's description, affected/fixed ranges and references read from GitHub's advisory API. A null first patched version remains unresolved rather than an invented upgrade target.

@@ -1,0 +1,412 @@
+[
+  {
+    "url": "https://index.crates.io/as/yn/async-broadcast",
+    "retrievedAt": "2026-10-05",
+    "version": {
+      "name": "async-broadcast",
+      "vers": "0.7.2",
+      "deps": [
+        {
+          "name": "criterion",
+          "req": "^0.3.5",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "doc-comment",
+          "req": "^0.3.3",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "easy-parallel",
+          "req": "^3.2.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "event-listener",
+          "req": "^5.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "event-listener-strategy",
+          "req": "^0.5.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "futures-core",
+          "req": "^0.3.21",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "futures-lite",
+          "req": "^1.11.3",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "futures-util",
+          "req": "^0.3.21",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "pin-project-lite",
+          "req": "^0.2.13",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        }
+      ],
+      "cksum": "435a87a52755b8f27fcf321ac4f04b2802e337c8c4872923137471ec39c37532",
+      "features": {},
+      "yanked": false,
+      "rust_version": "1.60",
+      "pubtime": "2024-12-23T21:10:23Z"
+    }
+  },
+  {
+    "url": "https://index.crates.io/as/yn/async-lock",
+    "retrievedAt": "2026-10-05",
+    "version": {
+      "name": "async-lock",
+      "vers": "3.4.2",
+      "deps": [
+        {
+          "name": "event-listener",
+          "req": "^5.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": false,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "event-listener-strategy",
+          "req": "^0.5.0",
+          "features": [],
+          "optional": false,
+          "default_features": false,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "fastrand",
+          "req": "^2.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "flume",
+          "req": "^0.12.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "futures-lite",
+          "req": "^2.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "loom",
+          "req": "^0.7",
+          "features": [],
+          "optional": true,
+          "default_features": true,
+          "target": "cfg(loom)",
+          "kind": "normal"
+        },
+        {
+          "name": "pin-project-lite",
+          "req": "^0.2.11",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "waker-fn",
+          "req": "^1.1.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "wasm-bindgen-test",
+          "req": "^0.3",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(target_family = \"wasm\")",
+          "kind": "dev"
+        }
+      ],
+      "cksum": "290f7f2596bd5b78a9fec8088ccd89180d7f9f55b94b0576823bbbdc72ee8311",
+      "features": {
+        "default": [
+          "std"
+        ],
+        "std": [
+          "event-listener/std",
+          "event-listener-strategy/std"
+        ]
+      },
+      "features2": {
+        "loom": [
+          "event-listener/loom",
+          "dep:loom"
+        ]
+      },
+      "yanked": false,
+      "rust_version": "1.85",
+      "pubtime": "2025-12-21T16:24:46Z",
+      "v": 2
+    }
+  },
+  {
+    "url": "https://index.crates.io/as/yn/async-process",
+    "retrievedAt": "2026-10-05",
+    "version": {
+      "name": "async-process",
+      "vers": "2.5.0",
+      "deps": [
+        {
+          "name": "async-channel",
+          "req": "^2.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(any(windows, target_os = \"linux\"))",
+          "kind": "normal"
+        },
+        {
+          "name": "async-executor",
+          "req": "^1.5.1",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "async-io",
+          "req": "^2.3.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "async-lock",
+          "req": "^3.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(unix)",
+          "kind": "normal"
+        },
+        {
+          "name": "async-signal",
+          "req": "^0.2.3",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(unix)",
+          "kind": "normal"
+        },
+        {
+          "name": "async-task",
+          "req": "^4.7.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(any(windows, target_os = \"linux\"))",
+          "kind": "normal"
+        },
+        {
+          "name": "blocking",
+          "req": "^1.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(windows)",
+          "kind": "normal"
+        },
+        {
+          "name": "cfg-if",
+          "req": "^1.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "event-listener",
+          "req": "^5.1.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "futures-lite",
+          "req": "^2.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "rustix",
+          "req": "^1.0",
+          "features": [
+            "std",
+            "fs",
+            "process"
+          ],
+          "optional": false,
+          "default_features": false,
+          "target": "cfg(unix)",
+          "kind": "normal"
+        },
+        {
+          "name": "tracing",
+          "req": "^0.1.40",
+          "features": [],
+          "optional": true,
+          "default_features": false,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "windows-sys",
+          "req": "^0.61",
+          "features": [
+            "Win32_Foundation",
+            "Win32_System_Threading"
+          ],
+          "optional": false,
+          "default_features": false,
+          "target": "cfg(windows)",
+          "kind": "dev"
+        }
+      ],
+      "cksum": "fc50921ec0055cdd8a16de48773bfeec5c972598674347252c0399676be7da75",
+      "features": {},
+      "yanked": false,
+      "rust_version": "1.71",
+      "pubtime": "2025-09-14T14:11:17Z"
+    }
+  },
+  {
+    "url": "https://index.crates.io/ev/en/event-listener-strategy",
+    "retrievedAt": "2026-10-05",
+    "version": {
+      "name": "event-listener-strategy",
+      "vers": "0.5.4",
+      "deps": [
+        {
+          "name": "event-listener",
+          "req": "^5.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": false,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "futures-lite",
+          "req": "^2.0.0",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "dev"
+        },
+        {
+          "name": "pin-project-lite",
+          "req": "^0.2.12",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": null,
+          "kind": "normal"
+        },
+        {
+          "name": "wasm-bindgen-test",
+          "req": "^0.3.37",
+          "features": [],
+          "optional": false,
+          "default_features": true,
+          "target": "cfg(target_family = \"wasm\")",
+          "kind": "dev"
+        }
+      ],
+      "cksum": "8be9f3dfaaffdae2972880079a491a1a8bb7cbed0b8dd7a347f668b4150a3b93",
+      "features": {
+        "default": [
+          "std"
+        ],
+        "loom": [
+          "event-listener/loom"
+        ],
+        "portable-atomic": [
+          "event-listener/portable-atomic"
+        ],
+        "std": [
+          "event-listener/std"
+        ]
+      },
+      "yanked": false,
+      "rust_version": "1.60",
+      "pubtime": "2025-03-27T17:31:33Z"
+    }
+  }
+]

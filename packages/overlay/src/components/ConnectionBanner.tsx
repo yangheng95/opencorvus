@@ -78,7 +78,7 @@ export function ConnectionBanner() {
           variant="ghost"
           size="sm"
           tone="neutral"
-          onClick={() => openConfigDialog("general")}
+          onClick={() => openConfigDialog("network")}
           title={t("titlebar.connection_diagnostics")}
           data-ui="connection-banner-setup"
           data-testid="connection-banner-setup"

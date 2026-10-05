@@ -1,5 +1,14 @@
 # Specs Storage Index
 
+- [Settings search preserves the active authoring page](records/2026-10/2026-10-05-settings-search-authoring-lifetime.md)
+- [Settings search authoring evidence](artifacts/2026-10-05-settings-search-authoring-lifetime/README.md)
+
+- [Binary API error projection](records/2026-10/2026-10-05-binary-api-error-projection.md)
+- [Binary API error evidence](artifacts/2026-10-05-binary-api-error-projection/README.md)
+
+- [Connection recovery entry](records/2026-10/2026-10-05-connection-recovery-entry.md)
+- [Connection recovery evidence](artifacts/2026-10-05-connection-recovery-entry/README.md)
+
 - [HTTP exception response projection and authentication challenge](records/2026-10/2026-10-05-http-exception-response-projection.md)
 - [HTTP exception response evidence](artifacts/2026-10-05-http-exception-response-projection/README.md)
 - [Timeline selection theme](records/2026-10/2026-10-05-timeline-selection-theme.md)

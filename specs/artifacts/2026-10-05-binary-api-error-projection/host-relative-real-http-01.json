@@ -1,0 +1,31 @@
+{
+  "qualification": "actual owned host-relative resource error passed",
+  "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project",
+  "raw": "/file/content?path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+  "wire": {
+    "url": "http://127.0.0.1:17883/file/content?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject&path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+    "method": "GET",
+    "status": 404,
+    "headers": {
+      "content-type": "application/json",
+      "x-opencorvus-request-id": "264887d6-06a1-48c1-9ebe-5d12d5b64eb6"
+    },
+    "text": "{\"name\":\"FileNotFoundError\",\"data\":{\"path\":\"missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png\",\"message\":\"File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png\"}}"
+  },
+  "error": {
+    "name": "ApiError",
+    "status": 404,
+    "path": "/file/content?path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+    "body": {
+      "name": "FileNotFoundError",
+      "data": {
+        "path": "missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+        "message": "File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png"
+      }
+    },
+    "summary": "API 404: File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+    "message": "API 404 /file/content?path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject: File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+    "requestID": "264887d6-06a1-48c1-9ebe-5d12d5b64eb6",
+    "details": "HTTP 404 /file/content?path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject\n\nRequest ID: 264887d6-06a1-48c1-9ebe-5d12d5b64eb6\n\nApiError: API 404 /file/content?path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject: File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\api.ts:492:30)\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"name\": \"FileNotFoundError\",\n  \"data\": {\n    \"path\": \"missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png\",\n    \"message\": \"File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png\"\n  }\n}"
+  }
+}

@@ -1,0 +1,42 @@
+bun test v1.3.14 (0d9b296a)
+
+test\api-error.test.ts:
+(pass) apiJson + ApiError > materializes one binary named UTF8 JSON body for every diagnostic [2.12ms]
+(pass) apiJson + ApiError > materializes one binary message JSON body for every diagnostic [0.06ms]
+(pass) apiJson + ApiError > materializes one binary problem JSON body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary plain authentication response body for every diagnostic [0.05ms]
+(pass) apiJson + ApiError > materializes one binary malformed JSON text body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary empty bytes body for every diagnostic [0.02ms]
+(pass) apiJson + ApiError > preserves the actual x-opencorvus-request-id response correlation in complete diagnostics [1.11ms]
+(pass) apiJson + ApiError > preserves the actual X-OpenCorvus-Request-ID response correlation in complete diagnostics [0.08ms]
+(pass) apiJson + ApiError > binary archive failure preserves decoded public body and its response correlation [0.37ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 500 diagnostic [0.05ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 400 diagnostic [0.01ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 502 diagnostic
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 503 diagnostic
+(pass) apiJson + ApiError > applies an explicit empty Basic Auth username [0.09ms]
+(pass) apiJson + ApiError > 2xx returns the parsed body unchanged [0.13ms]
+(pass) apiJson + ApiError > 4xx throws ApiError carrying status / path / body / readable message [0.20ms]
+(pass) apiJson + ApiError > ApiError prefers `message` over `error` when both are present [0.16ms]
+(pass) apiJson + ApiError > ApiError renders the message carried by a NamedError envelope [0.20ms]
+(pass) apiJson + ApiError > ApiError falls back to status + path when body is empty [0.16ms]
+(pass) apiJson + ApiError > ApiError with a string body uses the string as detail [0.17ms]
+(pass) apiJson + ApiError > apiJsonWithTimeout preserves ApiError status / path / body [0.35ms]
+
+ 21 pass
+ 0 fail
+ 89 expect() calls
+Ran 21 tests across 1 file. [185.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [3.83ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.42ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [1.09ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [0.66ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.57ms]
+
+ 5 pass
+ 0 fail
+ 36 expect() calls
+Ran 5 tests across 1 file. [170.00ms]

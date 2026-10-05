@@ -1,0 +1,42 @@
+{
+  "launcher": {
+    "ProcessId": 30548,
+    "ParentProcessId": 45096,
+    "CreationDate": "2026-10-05T17:42:41.98697+08:00",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "listener": {
+    "ProcessId": 70004,
+    "ParentProcessId": 76364,
+    "CreationDate": "2026-10-05T17:42:42.13458+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "parent": {
+    "ProcessId": 76364,
+    "ParentProcessId": 30548,
+    "CreationDate": "2026-10-05T17:42:42.0625+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "uiAssets": [
+    "main-BeskyhIj.js",
+    "main-Yy88IPFU.css"
+  ],
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project",
+  "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui",
+  "stdout": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui/settings-search-second-after.stdout.log",
+  "stderr": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui/settings-search-second-after.stderr.log",
+  "authExists": false,
+  "catalog": "Known bundled metadata provision retained per root authorization; no catalog contents read",
+  "handoff": "Retain for root final UI, root will restore original7878 and close page before cleanup",
+  "priorVersion": "main-C_Oa9I38.js rejected; firstafter shutdown and physical absence retained",
+  "modelRequests": "none"
+}

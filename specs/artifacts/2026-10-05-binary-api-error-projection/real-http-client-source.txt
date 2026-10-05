@@ -1,0 +1,68 @@
+import fs from "node:fs/promises"
+import assert from "node:assert/strict"
+import { ApiError, configure } from "../packages/overlay/src/services/api"
+import { getHostTransport } from "../packages/overlay/src/services/host-transport-runtime"
+import { downloadZipArchive } from "../packages/overlay/src/services/project-archive"
+import { loadTaskBrowserPreviewEvidenceCaptureObjectUrl } from "../packages/overlay/src/services/browser-preview"
+import { loadConversationArtifactContent } from "../packages/overlay/src/services/conversation-artifact"
+import { resolveDiff, type ChangeGroup } from "../packages/overlay/src/services/diff"
+import { setBoardStore } from "../packages/overlay/src/store/board"
+import { formatErrorDetails } from "../packages/overlay/src/utils/error-details"
+
+const handoff = JSON.parse(await fs.readFile("D:/myhexin-local/opencorvus/.tmp-product-experience/settings-navigation-audit-20261005/shared-owner.json", "utf8"))
+const resultPath = "D:/myhexin-local/opencorvus/.tmp-product-iteration/binary-api-error-real-01.json"
+const directory: string = handoff.project
+const taskID = `tsk_binary_read_${crypto.randomUUID()}`
+const nativeFetch = globalThis.fetch
+const wire: Array<Record<string, any>> = []
+const outcomes: Array<Record<string, unknown>> = []
+configure({ serverUrl: "http://127.0.0.1:17883", directory })
+setBoardStore({ selectedSource: { kind: "task", id: taskID, directory }, board: null, tasks: [] })
+const transport = getHostTransport()
+globalThis.fetch = Object.assign(async (...args: Parameters<typeof fetch>) => {
+  const response = await nativeFetch(...args)
+  const text = await response.clone().text()
+  wire.push({ url: String(args[0]), method: args[1]?.method ?? "GET", status: response.status,
+    headers: Object.fromEntries(["content-type", "x-opencorvus-request-id"].map(key => [key, response.headers.get(key)])), text })
+  return response
+}, { preconnect: nativeFetch.preconnect })
+const groups: ChangeGroup[] = [{id:"artifact:art_binary_missing",taskID,artifactID:"art_binary_missing",additions:1,deletions:0,
+  changes:[{file:"missing.txt",status:"added",additions:1,deletions:0,isText:true,beforeObject:null,afterObject:{oid:"read-request-only",bytes:1}}]}]
+const cases = [
+  {name:"archive",status:404,read:()=>downloadZipArchive({path:`task/${taskID}/project-archive?${new URLSearchParams({directory})}`})},
+  {name:"preview",status:404,read:()=>loadTaskBrowserPreviewEvidenceCaptureObjectUrl({taskID,directory,evidenceID:"art_binary_missing"})},
+  {name:"build-observation",status:404,read:()=>resolveDiff({filePath:"missing.txt",groupID:"artifact:art_binary_missing"},groups)},
+  {name:"conversation-validator",status:400,read:()=>loadConversationArtifactContent({taskID,locator:{source:"task_artifact_resource",ref:{path:"missing.txt"}}})},
+]
+let failure: unknown
+try {
+  for (const item of cases) {
+    const start = wire.length
+    const error = await item.read().catch((value: unknown)=>value)
+    assert(error instanceof ApiError)
+    const actual = wire[start]
+    outcomes.push({name:item.name,status:error.status,path:error.path,body:error.body,message:error.message,summary:error.summary,requestID:error.requestID,details:formatErrorDetails(error),wire:actual})
+    assert.equal(wire.length,start+1)
+    assert.equal(error.status,item.status)
+    assert.equal(actual!.status,item.status)
+    assert.equal(new URL(actual!.url).searchParams.get("directory"),directory)
+    assert.equal(error.requestID,actual!.headers["x-opencorvus-request-id"])
+    assert.match(error.requestID!,/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+    assert.deepEqual(error.body,JSON.parse(actual!.text))
+    if(item.status===404){
+      assert.deepEqual(error.body,{name:"NotFoundError",data:{message:`Task not found: ${taskID}`}})
+      assert.equal(error.summary,`API 404: Task not found: ${taskID}`)
+    }else{
+      assert.match(error.summary,/^API 400:/)
+    }
+    assert.equal(formatErrorDetails(error).includes(`Request ID: ${error.requestID}`),true)
+  }
+}catch(error){failure={name:error instanceof Error?error.name:"UnknownError",message:String(error)}}
+finally{
+  globalThis.fetch=nativeFetch
+  configure({directory:""})
+  setBoardStore({selectedSource:null,board:null,tasks:[]})
+  await fs.writeFile(resultPath,JSON.stringify({qualification:failure?"failed":"actual_http_four_services_passed",profile:"pure frontend client / existing owned dev server",transportKind:transport.kind,listener:handoff.listener,directory,taskID,outcomes,failure,serverOwner:"experience/root retains shutdown authority; no client process owner"},null,2),{flag:"wx"})
+}
+console.log(JSON.stringify({resultPath,cases:outcomes.map(x=>({name:x.name,status:x.status,summary:x.summary,requestID:x.requestID})),failure},null,2))
+if(failure)process.exitCode=1

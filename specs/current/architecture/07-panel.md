@@ -179,6 +179,16 @@ The config store owns the one settings-search query. Explicit page-open and
 close actions clear that query so a rail selection opens its exact target even
 when the preceding page was filtered.
 
+Search filters the navigation while retaining the active section once in its
+canonical group. The same selected-page identity continues to own its title,
+Tabs value and mounted panel, so typing or clearing a query preserves that
+panel's authored input. The selected trigger remains associated with the panel;
+matching results navigate only on explicit activation. An unmatched query shows
+its empty result beside the navigation while the active content stays available.
+Canonical navigation groups and tab objects retain their component identity
+across filtering and selection, keeping the active trigger registered in the
+shared Tabs collection throughout the update.
+
 Command palette ledger selections close the settings page through that same
 reveal lifecycle after file departure is approved and before selecting the
 exact Mission, Task or conversation.
@@ -286,6 +296,11 @@ the failing boundary exactly: an unreachable backend is never described merely a
 that is still connecting, while an online backend with a missing stream is explicitly a
 stream reconnect condition. The SSE owner also publishes whether the selected source currently
 expects such a stream, so an empty New Chat cannot manufacture a reconnect warning.
+
+The banner's configuration action opens the canonical Network settings section,
+where the existing server URL and authentication form are immediately available.
+Navigation retains the configured API address; the saved settings and connection
+owner continue to control recovery.
 
 ## Current Surface Ownership
 

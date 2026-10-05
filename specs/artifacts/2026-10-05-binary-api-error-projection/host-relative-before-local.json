@@ -1,0 +1,15 @@
+{
+  "qualification": "local Response fixture / actual resource service only",
+  "raw": "/attachment/probe/missing.png?variant=screenshot-browser-thumbnail&directory=D%3A%2Fowned",
+  "publicBody": {
+    "name": "NotFoundError",
+    "data": {
+      "message": "Owned image is unavailable"
+    }
+  },
+  "responseRequestID": "local-resource-before",
+  "error": {
+    "name": "Error",
+    "message": "resource 404: /attachment/probe/missing.png?variant=screenshot-browser-thumbnail&directory=D%3A%2Fowned"
+  }
+}

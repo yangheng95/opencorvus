@@ -1,0 +1,25 @@
+{
+  "time": "2026-10-05T17:19:56.9070750+08:00",
+  "shutdownOccurrence": "cal_g0VXAIyzO00PhShxemTM",
+  "ownerReceipt": ".tmp-product-experience/settings-navigation-audit-20261005/shared-owner.json",
+  "verifiedPreShutdown": "CIM PID,parent,creationDate,exactcommand matched ownedreceipt",
+  "processes": [
+    {
+      "pid": 72740,
+      "present": false
+    },
+    {
+      "pid": 31516,
+      "present": false
+    },
+    {
+      "pid": 76652,
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "rootPage": "Root reports IAB8 API restored7878, blankpassword/theme/viewportunchanged, pageclosed",
+  "functional": "Five actual read-only HTTP requests complete; clients exited",
+  "agentBrowser": "No successful Chrome/IAB handle; unavailable, no UIaction",
+  "completion": "Physical absence only; detached launcher exitcode not invented"
+}

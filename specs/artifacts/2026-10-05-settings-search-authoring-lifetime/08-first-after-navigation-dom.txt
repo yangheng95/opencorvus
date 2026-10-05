@@ -1,0 +1,111 @@
+- banner:
+  - button "收起侧边栏" [expanded]:
+  - navigation "设置导航":
+    - button "返回 OpenCorvus":
+  - menubar "OpenCorvus":
+    - menuitem "文件":
+      - generic: 文件
+    - menuitem "编辑":
+      - generic: 编辑
+    - menuitem "视图":
+      - generic: 视图
+    - menuitem "帮助":
+      - generic: 帮助
+- main:
+  - navigation "对话快捷入口":
+    - generic "对话快捷入口":
+      - button "对话":
+        - generic: 对话
+      - button "Mission 看板":
+        - generic: Mission 看板
+      - button "定时":
+        - generic: 定时
+      - button "专家团":
+        - generic: 专家团
+      - button "更多":
+        - generic: 更多
+      - button "设置":
+        - generic: 设置
+    - button "关于":
+    - button "OpenCorvus 菜单":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - region "更新日志":
+    - navigation:
+      - button "返回应用":
+        - generic: 返回应用
+      - searchbox "搜索设置页面..."
+      - tablist:
+        - generic: 应用
+        - tab "通用":
+          - generic: 通用
+        - tab "外观":
+          - generic: 外观
+        - tab "网络":
+          - generic: 网络
+        - tab "用量统计":
+          - generic: 用量统计
+        - generic: 产品
+        - tab "Chat":
+          - generic: Chat
+        - tab "Work":
+          - generic: Work
+        - generic: Mission 与自动化
+        - tab "Mission Card":
+          - generic: Mission Card
+        - tab "定时任务":
+          - generic: 定时任务
+        - generic: 专家团
+        - tab "Squad 市场":
+          - generic: Squad 市场
+        - tab "已安装专家团":
+          - generic: 已安装专家团
+        - generic: 共享资源
+        - tab "模型服务商":
+          - generic: 模型服务商
+        - tab "Skill 资源库":
+          - generic: Skill 资源库
+        - tab "MCP 连接":
+          - generic: MCP 连接
+        - tab "通道":
+          - generic: 通道
+        - generic: 上下文
+        - tab "记忆与上下文":
+          - generic: 记忆与上下文
+        - generic: 数据
+        - tab "归档":
+          - generic: 归档
+        - tab "更新日志" [selected]:
+          - generic: 更新日志
+        - tab "关于":
+          - generic: 关于
+    - separator "设置"
+    - heading "更新日志" [level=1]
+    - tabpanel "更新日志":
+      - paragraph: 查看每个版本的新功能、调整与修复。历史记录从 0.0.35beta 的完整功能基线开始。
+      - button "全部版本":
+        - text: 全部版本
+      - link "在网站阅读":
+        - /url: https://opencorvus.com/zh-cn/changelog/0.1.23/
+        - text: 在网站阅读
+      - article:
+        - heading "v0.1.23" [level=2]
+        - generic: 当前版本
+        - time: 2026-09-30
+        - heading "Added" [level=3]
+        - list:
+          - listitem: 官网新增按版本浏览的更新日志及单版详情，补齐从 0.0.35beta 到 0.1.22 的历史与原始来源。
+          - listitem: 设置新增更新日志：默认查看当前安装版本，搜索历史版本与功能内容，离线阅读完整说明，并从关于页直接进入。
+        - heading "Changed" [level=3]
+        - list:
+          - listitem: 每次发布要求先编写更新日志；GitHub Release 和网站使用根目录的同一份版本说明，保留发布归属与原始来源。
+          - listitem: 项目环境概览采用圆角面板和独立操作菜单，按变更、分支、子 agent、来源排列；显示真实角色头像与统计，保留项目工具和交付物入口。
+        - heading "Fixed" [level=3]
+        - list:
+          - listitem: 设置、计划任务和专家团页面挂载到常驻导航旁的同一页面容器，左侧导航始终可见，切回对话或 Mission Board 时正确关闭设置并更新选中状态。
+          - listitem: 设置搜索由统一导航状态管理，重新选择当前页面会清空旧搜索，避免仍停留在其他搜索结果页。
+          - listitem: 环境概览关闭时同步释放操作菜单和目录／分支菜单；长名称截断、收起后的变更统计及深浅主题保持一致。
+      - link "在 GitHub 查看完整日志":
+        - /url: https://github.com/yangheng95/opencorvus/blob/main/CHANGELOG.md
+        - text: 在 GitHub 查看完整日志

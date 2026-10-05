@@ -1,0 +1,5346 @@
+{
+  "retrievedAt": "2026-10-05",
+  "scope": "Selected exact metadata/excerpts; original public responses retained in ignored data-integrity/stage4-original-primary-responses.json",
+  "sources": {
+    "audit-index": {
+      "url": "https://index.crates.io/ca/rg/cargo-audit",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "cargo-audit",
+          "vers": "0.22.2",
+          "deps": [
+            {
+              "name": "abscissa_core",
+              "req": "^0.9",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "abscissa_core",
+              "req": "^0.9",
+              "features": [
+                "testing"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "cargo-lock",
+              "req": "^11",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "clap",
+              "req": "^4",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "display-error-chain",
+              "req": "^0.2.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "home",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "object",
+              "req": "^0.39",
+              "features": [
+                "read",
+                "wasm"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "once_cell",
+              "req": "^1.15.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "rustc-demangle",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rustsec",
+              "req": "^0.33",
+              "features": [
+                "dependency-tree"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "serde_derive"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "syn",
+              "req": "^2",
+              "features": [
+                "extra-traits"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tempfile",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "toml",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            }
+          ],
+          "cksum": "700c2b240f7fd330c24b675fe429f73a5b676531fcc6300400b2b67f155ba12a",
+          "features": {
+            "fix": []
+          },
+          "features2": {
+            "binary-scanning": [
+              "rustsec/binary-scanning",
+              "dep:object",
+              "dep:rustc-demangle",
+              "dep:syn"
+            ],
+            "default": [
+              "binary-scanning"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.88",
+          "pubtime": "2026-06-05T12:33:04Z",
+          "v": 2
+        }
+      ]
+    },
+    "glib-index": {
+      "url": "https://index.crates.io/gl/ib/glib",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "glib",
+          "vers": "0.18.5",
+          "deps": [
+            {
+              "name": "bitflags",
+              "req": "^2.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "criterion",
+              "req": "^0.5.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "ffi",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "glib-sys"
+            },
+            {
+              "name": "futures-channel",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "futures-core",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "futures-executor",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "futures-task",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "futures-util",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gio_ffi",
+              "req": "^0.18",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "gio-sys"
+            },
+            {
+              "name": "gir-format-check",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glib-macros",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gobject_ffi",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "gobject-sys"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "memchr",
+              "req": "^2.5.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "once_cell",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rs-log",
+              "req": "^0.4",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "log"
+            },
+            {
+              "name": "smallvec",
+              "req": "^1.0",
+              "features": [
+                "union",
+                "const_generics",
+                "const_new"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tempfile",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "thiserror",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "trybuild2",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            }
+          ],
+          "cksum": "233daaf6e83ae6a12a52055f568f9d7cf4671dabb78ff9560ab6da230ce00ee5",
+          "features": {
+            "compiletests": [],
+            "default": [
+              "gio"
+            ],
+            "gio": [
+              "gio_ffi"
+            ],
+            "log": [
+              "rs-log"
+            ],
+            "log_macros": [
+              "log"
+            ],
+            "v2_58": [
+              "ffi/v2_58",
+              "gobject_ffi/v2_58"
+            ],
+            "v2_60": [
+              "v2_58",
+              "ffi/v2_60"
+            ],
+            "v2_62": [
+              "v2_60",
+              "ffi/v2_62",
+              "gobject_ffi/v2_62"
+            ],
+            "v2_64": [
+              "v2_62",
+              "ffi/v2_64"
+            ],
+            "v2_66": [
+              "v2_64",
+              "ffi/v2_66",
+              "gobject_ffi/v2_66"
+            ],
+            "v2_68": [
+              "v2_66",
+              "ffi/v2_68",
+              "gobject_ffi/v2_68"
+            ],
+            "v2_70": [
+              "v2_68",
+              "ffi/v2_70",
+              "gobject_ffi/v2_70"
+            ],
+            "v2_72": [
+              "v2_70",
+              "ffi/v2_72",
+              "gobject_ffi/v2_72"
+            ],
+            "v2_74": [
+              "v2_72",
+              "ffi/v2_74",
+              "gobject_ffi/v2_74"
+            ],
+            "v2_76": [
+              "v2_74",
+              "ffi/v2_76",
+              "gobject_ffi/v2_76"
+            ],
+            "v2_78": [
+              "v2_76",
+              "ffi/v2_78",
+              "gobject_ffi/v2_78"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.70",
+          "pubtime": "2023-12-30T14:09:59Z"
+        }
+      ]
+    },
+    "gtk-index": {
+      "url": "https://index.crates.io/3/g/gtk",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "gtk",
+          "vers": "0.18.2",
+          "deps": [
+            {
+              "name": "atk",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cairo-rs",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "ffi",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "gtk-sys"
+            },
+            {
+              "name": "field-offset",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "futures-channel",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gdk",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gdk-pixbuf",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gio",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gir-format-check",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glib",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gtk3-macros",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "pango",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "pkg-config",
+              "req": "^0.3.7",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            }
+          ],
+          "cksum": "fd56fb197bfc42bd5d2751f4f017d44ff59fbb58140c6b49f9b3b2bdab08506a",
+          "features": {
+            "gio_v2_58": [
+              "gio/v2_58"
+            ],
+            "unsafe-assume-initialized": [],
+            "v3_24": [
+              "ffi/v3_24"
+            ],
+            "v3_24_1": [
+              "v3_24",
+              "ffi/v3_24_1"
+            ],
+            "v3_24_11": [
+              "v3_24_9",
+              "ffi/v3_24_11"
+            ],
+            "v3_24_30": [
+              "v3_24_11",
+              "ffi/v3_24_30"
+            ],
+            "v3_24_8": [
+              "v3_24_1",
+              "ffi/v3_24_8"
+            ],
+            "v3_24_9": [
+              "v3_24_8",
+              "ffi/v3_24_9"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.70",
+          "pubtime": "2024-12-09T11:46:31Z"
+        },
+        {
+          "name": "gtk",
+          "vers": "0.19.0",
+          "deps": [
+            {
+              "name": "atk",
+              "req": "^0.19.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cairo",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "cairo-rs"
+            },
+            {
+              "name": "field-offset",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "futures-channel",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gdk",
+              "req": "^0.19.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gdk-pixbuf",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gio",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gir-format-check",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glib",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gtk-sys",
+              "req": "^0.19.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gtk3-macros",
+              "req": "^0.19.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "pango",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "pkg-config",
+              "req": "^0.3.7",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            }
+          ],
+          "cksum": "a86cafafc177054a1d555a0b302044d2b5f82e1c1e23d152a7ba252dc6bfced0",
+          "features": {
+            "gio_v2_58": [
+              "gio/v2_58"
+            ],
+            "gio_v2_80": [
+              "gio/v2_80"
+            ],
+            "unsafe-assume-initialized": [],
+            "v3_22": [],
+            "v3_24": [
+              "gtk-sys/v3_24"
+            ],
+            "v3_24_1": [
+              "v3_24",
+              "gtk-sys/v3_24_1"
+            ],
+            "v3_24_11": [
+              "v3_24_9",
+              "gtk-sys/v3_24_11"
+            ],
+            "v3_24_30": [
+              "v3_24_11",
+              "gtk-sys/v3_24_30"
+            ],
+            "v3_24_8": [
+              "v3_24_1",
+              "gtk-sys/v3_24_8"
+            ],
+            "v3_24_9": [
+              "v3_24_8",
+              "gtk-sys/v3_24_9"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.92",
+          "pubtime": "2026-09-08T06:26:27Z"
+        }
+      ]
+    },
+    "selectors-index": {
+      "url": "https://index.crates.io/se/le/selectors",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "selectors",
+          "vers": "0.24.0",
+          "deps": [
+            {
+              "name": "bitflags",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cssparser",
+              "req": "^0.29",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "derive_more",
+              "req": "^0.99",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "fxhash",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "log",
+              "req": "^0.4",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "phf",
+              "req": "^0.8",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "phf_codegen",
+              "req": "^0.8",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "precomputed-hash",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "servo_arc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "smallvec",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "to_shmem",
+              "req": "^0.0.0",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "to_shmem_derive",
+              "req": "^0.0.0",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            }
+          ],
+          "cksum": "0c37578180969d00692904465fb7f6b3d50b9a2b952b87c23d0e2e5cb5013416",
+          "features": {
+            "bench": []
+          },
+          "features2": {
+            "shmem": [
+              "dep:to_shmem",
+              "dep:to_shmem_derive"
+            ]
+          },
+          "yanked": false,
+          "pubtime": "2023-02-20T13:23:46Z",
+          "v": 2
+        },
+        {
+          "name": "selectors",
+          "vers": "0.32.0",
+          "deps": [
+            {
+              "name": "bitflags",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cssparser",
+              "req": "^0.35",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "derive_more",
+              "req": "^2",
+              "features": [
+                "add",
+                "add_assign"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "log",
+              "req": "^0.4",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "new_debug_unreachable",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "phf",
+              "req": "^0.11",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "phf_codegen",
+              "req": "^0.11",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "precomputed-hash",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rustc-hash",
+              "req": "^2.1.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "servo_arc",
+              "req": "^0.4",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "smallvec",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "to_shmem",
+              "req": "^0.2",
+              "features": [
+                "servo_arc"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "to_shmem_derive",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            }
+          ],
+          "cksum": "09975d3195f34dce9c7b381cb0f00c3c13381d4d3735c0f1a9c894b283b302ab",
+          "features": {
+            "bench": []
+          },
+          "features2": {
+            "to_shmem": [
+              "dep:to_shmem",
+              "dep:to_shmem_derive"
+            ]
+          },
+          "yanked": false,
+          "pubtime": "2025-10-04T08:37:49Z",
+          "v": 2
+        }
+      ]
+    },
+    "kuchikiki-index": {
+      "url": "https://index.crates.io/ku/ch/kuchikiki",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "kuchikiki",
+          "vers": "0.8.8-speedreader",
+          "deps": [
+            {
+              "name": "cssparser",
+              "req": "^0.29",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "html5ever",
+              "req": "^0.29.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "indexmap",
+              "req": "^2.6.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "selectors",
+              "req": "^0.24",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tempfile",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            }
+          ],
+          "cksum": "02cb977175687f33fa4afa0c95c112b987ea1443e5a51c8f8ff27dc618270cc2",
+          "features": {},
+          "yanked": false,
+          "pubtime": "2025-02-22T00:36:13Z"
+        },
+        {
+          "name": "kuchikiki",
+          "vers": "0.8.9-speedreader",
+          "deps": [
+            {
+              "name": "cssparser",
+              "req": "^0.35",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "html5ever",
+              "req": "^0.35",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "indexmap",
+              "req": "^2.14",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "precomputed-hash",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "selectors",
+              "req": "^0.32",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tempfile",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            }
+          ],
+          "cksum": "21334058718b60f8ba666140d4b8f6f00f30ae6e48e1e809a226f72a59f8c712",
+          "features": {},
+          "yanked": false,
+          "pubtime": "2026-07-13T20:04:25Z"
+        }
+      ]
+    },
+    "rand-index": {
+      "url": "https://index.crates.io/ra/nd/rand",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "rand",
+          "vers": "0.7.3",
+          "deps": [
+            {
+              "name": "getrandom_package",
+              "req": "^0.1.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "getrandom"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2.22",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": "cfg(unix)",
+              "kind": "normal"
+            },
+            {
+              "name": "log",
+              "req": "^0.4.4",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "packed_simd",
+              "req": "^0.3",
+              "features": [
+                "into_bits"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rand_chacha",
+              "req": "^0.2.1",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(not(target_os = \"emscripten\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "rand_core",
+              "req": "^0.5.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rand_hc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"emscripten\")",
+              "kind": "normal"
+            },
+            {
+              "name": "rand_hc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "rand_pcg",
+              "req": "^0.2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rand_pcg",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            }
+          ],
+          "cksum": "6a6b1679d49b24bbfe0c803429aa1874472f50d9b363131f0e89fc356b544d03",
+          "features": {
+            "alloc": [
+              "rand_core/alloc"
+            ],
+            "default": [
+              "std"
+            ],
+            "getrandom": [
+              "getrandom_package",
+              "rand_core/getrandom"
+            ],
+            "nightly": [
+              "simd_support"
+            ],
+            "serde1": [],
+            "simd_support": [
+              "packed_simd"
+            ],
+            "small_rng": [
+              "rand_pcg"
+            ],
+            "std": [
+              "rand_core/std",
+              "rand_chacha/std",
+              "alloc",
+              "getrandom",
+              "libc"
+            ],
+            "stdweb": [
+              "getrandom_package/stdweb"
+            ],
+            "wasm-bindgen": [
+              "getrandom_package/wasm-bindgen"
+            ]
+          },
+          "yanked": false,
+          "pubtime": "2020-01-10T21:46:21Z"
+        },
+        {
+          "name": "rand",
+          "vers": "0.8.6",
+          "deps": [
+            {
+              "name": "bincode",
+              "req": "^1.2.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2.22",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": "cfg(unix)",
+              "kind": "normal"
+            },
+            {
+              "name": "rand_chacha",
+              "req": "^0.3.0",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rand_core",
+              "req": "^0.6.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "rand_pcg",
+              "req": "^0.3.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serde",
+              "req": "^1.0.103",
+              "features": [
+                "derive"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            }
+          ],
+          "cksum": "5ca0ecfa931c29007047d1bc58e623ab12e5590e8c7cc53200d5202b69266d8a",
+          "features": {
+            "alloc": [
+              "rand_core/alloc"
+            ],
+            "default": [
+              "std",
+              "std_rng"
+            ],
+            "getrandom": [
+              "rand_core/getrandom"
+            ],
+            "log": [],
+            "min_const_gen": [],
+            "nightly": [],
+            "serde1": [
+              "serde",
+              "rand_core/serde1"
+            ],
+            "small_rng": [],
+            "std": [
+              "rand_core/std",
+              "rand_chacha/std",
+              "alloc",
+              "getrandom",
+              "libc"
+            ],
+            "std_rng": [
+              "rand_chacha"
+            ]
+          },
+          "yanked": false,
+          "pubtime": "2026-04-17T06:42:26Z"
+        }
+      ]
+    },
+    "tauri-index": {
+      "url": "https://index.crates.io/ta/ur/tauri",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "tauri",
+          "vers": "2.11.1",
+          "deps": [
+            {
+              "name": "anyhow",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "bytes",
+              "req": "^1",
+              "features": [
+                "serde"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"android\", all(target_vendor = \"apple\", not(target_os = \"macos\"))))",
+              "kind": "normal"
+            },
+            {
+              "name": "cargo_toml",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "cookie",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "data-url",
+              "req": "^0.3",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dirs",
+              "req": "^6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dunce",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "embed_plist",
+              "req": "^1.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "glob",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "glob",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "gtk",
+              "req": "^0.18",
+              "features": [
+                "v3_24"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "heck",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "heck",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "http",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http-range",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http-range",
+              "req": "^0.1.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "image",
+              "req": "^0.25",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "jni",
+              "req": "^0.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(all(target_vendor = \"apple\", not(target_os = \"macos\")))",
+              "kind": "normal"
+            },
+            {
+              "name": "log",
+              "req": "^0.4.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "mime",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "muda",
+              "req": "^0.19",
+              "features": [
+                "serde",
+                "gtk"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\", target_os = \"windows\", target_os = \"macos\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-app-kit",
+              "req": "^0.3",
+              "features": [
+                "std",
+                "NSApplication",
+                "NSColor",
+                "NSResponder",
+                "NSView",
+                "NSWindow",
+                "NSImage"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-foundation",
+              "req": "^0.3",
+              "features": [
+                "std",
+                "NSData",
+                "NSThread"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-ui-kit",
+              "req": "^0.3.0",
+              "features": [
+                "UIApplication",
+                "UIResponder",
+                "UIView"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(all(target_vendor = \"apple\", not(target_os = \"macos\")))",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-web-kit",
+              "req": "^0.3",
+              "features": [
+                "objc2-app-kit",
+                "WKWebView",
+                "WKWebViewConfiguration",
+                "WKUserContentController"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "percent-encoding",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "plist",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "proptest",
+              "req": "^1.6.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "quickcheck",
+              "req": "^1.0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "quickcheck_macros",
+              "req": "^1.0.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "raw-window-handle",
+              "req": "^0.6",
+              "features": [
+                "std"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "reqwest",
+              "req": "^0.13",
+              "features": [
+                "json",
+                "stream"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"android\", all(target_vendor = \"apple\", not(target_os = \"macos\"))))",
+              "kind": "normal"
+            },
+            {
+              "name": "rustls",
+              "req": "^0.23",
+              "features": [
+                "ring"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"android\", all(target_vendor = \"apple\", not(target_os = \"macos\"))))",
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "derive",
+                "rc"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "derive"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [
+                "raw_value"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serde_repr",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serialize-to-javascript",
+              "req": "^0.1.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "specta",
+              "req": "^2.0.0-rc.16",
+              "features": [
+                "function",
+                "derive"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "swift-rs",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(all(target_vendor = \"apple\", not(target_os = \"macos\")))",
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-build",
+              "req": "^2.6.1",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "tauri-macros",
+              "req": "^2.6.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-runtime",
+              "req": "^2.11.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-runtime-wry",
+              "req": "^2.11.1",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-utils",
+              "req": "^2.9.1",
+              "features": [
+                "resources"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-utils",
+              "req": "^2.9.1",
+              "features": [
+                "build-2"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tokio",
+              "req": "^1",
+              "features": [
+                "rt",
+                "rt-multi-thread",
+                "sync",
+                "fs",
+                "io-util"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tokio",
+              "req": "^1",
+              "features": [
+                "full"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "tracing",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tray-icon",
+              "req": "^0.23",
+              "features": [
+                "serde"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\", target_os = \"windows\", target_os = \"macos\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "url",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "uuid",
+              "req": "^1",
+              "features": [
+                "v4"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "webkit2gtk",
+              "req": "^2",
+              "features": [
+                "v2_40"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "webview2-com",
+              "req": "^0.38",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(windows)",
+              "kind": "normal"
+            },
+            {
+              "name": "window-vibrancy",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "window-vibrancy",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(windows)",
+              "kind": "normal"
+            },
+            {
+              "name": "windows",
+              "req": "^0.61",
+              "features": [
+                "Win32_Foundation",
+                "Win32_UI",
+                "Win32_UI_WindowsAndMessaging"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(windows)",
+              "kind": "normal"
+            }
+          ],
+          "cksum": "b93bd86d231f0a8138f11a02a584769fe4b703dc36ae133d783228dbc4801405",
+          "features": {
+            "compression": [
+              "tauri-macros/compression",
+              "tauri-utils/compression"
+            ],
+            "config-json5": [
+              "tauri-macros/config-json5"
+            ],
+            "config-toml": [
+              "tauri-macros/config-toml"
+            ],
+            "custom-protocol": [
+              "tauri-macros/custom-protocol"
+            ],
+            "dynamic-acl": [],
+            "image-ico": [
+              "image/ico"
+            ],
+            "image-png": [
+              "image/png"
+            ],
+            "isolation": [
+              "tauri-utils/isolation",
+              "tauri-macros/isolation",
+              "uuid"
+            ],
+            "linux-libxdo": [
+              "tray-icon/libxdo",
+              "muda/libxdo"
+            ],
+            "native-tls": [
+              "reqwest/native-tls"
+            ],
+            "native-tls-vendored": [
+              "reqwest/native-tls-vendored"
+            ],
+            "objc-exception": [],
+            "process-relaunch-dangerous-allow-symlink-macos": [
+              "tauri-utils/process-relaunch-dangerous-allow-symlink-macos"
+            ],
+            "protocol-asset": [
+              "http-range"
+            ],
+            "test": [],
+            "webview-data-url": [
+              "data-url",
+              "tauri-utils/html-manipulation-2"
+            ],
+            "wry": [
+              "webview2-com",
+              "webkit2gtk",
+              "tauri-runtime-wry"
+            ]
+          },
+          "features2": {
+            "common-controls-v6": [
+              "tray-icon?/common-controls-v6",
+              "muda/common-controls-v6",
+              "tauri-runtime-wry?/common-controls-v6"
+            ],
+            "dbus": [
+              "tauri-runtime-wry?/dbus"
+            ],
+            "default": [
+              "wry",
+              "compression",
+              "common-controls-v6",
+              "dynamic-acl",
+              "x11",
+              "dbus"
+            ],
+            "devtools": [
+              "tauri-runtime/devtools",
+              "tauri-runtime-wry?/devtools"
+            ],
+            "macos-private-api": [
+              "tauri-runtime/macos-private-api",
+              "tauri-runtime-wry?/macos-private-api"
+            ],
+            "macos-proxy": [
+              "tauri-runtime-wry?/macos-proxy"
+            ],
+            "rustls-tls": [
+              "reqwest/rustls-no-provider",
+              "dep:rustls"
+            ],
+            "specta": [
+              "dep:specta"
+            ],
+            "tracing": [
+              "dep:tracing",
+              "tauri-macros/tracing",
+              "tauri-runtime-wry?/tracing"
+            ],
+            "tray-icon": [
+              "dep:tray-icon"
+            ],
+            "unstable": [
+              "tauri-runtime-wry?/unstable"
+            ],
+            "x11": [
+              "tauri-runtime-wry?/x11"
+            ]
+          },
+          "yanked": false,
+          "links": "Tauri",
+          "rust_version": "1.77.2",
+          "pubtime": "2026-05-06T10:17:45Z",
+          "v": 2
+        },
+        {
+          "name": "tauri",
+          "vers": "2.12.1",
+          "deps": [
+            {
+              "name": "anyhow",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "bytes",
+              "req": "^1",
+              "features": [
+                "serde"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"android\", all(target_vendor = \"apple\", not(target_os = \"macos\"))))",
+              "kind": "normal"
+            },
+            {
+              "name": "cargo_toml",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "cookie",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "data-url",
+              "req": "^0.3",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dirs",
+              "req": "^7",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dunce",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "embed_plist",
+              "req": "^1.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "glob",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "glob",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "gtk",
+              "req": "^0.18",
+              "features": [
+                "v3_24"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "heck",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "heck",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "http",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http-range",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http-range",
+              "req": "^0.1.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "image",
+              "req": "^0.25",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "jni",
+              "req": "^0.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(all(target_vendor = \"apple\", not(target_os = \"macos\")))",
+              "kind": "normal"
+            },
+            {
+              "name": "log",
+              "req": "^0.4.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "mime",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "muda",
+              "req": "^0.20",
+              "features": [
+                "serde",
+                "gtk3"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\", target_os = \"windows\", target_os = \"macos\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-app-kit",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "NSApplication",
+                "NSColor",
+                "NSResponder",
+                "NSView",
+                "NSWindow",
+                "NSImage"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-foundation",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "NSData",
+                "NSEnumerator",
+                "NSThread"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-ui-kit",
+              "req": "^0.3.2",
+              "features": [
+                "UIApplication",
+                "UIResponder",
+                "UIView"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(all(target_vendor = \"apple\", not(target_os = \"macos\")))",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-web-kit",
+              "req": "^0.3.2",
+              "features": [
+                "objc2-app-kit",
+                "WKWebView",
+                "WKWebViewConfiguration",
+                "WKUserContentController"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "percent-encoding",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "plist",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "proptest",
+              "req": "^1.6.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "quickcheck",
+              "req": "^1.0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "quickcheck_macros",
+              "req": "^1.0.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "raw-window-handle",
+              "req": "^0.6",
+              "features": [
+                "std"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "reqwest",
+              "req": "^0.13",
+              "features": [
+                "json",
+                "stream"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"android\", all(target_vendor = \"apple\", not(target_os = \"macos\"))))",
+              "kind": "normal"
+            },
+            {
+              "name": "rustls",
+              "req": "^0.23",
+              "features": [
+                "ring"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"android\", all(target_vendor = \"apple\", not(target_os = \"macos\"))))",
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "derive",
+                "rc"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "derive"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [
+                "raw_value"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serde_repr",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serialize-to-javascript",
+              "req": "^0.1.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "specta",
+              "req": "^2.0.0-rc.16",
+              "features": [
+                "function",
+                "derive"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "swift-rs",
+              "req": "^1.0.8",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(all(target_vendor = \"apple\", not(target_os = \"macos\")))",
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-build",
+              "req": "^2.7.1",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "tauri-macros",
+              "req": "~2.7.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-runtime",
+              "req": "~2.12.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-runtime-wry",
+              "req": "~2.12.1",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-utils",
+              "req": "~2.10.1",
+              "features": [
+                "resources"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tauri-utils",
+              "req": "~2.10.1",
+              "features": [
+                "build-2"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "build"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tokio",
+              "req": "^1",
+              "features": [
+                "rt",
+                "rt-multi-thread",
+                "sync",
+                "fs",
+                "io-util"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tokio",
+              "req": "^1",
+              "features": [
+                "full"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "tracing",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tray-icon",
+              "req": "^0.25",
+              "features": [
+                "serde",
+                "libappindicator"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\", target_os = \"windows\", target_os = \"macos\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "url",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "uuid",
+              "req": "^1",
+              "features": [
+                "v4"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "webkit2gtk",
+              "req": "^2",
+              "features": [
+                "v2_40"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "webview2-com",
+              "req": "^0.39",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(windows)",
+              "kind": "normal"
+            },
+            {
+              "name": "window-vibrancy",
+              "req": "^0.8.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "window-vibrancy",
+              "req": "^0.8.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(windows)",
+              "kind": "normal"
+            },
+            {
+              "name": "windows",
+              "req": "^0.62",
+              "features": [
+                "Win32_Foundation",
+                "Win32_UI",
+                "Win32_UI_WindowsAndMessaging",
+                "Win32_System_LibraryLoader",
+                "Win32_Graphics_Gdi"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(windows)",
+              "kind": "normal"
+            }
+          ],
+          "cksum": "ed99ee9694a2deb776d91cae48ac7411ddfc89ecae2f9b5041111d8c88f2ace9",
+          "features": {
+            "compression": [
+              "tauri-macros/compression",
+              "tauri-utils/compression"
+            ],
+            "config-json5": [
+              "tauri-macros/config-json5"
+            ],
+            "config-toml": [
+              "tauri-macros/config-toml"
+            ],
+            "custom-protocol": [
+              "tauri-macros/custom-protocol"
+            ],
+            "dynamic-acl": [],
+            "image-ico": [
+              "image/ico"
+            ],
+            "image-png": [
+              "image/png"
+            ],
+            "isolation": [
+              "tauri-utils/isolation",
+              "tauri-macros/isolation",
+              "uuid"
+            ],
+            "linux-libxdo": [
+              "tray-icon/muda-libxdo",
+              "muda/libxdo"
+            ],
+            "native-tls": [
+              "reqwest/native-tls"
+            ],
+            "native-tls-vendored": [
+              "reqwest/native-tls-vendored"
+            ],
+            "objc-exception": [],
+            "process-relaunch-dangerous-allow-symlink-macos": [
+              "tauri-utils/process-relaunch-dangerous-allow-symlink-macos"
+            ],
+            "protocol-asset": [
+              "http-range"
+            ],
+            "test": [],
+            "webview-data-url": [
+              "data-url",
+              "tauri-utils/html-manipulation-2"
+            ],
+            "wry": [
+              "webview2-com",
+              "webkit2gtk",
+              "tauri-runtime-wry"
+            ]
+          },
+          "features2": {
+            "common-controls-v6": [
+              "tray-icon?/muda-common-controls-v6",
+              "muda/common-controls-v6",
+              "tauri-runtime-wry?/common-controls-v6"
+            ],
+            "dbus": [
+              "tauri-runtime-wry?/dbus"
+            ],
+            "default": [
+              "wry",
+              "compression",
+              "common-controls-v6",
+              "dynamic-acl",
+              "x11",
+              "dbus"
+            ],
+            "devtools": [
+              "tauri-runtime/devtools",
+              "tauri-runtime-wry?/devtools"
+            ],
+            "macos-private-api": [
+              "tauri-runtime/macos-private-api",
+              "tauri-runtime-wry?/macos-private-api"
+            ],
+            "macos-proxy": [
+              "tauri-runtime-wry?/macos-proxy"
+            ],
+            "rustls-tls": [
+              "reqwest/rustls-no-provider",
+              "dep:rustls"
+            ],
+            "specta": [
+              "dep:specta"
+            ],
+            "tracing": [
+              "dep:tracing",
+              "tauri-macros/tracing",
+              "tauri-runtime-wry?/tracing"
+            ],
+            "tray-icon": [
+              "dep:tray-icon"
+            ],
+            "unstable": [
+              "tauri-runtime-wry?/unstable"
+            ],
+            "x11": [
+              "tauri-runtime-wry?/x11"
+            ]
+          },
+          "yanked": false,
+          "links": "Tauri",
+          "rust_version": "1.90",
+          "pubtime": "2026-09-30T20:47:44Z",
+          "v": 2
+        }
+      ]
+    },
+    "wry-index": {
+      "url": "https://index.crates.io/3/w/wry",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "wry",
+          "vers": "0.55.1",
+          "deps": [
+            {
+              "name": "base64",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "base64",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "block2",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "cookie",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "crossbeam-channel",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "dirs",
+              "req": "^6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "dirs",
+              "req": "^6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "dom_query",
+              "req": "^0.27.0",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "dom_query",
+              "req": "^0.27.0",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "dpi",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dunce",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "gdkx11",
+              "req": "^0.18",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glow",
+              "req": "^0.16.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "gtk",
+              "req": "^0.18",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "http",
+              "req": "^1.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http-range",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "javascriptcore-rs",
+              "req": "=1.1.2",
+              "features": [
+                "v2_28"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "jni",
+              "req": "^0.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "libloading",
+              "req": "^0.8.9",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "ndk",
+              "req": "^0.9",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2",
+              "req": "^0.6.4",
+              "features": [
+                "exception",
+                "disable-encoding-assertions"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-app-kit",
+              "req": "^0.3.0",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "NSApplication",
+                "NSButton",
+                "NSControl",
+                "NSEvent",
+                "NSWindow",
+                "NSView",
+                "NSPasteboard",
+                "NSPanel",
+                "NSResponder",
+                "NSOpenPanel",
+                "NSSavePanel",
+                "NSMenu",
+                "NSGraphics",
+                "NSScreen"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-core-foundation",
+              "req": "^0.3.0",
+              "features": [
+                "std",
+                "CFCGTypes"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-foundation",
+              "req": "^0.3.0",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "NSURLRequest",
+                "NSURL",
+                "NSString",
+                "NSKeyValueCoding",
+                "NSStream",
+                "NSDictionary",
+                "NSObject",
+                "NSData",
+                "NSEnumerator",
+                "NSKeyValueObserving",
+                "NSThread",
+                "NSJSONSerialization",
+                "NSDate",
+                "NSBundle",
+                "NSProcessInfo",
+                "NSValue",
+                "NSRange",
+                "NSRunLoop"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-ui-kit",
+              "req": "^0.3.0",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "UIResponder",
+                "UIScrollView",
+                "UIView",
+                "UIWindow",
+                "UIApplication",
+                "UIEvent",
+                "UIColor"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"ios\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-web-kit",
+              "req": "^0.3.0",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "objc2-app-kit",
+                "block2",
+                "WKWebView",
+                "WKWebViewConfiguration",
+                "WKWebsiteDataStore",
+                "WKDownload",
+                "WKDownloadDelegate",
+                "WKNavigation",
+                "WKNavigationDelegate",
+                "WKUserContentController",
+                "WKURLSchemeHandler",
+                "WKPreferences",
+                "WKURLSchemeTask",
+                "WKScriptMessageHandler",
+                "WKUIDelegate",
+                "WKOpenPanelParameters",
+                "WKFrameInfo",
+                "WKSecurityOrigin",
+                "WKScriptMessage",
+                "WKNavigationAction",
+                "WKWebpagePreferences",
+                "WKNavigationResponse",
+                "WKUserScript",
+                "WKHTTPCookieStore",
+                "WKWindowFeatures"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "once_cell",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "percent-encoding",
+              "req": "^2.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "percent-encoding",
+              "req": "^2.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "pollster",
+              "req": "^0.4.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "raw-window-handle",
+              "req": "^0.6",
+              "features": [
+                "std"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "sha2",
+              "req": "^0.10",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "sha2",
+              "req": "^0.10",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "soup3",
+              "req": "^0.5",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "tao",
+              "req": "^0.35",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "tao-macros",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tracing",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "url",
+              "req": "^2.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "webkit2gtk",
+              "req": "=2.0.2",
+              "features": [
+                "v2_38"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "webkit2gtk-sys",
+              "req": "=2.0.2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "webview2-com",
+              "req": "^0.38",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "wgpu",
+              "req": "^23",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "windows",
+              "req": "^0.61",
+              "features": [
+                "Win32_Foundation",
+                "Win32_Graphics_Gdi",
+                "Win32_System_Com",
+                "Win32_System_Com_StructuredStorage",
+                "Win32_System_LibraryLoader",
+                "Win32_System_Ole",
+                "Win32_System_SystemInformation",
+                "Win32_System_SystemServices",
+                "Win32_UI_Shell",
+                "Win32_UI_WindowsAndMessaging",
+                "Win32_Globalization",
+                "Win32_UI_HiDpi",
+                "Win32_UI_Input",
+                "Win32_UI_Input_KeyboardAndMouse"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "windows-core",
+              "req": "^0.61",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "windows-version",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "winit",
+              "req": "^0.30",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "x11-dl",
+              "req": "^2.21",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "x11-dl",
+              "req": "^2.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "dev"
+            }
+          ],
+          "cksum": "186f9871daa55fd9c016578b810d149de58367113db7fb72b462d2323ce19514",
+          "features": {
+            "devtools": [],
+            "fullscreen": [],
+            "mac-proxy": [],
+            "protocol": [],
+            "serde": [
+              "dpi/serde"
+            ],
+            "transparent": [],
+            "x11": [
+              "x11-dl",
+              "gdkx11",
+              "tao/x11"
+            ]
+          },
+          "features2": {
+            "default": [
+              "protocol",
+              "os-webview",
+              "x11"
+            ],
+            "linux-body": [
+              "webkit2gtk/v2_40",
+              "os-webview"
+            ],
+            "os-webview": [
+              "javascriptcore-rs",
+              "webkit2gtk",
+              "webkit2gtk-sys",
+              "dep:gtk",
+              "soup3"
+            ],
+            "tracing": [
+              "dep:tracing"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.77",
+          "pubtime": "2026-05-04T15:34:32Z",
+          "v": 2
+        },
+        {
+          "name": "wry",
+          "vers": "0.57.0",
+          "deps": [
+            {
+              "name": "base64",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "base64",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "block2",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "cookie",
+              "req": "^0.18",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "crossbeam-channel",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "dirs",
+              "req": "^7",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "dirs",
+              "req": "^7",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "dom_query",
+              "req": "^0.28.0",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "dom_query",
+              "req": "^0.28.0",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "dpi",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dunce",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "gdkx11",
+              "req": "^0.18",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glow",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "gtk",
+              "req": "^0.18",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "http",
+              "req": "^1.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http-range",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "javascriptcore-rs",
+              "req": "=1.1.2",
+              "features": [
+                "v2_28"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "jni",
+              "req": "^0.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "libloading",
+              "req": "^0.8.9",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "ndk",
+              "req": "^0.9",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2",
+              "req": "^0.6.4",
+              "features": [
+                "exception",
+                "disable-encoding-assertions"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-app-kit",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "NSApplication",
+                "NSButton",
+                "NSControl",
+                "NSEvent",
+                "NSWindow",
+                "NSView",
+                "NSPasteboard",
+                "NSPanel",
+                "NSResponder",
+                "NSOpenPanel",
+                "NSSavePanel",
+                "NSMenu",
+                "NSGraphics",
+                "NSScreen"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-core-foundation",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "CFCGTypes"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-foundation",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "block2",
+                "objc2-core-foundation",
+                "NSURLRequest",
+                "NSURL",
+                "NSString",
+                "NSKeyValueCoding",
+                "NSStream",
+                "NSDictionary",
+                "NSObject",
+                "NSData",
+                "NSEnumerator",
+                "NSKeyValueObserving",
+                "NSThread",
+                "NSJSONSerialization",
+                "NSDate",
+                "NSBundle",
+                "NSProcessInfo",
+                "NSValue",
+                "NSRange",
+                "NSRunLoop"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-foundation",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "NSProcessInfo"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "build"
+            },
+            {
+              "name": "objc2-ui-kit",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "UIResponder",
+                "UIScrollView",
+                "UIView",
+                "UIWindow",
+                "UIApplication",
+                "UIEvent",
+                "UIColor",
+                "UIInterface"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_os = \"ios\")",
+              "kind": "normal"
+            },
+            {
+              "name": "objc2-web-kit",
+              "req": "^0.3.2",
+              "features": [
+                "std",
+                "objc2-core-foundation",
+                "objc2-app-kit",
+                "block2",
+                "WKWebView",
+                "WKWebViewConfiguration",
+                "WKWebsiteDataStore",
+                "WKDownload",
+                "WKDownloadDelegate",
+                "WKNavigation",
+                "WKNavigationDelegate",
+                "WKUserContentController",
+                "WKURLSchemeHandler",
+                "WKPreferences",
+                "WKURLSchemeTask",
+                "WKScriptMessageHandler",
+                "WKUIDelegate",
+                "WKOpenPanelParameters",
+                "WKFrameInfo",
+                "WKSecurityOrigin",
+                "WKScriptMessage",
+                "WKNavigationAction",
+                "WKWebpagePreferences",
+                "WKNavigationResponse",
+                "WKUserScript",
+                "WKHTTPCookieStore",
+                "WKWindowFeatures"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "once_cell",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "percent-encoding",
+              "req": "^2.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "percent-encoding",
+              "req": "^2.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "pollster",
+              "req": "^1.0.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "raw-window-handle",
+              "req": "^0.6",
+              "features": [
+                "std"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "sha2",
+              "req": "^0.10",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "sha2",
+              "req": "^0.10",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "soup3",
+              "req": "^0.5",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "tao",
+              "req": "^0.37",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "tao-macros",
+              "req": "^0.1.4",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"android\")",
+              "kind": "normal"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "tracing",
+              "req": "^0.1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "url",
+              "req": "^2.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_vendor = \"apple\")",
+              "kind": "normal"
+            },
+            {
+              "name": "webkit2gtk",
+              "req": "=2.0.2",
+              "features": [
+                "v2_38"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "webkit2gtk-sys",
+              "req": "=2.0.2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "webview2-com",
+              "req": "^0.39",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "wgpu",
+              "req": "^23",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "windows",
+              "req": "^0.62",
+              "features": [
+                "Win32_Foundation",
+                "Win32_Graphics_Gdi",
+                "Win32_System_Com",
+                "Win32_System_Com_StructuredStorage",
+                "Win32_System_LibraryLoader",
+                "Win32_System_Ole",
+                "Win32_System_SystemInformation",
+                "Win32_System_SystemServices",
+                "Win32_UI_Shell",
+                "Win32_UI_WindowsAndMessaging",
+                "Win32_Globalization",
+                "Win32_UI_HiDpi",
+                "Win32_UI_Input",
+                "Win32_UI_Input_KeyboardAndMouse"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "windows-core",
+              "req": "^0.62",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "windows-version",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(target_os = \"windows\")",
+              "kind": "normal"
+            },
+            {
+              "name": "winit",
+              "req": "^0.30",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "x11-dl",
+              "req": "^2.21",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "normal"
+            },
+            {
+              "name": "x11-dl",
+              "req": "^2.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": "cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))",
+              "kind": "dev"
+            }
+          ],
+          "cksum": "a819957a01b3119af85e638a38d242af76dbc87d130dca67bfd0441072e21ff0",
+          "features": {
+            "devtools": [],
+            "mac-proxy": [],
+            "serde": [
+              "dpi/serde"
+            ],
+            "x11": [
+              "x11-dl",
+              "gdkx11",
+              "tao/x11"
+            ]
+          },
+          "features2": {
+            "default": [
+              "os-webview",
+              "x11"
+            ],
+            "linux-body": [
+              "webkit2gtk/v2_40",
+              "os-webview"
+            ],
+            "os-webview": [
+              "javascriptcore-rs",
+              "webkit2gtk",
+              "webkit2gtk-sys",
+              "dep:gtk",
+              "soup3"
+            ],
+            "tracing": [
+              "dep:tracing"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.85",
+          "pubtime": "2026-09-08T03:54:05Z",
+          "v": 2
+        }
+      ]
+    },
+    "tauri-utils-index": {
+      "url": "https://index.crates.io/ta/ur/tauri-utils",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "tauri-utils",
+          "vers": "2.9.1",
+          "deps": [
+            {
+              "name": "aes-gcm",
+              "req": "^0.10",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "anyhow",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "brotli",
+              "req": "^8",
+              "features": [
+                "std"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cargo_metadata",
+              "req": "^0.19",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "ctor",
+              "req": "^0.8",
+              "features": [
+                "std",
+                "proc_macro"
+              ],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dom_query",
+              "req": "^0.27",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dunce",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [
+                "std"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [
+                "std"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glob",
+              "req": "^0.3.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "html5ever",
+              "req": "^0.29",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "infer",
+              "req": "^0.19",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "json-patch",
+              "req": "^3.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "json5",
+              "req": "^0.4",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "kuchiki",
+              "req": "^0.8.8-speedreader",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "kuchikiki"
+            },
+            {
+              "name": "log",
+              "req": "^0.4.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "memchr",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "phf",
+              "req": "^0.13",
+              "features": [
+                "macros"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "plist",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "proc-macro2",
+              "req": "^1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "quote",
+              "req": "^1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "regex",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "schemars",
+              "req": "^0.8.21",
+              "features": [
+                "url",
+                "uuid1"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "semver",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "derive"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde-untagged",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_with",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serial_test",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serialize-to-javascript",
+              "req": "^0.1.2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "swift-rs",
+              "req": "^1",
+              "features": [
+                "build"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "tempfile",
+              "req": "^3.15.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "toml",
+              "req": ">=0.9, <=1",
+              "features": [
+                "parse"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "url",
+              "req": "^2",
+              "features": [
+                "serde"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "urlpattern",
+              "req": "^0.3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "uuid",
+              "req": "^1",
+              "features": [
+                "serde"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "walkdir",
+              "req": "^2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            }
+          ],
+          "cksum": "d57200389a2f82b4b0a40ae29ca19b6978116e8f4d4e974c3234ce40c0ffbdec",
+          "features": {
+            "compression": [
+              "brotli"
+            ],
+            "config-json5": [
+              "json5"
+            ],
+            "config-toml": [],
+            "isolation": [
+              "aes-gcm",
+              "getrandom",
+              "serialize-to-javascript"
+            ],
+            "process-relaunch-dangerous-allow-symlink-macos": [],
+            "resources": [
+              "walkdir"
+            ],
+            "schema": [
+              "schemars"
+            ]
+          },
+          "features2": {
+            "build": [
+              "proc-macro2",
+              "quote",
+              "cargo_metadata",
+              "schema",
+              "swift-rs",
+              "html-manipulation"
+            ],
+            "build-2": [
+              "proc-macro2",
+              "quote",
+              "cargo_metadata",
+              "schema",
+              "swift-rs",
+              "html-manipulation-2"
+            ],
+            "html-manipulation": [
+              "dep:html5ever",
+              "dep:kuchiki"
+            ],
+            "html-manipulation-2": [
+              "dep:dom_query"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.77.2",
+          "pubtime": "2026-05-06T10:12:55Z",
+          "v": 2
+        },
+        {
+          "name": "tauri-utils",
+          "vers": "2.10.1",
+          "deps": [
+            {
+              "name": "aes-gcm",
+              "req": "^0.10",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "anyhow",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "brotli",
+              "req": "^9",
+              "features": [
+                "std"
+              ],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cargo_metadata",
+              "req": "^0.19",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "ctor",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dom_query",
+              "req": "^0.28",
+              "features": [],
+              "optional": true,
+              "default_features": false,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "dunce",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [
+                "std"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "getrandom",
+              "req": "^0.3",
+              "features": [
+                "std"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "glob",
+              "req": "^0.3.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "html5ever",
+              "req": "^0.29",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "http",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "infer",
+              "req": "^0.22",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "json-patch",
+              "req": "^4.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "json5",
+              "req": "^0.4",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "kuchiki",
+              "req": "^0.8.8-speedreader",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "kuchikiki"
+            },
+            {
+              "name": "log",
+              "req": "^0.4.21",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "memchr",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "phf",
+              "req": "^0.13",
+              "features": [
+                "macros"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "plist",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "proc-macro2",
+              "req": "^1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "quote",
+              "req": "^1",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "regex",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "schemars",
+              "req": "^0.8.22",
+              "features": [
+                "url",
+                "uuid1"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "semver",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde",
+              "req": "^1",
+              "features": [
+                "derive"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde-untagged",
+              "req": "^0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_json",
+              "req": "^1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serde_with",
+              "req": "^3",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "serial_test",
+              "req": "^3.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "serialize-to-javascript",
+              "req": "^0.1.2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "swift-rs",
+              "req": "^1.0.8",
+              "features": [
+                "build"
+              ],
+              "optional": true,
+              "default_features": true,
+              "target": "cfg(target_os = \"macos\")",
+              "kind": "normal"
+            },
+            {
+              "name": "tempfile",
+              "req": "^3.15.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "dev"
+            },
+            {
+              "name": "thiserror",
+              "req": "^2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "toml",
+              "req": ">=0.9, <=1",
+              "features": [
+                "parse"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "url",
+              "req": "^2",
+              "features": [
+                "serde"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "urlpattern",
+              "req": "^0.6",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "uuid",
+              "req": "^1",
+              "features": [
+                "serde"
+              ],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "walkdir",
+              "req": "^2",
+              "features": [],
+              "optional": true,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            }
+          ],
+          "cksum": "2ff55a614843b9a3f010f211df637c94df2607175b8d0f6e0f4a7c19e18621ee",
+          "features": {
+            "compression": [
+              "brotli"
+            ],
+            "config-json5": [
+              "json5"
+            ],
+            "config-toml": [],
+            "isolation": [
+              "aes-gcm",
+              "getrandom",
+              "serialize-to-javascript"
+            ],
+            "process-relaunch-dangerous-allow-symlink-macos": [],
+            "resources": [
+              "walkdir"
+            ],
+            "schema": [
+              "schemars"
+            ]
+          },
+          "features2": {
+            "build": [
+              "proc-macro2",
+              "quote",
+              "cargo_metadata",
+              "schema",
+              "swift-rs",
+              "html-manipulation"
+            ],
+            "build-2": [
+              "proc-macro2",
+              "quote",
+              "cargo_metadata",
+              "schema",
+              "swift-rs",
+              "html-manipulation-2"
+            ],
+            "html-manipulation": [
+              "dep:html5ever",
+              "dep:kuchiki"
+            ],
+            "html-manipulation-2": [
+              "dep:dom_query"
+            ]
+          },
+          "yanked": false,
+          "rust_version": "1.90",
+          "pubtime": "2026-09-30T20:42:58Z",
+          "v": 2
+        }
+      ]
+    },
+    "webkit2gtk-index": {
+      "url": "https://index.crates.io/we/bk/webkit2gtk",
+      "httpObservation": "successful public response",
+      "entries": [
+        {
+          "name": "webkit2gtk",
+          "vers": "2.0.2",
+          "deps": [
+            {
+              "name": "bitflags",
+              "req": "^1.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "cairo-rs",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "ffi",
+              "req": "^2.0.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "webkit2gtk-sys"
+            },
+            {
+              "name": "gdk",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gdk-sys",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gio",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gio-sys",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "glib",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "glib-sys",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gobject-sys",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gtk",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "gtk-sys",
+              "req": "^0.18.0",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "java_script_core",
+              "req": "=1.1",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "javascriptcore-rs"
+            },
+            {
+              "name": "libc",
+              "req": "^0.2",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "once_cell",
+              "req": "^1.8",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal"
+            },
+            {
+              "name": "soup",
+              "req": "^0.5",
+              "features": [],
+              "optional": false,
+              "default_features": true,
+              "target": null,
+              "kind": "normal",
+              "package": "soup3"
+            }
+          ],
+          "cksum": "a1027150013530fb2eaf806408df88461ae4815a45c541c8975e61d6f2fc4793",
+          "features": {
+            "v2_10": [
+              "v2_8",
+              "ffi/v2_10"
+            ],
+            "v2_12": [
+              "v2_10",
+              "ffi/v2_12"
+            ],
+            "v2_14": [
+              "v2_12",
+              "ffi/v2_14"
+            ],
+            "v2_16": [
+              "v2_14",
+              "ffi/v2_16"
+            ],
+            "v2_18": [
+              "v2_16",
+              "ffi/v2_18"
+            ],
+            "v2_2": [],
+            "v2_20": [
+              "v2_18",
+              "ffi/v2_20"
+            ],
+            "v2_22": [
+              "v2_20",
+              "ffi/v2_22"
+            ],
+            "v2_24": [
+              "v2_22",
+              "ffi/v2_24"
+            ],
+            "v2_26": [
+              "v2_24",
+              "ffi/v2_26"
+            ],
+            "v2_28": [
+              "v2_26",
+              "ffi/v2_28"
+            ],
+            "v2_30": [
+              "v2_28",
+              "ffi/v2_30"
+            ],
+            "v2_32": [
+              "v2_30",
+              "ffi/v2_32"
+            ],
+            "v2_34": [
+              "v2_32",
+              "ffi/v2_34"
+            ],
+            "v2_36": [
+              "v2_34",
+              "ffi/v2_36"
+            ],
+            "v2_38": [
+              "v2_36",
+              "ffi/v2_38"
+            ],
+            "v2_4": [
+              "v2_2"
+            ],
+            "v2_40": [
+              "v2_38",
+              "ffi/v2_40"
+            ],
+            "v2_6": [
+              "v2_4",
+              "ffi/v2_6"
+            ],
+            "v2_8": [
+              "v2_6",
+              "ffi/v2_8"
+            ]
+          },
+          "yanked": false,
+          "pubtime": "2025-12-16T11:13:04Z"
+        }
+      ]
+    },
+    "braces": {
+      "url": "https://registry.npmjs.org/braces/latest",
+      "httpObservation": "successful public response",
+      "name": "braces",
+      "version": "3.0.3",
+      "dist": {
+        "shasum": "490332f40919452272d55a8480adc0c441358789",
+        "tarball": "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz",
+        "fileCount": 10,
+        "integrity": "sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==",
+        "signatures": [
+          {
+            "sig": "MEQCICfWLKNcFCGtU07ikrPJ+s1dTDH3VZTE+vQZzC22s6o+AiAEVUE/YXRqHYgctcwHqNawvsOviSDFZPvgNm8+SUXD3w==",
+            "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+          }
+        ],
+        "unpackedSize": 44635
+      }
+    },
+    "http-cache-semantics": {
+      "url": "https://registry.npmjs.org/http-cache-semantics/latest",
+      "httpObservation": "successful public response",
+      "name": "http-cache-semantics",
+      "version": "4.3.0",
+      "dist": {
+        "shasum": "09eead3b16c6d85552857cc3fbd888d8353a2aaf",
+        "tarball": "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.3.0.tgz",
+        "fileCount": 4,
+        "integrity": "sha512-M5t5LlJpS1UHMjvwRQVdFHvPISGeLAxNcrWuJkeGh0KxsqCHZ1O3NXZU/8x7cD0BDcGW8kapxMKTvwlqrNkHkA==",
+        "signatures": [
+          {
+            "sig": "MEUCIQDU71NGQGXN2buhOfei8zXURLpUX2HZ5LtN+S2RA3DdXAIgTyD8bU/4QDHCqLXZ9rJomYbAJ8S0FuwmAbXfZWIqAhw=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIGi6foYRIrk5DVJSvvCMxa3/bOoY2UAobLWZqWuB0zPiAiEA9hXrJvqvBfqVrkB+W+TEbg+OPpjr9JqPrrmgPsZ3big=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 50444
+      }
+    },
+    "braces75": {
+      "url": "https://api.github.com/repos/micromatch/braces/pulls/75",
+      "state": "open",
+      "merged_at": null,
+      "merge_commit_sha": "40722e8f542c6cce172ece8b1505e49bf77dde84",
+      "html_url": "https://github.com/micromatch/braces/pull/75"
+    },
+    "braces72": {
+      "url": "https://api.github.com/repos/micromatch/braces/pulls/72",
+      "state": "closed",
+      "merged_at": null,
+      "merge_commit_sha": "2f2eb935a1afa189ab95aed83a09d2ba4def848f",
+      "html_url": "https://github.com/micromatch/braces/pull/72"
+    },
+    "rand1763": {
+      "url": "https://api.github.com/repos/rust-random/rand/pulls/1763",
+      "state": "closed",
+      "merged_at": "2026-04-11T10:34:44Z",
+      "merge_commit_sha": "27ff4cb7ced3122a1f677fc248c1a07e59ddc8cd",
+      "html_url": "https://github.com/rust-random/rand/pull/1763"
+    }
+  },
+  "cachePublishedDelta": "--- https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.2.0.tgz\n+++ https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.3.0.tgz\n@@ -334,12 +334,13 @@\n \n     /**\n      * @param {{headers: Record<string, string>, synchronous: boolean}|undefined} revalidation - Revalidation information, if any.\n-     * @returns {{response: {headers: Record<string, string>}, revalidation: {headers: Record<string, string>, synchronous: boolean}|undefined}} An object with a cached response headers and revalidation info.\n+     * @returns {{response: HttpResponse, revalidation: {headers: Record<string, string>, synchronous: boolean}|undefined}} An object with a cached response headers and revalidation info.\n      */\n     _evaluateRequestHitResult(revalidation) {\n         return {\n             response: {\n                 headers: this.responseHeaders(),\n+                status: this._status,\n             },\n             revalidation,\n         };\n@@ -387,9 +388,9 @@\n      * }\n      * ```\n      * @param {HttpRequest} req - new incoming HTTP request\n-     * @returns {{response: {headers: Record<string, string>}|undefined, revalidation: {headers: Record<string, string>, synchronous: boolean}|undefined}} An object containing keys:\n+     * @returns {{response: HttpResponse|undefined, revalidation: {headers: Record<string, string>, synchronous: boolean}|undefined}} An object containing keys:\n      *   - revalidation: { headers: Record<string, string>, synchronous: boolean } Set if you should send this to the origin server\n-     *   - response: { headers: Record<string, string> } Set if you can respond to the client with these cached headers\n+     *   - response: HttpResponse Set if you can respond to the client with these cached headers\n      */\n     evaluateRequest(req) {\n         this._assertRequestHasHeaders(req);\n@@ -484,18 +485,32 @@\n             return true;\n         }\n \n-        // A Vary header field-value of \"*\" always fails to match\n-        if (this._resHeaders.vary === '*') {\n-            return false;\n-        }\n-\n         const fields = this._resHeaders.vary\n             .trim()\n             .toLowerCase()\n             .split(/\\s*,\\s*/);\n+\n         for (const name of fields) {\n-            if (req.headers[name] !== this._reqHeaders[name]) return false;\n-        }\n+            // A Vary header field-value of \"*\" always fails to match\n+            if (name === '*') {\n+                return false;\n+            }\n+\n+            const newReq = Object.prototype.hasOwnProperty.call(\n+                req.headers,\n+                name\n+            ) && req.headers[name];\n+\n+            const cachedReq = Object.prototype.hasOwnProperty.call(\n+                this._reqHeaders,\n+                name\n+            ) && this._reqHeaders[name];\n+\n+            if (newReq !== cachedReq) {\n+                return false;\n+            }\n+        }\n+\n         return true;\n     }\n \n@@ -554,6 +569,14 @@\n         headers.age = `${Math.round(age)}`;\n         headers.date = new Date(this.now()).toUTCString();\n         return headers;\n+    }\n+\n+    /**\n+     * Returns the status code of the cached response.\n+     * @returns {number} The response status code.\n+     */\n+    status() {\n+      return this._status;\n     }\n \n     /**\n",
+  "cacheDispute": {
+    "url": "https://github.com/kornelski/http-cache-semantics/issues/56",
+    "owner": "kornelski",
+    "summary": "Maintainer disputes advisory under RFC9111 Set-Cookie/cache-control semantics; withdrawal request github/advisory-database#10139 remains open."
+  }
+}

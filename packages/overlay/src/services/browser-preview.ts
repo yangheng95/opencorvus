@@ -96,17 +96,7 @@ export async function loadTaskBrowserPreviewEvidenceCaptureObjectUrl(input: {
     signal: input.signal,
   })
   if (!response.ok)
-    throw new ApiError(response.status, path, decodeBinaryBrowserPreviewErrorBody(response.body), response.headers)
+    throw new ApiError(response.status, path, response.body, response.headers)
   const contentType = response.headers["content-type"] || response.headers["Content-Type"] || "image/png"
   return URL.createObjectURL(new Blob([bytesToArrayBuffer(response.body)], { type: contentType }))
-}
-
-function decodeBinaryBrowserPreviewErrorBody(body: Uint8Array): unknown {
-  const text = new TextDecoder().decode(body).trim()
-  if (!text) return body
-  try {
-    return JSON.parse(text) as unknown
-  } catch {
-    return text
-  }
 }

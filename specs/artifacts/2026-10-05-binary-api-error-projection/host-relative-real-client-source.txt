@@ -1,0 +1,36 @@
+import fs from "node:fs/promises"
+import assert from "node:assert/strict"
+import { ApiError, configure, fetchResourceAsObjectUrl } from "../packages/overlay/src/services/api"
+import { formatErrorDetails } from "../packages/overlay/src/utils/error-details"
+const directory="C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+const missing=`missing-resource-${crypto.randomUUID()}.png`
+const raw=`/file/content?${new URLSearchParams({path:missing,directory})}`
+const nativeFetch=globalThis.fetch
+let wire: unknown
+let result: unknown
+configure({serverUrl:"http://127.0.0.1:17883",directory})
+globalThis.fetch=Object.assign(async (...args:Parameters<typeof fetch>)=>{
+  const response=await nativeFetch(...args)
+  wire={url:String(args[0]),method:args[1]?.method??"GET",status:response.status,headers:Object.fromEntries(["content-type","x-opencorvus-request-id"].map(key=>[key,response.headers.get(key)])),text:await response.clone().text()}
+  return response
+},{preconnect:nativeFetch.preconnect})
+try{
+  const error=await fetchResourceAsObjectUrl(raw).catch(value=>value)
+  assert(error instanceof ApiError)
+  const actual=wire as {status:number;headers:Record<string,string>;text:string}
+  assert.equal(error.status,404)
+  assert.equal(error.path,raw)
+  assert.deepEqual(error.body,JSON.parse(actual.text))
+  assert.equal((error.body as {name:string}).name,"FileNotFoundError")
+  assert.equal(error.requestID,actual.headers["x-opencorvus-request-id"])
+  assert.match(error.requestID!,/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+  const message=(error.body as {data:{message:string}}).data.message
+  assert.equal(error.summary,`API 404: ${message}`)
+  result={qualification:"actual owned host-relative resource error passed",directory,raw,wire,error:{name:error.name,status:error.status,path:error.path,body:error.body,summary:error.summary,message:error.message,requestID:error.requestID,details:formatErrorDetails(error)}}
+}catch(error){result={qualification:"failed",directory,raw,wire,error:String(error)};process.exitCode=1}
+finally{
+  globalThis.fetch=nativeFetch
+  configure({directory:""})
+  await fs.writeFile("D:/myhexin-local/opencorvus/.tmp-product-iteration/host-relative-error-real-01.json",JSON.stringify(result,null,2),{flag:"wx"})
+}
+console.log(JSON.stringify(result,null,2))

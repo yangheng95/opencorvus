@@ -1,223 +1,153 @@
-import { expect, test, describe, beforeEach, afterEach, mock } from "bun:test"
+import { expect, test, describe, beforeEach, afterEach } from "bun:test"
 import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
-import {
-  HOST_CAPABILITIES,
-  type HostTransport,
-  type TransportRequest,
-  type TransportResponse,
-} from "../src/services/host-transport"
-import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
+import { ApiError, configure, fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../src/services/api"
 
-// Guards Phase 3: blob object URL lifetime is owned by the module-level
-// cache in services/api, not by the rendering component. These tests pin
-// the contract:
-//   1. Repeated `fetchResourceAsObjectUrl` calls for the same raw URL hit
-//      the cache and return the same blob URL without re-fetching — so
-//      remounting the FilePart subtree never triggers a network roundtrip
-//      nor a momentarily-empty <img>.
-//   2. Concurrent callers for the same URL share a single in-flight fetch
-//      so a burst of mounts does not amplify network traffic.
-//   3. `peekResourceObjectUrl` returns the cached URL synchronously once
-//      the resource has been materialised — that's what keeps Solid's
-//      createResource signal non-pending on the first read after remount.
-
+// Local Response fixtures qualify service cache, byte and cancellation contracts.
+// Native Blob URLs hold actual bytes; no renderer or DOM is involved.
 const originalFetch = globalThis.fetch
-const originalCreateObjectURL = (globalThis.URL as any).createObjectURL
-const originalRevokeObjectURL = (globalThis.URL as any).revokeObjectURL
+const bytes = [137, 80, 78, 71]
+const response = (value = bytes) => new Response(new Uint8Array(value), { headers: { "content-type": "image/png" } })
+const blobBytes = async (url: string) => [...new Uint8Array(await (await originalFetch(url)).arrayBuffer())]
+type RequestFact = { url: string; init?: RequestInit }
 
 describe("blob URL cache", () => {
-  let blobCounter = 0
-  let fetchCalls: string[]
-
+  let requests: RequestFact[]
+  let respond: (url: string, init?: RequestInit) => Promise<Response>
   beforeEach(() => {
-    blobCounter = 0
-    fetchCalls = []
-    ;(globalThis.URL as any).createObjectURL = (_blob: any) => `blob:fake-${++blobCounter}`
-    ;(globalThis.URL as any).revokeObjectURL = (_url: string) => {}
-    globalThis.fetch = mock(async (url: string) => {
-      fetchCalls.push(String(url))
-      // audit-2026-04-29 W2-V25 — the mock blob must provide
-      // arrayBuffer() because the binary path in
-      // tauri-transport.readResponse calls `blob.arrayBuffer()` to
-      // materialise the bytes (see tauri-transport.ts:115-116).
-      // Pre-fix the mock returned `{}` which crashed with
-      // "blob.arrayBuffer is not a function" — so all 3 cache
-      // tests had been silently failing.
-      return {
-        ok: true,
-        status: 200,
-        headers: new Map([["content-type", "image/png"]]) as any,
-        blob: async () => ({
-          arrayBuffer: async () => new Uint8Array(0).buffer,
-        }),
-        // Mirror Response.headers iterator shape used by
-        // headersToObject in tauri-transport.ts:246-251.
-        forEach: () => {},
-      } as any
-    })
+    configure({ serverUrl: "http://127.0.0.1:7878", directory: "" })
+    requests = []
+    respond = async () => response()
+    globalThis.fetch = Object.assign(async (input: Parameters<typeof fetch>[0], init?: RequestInit) => {
+      const url = String(input)
+      requests.push({ url, init })
+      return respond(url, init)
+    }, { preconnect: originalFetch.preconnect })
+  })
+  afterEach(() => { globalThis.fetch = originalFetch })
+
+  const expectedRequest = (raw: string) => ({
+    url: `http://127.0.0.1:7878${raw}`,
+    init: { method: "GET", headers: { Accept: "application/json" }, signal: expect.any(AbortSignal) },
   })
 
-  afterEach(() => {
-    __setHostTransportForTest(undefined)
-    globalThis.fetch = originalFetch
-    ;(globalThis.URL as any).createObjectURL = originalCreateObjectURL
-    ;(globalThis.URL as any).revokeObjectURL = originalRevokeObjectURL
+  test("repeated reads and peek share the materialized Blob and its exact bytes", async () => {
+    const raw = "/attachment/proj/cache-a.png"
+    const first = await fetchResourceAsObjectUrl(raw)
+    const repeated = await fetchResourceAsObjectUrl(raw)
+    expect(repeated).toBe(first)
+    expect(peekResourceObjectUrl(raw)).toBe(first)
+    expect(await blobBytes(first)).toEqual(bytes)
+    expect(requests).toEqual([expectedRequest(raw)])
   })
 
-  test("second call with same raw URL returns the cached blob and does not refetch", async () => {
-    // Deferred import so the fetch/URL stubs above are in place before the
-    // module-level cache gets any live values.
-    const { fetchResourceAsObjectUrl } = await import("../src/services/api")
-    const url1 = await fetchResourceAsObjectUrl("/attachment/proj/cache-a.png")
-    const url2 = await fetchResourceAsObjectUrl("/attachment/proj/cache-a.png")
-    expect(url1).toBe(url2)
-    expect(fetchCalls.length).toBe(1)
-  })
-
-  test("peekResourceObjectUrl returns the cached URL synchronously after first fetch", async () => {
-    const { fetchResourceAsObjectUrl, peekResourceObjectUrl } = await import("../src/services/api")
-    expect(peekResourceObjectUrl("/attachment/proj/cache-b.png")).toBeUndefined()
-    const materialised = await fetchResourceAsObjectUrl("/attachment/proj/cache-b.png")
-    expect(peekResourceObjectUrl("/attachment/proj/cache-b.png")).toBe(materialised)
-  })
-
-  test("server-relative resource URLs preserve query parameters through host transport", async () => {
-    const { fetchResourceAsObjectUrl, peekResourceObjectUrl } = await import("../src/services/api")
-    const requests: TransportRequest[] = []
-    const transport = {
-      kind: "tauri",
-      capabilities: HOST_CAPABILITIES.tauri,
-      async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
-        requests.push(req)
-        return {
-          status: 200,
-          ok: true,
-          headers: { "content-type": "image/webp" },
-          body: new Uint8Array([1, 2, 3]) as T,
-        }
-      },
-      openStream() {
-        throw new Error("openStream not used")
-      },
-      async native() {
-        throw new Error("native not used")
-      },
-    } satisfies HostTransport
-    __setHostTransportForTest(transport)
-
+  test("server-relative query and successful content type reach the materialized Blob", async () => {
     const raw = `/attachment/proj/shot.png?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}`
-    const materialised = await fetchResourceAsObjectUrl(raw)
-
-    expect(materialised).toBe("blob:fake-1")
-    expect(requests).toHaveLength(1)
-    expect(requests[0]?.path).toBe("attachment/proj/shot.png")
-    expect(requests[0]?.query).toEqual({ variant: SCREENSHOT_BROWSER_THUMBNAIL_VARIANT })
-    expect(peekResourceObjectUrl(raw)).toBe(materialised)
+    respond = async () => new Response(new Uint8Array([1, 2, 3]), { headers: { "content-type": "image/webp" } })
+    const materialized = await fetchResourceAsObjectUrl(raw)
+    expect(requests).toEqual([expectedRequest(raw)])
+    expect(peekResourceObjectUrl(raw)).toBe(materialized)
+    const blob = await (await originalFetch(materialized)).blob()
+    expect(blob.type).toBe("image/webp")
+    expect([...new Uint8Array(await blob.arrayBuffer())]).toEqual([1, 2, 3])
   })
 
-  test("concurrent callers for the same URL share a single in-flight fetch", async () => {
-    const { fetchResourceAsObjectUrl } = await import("../src/services/api")
-    const [u1, u2, u3] = await Promise.all([
-      fetchResourceAsObjectUrl("/attachment/proj/cache-c.png"),
-      fetchResourceAsObjectUrl("/attachment/proj/cache-c.png"),
-      fetchResourceAsObjectUrl("/attachment/proj/cache-c.png"),
-    ])
-    expect(u1).toBe(u2)
-    expect(u2).toBe(u3)
-    expect(fetchCalls.length).toBe(1)
+  test("concurrent consumers receive the same completed Blob and request identity", async () => {
+    const raw = "/attachment/proj/cache-c.png"
+    const urls = await Promise.all([fetchResourceAsObjectUrl(raw), fetchResourceAsObjectUrl(raw), fetchResourceAsObjectUrl(raw)])
+    expect(urls).toEqual([urls[0], urls[0], urls[0]])
+    expect(await blobBytes(urls[0]!)).toEqual(bytes)
+    expect(requests).toEqual([expectedRequest(raw)])
   })
 
-  test("aborting the only consumer cancels the underlying resource request without caching", async () => {
-    const { fetchResourceAsObjectUrl, peekResourceObjectUrl } = await import("../src/services/api")
+  test("last-consumer cancellation reports its reason and a fresh retry completes with bytes", async () => {
+    const raw = "/attachment/proj/abort.png"
     let started!: () => void
-    let transportSignal: AbortSignal | undefined
-    const requestStarted = new Promise<void>((resolve) => {
-      started = resolve
+    const requestStarted = new Promise<void>(resolve => { started = resolve })
+    let transportAbort: unknown
+    respond = async (_url, init) => new Promise<Response>((_resolve, reject) => {
+      init!.signal!.addEventListener("abort", () => {
+        transportAbort = init!.signal!.reason
+        reject(transportAbort)
+      }, { once: true })
+      started()
     })
-    const transport = {
-      kind: "tauri",
-      capabilities: HOST_CAPABILITIES.tauri,
-      async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
-        expect(req.path).toBe("attachment/proj/abort.png")
-        transportSignal = req.signal
-        started()
-        return await new Promise<TransportResponse<T>>((_resolve, reject) => {
-          req.signal?.addEventListener(
-            "abort",
-            () => reject(req.signal?.reason ?? new DOMException("transport aborted", "AbortError")),
-            { once: true },
-          )
-        })
-      },
-      openStream() {
-        throw new Error("openStream not used")
-      },
-      async native() {
-        throw new Error("native not used")
-      },
-    } satisfies HostTransport
-    __setHostTransportForTest(transport)
-
     const controller = new AbortController()
-    const pending = fetchResourceAsObjectUrl("/attachment/proj/abort.png", { signal: controller.signal })
+    const pending = fetchResourceAsObjectUrl(raw, { signal: controller.signal })
     await requestStarted
     controller.abort(new DOMException("thumbnail unmounted", "AbortError"))
-
-    await expect(pending).rejects.toThrow("thumbnail unmounted")
-    expect(transportSignal?.aborted).toBe(true)
-    expect(peekResourceObjectUrl("/attachment/proj/abort.png")).toBeUndefined()
+    await expect(pending).rejects.toMatchObject({ name: "AbortError", message: "thumbnail unmounted" })
+    expect(transportAbort).toMatchObject({ name: "AbortError", message: "Resource request has no active consumers" })
+    respond = async () => response([7, 8, 9])
+    const fresh = await fetchResourceAsObjectUrl(raw)
+    expect(await blobBytes(fresh)).toEqual([7, 8, 9])
+    expect(peekResourceObjectUrl(raw)).toBe(fresh)
+    expect(requests).toEqual([expectedRequest(raw), expectedRequest(raw)])
   })
 
-  test("aborting one shared consumer keeps the in-flight request for remaining consumers", async () => {
-    const { fetchResourceAsObjectUrl, peekResourceObjectUrl } = await import("../src/services/api")
-    let requestCount = 0
-    let markRequestStarted!: () => void
-    let resolveRequest!: () => void
-    let transportSignal: AbortSignal | undefined
-    const requestStarted = new Promise<void>((resolve) => {
-      markRequestStarted = resolve
+  test("a remaining shared consumer completes after the other consumer receives AbortError", async () => {
+    const raw = "/attachment/proj/shared-abort.png"
+    let started!: () => void
+    let complete!: (value: Response) => void
+    const requestStarted = new Promise<void>(resolve => { started = resolve })
+    respond = async (_url, init) => new Promise<Response>((resolve, reject) => {
+      const abort = () => reject(init!.signal!.reason)
+      init!.signal!.addEventListener("abort", abort, { once: true })
+      complete = value => { init!.signal!.removeEventListener("abort", abort); resolve(value) }
+      started()
     })
-    const requestReady = new Promise<void>((resolve) => {
-      resolveRequest = resolve
-    })
-    const transport = {
-      kind: "tauri",
-      capabilities: HOST_CAPABILITIES.tauri,
-      async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
-        requestCount += 1
-        expect(req.path).toBe("attachment/proj/shared-abort.png")
-        transportSignal = req.signal
-        markRequestStarted()
-        await requestReady
-        return {
-          status: 200,
-          ok: true,
-          headers: { "content-type": "image/png" },
-          body: new Uint8Array([1, 2, 3]) as T,
-        }
-      },
-      openStream() {
-        throw new Error("openStream not used")
-      },
-      async native() {
-        throw new Error("native not used")
-      },
-    } satisfies HostTransport
-    __setHostTransportForTest(transport)
-
     const controller = new AbortController()
-    const first = fetchResourceAsObjectUrl("/attachment/proj/shared-abort.png", { signal: controller.signal })
-    const second = fetchResourceAsObjectUrl("/attachment/proj/shared-abort.png")
+    const first = fetchResourceAsObjectUrl(raw, { signal: controller.signal })
+    const second = fetchResourceAsObjectUrl(raw)
     await requestStarted
-    controller.abort(new DOMException("only one consumer left", "AbortError"))
+    controller.abort(new DOMException("one consumer left", "AbortError"))
+    await expect(first).rejects.toMatchObject({ name: "AbortError", message: "one consumer left" })
+    complete(response([10, 11, 12]))
+    const url = await second
+    expect(await blobBytes(url)).toEqual([10, 11, 12])
+    expect(peekResourceObjectUrl(raw)).toBe(url)
+    expect(requests).toEqual([expectedRequest(raw)])
+  })
 
-    await expect(first).rejects.toThrow("only one consumer left")
-    expect(transportSignal?.aborted).toBe(false)
-    resolveRequest()
-    const resolved = await second
+  test("host-relative failure preserves its raw path and public body before a successful retry", async () => {
+    const raw = "/attachment/proj/error.png?variant=thumbnail&directory=D%3A%2Fowned"
+    const body = { name: "NotFoundError", data: { message: "Owned image is unavailable" } }
+    respond = async () => new Response(JSON.stringify(body), { status: 404, headers: {
+      "content-type": "application/json", "x-opencorvus-request-id": "resource-response-1",
+    } })
+    const error = await fetchResourceAsObjectUrl(raw).catch((value: unknown) => value)
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error).toMatchObject({ status: 404, path: raw, body, requestID: "resource-response-1" })
+    expect((error as ApiError).summary).toBe("API 404: Owned image is unavailable")
+    respond = async () => response([15, 16])
+    const url = await fetchResourceAsObjectUrl(raw)
+    expect(await blobBytes(url)).toEqual([15, 16])
+    expect(peekResourceObjectUrl(raw)).toBe(url)
+    expect(requests).toEqual([expectedRequest(raw), expectedRequest(raw)])
+  })
 
-    expect(requestCount).toBe(1)
-    expect(resolved).toBe("blob:fake-1")
-    expect(peekResourceObjectUrl("/attachment/proj/shared-abort.png")).toBe(resolved)
+  test("a failed full-window request releases the next resource slot to complete", async () => {
+    const finish = new Map<string, (value: Response) => void>()
+    let windowReady!: () => void
+    let queuedStarted!: () => void
+    const ready = new Promise<void>(resolve => { windowReady = resolve })
+    const next = new Promise<void>(resolve => { queuedStarted = resolve })
+    respond = async (url) => new Promise<Response>(resolve => {
+      const pathname = new URL(url).pathname
+      finish.set(pathname, resolve)
+      if (finish.size === 64) windowReady()
+      if (pathname === "/attachment/proj/slot-64.png") queuedStarted()
+    })
+    const paths = Array.from({ length: 65 }, (_, index) => `/attachment/proj/slot-${index}.png`)
+    const pending = paths.map(raw => fetchResourceAsObjectUrl(raw).then(url => ({ url }), error => ({ error })))
+    await ready
+    finish.get(paths[0]!)!(new Response('{"message":"Resource unavailable"}', { status: 503, headers: { "content-type": "application/json" } }))
+    const failed = await pending[0]!
+    expect(failed).toMatchObject({ error: { name: "ApiError", status: 503, body: { message: "Resource unavailable" } } })
+    await next
+    for (let index = 1; index < paths.length; index++) finish.get(paths[index]!)!(response([index]))
+    const results = await Promise.all(pending)
+    expect(await blobBytes((results[64] as { url: string }).url)).toEqual([64])
+    expect(await blobBytes((results[63] as { url: string }).url)).toEqual([63])
+    expect(requests).toEqual(paths.map(expectedRequest))
   })
 })

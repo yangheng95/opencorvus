@@ -1,0 +1,100 @@
+bun test v1.3.14 (0d9b296a)
+
+test\api-error.test.ts:
+(pass) apiJson + ApiError > materializes one binary named UTF8 JSON body for every diagnostic [0.84ms]
+(pass) apiJson + ApiError > materializes one binary message JSON body for every diagnostic [0.07ms]
+(pass) apiJson + ApiError > materializes one binary problem JSON body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary plain authentication response body for every diagnostic [0.06ms]
+(pass) apiJson + ApiError > materializes one binary malformed JSON text body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary empty bytes body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > preserves the actual x-opencorvus-request-id response correlation in complete diagnostics [1.21ms]
+(pass) apiJson + ApiError > preserves the actual X-OpenCorvus-Request-ID response correlation in complete diagnostics [0.08ms]
+(pass) apiJson + ApiError > binary archive failure preserves decoded public body and its response correlation [0.35ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 500 diagnostic [0.05ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 400 diagnostic [0.01ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 502 diagnostic
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 503 diagnostic
+(pass) apiJson + ApiError > applies an explicit empty Basic Auth username [0.10ms]
+(pass) apiJson + ApiError > 2xx returns the parsed body unchanged [0.23ms]
+(pass) apiJson + ApiError > 4xx throws ApiError carrying status / path / body / readable message [0.22ms]
+(pass) apiJson + ApiError > ApiError prefers `message` over `error` when both are present [0.19ms]
+(pass) apiJson + ApiError > ApiError renders the message carried by a NamedError envelope [0.26ms]
+(pass) apiJson + ApiError > ApiError falls back to status + path when body is empty [0.16ms]
+(pass) apiJson + ApiError > ApiError with a string body uses the string as detail [0.20ms]
+(pass) apiJson + ApiError > apiJsonWithTimeout preserves ApiError status / path / body [0.43ms]
+
+ 21 pass
+ 0 fail
+ 89 expect() calls
+Ran 21 tests across 1 file. [199.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [3.79ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.41ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [0.82ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [0.68ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.54ms]
+
+ 5 pass
+ 0 fail
+ 36 expect() calls
+Ran 5 tests across 1 file. [196.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\blob-cache.test.ts:
+(pass) blob URL cache > repeated reads and peek share the materialized Blob and its exact bytes [2.52ms]
+(pass) blob URL cache > server-relative query and successful content type reach the materialized Blob [0.37ms]
+(pass) blob URL cache > concurrent consumers receive the same completed Blob and request identity [0.21ms]
+(pass) blob URL cache > last-consumer cancellation reports its reason and a fresh retry completes with bytes [0.75ms]
+(pass) blob URL cache > a remaining shared consumer completes after the other consumer receives AbortError [0.41ms]
+(pass) blob URL cache > host-relative failure preserves its raw path and public body before a successful retry [0.73ms]
+(pass) blob URL cache > a failed full-window request releases the next resource slot to complete [2.41ms]
+
+ 7 pass
+ 0 fail
+ 30 expect() calls
+Ran 7 tests across 1 file. [177.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\browser-preview-service.test.ts:
+(pass) browser preview service loads the task-scoped target through HostTransport [3.25ms]
+(pass) browser preview service loads persisted evidence through the task-scoped artifact endpoint [0.32ms]
+(pass) browser preview service loads persisted evidence screenshot bytes through HostTransport [0.62ms]
+(pass) browser preview service decodes JSON error bodies from evidence capture binary responses [0.50ms]
+
+ 4 pass
+ 0 fail
+ 14 expect() calls
+Ran 4 tests across 1 file. [176.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\conversation-artifact-scope.test.ts:
+(pass) all exact resource chunks retain the initial directory while the selected project changes [3.88ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [177.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\diff-resolution.test.ts:
+(pass) diff resolution > resolves the selected live group from the visible change collection [2.02ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [165.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\tauri-transport-error-body.test.ts:
+(pass) tauri transport error body > preserves JSON response bodies on non-2xx API responses [1.40ms]
+(pass) tauri transport error body > aborts stalled requests with the transport default timeout [3.24ms]
+(pass) tauri transport error body > preserves caller-owned abort signals [0.21ms]
+(pass) tauri transport error body > server-settled requests resolve with the actual server response [0.19ms]
+(pass) tauri transport error body > server-settled requests preserve the caller signal and its AbortError result [0.22ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [165.00ms]

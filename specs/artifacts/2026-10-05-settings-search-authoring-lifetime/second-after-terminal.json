@@ -1,0 +1,28 @@
+{
+  "time": "2026-10-05T17:52:57.2938784+08:00",
+  "shutdownOccurrence": "cal_g0VXARHpJ00MY3Iy3hLr",
+  "ownerReceipt": "second-after-owner.json",
+  "verifiedPreShutdown": "Exact CIM processID,parent,creationDate,command matched ownerreceipt",
+  "processes": [
+    {
+      "pid": 70004,
+      "present": false
+    },
+    {
+      "pid": 76364,
+      "present": false
+    },
+    {
+      "pid": 30548,
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "actualAsset": "main-BeskyhIj.js / main-Yy88IPFU.css",
+  "rootManualEvidence": "Root final-manual-review.json and personally reviewed09-19; root reports Scheduled and proxy search retention, explicit result and GoConfigure pass",
+  "rootCleanup": "IAB10 closed; originalAPI7878 saved; blankpassword/theme/viewport unchanged; fakeproxyURL restored empty without Save/Test; Scheduled Cancel without Save/Run",
+  "authExists": false,
+  "modelRequests": "none",
+  "compiledBackend": "not rebuilt in this batch",
+  "completion": "Physical process absence only; no fabricated detached exitcode"
+}

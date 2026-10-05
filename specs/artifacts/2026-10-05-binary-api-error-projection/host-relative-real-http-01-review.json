@@ -1,0 +1,64 @@
+{
+  "qualification": "actual host-relative error and completed log correlation",
+  "requestID": "264887d6-06a1-48c1-9ebe-5d12d5b64eb6",
+  "raw": "/file/content?path=missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+  "status": 404,
+  "body": {
+    "name": "FileNotFoundError",
+    "data": {
+      "path": "missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+      "message": "File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png"
+    }
+  },
+  "summary": "API 404: File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+  "logs": [
+    {
+      "level": "info",
+      "time": "2026-10-05T09:17:50.699Z",
+      "service": "server",
+      "requestID": "264887d6-06a1-48c1-9ebe-5d12d5b64eb6",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "error",
+      "time": "2026-10-05T09:17:50.702Z",
+      "service": "server",
+      "requestID": "264887d6-06a1-48c1-9ebe-5d12d5b64eb6",
+      "method": "GET",
+      "path": "/file/content",
+      "statusCode": 404,
+      "error": {
+        "type": "FileNotFoundError",
+        "message": "FileNotFoundError: File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+        "stack": "FileNotFoundError: FileNotFoundError: File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png\n    at fileNotFound (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:652:16)\n    at read (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:930:26)\n    at processTicksAndRejections (native:7:39)",
+        "data": {
+          "type": "Object",
+          "message": "File entry not found: missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png",
+          "stack": "",
+          "path": "missing-resource-70436005-1c45-41fc-858e-f16650ff26cc.png"
+        },
+        "name": "FileNotFoundError"
+      },
+      "logDomain": "non-session",
+      "message": "request failed"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T09:17:50.703Z",
+      "service": "server",
+      "requestID": "264887d6-06a1-48c1-9ebe-5d12d5b64eb6",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 404,
+      "duration": 4,
+      "logDomain": "non-session",
+      "message": "request"
+    }
+  ],
+  "observedUtc": "2026-10-05T09:18:14.4114727Z"
+}

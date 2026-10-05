@@ -1,0 +1,27 @@
+{
+  "launcher": 71516,
+  "listener": {
+    "ProcessId": 69140,
+    "ParentProcessId": 50548,
+    "CreationDate": "2026-10-05T16:52:07.842892+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "parent": {
+    "ProcessId": 50548,
+    "ParentProcessId": 71516,
+    "CreationDate": "2026-10-05T16:52:07.804811+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "asset": "main-CtHsra8c.js",
+  "unusedPort": 17991,
+  "unusedPortFree": true
+}

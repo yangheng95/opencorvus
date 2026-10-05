@@ -113,9 +113,9 @@ export async function apiRequest<T = unknown>(path: string, init?: ApiRequestIni
 }
 
 /**
- * Thrown by `apiJson` whenever the host transport returns a non-2xx
- * response. Carries the raw status, the request path, and the parsed
- * response body so callers that need the original failure detail can
+ * Shared non-2xx error projection for JSON and binary response readers.
+ * Carries the status, request path, and one decoded public response body
+ * so callers that need the original failure detail can
  * pattern-match (`err instanceof ApiError && err.status === 400 → form
  * field error`). The `message` is pre-rendered for `console.error` /
  * direct toast use, prefering common server-error fields (message,
@@ -128,16 +128,28 @@ export class ApiError extends Error {
   readonly body: unknown
   readonly requestID: string | undefined
   constructor(status: number, path: string, body: unknown, responseHeaders: Readonly<Record<string, string>>) {
-    super(formatApiErrorMessage(status, path, body))
+    const decodedBody = materializeApiErrorBody(body)
+    super(formatApiErrorMessage(status, path, decodedBody))
     this.name = "ApiError"
     this.status = status
     this.path = path
-    this.body = body
+    this.body = decodedBody
     this.requestID = pickHeader(responseHeaders, "x-opencorvus-request-id")?.trim() || undefined
   }
 
   get summary(): string {
     return formatApiErrorMessage(this.status, undefined, this.body)
+  }
+}
+
+function materializeApiErrorBody(body: unknown): unknown {
+  if (!(body instanceof Uint8Array)) return body
+  const text = new TextDecoder().decode(body).trim()
+  if (!text) return ""
+  try {
+    return JSON.parse(text)
+  } catch {
+    return text
   }
 }
 
@@ -477,7 +489,7 @@ function createBlobInFlightEntry(raw: string): BlobInFlightEntry {
         responseKind: "binary",
         signal: controller.signal,
       })
-      if (!res.ok) throw new Error(`resource ${res.status}: ${raw}`)
+      if (!res.ok) throw new ApiError(res.status, raw, res.body, res.headers)
       const ct = res.headers["content-type"] || res.headers["Content-Type"] || "application/octet-stream"
       const blob = new Blob([bytesToArrayBuffer(res.body as Uint8Array)], { type: ct })
       const objectUrl = URL.createObjectURL(blob)

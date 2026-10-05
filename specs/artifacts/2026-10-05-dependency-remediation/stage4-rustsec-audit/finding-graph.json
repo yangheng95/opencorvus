@@ -1,0 +1,569 @@
+[
+  {
+    "kind": "vulnerabilities",
+    "id": "RUSTSEC-2026-0194",
+    "name": "quick-xml",
+    "version": "0.37.5",
+    "parents": [
+      "tauri-winrt-notification@0.7.2"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "vulnerabilities",
+    "id": "RUSTSEC-2026-0195",
+    "name": "quick-xml",
+    "version": "0.37.5",
+    "parents": [
+      "tauri-winrt-notification@0.7.2"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "vulnerabilities",
+    "id": "RUSTSEC-2026-0194",
+    "name": "quick-xml",
+    "version": "0.38.4",
+    "parents": [
+      "plist@1.8.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "vulnerabilities",
+    "id": "RUSTSEC-2026-0195",
+    "name": "quick-xml",
+    "version": "0.38.4",
+    "parents": [
+      "plist@1.8.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "vulnerabilities",
+    "id": "RUSTSEC-2026-0285",
+    "name": "rustls",
+    "version": "0.23.43",
+    "parents": [
+      "hyper-rustls@0.27.9",
+      "reqwest@0.13.2",
+      "rustls-platform-verifier@0.6.2",
+      "tauri-plugin-updater@2.12.0",
+      "tokio-rustls@0.26.4"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "ring",
+          "std",
+          "tls12"
+        ],
+        "kind": [
+          "custom-build"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "ring",
+          "std",
+          "tls12"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2025-0057",
+    "name": "fxhash",
+    "version": "0.2.1",
+    "parents": [
+      "selectors@0.24.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2024-0370",
+    "name": "proc-macro-error",
+    "version": "1.0.4",
+    "parents": [
+      "glib-macros@0.18.5",
+      "gtk3-macros@0.18.2"
+    ],
+    "compiledUnits": []
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2025-0081",
+    "name": "unic-char-property",
+    "version": "0.9.0",
+    "parents": [
+      "unic-ucd-ident@0.9.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2025-0075",
+    "name": "unic-char-range",
+    "version": "0.9.0",
+    "parents": [
+      "unic-char-property@0.9.0",
+      "unic-ucd-ident@0.9.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2025-0080",
+    "name": "unic-common",
+    "version": "0.9.0",
+    "parents": [
+      "unic-ucd-version@0.9.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2025-0100",
+    "name": "unic-ucd-ident",
+    "version": "0.9.0",
+    "parents": [
+      "urlpattern@0.3.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "id",
+          "xid"
+        ],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "id",
+          "xid"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unmaintained",
+    "id": "RUSTSEC-2025-0098",
+    "name": "unic-ucd-version",
+    "version": "0.9.0",
+    "parents": [
+      "unic-ucd-ident@0.9.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unsound",
+    "id": "RUSTSEC-2026-0190",
+    "name": "anyhow",
+    "version": "1.0.102",
+    "parents": [
+      "tauri@2.11.1",
+      "tauri-build@2.6.1",
+      "tauri-plugin@2.5.4",
+      "tauri-plugin-fs@2.4.5",
+      "tauri-utils@2.9.1",
+      "wasm-metadata@0.244.0",
+      "wit-bindgen-core@0.51.0",
+      "wit-bindgen-rust@0.51.0",
+      "wit-bindgen-rust-macro@0.51.0",
+      "wit-component@0.244.0",
+      "wit-parser@0.244.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "std"
+        ],
+        "kind": [
+          "custom-build"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "std"
+        ],
+        "kind": [
+          "lib"
+        ]
+      },
+      {
+        "profile": {
+          "opt_level": "s",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "default",
+          "std"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "unsound",
+    "id": "RUSTSEC-2026-0221",
+    "name": "event-listener",
+    "version": "5.4.1",
+    "parents": [
+      "async-broadcast@0.7.2",
+      "async-lock@3.4.2",
+      "async-process@2.5.0",
+      "event-listener-strategy@0.5.4",
+      "zbus@5.14.0"
+    ],
+    "compiledUnits": []
+  },
+  {
+    "kind": "unsound",
+    "id": "RUSTSEC-2024-0429",
+    "name": "glib",
+    "version": "0.18.5",
+    "parents": [
+      "atk@0.18.2",
+      "cairo-rs@0.18.5",
+      "gdk@0.18.2",
+      "gdk-pixbuf@0.18.5",
+      "gdkx11@0.18.2",
+      "gio@0.18.4",
+      "gtk@0.18.2",
+      "javascriptcore-rs@1.1.2",
+      "libappindicator@0.9.0",
+      "pango@0.18.3",
+      "soup3@0.5.0",
+      "webkit2gtk@2.0.2"
+    ],
+    "compiledUnits": []
+  },
+  {
+    "kind": "unsound",
+    "id": "RUSTSEC-2026-0097",
+    "name": "rand",
+    "version": "0.7.3",
+    "parents": [
+      "phf_generator@0.8.0"
+    ],
+    "compiledUnits": [
+      {
+        "profile": {
+          "opt_level": "0",
+          "debuginfo": 0,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "test": false
+        },
+        "features": [
+          "alloc",
+          "default",
+          "getrandom",
+          "getrandom_package",
+          "libc",
+          "rand_pcg",
+          "small_rng",
+          "std"
+        ],
+        "kind": [
+          "lib"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "yanked",
+    "id": null,
+    "name": "uds_windows",
+    "version": "1.2.0",
+    "parents": [
+      "zbus@5.14.0"
+    ],
+    "compiledUnits": []
+  }
+]

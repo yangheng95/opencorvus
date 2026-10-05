@@ -1,0 +1,175 @@
+{
+  "qualification": "actual_http_four_services_passed",
+  "profile": "pure frontend client / existing owned dev server",
+  "transportKind": "browser",
+  "listener": {
+    "ProcessId": 72740,
+    "ParentProcessId": 31516,
+    "CreationDate": "2026-10-05T17:01:25.498283+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "directory": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project",
+  "taskID": "tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+  "outcomes": [
+    {
+      "name": "archive",
+      "status": 404,
+      "path": "task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/project-archive?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5"
+        }
+      },
+      "message": "API 404 task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/project-archive?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+      "summary": "API 404: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+      "requestID": "932532b9-94a6-4f8a-a401-43a7c5034cc3",
+      "details": "HTTP 404 task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/project-archive?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject\n\nRequest ID: 932532b9-94a6-4f8a-a401-43a7c5034cc3\n\nApiError: API 404 task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/project-archive?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\n    at downloadZipArchive (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\project-archive.ts:33:15)\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"name\": \"NotFoundError\",\n  \"data\": {\n    \"message\": \"Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\"\n  }\n}",
+      "wire": {
+        "url": "http://127.0.0.1:17883/task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/project-archive?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+        "method": "GET",
+        "status": 404,
+        "headers": {
+          "content-type": "application/json",
+          "x-opencorvus-request-id": "932532b9-94a6-4f8a-a401-43a7c5034cc3"
+        },
+        "text": "{\"name\":\"NotFoundError\",\"data\":{\"message\":\"Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\"}}"
+      }
+    },
+    {
+      "name": "preview",
+      "status": 404,
+      "path": "task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/browser-preview/evidence/art_binary_missing/capture.png?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5"
+        }
+      },
+      "message": "API 404 task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/browser-preview/evidence/art_binary_missing/capture.png?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+      "summary": "API 404: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+      "requestID": "939951b6-fcd6-4ad7-a8db-741ef35c7962",
+      "details": "HTTP 404 task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/browser-preview/evidence/art_binary_missing/capture.png?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject\n\nRequest ID: 939951b6-fcd6-4ad7-a8db-741ef35c7962\n\nApiError: API 404 task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/browser-preview/evidence/art_binary_missing/capture.png?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\n    at loadTaskBrowserPreviewEvidenceCaptureObjectUrl (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\browser-preview.ts:99:15)\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"name\": \"NotFoundError\",\n  \"data\": {\n    \"message\": \"Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\"\n  }\n}",
+      "wire": {
+        "url": "http://127.0.0.1:17883/task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/browser-preview/evidence/art_binary_missing/capture.png?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+        "method": "GET",
+        "status": 404,
+        "headers": {
+          "content-type": "application/json",
+          "x-opencorvus-request-id": "939951b6-fcd6-4ad7-a8db-741ef35c7962"
+        },
+        "text": "{\"name\":\"NotFoundError\",\"data\":{\"message\":\"Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\"}}"
+      }
+    },
+    {
+      "name": "build-observation",
+      "status": 404,
+      "path": "build observation content",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5"
+        }
+      },
+      "message": "API 404 build observation content: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+      "summary": "API 404: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5",
+      "requestID": "91fa03a1-3dfe-4377-aa50-e745d270bd3f",
+      "details": "HTTP 404 build observation content\n\nRequest ID: 91fa03a1-3dfe-4377-aa50-e745d270bd3f\n\nApiError: API 404 build observation content: Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\n    at readObservedTextSide (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\diff.ts:219:33)\n    at async resolveDiff (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\diff.ts:173:41)\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"name\": \"NotFoundError\",\n  \"data\": {\n    \"message\": \"Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\"\n  }\n}",
+      "wire": {
+        "url": "http://127.0.0.1:17883/task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/build-observation/art_binary_missing/content?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject&file=missing.txt&side=after&offset=0&length=1",
+        "method": "GET",
+        "status": 404,
+        "headers": {
+          "content-type": "application/json",
+          "x-opencorvus-request-id": "91fa03a1-3dfe-4377-aa50-e745d270bd3f"
+        },
+        "text": "{\"name\":\"NotFoundError\",\"data\":{\"message\":\"Task not found: tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5\"}}"
+      }
+    },
+    {
+      "name": "conversation-validator",
+      "status": 400,
+      "path": "Conversation Artifact read",
+      "body": {
+        "data": {
+          "locator": {
+            "source": "task_artifact_resource",
+            "ref": {
+              "path": "missing.txt"
+            }
+          },
+          "byte_offset": 0,
+          "max_bytes": 65536
+        },
+        "error": [
+          {
+            "expected": "object",
+            "code": "invalid_type",
+            "path": [
+              "locator",
+              "ref",
+              "snapshot"
+            ],
+            "message": "Invalid input: expected object, received undefined"
+          },
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "locator",
+              "ref",
+              "tree"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          },
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "locator",
+              "ref",
+              "media_type"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          },
+          {
+            "expected": "number",
+            "code": "invalid_type",
+            "path": [
+              "locator",
+              "ref",
+              "bytes"
+            ],
+            "message": "Invalid input: expected number, received undefined"
+          },
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "locator",
+              "ref",
+              "sha256"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      },
+      "message": "API 400 Conversation Artifact read: {\"data\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"path\":\"missing.txt\"}},\"byte_offset\":0,\"max_bytes\":65536},\"error\":[{\"expected\":\"object\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"snapshot\"],\"message\":\"Invalid input: expected object, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"tree\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"media_type\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"bytes\"],\"message\":\"Invalid input: expected number, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"sha256\"],\"message\":\"Invalid input: expected string, received undefined\"}],\"success\":false}",
+      "summary": "API 400: {\"data\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"path\":\"missing.txt\"}},\"byte_offset\":0,\"max_bytes\":65536},\"error\":[{\"expected\":\"object\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"snapshot\"],\"message\":\"Invalid input: expected object, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"tree\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"media_type\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"bytes\"],\"message\":\"Invalid input: expected number, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"sha256\"],\"message\":\"Invalid input: expected string, received undefined\"}],\"success\":false}",
+      "requestID": "49dad59e-0d35-43af-afe8-750b68342a5c",
+      "details": "HTTP 400 Conversation Artifact read\n\nRequest ID: 49dad59e-0d35-43af-afe8-750b68342a5c\n\nApiError: API 400 Conversation Artifact read: {\"data\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"path\":\"missing.txt\"}},\"byte_offset\":0,\"max_bytes\":65536},\"error\":[{\"expected\":\"object\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"snapshot\"],\"message\":\"Invalid input: expected object, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"tree\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"media_type\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"bytes\"],\"message\":\"Invalid input: expected number, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"sha256\"],\"message\":\"Invalid input: expected string, received undefined\"}],\"success\":false}\n    at readChunk (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\conversation-artifact.ts:91:31)\n    at async loadConversationArtifactContent (D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\services\\conversation-artifact.ts:120:25)\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"locator\": {\n      \"source\": \"task_artifact_resource\",\n      \"ref\": {\n        \"path\": \"missing.txt\"\n      }\n    },\n    \"byte_offset\": 0,\n    \"max_bytes\": 65536\n  },\n  \"error\": [\n    {\n      \"expected\": \"object\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"locator\",\n        \"ref\",\n        \"snapshot\"\n      ],\n      \"message\": \"Invalid input: expected object, received undefined\"\n    },\n    {\n      \"expected\": \"string\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"locator\",\n        \"ref\",\n        \"tree\"\n      ],\n      \"message\": \"Invalid input: expected string, received undefined\"\n    },\n    {\n      \"expected\": \"string\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"locator\",\n        \"ref\",\n        \"media_type\"\n      ],\n      \"message\": \"Invalid input: expected string, received undefined\"\n    },\n    {\n      \"expected\": \"number\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"locator\",\n        \"ref\",\n        \"bytes\"\n      ],\n      \"message\": \"Invalid input: expected number, received undefined\"\n    },\n    {\n      \"expected\": \"string\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"locator\",\n        \"ref\",\n        \"sha256\"\n      ],\n      \"message\": \"Invalid input: expected string, received undefined\"\n    }\n  ],\n  \"success\": false\n}",
+      "wire": {
+        "url": "http://127.0.0.1:17883/task/tsk_binary_read_ec3ef986-b161-49d9-bdaa-96ff8c8453d5/artifact-read?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fproject",
+        "method": "POST",
+        "status": 400,
+        "headers": {
+          "content-type": "application/json",
+          "x-opencorvus-request-id": "49dad59e-0d35-43af-afe8-750b68342a5c"
+        },
+        "text": "{\"data\":{\"locator\":{\"source\":\"task_artifact_resource\",\"ref\":{\"path\":\"missing.txt\"}},\"byte_offset\":0,\"max_bytes\":65536},\"error\":[{\"expected\":\"object\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"snapshot\"],\"message\":\"Invalid input: expected object, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"tree\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"media_type\"],\"message\":\"Invalid input: expected string, received undefined\"},{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"bytes\"],\"message\":\"Invalid input: expected number, received undefined\"},{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"locator\",\"ref\",\"sha256\"],\"message\":\"Invalid input: expected string, received undefined\"}],\"success\":false}"
+      }
+    }
+  ],
+  "serverOwner": "experience/root retains shutdown authority; no client process owner"
+}

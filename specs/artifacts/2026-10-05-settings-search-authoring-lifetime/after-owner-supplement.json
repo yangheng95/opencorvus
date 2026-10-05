@@ -1,0 +1,13 @@
+{
+  "previousPreconditionReceipt": ".tmp-product-experience/settings-navigation-audit-20261005/after-start-precondition.json",
+  "currentAuthorization": "Root explicitly approves known bundled catalog retained; auth absent; no model request",
+  "rootSourceEvidence": "models.ts provisionDefaultCatalog writes missing bundled bootstrap via parse/migrate atomic write; ModelsDev.Data/get via Provider.buildState metadata initialization",
+  "rootLogEvidence": "2026-10-05T09:04:01.823Z models.dev provisioned bundled model catalog, owned data/models.json",
+  "catalogMetadata": {
+    "Length": 2001983,
+    "CreationTimeUtc": "2026-10-05T09:04:01.8242558Z",
+    "LastWriteTimeUtc": "2026-10-05T09:04:01.8247999Z"
+  },
+  "catalogContents": "not read, copied, printed, deleted or overwritten",
+  "authExists": false
+}

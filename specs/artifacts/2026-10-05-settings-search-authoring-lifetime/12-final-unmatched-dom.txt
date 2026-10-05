@@ -1,0 +1,136 @@
+- banner:
+  - button "收起侧边栏" [expanded]:
+  - navigation "设置导航":
+    - button "返回 OpenCorvus":
+  - menubar "OpenCorvus":
+    - menuitem "文件":
+      - generic: 文件
+    - menuitem "编辑":
+      - generic: 编辑
+    - menuitem "视图":
+      - generic: 视图
+    - menuitem "帮助":
+      - generic: 帮助
+- main:
+  - navigation "对话快捷入口":
+    - generic "对话快捷入口":
+      - button "对话":
+        - generic: 对话
+      - button "Mission 看板":
+        - generic: Mission 看板
+      - button "定时":
+        - generic: 定时
+      - button "专家团":
+        - generic: 专家团
+      - button "更多":
+        - generic: 更多
+      - button "设置":
+        - generic: 设置
+    - button "关于":
+    - button "OpenCorvus 菜单":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - region "定时任务":
+    - navigation:
+      - button "返回应用":
+        - generic: 返回应用
+      - searchbox "搜索设置页面..." [active]: zz-no-settings-page-20261005
+      - button "清除":
+      - status:
+        - generic: 没有匹配此搜索的设置页面。
+      - tablist:
+        - generic: Mission 与自动化
+        - tab "定时任务" [selected]:
+          - generic: 定时任务
+    - separator "设置"
+    - heading "定时任务" [level=1]
+    - tabpanel "定时任务":
+      - paragraph: 让 OpenCorvus 定时执行任务、设置提醒或持续关注更新
+      - button "新建自动化":
+        - text: 新建自动化
+      - button "定时任务":
+        - text: 定时任务
+      - heading "创建定时自动化" [level=3]
+      - paragraph: 选择任务运行范围、重复频率和时区。
+      - button "取消"
+      - button "保存"
+      - generic: 名称
+      - textbox "名称": Draft audit final 20261005
+      - generic: 运行范围
+      - button "运行范围":
+        - generic: 全局收件箱
+      - textbox
+      - listbox:
+        - option
+        - option: 当前会话
+        - option: 所选项目
+        - option [selected]: 全局收件箱
+      - generic: 每次运行都会在全局收件箱中新建一个可见对话。
+      - generic: 重复频率
+      - button "重复频率":
+        - generic: 每天
+      - textbox
+      - listbox:
+        - option
+        - option [selected]: 每天
+        - option: 工作日
+        - option: 每周
+        - option: 高级 RRULE
+      - generic: 开始日期
+      - textbox "开始日期 在所选时区中，从此日期起执行。": 2026-10-05
+      - generic: 在所选时区中，从此日期起执行。
+      - generic: 时间
+      - textbox "时间": 13:45
+      - generic: 时区
+      - combobox "时区": Asia/Shanghai
+      - generic: 搜索城市或地区，选择任务运行的时区。
+      - generic: 模型
+      - button "模型":
+        - generic: 全局默认
+      - textbox
+      - listbox:
+        - option
+        - option [selected]: 全局默认
+        - option: DeepSeek Chat
+        - option: DeepSeek Reasoner
+        - option: DeepSeek V4 Flash
+        - option: DeepSeek-R1-0528
+        - option: DeepSeek-V3.2
+        - option: GLM-4.7
+        - option: GLM-4.7-Flash
+        - option: Kimi-K2-Instruct
+        - option: Kimi-K2-Instruct-0905
+        - option: Kimi-K2-Thinking
+        - option: Kimi-K2.5
+        - option: MiMo-V2-Flash
+        - option: MiniMax-M2.1
+        - option: Qwen 3 Embedding 4B
+        - option: Qwen 3 Embedding 8B
+        - option: Qwen3-235B-A22B-Thinking-2507
+        - option: Qwen3-Coder-480B-A35B-Instruct
+        - option: Qwen3-Next-80B-A3B-Instruct
+        - option: Qwen3-Next-80B-A3B-Thinking
+        - option: Kimi K2 0711
+        - option: Kimi K2 0905
+        - option: Kimi K2 Thinking
+        - option: Kimi K2 Thinking Turbo
+        - option: Kimi K2 Turbo
+        - option: Kimi K2.5
+        - option: Kimi K2 0711
+        - option: Kimi K2 0905
+        - option: Kimi K2 Thinking
+        - option: Kimi K2 Thinking Turbo
+        - option: Kimi K2 Turbo
+        - option: Kimi K2.5
+      - generic: 使用全局默认模型，或选择已连接提供商的模型。
+      - generic: 推理强度
+      - button "推理强度" [disabled]:
+        - generic: 模型默认
+      - textbox [disabled]
+      - combobox [disabled]
+      - generic: 推理强度跟随全局默认模型。
+      - generic: 提示词
+      - textbox "提示词":
+        - /placeholder: 描述这个自动化需要完成的工作…
+        - text: 搜索、清空后保留这段草稿，不保存不运行。

@@ -45,6 +45,28 @@ afterEach(() => {
 })
 
 describe("apiJson + ApiError", () => {
+  test.each([
+    { name: "named UTF8 JSON", status: 404, text: '{"name":"NotFoundError","data":{"message":"原产物不可用"}}', body: { name: "NotFoundError", data: { message: "原产物不可用" } }, detail: "原产物不可用" },
+    { name: "message JSON", status: 409, text: '{"message":"Read conflict"}', body: { message: "Read conflict" }, detail: "Read conflict" },
+    { name: "problem JSON", status: 429, text: '{"detail":"Read limit reached"}', body: { detail: "Read limit reached" }, detail: "Read limit reached" },
+    { name: "plain authentication response", status: 401, text: " Unauthorized ", body: "Unauthorized", detail: "Unauthorized" },
+    { name: "malformed JSON text", status: 502, text: '{"message": upstream unavailable', body: '{"message": upstream unavailable', detail: '{"message": upstream unavailable' },
+    { name: "empty bytes", status: 503, text: "", body: "", detail: "" },
+  ])("materializes one binary $name body for every diagnostic", ({ status, text, body, detail }) => {
+    const error = new ApiError(status, "binary/read", new TextEncoder().encode(text), {
+      "X-OpenCorvus-Request-ID": "binary-response-1",
+    })
+    expect(error.body).toEqual(body)
+    expect(error.message).toBe(`API ${status} binary/read${detail ? `: ${detail}` : ""}`)
+    expect(error.summary).toBe(`API ${status}${detail ? `: ${detail}` : ""}`)
+    expect(error.requestID).toBe("binary-response-1")
+    error.stack = "ApiError: binary fixture stack"
+    const rendered = typeof body === "string" ? body : JSON.stringify(body, null, 2)
+    expect(formatErrorDetails(error)).toBe(
+      `HTTP ${status} binary/read\n\nRequest ID: binary-response-1\n\nApiError: binary fixture stack${rendered ? `\n\nresponse body:\n${rendered}` : ""}`,
+    )
+  })
+
   test.each(["x-opencorvus-request-id", "X-OpenCorvus-Request-ID"])(
     "preserves the actual %s response correlation in complete diagnostics",
     async (headerName) => {

@@ -1,0 +1,12 @@
+import fs from "node:fs/promises"
+import { fetchResourceAsObjectUrl } from "../packages/overlay/src/services/api"
+const originalFetch = globalThis.fetch
+const raw = "/attachment/probe/missing.png?variant=screenshot-browser-thumbnail&directory=D%3A%2Fowned"
+const publicBody = {name:"NotFoundError",data:{message:"Owned image is unavailable"}}
+try {
+  globalThis.fetch = Object.assign(async () => new Response(new TextEncoder().encode(JSON.stringify(publicBody)), {
+    status:404,headers:{"content-type":"application/json","x-opencorvus-request-id":"local-resource-before"},
+  }),{preconnect:originalFetch.preconnect})
+  const error=await fetchResourceAsObjectUrl(raw).catch(e=>e)
+  await fs.writeFile("D:/myhexin-local/opencorvus/.tmp-product-iteration/host-relative-error-before.json",JSON.stringify({qualification:"local Response fixture / actual resource service only",raw,publicBody,responseRequestID:"local-resource-before",error:{name:error.name,message:error.message,body:error.body,requestID:error.requestID}},null,2))
+}finally{globalThis.fetch=originalFetch}

@@ -1,0 +1,24 @@
+{
+  "time": "2026-10-05T17:37:11.4290672+08:00",
+  "occurrenceID": "cal_g0VXANMG600Qq6ugmkPY",
+  "asset": "main-C_Oa9I38.js first after has qualified navigation regression; not accepted",
+  "verifiedPreShutdown": "Exact CIM PID,parent,creationdate,command matched after-owner.json",
+  "processes": [
+    {
+      "pid": 76648,
+      "present": false
+    },
+    {
+      "pid": 76088,
+      "present": false
+    },
+    {
+      "pid": 64128,
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "rootPage": "Root closed IAB9; API remains17883 pending final original7878 restoration",
+  "modelRequests": "none",
+  "agentUI": "not operated"
+}

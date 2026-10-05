@@ -1,0 +1,29 @@
+{
+  "launcher": 25232,
+  "listener": {
+    "ProcessId": 73772,
+    "ParentProcessId": 44700,
+    "CreationDate": "2026-10-05T16:48:50.374008+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "parent": {
+    "ProcessId": 44700,
+    "ParentProcessId": 25232,
+    "CreationDate": "2026-10-05T16:48:50.335236+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17889 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "asset": "main-xDfjxawi.js",
+  "unusedPort": 17991,
+  "unusedPortFree": true,
+  "authExists": false,
+  "modelsExists": false
+}

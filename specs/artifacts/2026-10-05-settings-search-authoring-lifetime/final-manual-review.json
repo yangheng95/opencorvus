@@ -1,0 +1,46 @@
+{
+  "qualification": "actual isolated development page and personally viewed screenshots",
+  "source": {
+    "cssAssets": [
+      "./assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "./assets/main-Yy88IPFU.css"
+    ],
+    "entryAsset": "./assets/main-BeskyhIj.js",
+    "pathname": "/ui/"
+  },
+  "browser": "root IAB tab10",
+  "scheduled": {
+    "name": "Draft audit final 20261005",
+    "prompt": "搜索、清空后保留这段草稿，不保存不运行。",
+    "authoredTime": "13:45",
+    "date": "2026-10-05",
+    "timeZone": "Asia/Shanghai",
+    "transitions": [
+      "matching 网络 retains editor",
+      "unmatched retains editor and navigation notice",
+      "clear retains editor",
+      "explicit Cancel returns list"
+    ],
+    "operation": "not saved or run"
+  },
+  "proxy": {
+    "original": "",
+    "authored": "http://127.0.0.1:17997/draft-only",
+    "matching": "外观",
+    "unmatched": "zz-proxy-no-match",
+    "restored": "",
+    "operation": "not saved or tested"
+  },
+  "explicitResult": "Return on Network search-result tab selects Network",
+  "recovery": "actual General then Go Configure selects Network",
+  "originalAndRestoredAPI": "http://127.0.0.1:7878",
+  "authentication": "blank password; absent auth file; no credentials entered",
+  "catalog": "known bundled catalog retained, no model request",
+  "theme": "unchanged",
+  "viewport": "never overridden",
+  "limits": [
+    "only Scheduled and proxy drafts personally exercised",
+    "explicit departure keeps existing semantics",
+    "native window and other platforms unqualified"
+  ]
+}

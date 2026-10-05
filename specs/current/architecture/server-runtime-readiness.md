@@ -33,6 +33,12 @@ Authentication/origin ordering is unchanged: early authentication or blocked
 network responses can remain unreadable across origins, so a client must not
 invent a response ID or assume every error has one.
 
+Overlay ApiError materializes a binary failure body once as UTF-8 (Unicode
+Transformation Format, 8-bit) text and, when valid, its JSON value. The same
+stored body supplies its message, summary and details; empty bytes supply empty
+text. Nonbinary bodies retain their value and reference. The transport's binary
+response contract and successful resource bytes remain unchanged.
+
 ## Standalone restart
 
 Standalone restart first observes the exact current launch boundary. The public

@@ -1,0 +1,31 @@
+import fs from "node:fs/promises"
+import { ApiError } from "../packages/overlay/src/services/api"
+import { formatErrorDetails } from "../packages/overlay/src/utils/error-details"
+import { createTauriTransport } from "../packages/overlay/src/services/tauri-transport"
+import { downloadZipArchive } from "../packages/overlay/src/services/project-archive"
+import { __setHostTransportForTest } from "../packages/overlay/src/services/host-transport-runtime"
+
+// Explicitly a local fixture observation, with no network, DOM, service, or Provider.
+const originalFetch = globalThis.fetch
+const cases = [
+  {name:"named-json",status:404,contentType:"application/json",text:JSON.stringify({name:"NotFoundError",data:{message:"原产物不可用"}})},
+  {name:"basic-auth-actual-wire-shape",status:401,contentType:"application/octet-stream",text:"Unauthorized"},
+  {name:"problem-json",status:429,contentType:"application/problem+json",text:JSON.stringify({detail:"Read limit reached"})},
+  {name:"malformed-json",status:502,contentType:"application/json",text:"upstream response unavailable"},
+  {name:"empty",status:503,contentType:"text/plain",text:""},
+]
+const observations=[]
+try {
+  for (const item of cases) {
+    globalThis.fetch = async () => new Response(new TextEncoder().encode(item.text), {status:item.status,headers:{"content-type":item.contentType,"x-opencorvus-request-id":"local-fixture-response-1"}})
+    const transport=createTauriTransport("browser")
+    const response=await transport.request<Uint8Array>({path:"global/health",responseKind:"binary"})
+    const error=new ApiError(response.status,"Conversation Artifact read",response.body,response.headers)
+    error.stack="ApiError: local fixture stack"
+    __setHostTransportForTest(transport)
+    const archive=await downloadZipArchive({path:"global/health"}).catch(error=>error)
+    observations.push({input:item,transport:{status:response.status,bodyType:response.body.constructor.name,bytes:[...response.body]},direct:{message:error.message,summary:error.summary,requestID:error.requestID,body:error.body,details:formatErrorDetails(error)},archive:{message:archive.message,summary:archive.summary,body:archive.body}})
+  }
+} finally {globalThis.fetch=originalFetch;__setHostTransportForTest(undefined)}
+await fs.writeFile("D:/myhexin-local/opencorvus/.tmp-product-iteration/binary-error-local-probe.json",JSON.stringify({qualification:"local actual module + fixture Response only; not network/visual E2E",observations},null,2))
+console.log(JSON.stringify(observations.map(x=>({name:x.input.name,bodyType:x.transport.bodyType,direct:x.direct.summary,archive:x.archive.summary})),null,2))

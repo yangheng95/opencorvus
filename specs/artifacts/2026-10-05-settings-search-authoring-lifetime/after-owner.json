@@ -1,0 +1,40 @@
+{
+  "launcher": {
+    "ProcessId": 64128,
+    "ParentProcessId": 44604,
+    "CreationDate": "2026-10-05T17:25:37.138078+08:00",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "listener": {
+    "ProcessId": 76648,
+    "ParentProcessId": 76088,
+    "CreationDate": "2026-10-05T17:25:37.24835+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "parent": {
+    "ProcessId": 76088,
+    "ParentProcessId": 64128,
+    "CreationDate": "2026-10-05T17:25:37.208595+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17883 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home-file-ui\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "uiAssets": [
+    "main-C_Oa9I38.js",
+    "main-Yy88IPFU.css"
+  ],
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/project",
+  "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui",
+  "stdout": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui/settings-search-after.stdout.log",
+  "stderr": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/home-file-ui/settings-search-after.stderr.log",
+  "authExists": false,
+  "catalog": "known bundled metadata provision retained per root authorization; see after-owner-supplement.json",
+  "handoff": "Retain for root final actual UI until root cleanup notice; no agent browser/model request"
+}
