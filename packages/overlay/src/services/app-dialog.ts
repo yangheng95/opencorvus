@@ -9,6 +9,7 @@ import { occludeNativeSurfaces, revealNativeSurfaces } from "./native-surface-oc
 export type AppDialogOptions = {
   title?: string
   message?: string
+  details?: string
   kind?: string
   okLabel?: string
   okTone?: "accent" | "danger"
@@ -132,6 +133,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           epoch,
           title: options.title || t("dialog.notice"),
           message: options.message || "",
+          details: options.details || "",
           kind: options.kind || "",
           okLabel: options.okLabel || t("common.ok"),
           okTone: options.okTone || "accent",
@@ -166,11 +168,12 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
 
 export async function nativeMessage(
   message: string,
-  options: { title?: string; kind?: string; okLabel?: string; link?: AppDialogOptions["link"] } = {},
+  options: { title?: string; kind?: string; okLabel?: string; link?: AppDialogOptions["link"]; details?: string } = {},
 ): Promise<AppDialogResult> {
   return showAppDialog({
     title: options.title,
     message,
+    details: options.details,
     kind: options.kind,
     okLabel: options.okLabel,
     link: options.link,

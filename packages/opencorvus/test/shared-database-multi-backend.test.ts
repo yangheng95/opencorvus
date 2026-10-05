@@ -59,7 +59,7 @@ async function command(
   input: { command: string; projectID?: string; directory?: string },
 ) {
   const id = crypto.randomUUID()
-  return await new Promise<{ ok: boolean; name?: string; message?: string }>((resolve, reject) => {
+  return await new Promise<{ status: "response"; id: string; ok: boolean; name?: string; message?: string }>((resolve, reject) => {
     let buffered = ""
     const onData = (chunk: Buffer | string) => {
       buffered += String(chunk)
@@ -67,7 +67,7 @@ async function command(
       buffered = lines.pop() ?? ""
       for (const line of lines) {
         if (!line.startsWith("{")) continue
-        const response = JSON.parse(line) as { status: string; id: string; ok: boolean; name?: string; message?: string }
+        const response = JSON.parse(line) as { status: "response"; id: string; ok: boolean; name?: string; message?: string }
         if (response.status !== "response" || response.id !== id) continue
         child.stdout.off("data", onData)
         resolve(response)
@@ -95,7 +95,7 @@ describe("shared SQLite backend startup", () => {
     const [firstHealth, secondHealth] = await Promise.all([
       fetch(new URL("/global/health", firstReady.url)).then((response) => response.json()),
       fetch(new URL("/global/health", secondReady.url)).then((response) => response.json()),
-    ]) as Array<{ healthy: boolean; paths: { database: string } }>
+    ]) as Array<{ healthy: boolean; version: string; paths: { database: string } }>
 
     expect({
       first: {
@@ -128,10 +128,10 @@ describe("shared SQLite backend startup", () => {
         health: { healthy: true, paths: expect.objectContaining({ database: secondReady.database }), version: expect.any(String) },
       },
     })
-    expect(firstReady.port).not.toBe(secondReady.port)
+    expect(new Set([firstReady.port, secondReady.port]).size).toBe(2)
     expect(firstReady.schemaTables).toBeGreaterThan(0)
     expect(secondReady.schemaTables).toBe(firstReady.schemaTables)
-    expect(firstReady.occurrenceID).not.toBe(secondReady.occurrenceID)
+    expect(new Set([firstReady.occurrenceID, secondReady.occurrenceID]).size).toBe(2)
 
     const projectID = "prj_sharedfence"
     const directory = path.join(root, "project")

@@ -1,0 +1,172 @@
+$ bun script/run-tests.ts test/storage/database-transaction-contract.test.ts test/storage/drizzle-adapter-contract.test.ts test/storage/schema-contract.test.ts test/shared-database-multi-backend.test.ts test/scheduler-automation-revision.test.ts test/scheduler-automation-target-revision.test.ts test/scheduler-tool-recovery.test.ts test/server/mission-dispatch-replay.test.ts test/task-message-atomic-acceptance.test.ts test/session/fork-atomic-transcript.test.ts test/session/session-created-effect.test.ts
+[1/11] START test/storage/database-transaction-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Database.transaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [148.06ms]
+(pass) Database.transaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [12.32ms]
+(pass) Database.transaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [6.59ms]
+(pass) Database.immediateTransaction synchronous library boundary > returns exact scalar, object identity and undefined from the committed callback [0.78ms]
+(pass) Database.immediateTransaction synchronous library boundary > nested rollback preserves the committed rows and ordered post-commit effects [3.54ms]
+(pass) Database.immediateTransaction synchronous library boundary > Promise and thenable results return the exact synchronous error with committed state preserved [3.42ms]
+
+ 6 pass
+ 0 fail
+ 26 expect() calls
+Ran 6 tests across 1 file. [1.75s]
+[1/11] DONE test/storage/database-transaction-contract.test.ts exit=0 duration=1.98s
+[2/11] START test/storage/drizzle-adapter-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ESM installed Bun SQLite adapter > quoted identifiers and aliases return exact data with the sentinel row retained [5.93ms]
+(pass) ESM installed Bun SQLite adapter > compound predicates, bound values and joined aliases select the intended rows [6.46ms]
+(pass) ESM installed Bun SQLite adapter > ordinary one-time methods finalize their actual native statement before returning [25.48ms]
+(pass) ESM installed Bun SQLite adapter > CRUD builders complete their native one-time owners with exact changed rows [6.31ms]
+(pass) ESM installed Bun SQLite adapter > mapped and relational results finish mapping before their single finalization [1.02ms]
+(pass) ESM installed Bun SQLite adapter > native constraint, missing placeholder and mapper failures retain their error and finalization [1.87ms]
+(pass) ESM installed Bun SQLite adapter > explicit prepared queries retain two bound executions and expose the finalized-query error [1.31ms]
+(pass) ESM installed Bun SQLite adapter > fault-injected finalization preserves the original mapper cause and both errors [0.61ms]
+(pass) CommonJS installed Bun SQLite adapter > quoted identifiers and aliases return exact data with the sentinel row retained [9.06ms]
+(pass) CommonJS installed Bun SQLite adapter > compound predicates, bound values and joined aliases select the intended rows [4.26ms]
+(pass) CommonJS installed Bun SQLite adapter > ordinary one-time methods finalize their actual native statement before returning [27.12ms]
+(pass) CommonJS installed Bun SQLite adapter > CRUD builders complete their native one-time owners with exact changed rows [7.47ms]
+(pass) CommonJS installed Bun SQLite adapter > mapped and relational results finish mapping before their single finalization [0.59ms]
+(pass) CommonJS installed Bun SQLite adapter > native constraint, missing placeholder and mapper failures retain their error and finalization [0.87ms]
+(pass) CommonJS installed Bun SQLite adapter > explicit prepared queries retain two bound executions and expose the finalized-query error [1.46ms]
+(pass) CommonJS installed Bun SQLite adapter > fault-injected finalization preserves the original mapper cause and both errors [0.30ms]
+
+ 16 pass
+ 0 fail
+ 110 expect() calls
+Ran 16 tests across 1 file. [1.51s]
+[2/11] DONE test/storage/drizzle-adapter-contract.test.ts exit=0 duration=1.70s
+[3/11] START test/storage/schema-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) creates the complete pre-0.1.0 schema directly from the canonical DDL [198.24ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [63.81ms]
+(pass) uses one explicit application table registry for SQLite and transfer shapes [662.85ms]
+(pass) reports invalid and duplicate application schema declarations [0.81ms]
+(pass) requires an explicit reset when any canonical fact table is missing [541.59ms]
+(pass) requires an explicit reset instead of adding a missing Project fence [570.14ms]
+(pass) returns the reset-required contract for an unexpected legacy application table [540.60ms]
+(pass) rejects cross-owned creation and unrelated schema drift before any mutation [736.70ms]
+(pass) reports the canonical reset-required error for a stale WAL-backed schema [407.95ms]
+(pass) reopens a freshly reset database with the exact current schema [807.14ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [4413.63ms]
+(pass) requires a reset for a v1 Task process binding [3393.91ms]
+(pass) requires a stable reset for structurally invalid recognized v2 Native and Capsule bindings [7482.15ms]
+(pass) round-trips one production-written current Task through the strict transfer contract [6370.55ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [668.32ms]
+
+ 15 pass
+ 0 fail
+ 84 expect() calls
+Ran 15 tests across 1 file. [30.01s]
+[3/11] DONE test/storage/schema-contract.test.ts exit=0 duration=30.24s
+[4/11] START test/shared-database-multi-backend.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared SQLite backend startup > keeps two independent backend processes healthy on one database [10802.86ms]
+
+ 1 pass
+ 0 fail
+ 11 expect() calls
+Ran 1 test across 1 file. [12.38s]
+[4/11] DONE test/shared-database-multi-backend.test.ts exit=0 duration=12.56s
+[5/11] START test/scheduler-automation-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) HTTP mutations require the observed revision across scopes, lease races, deletion and reopen [6658.70ms]
+
+ 1 pass
+ 0 fail
+ 45 expect() calls
+Ran 1 test across 1 file. [8.87s]
+[5/11] DONE test/scheduler-automation-revision.test.ts exit=0 duration=9.04s
+[6/11] START test/scheduler-automation-target-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real HTTP scope edits project the exact physical revision and survive database reopen [4889.03ms]
+(pass) retargeted manual and due runs bind exact revision members and retain historical run targets [5301.32ms]
+(pass) retargeted retry reopens its exact Fire after database restart with independent parallel definitions [7007.69ms]
+
+ 3 pass
+ 0 fail
+ 48 expect() calls
+Ran 3 tests across 1 file. [19.36s]
+[6/11] DONE test/scheduler-automation-target-revision.test.ts exit=0 duration=19.59s
+[7/11] START test/scheduler-tool-recovery.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) schedule Tool exact lost-response recovery > retargeted Tool receipts, replay and the public list use their exact revision membership [4032.84ms]
+(pass) schedule Tool exact lost-response recovery > a paused manual Tool retries the same persisted occurrence at a later admission time [1782.75ms]
+(pass) schedule Tool exact lost-response recovery > the real Session Wait Tool and outer recovery replay one exact result [1774.46ms]
+(pass) schedule Tool exact lost-response recovery > replays Automation definition, manual run, update and deletion with the live action result [1770.15ms]
+(pass) schedule Tool exact lost-response recovery > manual Tool run preserves durable busy and delay owners before one terminal replay [1910.47ms]
+(pass) schedule Tool exact lost-response recovery > replays Event creation and cancellation with the live action result [1794.12ms]
+(pass) schedule Tool exact lost-response recovery > replays exact immutable definition and Fire receipts after later external mutations [1851.79ms]
+(pass) schedule Tool exact lost-response recovery > surfaces a zero-run terminal Fire and replays its lost manual Tool response [1798.45ms]
+(pass) schedule Tool exact lost-response recovery > returns a typed conflict when one persisted schedule occurrence changes input [1584.82ms]
+(pass) schedule Tool exact lost-response recovery > the outer Session recovery writer persists the exact schedule receipt once [1550.55ms]
+(pass) accepted historical configuration inputs recover immutable receipts without new admission fields [1651.03ms]
+(pass) accepted create defaults share one normalization and a new stale Tool mutation exposes its named conflict [1651.20ms]
+
+ 12 pass
+ 0 fail
+ 61 expect() calls
+Ran 12 tests across 1 file. [25.65s]
+[7/11] DONE test/scheduler-tool-recovery.test.ts exit=0 duration=25.84s
+[8/11] START test/server/mission-dispatch-replay.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[mission-dispatch HTTP] {"first":{"status":200,"body":{"missionID":"dispatch-replay","sessionID":"ses_-zUSqPnYpzzpi4wLL6Xm","created":false,"productPillar":"work"}},"replay":{"status":200,"body":{"missionID":"dispatch-replay","sessionID":"ses_-zUSqPnYpzzpi4wLL6Xm","created":false,"productPillar":"work"}}}
+(pass) HTTP dispatch replays the accepted Message after draft consumption and retains exact terminal conflicts [10721.74ms]
+
+ 1 pass
+ 0 fail
+ 23 expect() calls
+Ran 1 test across 1 file. [12.87s]
+[8/11] DONE test/server/mission-dispatch-replay.test.ts exit=0 duration=13.08s
+[9/11] START test/task-message-atomic-acceptance.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task operator message acceptance is one transaction > a failed acceptance leaves no overlay or message, and the retry commits every fact together [8815.51ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [11.16s]
+[9/11] DONE test/task-message-atomic-acceptance.test.ts exit=0 duration=11.33s
+[10/11] START test/session/fork-atomic-transcript.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [2052.17ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [1773.12ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [1805.04ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [6.68s]
+[10/11] DONE test/session/fork-atomic-transcript.test.ts exit=0 duration=6.84s
+[11/11] START test/session/session-created-effect.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session Created post-commit lifecycle > delivers the exact global Created envelope from the durable post-commit publication [1992.40ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [4.08s]
+[11/11] DONE test/session/session-created-effect.test.ts exit=0 duration=4.25s

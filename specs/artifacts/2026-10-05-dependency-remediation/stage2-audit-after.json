@@ -1,0 +1,39 @@
+{
+  "exitCode": 1,
+  "rawOutput": "bun audit v1.3.14 (0d9b296a)\r\n{\"braces\":[{\"id\":1240992,\"url\":\"https://github.com/advisories/GHSA-vfj7-8cjw-p6xm\",\"title\":\"braces vulnerable to stack-exhaustion denial of service through deeply nested patterns\",\"severity\":\"high\",\"vulnerable_versions\":\"<=3.0.3\",\"cwe\":[\"CWE-674\"],\"cvss\":{\"score\":7.5,\"vectorString\":\"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H\"}}],\"http-cache-semantics\":[{\"id\":1240991,\"url\":\"https://github.com/advisories/GHSA-ch52-4w7c-c8xp\",\"title\":\"http-cache-semantics max-stale handling can disclose cross-user cached responses\",\"severity\":\"high\",\"vulnerable_versions\":\"<=4.2.0\",\"cwe\":[\"CWE-524\"],\"cvss\":{\"score\":7.5,\"vectorString\":\"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N\"}}]}\r\n",
+  "advisories": {
+    "braces": [
+      {
+        "id": 1240992,
+        "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+        "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+        "severity": "high",
+        "vulnerable_versions": "<=3.0.3",
+        "cwe": [
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "http-cache-semantics": [
+      {
+        "id": 1240991,
+        "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+        "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+        "severity": "high",
+        "vulnerable_versions": "<=4.2.0",
+        "cwe": [
+          "CWE-524"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      }
+    ]
+  },
+  "qualification": "Actual nonzero audit, both unpatched high findings retained."
+}

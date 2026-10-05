@@ -43,6 +43,40 @@ afterEach(() => {
 })
 
 describe("apiJson + ApiError", () => {
+  test.each([
+    {
+      status: 500,
+      body: { name: "StorageError", data: { message: "Storage is unavailable" } },
+      summary: "API 500: Storage is unavailable",
+      message: "API 500 attachment?directory=D%3A%2Fproject: Storage is unavailable",
+    },
+    {
+      status: 400,
+      body: { message: "Invalid file", error: "Secondary explanation" },
+      summary: "API 400: Invalid file",
+      message: "API 400 attachment?directory=D%3A%2Fproject: Invalid file",
+    },
+    {
+      status: 502,
+      body: "Bad Gateway",
+      summary: "API 502: Bad Gateway",
+      message: "API 502 attachment?directory=D%3A%2Fproject: Bad Gateway",
+    },
+    {
+      status: 503,
+      body: null,
+      summary: "API 503",
+      message: "API 503 attachment?directory=D%3A%2Fproject",
+    },
+  ])("derives a concise summary and preserves the complete $status diagnostic", ({ status, body, summary, message }) => {
+    const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body)
+    expect(error.summary).toBe(summary)
+    expect(error.message).toBe(message)
+    expect(error.status).toBe(status)
+    expect(error.path).toBe("attachment?directory=D%3A%2Fproject")
+    expect(error.body).toBe(body)
+  })
+
   test("applies an explicit empty Basic Auth username", () => {
     configure({ username: "", password: "secret" })
     expect(apiHeaders().Authorization).toBe("Basic OnNlY3JldA==")

@@ -1,8 +1,7 @@
 diff --git a/bun-sqlite/session.cjs b/bun-sqlite/session.cjs
-index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e889175cda3175 100644
 --- a/bun-sqlite/session.cjs
 +++ b/bun-sqlite/session.cjs
-@@ -23,9 +23,15 @@ var SQLiteBunSession = class extends __sqlite_core_session_ts.SQLiteSession {
+@@ -24,8 +24,14 @@
  	prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
  		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper);
  	}
@@ -11,14 +10,13 @@ index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e88917
 +	}
  	prepareRelationalQuery(query, fields, executeMethod, customResultMapper) {
  		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true);
- 	}
++	}
 +	prepareOneTimeRelationalQuery(query, fields, executeMethod, customResultMapper) {
 +		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true, true);
-+	}
+ 	}
  	transaction(transaction, config = {}) {
  		const tx = new SQLiteBunTransaction("sync", this.dialect, this, this.relations, this.schema);
- 		let result;
-@@ -53,7 +59,7 @@ var SQLiteBunTransaction = class SQLiteBunTransaction extends __sqlite_core_inde
+@@ -54,7 +60,7 @@
  };
  var PreparedQuery = class extends __sqlite_core_session_ts.SQLitePreparedQuery {
  	static [__entity_ts.entityKind] = "SQLiteBunPreparedQuery";
@@ -27,7 +25,7 @@ index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e88917
  		super("sync", executeMethod, query);
  		this.stmt = stmt;
  		this.logger = logger;
-@@ -61,38 +67,70 @@ var PreparedQuery = class extends __sqlite_core_session_ts.SQLitePreparedQuery {
+@@ -62,38 +68,70 @@
  		this._isResponseInArrayMode = _isResponseInArrayMode;
  		this.customResultMapper = customResultMapper;
  		this.isRqbV2Query = isRqbV2Query;
@@ -96,9 +94,9 @@ index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e88917
 -		this.logger.logQuery(this.query.sql, params);
 -		const { fields, joinsNotNullableMap, customResultMapper } = this;
 -		if (!fields && !customResultMapper) {
--			const row$1 = this.stmt.get(...params);
--			if (!row$1) return void 0;
--			return row$1;
+-			const row = this.stmt.get(...params);
+-			if (!row) return void 0;
+-			return row;
 -		}
 -		const row = this.stmt.values(...params)[0];
 -		if (!row) return;
@@ -110,9 +108,9 @@ index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e88917
 +			this.logger.logQuery(this.query.sql, params);
 +			const { fields, joinsNotNullableMap, customResultMapper } = this;
 +			if (!fields && !customResultMapper) {
-+				const row$1 = this.stmt.get(...params);
-+				if (!row$1) return void 0;
-+				return row$1;
++				const row = this.stmt.get(...params);
++				if (!row) return void 0;
++				return row;
 +			}
 +			const row = this.stmt.values(...params)[0];
 +			if (!row) return;
@@ -122,7 +120,7 @@ index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e88917
  	}
  	allRqbV2(placeholderValues) {
  		const { query, logger, stmt, customResultMapper } = this;
-@@ -109,9 +147,11 @@ var PreparedQuery = class extends __sqlite_core_session_ts.SQLitePreparedQuery {
+@@ -110,9 +148,11 @@
  		return customResultMapper([row]);
  	}
  	values(placeholderValues) {
@@ -138,10 +136,9 @@ index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e88917
  	/** @internal */
  	isResponseInArrayMode() {
 diff --git a/bun-sqlite/session.d.cts b/bun-sqlite/session.d.cts
-index 38b9a4807fbd313565fb1a3135692e7a270a0aea..6ee070ebf787137dfa8a3f5b2d4ff794830e6824 100644
 --- a/bun-sqlite/session.d.cts
 +++ b/bun-sqlite/session.d.cts
-@@ -25,7 +25,9 @@ declare class SQLiteBunSession<TFullSchema extends Record<string, unknown>, TRel
+@@ -26,7 +26,9 @@
    constructor(client: Database, dialect: SQLiteSyncDialect, relations: TRelations, schema: V1.RelationalSchemaConfig<TSchema> | undefined, options?: SQLiteBunSessionOptions);
    exec(query: string): void;
    prepareQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, isResponseInArrayMode: boolean, customResultMapper?: (rows: unknown[][]) => unknown): PreparedQuery<T>;
@@ -151,7 +148,7 @@ index 38b9a4807fbd313565fb1a3135692e7a270a0aea..6ee070ebf787137dfa8a3f5b2d4ff794
    transaction<T>(transaction: (tx: SQLiteBunTransaction<TFullSchema, TRelations, TSchema>) => T, config?: SQLiteTransactionConfig): T;
  }
  declare class SQLiteBunTransaction<TFullSchema extends Record<string, unknown>, TRelations extends AnyRelations, TSchema extends V1.TablesRelationalConfig> extends SQLiteTransaction$1<'sync', void, TFullSchema, TRelations, TSchema> {
-@@ -46,8 +48,12 @@ declare class PreparedQuery<T extends PreparedQueryConfig$2 = PreparedQueryConfi
+@@ -47,8 +49,12 @@
    private _isResponseInArrayMode;
    private customResultMapper?;
    private isRqbV2Query?;
@@ -166,10 +163,9 @@ index 38b9a4807fbd313565fb1a3135692e7a270a0aea..6ee070ebf787137dfa8a3f5b2d4ff794
    all(placeholderValues?: Record<string, unknown>): T['all'];
    get(placeholderValues?: Record<string, unknown>): T['get'];
 diff --git a/bun-sqlite/session.d.ts b/bun-sqlite/session.d.ts
-index 6db6252b8a7735c0f3736adf1bd40f3ac5a2861e..1797f27387986ac3423b71e3a91ec31c5a3a595c 100644
 --- a/bun-sqlite/session.d.ts
 +++ b/bun-sqlite/session.d.ts
-@@ -25,7 +25,9 @@ declare class SQLiteBunSession<TFullSchema extends Record<string, unknown>, TRel
+@@ -26,7 +26,9 @@
    constructor(client: Database, dialect: SQLiteSyncDialect, relations: TRelations, schema: V1.RelationalSchemaConfig<TSchema> | undefined, options?: SQLiteBunSessionOptions);
    exec(query: string): void;
    prepareQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, isResponseInArrayMode: boolean, customResultMapper?: (rows: unknown[][]) => unknown): PreparedQuery<T>;
@@ -179,7 +175,7 @@ index 6db6252b8a7735c0f3736adf1bd40f3ac5a2861e..1797f27387986ac3423b71e3a91ec31c
    transaction<T>(transaction: (tx: SQLiteBunTransaction<TFullSchema, TRelations, TSchema>) => T, config?: SQLiteTransactionConfig$1): T;
  }
  declare class SQLiteBunTransaction<TFullSchema extends Record<string, unknown>, TRelations extends AnyRelations, TSchema extends V1.TablesRelationalConfig> extends SQLiteTransaction<'sync', void, TFullSchema, TRelations, TSchema> {
-@@ -46,8 +48,12 @@ declare class PreparedQuery<T extends PreparedQueryConfig$2 = PreparedQueryConfi
+@@ -47,8 +49,12 @@
    private _isResponseInArrayMode;
    private customResultMapper?;
    private isRqbV2Query?;
@@ -194,10 +190,9 @@ index 6db6252b8a7735c0f3736adf1bd40f3ac5a2861e..1797f27387986ac3423b71e3a91ec31c
    all(placeholderValues?: Record<string, unknown>): T['all'];
    get(placeholderValues?: Record<string, unknown>): T['get'];
 diff --git a/bun-sqlite/session.js b/bun-sqlite/session.js
-index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6479f74c0 100644
 --- a/bun-sqlite/session.js
 +++ b/bun-sqlite/session.js
-@@ -22,9 +22,15 @@ var SQLiteBunSession = class extends SQLiteSession$1 {
+@@ -22,8 +22,14 @@
  	prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
  		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper);
  	}
@@ -206,14 +201,13 @@ index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6
 +	}
  	prepareRelationalQuery(query, fields, executeMethod, customResultMapper) {
  		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true);
- 	}
++	}
 +	prepareOneTimeRelationalQuery(query, fields, executeMethod, customResultMapper) {
 +		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true, true);
-+	}
+ 	}
  	transaction(transaction, config = {}) {
  		const tx = new SQLiteBunTransaction("sync", this.dialect, this, this.relations, this.schema);
- 		let result;
-@@ -52,7 +58,7 @@ var SQLiteBunTransaction = class SQLiteBunTransaction extends SQLiteTransaction
+@@ -52,7 +58,7 @@
  };
  var PreparedQuery = class extends SQLitePreparedQuery$1 {
  	static [entityKind] = "SQLiteBunPreparedQuery";
@@ -222,7 +216,7 @@ index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6
  		super("sync", executeMethod, query);
  		this.stmt = stmt;
  		this.logger = logger;
-@@ -60,38 +66,70 @@ var PreparedQuery = class extends SQLitePreparedQuery$1 {
+@@ -60,38 +66,70 @@
  		this._isResponseInArrayMode = _isResponseInArrayMode;
  		this.customResultMapper = customResultMapper;
  		this.isRqbV2Query = isRqbV2Query;
@@ -291,9 +285,9 @@ index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6
 -		this.logger.logQuery(this.query.sql, params);
 -		const { fields, joinsNotNullableMap, customResultMapper } = this;
 -		if (!fields && !customResultMapper) {
--			const row$1 = this.stmt.get(...params);
--			if (!row$1) return void 0;
--			return row$1;
+-			const row = this.stmt.get(...params);
+-			if (!row) return void 0;
+-			return row;
 -		}
 -		const row = this.stmt.values(...params)[0];
 -		if (!row) return;
@@ -305,9 +299,9 @@ index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6
 +			this.logger.logQuery(this.query.sql, params);
 +			const { fields, joinsNotNullableMap, customResultMapper } = this;
 +			if (!fields && !customResultMapper) {
-+				const row$1 = this.stmt.get(...params);
-+				if (!row$1) return void 0;
-+				return row$1;
++				const row = this.stmt.get(...params);
++				if (!row) return void 0;
++				return row;
 +			}
 +			const row = this.stmt.values(...params)[0];
 +			if (!row) return;
@@ -317,7 +311,7 @@ index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6
  	}
  	allRqbV2(placeholderValues) {
  		const { query, logger, stmt, customResultMapper } = this;
-@@ -108,9 +146,11 @@ var PreparedQuery = class extends SQLitePreparedQuery$1 {
+@@ -108,9 +146,11 @@
  		return customResultMapper([row]);
  	}
  	values(placeholderValues) {

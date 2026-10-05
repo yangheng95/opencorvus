@@ -246,6 +246,7 @@
 
 .app-dialog-form > .app-dialog-body {
   min-height: 0;
+  overflow-y: auto;
   padding: var(--ui-gap-xl) var(--ui-gap-2xl);
   border: 0;
   border-radius: 0;

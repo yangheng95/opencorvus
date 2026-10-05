@@ -508,6 +508,7 @@ body[data-resizing="true"] .pane-resizer::after {
 
 .workspace-primary-page[data-active="false"] {
   visibility: hidden;
+  opacity: var(--ui-opacity-hidden);
 }
 
 .sections,

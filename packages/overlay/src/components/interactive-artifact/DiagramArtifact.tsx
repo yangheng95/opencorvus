@@ -4,6 +4,7 @@ import type { InteractiveArtifactPayload } from "../../services/interactive-arti
 import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { randomUUID } from "../../utils/random-id"
+import { artifactVisualTheme } from "./theme-color"
 
 type DiagramPayload = Extract<InteractiveArtifactPayload, { renderer: "diagram@1" }>
 
@@ -23,6 +24,7 @@ export function DiagramArtifact(props: { payload: DiagramPayload }) {
       startOnLoad: false,
       securityLevel: "strict",
       theme: dark ? "dark" : "neutral",
+      fontFamily: artifactVisualTheme(host).font,
       flowchart: { htmlLabels: false, useMaxWidth: true },
     })
     const id = `artifact-diagram-${randomUUID().replaceAll("-", "")}`

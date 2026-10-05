@@ -36,7 +36,7 @@ import {
   uploadComposerBytes,
   uploadComposerDirectoryReference,
 } from "../services/attachment-upload"
-import { fetchResourceAsObjectUrl } from "../services/api"
+import { ApiError, fetchResourceAsObjectUrl } from "../services/api"
 import {
   SCREENSHOT_BROWSER_THUMBNAIL_VARIANT,
   type VisibleComposerReferences,
@@ -195,13 +195,14 @@ export interface ChatComposerProps {
 }
 
 function composerDialogErrorMessage(error: unknown): string {
+  if (error instanceof ApiError) return error.summary
   return error instanceof Error ? error.message : String(error)
 }
 
 function showComposerMessage(
   owner: string,
   message: string,
-  options: { title?: string; kind?: string; okLabel?: string } = {},
+  options: { title?: string; kind?: string; okLabel?: string; details?: string } = {},
 ): void {
   void nativeMessage(message, options).catch((error) => {
     reportError({
@@ -898,6 +899,7 @@ export function ChatComposer(props: ChatComposerProps) {
         {
           title: t("chat.attach_upload_failed_title"),
           kind: "error",
+          details: formatErrorDetails(err),
         },
       )
     } finally {
@@ -971,6 +973,7 @@ export function ChatComposer(props: ChatComposerProps) {
         {
           title: t("chat.attach_upload_failed_title"),
           kind: "error",
+          details: formatErrorDetails(err),
         },
       )
     } finally {

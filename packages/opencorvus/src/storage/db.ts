@@ -1804,12 +1804,14 @@ export namespace Database {
       throwIfUnavailable()
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction((tx) => {
-        return provideDatabaseContext({ tx, effects, closed: false, transactionDepth: 1 }, "Database.transaction", () =>
-          callback(tx),
-        )
+        return {
+          value: provideDatabaseContext({ tx, effects, closed: false, transactionDepth: 1 }, "Database.transaction", () =>
+            callback(tx),
+          ),
+        }
       })
       drainEffects(effects)
-      return result
+      return result.value
     } catch (error) {
       throwNormalized(error, "Database.transaction")
     }
@@ -1830,16 +1832,17 @@ export namespace Database {
     try {
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction(
-        (tx) =>
-          provideDatabaseContext(
+        (tx) => ({
+          value: provideDatabaseContext(
             { tx, effects, closed: false, transactionDepth: 1 },
             "Database.immediateTransaction",
             () => callback(tx),
           ),
+        }),
         { behavior: "immediate" },
       )
       drainEffects(effects)
-      return result
+      return result.value
     } catch (error) {
       throwNormalized(error, "Database.immediateTransaction")
     }

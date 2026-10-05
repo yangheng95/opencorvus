@@ -1,0 +1,27 @@
+$ bun script/run-tests.ts test/storage/drizzle-adapter-contract.test.ts
+[1/1] START test/storage/drizzle-adapter-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ESM installed Bun SQLite adapter > quoted identifiers and aliases return exact data with the sentinel row retained [5.53ms]
+(pass) ESM installed Bun SQLite adapter > compound predicates, bound values and joined aliases select the intended rows [3.83ms]
+(pass) ESM installed Bun SQLite adapter > ordinary one-time methods finalize their actual native statement before returning [28.77ms]
+(pass) ESM installed Bun SQLite adapter > CRUD builders complete their native one-time owners with exact changed rows [5.16ms]
+(pass) ESM installed Bun SQLite adapter > mapped and relational results finish mapping before their single finalization [0.62ms]
+(pass) ESM installed Bun SQLite adapter > native constraint, missing placeholder and mapper failures retain their error and finalization [1.12ms]
+(pass) ESM installed Bun SQLite adapter > explicit prepared queries retain two bound executions and expose the finalized-query error [0.78ms]
+(pass) ESM installed Bun SQLite adapter > fault-injected finalization preserves the original mapper cause and both errors [0.38ms]
+(pass) CommonJS installed Bun SQLite adapter > quoted identifiers and aliases return exact data with the sentinel row retained [5.61ms]
+(pass) CommonJS installed Bun SQLite adapter > compound predicates, bound values and joined aliases select the intended rows [3.94ms]
+(pass) CommonJS installed Bun SQLite adapter > ordinary one-time methods finalize their actual native statement before returning [25.58ms]
+(pass) CommonJS installed Bun SQLite adapter > CRUD builders complete their native one-time owners with exact changed rows [4.90ms]
+(pass) CommonJS installed Bun SQLite adapter > mapped and relational results finish mapping before their single finalization [0.35ms]
+(pass) CommonJS installed Bun SQLite adapter > native constraint, missing placeholder and mapper failures retain their error and finalization [0.58ms]
+(pass) CommonJS installed Bun SQLite adapter > explicit prepared queries retain two bound executions and expose the finalized-query error [0.69ms]
+(pass) CommonJS installed Bun SQLite adapter > fault-injected finalization preserves the original mapper cause and both errors [0.18ms]
+
+ 16 pass
+ 0 fail
+ 110 expect() calls
+Ran 16 tests across 1 file. [2.40s]
+[1/1] DONE test/storage/drizzle-adapter-contract.test.ts exit=0 duration=2.56s

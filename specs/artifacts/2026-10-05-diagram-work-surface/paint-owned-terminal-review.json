@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-05T15:06:20.3394578+08:00",
+  "shutdownOccurrence": "cal_g0VX9kwzI00Q1T9kR3Fv",
+  "rootImmediateObservation": {
+    "port17889": "free",
+    "listener45876": "exact process absent",
+    "parent1400": "present at immediate receipt; retained as historical fact"
+  },
+  "finalProcesses": [],
+  "finalListeners": [],
+  "launcher35264Exists": false,
+  "parent1400Exists": false,
+  "listener45876Exists": false,
+  "processActions": "read only; no kill or restart",
+  "launchMechanism": "Start-Process -PassThru in completed exec; no ongoing exec PTY/session handle remains; final OS process absence is observed, not an inferred exit code"
+}

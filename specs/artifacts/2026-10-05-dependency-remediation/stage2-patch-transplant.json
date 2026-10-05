@@ -1,0 +1,87 @@
+{
+  "upstream": "https://registry.npmjs.org/drizzle-orm/-/drizzle-orm-1.0.0-beta.20.tgz",
+  "version": "1.0.0-beta.20",
+  "files": [
+    {
+      "file": "bun-sqlite/session.cjs",
+      "hunks": [
+        {
+          "hunk": 1,
+          "exactOldContext": true,
+          "adaptation": null
+        },
+        {
+          "hunk": 2,
+          "exactOldContext": true,
+          "adaptation": null
+        },
+        {
+          "hunk": 3,
+          "exactOldContext": false,
+          "adaptation": "upstream get local row$1 -> row"
+        },
+        {
+          "hunk": 4,
+          "exactOldContext": true,
+          "adaptation": null
+        }
+      ]
+    },
+    {
+      "file": "bun-sqlite/session.d.cts",
+      "hunks": [
+        {
+          "hunk": 1,
+          "exactOldContext": true,
+          "adaptation": null
+        },
+        {
+          "hunk": 2,
+          "exactOldContext": true,
+          "adaptation": null
+        }
+      ]
+    },
+    {
+      "file": "bun-sqlite/session.d.ts",
+      "hunks": [
+        {
+          "hunk": 1,
+          "exactOldContext": true,
+          "adaptation": null
+        },
+        {
+          "hunk": 2,
+          "exactOldContext": true,
+          "adaptation": null
+        }
+      ]
+    },
+    {
+      "file": "bun-sqlite/session.js",
+      "hunks": [
+        {
+          "hunk": 1,
+          "exactOldContext": true,
+          "adaptation": null
+        },
+        {
+          "hunk": 2,
+          "exactOldContext": true,
+          "adaptation": null
+        },
+        {
+          "hunk": 3,
+          "exactOldContext": false,
+          "adaptation": "upstream get local row$1 -> row"
+        },
+        {
+          "hunk": 4,
+          "exactOldContext": true,
+          "adaptation": null
+        }
+      ]
+    }
+  ],
+  "localBehavior": "Existing four-file one-time/prepared statement ownership unchanged; upstream get local rename retained."
+}

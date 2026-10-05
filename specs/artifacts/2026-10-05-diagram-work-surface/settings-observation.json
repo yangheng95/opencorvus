@@ -1,0 +1,153 @@
+{
+  "hit": [
+    {
+      "class": "s-row-desc",
+      "id": "",
+      "tag": "SPAN"
+    },
+    {
+      "class": "s-row-main",
+      "id": "",
+      "tag": "DIV"
+    },
+    {
+      "class": "s-row",
+      "id": "",
+      "tag": "DIV"
+    },
+    {
+      "class": "s-group-body",
+      "id": "",
+      "tag": "DIV"
+    },
+    {
+      "class": "s-group",
+      "id": "",
+      "tag": "SECTION"
+    },
+    {
+      "class": "s-panel general-panel appearance-panel",
+      "id": "",
+      "tag": "DIV"
+    },
+    {
+      "class": "config-section-body",
+      "id": "appearanceBody",
+      "tag": "DIV"
+    }
+  ],
+  "menus": [
+    {
+      "label": "查看本轮模型用量：87K Token",
+      "text": "87K"
+    },
+    {
+      "label": "添加支持的文件",
+      "text": ""
+    },
+    {
+      "label": "查看启动引用",
+      "text": "查看启动引用"
+    },
+    {
+      "label": "授权模式，当前为 完全访问",
+      "text": "完全访问"
+    },
+    {
+      "label": "OpenCorvus 模型 openai/gpt-6.1-sol，点击切换",
+      "text": "openai/gpt-6.1-sol"
+    },
+    {
+      "label": "添加工具",
+      "text": ""
+    },
+    {
+      "label": "主题",
+      "text": "浅色"
+    },
+    {
+      "label": "语言",
+      "text": "简体中文"
+    }
+  ],
+  "settings": {
+    "rect": {
+      "bottom": 720,
+      "height": 684,
+      "left": 56,
+      "right": 1280,
+      "top": 36,
+      "width": 1224,
+      "x": 56,
+      "y": 36
+    }
+  },
+  "timelines": [
+    {
+      "ancestors": [
+        {
+          "class": "msg-artifact__body",
+          "display": "block",
+          "id": "",
+          "tag": "DIV",
+          "visibility": "hidden"
+        },
+        {
+          "class": "msg-artifact",
+          "display": "block",
+          "id": "",
+          "tag": "SECTION",
+          "visibility": "hidden"
+        },
+        {
+          "class": "card-message-run",
+          "display": "block",
+          "id": "",
+          "tag": "SECTION",
+          "visibility": "hidden"
+        },
+        {
+          "class": "chat-bubble__body-inner",
+          "display": "flex",
+          "id": "",
+          "tag": "DIV",
+          "visibility": "hidden"
+        },
+        {
+          "class": "chat-bubble__body",
+          "display": "block",
+          "id": "",
+          "tag": "DIV",
+          "visibility": "hidden"
+        },
+        {
+          "class": "chat-bubble",
+          "display": "flex",
+          "id": "",
+          "tag": "DIV",
+          "visibility": "hidden"
+        },
+        {
+          "class": "chat-bubble-shell",
+          "display": "flex",
+          "id": "",
+          "tag": "DIV",
+          "visibility": "hidden"
+        }
+      ],
+      "display": "block",
+      "position": "relative",
+      "rect": {
+        "bottom": 447.609375,
+        "height": 316,
+        "left": 422.5,
+        "right": 1180.5,
+        "top": 131.609375,
+        "width": 758,
+        "x": 422.5,
+        "y": 131.609375
+      },
+      "visibility": "hidden"
+    }
+  ]
+}

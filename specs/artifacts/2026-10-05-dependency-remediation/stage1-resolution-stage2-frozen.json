@@ -1,0 +1,105 @@
+{
+  "time": "2026-10-05T06:12:39.237Z",
+  "receipts": [
+    {
+      "target": "undici",
+      "workspace": "packages/opencorvus",
+      "chain": [
+        "undici"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\undici@6.28.1\\node_modules\\undici\\index.js",
+      "version": "6.28.1"
+    },
+    {
+      "target": "hono",
+      "workspace": "packages/opencorvus",
+      "chain": [
+        "hono"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.7\\node_modules\\hono\\dist\\cjs\\index.js",
+      "version": "4.13.7"
+    },
+    {
+      "target": "brace-expansion",
+      "workspace": "packages/opencorvus",
+      "chain": [
+        "minimatch",
+        "brace-expansion"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\brace-expansion@5.0.12\\node_modules\\brace-expansion\\dist\\commonjs\\index.js",
+      "version": "5.0.12"
+    },
+    {
+      "target": "fast-uri",
+      "workspace": "packages/opencorvus",
+      "chain": [
+        "ajv",
+        "fast-uri"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\fast-uri@4.1.5\\node_modules\\fast-uri\\index.js",
+      "version": "4.1.5"
+    },
+    {
+      "target": "axios",
+      "workspace": "packages/opencorvus",
+      "chain": [
+        "open-websearch/build/engines/bing/bing.js",
+        "axios"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\axios@1.20.0\\node_modules\\axios\\dist\\node\\axios.cjs",
+      "version": "1.20.0"
+    },
+    {
+      "target": "@grpc/grpc-js",
+      "workspace": "packages/overlay",
+      "chain": [
+        "@univerjs/core",
+        "@univerjs/protocol",
+        "@grpc/grpc-js"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\@grpc+grpc-js@1.14.5\\node_modules\\@grpc\\grpc-js\\build\\src\\index.js",
+      "version": "1.14.5"
+    },
+    {
+      "target": "ip-address",
+      "workspace": "packages/opencorvus",
+      "chain": [
+        "@modelcontextprotocol/sdk/server/index.js",
+        "express-rate-limit",
+        "ip-address"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\ip-address@10.7.1\\node_modules\\ip-address\\dist\\ip-address.js",
+      "version": "10.7.1"
+    },
+    {
+      "target": "devalue",
+      "workspace": "packages/web",
+      "chain": [
+        "astro",
+        "devalue"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\devalue@5.9.3\\node_modules\\devalue\\index.js",
+      "version": "5.9.3"
+    },
+    {
+      "target": "dompurify",
+      "workspace": "packages/overlay",
+      "chain": [
+        "mermaid",
+        "dompurify"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\dompurify@3.4.16\\node_modules\\dompurify\\dist\\purify.cjs.js",
+      "version": "3.4.16"
+    },
+    {
+      "target": "moment",
+      "workspace": "packages/overlay",
+      "chain": [
+        "vis-timeline",
+        "moment"
+      ],
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\moment@2.31.0\\node_modules\\moment\\moment.js",
+      "version": "2.31.0"
+    }
+  ]
+}

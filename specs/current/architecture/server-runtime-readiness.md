@@ -22,6 +22,14 @@ Job containment through one strict protocol3 capability operation, then repeats
 that physical check in the real helper. The host's own silent-breakaway child
 management Job is not an external lifecycle owner. Job flags are never relaxed.
 
+The replacement command uses the actual executable and the original CLI
+arguments. The existing compiled-runtime identity from the canonical build
+defines owns whether an external source entry is included: source execution
+retains its script argument, and compiled execution starts its native entry
+directly. Bun's embedded virtual entry is loader metadata. Explicit handoff
+commands keep their declared invocation unchanged. This selection does not
+change listener, process ownership, execution settlement or recovery authority.
+
 Restart prepares one supervisor request context and uses durable waiting, bind,
 ready and failed files in that same root. Facts bind the full predecessor and
 successor occurrences, native request and exact listener. Independent diagnostic

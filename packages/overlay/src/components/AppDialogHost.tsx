@@ -7,6 +7,7 @@ import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
 import { TextField } from "./ui/TextField"
 import { SelectControl } from "./ui/SelectControl"
+import { Disclosure } from "./ui/Disclosure"
 
 type AppDialogSelectOption = { value: string; label?: string }
 
@@ -14,9 +15,11 @@ export function AppDialogHost() {
   // Reported by the link action alone. Cleared whenever a new dialog opens, so
   // one dialog's failure never greets the next.
   const [linkError, setLinkError] = createSignal("")
+  const [detailsOpen, setDetailsOpen] = createSignal(false)
   createEffect(() => {
     dialogStore.app.epoch
     setLinkError("")
+    setDetailsOpen(false)
   })
 
   let okButtonRef: HTMLButtonElement | undefined
@@ -119,6 +122,12 @@ export function AppDialogHost() {
     >
       <div class="app-dialog-body" id="appDialogBody" data-kind={dialogStore.app.kind || undefined}>
         {dialogStore.app.message || ""}
+        <Show when={dialogStore.app.details}>
+          <Disclosure.Root open={detailsOpen()} onOpenChange={setDetailsOpen}>
+            <Disclosure.Trigger indicatorPosition="end">{t("common.details")}</Disclosure.Trigger>
+            <Disclosure.Content class="oc-feedback__diagnostic">{dialogStore.app.details}</Disclosure.Content>
+          </Disclosure.Root>
+        </Show>
       </div>
       <Show when={linkError()}>
         <p class="app-dialog-link-error" data-ui="app-dialog-link-error" role="alert">

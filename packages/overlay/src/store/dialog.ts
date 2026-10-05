@@ -118,6 +118,7 @@ const DEFAULT_DIALOG_STATE: DialogState = {
     epoch: 0,
     title: "",
     message: "",
+    details: "",
     kind: "",
     okLabel: "",
     okTone: "accent",

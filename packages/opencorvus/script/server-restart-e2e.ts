@@ -1,4 +1,7 @@
-/** Credential-free real HTTP restart qualification. Optional SERVER_RESTART_RESULT absolute evidence path. */
+/** Credential-free Windows restart qualification. SERVER_RESTART_RESULT selects evidence.
+ * SERVER_RESTART_BINARY explicitly selects a compiled backend and its adjacent helper;
+ * omitted input runs the twelve-case source profile. Packaged mode runs six HTTP/SDK cases.
+ */
 import assert from "node:assert/strict"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -8,7 +11,16 @@ import { bootstrapIsolatedTestRuntime, applyIsolatedTestUserEnvironment } from "
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 const resultPath = path.resolve(process.env.SERVER_RESTART_RESULT ?? ".server-restart-result.json")
-const helper = prepareTestProcessSupervisor()
+const binaryInput = process.env.SERVER_RESTART_BINARY
+if (binaryInput) assert(path.isAbsolute(binaryInput), "SERVER_RESTART_BINARY must be an absolute executable path")
+const binary = binaryInput ? await fs.realpath(binaryInput) : undefined
+const helper = binary ? await fs.realpath(path.join(path.dirname(binary), "opencorvus-process-supervisor.exe")) : prepareTestProcessSupervisor()
+if (binary) {
+  assert.equal((await fs.stat(binary)).isFile(), true)
+  assert.equal((await fs.stat(helper!)).isFile(), true)
+  const hostKeys = new Set(["path", "systemroot", "windir", "comspec", "pathext", "lang", "lc_all"])
+  for (const key of Object.keys(process.env)) if (!hostKeys.has(key.toLowerCase())) delete process.env[key]
+}
 const isolation = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolation)
 if (helper) process.env.OPENCORVUS_PROCESS_SUPERVISOR = helper
@@ -17,7 +29,11 @@ const root = path.join(isolation.processRoot, "restart-check")
 await fs.mkdir(root, { recursive: true })
 const results: any[] = []
 let failure: unknown
+const provenance: Record<string, unknown> = { profile: binary ? "packaged-http" : "source", executable: binary ?? process.execPath }
+provenance.checkerOwner = currentRuntimeProcessOccurrence()
+if (binary) provenance.package = JSON.parse(await fs.readFile(path.join(path.dirname(binary), "package.json"), "utf8"))
 const entry = path.resolve(import.meta.dir, "../src/index.ts")
+type NativeFacts = { requestRoot: string; request: any; ready: any; helper: any }
 const wait = async <T>(label: string, read: () => Promise<T | undefined>, milliseconds = 30_000): Promise<T> => {
   const deadline = Date.now() + milliseconds
   for (;;) {
@@ -31,32 +47,96 @@ const jsonFile = async (file: string) => {
   try { return JSON.parse(await fs.readFile(file, "utf8")) }
   catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return; throw error }
 }
-const launchStandalone = async (script: string) => {
+const launchStandalone = async (command: { executable: string; args: string[]; cwd?: string; env?: NodeJS.ProcessEnv }) => {
   const quote = (value: string) => `'${value.replaceAll("'", "''")}'`
-  const commandLine = `"${process.execPath}" "${script}"`
-  const code = `$startup=New-CimInstance -CimClass (Get-CimClass Win32_ProcessStartup) -ClientOnly -Property @{ShowWindow=[uint16]0};Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine=${quote(commandLine)};CurrentDirectory=${quote(path.dirname(entry))};ProcessStartupInformation=$startup}|Select-Object ReturnValue,ProcessId|ConvertTo-Json -Compress`
+  const commandLine = [command.executable, ...command.args].map(value => `"${value.replace(/(\\*)"/g, "$1$1\\\"").replace(/(\\+)$/, "$1$1")}"`).join(" ")
+  const environment = command.env ? `;CreateFlags=[uint32]1024;EnvironmentVariables=[string[]]@(${Object.entries(command.env).filter((entry): entry is [string,string] => typeof entry[1] === "string").map(([key,value]) => quote(`${key}=${value}`)).join(",")})` : ""
+  const code = `$startup=New-CimInstance -CimClass (Get-CimClass Win32_ProcessStartup) -ClientOnly -Property @{ShowWindow=[uint16]0${environment}};Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine=${quote(commandLine)};CurrentDirectory=${quote(command.cwd ?? path.dirname(entry))};ProcessStartupInformation=$startup}|Select-Object ReturnValue,ProcessId|ConvertTo-Json -Compress`
   const launched = await NodeProcess.run({ command: { executable: "powershell.exe", args: ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(code, "utf16le").toString("base64")] }, timeoutMs: 15_000 })
   const receipt = JSON.parse(new TextDecoder().decode(launched.stdout))
+  const launches = (provenance.launches ??= []) as unknown[]
+  launches.push({ ...receipt, executable: command.executable, args: command.args, cwd: command.cwd,
+    environmentKeys: command.env ? Object.keys(command.env).sort() : undefined })
   assert.equal(receipt.ReturnValue, 0)
   const identity = await NodeProcess.run({ command: { executable: helper!, args: ["--process-instance-id", String(receipt.ProcessId)] }, timeoutMs: 5000 })
   return { ...receipt, owner: { pid: receipt.ProcessId as number, processInstanceID: new TextDecoder().decode(identity.stdout).trim(), occurrenceID: "checker-created-host" } }
 }
-const readTransfers = async (home: string): Promise<Array<{ root: string; transfer: any; ready: any; applicationReady: any }>> => {
+const executableFact = async (owner: {pid:number;processInstanceID:string;occurrenceID?:string}, expected: string) => {
+  assert.equal(observeRuntimeProcessOccurrence({ ...owner, occurrenceID: owner.occurrenceID ?? "native-helper" }), "exact_live")
+  const code = `Get-CimInstance Win32_Process -Filter 'ProcessId=${owner.pid}'|Select-Object ProcessId,ExecutablePath|ConvertTo-Json -Compress`
+  const observed = await NodeProcess.run({ command: { executable: "powershell.exe", args: ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(code, "utf16le").toString("base64")] }, timeoutMs: 15_000 })
+  const fact = JSON.parse(new TextDecoder().decode(observed.stdout))
+  assert.equal(fact.ProcessId, owner.pid)
+  assert.equal((await fs.realpath(fact.ExecutablePath)).toLowerCase(), (await fs.realpath(expected)).toLowerCase())
+  assert.equal(observeRuntimeProcessOccurrence({ ...owner, occurrenceID: owner.occurrenceID ?? "native-helper" }), "exact_live")
+  return { ...owner, executable: fact.ExecutablePath }
+}
+const captureNativeFacts = async (home: string, record: any) => {
+  const temporary = path.join(home, "tmp")
+  await fs.mkdir(temporary, { recursive: true })
+  const stop = new AbortController()
+  const observed = new Map<string, any>()
+  record.nativeAttempts = []
+  record.nativeObservationErrors = []
+  let pending: Promise<void> | undefined
+  const scan = () => pending ??= (async () => {
+    for (const item of await fs.readdir(temporary, { withFileTypes: true })) {
+      if (!item.isDirectory() || !item.name.startsWith("supervisor-")) continue
+      const requestRoot = path.join(temporary, item.name)
+      const request = await jsonFile(path.join(requestRoot, "request.json"))
+      if (request?.detached !== true) continue
+      let attempt = observed.get(request.request_id)
+      if (!attempt) {
+        if (observed.size >= 16) throw new Error("Native diagnostic capture exceeded its sixteen-request observation budget")
+        attempt = { requestID: request.request_id, root: requestRoot, firstObservedAt: Date.now(), facts: {} }
+        observed.set(request.request_id, attempt)
+        record.nativeAttempts.push(attempt)
+      }
+      attempt.facts["request.json"] = request
+      for (const name of ["helper.json", "ready.json", "restart-waiting.json", "restart-bind.json", "restart-ready.json", "restart-failed.json", "transfer-request.json", "transfer-receipt.json", "settled.json", "launch-failed.json"]) {
+        const value = await jsonFile(path.join(requestRoot, name))
+        if (value !== undefined) attempt.facts[name] = value
+      }
+      attempt.lastObservedAt = Date.now()
+    }
+  })().finally(() => { pending = undefined })
+  const captureError = (error: unknown) => {
+    if (record.nativeObservationErrors.length < 16) record.nativeObservationErrors.push({ time: Date.now(), error: String(error) })
+  }
+  const watcher = fs.watch(temporary, { recursive: true, signal: stop.signal })
+  const watching = (async () => {
+    try { for await (const _ of watcher) await scan() }
+    catch (error) { if (!stop.signal.aborted) captureError(error) }
+  })()
+  const bounded = setTimeout(() => { record.nativeCaptureStop = "observation_window_elapsed"; stop.abort() }, 120_000)
+  try { await scan() } catch (error) { clearTimeout(bounded); stop.abort(); await watching; throw error }
+  return { scan, async close() {
+    clearTimeout(bounded)
+    record.nativeCaptureStop ??= "observer_closed"
+    stop.abort()
+    await watching
+    await scan().catch(captureError)
+  } }
+}
+const readTransfers = async (home: string): Promise<Array<{ root: string; transfer: any; ready: any; applicationReady: any; request: any }>> => {
   const temporary = path.join(home, "tmp")
   const directories = await fs.readdir(temporary, { withFileTypes: true })
-  const found: Array<{ root: string; transfer: any; ready: any; applicationReady: any }> = []
+  const found: Array<{ root: string; transfer: any; ready: any; applicationReady: any; request: any }> = []
   for (const item of directories) {
     if (!item.isDirectory() || !item.name.startsWith("supervisor-")) continue
     const requestRoot = path.join(temporary, item.name)
     const transfer = await jsonFile(path.join(requestRoot, "transfer-receipt.json"))
     if (transfer) found.push({ root: requestRoot, transfer, ready: await jsonFile(path.join(requestRoot, "ready.json")),
-      applicationReady: await jsonFile(path.join(requestRoot, "restart-ready.json")) })
+      applicationReady: await jsonFile(path.join(requestRoot, "restart-ready.json")), request: await jsonFile(path.join(requestRoot, "request.json")) })
   }
   return found
 }
 try {
   assert.equal(process.platform, "win32", "This checker qualifies the Windows physical adapter")
   assert.equal(currentWindowsProcessIsInJob(), false, "Standalone checker launcher must itself be outside a Job")
+  const capability = await NodeProcess.run({ command: { executable: helper!, args: ["--detached-capability"] }, ownership: "detached", timeoutMs: 15_000 })
+  provenance.capability = JSON.parse(new TextDecoder().decode(capability.stdout))
+  assert.deepEqual(provenance.capability, { protocol: 3, containment: "independent" })
   const runCase = async (mode: "standalone" | "standalone-peer" | "managed-parent" | "owned-tree" | "helper-unavailable") => {
     const home = path.join(root, mode, "home")
     const directory = path.join(root, mode, "project")
@@ -75,14 +155,18 @@ try {
       probe.once("error", reject)
       probe.listen(0, "127.0.0.1", () => { const port = (probe.address() as net.AddressInfo).port; probe.close(error => error ? reject(error) : resolve(port)) })
     })
-    const args = [entry, "serve", "--hostname", "127.0.0.1", "--port", String(port), "--project-dir", directory,
+    const args = [...(binary ? [] : [entry]), "serve", "--hostname", "127.0.0.1", "--port", String(port), "--project-dir", directory,
       "--startup-receipt", receiptPath, "--startup-occurrence", `restart-${mode}`, "--print-logs",
       ...(mode === "managed-parent" ? ["--parent-pid", String(parent.pid), "--parent-process-instance-id", parent.processInstanceID] : [])]
-    const processHandle = mode === "owned-tree" ? await NodeProcess.spawn({ command: { executable: process.execPath, args },
+    const processHandle = mode === "owned-tree" ? await NodeProcess.spawn({ command: { executable: binary ?? process.execPath, args },
       ownership: "owned_tree", env: environment, stdin: "ignore" }) : undefined
     let originalPID = processHandle?.pid
     let launchReceipt: unknown
-    if (!processHandle) {
+    if (!processHandle && binary) {
+      const parsed = await launchStandalone({ executable: binary, args, cwd: directory, env: environment })
+      originalPID = parsed.ProcessId
+      launchReceipt = parsed
+    } else if (!processHandle) {
       // WMI creates the exact Bun host outside a caller's Job. The bootstrap only establishes its isolated environment.
       const selected = ["OPENCORVUS_HOME", "OPENCORVUS_TEST_HOME", "OPENCORVUS_TEST_PROCESS_ROOT", "OPENCORVUS_PROCESS_SUPERVISOR", "OPENCORVUS_CONFIG_CONTENT",
         "HOME", "USERPROFILE", "APPDATA", "LOCALAPPDATA", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "OPENCORVUS_TEST_MANAGED_CONFIG_DIR"]
@@ -99,7 +183,7 @@ try {
         `process.on('exit',code=>fs.writeFileSync(${JSON.stringify(path.join(root, mode, "launcher-terminal.json"))},JSON.stringify({...owner,exitCode:code})))`,
         `await import(${JSON.stringify(entry.replaceAll("\\", "/"))})`,
       ].join("\n"))
-      const parsed = await launchStandalone(launchScript)
+      const parsed = await launchStandalone({ executable: process.execPath, args: [launchScript] })
       originalPID = parsed.ProcessId
       launchReceipt = parsed
     }
@@ -112,6 +196,7 @@ try {
     void output.catch(() => undefined)
     let url: string | undefined
     const record: any = { mode, home, directory, originalPID, originalOwner, launchReceipt, restarts: [] }
+    let nativeCapture: Awaited<ReturnType<typeof captureNativeFacts>> | undefined
     results.push(record)
     const request = async (route: string, method = "GET", body?: unknown) => {
       const target = new URL(route, url)
@@ -121,7 +206,7 @@ try {
       return { status: response.status, body: await response.json() }
     }
     try {
-      if (!processHandle) {
+      if (!processHandle && !binary) {
         const started = await wait("WMI exact host identity", () => jsonFile(path.join(root, mode, "launcher-started.json")))
         assert.equal(started.pid, originalPID)
         assert.equal(started.inJob, false)
@@ -144,6 +229,24 @@ try {
       originalOwner = { pid: originalPID!, processInstanceID: new TextDecoder().decode(identity.stdout).trim(), occurrenceID: `checker:${mode}` }
       record.originalPID = originalPID
       record.originalOwner = originalOwner
+      if (binary) record.executable = await executableFact(originalOwner, binary)
+      if (binary && processHandle) {
+        const candidates = await fs.readdir(isolation.temporaryRoot, { withFileTypes: true })
+        const matched: NativeFacts[] = []
+        for (const candidate of candidates) {
+          if (!candidate.isDirectory() || !candidate.name.startsWith("opencorvus-node-process-")) continue
+          const requestRoot = path.join(isolation.temporaryRoot, candidate.name)
+          const ready = await jsonFile(path.join(requestRoot, "ready.json"))
+          if (ready?.target_pid !== originalPID || ready.target_process_instance_id !== originalOwner.processInstanceID) continue
+          matched.push({ requestRoot, ready, request: await jsonFile(path.join(requestRoot, "request.json")), helper: await jsonFile(path.join(requestRoot, "helper.json")) })
+        }
+        assert.equal(matched.length, 1, "Owned-tree target has its exact paired native request")
+        record.native = matched[0]
+        assert.equal(record.native.ready.protocol, 3)
+        assert.equal(record.native.ready.detached, false)
+        record.helperOwner = { pid: record.native.helper.helper_pid, processInstanceID: record.native.helper.helper_process_instance_id, occurrenceID: record.native.request.request_id }
+        record.helperExecutable = await executableFact(record.helperOwner, helper!)
+      }
       url = startup.url
       record.startup = startup
       assert.equal((await request("/global/health")).status, 200)
@@ -170,20 +273,41 @@ try {
         record.continuedHealth = await request("/global/health")
         assert.equal(record.continuedHealth.status, 200)
       } else {
+        nativeCapture = await captureNativeFacts(home, record)
+        record.lifecycleObservations = []
         let predecessorPID = startup.pid
         for (let turn = 1; turn <= 2; turn++) {
           const accepted = await request("/restart", "POST", {})
           record.lastAdmission = accepted
           assert.equal(accepted.status, 200)
           assert.equal(accepted.body.ok, true)
-          const transfer = await wait("committed native transfer", async () =>
-            (await readTransfers(home)).find(item => item.transfer.previous_owner.pid === predecessorPID))
+          const transfer = await wait("committed native transfer", async () => {
+            await nativeCapture!.scan()
+            const committed = (await readTransfers(home)).find(item => item.transfer.previous_owner.pid === predecessorPID)
+            if (committed) return committed
+            let lifecycle: any
+            try { lifecycle = await request(`/lifecycle/${accepted.body.occurrenceID}`) } catch {}
+            if (lifecycle?.status === 200) {
+              assert.equal(lifecycle.body.id, accepted.body.occurrenceID)
+              record.lifecycleObservations.push(lifecycle.body)
+              if (lifecycle.body.state === "failed") {
+                await nativeCapture!.scan()
+                throw new Error(`Observed restart lifecycle failure: ${lifecycle.body.error}`)
+              }
+            }
+          })
           assert.equal(transfer.ready.protocol, 3)
           assert.equal(transfer.ready.detached, true)
           assert.equal(transfer.transfer.outcome, "committed")
           assert.equal(transfer.transfer.successor.pid, transfer.ready.target_pid)
           assert.equal(transfer.applicationReady.url, url)
           assert.deepEqual(transfer.applicationReady.successor, transfer.transfer.successor)
+          assert.equal((await fs.realpath(transfer.request.executable)).toLowerCase(), (await fs.realpath(binary ?? process.execPath)).toLowerCase())
+          assert.deepEqual(transfer.request.args, binary ? args : args.filter(value => value !== "--print-logs"), "Replacement preserves the exact executable invocation arguments")
+          if (binary) {
+            Object.assign(transfer, { targetExecutable: await executableFact(transfer.transfer.successor, binary),
+              helperExecutable: await executableFact(transfer.transfer.helper, helper!) })
+          }
           await wait("predecessor physical exit", async () => observeRuntimeProcessOccurrence(transfer.transfer.previous_owner) === "dead_or_reused" ? "settled" : undefined)
           const health = await wait("successor HTTP health", async () => {
             try { const value = await request("/global/health"); return value.status === 200 ? value : undefined } catch { return }
@@ -200,6 +324,7 @@ try {
       }
       record.status = "passed"
     } finally {
+      try {
       if (url) {
         try { record.shutdown = await request("/shutdown", "POST", {}) }
         catch (error) { record.shutdownError = String(error) }
@@ -218,12 +343,17 @@ try {
       if (originalOwner) record.originalDisposition = await wait("owned original process physical end", async () =>
         observeRuntimeProcessOccurrence(originalOwner!) === "dead_or_reused" ? "dead_or_reused" : undefined, 15_000)
       if (processHandle) { await processHandle.dispose(); record.launcherTerminal = await processHandle.settled }
-      else {
+      else if (!binary) {
         record.launcherTerminal = await wait("WMI launcher physical child terminal", () => jsonFile(path.join(root, mode, "launcher-terminal.json")), 15_000)
         assert.equal(record.launcherTerminal.pid, originalOwner?.pid)
         assert.equal(record.launcherTerminal.processInstanceID, originalOwner?.processInstanceID)
       }
+      if (record.helperOwner) {
+        record.helperDisposition = observeRuntimeProcessOccurrence(record.helperOwner)
+        assert.equal(record.helperDisposition, "dead_or_reused")
+      }
       await output
+      } finally { await nativeCapture?.close() }
     }
   }
   const parallel = await Promise.allSettled([runCase("standalone"), runCase("standalone-peer")])
@@ -236,8 +366,11 @@ try {
   const sdkOwnerPath = path.join(sdkRoot, "owner.json")
   const sdkRecord: any = { mode: "sdk-owned-tree", directory: sdkRoot }
   results.push(sdkRecord)
-  await fs.writeFile(path.join(sdkRoot, "serve"), `process.argv.splice(1,1,${JSON.stringify(entry)},'serve');const fs=await import('node:fs');const r=await import(${JSON.stringify(path.resolve(import.meta.dir, "../src/runtime/process-occurrence.ts").replaceAll("\\", "/"))});fs.writeFileSync(${JSON.stringify(sdkOwnerPath)},JSON.stringify({...r.currentRuntimeProcessOccurrence(),inJob:r.currentWindowsProcessIsInJob()}));await import(${JSON.stringify(entry.replaceAll("\\", "/"))})`)
-  const sdkEnv = { OPENCORVUS_HOME: path.join(sdkRoot, "home"), OPENCORVUS_TEST_HOME: path.join(sdkRoot, "home"), OPENCORVUS_BIN_PATH: process.execPath }
+  if (!binary) await fs.writeFile(path.join(sdkRoot, "serve"), `process.argv.splice(1,1,${JSON.stringify(entry)},'serve');const fs=await import('node:fs');const r=await import(${JSON.stringify(path.resolve(import.meta.dir, "../src/runtime/process-occurrence.ts").replaceAll("\\", "/"))});fs.writeFileSync(${JSON.stringify(sdkOwnerPath)},JSON.stringify({...r.currentRuntimeProcessOccurrence(),inJob:r.currentWindowsProcessIsInJob()}));await import(${JSON.stringify(entry.replaceAll("\\", "/"))})`)
+  const sdkTemporary = path.join(sdkRoot, "tmp")
+  await fs.mkdir(sdkTemporary, { recursive: true })
+  const sdkEnv = { OPENCORVUS_HOME: path.join(sdkRoot, "home"), OPENCORVUS_TEST_HOME: path.join(sdkRoot, "home"), OPENCORVUS_BIN_PATH: binary ?? process.execPath,
+    ...(binary ? { TEMP: sdkTemporary, TMP: sdkTemporary, TMPDIR: sdkTemporary } : {}) }
   const previousEnvironment = Object.fromEntries(Object.keys(sdkEnv).map(key => [key, process.env[key]]))
   const previousDirectory = process.cwd()
   let sdkServer: Awaited<ReturnType<typeof import("../../sdk/js/src/server").createOpenCorvusServer>> | undefined
@@ -251,8 +384,35 @@ try {
       probe.listen(0, "127.0.0.1", () => { const port = (probe.address() as net.AddressInfo).port; probe.close(error => error ? reject(error) : resolve(port)) })
     })
     sdkServer = await createOpenCorvusServer({ hostname: "127.0.0.1", port: sdkPort, timeout: 30_000 })
-    sdkRecord.owner = await jsonFile(sdkOwnerPath)
-    assert.equal(sdkRecord.owner.inJob, true)
+    if (binary) {
+      const entries = await fs.readdir(sdkTemporary, { withFileTypes: true })
+      const matches: NativeFacts[] = []
+      const currentOwner = currentRuntimeProcessOccurrence()
+      for (const candidate of entries) {
+        if (!candidate.isDirectory() || !candidate.name.startsWith("opencorvus-node-process-")) continue
+        const requestRoot = path.join(sdkTemporary, candidate.name)
+        const request = await jsonFile(path.join(requestRoot, "request.json"))
+        if (request?.owner_pid !== process.pid || request.owner_process_instance_id !== currentOwner.processInstanceID
+          || request.executable.toLowerCase() !== binary.toLowerCase() || !request.args.includes(`--port=${sdkPort}`)) continue
+        matches.push({ requestRoot, request, ready: await jsonFile(path.join(requestRoot, "ready.json")), helper: await jsonFile(path.join(requestRoot, "helper.json")) })
+      }
+      assert.equal(matches.length, 1, "SDK has one exact native executable/port/owner admission")
+      const native = matches[0]!
+      assert.equal(native.ready.protocol, 3)
+      assert.equal(native.ready.detached, false)
+      assert.equal(native.ready.request_id, native.request.request_id)
+      const startupArgument = native.request.args.find((arg: string) => arg.startsWith("--startup-occurrence="))
+      assert(startupArgument, "SDK native request carries its actual startup occurrence")
+      sdkRecord.owner = { pid: native.ready.target_pid, processInstanceID: native.ready.target_process_instance_id,
+        occurrenceID: startupArgument.slice("--startup-occurrence=".length), occurrenceKind: "sdk_startup" }
+      sdkRecord.native = native
+      sdkRecord.executable = await executableFact(sdkRecord.owner, binary)
+      sdkRecord.helperOwner = { pid: native.helper.helper_pid, processInstanceID: native.helper.helper_process_instance_id, occurrenceID: native.request.request_id }
+      sdkRecord.helperExecutable = await executableFact(sdkRecord.helperOwner, helper!)
+    } else {
+      sdkRecord.owner = await jsonFile(sdkOwnerPath)
+      assert.equal(sdkRecord.owner.inJob, true)
+    }
     sdkRecord.url = sdkServer.url
     const refused = await fetch(`${sdkServer.url}/restart`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })
     sdkRecord.refused = { status: refused.status, body: await refused.json() }
@@ -264,6 +424,10 @@ try {
     await sdkServer.close()
     sdkRecord.physicalDisposition = observeRuntimeProcessOccurrence(sdkRecord.owner)
     assert.equal(sdkRecord.physicalDisposition, "dead_or_reused")
+    if (binary) {
+      sdkRecord.helperDisposition = observeRuntimeProcessOccurrence(sdkRecord.helperOwner)
+      assert.equal(sdkRecord.helperDisposition, "dead_or_reused")
+    }
     sdkRecord.status = "passed"
   } finally {
     await sdkServer?.close()
@@ -271,6 +435,7 @@ try {
     for (const [key, value] of Object.entries(previousEnvironment)) { if (value === undefined) delete process.env[key]; else process.env[key] = value }
   }
 
+  if (!binary) {
   const { beginRestartHandoff } = await import("@/server/restart-handoff")
   const handoffModule = JSON.stringify(path.resolve(import.meta.dir, "../src/server/restart-handoff.ts").replaceAll("\\", "/"))
   const failureParticipant = `const h=await import(${handoffModule});const c=h.childRestartHandoff();await h.waitForRestartBind(c);await h.sendRestartHandoffMessage({type:'failed',error:'actual child startup failure'},c);`
@@ -358,7 +523,7 @@ try {
     `const child=await p.spawnHostCommand({executable:process.execPath,args:['-e',${JSON.stringify(preReadyChild)}],detached:context});`,
     `while(!fs.existsSync(${JSON.stringify(crashPhase)}))await Bun.sleep(10);fs.writeFileSync(${JSON.stringify(crashFact)},JSON.stringify({context,childPID:child.pid,owner:r.currentRuntimeProcessOccurrence()}));const deadline=Date.now()+15000;while(!fs.existsSync(${JSON.stringify(crashRelease)})&&Date.now()<deadline)await Bun.sleep(10);process.exit(52);`,
   ].join("\n"))
-  const crash: any = { mode: "owner-death-before-ready", launch: await launchStandalone(crashScript) }
+  const crash: any = { mode: "owner-death-before-ready", launch: await launchStandalone({ executable: process.execPath, args: [crashScript] }) }
   results.push(crash)
   crash.admitted = await wait("pre-ready target admission", () => jsonFile(crashFact))
   crash.phase = await jsonFile(crashPhase)
@@ -375,12 +540,15 @@ try {
   assert.equal(crash.ownerDisposition, "dead_or_reused")
   assert.equal(crash.targetDisposition, "dead_or_reused")
   crash.status = "passed"
+  }
+  assert.equal(results.length, binary ? 6 : 12, "The selected qualification profile ran all of its cases")
 } catch (error) { failure = error; process.exitCode = 1 }
 finally {
   await fs.mkdir(path.dirname(resultPath), { recursive: true })
-  await fs.writeFile(resultPath, JSON.stringify({ status: failure ? "failed" : "passed", root, helper, cases: results,
+  await fs.writeFile(resultPath, JSON.stringify({ status: failure ? "failed" : "passed", ...provenance, root, helper, cases: results,
     error: failure instanceof Error ? { name: failure.name, message: failure.message, stack: failure.stack,
       ...(failure instanceof AggregateError ? { causes: failure.errors.map(error => String(error)) } : {}) } : failure,
-    limits: ["Credential-free Windows HTTP/physical ownership qualification; POSIX and Docker unverified"] }, null, 2))
+    limits: ["Credential-free Windows qualification; POSIX, Docker and GUI unverified",
+      ...(binary ? ["Compiled HTTP/SDK profile; source-only primitive fault/crash/orphan cases belong to the separate source profile"] : [])] }, null, 2))
   console.log(`[restart-check] ${failure ? "failed" : "passed"} ${resultPath}`)
 }

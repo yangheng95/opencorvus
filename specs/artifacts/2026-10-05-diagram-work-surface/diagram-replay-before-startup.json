@@ -1,0 +1,20 @@
+{
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data",
+      "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home"
+    }
+  },
+  "listener": 70252,
+  "process": {
+    "ProcessId": 70252,
+    "ParentProcessId": 75024,
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17882 --project-dir C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CONUDa\\runner-68192-tSMdLe\\runtime-root\\tmp\\opencorvus-renderers-real-zizPYZ\\home\\data\\projects\\2026\\10\\05\\f938842b-e4fb-4391-a987-307e759623a7 --print-logs",
+    "CreationDate": "2026-10-05T14:14:47.416595+08:00"
+  },
+  "asset": "main-DAGC6GnQ.js"
+}

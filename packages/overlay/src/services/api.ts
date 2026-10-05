@@ -133,6 +133,10 @@ export class ApiError extends Error {
     this.path = path
     this.body = body
   }
+
+  get summary(): string {
+    return formatApiErrorMessage(this.status, undefined, this.body)
+  }
 }
 
 type ApiErrorListener = (error: ApiError) => void
@@ -153,9 +157,10 @@ function publishApiError(error: ApiError): void {
   }
 }
 
-function formatApiErrorMessage(status: number, path: string, body: unknown): string {
+function formatApiErrorMessage(status: number, path: string | undefined, body: unknown): string {
   const detail = pickServerErrorDetail(body)
-  return detail ? `API ${status} ${path}: ${detail}` : `API ${status} ${path}`
+  const prefix = `API ${status}${path === undefined ? "" : ` ${path}`}`
+  return detail ? `${prefix}: ${detail}` : prefix
 }
 
 function pickServerErrorDetail(body: unknown): string {

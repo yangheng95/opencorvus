@@ -1,0 +1,41 @@
+{
+  "checkedAtUtc": "2026-10-05T06:09:24.6792915Z",
+  "root": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check",
+  "processCount": 0,
+  "processes": [],
+  "knownOwners": [
+    {
+      "owner": {
+        "pid": 70304,
+        "processInstanceID": "win32:639267771133126163",
+        "occurrenceID": "checker:standalone"
+      },
+      "present": false,
+      "originalDisposition": "dead_or_reused",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9WCCy00ERsVaWioV"
+        }
+      }
+    },
+    {
+      "owner": {
+        "pid": 32852,
+        "processInstanceID": "win32:639267771133419941",
+        "occurrenceID": "checker:standalone-peer"
+      },
+      "present": false,
+      "originalDisposition": "dead_or_reused",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9WCD3009rEXFeXOK"
+        }
+      }
+    }
+  ],
+  "checkerPresent": false
+}

@@ -1,0 +1,249 @@
+{
+  "status": "failed",
+  "profile": "packaged-http",
+  "executable": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+  "checkerOwner": {
+    "pid": 44684,
+    "processInstanceID": "win32:639267771122351439",
+    "occurrenceID": "d677b67d-0079-4b95-b9e7-52541a94153a"
+  },
+  "package": {
+    "name": "opencorvus-overlay-server-windows-x64",
+    "version": "0.0.0-main-202610050510",
+    "os": [
+      "win32"
+    ],
+    "cpu": [
+      "x64"
+    ]
+  },
+  "capability": {
+    "containment": "independent",
+    "protocol": 3
+  },
+  "launches": [
+    {
+      "ReturnValue": 0,
+      "ProcessId": 70304,
+      "executable": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+      "args": [
+        "serve",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "57310",
+        "--project-dir",
+        "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone\\project",
+        "--startup-receipt",
+        "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone\\startup.json",
+        "--startup-occurrence",
+        "restart-standalone",
+        "--print-logs"
+      ],
+      "cwd": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone\\project",
+      "environmentKeys": [
+        "APPDATA",
+        "CARGO_HOME",
+        "ComSpec",
+        "HOME",
+        "HOMEDRIVE",
+        "HOMEPATH",
+        "LOCALAPPDATA",
+        "OPENCORVUS_CONFIG_CONTENT",
+        "OPENCORVUS_HOME",
+        "OPENCORVUS_PROCESS_SUPERVISOR",
+        "OPENCORVUS_TEST_HOME",
+        "OPENCORVUS_TEST_MANAGED_CONFIG_DIR",
+        "OPENCORVUS_TEST_OS_TEMP_ROOT",
+        "OPENCORVUS_TEST_OWNER_NONCE",
+        "OPENCORVUS_TEST_OWNER_PID",
+        "OPENCORVUS_TEST_OWNER_ROOT",
+        "OPENCORVUS_TEST_PROCESS_ROOT",
+        "PATHEXT",
+        "Path",
+        "RUSTUP_HOME",
+        "RUSTUP_SKIP_UPDATE_CHECK",
+        "RUSTUP_TOOLCHAIN",
+        "SystemRoot",
+        "TEMP",
+        "TMP",
+        "TMPDIR",
+        "USERPROFILE",
+        "XDG_CACHE_HOME",
+        "XDG_CONFIG_HOME",
+        "XDG_DATA_HOME",
+        "XDG_STATE_HOME",
+        "windir"
+      ]
+    },
+    {
+      "ReturnValue": 0,
+      "ProcessId": 32852,
+      "executable": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+      "args": [
+        "serve",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "57311",
+        "--project-dir",
+        "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone-peer\\project",
+        "--startup-receipt",
+        "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone-peer\\startup.json",
+        "--startup-occurrence",
+        "restart-standalone-peer",
+        "--print-logs"
+      ],
+      "cwd": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone-peer\\project",
+      "environmentKeys": [
+        "APPDATA",
+        "CARGO_HOME",
+        "ComSpec",
+        "HOME",
+        "HOMEDRIVE",
+        "HOMEPATH",
+        "LOCALAPPDATA",
+        "OPENCORVUS_CONFIG_CONTENT",
+        "OPENCORVUS_HOME",
+        "OPENCORVUS_PROCESS_SUPERVISOR",
+        "OPENCORVUS_TEST_HOME",
+        "OPENCORVUS_TEST_MANAGED_CONFIG_DIR",
+        "OPENCORVUS_TEST_OS_TEMP_ROOT",
+        "OPENCORVUS_TEST_OWNER_NONCE",
+        "OPENCORVUS_TEST_OWNER_PID",
+        "OPENCORVUS_TEST_OWNER_ROOT",
+        "OPENCORVUS_TEST_PROCESS_ROOT",
+        "PATHEXT",
+        "Path",
+        "RUSTUP_HOME",
+        "RUSTUP_SKIP_UPDATE_CHECK",
+        "RUSTUP_TOOLCHAIN",
+        "SystemRoot",
+        "TEMP",
+        "TMP",
+        "TMPDIR",
+        "USERPROFILE",
+        "XDG_CACHE_HOME",
+        "XDG_CONFIG_HOME",
+        "XDG_DATA_HOME",
+        "XDG_STATE_HOME",
+        "windir"
+      ]
+    }
+  ],
+  "root": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus-process-supervisor.exe",
+  "cases": [
+    {
+      "mode": "standalone",
+      "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone\\home",
+      "directory": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone\\project",
+      "originalPID": 70304,
+      "originalOwner": {
+        "pid": 70304,
+        "processInstanceID": "win32:639267771133126163",
+        "occurrenceID": "checker:standalone"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 70304,
+        "owner": {
+          "pid": 70304,
+          "processInstanceID": "win32:639267771133126163",
+          "occurrenceID": "checker-created-host"
+        }
+      },
+      "restarts": [],
+      "executable": {
+        "pid": 70304,
+        "processInstanceID": "win32:639267771133126163",
+        "occurrenceID": "checker:standalone",
+        "executable": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe"
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:57310",
+        "pid": 70304
+      },
+      "lastAdmission": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9W4OP00ArvXfIZWy"
+        }
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9WCCy00ERsVaWioV"
+        }
+      },
+      "originalDisposition": "dead_or_reused"
+    },
+    {
+      "mode": "standalone-peer",
+      "home": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone-peer\\home",
+      "directory": "C:\\WINDOWS\\temp\\opencorvus-test-run-nHELPN\\runner-44684-Q5eQNZ\\restart-check\\standalone-peer\\project",
+      "originalPID": 32852,
+      "originalOwner": {
+        "pid": 32852,
+        "processInstanceID": "win32:639267771133419941",
+        "occurrenceID": "checker:standalone-peer"
+      },
+      "launchReceipt": {
+        "ReturnValue": 0,
+        "ProcessId": 32852,
+        "owner": {
+          "pid": 32852,
+          "processInstanceID": "win32:639267771133419941",
+          "occurrenceID": "checker-created-host"
+        }
+      },
+      "restarts": [],
+      "executable": {
+        "pid": 32852,
+        "processInstanceID": "win32:639267771133419941",
+        "occurrenceID": "checker:standalone-peer",
+        "executable": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe"
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "restart-standalone-peer",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:57311",
+        "pid": 32852
+      },
+      "lastAdmission": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9W4Oj00a7MOsYg6W"
+        }
+      },
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VX9WCD3009rEXFeXOK"
+        }
+      },
+      "originalDisposition": "dead_or_reused"
+    }
+  ],
+  "error": {
+    "name": "AggregateError",
+    "message": "Parallel isolated restart qualification failed",
+    "stack": "AggregateError: Parallel isolated restart qualification failed\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\server-restart-e2e.ts:294:34\n    at processTicksAndRejections (native:7:39)",
+    "causes": [
+      "Error: Timed out: committed native transfer",
+      "Error: Timed out: committed native transfer"
+    ]
+  },
+  "limits": [
+    "Credential-free Windows qualification; POSIX, Docker and GUI unverified",
+    "Compiled HTTP/SDK profile; source-only primitive fault/crash/orphan cases belong to the separate source profile"
+  ]
+}

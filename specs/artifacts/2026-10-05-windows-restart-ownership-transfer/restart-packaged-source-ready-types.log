@@ -1,0 +1,7 @@
+packages/opencorvus/src/storage/db.ts(1806,43): error TS2345: Argument of type '(tx: import("D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+13586c8ac9862723/node_modules/drizzle-orm/sqlite-core/session").SQLiteTransaction<"sync", void, { readonly ControlAccountTable: import("D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+13586c8ac9862723/node_mo...' is not assignable to parameter of type '(tx: import("D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+13586c8ac9862723/node_modules/drizzle-orm/sqlite-core/session").SQLiteTransaction<"sync", void, { readonly ControlAccountTable: import("D:/myhexin-local/opencorvus/node_modules/.bun/drizzle-orm@1.0.0-beta.20+13586c8ac9862723/node_mo...'.
+  Type 'T' is not assignable to type 'T extends Promise<any> ? DrizzleTypeError<"Sync drivers can't use async functions in transactions!"> : T'.
+packages/opencorvus/src/storage/db.ts(1812,7): error TS2322: Type 'unknown' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
+packages/opencorvus/src/storage/db.ts(1834,11): error TS2322: Type 'T' is not assignable to type 'T extends Promise<any> ? DrizzleTypeError<"Sync drivers can't use async functions in transactions!"> : T'.
+packages/opencorvus/src/storage/db.ts(1842,7): error TS2322: Type 'unknown' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.

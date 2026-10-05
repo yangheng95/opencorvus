@@ -1,0 +1,56 @@
+{
+  "kind": "normal_backend_build_provenance",
+  "command": "bun script/build.local.ts --single --overlay-server",
+  "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+  "execSession": 44821,
+  "exitCode": 0,
+  "log": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\restart-packaged-backend-build-03.log",
+  "package": {
+    "name": "opencorvus-overlay-server-windows-x64",
+    "version": "0.0.0-main-202610050708",
+    "os": [
+      "win32"
+    ],
+    "cpu": [
+      "x64"
+    ]
+  },
+  "frontendAsset": "main-C4si2421.js",
+  "embeddedUiFiles": 439,
+  "sourceIndexReference": [
+    "<script type=\"module\" crossorigin src=\"./assets/main-C4si2421.js\"></script>"
+  ],
+  "installedIndexReference": [
+    "<script type=\"module\" crossorigin src=\"./assets/main-C4si2421.js\"></script>"
+  ],
+  "files": [
+    {
+      "path": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+      "bytes": 164488192,
+      "modifiedUtc": "2026-10-05T07:10:59.3723874Z"
+    },
+    {
+      "path": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus-process-supervisor.exe",
+      "bytes": 345600,
+      "modifiedUtc": "2026-10-05T05:11:43.3877778Z"
+    },
+    {
+      "path": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\ui\\assets\\main-C4si2421.js",
+      "bytes": 1611858,
+      "modifiedUtc": "2026-10-05T07:10:54.0589046Z"
+    },
+    {
+      "path": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\work-artifact-target-package-manifest.json",
+      "bytes": 1431,
+      "modifiedUtc": "2026-10-05T07:11:06.5991580Z"
+    },
+    {
+      "path": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\.opencorvus-overlay-payload.stamp",
+      "bytes": 139,
+      "modifiedUtc": "2026-10-05T07:11:32.2756839Z"
+    }
+  ],
+  "runningBundleProcesses": [],
+  "qualificationScope": "Final CSS paint asset integration only; packaged02 6/6 and source regression01 12/12 prior behavior evidence retained; build03 did not rerun runtime profiles or GUI.",
+  "observedUtc": "2026-10-05T07:13:46.0451476Z"
+}

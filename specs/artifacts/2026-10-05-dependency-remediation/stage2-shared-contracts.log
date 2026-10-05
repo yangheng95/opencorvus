@@ -1,0 +1,130 @@
+$ bun script/run-tests.ts test/storage/schema-contract.test.ts test/shared-database-multi-backend.test.ts test/scheduler-automation-revision.test.ts test/scheduler-automation-target-revision.test.ts test/scheduler-tool-recovery.test.ts test/server/mission-dispatch-replay.test.ts test/task-message-atomic-acceptance.test.ts test/session/fork-atomic-transcript.test.ts test/session/session-created-effect.test.ts
+[1/9] START test/storage/schema-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) creates the complete pre-0.1.0 schema directly from the canonical DDL [163.40ms]
+(pass) accepted Task request, channel, and creation-contract claims are immutable until owner retention [41.93ms]
+(pass) uses one explicit application table registry for SQLite and transfer shapes [522.22ms]
+(pass) reports invalid and duplicate application schema declarations [0.50ms]
+(pass) requires an explicit reset when any canonical fact table is missing [433.22ms]
+(pass) requires an explicit reset instead of adding a missing Project fence [416.95ms]
+(pass) returns the reset-required contract for an unexpected legacy application table [416.38ms]
+(pass) rejects cross-owned creation and unrelated schema drift before any mutation [518.52ms]
+(pass) reports the canonical reset-required error for a stale WAL-backed schema [455.69ms]
+(pass) reopens a freshly reset database with the exact current schema [596.26ms]
+(pass) reopens production Native and Capsule v2 bindings through the indexed current epoch [3204.30ms]
+(pass) requires a reset for a v1 Task process binding [2878.41ms]
+(pass) requires a stable reset for structurally invalid recognized v2 Native and Capsule bindings [5709.26ms]
+(pass) round-trips one production-written current Task through the strict transfer contract [4735.56ms]
+(pass) gracefully retires a settled connection with a retained completed prepared query [482.05ms]
+
+ 15 pass
+ 0 fail
+ 84 expect() calls
+Ran 15 tests across 1 file. [23.32s]
+[1/9] DONE test/storage/schema-contract.test.ts exit=0 duration=23.52s
+[2/9] START test/shared-database-multi-backend.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared SQLite backend startup > keeps two independent backend processes healthy on one database [12043.10ms]
+
+ 1 pass
+ 0 fail
+ 11 expect() calls
+Ran 1 test across 1 file. [13.08s]
+[2/9] DONE test/shared-database-multi-backend.test.ts exit=0 duration=13.24s
+[3/9] START test/scheduler-automation-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) HTTP mutations require the observed revision across scopes, lease races, deletion and reopen [8105.26ms]
+
+ 1 pass
+ 0 fail
+ 45 expect() calls
+Ran 1 test across 1 file. [10.62s]
+[3/9] DONE test/scheduler-automation-revision.test.ts exit=0 duration=10.85s
+[4/9] START test/scheduler-automation-target-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real HTTP scope edits project the exact physical revision and survive database reopen [13494.60ms]
+(pass) retargeted manual and due runs bind exact revision members and retain historical run targets [10031.56ms]
+(pass) retargeted retry reopens its exact Fire after database restart with independent parallel definitions [8729.36ms]
+
+ 3 pass
+ 0 fail
+ 48 expect() calls
+Ran 3 tests across 1 file. [35.24s]
+[4/9] DONE test/scheduler-automation-target-revision.test.ts exit=0 duration=35.50s
+[5/9] START test/scheduler-tool-recovery.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) schedule Tool exact lost-response recovery > retargeted Tool receipts, replay and the public list use their exact revision membership [4612.92ms]
+(pass) schedule Tool exact lost-response recovery > a paused manual Tool retries the same persisted occurrence at a later admission time [1981.33ms]
+(pass) schedule Tool exact lost-response recovery > the real Session Wait Tool and outer recovery replay one exact result [2027.18ms]
+(pass) schedule Tool exact lost-response recovery > replays Automation definition, manual run, update and deletion with the live action result [1980.90ms]
+(pass) schedule Tool exact lost-response recovery > manual Tool run preserves durable busy and delay owners before one terminal replay [1993.73ms]
+(pass) schedule Tool exact lost-response recovery > replays Event creation and cancellation with the live action result [2367.60ms]
+(pass) schedule Tool exact lost-response recovery > replays exact immutable definition and Fire receipts after later external mutations [2958.56ms]
+(pass) schedule Tool exact lost-response recovery > surfaces a zero-run terminal Fire and replays its lost manual Tool response [2471.24ms]
+(pass) schedule Tool exact lost-response recovery > returns a typed conflict when one persisted schedule occurrence changes input [1982.65ms]
+(pass) schedule Tool exact lost-response recovery > the outer Session recovery writer persists the exact schedule receipt once [1944.96ms]
+(pass) accepted historical configuration inputs recover immutable receipts without new admission fields [1839.40ms]
+(pass) accepted create defaults share one normalization and a new stale Tool mutation exposes its named conflict [1738.40ms]
+
+ 12 pass
+ 0 fail
+ 61 expect() calls
+Ran 12 tests across 1 file. [30.59s]
+[5/9] DONE test/scheduler-tool-recovery.test.ts exit=0 duration=30.84s
+[6/9] START test/server/mission-dispatch-replay.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[mission-dispatch HTTP] {"first":{"status":200,"body":{"missionID":"dispatch-replay","sessionID":"ses_-zUSqRDVszzMywIjaRM0","created":false,"productPillar":"work"}},"replay":{"status":200,"body":{"missionID":"dispatch-replay","sessionID":"ses_-zUSqRDVszzMywIjaRM0","created":false,"productPillar":"work"}}}
+(pass) HTTP dispatch replays the accepted Message after draft consumption and retains exact terminal conflicts [11798.77ms]
+
+ 1 pass
+ 0 fail
+ 23 expect() calls
+Ran 1 test across 1 file. [14.15s]
+[6/9] DONE test/server/mission-dispatch-replay.test.ts exit=0 duration=14.43s
+[7/9] START test/task-message-atomic-acceptance.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task operator message acceptance is one transaction > a failed acceptance leaves no overlay or message, and the retry commits every fact together [9289.63ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [11.66s]
+[7/9] DONE test/task-message-atomic-acceptance.test.ts exit=0 duration=11.85s
+[8/9] START test/session/fork-atomic-transcript.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session fork commits the target and its transcript in one transaction > a fork's first observable state is the complete bounded transcript with remapped identities [2056.91ms]
+(pass) Session fork commits the target and its transcript in one transaction > a bounded fork stops before the cut message [1845.39ms]
+(pass) Session fork commits the target and its transcript in one transaction > a mid-clone storage failure restores the source-only state, and retry publishes one complete fork [1711.95ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [7.41s]
+[8/9] DONE test/session/fork-atomic-transcript.test.ts exit=0 duration=7.56s
+[9/9] START test/session/session-created-effect.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Session Created post-commit lifecycle > delivers the exact global Created envelope from the durable post-commit publication [1773.22ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [3.75s]
+[9/9] DONE test/session/session-created-effect.test.ts exit=0 duration=3.92s

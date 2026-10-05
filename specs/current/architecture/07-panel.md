@@ -165,7 +165,12 @@ App owns the single mounted navigation rail beside a bounded page stack. The
 project/conversation/dock row and settings region are sibling pages inside
 that stack; Scheduled, Expert Squads and all other settings pages render inline,
 without a body-level Dialog Portal. The underlying primary page stays mounted
-but hidden and inert while settings is open. Rail active state derives from the
+but hidden and inert while settings is open. Its inactive CSS rule sets the
+whole ordinary descendant compositing group to the canonical hidden opacity,
+so a library's explicit child visibility cannot paint over settings. Geometry
+and mounted renderer instances remain intact. Escaped body portals, browser
+top-layer surfaces and native windows retain their existing visibility owners.
+Rail active state derives from the
 open config tab or primary surface; Chats/Mission Board navigation closes the
 config page through its existing native-surface reveal lifecycle before opening
 the selected primary surface. Settings owns search focus, scoped Escape/Back
@@ -1178,8 +1183,11 @@ not receive this native control. One Overlay artifact-theme materializer reads
 the applied product CSS custom properties and supplies the semantic palette,
 type, surface, axis, grid, legend, and interaction values used by the mature
 renderer libraries. Chart and Dashboard share its Vega-Lite configuration;
-Network and Timeline consume the same semantic values through their library
-APIs. This keeps data semantics in the durable payload while making visual
+Network consumes its library style values and Diagram passes its product font
+to Mermaid. Timeline's existing stylesheet projects product tokens into the
+vis-timeline surface. Diagram's fullscreen SVG relinquishes Mermaid's compact
+intrinsic width cap while retaining the original mounted viewBox and graph.
+This keeps data semantics in the durable payload while making visual
 hierarchy a deterministic product responsibility rather than model-authored
 styling.
 

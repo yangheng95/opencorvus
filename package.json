@@ -64,7 +64,7 @@
       "diff": "8.0.3",
       "dompurify": "3.4.16",
       "drizzle-kit": "1.0.0-beta.12-a5629fb",
-      "drizzle-orm": "1.0.0-beta.12-a5629fb",
+      "drizzle-orm": "1.0.0-beta.20",
       "ai": "6.0.172",
       "hono": "4.13.7",
       "hono-openapi": "1.1.2",
@@ -173,7 +173,7 @@
   "patchedDependencies": {
     "@kobalte/core@0.13.11": "patches/@kobalte%2Fcore@0.13.11.patch",
     "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
-    "drizzle-orm@1.0.0-beta.12-a5629fb": "patches/drizzle-orm@1.0.0-beta.12-a5629fb.patch",
+    "drizzle-orm@1.0.0-beta.20": "patches/drizzle-orm@1.0.0-beta.20.patch",
     "rrule@2.8.1": "patches/rrule@2.8.1.patch"
   }
 }

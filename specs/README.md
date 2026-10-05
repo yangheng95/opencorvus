@@ -1,5 +1,10 @@
 # Specs Storage Index
 
+- [Inactive workspace paint isolation with retained geometry](records/2026-10/2026-10-05-inactive-workspace-paint-isolation.md)
+
+- [Diagram work surface: intrinsic width and product typography](records/2026-10/2026-10-05-diagram-work-surface.md)
+- [Diagram work surface evidence](artifacts/2026-10-05-diagram-work-surface/README.md)
+
 - [Release checker operational-source boundary](records/2026-10/2026-10-05-release-topology-source-boundary.md)
 
 - [Composer upload lifetime across Project activation](records/2026-10/2026-10-05-composer-upload-lifetime.md)

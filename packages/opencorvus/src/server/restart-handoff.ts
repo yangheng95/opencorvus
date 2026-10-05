@@ -6,6 +6,7 @@ import { Global } from "@/global"
 import { Filesystem } from "@/util/filesystem"
 import { currentRuntimeProcessOccurrence, observeRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { isCompiledBinaryRuntime } from "@/runtime/compiled-binary"
 
 const RESTART_HANDOFF_ENV = "OPENCORVUS_RESTART_HANDOFF"
 const TIMEOUT_MS = 15_000
@@ -103,7 +104,7 @@ export async function beginRestartHandoff(input: {
   const context = await ProcessSupervisor.createDetachedCommandContext()
   const handoff: RestartHandoff = { protocol: 1, requestID: context.requestID, root: context.root, owner: context.owner,
     hostname: input.hostname, port: input.port }
-  const [executable, ...args] = input.command ?? process.argv
+  const [executable, ...args] = input.command ?? [process.execPath, ...process.argv.slice(isCompiledBinaryRuntime() ? 2 : 1)]
   let listenerQuiesceStarted = false
   let spawnAttempted = false
   let drained = Promise.resolve()

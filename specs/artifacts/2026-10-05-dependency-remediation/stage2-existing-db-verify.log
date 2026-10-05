@@ -1,0 +1,4 @@
+{"level":"info","time":"2026-10-05T06:14:30.047Z","service":"db","path":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dtQ1it\\runner-63484-be5ag9\\runtime-root\\tmp\\opencorvus-automation-target-real-O3hjEV\\runtime\\data\\opencorvus.db","logDomain":"non-session","message":"opening database"}
+{"level":"info","time":"2026-10-05T06:14:30.226Z","service":"db","logDomain":"non-session","message":"schema applied"}
+{"level":"info","time":"2026-10-05T06:14:30.377Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+{"status":"passed","mode":"verify","outputPath":"D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-dependency-remediation\\stage2-existing-db-after.json.reopen.json","databaseClosed":true}

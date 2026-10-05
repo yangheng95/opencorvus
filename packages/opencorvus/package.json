@@ -48,7 +48,7 @@
     "@types/turndown": "5.0.5",
     "@types/yargs": "17.0.33",
     "@typescript/native-preview": "catalog:",
-    "drizzle-orm": "1.0.0-beta.12-a5629fb",
+    "drizzle-orm": "1.0.0-beta.20",
     "pngjs": "^7.0.0",
     "ssim.js": "^3.5.0",
     "tree-sitter-bash": "^0.25.1",
@@ -105,7 +105,7 @@
     "chromium-bidi": "14.0.0",
     "decimal.js": "10.5.0",
     "diff": "catalog:",
-    "drizzle-orm": "1.0.0-beta.12-a5629fb",
+    "drizzle-orm": "1.0.0-beta.20",
     "effect": "4.0.0-beta.83",
     "fuzzysort": "3.1.0",
     "gitlab-ai-provider": "6.9.3",
@@ -145,6 +145,6 @@
     "zod-to-json-schema": "3.24.5"
   },
   "overrides": {
-    "drizzle-orm": "1.0.0-beta.12-a5629fb"
+    "drizzle-orm": "1.0.0-beta.20"
   }
 }
