@@ -402,6 +402,39 @@ body {
   animation: oc-spin var(--ui-duration-loop-spin) linear infinite;
 }
 
+.mission-board-card__draft-controls {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-sm);
+}
+
+#missionDraftEditDialog .dialog-form {
+  max-width: calc(640px * var(--ui-scale));
+  max-height: calc(var(--ui-overlay-shell-height) - calc(32px * var(--ui-scale)));
+  overflow: hidden;
+}
+
+.mission-draft-edit__context {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+}
+
+.mission-draft-edit__context > span {
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.mission-draft-edit__context > p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
 .mission-create-dialog__breadcrumb {
   display: flex;
   min-width: 0;

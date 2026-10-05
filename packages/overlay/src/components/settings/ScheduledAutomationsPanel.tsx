@@ -3,11 +3,14 @@ import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show }
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
 import {
   automationTimeZoneOptions,
+  automationRecurrenceDefaults,
+  automationRecurrenceUpdate,
   buildAutomationRecurrence,
   browserTimeZone,
   parseAutomationRecurrence,
   recurrenceSummary,
   type AutomationRecurrencePreset,
+  type AutomationWeekday,
 } from "../../services/automation-recurrence"
 import {
   createAutomation,
@@ -46,7 +49,7 @@ import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurfa
 
 type SelectOption<T extends string> = { value: T; label: string }
 type AutomationError = { message: string; retry?: () => void; source?: "list-load" }
-type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean }
+type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
 type AutomationMutationOwner = { kind: "save"; id: string } | { kind: "action"; id: string }
@@ -63,6 +66,7 @@ interface AutomationSuggestion {
   schedule: string
   description: string
   preset: AutomationRecurrencePreset
+  weekday?: AutomationWeekday
   time: string
   prompt: string
 }
@@ -87,6 +91,7 @@ function automationSuggestions(): AutomationSuggestion[] {
       schedule: t("automations.suggestion.weekly_review.schedule"),
       description: t("automations.suggestion.weekly_review.description"),
       preset: "weekly",
+      weekday: "FR",
       time: "16:00",
       prompt: t("automations.suggestion.weekly_review.prompt"),
     },
@@ -184,6 +189,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [preset, setPreset] = createSignal<AutomationRecurrencePreset>("daily")
   const [time, setTime] = createSignal("09:00")
   const [timeZone, setTimeZone] = createSignal(browserTimeZone())
+  const initialCalendar = automationRecurrenceDefaults(timeZone())
+  const [startDate, setStartDate] = createSignal(initialCalendar.startDate)
+  const [weekday, setWeekday] = createSignal<AutomationWeekday>(initialCalendar.weekday)
   const [advancedRule, setAdvancedRule] = createSignal("")
   const [providerID, setProviderID] = createSignal("")
   const [modelID, setModelID] = createSignal("")
@@ -257,27 +265,56 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       disabled: Boolean(busyAction()),
     })),
   )
-  const modelOptions = createMemo<AutomationModelOption[]>(() => [
-    {
-      value: "",
-      providerID: "",
-      providerLabel: "",
-      modelID: "",
-      modelLabel: t(scope() === "global" ? "automations.model_global_default" : "automations.model_default"),
-      variants: [],
-      defaultModel: true,
-    },
-    ...connectedModelOptions(),
-  ])
+  const modelOptions = createMemo<AutomationModelOption[]>(() => {
+    const available = connectedModelOptions()
+    const storedProvider = providerID()
+    const storedModel = modelID()
+    const retained =
+      storedProvider &&
+      storedModel &&
+      !available.some((option) => option.providerID === storedProvider && option.modelID === storedModel)
+        ? [
+            {
+              value: `${storedProvider}/${storedModel}`,
+              providerID: storedProvider,
+              providerLabel: storedProvider,
+              modelID: storedModel,
+              modelLabel: `${storedProvider}/${storedModel}`,
+              variants: [],
+              retained: true,
+            },
+          ]
+        : []
+    return [
+      {
+        value: "",
+        providerID: "",
+        providerLabel: "",
+        modelID: "",
+        modelLabel: t(scope() === "global" ? "automations.model_global_default" : "automations.model_default"),
+        variants: [],
+        defaultModel: true,
+      },
+      ...retained,
+      ...available,
+    ]
+  })
   const selectedModelOption = createMemo(
     () =>
       modelOptions().find((option) => option.providerID === providerID() && option.modelID === modelID()) ??
       modelOptions()[0],
   )
-  const reasoningOptions = createMemo<SelectOption<string>[]>(() => [
-    { value: "", label: t("automations.reasoning_default") },
-    ...(selectedModelOption()?.variants ?? []).map((value) => ({ value, label: reasoningLabel(value) })),
-  ])
+  const reasoningOptions = createMemo<SelectOption<string>[]>(() => {
+    const variants = selectedModelOption()?.variants ?? []
+    const stored = reasoningEffort()
+    return [
+      { value: "", label: t("automations.reasoning_default") },
+      ...(stored && !variants.includes(stored)
+        ? [{ value: stored, label: `${stored} · ${t("automations.saved_value")}` }]
+        : []),
+      ...variants.map((value) => ({ value, label: reasoningLabel(value) })),
+    ]
+  })
   const selectedReasoningOption = createMemo(() => selectOption(reasoningOptions(), reasoningEffort()))
   const timeZoneOptions = automationTimeZoneOptions()
   const selectedTimeZoneOption = createMemo(() => timeZoneOptions.find((option) => option.value === timeZone()) ?? null)
@@ -296,6 +333,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   function resetForm(automation?: AutomationView): void {
     const recurrence = automation ? parseAutomationRecurrence(automation.recurrence) : null
+    const zone = recurrence?.timeZone ?? browserTimeZone()
+    const calendar = recurrence ?? automationRecurrenceDefaults(zone)
     setName(automation?.name ?? "")
     setPrompt(automation?.prompt ?? "")
     setScope(automation?.target.scope ?? "global")
@@ -306,7 +345,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setPreset(recurrence?.preset ?? "daily")
     setAdvancedRule(recurrence?.customRule ?? "")
     setTime(recurrence?.time ?? "09:00")
-    setTimeZone(recurrence?.timeZone ?? browserTimeZone())
+    setTimeZone(zone)
+    setStartDate(calendar.startDate)
+    setWeekday(calendar.weekday)
     setProviderID(automation?.model?.providerID ?? "")
     setModelID(automation?.model?.modelID ?? "")
     setReasoningEffort(automation?.reasoningEffort ?? "")
@@ -390,6 +431,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setName(suggestion.name)
     setPrompt(suggestion.prompt)
     setPreset(suggestion.preset)
+    if (suggestion.weekday) setWeekday(suggestion.weekday)
     setTime(suggestion.time)
     setSelectedID("")
     setCreating(true)
@@ -439,9 +481,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   function selectModel(option: AutomationModelOption | null): void {
     setError(null)
     const next = option ?? modelOptions()[0]
+    const changed = next.providerID !== providerID() || next.modelID !== modelID()
     setProviderID(next.providerID)
     setModelID(next.modelID)
-    if (!next.variants.includes(reasoningEffort())) setReasoningEffort("")
+    if (changed && !next.variants.includes(reasoningEffort())) setReasoningEffort("")
   }
 
   async function submitForm(event: SubmitEvent): Promise<void> {
@@ -457,14 +500,21 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       return
     }
 
-    let recurrence: string
+    const current = selected()
+    let recurrence: string | undefined
     try {
-      recurrence = buildAutomationRecurrence({
+      const recurrenceInput = {
         preset: preset(),
+        startDate: startDate(),
+        weekday: weekday(),
         time: time(),
         timeZone: timeZone().trim(),
         customRule: advancedRule(),
-      })
+      }
+      recurrence =
+        editing() && current
+          ? automationRecurrenceUpdate(current.recurrence, recurrenceInput)
+          : buildAutomationRecurrence(recurrenceInput)
     } catch (cause) {
       setError({ message: errorText(cause) })
       return
@@ -489,13 +539,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       const base = {
         name: name().trim(),
         target,
-        recurrence,
+        ...(recurrence !== undefined ? { recurrence } : {}),
         executionMode: scope() === "session" ? ("local" as const) : executionMode(),
         prompt: prompt().trim(),
         ...(model ? { model } : {}),
         ...(reasoningEffort().trim() ? { reasoningEffort: reasoningEffort().trim() } : {}),
       }
-      const current = selected()
       let preferredID: string
       if (editing() && current) {
         await updateAutomation(current.id, {
@@ -505,7 +554,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         })
         preferredID = current.id
       } else {
-        const created = await createAutomation(base)
+        const created = await createAutomation({ ...base, recurrence: recurrence! })
         preferredID = created.id
       }
       setCreating(false)
@@ -1249,49 +1298,87 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   </TextField.Root>
 
                   <Show when={preset() !== "custom"}>
-                    <TextField.Root as="label">
-                      <TextField.Label>{t("automations.time")}</TextField.Label>
-                      <TextField.Input
-                        type="time"
-                        data-ui="automation-time"
-                        value={time()}
-                        required
-                        onInput={(event) => {
-                          setError(null)
-                          setTime(event.currentTarget.value)
-                        }}
-                      />
-                    </TextField.Root>
-                    <TextField.Root>
-                      <TextField.Label>{t("automations.time_zone")}</TextField.Label>
-                      <ComboboxControl
-                        options={timeZoneOptions}
-                        value={selectedTimeZoneOption()}
-                        onChange={(option) => {
-                          if (!option) return
-                          setError(null)
-                          setTimeZone(option.value)
-                        }}
-                        open={timeZoneOpen()}
-                        onOpenChange={setTimeZoneOpen}
-                        optionValue="value"
-                        optionTextValue="label"
-                        optionLabel="label"
-                        defaultFilter="contains"
-                        disallowEmptySelection
-                        closeOnSelection
-                        class="automation-time-zone-combobox"
-                        controlClass="automation-time-zone-control"
-                        inputClass="automation-time-zone-input"
-                        listboxClass="automation-time-zone-list"
-                        optionClass="automation-time-zone-option"
-                        inputID="automation-time-zone"
-                        listboxID="automation-time-zone-options"
-                        ariaLabel={t("automations.time_zone")}
-                        renderOptionLabel={(option) => option.label}
-                      />
-                      <TextField.Description>{t("automations.time_zone_help")}</TextField.Description>
-                    </TextField.Root>
+                    <div class="automation-calendar-fields automation-field-wide">
+                      <TextField.Root as="label">
+                        <TextField.Label>{t("automations.start_date")}</TextField.Label>
+                        <TextField.Input
+                          type="date"
+                          value={startDate()}
+                          required
+                          onInput={(event) => {
+                            setError(null)
+                            setStartDate(event.currentTarget.value)
+                          }}
+                        />
+                        <TextField.Description>{t("automations.start_date_help")}</TextField.Description>
+                      </TextField.Root>
+                      <Show when={preset() === "weekly"}>
+                        <TextField.Root>
+                          <TextField.Label>{t("automations.weekday")}</TextField.Label>
+                          <SelectControl
+                            options={(["MO", "TU", "WE", "TH", "FR", "SA", "SU"] as AutomationWeekday[]).map(
+                              (value) => ({ value, label: t(`automations.weekday.${value}`) }),
+                            )}
+                            value={{ value: weekday(), label: t(`automations.weekday.${weekday()}`) }}
+                            onChange={(option) => {
+                              if (option) {
+                                setError(null)
+                                setWeekday(option.value)
+                              }
+                            }}
+                            optionValue="value"
+                            optionTextValue="label"
+                            disallowEmptySelection
+                            ariaLabel={t("automations.weekday")}
+                            renderValue={(option) => option?.label}
+                            renderOptionLabel={(option) => option.label}
+                          />
+                        </TextField.Root>
+                      </Show>
+                      <TextField.Root as="label">
+                        <TextField.Label>{t("automations.time")}</TextField.Label>
+                        <TextField.Input
+                          type="time"
+                          data-ui="automation-time"
+                          value={time()}
+                          required
+                          onInput={(event) => {
+                            setError(null)
+                            setTime(event.currentTarget.value)
+                          }}
+                        />
+                      </TextField.Root>
+                      <TextField.Root class={preset() === "weekly" ? undefined : "automation-field-wide"}>
+                        <TextField.Label>{t("automations.time_zone")}</TextField.Label>
+                        <ComboboxControl
+                          options={timeZoneOptions}
+                          value={selectedTimeZoneOption()}
+                          onChange={(option) => {
+                            if (!option) return
+                            setError(null)
+                            setTimeZone(option.value)
+                          }}
+                          open={timeZoneOpen()}
+                          onOpenChange={setTimeZoneOpen}
+                          optionValue="value"
+                          optionTextValue="label"
+                          optionLabel="label"
+                          defaultFilter="contains"
+                          disallowEmptySelection
+                          closeOnSelection
+                          class="automation-time-zone-combobox"
+                          controlClass="automation-time-zone-control"
+                          inputClass="automation-time-zone-input"
+                          listboxClass="automation-time-zone-list"
+                          optionClass="automation-time-zone-option"
+                          inputID="automation-time-zone"
+                          listboxID="automation-time-zone-options"
+                          ariaLabel={t("automations.time_zone")}
+                          renderOptionLabel={(option) => option.label}
+                        />
+                        <TextField.Description>{t("automations.time_zone_help")}</TextField.Description>
+                      </TextField.Root>
+                    </div>
                   </Show>
 
                   <Show when={preset() === "custom"}>
@@ -1324,13 +1411,24 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       disallowEmptySelection
                       triggerDataUI="automation-model"
                       ariaLabel={t("automations.model")}
-                      renderValue={(option) => <span>{option?.modelLabel}</span>}
+                      renderValue={(option) => (
+                        <span>
+                          {option?.modelLabel}
+                          {option?.retained ? ` · ${t("automations.saved_value")}` : ""}
+                        </span>
+                      )}
                       renderOptionLabel={(option) =>
-                        option.defaultModel ? option.modelLabel : `${option.providerLabel} · ${option.modelLabel}`
+                        option.defaultModel
+                          ? option.modelLabel
+                          : option.retained
+                            ? `${option.modelLabel} · ${t("automations.saved_value")}`
+                            : `${option.providerLabel} · ${option.modelLabel}`
                       }
                     />
                     <TextField.Description>
-                      {t(scope() === "global" ? "automations.model_global_help" : "automations.model_help")}
+                      {selectedModelOption().retained
+                        ? t("automations.model_retained_help")
+                        : t(scope() === "global" ? "automations.model_global_help" : "automations.model_help")}
                     </TextField.Description>
                   </TextField.Root>
                   <TextField.Root>
@@ -1345,22 +1443,26 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       optionValue="value"
                       optionTextValue="label"
                       disallowEmptySelection
-                      disabled={selectedModelOption().defaultModel || selectedModelOption().variants.length === 0}
+                      disabled={selectedModelOption().defaultModel || reasoningOptions().length === 1}
                       triggerDataUI="automation-reasoning"
                       ariaLabel={t("automations.reasoning")}
                       renderValue={(option) => <span>{option?.label}</span>}
                       renderOptionLabel={(option) => option.label}
                     />
                     <TextField.Description>
-                      {selectedModelOption().defaultModel
-                        ? t(
-                            scope() === "global"
-                              ? "automations.reasoning_global_default_help"
-                              : "automations.reasoning_default_help",
-                          )
-                        : selectedModelOption().variants.length === 0
-                          ? t("automations.reasoning_unavailable")
-                          : t("automations.reasoning_help")}
+                      {reasoningEffort() && !selectedModelOption().variants.includes(reasoningEffort())
+                        ? t("automations.reasoning_retained_help")
+                        : selectedModelOption().retained
+                          ? t("automations.reasoning_catalog_help")
+                          : selectedModelOption().defaultModel
+                            ? t(
+                                scope() === "global"
+                                  ? "automations.reasoning_global_default_help"
+                                  : "automations.reasoning_default_help",
+                              )
+                            : selectedModelOption().variants.length === 0
+                              ? t("automations.reasoning_unavailable")
+                              : t("automations.reasoning_help")}
                     </TextField.Description>
                   </TextField.Root>
 

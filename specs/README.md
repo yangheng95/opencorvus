@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Product iteration: editable Mission drafts and workbench usability](records/2026-10/2026-10-05-product-iteration.md)
+
+- [Product iteration evidence](artifacts/2026-10-05-product-iteration/README.md)
+
 - [Current-version product experience and functional repair](records/2026-10/2026-10-04-product-experience.md)
 
 - [Product experience screenshots and real model evidence](artifacts/2026-10-04-product-experience/README.md)

@@ -85,11 +85,11 @@ test("HTTP dispatch replays the accepted Message after draft consumption and ret
         fn: async () => app.fetch(request),
       }),
   })
-  const request = async (suffix: string, body: unknown, directory = project.path) => {
+  const request = async (suffix: string, body: unknown, directory = project.path, method = "POST") => {
     const url = new URL(`/mission/${mission.missionID}/${suffix}`, server.url)
     url.searchParams.set("directory", directory)
     const response = await fetch(url, {
-      method: "POST",
+      method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
@@ -179,7 +179,11 @@ test("HTTP dispatch replays the accepted Message after draft consumption and ret
           }),
       })
     const nextDraft = "The later draft must remain exact after an older request is replayed."
-    await updateDraft(nextDraft)
+    const laterDraft = "The later draft before its operator edit."
+    await updateDraft(laterDraft)
+    expect(
+      await request("draft", { expectedRequest: laterDraft, request: nextDraft }, project.path, "PATCH"),
+    ).toMatchObject({ status: 200, body: { pendingPrompt: { text: nextDraft } } })
     expect({
       replay: await request("dispatch", input),
       draft: missionPendingPrompt(await Session.get(mission.id)),

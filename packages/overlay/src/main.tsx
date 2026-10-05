@@ -190,6 +190,7 @@ import {
   createMissionDraft,
   deleteMission,
   dispatchMission,
+  editMissionDraft,
   downloadMissionProjectArchive,
   renameMission,
   setMissionArchived,
@@ -2027,6 +2028,10 @@ function OverlayRoot() {
           onCreateManual={createMissionBoardDraft}
           onCreateWithAI={createMissionBoardWithAI}
           onDispatchMission={dispatchMissionBoardDraft}
+          onEditMissionDraft={async (input) => {
+            await editMissionDraft(input)
+            setMissionSharedRefreshToken((value) => value + 1)
+          }}
           onConfirmDeleteMission={confirmDeleteMissionBoardMission}
           onDeleteMission={deleteMissionBoardMission}
         />

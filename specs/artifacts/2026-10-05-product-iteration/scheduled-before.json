@@ -1,0 +1,21 @@
+{
+  "originalNextRun": 1798185637000,
+  "originalRecurrence": "DTSTART;TZID=Asia/Shanghai:20261225T160037\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+  "afterNameOnlyEdit": {
+    "id": "atm_g0VX80Sem00LJwa2X10V",
+    "name": "每周五未来计划（仅改名称）",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20261005T160000\nRRULE:FREQ=WEEKLY;BYDAY=MO",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Read the disposable acceptance notes.",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 1791187200000,
+    "failureCount": 0,
+    "lastError": null
+  }
+}

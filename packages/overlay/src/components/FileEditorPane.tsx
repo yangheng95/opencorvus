@@ -202,7 +202,22 @@ export function FileEditorPane() {
   }
 
   return (
-    <section class="file-editor-pane" aria-label={t("file_editor.title")}>
+    <section
+      class="file-editor-pane"
+      aria-label={t("file_editor.title")}
+      onKeyDown={(event) => {
+        if (
+          event.isComposing ||
+          event.altKey ||
+          event.shiftKey ||
+          !(event.ctrlKey || event.metaKey) ||
+          event.key.toLowerCase() !== "s"
+        )
+          return
+        event.preventDefault()
+        void save()
+      }}
+    >
       <Show
         when={path()}
         fallback={
@@ -228,6 +243,8 @@ export function FileEditorPane() {
             tone={dirty() ? "accent" : "neutral"}
             data-ui="file-editor-save"
             data-dirty={dirty() ? "true" : "false"}
+            title={`${t("common.save")} (Ctrl/Cmd+S)`}
+            aria-keyshortcuts="Control+s Meta+s"
             disabled={!dirty() || saving()}
             onClick={() => void save()}
           >

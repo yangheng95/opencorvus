@@ -11,6 +11,10 @@ The file pane uses the existing forced tab mount so hiding the Dock or selecting
 another tool retains that single draft owner and its navigation guard. Closing
 the file still clears the canonical target after the guard resolves.
 
+Ctrl/Cmd+S within the file pane invokes that same dirty/save/error owner and
+prevents the browser's Save Page action. It is not a global shortcut or a second
+filesystem writer. CodeMirror retains its existing search and undo keymaps.
+
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns
 grammar metadata and cached dynamic loading; Markdown fences use that same
@@ -21,6 +25,28 @@ Changing a language reconfigures only the editor's language compartment, keeping
 the draft, selection and undo history. A disposed or superseded view cannot
 accept a late grammar result. The editor displays its language, loading state or
 a retryable highlighting failure; grammar loading never owns file saving.
+
+## Mission draft and schedule authoring
+
+Mission Board draft cards offer separate Edit request and Start actions. The
+editor snapshots exact Mission/directory and original pending text when opened;
+Board refreshes do not replace its authored input. Save uses `mission.editDraft`
+and the shared refresh lifecycle. Typed conflicts preserve entered text for
+review/copy; cancellation and saving do not dispatch an execution.
+
+Scheduled automation basic fields own an explicit start date, time, time zone
+and weekly day. The date/weekday of today are creation defaults only; changing
+unrelated fields omits recurrence from the existing PATCH. Seconds and advanced
+recurrence components that the basic fields cannot express retain their complete
+authored rule in the current advanced editor. Explicit calendar changes use the
+chosen anchor, rather than resetting it to the save date. Weekly review's Friday
+is suggestion data passed through that same weekly field.
+
+The host-wide automation editor labels retained model and reasoning identities
+explicitly when they are absent from the active project's connected catalog.
+The target's saved identity remains visible and is validated by its existing
+backend target contract. Explicit Default selection clears the saved override;
+the panel neither invents another catalog nor switches global project state.
 
 ## Side conversations and quotations
 

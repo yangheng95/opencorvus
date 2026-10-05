@@ -24,6 +24,16 @@ import z from "zod"
 
 export type MissionSession = Session.Info & { missionID: string; productPillar: ProductPillar }
 
+export const MissionDraftEditConflictError = NamedError.create(
+  "MissionDraftEditConflictError",
+  z.object({
+    message: z.string(),
+    missionID: MissionID,
+    sessionID: z.string(),
+    reason: z.enum(["changed", "missing", "archived"]),
+  }),
+)
+
 export const MissionDispatchDraftConflictError = NamedError.create(
   "MissionDispatchDraftConflictError",
   z.object({
@@ -171,18 +181,74 @@ export async function setMissionPendingPrompt(input: {
   )
 }
 
+export async function editMissionPendingPrompt(input: {
+  sessionID: string
+  missionID: string
+  request: string
+  expectedRequest: string
+}): Promise<Session.Info> {
+  const pendingPrompt = MissionPendingPrompt.parse({ text: input.request })
+  const expectedRequest = MissionPendingPrompt.shape.text.parse(input.expectedRequest)
+  return Database.immediateTransaction((db) =>
+    updateMissionPendingPromptInTransaction(db, {
+      sessionID: input.sessionID,
+      pendingPrompt,
+      edit: {
+        missionID: input.missionID,
+        projectID: Instance.project.id,
+        directory: normalizeDirectory(Instance.directory),
+        expectedRequest,
+      },
+    }),
+  )
+}
+
 function updateMissionPendingPromptInTransaction(
   db: Database.TxOrDb,
   input: {
     sessionID: string
     pendingPrompt?: MissionPendingPrompt
     consume?: { missionID: string; requestID: string; text: string }
+    edit?: { missionID: string; projectID: string; directory: string; expectedRequest: string }
   },
 ): Session.Info {
   Database.requireActiveTransaction("updateMissionPendingPromptInTransaction")
   const row = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
   if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
   const session = Session.fromRow(row)
+  if (input.edit) {
+    if (
+      session.kind !== "mission" ||
+      session.projectID !== input.edit.projectID ||
+      session.directory !== input.edit.directory ||
+      missionIDFromInfo(session) !== input.edit.missionID
+    ) {
+      throw new NotFoundError({ message: `Mission not found: ${input.edit.missionID}` })
+    }
+    assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+    const pending = missionPendingPrompt(session)
+    const reason = session.time.archived !== undefined ? "archived" : !pending ? "missing" : undefined
+    if (reason) {
+      throw new MissionDraftEditConflictError({
+        message:
+          reason === "archived"
+            ? "Restore this Mission before editing its draft."
+            : "This Mission has no pending draft to edit.",
+        missionID: input.edit.missionID,
+        sessionID: input.sessionID,
+        reason,
+      })
+    }
+    if (pending!.text === input.pendingPrompt?.text) return session
+    if (pending!.text !== input.edit.expectedRequest) {
+      throw new MissionDraftEditConflictError({
+        message: "The Mission draft changed. Reload the current draft before saving your edits.",
+        missionID: input.edit.missionID,
+        sessionID: input.sessionID,
+        reason: "changed",
+      })
+    }
+  }
   if (session.kind !== "mission") throw new Error(`Session ${input.sessionID} is not a Mission session.`)
   const metadata = (session.metadata ?? {}) as Record<string, unknown>
   const mission = metadata.mission

@@ -15,6 +15,7 @@ import {
   missionVisibleExpertSquadIDs,
   missionProductPillar,
   setMissionPendingPrompt,
+  editMissionPendingPrompt,
 } from "@/mission/session"
 import {
   MissionID,
@@ -118,6 +119,10 @@ const MissionDispatchInput = z
       })
       .optional(),
   })
+  .strict()
+
+const MissionDraftEditInput = z
+  .object({ request: MissionPendingPrompt.shape.text, expectedRequest: MissionPendingPrompt.shape.text })
   .strict()
 
 const MissionListQuery = z
@@ -364,6 +369,39 @@ export function MissionRoutes() {
           }
           throw error
         }
+      },
+    )
+    .patch(
+      "/:missionID/draft",
+      describeRoute({
+        summary: "Edit a Mission draft",
+        description:
+          "Save an existing unarchived Mission draft using its expected current text. " +
+          "An already-saved target text returns the current record without another write. " +
+          "Saving does not start execution or change accepted Messages.",
+        operationId: "mission.editDraft",
+        responses: {
+          200: {
+            description: "Saved Mission draft",
+            content: { "application/json": { schema: resolver(MissionRecord) } },
+          },
+          ...errors(400, 404),
+          409: namedErrorResponse(
+            "Mission draft changed, was consumed, or is archived",
+            "MissionDraftEditConflictError",
+          ),
+        },
+      }),
+      validator("param", MissionParam),
+      validator("json", MissionDraftEditInput),
+      async (c) => {
+        const session = await missionRouteSession(c.req.valid("param").missionID)
+        const updated = await editMissionPendingPrompt({
+          sessionID: session.id,
+          missionID: session.missionID,
+          ...c.req.valid("json"),
+        })
+        return c.json(missionRecord({ ...updated, missionID: session.missionID, productPillar: session.productPillar }))
       },
     )
     .patch(

@@ -14,6 +14,8 @@ import type {
   MissionCreateDraftResponse,
   MissionDispatchData,
   MissionDispatchResponse,
+  MissionEditDraftData,
+  MissionEditDraftResponse,
   MissionListResponse,
   MissionRenameResponse,
   MissionSetArchivedResponse,
@@ -163,6 +165,8 @@ export interface MissionActionTarget {
   directory: string
 }
 
+export type MissionDraftEditInput = MissionEditDraftData["body"] & MissionActionTarget
+
 export interface MissionStatusRequest {
   missionID: string
   directory: string
@@ -309,6 +313,21 @@ export async function dispatchMission(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
+    }),
+  )
+}
+
+export async function editMissionDraft(input: MissionDraftEditInput): Promise<MissionEditDraftResponse> {
+  const request = input.request.trim()
+  if (!request || request.length > 32000 || !input.expectedRequest || input.expectedRequest.length > 32000) {
+    throw new Error("editMissionDraft: request and expectedRequest must contain 1-32000 characters")
+  }
+  return await apiJson<MissionEditDraftResponse>(
+    missionActionPath(input, "/draft"),
+    serverSettledRequest({
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ request, expectedRequest: input.expectedRequest } satisfies MissionEditDraftData["body"]),
     }),
   )
 }

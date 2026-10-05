@@ -88262,6 +88262,450 @@
         ]
       }
     },
+    "/mission/{missionID}/draft": {
+      "patch": {
+        "description": "Save an existing unarchived Mission draft using its expected current text. An already-saved target text returns the current record without another write. Saving does not start execution or change accepted Messages.",
+        "operationId": "mission.editDraft",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "missionID",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-z0-9-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expectedRequest": {
+                    "maxLength": 32000,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "request": {
+                    "maxLength": 32000,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "request",
+                  "expectedRequest"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "archived": {
+                      "type": "number"
+                    },
+                    "boardLane": {
+                      "enum": [
+                        "backlog",
+                        "running",
+                        "attention",
+                        "review",
+                        "completed"
+                      ],
+                      "type": "string"
+                    },
+                    "created": {
+                      "type": "number"
+                    },
+                    "directory": {
+                      "type": "string"
+                    },
+                    "interruptible": {
+                      "type": "boolean"
+                    },
+                    "missionID": {
+                      "maxLength": 64,
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9-]+$",
+                      "type": "string"
+                    },
+                    "outcome": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "accepted",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "properties": {
+                            "kind": {
+                              "const": "blocked",
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "summary": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "timeRecorded": {
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "unresolvedCriteria": {
+                              "description": "Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.",
+                              "items": {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 32,
+                              "minItems": 1,
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "messageID",
+                            "toolCallID",
+                            "toolPartID",
+                            "summary",
+                            "timeRecorded",
+                            "kind",
+                            "unresolvedCriteria"
+                          ],
+                          "type": "object"
+                        }
+                      ]
+                    },
+                    "pendingInteractions": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "pendingPrompt": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "text": {
+                          "maxLength": 32000,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "text"
+                      ],
+                      "type": "object"
+                    },
+                    "productPillar": {
+                      "enum": [
+                        "code",
+                        "work"
+                      ],
+                      "type": "string"
+                    },
+                    "sessionID": {
+                      "type": "string"
+                    },
+                    "taskStats": {
+                      "properties": {
+                        "inactive": {
+                          "type": "number"
+                        },
+                        "running": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "running",
+                        "inactive"
+                      ],
+                      "type": "object"
+                    },
+                    "tasks": {
+                      "items": {
+                        "properties": {
+                          "activityStatus": {
+                            "enum": [
+                              "running",
+                              "inactive"
+                            ],
+                            "type": "string"
+                          },
+                          "cancellationStatus": {
+                            "enum": [
+                              "none",
+                              "cancelling",
+                              "cancelled"
+                            ],
+                            "type": "string"
+                          },
+                          "completed": {
+                            "type": "number"
+                          },
+                          "created": {
+                            "type": "number"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "directory": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "lifecycleStatus": {
+                            "enum": [
+                              "active",
+                              "completed",
+                              "failed",
+                              "cancelled"
+                            ],
+                            "type": "string"
+                          },
+                          "pinned": {
+                            "type": "boolean"
+                          },
+                          "priority": {
+                            "enum": [
+                              "critical",
+                              "high",
+                              "normal",
+                              "low"
+                            ],
+                            "type": "string"
+                          },
+                          "productPillar": {
+                            "enum": [
+                              "code",
+                              "work"
+                            ],
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "started": {
+                            "type": "number"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "updated": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "description",
+                          "lifecycleStatus",
+                          "cancellationStatus",
+                          "activityStatus",
+                          "priority",
+                          "source",
+                          "productPillar",
+                          "directory",
+                          "created",
+                          "updated",
+                          "pinned",
+                          "started"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "updated": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "missionID",
+                    "sessionID",
+                    "title",
+                    "directory",
+                    "created",
+                    "updated",
+                    "interruptible",
+                    "productPillar",
+                    "boardLane",
+                    "pendingInteractions",
+                    "tasks",
+                    "taskStats"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Saved Mission draft"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionDraftEditConflictError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Mission draft changed, was consumed, or is archived"
+          }
+        },
+        "summary": "Edit a Mission draft",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.mission.editDraft({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/mission/{missionID}/project-archive": {
       "get": {
         "description": "Return a ZIP containing the Mission project's Git-included files plus Mission execution evidence exported from Mission projections.",

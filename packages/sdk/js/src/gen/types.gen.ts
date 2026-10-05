@@ -24436,6 +24436,124 @@ export type MissionDispatchResponses = {
 
 export type MissionDispatchResponse = MissionDispatchResponses[keyof MissionDispatchResponses]
 
+export type MissionEditDraftData = {
+  body: {
+    expectedRequest: string
+    request: string
+  }
+  path: {
+    missionID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/mission/{missionID}/draft"
+}
+
+export type MissionEditDraftErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+  /**
+   * Mission draft changed, was consumed, or is archived
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionDraftEditConflictError"
+  }
+}
+
+export type MissionEditDraftError = MissionEditDraftErrors[keyof MissionEditDraftErrors]
+
+export type MissionEditDraftResponses = {
+  /**
+   * Saved Mission draft
+   */
+  200: {
+    archived?: number
+    boardLane: "backlog" | "running" | "attention" | "review" | "completed"
+    created: number
+    directory: string
+    interruptible: boolean
+    missionID: string
+    outcome?:
+      | {
+          kind: "accepted"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+        }
+      | {
+          kind: "blocked"
+          messageID: string
+          summary: string
+          timeRecorded: number
+          toolCallID: string
+          toolPartID: string
+          /**
+           * Original outcome obligations that remain unmet because of the evidenced external authority or capability boundary.
+           */
+          unresolvedCriteria: Array<string>
+        }
+    pendingInteractions: number
+    pendingPrompt?: {
+      text: string
+    }
+    productPillar: "code" | "work"
+    sessionID: string
+    taskStats: {
+      inactive: number
+      running: number
+      total: number
+    }
+    tasks: Array<{
+      activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
+      completed?: number
+      created: number
+      description: string
+      directory: string
+      id: string
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
+      pinned: boolean
+      priority: "critical" | "high" | "normal" | "low"
+      productPillar: "code" | "work"
+      source: string
+      started: number
+      title: string
+      updated: number
+    }>
+    title: string
+    updated: number
+  }
+}
+
+export type MissionEditDraftResponse = MissionEditDraftResponses[keyof MissionEditDraftResponses]
+
 export type MissionProjectArchiveData = {
   body?: never
   path: {

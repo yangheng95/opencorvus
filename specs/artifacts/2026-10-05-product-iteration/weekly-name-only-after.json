@@ -1,0 +1,17 @@
+{
+  "id": "atm_g0VX86eZe00d2WSF70mn",
+  "name": "未来周六 15:30 验收计划（已编辑）",
+  "target": {
+    "scope": "global"
+  },
+  "recurrence": "DTSTART;TZID=Asia/Shanghai:20261219T153000\nRRULE:FREQ=WEEKLY;BYDAY=SA",
+  "executionMode": "local",
+  "model": null,
+  "reasoningEffort": null,
+  "prompt": "复盘本周项目工作，整理包含进展、风险和后续步骤的简洁状态更新。",
+  "status": "active",
+  "lastRun": null,
+  "nextRun": 1797665400000,
+  "failureCount": 0,
+  "lastError": null
+}

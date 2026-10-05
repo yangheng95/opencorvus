@@ -1,0 +1,37 @@
+{
+  "explicitWeeklyCreation": {
+    "id": "atm_g0VX86eZe00d2WSF70mn",
+    "name": "未来周六 15:30 验收计划",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20261219T153000\nRRULE:FREQ=WEEKLY;BYDAY=SA",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "复盘本周项目工作，整理包含进展、风险和后续步骤的简洁状态更新。",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 1797665400000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "advancedNameOnlyEdit": {
+    "id": "atm_g0VX80Sem00LJwa2X10V",
+    "name": "未来周五：保留开始日期和秒数",
+    "target": {
+      "scope": "global"
+    },
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20261225T160037\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Read the disposable acceptance notes.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 1798185637000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "savedFile": "# Product iteration\n\n- Keep a saved Mission draft editable before dispatch.\n- Save this file with Ctrl+S.\n\n- 快捷键验收：尚未保存\n- 修复后 Ctrl+S 已写盘。"
+}

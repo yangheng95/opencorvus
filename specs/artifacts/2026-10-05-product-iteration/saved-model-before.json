@@ -1,0 +1,23 @@
+{
+  "id": "atm_g0VX81XNs00rqu9I5xwD",
+  "name": "项目模型保存展示（旧表单）",
+  "target": {
+    "scope": "project",
+    "projectIds": [
+      "prj_hroPEGg17GAZWxDZ7MR7"
+    ]
+  },
+  "recurrence": "DTSTART;TZID=Asia/Shanghai:20261005T090000\nRRULE:FREQ=DAILY",
+  "executionMode": "local",
+  "model": {
+    "providerID": "iteration",
+    "modelID": "exact:retained"
+  },
+  "reasoningEffort": "thinking",
+  "prompt": "Read the disposable model catalog notes.",
+  "status": "active",
+  "lastRun": null,
+  "nextRun": 1791162000000,
+  "failureCount": 0,
+  "lastError": null
+}

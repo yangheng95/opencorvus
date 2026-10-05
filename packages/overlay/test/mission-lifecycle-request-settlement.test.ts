@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import { createMissionDraft, dispatchMission, wakeMission } from "../src/services/mission"
+import { createMissionDraft, dispatchMission, editMissionDraft, wakeMission } from "../src/services/mission"
 
 function recordingTransport(requests: TransportRequest[]): HostTransport {
   return {
@@ -35,7 +35,7 @@ afterEach(() => {
   __setHostTransportForTest(undefined)
 })
 
-test("Mission wake, draft creation, and draft dispatch settle on the authoritative server response", async () => {
+test("Mission wake, draft creation, editing, and dispatch settle on the authoritative server response", async () => {
   const requests: TransportRequest[] = []
   __setHostTransportForTest(recordingTransport(requests))
 
@@ -53,10 +53,13 @@ test("Mission wake, draft creation, and draft dispatch settle on the authoritati
     productPillar: "code",
     expertSquadIDs: ["base"],
   })
-  await dispatchMission(
-    { missionID: "mission_board_acceptance", directory: "D:/project" },
-    "openai/gpt-5.6-terra",
-  )
+  await dispatchMission({ missionID: "mission_board_acceptance", directory: "D:/project" }, "openai/gpt-5.6-terra")
+  await editMissionDraft({
+    missionID: "mission_board_acceptance",
+    directory: "D:/project",
+    request: "  Publish the revised backlog item  ",
+    expectedRequest: "Publish the backlog item",
+  })
 
   expect(
     requests.map((request) => ({
@@ -68,7 +71,13 @@ test("Mission wake, draft creation, and draft dispatch settle on the authoritati
     { method: "POST", path: "mission/wake", timeoutMilliseconds: null },
     { method: "POST", path: "mission/draft", timeoutMilliseconds: null },
     { method: "POST", path: "mission/mission_board_acceptance/dispatch", timeoutMilliseconds: null },
+    { method: "PATCH", path: "mission/mission_board_acceptance/draft", timeoutMilliseconds: null },
   ])
+  expect(requests[3]?.query).toEqual({ directory: "D:/project" })
+  expect(requests[3]?.body).toEqual({
+    kind: "json",
+    value: { request: "Publish the revised backlog item", expectedRequest: "Publish the backlog item" },
+  })
 })
 
 test.each([undefined, "mission_attachment_follow_up"])(

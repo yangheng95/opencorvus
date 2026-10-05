@@ -49,7 +49,8 @@ const redactor = new CredentialRedactor()
 redactor.collect(process.env)
 const requestID = `DISPATCH-${crypto.randomUUID()}`
 const operatorPrompt = `For acceptance ${requestID}, report the sum of 137 and 249 and the difference between 249 and 137. Return both numeric results in the conversation. This is the complete requested deliverable.`
-let evidence: Record<string, unknown> = { model, root, requestID, operatorPrompt }
+const originalDraft = `For acceptance ${requestID}, describe the project directory in one sentence.`
+let evidence: Record<string, unknown> = { model, root, requestID, operatorPrompt, originalDraft }
 let audit: RealProviderAudit | undefined
 let snapshotAtSend: (() => unknown) | undefined
 let cleanup: (() => Promise<void>) | undefined
@@ -155,25 +156,33 @@ try {
     inactivityMs: 180_000,
     activity: SessionStatus.getActivity,
   })
-  const post = async (route: string, body: unknown) => {
+  const request = async (route: string, body: unknown, method = "POST") => {
     const url = new URL(route, server.url)
     url.searchParams.set("directory", project)
     const response = await fetch(url, {
-      method: "POST",
+      method,
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),
     })
     return { status: response.status, body: (await response.json()) as any }
   }
-  const draft = await post("/mission/draft", {
+  const draft = await request("/mission/draft", {
     title: "Atomic manual draft acceptance",
-    request: operatorPrompt,
+    request: originalDraft,
     productPillar: "work",
     expertSquadIDs: ["base"],
   })
   assert.equal(draft.status, 200)
   const { missionID, sessionID } = draft.body as { missionID: string; sessionID: string }
   evidence.draft = draft
+  assert.deepEqual(draft.body.pendingPrompt, { text: originalDraft })
+  const editInput = { expectedRequest: originalDraft, request: operatorPrompt }
+  const editedDraft = await request(`/mission/${missionID}/draft`, editInput, "PATCH")
+  assert.equal(editedDraft.status, 200)
+  assert.deepEqual(editedDraft.body.pendingPrompt, { text: operatorPrompt })
+  const editReplay = await request(`/mission/${missionID}/draft`, editInput, "PATCH")
+  assert.deepEqual(editReplay, editedDraft)
+  evidence = { ...evidence, editedDraft, editReplay }
   snapshotAtSend = () =>
     Database.use((db) => {
       const row = db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()!
@@ -194,7 +203,7 @@ try {
         closure: closure.currentMissionExecutionClosure(sessionID),
       }
     })
-  const dispatch = await post(`/mission/${missionID}/dispatch`, { requestID, model })
+  const dispatch = await request(`/mission/${missionID}/dispatch`, { requestID, model })
   assert.equal(dispatch.status, 200)
   evidence.dispatch = dispatch
   process.stdout.write(`[dispatch-e2e] session=${sessionID} root=${root} result=${resultPath}\n`)
@@ -256,7 +265,7 @@ try {
         directory: project,
         fn: async () => mission.setMissionPendingPrompt({ session: await Session.get(sessionID), pendingPrompt }),
       })
-      const replay = await post(`/mission/${missionID}/dispatch`, { requestID, model })
+      const replay = await request(`/mission/${missionID}/dispatch`, { requestID, model })
       assert.deepEqual(replay, dispatch)
       const retainedDraft = mission.missionPendingPrompt(await Session.get(sessionID))
       assert.deepEqual(retainedDraft, pendingPrompt)
@@ -294,6 +303,14 @@ try {
   assert.equal(first.draftDisposition, "consumed")
   assert.equal(first.acceptedMessageIDs.length, 1)
   assert.equal(first.closure.state, "opened")
+  const accepted = (await Session.messages({ sessionID })).filter((entry) =>
+    entry.info.role === "user" && (entry.info.extra?.wake_reason as { requestID?: string })?.requestID === requestID,
+  )
+  assert.equal(accepted.length, 1)
+  const acceptedText = accepted[0]!.parts.flatMap((part) => part.type === "text" ? [part.text] : [])
+  assert.deepEqual(acceptedText, [operatorPrompt])
+  assert.deepEqual(first.acceptedMessageIDs, [accepted[0]!.info.id])
+  evidence.acceptedInput = { messageID: accepted[0]!.info.id, text: acceptedText[0] }
   const retainedDraft = mission.missionPendingPrompt(await Session.get(sessionID))
   assert.deepEqual(retainedDraft, pendingPrompt)
   evidence = {

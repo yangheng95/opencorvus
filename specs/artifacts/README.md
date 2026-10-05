@@ -88,3 +88,4 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [2026-09-08 bilingual founder case brief](2026-09-08-founder-case-brief/README.md): original PDF, derived facts, builder and source limitations.
 
 - [Historical WorkBuddy and fixed-round benchmark source](2026-08-25-benchmark-history/README.md): exact committed August experiment materials; current-runtime limitations are explicit.
+- [2026-10-05 — Product iteration](2026-10-05-product-iteration/README.md)

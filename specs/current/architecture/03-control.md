@@ -163,6 +163,16 @@ ownership 保证 reply 命中创建该 pending occurrence 的同一物理 owner�
 
 ## Mission operator draft acceptance
 
+`mission.editDraft` updates only an existing pending operator text. The strict
+request carries the desired `request` and its opening `expectedRequest`. The
+existing immediate metadata transaction rereads and validates exact Session,
+Mission, Project and directory ownership before comparing the current text.
+Archived Missions require restoration before editing. Missing, changed and
+archived drafts return `MissionDraftEditConflictError` (HTTP 409); wrong
+ownership uses the existing NotFound response. A current draft already equal
+to the desired text returns its unchanged record after those checks. Save
+creates no Message or execution occurrence, and cannot revive a consumed draft.
+
 `mission.dispatch` binds one pending operator draft to the deterministic
 Session/source/request Message. A replay reads that Message's accepted text
 after validating its opened occurrence and Project lineage; mutable draft

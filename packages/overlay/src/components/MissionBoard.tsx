@@ -1,7 +1,12 @@
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
 import type { ExpertSquadMarketIndexItem } from "../services/expert-squad"
-import { MISSION_BOARD_LANES, type MissionBoardLane, type MissionRecord } from "../services/mission"
+import {
+  MISSION_BOARD_LANES,
+  type MissionBoardLane,
+  type MissionDraftEditInput,
+  type MissionRecord,
+} from "../services/mission"
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
 import { projectDirectoryLabel } from "../utils/project-directory"
 import { detailStamp, relativeTime } from "../utils/time"
@@ -15,6 +20,7 @@ import { SelectControl } from "./ui/SelectControl"
 import { SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
+import { MissionDraftEditDialog, type MissionDraftEditTarget } from "./MissionDraftEditDialog"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
@@ -37,6 +43,7 @@ export interface MissionBoardProps {
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
+  onEditMissionDraft: (input: MissionDraftEditInput) => Promise<void>
   onConfirmDeleteMission: (mission: MissionRecord) => Promise<boolean>
   onDeleteMission: (mission: MissionRecord) => Promise<boolean>
 }
@@ -77,6 +84,7 @@ function MissionBoardCard(props: {
   actionBusy: boolean
   onOpen: () => void
   onDispatch: () => void
+  onEdit: () => void
   onDelete: () => void
 }) {
   const terminalTasks = createMemo(() => props.mission.tasks.filter(taskIsTerminal).length)
@@ -171,18 +179,24 @@ function MissionBoardCard(props: {
             <Badge size="sm" tone="muted">
               {t("mission_board.create.manual_draft")}
             </Badge>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              tone="neutral"
-              data-ui="mission-board-dispatch"
-              disabled={props.actionBusy}
-              onClick={props.onDispatch}
-            >
-              <Icon name={props.dispatching ? "loading" : "send"} size="compact" />
-              {props.dispatching ? t("mission_board.create.dispatching") : t("mission_board.create.dispatch")}
-            </Button>
+            <div class="mission-board-card__draft-controls">
+              <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={props.actionBusy} onClick={props.onEdit}>
+                <Icon name="edit" size="compact" />
+                {t("mission_board.edit.action")}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                data-ui="mission-board-dispatch"
+                disabled={props.actionBusy}
+                onClick={props.onDispatch}
+              >
+                <Icon name={props.dispatching ? "loading" : "send"} size="compact" />
+                {props.dispatching ? t("mission_board.create.dispatching") : t("mission_board.create.dispatch")}
+              </Button>
+            </div>
           </div>
         </Show>
       </ContextMenu.Trigger>
@@ -211,6 +225,7 @@ export function MissionBoard(props: MissionBoardProps) {
     null,
   )
   const [actionError, setActionError] = createSignal("")
+  const [editingDraft, setEditingDraft] = createSignal<MissionDraftEditTarget | null>(null)
   let searchInput: HTMLInputElement | undefined
   let actionGeneration = 0
 
@@ -461,6 +476,14 @@ export function MissionBoard(props: MissionBoardProps) {
                             actionBusy={Boolean(pendingAction())}
                             onOpen={() => void props.onOpenMission(mission)}
                             onDispatch={() => void dispatchMission(mission)}
+                            onEdit={() =>
+                              setEditingDraft({
+                                missionID: mission.missionID,
+                                directory: mission.directory,
+                                title: mission.title,
+                                expectedRequest: mission.pendingPrompt!.text,
+                              })
+                            }
                             onDelete={() => void deleteMission(mission)}
                           />
                         )}
@@ -473,6 +496,11 @@ export function MissionBoard(props: MissionBoardProps) {
           </Show>
         </Show>
       </Show>
+      <MissionDraftEditDialog
+        target={editingDraft()}
+        onClose={() => setEditingDraft(null)}
+        onSave={props.onEditMissionDraft}
+      />
       <MissionCreateDialog
         open={createOpen()}
         projectDirectories={props.projectDirectories}

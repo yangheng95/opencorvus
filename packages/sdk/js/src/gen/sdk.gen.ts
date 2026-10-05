@@ -345,6 +345,8 @@ import type {
   MissionDeleteResponses,
   MissionDispatchErrors,
   MissionDispatchResponses,
+  MissionEditDraftErrors,
+  MissionEditDraftResponses,
   MissionListResponses,
   MissionProjectArchiveErrors,
   MissionProjectArchiveResponses,
@@ -9840,6 +9842,45 @@ export class Mission extends HeyApiClient {
     )
     return (options?.client ?? this.client).post<MissionDispatchResponses, MissionDispatchErrors, ThrowOnError>({
       url: "/mission/{missionID}/dispatch",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Edit a Mission draft
+   *
+   * Save an existing unarchived Mission draft using its expected current text. An already-saved target text returns the current record without another write. Saving does not start execution or change accepted Messages.
+   */
+  public editDraft<ThrowOnError extends boolean = false>(
+    parameters: {
+      missionID: string
+      directory?: string
+      expectedRequest: string
+      request: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "missionID" },
+            { in: "query", key: "directory" },
+            { in: "body", key: "expectedRequest" },
+            { in: "body", key: "request" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).patch<MissionEditDraftResponses, MissionEditDraftErrors, ThrowOnError>({
+      url: "/mission/{missionID}/draft",
       ...options,
       ...params,
       headers: {
