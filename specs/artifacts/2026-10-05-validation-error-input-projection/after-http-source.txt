@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import { ApiError } from '../packages/overlay/src/services/api'
+import { formatErrorDetails } from '../packages/overlay/src/utils/error-details'
+
+const owner=JSON.parse(await fs.readFile('.tmp-product-iteration/validation-after-owner.json','utf8'))
+const cases=[
+ {name:'oauth-invalid-expires',method:'PUT',endpoint:'/auth/validation-dummy-provider',input:{type:'oauth',access:'DUMMY_NON_CREDENTIAL_ACCESS',refresh:'DUMMY_NON_CREDENTIAL_REFRESH',expires:'invalid-number'},issue:{code:'invalid_type',path:['expires'],message:'Invalid input: expected number, received string'}},
+ {name:'api-invalid-metadata',method:'PUT',endpoint:'/auth/validation-dummy-provider',input:{type:'api',key:'DUMMY_NON_CREDENTIAL_APIKEY',metadata:{label:123}},issue:{code:'invalid_type',path:['metadata','label'],message:'Invalid input: expected string, received number'}},
+ {name:'artifact-incomplete-locator',method:'POST',endpoint:'/task/tsk_validation_dummy/artifact-read?'+new URLSearchParams({directory:owner.launch.project}),input:{},issue:{code:'invalid_type',path:['locator'],message:'Invalid input: expected object, received undefined'}},
+]
+const resultPath='.tmp-product-iteration/validation-after-http.json'
+const evidence:{qualification:string,owner:unknown,results:unknown[],failure?:unknown}={qualification:'running_actual_source_HTTP',owner,results:[]}
+try {
+ for(const item of cases){
+  const startedAt=new Date().toISOString()
+  const response=await fetch(owner.startup.url+item.endpoint,{method:item.method,headers:{'content-type':'application/json'},body:JSON.stringify(item.input),signal:AbortSignal.timeout(15000)})
+  const bytes=new Uint8Array(await response.arrayBuffer())
+  const wireText=new TextDecoder().decode(bytes)
+  const body=JSON.parse(wireText)
+  const headers=Object.fromEntries(['content-type','x-opencorvus-request-id'].map(key=>[key,response.headers.get(key)??'']))
+  const error=new ApiError(response.status,item.endpoint,item.name.startsWith('artifact')?bytes:body,headers)
+  evidence.results.push({name:item.name,startedAt,method:item.method,url:owner.startup.url+item.endpoint,input:item.input,status:response.status,headers,wireText,body,apiError:{name:error.name,message:error.message,summary:error.summary,body:error.body,requestID:error.requestID,details:formatErrorDetails(error)}})
+  await fs.writeFile(resultPath,JSON.stringify(evidence,null,2))
+  const expected={data:{message:'Request validation failed'},error:[item.issue],success:false}
+  assert.equal(response.status,400)
+  assert.deepEqual(body,expected)
+  assert.deepEqual(error.body,expected)
+  assert.equal(error.summary,'API 400: Request validation failed')
+  assert.equal(error.message,`API 400 ${item.endpoint}: Request validation failed`)
+  assert.match(error.requestID??'',/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
+  assert.equal(formatErrorDetails(error),`HTTP 400 ${item.endpoint}\n\nRequest ID: ${error.requestID}\n\n${error.stack}\n\nresponse body:\n${JSON.stringify(expected,null,2)}`)
+ }
+ evidence.qualification='passed_actual_source_HTTP_three_public_validation_responses'
+} catch(error){evidence.failure=error instanceof Error?{name:error.name,message:error.message,stack:error.stack}:String(error);process.exitCode=1}
+finally{await fs.writeFile(resultPath,JSON.stringify(evidence,null,2))}
+console.log(JSON.stringify(evidence,null,2))

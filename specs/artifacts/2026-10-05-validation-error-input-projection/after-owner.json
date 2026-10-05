@@ -1,0 +1,58 @@
+{
+  "launch": {
+    "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01",
+    "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/home",
+    "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project",
+    "port": 17943,
+    "origin": "http://127.0.0.1:17943",
+    "occurrence": "validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81",
+    "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json",
+    "launcher": {
+      "ProcessId": 75148,
+      "ParentProcessId": 56592,
+      "CreationDate": "2026-10-05T18:40:20.380606+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    },
+    "authInitiallyAbsent": true,
+    "modelsInitiallyAbsent": true
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17943",
+    "pid": 47704
+  },
+  "listener": {
+    "ProcessId": 47704,
+    "ParentProcessId": 66212,
+    "CreationDate": "2026-10-05T18:40:20.491958+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+  },
+  "parent": {
+    "ProcessId": 66212,
+    "ParentProcessId": 75148,
+    "CreationDate": "2026-10-05T18:40:20.45408+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+  },
+  "launcher": {
+    "ProcessId": 75148,
+    "ParentProcessId": 56592,
+    "CreationDate": "2026-10-05T18:40:20.380606+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-after-01\\home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-after-01\\home\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/home"
+    }
+  },
+  "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/home/log/dev.log"
+}

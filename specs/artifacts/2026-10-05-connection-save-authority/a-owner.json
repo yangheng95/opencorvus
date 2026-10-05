@@ -1,0 +1,52 @@
+{
+  "id": "a",
+  "time": "2026-10-05T18:22:54.4235827+08:00",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17941",
+    "pid": 12392
+  },
+  "listener": {
+    "ProcessId": 12392,
+    "ParentProcessId": 73600,
+    "CreationDate": "2026-10-05T18:22:14.824349+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+  },
+  "parent": {
+    "ProcessId": 73600,
+    "ParentProcessId": 3448,
+    "CreationDate": "2026-10-05T18:22:14.782963+08:00",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+  },
+  "launcher": {
+    "ProcessId": 3448,
+    "ParentProcessId": 66600,
+    "CreationDate": "2026-10-05T18:22:14.705958+08:00",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-authority-pair-01\\a\\home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-authority-pair-01\\a\\home\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "assets": [
+    "main-BeskyhIj.js",
+    "main-Yy88IPFU.css"
+  ],
+  "publicShutdown": {
+    "path": "/shutdown",
+    "terminal": "CIM exactchain absent and portfree required",
+    "authority": "serve registered normal HTTP lifecycle",
+    "origin": "http://127.0.0.1:17941",
+    "method": "POST"
+  },
+  "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/home/log/dev.log",
+  "authExists": false,
+  "modelsExists": false
+}

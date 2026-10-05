@@ -173,9 +173,13 @@ export type AutomationRunningConflictError = {
 }
 
 export type BadRequestError = {
-  data: unknown
+  data: {
+    message: string
+  }
   error: Array<{
-    [key: string]: unknown
+    code?: string
+    message: string
+    path?: Array<string | number>
   }>
   success: false
 }

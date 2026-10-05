@@ -1,0 +1,226 @@
+{
+  "qualification": "passed_actual_source_HTTP_three_public_validation_responses",
+  "owner": {
+    "launch": {
+      "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/home",
+      "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project",
+      "port": 17943,
+      "origin": "http://127.0.0.1:17943",
+      "occurrence": "validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81",
+      "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json",
+      "launcher": {
+        "ProcessId": 75148,
+        "ParentProcessId": 56592,
+        "CreationDate": "2026-10-05T18:40:20.380606+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+      },
+      "authInitiallyAbsent": true,
+      "modelsInitiallyAbsent": true
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:17943",
+      "pid": 47704
+    },
+    "listener": {
+      "ProcessId": 47704,
+      "ParentProcessId": 66212,
+      "CreationDate": "2026-10-05T18:40:20.491958+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    },
+    "parent": {
+      "ProcessId": 66212,
+      "ParentProcessId": 75148,
+      "CreationDate": "2026-10-05T18:40:20.45408+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    },
+    "launcher": {
+      "ProcessId": 75148,
+      "ParentProcessId": 56592,
+      "CreationDate": "2026-10-05T18:40:20.380606+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    },
+    "health": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-after-01\\home\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-after-01\\home\\data",
+        "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/home"
+      }
+    },
+    "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/home/log/dev.log"
+  },
+  "results": [
+    {
+      "name": "oauth-invalid-expires",
+      "startedAt": "2026-10-05T10:41:33.469Z",
+      "method": "PUT",
+      "url": "http://127.0.0.1:17943/auth/validation-dummy-provider",
+      "input": {
+        "type": "oauth",
+        "access": "DUMMY_NON_CREDENTIAL_ACCESS",
+        "refresh": "DUMMY_NON_CREDENTIAL_REFRESH",
+        "expires": "invalid-number"
+      },
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "eee8b427-d48f-4c9f-84b5-70aa68e4b7e9"
+      },
+      "wireText": "{\"data\":{\"message\":\"Request validation failed\"},\"error\":[{\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}",
+      "body": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "invalid_type",
+            "path": [
+              "expires"
+            ],
+            "message": "Invalid input: expected number, received string"
+          }
+        ],
+        "success": false
+      },
+      "apiError": {
+        "name": "ApiError",
+        "message": "API 400 /auth/validation-dummy-provider: Request validation failed",
+        "summary": "API 400: Request validation failed",
+        "body": {
+          "data": {
+            "message": "Request validation failed"
+          },
+          "error": [
+            {
+              "code": "invalid_type",
+              "path": [
+                "expires"
+              ],
+              "message": "Invalid input: expected number, received string"
+            }
+          ],
+          "success": false
+        },
+        "requestID": "eee8b427-d48f-4c9f-84b5-70aa68e4b7e9",
+        "details": "HTTP 400 /auth/validation-dummy-provider\n\nRequest ID: eee8b427-d48f-4c9f-84b5-70aa68e4b7e9\n\nApiError: API 400 /auth/validation-dummy-provider: Request validation failed\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-after-http.ts:22:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"message\": \"Request validation failed\"\n  },\n  \"error\": [\n    {\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"expires\"\n      ],\n      \"message\": \"Invalid input: expected number, received string\"\n    }\n  ],\n  \"success\": false\n}"
+      }
+    },
+    {
+      "name": "api-invalid-metadata",
+      "startedAt": "2026-10-05T10:41:33.484Z",
+      "method": "PUT",
+      "url": "http://127.0.0.1:17943/auth/validation-dummy-provider",
+      "input": {
+        "type": "api",
+        "key": "DUMMY_NON_CREDENTIAL_APIKEY",
+        "metadata": {
+          "label": 123
+        }
+      },
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "78bce322-e32c-4340-9e52-1ceac6fdbc6d"
+      },
+      "wireText": "{\"data\":{\"message\":\"Request validation failed\"},\"error\":[{\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}",
+      "body": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "invalid_type",
+            "path": [
+              "metadata",
+              "label"
+            ],
+            "message": "Invalid input: expected string, received number"
+          }
+        ],
+        "success": false
+      },
+      "apiError": {
+        "name": "ApiError",
+        "message": "API 400 /auth/validation-dummy-provider: Request validation failed",
+        "summary": "API 400: Request validation failed",
+        "body": {
+          "data": {
+            "message": "Request validation failed"
+          },
+          "error": [
+            {
+              "code": "invalid_type",
+              "path": [
+                "metadata",
+                "label"
+              ],
+              "message": "Invalid input: expected string, received number"
+            }
+          ],
+          "success": false
+        },
+        "requestID": "78bce322-e32c-4340-9e52-1ceac6fdbc6d",
+        "details": "HTTP 400 /auth/validation-dummy-provider\n\nRequest ID: 78bce322-e32c-4340-9e52-1ceac6fdbc6d\n\nApiError: API 400 /auth/validation-dummy-provider: Request validation failed\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-after-http.ts:22:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"message\": \"Request validation failed\"\n  },\n  \"error\": [\n    {\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"metadata\",\n        \"label\"\n      ],\n      \"message\": \"Invalid input: expected string, received number\"\n    }\n  ],\n  \"success\": false\n}"
+      }
+    },
+    {
+      "name": "artifact-incomplete-locator",
+      "startedAt": "2026-10-05T10:41:33.496Z",
+      "method": "POST",
+      "url": "http://127.0.0.1:17943/task/tsk_validation_dummy/artifact-read?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fvalidation-projection-after-01%2Fproject",
+      "input": {},
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "f047d77a-734c-4078-860a-87ba4f33ae30"
+      },
+      "wireText": "{\"data\":{\"message\":\"Request validation failed\"},\"error\":[{\"code\":\"invalid_type\",\"path\":[\"locator\"],\"message\":\"Invalid input: expected object, received undefined\"}],\"success\":false}",
+      "body": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "invalid_type",
+            "path": [
+              "locator"
+            ],
+            "message": "Invalid input: expected object, received undefined"
+          }
+        ],
+        "success": false
+      },
+      "apiError": {
+        "name": "ApiError",
+        "message": "API 400 /task/tsk_validation_dummy/artifact-read?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fvalidation-projection-after-01%2Fproject: Request validation failed",
+        "summary": "API 400: Request validation failed",
+        "body": {
+          "data": {
+            "message": "Request validation failed"
+          },
+          "error": [
+            {
+              "code": "invalid_type",
+              "path": [
+                "locator"
+              ],
+              "message": "Invalid input: expected object, received undefined"
+            }
+          ],
+          "success": false
+        },
+        "requestID": "f047d77a-734c-4078-860a-87ba4f33ae30",
+        "details": "HTTP 400 /task/tsk_validation_dummy/artifact-read?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fvalidation-projection-after-01%2Fproject\n\nRequest ID: f047d77a-734c-4078-860a-87ba4f33ae30\n\nApiError: API 400 /task/tsk_validation_dummy/artifact-read?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fvalidation-projection-after-01%2Fproject: Request validation failed\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-after-http.ts:22:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"message\": \"Request validation failed\"\n  },\n  \"error\": [\n    {\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"locator\"\n      ],\n      \"message\": \"Invalid input: expected object, received undefined\"\n    }\n  ],\n  \"success\": false\n}"
+      }
+    }
+  ]
+}

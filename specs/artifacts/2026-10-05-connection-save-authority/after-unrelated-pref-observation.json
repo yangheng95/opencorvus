@@ -1,0 +1,23 @@
+[
+  {
+    "side": "a",
+    "start": "2026-10-05T10:47:50.8480000+00:00",
+    "exclusiveEnd": "2026-10-05T10:50:23.7000000+00:00",
+    "records": 100,
+    "healthyResponses": 16,
+    "uiReloads": [
+      {
+        "time": "2026-10-05T10:47:58.966Z",
+        "requestID": "e600fca1-c527-4b7b-af26-0b88774b6ad4"
+      }
+    ]
+  },
+  {
+    "side": "b",
+    "start": "2026-10-05T10:47:50.8480000+00:00",
+    "exclusiveEnd": "2026-10-05T10:50:23.7000000+00:00",
+    "records": 0,
+    "healthyResponses": 0,
+    "uiReloads": []
+  }
+]

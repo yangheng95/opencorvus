@@ -1,0 +1,48 @@
+{
+  "boundary": "Proposed future caller-publish ordering only, production saveSettings and in-memory native; not the current direct-store UI bug, no HTTP/UI/model",
+  "timeline": [
+    {
+      "phase": "native-start",
+      "call": 1,
+      "payload": {
+        "serverUrl": "http://backend-b.invalid",
+        "theme": "light"
+      },
+      "liveServer": "http://backend-a.invalid"
+    },
+    {
+      "phase": "release-first",
+      "liveServer": "http://backend-a.invalid"
+    },
+    {
+      "phase": "native-confirm",
+      "call": 1,
+      "durableServer": "http://backend-b.invalid",
+      "liveServer": "http://backend-a.invalid"
+    },
+    {
+      "phase": "native-start",
+      "call": 2,
+      "payload": {
+        "serverUrl": "http://backend-a.invalid",
+        "theme": "dark"
+      },
+      "liveServer": "http://backend-a.invalid"
+    },
+    {
+      "phase": "native-confirm",
+      "call": 2,
+      "durableServer": "http://backend-a.invalid",
+      "liveServer": "http://backend-a.invalid"
+    },
+    {
+      "phase": "proposed-caller-publish",
+      "liveServer": "http://backend-b.invalid"
+    }
+  ],
+  "final": {
+    "liveServer": "http://backend-b.invalid",
+    "durableServer": "http://backend-a.invalid",
+    "confirmedServer": "http://backend-a.invalid"
+  }
+}

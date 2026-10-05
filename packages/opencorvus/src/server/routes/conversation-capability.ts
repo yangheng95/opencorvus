@@ -1,6 +1,7 @@
 import { ConversationCapability, type ConversationAgentID } from "@/conversation/capability"
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import { badRequestBody, errors } from "../error"
 
 function harnessLabel(experience: ConversationAgentID): string {

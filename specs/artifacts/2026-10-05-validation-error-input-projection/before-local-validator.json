@@ -1,0 +1,96 @@
+{
+  "qualification": "Actual installed Hono/validator + Auth.Info schema, in-process Request fixture. Actual ApiError/diagnostic disconnected-memory modules. No network/server/auth mutation/Provider/visual qualification.",
+  "observations": [
+    {
+      "input": {
+        "type": "oauth",
+        "access": "DUMMY_NON_CREDENTIAL_ACCESS",
+        "refresh": "DUMMY_NON_CREDENTIAL_REFRESH",
+        "expires": "invalid-number"
+      },
+      "status": 400,
+      "body": {
+        "data": {
+          "type": "oauth",
+          "access": "DUMMY_NON_CREDENTIAL_ACCESS",
+          "refresh": "DUMMY_NON_CREDENTIAL_REFRESH",
+          "expires": "invalid-number"
+        },
+        "error": [
+          {
+            "expected": "number",
+            "code": "invalid_type",
+            "path": [
+              "expires"
+            ],
+            "message": "Invalid input: expected number, received string"
+          }
+        ],
+        "success": false
+      },
+      "message": "API 400 auth/dummy-provider: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}",
+      "summary": "API 400: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}",
+      "details": "HTTP 400 auth/dummy-provider\n\nApiError: API 400 auth/dummy-provider: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-echo-probe.ts:25:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"type\": \"oauth\",\n    \"access\": \"DUMMY_NON_CREDENTIAL_ACCESS\",\n    \"refresh\": \"DUMMY_NON_CREDENTIAL_REFRESH\",\n    \"expires\": \"invalid-number\"\n  },\n  \"error\": [\n    {\n      \"expected\": \"number\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"expires\"\n      ],\n      \"message\": \"Invalid input: expected number, received string\"\n    }\n  ],\n  \"success\": false\n}",
+      "diagnostic": {
+        "ts": "2026-10-05T10:06:06",
+        "level": "error",
+        "service": "ui",
+        "message": "Local dummy validator diagnostic",
+        "extra": {
+          "message": "API 400: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}",
+          "details": "HTTP 400 auth/dummy-provider\n\nApiError: API 400 auth/dummy-provider: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-echo-probe.ts:25:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"type\": \"oauth\",\n    \"access\": \"DUMMY_NON_CREDENTIAL_ACCESS\",\n    \"refresh\": \"DUMMY_NON_CREDENTIAL_REFRESH\",\n    \"expires\": \"invalid-number\"\n  },\n  \"error\": [\n    {\n      \"expected\": \"number\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"expires\"\n      ],\n      \"message\": \"Invalid input: expected number, received string\"\n    }\n  ],\n  \"success\": false\n}",
+          "taskID": "",
+          "taskDirectory": "",
+          "taskTitle": ""
+        }
+      }
+    },
+    {
+      "input": {
+        "type": "api",
+        "key": "DUMMY_NON_CREDENTIAL_APIKEY",
+        "metadata": {
+          "label": 123
+        }
+      },
+      "status": 400,
+      "body": {
+        "data": {
+          "type": "api",
+          "key": "DUMMY_NON_CREDENTIAL_APIKEY",
+          "metadata": {
+            "label": 123
+          }
+        },
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "metadata",
+              "label"
+            ],
+            "message": "Invalid input: expected string, received number"
+          }
+        ],
+        "success": false
+      },
+      "message": "API 400 auth/dummy-provider: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}",
+      "summary": "API 400: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}",
+      "details": "HTTP 400 auth/dummy-provider\n\nApiError: API 400 auth/dummy-provider: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-echo-probe.ts:25:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"type\": \"api\",\n    \"key\": \"DUMMY_NON_CREDENTIAL_APIKEY\",\n    \"metadata\": {\n      \"label\": 123\n    }\n  },\n  \"error\": [\n    {\n      \"expected\": \"string\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"metadata\",\n        \"label\"\n      ],\n      \"message\": \"Invalid input: expected string, received number\"\n    }\n  ],\n  \"success\": false\n}",
+      "diagnostic": {
+        "ts": "2026-10-05T10:06:06",
+        "level": "error",
+        "service": "ui",
+        "message": "Local dummy validator diagnostic",
+        "extra": {
+          "message": "API 400: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}",
+          "details": "HTTP 400 auth/dummy-provider\n\nApiError: API 400 auth/dummy-provider: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-echo-probe.ts:25:19\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"type\": \"api\",\n    \"key\": \"DUMMY_NON_CREDENTIAL_APIKEY\",\n    \"metadata\": {\n      \"label\": 123\n    }\n  },\n  \"error\": [\n    {\n      \"expected\": \"string\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"metadata\",\n        \"label\"\n      ],\n      \"message\": \"Invalid input: expected string, received number\"\n    }\n  ],\n  \"success\": false\n}",
+          "taskID": "",
+          "taskDirectory": "",
+          "taskTitle": ""
+        }
+      }
+    }
+  ]
+}

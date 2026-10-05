@@ -1,0 +1,76 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - navigation "Settings navigation":
+    - button "Back to OpenCorvus":
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - region "Network":
+    - navigation:
+      - button "Back to app":
+        - generic: Back to app
+      - searchbox "Search settings pages..." [active]: Appearance
+      - button "Clear":
+      - tablist:
+        - generic: Application
+        - tab "Appearance":
+          - generic: Appearance
+        - tab "Network" [selected]:
+          - generic: Network
+    - separator "Settings"
+    - heading "Network" [level=1]
+    - tabpanel "Network":
+      - heading "Connection" [level=2]
+      - generic: Server URL
+      - textbox "Server URL":
+        - /placeholder: http://127.0.0.1:7878
+        - text: http://127.0.0.1:17942
+      - generic: Username
+      - textbox "Username": opencorvus
+      - generic: Password
+      - textbox "Password"
+      - button "Save"
+      - heading "Proxy" [level=2]
+      - generic: LLM Provider proxy
+      - generic: Route model provider HTTP requests through the configured HTTP(S) proxy.
+      - switch "LLM Provider proxy"
+      - generic: Web Search / Web Fetch proxy
+      - generic: Route websearch and webfetch HTTP requests through the configured HTTP(S) proxy.
+      - switch "Web Search / Web Fetch proxy"
+      - generic: Proxy URL
+      - textbox "Proxy URL":
+        - /placeholder: http://127.0.0.1:7890
+      - generic: Username
+      - textbox "Username"
+      - generic: Password
+      - textbox "Password"
+      - button "Test"
+      - button "Delete the saved proxy settings." [disabled]:
+        - text: Delete
+      - button "Save"

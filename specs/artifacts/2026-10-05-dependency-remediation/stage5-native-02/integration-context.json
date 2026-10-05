@@ -1,0 +1,117 @@
+{
+  "purpose": "Final integrated Validator/connection-save source; native01 retained as earlier Besky snapshot",
+  "actualExecSession": 80639,
+  "actualExitCode": 0,
+  "startedAt": "2026-10-05T11:00:05.249Z",
+  "completedAt": "2026-10-05T11:07:17.173Z",
+  "backendPackage": {
+    "name": "opencorvus-overlay-server-windows-x64",
+    "version": "0.0.0-main-202610051102",
+    "os": [
+      "win32"
+    ],
+    "cpu": [
+      "x64"
+    ]
+  },
+  "frontendEntries": [
+    "../dist-vite/assets/main-CYapQrPb.js                                      1,612.22 kB │ gzip:   465.56 kB",
+    "../dist-vite/assets/main-CYapQrPb.js                                      1,612.22 kB │ gzip:   465.56 kB"
+  ],
+  "firstRun": {
+    "firstRun": "passed",
+    "sessionsCreated": 4,
+    "persistedAcrossRestart": 2,
+    "realProvider": false
+  },
+  "productionContracts": {
+    "passed": 9,
+    "qualification": "Original six Tauri/KeyValueMap/PHF cases plus real authenticated TLS13 data, typed key-boundary error/alert and typed anyhow mutation"
+  },
+  "eventContractsPassed": 2,
+  "selectedProductionBindings": [
+    {
+      "alias": "tauri_utils",
+      "name": "tauri-utils",
+      "version": "2.9.1",
+      "role": "runtime"
+    },
+    {
+      "alias": "serde",
+      "name": "serde",
+      "version": "1.0.228",
+      "role": "runtime"
+    },
+    {
+      "alias": "serde_json",
+      "name": "serde_json",
+      "version": "1.0.149",
+      "role": "runtime"
+    },
+    {
+      "alias": "serde_with",
+      "name": "serde_with",
+      "version": "3.21.0",
+      "role": "runtime"
+    },
+    {
+      "alias": "phf_generator_010",
+      "name": "phf_generator",
+      "version": "0.10.0",
+      "role": "host"
+    },
+    {
+      "alias": "phf_shared_010",
+      "name": "phf_shared",
+      "version": "0.10.0",
+      "role": "host"
+    },
+    {
+      "alias": "phf_generator_011",
+      "name": "phf_generator",
+      "version": "0.11.3",
+      "role": "host"
+    },
+    {
+      "alias": "phf_shared_011",
+      "name": "phf_shared",
+      "version": "0.11.3",
+      "role": "host"
+    },
+    {
+      "alias": "rustls",
+      "name": "rustls",
+      "version": "0.23.45",
+      "role": "runtime"
+    },
+    {
+      "alias": "webpki",
+      "name": "rustls-webpki",
+      "version": "0.103.14",
+      "role": "runtime"
+    },
+    {
+      "alias": "rustls_pki_types",
+      "name": "rustls-pki-types",
+      "version": "1.15.1",
+      "role": "runtime"
+    },
+    {
+      "alias": "anyhow",
+      "name": "anyhow",
+      "version": "1.0.103",
+      "role": "runtime"
+    }
+  ],
+  "buildStages": [
+    "Embedded overlay UI files: 439",
+    "[package] opencorvus-overlay-server-windows-x64 executable compile: started",
+    "[package] opencorvus-overlay-server-windows-x64 executable compile: completed in 3.03s",
+    "[package] opencorvus-overlay-server-windows-x64 runtime payload: started",
+    "[package] opencorvus-overlay-server-windows-x64 runtime payload: completed in 5.99s",
+    "[package] opencorvus-overlay-server-windows-x64 first-run conversation check: started",
+    "[package] opencorvus-overlay-server-windows-x64 first-run conversation check: completed in 18.88s",
+    "✓ Full overlay build complete."
+  ],
+  "qualification": "Current canonical compilation plus native data contracts; root separately owns actual compiled HTTP/embedded UI smoke. No GUI/Provider/Linux runtime qualification; audit unchanged and not repeated."
+}

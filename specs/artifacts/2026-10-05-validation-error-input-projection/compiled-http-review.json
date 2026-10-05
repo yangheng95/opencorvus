@@ -1,0 +1,86 @@
+{
+  "qualification": "passed_actual_compiled_HTTP_three_public_validation_responses",
+  "logFile": {
+    "FullName": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-compiled-01\\home\\log\\2026-10-05T111135-62864-1.log",
+    "Length": 26660
+  },
+  "requestIDs": [
+    "a026fba7-e4b0-491d-b0d0-e8101f0195ec",
+    "3f49cae4-f463-4590-a310-38b01d7a0c68",
+    "3d40fb55-3881-4922-863e-f0a902021d86"
+  ],
+  "matchingLogRows": [
+    {
+      "level": "info",
+      "time": "2026-10-05T11:12:48.052Z",
+      "service": "server",
+      "requestID": "a026fba7-e4b0-491d-b0d0-e8101f0195ec",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T11:12:48.056Z",
+      "service": "server",
+      "requestID": "a026fba7-e4b0-491d-b0d0-e8101f0195ec",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 4,
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T11:12:48.058Z",
+      "service": "server",
+      "requestID": "3f49cae4-f463-4590-a310-38b01d7a0c68",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T11:12:48.059Z",
+      "service": "server",
+      "requestID": "3f49cae4-f463-4590-a310-38b01d7a0c68",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 1,
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T11:12:48.071Z",
+      "service": "server",
+      "requestID": "3d40fb55-3881-4922-863e-f0a902021d86",
+      "method": "POST",
+      "path": "/task/tsk_validation_dummy/artifact-read",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T11:12:48.644Z",
+      "service": "server",
+      "requestID": "3d40fb55-3881-4922-863e-f0a902021d86",
+      "method": "POST",
+      "path": "/task/tsk_validation_dummy/artifact-read",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 573,
+      "logDomain": "non-session",
+      "message": "request"
+    }
+  ]
+}

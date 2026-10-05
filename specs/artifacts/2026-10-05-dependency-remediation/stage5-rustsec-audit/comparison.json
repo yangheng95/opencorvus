@@ -1,0 +1,148 @@
+{
+  "database": {
+    "advisory-count": 1290,
+    "last-commit": "ef6173cbc5c50ec8166f9a5b28f07834144373ee",
+    "last-updated": "2026-10-03T10:14:03+02:00"
+  },
+  "before": {
+    "vulnerabilities": 5,
+    "warnings": {
+      "unmaintained": 7,
+      "unsound": 4,
+      "yanked": 1
+    }
+  },
+  "after": {
+    "vulnerabilities": 4,
+    "warnings": {
+      "unmaintained": 7,
+      "unsound": 2,
+      "yanked": 1
+    }
+  },
+  "resolvedOccurrences": [
+    {
+      "kind": "vulnerability",
+      "id": "RUSTSEC-2026-0285",
+      "package": "rustls",
+      "version": "0.23.43"
+    },
+    {
+      "kind": "unsound",
+      "id": "RUSTSEC-2026-0190",
+      "package": "anyhow",
+      "version": "1.0.102"
+    },
+    {
+      "kind": "unsound",
+      "id": "RUSTSEC-2026-0221",
+      "package": "event-listener",
+      "version": "5.4.1"
+    }
+  ],
+  "remainingOccurrences": [
+    {
+      "kind": "vulnerability",
+      "id": "RUSTSEC-2026-0194",
+      "package": "quick-xml",
+      "version": "0.37.5"
+    },
+    {
+      "kind": "vulnerability",
+      "id": "RUSTSEC-2026-0195",
+      "package": "quick-xml",
+      "version": "0.37.5"
+    },
+    {
+      "kind": "vulnerability",
+      "id": "RUSTSEC-2026-0194",
+      "package": "quick-xml",
+      "version": "0.38.4"
+    },
+    {
+      "kind": "vulnerability",
+      "id": "RUSTSEC-2026-0195",
+      "package": "quick-xml",
+      "version": "0.38.4"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2025-0057",
+      "package": "fxhash",
+      "version": "0.2.1"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2024-0370",
+      "package": "proc-macro-error",
+      "version": "1.0.4"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2025-0081",
+      "package": "unic-char-property",
+      "version": "0.9.0"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2025-0075",
+      "package": "unic-char-range",
+      "version": "0.9.0"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2025-0080",
+      "package": "unic-common",
+      "version": "0.9.0"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2025-0100",
+      "package": "unic-ucd-ident",
+      "version": "0.9.0"
+    },
+    {
+      "kind": "unmaintained",
+      "id": "RUSTSEC-2025-0098",
+      "package": "unic-ucd-version",
+      "version": "0.9.0"
+    },
+    {
+      "kind": "unsound",
+      "id": "RUSTSEC-2024-0429",
+      "package": "glib",
+      "version": "0.18.5"
+    },
+    {
+      "kind": "unsound",
+      "id": "RUSTSEC-2026-0097",
+      "package": "rand",
+      "version": "0.7.3"
+    },
+    {
+      "kind": "yanked",
+      "id": null,
+      "package": "uds_windows",
+      "version": "1.2.0"
+    }
+  ],
+  "newOccurrences": [],
+  "supervisor": {
+    "dependencies": {
+      "dependency-count": 22
+    },
+    "vulnerabilities": 0,
+    "warnings": {}
+  },
+  "settings": {
+    "target_arch": [],
+    "target_os": [],
+    "severity": null,
+    "ignore": [],
+    "informational_warnings": [
+      "unmaintained",
+      "unsound",
+      "notice"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "side": "b",
+  "time": "2026-10-05T10:33:58.4077588Z",
+  "shutdownReceipt": "b-shutdown.json",
+  "verifiedPreShutdown": "Exact listener owner, PID/CreationDate/CommandLine/parent matched pre-shutdown-identities.json",
+  "processes": [
+    {
+      "pid": 64056,
+      "present": false
+    },
+    {
+      "pid": 70276,
+      "present": false
+    },
+    {
+      "pid": 42916,
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "page": "Root reports IAB11 closed; A17941 restored and OfferGitFalse confirmed by actual reload; see root-before-manual-review.json",
+  "authExists": false,
+  "modelsExists": false,
+  "completion": "Physical absence; detached launcher exit code not fabricated",
+  "modelRequests": "none"
+}

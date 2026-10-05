@@ -1,0 +1,33 @@
+{
+  "time": "2026-10-05T10:42:34.5158192Z",
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01",
+  "port": 17943,
+  "owners": [
+    {
+      "role": "listener",
+      "pid": 47704,
+      "expectedCreation": "2026-10-05T18:40:20.491958+08:00",
+      "state": "absent",
+      "ifLiveCreation": null
+    },
+    {
+      "role": "parent",
+      "pid": 66212,
+      "expectedCreation": "2026-10-05T18:40:20.45408+08:00",
+      "state": "absent",
+      "ifLiveCreation": null
+    },
+    {
+      "role": "launcher",
+      "pid": 75148,
+      "expectedCreation": "2026-10-05T18:40:20.380606+08:00",
+      "state": "absent",
+      "ifLiveCreation": null
+    }
+  ],
+  "listeners": [],
+  "scopedProcesses": [],
+  "authFileExists": false,
+  "modelsFileExists": false,
+  "interpretation": "CIM physical observation after public shutdown; no inferred process exit code"
+}

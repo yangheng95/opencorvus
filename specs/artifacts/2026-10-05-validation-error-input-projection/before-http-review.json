@@ -1,0 +1,82 @@
+{
+  "qualification": "Read-only exact authorized A service / two request IDs only",
+  "reviewedAt": "2026-10-05T10:26:39.4184650Z",
+  "ownerIdentities": [
+    {
+      "ProcessId": 3448,
+      "ParentProcessId": 66600,
+      "CreationDate": "2026-10-05T18:22:14.705958+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    },
+    {
+      "ProcessId": 73600,
+      "ParentProcessId": 3448,
+      "CreationDate": "2026-10-05T18:22:14.782963+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    },
+    {
+      "ProcessId": 12392,
+      "ParentProcessId": 73600,
+      "CreationDate": "2026-10-05T18:22:14.824349+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    }
+  ],
+  "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/home/log/dev.log",
+  "requestIDs": [
+    "63363ba9-028e-48fb-85da-27dfc605eadd",
+    "ad1dfc39-a467-4177-a43d-cf5de6e51dec"
+  ],
+  "matchingLogRows": [
+    {
+      "level": "info",
+      "time": "2026-10-05T10:26:23.123Z",
+      "service": "server",
+      "requestID": "63363ba9-028e-48fb-85da-27dfc605eadd",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:26:23.127Z",
+      "service": "server",
+      "requestID": "63363ba9-028e-48fb-85da-27dfc605eadd",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 3,
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:26:23.135Z",
+      "service": "server",
+      "requestID": "ad1dfc39-a467-4177-a43d-cf5de6e51dec",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:26:23.136Z",
+      "service": "server",
+      "requestID": "ad1dfc39-a467-4177-a43d-cf5de6e51dec",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 1,
+      "logDomain": "non-session",
+      "message": "request"
+    }
+  ]
+}

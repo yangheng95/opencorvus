@@ -1,0 +1,30 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import { Hono } from '../packages/opencorvus/node_modules/hono'
+import { validator } from '../packages/opencorvus/node_modules/hono-openapi'
+import { ApiError } from '../packages/overlay/src/services/api'
+import { formatErrorDetails } from '../packages/overlay/src/utils/error-details'
+import { reportError } from '../packages/overlay/src/services/diagnostics'
+import { AppLog } from '../packages/overlay/src/utils/log'
+import { appStore } from '../packages/overlay/src/store/app'
+
+// Local Hono Request dispatch, no listener/network, real credential/provider reads or writes.
+process.env.OPENCORVUS_HOME=path.resolve('.tmp-product-iteration/validation-echo-probe-home')
+delete process.env.OPENCORVUS_TEST_HOME
+delete process.env.OPENCORVUS_TEST_PROCESS_ROOT
+const { Auth }=await import('../packages/opencorvus/src/auth')
+const app=new Hono().put('/auth/:providerID',validator('json',Auth.Info),c=>c.json({acceptedFixture:true}))
+if(appStore.connected) throw new Error('Local diagnostic fixture requires disconnected store')
+const observations=[]
+for(const input of [
+  {type:'oauth',access:'DUMMY_NON_CREDENTIAL_ACCESS',refresh:'DUMMY_NON_CREDENTIAL_REFRESH',expires:'invalid-number'},
+  {type:'api',key:'DUMMY_NON_CREDENTIAL_APIKEY',metadata:{label:123}},
+]) {
+  const response=await app.request('/auth/dummy-provider',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(input)})
+  const body=await response.json()
+  const error=new ApiError(response.status,'auth/dummy-provider',body,{})
+  reportError({title:'Local dummy validator diagnostic',message:error.summary,details:formatErrorDetails(error)})
+  observations.push({input,status:response.status,body,message:error.message,summary:error.summary,details:formatErrorDetails(error),diagnostic:AppLog.entries.at(-1)})
+}
+await fs.writeFile('.tmp-product-iteration/validation-echo-probe.json',JSON.stringify({qualification:'Actual installed Hono/validator + Auth.Info schema, in-process Request fixture. Actual ApiError/diagnostic disconnected-memory modules. No network/server/auth mutation/Provider/visual qualification.',observations},null,2))
+console.log(JSON.stringify(observations.map(o=>({status:o.status,body:o.body,summary:o.summary,diagnostic:o.diagnostic})),null,2))

@@ -1,0 +1,146 @@
+[
+  {
+    "side": "a",
+    "start": "2026-10-05T10:50:23.7000000+00:00",
+    "exclusiveEnd": "2026-10-05T10:53:12.0260000+00:00",
+    "restoreInputOnly": "2026-10-05T10:53:05.5700000+00:00",
+    "records": 28,
+    "healthAndSSE": [],
+    "uiReloads": [
+      {
+        "time": "2026-10-05T10:52:42.187Z",
+        "requestID": "6055f1ff-d268-4da0-97b7-522350027736"
+      }
+    ]
+  },
+  {
+    "side": "b",
+    "start": "2026-10-05T10:50:23.7000000+00:00",
+    "exclusiveEnd": "2026-10-05T10:53:12.0260000+00:00",
+    "restoreInputOnly": "2026-10-05T10:53:05.5700000+00:00",
+    "records": 114,
+    "healthAndSSE": [
+      {
+        "time": "2026-10-05T10:50:23.735Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "556c32c1-64f1-4805-947d-bd57ddef7d04"
+      },
+      {
+        "time": "2026-10-05T10:50:26.735Z",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "requestID": "7dd775b0-099e-4743-9389-5fd3388bab01"
+      },
+      {
+        "time": "2026-10-05T10:50:29.338Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "26511bc4-cb83-49cc-873c-34f0bfdd8b53"
+      },
+      {
+        "time": "2026-10-05T10:50:39.337Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "df5cffdb-04d9-43fd-8026-73badbf29de4"
+      },
+      {
+        "time": "2026-10-05T10:50:49.352Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "f96183ea-7252-4689-9247-1f5aa43508c9"
+      },
+      {
+        "time": "2026-10-05T10:50:59.34Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "5df22292-ebcf-4c5e-8b1d-5f0e5ec3aca6"
+      },
+      {
+        "time": "2026-10-05T10:51:09.351Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "1083a48e-e5e6-481d-8d0e-fa7024578649"
+      },
+      {
+        "time": "2026-10-05T10:51:19.345Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "f5a33a1b-1c1c-43dd-954e-232bd0d48996"
+      },
+      {
+        "time": "2026-10-05T10:51:29.351Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "a55351c6-431f-4995-9e82-99456fda9d98"
+      },
+      {
+        "time": "2026-10-05T10:51:39.352Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "296c6df5-2650-4b72-a8d4-d4ed84ec6f9a"
+      },
+      {
+        "time": "2026-10-05T10:51:49.352Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "eadda266-4d31-420a-8fbe-1323a0e7996c"
+      },
+      {
+        "time": "2026-10-05T10:51:59.351Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "b1af77d7-0e4c-46fb-ad7e-dad6c20b7d56"
+      },
+      {
+        "time": "2026-10-05T10:52:09.348Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "98af40ac-7223-44f6-a64c-31bb9728a074"
+      },
+      {
+        "time": "2026-10-05T10:52:19.349Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "33978654-86c4-4263-ad57-0ce7e2adce17"
+      },
+      {
+        "time": "2026-10-05T10:52:29.346Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "52745a94-b25f-49ac-8224-0b05ff7d7464"
+      },
+      {
+        "time": "2026-10-05T10:52:39.351Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "46ab9f8a-ccc6-45e7-ac8c-012be0cc3964"
+      },
+      {
+        "time": "2026-10-05T10:52:42.42Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "e4089d15-99f5-4ec5-a240-985f14bf181b"
+      },
+      {
+        "time": "2026-10-05T10:52:42.459Z",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "requestID": "312661c4-cb5f-48d0-b2f9-8fefc056d63c"
+      },
+      {
+        "time": "2026-10-05T10:52:52.98Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "aa86c56d-96a4-449d-ad0b-37b7b4390d5a"
+      },
+      {
+        "time": "2026-10-05T10:53:02.981Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "07de3931-74ac-4a51-bc0f-126a532550e4"
+      }
+    ],
+    "uiReloads": []
+  }
+]

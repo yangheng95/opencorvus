@@ -1,0 +1,23 @@
+$ErrorActionPreference='Stop'
+$runtimeRoot='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01'
+if(Test-Path -LiteralPath $runtimeRoot){throw 'Owned runtime already exists'}
+$port=17943
+if(Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue){$probe=[System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback,0);$probe.Start();$port=$probe.LocalEndpoint.Port;$probe.Stop()}
+$runtimeHome="$runtimeRoot/home"
+$project="$runtimeRoot/project"
+New-Item -ItemType Directory -Path $runtimeHome,$project | Out-Null
+foreach($entry in @(Get-ChildItem Env:)){if($entry.Name -match '^(OPENCORVUS_|OPENAI_|ANTHROPIC_|AZURE_OPENAI_|GOOGLE_GENERATIVE_AI_|GEMINI_|MISTRAL_|GROQ_|DEEPSEEK_|DASHSCOPE_|OPENROUTER_)'){Remove-Item -LiteralPath "Env:$($entry.Name)"}}
+$env:OPENCORVUS_HOME=$runtimeHome
+$env:OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$env:HOME=$runtimeHome
+$env:USERPROFILE=$runtimeHome
+$env:APPDATA="$runtimeHome/AppData/Roaming"
+$env:LOCALAPPDATA="$runtimeHome/AppData/Local"
+$occurrence='validation-after-'+[guid]::NewGuid().ToString()
+$receipt="$runtimeRoot/startup.json"
+$arguments=@('run','dev','serve','--hostname','127.0.0.1','--port',"$port",'--project-dir',$project,'--startup-receipt',$receipt,'--startup-occurrence',$occurrence)
+$binary='C:/Users/hengu/.bun/bin/bun.exe'
+$started=Start-Process -FilePath $binary -ArgumentList $arguments -WorkingDirectory 'D:/myhexin-local/opencorvus' -WindowStyle Hidden -RedirectStandardOutput "$runtimeRoot/stdout.log" -RedirectStandardError "$runtimeRoot/stderr.log" -PassThru
+$identity=Get-CimInstance Win32_Process -Filter "ProcessId=$($started.Id)" | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+[ordered]@{root=$runtimeRoot;home=$runtimeHome;project=$project;port=$port;origin="http://127.0.0.1:$port";occurrence=$occurrence;startupReceipt=$receipt;launcher=$identity;authInitiallyAbsent=!(Test-Path -LiteralPath "$runtimeHome/data/auth.json");modelsInitiallyAbsent=!(Test-Path -LiteralPath "$runtimeHome/data/models.json")} | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath '.tmp-product-iteration/validation-after-launch.json' -Encoding utf8
+Get-Content '.tmp-product-iteration/validation-after-launch.json'

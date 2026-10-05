@@ -1,5 +1,13 @@
 # 2026-10 Records
 
+- [Skill mount cold-start latency qualification](2026-10-05-skill-mount-cold-start-latency.md)
+
+- [Server base URL contract and recoverable authoring](2026-10-05-server-base-url-contract.md)
+
+- [Public validation error input projection](2026-10-05-validation-error-input-projection.md)
+
+- [Connection Save authority and backend scope](2026-10-05-connection-save-authority.md)
+
 - [Settings search preserves the active authoring page](2026-10-05-settings-search-authoring-lifetime.md)
 
 - [Binary API error projection](2026-10-05-binary-api-error-projection.md)

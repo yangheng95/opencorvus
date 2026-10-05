@@ -16,7 +16,7 @@ its own directory and occurrence identity. Startup deadlines remain unchanged.
 
 ## Public HTTP response boundary
 
-HTTP (Hypertext Transfer Protocol) failures enter the shared server error
+Thrown HTTP (Hypertext Transfer Protocol) failures enter the shared server error
 handler. Named errors and message-authored HTTP exceptions retain the current
 JSON (JavaScript Object Notation) envelopes, including400/404 mapping and the
 masked unknown500 message. An explicitly response-authored HTTPException is
@@ -24,6 +24,20 @@ already a public response: its original body, exception status and protocol
 headers are materialized through Hono's response API and merged with the
 existing context. This retains Basic Auth's Unauthorized body and
 WWW-Authenticate challenge without a second error message or body parser.
+
+Schema validation failures instead return400 directly through the sole
+server-owned validator hook. The wrapper accepts target/schema and delegates to
+hono-openapi, preserving its resolver metadata, successful parsed values and
+generic output inference. Its public envelope is
+`{data:{message:"Request validation failed"},error:[...],success:false}`.
+Each issue explicitly projects message plus optional code and normalized
+string/number path; rejected raw input and arbitrary issue fields are not copied
+into that envelope. Dynamic property keys and schema-authored diagnostic prose
+can still contain caller-controlled text: this is input projection, not universal
+secret sanitization. Manual and parser-authored400 responses retain their current
+message-only shape. server/error.ts owns the shared BadRequestError schema and
+projector; the existing SDK build generates OpenAPI and SDK types from this one
+source, with API reference docs generated from the same route metadata.
 
 The server owns one opaque x-opencorvus-request-id for the real Request and
 its log records. The existing CORS (Cross-Origin Resource Sharing) exposure

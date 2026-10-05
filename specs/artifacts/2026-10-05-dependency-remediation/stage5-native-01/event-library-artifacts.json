@@ -1,0 +1,217 @@
+{
+  "artifacts": [
+    {
+      "reason": "compiler-artifact",
+      "package_id": "registry+https://github.com/rust-lang/crates.io-index#pin-project-lite@0.2.17",
+      "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\pin-project-lite-0.2.17\\Cargo.toml",
+      "target": {
+        "kind": [
+          "lib"
+        ],
+        "crate_types": [
+          "lib"
+        ],
+        "name": "pin_project_lite",
+        "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\pin-project-lite-0.2.17\\src\\lib.rs",
+        "edition": "2018",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "s",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": false
+      },
+      "features": [],
+      "filenames": [
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-unknown-linux-gnu\\release\\deps\\libpin_project_lite-664ddc10d81906ec.rlib",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-unknown-linux-gnu\\release\\deps\\libpin_project_lite-664ddc10d81906ec.rmeta"
+      ],
+      "executable": null,
+      "fresh": true
+    },
+    {
+      "reason": "compiler-artifact",
+      "package_id": "registry+https://github.com/rust-lang/crates.io-index#parking@2.2.1",
+      "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\parking-2.2.1\\Cargo.toml",
+      "target": {
+        "kind": [
+          "lib"
+        ],
+        "crate_types": [
+          "lib"
+        ],
+        "name": "parking",
+        "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\parking-2.2.1\\src\\lib.rs",
+        "edition": "2018",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "s",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": false
+      },
+      "features": [],
+      "filenames": [
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps\\libparking-de834e93efac79ba.rlib",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps\\libparking-de834e93efac79ba.rmeta"
+      ],
+      "executable": null,
+      "fresh": true
+    },
+    {
+      "reason": "compiler-artifact",
+      "package_id": "registry+https://github.com/rust-lang/crates.io-index#pin-project-lite@0.2.17",
+      "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\pin-project-lite-0.2.17\\Cargo.toml",
+      "target": {
+        "kind": [
+          "lib"
+        ],
+        "crate_types": [
+          "lib"
+        ],
+        "name": "pin_project_lite",
+        "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\pin-project-lite-0.2.17\\src\\lib.rs",
+        "edition": "2018",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "s",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": false
+      },
+      "features": [],
+      "filenames": [
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps\\libpin_project_lite-aba698ffa4f376ec.rlib",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps\\libpin_project_lite-aba698ffa4f376ec.rmeta"
+      ],
+      "executable": null,
+      "fresh": true
+    },
+    {
+      "reason": "compiler-artifact",
+      "package_id": "registry+https://github.com/rust-lang/crates.io-index#parking@2.2.1",
+      "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\parking-2.2.1\\Cargo.toml",
+      "target": {
+        "kind": [
+          "lib"
+        ],
+        "crate_types": [
+          "lib"
+        ],
+        "name": "parking",
+        "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\parking-2.2.1\\src\\lib.rs",
+        "edition": "2018",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "s",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": false
+      },
+      "features": [],
+      "filenames": [
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-unknown-linux-gnu\\release\\deps\\libparking-24df308a2c5d91cb.rlib",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-unknown-linux-gnu\\release\\deps\\libparking-24df308a2c5d91cb.rmeta"
+      ],
+      "executable": null,
+      "fresh": true
+    },
+    {
+      "reason": "compiler-artifact",
+      "package_id": "registry+https://github.com/rust-lang/crates.io-index#event-listener@5.4.2",
+      "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\Cargo.toml",
+      "target": {
+        "kind": [
+          "lib"
+        ],
+        "crate_types": [
+          "lib"
+        ],
+        "name": "event_listener",
+        "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\src\\lib.rs",
+        "edition": "2021",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "s",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": false
+      },
+      "features": [
+        "default",
+        "parking",
+        "std"
+      ],
+      "filenames": [
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-unknown-linux-gnu\\release\\libevent_listener.rlib",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-unknown-linux-gnu\\release\\deps\\libevent_listener-e0915b0bd90ae208.rmeta"
+      ],
+      "executable": null,
+      "fresh": true
+    },
+    {
+      "reason": "compiler-artifact",
+      "package_id": "registry+https://github.com/rust-lang/crates.io-index#event-listener@5.4.2",
+      "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\Cargo.toml",
+      "target": {
+        "kind": [
+          "lib"
+        ],
+        "crate_types": [
+          "lib"
+        ],
+        "name": "event_listener",
+        "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\src\\lib.rs",
+        "edition": "2021",
+        "doc": true,
+        "doctest": true,
+        "test": true
+      },
+      "profile": {
+        "opt_level": "s",
+        "debuginfo": 0,
+        "debug_assertions": false,
+        "overflow_checks": false,
+        "test": false
+      },
+      "features": [
+        "default",
+        "parking",
+        "std"
+      ],
+      "filenames": [
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\libevent_listener.rlib",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps\\libevent_listener-11c70891047d07c5.rmeta"
+      ],
+      "executable": null,
+      "fresh": true
+    }
+  ],
+  "buildScripts": [],
+  "completions": [
+    {
+      "reason": "build-finished",
+      "success": true
+    }
+  ]
+}

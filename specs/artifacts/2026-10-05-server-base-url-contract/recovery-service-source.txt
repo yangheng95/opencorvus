@@ -1,0 +1,22 @@
+import fs from 'node:fs/promises'
+import { DEFAULT_SETTINGS, bootstrapOverlaySettings, loadSettings, saveSettings, setSettingsStore, settingsStore, confirmedPersistedSettingsSnapshot } from '../packages/overlay/src/store/settings'
+import { __setHostTransportForTest } from '../packages/overlay/src/services/host-transport-runtime'
+import { createTauriTransport } from '../packages/overlay/src/services/tauri-transport'
+import { configure, getServerUrl, apiUrl } from '../packages/overlay/src/services/api-state'
+let document=bootstrapOverlaySettings({...DEFAULT_SETTINGS,serverUrl:'not a url',username:'dummy',password:'',theme:'sage'})
+const memoryDocuments=[]
+const previous=getServerUrl()
+const transport=createTauriTransport('browser')
+__setHostTransportForTest({...transport,async native(command){if(command.kind==='settings.load')return document;if(command.kind==='settings.save'){document=command.payload;memoryDocuments.push(document);return true}throw new Error(`Unsupported local fixture command ${command.kind}`)}})
+const observations:any={qualification:'Actual load/save/confirmed transaction and API projection, with explicit in-memory native storage fixture. No browser/DOM/network/nativeIPC or durable storage.'}
+try{
+ await loadSettings()
+ observations.load={applied:settingsStore.serverUrl,confirmed:confirmedPersistedSettingsSnapshot().serverUrl,theme:settingsStore.theme,loadResolved:true}
+ configure({serverUrl:settingsStore.serverUrl})
+ try{observations.beforeURL=apiUrl('global/health')}catch(error){observations.beforeError={name:error.name,message:error.message}}
+ await saveSettings({overrides:{serverUrl:'https://example.invalid/prefix/'},onConfirmed(confirmed){setSettingsStore({serverUrl:confirmed.serverUrl});configure({serverUrl:confirmed.serverUrl})}})
+ observations.corrected={applied:settingsStore.serverUrl,confirmed:confirmedPersistedSettingsSnapshot().serverUrl,memorySaved:document.serverUrl,theme:document.theme,apiURL:apiUrl('global/health')}
+ observations.memoryDocuments=memoryDocuments
+}finally{__setHostTransportForTest(undefined);configure({serverUrl:previous})}
+await fs.writeFile('.tmp-product-iteration/server-url-recovery-service-probe.json',JSON.stringify(observations,null,2))
+console.log(JSON.stringify(observations,null,2))

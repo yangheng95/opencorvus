@@ -1,0 +1,60 @@
+$ bun script/run-tests.ts test/server/validation-error-projection.test.ts test/server/http-exception-response.test.ts test/server/cors-response-headers.test.ts
+[1/3] START test/server/validation-error-projection.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) public validation error projection > projects the canonical OAuth expiry error with its response identity [7.91ms]
+(pass) public validation error projection > projects the canonical API metadata error with its response identity [1.32ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for root union [1.16ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for dynamic record key [0.55ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for strict object [0.95ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for authored custom prose [1.13ms]
+(pass) public validation error projection > normalizes Standard Schema property-key locations and message-only errors [0.14ms]
+(pass) public validation error projection > passes transformed query, param and JSON values to the typed handler [4.42ms]
+(pass) public validation error projection > retains optional JSON inference and the parsed empty object [1.36ms]
+(pass) public validation error projection > uses the shared projection for query failures [1.54ms]
+(pass) public validation error projection > uses the shared projection for param failures [0.74ms]
+(pass) public validation error projection > retains the parser-authored malformed JSON response [5.41ms]
+(pass) public validation error projection > projects the canonical Global Chat attachment MIME location [2.68ms]
+(pass) public validation error projection > publishes the actual request metadata and explicit BadRequestError schema [34.81ms]
+
+ 14 pass
+ 0 fail
+ 20 expect() calls
+Ran 14 tests across 1 file. [2.89s]
+[1/3] DONE test/server/validation-error-projection.test.ts exit=0 duration=3.11s
+[2/3] START test/server/http-exception-response.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) authored HTTP exception responses > projects the actual Basic Auth public response and challenge [5.32ms]
+(pass) authored HTTP exception responses > retains supplied entity and semantic headers with the canonical context identity [0.77ms]
+(pass) authored HTTP exception responses > projects the current message-authored 400 envelope [0.81ms]
+(pass) authored HTTP exception responses > projects the current message-authored 404 envelope [0.41ms]
+(pass) authored HTTP exception responses > projects the current message-authored 403 envelope [0.31ms]
+(pass) authored HTTP exception responses > projects the current message-authored 503 envelope [0.30ms]
+
+ 6 pass
+ 0 fail
+ 23 expect() calls
+Ran 6 tests across 1 file. [998.00ms]
+[2/3] DONE test/server/http-exception-response.test.ts exit=0 duration=1.15s
+[3/3] START test/server/cors-response-headers.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"level":"info","time":"2026-10-05T10:31:32.207Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(pass) Server cross-origin response contract > allowed preflight returns its own diagnostic identity and requested method/header contract [65.33ms]
+{"level":"info","time":"2026-10-05T10:31:34.782Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(pass) Server cross-origin response contract > real attachment storage error correlates its exposed response with its server log [2591.74ms]
+{"level":"info","time":"2026-10-05T10:31:34.802Z","service":"server","requestID":"b29fbc3a-5bc1-469f-af81-657af49ebf6b","method":"GET","path":"/global/health","status":"started","logDomain":"non-session","message":"request"}
+{"level":"info","time":"2026-10-05T10:31:34.803Z","service":"server","requestID":"b29fbc3a-5bc1-469f-af81-657af49ebf6b","method":"GET","path":"/global/health","status":"completed","statusCode":200,"duration":1,"logDomain":"non-session","message":"request"}
+{"level":"info","time":"2026-10-05T10:31:34.803Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(pass) Server cross-origin response contract > exposes the archive filename header to an allowed Overlay origin [2.68ms]
+{"level":"info","time":"2026-10-05T10:31:34.804Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+
+ 3 pass
+ 0 fail
+ 14 expect() calls
+Ran 3 tests across 1 file. [4.85s]
+[3/3] DONE test/server/cors-response-headers.test.ts exit=0 duration=5.02s

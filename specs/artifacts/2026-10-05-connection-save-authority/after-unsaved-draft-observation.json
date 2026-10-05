@@ -1,0 +1,49 @@
+[
+  {
+    "side": "a",
+    "windowStart": "2026-10-05T10:46:14.8710000+00:00",
+    "windowEnd": "2026-10-05T10:47:10.2140640+00:00",
+    "records": 10,
+    "started": [
+      {
+        "time": "2026-10-05T10:46:22.689Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "464dcbfc-b352-473c-b8da-493c43a40d5b"
+      },
+      {
+        "time": "2026-10-05T10:46:32.693Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "a344fd4b-bdde-4aba-98b0-3a59ae2c254e"
+      },
+      {
+        "time": "2026-10-05T10:46:42.684Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "5caab96e-b63e-4011-8425-d8da64b3dea8"
+      },
+      {
+        "time": "2026-10-05T10:46:52.691Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "28b89dc5-df93-47f7-b95f-495c9fd462d5"
+      },
+      {
+        "time": "2026-10-05T10:47:02.688Z",
+        "method": "GET",
+        "path": "/global/health",
+        "requestID": "f9d1629c-1e11-4ca8-ae6c-046182b46cb5"
+      }
+    ],
+    "postSetupRecords": 82
+  },
+  {
+    "side": "b",
+    "windowStart": "2026-10-05T10:46:14.8710000+00:00",
+    "windowEnd": "2026-10-05T10:47:10.2140640+00:00",
+    "records": 0,
+    "started": [],
+    "postSetupRecords": 0
+  }
+]

@@ -1,5 +1,6 @@
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import { HTTPException } from "hono/http-exception"
 import { TerminalProfile } from "@/system-terminal/profile"
 import { SystemTerminal } from "@/system-terminal"

@@ -1,0 +1,20 @@
+{
+  "time": "2026-10-05T11:15:45.4077522Z",
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01",
+  "port": 17944,
+  "server": {
+    "pid": 62864,
+    "expectedCreation": "2026-10-05T19:11:34.412354+08:00",
+    "state": "absent"
+  },
+  "transientLaunchParent": {
+    "pid": 71404,
+    "currentObservation": null,
+    "meaning": "launch shell already naturally exited before Ready; no synthetic exit code"
+  },
+  "listeners": [],
+  "scopedProcesses": [],
+  "authFileExists": false,
+  "modelsFileExists": false,
+  "interpretation": "Physical CIM/port metadata after authorized public shutdown; no credentials or file contents read"
+}

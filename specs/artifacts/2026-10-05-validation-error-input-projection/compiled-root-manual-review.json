@@ -1,0 +1,24 @@
+{
+  "qualification": "Root real IAB13 rendered /ui from current compiled backend; personally reviewed Network screenshot, no UI automation test",
+  "assets": {
+    "css": [
+      "http://127.0.0.1:17944/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "http://127.0.0.1:17944/ui/assets/main-Yy88IPFU.css"
+    ],
+    "js": [
+      "http://127.0.0.1:17944/ui/assets/main-CYapQrPb.js"
+    ],
+    "url": "http://127.0.0.1:17944/ui/"
+  },
+  "actualUI": {
+    "networkValue": "http://127.0.0.1:17944",
+    "username": "opencorvus",
+    "password": "blank",
+    "mainBeforeSettingsAX": "Online Port 17944",
+    "networkPanel": "Connection/Proxy rendered with enabled existing controls",
+    "credentialsEntered": false,
+    "settingsSaved": false
+  },
+  "scope": "Rendered compiled-host Web UI and actual asset provenance only; A/B interaction qualification is separately completed in the development service record. Native GUI window was not launched.",
+  "reviewedAt": "2026-10-05T11:14:46.488Z"
+}

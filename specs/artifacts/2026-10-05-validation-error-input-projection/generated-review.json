@@ -1,0 +1,70 @@
+{
+  "qualification": "Semantic actual generated before/after review, not runtime acceptance",
+  "changedFiles": [
+    "packages/sdk/js/src/gen/types.gen.ts",
+    "packages/sdk/openapi.json"
+  ],
+  "openapiChangedPaths": [
+    "/components/schemas/BadRequestError/properties/data/additionalProperties",
+    "/components/schemas/BadRequestError/properties/data/properties",
+    "/components/schemas/BadRequestError/properties/data/required",
+    "/components/schemas/BadRequestError/properties/data/type",
+    "/components/schemas/BadRequestError/properties/error/items/additionalProperties",
+    "/components/schemas/BadRequestError/properties/error/items/propertyNames",
+    "/components/schemas/BadRequestError/properties/error/items/properties",
+    "/components/schemas/BadRequestError/properties/error/items/required",
+    "/components/schemas/BadRequestError/additionalProperties"
+  ],
+  "changes": [
+    {
+      "file": "packages/sdk/js/src/gen/types.gen.ts",
+      "diff": [
+        {
+          "kind": "removed",
+          "value": "  data: unknown\n"
+        },
+        {
+          "kind": "added",
+          "value": "  data: {\n    message: string\n  }\n"
+        },
+        {
+          "kind": "removed",
+          "value": "    [key: string]: unknown\n"
+        },
+        {
+          "kind": "added",
+          "value": "    code?: string\n    message: string\n    path?: Array<string | number>\n"
+        }
+      ]
+    },
+    {
+      "file": "packages/sdk/openapi.json",
+      "diff": [
+        {
+          "kind": "added",
+          "value": "        \"additionalProperties\": false,\n"
+        },
+        {
+          "kind": "removed",
+          "value": "          \"data\": {},\n"
+        },
+        {
+          "kind": "added",
+          "value": "          \"data\": {\n            \"additionalProperties\": false,\n            \"properties\": {\n              \"message\": {\n                \"type\": \"string\"\n              }\n            },\n            \"required\": [\n              \"message\"\n            ],\n            \"type\": \"object\"\n          },\n"
+        },
+        {
+          "kind": "removed",
+          "value": "              \"additionalProperties\": {},\n              \"propertyNames\": {\n                \"type\": \"string\"\n"
+        },
+        {
+          "kind": "added",
+          "value": "              \"additionalProperties\": false,\n              \"properties\": {\n                \"code\": {\n                  \"type\": \"string\"\n                },\n                \"message\": {\n                  \"type\": \"string\"\n                },\n                \"path\": {\n                  \"items\": {\n                    \"anyOf\": [\n                      {\n                        \"type\": \"string\"\n                      },\n                      {\n                        \"type\": \"number\"\n                      }\n                    ]\n                  },\n                  \"type\": \"array\"\n                }\n"
+        },
+        {
+          "kind": "added",
+          "value": "              \"required\": [\n                \"message\"\n              ],\n"
+        }
+      ]
+    }
+  ]
+}

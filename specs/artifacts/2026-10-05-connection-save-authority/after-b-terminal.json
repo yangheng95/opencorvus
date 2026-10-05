@@ -1,0 +1,26 @@
+{
+  "side": "b",
+  "time": "2026-10-05T10:57:19.3248075Z",
+  "receipt": "after-b-shutdown.json",
+  "preShutdown": "CIM exact PID,CreationDate,CommandLine,parent and listener matched after-owner",
+  "processes": [
+    {
+      "pid": 75316,
+      "present": false
+    },
+    {
+      "pid": 69424,
+      "present": false
+    },
+    {
+      "pid": 23640,
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "rootPage": "Root reports IAB12 closed after actual reload A17941/OfferGitfalse/defaultusername/blankpassword/proxyoffblank/lightEnglish; viewportunchanged",
+  "UIEvidence": "root-after-manual-review.json; root operated and viewed08-17",
+  "modelRequests": "none",
+  "completion": "Physical absence; no fabricated detached exit code",
+  "backendIdentity": "CIM and startup occurrence establish owned process; health data path is a returned path, not a server identity"
+}

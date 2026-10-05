@@ -1,5 +1,6 @@
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import * as fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"

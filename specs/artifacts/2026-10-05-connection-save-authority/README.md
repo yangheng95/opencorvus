@@ -1,0 +1,27 @@
+# Connection Save authority evidence
+
+See [Recall, root-cause audit and qualification plan](../../records/2026-10/2026-10-05-connection-save-authority.md).
+
+The selected A repair is complete. Root personally reviewed before01–07 and after08–15/17; exact after controls and limits are in `root-after-manual-review.json`. Final asset main-CYapQrPb.js/main-Yy88IPFU.css. The target list has no16; the final17 screenshot proves restoredA after reload. The observer agent does not claim these root interactions as its own.
+
+- `08-after-initial-applied-a.png` / `09-after-search-preserves-draft.png` / `10-after-unsaved-draft-still-applied-a.png`: localB authoring/search retains appliedA.
+- `11-after-unrelated-preference-with-applied-a.png` / `12-after-unrelated-save-reloads-a.png`: unrelated Offer Git save and reload retainA. The skills timeout visible in11 is a separate candidate, not repaired here.
+- `13-after-explicit-save-applies-b.png` / `14-after-explicit-save-reloads-b.png`: only actual Save applies/persistsB. Root observed Saving→settled ordinary Save, not the transient Saved label; port comes from live accessibility, not the Online-only pixels.
+- `15-after-restored-preference.png` / `17-after-restored-a-reload.png`: originalA/OfferGitfalse restored; default username/blank password/proxyoffblank/lightEnglish, viewport unchanged, rootIAB12 closed.
+- `after-unrelated-pref-observation.json`, `after-explicit-save-observation.json`, `after-restoration-observation.json` and corresponding per-side checkpointjsonl files: actual time-partitioned A/B request evidence, preserving Save-vs-input distinction. B Project-query, late response and dirty admission remain unqualified; native logs do not include query.
+- `after-pre-shutdown-identities.json`, `after-a-shutdown.json`/`after-b-shutdown.json`, `after-a-terminal.json`/`after-b-terminal.json`: exact final ownership and physical exit of all six parent/listener/launcher processes, both ports free. Health data paths are returned paths, not backend identities; auth/models remain absent and no credentials/model request occurred.
+
+After qualification uses distinct `after-*` receipts and the new pair02 root. It serves main-CYapQrPb.js/main-Yy88IPFU.css; root's reused A origin has previously restored preferences, not proven fresh storage. Root owns the actual local-editor/no-Save/explicit-Save and harmless preference/reload pixels; the observer records native request facts and physical lifecycle only. Pair01 before evidence is preserved separately.
+
+- `after-unsaved-draft-observation.json` and `after-a-unsaved-draft-checkpoint.jsonl`/`after-b-unsaved-draft-checkpoint.jsonl`: bounded10:46:14.871–10:47:10.214Z after root typedB without Save. Five real A health responses200 agree with root's appliedA observation; B has only setup requests at that point. Later explicit Save/restoration must use separately named checkpoints.
+
+Two new independent homes/projects and owned loopback listeners share the already built main-BeskyhIj.js frontend. Runtime receipts, health and passive method/path logs are supporting evidence; root's actual manual page interaction and screenshots determine UI qualification. No credentials/models are copied and no model request, task creation, file mutation or response interception is authorized in this first qualification.
+
+- `pair-preparation.json`, `a-launch.json`/`b-launch.json`, `a-owner.json`/`b-owner.json`: empty-root preparation, exact occurrence-bound readiness receipts, PID/CreationDate/parent chains, distinct healthy data paths and actual shared asset. Shutdown method is retained as an internal owned-runtime control fact; admitted shutdown will still require physical exit evidence.
+- `a-setup-requests.jsonl`/`b-setup-requests.jsonl`: setup-only baseline from actual existing server logging. `a-passive-requests.jsonl`/`b-passive-requests.jsonl` are explicit observation snapshots; only method/path/status/time/requestID are exported, without headers/body/query. They are not a proxy or synthetic API source.
+- `proposal-save-tail-service-probe.json`: pure in-memory production saveSettings/native ordering, demonstrating the rejected proposal's external publish-after-release race. It is not an actual UI or HTTP check and not a claim about the existing direct-store writer's behavior.
+
+- `a-unsaved-input-checkpoint-requests.jsonl` / `b-unsaved-input-checkpoint-requests.jsonl`: actual post-input/pre-connection-save method/path evidence. B receives work-ledger SSE and periodic health after root typedB; A's separate dummy Auth validation requests are excluded.
+- `a-pref-save-and-restoration-checkpoint.jsonl` / `b-pref-save-and-restoration-checkpoint.jsonl`: actual request window beginning at the successful10:28:10.825Z Offer Git keyboard activation, including later restoration. Root's final manual review and screenshots own the form/reload facts; these logs do not contain query or assert old Project directory transfer.
+- `catalog-provision-metadata.json` / `pref-save-catalog-metadata.json`: existence/metadata-only observations, with auth/models absent on both in this qualification; no contents read.
+- `pre-shutdown-identities.json`, `a-shutdown.json`/`b-shutdown.json`, `a-terminal.json`/`b-terminal.json`: exact creation/command/listener matching, real shutdown admissions and physical exit of both parent chains with free ports. Root restoredA/OfferGitfalse and closed the page before shutdown.

@@ -1,0 +1,79 @@
+{
+  "qualification": "Root actual IAB12 /ui desktop interactions, personally reviewed target screenshots; no UI automated tests",
+  "page": "http://127.0.0.1:17941/ui/",
+  "assets": {
+    "css": [
+      "http://127.0.0.1:17941/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "http://127.0.0.1:17941/ui/assets/main-Yy88IPFU.css"
+    ],
+    "js": [
+      "http://127.0.0.1:17941/ui/assets/main-CYapQrPb.js"
+    ]
+  },
+  "storage": "A origin reused with previously restored A/OfferGitFalse; not a fresh-storage claim",
+  "stages": [
+    {
+      "stage": "initial",
+      "url": "http://127.0.0.1:17941",
+      "offerGit": false
+    },
+    {
+      "stage": "unsaved draft",
+      "at": "2026-10-05T10:46:14.871Z",
+      "editorUrl": "http://127.0.0.1:17942",
+      "search": "Appearance then cleared, active Network/B draft retained",
+      "afterBackAX": "Online Port 17941",
+      "pixelBadge": "Online"
+    },
+    {
+      "stage": "unrelated preference save",
+      "at": "2026-10-05T10:47:50.848Z",
+      "offerGit": true,
+      "afterReloadNetworkUrl": "http://127.0.0.1:17941",
+      "afterReloadOfferGit": true
+    },
+    {
+      "stage": "explicit connection save",
+      "at": "2026-10-05T10:50:23.700Z",
+      "url": "http://127.0.0.1:17942",
+      "observedProgress": "Saving then settled ordinary Save, enabled fields and blank error; transient Saved label not captured",
+      "afterBackAX": "Online Port 17942",
+      "afterReloadNetworkUrl": "http://127.0.0.1:17942"
+    },
+    {
+      "stage": "restore",
+      "inputOnlyAt": "2026-10-05T10:53:05.570Z",
+      "savedAt": "2026-10-05T10:53:12.026Z",
+      "finalReloadNetworkUrl": "http://127.0.0.1:17941",
+      "finalReloadOfferGit": false,
+      "username": "opencorvus",
+      "password": "blank",
+      "proxy": "off/blank",
+      "theme": "light",
+      "locale": "English"
+    }
+  ],
+  "screenshots": [
+    "08-after-initial-applied-a.png",
+    "09-after-search-preserves-draft.png",
+    "10-after-unsaved-draft-still-applied-a.png",
+    "11-after-unrelated-preference-with-applied-a.png",
+    "12-after-unrelated-save-reloads-a.png",
+    "13-after-explicit-save-applies-b.png",
+    "14-after-explicit-save-reloads-b.png",
+    "15-after-restored-preference.png",
+    "17-after-restored-a-reload.png"
+  ],
+  "newCandidate": {
+    "observedGeneralFeedback": "extensions: skills: signal timed out",
+    "screenshot": "11-after-unrelated-preference-with-applied-a.png",
+    "status": "Separate source/owned-log audit; not repaired or masked by this change"
+  },
+  "limits": [
+    "No credential/model/Task start",
+    "No file edit, dirty-leave, native settings window or delayed HTTP response qualification",
+    "Persistence-failure/activation-error/queued order are separately qualified non-UI service contracts",
+    "Only selected screenshots plus live AX observations qualify the edited area, not all UI"
+  ],
+  "reviewedAt": "2026-10-05T10:55:27.933Z"
+}

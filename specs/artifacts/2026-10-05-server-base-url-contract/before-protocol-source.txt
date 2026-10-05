@@ -1,0 +1,20 @@
+import fs from 'node:fs/promises'
+import { isOverlayPersistedSettings } from '../packages/transport-protocol/src'
+import { parsePersistedOverlaySettings } from '../packages/overlay/src/services/persisted-overlay-settings'
+import { bootstrapOverlaySettings, DEFAULT_SETTINGS } from '../packages/overlay/src/store/settings'
+import { configure, apiUrl, getServerUrl } from '../packages/overlay/src/services/api-state'
+const previous=getServerUrl()
+const values=['','   ','not a url','localhost:7878','http://','http://[::1','//example.invalid','https://example.invalid/prefix/','https://example.invalid/prefix?mode=DUMMY','https://example.invalid/prefix#DUMMY','ftp://example.invalid/prefix','file:///D:/dummy','data:text/plain,DUMMY','javascript:DUMMY','  http://example.invalid/prefix  ','http://dummy:DUMMY_NON_CREDENTIAL@example.invalid/prefix']
+const observations=[]
+try{
+ for(const serverUrl of values){
+  const base=bootstrapOverlaySettings({...DEFAULT_SETTINGS,serverUrl:'http://example.invalid',password:'',username:'dummy'})
+  const payload={...base,serverUrl}
+  const row:any={serverUrl,protocolAccepted:isOverlayPersistedSettings(payload)}
+  try{row.parsedServerUrl=parsePersistedOverlaySettings(payload).serverUrl}catch(error){row.parseError={name:error.name,message:error.message}}
+  if(row.protocolAccepted){configure({serverUrl});try{row.apiUrl=apiUrl('global/health');const u=new URL(row.apiUrl);row.projection={protocol:u.protocol,hostname:u.hostname,pathname:u.pathname,search:u.search,hash:u.hash};try{row.requestURL=new Request(row.apiUrl).url}catch(error){row.requestError={name:error.name,message:error.message}}}catch(error){row.apiError={name:error.name,message:error.message}}}
+  observations.push(row)
+ }
+}finally{configure({serverUrl:previous})}
+await fs.writeFile('.tmp-product-iteration/server-url-protocol-probe.json',JSON.stringify({qualification:'Pure actual TypeScript protocol/parser/apiUrl/Request construction. No fetch, native IPC, storage save, private home, server or UI.',observations},null,2))
+console.log(JSON.stringify(observations,null,2))

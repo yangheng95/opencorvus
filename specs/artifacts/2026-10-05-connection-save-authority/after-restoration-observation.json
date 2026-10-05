@@ -1,0 +1,102 @@
+[
+  {
+    "side": "a",
+    "start": "2026-10-05T10:53:12.0260000+00:00",
+    "end": "2026-10-05T10:56:41.6479005+00:00",
+    "records": 136,
+    "health": [
+      {
+        "time": "2026-10-05T10:53:12.05Z",
+        "requestID": "2e0756b6-5c02-4a44-a829-0f5018aa40df",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:53:12.981Z",
+        "requestID": "1389e6f7-9cad-4baf-94e1-9b10e18c30f3",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:53:22.976Z",
+        "requestID": "56b09bc8-c853-4eff-855c-759fb9da7945",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:53:32.977Z",
+        "requestID": "10f7948e-aa9e-4470-ab60-051b45f704c5",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:53:42.978Z",
+        "requestID": "d1a49094-12a9-49dd-bba5-5f6418022ea7",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:53:52.98Z",
+        "requestID": "97eba860-5b1d-417d-8097-c45c2e3482d9",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:02.979Z",
+        "requestID": "6334a68f-beef-43eb-94d2-299d14cb2e3f",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:12.979Z",
+        "requestID": "0b78234f-511f-4149-90c3-25f39f122ff7",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:22.979Z",
+        "requestID": "7c8affdf-e5c3-4e71-b1cb-90d1d25527aa",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:32.975Z",
+        "requestID": "6b126637-6e67-492a-a78c-766f8e5c6752",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:39.437Z",
+        "requestID": "d5cf57ae-a163-4fea-b448-3acab3e580aa",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:49.508Z",
+        "requestID": "ff977213-e992-403c-9ff6-57ef754db69a",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:54:59.507Z",
+        "requestID": "301e0f8b-7253-4212-aefa-073d93018d78",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:55:09.507Z",
+        "requestID": "e620aa81-10ee-45b8-bbb2-11224049fa63",
+        "statusCode": 200
+      },
+      {
+        "time": "2026-10-05T10:55:19.507Z",
+        "requestID": "daf07e8c-d81b-4e3b-89e9-8998fa3496a0",
+        "statusCode": 200
+      }
+    ],
+    "authExists": false,
+    "modelsExists": false,
+    "catalogMetadata": null,
+    "catalogProvisionEvents": [],
+    "catalogContents": "not read"
+  },
+  {
+    "side": "b",
+    "start": "2026-10-05T10:53:12.0260000+00:00",
+    "end": "2026-10-05T10:56:41.6479005+00:00",
+    "records": 0,
+    "health": [],
+    "authExists": false,
+    "modelsExists": false,
+    "catalogMetadata": null,
+    "catalogProvisionEvents": [],
+    "catalogContents": "not read"
+  }
+]

@@ -1,5 +1,17 @@
 # Specs Storage Index
 
+- [Skill mount cold-start latency qualification](records/2026-10/2026-10-05-skill-mount-cold-start-latency.md)
+- [Skill mount latency evidence](artifacts/2026-10-05-skill-mount-cold-start-latency/README.md)
+
+- [Server base URL contract and recoverable authoring](records/2026-10/2026-10-05-server-base-url-contract.md)
+- [Server base URL investigation evidence](artifacts/2026-10-05-server-base-url-contract/README.md)
+
+- [Public validation error input projection](records/2026-10/2026-10-05-validation-error-input-projection.md)
+- [Validation error input projection evidence](artifacts/2026-10-05-validation-error-input-projection/README.md)
+
+- [Connection Save authority and backend scope](records/2026-10/2026-10-05-connection-save-authority.md)
+- [Connection Save authority evidence](artifacts/2026-10-05-connection-save-authority/README.md)
+
 - [Settings search preserves the active authoring page](records/2026-10/2026-10-05-settings-search-authoring-lifetime.md)
 - [Settings search authoring evidence](artifacts/2026-10-05-settings-search-authoring-lifetime/README.md)
 

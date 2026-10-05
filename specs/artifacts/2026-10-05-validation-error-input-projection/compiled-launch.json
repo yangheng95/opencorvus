@@ -1,0 +1,18 @@
+{
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01",
+  "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/home",
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project",
+  "port": 17944,
+  "origin": "http://127.0.0.1:17944",
+  "occurrence": "validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f",
+  "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json",
+  "launcher": {
+    "ProcessId": 62864,
+    "ParentProcessId": 71404,
+    "CreationDate": "2026-10-05T19:11:34.412354+08:00",
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+    "CommandLine": "\"D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe\" serve --hostname 127.0.0.1 --port 17944 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json --startup-occurrence validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f"
+  },
+  "authInitiallyAbsent": true,
+  "modelsInitiallyAbsent": true
+}

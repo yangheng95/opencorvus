@@ -1,0 +1,62 @@
+[
+  {
+    "side": "a",
+    "role": "listener",
+    "process": {
+      "ProcessId": 12392,
+      "ParentProcessId": 73600,
+      "CreationDate": "2026-10-05T18:22:14.824349+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    }
+  },
+  {
+    "side": "a",
+    "role": "parent",
+    "process": {
+      "ProcessId": 73600,
+      "ParentProcessId": 3448,
+      "CreationDate": "2026-10-05T18:22:14.782963+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    }
+  },
+  {
+    "side": "a",
+    "role": "launcher",
+    "process": {
+      "ProcessId": 3448,
+      "ParentProcessId": 66600,
+      "CreationDate": "2026-10-05T18:22:14.705958+08:00",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    }
+  },
+  {
+    "side": "b",
+    "role": "listener",
+    "process": {
+      "ProcessId": 64056,
+      "ParentProcessId": 70276,
+      "CreationDate": "2026-10-05T18:23:15.887261+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17942 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/b/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/b/startup.json --startup-occurrence connection-authority-b-a1e94ae3-61ab-4f62-8215-95ccbb8c6c79"
+    }
+  },
+  {
+    "side": "b",
+    "role": "parent",
+    "process": {
+      "ProcessId": 70276,
+      "ParentProcessId": 42916,
+      "CreationDate": "2026-10-05T18:23:15.848941+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17942 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/b/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/b/startup.json --startup-occurrence connection-authority-b-a1e94ae3-61ab-4f62-8215-95ccbb8c6c79"
+    }
+  },
+  {
+    "side": "b",
+    "role": "launcher",
+    "process": {
+      "ProcessId": 42916,
+      "ParentProcessId": 68804,
+      "CreationDate": "2026-10-05T18:23:15.744197+08:00",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17942 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/b/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/b/startup.json --startup-occurrence connection-authority-b-a1e94ae3-61ab-4f62-8215-95ccbb8c6c79"
+    }
+  }
+]

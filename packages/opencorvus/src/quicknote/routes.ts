@@ -1,5 +1,6 @@
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import { createNote } from "./service"
 import { MAX_CONTENT_LENGTH } from "./text-processor"
 import { lazy } from "@/util/lazy"

@@ -1,0 +1,107 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - navigation "Settings navigation":
+    - button "Back to OpenCorvus":
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - region "General":
+    - navigation:
+      - button "Back to app":
+        - generic: Back to app
+      - searchbox "Search settings pages..."
+      - tablist:
+        - generic: Application
+        - tab "General" [selected]:
+          - generic: General
+        - tab "Appearance":
+          - generic: Appearance
+        - tab "Network":
+          - generic: Network
+        - tab "Usage":
+          - generic: Usage
+        - generic: Product
+        - tab "Chat":
+          - generic: Chat
+        - tab "Work":
+          - generic: Work
+        - generic: Missions & Automation
+        - tab "Mission Card":
+          - generic: Mission Card
+        - tab "Scheduled tasks":
+          - generic: Scheduled tasks
+        - generic: Expert Squads
+        - tab "Squad Market":
+          - generic: Squad Market
+        - tab "Installed Expert Squads":
+          - generic: Installed Expert Squads
+        - generic: Shared Resources
+        - tab "Providers":
+          - generic: Providers
+        - tab "Skill Library":
+          - generic: Skill Library
+        - tab "MCP Connections":
+          - generic: MCP Connections
+        - tab "Channel":
+          - generic: Channel
+        - generic: Context
+        - tab "Memory & Context":
+          - generic: Memory & Context
+        - generic: Data
+        - tab "Archive":
+          - generic: Archive
+        - tab "Release notes":
+          - generic: Release notes
+        - tab "About":
+          - generic: About
+    - separator "Settings"
+    - heading "General" [level=1]
+    - tabpanel "General":
+      - heading "Notifications" [level=2]
+      - generic: Desktop notifications
+      - generic: Show new agent notices and attention requests in the system notification area.
+      - switch "Desktop notifications" [checked]
+      - heading "Permissions" [level=2]
+      - generic: Default authorization
+      - generic: Tools can change files, run commands and take external actions without asking.
+      - generic: Applies to new tasks; running tasks keep their existing mode.
+      - group "Default authorization":
+        - button "Ask me"
+        - button "Full access" [pressed]
+      - generic "Approvals & history Review this project's saved approvals and recent operations.":
+        - strong: Approvals & history
+        - generic: Review this project's saved approvals and recent operations.
+      - heading "Git" [level=2]
+      - generic: Offer Git initialization
+      - generic: When explicitly opening a non-Git directory, ask before creating a repository. Startup only reads existing state.
+      - switch "Offer Git initialization" [checked] [active]
+      - heading "Diagnostics" [level=2]
+      - generic: Export logs
+      - generic: Download a ZIP support bundle with every retained raw log, readable formatted copies, and a detailed diagnostic manifest.
+      - button "Export ZIP"

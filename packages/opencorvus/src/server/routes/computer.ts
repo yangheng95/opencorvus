@@ -1,5 +1,6 @@
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import { z } from "zod"
 import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { ComputerError } from "@/mcp/computer/errors"

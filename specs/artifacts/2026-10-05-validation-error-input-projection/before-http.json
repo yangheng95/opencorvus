@@ -1,0 +1,186 @@
+{
+  "qualification": "Actual readonly-to-authority malformed HTTP requests; no successful Auth mutation, provider/model or UI",
+  "owner": {
+    "id": "a",
+    "time": "2026-10-05T18:22:54.4235827+08:00",
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:17941",
+      "pid": 12392
+    },
+    "listener": {
+      "ProcessId": 12392,
+      "ParentProcessId": 73600,
+      "CreationDate": "2026-10-05T18:22:14.824349+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    },
+    "parent": {
+      "ProcessId": 73600,
+      "ParentProcessId": 3448,
+      "CreationDate": "2026-10-05T18:22:14.782963+08:00",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    },
+    "launcher": {
+      "ProcessId": 3448,
+      "ParentProcessId": 66600,
+      "CreationDate": "2026-10-05T18:22:14.705958+08:00",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17941 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json --startup-occurrence connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f"
+    },
+    "health": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-authority-pair-01\\a\\home\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-authority-pair-01\\a\\home\\data",
+        "home": "C:\\Users\\hengu"
+      }
+    },
+    "assets": [
+      "main-BeskyhIj.js",
+      "main-Yy88IPFU.css"
+    ],
+    "publicShutdown": {
+      "path": "/shutdown",
+      "terminal": "CIM exactchain absent and portfree required",
+      "authority": "serve registered normal HTTP lifecycle",
+      "origin": "http://127.0.0.1:17941",
+      "method": "POST"
+    },
+    "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/home/log/dev.log",
+    "authExists": false,
+    "modelsExists": false
+  },
+  "results": [
+    {
+      "name": "oauth-invalid-expires",
+      "startedAt": "2026-10-05T10:26:23.115Z",
+      "method": "PUT",
+      "url": "http://127.0.0.1:17941/auth/validation-dummy-provider",
+      "input": {
+        "type": "oauth",
+        "access": "DUMMY_NON_CREDENTIAL_ACCESS",
+        "refresh": "DUMMY_NON_CREDENTIAL_REFRESH",
+        "expires": "invalid-number"
+      },
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "63363ba9-028e-48fb-85da-27dfc605eadd"
+      },
+      "body": {
+        "data": {
+          "type": "oauth",
+          "access": "DUMMY_NON_CREDENTIAL_ACCESS",
+          "refresh": "DUMMY_NON_CREDENTIAL_REFRESH",
+          "expires": "invalid-number"
+        },
+        "error": [
+          {
+            "expected": "number",
+            "code": "invalid_type",
+            "path": [
+              "expires"
+            ],
+            "message": "Invalid input: expected number, received string"
+          }
+        ],
+        "success": false
+      },
+      "apiError": {
+        "name": "ApiError",
+        "message": "API 400 /auth/validation-dummy-provider: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}",
+        "summary": "API 400: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}",
+        "body": {
+          "data": {
+            "type": "oauth",
+            "access": "DUMMY_NON_CREDENTIAL_ACCESS",
+            "refresh": "DUMMY_NON_CREDENTIAL_REFRESH",
+            "expires": "invalid-number"
+          },
+          "error": [
+            {
+              "expected": "number",
+              "code": "invalid_type",
+              "path": [
+                "expires"
+              ],
+              "message": "Invalid input: expected number, received string"
+            }
+          ],
+          "success": false
+        },
+        "requestID": "63363ba9-028e-48fb-85da-27dfc605eadd",
+        "details": "HTTP 400 /auth/validation-dummy-provider\n\nRequest ID: 63363ba9-028e-48fb-85da-27dfc605eadd\n\nApiError: API 400 /auth/validation-dummy-provider: {\"data\":{\"type\":\"oauth\",\"access\":\"DUMMY_NON_CREDENTIAL_ACCESS\",\"refresh\":\"DUMMY_NON_CREDENTIAL_REFRESH\",\"expires\":\"invalid-number\"},\"error\":[{\"expected\":\"number\",\"code\":\"invalid_type\",\"path\":[\"expires\"],\"message\":\"Invalid input: expected number, received string\"}],\"success\":false}\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-before-http.ts:21:18\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"type\": \"oauth\",\n    \"access\": \"DUMMY_NON_CREDENTIAL_ACCESS\",\n    \"refresh\": \"DUMMY_NON_CREDENTIAL_REFRESH\",\n    \"expires\": \"invalid-number\"\n  },\n  \"error\": [\n    {\n      \"expected\": \"number\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"expires\"\n      ],\n      \"message\": \"Invalid input: expected number, received string\"\n    }\n  ],\n  \"success\": false\n}"
+      }
+    },
+    {
+      "name": "api-invalid-metadata",
+      "startedAt": "2026-10-05T10:26:23.141Z",
+      "method": "PUT",
+      "url": "http://127.0.0.1:17941/auth/validation-dummy-provider",
+      "input": {
+        "type": "api",
+        "key": "DUMMY_NON_CREDENTIAL_APIKEY",
+        "metadata": {
+          "label": 123
+        }
+      },
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "ad1dfc39-a467-4177-a43d-cf5de6e51dec"
+      },
+      "body": {
+        "data": {
+          "type": "api",
+          "key": "DUMMY_NON_CREDENTIAL_APIKEY",
+          "metadata": {
+            "label": 123
+          }
+        },
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "metadata",
+              "label"
+            ],
+            "message": "Invalid input: expected string, received number"
+          }
+        ],
+        "success": false
+      },
+      "apiError": {
+        "name": "ApiError",
+        "message": "API 400 /auth/validation-dummy-provider: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}",
+        "summary": "API 400: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}",
+        "body": {
+          "data": {
+            "type": "api",
+            "key": "DUMMY_NON_CREDENTIAL_APIKEY",
+            "metadata": {
+              "label": 123
+            }
+          },
+          "error": [
+            {
+              "expected": "string",
+              "code": "invalid_type",
+              "path": [
+                "metadata",
+                "label"
+              ],
+              "message": "Invalid input: expected string, received number"
+            }
+          ],
+          "success": false
+        },
+        "requestID": "ad1dfc39-a467-4177-a43d-cf5de6e51dec",
+        "details": "HTTP 400 /auth/validation-dummy-provider\n\nRequest ID: ad1dfc39-a467-4177-a43d-cf5de6e51dec\n\nApiError: API 400 /auth/validation-dummy-provider: {\"data\":{\"type\":\"api\",\"key\":\"DUMMY_NON_CREDENTIAL_APIKEY\",\"metadata\":{\"label\":123}},\"error\":[{\"expected\":\"string\",\"code\":\"invalid_type\",\"path\":[\"metadata\",\"label\"],\"message\":\"Invalid input: expected string, received number\"}],\"success\":false}\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\validation-before-http.ts:21:18\n    at processTicksAndRejections (native:7:39)\n\nresponse body:\n{\n  \"data\": {\n    \"type\": \"api\",\n    \"key\": \"DUMMY_NON_CREDENTIAL_APIKEY\",\n    \"metadata\": {\n      \"label\": 123\n    }\n  },\n  \"error\": [\n    {\n      \"expected\": \"string\",\n      \"code\": \"invalid_type\",\n      \"path\": [\n        \"metadata\",\n        \"label\"\n      ],\n      \"message\": \"Invalid input: expected string, received number\"\n    }\n  ],\n  \"success\": false\n}"
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import { streamProjectSSE } from "../sse"
 import z from "zod"
 import { ControlMessage } from "@/control/message"

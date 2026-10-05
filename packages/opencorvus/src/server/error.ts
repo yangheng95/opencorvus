@@ -23,12 +23,21 @@ function namedErrorUnionSchema(first: string, ...rest: string[]) {
   return resolver(z.union([branch(first), ...rest.map(branch)]))
 }
 
+const BAD_REQUEST_ISSUE_SCHEMA = z
+  .object({
+    code: z.string().optional(),
+    path: z.array(z.union([z.string(), z.number()])).optional(),
+    message: z.string(),
+  })
+  .strict()
+
 const BAD_REQUEST_SCHEMA = z
   .object({
-    data: z.any(),
-    error: z.array(z.record(z.string(), z.any())),
+    data: z.object({ message: z.string() }).strict(),
+    error: z.array(BAD_REQUEST_ISSUE_SCHEMA),
     success: z.literal(false),
   })
+  .strict()
   .meta({ ref: "BadRequestError" })
 
 const WORKTREE_OWNERSHIP_OBSERVATION_SCHEMA = z
@@ -123,10 +132,27 @@ export function errors(...codes: number[]) {
   return Object.fromEntries(codes.map((code) => [code, ERRORS[code as keyof typeof ERRORS]]))
 }
 
-export function badRequestBody(message: string) {
+type RequestIssue = {
+  readonly message: string
+  readonly code?: unknown
+  readonly path?: readonly (PropertyKey | { readonly key: PropertyKey })[]
+}
+
+export function badRequestBody(message: string, issues: readonly RequestIssue[] = [{ message }]) {
   return {
     data: { message },
-    error: [{ message }],
+    error: issues.map((issue) => ({
+      ...(typeof issue.code === "string" ? { code: issue.code } : {}),
+      ...(issue.path
+        ? {
+            path: issue.path.map((segment) => {
+              const key = typeof segment === "object" ? segment.key : segment
+              return typeof key === "symbol" ? String(key) : key
+            }),
+          }
+        : {}),
+      message: issue.message,
+    })),
     success: false as const,
   }
 }

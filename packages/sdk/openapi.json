@@ -642,14 +642,47 @@
         "type": "object"
       },
       "BadRequestError": {
+        "additionalProperties": false,
         "properties": {
-          "data": {},
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
           "error": {
             "items": {
-              "additionalProperties": {},
-              "propertyNames": {
-                "type": "string"
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "path": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                }
               },
+              "required": [
+                "message"
+              ],
               "type": "object"
             },
             "type": "array"

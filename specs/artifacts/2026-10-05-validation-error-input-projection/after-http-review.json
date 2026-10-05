@@ -1,0 +1,105 @@
+{
+  "qualification": "actual three completed400 records and exact owned current identities",
+  "requestIDs": [
+    "eee8b427-d48f-4c9f-84b5-70aa68e4b7e9",
+    "78bce322-e32c-4340-9e52-1ceac6fdbc6d",
+    "f047d77a-734c-4078-860a-87ba4f33ae30"
+  ],
+  "matchingLogRows": [
+    {
+      "level": "info",
+      "time": "2026-10-05T10:41:33.476Z",
+      "service": "server",
+      "requestID": "eee8b427-d48f-4c9f-84b5-70aa68e4b7e9",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:41:33.479Z",
+      "service": "server",
+      "requestID": "eee8b427-d48f-4c9f-84b5-70aa68e4b7e9",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 3,
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:41:33.484Z",
+      "service": "server",
+      "requestID": "78bce322-e32c-4340-9e52-1ceac6fdbc6d",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:41:33.485Z",
+      "service": "server",
+      "requestID": "78bce322-e32c-4340-9e52-1ceac6fdbc6d",
+      "method": "PUT",
+      "path": "/auth/validation-dummy-provider",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 1,
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:41:33.495Z",
+      "service": "server",
+      "requestID": "f047d77a-734c-4078-860a-87ba4f33ae30",
+      "method": "POST",
+      "path": "/task/tsk_validation_dummy/artifact-read",
+      "status": "started",
+      "logDomain": "non-session",
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-05T10:41:34.334Z",
+      "service": "server",
+      "requestID": "f047d77a-734c-4078-860a-87ba4f33ae30",
+      "method": "POST",
+      "path": "/task/tsk_validation_dummy/artifact-read",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 839,
+      "logDomain": "non-session",
+      "message": "request"
+    }
+  ],
+  "beforeShutdown": [
+    {
+      "ProcessId": 47704,
+      "ParentProcessId": 66212,
+      "CreationDate": "2026-10-05T18:40:20.491958+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    },
+    {
+      "ProcessId": 66212,
+      "ParentProcessId": 75148,
+      "CreationDate": "2026-10-05T18:40:20.45408+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    },
+    {
+      "ProcessId": 75148,
+      "ParentProcessId": 56592,
+      "CreationDate": "2026-10-05T18:40:20.380606+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17943 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-after-01/startup.json --startup-occurrence validation-after-81408e22-0a90-46c8-a328-b9ce4f004a81"
+    }
+  ]
+}

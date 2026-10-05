@@ -1,0 +1,64 @@
+{
+  "launch": {
+    "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01",
+    "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/home",
+    "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project",
+    "port": 17944,
+    "origin": "http://127.0.0.1:17944",
+    "occurrence": "validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f",
+    "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json",
+    "launcher": {
+      "ProcessId": 62864,
+      "ParentProcessId": 71404,
+      "CreationDate": "2026-10-05T19:11:34.412354+08:00",
+      "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+      "CommandLine": "\"D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe\" serve --hostname 127.0.0.1 --port 17944 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json --startup-occurrence validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f"
+    },
+    "authInitiallyAbsent": true,
+    "modelsInitiallyAbsent": true
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17944",
+    "pid": 62864
+  },
+  "listener": {
+    "ProcessId": 62864,
+    "ParentProcessId": 71404,
+    "CreationDate": "2026-10-05T19:11:34.412354+08:00",
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+    "CommandLine": "\"D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe\" serve --hostname 127.0.0.1 --port 17944 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json --startup-occurrence validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f"
+  },
+  "launcher": {
+    "ProcessId": 62864,
+    "ParentProcessId": 71404,
+    "CreationDate": "2026-10-05T19:11:34.412354+08:00",
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+    "CommandLine": "\"D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe\" serve --hostname 127.0.0.1 --port 17944 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json --startup-occurrence validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f"
+  },
+  "launchParentObservation": null,
+  "parentInterpretation": "Direct compiled executable; ParentProcessId names the transient owned launcher shell, not a second persistent backend owner",
+  "health": {
+    "healthy": true,
+    "version": "0.0.0-main-202610051102",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-compiled-01\\home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-compiled-01\\home\\data",
+      "home": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/home"
+    }
+  },
+  "log": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\validation-projection-compiled-01\\home\\log\\2026-10-05T111135-62864-1.log",
+  "buildContext": "specs/artifacts/2026-10-05-dependency-remediation/stage5-native-02/integration-context.json",
+  "package": {
+    "name": "opencorvus-overlay-server-windows-x64",
+    "version": "0.0.0-main-202610051102",
+    "os": [
+      "win32"
+    ],
+    "cpu": [
+      "x64"
+    ]
+  }
+}

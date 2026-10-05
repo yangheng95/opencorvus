@@ -1,6 +1,7 @@
 import { Session } from "@/session"
 import { Hono } from "hono"
-import { describeRoute, resolver, validator } from "hono-openapi"
+import { describeRoute, resolver } from "hono-openapi"
+import { validator } from "@/server/validator"
 import z from "zod"
 import { errors } from "../error"
 import { lazy } from "../../util/lazy"

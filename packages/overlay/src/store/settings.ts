@@ -145,7 +145,18 @@ export const [settingsStore, setSettingsStore] = createStore<OverlaySettings>({ 
 
 export interface SettingsSaveAction {
   overrides?: Partial<OverlaySettings>
+  /** Publish an explicit saved fact synchronously before the next queued snapshot. */
+  onConfirmed?: (confirmed: Readonly<PersistedOverlaySettings>) => undefined
   onFailure?: (input: { error: unknown; confirmed: Readonly<PersistedOverlaySettings> }) => void
+}
+
+export class SettingsActivationError extends Error {
+  override readonly name = "SettingsActivationError"
+  readonly persisted = true
+
+  constructor(cause: unknown) {
+    super("Settings were saved, but could not be applied to the current client.", { cause })
+  }
 }
 
 type SettingsSaveOutcome = { kind: "saved"; payload: PersistedOverlaySettings } | { kind: "failed"; error: unknown }
@@ -221,6 +232,11 @@ export async function saveSettings(action: SettingsSaveAction = {}): Promise<voi
     })()
     if (outcome.kind === "saved") {
       confirmedPersistedSettings = outcome.payload
+      try {
+        action.onConfirmed?.(outcome.payload)
+      } catch (error) {
+        throw new SettingsActivationError(error)
+      }
       return
     }
     if (action.onFailure) {

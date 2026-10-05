@@ -302,6 +302,16 @@ where the existing server URL and authentication form are immediately available.
 Navigation retains the configured API address; the saved settings and connection
 owner continue to control recovery.
 
+Network keeps the server URL, username and password in the mounted editor's
+local draft. Typing and unrelated preference saves retain the applied connection;
+explicit departure disposes that unsaved editor normally. Connection Save uses
+the single preference transaction defined in [05-config](05-config.md) to publish
+those three fields only after persistence is confirmed. The existing main reactive
+API projection then applies them. Persistence failure retains the draft and the
+applied connection; activation failure is labelled as a saved fact that could
+not be applied. Closing the editor can retire its feedback and optional refresh,
+but cannot suppress the transaction's confirmed connection publication.
+
 ## Current Surface Ownership
 
 | Surface          | Source                                                                                   | Responsibility                                                                                                                                                                                                                                                                                                                                                                  |

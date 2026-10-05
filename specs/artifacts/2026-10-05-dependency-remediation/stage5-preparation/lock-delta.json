@@ -1,0 +1,90 @@
+{
+  "removed": [
+    {
+      "name": "rustls-webpki",
+      "version": "0.103.13",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "61c429a8649f110dddef65e2a5ad240f747e85f7758a6bccc7e5777bd33f756e",
+      "dependencies": [
+        "ring",
+        "rustls-pki-types",
+        "untrusted"
+      ]
+    },
+    {
+      "name": "event-listener",
+      "version": "5.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "e13b66accf52311f30a0db42147dadea9850cb48cd070028831ae5f5d4b856ab",
+      "dependencies": [
+        "concurrent-queue",
+        "parking",
+        "pin-project-lite"
+      ]
+    },
+    {
+      "name": "rustls",
+      "version": "0.23.43",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "0283386ce02abc0151e1761d08802dfe86c173b0b494af5cbc086574e453da06",
+      "dependencies": [
+        "once_cell",
+        "ring",
+        "rustls-pki-types",
+        "rustls-webpki",
+        "subtle",
+        "zeroize"
+      ]
+    },
+    {
+      "name": "anyhow",
+      "version": "1.0.102",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c"
+    }
+  ],
+  "added": [
+    {
+      "name": "rustls-webpki",
+      "version": "0.103.14",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "0527518605e68109d875e248ea259b6758801cf165e4b2c2733ae3b51f12535a",
+      "dependencies": [
+        "ring",
+        "rustls-pki-types",
+        "untrusted"
+      ]
+    },
+    {
+      "name": "rustls",
+      "version": "0.23.45",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "0d41d731c7d2f962d1ccc364cec258de3c0e93b38c2fb3ba97ac74513048d634",
+      "dependencies": [
+        "once_cell",
+        "ring",
+        "rustls-pki-types",
+        "rustls-webpki",
+        "subtle",
+        "zeroize"
+      ]
+    },
+    {
+      "name": "event-listener",
+      "version": "5.4.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "5a23add41df1562121a9393cb065eab5146a1242410f23a644851e90cfd669d2",
+      "dependencies": [
+        "parking",
+        "pin-project-lite"
+      ]
+    },
+    {
+      "name": "anyhow",
+      "version": "1.0.103",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3"
+    }
+  ],
+  "sameVersionChanges": []
+}

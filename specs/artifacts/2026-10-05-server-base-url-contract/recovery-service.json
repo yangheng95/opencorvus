@@ -1,0 +1,38 @@
+{
+  "qualification": "Actual load/save/confirmed transaction and API projection, with explicit in-memory native storage fixture. No browser/DOM/network/nativeIPC or durable storage.",
+  "load": {
+    "applied": "not a url",
+    "confirmed": "not a url",
+    "theme": "sage",
+    "loadResolved": true
+  },
+  "beforeError": {
+    "name": "TypeError",
+    "message": "\"not a url/global/health\" cannot be parsed as a URL."
+  },
+  "corrected": {
+    "applied": "https://example.invalid/prefix/",
+    "confirmed": "https://example.invalid/prefix/",
+    "memorySaved": "https://example.invalid/prefix/",
+    "theme": "sage",
+    "apiURL": "https://example.invalid/prefix/global/health"
+  },
+  "memoryDocuments": [
+    {
+      "serverUrl": "https://example.invalid/prefix/",
+      "autoServer": true,
+      "password": "",
+      "username": "dummy",
+      "projectEditor": "vscode",
+      "initGit": false,
+      "sidebarCollapsed": false,
+      "workLedgerOrganization": "by-project",
+      "workLedgerSort": "updated",
+      "zoom": 1,
+      "theme": "sage",
+      "locale": "en-US",
+      "desktopNotifications": true,
+      "preferredProjectEditor": "vscode"
+    }
+  ]
+}

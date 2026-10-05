@@ -1,0 +1,93 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings" [active]:
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - generic: No work yet.
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 17942":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic "Conversation"
+  - heading "What should we build in project?" [level=1]
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Describe the outcome or finished deliverable you need...
+  - button
+  - button "Add supported files":
+  - button "Select product mode":
+    - generic: Work
+  - textbox
+  - listbox:
+    - option
+    - option: Code
+    - option [selected]: Work
+  - button "Select conversation target":
+    - generic: Chat
+  - textbox
+  - listbox:
+    - option
+    - option [selected]: Chat
+    - option: Mission
+  - button "Skills & squads":
+    - generic: Skills & squads
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model Choose model. Click to change.":
+    - generic "Choose model"
+  - button "Send" [disabled]:
+    - generic: Send
+  - generic "Suggested chat starters":
+    - button "Build a webpage":
+      - generic: Build a webpage
+    - button "Create an expert squad":
+      - generic: Create an expert squad
+    - button "Fix a bug":
+      - generic: Fix a bug
+    - button "More":
+      - generic: More
+  - button:
+  - button:
+- tooltip "Settings Settings":
+  - strong: Settings
+  - generic: Settings

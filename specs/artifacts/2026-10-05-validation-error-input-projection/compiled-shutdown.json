@@ -1,0 +1,20 @@
+{
+  "time": "2026-10-05T11:15:18.1656927Z",
+  "fingerprint": {
+    "ProcessId": 62864,
+    "ParentProcessId": 71404,
+    "CreationDate": "2026-10-05T19:11:34.412354+08:00",
+    "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe",
+    "CommandLine": "\"D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\dist\\opencorvus-overlay-server-windows-x64\\opencorvus.exe\" serve --hostname 127.0.0.1 --port 17944 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/validation-projection-compiled-01/startup.json --startup-occurrence validation-compiled-06df2ce7-4261-445b-b518-278629df2d3f"
+  },
+  "url": "http://127.0.0.1:17944/shutdown",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXAm7Or00ZvTs4kKjC"
+  },
+  "requestID": [
+    "59ccc922-e1e8-4ee3-a98d-09eaa1dedd91"
+  ],
+  "manualUI": "Root confirmed IAB13 closed before this request"
+}

@@ -1,0 +1,2439 @@
+{
+  "summary": {
+    "calls": 323,
+    "files": 33,
+    "targets": {
+      "\"json\"": 136,
+      "\"query\"": 62,
+      "\"param\"": 125
+    },
+    "hooks": [],
+    "excludedSameName": [
+      {
+        "file": "packages\\opencorvus\\src\\session\\loop.ts",
+        "line": 752,
+        "target": "payload",
+        "args": 1
+      }
+    ]
+  },
+  "imports": [
+    {
+      "file": "packages\\opencorvus\\src\\quicknote\\routes.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\error.ts",
+      "import": "import { resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "import": "import { describeRoute, openAPIRouteHandler, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\attachment.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\auth.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\channel.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\coding.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\computer.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\config.ts",
+      "import": "import { describeRoute, validator, resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\conversation-capability.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "import": "import { describeRoute, validator, resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\export.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "import": "import { describeRoute, validator, resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\gateway.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\interactive-artifact.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mailbox.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mcp.ts",
+      "import": "import { describeRoute, validator, resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission-skill.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\panel.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\permission.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "import": "import { describeRoute, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "import": "import { resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "import": "import { describeRoute, validator, resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\question.ts",
+      "import": "import { describeRoute, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\question.ts",
+      "import": "import { resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "import": "import { describeRoute, validator, resolver } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\terminal.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "import": "import { describeRoute, resolver, validator } from \"hono-openapi\""
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\server.ts",
+      "import": "import { generateSpecs } from \"hono-openapi\""
+    }
+  ],
+  "calls": [
+    {
+      "file": "packages\\opencorvus\\src\\quicknote\\routes.ts",
+      "line": 44,
+      "target": "\"json\"",
+      "schema": "CreateQuickNoteRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 463,
+      "target": "\"json\"",
+      "schema": "z.object({\n          branch: Vcs.Branch.shape.name.min(1),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 494,
+      "target": "\"json\"",
+      "schema": "VcsCommitInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 542,
+      "target": "\"json\"",
+      "schema": "VcsCommitMessageInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 592,
+      "target": "\"query\"",
+      "schema": "z.object({\n          mode: Vcs.Mode.default(\"git\"),\n          context: z.coerce.number().int().nonnegative().optional(),\n          directory: z.string().optional(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 646,
+      "target": "\"json\"",
+      "schema": "z\n          .object({\n            entries: z\n              .array(\n                z\n                  .object({\n                    service: z.string().meta({ description: \"Service name for the log entry\" }),\n                    level: z.enum([\"debug\", \"info\", \"error\", \"warn\"]).meta({ description: \"Log level\" }),\n                    message: z.string().meta({ description: \"Log message\" }),\n                    extra: z\n                      .record(z.string(), z.unknown())\n                      .optional()\n                      .meta({ description: \"Additional metadata for the log entry\" }),\n                  })\n                  .strict(),\n              )\n              .min(1)\n              .max(50),\n          })\n          .strict()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 709,
+      "target": "\"query\"",
+      "schema": "LogReadQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\app.ts",
+      "line": 791,
+      "target": "\"query\"",
+      "schema": "z.object({\n          n: z.coerce.number().int().min(1).max(5000).default(500),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\attachment.ts",
+      "line": 124,
+      "target": "\"json\"",
+      "schema": "DirectoryReferenceInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\attachment.ts",
+      "line": 158,
+      "target": "\"query\"",
+      "schema": "AttachmentUploadQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\attachment.ts",
+      "line": 178,
+      "target": "\"query\"",
+      "schema": "z.object({\n          variant: z\n            .string()\n            .optional()\n            .meta({ description: \"Serve a derived rendition of the attachment instead of the stored bytes.\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\auth.ts",
+      "line": 39,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\auth.ts",
+      "line": 45,
+      "target": "\"json\"",
+      "schema": "Auth.Info",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\auth.ts",
+      "line": 76,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 81,
+      "target": "\"param\"",
+      "schema": "z.object({\n          taskID: z.string().min(1),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 119,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: z.string().min(1), evidenceID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 155,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: z.string().min(1), evidenceID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 194,
+      "target": "\"param\"",
+      "schema": "z.object({\n          taskID: z.string().min(1),\n          evidenceID: z.string().min(1),\n          artifactName: z.enum([\"source\", \"implementation\", \"side-by-side\", \"diff\"]),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 243,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 244,
+      "target": "\"json\"",
+      "schema": "BrowserPreviewTargetSelectionRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 289,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 290,
+      "target": "\"json\"",
+      "schema": "BrowserPreviewCaptureRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 331,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\browser-preview.ts",
+      "line": 332,
+      "target": "\"json\"",
+      "schema": "BrowserPreviewRegionComparisonRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\channel.ts",
+      "line": 62,
+      "target": "\"json\"",
+      "schema": "ChannelAttachment.Input",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\channel.ts",
+      "line": 85,
+      "target": "\"query\"",
+      "schema": "z.object({\n          e: z\n            .string()\n            .optional()\n            .meta({ description: \"Expiry the signature covers; the URL is unauthorized once it passes.\" }),\n          s: z.string().optional().meta({ description: \"Signature authorizing this attachment read.\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\channel.ts",
+      "line": 130,
+      "target": "\"json\"",
+      "schema": "ChannelIngressInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\coding.ts",
+      "line": 57,
+      "target": "\"json\"",
+      "schema": "CodingCli.OpenInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\computer.ts",
+      "line": 56,
+      "target": "\"json\"",
+      "schema": "ComputerOwnershipInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\computer.ts",
+      "line": 88,
+      "target": "\"json\"",
+      "schema": "ComputerOwnershipInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\computer.ts",
+      "line": 121,
+      "target": "\"json\"",
+      "schema": "ComputerOwnershipInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\config.ts",
+      "line": 96,
+      "target": "\"json\"",
+      "schema": "z.record(z.string(), z.unknown())",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\config.ts",
+      "line": 148,
+      "target": "\"json\"",
+      "schema": "NetworkProxyTestRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\config.ts",
+      "line": 175,
+      "target": "\"query\"",
+      "schema": "z.object({\n          sessionID: z\n            .string()\n            .optional()\n            .meta({ description: \"Optional root or child session id for session-effective prompt catalog view\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\conversation-capability.ts",
+      "line": 44,
+      "target": "\"json\"",
+      "schema": "ConversationCapability.Update",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 41,
+      "target": "\"param\"",
+      "schema": "z.object({\n          id: Workspace.Info.shape.id,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 47,
+      "target": "\"json\"",
+      "schema": "z.object({}).strict()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 88,
+      "target": "\"param\"",
+      "schema": "z.object({\n          id: Workspace.Info.shape.id,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 188,
+      "target": "\"query\"",
+      "schema": "z.object({\n          provider: z.string(),\n          model: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 222,
+      "target": "\"json\"",
+      "schema": "Worktree.create.schema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 262,
+      "target": "\"json\"",
+      "schema": "Worktree.remove.schema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 283,
+      "target": "\"json\"",
+      "schema": "Worktree.reset.schema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 304,
+      "target": "\"query\"",
+      "schema": "ProjectScopedRouteQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 326,
+      "target": "\"json\"",
+      "schema": "CreateEventScheduleBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 345,
+      "target": "\"query\"",
+      "schema": "ProjectScopedRouteQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 382,
+      "target": "\"query\"",
+      "schema": "z.object({ sessionId: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 414,
+      "target": "\"query\"",
+      "schema": "z.object({ sessionId: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\experimental.ts",
+      "line": 491,
+      "target": "\"json\"",
+      "schema": "z.object({ generation: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 489,
+      "target": "\"query\"",
+      "schema": "CatalogQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 509,
+      "target": "\"query\"",
+      "schema": "ExpertSquadCatalogSearchQuerySchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 556,
+      "target": "\"query\"",
+      "schema": "ExpertSquadCatalogInspectionQuerySchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 584,
+      "target": "\"query\"",
+      "schema": "z.object({ cursor: z.string().min(1).optional(), limit: z.coerce.number().int().min(1).max(20).default(20) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 615,
+      "target": "\"query\"",
+      "schema": "ExpertSquadSettingsDetailQuerySchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 652,
+      "target": "\"query\"",
+      "schema": "z.object({\n          query: z.string().max(500).default(\"\"),\n          availability: z.enum([\"all\", \"available\", \"installed\"]).default(\"all\"),\n          productPillar: z.enum([\"code\", \"work\"]).optional(),\n          cursor: z.string().min(1).optional(),\n          limit: z.coerce.number().int().min(1).max(20).default(20),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 709,
+      "target": "\"query\"",
+      "schema": "z.object({ id: ExpertSquadIDSchema })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 764,
+      "target": "\"query\"",
+      "schema": "z.object({\n          id: ExpertSquadIDSchema,\n          installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 793,
+      "target": "\"json\"",
+      "schema": "ExpertSquadConfigurationUpdateSchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 850,
+      "target": "\"json\"",
+      "schema": "MulticaPreviewInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 884,
+      "target": "\"json\"",
+      "schema": "InstallPayloadInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 955,
+      "target": "\"json\"",
+      "schema": "UpdateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 986,
+      "target": "\"json\"",
+      "schema": "EvolutionMutationAuthorizationRequestSchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1005,
+      "target": "\"json\"",
+      "schema": "EvolutionMutationRequestSchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1026,
+      "target": "\"query\"",
+      "schema": "EvolutionHistoryListQuerySchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1048,
+      "target": "\"json\"",
+      "schema": "EvolutionCampaignDetailRequestSchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1067,
+      "target": "\"json\"",
+      "schema": "UninstallInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1146,
+      "target": "\"json\"",
+      "schema": "ValidateFolderInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1179,
+      "target": "\"json\"",
+      "schema": "ImportFolderInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1214,
+      "target": "\"json\"",
+      "schema": "ImportFileInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1246,
+      "target": "\"json\"",
+      "schema": "ImportExactFileInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\expert-squad.ts",
+      "line": 1285,
+      "target": "\"json\"",
+      "schema": "ExportInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\export.ts",
+      "line": 36,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 30,
+      "target": "\"query\"",
+      "schema": "z.object({\n          pattern: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 64,
+      "target": "\"query\"",
+      "schema": "z.object({\n          query: z.string(),\n          dirs: z.enum([\"true\", \"false\"]).optional(),\n          type: z.enum([\"file\", \"directory\"]).optional(),\n          limit: z.coerce.number().int().min(1).max(200).optional(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 104,
+      "target": "\"query\"",
+      "schema": "z.object({\n          path: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 135,
+      "target": "\"query\"",
+      "schema": "z.object({\n          path: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 167,
+      "target": "\"query\"",
+      "schema": "z.object({\n          path: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 199,
+      "target": "\"json\"",
+      "schema": "z.object({\n          path: z.string(),\n          content: z.string(),\n          expectedRevision: File.ContentRevision,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 231,
+      "target": "\"json\"",
+      "schema": "File.CreateRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 256,
+      "target": "\"json\"",
+      "schema": "File.CopyRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 281,
+      "target": "\"json\"",
+      "schema": "File.MoveRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 306,
+      "target": "\"query\"",
+      "schema": "z.object({\n          path: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\file.ts",
+      "line": 336,
+      "target": "\"json\"",
+      "schema": "File.UploadRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\gateway.ts",
+      "line": 167,
+      "target": "\"query\"",
+      "schema": "GatewayStatsQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\gateway.ts",
+      "line": 183,
+      "target": "\"json\"",
+      "schema": "GatewayControlMessageInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\gateway.ts",
+      "line": 208,
+      "target": "\"json\"",
+      "schema": "PanelActionSchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\gateway.ts",
+      "line": 247,
+      "target": "\"json\"",
+      "schema": "getGatewayChannelMessageInput()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 222,
+      "target": "\"query\"",
+      "schema": "UsageStats.Query",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 259,
+      "target": "\"json\"",
+      "schema": "CreateAutomationBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 283,
+      "target": "\"json\"",
+      "schema": "UpdateAutomationBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 355,
+      "target": "\"query\"",
+      "schema": "z.object({ expectedRevisionId: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 373,
+      "target": "\"json\"",
+      "schema": "GlobalConversationCreateRequest.optional()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 407,
+      "target": "\"json\"",
+      "schema": "GlobalChatStartInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 425,
+      "target": "\"json\"",
+      "schema": "GlobalConversationCreateRequest.optional()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 482,
+      "target": "\"query\"",
+      "schema": "ExpertSquadCatalogSearchQuerySchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 646,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string().trim().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 680,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 681,
+      "target": "\"json\"",
+      "schema": "z.object({\r\n          method: z.number(),\r\n          inputs: z.record(z.string(), z.string()).optional(),\r\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 709,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 710,
+      "target": "\"json\"",
+      "schema": "z.object({\r\n          method: z.number(),\r\n          inputs: z.record(z.string(), z.string()).optional(),\r\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 752,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 753,
+      "target": "\"json\"",
+      "schema": "z.object({\r\n          method: z.number(),\r\n          inputs: z.record(z.string(), z.string()).optional(),\r\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 785,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 786,
+      "target": "\"json\"",
+      "schema": "z.object({ method: z.number(), flowID: ProviderOAuthFlowStore.FlowID })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 815,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 816,
+      "target": "\"json\"",
+      "schema": "z.object({\r\n          method: z.number(),\r\n          code: z.string().optional(),\r\n          flowID: ProviderOAuthFlowStore.FlowID,\r\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 861,
+      "target": "\"json\"",
+      "schema": "z.object({\r\n          api: z.string().min(1),\r\n          apiKey: z.string().optional(),\r\n          providerID: z.string().optional(),\r\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 904,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 905,
+      "target": "\"json\"",
+      "schema": "z.object({ modelID: z.string().optional() }).optional()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 964,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string().trim().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 1046,
+      "target": "\"query\"",
+      "schema": "SkillManager.MarketSearchInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 1063,
+      "target": "\"query\"",
+      "schema": "SkillManager.MarketInspectInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 1080,
+      "target": "\"json\"",
+      "schema": "SkillManager.MarketInstallInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 1107,
+      "target": "\"json\"",
+      "schema": "SkillManager.InstallInput.extend({\r\n          kind: z.enum([\"url\", \"git\"]),\r\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 1276,
+      "target": "\"json\"",
+      "schema": "z.record(z.string(), z.unknown())",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\global.ts",
+      "line": 1398,
+      "target": "\"json\"",
+      "schema": "z.object({ snapshot: MysqlTransferSnapshot }).strict()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\interactive-artifact.ts",
+      "line": 53,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().min(1),\n          artifactID: z.string().min(1),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\interactive-artifact.ts",
+      "line": 92,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().min(1),\n          artifactID: z.string().min(1),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\interactive-artifact.ts",
+      "line": 99,
+      "target": "\"json\"",
+      "schema": "McpAppHostRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\interactive-artifact.ts",
+      "line": 127,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().min(1),\n          artifactID: z.string().min(1),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mailbox.ts",
+      "line": 72,
+      "target": "\"query\"",
+      "schema": "MailboxListQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mailbox.ts",
+      "line": 117,
+      "target": "\"json\"",
+      "schema": "MailboxDeleteManyInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mailbox.ts",
+      "line": 146,
+      "target": "\"param\"",
+      "schema": "z.object({ messageID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mailbox.ts",
+      "line": 174,
+      "target": "\"param\"",
+      "schema": "z.object({ messageID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mailbox.ts",
+      "line": 175,
+      "target": "\"json\"",
+      "schema": "MailboxActionInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mcp.ts",
+      "line": 53,
+      "target": "\"json\"",
+      "schema": "MCP.ConfigureRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mcp.ts",
+      "line": 98,
+      "target": "\"json\"",
+      "schema": "MCP.RemoveConfiguredInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mcp.ts",
+      "line": 166,
+      "target": "\"json\"",
+      "schema": "z.object({\n            code: z.string().describe(\"Authorization code from OAuth callback\"),\n            state: z.string().describe(\"OAuth state parameter from OAuth callback\"),\n          })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mcp.ts",
+      "line": 252,
+      "target": "\"param\"",
+      "schema": "z.object({ name: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mcp.ts",
+      "line": 276,
+      "target": "\"param\"",
+      "schema": "z.object({ name: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission-skill.ts",
+      "line": 37,
+      "target": "\"query\"",
+      "schema": "scopeQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission-skill.ts",
+      "line": 63,
+      "target": "\"query\"",
+      "schema": "scopeQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission-skill.ts",
+      "line": 89,
+      "target": "\"query\"",
+      "schema": "scopeQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission-skill.ts",
+      "line": 90,
+      "target": "\"json\"",
+      "schema": "MissionSkillCatalog.DirectoryRequest",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 201,
+      "target": "\"json\"",
+      "schema": "MissionDraftInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 247,
+      "target": "\"query\"",
+      "schema": "MissionListQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 280,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 301,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 340,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 395,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 396,
+      "target": "\"json\"",
+      "schema": "MissionDraftEditInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 421,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 422,
+      "target": "\"json\"",
+      "schema": "MissionTitleInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 444,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 445,
+      "target": "\"json\"",
+      "schema": "MissionArchiveInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 493,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 494,
+      "target": "\"json\"",
+      "schema": "TaskCancellationRequestBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 522,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 523,
+      "target": "\"json\"",
+      "schema": "TaskCancellationRequestBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 589,
+      "target": "\"param\"",
+      "schema": "MissionParam",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 590,
+      "target": "\"json\"",
+      "schema": "MissionDispatchInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\mission.ts",
+      "line": 689,
+      "target": "\"json\"",
+      "schema": "MissionWakeInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 239,
+      "target": "\"json\"",
+      "schema": "CreateTaskInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 283,
+      "target": "\"query\"",
+      "schema": "TaskListQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 333,
+      "target": "\"json\"",
+      "schema": "GlobalTaskCreateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 361,
+      "target": "\"query\"",
+      "schema": "z\n          .object({\n            directory: z.string().optional(),\n            q: z.string().optional(),\n            status: z.string().optional(),\n            limit: z.coerce.number().optional(),\n            cursor: z.coerce.number().optional(),\n            cursorTaskID: z.string().optional(),\n          })\n          .refine((query) => (query.cursor === undefined) === (query.cursorTaskID === undefined), {\n            message: \"cursor and cursorTaskID must be provided together\",\n            path: [\"cursor\"],\n          })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 408,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 433,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 466,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 511,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 547,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 568,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 569,
+      "target": "\"query\"",
+      "schema": "z.object({\n          after: z.string().optional().meta({ description: \"Resume after this durable task-event sequence.\" }),\n          after_live: z\n            .string()\n            .optional()\n            .meta({ description: \"Resume live projection after this sequence; omit to skip live replay.\" }),\n          after_live_epoch: z\n            .string()\n            .optional()\n            .meta({ description: \"The live projection epoch the after_live cursor belongs to.\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 756,
+      "target": "\"param\"",
+      "schema": "z.object({\n          taskID: Task.shape.id,\n          artifactID: Identifier.schema(\"artifact\"),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 763,
+      "target": "\"query\"",
+      "schema": "z.object({\n          file: z.string().min(1),\n          side: z.enum([\"before\", \"after\"]),\n          offset: z.coerce.number().int().nonnegative().default(0),\n          length: z.coerce.number().int().positive().max(BUILD_OBSERVATION_CONTENT_CHUNK_BYTES),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 827,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 857,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 858,
+      "target": "\"json\"",
+      "schema": "ArtifactInlineReadInputSchema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 908,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 909,
+      "target": "\"query\"",
+      "schema": "ConversationHydrationQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1057,
+      "target": "\"query\"",
+      "schema": "z.object({\n          after_live_sequence: z\n            .string()\n            .optional()\n            .meta({ description: \"Resume the live transcript after this sequence.\" }),\n          after_live_epoch: z\n            .string()\n            .optional()\n            .meta({ description: \"The live projection epoch the after_live_sequence cursor belongs to.\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1070,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id, sessionID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1209,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1210,
+      "target": "\"query\"",
+      "schema": "ConversationHistoryQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1270,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1271,
+      "target": "\"query\"",
+      "schema": "ConversationEventPageQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1304,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1326,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1355,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1375,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1400,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1422,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1449,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1450,
+      "target": "\"json\"",
+      "schema": "TaskMessageInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1478,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1479,
+      "target": "\"json\"",
+      "schema": "InjectMessageInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1508,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id, sessionID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1509,
+      "target": "\"json\"",
+      "schema": "AgentSessionOperatorSteerInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1536,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id, sessionID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1582,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1583,
+      "target": "\"json\"",
+      "schema": "TaskCancellationRequestBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1625,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1626,
+      "target": "\"json\"",
+      "schema": "RewindTaskInput.omit({ taskID: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1656,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1681,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1703,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1725,
+      "target": "\"param\"",
+      "schema": "z.object({ interactionID: Interaction.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1726,
+      "target": "\"json\"",
+      "schema": "UserReplyInteractionInput.omit({ userInput: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1762,
+      "target": "\"param\"",
+      "schema": "z.object({ interactionID: Interaction.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1763,
+      "target": "\"json\"",
+      "schema": "UserRejectInteractionInput.omit({ userInput: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1791,
+      "target": "\"param\"",
+      "schema": "z.object({ goalID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1792,
+      "target": "\"json\"",
+      "schema": "UpdateGoalTitleInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1810,
+      "target": "\"param\"",
+      "schema": "z.object({ goalID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1835,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1836,
+      "target": "\"json\"",
+      "schema": "TaskCancellationRequestBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1865,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1866,
+      "target": "\"json\"",
+      "schema": "TaskArchiveRequestBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1898,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1899,
+      "target": "\"json\"",
+      "schema": "z.object({ budget: Budget.nullable() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1915,
+      "target": "\"param\"",
+      "schema": "z.object({ taskID: Task.shape.id })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\orchestrator.ts",
+      "line": 1916,
+      "target": "\"json\"",
+      "schema": "z.object({\n          title: z\n            .string()\n            .transform((value) => value.trim())\n            .pipe(z.string().min(1).max(200)),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\panel.ts",
+      "line": 55,
+      "target": "\"query\"",
+      "schema": "PanelCapabilityQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\panel.ts",
+      "line": 75,
+      "target": "\"json\"",
+      "schema": "ControlMessageInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\panel.ts",
+      "line": 94,
+      "target": "\"json\"",
+      "schema": "ControlMessageInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\panel.ts",
+      "line": 150,
+      "target": "\"query\"",
+      "schema": "z.object({})",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\panel.ts",
+      "line": 219,
+      "target": "\"json\"",
+      "schema": "z.object({\n            query: z.string(),\n            limit: z.number().int().min(1).max(50).optional(),\n          })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\permission.ts",
+      "line": 23,
+      "target": "\"param\"",
+      "schema": "z.object({ requestID: PermissionAuthority.Identity })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\permission.ts",
+      "line": 24,
+      "target": "\"json\"",
+      "schema": "PermissionAuthority.UserReply.omit({ requestID: true, userInput: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\permission.ts",
+      "line": 93,
+      "target": "\"param\"",
+      "schema": "z.object({ grantID: PermissionAuthority.Identity })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "line": 125,
+      "target": "\"json\"",
+      "schema": "TaskCancellationRequestBody",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "line": 157,
+      "target": "\"json\"",
+      "schema": "CurrentProjectUpdateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "line": 184,
+      "target": "\"json\"",
+      "schema": "ImplicitProject.PromotionInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "line": 318,
+      "target": "\"json\"",
+      "schema": "Worktree.RemoveInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "line": 343,
+      "target": "\"param\"",
+      "schema": "z.object({ projectID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\project.ts",
+      "line": 344,
+      "target": "\"json\"",
+      "schema": "Project.update.schema.omit({ projectID: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 128,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string().trim().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 234,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string().trim().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 264,
+      "target": "\"json\"",
+      "schema": "z.object({\n          api: z.string().min(1).meta({ description: \"OpenAI-compatible base URL, usually ending in /v1\" }),\n          apiKey: z.string().optional().meta({ description: \"Optional API key used as a Bearer token\" }),\n          providerID: z\n            .string()\n            .optional()\n            .meta({ description: \"Optional provider ID whose saved auth key may be used\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 310,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string().meta({ description: \"Provider ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 316,
+      "target": "\"json\"",
+      "schema": "z\n          .object({\n            modelID: z.string().optional(),\n          })\n          .optional()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 350,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string().meta({ description: \"Provider ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 356,
+      "target": "\"json\"",
+      "schema": "z.object({\n          method: z.number().meta({ description: \"Auth method index\" }),\n          inputs: z.record(z.string(), z.string()).optional().meta({ description: \"Already collected inputs\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 389,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string().meta({ description: \"Provider ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 395,
+      "target": "\"json\"",
+      "schema": "z.object({\n          method: z.number().meta({ description: \"Auth method index\" }),\n          inputs: z.record(z.string(), z.string()).optional().meta({ description: \"Collected inputs\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 441,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string().meta({ description: \"Provider ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 447,
+      "target": "\"json\"",
+      "schema": "z.object({\n          method: z.number().meta({ description: \"Auth method index\" }),\n          inputs: z.record(z.string(), z.string()).optional().meta({ description: \"Collected inputs\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 484,
+      "target": "\"param\"",
+      "schema": "z.object({ providerID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 485,
+      "target": "\"json\"",
+      "schema": "z.object({ method: z.number(), flowID: ProviderOAuthFlowStore.FlowID })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 518,
+      "target": "\"param\"",
+      "schema": "z.object({\n          providerID: z.string().meta({ description: \"Provider ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\provider.ts",
+      "line": 524,
+      "target": "\"json\"",
+      "schema": "z.object({\n          method: z.number().meta({ description: \"Auth method index\" }),\n          code: z.string().optional().meta({ description: \"OAuth authorization code\" }),\n          flowID: ProviderOAuthFlowStore.FlowID.meta({ description: \"Exact authorization flow occurrence to finish\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 118,
+      "target": "\"json\"",
+      "schema": "Pty.CreateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 151,
+      "target": "\"param\"",
+      "schema": "z.object({ ptyID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 176,
+      "target": "\"param\"",
+      "schema": "z.object({ ptyID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 177,
+      "target": "\"json\"",
+      "schema": "Pty.UpdateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 202,
+      "target": "\"param\"",
+      "schema": "z.object({ ptyID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 228,
+      "target": "\"param\"",
+      "schema": "z.object({ ptyID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 229,
+      "target": "\"query\"",
+      "schema": "z.object({ cursor: z.coerce.number().int().min(-1).optional() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 255,
+      "target": "\"param\"",
+      "schema": "z.object({ ptyID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\pty.ts",
+      "line": 256,
+      "target": "\"json\"",
+      "schema": "Pty.Input",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\question.ts",
+      "line": 51,
+      "target": "\"param\"",
+      "schema": "z.object({\n          requestID: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\question.ts",
+      "line": 57,
+      "target": "\"json\"",
+      "schema": "Question.Reply",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\question.ts",
+      "line": 91,
+      "target": "\"param\"",
+      "schema": "z.object({\n          requestID: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 141,
+      "target": "\"json\"",
+      "schema": "ConversationSessionCreateInput.optional()",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 174,
+      "target": "\"query\"",
+      "schema": "ConversationSessionQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 198,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 222,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 223,
+      "target": "\"json\"",
+      "schema": "ConversationSessionUpdateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 256,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 291,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 292,
+      "target": "\"json\"",
+      "schema": "ConversationSessionArchiveInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 332,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 365,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string() })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\right-sidebar-conversation.ts",
+      "line": 366,
+      "target": "\"json\"",
+      "schema": "ConversationSessionSelectionInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 769,
+      "target": "\"query\"",
+      "schema": "z.object({\n          directory: z.string().optional().meta({ description: \"Filter sessions by project directory\" }),\n          roots: HttpQueryBoolean.optional().meta({ description: \"Only return root sessions (no parentID)\" }),\n          start: z.coerce\n            .number()\n            .optional()\n            .meta({ description: \"Filter sessions updated on or after this timestamp (milliseconds since epoch)\" }),\n          search: z.string().optional().meta({ description: \"Filter sessions by title (case-insensitive)\" }),\n          limit: HttpQueryLimit.optional().meta({ description: \"Maximum number of sessions to return\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 822,
+      "target": "\"query\"",
+      "schema": "z\n          .object({\n            directory: z.string().optional().meta({ description: \"Filter sessions by project directory\" }),\n            roots: HttpQueryBoolean.optional().meta({ description: \"Only return root sessions (no parentID)\" }),\n            start: z.coerce\n              .number()\n              .optional()\n              .meta({ description: \"Filter sessions updated on or after this timestamp (milliseconds since epoch)\" }),\n            cursorUpdated: z.coerce\n              .number()\n              .optional()\n              .meta({ description: \"Compound cursor updated timestamp (milliseconds since epoch)\" }),\n            cursorSessionID: z.string().trim().min(1).optional().meta({ description: \"Compound cursor session ID\" }),\n            search: z.string().optional().meta({ description: \"Filter sessions by title (case-insensitive)\" }),\n            limit: HttpQueryLimit.optional().meta({ description: \"Maximum number of sessions to return\" }),\n            archived: HttpQueryBoolean.optional().meta({ description: \"Include archived sessions (default false)\" }),\n          })\n          .superRefine((value, ctx) => {\n            const hasUpdated = value.cursorUpdated !== undefined\n            const hasSessionID = value.cursorSessionID !== undefined\n            if (hasUpdated === hasSessionID) return\n            ctx.addIssue({\n              code: z.ZodIssueCode.custom,\n              path: hasUpdated ? [\"cursorSessionID\"] : [\"cursorUpdated\"],\n              message: \"cursorUpdated and cursorSessionID must be supplied together\",\n            })\n          })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 911,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 947,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 953,
+      "target": "\"json\"",
+      "schema": "Config.Overlay",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 997,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1039,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1045,
+      "target": "\"query\"",
+      "schema": "ConversationHydrationQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1125,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1126,
+      "target": "\"query\"",
+      "schema": "ConversationHistoryQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1173,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1378,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: Session.get.schema,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1406,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: Session.children.schema,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1432,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1460,
+      "target": "\"json\"",
+      "schema": "Session.create.schema",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1496,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: Identifier.schema(\"session\"),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1502,
+      "target": "\"query\"",
+      "schema": "z.object({\n          deleteTasks: HttpQueryBoolean.optional(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1548,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1554,
+      "target": "\"json\"",
+      "schema": "z.object({\n          title: z.string().optional(),\n          time: z\n            .object({\n              archived: z.number().nullable().optional(),\n            })\n            .optional(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1601,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1607,
+      "target": "\"json\"",
+      "schema": "SessionInitializer.initialize.schema.omit({ sessionID: true, extra: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1640,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: Session.fork.schema.shape.sessionID,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1646,
+      "target": "\"json\"",
+      "schema": "Session.fork.schema.omit({ sessionID: true })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1675,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1720,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: SessionSummary.diff.schema.shape.sessionID,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1726,
+      "target": "\"query\"",
+      "schema": "z.object({\n          messageID: SessionSummary.diff.schema.shape.messageID,\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1758,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1764,
+      "target": "\"json\"",
+      "schema": "z.object({\n          providerID: z.string(),\n          modelID: z.string(),\n          auto: z.boolean().optional().default(false),\n          focus: z.string().optional(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1821,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: Identifier.schema(\"session\") })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1839,
+      "target": "\"param\"",
+      "schema": "z.object({ sessionID: Identifier.schema(\"session\") })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1861,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1867,
+      "target": "\"query\"",
+      "schema": "z.object({\n          limit: HttpQueryLimit.optional(),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1902,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n          messageID: z.string().meta({ description: \"Message ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1933,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n          messageID: z.string().meta({ description: \"Message ID\" }),\n          partID: z.string().meta({ description: \"Part ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1962,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n          messageID: z.string().meta({ description: \"Message ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 1993,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n          messageID: z.string().meta({ description: \"Message ID\" }),\n          partID: z.string().meta({ description: \"Part ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2028,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n          messageID: z.string().meta({ description: \"Message ID\" }),\n          partID: z.string().meta({ description: \"Part ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2036,
+      "target": "\"json\"",
+      "schema": "Message.Part",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2089,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2095,
+      "target": "\"json\"",
+      "schema": "PublicSessionPromptInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2135,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2141,
+      "target": "\"json\"",
+      "schema": "PublicSessionCommandInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2195,
+      "target": "\"param\"",
+      "schema": "z.object({\n          sessionID: z.string().meta({ description: \"Session ID\" }),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\session.ts",
+      "line": 2201,
+      "target": "\"json\"",
+      "schema": "PublicSessionShellInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 56,
+      "target": "\"query\"",
+      "schema": "z.object({\n          sessionID: z.string().optional(),\n          expertSquadID: z.string().trim().min(1).optional(),\n          refresh: z\n            .literal(\"true\")\n            .optional()\n            .transform((value) => value === \"true\"),\n        })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 113,
+      "target": "\"json\"",
+      "schema": "SkillMount.SetOverrideInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 176,
+      "target": "\"query\"",
+      "schema": "SkillManager.MarketSearchInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 193,
+      "target": "\"query\"",
+      "schema": "SkillManager.MarketInspectInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 210,
+      "target": "\"json\"",
+      "schema": "SkillManager.MarketInstallInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 258,
+      "target": "\"json\"",
+      "schema": "SkillManager.InstallInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 289,
+      "target": "\"json\"",
+      "schema": "SkillManager.ImportFileInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 311,
+      "target": "\"json\"",
+      "schema": "SkillManager.RemoveInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 330,
+      "target": "\"json\"",
+      "schema": "SkillManager.UpdateInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\skill.ts",
+      "line": 352,
+      "target": "\"json\"",
+      "schema": "SkillManager.PolicyInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\terminal.ts",
+      "line": 56,
+      "target": "\"json\"",
+      "schema": "SystemTerminal.OpenInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "line": 237,
+      "target": "\"param\"",
+      "schema": "z.object({ projectID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "line": 238,
+      "target": "\"json\"",
+      "schema": "WorkLedgerPinInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "line": 258,
+      "target": "\"param\"",
+      "schema": "z.object({ kind: WorkLedgerItemPinKind, itemID: z.string().min(1) })",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "line": 259,
+      "target": "\"json\"",
+      "schema": "WorkLedgerPinInput",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "line": 435,
+      "target": "\"query\"",
+      "schema": "WorkLedgerListQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\server\\routes\\work-ledger.ts",
+      "line": 453,
+      "target": "\"query\"",
+      "schema": "WorkLedgerListQuery",
+      "args": 2
+    },
+    {
+      "file": "packages\\opencorvus\\src\\session\\loop.ts",
+      "line": 752,
+      "target": "payload",
+      "args": 1
+    }
+  ]
+}

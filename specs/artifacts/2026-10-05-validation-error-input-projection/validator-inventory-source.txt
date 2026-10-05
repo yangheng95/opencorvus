@@ -1,0 +1,17 @@
+import ts from '../node_modules/typescript'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+const root='packages/opencorvus/src'
+const calls:any[]=[];const imports:any[]=[]
+async function walk(dir:string){for(const entry of await fs.readdir(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())await walk(file);else if(/\.tsx?$/.test(file)){
+ const text=await fs.readFile(file,'utf8'),source=ts.createSourceFile(file,text,ts.ScriptTarget.Latest,true)
+ function visit(node:ts.Node){
+  if(ts.isImportDeclaration(node)&&/hono.*validator|hono-openapi/.test(node.moduleSpecifier.getText(source)))imports.push({file,import:node.getText(source)})
+  if(ts.isCallExpression(node)&&/^(validator|zValidator|sValidator)$/.test(node.expression.getText(source)))calls.push({file,line:source.getLineAndCharacterOfPosition(node.getStart()).line+1,target:node.arguments[0]?.getText(source),schema:node.arguments[1]?.getText(source),args:node.arguments.length,hook:node.arguments[2]?.getText(source)})
+  ts.forEachChild(node,visit)
+ }visit(source)
+}}}
+await walk(root)
+const serverCalls=calls.filter(x=>x.args>=2)
+const summary={calls:serverCalls.length,files:new Set(serverCalls.map(x=>x.file)).size,targets:Object.fromEntries([...new Set(serverCalls.map(x=>x.target))].map(t=>[t,serverCalls.filter(x=>x.target===t).length])),hooks:serverCalls.filter(x=>x.args>2),excludedSameName:calls.filter(x=>!serverCalls.includes(x))}
+await fs.writeFile('.tmp-product-iteration/validation-inventory.json',JSON.stringify({summary,imports,calls},null,2));console.log(JSON.stringify(summary,null,2))

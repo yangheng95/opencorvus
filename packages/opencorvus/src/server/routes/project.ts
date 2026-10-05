@@ -5,7 +5,8 @@ import {
   ProjectWorktreeList,
   TaskCancellationRequestBody,
 } from "@opencorvus-ai/transport-protocol"
-import { describeRoute, validator } from "hono-openapi"
+import { describeRoute } from "hono-openapi"
+import { validator } from "@/server/validator"
 import { resolver } from "hono-openapi"
 import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"

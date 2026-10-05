@@ -1,5 +1,10 @@
 # Dependency remediation evidence
 
+- [Final integrated Stage5 native02](stage5-native-02/README.md): final Validator/SDK and connection-save source, actual CYap embedded UI, four first-run Sessions/two persisted across restart, nine production plus two separate event contracts; all commands exit0. Historical native01 remains the earlier source snapshot.
+
+- [Stage5 exact preparation and original tool failure](stage5-preparation/README.md), [actual canonical native01](stage5-native-01/result.json), [nine production cases](stage5-native-01/native-contracts.stdout.log) and [two independent event cases](stage5-native-01/event-library-contracts.stdout.log): four precise package updates, real compiler tuple/profile/native ownership, authenticated TLS and typed errors/context/tag data. Public test key contents remain in ignored storage only.
+- [Stage5 full standard audit](stage5-rustsec-audit/README.md): actual Overlay vulnerabilities5->4 and unsound4->2; remaining warning classes and full raw reports preserved. Supervisor22 dependencies still has zero findings. This is scoped first-phase qualification, not a clean overall dependency report.
+
 - [Stage4 standard RustSec audit](stage4-rustsec-audit/README.md): owned official tool installation and full audit of both physical Cargo locks, with every vulnerability/warning and original exit result retained. This is investigation, not an authorized dependency repair.
 
 - [Exact open Dependabot alerts](dependency-github-alerts-before.json): seven repository alerts read through the configured GitHub CLI; package, dependency relationship, affected range and official advisory facts. No credential contents were read or captured.

@@ -1,0 +1,67 @@
+{
+  "qualification": "Root actual IAB desktop actions and personally reviewed screenshots, no UI automation tests",
+  "page": "http://127.0.0.1:17941/ui/",
+  "tab": "11",
+  "assets": {
+    "js": "main-BeskyhIj.js",
+    "css": "main-Yy88IPFU.css"
+  },
+  "initial": {
+    "serverUrl": "http://127.0.0.1:17941",
+    "username": "opencorvus",
+    "password": "blank",
+    "offerGit": false,
+    "theme": "light",
+    "locale": "English",
+    "rawStorageNullNotIndependentlyInspected": true
+  },
+  "observations": [
+    {
+      "stage": "input-only",
+      "at": "2026-10-05T10:26:04.575Z",
+      "serverDraft": "http://127.0.0.1:17942",
+      "connectionSaveClicked": false,
+      "visibleMainAX": "Online Port 17942",
+      "pixelBadge": "Online"
+    },
+    {
+      "stage": "native switch click",
+      "at": "2026-10-05T10:27:32.911Z",
+      "result": "focused only; state remained false; not a save qualification"
+    },
+    {
+      "stage": "actual unrelated preference keyboard input",
+      "at": "2026-10-05T10:28:10.825Z",
+      "offerGit": true
+    },
+    {
+      "stage": "reload",
+      "pageOrigin": "http://127.0.0.1:17941",
+      "actualNetworkValue": "http://127.0.0.1:17942",
+      "offerGit": true
+    },
+    {
+      "stage": "restore",
+      "actualConnectionSave": "A address then Saving and settled normal Save/blank error; subsequent reload confirms A",
+      "offerGit": false,
+      "username": "opencorvus",
+      "password": "blank"
+    }
+  ],
+  "screenshots": [
+    "01-before-applied-a.png",
+    "02-before-unsaved-b-draft.png",
+    "03-before-unsaved-b-live.png",
+    "04-before-unrelated-preference-saved.png",
+    "05-before-unsaved-b-restored-from-storage.png",
+    "06-before-restored-preference.png",
+    "07-before-restored-a.png"
+  ],
+  "limits": [
+    "No successful auth/provider/model request",
+    "No Task creation, file content edit, Git initialization or old-directory opening",
+    "No independent exact directory query or delayed response proof",
+    "Server request correlation supplied separately by owned passive evidence"
+  ],
+  "reviewedAt": "2026-10-05T10:32:06.139Z"
+}

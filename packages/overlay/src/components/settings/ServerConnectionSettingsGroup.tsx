@@ -1,9 +1,8 @@
 import { Feedback } from "../ui/Feedback"
 import { createSignal, onCleanup } from "solid-js"
-import { configure as configureApi } from "../../services/api"
 import { checkConnection } from "../../services/connection"
 import { reloadProjectScope } from "../../services/config"
-import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
+import { settingsStore, setSettingsStore, saveSettings, SettingsActivationError } from "../../store/settings"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SettingsGroup, SettingsRow } from "./layout"
@@ -14,6 +13,11 @@ function errorMessage(error: unknown): string {
 }
 
 export function ServerConnectionSettingsGroup() {
+  const [draft, setDraft] = createSignal({
+    serverUrl: settingsStore.serverUrl,
+    username: settingsStore.username,
+    password: settingsStore.password,
+  })
   const [saved, setSaved] = createSignal(false)
   const [error, setError] = createSignal("")
   const [saving, setSaving] = createSignal(false)
@@ -30,19 +34,19 @@ export function ServerConnectionSettingsGroup() {
 
   async function saveConnection(): Promise<void> {
     if (saving()) return
-    const snapshot = {
-      serverUrl: settingsStore.serverUrl,
-      username: settingsStore.username,
-      password: settingsStore.password,
-    }
+    const snapshot = { ...draft() }
     const generation = ++saveGeneration
     const ownsSave = () => saveGeneration === generation
     setSaving(true)
     setSaved(false)
     setError("")
-    configureApi(snapshot)
     try {
-      await saveSettings({ overrides: snapshot })
+      await saveSettings({
+        overrides: snapshot,
+        onConfirmed: () => {
+          setSettingsStore(snapshot)
+        },
+      })
       if (!ownsSave()) return
       await checkConnection()
       if (!ownsSave()) return
@@ -57,7 +61,11 @@ export function ServerConnectionSettingsGroup() {
     } catch (nextError) {
       if (!ownsSave()) return
       setSaved(false)
-      setError(t("settings.save_failed", { error: errorMessage(nextError) }))
+      setError(
+        nextError instanceof SettingsActivationError
+          ? nextError.message
+          : t("settings.save_failed", { error: errorMessage(nextError) }),
+      )
     } finally {
       if (ownsSave()) setSaving(false)
     }
@@ -75,12 +83,12 @@ export function ServerConnectionSettingsGroup() {
           <TextField.Label>{t("settings.server_url")}</TextField.Label>
           <TextField.Input
             type="url"
-            value={settingsStore.serverUrl}
+            value={draft().serverUrl}
             placeholder="http://127.0.0.1:7878"
             disabled={saving()}
             onInput={(event) => {
               clearFeedback()
-              setSettingsStore("serverUrl", event.currentTarget.value.trim())
+              setDraft((value) => ({ ...value, serverUrl: event.currentTarget.value.trim() }))
             }}
           />
         </TextField.Root>
@@ -90,11 +98,11 @@ export function ServerConnectionSettingsGroup() {
           <TextField.Label>{t("settings.username")}</TextField.Label>
           <TextField.Input
             type="text"
-            value={settingsStore.username}
+            value={draft().username}
             disabled={saving()}
             onInput={(event) => {
               clearFeedback()
-              setSettingsStore("username", event.currentTarget.value.trim())
+              setDraft((value) => ({ ...value, username: event.currentTarget.value.trim() }))
             }}
           />
         </TextField.Root>
@@ -104,11 +112,11 @@ export function ServerConnectionSettingsGroup() {
           <TextField.Label>{t("settings.password")}</TextField.Label>
           <TextField.Input
             type="password"
-            value={settingsStore.password}
+            value={draft().password}
             disabled={saving()}
             onInput={(event) => {
               clearFeedback()
-              setSettingsStore("password", event.currentTarget.value)
+              setDraft((value) => ({ ...value, password: event.currentTarget.value }))
             }}
           />
         </TextField.Root>

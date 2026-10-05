@@ -1,0 +1,116 @@
+{
+  "qualification": "Local installed Zod Standard Schema issue shapes only; not public route/network/UI acceptance",
+  "observations": [
+    {
+      "name": "root-type",
+      "input": 42,
+      "issues": [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [],
+          "message": "Invalid input: expected string, received number"
+        }
+      ]
+    },
+    {
+      "name": "array-location",
+      "input": {
+        "attachments": [
+          {
+            "mime": ""
+          }
+        ]
+      },
+      "issues": [
+        {
+          "origin": "string",
+          "code": "too_small",
+          "minimum": 1,
+          "inclusive": true,
+          "path": [
+            "attachments",
+            0,
+            "mime"
+          ],
+          "message": "Too small: expected string to have >=1 characters"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-record-location",
+      "input": {
+        "DUMMY_USER_CONTROLLED_KEY": 12
+      },
+      "issues": [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "DUMMY_USER_CONTROLLED_KEY"
+          ],
+          "message": "Invalid input: expected string, received number"
+        }
+      ]
+    },
+    {
+      "name": "strict-unknown-key",
+      "input": {
+        "name": "valid",
+        "DUMMY_USER_CONTROLLED_KEY": "DUMMY_NON_CREDENTIAL_VALUE"
+      },
+      "issues": [
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "DUMMY_USER_CONTROLLED_KEY"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"DUMMY_USER_CONTROLLED_KEY\""
+        }
+      ]
+    },
+    {
+      "name": "union-detail",
+      "input": {
+        "dummy": "DUMMY_NON_CREDENTIAL_VALUE"
+      },
+      "issues": [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received object"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received object"
+              }
+            ]
+          ],
+          "path": [],
+          "message": "Invalid input"
+        }
+      ]
+    },
+    {
+      "name": "custom-prose",
+      "input": "DUMMY_USER_CONTROLLED_PROSE",
+      "issues": [
+        {
+          "code": "custom",
+          "message": "Example authored diagnostic: DUMMY_USER_CONTROLLED_PROSE",
+          "path": []
+        }
+      ]
+    }
+  ]
+}

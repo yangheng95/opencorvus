@@ -1,0 +1,29 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import { ApiError } from '../packages/overlay/src/services/api'
+import { formatErrorDetails } from '../packages/overlay/src/utils/error-details'
+
+const owner=JSON.parse(await fs.readFile('specs/artifacts/2026-10-05-connection-save-authority/a-owner.json','utf8'))
+assert.equal(owner.startup.url,'http://127.0.0.1:17941')
+assert.equal(owner.listener.ProcessId,12392)
+const origin='http://127.0.0.1:17941'
+const endpoint='/auth/validation-dummy-provider'
+const cases=[
+ {name:'oauth-invalid-expires',input:{type:'oauth',access:'DUMMY_NON_CREDENTIAL_ACCESS',refresh:'DUMMY_NON_CREDENTIAL_REFRESH',expires:'invalid-number'},issue:{expected:'number',code:'invalid_type',path:['expires'],message:'Invalid input: expected number, received string'}},
+ {name:'api-invalid-metadata',input:{type:'api',key:'DUMMY_NON_CREDENTIAL_APIKEY',metadata:{label:123}},issue:{expected:'string',code:'invalid_type',path:['metadata','label'],message:'Invalid input: expected string, received number'}},
+]
+const results=[]
+for(const item of cases){
+ const startedAt=new Date().toISOString()
+ const response=await fetch(origin+endpoint,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(item.input),signal:AbortSignal.timeout(15000)})
+ const body=await response.json()
+ const headers=Object.fromEntries(['content-type','x-opencorvus-request-id'].map(key=>[key,response.headers.get(key)??'']))
+ const error=new ApiError(response.status,endpoint,body,headers)
+ const observation={name:item.name,startedAt,method:'PUT',url:origin+endpoint,input:item.input,status:response.status,headers,body,apiError:{name:error.name,message:error.message,summary:error.summary,body:error.body,requestID:error.requestID,details:formatErrorDetails(error)}}
+ results.push(observation)
+ await fs.writeFile('.tmp-product-iteration/validation-before-http.json',JSON.stringify({qualification:'Actual readonly-to-authority malformed HTTP requests; no successful Auth mutation, provider/model or UI',owner,results},null,2))
+ assert.equal(response.status,400)
+ assert.deepEqual(body,{data:item.input,error:[item.issue],success:false})
+ assert.match(error.requestID??'',/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
+}
+console.log(JSON.stringify(results.map(x=>({name:x.name,status:x.status,requestID:x.apiError.requestID,summary:x.apiError.summary})),null,2))

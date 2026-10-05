@@ -73,6 +73,7 @@ EngineInteraction 持久化；进程恢复复用同一 Request 创建时间与�
 - **Browser host**：在 localStorage 的唯一键 `oc_settings` 中存放完整文档。
 - **Tauri host**：在应用配置目录的 `overlay.jsonc` 中存放同一文档，写入使用同目录临时文件原子替换。
 - **加载边界**：Browser 直接使用 TypeScript 严格 parser；Tauri 先用 Rust 的同构严格 schema 拒绝未知或无效字段，返回 Overlay 后再经过 TypeScript parser。文档不存在时，由 TypeScript `DEFAULT_SETTINGS` 唯一提供默认值。
+- **保存事务**：所有客户端偏好写入复用唯一串行 `saveSettings` 队列，轮到当前动作时才获取完整文档快照。原生持久化确认后先更新 `confirmedPersistedSettings`，再执行调用者显式提供的同步 `onConfirmed`，最后释放下一次写入；不会默认应用所有 overrides。视图关闭不能取消已持久事实的发布。持久化失败保留既有 `onFailure` 契约；确认回调失败返回带 `persisted=true` 和原始 cause 的 `SettingsActivationError`，表示已保存但客户端激活失败，不回滚或伪称保存失败，错误对象不携带完整偏好文档。后续合法写入仍按原队列继续，此边界不涉及 Task/Mission/Session 执行轮次。
 - **边界**：不同步到 server Config，也不是 LLM prompt 或 agent capability 的配置源。它只拥有当前客户端的连接、呈现、工作区恢复和桌面集成。
 
 **字段**：

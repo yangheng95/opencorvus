@@ -1,0 +1,22 @@
+{
+  "command": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+    "audit",
+    "--file",
+    "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+    "--db",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-advisory-db",
+    "--json"
+  ],
+  "cwd": "D:\\myhexin-local\\opencorvus",
+  "startedAt": "2026-10-05T10:32:25.133714+00:00",
+  "completedAt": "2026-10-05T10:32:29.499043+00:00",
+  "exitCode": 1,
+  "lockfile": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+  "inputBytesRetained": true,
+  "database": {
+    "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-advisory-db",
+    "head": "ref: refs/heads/main",
+    "commit": "ef6173cbc5c50ec8166f9a5b28f07834144373ee"
+  }
+}

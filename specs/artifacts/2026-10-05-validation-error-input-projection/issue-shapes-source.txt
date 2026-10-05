@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises'
+import z from '../packages/opencorvus/node_modules/zod'
+const cases = [
+  {name:'root-type',schema:z.string(),input:42},
+  {name:'array-location',schema:z.object({attachments:z.array(z.object({mime:z.string().min(1)}))}),input:{attachments:[{mime:''}]}},
+  {name:'dynamic-record-location',schema:z.record(z.string(),z.string()),input:{DUMMY_USER_CONTROLLED_KEY:12}},
+  {name:'strict-unknown-key',schema:z.object({name:z.string()}).strict(),input:{name:'valid',DUMMY_USER_CONTROLLED_KEY:'DUMMY_NON_CREDENTIAL_VALUE'}},
+  {name:'union-detail',schema:z.union([z.string(),z.number()]),input:{dummy:'DUMMY_NON_CREDENTIAL_VALUE'}},
+  {name:'custom-prose',schema:z.string().superRefine((value,ctx)=>ctx.addIssue({code:'custom',message:`Example authored diagnostic: ${value}`})),input:'DUMMY_USER_CONTROLLED_PROSE'},
+]
+const observations=[]
+for(const item of cases){const result=await item.schema['~standard'].validate(item.input); observations.push({name:item.name,input:item.input,issues:result.issues})}
+await fs.writeFile('.tmp-product-iteration/validation-issue-shapes.json',JSON.stringify({qualification:'Local installed Zod Standard Schema issue shapes only; not public route/network/UI acceptance',observations},null,2));console.log(JSON.stringify(observations,null,2))

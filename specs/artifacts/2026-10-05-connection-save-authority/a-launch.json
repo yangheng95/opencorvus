@@ -1,0 +1,10 @@
+{
+  "id": "a",
+  "launchPID": 3448,
+  "launchCreation": "2026-10-05T18:22:14.7059586+08:00",
+  "startupOccurrence": "connection-authority-a-2731f439-da37-4542-8fde-cf3cf2fa851f",
+  "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-authority-pair-01/a/startup.json",
+  "authInitiallyAbsent": true,
+  "modelsInitiallyAbsent": true,
+  "shutdownMethod": "POST /shutdown on matched owned origin; await exact PID/CreationDate,parent/listener absence and free port"
+}

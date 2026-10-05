@@ -1,0 +1,202 @@
+{
+  "qualification": "Pure actual TypeScript protocol/parser/apiUrl/Request construction. No fetch, native IPC, storage save, private home, server or UI.",
+  "observations": [
+    {
+      "serverUrl": "",
+      "protocolAccepted": false,
+      "parseError": {
+        "name": "TypeError",
+        "message": "persisted overlay settings payload is invalid"
+      }
+    },
+    {
+      "serverUrl": "   ",
+      "protocolAccepted": false,
+      "parseError": {
+        "name": "TypeError",
+        "message": "persisted overlay settings payload is invalid"
+      }
+    },
+    {
+      "serverUrl": "not a url",
+      "protocolAccepted": true,
+      "parsedServerUrl": "not a url",
+      "apiError": {
+        "name": "TypeError",
+        "message": "\"not a url/global/health\" cannot be parsed as a URL."
+      }
+    },
+    {
+      "serverUrl": "localhost:7878",
+      "protocolAccepted": true,
+      "parsedServerUrl": "localhost:7878",
+      "apiUrl": "localhost:7878/global/health",
+      "projection": {
+        "protocol": "localhost:",
+        "hostname": "",
+        "pathname": "7878/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "localhost:7878/global/health"
+    },
+    {
+      "serverUrl": "http://",
+      "protocolAccepted": true,
+      "parsedServerUrl": "http://",
+      "apiUrl": "http://global/health",
+      "projection": {
+        "protocol": "http:",
+        "hostname": "global",
+        "pathname": "/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "http://global/health"
+    },
+    {
+      "serverUrl": "http://[::1",
+      "protocolAccepted": true,
+      "parsedServerUrl": "http://[::1",
+      "apiError": {
+        "name": "TypeError",
+        "message": "\"http://[::1/global/health\" cannot be parsed as a URL."
+      }
+    },
+    {
+      "serverUrl": "//example.invalid",
+      "protocolAccepted": true,
+      "parsedServerUrl": "//example.invalid",
+      "apiError": {
+        "name": "TypeError",
+        "message": "\"//example.invalid/global/health\" cannot be parsed as a URL."
+      }
+    },
+    {
+      "serverUrl": "https://example.invalid/prefix/",
+      "protocolAccepted": true,
+      "parsedServerUrl": "https://example.invalid/prefix/",
+      "apiUrl": "https://example.invalid/prefix/global/health",
+      "projection": {
+        "protocol": "https:",
+        "hostname": "example.invalid",
+        "pathname": "/prefix/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "https://example.invalid/prefix/global/health"
+    },
+    {
+      "serverUrl": "https://example.invalid/prefix?mode=DUMMY",
+      "protocolAccepted": true,
+      "parsedServerUrl": "https://example.invalid/prefix?mode=DUMMY",
+      "apiUrl": "https://example.invalid/prefix?mode=DUMMY/global/health",
+      "projection": {
+        "protocol": "https:",
+        "hostname": "example.invalid",
+        "pathname": "/prefix",
+        "search": "?mode=DUMMY/global/health",
+        "hash": ""
+      },
+      "requestURL": "https://example.invalid/prefix?mode=DUMMY/global/health"
+    },
+    {
+      "serverUrl": "https://example.invalid/prefix#DUMMY",
+      "protocolAccepted": true,
+      "parsedServerUrl": "https://example.invalid/prefix#DUMMY",
+      "apiUrl": "https://example.invalid/prefix#DUMMY/global/health",
+      "projection": {
+        "protocol": "https:",
+        "hostname": "example.invalid",
+        "pathname": "/prefix",
+        "search": "",
+        "hash": "#DUMMY/global/health"
+      },
+      "requestURL": "https://example.invalid/prefix#DUMMY/global/health"
+    },
+    {
+      "serverUrl": "ftp://example.invalid/prefix",
+      "protocolAccepted": true,
+      "parsedServerUrl": "ftp://example.invalid/prefix",
+      "apiUrl": "ftp://example.invalid/prefix/global/health",
+      "projection": {
+        "protocol": "ftp:",
+        "hostname": "example.invalid",
+        "pathname": "/prefix/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "ftp://example.invalid/prefix/global/health"
+    },
+    {
+      "serverUrl": "file:///D:/dummy",
+      "protocolAccepted": true,
+      "parsedServerUrl": "file:///D:/dummy",
+      "apiUrl": "file:///D:/dummy/global/health",
+      "projection": {
+        "protocol": "file:",
+        "hostname": "",
+        "pathname": "/D:/dummy/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "file:///D:/dummy/global/health"
+    },
+    {
+      "serverUrl": "data:text/plain,DUMMY",
+      "protocolAccepted": true,
+      "parsedServerUrl": "data:text/plain,DUMMY",
+      "apiUrl": "data:text/plain,DUMMY/global/health",
+      "projection": {
+        "protocol": "data:",
+        "hostname": "",
+        "pathname": "text/plain,DUMMY/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "data:text/plain,DUMMY/global/health"
+    },
+    {
+      "serverUrl": "javascript:DUMMY",
+      "protocolAccepted": true,
+      "parsedServerUrl": "javascript:DUMMY",
+      "apiUrl": "javascript:DUMMY/global/health",
+      "projection": {
+        "protocol": "javascript:",
+        "hostname": "",
+        "pathname": "DUMMY/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "javascript:DUMMY/global/health"
+    },
+    {
+      "serverUrl": "  http://example.invalid/prefix  ",
+      "protocolAccepted": true,
+      "parsedServerUrl": "  http://example.invalid/prefix  ",
+      "apiUrl": "http://example.invalid/prefix%20%20/global/health",
+      "projection": {
+        "protocol": "http:",
+        "hostname": "example.invalid",
+        "pathname": "/prefix%20%20/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "http://example.invalid/prefix%20%20/global/health"
+    },
+    {
+      "serverUrl": "http://dummy:DUMMY_NON_CREDENTIAL@example.invalid/prefix",
+      "protocolAccepted": true,
+      "parsedServerUrl": "http://dummy:DUMMY_NON_CREDENTIAL@example.invalid/prefix",
+      "apiUrl": "http://dummy:DUMMY_NON_CREDENTIAL@example.invalid/prefix/global/health",
+      "projection": {
+        "protocol": "http:",
+        "hostname": "example.invalid",
+        "pathname": "/prefix/global/health",
+        "search": "",
+        "hash": ""
+      },
+      "requestURL": "http://dummy:DUMMY_NON_CREDENTIAL@example.invalid/prefix/global/health"
+    }
+  ]
+}

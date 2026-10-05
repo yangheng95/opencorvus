@@ -1,0 +1,76 @@
+{
+  "qualifiedTarget": "x86_64-pc-windows-msvc",
+  "artifact": {
+    "reason": "compiler-artifact",
+    "package_id": "registry+https://github.com/rust-lang/crates.io-index#event-listener@5.4.2",
+    "manifest_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\Cargo.toml",
+    "target": {
+      "kind": [
+        "lib"
+      ],
+      "crate_types": [
+        "lib"
+      ],
+      "name": "event_listener",
+      "src_path": "C:\\Users\\hengu\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\event-listener-5.4.2\\src\\lib.rs",
+      "edition": "2021",
+      "doc": true,
+      "doctest": true,
+      "test": true
+    },
+    "profile": {
+      "opt_level": "s",
+      "debuginfo": 0,
+      "debug_assertions": false,
+      "overflow_checks": false,
+      "test": false
+    },
+    "features": [
+      "default",
+      "parking",
+      "std"
+    ],
+    "filenames": [
+      "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\libevent_listener.rlib",
+      "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps\\libevent_listener-11c70891047d07c5.rmeta"
+    ],
+    "executable": null,
+    "fresh": false
+  },
+  "dependencyDirectories": [
+    "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release",
+    "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps"
+  ],
+  "commands": [
+    {
+      "command": [
+        "rustc",
+        "--test",
+        "--edition=2021",
+        "--cfg",
+        "event_listener_contract",
+        "D:\\myhexin-local\\opencorvus\\packages\\overlay\\script\\fixture\\rust-dependency-contract.rs",
+        "--extern",
+        "event_listener=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\libevent_listener.rlib",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release",
+        "-L",
+        "dependency=D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\target\\x86_64-pc-windows-msvc\\release\\deps",
+        "-o",
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-dependency-remediation\\stage5-preparation\\event-contract-preparation.exe"
+      ],
+      "exitCode": 0,
+      "completedAt": "2026-10-05T10:20:55.038444+00:00"
+    },
+    {
+      "command": [
+        "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-dependency-remediation\\stage5-preparation\\event-contract-preparation.exe",
+        "--test-threads=1",
+        "--nocapture"
+      ],
+      "exitCode": 0,
+      "completedAt": "2026-10-05T10:20:55.155787+00:00"
+    }
+  ],
+  "qualification": "same lock, explicit Windows library; Linux cross-compiled units excluded; not product/Linux runtime"
+}
