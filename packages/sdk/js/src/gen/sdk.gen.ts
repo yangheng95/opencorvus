@@ -6055,10 +6055,21 @@ export class Automations extends HeyApiClient {
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
       id: string
+      expectedRevisionId: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "id" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "id" },
+            { in: "query", key: "expectedRevisionId" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).delete<
       GlobalAutomationsDeleteResponses,
       GlobalAutomationsDeleteErrors,
@@ -6077,6 +6088,7 @@ export class Automations extends HeyApiClient {
     parameters: {
       id: string
       executionMode?: "local" | "worktree"
+      expectedRevisionId: string
       model?: {
         modelID: string
         providerID: string
@@ -6108,6 +6120,7 @@ export class Automations extends HeyApiClient {
           args: [
             { in: "path", key: "id" },
             { in: "body", key: "executionMode" },
+            { in: "body", key: "expectedRevisionId" },
             { in: "body", key: "model" },
             { in: "body", key: "name" },
             { in: "body", key: "prompt" },

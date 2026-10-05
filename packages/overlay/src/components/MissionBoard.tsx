@@ -180,7 +180,14 @@ function MissionBoardCard(props: {
               {t("mission_board.create.manual_draft")}
             </Badge>
             <div class="mission-board-card__draft-controls">
-              <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={props.actionBusy} onClick={props.onEdit}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={props.actionBusy}
+                onClick={props.onEdit}
+              >
                 <Icon name="edit" size="compact" />
                 {t("mission_board.edit.action")}
               </Button>
@@ -275,6 +282,7 @@ export function MissionBoard(props: MissionBoardProps) {
     try {
       await props.onDispatchMission(mission)
     } catch (nextError) {
+      if (nextError instanceof DOMException && nextError.name === "AbortError") return
       if (generation === actionGeneration) {
         setActionError(nextError instanceof Error ? nextError.message : String(nextError))
       }

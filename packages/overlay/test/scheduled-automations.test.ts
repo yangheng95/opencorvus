@@ -235,11 +235,11 @@ test("automation service sends the full lifecycle through global target-aware HT
   await listAutomations()
   expect(await resolveAutomationProjectID("/workspace/atlas")).toBe("prj_1")
   await createAutomation(input)
-  await pauseAutomation("atm_1")
-  await resumeAutomation("atm_1")
+  await pauseAutomation("atm_1", "atm_revision_opened")
+  await resumeAutomation("atm_1", "atm_revision_paused")
   await runAutomationNow("atm_1")
   await listAutomationRuns("atm_1")
-  await deleteAutomation("atm_1")
+  await deleteAutomation("atm_1", "atm_revision_resumed")
 
   expect(requests.map(({ path, method }) => `${method} ${path}`)).toEqual([
     "GET global/automations",
@@ -253,4 +253,13 @@ test("automation service sends the full lifecycle through global target-aware HT
   ])
   expect(requests[1]?.query).toEqual({ directory: "/workspace/atlas" })
   expect(requests[2]?.body).toEqual({ kind: "json", value: input })
+  expect(requests[3]?.body).toEqual({
+    kind: "json",
+    value: { status: "paused", expectedRevisionId: "atm_revision_opened" },
+  })
+  expect(requests[4]?.body).toEqual({
+    kind: "json",
+    value: { status: "active", expectedRevisionId: "atm_revision_paused" },
+  })
+  expect(requests[7]?.query).toEqual({ expectedRevisionId: "atm_revision_resumed" })
 })

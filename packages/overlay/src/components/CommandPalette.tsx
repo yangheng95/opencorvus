@@ -28,7 +28,7 @@ import {
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
-import { closeConfigDialog, openConfigDialog } from "../services/config-dialog-control"
+import { openConfigDialog } from "../services/config-dialog-control"
 import { CONFIG_SECTIONS } from "../store/dialog"
 import { t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -119,7 +119,6 @@ export function CommandPalette(props: {
         keywords: `${row.id} ${row.directory} ${row.kind}`,
         icon: rowCommandIcon(row),
         run: async () => {
-          await closeConfigDialog()
           if (row.kind === "mission") {
             await props.onSelectMission(row)
             return
@@ -304,6 +303,7 @@ export function CommandPalette(props: {
     close()
     try {
       void Promise.resolve(cmd.run()).catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return
         reportError({
           title: t("common.error"),
           message: `${t("command_palette.label")}: ${cmd.label}`,
@@ -311,6 +311,7 @@ export function CommandPalette(props: {
         })
       })
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return
       reportError({
         title: t("common.error"),
         message: `${t("command_palette.label")}: ${cmd.label}`,

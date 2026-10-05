@@ -206,7 +206,10 @@ export function FileEditorPane() {
     return pendingLeaveDecision
   }
 
-  const unregisterBeforeNavigate = registerFileEditorBeforeNavigate(decideBeforeNavigate)
+  const unregisterBeforeNavigate = registerFileEditorBeforeNavigate({
+    confirmLeave: decideBeforeNavigate,
+    isDirty: dirty,
+  })
   onCleanup(() => {
     reloadGeneration += 1
     saveGeneration += 1

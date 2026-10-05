@@ -11,6 +11,30 @@ The file pane uses the existing forced tab mount so hiding the Dock or selecting
 another tool retains that single draft owner and its navigation guard. Closing
 the file still clears the canonical target after the guard resolves.
 
+Workspace selection asks this same editor owner before changing the selected
+source, directory, intent, tools or accepting durable creation/dispatch. File
+closure and the admitted workspace epoch commit synchronously through the file
+owner's guarded boundary. Cancel, an explicit current-source no-op or a newer
+user/committed-fact selection keeps both original file and workspace facts.
+Internal hydration/directory primitives consume the explicit epoch; they do not
+start another selection. Committed handoff/removal/recovery facts converge their
+source while retaining the independently scoped file owner and tools.
+
+Concurrent global Composer attachments share the existing single allocation
+owner across admission, anonymous Project creation and complete activation.
+Inputs capture their source epoch and begin transient byte capture immediately.
+The resolver explicitly accepts either attachment admission or an already
+admitted epoch, and returns the exact directory/accepted epoch receipt. Its
+pointer, current admission sequence and workspace epoch must still agree;
+same-lineage inputs join before a half-activated directory can return early.
+Old completion releases only its own owner. Receipt and upload-owner validation
+keep late input bound to the Project that accepted it.
+
+The registered file owner exposes its existing dirty memo for browser exit.
+Only dirty pages register cancellable beforeunload confirmation. Actual page
+destruction runs the one idempotent teardown on non-cached pagehide; browser Stay
+and cached page preservation keep the mounted root, listeners and draft live.
+
 Ctrl/Cmd+S within the file pane invokes that same dirty/save/error owner and
 prevents the browser's Save Page action. It is not a global shortcut or a second
 filesystem writer. CodeMirror retains its existing search and undo keymaps.
@@ -61,6 +85,15 @@ captures authored fields before resolving project identities. Background list
 refreshes own list data only and cannot change navigation. User navigation
 invalidates old list requests. Missing edit targets retain the form and report
 an explicit error rather than becoming new definitions.
+
+The opening snapshot also owns the observed physical revisionId. Save, explicit
+status changes and deletion submit that exact version to the conditional public
+writer. Revision conflicts retain authored input and explain an explicit fresh
+read; the panel does not retry against a newer head. Automation public shapes
+derive from the canonical generated SDK operation types.
+Explicit return to the list starts its existing foreground read; row selection
+and deletion stay unavailable while that read is in progress. The form's list
+back button consumes the same owner, so reopening follows the latest definition.
 
 The host-wide automation editor labels retained model and reasoning identities
 explicitly when they are absent from the active project's connected catalog.
@@ -127,7 +160,8 @@ close actions clear that query so a rail selection opens its exact target even
 when the preceding page was filtered.
 
 Command palette ledger selections close the settings page through that same
-reveal lifecycle before selecting the exact Mission, Task or conversation.
+reveal lifecycle after file departure is approved and before selecting the
+exact Mission, Task or conversation.
 Global New chat actions from the rail, palette and titlebar all enter main's
 single global Composer lifecycle: close Settings, open the directory-free
 workspace, apply the default chat intent and reset the primary center surface.

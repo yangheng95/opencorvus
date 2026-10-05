@@ -10,7 +10,7 @@ import {
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 type Target = { scope: "session"; sessionId: string } | { scope: "project"; projectIds: string[] } | { scope: "global" }
-type Automation = { id: string; name: string; target: Target; status: "active" | "paused"; nextRun: number | null }
+type Automation = { id: string; revisionId: string; name: string; target: Target; status: "active" | "paused"; nextRun: number | null }
 type Run = {
   id: string
   automationId: string
@@ -278,16 +278,21 @@ try {
       { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) },
       directory,
     )
-  const patchAutomation = <T>(id: string, body: unknown) =>
-    json<T>(`/global/automations/${id}`, {
+  const patchAutomation = <T,>(observed: { id: string; revisionId: string }, body: JsonObject) =>
+    json<T>(`/global/automations/${observed.id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, expectedRevisionId: observed.revisionId }),
     })
   const create = (input: JsonObject) =>
-    post<{ id: string; name: string; nextRun: number | null }>("/global/automations", input)
+    post<{ id: string; revisionId: string; name: string; nextRun: number | null }>("/global/automations", input)
   const runs = (id: string) => json<Run[]>(`/global/automations/${id}/runs`)
-  const remove = (id: string) => json<{ id: string; name: string }>(`/global/automations/${id}`, { method: "DELETE" })
+  const remove = (observed: { id: string; revisionId: string }) =>
+    json<{ id: string; name: string }>(
+      `/global/automations/${observed.id}?expectedRevisionId=${encodeURIComponent(observed.revisionId)}`,
+      { method: "DELETE" },
+    )
+
   const messages = (sessionID: string, directory: string) =>
     json<Array<{ info: { role: string } }>>(`/session/${sessionID}/message`, {}, directory)
 
@@ -312,9 +317,9 @@ try {
     }),
   })
   if (invalid.status === 201) {
-    const row = (await invalid.json()) as { id: string }
+    const row = (await invalid.json()) as { id: string; revisionId: string }
     findings.push("global Automation persisted an unresolved explicit model")
-    await remove(row.id)
+    await remove(row)
   } else if (invalid.status < 400 || invalid.status >= 500)
     findings.push(`invalid global model returned ${invalid.status}`)
 
@@ -328,8 +333,8 @@ try {
   const sessionRun = await post<Run[]>(`/global/automations/${sessionAutomation.id}/run`, {})
   if (sessionRun.length !== 1 || sessionRun[0]?.outcome !== "succeeded" || sessionRun[0]?.session?.id !== session.id)
     findings.push("Run now did not reuse the exact Session")
-  const paused = await patchAutomation<Automation>(sessionAutomation.id, { status: "paused" })
-  const resumed = await patchAutomation<Automation>(sessionAutomation.id, { status: "active" })
+  const paused = await patchAutomation<Automation>(sessionAutomation, { status: "paused" })
+  const resumed = await patchAutomation<Automation>(paused, { status: "active" })
   if (
     paused.status !== "paused" ||
     resumed.status !== "active" ||
@@ -345,7 +350,7 @@ try {
     model: { providerID, modelID },
     prompt: "SCHEDULED_E2E_FINITE_MANUAL",
   })
-  const finitePaused = await patchAutomation<Automation>(finiteAutomation.id, { status: "paused" })
+  const finitePaused = await patchAutomation<Automation>(finiteAutomation, { status: "paused" })
   const finiteRuns = await post<Run[]>(`/global/automations/${finiteAutomation.id}/run`, {})
   const finiteSettled = (await json<Automation[]>("/global/automations")).find((row) => row.id === finiteAutomation.id)
   if (
@@ -396,7 +401,7 @@ try {
   )
   if (busyRun.session?.id !== session.id || busyRun.fireId.length === 0)
     findings.push("busy Session delayed occurrence lost its exact Session or fire identity")
-  await patchAutomation(busyAutomation.id, { status: "paused" })
+  const busyPaused = await patchAutomation<Automation>(busyAutomation, { status: "paused" })
 
   const globalAutomation = await create({
     name: "global natural due",
@@ -410,7 +415,7 @@ try {
     (await runs(globalAutomation.id)).find((row) => row.outcome === "succeeded"),
   )
   if (globalRun.targetScope !== "global" || !globalRun.session) findings.push("global due run lacked a visible Chat")
-  await patchAutomation(globalAutomation.id, { status: "paused" })
+  const globalPaused = await patchAutomation<Automation>(globalAutomation, { status: "paused" })
 
   provider.failProjectTwoOnce()
   const projectAutomation = await create({
@@ -435,7 +440,7 @@ try {
   const twoRequests = retryRequests.filter((entry) => entry.project === "two").length
   if (oneRequests !== 1 || twoRequests !== 2)
     findings.push(`retry replay cardinality was one=${oneRequests}, two=${twoRequests}`)
-  await patchAutomation(projectAutomation.id, { status: "paused" })
+  const projectPaused = await patchAutomation<Automation>(projectAutomation, { status: "paused" })
 
   const worktreeAutomation = await create({
     name: "worktree manual",
@@ -452,24 +457,20 @@ try {
     path.resolve(worktreeRun.session.directory) === path.resolve(projectOne)
   )
     findings.push("worktree run lacked its owned execution directory")
-  const switched = await patchAutomation<Automation>(worktreeAutomation.id, {
+  const switched = await patchAutomation<Automation>(worktreeAutomation, {
     target: { scope: "global" },
     executionMode: "local",
     name: "scope switched",
   })
   if (switched.target.scope !== "global") findings.push("target replacement retained stale Project scope")
 
+  let finalDefinitions = [resumed, busyPaused, globalPaused, projectPaused, switched, finitePaused]
   if (process.env.OPENCORVUS_SCHEDULED_E2E_VISUAL_HOLD === "1") {
-    for (const automation of [
-      sessionAutomation,
-      busyAutomation,
-      globalAutomation,
-      projectAutomation,
-      worktreeAutomation,
-      finiteAutomation,
-    ]) {
-      await patchAutomation(automation.id, { status: "paused" })
+    const pausedDefinitions: Automation[] = []
+    for (const automation of finalDefinitions) {
+      pausedDefinitions.push(await patchAutomation<Automation>(automation, { status: "paused" }))
     }
+    finalDefinitions = pausedDefinitions
     const releasePath = path.join(root, "visual-release")
     console.log(`SCHEDULED_E2E_VISUAL_READY ${JSON.stringify({ url: `${origin}/ui/`, root, releasePath })}`)
     await waitFor(
@@ -493,15 +494,8 @@ try {
     ...projectRuns.map((row) => row.session),
     worktreeRun?.session,
   ].filter((value): value is { id: string; directory: string } => !!value)
-  for (const row of [
-    sessionAutomation,
-    busyAutomation,
-    globalAutomation,
-    projectAutomation,
-    worktreeAutomation,
-    finiteAutomation,
-  ]) {
-    const receipt = await remove(row.id)
+  for (const row of finalDefinitions) {
+    const receipt = await remove(row)
     if (receipt.id !== row.id || !receipt.name) findings.push(`delete receipt was incomplete for ${row.id}`)
   }
   for (const preservedSession of preserved) {

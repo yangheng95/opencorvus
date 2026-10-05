@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\attachment-upload.test.ts:
+(pass) composer attachment upload > uploads a file as raw binary and returns only the canonical reference [1.64ms]
+(pass) composer attachment upload > uploads captured clipboard bytes after the transient source lifetime ends [0.26ms]
+(pass) composer attachment upload > uploads payloads larger than the retired 10 MiB composer limit [38.02ms]
+(pass) composer attachment upload > creates one directory reference request without reading child files [0.58ms]
+
+ 4 pass
+ 0 fail
+ 13 expect() calls
+Ran 4 tests across 1 file. [1.81s]

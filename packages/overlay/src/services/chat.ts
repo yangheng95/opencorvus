@@ -17,7 +17,7 @@ import {
 } from "../store/messages"
 import { boardStore, loadBoard, loadTasks, activeTaskID, activeSessionID } from "../store/board"
 import { appStore, setConnectionStatus } from "../store/app"
-import { workspaceMode } from "./workspace"
+import { workspaceMode, beginWorkspaceSelection } from "./workspace"
 import { currentOpenCorvusModel, currentOpenCorvusPromptModel, selectTask } from "./task"
 import { setSessionExpertSquadActive } from "./expert-squad"
 import { ingestPersistedConversationMessage } from "./tree-writer"
@@ -72,11 +72,11 @@ async function resolvePanelMessageTaskID(): Promise<string> {
   if (target === "task") return selectedTaskID
 
   if (target === "reload") {
-    await selectTask(selectedTaskID)
+    await selectTask(selectedTaskID, { selectionEpoch: beginWorkspaceSelection() })
     return String(activeTaskID() || "").trim()
   }
 
-  await selectTask("")
+  await selectTask("", { selectionEpoch: beginWorkspaceSelection() })
   return ""
 }
 
@@ -244,11 +244,7 @@ export async function promptSessionMessage(input: {
     }
     input.onDispatch?.()
     const result = await apiJson(
-      directoryScopedPath(
-        `session/${encodeURIComponent(input.sessionID)}/message`,
-        input.directory,
-        "session prompt",
-      ),
+      directoryScopedPath(`session/${encodeURIComponent(input.sessionID)}/message`, input.directory, "session prompt"),
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

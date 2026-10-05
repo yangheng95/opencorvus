@@ -1,0 +1,21 @@
+{
+  "id": "atm_g0VX8MR4A002Lr4J7nut",
+  "revisionId": "atm_g0VX8yHQu00xlircpHk8",
+  "name": "Fresh edit preserved latest peer prompt",
+  "target": {
+    "scope": "project",
+    "projectIds": [
+      "prj_hroPEGg17GAZWxDZ7MR7"
+    ]
+  },
+  "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+  "executionMode": "local",
+  "model": null,
+  "reasoningEffort": null,
+  "prompt": "Final peer prompt survives explicit reload and fresh save.",
+  "status": "active",
+  "lastRun": null,
+  "nextRun": 4102416000000,
+  "failureCount": 0,
+  "lastError": null
+}

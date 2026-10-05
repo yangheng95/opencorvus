@@ -577,6 +577,70 @@
         ],
         "type": "object"
       },
+      "AutomationRevisionConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "currentRevisionId": {
+                "type": "string"
+              },
+              "expectedRevisionId": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID",
+              "expectedRevisionId",
+              "currentRevisionId"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationRevisionConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "AutomationRunningConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationRunningConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "BadRequestError": {
         "properties": {
           "data": {},
@@ -75629,6 +75693,9 @@
                       "recurrence": {
                         "type": "string"
                       },
+                      "revisionId": {
+                        "type": "string"
+                      },
                       "status": {
                         "enum": [
                           "active",
@@ -75696,6 +75763,7 @@
                     },
                     "required": [
                       "id",
+                      "revisionId",
                       "name",
                       "target",
                       "recurrence",
@@ -75875,10 +75943,14 @@
                           "type": "null"
                         }
                       ]
+                    },
+                    "revisionId": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "id",
+                    "revisionId",
                     "name",
                     "nextRun"
                   ],
@@ -75963,6 +76035,15 @@
       "delete": {
         "operationId": "global.automations.delete",
         "parameters": [
+          {
+            "in": "query",
+            "name": "expectedRevisionId",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
           {
             "in": "path",
             "name": "id",
@@ -76061,28 +76142,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/AutomationRevisionConflictError"
                     },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/AutomationRunningConflictError"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Conflict"
+            "description": "Observed definition changed or its execution is running"
           }
         },
         "summary": "Delete a scheduled automation",
@@ -76116,6 +76187,10 @@
                       "local",
                       "worktree"
                     ],
+                    "type": "string"
+                  },
+                  "expectedRevisionId": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "model": {
@@ -76230,10 +76305,14 @@
                     ]
                   }
                 },
+                "required": [
+                  "expectedRevisionId"
+                ],
                 "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -76326,6 +76405,9 @@
                     "recurrence": {
                       "type": "string"
                     },
+                    "revisionId": {
+                      "type": "string"
+                    },
                     "status": {
                       "enum": [
                         "active",
@@ -76393,6 +76475,7 @@
                   },
                   "required": [
                     "id",
+                    "revisionId",
                     "name",
                     "target",
                     "recurrence",
@@ -76477,28 +76560,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/AutomationRevisionConflictError"
                     },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/AutomationRunningConflictError"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Conflict"
+            "description": "Observed definition changed or its execution is running"
           }
         },
         "summary": "Update a scheduled automation",

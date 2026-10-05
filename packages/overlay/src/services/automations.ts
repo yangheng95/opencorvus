@@ -1,73 +1,25 @@
 import { apiJson } from "./api"
 import { directoryScopedPath } from "./task-path"
+import type {
+  GlobalAutomationsCreateData,
+  GlobalAutomationsCreateResponse,
+  GlobalAutomationsDeleteResponses,
+  GlobalAutomationsListResponses,
+  GlobalAutomationsRunResponses,
+  GlobalAutomationsUpdateData,
+} from "@opencorvus-ai/sdk"
 
-export type AutomationScope = "session" | "project" | "global"
-export type AutomationTarget =
-  | { scope: "session"; sessionId: string }
-  | { scope: "project"; projectIds: string[] }
-  | { scope: "global" }
-export type AutomationStatus = "active" | "paused"
-export type AutomationExecutionMode = "local" | "worktree"
-export type AutomationRunOutcome = "running" | "succeeded" | "failed"
-
-export interface AutomationModel {
-  providerID: string
-  modelID: string
-}
-
-export interface AutomationView {
-  id: string
-  name: string
-  target: AutomationTarget
-  recurrence: string
-  executionMode: AutomationExecutionMode
-  model: AutomationModel | null
-  reasoningEffort: string | null
-  prompt: string
-  status: AutomationStatus
-  lastRun: number | null
-  nextRun: number | null
-  failureCount: number
-  lastError: string | null
-}
-
-export interface AutomationRunSession {
-  id: string
-  title: string
-  directory: string
-  kind: string
-  experience: "chat" | "work" | null
-  productPillar: "code" | "work" | null
-}
-
-export interface AutomationRunView {
-  id: string
-  automationId: string
-  fireId: string
-  targetScope: AutomationScope
-  targetProjectId: string | null
-  session: AutomationRunSession | null
-  outcome: AutomationRunOutcome
-  startedAt: number
-  completedAt: number | null
-  error: string | null
-}
-
-export interface AutomationInput {
-  name: string
-  target: AutomationTarget
-  recurrence: string
-  executionMode: AutomationExecutionMode
-  model?: AutomationModel
-  reasoningEffort?: string
-  prompt: string
-}
-
-export type AutomationUpdate = Partial<Omit<AutomationInput, "model" | "reasoningEffort">> & {
-  model?: AutomationModel | null
-  reasoningEffort?: string | null
-  status?: AutomationStatus
-}
+export type AutomationView = GlobalAutomationsListResponses[200][number]
+export type AutomationTarget = AutomationView["target"]
+export type AutomationScope = AutomationTarget["scope"]
+export type AutomationStatus = AutomationView["status"]
+export type AutomationExecutionMode = AutomationView["executionMode"]
+export type AutomationModel = NonNullable<AutomationView["model"]>
+export type AutomationRunView = GlobalAutomationsRunResponses[200][number]
+export type AutomationRunSession = NonNullable<AutomationRunView["session"]>
+export type AutomationRunOutcome = AutomationRunView["outcome"]
+export type AutomationInput = GlobalAutomationsCreateData["body"]
+export type AutomationUpdate = GlobalAutomationsUpdateData["body"]
 
 const jsonHeaders = { "Content-Type": "application/json" }
 
@@ -81,7 +33,7 @@ export function listAutomations(signal?: AbortSignal): Promise<AutomationView[]>
 
 export function createAutomation(
   input: AutomationInput,
-): Promise<{ id: string; name: string; nextRun: number | null }> {
+): Promise<GlobalAutomationsCreateResponse> {
   return apiJson(automationPath(), {
     method: "POST",
     headers: jsonHeaders,
@@ -97,12 +49,12 @@ export function updateAutomation(id: string, input: AutomationUpdate): Promise<A
   })
 }
 
-export function pauseAutomation(id: string): Promise<AutomationView> {
-  return updateAutomation(id, { status: "paused" })
+export function pauseAutomation(id: string, expectedRevisionId: string): Promise<AutomationView> {
+  return updateAutomation(id, { status: "paused", expectedRevisionId })
 }
 
-export function resumeAutomation(id: string): Promise<AutomationView> {
-  return updateAutomation(id, { status: "active" })
+export function resumeAutomation(id: string, expectedRevisionId: string): Promise<AutomationView> {
+  return updateAutomation(id, { status: "active", expectedRevisionId })
 }
 
 export function runAutomationNow(id: string): Promise<AutomationRunView[]> {
@@ -113,8 +65,12 @@ export function listAutomationRuns(id: string, signal?: AbortSignal): Promise<Au
   return apiJson(automationPath(`/${encodeURIComponent(id)}/runs`), { signal })
 }
 
-export function deleteAutomation(id: string): Promise<{ id: string; name: string }> {
-  return apiJson(automationPath(`/${encodeURIComponent(id)}`), { method: "DELETE" })
+export function deleteAutomation(
+  id: string,
+  expectedRevisionId: string,
+): Promise<GlobalAutomationsDeleteResponses[200]> {
+  const query = new URLSearchParams({ expectedRevisionId })
+  return apiJson(`${automationPath(`/${encodeURIComponent(id)}`)}?${query}`, { method: "DELETE" })
 }
 
 export async function resolveAutomationProjectID(directory: string): Promise<string> {

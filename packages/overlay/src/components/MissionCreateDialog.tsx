@@ -458,6 +458,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       }
       props.onClose()
     } catch (nextError) {
+      if (nextError instanceof DOMException && nextError.name === "AbortError") return
       setError(nextError instanceof Error ? nextError.message : String(nextError))
     } finally {
       setSubmitting(false)

@@ -661,6 +661,7 @@
   "automations.error.session_required": "Select a Session before creating a conversation-scoped automation.",
   "automations.error.project_required": "Choose at least one project for this automation.",
   "automations.error.edit_target_missing": "This automation is no longer available. Your edits are kept here; return to the list to review the current schedules.",
+  "automations.error.revision_conflict": "This automation changed since you opened it. Your edits are kept here; return to the list to review the latest version before editing again.",
   "automations.session_target": "Exact Session target",
   "automations.session_target_exact": "Session {{session}}",
   "automations.session_target_missing": "Select a Session in the workspace before saving this automation.",

@@ -163,6 +163,15 @@ function outcomeTone(outcome: AutomationRunView["outcome"]): BadgeTone {
 }
 
 function errorText(error: unknown): string {
+  if (
+    error instanceof ApiError &&
+    error.status === 409 &&
+    error.body &&
+    typeof error.body === "object" &&
+    (error.body as { name?: unknown }).name === "AutomationRevisionConflictError"
+  ) {
+    return t("automations.error.revision_conflict")
+  }
   return error instanceof Error ? error.message : String(error)
 }
 
@@ -414,7 +423,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function selectAutomation(id: string): void {
-    if (busyAction()) return
+    if (loading() || busyAction()) return
     invalidateListNavigation()
     rememberListFocus()
     setSelectedID(id)
@@ -460,6 +469,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setCreating(false)
     setEditTarget(null)
     setError(null)
+    void load()
     focusListReturn()
   }
 
@@ -578,6 +588,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       if (current) {
         await updateAutomation(current.id, {
           ...base,
+          expectedRevisionId: current.revisionId,
           model: form.model ?? null,
           reasoningEffort: form.reasoningEffort || null,
         })
@@ -623,11 +634,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   async function removeSelected(): Promise<void> {
     const automation = selected()
     if (!automation) return
-    await removeAutomation(automation.id)
+    await removeAutomation(automation)
   }
 
-  async function removeAutomation(id: string): Promise<void> {
+  async function removeAutomation(automation: AutomationView): Promise<void> {
     if (busyAction()) return
+    const { id, revisionId } = automation
     const removingSelected = selectedID() === id
     const active = document.activeElement
     const removingFocusedRow = active instanceof HTMLElement && Boolean(active.closest(".automation-list-row"))
@@ -636,7 +648,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setMutationOwner(owner)
     setError(null)
     try {
-      await deleteAutomation(id)
+      await deleteAutomation(id, revisionId)
       if (removingSelected) {
         setSelectedID("")
         setRunState({ automationID: "", status: "idle", items: [] })
@@ -840,7 +852,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           interactive
                           customContent
                           data-selected={String(selectedID() === automation.id)}
-                          disabled={Boolean(busyAction())}
+                          disabled={loading() || Boolean(busyAction())}
                           onClick={() => selectAutomation(automation.id)}
                         >
                           <Icon name={automation.status === "active" ? "run" : "scheduled"} />
@@ -865,8 +877,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           label={t("automations.delete")}
                           armedDescription={t("automations.delete_confirm")}
                           confirmChildren={t("automations.delete_confirm")}
-                          disabled={Boolean(busyAction())}
-                          onConfirm={() => void removeAutomation(automation.id)}
+                          disabled={loading() || Boolean(busyAction())}
+                          onConfirm={() => void removeAutomation(automation)}
                         >
                           <Icon name="delete" />
                         </ArmedConfirmButton>
@@ -987,14 +999,15 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             tone="neutral"
                             data-ui="automation-status"
                             disabled={Boolean(busyAction())}
-                            onClick={() =>
+                            onClick={() => {
+                              const current = automation()
                               void performAction(
-                                automation().id,
-                                automation().status === "active"
-                                  ? () => pauseAutomation(automation().id)
-                                  : () => resumeAutomation(automation().id),
+                                current.id,
+                                current.status === "active"
+                                  ? () => pauseAutomation(current.id, current.revisionId)
+                                  : () => resumeAutomation(current.id, current.revisionId),
                               )
-                            }
+                            }}
                           >
                             {automation().status === "active" ? t("automations.pause") : t("automations.resume")}
                           </Button>
@@ -1159,7 +1172,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   size="sm"
                   tone="neutral"
                   disabled={Boolean(busyAction())}
-                  onClick={cancelForm}
+                  onClick={returnToList}
                 >
                   <Icon name="nav-back" />
                   {t("automations.back")}

@@ -13,12 +13,7 @@ import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
-import {
-  applyDirectory,
-  beginWorkspaceSelection,
-  ownsWorkspaceSelection,
-  supersedePendingWorkspaceSelection,
-} from "./workspace"
+import { applyDirectory, ownsWorkspaceSelection } from "./workspace"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "./diagnostics"
 import type { WorkLedgerStreamEvent } from "./sse"
@@ -41,7 +36,7 @@ export type SelectConversationSessionOptions = {
   directory: string
   experience: ConversationExperience
   signal?: AbortSignal
-  selectionEpoch?: number
+  selectionEpoch: number
 }
 
 export type ConversationSessionActionTarget = {
@@ -250,12 +245,14 @@ export function setConversationSearchQuery(query: string): void {
 }
 
 async function createConversationSessionFromPath(options: {
+  selectionEpoch: number
   path: string
   experience: ConversationExperience
   signal?: AbortSignal
   body?: Record<string, unknown>
 }): Promise<string> {
-  const selectionEpoch = supersedePendingWorkspaceSelection()
+  const selectionEpoch = options.selectionEpoch
+  if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Conversation creation superseded", "AbortError")
   assertNotAborted(options.signal)
   const response = (await apiJson(options.path, {
     method: "POST",
@@ -282,6 +279,7 @@ async function createConversationSessionFromPath(options: {
 }
 
 export async function createConversationSession(options: {
+  selectionEpoch: number
   directory: string
   experience: ConversationExperience
   model?: string
@@ -291,6 +289,7 @@ export async function createConversationSession(options: {
   if (!directory) throw new Error("createConversationSession: directory is required")
   const params = new URLSearchParams({ directory })
   return createConversationSessionFromPath({
+    selectionEpoch: options.selectionEpoch,
     path: `coding/${options.experience}/session?${params.toString()}`,
     experience: options.experience,
     signal: options.signal,
@@ -299,12 +298,14 @@ export async function createConversationSession(options: {
 }
 
 export async function createGlobalConversationSession(options: {
+  selectionEpoch: number
   experience: ConversationExperience
   model?: string
   signal?: AbortSignal
 }): Promise<string> {
   const model = options.model?.trim()
   return createConversationSessionFromPath({
+    selectionEpoch: options.selectionEpoch,
     path: `global/${options.experience}`,
     experience: options.experience,
     signal: options.signal,
@@ -317,7 +318,7 @@ export async function selectConversationSession(options: SelectConversationSessi
   if (!requestedSessionID) throw new Error("selectConversationSession: sessionID is required")
   const inputDirectory = String(options.directory || "").trim()
   if (!inputDirectory) throw new Error("selectConversationSession: session directory is required")
-  const selectionEpoch = options.selectionEpoch ?? beginWorkspaceSelection()
+  const selectionEpoch = options.selectionEpoch
   if (!ownsWorkspaceSelection(selectionEpoch)) {
     throw new DOMException("Coding assistant selection superseded", "AbortError")
   }

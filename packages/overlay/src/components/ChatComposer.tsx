@@ -23,6 +23,8 @@ import { t } from "../utils/i18n"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { messageStore, setChatAttachments } from "../store/messages"
+import { boardStore } from "../store/board"
+import { ownsWorkspaceSelection, type GlobalComposerProjectResolution } from "../services/workspace"
 import type { ConversationExperience } from "../store/conversation-session"
 import {
   canAcceptComposerAttachment,
@@ -160,7 +162,7 @@ export interface ChatComposerProps {
     markDispatched: () => void,
   ) => void | Promise<void>
   /** Resolve and activate the Project that owns a real attachment upload. */
-  resolveAttachmentDirectory: () => Promise<string>
+  resolveAttachmentDirectory: (selectionEpoch: number) => Promise<GlobalComposerProjectResolution>
   /** Called when the user clicks the stop button while busy. */
   onStop?: () => void
   onSideChat?: (prompt: string) => Promise<void>
@@ -843,17 +845,20 @@ export function ChatComposer(props: ChatComposerProps) {
     draftKey: string
     directory: string
     generation: number
+    selectionEpoch: number
   } {
     return {
       draftKey: normalizeComposerDraftKey(props.draftKey),
       directory: activeProjectDirectory(),
       generation: attachmentUploadGeneration,
+      selectionEpoch: boardStore.selectEpoch,
     }
   }
 
-  function ownsAttachmentUpload(owner: { draftKey: string; directory: string; generation: number }): boolean {
+  function ownsAttachmentUpload(owner: ReturnType<typeof captureAttachmentUploadOwner>): boolean {
     return (
       owner.generation === attachmentUploadGeneration &&
+      ownsWorkspaceSelection(owner.selectionEpoch) &&
       owner.draftKey === normalizeComposerDraftKey(props.draftKey) &&
       owner.directory === activeProjectDirectory()
     )
@@ -898,8 +903,13 @@ export function ChatComposer(props: ChatComposerProps) {
     setUploadingCount((count) => count + 1)
     let owner: ReturnType<typeof captureAttachmentUploadOwner> | undefined
     try {
-      const captured = await captureComposerFile(file)
-      const directory = await props.resolveAttachmentDirectory()
+      const inputOwner = captureAttachmentUploadOwner()
+      const capturedInput = captureComposerFile(file)
+      const projectResolution = props.resolveAttachmentDirectory(inputOwner.selectionEpoch)
+      const [captured, resolution] = await Promise.all([capturedInput, projectResolution])
+      if (!ownsWorkspaceSelection(resolution.selectionEpoch))
+        throw new DOMException("Attachment input superseded", "AbortError")
+      const { directory } = resolution
       owner = captureAttachmentUploadOwner()
       if (owner.directory !== directory) {
         throw new Error("Attachment Project activation did not establish the resolved directory")
@@ -919,6 +929,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       setAttachments((prev) => [...prev, { ...reference, kind: "file" }])
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return
       if (owner && !ownsAttachmentUpload(owner)) return
       console.warn("[ChatComposer] attachment upload failed for", sourceName, err)
       showComposerMessage("attachment-upload-failed", t("chat.attach_upload_failed", { name: sourceName }), {
@@ -972,7 +983,10 @@ export function ChatComposer(props: ChatComposerProps) {
       if (!ownsAttachmentUpload(pickerOwner)) return
       setUploadingCount((count) => count + 1)
       uploadStarted = true
-      const directory = await props.resolveAttachmentDirectory()
+      const resolution = await props.resolveAttachmentDirectory(pickerOwner.selectionEpoch)
+      if (!ownsWorkspaceSelection(resolution.selectionEpoch))
+        throw new DOMException("Directory attachment superseded", "AbortError")
+      const { directory } = resolution
       owner = captureAttachmentUploadOwner()
       if (owner.directory !== directory) {
         throw new Error("Attachment Project activation did not establish the resolved directory")
@@ -992,6 +1006,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       setAttachments((prev) => [...prev, { ...reference, kind: "folder", mime: DIRECTORY_REFERENCE_MIME }])
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return
       if (owner && !ownsAttachmentUpload(owner)) return
       showComposerMessage(
         "attachment-folder-failed",
@@ -1075,6 +1090,7 @@ export function ChatComposer(props: ChatComposerProps) {
       )
       if (!dispatched) throw new Error("Composer submission completed without crossing the dispatch boundary")
     } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return
       console.error("[ChatComposer] submit failed", error)
       if (quotation && !composerDraftText(submittedDraftKey) && !composerQuotation(submittedDraftKey)) {
         setComposerDraft(submittedDraftKey, trimmed)

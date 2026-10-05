@@ -23,8 +23,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/agents` | List primary assistants for global configuration | `global.agents.list` |
 | GET | `/global/automations` | List scheduled automations 错误: `BadRequestError`. | `global.automations.list` |
 | POST | `/global/automations` | Create a scheduled automation 请求体: `executionMode`, `model`, `name`, `prompt`, `reasoningEffort`, `recurrence`, `target`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.create` |
-| DELETE | `/global/automations/{id}` | Delete a scheduled automation 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.delete` |
-| PATCH | `/global/automations/{id}` | Update a scheduled automation 请求体: `executionMode`, `model`, `name`, `prompt`, `reasoningEffort`, `recurrence`, `status`, `target`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.update` |
+| DELETE | `/global/automations/{id}` | Delete a scheduled automation 错误: `AutomationRevisionConflictError`, `AutomationRunningConflictError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.delete` |
+| PATCH | `/global/automations/{id}` | Update a scheduled automation 请求体: `executionMode`, `expectedRevisionId`, `model`, `name`, `prompt`, `reasoningEffort`, `recurrence`, `status`, `target`; 错误: `AutomationRevisionConflictError`, `AutomationRunningConflictError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.update` |
 | GET | `/global/automations/{id}/fires` | List scheduled automation Fire history 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.fires` |
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
 | GET | `/global/automations/{id}/runs` | List scheduled automation target executions 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |

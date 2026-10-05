@@ -1,0 +1,36 @@
+{
+  "startedAt": "2026-10-05T02:49:49.611Z",
+  "requests": [
+    {
+      "time": "2026-10-05T02:49:49.653Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/project/current",
+      "method": "GET",
+      "status": 400,
+      "body": {
+        "name": "DirectoryRequiredError",
+        "data": {
+          "message": "Project-scoped route /project/current requires ?directory= query parameter or x-opencorvus-directory header"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:49:49.670Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/session",
+      "method": "POST",
+      "input": {
+        "kind": "root",
+        "title": "Configuration-only version acceptance"
+      },
+      "status": 400,
+      "body": {
+        "name": "DirectoryRequiredError",
+        "data": {
+          "message": "Project-scoped route /session requires ?directory= query parameter or x-opencorvus-directory header"
+        }
+      }
+    }
+  ],
+  "definitions": []
+}

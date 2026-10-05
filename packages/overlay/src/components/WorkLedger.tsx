@@ -639,7 +639,9 @@ function WorkLedgerRowView(props: {
                     type="button"
                     data-ui={`${row().kind}-row-pin`}
                     disabled={busy()}
-                    onSelect={() => void runAction("pin", () => setWorkLedgerItemPinned({ row: row(), pinned: !row().pinned }))}
+                    onSelect={() =>
+                      void runAction("pin", () => setWorkLedgerItemPinned({ row: row(), pinned: !row().pinned }))
+                    }
                   >
                     <Icon name="pin" />
                     {row().pinned ? t("work_ledger.action.unpin") : t("work_ledger.action.pin")}
@@ -1046,6 +1048,7 @@ export function WorkLedger(props: WorkLedgerProps) {
     void Promise.resolve()
       .then(() => props.onCreateGlobalChat())
       .catch((nextError) => {
+        if (nextError instanceof DOMException && nextError.name === "AbortError") return
         reportError({
           id: "work-ledger:new-chat",
           title: t("common.error"),

@@ -1,0 +1,1966 @@
+{
+  "startedAt": "2026-10-05T02:50:14.188Z",
+  "requests": [
+    {
+      "time": "2026-10-05T02:50:14.916Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/project/current?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Ftarget-revision%2Fproject-b",
+      "method": "GET",
+      "status": 200,
+      "body": {
+        "id": "prj_hooJ2fQbwJlRGCp0hur1",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\target-revision\\project-b",
+        "time": {
+          "created": 1791164572917,
+          "updated": 1791164572917
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.657Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/session?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Ftarget-revision%2Fproject-a",
+      "method": "POST",
+      "input": {
+        "kind": "root",
+        "title": "Configuration-only version acceptance"
+      },
+      "status": 200,
+      "body": {
+        "id": "ses_-zUSrH1f0zzAN8WetbJs",
+        "slug": "brave-canyon",
+        "version": "local",
+        "projectID": "prj_hyoTA4JBMFSbkYBNB7EO",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\target-revision\\project-a",
+        "title": "Configuration-only version acceptance",
+        "kind": "root",
+        "time": {
+          "created": 1791168615621,
+          "updated": 1791168615621
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.681Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations",
+      "method": "POST",
+      "input": {
+        "name": "Version global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "prompt": "Original observed prompt",
+        "executionMode": "local"
+      },
+      "status": 201,
+      "body": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyLn00AtaXxJAFX",
+        "name": "Version global",
+        "nextRun": 4102416000000
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.702Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyLn00AtaXxJAFX",
+        "status": "paused"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyMB00EuSqy11R6",
+        "name": "Version global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Original observed prompt",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.708Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "name": "missing version"
+      },
+      "status": 400,
+      "body": {
+        "data": {
+          "name": "missing version"
+        },
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "expectedRevisionId"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.711Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "DELETE",
+      "status": 400,
+      "body": {
+        "data": {},
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "expectedRevisionId"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.732Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyMB00EuSqy11R6",
+        "prompt": "Actual peer 1 winner global"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyMg009POF9MiAp",
+        "name": "Version global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner global",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.747Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyMB00EuSqy11R6",
+        "prompt": "Actual peer 0 winner global"
+      },
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyLn00AtaXxJAFX changed from observed revision atm_g0VX8iyMB00EuSqy11R6 to atm_g0VX8iyMg009POF9MiAp. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyLn00AtaXxJAFX",
+          "expectedRevisionId": "atm_g0VX8iyMB00EuSqy11R6",
+          "currentRevisionId": "atm_g0VX8iyMg009POF9MiAp"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.754Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyMB00EuSqy11R6",
+        "name": "Only changed old form name",
+        "target": {
+          "scope": "global"
+        },
+        "prompt": "Original observed prompt",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyLn00AtaXxJAFX changed from observed revision atm_g0VX8iyMB00EuSqy11R6 to atm_g0VX8iyMg009POF9MiAp. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyLn00AtaXxJAFX",
+          "expectedRevisionId": "atm_g0VX8iyMB00EuSqy11R6",
+          "currentRevisionId": "atm_g0VX8iyMg009POF9MiAp"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.770Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "body": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "revisionId": "atm_g0VX8S69u00SCn99DgCu",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revisionId": "atm_g0VX8iyMg009POF9MiAp",
+          "name": "Version global",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner global",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revisionId": "atm_g0VX8YfwG00lMbS9XE8d",
+          "name": "Only the name was edited in the older form",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "revisionId": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "name": "project peer pair 1 writer 1",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revisionId": "atm_g0VX8YJXm00dhHhETr0F",
+          "name": "session peer pair 1 writer 0",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "time": "2026-10-05T02:50:15.781Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyMg009POF9MiAp",
+        "name": "Fresh editor saved global"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+        "name": "Fresh editor saved global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner global",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.786Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX?expectedRevisionId=atm_g0VX8iyMg009POF9MiAp",
+      "method": "DELETE",
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyLn00AtaXxJAFX changed from observed revision atm_g0VX8iyMg009POF9MiAp to atm_g0VX8iyNT00fDmgtjbgu. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyLn00AtaXxJAFX",
+          "expectedRevisionId": "atm_g0VX8iyMg009POF9MiAp",
+          "currentRevisionId": "atm_g0VX8iyNT00fDmgtjbgu"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.793Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations",
+      "method": "POST",
+      "input": {
+        "name": "Version project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "prompt": "Original observed prompt",
+        "executionMode": "local"
+      },
+      "status": 201,
+      "body": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyNe00VvmayKsFE",
+        "name": "Version project",
+        "nextRun": 4102416000000
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.806Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyNe00VvmayKsFE",
+        "status": "paused"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+        "name": "Version project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Original observed prompt",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.809Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "name": "missing version"
+      },
+      "status": 400,
+      "body": {
+        "data": {
+          "name": "missing version"
+        },
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "expectedRevisionId"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.814Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "DELETE",
+      "status": 400,
+      "body": {
+        "data": {},
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "expectedRevisionId"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.825Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+        "prompt": "Actual peer 0 winner project"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyOB00unIcQCFeb",
+        "name": "Version project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 0 winner project",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.838Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+        "prompt": "Actual peer 1 winner project"
+      },
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyNe00VvmayKsFE changed from observed revision atm_g0VX8iyNs00Zuvsij1fE to atm_g0VX8iyOB00unIcQCFeb. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyNe00VvmayKsFE",
+          "expectedRevisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+          "currentRevisionId": "atm_g0VX8iyOB00unIcQCFeb"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.842Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+        "name": "Only changed old form name",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "prompt": "Original observed prompt",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyNe00VvmayKsFE changed from observed revision atm_g0VX8iyNs00Zuvsij1fE to atm_g0VX8iyOB00unIcQCFeb. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyNe00VvmayKsFE",
+          "expectedRevisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+          "currentRevisionId": "atm_g0VX8iyOB00unIcQCFeb"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.853Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "body": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "revisionId": "atm_g0VX8S69u00SCn99DgCu",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+          "name": "Fresh editor saved global",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner global",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revisionId": "atm_g0VX8iyOB00unIcQCFeb",
+          "name": "Version project",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 0 winner project",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revisionId": "atm_g0VX8YfwG00lMbS9XE8d",
+          "name": "Only the name was edited in the older form",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "revisionId": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "name": "project peer pair 1 writer 1",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revisionId": "atm_g0VX8YJXm00dhHhETr0F",
+          "name": "session peer pair 1 writer 0",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "time": "2026-10-05T02:50:15.863Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyOB00unIcQCFeb",
+        "name": "Fresh editor saved project"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+        "name": "Fresh editor saved project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 0 winner project",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.868Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE?expectedRevisionId=atm_g0VX8iyOB00unIcQCFeb",
+      "method": "DELETE",
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyNe00VvmayKsFE changed from observed revision atm_g0VX8iyOB00unIcQCFeb to atm_g0VX8iyOn00CGCnKWmIf. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyNe00VvmayKsFE",
+          "expectedRevisionId": "atm_g0VX8iyOB00unIcQCFeb",
+          "currentRevisionId": "atm_g0VX8iyOn00CGCnKWmIf"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.876Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations",
+      "method": "POST",
+      "input": {
+        "name": "Version session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "prompt": "Original observed prompt",
+        "executionMode": "local"
+      },
+      "status": 201,
+      "body": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyOz00BANIaRK3I",
+        "name": "Version session",
+        "nextRun": 4102416000000
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.887Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyOz00BANIaRK3I",
+        "status": "paused"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyPB000u21SvZ6m",
+        "name": "Version session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Original observed prompt",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.892Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "name": "missing version"
+      },
+      "status": 400,
+      "body": {
+        "data": {
+          "name": "missing version"
+        },
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "expectedRevisionId"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.895Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "DELETE",
+      "status": 400,
+      "body": {
+        "data": {},
+        "error": [
+          {
+            "expected": "string",
+            "code": "invalid_type",
+            "path": [
+              "expectedRevisionId"
+            ],
+            "message": "Invalid input: expected string, received undefined"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.907Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyPB000u21SvZ6m",
+        "prompt": "Actual peer 1 winner session"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyPW00U1S0FoPrH",
+        "name": "Version session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner session",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.914Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyPB000u21SvZ6m",
+        "prompt": "Actual peer 0 winner session"
+      },
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyOz00BANIaRK3I changed from observed revision atm_g0VX8iyPB000u21SvZ6m to atm_g0VX8iyPW00U1S0FoPrH. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyOz00BANIaRK3I",
+          "expectedRevisionId": "atm_g0VX8iyPB000u21SvZ6m",
+          "currentRevisionId": "atm_g0VX8iyPW00U1S0FoPrH"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.921Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyPB000u21SvZ6m",
+        "name": "Only changed old form name",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "prompt": "Original observed prompt",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyOz00BANIaRK3I changed from observed revision atm_g0VX8iyPB000u21SvZ6m to atm_g0VX8iyPW00U1S0FoPrH. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyOz00BANIaRK3I",
+          "expectedRevisionId": "atm_g0VX8iyPB000u21SvZ6m",
+          "currentRevisionId": "atm_g0VX8iyPW00U1S0FoPrH"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.934Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "body": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "revisionId": "atm_g0VX8S69u00SCn99DgCu",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+          "name": "Fresh editor saved global",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner global",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+          "name": "Fresh editor saved project",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 0 winner project",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revisionId": "atm_g0VX8iyPW00U1S0FoPrH",
+          "name": "Version session",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner session",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revisionId": "atm_g0VX8YfwG00lMbS9XE8d",
+          "name": "Only the name was edited in the older form",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "revisionId": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "name": "project peer pair 1 writer 1",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revisionId": "atm_g0VX8YJXm00dhHhETr0F",
+          "name": "session peer pair 1 writer 0",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "time": "2026-10-05T02:50:15.944Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyPW00U1S0FoPrH",
+        "name": "Fresh editor saved session"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+        "name": "Fresh editor saved session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner session",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.948Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I?expectedRevisionId=atm_g0VX8iyPW00U1S0FoPrH",
+      "method": "DELETE",
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyOz00BANIaRK3I changed from observed revision atm_g0VX8iyPW00U1S0FoPrH to atm_g0VX8iyQ700LlK1zbiNg. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyOz00BANIaRK3I",
+          "expectedRevisionId": "atm_g0VX8iyPW00U1S0FoPrH",
+          "currentRevisionId": "atm_g0VX8iyQ700LlK1zbiNg"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:50:15.958Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "body": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "revisionId": "atm_g0VX8S69u00SCn99DgCu",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+          "name": "Fresh editor saved global",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner global",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+          "name": "Fresh editor saved project",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 0 winner project",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+          "name": "Fresh editor saved session",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner session",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revisionId": "atm_g0VX8YfwG00lMbS9XE8d",
+          "name": "Only the name was edited in the older form",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "revisionId": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "name": "project peer pair 1 writer 1",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revisionId": "atm_g0VX8YJXm00dhHhETr0F",
+          "name": "session peer pair 1 writer 0",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "time": "2026-10-05T02:50:15.971Z",
+      "peer": "http://127.0.0.1:17888",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "body": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "revisionId": "atm_g0VX8S69u00SCn99DgCu",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+          "name": "Fresh editor saved global",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner global",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+          "name": "Fresh editor saved project",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 0 winner project",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+          "name": "Fresh editor saved session",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner session",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revisionId": "atm_g0VX8YfwG00lMbS9XE8d",
+          "name": "Only the name was edited in the older form",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "revisionId": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "name": "project peer pair 1 writer 1",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revisionId": "atm_g0VX8YJXm00dhHhETr0F",
+          "name": "session peer pair 1 writer 0",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "time": "2026-10-05T02:51:43.182Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "body": [
+        {
+          "id": "atm_g0VX8S66X00JZmHF18s2",
+          "revisionId": "atm_g0VX8S69u00SCn99DgCu",
+          "name": "Qualified project target",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO",
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only qualification; keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+          "name": "Fresh editor saved global",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner global",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+          "name": "Fresh editor saved project",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hooJ2fQbwJlRGCp0hur1"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 0 winner project",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+          "name": "Fresh editor saved session",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Actual peer 1 winner session",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8XwyD0022GOmuYMK",
+          "revisionId": "atm_g0VX8YfwG00lMbS9XE8d",
+          "name": "Only the name was edited in the older form",
+          "target": {
+            "scope": "global"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx3N001205jB5yS",
+          "revisionId": "atm_g0VX8YJXE00CV6JbE6Cx",
+          "name": "project peer pair 1 writer 1",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hyoTA4JBMFSbkYBNB7EO"
+            ]
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        {
+          "id": "atm_g0VX8Xx7700tH2kQ93i9",
+          "revisionId": "atm_g0VX8YJXm00dhHhETr0F",
+          "name": "session peer pair 1 writer 0",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_-zUSrS32Zzz5BNKa6Qau"
+          },
+          "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Configuration-only concurrent writer probe. Keep paused.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4102416000000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    {
+      "time": "2026-10-05T02:51:43.215Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+        "name": "Restart saved global"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8jL7e003UFdFDs0T",
+        "name": "Restart saved global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner global",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.230Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX?expectedRevisionId=atm_g0VX8iyNT00fDmgtjbgu",
+      "method": "DELETE",
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyLn00AtaXxJAFX changed from observed revision atm_g0VX8iyNT00fDmgtjbgu to atm_g0VX8jL7e003UFdFDs0T. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyLn00AtaXxJAFX",
+          "expectedRevisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+          "currentRevisionId": "atm_g0VX8jL7e003UFdFDs0T"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.238Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX?expectedRevisionId=atm_g0VX8jL7e003UFdFDs0T",
+      "method": "DELETE",
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "name": "Restart saved global"
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.246Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyLn00AtaXxJAFX",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8jL7e003UFdFDs0T",
+        "name": "after tombstone"
+      },
+      "status": 404,
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Automation not found: atm_g0VX8iyLn00AtaXxJAFX"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.261Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+        "name": "Restart saved project"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8jL8R00TBwlswqi6",
+        "name": "Restart saved project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 0 winner project",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.278Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE?expectedRevisionId=atm_g0VX8iyOn00CGCnKWmIf",
+      "method": "DELETE",
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyNe00VvmayKsFE changed from observed revision atm_g0VX8iyOn00CGCnKWmIf to atm_g0VX8jL8R00TBwlswqi6. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyNe00VvmayKsFE",
+          "expectedRevisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+          "currentRevisionId": "atm_g0VX8jL8R00TBwlswqi6"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.293Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE?expectedRevisionId=atm_g0VX8jL8R00TBwlswqi6",
+      "method": "DELETE",
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "name": "Restart saved project"
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.299Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyNe00VvmayKsFE",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8jL8R00TBwlswqi6",
+        "name": "after tombstone"
+      },
+      "status": 404,
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Automation not found: atm_g0VX8iyNe00VvmayKsFE"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.311Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+        "name": "Restart saved session"
+      },
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8jL9H00JBrC272Ql",
+        "name": "Restart saved session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner session",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.317Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I?expectedRevisionId=atm_g0VX8iyQ700LlK1zbiNg",
+      "method": "DELETE",
+      "status": 409,
+      "body": {
+        "name": "AutomationRevisionConflictError",
+        "data": {
+          "message": "Automation atm_g0VX8iyOz00BANIaRK3I changed from observed revision atm_g0VX8iyQ700LlK1zbiNg to atm_g0VX8jL9H00JBrC272Ql. Reload the current definition before applying your change.",
+          "automationID": "atm_g0VX8iyOz00BANIaRK3I",
+          "expectedRevisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+          "currentRevisionId": "atm_g0VX8jL9H00JBrC272Ql"
+        }
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.322Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I?expectedRevisionId=atm_g0VX8jL9H00JBrC272Ql",
+      "method": "DELETE",
+      "status": 200,
+      "body": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "name": "Restart saved session"
+      }
+    },
+    {
+      "time": "2026-10-05T02:51:43.326Z",
+      "peer": "http://127.0.0.1:17887",
+      "route": "/global/automations/atm_g0VX8iyOz00BANIaRK3I",
+      "method": "PATCH",
+      "input": {
+        "expectedRevisionId": "atm_g0VX8jL9H00JBrC272Ql",
+        "name": "after tombstone"
+      },
+      "status": 404,
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Automation not found: atm_g0VX8iyOz00BANIaRK3I"
+        }
+      }
+    }
+  ],
+  "definitions": [
+    {
+      "target": {
+        "scope": "global"
+      },
+      "before": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyMB00EuSqy11R6",
+        "name": "Version global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Original observed prompt",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "winner": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyMg009POF9MiAp",
+        "name": "Version global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner global",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "saved": {
+        "id": "atm_g0VX8iyLn00AtaXxJAFX",
+        "revisionId": "atm_g0VX8iyNT00fDmgtjbgu",
+        "name": "Fresh editor saved global",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner global",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hooJ2fQbwJlRGCp0hur1"
+        ]
+      },
+      "before": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyNs00Zuvsij1fE",
+        "name": "Version project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Original observed prompt",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "winner": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyOB00unIcQCFeb",
+        "name": "Version project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 0 winner project",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "saved": {
+        "id": "atm_g0VX8iyNe00VvmayKsFE",
+        "revisionId": "atm_g0VX8iyOn00CGCnKWmIf",
+        "name": "Fresh editor saved project",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hooJ2fQbwJlRGCp0hur1"
+          ]
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 0 winner project",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    },
+    {
+      "target": {
+        "scope": "session",
+        "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+      },
+      "before": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyPB000u21SvZ6m",
+        "name": "Version session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Original observed prompt",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "winner": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyPW00U1S0FoPrH",
+        "name": "Version session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner session",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "saved": {
+        "id": "atm_g0VX8iyOz00BANIaRK3I",
+        "revisionId": "atm_g0VX8iyQ700LlK1zbiNg",
+        "name": "Fresh editor saved session",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_-zUSrH1f0zzAN8WetbJs"
+        },
+        "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Actual peer 1 winner session",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4102416000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    }
+  ],
+  "beforeRestartPassed": true,
+  "finishedAt": "2026-10-05T02:51:43.327Z",
+  "restartPassed": true
+}

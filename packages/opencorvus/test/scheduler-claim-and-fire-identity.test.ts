@@ -704,9 +704,9 @@ describe("scheduler immutable definition and fire identity", () => {
         expect(promptOwnerReleased).toBe(true)
         await expect(AutomationService.runNow(automation.id)).rejects.toBeInstanceOf(AutomationRunningConflictError)
         await expect(
-          AutomationService.update({ id: automation.id, prompt: "fenced mutation" }),
+          AutomationService.update({ id: automation.id, expectedRevisionId: AutomationService.list().find((row) => row.id === automation.id)!.revisionId, prompt: "fenced mutation" }),
         ).rejects.toBeInstanceOf(AutomationRunningConflictError)
-        expect(() => AutomationService.remove(automation.id)).toThrow(AutomationRunningConflictError)
+        expect(() => AutomationService.remove(automation.id, AutomationService.list().find((row) => row.id === automation.id)!.revisionId)).toThrow(AutomationRunningConflictError)
       } finally {
         if (!promptOwnerReleased) SessionPromptOwner.release(promptOwner.authority)
       }
@@ -849,9 +849,9 @@ describe("scheduler immutable definition and fire identity", () => {
     await using project = await memoryProject()
     await Instance.provide({ directory: project.path, fn: async () => {
       const created = await AutomationService.create({ name: "v1", target: { scope: "project", projectIds: [Instance.project.id] }, recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY", prompt: "first" })
-      const updated = await AutomationService.update({ id: created.id, name: "v2", prompt: "second" })
+      const updated = await AutomationService.update({ id: created.id, expectedRevisionId: AutomationService.list().find((row) => row.id === created.id)!.revisionId, name: "v2", prompt: "second" })
       expect(updated).toMatchObject({ id: created.id, name: "v2", prompt: "second" })
-      expect(AutomationService.remove(created.id)).toEqual({ id: created.id, name: "v2" })
+      expect(AutomationService.remove(created.id, AutomationService.list().find((row) => row.id === created.id)!.revisionId)).toEqual({ id: created.id, name: "v2" })
       const revisions = Database.use((db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, created.id)).orderBy(AutomationTable.revision).all())
       expect(revisions.map((row) => ({ revision: row.revision, name: row.name }))).toEqual([
         { revision: 1, name: "v1" },
@@ -1345,7 +1345,7 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(runs.map((run) => run.outcome)).toEqual(["succeeded"])
       const settled = Database.use((db) => currentControlLeaseInTransaction(db, "automation", automation.id))!
       expect(settled.expires_at).toBeLessThanOrEqual(Date.now())
-      expect(AutomationService.remove(automation.id)).toEqual({ id: automation.id, name: "settling" })
+      expect(AutomationService.remove(automation.id, AutomationService.list().find((row) => row.id === automation.id)!.revisionId)).toEqual({ id: automation.id, name: "settling" })
     } })
   }, 30_000)
 
@@ -1760,7 +1760,7 @@ describe("scheduler immutable definition and fire identity", () => {
       expect(settled.expires_at).toBeLessThanOrEqual(Date.now())
       expect(AutomationService.list().find((candidate) => candidate.id === automation.id))
         .toMatchObject({ id: automation.id, failureCount: 1 })
-      expect(() => AutomationService.remove(automation.id)).toThrow(AutomationRunningConflictError)
+      expect(() => AutomationService.remove(automation.id, AutomationService.list().find((row) => row.id === automation.id)!.revisionId)).toThrow(AutomationRunningConflictError)
     } })
   }, 30_000)
 
@@ -1788,7 +1788,7 @@ describe("scheduler immutable definition and fire identity", () => {
         receipt: { attempt_id: job.attempt_id, outcome: "retry_wait", retry_at: expect.any(Number), error: "fire refused" },
         runs: [],
       })
-      expect(() => AutomationService.remove(automation.id)).toThrow(AutomationRunningConflictError)
+      expect(() => AutomationService.remove(automation.id, AutomationService.list().find((row) => row.id === automation.id)!.revisionId)).toThrow(AutomationRunningConflictError)
     } })
   }, 30_000)
 
@@ -1877,7 +1877,7 @@ describe("scheduler immutable definition and fire identity", () => {
     await Instance.provide({ directory: project.path, fn: async () => {
       const created = await AutomationService.create({ name: "leased", target: { scope: "project", projectIds: [Instance.project.id] }, recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY", prompt: "first" })
       expect(acquireControlLease({ target: "automation", targetID: created.id, ownerOccurrenceID: "owner:race", now: Date.now(), leaseMilliseconds: 30_000 }).acquired).toBe(true)
-      await expect(AutomationService.update({ id: created.id, prompt: "conflict" })).rejects.toBeInstanceOf(AutomationRunningConflictError)
+      await expect(AutomationService.update({ id: created.id, expectedRevisionId: AutomationService.list().find((row) => row.id === created.id)!.revisionId, prompt: "conflict" })).rejects.toBeInstanceOf(AutomationRunningConflictError)
       expect(Database.use((db) => db.select().from(AutomationTable).where(eq(AutomationTable.definition_id, created.id)).all())).toHaveLength(1)
     } })
   })

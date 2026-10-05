@@ -13,6 +13,10 @@ import {
   selectedFileTarget,
 } from "../src/services/file-workbench"
 
+function registerDecision(confirmLeave: () => Promise<boolean>) {
+  return registerFileEditorBeforeNavigate({ confirmLeave, isDirty: () => true })
+}
+
 let unregister: (() => void) | undefined
 afterEach(async () => {
   unregister?.()
@@ -43,7 +47,7 @@ function moved(previousPath: string, path: string) {
 test("rename resolves the shared decision at the original target before applying its exact receipt", async () => {
   await openFileEditor("notes.md", { directory: "/repo" }, { startLine: 2, endLine: 2 })
   const steps: unknown[] = []
-  unregister = registerFileEditorBeforeNavigate(async () => {
+  unregister = registerDecision(async () => {
     steps.push({ decisionTarget: selectedFileTarget()?.path })
     return true
   })
@@ -61,7 +65,7 @@ test("rename resolves the shared decision at the original target before applying
 
 test("cancelling an affected mutation returns AbortError and retains the authored resource target", async () => {
   await openFileEditor("notes.md", { directory: "/repo" })
-  unregister = registerFileEditorBeforeNavigate(async () => false)
+  unregister = registerDecision(async () => false)
   await expect(moveFileItem("notes.md", "renamed.md", { directory: "/repo" })).rejects.toMatchObject({
     name: "AbortError",
   })
@@ -75,7 +79,7 @@ test("a newer navigation supersedes an outstanding mutation decision", async () 
   await openFileEditor("notes.md", { directory: "/repo" })
   let resolveDecision!: (allowed: boolean) => void
   let first = true
-  unregister = registerFileEditorBeforeNavigate(() => {
+  unregister = registerDecision(() => {
     if (!first) return Promise.resolve(true)
     first = false
     return new Promise<boolean>((resolve) => {
@@ -91,7 +95,7 @@ test("a newer navigation supersedes an outstanding mutation decision", async () 
 
 test("ancestor moves carry the selected descendant to the authoritative returned path", async () => {
   await openFileEditor("src/nested/notes.md", { directory: "/repo" })
-  unregister = registerFileEditorBeforeNavigate(async () => true)
+  unregister = registerDecision(async () => true)
   transport(() => ({ body: moved("src", "lib") }))
   await moveFileItem("src", "lib", { directory: "/repo" })
   expect(selectedFileTarget()).toEqual({ directory: "/repo", path: "lib/nested/notes.md" })
@@ -99,7 +103,7 @@ test("ancestor moves carry the selected descendant to the authoritative returned
 
 test("unrelated directories and sibling paths preserve their independent selected resource", async () => {
   await openFileEditor("src/notes.md", { directory: "/repo" })
-  unregister = registerFileEditorBeforeNavigate(async () => false)
+  unregister = registerDecision(async () => false)
   transport(() => ({ body: moved("src", "lib") }))
   expect((await moveFileItem("src", "lib", { directory: "/other" })).path).toBe("lib")
   transport(() => ({ body: moved("src-copy", "copy") }))
@@ -109,7 +113,7 @@ test("unrelated directories and sibling paths preserve their independent selecte
 
 test("deleting an approved ancestor closes the exact writable target and advances its revision", async () => {
   await openFileEditor("src/notes.md", { directory: "/repo" })
-  unregister = registerFileEditorBeforeNavigate(async () => true)
+  unregister = registerDecision(async () => true)
   transport(() => ({ body: { path: "src" } }))
   const revision = fileWorkbenchRevision()
   expect(await deleteFileItem("src", { directory: "/repo" })).toEqual({ path: "src" })
@@ -122,7 +126,7 @@ test("deleting an approved ancestor closes the exact writable target and advance
 
 test("project mutations retain the independent read-only source target", async () => {
   await openSourceFileEditor("/source/notes.md", { directory: "/repo" })
-  unregister = registerFileEditorBeforeNavigate(async () => false)
+  unregister = registerDecision(async () => false)
   transport(() => ({ body: { path: "source" } }))
   expect(await deleteFileItem("source", { directory: "/repo" })).toEqual({ path: "source" })
   expect(selectedFileTarget()).toEqual({
@@ -134,7 +138,7 @@ test("project mutations retain the independent read-only source target", async (
 
 test("each successful mutation remains reconciled when a later batch member fails", async () => {
   await openFileEditor("first.md", { directory: "/repo" })
-  unregister = registerFileEditorBeforeNavigate(async () => true)
+  unregister = registerDecision(async () => true)
   transport(() => ({ body: moved("first.md", "moved.md") }))
   const revision = fileWorkbenchRevision()
   await moveFileItem("first.md", "moved.md", { directory: "/repo" })

@@ -1,0 +1,30 @@
+{
+  "url": "http://127.0.0.1:17882/ui/?departure-control=clean",
+  "dialog": null,
+  "logs": [
+    {
+      "level": "info",
+      "message": "[authoring-exit-diagnostic] guard attached",
+      "timestamp": "2026-10-05T03:12:07.105Z",
+      "url": "http://127.0.0.1:17882/ui/assets/main-B3n2jesH.js"
+    },
+    {
+      "level": "info",
+      "message": "[authoring-exit-diagnostic] guard detached",
+      "timestamp": "2026-10-05T03:12:07.106Z",
+      "url": "http://127.0.0.1:17882/ui/assets/main-B3n2jesH.js"
+    },
+    {
+      "level": "info",
+      "message": "[authoring-exit-diagnostic] guard attached",
+      "timestamp": "2026-10-05T03:12:16.460Z",
+      "url": "http://127.0.0.1:17882/ui/assets/main-B3n2jesH.js"
+    },
+    {
+      "level": "info",
+      "message": "[authoring-exit-diagnostic] beforeunload callback Object",
+      "timestamp": "2026-10-05T03:12:26.499Z",
+      "url": "http://127.0.0.1:17882/ui/assets/main-B3n2jesH.js"
+    }
+  ]
+}

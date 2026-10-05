@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+- [Windows restart ownership transfer: qualified failure and proposed repair](records/2026-10/2026-10-05-windows-restart-ownership-transfer.md)
+
+- [Continuous iteration: admitting changes to authored work](records/2026-10/2026-10-05-authoring-admission.md)
+
+- [Authoring admission evidence](artifacts/2026-10-05-authoring-admission/README.md)
+
 - [Continuous product iteration: protecting authored work](records/2026-10/2026-10-05-product-data-integrity.md)
 
 - [Product data integrity evidence](artifacts/2026-10-05-product-data-integrity/README.md)

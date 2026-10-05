@@ -1,0 +1,11 @@
+{
+  "bundle": "main-AtNYkXEe.js",
+  "before": "http://127.0.0.1:17882/ui/?departure-control=completed",
+  "dirtyNavigation": {
+    "outcome": "rejected",
+    "message": "Error: Browser Use cannot open http://127.0.0.1:17882/ui/ in tab 6. Browser reported: net::ERR_ABORTED"
+  },
+  "dirtyRetainedURL": "http://127.0.0.1:17882/ui/?departure-control=completed",
+  "cleanNavigationURL": "http://127.0.0.1:17882/ui/?departure-control=final-clean",
+  "manualStayDialogObserved": false
+}

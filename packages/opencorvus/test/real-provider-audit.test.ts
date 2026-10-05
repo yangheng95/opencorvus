@@ -24,6 +24,52 @@ test("an undeclared request ceiling retains every real local transport receipt",
   } finally { await server.stop(true) }
 })
 
+for (const failureStage of [undefined, "body", "cleanup"] as const) {
+  test(`outer audit lifetime observes real HTTP cleanup and restores fetch after ${failureStage ?? "successful"} completion`, async () => {
+    const received: string[] = []
+    // Actual local transport only; these acknowledgements are not Provider/model results.
+    const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+      const body = await request.text()
+      received.push(body)
+      return new Response(`acknowledged:${JSON.parse(body).phase}`, { status: 202 })
+    } })
+    const originalFetch = globalThis.fetch
+    let audit: RealProviderAudit | undefined
+    const body = (phase: string) => JSON.stringify({ model: "authorized-model", stream: true, phase })
+    const send = async (phase: string) => {
+      const response = await fetch(server.url, { method: "POST", body: body(phase) })
+      expect({ status: response.status, text: await response.text() }).toEqual({
+        status: 202, text: `acknowledged:${phase}`,
+      })
+    }
+    const run = async () => {
+      using lifetime = new DisposableStack()
+      try {
+        audit = lifetime.use(new RealProviderAudit("authorized-model", 2))
+        await send("body")
+        if (failureStage === "body") throw new Error("primary operation failed")
+        return "completed"
+      } finally {
+        await send("cleanup")
+        if (failureStage === "cleanup") throw new Error("cleanup failed after transport settlement")
+      }
+    }
+    try {
+      if (failureStage === "body") await expect(run()).rejects.toThrow("primary operation failed")
+      else if (failureStage === "cleanup") await expect(run()).rejects.toThrow("cleanup failed after transport settlement")
+      else expect(await run()).toBe("completed")
+      expect(received).toEqual([body("body"), body("cleanup")])
+      expect(audit!.requests).toEqual([
+        { model: "authorized-model", streaming: true, status: 202 },
+        { model: "authorized-model", streaming: true, status: 202 },
+      ])
+      expect(globalThis.fetch).toBe(originalFetch)
+    } finally {
+      await server.stop(true)
+    }
+  })
+}
+
 test("native plugin reuses the process audit and publishes one actual transport observation", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "provider-audit-singleton-"))
   const keys = ["OPENCORVUS_NATIVE_REAL_PROVIDER", "OPENCORVUS_NATIVE_AUDIT_ROOT", "OPENCORVUS_NATIVE_AUDIT_MODEL", "OPENCORVUS_NATIVE_AUDIT_MAX_REQUESTS", "OPENCORVUS_NATIVE_AUDIT_COPIED_OAUTH_EXPIRES"]

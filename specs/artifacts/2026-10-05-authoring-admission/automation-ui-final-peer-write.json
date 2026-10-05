@@ -1,0 +1,44 @@
+{
+  "observed": {
+    "id": "atm_g0VX8MR4A002Lr4J7nut",
+    "revisionId": "atm_g0VX8lqEQ00e3e1cqGod",
+    "name": "Peer definition version saved",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hroPEGg17GAZWxDZ7MR7"
+      ]
+    },
+    "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Peer saved prompt must survive the older full form.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4102416000000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "peer": {
+    "id": "atm_g0VX8MR4A002Lr4J7nut",
+    "revisionId": "atm_g0VX8xzWV00Gj0qqKg3Y",
+    "name": "Latest peer version on final build",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hroPEGg17GAZWxDZ7MR7"
+      ]
+    },
+    "recurrence": "DTSTART:20991231T160000Z\nRRULE:FREQ=DAILY",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Final peer prompt survives explicit reload and fresh save.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4102416000000,
+    "failureCount": 0,
+    "lastError": null
+  }
+}

@@ -1,0 +1,47 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\global-composer-project.test.ts:
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) concurrent attachment inputs share one admission, anonymous Project and complete receipt [16.80ms]
+(pass) a shared cancelled decision returns AbortError to every input and retains its original facts [1.40ms]
+(pass) a newer admission sequence invalidates same-lineage joins before the public epoch changes [1.11ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) an old completion preserves a replacement allocation and its concurrent join [7.22ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) same-lineage inputs join until directory activation finishes even after directory becomes visible [2.19ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) admitted Mission input consumes its exact epoch and established attachment input returns that owner [1.97ms]
+(pass) a late allocation response reports AbortError and retains a newer established Project [0.48ms]
+
+ 7 pass
+ 0 fail
+ 18 expect() calls
+Ran 7 tests across 1 file. [2.03s]

@@ -1,0 +1,29 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\workspace-directory-persistence.test.ts:
+[applyDir] checking connection
+[applyDir] switching {
+  from: "D:/workspace/previous",
+  to: "D:/workspace/next-project",
+  save: "D:/workspace/next-project",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) active directory persistence > switching the active directory persists the switched directory and cleared workspace memory [9.53ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "D:/workspace/previous",
+  to: "D:/workspace/next-project",
+  save: "D:/workspace/next-project",
+}
+(pass) active directory persistence > a rejected settings save fails the directory switch with the host error [1.01ms]
+[applyDir] checking connection
+(pass) active directory persistence > a late connection result settles the old switch while retaining the newer directory [0.47ms]
+[applyDir] checking connection
+(pass) active directory persistence > a superseded user directory request reports AbortError to its action owner [0.88ms]
+(pass) active directory persistence > a new committed epoch takes over an in-flight same-Task hydrate and settles its current failure [4.85ms]
+
+ 5 pass
+ 0 fail
+ 11 expect() calls
+Ran 5 tests across 1 file. [1.98s]

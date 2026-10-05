@@ -1,0 +1,74 @@
+{
+  "capturedAt": "2026-10-05T03:50:14.544997+00:00",
+  "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\opencorvus.db",
+  "access": "Read-only owned SQLite and exact selected attachment metadata/blob paths; no auth/models, HTTP, browser, service or Provider operation.",
+  "discoverEvidence": {
+    "beforeFile": "attachment-current-projects-before.json",
+    "afterFile": "attachment-current-projects-after.json",
+    "addedProjects": [
+      {
+        "id": "prj_h6AOEHZJCevcukMrDcTO",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c",
+        "name": "25999959-ff20-429b-abd7-43a7a3904b7c",
+        "marker": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c\\.opencorvus"
+      }
+    ],
+    "addedProjectCount": 1
+  },
+  "project": {
+    "id": "prj_h6AOEHZJCevcukMrDcTO",
+    "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c",
+    "name": null,
+    "time_created": 1791172087067,
+    "time_updated": 1791172087067,
+    "generation": "714a53c7-568c-45cb-9873-8ff62b24af71",
+    "createdAtUTC": "2026-10-05T03:48:07.067000+00:00"
+  },
+  "attachments": [
+    {
+      "filename": "batch-first.txt",
+      "url": "/attachment/prj_h6AOEHZJCevcukMrDcTO/7a776a710d6618bbbd06a36c4ccb909ac5b3165f97ae63d8a78c01d938679d8b.txt",
+      "mime": "text/plain",
+      "size": 38,
+      "sha": "7a776a710d6618bbbd06a36c4ccb909ac5b3165f97ae63d8a78c01d938679d8b",
+      "metadataPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c\\.opencorvus\\.r\\project\\attachments\\ab834fbc1901a63e660385ef156a13ae9529f1a7aa6465a7b6659782df8d3d23\\7a776a710d6618bbbd06a36c4ccb909ac5b3165f97ae63d8a78c01d938679d8b.txt.metadata.json",
+      "blobPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c\\.opencorvus\\.r\\project\\attachments\\ab834fbc1901a63e660385ef156a13ae9529f1a7aa6465a7b6659782df8d3d23\\7a776a710d6618bbbd06a36c4ccb909ac5b3165f97ae63d8a78c01d938679d8b.txt",
+      "selectedPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\batch-first.txt",
+      "selectedSize": 38,
+      "blobSize": 38,
+      "exactSelectedBytesMatch": true,
+      "canonicalURLMatchesProjectAndBlob": true,
+      "modifiedAtUTC": "2026-10-05T03:48:09.290154+00:00"
+    },
+    {
+      "filename": "batch-second.txt",
+      "url": "/attachment/prj_h6AOEHZJCevcukMrDcTO/ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af.txt",
+      "mime": "text/plain",
+      "size": 39,
+      "sha": "ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af",
+      "metadataPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c\\.opencorvus\\.r\\project\\attachments\\ab834fbc1901a63e660385ef156a13ae9529f1a7aa6465a7b6659782df8d3d23\\ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af.txt.metadata.json",
+      "blobPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\25999959-ff20-429b-abd7-43a7a3904b7c\\.opencorvus\\.r\\project\\attachments\\ab834fbc1901a63e660385ef156a13ae9529f1a7aa6465a7b6659782df8d3d23\\ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af.txt",
+      "selectedPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\batch-second.txt",
+      "selectedSize": 39,
+      "blobSize": 39,
+      "exactSelectedBytesMatch": true,
+      "canonicalURLMatchesProjectAndBlob": true,
+      "modifiedAtUTC": "2026-10-05T03:48:09.289153+00:00"
+    }
+  ],
+  "sessions": [],
+  "messageAttachmentRefs": [],
+  "allocations": [],
+  "observedFacts": {
+    "attachmentCount": 2,
+    "filenames": [
+      "batch-first.txt",
+      "batch-second.txt"
+    ],
+    "allCanonicalReferencesBelongToNewProject": true,
+    "allSelectedBytesMatch": true,
+    "sessionCount": 0,
+    "messageAttachmentReferenceCount": 0
+  },
+  "qualification": "Attachment references here are the canonical receipt-shaped metadata published with the actual blobs by AttachmentStore.write. This audit did not capture upload HTTP responses. Root separately captured the actual two-chip UI in 07-multi-attachment-after.png and the before/after discover responses. Both references in this new batch belong to the single newly discovered Project; this does not assert that identical bytes have no historical copies in earlier projects."
+}

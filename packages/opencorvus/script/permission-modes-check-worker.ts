@@ -835,8 +835,9 @@ async function main() {
           ),
           "schedule create",
         )
-        const automationId = JSON.parse(String((scheduled as any)?.output ?? "{}"))?.automationId
-        if (typeof automationId !== "string") {
+        const scheduledReceipt = JSON.parse(String((scheduled as any)?.output ?? "{}"))
+        const automationId = scheduledReceipt?.automationId
+        if (typeof automationId !== "string" || typeof scheduledReceipt.revisionId !== "string") {
           throw new Error(`Schedule Tool did not return its automation identity: ${JSON.stringify(scheduled)}`)
         }
         const scheduleRun = await allowPendingExecution(
@@ -855,7 +856,7 @@ async function main() {
           mcpRun.session.id,
           executeTool(
             scheduleTool,
-            { action: "delete", automationId },
+            { action: "delete", automationId, expectedRevisionId: scheduledReceipt.revisionId },
             "call_permission_check_schedule_delete",
             mcpRun.abort,
             mcpRun.processor,

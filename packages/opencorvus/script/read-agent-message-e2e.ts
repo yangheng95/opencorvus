@@ -60,6 +60,7 @@ process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
 process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ permission_mode: "full_access", model, small_model: model })
 process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 
+using auditLifetime = new DisposableStack()
 try {
   await fs.mkdir(projectDirectory, { recursive: true })
   await fs.writeFile(path.join(projectDirectory, "README.md"), "# Real causal evidence reader acceptance\n")
@@ -85,7 +86,7 @@ try {
   const authority = credential.type === "oauth" ? { copiedOAuthExpiresAt: credential.expires } : undefined
   if (authority) assertCopiedOAuthAccess(authority.copiedOAuthExpiresAt)
   const { ReadAgentMessageInputSchema, ReadAgentMessageTestHooks } = await import("@/tool/read-agent-message")
-  using observed = new RealProviderAudit(
+  const observed = auditLifetime.use(new RealProviderAudit(
     modelID,
     maxRequests,
     () => {
@@ -98,7 +99,7 @@ try {
       redactor,
       probes: [{ id: "reader-budget-schema", text: ReadAgentMessageTestHooks.evidenceReadsDescription }],
     },
-  )
+  ))
   audit = observed
   const [
     { Instance },

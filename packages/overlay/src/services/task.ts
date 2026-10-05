@@ -44,7 +44,13 @@ import { directoryScopedPath, taskScopedPath } from "./task-path"
 import { taskOwningDirectory } from "./task-directory"
 import { downloadProjectArchive } from "./project-archive"
 import { activeProjectDirectory } from "./project-directory"
-import { applyDirectory, beginWorkspaceSelection, ownsWorkspaceSelection } from "./workspace"
+import {
+  applyDirectory,
+  beginWorkspaceSelection,
+  ownsWorkspaceSelection,
+  requestWorkspaceSelection,
+  isWorkspaceSelectionReady,
+} from "./workspace"
 import { ingestPersistedConversationMessage } from "./tree-writer"
 import {
   cancelConversationReplay,
@@ -58,7 +64,11 @@ import { cardTreeStore } from "../store/card-tree"
 import { AppLog } from "../utils/log"
 import { isImplicitProjectDirectory } from "../utils/project-directory"
 import { requestTaskCancellation, type TaskCancellationSurface } from "./task-cancellation"
-import { clearComposerModelProjection, projectComposerModelFromSession, restoreDraftComposerModel } from "./composer-model"
+import {
+  clearComposerModelProjection,
+  projectComposerModelFromSession,
+  restoreDraftComposerModel,
+} from "./composer-model"
 import { wakeMission } from "./mission"
 import { workLedgerSessionExecution } from "./work-ledger"
 import { randomUUID } from "../utils/random-id"
@@ -111,6 +121,7 @@ export interface CreateTaskResult {
 }
 
 export interface SelectTaskOptions {
+  selectionEpoch: number
   directory?: string
   /** Keep staged new-request files when only the composer intent changes. */
   preserveComposerAttachments?: boolean
@@ -237,7 +248,8 @@ function hasConversationPanelState(): boolean {
   )
 }
 
-export async function selectTask(taskID: string, options: SelectTaskOptions = {}): Promise<void> {
+export async function selectTask(taskID: string, options: SelectTaskOptions): Promise<void> {
+  if (!ownsWorkspaceSelection(options.selectionEpoch)) return
   const nextTaskID = taskID || ""
   const explicitDirectory = options.directory?.trim() ?? ""
 
@@ -245,16 +257,13 @@ export async function selectTask(taskID: string, options: SelectTaskOptions = {}
     throw new Error(`selectTask: invalid taskID ${JSON.stringify(nextTaskID)} — expected [A-Za-z0-9_-]{1,128}`)
   }
 
-  // Guard: skip if already on this task. Board-loaded OR switch-in-flight
-  // both count as "nothing to do" — without the taskSwitching check a user
-  // clicking the same task before the first load finishes would interrupt
-  // and restart their own load.
+  // User admission handles the in-flight no-op before advancing the epoch.
+  // An explicit new epoch must take over a pending hydrate, or its old owner
+  // would become stale while nobody could settle taskSwitching.
   if (
     nextTaskID &&
-    boardStore.selectedSource?.kind === "task" &&
-    boardStore.selectedSource.id === nextTaskID &&
-    !boardStore.taskSelectionError &&
-    (boardStore.board || boardStore.taskSwitching)
+    !boardStore.taskSwitching &&
+    isWorkspaceSelectionReady({ kind: "task", id: nextTaskID, directory: explicitDirectory })
   ) {
     if (nextTaskID && boardStore.board && !boardStore.taskSwitching && !isSelectedTaskSSEConnected(nextTaskID)) {
       const directory = String(boardStore.board?.task?.directory || settingsStore.directory || "").trim()
@@ -277,7 +286,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions = {}
   const taskDirectory =
     explicitDirectory || (typeof taskItem?.task?.directory === "string" ? taskItem.task.directory.trim() : "")
   const taskTitle = String(taskItem?.task?.title || taskItem?.overview?.headline || nextTaskID).trim()
-  const epoch = beginWorkspaceSelection()
+  const epoch = options.selectionEpoch
 
   // ── Synchronous phase ────────────────────────────────────────────────
   // Everything the UI needs to feel "switched instantly" happens here:
@@ -397,7 +406,9 @@ export async function retrySelectedTaskSelection(): Promise<void> {
   const failure = boardStore.taskSelectionError
   if (!failure) return
   if (boardStore.selectedSource?.kind !== "task" || boardStore.selectedSource.id !== failure.taskID) return
-  await selectTask(failure.taskID)
+  const admission = await requestWorkspaceSelection({ kind: "task", id: failure.taskID, directory: failure.directory })
+  if (admission.kind === "unchanged") return
+  await selectTask(failure.taskID, { directory: failure.directory, selectionEpoch: admission.epoch })
 }
 
 // ── Public: deleteTask ──
@@ -939,7 +950,7 @@ export async function interruptTask(taskID: string): Promise<boolean> {
 // stopSSE) that every intentional deselect uses. Registered at module load so
 // it's in place before any tasks fetch completes.
 setOrphanedSelectionHandler(() => {
-  void selectTask("").catch((error) => {
+  void selectTask("", { selectionEpoch: beginWorkspaceSelection() }).catch((error) => {
     AppLog.error("task", "failed to clear orphaned task selection", {
       error: formatErrorDetails(error),
       diagnosticID: "task:orphan-selection-clear-failed",

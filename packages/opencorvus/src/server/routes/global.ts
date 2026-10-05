@@ -51,7 +51,12 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { ExpertSquadCatalogPageSchema, ExpertSquadCatalogSearchQuerySchema } from "@/expert-squad/catalog"
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
-import { AutomationRunOutcomes, AutomationService } from "@/scheduler/automation-service"
+import {
+  AutomationRevisionConflictError,
+  AutomationRunningConflictError,
+  AutomationRunOutcomes,
+  AutomationService,
+} from "@/scheduler/automation-service"
 import { ProviderAccountUsage } from "@/provider/account-usage"
 import { UsageStats } from "@/usage"
 
@@ -79,6 +84,7 @@ const AutomationTarget = z.discriminatedUnion("scope", [
 const AutomationView = z
   .object({
     id: z.string(),
+    revisionId: z.string(),
     name: z.string(),
     target: AutomationTarget,
     recurrence: z.string(),
@@ -164,6 +170,7 @@ const CreateAutomationBody = z
 
 const UpdateAutomationBody = CreateAutomationBody.partial()
   .extend({
+    expectedRevisionId: z.string().min(1),
     model: z
       .object({ providerID: z.string().min(1), modelID: z.string().min(1) })
       .nullable()
@@ -240,7 +247,9 @@ export const GlobalRoutes = lazy(() =>
             description: "Created scheduled automation",
             content: {
               "application/json": {
-                schema: resolver(z.object({ id: z.string(), name: z.string(), nextRun: z.number().nullable() })),
+                schema: resolver(
+                  z.object({ id: z.string(), revisionId: z.string(), name: z.string(), nextRun: z.number().nullable() }),
+                ),
               },
             },
           },
@@ -260,7 +269,15 @@ export const GlobalRoutes = lazy(() =>
             description: "Updated scheduled automation",
             content: { "application/json": { schema: resolver(AutomationView) } },
           },
-          ...errors(400, 404, 409),
+          ...errors(400, 404),
+          409: {
+            description: "Observed definition changed or its execution is running",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema])),
+              },
+            },
+          },
         },
       }),
       validator("json", UpdateAutomationBody),
@@ -324,10 +341,19 @@ export const GlobalRoutes = lazy(() =>
               "application/json": { schema: resolver(z.object({ id: z.string(), name: z.string() }).strict()) },
             },
           },
-          ...errors(400, 404, 409),
+          ...errors(400, 404),
+          409: {
+            description: "Observed definition changed or its execution is running",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema])),
+              },
+            },
+          },
         },
       }),
-      (c) => c.json(AutomationService.remove(c.req.param("id"))),
+      validator("query", z.object({ expectedRevisionId: z.string().min(1) })),
+      (c) => c.json(AutomationService.remove(c.req.param("id"), c.req.valid("query").expectedRevisionId)),
     )
     .post(
       "/chat",

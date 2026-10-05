@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Authoring admission evidence](2026-10-05-authoring-admission/README.md): actual conditional definition execution, navigation and page-departure qualification.
+
 - [Continuous product data integrity iteration](2026-10-05-product-data-integrity/README.md): actual authored-work preservation investigations and verified repairs.
 
 - [Current-version product experience](2026-10-04-product-experience/README.md): actual desktop interactions, verified repairs and authorized GPT-6.1 Sol Task/Mission/evidence-reader acceptance.

@@ -1,0 +1,37 @@
+{
+  "runtime": "node/25.7.0",
+  "operation": "Unauthenticated HEAD to the production Codex endpoint; no model body, authorization or app modules",
+  "environmentPresence": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "ALL_PROXY": false,
+    "NO_PROXY": false,
+    "NODE_EXTRA_CA_CERTS": false,
+    "NODE_USE_SYSTEM_CA": false,
+    "NODE_OPTIONS": false,
+    "SSL_CERT_FILE": false,
+    "SSL_CERT_DIR": false,
+    "NODE_TLS_REJECT_UNAUTHORIZED": false,
+    "BUN_OPTIONS": false
+  },
+  "outcomes": [
+    {
+      "attempt": 1,
+      "startedAt": "2026-10-05T02:53:57.582Z",
+      "outcome": "http_response",
+      "status": 405
+    },
+    {
+      "attempt": 2,
+      "startedAt": "2026-10-05T02:53:58.070Z",
+      "outcome": "http_response",
+      "status": 405
+    },
+    {
+      "attempt": 3,
+      "startedAt": "2026-10-05T02:53:58.392Z",
+      "outcome": "http_response",
+      "status": 405
+    }
+  ]
+}

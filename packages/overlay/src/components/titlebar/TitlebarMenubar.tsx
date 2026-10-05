@@ -96,6 +96,7 @@ function menuActionErrorMessage(error: unknown): string {
 function runTitlebarMenuAction(label: string, action: () => void | Promise<void>): void {
   try {
     void Promise.resolve(action()).catch((error) => {
+      if (error instanceof DOMException && error.name === "AbortError") return
       reportError({
         id: `titlebar-menu:${label}`,
         title: t("common.error"),
@@ -104,6 +105,7 @@ function runTitlebarMenuAction(label: string, action: () => void | Promise<void>
       })
     })
   } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") return
     reportError({
       id: `titlebar-menu:${label}`,
       title: t("common.error"),

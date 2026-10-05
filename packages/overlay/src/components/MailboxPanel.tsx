@@ -390,13 +390,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
   }
 
   async function openTask(item: MailboxItem): Promise<void> {
-    if (!item.readAt) await applyAction(item, "read")
     await props.onSelectTask(item.taskID, item.taskDirectory)
+    if (!item.readAt) await applyAction(item, "read")
     await loadTasks()
   }
 
   function runOpenTask(item: MailboxItem): void {
     void openTask(item).catch((error) => {
+      if (error instanceof DOMException && error.name === "AbortError") return
       reportError({
         id: `mailbox:open-task:${item.id}`,
         title: t("mailbox.open_failed"),

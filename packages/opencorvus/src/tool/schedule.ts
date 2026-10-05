@@ -1,7 +1,7 @@
 import z from "zod"
 import { Tool } from "./tool"
 import { Recurrence } from "@/scheduler/recurrence"
-import { AutomationService } from "@/scheduler/automation-service"
+import { AutomationService, type AutomationDefinitionReceipt } from "@/scheduler/automation-service"
 import { EventService } from "@/scheduler/event-service"
 import { Instance } from "@/project/instance"
 import { scheduledToolInputDigest, scheduledToolOccurrenceFromContext } from "@/scheduler/tool-occurrence"
@@ -34,6 +34,7 @@ const AutomationCreateFields = {
 const AutomationUpdateFields = {
   action: z.literal("update"),
   automationId: z.string().describe("Exact Scheduled Automation ID returned by create or list"),
+  expectedRevisionId: z.string().min(1).describe("Exact observed revisionId returned by create, list, or update"),
   name: z.string().min(1).optional(),
   recurrence: z.string().min(1).optional(),
   prompt: z.string().min(1).optional(),
@@ -65,43 +66,102 @@ Time actions use RFC 5545 recurrence rules:
 - **history**: List factual outcomes and visible Sessions for previous runs.
 - **delete**: Permanently delete a Scheduled Automation.
 
+For update, pause, resume and delete, send the exact observed revisionId as expectedRevisionId. If the definition changed, read it again before deciding a new change; never silently overwrite a conflict.
+
 Interpret relative dates such as "today" in the user's local time zone, then send one anchored RFC 5545 recurrence with an explicit TZID or UTC DTSTART. For actions that require an automationId, call **list** first when the exact ID is not already present in visible tool results; never guess an ID. Do not implement a scheduling request with shell cron, background sleeps, or task records.
 
 Event actions remain separate because they react to Bus events rather than time:
 - **create_event**, **list_event**, **cancel_event** manage event-triggered jobs.`
 
+const ScheduleCreateParameters = z.object({
+  ...AutomationCreateFields,
+  executionMode: z
+    .enum(["local", "worktree"])
+    .default("local")
+    .describe("For project scope, run in each project directory or an isolated worktree"),
+})
+const ScheduleCreateEventParameters = z.object({
+  action: z.literal("create_event"),
+  name: z.string().describe("Short name for the event task"),
+  eventType: z.string().describe("Bus event type wildcard (for example: 'command.*' or 'session.updated')"),
+  prompt: z.string().describe("The instruction to execute when the event matches"),
+  match: MatchSchema.optional().describe("Optional event property matcher, e.g. {'properties.name':'init'}"),
+  oneShot: z.boolean().default(false).describe("Execute only once"),
+  cooldownMs: z.number().int().min(0).optional().describe("Minimum ms between runs for this job"),
+})
+
 export const ScheduleToolParameters = z.union([
-    z.object({
-      ...AutomationCreateFields,
-      executionMode: z
-        .enum(["local", "worktree"])
-        .default("local")
-        .describe("For project scope, run in each project directory or an isolated worktree"),
-    }),
-    z.object({ action: z.literal("list") }),
-    z.object({
-      ...AutomationUpdateFields,
-      executionMode: z
-        .enum(["local", "worktree"])
-        .optional()
-        .describe("Replacement project-directory or isolated-worktree execution mode"),
-    }),
-    z.object({
-      action: z.enum(["pause", "resume", "run", "history", "delete"]),
-      automationId: z.string().describe("Exact Scheduled Automation ID returned by create or list"),
-    }),
-    z.object({
-      action: z.literal("create_event"),
-      name: z.string().describe("Short name for the event task"),
-      eventType: z.string().describe("Bus event type wildcard (for example: 'command.*' or 'session.updated')"),
-      prompt: z.string().describe("The instruction to execute when the event matches"),
-      match: MatchSchema.optional().describe("Optional event property matcher, e.g. {'properties.name':'init'}"),
-      oneShot: z.boolean().default(false).describe("Execute only once"),
-      cooldownMs: z.number().int().min(0).optional().describe("Minimum ms between runs for this job"),
-    }),
-    z.object({ action: z.literal("list_event") }),
-    z.object({ action: z.literal("cancel_event"), jobId: z.string().describe("The event task ID") }),
+  ScheduleCreateParameters,
+  z.object({ action: z.literal("list") }),
+  z.object({
+    ...AutomationUpdateFields,
+    executionMode: z
+      .enum(["local", "worktree"])
+      .optional()
+      .describe("Replacement project-directory or isolated-worktree execution mode"),
+  }),
+  z.object({
+    action: z.enum(["pause", "resume", "delete"]),
+    automationId: z.string().describe("Exact Scheduled Automation ID returned by create or list"),
+    expectedRevisionId: z.string().min(1).describe("Exact observed revisionId returned by create, list, or update"),
+  }),
+  z.object({
+    action: z.enum(["run", "history"]),
+    automationId: z.string().describe("Exact Scheduled Automation ID returned by create or list"),
+  }),
+  ScheduleCreateEventParameters,
+  z.object({ action: z.literal("list_event") }),
+  z.object({ action: z.literal("cancel_event"), jobId: z.string().describe("The event task ID") }),
 ])
+
+export function normalizeScheduleToolInputForDigest(input: Record<string, unknown>): Record<string, unknown> {
+  if (input.action === "create") return ScheduleCreateParameters.parse(input)
+  if (input.action === "create_event") return ScheduleCreateEventParameters.parse(input)
+  return input
+}
+
+export function formatScheduleDefinitionResult(
+  action: "create" | "update" | "pause" | "resume",
+  automation: AutomationDefinitionReceipt,
+) {
+  if (action === "create")
+    return result(`Scheduled: ${automation.name}`, {
+      automationId: automation.id,
+      revisionId: automation.revisionId,
+      revision: automation.revision,
+      name: automation.name,
+      target: automation.target,
+      executionMode: automation.executionMode,
+      model: automation.model,
+      reasoningEffort: automation.reasoningEffort,
+      recurrence: automation.recurrence,
+      description: Recurrence.describe(automation.recurrence),
+      firstEligibleAt: automation.firstEligibleAt === null ? null : new Date(automation.firstEligibleAt).toISOString(),
+    })
+  return result(
+    `${action === "update" ? "Updated" : action === "pause" ? "Paused" : "Resumed"}: ${automation.name}`,
+    automation,
+  )
+}
+
+export function formatScheduleDeletionResult(deleted: { id: string; name: string }) {
+  return result(`Deleted: ${deleted.name}`, { deleted: true, automationId: deleted.id, name: deleted.name })
+}
+
+export function formatScheduleEventCreationResult(job: ReturnType<typeof EventService.definitionReceiptInTransaction>) {
+  return result(`Event task created: ${job.name}`, {
+    jobId: job.id,
+    name: job.name,
+    eventType: job.eventType,
+    oneShot: job.oneShot,
+    cooldownMs: job.cooldownMs,
+    match: job.match,
+  })
+}
+
+export function formatScheduleEventCancellationResult(deleted: { id: string; name: string }) {
+  return result(`Cancelled event task: ${deleted.name}`, { cancelled: true, jobId: deleted.id, name: deleted.name })
+}
 
 export type ScheduleToolInput = z.infer<typeof ScheduleToolParameters>
 
@@ -115,7 +175,7 @@ export async function executeScheduleToolInput(
 ) {
     const projectID = ctx.projectID
     const occurrence = ctx.occurrence
-    const causation = { occurrence, inputDigest: scheduledToolInputDigest("schedule", params) }
+    const causation = { occurrence, inputDigest: scheduledToolInputDigest("schedule", normalizeScheduleToolInputForDigest(params)) }
 
     switch (params.action) {
       case "create": {
@@ -136,20 +196,7 @@ export async function executeScheduleToolInput(
         },
         causation,
       )
-      return result(`Scheduled: ${automation.name}`, {
-        automationId: automation.id,
-        revisionId: automation.revisionId,
-        revision: automation.revision,
-        name: automation.name,
-        target: automation.target,
-        executionMode: automation.executionMode,
-        model: automation.model,
-        reasoningEffort: automation.reasoningEffort,
-        recurrence: automation.recurrence,
-        description: Recurrence.describe(automation.recurrence),
-        firstEligibleAt:
-          automation.firstEligibleAt === null ? null : new Date(automation.firstEligibleAt).toISOString(),
-      })
+      return formatScheduleDefinitionResult("create", automation)
     }
     case "list": {
       const automations = AutomationService.list()
@@ -174,6 +221,7 @@ export async function executeScheduleToolInput(
       const automation = await AutomationService.updateFromTool(
         {
           id: params.automationId,
+          expectedRevisionId: params.expectedRevisionId,
           name: params.name,
           target,
           recurrence: params.recurrence,
@@ -182,16 +230,17 @@ export async function executeScheduleToolInput(
           model: params.model,
           reasoningEffort: params.reasoningEffort,
         }, causation)
-        return result(`Updated: ${automation.name}`, automation)
+        return formatScheduleDefinitionResult("update", automation)
       }
       case "pause":
       case "resume": {
         const status = params.action === "pause" ? "paused" : "active"
         const automation = await AutomationService.updateFromTool({
           id: params.automationId,
+          expectedRevisionId: params.expectedRevisionId,
           status,
         }, causation)
-        return result(`${status === "paused" ? "Paused" : "Resumed"}: ${automation.name}`, automation)
+        return formatScheduleDefinitionResult(params.action, automation)
       }
       case "run": {
         const run = await AutomationService.runNowFromTool(params.automationId, causation)
@@ -202,12 +251,8 @@ export async function executeScheduleToolInput(
         return result(`${fires.length} automation fires`, { fires })
       }
       case "delete": {
-        const deleted = AutomationService.removeFromTool(params.automationId, causation)
-        return result(`Deleted: ${deleted.name}`, {
-          deleted: true,
-          automationId: deleted.id,
-          name: deleted.name,
-        })
+        const deleted = AutomationService.removeFromTool(params.automationId, params.expectedRevisionId, causation)
+        return formatScheduleDeletionResult(deleted)
       }
       case "create_event": {
         const cooldownMs = params.cooldownMs ?? 0
@@ -220,14 +265,7 @@ export async function executeScheduleToolInput(
           oneShot: params.oneShot,
           cooldownMs,
         }, causation)
-        return result(`Event task created: ${params.name}`, {
-          jobId: job.id,
-          name: params.name,
-          eventType: params.eventType,
-          oneShot: params.oneShot,
-          cooldownMs,
-          match: params.match ?? {},
-        })
+        return formatScheduleEventCreationResult(job)
       }
       case "list_event": {
         const jobs = EventService.list(projectID)
@@ -242,11 +280,7 @@ export async function executeScheduleToolInput(
       case "cancel_event": {
         const deleted = EventService.removeFromTool(params.jobId, projectID, causation)
         if (!deleted) return result("Not found", { error: `Event task ${params.jobId} not found` })
-        return result(`Cancelled event task: ${deleted.name}`, {
-          cancelled: true,
-          jobId: params.jobId,
-          name: deleted.name,
-        })
+        return formatScheduleEventCancellationResult(deleted)
       }
     }
 }

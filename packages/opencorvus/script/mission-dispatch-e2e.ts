@@ -57,6 +57,7 @@ let cleanup: (() => Promise<void>) | undefined
 let failure: unknown
 const sendObservations: Array<{ requestIndex: number; observedAt: number; facts: unknown }> = []
 let observedCount = 0
+using auditLifetime = new DisposableStack()
 try {
   await fs.mkdir(project, { recursive: true })
   await fs.writeFile(path.join(project, "README.md"), "# Manual Mission dispatch acceptance\n")
@@ -80,7 +81,7 @@ try {
   assert(credential, "Canonical isolated Provider credential is available")
   const authority = credential.type === "oauth" ? { copiedOAuthExpiresAt: credential.expires } : undefined
   if (authority) assertCopiedOAuthAccess(authority.copiedOAuthExpiresAt)
-  using observed = new RealProviderAudit(
+  const observed = auditLifetime.use(new RealProviderAudit(
     modelID,
     32,
     () => {
@@ -90,7 +91,7 @@ try {
       }
     },
     authority,
-  )
+  ))
   audit = observed
   const [
     { Instance },

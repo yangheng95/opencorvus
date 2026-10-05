@@ -154,6 +154,24 @@ export type AuthReadError = {
   name: "AuthReadError"
 }
 
+export type AutomationRevisionConflictError = {
+  data: {
+    automationID: string
+    currentRevisionId: string
+    expectedRevisionId: string
+    message: string
+  }
+  name: "AutomationRevisionConflictError"
+}
+
+export type AutomationRunningConflictError = {
+  data: {
+    automationID: string
+    message: string
+  }
+  name: "AutomationRunningConflictError"
+}
+
 export type BadRequestError = {
   data: unknown
   error: Array<{
@@ -20153,6 +20171,7 @@ export type GlobalAutomationsListResponses = {
     prompt: string
     reasoningEffort: string | null
     recurrence: string
+    revisionId: string
     status: "active" | "paused"
     target:
       | {
@@ -20233,6 +20252,7 @@ export type GlobalAutomationsCreateResponses = {
     id: string
     name: string
     nextRun: number | null
+    revisionId: string
   }
 }
 
@@ -20243,7 +20263,9 @@ export type GlobalAutomationsDeleteData = {
   path: {
     id: string
   }
-  query?: never
+  query: {
+    expectedRevisionId: string
+  }
   url: "/global/automations/{id}"
 }
 
@@ -20269,14 +20291,9 @@ export type GlobalAutomationsDeleteErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Conflict
+   * Observed definition changed or its execution is running
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: AutomationRevisionConflictError | AutomationRunningConflictError
 }
 
 export type GlobalAutomationsDeleteError = GlobalAutomationsDeleteErrors[keyof GlobalAutomationsDeleteErrors]
@@ -20294,8 +20311,9 @@ export type GlobalAutomationsDeleteResponses = {
 export type GlobalAutomationsDeleteResponse = GlobalAutomationsDeleteResponses[keyof GlobalAutomationsDeleteResponses]
 
 export type GlobalAutomationsUpdateData = {
-  body?: {
+  body: {
     executionMode?: "local" | "worktree"
+    expectedRevisionId: string
     model?: {
       modelID: string
       providerID: string
@@ -20347,14 +20365,9 @@ export type GlobalAutomationsUpdateErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Conflict
+   * Observed definition changed or its execution is running
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: AutomationRevisionConflictError | AutomationRunningConflictError
 }
 
 export type GlobalAutomationsUpdateError = GlobalAutomationsUpdateErrors[keyof GlobalAutomationsUpdateErrors]
@@ -20378,6 +20391,7 @@ export type GlobalAutomationsUpdateResponses = {
     prompt: string
     reasoningEffort: string | null
     recurrence: string
+    revisionId: string
     status: "active" | "paused"
     target:
       | {

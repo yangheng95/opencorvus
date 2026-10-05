@@ -1,0 +1,69 @@
+{
+  "capturedAt": "2026-10-05T03:26:07.443087+00:00",
+  "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\opencorvus.db",
+  "access": "read-only SQLite and owned project attachment store; no HTTP/browser/provider activity",
+  "selectedFiles": [
+    {
+      "filename": "batch-first.txt",
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\batch-first.txt",
+      "size": 38
+    },
+    {
+      "filename": "batch-second.txt",
+      "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\batch-second.txt",
+      "size": 39
+    }
+  ],
+  "projects": [
+    {
+      "id": "prj_hQAmgBfL3YvwW2qDsExL",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\7c59336d-501f-4ae6-be33-2ac9d9af2a27",
+      "name": null,
+      "time_created": 1791170562505,
+      "time_updated": 1791170562505,
+      "generation": "995d4e46-fa93-40a0-bf0f-c866ac0be138",
+      "createdAtUTC": "2026-10-05T03:22:42.505000+00:00",
+      "attachmentStoreExists": false,
+      "attachments": [],
+      "sessions": [],
+      "allocations": [],
+      "messageAttachmentRefs": []
+    },
+    {
+      "id": "prj_hLzZTZDAPllqTF8UPHxW",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\c146ae4e-2f8b-4ce6-92c4-7fe5d525096c",
+      "name": null,
+      "time_created": 1791170562858,
+      "time_updated": 1791170562858,
+      "generation": "e974340a-86eb-43fc-95db-210caa43950c",
+      "createdAtUTC": "2026-10-05T03:22:42.858000+00:00",
+      "attachmentStoreExists": true,
+      "attachments": [
+        {
+          "filename": "batch-second.txt",
+          "url": "/attachment/prj_hLzZTZDAPllqTF8UPHxW/ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af.txt",
+          "mime": "text/plain",
+          "size": 39,
+          "sha": "ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af",
+          "metadataPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\c146ae4e-2f8b-4ce6-92c4-7fe5d525096c\\.opencorvus\\.r\\project\\attachments\\ab834fbc1901a63e660385ef156a13ae9529f1a7aa6465a7b6659782df8d3d23\\ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af.txt.metadata.json",
+          "blobPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\home\\data\\projects\\2026\\10\\05\\c146ae4e-2f8b-4ce6-92c4-7fe5d525096c\\.opencorvus\\.r\\project\\attachments\\ab834fbc1901a63e660385ef156a13ae9529f1a7aa6465a7b6659782df8d3d23\\ac4246604678cd414a956578c03f00fe3d7db7453ce9f77274aa3e383346c0af.txt",
+          "blobExists": true,
+          "modifiedAtUTC": "2026-10-05T03:22:44.983310+00:00",
+          "exactSelectedBytesMatch": true
+        }
+      ],
+      "sessions": [],
+      "allocations": [],
+      "messageAttachmentRefs": []
+    }
+  ],
+  "observedFacts": {
+    "newProjectCount": 2,
+    "storedAttachmentCount": 1,
+    "storedFilenames": [
+      "batch-second.txt"
+    ],
+    "sessionCount": 0
+  },
+  "qualification": "Canonical returned-reference shape is preserved in AttachmentStore metadata; this read-only audit did not capture HTTP network responses. Client chip count is independently evidenced by root screenshot 06."
+}

@@ -77,7 +77,7 @@ test("paused manual API execution settles while preserving the paused definition
         recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
         prompt: "manual command",
       })
-      await AutomationService.update({ id: automation.id, status: "paused" })
+      await AutomationService.update({ id: automation.id, expectedRevisionId: AutomationService.list().find((row) => row.id === automation.id)!.revisionId, status: "paused" })
       using _wake = completedWake()
       expect((await AutomationService.runNow(automation.id)).map((entry) => entry.outcome)).toEqual(["succeeded"])
       expect(AutomationService.list().find((entry) => entry.id === automation.id)).toMatchObject({ status: "paused" })
@@ -112,7 +112,7 @@ test("an exhausted new revision projects from its own creation boundary after ol
       now += 5_000
       expect(
         await AutomationService.update({
-          id: automation.id,
+          id: automation.id, expectedRevisionId: AutomationService.list().find((row) => row.id === automation.id)!.revisionId,
           recurrence: `DTSTART:${stamp(pastOccurrence)}\nRRULE:FREQ=DAILY;COUNT=1`,
         }),
       ).toMatchObject({ nextRun: null })
@@ -137,7 +137,7 @@ test.each(["active", "paused"] as const)(
           recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
           prompt: "retry exact occurrence",
         })
-        if (status === "paused") await AutomationService.update({ id: automation.id, status })
+        if (status === "paused") await AutomationService.update({ id: automation.id, expectedRevisionId: AutomationService.list().find((row) => row.id === automation.id)!.revisionId, status })
         const prior = Database.use((db) =>
           db
             .select()

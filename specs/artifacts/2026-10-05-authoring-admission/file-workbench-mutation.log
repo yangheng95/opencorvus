@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\file-workbench-mutation.test.ts:
+(pass) rename resolves the shared decision at the original target before applying its exact receipt [2.94ms]
+(pass) cancelling an affected mutation returns AbortError and retains the authored resource target [0.31ms]
+(pass) a newer navigation supersedes an outstanding mutation decision [0.37ms]
+(pass) ancestor moves carry the selected descendant to the authoritative returned path [0.46ms]
+(pass) unrelated directories and sibling paths preserve their independent selected resource [0.46ms]
+(pass) deleting an approved ancestor closes the exact writable target and advances its revision [0.59ms]
+(pass) project mutations retain the independent read-only source target [0.40ms]
+(pass) each successful mutation remains reconciled when a later batch member fails [1.72ms]
+
+ 8 pass
+ 0 fail
+ 21 expect() calls
+Ran 8 tests across 1 file. [2.05s]

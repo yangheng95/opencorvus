@@ -16,7 +16,7 @@
 import { boardStore } from "../store/board"
 import { selectTask } from "../services/task"
 import { settingsStore } from "../store/settings"
-import { hasWorkspaceSelection } from "../services/workspace"
+import { hasWorkspaceSelection, beginWorkspaceSelection } from "../services/workspace"
 import { t } from "./i18n"
 import { iconHtml } from "./icon-html"
 import { escapeHtml } from "./markdown"
@@ -363,7 +363,7 @@ export async function ensureTaskSelection(): Promise<boolean> {
   const taskID = tasks[0]?.task?.id || ""
   if (!taskID) return false
 
-  await selectTask(taskID)
+  await selectTask(taskID, { selectionEpoch: beginWorkspaceSelection() })
   return true
 }
 

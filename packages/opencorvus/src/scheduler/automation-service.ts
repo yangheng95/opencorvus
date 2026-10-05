@@ -98,6 +98,7 @@ export type AutomationTarget =
 
 export type AutomationView = {
   id: string
+  revisionId: string
   name: string
   target: AutomationTarget
   recurrence: string
@@ -153,6 +154,7 @@ export type CreateAutomationInput = {
 
 export type UpdateAutomationInput = {
   id: string
+  expectedRevisionId: string
   name?: string
   target?: AutomationTarget
   recurrence?: string
@@ -224,6 +226,16 @@ export const AutomationRunningConflictError = NamedError.create(
   z.object({
     message: z.string(),
     automationID: z.string(),
+  }),
+)
+
+export const AutomationRevisionConflictError = NamedError.create(
+  "AutomationRevisionConflictError",
+  z.object({
+    message: z.string(),
+    automationID: z.string(),
+    expectedRevisionId: z.string(),
+    currentRevisionId: z.string(),
   }),
 )
 
@@ -509,6 +521,7 @@ export namespace AutomationService {
     }
     return {
       id: row.id,
+      revisionId: row.revision_id,
       name: row.name,
       target: Database.use((db) =>
         targetForRevision(db, { revisionID: row.revision_id, scope: row.scope, sessionID: row.session_id }),
@@ -550,7 +563,7 @@ export namespace AutomationService {
     throw new Error(`Automation revision ${input.revisionID} has invalid public target`)
   }
 
-  function definitionReceiptInTransaction(
+  export function definitionReceiptInTransaction(
     db: Database.TxOrDb,
     row: typeof AutomationTable.$inferSelect,
   ): AutomationDefinitionReceipt {
@@ -577,7 +590,7 @@ export namespace AutomationService {
 
   export async function create(
     input: CreateAutomationInput,
-  ): Promise<{ id: string; name: string; nextRun: number | null }> {
+  ): Promise<{ id: string; revisionId: string; name: string; nextRun: number | null }> {
     return createAutomation(input)
   }
 
@@ -595,11 +608,11 @@ export namespace AutomationService {
   async function createAutomation(
     input: CreateAutomationInput,
     causation?: undefined,
-  ): Promise<{ id: string; name: string; nextRun: number | null }>
+  ): Promise<{ id: string; revisionId: string; name: string; nextRun: number | null }>
   async function createAutomation(
     input: CreateAutomationInput,
     causation?: ScheduleToolCausation,
-  ): Promise<AutomationDefinitionReceipt | { id: string; name: string; nextRun: number | null }> {
+  ): Promise<AutomationDefinitionReceipt | { id: string; revisionId: string; name: string; nextRun: number | null }> {
     if (causation) {
       const replay = Database.immediateTransaction((tx) => {
         assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
@@ -680,7 +693,7 @@ export namespace AutomationService {
     })
     if (causation) return Database.use((db) => definitionReceiptInTransaction(db, row))
     const projected = Database.use((db) => projectAutomationInTransaction(db, row))
-    return { id: projected.id, name: projected.name, nextRun: projected.next_run }
+    return { id: projected.id, revisionId: row.id, name: projected.name, nextRun: projected.next_run }
   }
 
   export async function update(input: UpdateAutomationInput): Promise<AutomationView> {
@@ -719,14 +732,9 @@ export namespace AutomationService {
       })
       if (replay) return replay
     }
-    const current = assertPublicAutomation(input.id)
-    const updateStartedAt = Date.now()
-    if (current.pending_fire_id || (current.lease_owner && current.lease_until > updateStartedAt)) {
-      throw new AutomationRunningConflictError({
-        message: `Automation ${input.id} cannot be updated while it is running`,
-        automationID: input.id,
-      })
-    }
+    const current = Database.immediateTransaction((db) =>
+      projectAutomationInTransaction(db, assertMutationDefinitionInTransaction(db, input.id, input.expectedRevisionId)),
+    )
     const currentTarget = Database.use((db) =>
       targetForRevision(db, { revisionID: current.revision_id, scope: current.scope, sessionID: current.session_id }),
     )
@@ -759,12 +767,21 @@ export namespace AutomationService {
     })
     const committedAt = Date.now()
     const row = Database.immediateTransaction((tx) => {
-      const latest = latestAutomationDefinitionInTransaction(tx, input.id)
-      const lease = currentControlLeaseInTransaction(tx, "automation", input.id)
-      if (!latest || latest.kind === "delay" || (lease && lease.expires_at > committedAt)) return undefined
-      if (projectAutomationFrontierInTransaction(tx, latest).pending_fire_id) return undefined
-      if (latest.revision !== current.revision) return undefined
-      if (causation) assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
+      if (causation) {
+        assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
+        const accepted = tx
+          .select()
+          .from(AutomationTable)
+          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
+          .get()
+        if (accepted) {
+          if (accepted.definition_id !== input.id || accepted.tool_input_digest !== causation.inputDigest) {
+            throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation update input")
+          }
+          return accepted
+        }
+      }
+      const latest = assertMutationDefinitionInTransaction(tx, input.id, input.expectedRevisionId)
       const revisionID = causation
         ? Identifier.deterministic("automation", `automation-revision-v1\0${causation.occurrence.toolPartID}`)
         : Identifier.ascending("automation")
@@ -809,13 +826,6 @@ export namespace AutomationService {
       }
       return inserted
     })
-    if (!row) {
-      assertPublicAutomation(input.id)
-      throw new AutomationRunningConflictError({
-        message: `Automation ${input.id} began running before its update could commit`,
-        automationID: input.id,
-      })
-    }
     if (causation) return Database.use((db) => definitionReceiptInTransaction(db, row))
     return view(Database.use((db) => projectAutomationInTransaction(db, row)))
   }
@@ -1235,61 +1245,84 @@ export namespace AutomationService {
     }
   }
 
-  export function remove(id: string): { id: string; name: string } {
-    return removeAutomation(id)
+  export function deletionReceiptInTransaction(
+    db: Database.TxOrDb,
+    tombstone: typeof AutomationDefinitionTombstoneTable.$inferSelect,
+  ): { id: string; name: string } {
+    const definition = db
+      .select()
+      .from(AutomationTable)
+      .where(
+        and(
+          eq(AutomationTable.definition_id, tombstone.definition_id),
+          eq(AutomationTable.revision, tombstone.revision - 1),
+        ),
+      )
+      .get()
+    if (!definition) throw new Error(`Automation tombstone ${tombstone.id} has no terminated definition`)
+    return { id: definition.definition_id, name: definition.name }
   }
 
-  export function removeFromTool(id: string, causation: ScheduleToolCausation): { id: string; name: string } {
-    return removeAutomation(id, causation)
+  function assertMutationDefinitionInTransaction(db: Database.TxOrDb, id: string, expectedRevisionId: string) {
+    const latest = latestAutomationDefinitionInTransaction(db, id)
+    if (!latest || latest.kind === "delay") throw new NotFoundError({ message: `Automation not found: ${id}` })
+    if (latest.id !== expectedRevisionId) {
+      throw new AutomationRevisionConflictError({
+        message: `Automation ${id} changed from observed revision ${expectedRevisionId} to ${latest.id}. Reload the current definition before applying your change.`,
+        automationID: id,
+        expectedRevisionId,
+        currentRevisionId: latest.id,
+      })
+    }
+    const lease = currentControlLeaseInTransaction(db, "automation", id)
+    if (
+      projectAutomationFrontierInTransaction(db, latest).pending_fire_id ||
+      (lease && lease.expires_at > Date.now())
+    ) {
+      throw new AutomationRunningConflictError({
+        message: `Automation ${id} cannot be changed while it is running`,
+        automationID: id,
+      })
+    }
+    return latest
   }
 
-  function removeAutomation(id: string, causation?: ScheduleToolCausation): { id: string; name: string } {
-    if (causation) {
-      const replay = Database.immediateTransaction((db) => {
+  export function remove(id: string, expectedRevisionId: string): { id: string; name: string } {
+    return removeAutomation(id, expectedRevisionId)
+  }
+
+  export function removeFromTool(
+    id: string,
+    expectedRevisionId: string,
+    causation: ScheduleToolCausation,
+  ): { id: string; name: string } {
+    return removeAutomation(id, expectedRevisionId, causation)
+  }
+
+  function removeAutomation(
+    id: string,
+    expectedRevisionId: string,
+    causation?: ScheduleToolCausation,
+  ): { id: string; name: string } {
+    return Database.immediateTransaction((db) => {
+      if (causation) {
         assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
         const tombstone = db
           .select()
           .from(AutomationDefinitionTombstoneTable)
           .where(eq(AutomationDefinitionTombstoneTable.tool_part_id, causation.occurrence.toolPartID))
           .get()
-        if (!tombstone) return undefined
-        if (tombstone.definition_id !== id || tombstone.tool_input_digest !== causation.inputDigest) {
-          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation delete input")
+        if (tombstone) {
+          if (tombstone.definition_id !== id || tombstone.tool_input_digest !== causation.inputDigest) {
+            throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation delete input")
+          }
+          return deletionReceiptInTransaction(db, tombstone)
         }
-        const definition = db
-          .select({ name: AutomationTable.name })
-          .from(AutomationTable)
-          .where(eq(AutomationTable.definition_id, id))
-          .orderBy(desc(AutomationTable.revision))
-          .get()
-        if (!definition) throw new Error(`Automation tombstone ${tombstone.id} has no definition`)
-        return { id, name: definition.name }
-      })
-      if (replay) return replay
-    }
-    const current = assertPublicAutomation(id)
-    const now = Date.now()
-    if (current.pending_fire_id || (current.lease_owner && current.lease_until > now)) {
-      throw new AutomationRunningConflictError({
-        message: `Automation ${id} is currently running`,
-        automationID: id,
-      })
-    }
-    const row = Database.immediateTransaction((db) => {
-      const latest = latestAutomationDefinitionInTransaction(db, id)
-      const lease = currentControlLeaseInTransaction(db, "automation", id)
-      if (!latest || latest.kind === "delay" || (lease && lease.expires_at > now)) return undefined
-      if (projectAutomationFrontierInTransaction(db, latest).pending_fire_id) return undefined
-      appendAutomationTombstoneInTransaction(db, latest, now, causation)
+      }
+      const latest = assertMutationDefinitionInTransaction(db, id, expectedRevisionId)
+      appendAutomationTombstoneInTransaction(db, latest, Date.now(), causation)
       return { id, name: latest.name }
     })
-    if (!row) {
-      throw new AutomationRunningConflictError({
-        message: `Automation ${id} began running before it could be deleted`,
-        automationID: id,
-      })
-    }
-    return row
   }
 
   async function poll(signal?: AbortSignal): Promise<void> {

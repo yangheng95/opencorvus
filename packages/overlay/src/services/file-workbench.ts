@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js"
+import { batch, createSignal } from "solid-js"
 import type { FileContent as SdkFileContent } from "@opencorvus-ai/sdk"
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
 import { apiJson } from "./api"
@@ -67,9 +67,20 @@ const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarge
 const [fileWorkbenchOpen, setFileWorkbenchOpen] = createSignal(false)
 const [fileWorkbenchRevision, setFileWorkbenchRevision] = createSignal(0)
 const [fileEditorRevealRevision, setFileEditorRevealRevision] = createSignal(0)
-type FileEditorBeforeNavigate = () => Promise<boolean>
-let fileEditorBeforeNavigate: FileEditorBeforeNavigate | undefined
+export interface FileEditorNavigationOwner {
+  confirmLeave: () => Promise<boolean>
+  isDirty: () => boolean
+}
+export interface FileEditorCommitBoundary {
+  isCurrent: () => boolean
+  commit: () => void
+}
+const [fileEditorOwner, setFileEditorOwner] = createSignal<FileEditorNavigationOwner>()
 let fileEditorNavigationGeneration = 0
+
+export function hasUnsavedFileChanges(): boolean {
+  return fileEditorOwner()?.isDirty() ?? false
+}
 
 const selectedFilePath = () => selectedFileTarget()?.path ?? ""
 
@@ -173,38 +184,42 @@ function commitFileEditorTarget(target: FileEditorTarget | null): void {
   if (target) setFileEditorRevealRevision((current) => current + 1)
 }
 
-async function requestFileEditorTarget(target: FileEditorTarget | null): Promise<boolean> {
+async function requestFileEditorTarget(
+  target: FileEditorTarget | null,
+  boundary?: FileEditorCommitBoundary,
+): Promise<boolean> {
   const current = selectedFileTarget()
-  if (sameFileEditorTarget(current, target)) {
-    if (target) setFileEditorRevealRevision((revision) => revision + 1)
-    return true
-  }
-  if (current && target && sameFileEditorResource(current, target)) {
-    commitFileEditorTarget(target)
-    return true
-  }
   const generation = ++fileEditorNavigationGeneration
-  if (fileEditorBeforeNavigate && !(await fileEditorBeforeNavigate())) return false
-  if (generation !== fileEditorNavigationGeneration) return false
-  commitFileEditorTarget(target)
+  const owner = fileEditorOwner()
+  if (!sameFileEditorResource(current, target) && owner && !(await owner.confirmLeave())) return false
+  if (
+    generation !== fileEditorNavigationGeneration ||
+    !sameFileEditorResource(current, selectedFileTarget()) ||
+    (boundary && !boundary.isCurrent())
+  )
+    return false
+  batch(() => {
+    if (sameFileEditorTarget(current, target)) {
+      if (target) setFileEditorRevealRevision((revision) => revision + 1)
+    } else {
+      commitFileEditorTarget(target)
+    }
+    boundary?.commit()
+  })
   return true
 }
 
-export function registerFileEditorBeforeNavigate(handler: FileEditorBeforeNavigate): () => void {
-  if (fileEditorBeforeNavigate && fileEditorBeforeNavigate !== handler) {
+export function registerFileEditorBeforeNavigate(owner: FileEditorNavigationOwner): () => void {
+  if (fileEditorOwner() && fileEditorOwner() !== owner) {
     throw new Error("File editor already has a navigation decision owner")
   }
-  fileEditorBeforeNavigate = handler
+  setFileEditorOwner(owner)
   return () => {
-    if (fileEditorBeforeNavigate === handler) fileEditorBeforeNavigate = undefined
+    if (fileEditorOwner() === owner) setFileEditorOwner(undefined)
   }
 }
 
-export function openFileEditor(
-  path: string,
-  scope: FileOperationScope,
-  range?: FileEditorLineRange,
-): Promise<boolean> {
+export function openFileEditor(path: string, scope: FileOperationScope, range?: FileEditorLineRange): Promise<boolean> {
   return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range))
 }
 
@@ -216,8 +231,8 @@ export function openSourceFileEditor(
   return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range))
 }
 
-export function closeFileEditor(): Promise<boolean> {
-  return requestFileEditorTarget(null)
+export function closeFileEditor(boundary?: FileEditorCommitBoundary): Promise<boolean> {
+  return requestFileEditorTarget(null, boundary)
 }
 
 async function admitFileMutation(path: string, scope: FileOperationScope): Promise<void> {
@@ -225,7 +240,8 @@ async function admitFileMutation(path: string, scope: FileOperationScope): Promi
   if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
   if (descendantSuffix(target.path, path) === null) return
   const generation = ++fileEditorNavigationGeneration
-  const allowed = fileEditorBeforeNavigate ? await fileEditorBeforeNavigate() : true
+  const owner = fileEditorOwner()
+  const allowed = owner ? await owner.confirmLeave() : true
   if (
     !allowed ||
     generation !== fileEditorNavigationGeneration ||

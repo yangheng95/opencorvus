@@ -59,7 +59,7 @@ test("real HTTP scope edits project the exact physical revision and survive data
   try {
     const created = await request("/global/automations", "POST", definition("scope revision", { scope: "global" }))
     const route = `/global/automations/${created.id}`
-    await request(route, "PATCH", { status: "paused" })
+    let current = await request(route, "PATCH", { expectedRevisionId: created.revisionId, status: "paused" })
     for (const target of [
       { scope: "project", projectIds: [secondID, firstID] },
       { scope: "project", projectIds: [secondID] },
@@ -68,8 +68,9 @@ test("real HTTP scope edits project the exact physical revision and survive data
       { scope: "global" },
       { scope: "project", projectIds: [firstID, secondID] },
     ] satisfies AutomationTarget[]) {
-      const updated = await request(route, "PATCH", { target })
-      const renamed = await request(route, "PATCH", { name: `scope ${target.scope}` })
+      const updated = await request(route, "PATCH", { expectedRevisionId: current.revisionId, target })
+      const renamed = await request(route, "PATCH", { expectedRevisionId: updated.revisionId, name: `scope ${target.scope}` })
+      current = renamed
       const list = await request("/global/automations")
       expect({
         updated: updated.target,
@@ -113,10 +114,10 @@ test("retargeted manual and due runs bind exact revision members and retain hist
       const created = await AutomationService.create(
         definition("manual exact members", { scope: "project", projectIds: [firstID] }),
       )
-      await AutomationService.update({ id: created.id, status: "paused" })
+      await AutomationService.update({ id: created.id, expectedRevisionId: AutomationService.list().find((row) => row.id === created.id)!.revisionId, status: "paused" })
       const originalRun = await AutomationService.runNow(created.id)
       expect(originalRun.map((row) => row.targetProjectId)).toEqual([firstID])
-      await AutomationService.update({ id: created.id, target: { scope: "project", projectIds: [secondID, firstID] } })
+      await AutomationService.update({ id: created.id, expectedRevisionId: AutomationService.list().find((row) => row.id === created.id)!.revisionId, target: { scope: "project", projectIds: [secondID, firstID] } })
       const revision = latestMembership(created.id)
       const runs = await AutomationService.runNow(created.id)
       expect(runs.map((row) => row.targetProjectId).sort()).toEqual([firstID, secondID].sort())
@@ -147,7 +148,7 @@ test("retargeted manual and due runs bind exact revision members and retain hist
       const scheduled = await AutomationService.create(definition("due retarget", { scope: "global" }))
       const originalScheduledRevision = latestMembership(scheduled.id)
       await AutomationService.update({
-        id: scheduled.id,
+        id: scheduled.id, expectedRevisionId: AutomationService.list().find((row) => row.id === scheduled.id)!.revisionId,
         target: { scope: "project", projectIds: [secondID] },
         recurrence: `DTSTART:${stamp}\nRRULE:FREQ=DAILY;COUNT=1`,
       })
@@ -185,13 +186,13 @@ test("retargeted retry reopens its exact Fire after database restart with indepe
         definition("retry target", { scope: "project", projectIds: [firstID] }),
       )
       await AutomationService.update({
-        id: original.id,
+        id: original.id, expectedRevisionId: AutomationService.list().find((row) => row.id === original.id)!.revisionId,
         status: "paused",
         target: { scope: "project", projectIds: [secondID] },
       })
       const peer = await AutomationService.create(definition("parallel target", { scope: "global" }))
       await AutomationService.update({
-        id: peer.id,
+        id: peer.id, expectedRevisionId: AutomationService.list().find((row) => row.id === peer.id)!.revisionId,
         status: "paused",
         target: { scope: "project", projectIds: [firstID] },
       })

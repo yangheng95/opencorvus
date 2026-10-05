@@ -1,0 +1,190 @@
+{
+  "capturedAt": "2026-10-05T02:51:43.517735+00:00",
+  "definitions": [
+    {
+      "id": "atm_g0VX8iyLn00AtaXxJAFX",
+      "revisions": [
+        {
+          "id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "definition_id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revision": 1,
+          "scope": "global",
+          "status": "active",
+          "name": "Version global",
+          "prompt": "Original observed prompt"
+        },
+        {
+          "id": "atm_g0VX8iyMB00EuSqy11R6",
+          "definition_id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revision": 2,
+          "scope": "global",
+          "status": "paused",
+          "name": "Version global",
+          "prompt": "Original observed prompt"
+        },
+        {
+          "id": "atm_g0VX8iyMg009POF9MiAp",
+          "definition_id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revision": 3,
+          "scope": "global",
+          "status": "paused",
+          "name": "Version global",
+          "prompt": "Actual peer 1 winner global"
+        },
+        {
+          "id": "atm_g0VX8iyNT00fDmgtjbgu",
+          "definition_id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revision": 4,
+          "scope": "global",
+          "status": "paused",
+          "name": "Fresh editor saved global",
+          "prompt": "Actual peer 1 winner global"
+        },
+        {
+          "id": "atm_g0VX8jL7e003UFdFDs0T",
+          "definition_id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revision": 5,
+          "scope": "global",
+          "status": "paused",
+          "name": "Restart saved global",
+          "prompt": "Actual peer 1 winner global"
+        }
+      ],
+      "tombstones": [
+        {
+          "id": "atm_g0VX8jL8700I8MWrcVub",
+          "definition_id": "atm_g0VX8iyLn00AtaXxJAFX",
+          "revision": 6,
+          "tool_part_id": null,
+          "tool_input_digest": null,
+          "time_created": 1791168703235
+        }
+      ],
+      "leases": []
+    },
+    {
+      "id": "atm_g0VX8iyNe00VvmayKsFE",
+      "revisions": [
+        {
+          "id": "atm_g0VX8iyNe00VvmayKsFE",
+          "definition_id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revision": 1,
+          "scope": "project",
+          "status": "active",
+          "name": "Version project",
+          "prompt": "Original observed prompt"
+        },
+        {
+          "id": "atm_g0VX8iyNs00Zuvsij1fE",
+          "definition_id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revision": 2,
+          "scope": "project",
+          "status": "paused",
+          "name": "Version project",
+          "prompt": "Original observed prompt"
+        },
+        {
+          "id": "atm_g0VX8iyOB00unIcQCFeb",
+          "definition_id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revision": 3,
+          "scope": "project",
+          "status": "paused",
+          "name": "Version project",
+          "prompt": "Actual peer 0 winner project"
+        },
+        {
+          "id": "atm_g0VX8iyOn00CGCnKWmIf",
+          "definition_id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revision": 4,
+          "scope": "project",
+          "status": "paused",
+          "name": "Fresh editor saved project",
+          "prompt": "Actual peer 0 winner project"
+        },
+        {
+          "id": "atm_g0VX8jL8R00TBwlswqi6",
+          "definition_id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revision": 5,
+          "scope": "project",
+          "status": "paused",
+          "name": "Restart saved project",
+          "prompt": "Actual peer 0 winner project"
+        }
+      ],
+      "tombstones": [
+        {
+          "id": "atm_g0VX8jL9100EXktcdZa6",
+          "definition_id": "atm_g0VX8iyNe00VvmayKsFE",
+          "revision": 6,
+          "tool_part_id": null,
+          "tool_input_digest": null,
+          "time_created": 1791168703291
+        }
+      ],
+      "leases": []
+    },
+    {
+      "id": "atm_g0VX8iyOz00BANIaRK3I",
+      "revisions": [
+        {
+          "id": "atm_g0VX8iyOz00BANIaRK3I",
+          "definition_id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revision": 1,
+          "scope": "session",
+          "status": "active",
+          "name": "Version session",
+          "prompt": "Original observed prompt"
+        },
+        {
+          "id": "atm_g0VX8iyPB000u21SvZ6m",
+          "definition_id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revision": 2,
+          "scope": "session",
+          "status": "paused",
+          "name": "Version session",
+          "prompt": "Original observed prompt"
+        },
+        {
+          "id": "atm_g0VX8iyPW00U1S0FoPrH",
+          "definition_id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revision": 3,
+          "scope": "session",
+          "status": "paused",
+          "name": "Version session",
+          "prompt": "Actual peer 1 winner session"
+        },
+        {
+          "id": "atm_g0VX8iyQ700LlK1zbiNg",
+          "definition_id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revision": 4,
+          "scope": "session",
+          "status": "paused",
+          "name": "Fresh editor saved session",
+          "prompt": "Actual peer 1 winner session"
+        },
+        {
+          "id": "atm_g0VX8jL9H00JBrC272Ql",
+          "definition_id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revision": 5,
+          "scope": "session",
+          "status": "paused",
+          "name": "Restart saved session",
+          "prompt": "Actual peer 1 winner session"
+        }
+      ],
+      "tombstones": [
+        {
+          "id": "atm_g0VX8jL9U00toPS2NRK1",
+          "definition_id": "atm_g0VX8iyOz00BANIaRK3I",
+          "revision": 6,
+          "tool_part_id": null,
+          "tool_input_digest": null,
+          "time_created": 1791168703320
+        }
+      ],
+      "leases": []
+    }
+  ],
+  "databaseRunCount": 0,
+  "databaseAttemptCount": 0
+}

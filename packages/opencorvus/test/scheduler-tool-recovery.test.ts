@@ -15,6 +15,9 @@ import type { Message } from "../src/session/message"
 import { SessionPromptOwner } from "../src/session/prompt/owner"
 import {
   executeScheduleToolInput,
+  normalizeScheduleToolInputForDigest,
+  formatScheduleDefinitionResult,
+  formatScheduleDeletionResult,
   ScheduleToolParameters,
   type ScheduleToolInput,
 } from "../src/tool/schedule"
@@ -26,6 +29,10 @@ afterAll(resetMemoryDatabase)
 
 async function persistedScheduleRequest(sessionID: string, raw: unknown) {
   const input = ScheduleToolParameters.parse(raw)
+  return { ...(await persistedScheduleInput(sessionID, input)), input }
+}
+
+async function persistedScheduleInput(sessionID: string, input: Record<string, unknown>) {
   const user = await Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID,
@@ -139,6 +146,7 @@ describe("schedule Tool exact lost-response recovery", () => {
         const update = await persistedScheduleRequest(session.id, {
           action: "update",
           automationId: created.automationId,
+          expectedRevisionId: AutomationService.list().find((row) => row.id === created.automationId)!.revisionId,
           scope: "project",
           projectIds: [secondID, firstID],
         })
@@ -149,7 +157,7 @@ describe("schedule Tool exact lost-response recovery", () => {
           projectIds: [secondID, firstID],
         })
         await AutomationService.update({
-          id: created.automationId,
+          id: created.automationId, expectedRevisionId: AutomationService.list().find((row) => row.id === created.automationId)!.revisionId,
           status: "paused",
           target: { scope: "project", projectIds: [firstID] },
         })
@@ -174,7 +182,7 @@ describe("schedule Tool exact lost-response recovery", () => {
           recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
           prompt: "retry exact manual input",
         })
-        await AutomationService.update({ id: automation.id, status: "paused" })
+        await AutomationService.update({ id: automation.id, expectedRevisionId: AutomationService.list().find((row) => row.id === automation.id)!.revisionId, status: "paused" })
         const request = await persistedScheduleRequest(session.id, { action: "run", automationId: automation.id })
         const context = {
           sessionID: session.id,
@@ -286,6 +294,7 @@ describe("schedule Tool exact lost-response recovery", () => {
         const update = await persistedScheduleRequest(session.id, {
           action: "update",
           automationId: automationID,
+          expectedRevisionId: AutomationService.list().find((row) => row.id === automationID)!.revisionId,
           prompt: "Resume updated recovery",
         })
         await executeAndRecover(session.id, update)
@@ -302,6 +311,7 @@ describe("schedule Tool exact lost-response recovery", () => {
         const deletion = await persistedScheduleRequest(session.id, {
           action: "delete",
           automationId: automationID,
+          expectedRevisionId: AutomationService.list().find((row) => row.id === automationID)!.revisionId,
         })
         await executeAndRecover(session.id, deletion)
       },
@@ -476,12 +486,13 @@ describe("schedule Tool exact lost-response recovery", () => {
           occurrence,
         })
         const automationID = JSON.parse(liveCreate.output).automationId as string
-        await AutomationService.update({ id: automationID, name: "Later external name", prompt: "Later prompt" })
+        await AutomationService.update({ id: automationID, expectedRevisionId: AutomationService.list().find((row) => row.id === automationID)!.revisionId, name: "Later external name", prompt: "Later prompt" })
         expect(await recoverScheduledToolPart(create.part)).toEqual(liveCreate)
 
         const update = await persistedScheduleRequest(session.id, {
           action: "update",
           automationId: automationID,
+          expectedRevisionId: AutomationService.list().find((row) => row.id === automationID)!.revisionId,
           prompt: "Tool revision prompt",
         })
         const updateOccurrence = {
@@ -496,7 +507,7 @@ describe("schedule Tool exact lost-response recovery", () => {
           projectID: Instance.project.id,
           occurrence: updateOccurrence,
         })
-        await AutomationService.update({ id: automationID, name: "Newest external name" })
+        await AutomationService.update({ id: automationID, expectedRevisionId: AutomationService.list().find((row) => row.id === automationID)!.revisionId, name: "Newest external name" })
         expect(await recoverScheduledToolPart(update.part)).toEqual(liveUpdate)
       },
     })
@@ -622,7 +633,7 @@ describe("schedule Tool exact lost-response recovery", () => {
           occurrence,
         })
         const automationID = JSON.parse(live.output).automationId as string
-        await AutomationService.update({ id: automationID, name: "External later revision" })
+        await AutomationService.update({ id: automationID, expectedRevisionId: AutomationService.list().find((row) => row.id === automationID)!.revisionId, name: "External later revision" })
         const completedAt = Date.now() + 1
         expect(
           await SessionLoop.terminalizeRecoveredIncompleteAssistant(session.id, undefined, [
@@ -649,3 +660,136 @@ describe("schedule Tool exact lost-response recovery", () => {
     })
   }, 60_000)
 })
+
+
+test("accepted historical configuration inputs recover immutable receipts without new admission fields", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "root", title: "Accepted historical definitions" })
+      const original = await AutomationService.create({
+        name: "historical",
+        target: { scope: "global" },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        prompt: "original",
+      })
+      let observed = original
+      for (const action of ["update", "pause", "resume"] as const) {
+        const raw = { action, automationId: original.id, ...(action === "update" ? { name: "accepted name" } : {}) }
+        const request = await persistedScheduleInput(session.id, raw)
+        const occurrence = {
+          sessionID: session.id,
+          messageID: request.part.messageID,
+          toolPartID: request.part.id,
+          toolCallID: request.part.callID,
+          toolName: "schedule" as const,
+        }
+        // Materialize the upgrade-era accepted fact with its actual old request digest; new admission uses its explicit observed revision.
+        const accepted = await AutomationService.updateFromTool(
+          {
+            id: original.id,
+            expectedRevisionId: observed.revisionId,
+            ...(action === "update"
+              ? { name: "accepted name" }
+              : { status: action === "pause" ? ("paused" as const) : ("active" as const) }),
+          },
+          { occurrence, inputDigest: scheduledToolInputDigest("schedule", normalizeScheduleToolInputForDigest(raw)) },
+        )
+        observed = await AutomationService.update({
+          id: original.id,
+          expectedRevisionId: accepted.revisionId,
+          name: "later peer",
+        })
+        expect(await recoverScheduledToolPart(request.part)).toEqual(formatScheduleDefinitionResult(action, accepted))
+        await expect(
+          recoverScheduledToolPart({
+            ...request.part,
+            state: { ...request.part.state, input: { ...raw, automationId: "changed" } },
+          }),
+        ).rejects.toMatchObject({ name: "ScheduledToolOccurrenceConflictError" })
+        const currentValidation = ScheduleToolParameters.safeParse(raw)
+        expect(currentValidation.success).toBe(false)
+        if (!currentValidation.success) expect(currentValidation.error.issues[0]?.code).toBe("invalid_union")
+      }
+      const raw = { action: "delete", automationId: original.id }
+      const request = await persistedScheduleInput(session.id, raw)
+      const deleted = AutomationService.removeFromTool(original.id, observed.revisionId, {
+        occurrence: {
+          sessionID: session.id,
+          messageID: request.part.messageID,
+          toolPartID: request.part.id,
+          toolCallID: request.part.callID,
+          toolName: "schedule",
+        },
+        inputDigest: scheduledToolInputDigest("schedule", raw),
+      })
+      expect(await recoverScheduledToolPart(request.part)).toEqual(formatScheduleDeletionResult(deleted))
+    },
+  })
+}, 60_000)
+
+test("accepted create defaults share one normalization and a new stale Tool mutation exposes its named conflict", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "root", title: "Normalized accepted requests" })
+      for (const raw of [
+        {
+          action: "create",
+          name: "defaults",
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "future",
+        },
+        { action: "create_event", name: "event defaults", eventType: "normalization.never", prompt: "event" },
+      ]) {
+        const request = await persistedScheduleInput(session.id, raw)
+        const input = ScheduleToolParameters.parse(raw)
+        const live = await executeScheduleToolInput(input, {
+          sessionID: session.id,
+          projectID: Instance.project.id,
+          occurrence: {
+            sessionID: session.id,
+            messageID: request.part.messageID,
+            toolPartID: request.part.id,
+            toolCallID: request.part.callID,
+            toolName: "schedule",
+          },
+        })
+        expect(await recoverScheduledToolPart(request.part)).toEqual(live)
+        if (input.action === "create_event")
+          expect(JSON.parse(live.output)).toMatchObject({ oneShot: false, cooldownMs: 0, match: {} })
+        if (input.action !== "create") continue
+        const created = JSON.parse(live.output)
+        const current = await AutomationService.update({
+          id: created.automationId,
+          expectedRevisionId: created.revisionId,
+          name: "peer",
+        })
+        const stale = await persistedScheduleRequest(session.id, {
+          action: "update",
+          automationId: current.id,
+          expectedRevisionId: created.revisionId,
+          prompt: "stale",
+        })
+        await expect(
+          executeScheduleToolInput(stale.input, {
+            sessionID: session.id,
+            projectID: Instance.project.id,
+            occurrence: {
+              sessionID: session.id,
+              messageID: stale.part.messageID,
+              toolPartID: stale.part.id,
+              toolCallID: stale.part.callID,
+              toolName: "schedule",
+            },
+          }),
+        ).rejects.toMatchObject({
+          name: "AutomationRevisionConflictError",
+          data: { expectedRevisionId: created.revisionId, currentRevisionId: current.revisionId },
+        })
+      }
+    },
+  })
+}, 60_000)

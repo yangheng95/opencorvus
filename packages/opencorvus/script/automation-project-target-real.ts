@@ -61,6 +61,7 @@ let cleanup: (() => Promise<void>) | undefined
 let failure: unknown
 const cases: Array<Record<string, unknown>> = []
 const evidence: Record<string, unknown> = { root, model, maxRequests, inactivityMs, directories, markers, cases }
+using auditLifetime = new DisposableStack()
 try {
   for (const [index, directory] of directories.entries()) {
     await fs.mkdir(directory, { recursive: true })
@@ -88,7 +89,7 @@ try {
   assert(credential, "Canonical isolated OpenAI authorization is available")
   const authority = credential.type === "oauth" ? { copiedOAuthExpiresAt: credential.expires } : undefined
   if (authority) assertCopiedOAuthAccess(authority.copiedOAuthExpiresAt)
-  using observed = new RealProviderAudit("gpt-6.1-sol", maxRequests, undefined, authority)
+  const observed = auditLifetime.use(new RealProviderAudit("gpt-6.1-sol", maxRequests, undefined, authority))
   audit = observed
   const [
     { Instance },
@@ -188,7 +189,7 @@ try {
     const prompt =
       "Read target.txt in your current working directory. Report its exact marker verbatim and the absolute directory you read it from. This is a read-only check; that report is the complete requested result."
     current.prompt = prompt
-    const created = await request<{ id: string }>(
+    const created = await request<{ id: string; revisionId: string }>(
       "/global/automations",
       {
         name: `Real target ${label}`,
@@ -202,12 +203,12 @@ try {
     )
     current.automationID = created.id
     // The public creation schema starts active; a far-future rule is immediately paused before retargeting.
-    const paused = await request<AutomationView>(`/global/automations/${created.id}`, { status: "paused" }, "PATCH")
+    const paused = await request<AutomationView>(`/global/automations/${created.id}`, { expectedRevisionId: created.revisionId, status: "paused" }, "PATCH")
     assert.equal(paused.status, "paused")
     assert.deepEqual(paused.target, { scope: "project", projectIds: initialProjects })
     const edited = await request<AutomationView>(
       `/global/automations/${created.id}`,
-      { target: { scope: "project", projectIds: [projects[1]!.id] } },
+      { expectedRevisionId: paused.revisionId, target: { scope: "project", projectIds: [projects[1]!.id] } },
       "PATCH",
     )
     assert.equal(edited.status, "paused")

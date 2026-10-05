@@ -29,6 +29,7 @@ import {
   ensureWorkspaceDirectory,
   isMissingProjectDirectoryError,
   leaveUnavailableProject,
+  beginWorkspaceSelection,
 } from "./workspace"
 import { workspaceRestoreDirectory } from "../store/settings"
 import { selectTask } from "./task"
@@ -306,7 +307,7 @@ export function createInitialDirectoryResolver(
 
 /**
  * Tear down the reconnect loop.
- * Call on `beforeunload` or component cleanup.
+ * Call on final page destruction or component cleanup.
  */
 export function teardownApp(): void {
   initLifecycleGeneration += 1
@@ -360,7 +361,7 @@ export function initialRestoreTaskID(
 export async function restoreInitialTaskSelection(options: { search?: string } = {}): Promise<boolean> {
   const deepLink = options.search === undefined ? currentTaskDeepLink() : taskDeepLinkFromSearch(options.search)
   if (deepLink) {
-    await selectTask(deepLink.taskID)
+    await selectTask(deepLink.taskID, { selectionEpoch: beginWorkspaceSelection() })
     bumpWorkspaceEpoch()
     return true
   }
@@ -395,7 +396,7 @@ export async function restoreInitialWorkspace(): Promise<boolean> {
 
   if (taskID) {
     if (activeTaskID() !== taskID || !boardStore.board) {
-      await selectTask(taskID)
+      await selectTask(taskID, { selectionEpoch: beginWorkspaceSelection() })
     }
     // body.dataset.workspace/connection is updated reactively by main.tsx createEffect.
     bumpWorkspaceEpoch()
@@ -410,7 +411,7 @@ export async function restoreInitialWorkspace(): Promise<boolean> {
   }
 
   if ((workspaceTaskID || "").trim() || boardStore.selectedSource?.kind === "task" || boardStore.board?.task) {
-    await selectTask("")
+    await selectTask("", { selectionEpoch: beginWorkspaceSelection() })
   }
   return false
 }

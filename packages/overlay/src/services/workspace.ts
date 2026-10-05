@@ -12,7 +12,14 @@
 
 import { batch } from "solid-js"
 import { bumpWorkspaceEpoch, saveSettings, settingsStore, setSettingsStore } from "../store/settings"
-import { boardStore, setBoardStore, activeTaskID, clearTasksForMissingDirectory } from "../store/board"
+import {
+  boardStore,
+  setBoardStore,
+  activeTaskID,
+  clearTasksForMissingDirectory,
+  type BoardSource,
+} from "../store/board"
+import { closeFileEditor } from "./file-workbench"
 import { abortChatRequest } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
@@ -80,7 +87,13 @@ export interface EnterEmptyWorkspaceOptions {
 // ── Module-level task sequence ──
 
 let tasksSeq = 0
-let globalComposerProjectAllocation: Promise<string> | null = null
+interface GlobalComposerProjectAllocation {
+  originEpoch: number
+  epoch: number
+  sequence: number
+  promise: Promise<GlobalComposerProjectResolution>
+}
+let globalComposerProjectAllocation: GlobalComposerProjectAllocation | null = null
 
 // ── Internal: schedule-board timer (
 // These timers are held here so clearWorkspaceRuntime can cancel them.
@@ -247,8 +260,8 @@ export function clearProjectScopeData(): void {
 
 // ── closeProject ──
 
-function enterDirectoryFreeWorkspace(savedDirectory: string): number {
-  const selectionEpoch = beginWorkspaceSelection()
+function enterDirectoryFreeWorkspace(savedDirectory: string, selectionEpoch: number): void {
+  if (!ownsWorkspaceSelection(selectionEpoch)) return
   stopSSE()
   setSettingsStore("directoryEpoch", (n: number) => n + 1)
   setSettingsStore({
@@ -260,7 +273,6 @@ function enterDirectoryFreeWorkspace(savedDirectory: string): number {
   configureApi({ directory: "" })
   enterEmptyWorkspace({ restoreDirectory: false })
   clearProjectScopeData()
-  return selectionEpoch
 }
 
 /**
@@ -268,17 +280,21 @@ function enterDirectoryFreeWorkspace(savedDirectory: string): number {
  * This is the single lifecycle path for Project -> Close Project.
  */
 export async function closeProject(): Promise<void> {
-  enterDirectoryFreeWorkspace("")
+  const admission = await requestWorkspaceSelection()
+  if (admission.kind === "unchanged") return
+  if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
+  enterDirectoryFreeWorkspace("", admission.epoch)
   await saveSettings()
+  if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
 }
 
 /**
  * Enter the directory-free global launcher. Durable Project ownership begins
  * only when the operator submits actual content.
  */
-export async function openGlobalChatLauncher(): Promise<void> {
-  enterDirectoryFreeWorkspace(settingsStore.savedDirectory)
-  setTimeout(() => document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")?.focus(), 0)
+export async function openGlobalChatLauncher(selectionEpoch: number): Promise<void> {
+  if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Global launcher superseded", "AbortError")
+  enterDirectoryFreeWorkspace(settingsStore.savedDirectory, selectionEpoch)
 }
 
 export function isMissingProjectDirectoryError(error: unknown, directory: string): boolean {
@@ -310,7 +326,7 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
   const savedDirectory =
     projectDirectoryKey(settingsStore.savedDirectory) === unavailableKey ? "" : settingsStore.savedDirectory
   if (ownsRuntimeDirectory) {
-    enterDirectoryFreeWorkspace(savedDirectory)
+    enterDirectoryFreeWorkspace(savedDirectory, beginWorkspaceSelection())
   } else {
     // A selected Task or Session can temporarily own another live Project
     // while settings still retain this removed directory. Clear only the
@@ -330,33 +346,80 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
  * Chat remains write-free; a real attachment or Mission submission is the
  * first durable boundary. Concurrent attachment ingresses share one Project.
  */
-export async function resolveGlobalComposerProject(): Promise<string> {
-  const current = activeDirectory().trim()
-  if (current) return current
-  if (globalComposerProjectAllocation) return globalComposerProjectAllocation
+export type GlobalComposerProjectRequest =
+  | { kind: "attachment"; selectionEpoch: number }
+  | { kind: "admitted"; selectionEpoch: number }
 
-  const selectionEpoch = beginWorkspaceSelection()
-  const allocation = (async () => {
-    const directory = await createAnonymousProject()
-    if (!ownsWorkspaceSelection(selectionEpoch)) {
-      throw new DOMException("Global Composer Project creation superseded", "AbortError")
-    }
-    const activated = await applyDirectory(directory, {
-      save: false,
-      persist: false,
-      restoreWorkspace: false,
-      selectionEpoch,
-    })
-    if (!activated || !ownsWorkspaceSelection(selectionEpoch)) {
-      throw new DOMException("Global Composer Project activation superseded", "AbortError")
-    }
-    return directory
-  })()
-  globalComposerProjectAllocation = allocation
+export interface GlobalComposerProjectResolution {
+  directory: string
+  selectionEpoch: number
+}
+
+function assertComposerProjectAllocationCurrent(owner: GlobalComposerProjectAllocation): void {
+  if (
+    globalComposerProjectAllocation !== owner ||
+    owner.sequence !== workspaceAdmissionSequence ||
+    !ownsWorkspaceSelection(owner.epoch)
+  )
+    throw new DOMException("Global Composer Project allocation superseded", "AbortError")
+}
+
+export async function resolveGlobalComposerProject(
+  request: GlobalComposerProjectRequest,
+): Promise<GlobalComposerProjectResolution> {
+  const existing = globalComposerProjectAllocation
+  if (
+    existing &&
+    (existing.epoch === request.selectionEpoch ||
+      (request.kind === "attachment" && existing.originEpoch === request.selectionEpoch))
+  ) {
+    assertComposerProjectAllocationCurrent(existing)
+    return existing.promise
+  }
+  if (!ownsWorkspaceSelection(request.selectionEpoch))
+    throw new DOMException("Global Composer Project creation superseded", "AbortError")
+  const current = activeDirectory().trim()
+  if (current) return { directory: current, selectionEpoch: request.selectionEpoch }
+
+  // Install the sole owner before its microtask starts admission. Every file
+  // in a clipboard/drop batch can start capturing transient bytes first.
+  const owner: GlobalComposerProjectAllocation = {
+    originEpoch: request.selectionEpoch,
+    epoch: request.selectionEpoch,
+    sequence: workspaceAdmissionSequence,
+    promise: Promise.resolve().then(async () => {
+      assertComposerProjectAllocationCurrent(owner)
+      if (request.kind === "attachment") {
+        await admitWorkspaceSelection(undefined, {
+          requested: (sequence) => {
+            owner.sequence = sequence
+          },
+          committed: (epoch) => {
+            owner.epoch = epoch
+          },
+        })
+        assertComposerProjectAllocationCurrent(owner)
+      }
+      const directory = await createAnonymousProject()
+      assertComposerProjectAllocationCurrent(owner)
+      const activated = await applyDirectory(directory, {
+        save: false,
+        persist: false,
+        restoreWorkspace: false,
+        selectionEpoch: owner.epoch,
+      })
+      assertComposerProjectAllocationCurrent(owner)
+      if (!activated) {
+        throw new DOMException("Global Composer Project activation superseded", "AbortError")
+      }
+      return { directory, selectionEpoch: owner.epoch }
+    }),
+  }
+  globalComposerProjectAllocation = owner
   try {
-    return await allocation
+    return await owner.promise
   } finally {
-    if (globalComposerProjectAllocation === allocation) globalComposerProjectAllocation = null
+    if (globalComposerProjectAllocation === owner) globalComposerProjectAllocation = null
   }
 }
 
@@ -369,9 +432,11 @@ export interface GlobalComposerSubmissionContext {
  * Snapshot the directory-free Composer model before Project activation can
  * replace the active frontend projection, then resolve its durable owner.
  */
-export async function resolveGlobalComposerSubmissionContext(): Promise<GlobalComposerSubmissionContext> {
+export async function resolveGlobalComposerSubmissionContext(
+  selectionEpoch: number,
+): Promise<GlobalComposerSubmissionContext> {
   const model = appStore.composerModel.trim() || undefined
-  const directory = await resolveGlobalComposerProject()
+  const { directory } = await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch })
   return { directory, model }
 }
 
@@ -698,7 +763,7 @@ export interface ApplyDirectoryOptions {
   /** Explicit caller cancellation; ordinary wall-clock time does not cancel project mutations. */
   signal?: AbortSignal
   /** Shared selection intent that must still own boardStore.selectEpoch. */
-  selectionEpoch?: number
+  selectionEpoch: number
   /**
    * When true, `next` is written as the saved directory.
    * When false, the saved directory is cleared.
@@ -753,8 +818,58 @@ export function ownsWorkspaceSelection(epoch: number): boolean {
   return boardStore.selectEpoch === epoch
 }
 
-export async function applyDirectory(next: string, options: ApplyDirectoryOptions = {}): Promise<boolean> {
-  const selectionEpoch = options.selectionEpoch ?? beginWorkspaceSelection()
+let workspaceAdmissionSequence = 0
+
+export type WorkspaceAdmission = { kind: "unchanged" } | { kind: "admitted"; epoch: number }
+
+export function isWorkspaceSelectionReady(target: BoardSource): boolean {
+  const current = boardStore.selectedSource
+  if (!current || current.kind !== target.kind || current.id !== target.id) return false
+  if (
+    projectDirectoryKey(current.directory || activeDirectory()) !==
+    projectDirectoryKey(target.directory || activeDirectory())
+  )
+    return false
+  if (
+    current.kind === "session" &&
+    target.kind === "session" &&
+    (current.sessionKind !== target.sessionKind || current.experience !== target.experience)
+  )
+    return false
+  if (target.kind === "task" && boardStore.taskSelectionError?.taskID === target.id) return false
+  if (boardStore.taskSwitching) return true
+  return target.kind === "session"
+    ? boardStore.board?.kind === "session" && boardStore.board.sessionID === target.id
+    : boardStore.board?.task?.id === target.id
+}
+
+/** Admit a user navigation before either its file owner or workspace changes. */
+export function requestWorkspaceSelection(target?: BoardSource): Promise<WorkspaceAdmission> {
+  return admitWorkspaceSelection(target)
+}
+
+async function admitWorkspaceSelection(
+  target?: BoardSource,
+  observer?: { requested: (sequence: number) => void; committed: (epoch: number) => void },
+): Promise<WorkspaceAdmission> {
+  const sequence = ++workspaceAdmissionSequence
+  observer?.requested(sequence)
+  if (target && isWorkspaceSelectionReady(target)) return { kind: "unchanged" }
+  const previousEpoch = boardStore.selectEpoch
+  let epoch = previousEpoch
+  const accepted = await closeFileEditor({
+    isCurrent: () => sequence === workspaceAdmissionSequence && ownsWorkspaceSelection(previousEpoch),
+    commit: () => {
+      epoch = beginWorkspaceSelection()
+      observer?.committed(epoch)
+    },
+  })
+  if (!accepted) throw new DOMException("Workspace selection cancelled or superseded", "AbortError")
+  return { kind: "admitted", epoch }
+}
+
+export async function applyDirectory(next: string, options: ApplyDirectoryOptions): Promise<boolean> {
+  const selectionEpoch = options.selectionEpoch
   if (!ownsWorkspaceSelection(selectionEpoch)) return false
   const save = options.save === true ? next : options.save === false ? "" : null
 
@@ -864,10 +979,16 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
  * Set the active directory without persisting.
  * No-ops when `value` is empty or already equals the current directory.
  */
-export async function setActiveDirectory(value: string, options: ApplyDirectoryOptions = {}): Promise<void> {
+export async function setActiveDirectory(
+  value: string,
+  options: Omit<ApplyDirectoryOptions, "selectionEpoch"> = {},
+): Promise<void> {
   const next = typeof value === "string" ? value.trim() : ""
   if (!next || next === settingsStore.directory) return
-  await applyDirectory(next, { ...options, persist: false })
+  const admission = await requestWorkspaceSelection()
+  if (admission.kind === "unchanged") return
+  const applied = await applyDirectory(next, { ...options, persist: false, selectionEpoch: admission.epoch })
+  if (!applied) throw new DOMException("Project navigation superseded", "AbortError")
 }
 
 // ── browseDirectory ──
@@ -895,6 +1016,7 @@ export async function browseDirectory(): Promise<void> {
     if (!selected) return
     await setDirectory(selected)
   } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") return
     AppLog.error("ui", "Failed to set working directory", { error: String(e) })
     await nativeMessage(errorText("cwd.set_failed", e), {
       title: t("cwd.title"),
@@ -1026,7 +1148,10 @@ export async function openProjectPathInEditor(
   }
 }
 
-export async function openPathInSelectedEditor(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
+export async function openPathInSelectedEditor(
+  target: string,
+  location?: Partial<FileReferenceLocation>,
+): Promise<void> {
   const path = editorTargetPath(target)
   if (!path) {
     if (typeof target === "string" && target.trim()) {
@@ -1098,10 +1223,16 @@ export function editorTargetPath(target: string): string {
  * creating a temp workspace (that fallback was removed — see CHANGELOG for
  * the temp-workspace deletion rationale).
  */
-export async function setDirectory(value: string, options: ApplyDirectoryOptions = {}): Promise<void> {
+export async function setDirectory(
+  value: string,
+  options: Omit<ApplyDirectoryOptions, "selectionEpoch"> = {},
+): Promise<void> {
   const next = typeof value === "string" ? value.trim() : ""
   if (!next) throw new Error(t("cwd.path_required"))
-  await applyDirectory(next, { ...options, save: true })
+  const admission = await requestWorkspaceSelection()
+  if (admission.kind === "unchanged") return
+  const applied = await applyDirectory(next, { ...options, save: true, selectionEpoch: admission.epoch })
+  if (!applied) throw new DOMException("Project navigation superseded", "AbortError")
 }
 
 // ── ensureDefaultDirectory ──

@@ -383,21 +383,51 @@ export namespace EventService {
     await Session.assertLineageInProject({ sessionID: sessionId, projectID: input.projectId })
   }
 
+  export function definitionReceiptInTransaction(row: typeof EventJobTable.$inferSelect) {
+    return {
+      id: row.definition_id,
+      name: row.name,
+      eventType: row.event_type,
+      oneShot: row.one_shot,
+      cooldownMs: row.cooldown_ms,
+      match: row.match_json ?? {},
+    }
+  }
+
+  export function deletionReceiptInTransaction(
+    db: Database.TxOrDb,
+    tombstone: typeof EventJobDefinitionTombstoneTable.$inferSelect,
+  ) {
+    const definition = db
+      .select()
+      .from(EventJobTable)
+      .where(
+        and(
+          eq(EventJobTable.definition_id, tombstone.definition_id),
+          eq(EventJobTable.revision, tombstone.revision - 1),
+        ),
+      )
+      .get()
+    if (!definition) throw new Error(`Event tombstone ${tombstone.id} has no terminated definition`)
+    return { id: definition.definition_id, name: definition.name, projectID: definition.project_id }
+  }
+
   export async function create(input: CreateEventJobInput): Promise<{ id: string; name: string; eventType: string }> {
-    return createEventJob(input)
+    const receipt = await createEventJob(input)
+    return { id: receipt.id, name: receipt.name, eventType: receipt.eventType }
   }
 
   export async function createFromTool(
     input: CreateEventJobInput,
     causation: ScheduleToolCausation,
-  ): Promise<{ id: string; name: string; eventType: string }> {
+  ): Promise<ReturnType<typeof definitionReceiptInTransaction>> {
     return createEventJob(input, causation)
   }
 
   async function createEventJob(
     input: CreateEventJobInput,
     causation?: ScheduleToolCausation,
-  ): Promise<{ id: string; name: string; eventType: string }> {
+  ): Promise<ReturnType<typeof definitionReceiptInTransaction>> {
     if (causation) {
       const replay = Database.immediateTransaction((db) => {
         assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
@@ -416,7 +446,7 @@ export namespace EventService {
         }
         return existing
       })
-      if (replay) return { id: replay.definition_id, name: replay.name, eventType: replay.event_type }
+      if (replay) return definitionReceiptInTransaction(replay)
     }
     await assertSessionInProject({ sessionId: input.sessionId, projectId: input.projectId })
     const id = causation
@@ -458,7 +488,7 @@ export namespace EventService {
         .run()
       return db.select().from(EventJobTable).where(eq(EventJobTable.id, id)).get()!
     })
-    return { id: row.definition_id, name: row.name, eventType: row.event_type }
+    return definitionReceiptInTransaction(row)
   }
 
   export function remove(id: string, projectID: string): boolean {
@@ -481,16 +511,9 @@ export namespace EventService {
         if (replay.definition_id !== id || replay.tool_input_digest !== causation.inputDigest) {
           throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Event cancel input")
         }
-        const definition = db
-          .select()
-          .from(EventJobTable)
-          .where(eq(EventJobTable.definition_id, replay.definition_id))
-          .orderBy(desc(EventJobTable.revision))
-          .get()
-        if (!definition || definition.project_id !== projectID) {
-          throw new Error(`Cancelled Event task ${id} lost its immutable definition`)
-        }
-        return { id, name: definition.name }
+        const receipt = deletionReceiptInTransaction(db, replay)
+        if (receipt.projectID !== projectID) throw new Error(`Cancelled Event task ${id} lost its project identity`)
+        return { id: receipt.id, name: receipt.name }
       }
       const row = latestEventDefinitionInTransaction(db, id)
       if (!row || row.project_id !== projectID) return undefined

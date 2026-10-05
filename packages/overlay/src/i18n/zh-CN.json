@@ -661,6 +661,7 @@
   "automations.error.session_required": "请先选择一个会话，再创建会话级自动化。",
   "automations.error.project_required": "请至少选择一个目标项目。",
   "automations.error.edit_target_missing": "此自动化已不可用。你的编辑仍保留在这里；请返回列表查看当前计划。",
+  "automations.error.revision_conflict": "此自动化已有新版本。你的编辑仍保留在这里；请返回列表查看最新内容，再重新打开编辑。",
   "automations.session_target": "精确会话目标",
   "automations.session_target_exact": "会话 {{session}}",
   "automations.session_target_missing": "保存前，请先在工作区中选择一个会话。",
