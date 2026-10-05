@@ -1,0 +1,266 @@
+{
+  "checker": [
+    {
+      "side": "=>",
+      "line": "    plist: packageID(\"plist\", \"1.10.0\"),"
+    },
+    {
+      "side": "=>",
+      "line": "    {"
+    },
+    {
+      "side": "=>",
+      "line": "      alias: \"plist\","
+    },
+    {
+      "side": "=>",
+      "line": "      name: \"plist\","
+    },
+    {
+      "side": "=>",
+      "line": "      target: \"plist\","
+    },
+    {
+      "side": "=>",
+      "line": "      version: \"1.10.0\","
+    },
+    {
+      "side": "=>",
+      "line": "      role: \"runtime\","
+    },
+    {
+      "side": "=>",
+      "line": "      features: [\"default\", \"serde\"],"
+    },
+    {
+      "side": "=>",
+      "line": "    },"
+    }
+  ],
+  "fixture": [
+    {
+      "side": "=>",
+      "line": "    fn actual_plist_xml_and_binary_return_complete_values() {"
+    },
+    {
+      "side": "=>",
+      "line": "        use plist::{Dictionary, Value};"
+    },
+    {
+      "side": "=>",
+      "line": "        let mut dictionary = Dictionary::new();"
+    },
+    {
+      "side": "=>",
+      "line": "        dictionary.insert(\"text\".into(), Value::String(\"中文😀 <>&\\\"'\".into()));"
+    },
+    {
+      "side": "=>",
+      "line": "        dictionary.insert(\"nested\".into(), Value::Array(vec![Value::Boolean(true), Value::Integer((-17_i64).into())]));"
+    },
+    {
+      "side": "=>",
+      "line": "        dictionary.insert(\"unsigned\".into(), Value::Integer(42_u64.into()));"
+    },
+    {
+      "side": "=>",
+      "line": "        dictionary.insert(\"bytes\".into(), Value::Data(vec![0, 1, 127, 255]));"
+    },
+    {
+      "side": "=>",
+      "line": "        dictionary.insert(\"date\".into(), Value::Date(plist::Date::from_xml_format(\"2026-10-06T00:00:00Z\").unwrap()));"
+    },
+    {
+      "side": "=>",
+      "line": "        let expected = Value::Dictionary(dictionary);"
+    },
+    {
+      "side": "=>",
+      "line": "        let mut xml = Vec::new();"
+    },
+    {
+      "side": "=>",
+      "line": "        expected.to_writer_xml(&mut xml).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(Value::from_reader_xml(xml.as_slice()).unwrap(), expected);"
+    },
+    {
+      "side": "=>",
+      "line": "        let mut binary = Vec::new();"
+    },
+    {
+      "side": "=>",
+      "line": "        expected.to_writer_binary(&mut binary).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(Value::from_reader(std::io::Cursor::new(binary)).unwrap(), expected);"
+    },
+    {
+      "side": "=>",
+      "line": "    fn actual_plist_serde_returns_typed_values_and_explicit_type_error() {"
+    },
+    {
+      "side": "=>",
+      "line": "        #[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]"
+    },
+    {
+      "side": "=>",
+      "line": "        struct Document { title: String, count: u64, active: bool }"
+    },
+    {
+      "side": "=>",
+      "line": "        let expected = Document { title: \"报告<&>😀\".into(), count: 23, active: true };"
+    },
+    {
+      "side": "=>",
+      "line": "        let mut xml = Vec::new();"
+    },
+    {
+      "side": "=>",
+      "line": "        plist::to_writer_xml(&mut xml, &expected).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(plist::from_reader_xml::<_, Document>(xml.as_slice()).unwrap(), expected);"
+    },
+    {
+      "side": "=>",
+      "line": "        let value = plist::to_value(&expected).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(plist::from_value::<Document>(&value).unwrap(), expected);"
+    },
+    {
+      "side": "=>",
+      "line": "        let error = plist::from_value::<String>(&plist::Value::Boolean(true)).unwrap_err();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(error.to_string(), \"Serde(\\\"invalid type: boolean `true`, expected a string\\\")\");"
+    },
+    {
+      "side": "=>",
+      "line": "    fn actual_tauri_association_plist_retains_dictionary_contract() {"
+    },
+    {
+      "side": "=>",
+      "line": "        let association: tauri_utils::config::FileAssociation = serde_json::from_value(serde_json::json!({"
+    },
+    {
+      "side": "=>",
+      "line": "            \"ext\": [\"ocreport\"], \"name\": \"报告<&>\", \"role\": \"Editor\", \"rank\": \"Owner\","
+    },
+    {
+      "side": "=>",
+      "line": "            \"mimeType\": \"application/x-ocreport\", \"contentTypes\": [\"public.data\"],"
+    },
+    {
+      "side": "=>",
+      "line": "            \"exportedType\": { \"identifier\": \"org.opencorvus.report\", \"conformsTo\": [\"public.data\"] }"
+    },
+    {
+      "side": "=>",
+      "line": "        })).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        let value = tauri_utils::config::file_associations_plist(&[association]).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        let document = &value.as_dictionary().unwrap()[\"CFBundleDocumentTypes\"].as_array().unwrap()[0];"
+    },
+    {
+      "side": "=>",
+      "line": "        let fields = document.as_dictionary().unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(fields[\"CFBundleTypeName\"].as_string(), Some(\"报告<&>\"));"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(fields[\"CFBundleTypeRole\"].as_string(), Some(\"Editor\"));"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(fields[\"LSHandlerRank\"].as_string(), Some(\"Owner\"));"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(fields[\"CFBundleTypeExtensions\"], plist::Value::Array(vec![\"ocreport\".into()]));"
+    },
+    {
+      "side": "=>",
+      "line": "        let exported = &value.as_dictionary().unwrap()[\"UTExportedTypeDeclarations\"].as_array().unwrap()[0];"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(exported.as_dictionary().unwrap()[\"UTTypeIdentifier\"].as_string(), Some(\"org.opencorvus.report\"));"
+    },
+    {
+      "side": "=>",
+      "line": "        let mut xml = Vec::new();"
+    },
+    {
+      "side": "=>",
+      "line": "        value.to_writer_xml(&mut xml).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(plist::Value::from_reader_xml(xml.as_slice()).unwrap(), value);"
+    },
+    {
+      "side": "=>",
+      "line": "        let mut binary = Vec::new();"
+    },
+    {
+      "side": "=>",
+      "line": "        value.to_writer_binary(&mut binary).unwrap();"
+    },
+    {
+      "side": "=>",
+      "line": "        assert_eq!(plist::Value::from_reader(std::io::Cursor::new(binary)).unwrap(), value);"
+    },
+    {
+      "side": "=>",
+      "line": "    #[test]"
+    },
+    {
+      "side": "=>",
+      "line": "    }"
+    },
+    {
+      "side": "=>",
+      "line": ""
+    },
+    {
+      "side": "=>",
+      "line": ""
+    },
+    {
+      "side": "=>",
+      "line": "    #[test]"
+    },
+    {
+      "side": "=>",
+      "line": "    }"
+    },
+    {
+      "side": "=>",
+      "line": ""
+    },
+    {
+      "side": "=>",
+      "line": "    #[test]"
+    },
+    {
+      "side": "=>",
+      "line": "    }"
+    }
+  ]
+}

@@ -648,8 +648,8 @@ async function pollSchedulerMessageDeliveries(signal: AbortSignal): Promise<void
       }
     },
   })
-  if (signal.aborted) throw signal.reason
   if (failure) throw failure.error
+  if (signal.aborted) throw signal.reason
 }
 
 export function requestSchedulerMessageDrain(): void {

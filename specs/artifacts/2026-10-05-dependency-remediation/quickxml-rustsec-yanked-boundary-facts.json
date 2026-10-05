@@ -1,0 +1,31 @@
+{
+  "currentLockPackage": {
+    "version": "1.2.0",
+    "source": "registry+https://github.com/rust-lang/crates.io-index",
+    "name": "uds_windows"
+  },
+  "ownedPublicCache": {
+    "path": ".tmp-product-iteration/cargo-home-quickxml-01/registry/index/index.crates.io-1949cf8c6b5b557f/.cache/ud/s_/uds_windows",
+    "version": "1.2.0",
+    "currentRemoteState": "not-queried",
+    "name": "uds_windows",
+    "yanked": true
+  },
+  "scope": "independent read-only source and saved output review",
+  "quietRisk": {
+    "cargoAudit": "0.22.2",
+    "CARGO": "not recorded in root launch environment names",
+    "json": "quiet initialization warning suppressed",
+    "protocol": "not recorded in root launch environment names",
+    "registryInitFailure": "None then empty yanked result",
+    "actualInitTrace": "unavailable"
+  },
+  "newAuditOwner": "Root",
+  "rootRetellingCorrection": "0.1.6 was inaccurate; saved old JSON and current lock use 1.2.0",
+  "oldYankedPackage": {
+    "version": "1.2.0",
+    "reportedWarningKind": "yanked",
+    "name": "uds_windows"
+  },
+  "executed": "no network, audit, Cargo, runtime or source change"
+}

@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-10-05T18:19:13.5786643Z",
+  "occurrence": "live-sol-write-01-51ab3cfb-bc50-4f3b-b7dd-3e41f924a6df",
+  "owner": {
+    "ProcessId": 67760,
+    "ParentProcessId": 41276,
+    "CreationDate": "2026-10-06T01:51:58.963554+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\startup.json 17953 live-sol-write-01-51ab3cfb-bc50-4f3b-b7dd-3e41f924a6df C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\functional-selection.json"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Shutdown admission is distinct from physical settlement and copied-pair cleanup",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXCUqLA00GE8ETL0eY"
+  }
+}

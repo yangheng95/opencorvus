@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\work-conserving-queue.test.ts:
+(pass) work-conserving physical admission > refills the first released worker slot while preserving settled result order [33.03ms]
+(pass) work-conserving physical admission > hands the next FIFO permit to the next live waiter after an exact caller abort [0.61ms]
+
+ 2 pass
+ 0 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [1046.00ms]

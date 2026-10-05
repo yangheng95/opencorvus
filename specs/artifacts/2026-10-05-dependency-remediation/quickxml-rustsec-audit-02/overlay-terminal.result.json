@@ -1,0 +1,36 @@
+{
+  "command": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-tools\\bin\\cargo-audit.exe",
+    "audit",
+    "--file",
+    "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+    "--db",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\data-integrity\\rustsec-advisory-db"
+  ],
+  "startedAtUtc": "2026-10-05T19:07:38.1974309Z",
+  "completedAtUtc": "2026-10-05T19:07:42.2519847Z",
+  "exitCode": 0,
+  "databaseCommit": "ef6173cbc5c50ec8166f9a5b28f07834144373ee",
+  "lockfile": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src-tauri\\Cargo.lock",
+  "environmentNames": [
+    "APPDATA",
+    "CARGO",
+    "CARGO_HOME",
+    "CARGO_REGISTRIES_CRATES_IO_PROTOCOL",
+    "ComSpec",
+    "GIT_CONFIG_NOSYSTEM",
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "LOCALAPPDATA",
+    "PATH",
+    "PATHEXT",
+    "SystemRoot",
+    "USERPROFILE",
+    "WINDIR"
+  ],
+  "cargo": "C:\\Users\\hengu\\.rustup\\toolchains\\stable-x86_64-pc-windows-msvc\\bin\\cargo.exe",
+  "registryProtocol": "sparse",
+  "scope": "Complete standard terminal and JSON; actual registry acquisition must be inspected; no ignore/stale/target/no-fetch/no-yanked",
+  "nativeBuilderSettled": "native03 complete before this audit"
+}

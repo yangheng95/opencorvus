@@ -1,0 +1,102 @@
+{
+  "scope": "four selected isolated checker files only; production remains frozen",
+  "complete_read": [
+    "bunfig.toml",
+    "script/run-tests.ts",
+    "test/isolated-test-entry.test.ts",
+    "test/preload.ts",
+    "test/fixture/memory.ts",
+    "test/instance-background-work.test.ts (complete)",
+    "test/scheduler-task-root-message-schema.test.ts (all1681 original lines)",
+    "test/scheduler-automation-target-revision.test.ts (complete)",
+    "test/runtime-execution-settlement.test.ts (all601 lines)"
+  ],
+  "first_four_run": {
+    "command": "bun run script/run-tests.ts test/instance-background-work.test.ts test/scheduler-task-root-message-schema.test.ts test/scheduler-automation-target-revision.test.ts test/runtime-execution-settlement.test.ts",
+    "cwd": "packages/opencorvus",
+    "exit": 0,
+    "results": [
+      {
+        "file": "instance-background-work.test.ts",
+        "pass": 8,
+        "assertions": 10
+      },
+      {
+        "file": "scheduler-task-root-message-schema.test.ts",
+        "pass": 8,
+        "assertions": 105
+      },
+      {
+        "file": "scheduler-automation-target-revision.test.ts",
+        "pass": 3,
+        "assertions": 48
+      },
+      {
+        "file": "runtime-execution-settlement.test.ts",
+        "pass": 17,
+        "assertions": 32
+      }
+    ],
+    "total_pass": 36,
+    "total_assertions": 195,
+    "raw_log": "shutdown-shared-four-tests-01.log"
+  },
+  "first_two_repaired_run": {
+    "exit": 0,
+    "pass": 11,
+    "assertions": 153,
+    "raw_log": "shutdown-shared-repaired-two-tests-02.log",
+    "boundary": "First fixture normalization revision; not the final outer consumer type normalization snapshot."
+  },
+  "type_failures": [
+    {
+      "exit": 2,
+      "raw_log": "shutdown-shared-four-types-01.log",
+      "cause": "Pre-existing Hono/Instance generic nested Promise fixture types, nullable Project/opened-event IDs and obsolete assistant Message.mode."
+    },
+    {
+      "exit": 2,
+      "raw_log": "shutdown-shared-four-types-02.log",
+      "cause": "Inner async callback alone still exposes Instance.provide<R> Promise<R> generic nesting. Corrected actual outer async/then consumer, without editing Instance production."
+    }
+  ],
+  "explicit_types_final": {
+    "exit": 0,
+    "command": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc -p .tmp-product-iteration/shutdown-shared-four-tsconfig.json",
+    "configuration": "shutdown-shared-four-tsconfig.json",
+    "provenance": "Original tool session96769 completed shared_four_types_exit=0. Empty stdout may have no raw final file; no fabricated raw log.",
+    "scope": "full backend src plus queue test and all four selected checker files; no compiler relaxation/exclusion."
+  },
+  "test_changes": [
+    "scheduler-task-root-message-schema: remove negative remaining/lastError/successfulReply-absence/recoverableWake-absence subassertions; positive delivered attempts/current FIFO lease and actual current opened event+prior session_wake receipt remain",
+    "scheduler-task-root-message-schema: disposal Promise<void> consumer normalization, actual required enqueue-opened event fixture guard, remove obsolete Message.mode",
+    "scheduler-automation-target-revision: async Bun HTTP fetch consumer normalization and actual required project-target ID fixture guard"
+  ],
+  "unchanged_tests": [
+    "instance-background-work.test.ts",
+    "runtime-execution-settlement.test.ts"
+  ],
+  "diff": "shutdown-shared-two-fixture-final.diff",
+  "boundaries": [
+    "Local isolated SQLite/shared-owner qualification only, not ordinary CLI HTTP shutdown or actual replacement process acceptance.",
+    "Checker-owned loopback Hono/Bun HTTP route tests are actual local HTTP but not Provider/ordinary service shutdown qualification.",
+    "Existing preload uses isolated public bootstrap model catalog and wipes inherited Provider env; existing wake/Task callbacks prevent real model calls.",
+    "Existing fixture Git/bootstrap/supervisor operate only owned isolated test roots; no repository Git operation or user process action by this owner.",
+    "Leased delivery shutdown retry/dead-letter, active real Task/Mission and cross-Project ordinary restart still require Root qualification.",
+    "No production source changed during this four-checker continuation; no UI automated test or runtime public reset hook added."
+  ],
+  "final_changed_two_run": {
+    "command": "bun run script/run-tests.ts test/scheduler-task-root-message-schema.test.ts test/scheduler-automation-target-revision.test.ts",
+    "cwd": "packages/opencorvus",
+    "exit": 0,
+    "pass": 11,
+    "assertions": 153,
+    "raw_log": "shutdown-shared-repaired-two-tests-final.log",
+    "provenance": "Original tool session13690 completed shared_repaired_two_exit=0 after final fixture consumer fixes."
+  },
+  "final_qualified_total": {
+    "pass": 36,
+    "assertions": 195,
+    "boundary": "Counts each selected checker once: final changed-two run plus unchanged Instance/runtime from first four run. Not an additional full four-file rerun."
+  }
+}

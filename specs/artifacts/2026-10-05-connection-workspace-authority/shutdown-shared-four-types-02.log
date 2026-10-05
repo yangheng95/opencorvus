@@ -1,0 +1,9 @@
+packages/opencorvus/test/scheduler-automation-target-revision.test.ts(47,5): error TS2322: Type '(this: Server<undefined>, request: Request) => Promise<Promise<Response>>' is not assignable to type '((this: Server<undefined>, req: Request, server: Server<undefined>) => MaybePromise<Response>) | ((this: Server<...>, req: Request, server: Server<...>) => MaybePromise<...>) | ((this: Server<...>, req: Request, server: Server<...>) => MaybePromise<...>) | ((this: Server<...>, req: Request, server: Server<...>) => M...'.
+  Type '(this: Server<undefined>, request: Request) => Promise<Promise<Response>>' is not assignable to type '(this: Server<undefined>, req: Request, server: Server<undefined>) => MaybePromise<Response>'.
+    Type 'Promise<Promise<Response>>' is not assignable to type 'MaybePromise<Response>'.
+      Type 'Promise<Promise<Response>>' is not assignable to type 'Promise<Response>'.
+        Type 'Promise<Response>' is missing the following properties from type 'Response': headers, ok, redirected, status, and 12 more.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(352,7): error TS2322: Type 'Promise<Promise<void>>' is not assignable to type 'Promise<void>'.
+  Type 'Promise<void>' is not assignable to type 'void'.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(423,7): error TS2322: Type 'Promise<Promise<void>>' is not assignable to type 'Promise<void>'.
+  Type 'Promise<void>' is not assignable to type 'void'.

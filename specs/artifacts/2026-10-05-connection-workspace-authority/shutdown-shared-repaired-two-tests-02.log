@@ -1,0 +1,31 @@
+[1/2] START test/scheduler-task-root-message-schema.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) scheduler Task-root Message protocol > fresh Mission delivery propagates Project cancellation through its actual wake reservation and settles the receipt [3191.09ms]
+(pass) scheduler Task-root Message protocol > settles Project discovery queued after teardown starts while its initialized owner is still admitted [2340.86ms]
+(pass) scheduler Task-root Message protocol > global discovery admits a later Project and settles admitted work during Project teardown [6662.34ms]
+(pass) scheduler Task-root Message protocol > discovers a large scheduler Project backlog through fixed database cursor pages [2568.23ms]
+(pass) scheduler Task-root Message protocol > settles a Mission delivery against the occurrence open at enqueue after close and reopen [3000.96ms]
+(pass) scheduler Task-root Message protocol > materializes one delivery reference into the persisted Message and Orchestrator wake [2935.08ms]
+(pass) scheduler Task-root Message protocol > pages only due unresolved recipient heads and refills the shared production capacity [14846.87ms]
+(pass) scheduler Task-root Message protocol > resumes an errored scheduler wake only inside its enqueue-time Mission occurrence [3819.09ms]
+
+ 8 pass
+ 0 fail
+ 105 expect() calls
+Ran 8 tests across 1 file. [43.31s]
+[1/2] DONE test/scheduler-task-root-message-schema.test.ts exit=0 duration=43.52s
+[2/2] START test/scheduler-automation-target-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real HTTP scope edits project the exact physical revision and survive database reopen [5170.65ms]
+(pass) retargeted manual and due runs bind exact revision members and retain historical run targets [4546.91ms]
+(pass) retargeted retry reopens its exact Fire after database restart with independent parallel definitions [5927.32ms]
+
+ 3 pass
+ 0 fail
+ 48 expect() calls
+Ran 3 tests across 1 file. [17.86s]
+[2/2] DONE test/scheduler-automation-target-revision.test.ts exit=0 duration=18.09s

@@ -1,0 +1,46 @@
+{
+  "occurrence": "live-sol-write-02-ab6500a2-5736-483f-aa67-040a259dba92",
+  "copiedPair": [
+    {
+      "copiedLength": 2082,
+      "presentAfter": false,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\runtime\\data\\auth.json"
+    },
+    {
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\runtime\\data\\models.json"
+    }
+  ],
+  "physicalCompletion": true,
+  "listeners": null,
+  "chain": [
+    {
+      "expected": {
+        "ProcessId": 36512,
+        "ParentProcessId": 60556,
+        "CreationDate": "2026-10-06T02:41:24.063032+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\startup.json 17954 live-sol-write-02-ab6500a2-5736-483f-aa67-040a259dba92 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-02\\functional-selection.json"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 38880,
+        "ParentProcessId": 36512,
+        "CreationDate": "2026-10-06T02:41:24.074311+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    }
+  ],
+  "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write",
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-05T18:52:15.5053707Z"
+}

@@ -1,0 +1,78 @@
+param([ValidateSet('01','02','03')][string]$RunNumber='01')
+$ErrorActionPreference='Stop'
+$taskRepo='D:/myhexin-local/opencorvus'
+$taskCargoRoot=Join-Path $taskRepo '.tmp-product-iteration/cargo-home-quickxml-01'
+$taskBuildRoot=Join-Path $taskRepo ('.tmp-product-iteration/quickxml-native-environment-'+$RunNumber)
+$taskOutput=Join-Path $taskRepo ('.tmp-product-iteration/data-integrity/quickxml-native-'+$RunNumber)
+$taskToolchain='C:/Users/hengu/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin'
+if((Get-Content -Raw -LiteralPath (Join-Path $taskCargoRoot 'prepared-owner.txt')).Trim() -ne [IO.Path]::GetFullPath($taskRepo)){throw 'Owned public Cargo cache identity mismatch'}
+if((Get-Content -Raw -LiteralPath (Join-Path $taskCargoRoot 'config.toml')).Trim() -ne "[net]`noffline = true"){throw 'Owned Cargo configuration changed'}
+foreach($taskCredentialName in @('credentials','credentials.toml')){if(Test-Path -LiteralPath (Join-Path $taskCargoRoot $taskCredentialName)){throw 'Build Cargo authority must be credential free'}}
+$taskProbe=Join-Path $taskRepo 'packages/overlay/src-tauri'
+while($taskProbe){foreach($taskConfig in @('config','config.toml')){if(Test-Path -LiteralPath (Join-Path $taskProbe ('.cargo/'+$taskConfig))){throw 'Ancestor Cargo config requires separate review'}};$taskProbe=Split-Path $taskProbe -Parent}
+foreach($taskFresh in @($taskBuildRoot,$taskOutput)){if(Test-Path -LiteralPath $taskFresh){throw 'Keep prior occurrence; fresh path already exists'}}
+foreach($taskFolder in @('home','appdata','localappdata','temp','xdg-config','xdg-data','xdg-cache','xdg-state')){[IO.Directory]::CreateDirectory((Join-Path $taskBuildRoot $taskFolder)) | Out-Null}
+$taskOriginal=@{}
+Get-ChildItem Env: | ForEach-Object {$taskOriginal[$_.Name]=$_.Value}
+$taskEnvironment=@{}
+foreach($taskKey in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($taskOriginal.ContainsKey($taskKey)){$taskEnvironment[$taskKey]=$taskOriginal[$taskKey]}}
+$taskEnvironment.PATH=$taskToolchain+';'+$taskEnvironment.PATH
+$taskEnvironment.CARGO_HOME=$taskCargoRoot
+$taskEnvironment.CARGO_NET_OFFLINE='true'
+$taskEnvironment.RUSTC=Join-Path $taskToolchain 'rustc.exe'
+$taskEnvironment.RUSTDOC=Join-Path $taskToolchain 'rustdoc.exe'
+$taskEnvironment.HOME=Join-Path $taskBuildRoot 'home'
+$taskEnvironment.USERPROFILE=$taskEnvironment.HOME
+$taskEnvironment.APPDATA=Join-Path $taskBuildRoot 'appdata'
+$taskEnvironment.LOCALAPPDATA=Join-Path $taskBuildRoot 'localappdata'
+$taskEnvironment.TEMP=Join-Path $taskBuildRoot 'temp'
+$taskEnvironment.TMP=$taskEnvironment.TEMP
+$taskEnvironment.TMPDIR=$taskEnvironment.TEMP
+$taskEnvironment.XDG_CONFIG_HOME=Join-Path $taskBuildRoot 'xdg-config'
+$taskEnvironment.XDG_DATA_HOME=Join-Path $taskBuildRoot 'xdg-data'
+$taskEnvironment.XDG_CACHE_HOME=Join-Path $taskBuildRoot 'xdg-cache'
+$taskEnvironment.XDG_STATE_HOME=Join-Path $taskBuildRoot 'xdg-state'
+$taskEnvironment.OPENCORVUS_HOME=Join-Path $taskBuildRoot 'runtime'
+$taskEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1'
+$taskEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$taskVsPath='C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat'
+if(!(Test-Path -LiteralPath $taskVsPath)){throw 'Verified installed Microsoft compiler environment entry is missing'}
+$taskVsStart=[Diagnostics.ProcessStartInfo]::new()
+$taskVsStart.FileName=Join-Path $taskEnvironment.SystemRoot 'System32/cmd.exe'
+$taskVsStart.Arguments='/d /s /c "call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -no_logo -arch=amd64 -host_arch=amd64 && set"'
+$taskVsStart.WorkingDirectory=$taskBuildRoot
+$taskVsStart.UseShellExecute=$false
+$taskVsStart.CreateNoWindow=$true
+$taskVsStart.RedirectStandardOutput=$true
+$taskVsStart.RedirectStandardError=$true
+$taskVsStart.Environment.Clear()
+foreach($taskKey in $taskEnvironment.Keys){$taskVsStart.Environment[$taskKey]=$taskEnvironment[$taskKey]}
+$taskVsProcess=[Diagnostics.Process]::Start($taskVsStart)
+$taskVsStdout=$taskVsProcess.StandardOutput.ReadToEndAsync()
+$taskVsStderr=$taskVsProcess.StandardError.ReadToEndAsync()
+$taskVsProcess.WaitForExit()
+$taskVsText=$taskVsStdout.GetAwaiter().GetResult()
+$taskVsError=$taskVsStderr.GetAwaiter().GetResult()
+if($taskVsProcess.ExitCode -ne 0){
+  [IO.File]::WriteAllText((Join-Path $taskBuildRoot 'msvc-initialization-failed.stdout.log'),$taskVsText)
+  [IO.File]::WriteAllText((Join-Path $taskBuildRoot 'msvc-initialization-failed.stderr.log'),$taskVsError)
+  [IO.File]::WriteAllText((Join-Path $taskBuildRoot 'msvc-initialization-failed.exit.txt'),[string]$taskVsProcess.ExitCode)
+  throw 'Installed Microsoft compiler environment initialization failed; raw isolated output retained; no canonical retry admitted'
+}
+$taskVsAllowed=@('PATH','INCLUDE','LIB','LIBPATH','VSINSTALLDIR','VCINSTALLDIR','VCToolsInstallDir','VCToolsVersion','WindowsSdkDir','WindowsSDKVersion','WindowsSDKLibVersion','WindowsSdkBinPath','WindowsSdkVerBinPath','UniversalCRTSdkDir','UCRTVersion','VSCMD_VER','VSCMD_ARG_TGT_ARCH','VSCMD_ARG_HOST_ARCH','VisualStudioVersion','FrameworkDir','FrameworkVersion','FrameworkDir64','FrameworkVersion64')
+foreach($taskLine in ($taskVsText -split '\r?\n')){if($taskLine -match '^([^=]+)=(.*)$' -and $taskVsAllowed -contains $Matches[1]){$taskEnvironment[$Matches[1]]=$Matches[2]}}
+$taskLinkPaths=@($taskEnvironment.PATH -split ';' | Where-Object {Test-Path -LiteralPath (Join-Path $_ 'link.exe')})
+if(!$taskLinkPaths.Count -or !$taskEnvironment.LIB -or !$taskEnvironment.INCLUDE){throw 'Actual MSVC linker/library/include environment unavailable'}
+[IO.File]::WriteAllText((Join-Path $taskBuildRoot 'msvc-environment.json'),([ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');entry=$taskVsPath;exitCode=$taskVsProcess.ExitCode;linkerDirectories=$taskLinkPaths;copiedNames=@($taskVsAllowed | Where-Object {$taskEnvironment.ContainsKey($_)});credentialEnvironment='Only preconstructed public isolated build environment entered VsDevCmd; only named compiler variables returned';stderrBytes=[Text.Encoding]::UTF8.GetByteCount($taskVsError)} | ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
+[IO.File]::WriteAllText((Join-Path $taskBuildRoot 'admission.json'),([ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');repo=$taskRepo;output=$taskOutput;cargoRoot=$taskCargoRoot;environmentNames=@($taskEnvironment.Keys | Sort-Object);modelRequests='Not admitted; packaged first-run realProvider=false';nativeDisplay='Not qualified';source='Canonical existing checker/build only'} | ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
+try{
+  Get-ChildItem Env: | ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+  foreach($taskKey in $taskEnvironment.Keys){[Environment]::SetEnvironmentVariable($taskKey,$taskEnvironment[$taskKey],'Process')}
+  & 'C:/Users/hengu/.bun/bin/bun.exe' (Join-Path $taskRepo 'packages/overlay/script/check-rust-dependencies.ts') --output $taskOutput
+  $taskExit=$LASTEXITCODE
+  [IO.File]::WriteAllText((Join-Path $taskBuildRoot 'exit-code.txt'),[string]$taskExit)
+  if($taskExit -ne 0){throw 'Canonical checker failed; original results retained'}
+}finally{
+  Get-ChildItem Env: | ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+  foreach($taskKey in $taskOriginal.Keys){[Environment]::SetEnvironmentVariable($taskKey,$taskOriginal[$taskKey],'Process')}
+}

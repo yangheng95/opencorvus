@@ -1,0 +1,361 @@
+--- saved-before/live-sol-cli-owned.ts
++++ .tmp-product-iteration/live-sol-cli-owned.ts
+@@ -6,10 +6,14 @@
+ 
+ // Nonsecret arguments only: source auth, owned runtime, owned project, owned evidence,
+ // owned startup receipt, proposed port, unique startup occurrence. Environment is parent-owned.
+-const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence] = process.argv.slice(2)
++const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence, functionalSelectionPath] = process.argv.slice(2)
+ assert(authSource && runtime && project && evidenceRoot && receiptPath && portText && occurrence,
+   "Expected seven nonsecret owned/source arguments")
+ for (const value of [authSource, runtime, project, evidenceRoot, receiptPath]) assert(path.isAbsolute(value))
++if (functionalSelectionPath) {
++  assert(path.isAbsolute(functionalSelectionPath))
++  assert.equal(path.dirname(path.resolve(functionalSelectionPath)), path.dirname(path.resolve(runtime)))
++}
+ assert.equal(path.basename(authSource), "auth.json")
+ assert.equal(process.env.OPENCORVUS_HOME, runtime)
+ assert.equal(process.env.OPENCORVUS_TEST_HOME, undefined)
+@@ -27,9 +31,7 @@
+ await fs.mkdir(evidenceRoot, { recursive: true })
+ const publish = async (name: string, value: unknown) => {
+   const target = path.join(evidenceRoot, name)
+-  const temporary = `${target}.${process.pid}.tmp`
+-  await fs.writeFile(temporary, redactor.redact(JSON.stringify(value, null, 2)))
+-  await fs.rename(temporary, target)
++  await fs.writeFile(target, redactor.redact(JSON.stringify(value, null, 2)), { flag: "wx" })
+ }
+ 
+ try {
+@@ -104,6 +106,69 @@
+     await publish("preflight-ready.json", { pid: process.pid, owner, occurrence, port, preflight,
+       maxRequests: 12, budgetScope: "preflight-and-ui-cumulative-same-process",
+       nextAction: "root-owned-real-ui", credentialCleanup: "parent-owned-after-physical-exit" })
++    if (!functionalSelectionPath) return
++    const handleDeadline = Date.now() + 600_000
++    let handle: { occurrence: string; sessionID: string; directory: string; inputMessageID: string; observedAt: string } | undefined
++    for (;;) {
++      try { handle = JSON.parse(await fs.readFile(functionalSelectionPath, "utf8")) }
++      catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
++      if (handle) break
++      if (state.audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
++      if (Date.now() > handleDeadline) throw new Error("FUNCTIONAL_HANDLE_ADMISSION_TIMEOUT")
++      await new Promise((resolve) => setTimeout(resolve, 500))
++    }
++    assert.equal(handle.occurrence, occurrence)
++    assert.equal(path.resolve(handle.directory), path.resolve(project))
++    assert(/^ses_[A-Za-z0-9_-]+$/.test(handle.sessionID))
++    assert(/^msg_[A-Za-z0-9_-]+$/.test(handle.inputMessageID))
++    const observedAt = Date.parse(handle.observedAt)
++    assert(Number.isFinite(observedAt) && observedAt <= Date.now(), "Actual accepted-input observation time required")
++    const functionalSnapshot = createAuditSnapshotPublisher(evidenceRoot, "streams")
++    let signature = ""
++    let lastActivity = observedAt
++    for (;;) {
++      const url = new URL(`/session/${encodeURIComponent(handle.sessionID)}/message`, expectedURL)
++      url.searchParams.set("directory", handle.directory)
++      const response = await state.audit.nativeFetch(url, { signal: AbortSignal.timeout(15_000) })
++      assert(response.ok, `Functional message HTTP ${response.status}`)
++      const messages = await response.json() as Array<{ info: { id: string; sessionID: string; role: string; parentID?: string; acceptedInputMessageIDs?: string[]; finish?: string; error?: unknown; time: { created?: number; completed?: number } }; parts: unknown[] }>
++      assert(Array.isArray(messages))
++      assert(messages.some((entry) => entry.info.id === handle.inputMessageID && entry.info.sessionID === handle.sessionID && entry.info.role === "user"), "Observed input must be an actual persisted user Message")
++      const observation: { execution: { type: string }; activity: unknown; occurrenceInput?: string } = await Instance.provide({ directory: handle.directory, fn: async () => ({
++        execution: SessionStatus.getExecution(handle.sessionID, handle.inputMessageID),
++        activity: SessionStatus.getActivity(handle.sessionID),
++        occurrenceInput: SessionStatus.executionOccurrence(handle.sessionID)?.inputMessageID,
++      }) })
++      const { execution, activity, occurrenceInput } = observation
++      assert.equal(occurrenceInput, handle.inputMessageID, "Functional execution occurrence must retain the actual observed input")
++      const next = JSON.stringify({ messages, execution, activity })
++      if (next !== signature) {
++        // First observation establishes a baseline; polling time cannot renew an old input.
++        if (signature) lastActivity = Date.now()
++        signature = next
++        functionalSnapshot(JSON.parse(redactor.redact(JSON.stringify({ observationKind: "actual-functional-input-watch", pid: process.pid, occurrence, sessionID: handle.sessionID,
++          inputMessageID: handle.inputMessageID, messageIDs: messages.map((entry) => entry.info.id),
++          execution, activity, lastActivityAt: new Date(lastActivity).toISOString(), observedAt: new Date().toISOString() }))))
++      }
++      if (state.audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
++      const replies = messages.filter((entry) => entry.info.role === "assistant" &&
++        entry.info.sessionID === handle.sessionID &&
++        (entry.info.acceptedInputMessageIDs ?? [entry.info.parentID]).includes(handle.inputMessageID))
++      const failed = replies.find((entry) => entry.info.error)
++      if (failed) throw new Error(`FUNCTIONAL_REPLY_FAILED: ${JSON.stringify(failed.info.error)}`)
++      const completed = replies.find((entry) => typeof entry.info.time.completed === "number" &&
++        Number.isFinite(entry.info.time.completed) && entry.info.time.completed > 0 && entry.info.finish === "stop" && !entry.info.error)
++      if (completed && execution.type !== "streaming" && execution.type !== "retry") {
++        await publish("functional-complete.json", { pid: process.pid, occurrence,
++          sessionID: handle.sessionID, inputMessageID: handle.inputMessageID,
++          finalAssistantMessageID: completed.info.id, finish: completed.info.finish,
++          completedAt: completed.info.time.completed, execution, activity,
++          qualification: "Exact real input reply settled; Root separately verifies actual Write/Read/disk/UI" })
++        break
++      }
++      if (Date.now() - lastActivity > 180_000) throw new Error("FUNCTIONAL_INPUT_INACTIVITY")
++      await new Promise((resolve) => setTimeout(resolve, 500))
++    }
+   })()
+   process.argv = [process.execPath, path.join(packageRoot, "src/index.ts"), "serve",
+     "--hostname", "127.0.0.1", "--port", String(port), "--project-dir", project,
+--- saved-before/live-sol-launch.ps1
++++ .tmp-product-iteration/live-sol-launch.ps1
+@@ -1,5 +1,10 @@
++param(
++  [Parameter(Mandatory=$true)][string]$RunRoot,
++  [Parameter(Mandatory=$true)][ValidateRange(1,65535)][int]$Port,
++  [Parameter(Mandatory=$true)][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix
++)
+ $ErrorActionPreference = 'Stop'
+-$taskRunRoot = 'C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01'
++$taskRunRoot = [IO.Path]::GetFullPath($RunRoot)
+ $taskRuntime = Join-Path $taskRunRoot 'runtime'
+ $taskProject = Join-Path $taskRunRoot 'project'
+ $taskEvidence = Join-Path $taskRunRoot 'evidence'
+@@ -7,8 +12,9 @@
+ $taskWrapper = 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts'
+ $taskBun = 'C:/Users/hengu/.bun/bin/bun.exe'
+ $taskAuth = 'C:/Users/hengu/AppData/Local/opencorvus/data/auth.json'
+-$taskPort = 17952
+-$taskOccurrence = 'live-sol-cli-01-' + [Guid]::NewGuid().ToString()
++$taskPort = $Port
++$taskOccurrence = $EvidencePrefix + '-' + [Guid]::NewGuid().ToString()
++$taskFunctionalSelection = Join-Path $taskRunRoot 'functional-selection.json'
+ if (Test-Path -LiteralPath $taskRunRoot) { throw 'Fresh owned occurrence already exists' }
+ if (@(Get-NetTCPConnection -State Listen -LocalPort $taskPort -ErrorAction SilentlyContinue).Count) { throw 'Chosen owned port is occupied' }
+ foreach ($taskPath in @($taskWrapper,$taskBun,$taskAuth,'C:/Users/hengu/AppData/Local/opencorvus/data/models.json')) { if (!(Test-Path -LiteralPath $taskPath)) { throw 'Required owned/source input missing' } }
+@@ -16,7 +22,6 @@
+ $taskProxy = Get-ItemProperty -LiteralPath 'HKCU:/Software/Microsoft/Windows/CurrentVersion/Internet Settings' -ErrorAction SilentlyContinue
+ if (($taskProxy.ProxyServer -match '@') -or $taskProxy.AutoConfigURL) { throw 'System proxy credential/PAC input needs specific review; values suppressed' }
+ foreach ($taskPath in @($taskRuntime,$taskProject,$taskEvidence,(Join-Path $taskRunRoot 'home'),(Join-Path $taskRunRoot 'appdata'),(Join-Path $taskRunRoot 'localappdata'),(Join-Path $taskRunRoot 'temp'),(Join-Path $taskRunRoot 'xdg-config'),(Join-Path $taskRunRoot 'xdg-data'),(Join-Path $taskRunRoot 'xdg-cache'),(Join-Path $taskRunRoot 'xdg-state'))) { [IO.Directory]::CreateDirectory($taskPath) | Out-Null }
+-[IO.File]::WriteAllText((Join-Path $taskProject 'qualification-note.txt'), ('Owned actual model marker: ' + [Guid]::NewGuid().ToString() + "`n"), [Text.UTF8Encoding]::new($false))
+ $taskOriginalEnvironment = @{}
+ Get-ChildItem Env: | ForEach-Object { $taskOriginalEnvironment[$_.Name] = $_.Value }
+ $taskEnvironment = @{}
+@@ -42,11 +47,13 @@
+ try {
+   Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+   foreach ($taskName in $taskEnvironment.Keys) { [Environment]::SetEnvironmentVariable($taskName,$taskEnvironment[$taskName],'Process') }
+-  $taskArguments = @($taskWrapper,$taskAuth,$taskRuntime,$taskProject,$taskEvidence,$taskReceipt,[string]$taskPort,$taskOccurrence)
++  $taskArguments = @($taskWrapper,$taskAuth,$taskRuntime,$taskProject,$taskEvidence,$taskReceipt,[string]$taskPort,$taskOccurrence,$taskFunctionalSelection)
+   if (@($taskArguments | Where-Object { $_ -match '[\s"]' }).Count) { throw 'Known launch arguments require explicit quoting review' }
+   $taskProcess = Start-Process -FilePath $taskBun -ArgumentList $taskArguments -WorkingDirectory 'D:/myhexin-local/opencorvus/packages/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $taskRunRoot 'stdout.log') -RedirectStandardError (Join-Path $taskRunRoot 'stderr.log') -PassThru
+   $taskOwner = Get-CimInstance Win32_Process -Filter "ProcessId=$($taskProcess.Id)" | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+-  [ordered]@{ observedAtUtc = [DateTime]::UtcNow.ToString('o'); runRoot = $taskRunRoot; runtime = $taskRuntime; project = $taskProject; evidence = $taskEvidence; receipt = $taskReceipt; occurrence = $taskOccurrence; port = $taskPort; owner = $taskOwner; environmentNames = @($taskEnvironment.Keys | Sort-Object); requestBudget = 12; inactivityMilliseconds = 180000; sourcePair = 'Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper'; cleanup = 'Parent must verify exact process exit and port release then remove both copied data/auth.json and data/models.json, including failure'; uiAutomation = 'None' } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $taskRunRoot 'launch-owner.json') -Encoding utf8
++  $taskLaunchFact = [ordered]@{ observedAtUtc = [DateTime]::UtcNow.ToString('o'); runRoot = $taskRunRoot; runtime = $taskRuntime; project = $taskProject; evidence = $taskEvidence; evidencePrefix = $EvidencePrefix; receipt = $taskReceipt; occurrence = $taskOccurrence; port = $taskPort; owner = $taskOwner; observedProcessChain = @($taskOwner); functionalSelectionPath = $taskFunctionalSelection; handleAdmissionMilliseconds = 600000; environmentNames = @($taskEnvironment.Keys | Sort-Object); requestBudget = 12; inactivityMilliseconds = 180000; sourcePair = 'Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper'; cleanup = 'Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure'; uiAutomation = 'None' }
++  $taskLaunchStream = [IO.File]::Open((Join-Path $taskRunRoot 'launch-owner.json'),[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
++  try { $taskLaunchBytes = [Text.UTF8Encoding]::new($false).GetBytes(($taskLaunchFact | ConvertTo-Json -Depth 8)); $taskLaunchStream.Write($taskLaunchBytes,0,$taskLaunchBytes.Length) } finally { $taskLaunchStream.Dispose() }
+   Write-Output "Owned Sol CLI launched PID $($taskProcess.Id), occurrence $taskOccurrence; parent cleanup remains required."
+ } finally {
+   Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+--- saved-before/live-sol-shutdown.ps1
++++ .tmp-product-iteration/live-sol-shutdown.ps1
+@@ -1,35 +1,116 @@
++param(
++  [Parameter(Mandatory=$true)][string]$RunRoot,
++  [Parameter(Mandatory=$true)][string]$EvidenceRoot,
++  [Parameter(Mandatory=$true)][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix,
++  [string]$KnownChainPath,
++  [switch]$PageClosed
++)
+ $ErrorActionPreference='Stop'
+-$taskRunRoot='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01'
+-$taskEvidence='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority'
++$taskRunRoot=[IO.Path]::GetFullPath($RunRoot)
++$taskEvidence=[IO.Path]::GetFullPath($EvidenceRoot)
+ $taskOwner=Get-Content -Raw -LiteralPath (Join-Path $taskRunRoot 'launch-owner.json') | ConvertFrom-Json
+-$taskCurrent=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskOwner.owner.ProcessId)"
+-if (!$taskCurrent -or ([DateTime]$taskCurrent.CreationDate).ToUniversalTime() -ne ([DateTime]$taskOwner.owner.CreationDate).ToUniversalTime() -or $taskCurrent.CommandLine -ne $taskOwner.owner.CommandLine) { throw 'Exact owned CLI occurrence changed; no shutdown sent' }
+-$taskListeners=@(Get-NetTCPConnection -State Listen -LocalPort $taskOwner.port -ErrorAction Stop)
+-if($taskListeners.Count -ne 1 -or $taskListeners[0].OwningProcess -ne $taskOwner.owner.ProcessId){throw 'Owned listener changed'}
+-$taskAuditFile=Get-ChildItem -LiteralPath $taskOwner.evidence -Filter 'provider-*.json' | Sort-Object LastWriteTimeUtc | Select-Object -Last 1
+-if(!$taskAuditFile){throw 'Actual Provider audit receipt missing'}
+-Copy-Item -LiteralPath $taskAuditFile.FullName -Destination (Join-Path $taskEvidence 'live-sol-final-provider-audit.json') -ErrorAction Stop
+-$taskResponse=Invoke-WebRequest -Method Post -Uri "http://127.0.0.1:$($taskOwner.port)/shutdown" -ContentType 'application/json' -Body '{}' -TimeoutSec 15
+-[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');status=[int]$taskResponse.StatusCode;body=($taskResponse.Content|ConvertFrom-Json);owner=$taskOwner.owner;boundary='Admission only; physical settlement and paired cleanup follow separately';pageClosed=$true} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $taskEvidence 'live-sol-shutdown-admission.json') -Encoding utf8
+-$taskDeadline=[DateTime]::UtcNow.AddSeconds(45)
+-do {
+-  $taskCurrent=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskOwner.owner.ProcessId)"
+-  $taskSame=!!$taskCurrent -and ([DateTime]$taskCurrent.CreationDate).ToUniversalTime() -eq ([DateTime]$taskOwner.owner.CreationDate).ToUniversalTime() -and $taskCurrent.CommandLine -eq $taskOwner.owner.CommandLine
+-  $taskListeners=@(Get-NetTCPConnection -State Listen -LocalPort $taskOwner.port -ErrorAction SilentlyContinue | Select-Object LocalAddress,LocalPort,OwningProcess)
+-  if(!$taskSame -and !$taskListeners.Count){break}
++if([IO.Path]::GetFullPath($taskOwner.runRoot) -ne $taskRunRoot -or $taskOwner.evidencePrefix -ne $EvidencePrefix){throw 'Run/prefix does not match exact launch admission'}
++function Write-OwnedReceipt([string]$name,$value){
++  $target=Join-Path $taskEvidence "$EvidencePrefix-$name.json"
++  $stream=[IO.File]::Open($target,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
++  try{$bytes=[Text.UTF8Encoding]::new($false).GetBytes(($value|ConvertTo-Json -Depth 12));$stream.Write($bytes,0,$bytes.Length)}finally{$stream.Dispose()}
++}
++foreach($name in @('final-provider-audit','shutdown-admission','physical-terminal-and-pair-cleanup')){if(Test-Path -LiteralPath (Join-Path $taskEvidence "$EvidencePrefix-$name.json")){throw 'Evidence prefix already used; no action admitted'}}
++function Same-Occurrence($current,$expected){
++  return !!$current -and $current.ProcessId -eq $expected.ProcessId -and ([DateTime]$current.CreationDate).ToUniversalTime() -eq ([DateTime]$expected.CreationDate).ToUniversalTime() -and $current.CommandLine -eq $expected.CommandLine -and $current.ExecutablePath -eq $expected.ExecutablePath
++}
++$taskKnown=@{}
++foreach($entry in @($taskOwner.observedProcessChain)+@($taskOwner.owner)){
++  if(!$entry.ProcessId -or !$entry.CreationDate -or !$entry.CommandLine -or !$entry.ExecutablePath){throw 'Incomplete physical chain occurrence'}
++  $taskKnown[[string]$entry.ProcessId]=$entry
++}
++if($KnownChainPath){
++  $chain=Get-Content -Raw -LiteralPath $KnownChainPath|ConvertFrom-Json
++  if($chain.occurrence -ne $taskOwner.occurrence){throw 'Observed chain belongs to another startup occurrence'}
++  foreach($entry in @($chain.processes)){
++    if(!$entry.ProcessId -or !$entry.CreationDate -or !$entry.CommandLine -or !$entry.ExecutablePath){throw 'Incomplete supplied physical occurrence'}
++    if($taskKnown.ContainsKey([string]$entry.ProcessId) -and !(Same-Occurrence $entry $taskKnown[[string]$entry.ProcessId])){throw 'Conflicting same-PID chain occurrences; review exact lineage'}
++    $taskKnown[[string]$entry.ProcessId]=$entry
++  }
++}
++function Observe-OwnedChain {
++  $all=@(Get-CimInstance Win32_Process -ErrorAction Stop)
++  do{
++    $added=$false
++    foreach($candidate in $all){
++      $parent=$taskKnown[[string]$candidate.ParentProcessId]
++      if(!$parent){continue}
++      $actualParent=$all|Where-Object ProcessId -eq $parent.ProcessId|Select-Object -First 1
++      if(!(Same-Occurrence $actualParent $parent)){continue}
++      if(([DateTime]$candidate.CreationDate).ToUniversalTime() -lt ([DateTime]$parent.CreationDate).ToUniversalTime()){continue}
++      if(!$taskKnown.ContainsKey([string]$candidate.ProcessId)){
++        if(!$candidate.CommandLine -or !$candidate.ExecutablePath){throw 'Cannot establish full owned descendant occurrence'}
++        $taskKnown[[string]$candidate.ProcessId]=$candidate|Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
++        $added=$true
++      }elseif(!(Same-Occurrence $candidate $taskKnown[[string]$candidate.ProcessId])){throw 'Descendant PID was reused under a live owned parent; preserve pair for exact-chain review'}
++    }
++  }while($added)
++  return @($taskKnown.Values|ForEach-Object{
++    $expected=$_;$current=$all|Where-Object ProcessId -eq $expected.ProcessId|Select-Object -First 1
++    [ordered]@{expected=$expected;originalOccurrencePresent=(Same-Occurrence $current $expected);samePIDReused=(!!$current -and !(Same-Occurrence $current $expected))}
++  })
++}
++function Owned-Listeners {
++  # Query the table once; failure to observe it is a blocker, not an empty receipt.
++  return @(Get-NetTCPConnection -ErrorAction Stop|Where-Object{$_.State -eq 'Listen' -and $_.LocalPort -eq $taskOwner.port}|Select-Object LocalAddress,LocalPort,OwningProcess)
++}
++$taskChain=Observe-OwnedChain
++$taskRoot=$taskChain|Where-Object{$_.expected.ProcessId -eq $taskOwner.owner.ProcessId}|Select-Object -First 1
++$taskListeners=Owned-Listeners
++$taskAuditFile=Get-ChildItem -LiteralPath $taskOwner.evidence -Filter 'provider-*.json' -ErrorAction Stop|Sort-Object LastWriteTimeUtc|Select-Object -Last 1
++if($taskAuditFile){Write-OwnedReceipt 'final-provider-audit' (Get-Content -Raw -LiteralPath $taskAuditFile.FullName|ConvertFrom-Json)}else{Write-OwnedReceipt 'final-provider-audit' @{available=$false;boundary='No model receipt observed, possibly pre-audit startup failure; not model acceptance'}}
++$admission=[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');occurrence=$taskOwner.occurrence;owner=$taskOwner.owner;pageClosed=[bool]$PageClosed;dispatch=$false;boundary='Shutdown admission is distinct from physical settlement and copied-pair cleanup'}
++if($taskRoot.originalOccurrencePresent){
++  if($taskListeners.Count -eq 0){$admission.reason='Original root still live without listener; public shutdown unavailable';Write-OwnedReceipt 'shutdown-admission' $admission;throw 'Live root has no owned public listener; retain pair for Root review'}
++  if($taskListeners.Count -ne 1 -or $taskListeners[0].OwningProcess -ne $taskOwner.owner.ProcessId){throw 'Listener does not match exact original root; no shutdown sent'}
++  $response=Invoke-WebRequest -UseBasicParsing -Method Post -Uri "http://127.0.0.1:$($taskOwner.port)/shutdown" -ContentType 'application/json' -Body '{}' -TimeoutSec 15
++  $admission.dispatch=$true;$admission.status=[int]$response.StatusCode;$admission.body=$response.Content|ConvertFrom-Json
++  Write-OwnedReceipt 'shutdown-admission' $admission
++}else{
++  if($taskListeners.Count){throw 'Original occurrence gone but port belongs to another listener; no shutdown or cleanup'}
++  $admission.reason='Original occurrence already exited; no listener; no shutdown dispatched'
++  Write-OwnedReceipt 'shutdown-admission' $admission
++}
++$deadline=[DateTime]::UtcNow.AddSeconds(45)
++do{
++  $taskChain=Observe-OwnedChain;$taskListeners=Owned-Listeners
++  if(!@($taskChain|Where-Object originalOccurrencePresent).Count -and !$taskListeners.Count){break}
+   Start-Sleep -Milliseconds 500
+-}while([DateTime]::UtcNow -lt $taskDeadline)
+-if($taskSame -or $taskListeners.Count){throw 'Owned physical settlement incomplete; preserve copied pair and inspect exact owner'}
++}while([DateTime]::UtcNow -lt $deadline)
++if(@($taskChain|Where-Object originalOccurrencePresent).Count -or $taskListeners.Count){
++  Write-OwnedReceipt 'physical-terminal-and-pair-cleanup' @{physicalCompletion=$false;chain=$taskChain;listeners=$taskListeners;pairedCleanup='not attempted; physical owner still present'}
++  throw 'Whole observed chain/port settlement incomplete; retain copied pair'
++}
+ $taskOwnedData=[IO.Path]::GetFullPath((Join-Path $taskOwner.runtime 'data'))
+ $taskExpectedData=[IO.Path]::GetFullPath((Join-Path $taskRunRoot 'runtime/data'))
+-if($taskOwnedData -ne $taskExpectedData){throw 'Credential cleanup escaped exact owned directory'}
+-$taskPair=@()
+-foreach($taskName in @('auth.json','models.json')){
+-  $taskPath=[IO.Path]::GetFullPath((Join-Path $taskOwnedData $taskName))
+-  if([IO.Path]::GetDirectoryName($taskPath) -ne $taskExpectedData){throw 'Unexpected copied authority target'}
+-  $taskBefore=Get-Item -LiteralPath $taskPath -ErrorAction Stop
+-  Remove-Item -LiteralPath $taskPath -ErrorAction Stop
+-  $taskPair += [ordered]@{path=$taskPath;copiedLength=$taskBefore.Length;removed=$true;presentAfter=(Test-Path -LiteralPath $taskPath)}
++if($taskOwnedData -ne $taskExpectedData){throw 'Pair cleanup escaped exact owned runtime/data'}
++foreach($ancestor in @($taskRunRoot,(Join-Path $taskRunRoot 'runtime'),$taskExpectedData)){
++  if(Test-Path -LiteralPath $ancestor){
++    $ancestorItem=Get-Item -LiteralPath $ancestor -ErrorAction Stop
++    if($ancestorItem.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Owned cleanup ancestor is a reparse point; preserve pair for review'}
++  }
+ }
+-[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');expectedOwner=$taskOwner.owner;originalOccurrencePresent=$taskSame;samePIDReused=(!!$taskCurrent -and !$taskSame);current=($taskCurrent|Select-Object ProcessId,CreationDate,CommandLine);listeners=$taskListeners;physicalCompletion=$true;copiedPair=$taskPair;boundary='Exact original process exited and port released before paired copy deletion; no fabricated exit code, no user process control or source-credential write'}|ConvertTo-Json -Depth 8|Set-Content -LiteralPath (Join-Path $taskEvidence 'live-sol-physical-terminal-and-pair-cleanup.json') -Encoding utf8
+-Write-Output 'Owned real Sol physical completion and both copied authority removals recorded.'
++$taskPair=@();$cleanupErrors=@()
++foreach($name in @('auth.json','models.json')){
++  $target=[IO.Path]::GetFullPath((Join-Path $taskOwnedData $name))
++  if([IO.Path]::GetDirectoryName($target) -ne $taskExpectedData){throw 'Unexpected copied-authority target'}
++  try{
++    if(Test-Path -LiteralPath $target){
++      $item=Get-Item -LiteralPath $target -ErrorAction Stop
++      if($item.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Copied authority member is a reparse point; manual review required'}
++      Remove-Item -LiteralPath $target -ErrorAction Stop
++      $taskPair += @{path=$target;outcome='removed';copiedLength=$item.Length;presentAfter=(Test-Path -LiteralPath $target)}
++    }else{$taskPair += @{path=$target;outcome='already_absent';presentAfter=$false}}
++  }catch{
++    $cleanupErrors += $_.Exception.Message
++    $taskPair += @{path=$target;outcome='error';errorType=$_.Exception.GetType().Name;presentAfter=(Test-Path -LiteralPath $target)}
++  }
++}
++Write-OwnedReceipt 'physical-terminal-and-pair-cleanup' @{observedAtUtc=[DateTime]::UtcNow.ToString('o');occurrence=$taskOwner.occurrence;physicalCompletion=$true;chain=$taskChain;listeners=$taskListeners;copiedPair=$taskPair;pairedCleanupComplete=($cleanupErrors.Count -eq 0);boundary='Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write'}
++if($cleanupErrors.Count){throw 'Paired cleanup incomplete; exact member error receipt retained'}
++Write-Output 'Owned observed process chain settled and copied authority pair cleanup recorded.'
+--- saved-before/live-sol-physical-read.ts
++++ .tmp-product-iteration/live-sol-physical-read.ts
+@@ -1,21 +1,47 @@
+ import { Database } from "bun:sqlite"
+ import fs from "node:fs"
+-const phase = process.argv[2]
++import path from "node:path"
++const [database, evidenceRoot, prefix, phase] = process.argv.slice(2)
++if (!database || !evidenceRoot || !prefix || !path.isAbsolute(database) || !path.isAbsolute(evidenceRoot) || !/^[a-z0-9-]+$/.test(prefix)) throw new Error("Explicit absolute owned database/evidence and prefix required")
+ if (!phase || !/^[a-z0-9-]+$/.test(phase)) throw new Error("Explicit evidence phase required")
+-const database = "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/runtime/data/opencorvus.db"
+ const db = new Database(database, { readonly: true })
+ const facts = db.transaction(() => {
+-  const owners = db.query("SELECT o.*, s.kind, s.parent_id, s.project_id AS actual_session_project FROM session_prompt_owner o LEFT JOIN session s ON s.id=o.session_id ORDER BY o.session_id").all()
+-  const messages = db.query("SELECT id, session_id, time_created, data FROM message ORDER BY time_created,id").all().map((row: any) => {
+-    const data = JSON.parse(row.data)
+-    return { id: row.id, sessionID: row.session_id, role: data.role, parentID: data.parentID, time: data.time,
+-      finish: data.finish, modelID: data.modelID, providerID: data.providerID, error: data.error }
+-  })
+-  const lifecycles = db.query("SELECT id, aggregate_type, aggregate_id, project_id, task_id, session_id, source, emitted_at, seq, payload FROM protocol_event WHERE type=? ORDER BY emitted_at,seq").all("agent.execution.lifecycle").map((row: any) => ({ ...row, payload: row.payload ? JSON.parse(row.payload) : null }))
+-  return { owners, messages, lifecycles }
++  const rows = (sql: string) => db.query(sql).all()
++  const owners = rows("SELECT o.session_id,o.project_id,o.directory,o.generation,o.owner_pid,o.owner_process_instance_id,o.owner_occurrence_id,o.time_acquired,s.kind,s.parent_id,s.project_id AS actual_session_project FROM session_prompt_owner o LEFT JOIN session s ON s.id=o.session_id ORDER BY o.session_id")
++  const messages = rows("SELECT id,session_id,time_created,json_extract(data,'$.role') AS role,json_extract(data,'$.parentID') AS parent_id,json_extract(data,'$.acceptedInputMessageIDs') AS accepted_input_ids,json_extract(data,'$.time.created') AS created_at,json_extract(data,'$.time.completed') AS completed_at,json_extract(data,'$.finish') AS finish,json_extract(data,'$.error.name') AS error_name FROM message ORDER BY time_created,id")
++  const events = rows("SELECT id,kind,type,aggregate_type,aggregate_id,project_id,task_id,session_id,causation_id,correlation_id,reply_to,seq,deadline_ms,emitted_at,json_extract(payload,'$.execution_epoch') AS execution_epoch,CASE WHEN type='agent.execution.lifecycle' THEN json_extract(payload,'$.inputMessageID') END AS lifecycle_input_id,CASE WHEN type='agent.execution.lifecycle' THEN json_extract(payload,'$.status.type') END AS lifecycle_status,CASE WHEN type='agent.execution.lifecycle' THEN json_extract(payload,'$.status.attempt') END AS lifecycle_attempt FROM protocol_event ORDER BY emitted_at,seq,id")
++  const inbox = rows("SELECT id,envelope_id,actor,actor_id,visible_at,time_created FROM protocol_inbox ORDER BY time_created,id")
++  const deliveryReceipts = rows("SELECT id,inbox_id,time_created,json_extract(receipt,'$.kind') AS kind,json_extract(receipt,'$.visible_at') AS retry_visible_at,json_extract(receipt,'$.message_id') AS message_id,json_extract(receipt,'$.ingress_id') AS ingress_id,json_extract(receipt,'$.closure_event_id') AS closure_event_id,json_extract(receipt,'$.error_name') AS error_name FROM protocol_delivery_receipt ORDER BY time_created,id")
++  const unresolvedInbox = rows("SELECT i.id,i.envelope_id,i.actor,i.actor_id,i.visible_at FROM protocol_inbox i WHERE NOT EXISTS(SELECT 1 FROM protocol_delivery_receipt r WHERE r.inbox_id=i.id AND json_extract(r.receipt,'$.kind') <> 'retry_wait') ORDER BY i.visible_at,i.id")
++  const leases = rows("SELECT id,target,target_id,owner_occurrence_id,time_activated,expires_at FROM engine_control_activation_lease ORDER BY time_activated,id")
++  const leaseGrants = rows("SELECT lease_id,ordinal,expires_at,time_created FROM engine_control_activation_lease_grant ORDER BY lease_id,ordinal")
++  const tasks = rows("SELECT id,project_id,session_id,request_id,source,product_pillar,time_archived,time_created FROM engine_task ORDER BY time_created,id")
++  const taskIngress = rows("SELECT id,task_id,project_id,execution_epoch,sequence,source,source_id,policy_id,time_accepted FROM engine_task_root_ingress ORDER BY task_id,sequence,id")
++  const taskIngressPolicies = rows("SELECT id,semantic_turn_limit,activation_limit,absolute_deadline,time_created FROM engine_task_root_ingress_policy ORDER BY time_created,id")
++  const taskWaits = rows("SELECT id,task_id,project_id,execution_epoch,due_at,creator_ingress_id,creator_activation_id,time_created FROM engine_task_wait_registration ORDER BY time_created,id")
++  const taskWaitSettlements = rows("SELECT wait_id,ingress_id,disposition,time_created FROM engine_task_wait_settlement ORDER BY time_created,wait_id")
++  const sessionControls = rows("SELECT id,session_id,kind,source,time_created FROM session_control_record ORDER BY time_created,id")
++  const sessionControlEvents = rows("SELECT id,control_id,kind,time_created FROM session_control_event ORDER BY time_created,id")
++  const missionClosures = rows("SELECT id,type,aggregate_id AS session_id,project_id,correlation_id AS operation_id,seq,emitted_at,json_extract(payload,'$.missionID') AS mission_id,json_extract(payload,'$.requestID') AS request_id FROM protocol_event WHERE type IN ('mission.execution.opened','mission.execution.closing','mission.execution.closed') ORDER BY aggregate_id,seq,id")
++  const automationDefinitions = rows("SELECT id,definition_id,revision,project_id,session_id,kind,scope,execution_mode,status,due_at,time_created FROM automation ORDER BY definition_id,revision,id")
++  const automationTombstones = rows("SELECT id,definition_id,revision,time_created FROM automation_definition_tombstone ORDER BY definition_id,revision,id")
++  const automationTargets = rows("SELECT automation_revision_id,project_id,position FROM automation_project_target ORDER BY automation_revision_id,position")
++  const automationFires = rows("SELECT id,automation_revision_id,scheduled_due_at,origin,time_created FROM automation_fire ORDER BY time_created,id")
++  const automationFrontiers = rows("SELECT definition_id,automation_revision_id,fire_id,available_at FROM automation_fire_frontier ORDER BY definition_id")
++  const automationAttempts = rows("SELECT id,fire_id,ordinal,owner_occurrence_id,lease_id,lease_grant_ordinal,lease_expires_at,time_created FROM automation_fire_attempt ORDER BY fire_id,ordinal")
++  const automationAttemptReceipts = rows("SELECT attempt_id,outcome,retry_at,time_created FROM automation_fire_attempt_receipt ORDER BY time_created,attempt_id")
++  const automationRuns = rows("SELECT id,automation_revision_id,fire_id,target_project_id,mission_opened_event_id,mission_disposition,mission_closure_event_id,started_at FROM automation_run ORDER BY started_at,id")
++  const automationRunReceipts = rows("SELECT id,run_id,outcome,disposition,closure_event_id,retry_at,time_created FROM automation_run_receipt ORDER BY time_created,id")
++  const automationDelaySettlements = rows("SELECT definition_id,disposition,assistant_message_id,accepted_input_message_ids,fire_id,time_created FROM automation_delay_settlement ORDER BY time_created,definition_id")
++  const eventDefinitions = rows("SELECT id,definition_id,revision,project_id,session_id,event_type,enabled,one_shot,cooldown_ms,time_created FROM event_job ORDER BY definition_id,revision,id")
++  const eventTombstones = rows("SELECT id,definition_id,revision,time_created FROM event_job_definition_tombstone ORDER BY definition_id,revision,id")
++  const eventOccurrences = rows("SELECT id,bus_outbox_id,project_id,event_type,time_created FROM event_occurrence ORDER BY time_created,id")
++  const eventFires = rows("SELECT id,definition_id,queue_position,event_job_revision_id,event_occurrence_id,causation_fire_id,causal_cycle,created_session_id,mission_opened_event_id,mission_disposition,mission_closure_event_id,time_created FROM event_job_fire ORDER BY definition_id,queue_position,id")
++  const eventFireReceipts = rows("SELECT id,fire_id,definition_id,queue_position,outcome,disposition,closure_event_id,message_id,retry_at,time_created FROM event_job_fire_receipt ORDER BY time_created,id")
++  return { owners,messages,events,inbox,deliveryReceipts,unresolvedInbox,leases,leaseGrants,tasks,taskIngress,taskIngressPolicies,taskWaits,taskWaitSettlements,sessionControls,sessionControlEvents,missionClosures,automationDefinitions,automationTombstones,automationTargets,automationFires,automationFrontiers,automationAttempts,automationAttemptReceipts,automationRuns,automationRunReceipts,automationDelaySettlements,eventDefinitions,eventTombstones,eventOccurrences,eventFires,eventFireReceipts }
+ })()
+ db.close()
+-const evidence = { observedAt: new Date().toISOString(), phase, database, readonly: true,
+-  boundary: "One coherent read transaction of every durable Project/Session owner and actual Message/lifecycle facts. No live process registry imported or inferred from an empty checker map.", ...facts }
+-fs.writeFileSync(`D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/live-sol-durable-${phase}.json`, JSON.stringify(evidence, null, 2), { flag: "wx" })
+-console.log(JSON.stringify(evidence, null, 2))
++const evidence = { observedAt: new Date().toISOString(),phase,database,readonly:true,
++  boundary:"One coherent owned-database read of canonical durable IDs/occurrences/receipts/leases. No payload, credentials or tool keys. Unresolved inbox and persisted frontier are facts, not proof of active scheduling; no process-local registry imported or inferred from empty maps.",...facts }
++fs.writeFileSync(path.join(evidenceRoot,`${prefix}-durable-${phase}.json`),JSON.stringify(evidence,null,2),{flag:"wx"})
++console.log(JSON.stringify({phase,database,evidence:path.join(evidenceRoot,`${prefix}-durable-${phase}.json`),readonly:true}))

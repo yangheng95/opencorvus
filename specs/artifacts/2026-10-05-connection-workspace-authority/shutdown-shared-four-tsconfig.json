@@ -1,0 +1,19 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "include": [
+    "../packages/opencorvus/src/**/*.ts",
+    "../packages/opencorvus/test/work-conserving-queue.test.ts",
+    "../packages/opencorvus/test/instance-background-work.test.ts",
+    "../packages/opencorvus/test/scheduler-task-root-message-schema.test.ts",
+    "../packages/opencorvus/test/scheduler-automation-target-revision.test.ts",
+    "../packages/opencorvus/test/runtime-execution-settlement.test.ts"
+  ],
+  "exclude": [
+    "../packages/opencorvus/src/skill/builtin/**/*"
+  ],
+  "compilerOptions": {
+    "types": [
+      "../packages/opencorvus/node_modules/@types/bun"
+    ]
+  }
+}

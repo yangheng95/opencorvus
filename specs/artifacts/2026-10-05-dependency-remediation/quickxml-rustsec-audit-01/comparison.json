@@ -1,0 +1,106 @@
+[
+  {
+    "name": "overlay",
+    "exitCode": 0,
+    "dependencyCount": 615,
+    "database": {
+      "advisory-count": 1290,
+      "last-commit": "ef6173cbc5c50ec8166f9a5b28f07834144373ee",
+      "last-updated": "2026-10-03T16:14:03+08:00"
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": 0,
+    "warnings": [
+      {
+        "kind": "unmaintained",
+        "count": 7,
+        "findings": [
+          {
+            "package": "fxhash",
+            "version": "0.2.1",
+            "advisory": "RUSTSEC-2025-0057"
+          },
+          {
+            "package": "proc-macro-error",
+            "version": "1.0.4",
+            "advisory": "RUSTSEC-2024-0370"
+          },
+          {
+            "package": "unic-char-property",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0081"
+          },
+          {
+            "package": "unic-char-range",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0075"
+          },
+          {
+            "package": "unic-common",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0080"
+          },
+          {
+            "package": "unic-ucd-ident",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0100"
+          },
+          {
+            "package": "unic-ucd-version",
+            "version": "0.9.0",
+            "advisory": "RUSTSEC-2025-0098"
+          }
+        ]
+      },
+      {
+        "kind": "unsound",
+        "count": 2,
+        "findings": [
+          {
+            "package": "glib",
+            "version": "0.18.5",
+            "advisory": "RUSTSEC-2024-0429"
+          },
+          {
+            "package": "rand",
+            "version": "0.7.3",
+            "advisory": "RUSTSEC-2026-0097"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "supervisor",
+    "exitCode": 0,
+    "dependencyCount": 22,
+    "database": {
+      "advisory-count": 1290,
+      "last-commit": "ef6173cbc5c50ec8166f9a5b28f07834144373ee",
+      "last-updated": "2026-10-03T16:14:03+08:00"
+    },
+    "settings": {
+      "target_arch": [],
+      "target_os": [],
+      "severity": null,
+      "ignore": [],
+      "informational_warnings": [
+        "unmaintained",
+        "unsound",
+        "notice"
+      ]
+    },
+    "vulnerabilities": 0,
+    "warnings": []
+  }
+]

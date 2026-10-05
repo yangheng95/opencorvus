@@ -1,0 +1,53 @@
+$ bun script/run-tests.ts test/capability/registry-file-authority.test.ts test/capability/task-routine-tools.test.ts test/task-owner-direct-delivery.test.ts
+[1/3] START test/capability/registry-file-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) each interactive role materializes its complete authorized file tools across model identities [3264.73ms]
+
+ 1 pass
+ 0 fail
+ 207 expect() calls
+Ran 1 test across 1 file. [5.58s]
+[1/3] DONE test/capability/registry-file-authority.test.ts exit=0 duration=5.78s
+[2/3] START test/capability/task-routine-tools.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task role routine authority > coding directly projects its granted built-in tools on every occurrence [6.95ms]
+(pass) Task role routine authority > chat directly projects its granted built-in tools on every occurrence [4.79ms]
+(pass) Task role routine authority > work directly projects its granted built-in tools on every occurrence [3.70ms]
+(pass) Task role routine authority > control directly projects its granted built-in tools on every occurrence [2.43ms]
+(pass) Task role routine authority > mission directly projects its granted built-in tools on every occurrence [3.67ms]
+(pass) Task role routine authority > delegated-worker keeps its authorized platform base on a new and bound occurrence [3.01ms]
+(pass) Task role routine authority > intent-analysis keeps its authorized platform base on a new and bound occurrence [1.14ms]
+(pass) Task role routine authority > requirements keeps its authorized platform base on a new and bound occurrence [1.00ms]
+(pass) Task role routine authority > architect keeps its authorized platform base on a new and bound occurrence [1.25ms]
+(pass) Task role routine authority > goal-workload-analyst keeps its authorized platform base on a new and bound occurrence [1.05ms]
+(pass) Task role routine authority > build keeps its authorized platform base on a new and bound occurrence [1.52ms]
+(pass) Task role routine authority > explore keeps its authorized platform base on a new and bound occurrence [0.86ms]
+(pass) Task role routine authority > deep-research keeps its authorized platform base on a new and bound occurrence [0.80ms]
+(pass) Task role routine authority > frontend-research keeps its authorized platform base on a new and bound occurrence [0.92ms]
+(pass) Task role routine authority > frontend-design keeps its authorized platform base on a new and bound occurrence [1.10ms]
+(pass) Task role routine authority > visual-qa keeps its authorized platform base on a new and bound occurrence [17.41ms]
+(pass) Task role routine authority > integrity keeps its authorized platform base on a new and bound occurrence [1.71ms]
+(pass) Task role routine authority > fact-check keeps its authorized platform base on a new and bound occurrence [1.12ms]
+(pass) Task role routine authority > retains exact managed Build and projected role owners through grant and visibility intersection [0.53ms]
+
+ 19 pass
+ 0 fail
+ 42 expect() calls
+Ran 19 tests across 1 file. [2.28s]
+[2/3] DONE test/capability/task-routine-tools.test.ts exit=0 duration=2.46s
+[3/3] START test/task-owner-direct-delivery.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Base root produces and repairs through write/edit, then the same independent reviewer verifies the change [12463.12ms]
+(pass) Base root produces and repairs through apply_patch, then the same independent reviewer verifies the change [10754.88ms]
+
+ 2 pass
+ 0 fail
+ 28 expect() calls
+Ran 2 tests across 1 file. [25.50s]
+[3/3] DONE test/task-owner-direct-delivery.test.ts exit=0 duration=25.70s

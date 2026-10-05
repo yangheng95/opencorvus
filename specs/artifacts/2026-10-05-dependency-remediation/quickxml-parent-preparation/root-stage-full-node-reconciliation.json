@@ -1,0 +1,42 @@
+[
+  {
+    "exactUnchangedBlocks": 615,
+    "stage": "notification",
+    "removedNodes": [
+      "quick-xml@0.37.5",
+      "tauri-winrt-notification@0.7.2"
+    ],
+    "changedBlocks": [],
+    "owner": "Root execution, independently read-only reconciled",
+    "addedNodes": [
+      "tauri-winrt-notification@0.7.3"
+    ],
+    "changedRetainedNodeBlocks": [],
+    "afterNodes": 616,
+    "beforeNodes": 617
+  },
+  {
+    "exactUnchangedBlocks": 613,
+    "stage": "plist",
+    "removedNodes": [
+      "plist@1.8.0",
+      "quick-xml@0.38.4"
+    ],
+    "changedBlocks": [
+      {
+        "node": "wayland-scanner@0.31.11",
+        "after": "name = \"wayland-scanner\"\nversion = \"0.31.11\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"338e30461b3a2b67d70eb30a6d89f8e0c93a833e07d2ae89085cd070c4a00ac0\"\ndependencies = [\n \"proc-macro2\",\n \"quick-xml\",\n \"quote\",\n]",
+        "before": "name = \"wayland-scanner\"\nversion = \"0.31.11\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"338e30461b3a2b67d70eb30a6d89f8e0c93a833e07d2ae89085cd070c4a00ac0\"\ndependencies = [\n \"proc-macro2\",\n \"quick-xml 0.41.0\",\n \"quote\",\n]"
+      }
+    ],
+    "owner": "Root execution, independently read-only reconciled",
+    "addedNodes": [
+      "plist@1.10.0"
+    ],
+    "changedRetainedNodeBlocks": [
+      "wayland-scanner@0.31.11"
+    ],
+    "afterNodes": 615,
+    "beforeNodes": 616
+  }
+]

@@ -1,0 +1,76 @@
+[1/4] START test/instance-background-work.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [3993.01ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1534.79ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [1503.08ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [1563.46ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1583.23ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1579.87ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1519.73ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1492.25ms]
+
+ 8 pass
+ 0 fail
+ 10 expect() calls
+Ran 8 tests across 1 file. [16.04s]
+[1/4] DONE test/instance-background-work.test.ts exit=0 duration=16.22s
+[2/4] START test/scheduler-task-root-message-schema.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) scheduler Task-root Message protocol > fresh Mission delivery propagates Project cancellation through its actual wake reservation and settles the receipt [3132.06ms]
+(pass) scheduler Task-root Message protocol > settles Project discovery queued after teardown starts while its initialized owner is still admitted [2382.39ms]
+(pass) scheduler Task-root Message protocol > global discovery admits a later Project and settles admitted work during Project teardown [6881.13ms]
+(pass) scheduler Task-root Message protocol > discovers a large scheduler Project backlog through fixed database cursor pages [2637.90ms]
+(pass) scheduler Task-root Message protocol > settles a Mission delivery against the occurrence open at enqueue after close and reopen [3379.04ms]
+(pass) scheduler Task-root Message protocol > materializes one delivery reference into the persisted Message and Orchestrator wake [3446.94ms]
+(pass) scheduler Task-root Message protocol > pages only due unresolved recipient heads and refills the shared production capacity [16388.29ms]
+(pass) scheduler Task-root Message protocol > resumes an errored scheduler wake only inside its enqueue-time Mission occurrence [4126.77ms]
+
+ 8 pass
+ 0 fail
+ 105 expect() calls
+Ran 8 tests across 1 file. [45.93s]
+[2/4] DONE test/scheduler-task-root-message-schema.test.ts exit=0 duration=46.13s
+[3/4] START test/scheduler-automation-target-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real HTTP scope edits project the exact physical revision and survive database reopen [4855.97ms]
+(pass) retargeted manual and due runs bind exact revision members and retain historical run targets [4658.05ms]
+(pass) retargeted retry reopens its exact Fire after database restart with independent parallel definitions [5757.49ms]
+
+ 3 pass
+ 0 fail
+ 48 expect() calls
+Ran 3 tests across 1 file. [17.64s]
+[3/4] DONE test/scheduler-automation-target-revision.test.ts exit=0 duration=17.83s
+[4/4] START test/runtime-execution-settlement.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime execution settlement authority > fences and cancels Task activation before Session prompt settlement, then admits rollback [158.30ms]
+(pass) runtime execution settlement authority > returns shutdown cancellation and admits a successor after owner release [0.65ms]
+(pass) runtime execution settlement authority > reports the exact active Instance authority and converges on the same settlement gate [1571.93ms]
+(pass) runtime execution settlement authority > publishes terminal protocol evidence while an owned execution is being terminated [2.38ms]
+(pass) runtime execution settlement authority > classifies a wake rejected by the production server settlement reason [2.37ms]
+(pass) runtime execution settlement authority > cancels an unfinished protocol subscriber after terminal facts are fenced [2.14ms]
+(pass) runtime execution settlement authority > bounds Project Git lock inactivity and admits settlement after the held lifecycle exits [80.61ms]
+(pass) runtime execution settlement authority > retains process occurrence across protocol inactivity and converges after late settlement [63.59ms]
+(pass) runtime execution settlement authority > cancels the physical owner and settles the gate after the owner exits [0.44ms]
+(pass) runtime execution settlement authority > returns the typed admission error while a settlement phase owns the kind [0.18ms]
+(pass) runtime execution settlement authority > reopens admission under the same gate token and starts the registered durable rescan [0.21ms]
+(pass) runtime execution settlement authority > restores every owned admission and reports an aggregate when one reopen listener fails [0.54ms]
+(pass) runtime execution settlement authority > drains existing database lifecycle effects then returns a typed error until admission reopens [1.44ms]
+(pass) runtime execution settlement authority > rejects a Protocol append before insertion while database settlement owns new access [1570.42ms]
+(pass) runtime execution settlement authority > blocks late Instance creation with a typed error and admits a fresh owner after handoff release [981.97ms]
+(pass) runtime execution settlement authority > settles a durable Session wake loop before the runtime gate releases ownership [1668.38ms]
+(pass) runtime execution settlement authority > bounds a held Message bridge lifecycle and retains the process occurrence after late settlement [191.28ms]
+
+ 17 pass
+ 0 fail
+ 32 expect() calls
+Ran 17 tests across 1 file. [8.53s]
+[4/4] DONE test/runtime-execution-settlement.test.ts exit=0 duration=8.70s

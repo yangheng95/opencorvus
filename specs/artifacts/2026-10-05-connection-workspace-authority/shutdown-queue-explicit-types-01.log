@@ -1,0 +1,14 @@
+packages/opencorvus/src/util/queue.ts(82,41): error TS18048: 'firstItemFailure' is possibly 'undefined'.
+packages/opencorvus/src/util/queue.ts(85,89): error TS18048: 'input.signal' is possibly 'undefined'.
+packages/opencorvus/test/work-conserving-queue.test.ts(147,58): error TS2345: Argument of type 'PromiseSettledResult<unknown>' is not assignable to parameter of type 'PromiseSettledResult<number>'.
+  Type 'PromiseFulfilledResult<unknown>' is not assignable to type 'PromiseSettledResult<number>'.
+    Type 'PromiseFulfilledResult<unknown>' is not assignable to type 'PromiseFulfilledResult<number>'.
+      Type 'unknown' is not assignable to type 'number'.
+packages/opencorvus/test/work-conserving-queue.test.ts(175,60): error TS2322: Type 'PromiseSettledResult<unknown>' is not assignable to type 'PromiseSettledResult<number>'.
+  Type 'PromiseFulfilledResult<unknown>' is not assignable to type 'PromiseSettledResult<number>'.
+    Type 'PromiseFulfilledResult<unknown>' is not assignable to type 'PromiseFulfilledResult<number>'.
+      Type 'unknown' is not assignable to type 'number'.
+packages/opencorvus/test/work-conserving-queue.test.ts(201,112): error TS2345: Argument of type 'PromiseSettledResult<unknown>' is not assignable to parameter of type 'PromiseSettledResult<number>'.
+  Type 'PromiseFulfilledResult<unknown>' is not assignable to type 'PromiseSettledResult<number>'.
+    Type 'PromiseFulfilledResult<unknown>' is not assignable to type 'PromiseFulfilledResult<number>'.
+      Type 'unknown' is not assignable to type 'number'.

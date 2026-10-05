@@ -1,0 +1,176 @@
+{
+  "observedAtUtc": "2026-10-05T18:55:20.4729488Z",
+  "ownerProcess": [],
+  "listeners": [],
+  "durableCounts": [
+    {
+      "group": "owners",
+      "before": 2,
+      "after": 0
+    },
+    {
+      "group": "messages",
+      "before": 6,
+      "after": 6
+    },
+    {
+      "group": "events",
+      "before": 10,
+      "after": 14
+    },
+    {
+      "group": "inbox",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "deliveryReceipts",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "unresolvedInbox",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "leases",
+      "before": 290,
+      "after": 290
+    },
+    {
+      "group": "leaseGrants",
+      "before": 290,
+      "after": 290
+    },
+    {
+      "group": "tasks",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "taskIngress",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "taskIngressPolicies",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "taskWaits",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "taskWaitSettlements",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "sessionControls",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "group": "sessionControlEvents",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "group": "missionClosures",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationDefinitions",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationTombstones",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationTargets",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationFires",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationFrontiers",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationAttempts",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationAttemptReceipts",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationRuns",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationRunReceipts",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "automationDelaySettlements",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "eventDefinitions",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "eventTombstones",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "eventOccurrences",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "eventFires",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "group": "eventFireReceipts",
+      "before": 0,
+      "after": 0
+    }
+  ],
+  "messagesExactFactsPreserved": true,
+  "sourcePairAfter": [
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "size": 2147,
+      "lastWriteUtc": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "size": 9155406,
+      "lastWriteUtc": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "scope": "Readonly observed31canonical groups; historic lease rows are acquisitions, not active owners; actual Task/Mission/Automation/Event work unqualified"
+}

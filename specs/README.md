@@ -2,9 +2,13 @@
 
 - [Connection publication and workspace authority](records/2026-10/2026-10-05-connection-workspace-authority.md)
 - [Connection workspace authority investigation and root integration](artifacts/2026-10-05-connection-workspace-authority/README.md)
+- [Actual Sol Write and UI receipt qualification](artifacts/2026-10-05-connection-workspace-authority/root-live-sol-write-manual-review.md)
+- [Continuous file-result endpoint audit](artifacts/2026-10-05-connection-workspace-authority/live-file-change-endpoint-review.md)
+- [Active leased cancellation audit](artifacts/2026-10-05-connection-workspace-authority/leased-recipient-cancellation-review.md)
 
 - [Skill mount cold-start latency qualification](records/2026-10/2026-10-05-skill-mount-cold-start-latency.md)
 - [Skill mount latency evidence](artifacts/2026-10-05-skill-mount-cold-start-latency/README.md)
+- [Actual Sol Skills timeout recurrence](artifacts/2026-10-05-skill-mount-cold-start-latency/actual-write02-timeout-review.md)
 
 - [Server base URL contract and recoverable authoring](records/2026-10/2026-10-05-server-base-url-contract.md)
 - [Server base URL investigation and owned before evidence](artifacts/2026-10-05-server-base-url-contract/README.md)
@@ -41,6 +45,8 @@
 
 - [Dependency remediation: exact alerts and bounded upgrades](records/2026-10/2026-10-05-dependency-remediation.md)
 - [Dependency remediation baseline evidence](artifacts/2026-10-05-dependency-remediation/README.md)
+- [Compatible parser parent native qualification](artifacts/2026-10-05-dependency-remediation/quickxml-native-03/README.md)
+- [Corrected full RustSec and registry audit](artifacts/2026-10-05-dependency-remediation/quickxml-rustsec-audit-02/README.md)
 
 - [Mission draft context in an empty conversation](records/2026-10/2026-10-05-mission-draft-context.md)
 - [Mission draft context evidence](artifacts/2026-10-05-mission-draft-context/README.md)
@@ -2479,9 +2485,12 @@ The current connection-workspace authority record also includes metadata selecti
 - [Expanded Tool input/output detail boundary review](artifacts/2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): original actual Read ambiguity, independent input/output provenance and Root's bounded implementation admission.
 - [Root Read detail manual qualification](artifacts/2026-10-05-connection-workspace-authority/root-tool-detail-manual-review.md): DoU actual screenshots, qualified payload copies/reloaded history, physical cleanup and precise remaining limits.
 - [Next bounded Tool result review](artifacts/2026-10-05-connection-workspace-authority/next-product-result-review.md): source-qualified completed Write receipt omission; actual exploration and repair remain pending Root.
+- [Shutdown shared scheduler review](artifacts/2026-10-05-connection-workspace-authority/shutdown-scheduler-horizontal-review.md): actual parallel abort aggregation root cause, shared production audit and bounded implementation admission; actual repair qualification in progress.
+- [Second ordinary Sol Write plan](artifacts/2026-10-05-connection-workspace-authority/live-sol-write-e2e-plan.md): same-runner preparation and exact real UI/Provider/cleanup acceptance; execution not yet admitted.
 
 - [Live Sol Prompt-controller guard audit](artifacts/2026-10-05-connection-workspace-authority/live-sol-owned-prompt-guard-audit.md): shared ownership/standby/terminal/recovery audit; actual owner classification remains pending Root evidence.
 
 - [Push alert residual review](artifacts/2026-10-05-dependency-remediation/push-alert-residual-review-2026-10-06.md): read-only current graph/advisory reconciliation of the moderate/low GitHub summary.
 - [Rand/PHF candidate plan](artifacts/2026-10-05-dependency-remediation/rand-phf-candidate-plan.md): unique parent source/API and true native lookup acceptance; proposed source replacement remains pending Root.
 - [GLib backport candidate plan](artifacts/2026-10-05-dependency-remediation/glib-backport-candidate-plan.md): official iterator correction and coherent Linux delivery/qualification; no implementation or platform pass.
+- [Compatible Quick-XML parent plan](artifacts/2026-10-05-dependency-remediation/quick-xml-compatible-parent-plan.md): exact released-source/parent compatibility and bounded lock/checker preparation; actual native/platform acceptance pending.

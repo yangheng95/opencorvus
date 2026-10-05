@@ -1,0 +1,9 @@
+{
+  "exclude": [],
+  "include": [
+    "../../packages/overlay/script/check-rust-dependencies.ts",
+    "../../packages/overlay/script/build-overlay.ts",
+    "../../packages/opencorvus/src/**/*.d.ts"
+  ],
+  "extends": "../../packages/opencorvus/tsconfig.json"
+}

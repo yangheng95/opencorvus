@@ -1,0 +1,101 @@
+{
+  "status": "source frozen; Root owns actual service shutdown and Git integration",
+  "scope": [
+    "packages/opencorvus/src/util/queue.ts",
+    "packages/opencorvus/src/protocol/scheduler-message.ts global poll failure/abort ordering only",
+    "packages/opencorvus/test/work-conserving-queue.test.ts"
+  ],
+  "first_attempt": {
+    "provenance": "Original tool transcript and retained command log; not reconstructed test output",
+    "write_failure": "FileNotFoundError: packages/opencorvus/test/work-conserving-queue.test.ts because the Python edit used root-relative paths while its command ran in the backend directory. No test edit occurred in that failed script.",
+    "command": "bun test ./test/work-conserving-queue.test.ts",
+    "cwd": "packages/opencorvus",
+    "results": {
+      "pass": 2,
+      "assertions": 4
+    },
+    "raw_log": "shutdown-queue-tests-01.log",
+    "qualification": "Original two existing tests only; does not establish new cancellation coverage."
+  },
+  "intermediate_tests": {
+    "pass": 16,
+    "assertions": 35,
+    "raw_log": "shutdown-queue-tests-02.log"
+  },
+  "first_types": {
+    "explicit_exit": 2,
+    "formal_exit": 2,
+    "raw_logs": [
+      "shutdown-queue-explicit-types-01.log",
+      "shutdown-queue-backend-types-01.log"
+    ],
+    "causes": [
+      "TS18048 closure control-flow narrowing of firstItemFailure and input.signal",
+      "Throw-only generic fixture callback inferred unknown result instead of declared numeric result"
+    ],
+    "repair": "Existing-operation local const aliases and explicit numeric fixture type parameters; no excluded source/test or weakened compiler settings."
+  },
+  "final": {
+    "queue_tests": {
+      "command": "bun test ./test/work-conserving-queue.test.ts",
+      "cwd": "packages/opencorvus",
+      "exit": 0,
+      "pass": 19,
+      "assertions": 41,
+      "raw_log": "shutdown-queue-tests-final.log"
+    },
+    "backend_types": {
+      "command": "bun run --cwd packages/opencorvus typecheck",
+      "exit": 0,
+      "raw_log": "shutdown-queue-backend-types-final.log",
+      "exit_provenance": "Original tool session 62948 completion reports backend_types_exit=0."
+    },
+    "explicit_types": {
+      "command": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc -p .tmp-product-iteration/shutdown-queue-test-tsconfig.json",
+      "exit": 0,
+      "configuration": "shutdown-queue-test-tsconfig.json",
+      "exit_provenance": "Original tool session 74948 completion reports explicit_types_exit=0; stdout is empty so a raw explicit final log may not exist."
+    }
+  },
+  "recommended_root_checks": [
+    {
+      "file": "packages/opencorvus/test/instance-background-work.test.ts",
+      "positive_contract": "Actual Scheduler.register runs across two Projects; Instance.disposeAll cancels scheduled owners before Project leases drain and a fresh same-Project owner is admitted."
+    },
+    {
+      "file": "packages/opencorvus/test/scheduler-task-root-message-schema.test.ts",
+      "positive_contract": "Fresh Mission wake exact cancellation receipt; later Project admitted by real global poll; coalesced Project drain; paged unresolved recipient heads; enqueue-time Mission opened occurrence survives close/reopen."
+    },
+    {
+      "file": "packages/opencorvus/test/scheduler-automation-target-revision.test.ts",
+      "positive_contract": "Two actual memory Projects; retargeted manual/due exact revision members; retry resumes exact Fire after database reopen alongside independent parallel definitions."
+    },
+    {
+      "file": "packages/opencorvus/test/runtime-execution-settlement.test.ts",
+      "positive_contract": "Actual Server runtime fencing/cancellation, terminal publication before disposal, exact cancelled wake disposition, typed admission errors, rollback admission recovery and late physical settlement."
+    },
+    {
+      "file": "packages/opencorvus/test/scheduler-automation-remediation.test.ts",
+      "positive_contract": "Normal/fifth-failure finite Fire terminal receipt, work-conserving free-slot refill and newly due Fire admission during active poll; useful optional automation frontier regression scope."
+    }
+  ],
+  "checker_gaps": [
+    "No isolated existing Scheduler timer same-ID coalescing positive checker found; TaskControl coalescing checks do not prove Scheduler activeByTask/coalesced behavior.",
+    "runtime-execution-settlement local handoff/rollback is not actual HTTP restart or real replacement-process acceptance."
+  ],
+  "read_negative_core_scope": [
+    {
+      "file": "packages/opencorvus/test/scheduler-claim-and-fire-identity.test.ts",
+      "case": "does not claim a due Automation after its execution permit is granted to an aborted owner (line168)",
+      "finding": "Expected outcome includes positive exact cancellation reason and scheduled Fire revision, but attempts=[]/lease=undefined are negative-core subcontracts. Before including this file, Root should reformulate the affected case around exact owner cancellation plus real current Fire/permit/admission state or remove obsolete absence checks; no change is authorized in this child scope."
+    }
+  ],
+  "remaining_real_requirements": [
+    "Root actual idle/held-discovery shutdown HTTP admission separately from physical process/port receipt",
+    "Coherent actual ProtocolInbox/ProtocolDeliveryReceipt/control lease/Task/Mission/Session facts",
+    "Leased recipient cancellation retry/deadletter policy qualification, unchanged by this patch",
+    "Active Task/Mission and two-Project/restart/rollback real business paths remain local-only until truly exercised",
+    "Broad runInstanceBackgroundWork cancellation catch remains outside this bounded implementation"
+  ],
+  "restrictions": "No Scheduler classifier, durable business/retry/lease schema, UI, credential/Auth/model, process or Git operation was changed or performed."
+}

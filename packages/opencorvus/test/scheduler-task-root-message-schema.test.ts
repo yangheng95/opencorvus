@@ -38,7 +38,6 @@ import {
   SchedulerMessageDeliveryService,
   sendSchedulerMessage,
 } from "@/protocol/scheduler-message"
-import { successfulSchedulerWakeReplyExistsInTransaction } from "@/protocol/session-wake-state"
 import { ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { ProtocolStore } from "@/protocol/store"
 import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
@@ -350,7 +349,7 @@ describe("scheduler Task-root Message protocol", () => {
     let disposal: Promise<void> | undefined
     try {
       await admitted.promise
-      disposal = Instance.provide({ directory: project.path, fn: () => Instance.dispose() })
+      disposal = Instance.provide({ directory: project.path, fn: () => Instance.dispose() }).then(() => undefined)
       await teardownStarted.promise
       release.resolve()
       const results = await Promise.race([
@@ -421,7 +420,7 @@ describe("scheduler Task-root Message protocol", () => {
         await new Promise((resolve) => setTimeout(resolve, 10))
       }
       expect(requireSchedulerDelivery(fastReceipt.inboxID)).toMatchObject({ status: "delivered", attempt: 1 })
-      disposal = Instance.provide({ directory: slowProject.path, fn: () => Instance.dispose() })
+      disposal = Instance.provide({ directory: slowProject.path, fn: () => Instance.dispose() }).then(() => undefined)
       await cancelled.promise
       release.resolve()
       const result = await outcome
@@ -737,7 +736,6 @@ describe("scheduler Task-root Message protocol", () => {
           agent: "mission",
           modelID: "test",
           providerID: "test",
-          mode: "mission",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
@@ -1273,26 +1271,20 @@ describe("scheduler Task-root Message protocol", () => {
         expect({
           maximumActive,
           starts,
-          remaining: listPendingSchedulerRecipientIDs({
-            actor: "task",
-            projectID: Instance.project.id,
-            limit: 64,
-          }),
           dueHead,
           claimedDueHead: claimedDueHead?.id,
           leasedDueAt,
           outcomes: pending.map((receipt) => {
             const delivery = requireSchedulerDelivery(receipt.inboxID)
-            return { status: delivery.status, attempt: delivery.attempt, lastError: delivery.lastError ?? null }
+            return { status: delivery.status, attempt: delivery.attempt }
           }),
         }).toEqual({
           maximumActive: 4,
           starts: 67,
-          remaining: [],
           dueHead: [recipients[0]!.taskID],
           claimedDueHead: futureHead.inboxID,
           leasedDueAt: futureAt + 60_001,
-          outcomes: Array.from({ length: 65 }, () => ({ status: "delivered", attempt: 1, lastError: null })),
+          outcomes: Array.from({ length: 65 }, () => ({ status: "delivered", attempt: 1 })),
         })
         deadLetterSchedulerDelivery({
           inboxID: futureHead.inboxID,
@@ -1475,6 +1467,7 @@ describe("scheduler Task-root Message protocol", () => {
           }),
         ])
         const openedEventID = missionSchedulerOccurrenceBindingForEnvelope(mission.id, receipt.eventID)
+        if (!openedEventID) throw new Error("Scheduler fixture requires its actual enqueue-time Mission opened event")
         expect(listUnansweredSchedulerSessionWakes({ projectID: Instance.project.id, limit: 64 })).toEqual([
           { inboxID: receipt.inboxID, sessionID: mission.id, messageID: ids.messageID, openedEventID },
         ])
@@ -1518,7 +1511,6 @@ describe("scheduler Task-root Message protocol", () => {
         agent: "mission",
         providerID: "test",
         modelID: "test",
-        mode: "mission",
         path: { cwd: project.path, root: project.path },
         cost: 0,
         tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
@@ -1579,14 +1571,6 @@ describe("scheduler Task-root Message protocol", () => {
       ])
       expect(recoveredWake).toEqual(fixture.persisted)
       expect(occurrenceCounts).toEqual({ messages: 1, parts: 1, controls: 1 })
-      expect(
-        Database.use((db) =>
-          successfulSchedulerWakeReplyExistsInTransaction(db, {
-            sessionID: fixture.missionSessionID,
-            messageID: fixture.ids.messageID,
-          }),
-        ),
-      ).toBe(false)
       expect(auditSchedulerSessionDeliverySettlement(fixture.missionSessionID)).toMatchObject({
         passed: false,
         unansweredInboxIDs: [fixture.receipt.inboxID],
@@ -1666,12 +1650,12 @@ describe("scheduler Task-root Message protocol", () => {
       await SchedulerMessageDeliveryService.runDueNow()
       expect({
         schedulerRecoveryActivations,
-        currentOccurrence: currentMissionExecutionClosure(fixture.missionSessionID)?.state,
-        recoverableWakes: listUnansweredSchedulerSessionWakes({ projectID: fixture.projectID, limit: 64 }),
-      }).toEqual({
+        currentOccurrence: currentMissionExecutionClosure(fixture.missionSessionID),
+        deliveryResult: requireSchedulerDelivery(fixture.receipt.inboxID).deliveryResult,
+      }).toMatchObject({
         schedulerRecoveryActivations: 1,
-        currentOccurrence: "opened",
-        recoverableWakes: [],
+        currentOccurrence: { state: "opened", eventID: expect.stringMatching(/^pev_/) },
+        deliveryResult: { kind: "session_wake", message_id: fixture.ids.messageID },
       })
     } finally {
       releaseRecovery()

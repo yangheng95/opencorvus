@@ -1,5 +1,6 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
+import type { LanguageModelV3StreamResult } from "@ai-sdk/provider"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Auth } from "@/auth"
@@ -34,7 +35,7 @@ for (const usePatch of [false, true])
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const selected = { providerID: "owner-contract", modelID: usePatch ? "gpt-owner-contract" : "streamed-owner" }
+        const selected = { providerID: "owner-contract", modelID: "gpt-6.1-sol" }
         await Config.updateProjectPatch({ prompt_profile: { active: "base" }, permission_mode: "full_access" })
         using ingress = Ingress.replaceTaskIngressRunner({
           runner: async (input) => ({
@@ -59,7 +60,7 @@ for (const usePatch of [false, true])
           inputTokens: { total: 1, noCache: 1, cacheRead: 0, cacheWrite: 0 },
           outputTokens: { total: 1, text: 1, reasoning: 0 },
         }
-        const call = (toolName: string, input: unknown) => ({
+        const call = (toolName: string, input: unknown): LanguageModelV3StreamResult => ({
           stream: simulateReadableStream({
             chunks: [
               { type: "stream-start", warnings: [] },
@@ -68,7 +69,7 @@ for (const usePatch of [false, true])
             ],
           }),
         })
-        const finish = (text: string) => ({
+        const finish = (text: string): LanguageModelV3StreamResult => ({
           stream: simulateReadableStream({
             chunks: [
               { type: "stream-start", warnings: [] },
@@ -98,7 +99,9 @@ for (const usePatch of [false, true])
                 })
               const step = rootStep++
               if (step === 0) {
-                expect(names).toContain(usePatch ? "apply_patch" : "write")
+                expect(names.filter((name) => ["read", "write", "edit", "apply_patch"].includes(name)).sort()).toEqual(
+                  ["apply_patch", "edit", "read", "write"],
+                )
                 return usePatch
                   ? call("apply_patch", {
                       patchText: `*** Begin Patch\n*** Add File: ${filePath.replaceAll("\\", "/")}\n+value=1\n*** End Patch`,
@@ -138,8 +141,9 @@ for (const usePatch of [false, true])
                   },
                 })
               if (step === 3 || step === 7) {
-                const finalID = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload
-                  .outcome.final_message_id!
+                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload.outcome
+                if (!("final_message_id" in outcome)) throw new Error(`Expected reviewer message: ${outcome.kind}`)
+                const finalID = outcome.final_message_id
                 return call("read_agent_message", { sources: [{ kind: "dispatch_result", message_id: finalID }] })
               }
               if (step === 4)
@@ -149,8 +153,9 @@ for (const usePatch of [false, true])
                     })
                   : call("edit", { filePath, oldString: "value=1", newString: "value=2" })
               if (step === 8) {
-                const finalID = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload
-                  .outcome.final_message_id!
+                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload.outcome
+                if (!("final_message_id" in outcome)) throw new Error(`Expected reviewer message: ${outcome.kind}`)
+                const finalID = outcome.final_message_id
                 return call("manage_task", {
                   action: "complete_task",
                   summary: "Owner repair independently verified.",
@@ -230,7 +235,7 @@ for (const usePatch of [false, true])
           options: {},
           models: { [model.id]: model },
         } as never)
-        using authSpy = spyOn(Auth, "get").mockResolvedValue(undefined)
+        using authSpy = spyOn(Auth, "get").mockResolvedValue({ type: "api", key: "owner-contract-test" })
         using prepareGit = spyOn(EngineGit, "prepare").mockImplementation(async (task) => ({ task }))
         using completeGit = spyOn(EngineGit, "complete").mockImplementation(async (task) => ({ task }))
         taskID = await EngineService.createTask(

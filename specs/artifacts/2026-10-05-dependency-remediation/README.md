@@ -1,5 +1,9 @@
 # Dependency remediation evidence
 
+- [Compatible QuickXML parent repair](quick-xml-compatible-parent-plan.md): exact published notification0.7.3/plist1.10 offline lock resolution with full node/edge reconciliation.
+- [Actual canonical native03](quickxml-native-03/README.md): full Windows build,12 linked production plus2 separate event contracts pass; [original MSVC failure](quickxml-native-01/README.md) remains preserved. Native Toast/macOS/Linux/24-bit stay unqualified.
+- [Complete corrected advisory audit](quickxml-rustsec-audit-02/README.md): four QuickXML vulnerability occurrences resolve;7maintenance/2unsound/1yank retained. [Original quiet coverage limitation](quickxml-rustsec-audit-01/README.md) and [independent source review](quickxml-rustsec-yanked-boundary-review.md) explain the tool-environment repair without claiming a guessed old init error.
+
 - [Final integrated Stage5 native02](stage5-native-02/README.md): final Validator/SDK and connection-save source, actual CYap embedded UI, four first-run Sessions/two persisted across restart, nine production plus two separate event contracts; all commands exit0. Historical native01 remains the earlier source snapshot.
 
 - [Stage5 exact preparation and original tool failure](stage5-preparation/README.md), [actual canonical native01](stage5-native-01/result.json), [nine production cases](stage5-native-01/native-contracts.stdout.log) and [two independent event cases](stage5-native-01/event-library-contracts.stdout.log): four precise package updates, real compiler tuple/profile/native ownership, authenticated TLS and typed errors/context/tag data. Public test key contents remain in ignored storage only.
@@ -68,3 +72,4 @@ The paragraph above records the earlier Stage1 checkpoint. Current Stage2 and th
 - [2026-10-06 push alert residual review](push-alert-residual-review-2026-10-06.md): current glib/rand lock plus public severity matches known residuals; actual remote alert identity remains unverified.
 - [Rand/PHF candidate plan](rand-phf-candidate-plan.md): complete unique0.8 parent/API/source and actual checker analysis; local source replacement and fresh release verification remain unimplemented.
 - [GLib backport candidate plan](glib-backport-candidate-plan.md): official two-line correction, complete iterator/GTK/Linux delivery analysis and real optimized/native acceptance requirements; no patch or Linux qualification is claimed.
+- [Compatible Quick-XML parent plan](quick-xml-compatible-parent-plan.md): exact anonymous released-source verification and Root's two-parent lock/checker preparation admission; no canonical build, notification or platform pass.

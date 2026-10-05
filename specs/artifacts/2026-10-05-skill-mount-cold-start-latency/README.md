@@ -1,5 +1,7 @@
 # Skill mount cold-start latency evidence
 
+- [Actual Sol Write02 timeout recurrence](actual-write02-timeout-review.md): real first mount19.456s, client15s timeout and late backend200, warm244/498ms; exact ordinary launcher external-compatibility discovery disabled, safe slow phase still unknown. This is further investigation, not a latency repair.
+
 - [Actual01 HTTP-only qualification and timing failure](actual-01/README.md): unchanged raw results plus independent missing-DEBUG diagnosis.
 - [Actual02 qualified HTTP timings](actual-02/README.md): six real source occurrences, request/initializer ownership and balanced spans,27 HTTP200 plus one caller abort, independent physical cleanup. Original19.675s latency remains unresolved.
 - `skill-read-log-tests-02.*.log`: final10 positive tests/45 assertions, including real DEBUG file/stderr and actual State ownership. `skill-read-log-typecheck-01.*.log` and `skill-read-log-explicit-02.*.log` both exit0. Earlier test/type failures and exact source-scoped fixes remain in the adjacent numbered logs.

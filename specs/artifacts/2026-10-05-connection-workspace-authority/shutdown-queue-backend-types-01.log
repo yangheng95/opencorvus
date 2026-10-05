@@ -1,0 +1,3 @@
+$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+src/util/queue.ts(82,41): error TS18048: 'firstItemFailure' is possibly 'undefined'.
+src/util/queue.ts(85,89): error TS18048: 'input.signal' is possibly 'undefined'.

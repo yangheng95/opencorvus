@@ -1,0 +1,17 @@
+
+running 12 tests
+test production::actual_anyhow_context_and_inner_mutations_retain_the_error_chain ... ok
+test production::actual_phf_010_generator_returns_exact_deterministic_lookups ... ok
+test production::actual_phf_011_generator_returns_exact_deterministic_lookups ... ok
+test production::actual_plist_serde_returns_typed_values_and_explicit_type_error ... ok
+test production::actual_plist_xml_and_binary_return_complete_values ... ok
+test production::actual_rustls_authenticated_tls13_delivers_both_protected_payloads ... ok
+test production::actual_rustls_key_boundary_returns_the_protocol_error_and_alert ... ok
+test production::actual_tauri_association_plist_retains_dictionary_contract ... ok
+test production::actual_tauri_runner_config_serializes_and_round_trips_exactly ... ok
+test production::key_value_map_empty_map_returns_the_serialization_error ... ok
+test production::key_value_map_empty_sequence_returns_the_serialization_error ... ok
+test production::key_value_map_returns_the_exact_sequence_mapping ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

@@ -1,0 +1,22 @@
+{
+  "wrapper": "opt-in prepared not executed",
+  "explicitTypecheck": {
+    "config": "explicit-tsconfig.snapshot.json",
+    "exitCode": 0,
+    "log": "explicit-types-01.log"
+  },
+  "focused": {
+    "file": "test/real-provider-audit.test.ts",
+    "assertions": 67,
+    "passed": 17,
+    "exitCode": 0,
+    "scope": "actual local HTTP and prior local contracts, not Provider E2E"
+  },
+  "status": "implementation-frozen-local-qualified",
+  "formalTypecheck": {
+    "exitCode": 0,
+    "log": "formal-types-01.log"
+  },
+  "beforeImage": "exact added-delta reconstruction, not pre-edit capture",
+  "actualProviderTools": "unknown-not-executed"
+}

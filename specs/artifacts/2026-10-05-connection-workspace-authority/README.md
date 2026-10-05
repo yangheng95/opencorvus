@@ -6,12 +6,23 @@ Root's Cff, D5, DVw and DoU manual checkpoints retain separate actual screenshot
 disk and request evidence. DVw's ordinary Sol run has actual Read/reply, reopened
 history and five exact streamed model requests. DoU qualifies the completed Read
 Input/Output presentation, actual payload copies and reloaded owned history with
-no new Provider request. All six owned services physically exited; the copied
-OpenAI entry and complete catalog remain absent. Original phase statements and
-screenshots retain their original provenance.
+no new Provider request. Those six owned services and the later failed Write01
+physically exited with both copied authority files removed. Fresh Write02 also
+physically exited after real Work/Chat Write→Read,86-byte physical readback and
+CHKT same-history receipt/copy/source/reopen review. All eight owned services
+are closed and their copied authority pairs removed. Original phase
+statements and screenshots retain their original provenance.
 
 - [Root Read detail manual qualification](root-tool-detail-manual-review.md): all seven actual screenshots, two qualified copy receipts, structural checks, physical cleanup and precise failed-action/parser boundaries. The selected image is tool-detail-ui-05-raw-input-output.png.
-- [Next bounded result review](next-product-result-review.md): source-qualified completed Write receipt omission; actual Write exploration and repair remain pending Root.
+- [Root actual Sol Write review](root-live-sol-write-manual-review.md): truthful failed01 and successful02, actual wire declarations, active functional observation, exact disk bytes and current before/after/cleanup boundaries.
+- [Next bounded result review](next-product-result-review.md): actual completed Write receipt omission personally reproduced; one-line renderer repair and real same-history visual/copy review qualified.
+- [Shutdown shared scheduler review](shutdown-scheduler-horizontal-review.md): actual owned shutdown exposes parallel cancellation identity loss; complete production horizontal audit and Root's bounded utility/failure-order admission. Implementation/real shutdown qualification is in progress.
+- [Second ordinary Sol Write plan](live-sol-write-e2e-plan.md): one parameterized ordinary CLI, exact paired authority, request budget, real activity monitor and physical/pair cleanup; separate actual01 and fresh02 Root admissions/results.
+- [Shared file-tool authority](live-sol-write-tool-authority-review.md): model-string mutual exclusion root cause, approved single-registry repair and22/277 focused local contracts; actual02 independently qualifies Work/Chat.
+- [Actual declaration evidence](live-provider-tool-declaration-evidence-plan.md): native outgoing type/name metadata,17/67 positive local checks and independent official HEAD baseline review.
+- [Work mode experience](live-sol-write-mode-experience-review.md): actual default Work/Chat identity is correct; two source-document wording drifts remain separate.
+- [Continuous file endpoints](live-file-change-endpoint-review.md): subsequent source-backed live aggregate stale-after finding; chronology/duplicate observation and actual Review reproduction pending.
+- [Active leased cancellation](leased-recipient-cancellation-review.md): remaining delivery retry-budget and background fault-classification audit; standby exit cannot qualify active/restart behavior.
 
 - `next-provider-panel-audit.md`: original bounded Provider/auth, model-selector, Network and Channels plan; its later implementation and qualification sections record the completed source work and separate actual limits.
 

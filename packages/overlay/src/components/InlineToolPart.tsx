@@ -482,7 +482,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   const showPlainOutput = createMemo(() => {
     if (status() !== "completed" || !output().trim() || readView()) return false
     if (showStructuredOutput()) return /<diagnostics\b/i.test(output())
-    return !codeResult()
+    return !FILE_READ_TOOLS.has(key()) || !codeResult()
   })
   const visibleShellCommand = createMemo(() => {
     if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""

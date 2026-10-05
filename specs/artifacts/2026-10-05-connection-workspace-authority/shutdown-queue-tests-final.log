@@ -1,0 +1,27 @@
+bun test v1.3.14 (0d9b296a)
+
+test\work-conserving-queue.test.ts:
+(pass) work-conserving physical admission > refills the first released worker slot while preserving settled result order [37.00ms]
+(pass) work-conserving physical admission > hands the next FIFO permit to the next live waiter after an exact caller abort [0.66ms]
+(pass) already-aborted owner retains its exact reason after cleanup at concurrency 1 [0.36ms]
+(pass) pending iterator fully unwinds before original cancellation at concurrency 1 [0.34ms]
+(pass) active callbacks and async cleanup join before cancellation at concurrency 1 [0.49ms]
+(pass) already-aborted owner retains its exact reason after cleanup at concurrency 4 [0.08ms]
+(pass) pending iterator fully unwinds before original cancellation at concurrency 4 [0.09ms]
+(pass) active callbacks and async cleanup join before cancellation at concurrency 4 [0.08ms]
+(pass) mixed source, owner and cleanup faults retain their original causes [0.41ms]
+(pass) terminal abort retains first real item cause with streaming=false [0.55ms]
+(pass) terminal abort retains first real item cause with streaming=true [0.12ms]
+(pass) cleanup-blocked results retain the first actual item failure [0.37ms]
+(pass) real active item fault remains observable after all parallel callbacks unwind [0.45ms]
+(pass) normal streaming preserves all consumed results and its empty return [0.29ms]
+(pass) normal results retain the real rejection at its input index [0.27ms]
+(pass) original item and streaming observer faults remain separate causes [0.23ms]
+(pass) source, cleanup and first item causes all survive cancellation with streaming consumption [0.45ms]
+(pass) exact cancellation from worker slots and iterator cleanup preserves one owner reason [0.30ms]
+(pass) single original discovery failure retains its original value after successful cleanup [0.27ms]
+
+ 19 pass
+ 0 fail
+ 41 expect() calls
+Ran 19 tests across 1 file. [1185.00ms]

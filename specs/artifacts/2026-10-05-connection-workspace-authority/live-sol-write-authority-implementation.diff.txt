@@ -1,0 +1,233 @@
+===================================================================
+--- .tmp-product-iteration/write-authority-before-registry.ts.txt
++++ packages/opencorvus/src/tool/registry.ts
+@@ -13,15 +13,8 @@
+   async function all(): Promise<readonly Tool.Info[]> {
+     return builtInGlobalTools()
+   }
+ 
+-  function providerCompatible(toolID: string, modelID: string): boolean {
+-    const usePatch = modelID.includes("gpt-") && !modelID.includes("oss") && !modelID.includes("gpt-4")
+-    if (toolID === "apply_patch") return usePatch
+-    if (toolID === "edit" || toolID === "write") return !usePatch
+-    return true
+-  }
+-
+   export async function ids() {
+     return all().then((x) => x.map((t) => t.id))
+   }
+ 
+@@ -61,9 +54,9 @@
+           // SessionLoop initializes SkillTool from the exact projected-agent
+           // skill surface after the rest of the turn tool set is known.
+           if (isSkillFamilyToolID(t.id)) return false
+ 
+-          return providerCompatible(t.id, model.modelID)
++          return true
+         })
+         .map(async (t) => {
+           using _ = log.timeDebug(t.id)
+           const tool = await t.init({
+@@ -92,9 +85,8 @@
+         throw new Error("Projected worker registry tool IDs must be unique")
+       }
+       const expected = [...requestedSet]
+         .filter((toolID) => builtInToolProviderState(toolID, providerEnvironment) === "available")
+-        .filter((toolID) => providerCompatible(toolID, model.modelID))
+         .sort()
+       const actual = result.map((item) => item.id).sort()
+       if (new Set(actual).size !== actual.length || JSON.stringify(actual) !== JSON.stringify(expected)) {
+         throw new Error(
+@@ -114,9 +106,9 @@
+   ) {
+     return materialize(model, undefined, undefined, config, { kind: "agent-template" })
+   }
+ 
+-  /** Resolve Provider-compatible registry identity without initializing definitions. */
++  /** Resolve available registry identity without initializing definitions. */
+   export async function projectableRuntimeToolIDs(
+     model: { providerID: string; modelID: string },
+     _agent: SessionAgentRuntime,
+     config: Config.Info,
+@@ -127,9 +119,9 @@
+     const result: string[] = []
+     for (const toolID of requestedToolIDs) {
+       if (!known.has(toolID)) continue
+       const state = builtInToolProviderState(toolID, environment)
+-      if (state === "unavailable" || !providerCompatible(toolID, model.modelID)) continue
++      if (state === "unavailable") continue
+       result.push(toolID)
+     }
+     return [...new Set(result)]
+   }
+
+===================================================================
+--- .tmp-product-iteration/write-authority-before-task-owner.test.ts.txt
++++ packages/opencorvus/test/task-owner-direct-delivery.test.ts
+@@ -1,6 +1,7 @@
+ import { afterEach, expect, spyOn, test } from "bun:test"
+ import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
++import type { LanguageModelV3StreamResult } from "@ai-sdk/provider"
+ import fs from "node:fs/promises"
+ import path from "node:path"
+ import { Auth } from "@/auth"
+ import { Bus } from "@/bus"
+@@ -33,9 +34,9 @@
+     await using project = await memoryProject()
+     await Instance.provide({
+       directory: project.path,
+       fn: async () => {
+-        const selected = { providerID: "owner-contract", modelID: usePatch ? "gpt-owner-contract" : "streamed-owner" }
++        const selected = { providerID: "owner-contract", modelID: "gpt-6.1-sol" }
+         await Config.updateProjectPatch({ prompt_profile: { active: "base" }, permission_mode: "full_access" })
+         using ingress = Ingress.replaceTaskIngressRunner({
+           runner: async (input) => ({
+             finalMessageID: await Orchestrator.processTask(
+@@ -58,18 +59,18 @@
+         const usage = {
+           inputTokens: { total: 1, noCache: 1, cacheRead: 0, cacheWrite: 0 },
+           outputTokens: { total: 1, text: 1, reasoning: 0 },
+         }
+-        const call = (toolName: string, input: unknown) => ({
++        const call = (toolName: string, input: unknown): LanguageModelV3StreamResult => ({
+           stream: simulateReadableStream({
+             chunks: [
+               { type: "stream-start", warnings: [] },
+               { type: "tool-call", toolCallId: `owner_${++sequence}`, toolName, input: JSON.stringify(input) },
+               { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" }, usage },
+             ],
+           }),
+         })
+-        const finish = (text: string) => ({
++        const finish = (text: string): LanguageModelV3StreamResult => ({
+           stream: simulateReadableStream({
+             chunks: [
+               { type: "stream-start", warnings: [] },
+               { type: "text-start", id: "answer" },
+@@ -97,9 +98,11 @@
+                   reason: "Current terminal result reconciled.",
+                 })
+               const step = rootStep++
+               if (step === 0) {
+-                expect(names).toContain(usePatch ? "apply_patch" : "write")
++                expect(names.filter((name) => ["read", "write", "edit", "apply_patch"].includes(name)).sort()).toEqual(
++                  ["apply_patch", "edit", "read", "write"],
++                )
+                 return usePatch
+                   ? call("apply_patch", {
+                       patchText: `*** Begin Patch\n*** Add File: ${filePath.replaceAll("\\", "/")}\n+value=1\n*** End Patch`,
+                     })
+@@ -137,10 +140,11 @@
+                           },
+                   },
+                 })
+               if (step === 3 || step === 7) {
+-                const finalID = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload
+-                  .outcome.final_message_id!
++                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload.outcome
++                if (!("final_message_id" in outcome)) throw new Error(`Expected reviewer message: ${outcome.kind}`)
++                const finalID = outcome.final_message_id
+                 return call("read_agent_message", { sources: [{ kind: "dispatch_result", message_id: finalID }] })
+               }
+               if (step === 4)
+                 return usePatch
+@@ -148,10 +152,11 @@
+                       patchText: `*** Begin Patch\n*** Update File: ${filePath.replaceAll("\\", "/")}\n@@\n-value=1\n+value=2\n*** End Patch`,
+                     })
+                   : call("edit", { filePath, oldString: "value=1", newString: "value=2" })
+               if (step === 8) {
+-                const finalID = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload
+-                  .outcome.final_message_id!
++                const outcome = findDispatchSettlementByDispatchID({ taskID, dispatchID: latest!.dispatchID })!.payload.outcome
++                if (!("final_message_id" in outcome)) throw new Error(`Expected reviewer message: ${outcome.kind}`)
++                const finalID = outcome.final_message_id
+                 return call("manage_task", {
+                   action: "complete_task",
+                   summary: "Owner repair independently verified.",
+                   workflow_id: "execution-verification",
+@@ -229,9 +234,9 @@
+           env: [],
+           options: {},
+           models: { [model.id]: model },
+         } as never)
+-        using authSpy = spyOn(Auth, "get").mockResolvedValue(undefined)
++        using authSpy = spyOn(Auth, "get").mockResolvedValue({ type: "api", key: "owner-contract-test" })
+         using prepareGit = spyOn(EngineGit, "prepare").mockImplementation(async (task) => ({ task }))
+         using completeGit = spyOn(EngineGit, "complete").mockImplementation(async (task) => ({ task }))
+         taskID = await EngineService.createTask(
+           {
+
+===================================================================
+--- /dev/null
++++ packages/opencorvus/test/capability/registry-file-authority.test.ts
+@@ -0,0 +1,70 @@
++import { afterEach, expect, test } from "bun:test"
++import { capabilityRef } from "@opencorvus-ai/util/capability-ref"
++import { AgentToolPool } from "../../src/agent/tool-pool-contract"
++import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-registry"
++import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
++import { createHarnessGrantSet } from "../../src/capability/harness-projection"
++import { routineToolRefs } from "../../src/capability/routine-tools"
++import { CapabilityRules } from "../../src/capability/rules"
++import { searchCapabilityCatalog } from "../../src/capability/catalog"
++import { Config } from "../../src/config/config"
++import { Instance } from "../../src/project/instance"
++import { ToolRegistry } from "../../src/tool/registry"
++import { RuntimeCapabilityCatalog } from "../../src/tool/capability-runtime-catalog"
++import { Session } from "../../src/session"
++import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
++
++afterEach(resetMemoryDatabase)
++
++test("each interactive role materializes its complete authorized file tools across model identities", async () => {
++  await using project = await memoryProject()
++  await Instance.provide({
++    directory: project.path,
++    fn: async () => {
++      const config = await Config.get()
++      const expected = ["apply_patch", "edit", "read", "write"]
++      for (const role of ["coding", "chat", "work"] as const) {
++        const native = await PrimaryAssistantRegistry.get(role, { config })
++        const agent = sessionRuntimeFromNativeAgent(native)
++        const session = await Session.create({ kind: "assistant", title: `${role} file authority` })
++        const roleIDs = AgentToolPool.visibleToolIDs(agent.tools)
++        const requested = expected.filter((id) => roleIDs.has(id))
++        expect(requested).toEqual(expected)
++        const grants = createHarnessGrantSet({
++          context: { kind: "conversation", agent_id: role },
++          owner_revision: "file-authority",
++          grants: requested.map((local_ref) => ({
++            ref: capabilityRef({ kind: "tool", source: "platform", owner_ref: "tool-registry", local_ref }),
++            access: "discover_execute",
++          })),
++        })
++        for (const modelID of ["gpt-6.1-sol", "gpt-4-contract", "gpt-oss-contract", "streamed-owner"]) {
++          const model = { providerID: "file-authority", modelID }
++          const ids = await ToolRegistry.projectableRuntimeToolIDs(model, agent, config, requested)
++          expect(ids.sort()).toEqual(expected)
++          const catalog = await RuntimeCapabilityCatalog.snapshot({
++            config, sessionID: session.id, agentID: role, executionToolIDs: ids,
++            harnessGrants: grants, permission: CapabilityRules.merge(native.permission),
++          })
++          const results = searchCapabilityCatalog(catalog.snapshot, catalog.caller, { kinds: ["tool"] })
++            .filter((entry) => expected.includes(entry.ref.local_ref))
++          expect(results.map((entry) => entry.ref.local_ref).sort()).toEqual(expected)
++          for (const entry of results) {
++            expect(entry.next_owner).toEqual({ kind: "call_tool", tool_id: entry.ref.local_ref })
++          }
++          expect(routineToolRefs({ harness: grants, visibleToolIDs: ids }).map((ref) => ref.local_ref).sort()).toEqual(expected)
++          const tools = await ToolRegistry.exactRuntimeTools(model, agent, role, config, ids)
++          expect(tools.map((tool) => tool.id).sort()).toEqual(expected)
++          for (const tool of tools) {
++            expect(tool.description.length).toBeGreaterThan(0)
++            expect(typeof tool.execute).toBe("function")
++          }
++          const write = tools.find((tool) => tool.id === "write")!
++          expect(write.parameters.parse({ filePath: `${project.path}/exact.txt`, content: "exact UTF-8\n" })).toEqual({
++            filePath: `${project.path}/exact.txt`, content: "exact UTF-8\n",
++          })
++        }
++      }
++    },
++  })
++}, 60_000)

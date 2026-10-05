@@ -44,7 +44,7 @@ test("real HTTP scope edits project the exact physical revision and survive data
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
-    fetch: (request) => Instance.provide({ directory: first.path, fn: () => app.fetch(request) }),
+    fetch: async (request) => await Instance.provide({ directory: first.path, fn: () => app.fetch(request) }),
   })
   async function request(route: string, method = "GET", body?: unknown) {
     const response = await fetch(new URL(route, server.url), {
@@ -123,6 +123,8 @@ test("retargeted manual and due runs bind exact revision members and retain hist
       expect(runs.map((row) => row.targetProjectId).sort()).toEqual([firstID, secondID].sort())
       expect(runs.map((row) => row.outcome)).toEqual(["succeeded", "succeeded"])
       for (const run of runs) {
+        const targetProjectID = run.targetProjectId
+        if (!targetProjectID) throw new Error("Project-target fixture requires an exact target Project ID")
         const row = Database.use(
           (db) => db.select().from(AutomationRunTable).where(eq(AutomationRunTable.id, run.id)).get()!,
         )
@@ -133,8 +135,8 @@ test("retargeted manual and due runs bind exact revision members and retain hist
           directory: actual.directory,
         }).toEqual({
           revisionID: revision.revisionID,
-          projectID: run.targetProjectId,
-          directory: run.targetProjectId === firstID ? first.path : second.path,
+          projectID: targetProjectID,
+          directory: targetProjectID === firstID ? first.path : second.path,
         })
       }
       expect(AutomationService.listRuns(created.id).find((row) => row.id === originalRun[0].id)?.targetProjectId).toBe(

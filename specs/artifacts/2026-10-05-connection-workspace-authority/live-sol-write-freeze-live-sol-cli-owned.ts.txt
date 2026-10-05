@@ -1,0 +1,186 @@
+/** PREPARED ONLY. Root must review and authorize execution; ordinary CLI, no UI driver. */
+import assert from "node:assert/strict"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+
+// Nonsecret arguments only: source auth, owned runtime, owned project, owned evidence,
+// owned startup receipt, proposed port, unique startup occurrence. Environment is parent-owned.
+const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence, functionalSelectionPath] = process.argv.slice(2)
+assert(authSource && runtime && project && evidenceRoot && receiptPath && portText && occurrence,
+  "Expected seven nonsecret owned/source arguments")
+for (const value of [authSource, runtime, project, evidenceRoot, receiptPath]) assert(path.isAbsolute(value))
+if (functionalSelectionPath) {
+  assert(path.isAbsolute(functionalSelectionPath))
+  assert.equal(path.dirname(path.resolve(functionalSelectionPath)), path.dirname(path.resolve(runtime)))
+}
+assert.equal(path.basename(authSource), "auth.json")
+assert.equal(process.env.OPENCORVUS_HOME, runtime)
+assert.equal(process.env.OPENCORVUS_TEST_HOME, undefined)
+assert.equal(process.env.OPENCORVUS_MODELS_PATH, undefined)
+const port = Number(portText)
+assert(Number.isInteger(port) && port > 0 && port <= 65535)
+assert.notEqual(path.resolve(path.dirname(authSource)), path.resolve(runtime, "data"))
+const packageRoot = path.resolve(import.meta.dir, "../packages/opencorvus")
+const source = (relative: string) => pathToFileURL(path.join(packageRoot, relative)).href
+const { installProcessShims } = await import(source("src/runtime/shims.ts"))
+installProcessShims()
+const { CredentialRedactor, RealProviderAudit, installProcessProviderAudit } =
+  await import(source("script/real-provider-audit.ts"))
+const redactor = new CredentialRedactor()
+await fs.mkdir(evidenceRoot, { recursive: true })
+const publish = async (name: string, value: unknown) => {
+  const target = path.join(evidenceRoot, name)
+  await fs.writeFile(target, redactor.redact(JSON.stringify(value, null, 2)), { flag: "wx" })
+}
+
+try {
+  await fs.mkdir(path.join(runtime, "data"), { recursive: true })
+  for (const name of ["auth.json", "models.json"]) {
+    try {
+      await fs.lstat(path.join(runtime, "data", name))
+      throw new Error("Owned destination authority pair must be fresh before staging")
+    } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
+  }
+  const { stageDiagnosticProvider } = await import(source("script/evolution-diagnostic-provider.ts"))
+  // Mature helper requires the complete models.json adjacent to the explicitly approved auth source.
+  const access = await stageDiagnosticProvider({ authSource, dataDirectory: path.join(runtime, "data"),
+    modelID: "gpt-6.1-sol", redactor })
+  const { createAuditSnapshotPublisher } = await import(source("script/audit-snapshot.ts"))
+  const snapshot = createAuditSnapshotPublisher(evidenceRoot, "provider")
+  const state = installProcessProviderAudit(() => {
+    const persist = () => snapshot({ pid: process.pid, executable: process.execPath,
+      model: audit.modelID, maxRequests: 12, requests: audit.requests,
+      exhausted: audit.exhausted, observedAt: new Date().toISOString() })
+    const audit = new RealProviderAudit("gpt-6.1-sol", 12, persist,
+      { copiedOAuthExpiresAt: access.copiedOAuthExpiresAt })
+    persist()
+    return { audit, persist }
+  })
+  const expectedURL = new URL(`http://127.0.0.1:${port}`)
+  state.audit.localOrigins.add(expectedURL.origin)
+  state.audit.localOrigins.add(`http://localhost:${port}`)
+  const [{ Instance }, { Auth }, { Provider }, { SessionStatus }, physical, shutdown] = await Promise.all([
+    import(source("src/project/instance.ts")), import(source("src/auth/index.ts")),
+    import(source("src/provider/provider.ts")), import(source("src/session/status.ts")),
+    import(source("src/runtime/process-occurrence.ts")), import(source("src/server/shutdown.ts")),
+  ])
+  await Instance.provide({ directory: project, fn: async () => {
+    const credential = await Auth.get("openai")
+    assert.equal(credential?.type, "oauth")
+    const projected = await Provider.getModel("openai", "gpt-6.1-sol")
+    assert.equal(projected.api.id, "gpt-6.1-sol")
+  } })
+  const owner = physical.currentRuntimeProcessOccurrence()
+  await publish("authority-ready.json", { pid: process.pid, owner, model: "openai/gpt-6.1-sol",
+    credential: "available", catalog: "projected", pairedModels: true, executionStarted: false })
+
+  // Start before importing index: ordinary serve never resolves its top-level import.
+  const monitor = (async () => {
+    const startupDeadline = Date.now() + 180_000
+    for (;;) {
+      let receipt: any
+      try { receipt = JSON.parse(await fs.readFile(receiptPath, "utf8")) }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
+      if (receipt) {
+        assert.equal(receipt.occurrenceID, occurrence)
+        assert.equal(receipt.outcome, "listening")
+        assert.equal(receipt.pid, process.pid)
+        assert.equal(new URL(receipt.url).origin, expectedURL.origin)
+        assert.equal(physical.observeRuntimeProcessOccurrence(owner), "exact_live")
+        if (shutdown.hasServerShutdownHandler()) {
+          const health = await state.audit.nativeFetch(new URL("/global/health", expectedURL),
+            { signal: AbortSignal.timeout(15_000) })
+          assert(health.ok, `Owned health HTTP ${health.status}`)
+          const healthFact = await health.json() as { healthy?: boolean }
+          assert.equal(healthFact.healthy, true)
+          break
+        }
+      }
+      if (Date.now() > startupDeadline) throw new Error("OWNED_CLI_STARTUP_TIMEOUT")
+      await new Promise((resolve) => setTimeout(resolve, 250))
+    }
+    const preflight = await state.audit.preflight({ serverURL: expectedURL,
+      model: "openai/gpt-6.1-sol", inactivityMs: 180_000,
+      activity: SessionStatus.getActivity })
+    await publish("preflight-ready.json", { pid: process.pid, owner, occurrence, port, preflight,
+      maxRequests: 12, budgetScope: "preflight-and-ui-cumulative-same-process",
+      nextAction: "root-owned-real-ui", credentialCleanup: "parent-owned-after-physical-exit" })
+    if (!functionalSelectionPath) return
+    const handleDeadline = Date.now() + 600_000
+    let handle: { occurrence: string; sessionID: string; directory: string; inputMessageID: string; observedAt: string } | undefined
+    for (;;) {
+      try { handle = JSON.parse(await fs.readFile(functionalSelectionPath, "utf8")) }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
+      if (handle) break
+      if (state.audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
+      if (Date.now() > handleDeadline) throw new Error("FUNCTIONAL_HANDLE_ADMISSION_TIMEOUT")
+      await new Promise((resolve) => setTimeout(resolve, 500))
+    }
+    assert.equal(handle.occurrence, occurrence)
+    assert.equal(path.resolve(handle.directory), path.resolve(project))
+    assert(/^ses_[A-Za-z0-9_-]+$/.test(handle.sessionID))
+    assert(/^msg_[A-Za-z0-9_-]+$/.test(handle.inputMessageID))
+    const observedAt = Date.parse(handle.observedAt)
+    assert(Number.isFinite(observedAt) && observedAt <= Date.now(), "Actual accepted-input observation time required")
+    const functionalSnapshot = createAuditSnapshotPublisher(evidenceRoot, "streams")
+    let signature = ""
+    let lastActivity = observedAt
+    for (;;) {
+      const url = new URL(`/session/${encodeURIComponent(handle.sessionID)}/message`, expectedURL)
+      url.searchParams.set("directory", handle.directory)
+      const response = await state.audit.nativeFetch(url, { signal: AbortSignal.timeout(15_000) })
+      assert(response.ok, `Functional message HTTP ${response.status}`)
+      const messages = await response.json() as Array<{ info: { id: string; sessionID: string; role: string; parentID?: string; acceptedInputMessageIDs?: string[]; finish?: string; error?: unknown; time: { created?: number; completed?: number } }; parts: unknown[] }>
+      assert(Array.isArray(messages))
+      assert(messages.some((entry) => entry.info.id === handle.inputMessageID && entry.info.sessionID === handle.sessionID && entry.info.role === "user"), "Observed input must be an actual persisted user Message")
+      const observation: { execution: { type: string }; activity: unknown; occurrenceInput?: string } = await Instance.provide({ directory: handle.directory, fn: async () => ({
+        execution: SessionStatus.getExecution(handle.sessionID, handle.inputMessageID),
+        activity: SessionStatus.getActivity(handle.sessionID),
+        occurrenceInput: SessionStatus.executionOccurrence(handle.sessionID)?.inputMessageID,
+      }) })
+      const { execution, activity, occurrenceInput } = observation
+      assert.equal(occurrenceInput, handle.inputMessageID, "Functional execution occurrence must retain the actual observed input")
+      const next = JSON.stringify({ messages, execution, activity })
+      if (next !== signature) {
+        // First observation establishes a baseline; polling time cannot renew an old input.
+        if (signature) lastActivity = Date.now()
+        signature = next
+        functionalSnapshot(JSON.parse(redactor.redact(JSON.stringify({ observationKind: "actual-functional-input-watch", pid: process.pid, occurrence, sessionID: handle.sessionID,
+          inputMessageID: handle.inputMessageID, messageIDs: messages.map((entry) => entry.info.id),
+          execution, activity, lastActivityAt: new Date(lastActivity).toISOString(), observedAt: new Date().toISOString() }))))
+      }
+      if (state.audit.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
+      const replies = messages.filter((entry) => entry.info.role === "assistant" &&
+        entry.info.sessionID === handle.sessionID &&
+        (entry.info.acceptedInputMessageIDs ?? [entry.info.parentID]).includes(handle.inputMessageID))
+      const failed = replies.find((entry) => entry.info.error)
+      if (failed) throw new Error(`FUNCTIONAL_REPLY_FAILED: ${JSON.stringify(failed.info.error)}`)
+      const completed = replies.find((entry) => typeof entry.info.time.completed === "number" &&
+        Number.isFinite(entry.info.time.completed) && entry.info.time.completed > 0 && entry.info.finish === "stop" && !entry.info.error)
+      if (completed && execution.type !== "streaming" && execution.type !== "retry") {
+        await publish("functional-complete.json", { pid: process.pid, occurrence,
+          sessionID: handle.sessionID, inputMessageID: handle.inputMessageID,
+          finalAssistantMessageID: completed.info.id, finish: completed.info.finish,
+          completedAt: completed.info.time.completed, execution, activity,
+          qualification: "Exact real input reply settled; Root separately verifies actual Write/Read/disk/UI" })
+        break
+      }
+      if (Date.now() - lastActivity > 180_000) throw new Error("FUNCTIONAL_INPUT_INACTIVITY")
+      await new Promise((resolve) => setTimeout(resolve, 500))
+    }
+  })()
+  process.argv = [process.execPath, path.join(packageRoot, "src/index.ts"), "serve",
+    "--hostname", "127.0.0.1", "--port", String(port), "--project-dir", project,
+    "--startup-receipt", receiptPath, "--startup-occurrence", occurrence, "--log-level", "INFO"]
+  await Promise.all([import(source("src/index.ts")), monitor])
+} catch (error) {
+  await publish("failed.json", { pid: process.pid, occurrence,
+    error: error instanceof Error ? { name: error.name, message: error.message } : String(error),
+    actionRequired: "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+    credentialCleanup: "unverified-parent-owned" })
+  // Parent must watch this file. Do not wait forever silently or claim local finally cleanup.
+  process.stderr.write("Owned live Sol failed; parent must inspect sanitized failed.json and settle its process.\n")
+  process.exitCode = 1
+  // Keep listener alive for parent public shutdown; no process.kill, no credential deletion here.
+}

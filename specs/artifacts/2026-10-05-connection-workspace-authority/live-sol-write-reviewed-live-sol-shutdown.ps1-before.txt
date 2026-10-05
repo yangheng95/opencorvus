@@ -1,0 +1,35 @@
+$ErrorActionPreference='Stop'
+$taskRunRoot='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01'
+$taskEvidence='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority'
+$taskOwner=Get-Content -Raw -LiteralPath (Join-Path $taskRunRoot 'launch-owner.json') | ConvertFrom-Json
+$taskCurrent=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskOwner.owner.ProcessId)"
+if (!$taskCurrent -or ([DateTime]$taskCurrent.CreationDate).ToUniversalTime() -ne ([DateTime]$taskOwner.owner.CreationDate).ToUniversalTime() -or $taskCurrent.CommandLine -ne $taskOwner.owner.CommandLine) { throw 'Exact owned CLI occurrence changed; no shutdown sent' }
+$taskListeners=@(Get-NetTCPConnection -State Listen -LocalPort $taskOwner.port -ErrorAction Stop)
+if($taskListeners.Count -ne 1 -or $taskListeners[0].OwningProcess -ne $taskOwner.owner.ProcessId){throw 'Owned listener changed'}
+$taskAuditFile=Get-ChildItem -LiteralPath $taskOwner.evidence -Filter 'provider-*.json' | Sort-Object LastWriteTimeUtc | Select-Object -Last 1
+if(!$taskAuditFile){throw 'Actual Provider audit receipt missing'}
+Copy-Item -LiteralPath $taskAuditFile.FullName -Destination (Join-Path $taskEvidence 'live-sol-final-provider-audit.json') -ErrorAction Stop
+$taskResponse=Invoke-WebRequest -Method Post -Uri "http://127.0.0.1:$($taskOwner.port)/shutdown" -ContentType 'application/json' -Body '{}' -TimeoutSec 15
+[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');status=[int]$taskResponse.StatusCode;body=($taskResponse.Content|ConvertFrom-Json);owner=$taskOwner.owner;boundary='Admission only; physical settlement and paired cleanup follow separately';pageClosed=$true} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $taskEvidence 'live-sol-shutdown-admission.json') -Encoding utf8
+$taskDeadline=[DateTime]::UtcNow.AddSeconds(45)
+do {
+  $taskCurrent=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskOwner.owner.ProcessId)"
+  $taskSame=!!$taskCurrent -and ([DateTime]$taskCurrent.CreationDate).ToUniversalTime() -eq ([DateTime]$taskOwner.owner.CreationDate).ToUniversalTime() -and $taskCurrent.CommandLine -eq $taskOwner.owner.CommandLine
+  $taskListeners=@(Get-NetTCPConnection -State Listen -LocalPort $taskOwner.port -ErrorAction SilentlyContinue | Select-Object LocalAddress,LocalPort,OwningProcess)
+  if(!$taskSame -and !$taskListeners.Count){break}
+  Start-Sleep -Milliseconds 500
+}while([DateTime]::UtcNow -lt $taskDeadline)
+if($taskSame -or $taskListeners.Count){throw 'Owned physical settlement incomplete; preserve copied pair and inspect exact owner'}
+$taskOwnedData=[IO.Path]::GetFullPath((Join-Path $taskOwner.runtime 'data'))
+$taskExpectedData=[IO.Path]::GetFullPath((Join-Path $taskRunRoot 'runtime/data'))
+if($taskOwnedData -ne $taskExpectedData){throw 'Credential cleanup escaped exact owned directory'}
+$taskPair=@()
+foreach($taskName in @('auth.json','models.json')){
+  $taskPath=[IO.Path]::GetFullPath((Join-Path $taskOwnedData $taskName))
+  if([IO.Path]::GetDirectoryName($taskPath) -ne $taskExpectedData){throw 'Unexpected copied authority target'}
+  $taskBefore=Get-Item -LiteralPath $taskPath -ErrorAction Stop
+  Remove-Item -LiteralPath $taskPath -ErrorAction Stop
+  $taskPair += [ordered]@{path=$taskPath;copiedLength=$taskBefore.Length;removed=$true;presentAfter=(Test-Path -LiteralPath $taskPath)}
+}
+[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');expectedOwner=$taskOwner.owner;originalOccurrencePresent=$taskSame;samePIDReused=(!!$taskCurrent -and !$taskSame);current=($taskCurrent|Select-Object ProcessId,CreationDate,CommandLine);listeners=$taskListeners;physicalCompletion=$true;copiedPair=$taskPair;boundary='Exact original process exited and port released before paired copy deletion; no fabricated exit code, no user process control or source-credential write'}|ConvertTo-Json -Depth 8|Set-Content -LiteralPath (Join-Path $taskEvidence 'live-sol-physical-terminal-and-pair-cleanup.json') -Encoding utf8
+Write-Output 'Owned real Sol physical completion and both copied authority removals recorded.'

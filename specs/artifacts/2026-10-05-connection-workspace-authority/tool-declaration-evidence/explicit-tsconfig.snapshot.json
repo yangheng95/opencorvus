@@ -1,0 +1,15 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "include": [
+    "../packages/opencorvus/script/real-provider-audit.ts",
+    "../packages/opencorvus/script/native-provider-audit-plugin.ts",
+    "../packages/opencorvus/test/real-provider-audit.test.ts",
+    "../packages/opencorvus/src/**/*.d.ts"
+  ],
+  "compilerOptions": {
+    "types": [
+      "../packages/opencorvus/node_modules/@types/bun"
+    ]
+  },
+  "exclude": []
+}

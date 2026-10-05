@@ -1,0 +1,78 @@
+$ bun script/run-tests.ts test/capability/registry-file-authority.test.ts test/capability/task-routine-tools.test.ts test/task-owner-direct-delivery.test.ts
+[1/3] START test/capability/registry-file-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+44 |             config, sessionID: session.id, agentID: role, executionToolIDs: ids,
+45 |             harnessGrants: grants, permission: agent.permission,
+46 |           })
+47 |           const results = searchCapabilityCatalog(catalog.snapshot, catalog.caller, { kinds: ["tool"] })
+48 |             .filter((entry) => expected.includes(entry.ref.local_ref))
+49 |           expect(results.map((entry) => entry.ref.local_ref).sort()).toEqual(expected)
+                                                                          ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "apply_patch",
+-   "edit",
+-   "read",
+-   "write",
+- ]
++ []
+
+- Expected  - 6
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\registry-file-authority.test.ts:49:70)
+(fail) each interactive role materializes its complete authorized file tools across model identities [2852.49ms]
+
+ 0 pass
+ 1 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [5.02s]
+[1/3] DONE test/capability/registry-file-authority.test.ts exit=1 duration=5.23s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\registry-file-authority.test.ts
+[2/3] START test/capability/task-routine-tools.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task role routine authority > coding directly projects its granted built-in tools on every occurrence [4.67ms]
+(pass) Task role routine authority > chat directly projects its granted built-in tools on every occurrence [2.13ms]
+(pass) Task role routine authority > work directly projects its granted built-in tools on every occurrence [2.34ms]
+(pass) Task role routine authority > control directly projects its granted built-in tools on every occurrence [1.26ms]
+(pass) Task role routine authority > mission directly projects its granted built-in tools on every occurrence [1.86ms]
+(pass) Task role routine authority > delegated-worker keeps its authorized platform base on a new and bound occurrence [1.64ms]
+(pass) Task role routine authority > intent-analysis keeps its authorized platform base on a new and bound occurrence [0.58ms]
+(pass) Task role routine authority > requirements keeps its authorized platform base on a new and bound occurrence [0.55ms]
+(pass) Task role routine authority > architect keeps its authorized platform base on a new and bound occurrence [0.81ms]
+(pass) Task role routine authority > goal-workload-analyst keeps its authorized platform base on a new and bound occurrence [0.54ms]
+(pass) Task role routine authority > build keeps its authorized platform base on a new and bound occurrence [1.01ms]
+(pass) Task role routine authority > explore keeps its authorized platform base on a new and bound occurrence [0.58ms]
+(pass) Task role routine authority > deep-research keeps its authorized platform base on a new and bound occurrence [0.57ms]
+(pass) Task role routine authority > frontend-research keeps its authorized platform base on a new and bound occurrence [0.52ms]
+(pass) Task role routine authority > frontend-design keeps its authorized platform base on a new and bound occurrence [0.65ms]
+(pass) Task role routine authority > visual-qa keeps its authorized platform base on a new and bound occurrence [0.62ms]
+(pass) Task role routine authority > integrity keeps its authorized platform base on a new and bound occurrence [0.42ms]
+(pass) Task role routine authority > fact-check keeps its authorized platform base on a new and bound occurrence [0.71ms]
+(pass) Task role routine authority > retains exact managed Build and projected role owners through grant and visibility intersection [0.36ms]
+
+ 19 pass
+ 0 fail
+ 42 expect() calls
+Ran 19 tests across 1 file. [2.33s]
+[2/3] DONE test/capability/task-routine-tools.test.ts exit=0 duration=2.52s
+[3/3] START test/task-owner-direct-delivery.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Base root produces and repairs through write/edit, then the same independent reviewer verifies the change [14601.20ms]
+(pass) Base root produces and repairs through apply_patch, then the same independent reviewer verifies the change [13569.54ms]
+
+ 2 pass
+ 0 fail
+ 28 expect() calls
+Ran 2 tests across 1 file. [30.60s]
+OpenCorvus failed test files (1):
+[3/3] DONE test/task-owner-direct-delivery.test.ts exit=0 duration=30.82s
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\registry-file-authority.test.ts
+error: script "test" exited with code 1

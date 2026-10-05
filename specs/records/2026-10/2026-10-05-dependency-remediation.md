@@ -1,5 +1,13 @@
 # Dependency remediation: exact alerts, retained contracts and bounded upgrades
 
+## Compatible parser parent delivery continuation
+
+Root resolves only tauri-winrt-notification0.7.2→0.7.3 and plist1.8→1.10 through the existing exact public offline Cargo graph. Full617→616→615-node reconciliation retires only the two obsolete QuickXML parser versions/edges, with the retained wayland-scanner edge still pointing to0.41. No new patch source, manifest dependency or unrelated package update. Source analysis, Root admission, original resolver/build failures and limits remain in [the plan](../../artifacts/2026-10-05-dependency-remediation/quick-xml-compatible-parent-plan.md).
+
+The original isolated canonical build fails at missing MSVC linker; corrected same-launcher native03 initializes the installed compiler environment with named variables only and reruns the original whole checker. [Actual native03](../../artifacts/2026-10-05-dependency-remediation/quickxml-native-03/README.md) passes the full Windows build,12 selected production-library contracts and2 separate event-library contracts; actual notification0.7.3 optimized emission and packaged first-run4Sessions/2restart preserved are recorded. No actual native Toast pixels, macOS/Linux product execution or legitimate24-bit fixture is claimed.
+
+The first audit command reports advisory vulnerabilities0 but quietly omits the retained yank plane. Independent tool-source review shows JSON can suppress registry initialization failure; old actual init trace is unknown. Corrected direct-CARGO/public-sparse [full terminal+JSON audit](../../artifacts/2026-10-05-dependency-remediation/quickxml-rustsec-audit-02/README.md) positively updates the registry and restores uds_windows1.2.0 yanked warning. Four QuickXML vulnerability occurrences resolve;7unmaintained/2unsound/1yank remain, including GLib0.18.5 andRand0.7.3. Supervisor22dependencies has0 findings. All original outputs/settings and partial first audit are retained without ignore/category/target/stale/no-fetch/no-yanked filters. Npm/GLib/Rand/platform work continues, no release/tag/version is published.
+
 ## Stage5 Recall: compatible Rust repair and bounded implementation
 
 ### Final integration qualification authorization

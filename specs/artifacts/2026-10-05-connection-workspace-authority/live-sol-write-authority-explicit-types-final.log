@@ -1,0 +1,2 @@
+packages/opencorvus/test/capability/registry-file-authority.test.ts(45,36): error TS2322: Type '{ permission: string; pattern: string; action: "allow" | "deny"; }[] | undefined' is not assignable to type '{ permission: string; pattern: string; action: "allow" | "deny"; }[]'.
+  Type 'undefined' is not assignable to type '{ permission: string; pattern: string; action: "allow" | "deny"; }[]'.

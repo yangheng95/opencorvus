@@ -47,6 +47,7 @@ export async function settledWork<T, R>(input: {
   const iterator =
     Symbol.asyncIterator in input.items ? input.items[Symbol.asyncIterator]() : input.items[Symbol.iterator]()
   let nextIndex = 0
+  let firstItemFailure: { reason: unknown } | undefined
   const worker = async () => {
     while (true) {
       input.signal?.throwIfAborted()
@@ -59,6 +60,7 @@ export async function settledWork<T, R>(input: {
         result = { status: "fulfilled", value: await input.run(next.value, index) }
       } catch (reason) {
         result = { status: "rejected", reason }
+        if (!input.signal?.aborted || reason !== input.signal.reason) firstItemFailure ??= { reason }
       }
       if (input.onSettled) input.onSettled(result, index)
       else results[index] = result
@@ -67,8 +69,24 @@ export async function settledWork<T, R>(input: {
   // Keep the caller's Project/settlement scope alive until all admitted work
   // has unwound, including cancellation or a source read fault.
   const workers = await Promise.allSettled(Array.from({ length: input.concurrency }, worker))
-  await iterator.return?.()
   const faults = workers.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+  try {
+    await iterator.return?.()
+  } catch (reason) {
+    faults.push(reason)
+  }
+  const retainedItemFailure = firstItemFailure
+  const signal = input.signal
+  // A terminal discovery/cleanup failure prevents the ordinary result contract
+  // from reaching its caller. Retain one real item cause, not another history.
+  if (faults.length > 0 && retainedItemFailure &&
+    (!signal?.aborted || retainedItemFailure.reason !== signal.reason) &&
+    !faults.some((reason) => reason === retainedItemFailure.reason)) {
+    faults.push(retainedItemFailure.reason)
+  }
+  if (signal?.aborted && faults.length > 0 && faults.every((reason) => reason === signal.reason)) {
+    throw signal.reason
+  }
   if (faults.length === 1) throw faults[0]
   if (faults.length > 1) throw new AggregateError(faults, "Work discovery failed")
   return results

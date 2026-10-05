@@ -1,0 +1,12 @@
+{
+  "rustFixture": "source-only-not-compiled",
+  "lock": "saved-before-no-mutation",
+  "cleanup": "no-Cargo-runtime-started",
+  "typecheck": {
+    "exitCode": 0,
+    "command": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit -p .tmp-product-iteration/quickxml-parent-preparation/explicit-tsconfig.json"
+  },
+  "resolver": "root-review-required-two-offline-invocations",
+  "status": "prepared-not-executed",
+  "cargoUpdate": "not-run"
+}

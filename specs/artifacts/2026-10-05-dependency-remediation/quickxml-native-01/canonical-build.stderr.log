@@ -1,0 +1,84 @@
+$ bun run script/build-overlay.ts --cargo-message-format-json
+$ node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build --config vite.config.ts
+[33m../../node_modules/.bun/@radix-ui+react-direction@1.1.4+e14d3f224186685e/node_modules/@radix-ui/react-direction/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-direction@1.1.4+e14d3f224186685e/node_modules/@radix-ui/react-direction/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-hover-card@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-hover-card/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-hover-card@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-hover-card/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-popover@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-popover/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-popover@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-popover/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-dialog@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-dialog/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-dialog@1.1.23+7492c01c6988791b/node_modules/@radix-ui/react-dialog/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-dropdown-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-dropdown-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/sonner@2.0.7+7492c01c6988791b/node_modules/sonner/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/sonner@2.0.7+7492c01c6988791b/node_modules/sonner/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-portal@1.1.17+7492c01c6988791b/node_modules/@radix-ui/react-portal/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-portal@1.1.17+7492c01c6988791b/node_modules/@radix-ui/react-portal/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-popper@1.3.7+7492c01c6988791b/node_modules/@radix-ui/react-popper/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-popper@1.3.7+7492c01c6988791b/node_modules/@radix-ui/react-popper/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-presence@1.1.10+7492c01c6988791b/node_modules/@radix-ui/react-presence/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-presence@1.1.10+7492c01c6988791b/node_modules/@radix-ui/react-presence/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-focus-guards@1.1.6+e14d3f224186685e/node_modules/@radix-ui/react-focus-guards/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-focus-guards@1.1.6+e14d3f224186685e/node_modules/@radix-ui/react-focus-guards/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-dismissable-layer@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-dismissable-layer@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-focus-scope@1.1.16+7492c01c6988791b/node_modules/@radix-ui/react-focus-scope/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-focus-scope@1.1.16+7492c01c6988791b/node_modules/@radix-ui/react-focus-scope/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-menu/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-menu@2.1.24+7492c01c6988791b/node_modules/@radix-ui/react-menu/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-roving-focus@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-roving-focus/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-roving-focus@1.1.19+7492c01c6988791b/node_modules/@radix-ui/react-roving-focus/dist/index.mjs" was ignored.[39m
+[33m../../node_modules/.bun/@radix-ui+react-collection@1.1.15+7492c01c6988791b/node_modules/@radix-ui/react-collection/dist/index.mjs (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/.bun/@radix-ui+react-collection@1.1.15+7492c01c6988791b/node_modules/@radix-ui/react-collection/dist/index.mjs" was ignored.[39m
+[33m[plugin vite:reporter] 
+(!) D:/myhexin-local/opencorvus/packages/overlay/src/services/file-workbench.ts is dynamically imported by D:/myhexin-local/opencorvus/packages/overlay/src/services/workspace.ts but also statically imported by D:/myhexin-local/opencorvus/packages/overlay/src/components/ChatComposer.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/FileEditorPane.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/FileExplorerPanel.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/SideChatPanel.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/SourceParts.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/TaskDirBar.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/components/settings/ServerConnectionSettingsGroup.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/main.tsx, D:/myhexin-local/opencorvus/packages/overlay/src/services/connection-settings.ts, D:/myhexin-local/opencorvus/packages/overlay/src/services/events.ts, D:/myhexin-local/opencorvus/packages/overlay/src/services/workspace.ts, dynamic import will not move module into another chunk.
+[39m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+$ bun ./script/build.ts
+$ bun run script/build.ts --overlay-server
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling serde_core v1.0.228
+   Compiling zmij v1.0.21
+   Compiling serde v1.0.228
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.0
+   Compiling itoa v1.0.18
+error: linker `link.exe` not found
+  |
+  = note: program not found
+
+note: the msvc targets depend on the msvc linker but `link.exe` was not found
+
+note: please ensure that Visual Studio 2017 or later, or Build Tools for Visual Studio were installed with the Visual C++ option
+
+note: VS Code is a different product, and is not sufficient
+
+error: could not compile `windows_x86_64_msvc` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `serde_json` (build script) due to 1 previous error
+error: could not compile `quote` (build script) due to 1 previous error
+error: could not compile `zmij` (build script) due to 1 previous error
+error: could not compile `serde_core` (build script) due to 1 previous error
+error: could not compile `serde` (build script) due to 1 previous error
+error: could not compile `proc-macro2` (build script) due to 1 previous error
+210 |   if (windowsSupervisorHelper) return windowsSupervisorHelper
+211 |   if (process.platform !== "win32") {
+212 |     throw new Error("Windows process supervisor helper must be built on Windows")
+213 |   }
+214 |   const manifest = path.join(dir, "native", "process-supervisor", "Cargo.toml")
+215 |   await $`cargo build --manifest-path ${manifest} --release`
+                     ^
+ShellError: Failed with exit code 101
+ exitCode: 101,
+   stdout: "",
+   stderr: "   Compiling proc-macro2 v1.0.106\n   Compiling unicode-ident v1.0.24\n   Compiling quote v1.0.45\n   Compiling windows_x86_64_msvc v0.52.6\n   Compiling serde_core v1.0.228\n   Compiling zmij v1.0.21\n   Compiling serde v1.0.228\n   Compiling serde_json v1.0.150\n   Compiling memchr v2.8.0\n   Compiling itoa v1.0.18\nerror: linker `link.exe` not found\n  |\n  = note: program not found\n\nnote: the msvc targets depend on the msvc linker but `link.exe` was not found\n\nnote: please ensure that Visual Studio 2017 or later, or Build Tools for Visual Studio were installed with the Visual C++ option\n\nnote: VS Code is a different product, and is not sufficient\n\nerror: could not compile `windows_x86_64_msvc` (build script) due to 1 previous error\nwarning: build failed, waiting for other jobs to finish...\nerror: could not compile `serde_json` (build script) due to 1 previous error\nerror: could not compile `quote` (build script) due to 1 previous error\nerror: could not compile `zmij` (build script) due to 1 previous error\nerror: could not compile `serde_core` (build script) due to 1 previous error\nerror: could not compile `serde` (build script) due to 1 previous error\nerror: could not compile `proc-macro2` (build script) due to 1 previous error\n",
+
+      at new ShellPromise (75:16)
+      at BunShell2 (190:36)
+      at buildWindowsSupervisorHelper (D:\myhexin-local\opencorvus\packages\opencorvus\script\build.ts:215:9)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\script\build.ts:387:28)
+
+Bun v1.3.14 (Windows x64)
+error: script "build" exited with code 1
+ShellError: Failed with exit code 1
+ exitCode: 1,
+   stdout: "opencorvus script {\n  \"channel\": \"main\",\n  \"version\": \"0.0.0-main-202610051849\",\n  \"preview\": true,\n  \"release\": false,\n  \"team\": [\n    \"yangheng95\",\n    \"dependabot[bot]\",\n    \"github-actions[bot]\"\n  ]\n}\nGenerated expert-squad payload module\nGenerated expert-squad search localization module\nGenerated built-in Skill payload module\nGenerated built-in Mission Skill payload module\nGenerated Work Artifact qualification matrix\nEmbedded overlay UI files: 439\nbuilding opencorvus-overlay-server-windows-x64\n[package] opencorvus-overlay-server-windows-x64 executable compile: started\n[package] opencorvus-overlay-server-windows-x64 executable compile: completed in 8.62s\n[package] opencorvus-overlay-server-windows-x64 runtime payload: started\n[package] opencorvus-overlay-server-windows-x64 runtime payload: failed after 14.14s\n",
+   stderr: "$ bun run script/build.ts --overlay-server\n   Compiling proc-macro2 v1.0.106\n   Compiling unicode-ident v1.0.24\n   Compiling quote v1.0.45\n   Compiling windows_x86_64_msvc v0.52.6\n   Compiling serde_core v1.0.228\n   Compiling zmij v1.0.21\n   Compiling serde v1.0.228\n   Compiling serde_json v1.0.150\n   Compiling memchr v2.8.0\n   Compiling itoa v1.0.18\nerror: linker `link.exe` not found\n  |\n  = note: program not found\n\nnote: the msvc targets depend on the msvc linker but `link.exe` was not found\n\nnote: please ensure that Visual Studio 2017 or later, or Build Tools for Visual Studio were installed with the Visual C++ option\n\nnote: VS Code is a different product, and is not sufficient\n\nerror: could not compile `windows_x86_64_msvc` (build script) due to 1 previous error\nwarning: build failed, waiting for other jobs to finish...\nerror: could not compile `serde_json` (build script) due to 1 previous error\nerror: could not compile `quote` (build script) due to 1 previous error\nerror: could not compile `zmij` (build script) due to 1 previous error\nerror: could not compile `serde_core` (build script) due to 1 previous error\nerror: could not compile `serde` (build script) due to 1 previous error\nerror: could not compile `proc-macro2` (build script) due to 1 previous error\n210 |   if (windowsSupervisorHelper) return windowsSupervisorHelper\n211 |   if (process.platform !== \"win32\") {\n212 |     throw new Error(\"Windows process supervisor helper must be built on Windows\")\n213 |   }\n214 |   const manifest = path.join(dir, \"native\", \"process-supervisor\", \"Cargo.toml\")\n215 |   await $`cargo build --manifest-path ${manifest} --release`\n                     ^\nShellError: Failed with exit code 101\n exitCode: 101,\n   stdout: \"\",\n   stderr: \"   Compiling proc-macro2 v1.0.106\\n   Compiling unicode-ident v1.0.24\\n   Compiling quote v1.0.45\\n   Compiling windows_x86_64_msvc v0.52.6\\n   Compiling serde_core v1.0.228\\n   Compiling zmij v1.0.21\\n   Compiling serde v1.0.228\\n   Compiling serde_json v1.0.150\\n   Compiling memchr v2.8.0\\n   Compiling itoa v1.0.18\\nerror: linker `link.exe` not found\\n  |\\n  = note: program not found\\n\\nnote: the msvc targets depend on the msvc linker but `link.exe` was not found\\n\\nnote: please ensure that Visual Studio 2017 or later, or Build Tools for Visual Studio were installed with the Visual C++ option\\n\\nnote: VS Code is a different product, and is not sufficient\\n\\nerror: could not compile `windows_x86_64_msvc` (build script) due to 1 previous error\\nwarning: build failed, waiting for other jobs to finish...\\nerror: could not compile `serde_json` (build script) due to 1 previous error\\nerror: could not compile `quote` (build script) due to 1 previous error\\nerror: could not compile `zmij` (build script) due to 1 previous error\\nerror: could not compile `serde_core` (build script) due to 1 previous error\\nerror: could not compile `serde` (build script) due to 1 previous error\\nerror: could not compile `proc-macro2` (build script) due to 1 previous error\\n\",\n\n      at new ShellPromise (75:16)\n      at BunShell2 (190:36)\n      at buildWindowsSupervisorHelper (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\build.ts:215:9)\n      at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\build.ts:387:28)\n\nBun v1.3.14 (Windows x64)\nerror: script \"build\" exited with code 1\n",
+
+      at ShellPromise (unknown:75:16)
+      at BunShell2 (unknown:190:36)
+
+Bun v1.3.14 (Windows x64)
+error: script "build:overlay" exited with code 1

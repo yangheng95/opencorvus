@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "types": [
+      "../packages/opencorvus/node_modules/@types/bun"
+    ]
+  },
+  "files": [
+    "live-sol-cli-owned.ts",
+    "live-sol-physical-read.ts"
+  ]
+}

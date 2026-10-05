@@ -1,0 +1,61 @@
+{
+  "physicalTerminal": {
+    "chain": [
+      {
+        "expected": {
+          "ProcessId": 72232,
+          "ParentProcessId": 67760,
+          "CreationDate": "2026-10-06T01:51:58.974723+08:00",
+          "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+          "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+        },
+        "originalOccurrencePresent": false,
+        "samePIDReused": false
+      },
+      {
+        "expected": {
+          "ProcessId": 67760,
+          "ParentProcessId": 41276,
+          "CreationDate": "2026-10-06T01:51:58.963554+08:00",
+          "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+          "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\startup.json 17953 live-sol-write-01-51ab3cfb-bc50-4f3b-b7dd-3e41f924a6df C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\functional-selection.json"
+        },
+        "originalOccurrencePresent": false,
+        "samePIDReused": false
+      }
+    ],
+    "observedAtUtc": "2026-10-05T18:19:14.8882395Z",
+    "physicalCompletion": true,
+    "listeners": null,
+    "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write",
+    "pairedCleanupComplete": true,
+    "copiedPair": [
+      {
+        "presentAfter": false,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\runtime\\data\\auth.json",
+        "copiedLength": 2082
+      },
+      {
+        "presentAfter": false,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-write-01\\runtime\\data\\models.json",
+        "copiedLength": 9155406
+      }
+    ],
+    "occurrence": "live-sol-write-01-51ab3cfb-bc50-4f3b-b7dd-3e41f924a6df"
+  },
+  "ownersBefore": 2,
+  "ownersAfter": 0,
+  "messagesBefore": 6,
+  "messagesAfter": 6,
+  "messagesIdentical": true,
+  "inboxBefore": 0,
+  "inboxAfter": 0,
+  "taskBefore": 0,
+  "taskAfter": 0,
+  "retainedLeaseRowsBefore": 299,
+  "retainedLeaseRowsAfter": 299,
+  "runtimeErrors": [],
+  "boundary": "Exact idle/standby prompt release and preserved reply facts observed; historical lease rows are not all active leases, no active-delivery/restart claim"
+}

@@ -1,0 +1,28 @@
+$ bun script/run-tests.ts test/real-provider-audit.test.ts
+[1/1] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [8.82ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [6.51ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [5.50ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [7.40ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [4.43ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [5.59ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [29.40ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [0.81ms]
+(pass) copied OAuth access expires with an explicit authority error [0.19ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.49ms]
+(pass) the last authorized streaming request completes before the next is refused [0.50ms]
+(pass) the audit reports exact model and streaming contract errors [2.38ms]
+(pass) an exhausted cumulative balance returns the budget error [0.23ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.22ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [10.58ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.54ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.58ms]
+
+ 17 pass
+ 0 fail
+ 67 expect() calls
+Ran 17 tests across 1 file. [1295.00ms]
+[1/1] DONE test/real-provider-audit.test.ts exit=0 duration=1.48s

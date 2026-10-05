@@ -14,13 +14,6 @@ export namespace ToolRegistry {
     return builtInGlobalTools()
   }
 
-  function providerCompatible(toolID: string, modelID: string): boolean {
-    const usePatch = modelID.includes("gpt-") && !modelID.includes("oss") && !modelID.includes("gpt-4")
-    if (toolID === "apply_patch") return usePatch
-    if (toolID === "edit" || toolID === "write") return !usePatch
-    return true
-  }
-
   export async function ids() {
     return all().then((x) => x.map((t) => t.id))
   }
@@ -62,7 +55,7 @@ export namespace ToolRegistry {
           // skill surface after the rest of the turn tool set is known.
           if (isSkillFamilyToolID(t.id)) return false
 
-          return providerCompatible(t.id, model.modelID)
+          return true
         })
         .map(async (t) => {
           using _ = log.timeDebug(t.id)
@@ -93,7 +86,6 @@ export namespace ToolRegistry {
       }
       const expected = [...requestedSet]
         .filter((toolID) => builtInToolProviderState(toolID, providerEnvironment) === "available")
-        .filter((toolID) => providerCompatible(toolID, model.modelID))
         .sort()
       const actual = result.map((item) => item.id).sort()
       if (new Set(actual).size !== actual.length || JSON.stringify(actual) !== JSON.stringify(expected)) {
@@ -115,7 +107,7 @@ export namespace ToolRegistry {
     return materialize(model, undefined, undefined, config, { kind: "agent-template" })
   }
 
-  /** Resolve Provider-compatible registry identity without initializing definitions. */
+  /** Resolve available registry identity without initializing definitions. */
   export async function projectableRuntimeToolIDs(
     model: { providerID: string; modelID: string },
     _agent: SessionAgentRuntime,
@@ -128,7 +120,7 @@ export namespace ToolRegistry {
     for (const toolID of requestedToolIDs) {
       if (!known.has(toolID)) continue
       const state = builtInToolProviderState(toolID, environment)
-      if (state === "unavailable" || !providerCompatible(toolID, model.modelID)) continue
+      if (state === "unavailable") continue
       result.push(toolID)
     }
     return [...new Set(result)]

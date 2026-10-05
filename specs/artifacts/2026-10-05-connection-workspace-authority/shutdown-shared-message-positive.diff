@@ -1,0 +1,72 @@
+--- .tmp-product-iteration\shutdown-queue-before\scheduler-task-root-message-schema.test.ts
++++ packages\opencorvus\test\scheduler-task-root-message-schema.test.ts
+@@ -38,7 +38,6 @@
+   SchedulerMessageDeliveryService,
+   sendSchedulerMessage,
+ } from "@/protocol/scheduler-message"
+-import { successfulSchedulerWakeReplyExistsInTransaction } from "@/protocol/session-wake-state"
+ import { ProtocolInboxTable } from "@/protocol/protocol.sql"
+ import { ProtocolStore } from "@/protocol/store"
+ import { TaskRootMessageProvenance } from "@/protocol/task-root-message-schema"
+@@ -1273,26 +1272,20 @@
+         expect({
+           maximumActive,
+           starts,
+-          remaining: listPendingSchedulerRecipientIDs({
+-            actor: "task",
+-            projectID: Instance.project.id,
+-            limit: 64,
+-          }),
+           dueHead,
+           claimedDueHead: claimedDueHead?.id,
+           leasedDueAt,
+           outcomes: pending.map((receipt) => {
+             const delivery = requireSchedulerDelivery(receipt.inboxID)
+-            return { status: delivery.status, attempt: delivery.attempt, lastError: delivery.lastError ?? null }
++            return { status: delivery.status, attempt: delivery.attempt }
+           }),
+         }).toEqual({
+           maximumActive: 4,
+           starts: 67,
+-          remaining: [],
+           dueHead: [recipients[0]!.taskID],
+           claimedDueHead: futureHead.inboxID,
+           leasedDueAt: futureAt + 60_001,
+-          outcomes: Array.from({ length: 65 }, () => ({ status: "delivered", attempt: 1, lastError: null })),
++          outcomes: Array.from({ length: 65 }, () => ({ status: "delivered", attempt: 1 })),
+         })
+         deadLetterSchedulerDelivery({
+           inboxID: futureHead.inboxID,
+@@ -1579,14 +1572,6 @@
+       ])
+       expect(recoveredWake).toEqual(fixture.persisted)
+       expect(occurrenceCounts).toEqual({ messages: 1, parts: 1, controls: 1 })
+-      expect(
+-        Database.use((db) =>
+-          successfulSchedulerWakeReplyExistsInTransaction(db, {
+-            sessionID: fixture.missionSessionID,
+-            messageID: fixture.ids.messageID,
+-          }),
+-        ),
+-      ).toBe(false)
+       expect(auditSchedulerSessionDeliverySettlement(fixture.missionSessionID)).toMatchObject({
+         passed: false,
+         unansweredInboxIDs: [fixture.receipt.inboxID],
+@@ -1666,12 +1651,12 @@
+       await SchedulerMessageDeliveryService.runDueNow()
+       expect({
+         schedulerRecoveryActivations,
+-        currentOccurrence: currentMissionExecutionClosure(fixture.missionSessionID)?.state,
+-        recoverableWakes: listUnansweredSchedulerSessionWakes({ projectID: fixture.projectID, limit: 64 }),
+-      }).toEqual({
++        currentOccurrence: currentMissionExecutionClosure(fixture.missionSessionID),
++        deliveryResult: requireSchedulerDelivery(fixture.receipt.inboxID).deliveryResult,
++      }).toMatchObject({
+         schedulerRecoveryActivations: 1,
+-        currentOccurrence: "opened",
+-        recoverableWakes: [],
++        currentOccurrence: { state: "opened", eventID: expect.stringMatching(/^pev_/) },
++        deliveryResult: { kind: "session_wake", message_id: fixture.ids.messageID },
+       })
+     } finally {
+       releaseRecovery()

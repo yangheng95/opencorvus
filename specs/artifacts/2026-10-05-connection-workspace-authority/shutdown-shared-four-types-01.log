@@ -1,0 +1,26 @@
+packages/opencorvus/test/scheduler-automation-target-revision.test.ts(47,5): error TS2322: Type '(this: Server<undefined>, request: Request) => Promise<Response | Promise<Response>>' is not assignable to type '((this: Server<undefined>, req: Request, server: Server<undefined>) => MaybePromise<Response>) | ((this: Server<...>, req: Request, server: Server<...>) => MaybePromise<...>) | ((this: Server<...>, req: Request, server: Server<...>) => MaybePromise<...>) | ((this: Server<...>, req: Request, server: Server<...>) => M...'.
+  Type '(this: Server<undefined>, request: Request) => Promise<Response | Promise<Response>>' is not assignable to type '(this: Server<undefined>, req: Request, server: Server<undefined>) => MaybePromise<Response>'.
+    Type 'Promise<Response | Promise<Response>>' is not assignable to type 'MaybePromise<Response>'.
+      Type 'Promise<Response | Promise<Response>>' is not assignable to type 'Promise<Response>'.
+        Type 'Response | Promise<Response>' is not assignable to type 'Response'.
+          Type 'Promise<Response>' is missing the following properties from type 'Response': headers, ok, redirected, status, and 12 more.
+packages/opencorvus/test/scheduler-automation-target-revision.test.ts(136,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { revisionID: string; projectID: string; directory: string; }): void', gave the following error.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+  Overload 2 of 2, '(expected: NoInfer<{ revisionID: string; projectID: string; directory: string; }>): void', gave the following error.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(352,7): error TS2322: Type 'Promise<Promise<void>>' is not assignable to type 'Promise<void>'.
+  Type 'Promise<void>' is not assignable to type 'void'.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(423,7): error TS2322: Type 'Promise<Promise<void>>' is not assignable to type 'Promise<void>'.
+  Type 'Promise<void>' is not assignable to type 'void'.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(739,11): error TS2353: Object literal may only specify known properties, and 'mode' does not exist in type '{ id: string; sessionID: string; author: string; role: "assistant"; time: { created: number; completed?: number | undefined; }; parentID: string; modelID: string; providerID: string; agent: string; ... 14 more ...; activationID?: string | undefined; }'.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(1472,88): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { inboxID: string; sessionID: string; messageID: string; openedEventID: string; }[]): void', gave the following error.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+  Overload 2 of 2, '(expected: NoInfer<{ inboxID: string; sessionID: string; messageID: string; openedEventID: string; }[]>): void', gave the following error.
+    Type 'string | null' is not assignable to type 'string'.
+      Type 'null' is not assignable to type 'string'.
+packages/opencorvus/test/scheduler-task-root-message-schema.test.ts(1514,9): error TS2353: Object literal may only specify known properties, and 'mode' does not exist in type '{ id: string; sessionID: string; author: string; role: "assistant"; time: { created: number; completed?: number | undefined; }; parentID: string; modelID: string; providerID: string; agent: string; ... 14 more ...; activationID?: string | undefined; }'.

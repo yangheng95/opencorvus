@@ -1,0 +1,46 @@
+[
+  {
+    "side": "=>",
+    "line": "    plist: packageID(\"plist\", \"1.10.0\"),"
+  },
+  {
+    "side": "=>",
+    "line": "    {"
+  },
+  {
+    "side": "=>",
+    "line": "      alias: \"plist\","
+  },
+  {
+    "side": "=>",
+    "line": "      name: \"plist\","
+  },
+  {
+    "side": "=>",
+    "line": "      target: \"plist\","
+  },
+  {
+    "side": "=>",
+    "line": "      version: \"1.10.0\","
+  },
+  {
+    "side": "=>",
+    "line": "      role: \"runtime\","
+  },
+  {
+    "side": "=>",
+    "line": "      features: [\"default\", \"serde\"],"
+  },
+  {
+    "side": "=>",
+    "line": "    },"
+  },
+  {
+    "side": "=>",
+    "line": "      \"Original six Tauri/KeyValueMap/PHF cases plus real authenticated TLS13 data, typed key-boundary error/alert, typed anyhow mutation and actual plist XML/binary/serde/Tauri association contracts\","
+  },
+  {
+    "side": "<=",
+    "line": "      \"Original six Tauri/KeyValueMap/PHF cases plus real authenticated TLS13 data, typed key-boundary error/alert and typed anyhow mutation\","
+  }
+]

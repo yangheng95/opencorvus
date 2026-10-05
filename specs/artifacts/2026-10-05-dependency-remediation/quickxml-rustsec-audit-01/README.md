@@ -1,0 +1,3 @@
+# Advisory-complete command with incomplete yank coverage
+
+Original raw commands/results use full default audit settings and report0 advisory vulnerabilities,7 unmaintained/2unsound warnings, supervisor22 dependencies with0 findings. They omit the retained uds_windows1.2.0 yank. JSON quiet-mode index initialization can silently skip that plane; its actual initial failure trace is unknown. These original outputs are retained as incomplete yank qualification, not a clean dependency result. See [independent boundary review](../quickxml-rustsec-yanked-boundary-review.md) and the [corrected full audit](../quickxml-rustsec-audit-02/README.md).
