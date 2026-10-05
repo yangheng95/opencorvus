@@ -1,0 +1,45 @@
+diff --git a/packages/overlay/src/components/ui/CodeEditor.tsx b/packages/overlay/src/components/ui/CodeEditor.tsx
+index 7db758cd..b3ff1ccc 100644
+--- a/packages/overlay/src/components/ui/CodeEditor.tsx
++++ b/packages/overlay/src/components/ui/CodeEditor.tsx
+@@ -1,4 +1,4 @@
+-import { Compartment, EditorSelection } from "@codemirror/state"
++import { Compartment, EditorSelection, EditorState } from "@codemirror/state"
+ import { basicSetup, EditorView } from "codemirror"
+ import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
+ import { t } from "../../utils/i18n"
+@@ -39,6 +39,12 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
+   let applyingExternalValue = false
+   let revealedIdentity = ""
+   const languageCompartment = new Compartment()
++  const readOnlyCompartment = new Compartment()
++  const readOnlyExtensions = (readOnly: boolean) => [
++    EditorView.editable.of(!readOnly),
++    EditorState.readOnly.of(readOnly),
++    EditorView.contentAttributes.of({ "aria-readonly": readOnly ? "true" : "false" }),
++  ]
+   const [languageName, setLanguageName] = createSignal("")
+   const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
+   const [languageRetry, setLanguageRetry] = createSignal(0)
+@@ -93,8 +99,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
+         ...overlayCodeEditorExtensions(),
+         languageCompartment.of([]),
+         EditorView.lineWrapping,
+-        EditorView.editable.of(!local.readOnly),
+-        EditorView.contentAttributes.of({ "aria-readonly": local.readOnly ? "true" : "false" }),
++        readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
+         EditorView.contentAttributes.of({ "aria-label": local.ariaLabel }),
+         EditorView.updateListener.of((update) => {
+           if (!update.docChanged || applyingExternalValue) return
+@@ -105,6 +110,11 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
+     revealLineRange()
+   })
+ 
++  createEffect(() => {
++    const readOnly = !!local.readOnly
++    view?.dispatch({ effects: readOnlyCompartment.reconfigure(readOnlyExtensions(readOnly)) })
++  })
++
+   createEffect(() => {
+     const path = local.path
+     void languageRetry()

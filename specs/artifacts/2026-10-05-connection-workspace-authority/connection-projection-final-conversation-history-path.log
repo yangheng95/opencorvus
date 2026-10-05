@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\conversation-history-path.test.ts:
+(pass) conversation history path > projects the Task history route from the shared cursor [0.21ms]
+(pass) conversation history path > projects the Session history route from the shared cursor [0.13ms]
+
+ 2 pass
+ 0 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [992.00ms]

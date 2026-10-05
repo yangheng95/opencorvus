@@ -31,6 +31,7 @@ import type {
 } from "@opencorvus-ai/sdk"
 import { appStore } from "../store/app"
 import { apiJson, serverSettledRequest } from "./api"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { patchSessionConfig, updateConfig, type SessionConfigResponse } from "./config"
 
 export type ExpertSquadCatalog = ExpertSquadCatalogResponse
@@ -43,11 +44,11 @@ export type ExpertSquadDetail = ExpertSquadSettingsSurface["selected"]
 export type ExpertSquadConfiguration = ExpertSquadConfigurationGetResponse
 export type ExpertSquadConfigurationUpdates = NonNullable<ExpertSquadConfigurationUpdateData["body"]>["updates"]
 export type ExpertSquadOption = ExpertSquadCatalogPage["entries"][number]
-export type ExpertSquadCatalogScope = ExpertSquadCatalog["scope"]
+export type ExpertSquadCatalogScope = ExpertSquadCatalog["scope"] & { authority?: ApiAuthority }
 
-export type ExpertSquadImportFolderInput = ExpertSquadImportFolderData["body"] & { directory: string }
+export type ExpertSquadImportFolderInput = ExpertSquadImportFolderData["body"] & { directory: string; authority?: ApiAuthority }
 
-export type ExpertSquadImportFileInput = ExpertSquadImportFileData["body"] & { directory: string }
+export type ExpertSquadImportFileInput = ExpertSquadImportFileData["body"] & { directory: string; authority?: ApiAuthority }
 
 export type ExpertSquadImportResult = ExpertSquadImportFolderResponse | ExpertSquadImportFileResponse
 
@@ -60,10 +61,10 @@ export type ExpertSquadMarketInstallResult = ExpertSquadInstallPayloadResponse
 export type ExpertSquadUpdateSource = NonNullable<ExpertSquadUpdateData["body"]>["source"]
 export type ExpertSquadUpdateResult = ExpertSquadUpdateResponse
 
-export async function repairObsoleteBundledExpertSquads(directory: string): Promise<ExpertSquadRepairBundledResponse> {
+export async function repairObsoleteBundledExpertSquads(directory: string, authority = captureApiAuthority()): Promise<ExpertSquadRepairBundledResponse> {
   return apiJson<ExpertSquadRepairBundledResponse>(
     directoryScopedPath("expert-squad/repair-bundled", directory, "repairObsoleteBundledExpertSquads"),
-    serverSettledRequest({ method: "POST", body: JSON.stringify({}) }),
+    serverSettledRequest({ method: "POST", body: JSON.stringify({}), authority }),
   )
 }
 export type ExpertSquadEvolutionHistory = ExpertSquadEvolutionHistoryResponse
@@ -115,7 +116,12 @@ export type ExpertSquadUninstallReceipt = ExpertSquadUninstallResult & { directo
 const [expertSquadCatalogRefreshTokenValue, setExpertSquadCatalogRefreshTokenValue] = createSignal(0)
 const [expertSquadUninstallReceiptValue, setExpertSquadUninstallReceiptValue] =
   createSignal<ExpertSquadUninstallReceipt | null>(null)
-let pendingExpertSquadCatalogLoad: { key: string; promise: Promise<ExpertSquadCatalog> } | null = null
+let pendingExpertSquadCatalogLoad: { key: string; promise: Promise<ExpertSquadCatalog>; authority: ApiAuthority } | null = null
+
+export function retireExpertSquadProjection(): void {
+  pendingExpertSquadCatalogLoad = null
+  setExpertSquadUninstallReceiptValue(null)
+}
 
 export function expertSquadCatalogRefreshToken(): number {
   return expertSquadCatalogRefreshTokenValue()
@@ -156,17 +162,20 @@ function errorMessage(error: unknown): string {
 }
 
 export async function loadExpertSquadCatalog(scope: ExpertSquadCatalogScope): Promise<ExpertSquadCatalog> {
+  const authority = scope.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   if (!appStore.connected) {
     throw new Error("Cannot load expert squads while disconnected")
   }
   const path = expertSquadCatalogPath(scope)
   const key = path
-  if (pendingExpertSquadCatalogLoad?.key === key) return await pendingExpertSquadCatalogLoad.promise
-  const promise = apiJson(path) as Promise<ExpertSquadCatalog>
-  pendingExpertSquadCatalogLoad = { key, promise }
+  if (pendingExpertSquadCatalogLoad?.key === key && isApiAuthorityCurrent(pendingExpertSquadCatalogLoad.authority)) return await pendingExpertSquadCatalogLoad.promise
+  const promise = apiJson<ExpertSquadCatalog>(path, { authority })
+  pendingExpertSquadCatalogLoad = { key, promise, authority }
   try {
     return await promise
   } catch (error) {
+    if (error instanceof ApiAuthorityChangedError) throw error
     throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
   } finally {
     if (pendingExpertSquadCatalogLoad?.promise === promise) pendingExpertSquadCatalogLoad = null
@@ -178,6 +187,7 @@ export async function loadExpertSquadSettings(
   id: string,
   installationScope: ExpertSquadInstallationScope | "built_in",
   namespace?: string,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadSettingsSurface> {
   if (!appStore.connected) throw new Error("Cannot load expert squad settings while disconnected")
   const params = new URLSearchParams({ directory: directory.trim() })
@@ -187,13 +197,15 @@ export async function loadExpertSquadSettings(
   if (namespace) params.set("namespace", namespace)
   const path = `expert-squad/settings/detail?${params.toString()}`
   try {
-    return await apiJson<ExpertSquadSettingsSurface>(path)
+    return await apiJson<ExpertSquadSettingsSurface>(path, { authority })
   } catch (error) {
+    if (error instanceof ApiAuthorityChangedError) throw error
     throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
   }
 }
 
 export async function inspectExpertSquad(input: {
+  authority?: ApiAuthority
   directory: string
   id: string
   installationScope?: ExpertSquadInstallationScope | "built_in"
@@ -205,10 +217,11 @@ export async function inspectExpertSquad(input: {
   if (input.installationScope) params.set("installationScope", input.installationScope)
   if (input.namespace) params.set("namespace", input.namespace)
   if (input.workflowCursor) params.set("workflowCursor", input.workflowCursor)
-  return await apiJson<ExpertSquadInspection>(`expert-squad/inspect?${params.toString()}`)
+  return await apiJson<ExpertSquadInspection>(`expert-squad/inspect?${params.toString()}`, { authority: input.authority })
 }
 
 export async function searchExpertSquads(input: {
+  authority?: ApiAuthority
   directory: string
   view?: "effective" | "installations"
   query?: string
@@ -225,32 +238,34 @@ export async function searchExpertSquads(input: {
   if (!params.get("directory")) throw new Error("searchExpertSquads: directory is required")
   if (input.productPillar) params.set("productPillar", input.productPillar)
   if (input.cursor) params.set("cursor", input.cursor)
-  return await apiJson<ExpertSquadCatalogPage>(`expert-squad/search?${params.toString()}`)
+  return await apiJson<ExpertSquadCatalogPage>(`expert-squad/search?${params.toString()}`, { authority: input.authority })
 }
 
-export async function loadExpertSquadInventoryStatus(directory: string): Promise<ExpertSquadInventoryStatus> {
+export async function loadExpertSquadInventoryStatus(directory: string, authority = captureApiAuthority()): Promise<ExpertSquadInventoryStatus> {
   const path = directoryScopedPath("expert-squad/inventory-status", directory, "loadExpertSquadInventoryStatus")
-  return await apiJson<ExpertSquadInventoryStatus>(path)
+  return await apiJson<ExpertSquadInventoryStatus>(path, { authority })
 }
 
 export async function loadExpertSquadDiagnostics(
   directory: string,
-  input: { cursor?: string; limit?: number } = {},
+  input: { cursor?: string; limit?: number; authority?: ApiAuthority } = {},
 ): Promise<ExpertSquadDiagnosticsPage> {
   const params = new URLSearchParams({ directory: directory.trim(), limit: String(input.limit ?? 20) })
   if (!params.get("directory")) throw new Error("loadExpertSquadDiagnostics: directory is required")
   if (input.cursor) params.set("cursor", input.cursor)
-  return await apiJson<ExpertSquadDiagnosticsPage>(`expert-squad/diagnostics?${params.toString()}`)
+  return await apiJson<ExpertSquadDiagnosticsPage>(`expert-squad/diagnostics?${params.toString()}`, { authority: input.authority })
 }
 
 export async function loadExpertSquadConfiguration(
   directory: string,
   id: string,
   installationScope: ExpertSquadInstallationScope,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadConfiguration> {
   const path = directoryScopedPath("expert-squad/configuration", directory, "loadExpertSquadConfiguration")
   return (await apiJson(
     `${path}&id=${encodeURIComponent(id)}&installationScope=${encodeURIComponent(installationScope)}`,
+    { authority },
   )) as ExpertSquadConfiguration
 }
 
@@ -259,10 +274,12 @@ export async function updateExpertSquadConfiguration(
   id: string,
   installationScope: ExpertSquadInstallationScope,
   updates: ExpertSquadConfigurationUpdates,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadConfigurationUpdateResponse> {
   return (await apiJson(
     directoryScopedPath("expert-squad/configuration", directory, "updateExpertSquadConfiguration"),
     {
+      authority,
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, installationScope, updates }),
@@ -273,8 +290,9 @@ export async function updateExpertSquadConfiguration(
 export async function setProjectExpertSquadActive(
   expertSquadID: string,
   directory: string,
-  options: { isCurrentDirectory?: (directory: string) => boolean } = {},
+  options: { isCurrentDirectory?: (directory: string) => boolean; authority?: ApiAuthority } = {},
 ): Promise<any> {
+  const authority = options.authority ?? captureApiAuthority()
   const saved = await updateConfig(
     (current) => {
       const promptProfile =
@@ -286,9 +304,9 @@ export async function setProjectExpertSquadActive(
         active: expertSquadID,
       }
     },
-    { directory, isCurrentDirectory: options.isCurrentDirectory },
+    { directory, isCurrentDirectory: options.isCurrentDirectory, authority },
   )
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return saved
 }
 
@@ -296,27 +314,31 @@ export async function setSessionExpertSquadActive(
   sessionID: string,
   expertSquadID: string,
   directory: string,
+  authority = captureApiAuthority(),
 ): Promise<SessionConfigResponse> {
-  const saved = await patchSessionConfig({ sessionID, directory, diff: { prompt_profile: { active: expertSquadID } } })
-  markExpertSquadCatalogStale()
+  const saved = await patchSessionConfig({ sessionID, directory, authority, diff: { prompt_profile: { active: expertSquadID } } })
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return saved
 }
 
 export async function clearSessionExpertSquadOverride(
   sessionID: string,
   directory: string,
+  authority = captureApiAuthority(),
 ): Promise<SessionConfigResponse> {
-  const saved = await patchSessionConfig({ sessionID, directory, diff: { prompt_profile: null } })
-  markExpertSquadCatalogStale()
+  const saved = await patchSessionConfig({ sessionID, directory, authority, diff: { prompt_profile: null } })
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return saved
 }
 
 export async function importExpertSquadFolder(input: ExpertSquadImportFolderInput): Promise<ExpertSquadImportResult> {
+  const authority = input.authority ?? captureApiAuthority()
   const sourceDirectory = input.sourceDirectory.trim()
   if (!sourceDirectory) throw new Error("importExpertSquadFolder: sourceDirectory is required")
   const result = (await apiJson(
     directoryScopedPath("expert-squad/import-folder", input.directory, "importExpertSquadFolder"),
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -326,16 +348,18 @@ export async function importExpertSquadFolder(input: ExpertSquadImportFolderInpu
       }),
     },
   )) as ExpertSquadImportResult
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return result
 }
 
 export async function importExpertSquadArchive(input: ExpertSquadImportFileInput): Promise<ExpertSquadImportResult> {
+  const authority = input.authority ?? captureApiAuthority()
   const archiveBase64 = input.archiveBase64.trim()
   if (!archiveBase64) throw new Error("importExpertSquadArchive: archiveBase64 is required")
   const result = (await apiJson(
     directoryScopedPath("expert-squad/import-file", input.directory, "importExpertSquadArchive"),
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -346,24 +370,26 @@ export async function importExpertSquadArchive(input: ExpertSquadImportFileInput
       }),
     },
   )) as ExpertSquadImportResult
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return result
 }
 
-export async function releaseExpertSquadPayload(directory: string): Promise<ExpertSquadReleasePayloadResult> {
+export async function releaseExpertSquadPayload(directory: string, authority = captureApiAuthority()): Promise<ExpertSquadReleasePayloadResult> {
   const result = (await apiJson(
     directoryScopedPath("expert-squad/release-payload", directory, "releaseExpertSquadPayload"),
     {
+      authority,
       method: "POST",
     },
   )) as ExpertSquadReleasePayloadResult
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return result
 }
 
 export async function loadExpertSquadMarket(
   directory: string,
   input: {
+    authority?: ApiAuthority
     query?: string
     availability?: "all" | "available" | "installed"
     productPillar?: "code" | "work"
@@ -381,33 +407,36 @@ export async function loadExpertSquadMarket(
   if (input.cursor) params.set("cursor", input.cursor)
   const path = `expert-squad/market?${params.toString()}`
   try {
-    return await apiJson<ExpertSquadMarketPage>(path)
+    return await apiJson<ExpertSquadMarketPage>(path, { authority: input.authority })
   } catch (error) {
+    if (error instanceof ApiAuthorityChangedError) throw error
     throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
   }
 }
 
-export async function loadExpertSquadMarketDetail(directory: string, id: string): Promise<ExpertSquadMarketItem> {
+export async function loadExpertSquadMarketDetail(directory: string, id: string, authority = captureApiAuthority()): Promise<ExpertSquadMarketItem> {
   const params = new URLSearchParams({ directory: directory.trim(), id: id.trim() })
-  return await apiJson<ExpertSquadMarketItem>(`expert-squad/market/detail?${params.toString()}`)
+  return await apiJson<ExpertSquadMarketItem>(`expert-squad/market/detail?${params.toString()}`, { authority })
 }
 
 export async function installExpertSquadMarketPackage(
   directory: string,
   expertSquadID: string,
   installationScope: ExpertSquadInstallationScope,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadMarketInstallResult> {
   const id = expertSquadID.trim()
   if (!id) throw new Error("installExpertSquadMarketPackage: expertSquadID is required")
   const result = (await apiJson(
     directoryScopedPath("expert-squad/install-payload", directory, "installExpertSquadMarketPackage"),
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, installationScope }),
     },
   )) as ExpertSquadMarketInstallResult
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return result
 }
 
@@ -417,15 +446,17 @@ export async function updateExpertSquadPackage(
   installationScope: ExpertSquadInstallationScope,
   source: ExpertSquadUpdateSource,
   expectedCurrentPackageDigest: string,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadUpdateResult> {
   const id = expertSquadID.trim()
   if (!id) throw new Error("updateExpertSquadPackage: expertSquadID is required")
   const result = (await apiJson(directoryScopedPath("expert-squad/update", directory, "updateExpertSquadPackage"), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id, installationScope, source, expectedCurrentPackageDigest }),
   })) as ExpertSquadUpdateResult
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return result
 }
 
@@ -433,19 +464,23 @@ export async function uninstallExpertSquadPackage(
   directory: string,
   expertSquadID: string,
   installationScope: ExpertSquadInstallationScope,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadUninstallResult> {
   const id = expertSquadID.trim()
   if (!id) throw new Error("uninstallExpertSquadPackage: expertSquadID is required")
   const result = (await apiJson(
     directoryScopedPath("expert-squad/uninstall", directory, "uninstallExpertSquadPackage"),
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, installationScope, replacementID: BASE_EXPERT_SQUAD_ID }),
     },
   )) as ExpertSquadUninstallResult
-  markExpertSquadCatalogStale()
-  setExpertSquadUninstallReceiptValue({ ...result, directory: directory.trim() })
+  if (isApiAuthorityCurrent(authority)) {
+    markExpertSquadCatalogStale()
+    setExpertSquadUninstallReceiptValue({ ...result, directory: directory.trim() })
+  }
   return result
 }
 
@@ -453,10 +488,12 @@ export async function exportExpertSquadArchive(
   directory: string,
   expertSquadID: string,
   installationScope: ExpertSquadInstallationScope,
+  authority = captureApiAuthority(),
 ): Promise<ExpertSquadExportResult> {
   const id = expertSquadID.trim()
   if (!id) throw new Error("exportExpertSquadArchive: expertSquadID is required")
   return (await apiJson(directoryScopedPath("expert-squad/export", directory, "exportExpertSquadArchive"), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id, installationScope }),
@@ -464,6 +501,7 @@ export async function exportExpertSquadArchive(
 }
 
 export async function loadExpertSquadEvolutionHistory(input: {
+  authority?: ApiAuthority
   directory: string
   namespace: string
   id: string
@@ -488,10 +526,11 @@ export async function loadExpertSquadEvolutionHistory(input: {
   }
   const params = new URLSearchParams()
   for (const [key, value] of Object.entries(query)) params.set(key, String(value))
-  return await apiJson<ExpertSquadEvolutionHistory>(`expert-squad/evolution-history?${params.toString()}`)
+  return await apiJson<ExpertSquadEvolutionHistory>(`expert-squad/evolution-history?${params.toString()}`, { authority: input.authority })
 }
 
 export async function loadExpertSquadEvolutionHistoryDetail(input: {
+  authority?: ApiAuthority
   directory: string
   namespace: string
   id: string
@@ -517,6 +556,7 @@ export async function loadExpertSquadEvolutionHistoryDetail(input: {
   return await apiJson<ExpertSquadEvolutionHistoryDetail>(
     `expert-squad/evolution-history/detail?${new URLSearchParams({ directory }).toString()}`,
     {
+      authority: input.authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -525,12 +565,14 @@ export async function loadExpertSquadEvolutionHistoryDetail(input: {
 }
 
 export async function executeExpertSquadEvolutionMutation(input: {
+  authority?: ApiAuthority
   directory: string
   taskID: string
   sessionID: string
   confirmationText: string
   intent: ExpertSquadEvolutionMutationIntent
 }): Promise<ExpertSquadEvolutionMutationResult> {
+  const authority = input.authority ?? captureApiAuthority()
   const directory = input.directory.trim()
   if (!directory) throw new Error("executeExpertSquadEvolutionMutation: directory is required")
   const authorizationBody: NonNullable<ExpertSquadEvolutionAuthorizationData["body"]> = {
@@ -542,6 +584,7 @@ export async function executeExpertSquadEvolutionMutation(input: {
   const authorization = await apiJson<ExpertSquadEvolutionAuthorizationResponse>(
     `expert-squad/evolution-authorization?${new URLSearchParams({ directory }).toString()}`,
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(authorizationBody),
@@ -554,11 +597,12 @@ export async function executeExpertSquadEvolutionMutation(input: {
   const result = await apiJson<ExpertSquadEvolutionMutationResult>(
     `expert-squad/evolution-mutation?${new URLSearchParams({ directory }).toString()}`,
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(mutationBody),
     },
   )
-  markExpertSquadCatalogStale()
+  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
   return result
 }

@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\git-init-current.test.ts:
+(pass) Git initialization utilities > startup primitive only initializes through the canonical endpoint [1.64ms]
+(pass) Git initialization utilities > posts init-git even when VCS metadata has not loaded yet [0.91ms]
+(pass) Git initialization utilities > preserves explicit caller cancellation while waiting for Git initialization settlement [0.44ms]
+
+ 3 pass
+ 0 fail
+ 19 expect() calls
+Ran 3 tests across 1 file. [1067.00ms]

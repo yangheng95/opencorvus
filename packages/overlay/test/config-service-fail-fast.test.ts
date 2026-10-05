@@ -2,12 +2,13 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { configure } from "../src/services/api"
 import { patchConfig } from "../src/services/config"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { appStore, setAppStore } from "../src/store/app"
 
 function fakeTransport(responder: (req: TransportRequest) => TransportResponse<unknown>): HostTransport {
   return {
     kind: "tauri",
+    capabilities: HOST_CAPABILITIES.tauri,
     async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
       return responder(req) as TransportResponse<T>
     },
@@ -27,7 +28,7 @@ describe("config service fail-fast writes", () => {
     setAppStore({ connected: false, config: null })
   })
 
-  test("patchConfig rejects while disconnected instead of returning null", async () => {
+  test("disconnected config write exposes its explicit failure and retains the current config", async () => {
     setAppStore({ connected: false, config: { model: "openai/old" } })
 
     await expect(patchConfig({ model: "openai/new" })).rejects.toThrow("Cannot patch config while disconnected")
@@ -35,7 +36,7 @@ describe("config service fail-fast writes", () => {
     expect(appStore.config).toEqual({ model: "openai/old" })
   })
 
-  test("patchConfig rejects backend failures without mutating the config store", async () => {
+  test("backend503 config write preserves its exact error contract and current config", async () => {
     const requests: TransportRequest[] = []
     configure({ directory: "C:/Users/example/project" })
     setAppStore({ connected: true, config: { model: "openai/old" } })

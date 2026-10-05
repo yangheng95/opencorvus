@@ -1,0 +1,31 @@
+{
+  "time": "2026-10-05T12:49:49.2372139Z",
+  "side": "b",
+  "states": [
+    {
+      "role": "listener",
+      "pid": 61108,
+      "expectedCreationDate": "2026-10-05T20:26:08.549027+08:00",
+      "present": false,
+      "current": null
+    },
+    {
+      "role": "parent",
+      "pid": 69760,
+      "expectedCreationDate": "2026-10-05T20:26:08.501137+08:00",
+      "present": false,
+      "current": null
+    },
+    {
+      "role": "launcher",
+      "pid": 32312,
+      "expectedCreationDate": "2026-10-05T20:26:08.414474+08:00",
+      "present": false,
+      "current": null
+    }
+  ],
+  "listeners": [],
+  "physicalCompletion": true,
+  "rootPageClosed": true,
+  "fixtureSessionRetained": true
+}

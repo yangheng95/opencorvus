@@ -1,0 +1,135 @@
+{
+  "observedAtUtc": "2026-10-05T16:10:46.7016286Z",
+  "owner": "after-01-a-owner.json",
+  "logSource": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-home/log/dev.log",
+  "requests": [
+    {
+      "time": "2026-10-05T14:58:51.562Z",
+      "requestID": "010d938d-a92e-44c0-b24e-0ff048931dd6",
+      "method": "GET",
+      "path": "/session/ses_-zUSotvzOzzZgeNQExal/side-chat",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:58:51.565Z",
+      "requestID": "010d938d-a92e-44c0-b24e-0ff048931dd6",
+      "method": "GET",
+      "path": "/session/ses_-zUSotvzOzzZgeNQExal/side-chat",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-05T14:58:51.565Z",
+      "requestID": "2cd353ae-8fae-4b55-99c0-9840ce2c552b",
+      "method": "POST",
+      "path": "/session/ses_-zUSotvzOzzZgeNQExal/side-chat",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:58:51.621Z",
+      "requestID": "2cd353ae-8fae-4b55-99c0-9840ce2c552b",
+      "method": "POST",
+      "path": "/session/ses_-zUSotvzOzzZgeNQExal/side-chat",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 56
+    },
+    {
+      "time": "2026-10-05T16:01:28.983Z",
+      "requestID": "c30453a9-62bf-4c6f-811f-be4184ffeb7d",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T16:01:28.986Z",
+      "requestID": "c30453a9-62bf-4c6f-811f-be4184ffeb7d",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-05T16:03:42.051Z",
+      "requestID": "ca975372-efba-4f37-b5e5-121354c5b85a",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T16:03:42.153Z",
+      "requestID": "ca975372-efba-4f37-b5e5-121354c5b85a",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 102
+    },
+    {
+      "time": "2026-10-05T16:04:08.502Z",
+      "requestID": "acc8fee3-d3b3-4a58-b872-6e7504525b26",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T16:04:08.539Z",
+      "requestID": "acc8fee3-d3b3-4a58-b872-6e7504525b26",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 37
+    },
+    {
+      "time": "2026-10-05T16:05:35.861Z",
+      "requestID": "8b7b246e-e19c-4f2b-96c1-7e21b3ec21ec",
+      "method": "OPTIONS",
+      "path": "/attachment",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T16:05:35.861Z",
+      "requestID": "8b7b246e-e19c-4f2b-96c1-7e21b3ec21ec",
+      "method": "OPTIONS",
+      "path": "/attachment",
+      "status": "completed",
+      "statusCode": 204,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-05T16:05:35.866Z",
+      "requestID": "5e2d32ea-fa36-460d-b9b8-6c814db24115",
+      "method": "POST",
+      "path": "/attachment",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T16:05:35.87Z",
+      "requestID": "5e2d32ea-fa36-460d-b9b8-6c814db24115",
+      "method": "POST",
+      "path": "/attachment",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 4
+    }
+  ],
+  "boundary": "Selected actual server metadata; no body or query identity inferred. Historical side-chat GET and POST establish real creation on Cff. D5 Save and upload are actual later manual actions.",
+  "firstFilterRepair": "PowerShell ConvertFrom-Json parsed time into DateTime; raw string comparison excluded D5 rows. Compare explicit DateTimeOffset to cutoff; original incomplete output retained."
+}

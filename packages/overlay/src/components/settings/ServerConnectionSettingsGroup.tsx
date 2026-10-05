@@ -1,8 +1,11 @@
 import { Feedback } from "../ui/Feedback"
 import { createSignal, onCleanup } from "solid-js"
 import { checkConnection } from "../../services/connection"
-import { reloadProjectScope } from "../../services/config"
-import { settingsStore, setSettingsStore, saveSettings, SettingsActivationError } from "../../store/settings"
+import { refreshConnectionWorkspace } from "../../services/connection-projection"
+import { settingsStore, SettingsActivationError } from "../../store/settings"
+import { saveConnectionSettings } from "../../services/connection-settings"
+import { isApiAuthorityCurrent, ApiAuthorityChangedError } from "../../services/api"
+import { FileEditorAdmissionError } from "../../services/file-workbench"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SettingsGroup, SettingsRow } from "./layout"
@@ -21,6 +24,7 @@ export function ServerConnectionSettingsGroup() {
   const [saved, setSaved] = createSignal(false)
   const [error, setError] = createSignal("")
   const [saving, setSaving] = createSignal(false)
+  const [referencesRetired, setReferencesRetired] = createSignal(false)
   let saveGeneration = 0
   let savedTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -30,6 +34,7 @@ export function ServerConnectionSettingsGroup() {
     savedTimer = undefined
     setSaved(false)
     setError("")
+    setReferencesRetired(false)
   }
 
   async function saveConnection(): Promise<void> {
@@ -40,18 +45,16 @@ export function ServerConnectionSettingsGroup() {
     setSaving(true)
     setSaved(false)
     setError("")
+    let persistenceConfirmed = false
     try {
-      await saveSettings({
-        overrides: snapshot,
-        onConfirmed: () => {
-          setSettingsStore(snapshot)
-        },
-      })
+      const { authority, retiredReferences } = await saveConnectionSettings(snapshot)
+      persistenceConfirmed = true
       if (!ownsSave()) return
-      await checkConnection()
-      if (!ownsSave()) return
-      await reloadProjectScope()
-      if (!ownsSave()) return
+      setReferencesRetired(retiredReferences)
+      const connected = await checkConnection({ authority })
+      if (!ownsSave() || !isApiAuthorityCurrent(authority)) return
+      if (connected) await refreshConnectionWorkspace(authority)
+      if (!ownsSave() || !isApiAuthorityCurrent(authority)) return
       setError("")
       setSaved(true)
       savedTimer = setTimeout(() => {
@@ -60,6 +63,11 @@ export function ServerConnectionSettingsGroup() {
       }, 1800)
     } catch (nextError) {
       if (!ownsSave()) return
+      if (nextError instanceof FileEditorAdmissionError && nextError.reason !== "busy") return
+      if (persistenceConfirmed && nextError instanceof ApiAuthorityChangedError) {
+        setSaved(true)
+        return
+      }
       setSaved(false)
       setError(
         nextError instanceof SettingsActivationError
@@ -142,6 +150,7 @@ export function ServerConnectionSettingsGroup() {
           {error()}
         </Feedback>
       ) : null}
+      {referencesRetired() ? <Feedback tone="info">{t("settings.connection_references_retired")}</Feedback> : null}
     </SettingsGroup>
   )
 }

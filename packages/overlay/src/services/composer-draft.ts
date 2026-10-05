@@ -1,6 +1,7 @@
 import { createStore, reconcile } from "solid-js/store"
 import { parseQuotation, type Quotation } from "./quotation"
 import { randomUUID } from "../utils/random-id"
+import { composerMentionDirectiveRanges, setComposerMentionDirectiveSelected } from "./composer-mention"
 
 export interface ComposerDraftEntry {
   text: string
@@ -20,6 +21,74 @@ export function normalizeComposerDraftKey(key: string | null | undefined): strin
 
 export function composerDraftKey(...parts: string[]): string {
   return parts.map((part) => encodeURIComponent(part)).join(":")
+}
+
+export function workspaceComposerDraftKey(taskID: string, sessionID: string, directory: string): string {
+  if (taskID) return composerDraftKey("task", taskID)
+  if (sessionID) return composerDraftKey("session", sessionID)
+  return directory ? composerDraftKey("launcher", "new", directory) : composerDraftKey("launcher", "new")
+}
+
+function connectionIndependentText(text: string): string {
+  let result = text
+  for (const directive of composerMentionDirectiveRanges(text)) {
+    result = setComposerMentionDirectiveSelected(result, directive.kind, directive.value, false)
+  }
+  return result
+}
+
+function connectionIndependentRecords(records: ComposerDraftRecords): ComposerDraftRecords {
+  return Object.fromEntries(
+    Object.entries(records).map(([key, entry]) => [
+      key,
+      {
+        text: connectionIndependentText(entry.text),
+        updated: entry.updated,
+      },
+    ]),
+  )
+}
+
+let preparedDeparture: { records: ComposerDraftRecords } | undefined
+
+/** All ordinary writes update this transaction's parsed projection before writing the sole store. */
+function writeComposerDraftRecords(records: ComposerDraftRecords): void {
+  if (preparedDeparture) preparedDeparture.records = connectionIndependentRecords(records)
+  setComposerDraftStore("drafts", reconcile(records))
+  persistComposerDraftRecords(records)
+}
+
+/** A temporary preparation of the existing store; confirmed commit performs no parsing. */
+export function prepareComposerDraftDeparture(currentKey: string): { commit: () => boolean; release: () => void } {
+  if (preparedDeparture) throw new DOMException("Composer departure preparation is busy", "AbortError")
+  const prepared = { records: connectionIndependentRecords(composerDraftStore.drafts) }
+  preparedDeparture = prepared
+  const release = () => {
+    if (preparedDeparture === prepared) preparedDeparture = undefined
+  }
+  return {
+    release,
+    commit: () => {
+      const retiredReferences = Object.entries(composerDraftStore.drafts).some(
+        ([key, entry]) => !!entry.quotation || !!entry.submission || entry.text !== prepared.records[key]?.text,
+      )
+      const next = { ...prepared.records }
+      const currentText = next[currentKey]?.text
+      if (currentText) {
+        const launcher = workspaceComposerDraftKey("", "", "")
+        const previous = next[launcher]?.text ?? ""
+        next[launcher] = {
+          text: previous && currentKey !== launcher ? `${previous}\n\n${currentText}` : currentText,
+          updated: Date.now(),
+        }
+        if (currentKey !== launcher) delete next[currentKey]
+      }
+      const retained = pruneComposerDraftRecords(next)
+      release()
+      writeComposerDraftRecords(retained)
+      return retiredReferences
+    },
+  }
 }
 
 export function parseComposerDraftRecords(raw: string | null | undefined): ComposerDraftRecords {
@@ -131,8 +200,7 @@ export function setComposerDraft(key: string | null | undefined, text: string): 
     text,
     updated: Date.now(),
   })
-  setComposerDraftStore("drafts", reconcile(next))
-  persistComposerDraftRecords(next)
+  writeComposerDraftRecords(next)
 }
 
 export function clearComposerDraft(key: string | null | undefined): void {
@@ -149,8 +217,7 @@ export function composerSubmission(key: string, text: string): { messageID: stri
     ...composerDraftStore.drafts,
     [key]: { ...current, text: current?.text ?? text, updated: Date.now(), submission },
   }
-  setComposerDraftStore("drafts", reconcile(next))
-  persistComposerDraftRecords(next)
+  writeComposerDraftRecords(next)
   return submission
 }
 
@@ -169,6 +236,5 @@ export function setComposerQuotation(key: string | null | undefined, quotation: 
       ...(quotation ? { quotation } : {}),
     },
   })
-  setComposerDraftStore("drafts", reconcile(next))
-  persistComposerDraftRecords(next)
+  writeComposerDraftRecords(next)
 }

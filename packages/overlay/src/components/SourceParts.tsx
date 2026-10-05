@@ -7,6 +7,8 @@ import { Icon } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
 import { Disclosure } from "./ui/Disclosure"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { AppLog } from "../utils/log"
 
 export type ConversationSourcePart = {
   type: "source-url" | "source-document" | "source-file"
@@ -63,15 +65,25 @@ function sourceDetail(source: ConversationSourcePart): string {
 }
 
 async function openSourceFile(source: ConversationSourcePart): Promise<void> {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   const directory = sourceDirectory()
   const path = source.path?.trim() || ""
   if (!directory || !path) return
   const projectPath = relativePathFrom(directory, path)
-  if (projectPath) {
-    await openFileEditor(projectPath, { directory }, source.range)
-    return
+  try {
+    if (projectPath) {
+      await openFileEditor(projectPath, { directory, authority }, source.range)
+      return
+    }
+    await openSourceFileEditor(path, { directory, authority }, source.range)
+  } catch (error) {
+    if (!isApiAuthorityCurrent(authority) || boardStore.selectEpoch !== epoch) return
+    if (error instanceof DOMException && error.name === "AbortError") return
+    AppLog.error("source-file", "Opening the file source failed", {
+      error: error instanceof Error ? error.message : String(error),
+    })
   }
-  await openSourceFileEditor(path, { directory }, source.range)
 }
 
 function SourceTooltipContent(props: { source: ConversationSourcePart }) {

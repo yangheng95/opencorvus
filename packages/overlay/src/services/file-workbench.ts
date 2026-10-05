@@ -1,7 +1,7 @@
 import { batch, createSignal } from "solid-js"
 import type { FileContent as SdkFileContent } from "@opencorvus-ai/sdk"
 import { uint8ToBase64 } from "@opencorvus-ai/transport-protocol"
-import { apiJson } from "./api"
+import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { projectScopedPath } from "./project-directory"
 
 export interface FileNode {
@@ -50,6 +50,7 @@ export interface FileDeleteResult {
 
 export interface FileOperationScope {
   directory: string
+  authority?: ApiAuthority
 }
 
 export interface FileEditorLineRange {
@@ -68,7 +69,9 @@ const [fileWorkbenchOpen, setFileWorkbenchOpen] = createSignal(false)
 const [fileWorkbenchRevision, setFileWorkbenchRevision] = createSignal(0)
 const [fileEditorRevealRevision, setFileEditorRevealRevision] = createSignal(0)
 export interface FileEditorNavigationOwner {
-  confirmLeave: () => Promise<boolean>
+  confirmLeave: () => Promise<number | null>
+  getRevision: () => number
+  isBusy: () => boolean
   isDirty: () => boolean
 }
 export interface FileEditorCommitBoundary {
@@ -77,6 +80,27 @@ export interface FileEditorCommitBoundary {
 }
 const [fileEditorOwner, setFileEditorOwner] = createSignal<FileEditorNavigationOwner>()
 let fileEditorNavigationGeneration = 0
+const [fileEditorReserved, setFileEditorReserved] = createSignal(false)
+export { fileEditorReserved }
+
+export interface FileEditorCloseHandle {
+  isCurrent: () => boolean
+  commit: () => void
+  release: () => void
+}
+export type FileEditorClosePreparation =
+  | { status: "ready"; handle: FileEditorCloseHandle }
+  | { status: "cancelled" | "superseded" | "busy" }
+
+export class FileEditorAdmissionError extends DOMException {
+  constructor(readonly reason: "cancelled" | "superseded" | "busy") {
+    super(`File editor admission ${reason}`, "AbortError")
+  }
+}
+
+function assertFileEditorAvailable(): void {
+  if (fileEditorReserved()) throw new FileEditorAdmissionError("busy")
+}
 
 export function hasUnsavedFileChanges(): boolean {
   return fileEditorOwner()?.isDirty() ?? false
@@ -184,29 +208,80 @@ function commitFileEditorTarget(target: FileEditorTarget | null): void {
   if (target) setFileEditorRevealRevision((current) => current + 1)
 }
 
-async function requestFileEditorTarget(
-  target: FileEditorTarget | null,
+async function prepareFileEditorTarget(
+  target: () => FileEditorTarget | null,
+  needsDecision: boolean,
+  authority: ApiAuthority,
   boundary?: FileEditorCommitBoundary,
-): Promise<boolean> {
+): Promise<FileEditorClosePreparation> {
+  assertApiAuthorityCurrent(authority)
+  if (fileEditorReserved()) return { status: "busy" }
   const current = selectedFileTarget()
   const generation = ++fileEditorNavigationGeneration
   const owner = fileEditorOwner()
-  if (!sameFileEditorResource(current, target) && owner && !(await owner.confirmLeave())) return false
+  if (owner?.isBusy()) return { status: "busy" }
+  const revision = needsDecision && owner ? await owner.confirmLeave() : (owner?.getRevision() ?? 0)
+  assertApiAuthorityCurrent(authority)
+  if (revision === null) return { status: "cancelled" }
   if (
     generation !== fileEditorNavigationGeneration ||
+    fileEditorReserved() ||
+    fileEditorOwner() !== owner ||
     !sameFileEditorResource(current, selectedFileTarget()) ||
+    (owner && revision !== owner.getRevision()) ||
     (boundary && !boundary.isCurrent())
+  ) return { status: "superseded" }
+  if (owner?.isBusy()) return { status: "busy" }
+  let held = true
+  setFileEditorReserved(true)
+  const release = () => {
+    if (!held) return
+    held = false
+    setFileEditorReserved(false)
+  }
+  return {
+    status: "ready",
+    handle: {
+      isCurrent: () => held && generation === fileEditorNavigationGeneration &&
+        sameFileEditorResource(current, selectedFileTarget()) &&
+        fileEditorOwner() === owner && (!owner || owner.getRevision() === revision) &&
+        isApiAuthorityCurrent(authority) && (!boundary || boundary.isCurrent()),
+      commit: () => {
+        if (!held) return
+        batch(() => {
+          const next = target()
+          if (sameFileEditorTarget(current, next)) {
+            if (next) setFileEditorRevealRevision((value) => value + 1)
+          } else commitFileEditorTarget(next)
+          try { boundary?.commit() } finally { release() }
+        })
+      },
+      release,
+    },
+  }
+}
+
+export function prepareFileEditorClose(boundary?: FileEditorCommitBoundary): Promise<FileEditorClosePreparation> {
+  return prepareFileEditorTarget(() => null, selectedFileTarget() !== null, captureApiAuthority(), boundary)
+}
+
+async function requestFileEditorTarget(
+  target: FileEditorTarget | null,
+  authority: ApiAuthority,
+  boundary?: FileEditorCommitBoundary,
+): Promise<boolean> {
+  const result = await prepareFileEditorTarget(
+    () => target, !sameFileEditorResource(selectedFileTarget(), target), authority, boundary,
   )
-    return false
-  batch(() => {
-    if (sameFileEditorTarget(current, target)) {
-      if (target) setFileEditorRevealRevision((revision) => revision + 1)
-    } else {
-      commitFileEditorTarget(target)
-    }
-    boundary?.commit()
-  })
-  return true
+  if (result.status !== "ready") return false
+  try {
+    assertApiAuthorityCurrent(authority)
+    if (!result.handle.isCurrent()) return false
+    result.handle.commit()
+    return true
+  } finally {
+    result.handle.release()
+  }
 }
 
 export function registerFileEditorBeforeNavigate(owner: FileEditorNavigationOwner): () => void {
@@ -220,7 +295,8 @@ export function registerFileEditorBeforeNavigate(owner: FileEditorNavigationOwne
 }
 
 export function openFileEditor(path: string, scope: FileOperationScope, range?: FileEditorLineRange): Promise<boolean> {
-  return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range))
+  const authority = scope.authority ?? captureApiAuthority()
+  return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range), authority)
 }
 
 export function openSourceFileEditor(
@@ -228,47 +304,28 @@ export function openSourceFileEditor(
   scope: FileOperationScope,
   range?: FileEditorLineRange,
 ): Promise<boolean> {
-  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range))
+  const authority = scope.authority ?? captureApiAuthority()
+  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range), authority)
 }
 
 export function closeFileEditor(boundary?: FileEditorCommitBoundary): Promise<boolean> {
-  return requestFileEditorTarget(null, boundary)
+  return requestFileEditorTarget(null, captureApiAuthority(), boundary)
 }
 
-async function admitFileMutation(path: string, scope: FileOperationScope): Promise<void> {
+async function admitFileMutation(
+  path: string,
+  scope: FileOperationScope,
+  destination: () => FileEditorTarget | null,
+  authority: ApiAuthority,
+): Promise<FileEditorCloseHandle | undefined> {
+  assertApiAuthorityCurrent(authority)
+  assertFileEditorAvailable()
   const target = selectedFileTarget()
   if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
   if (descendantSuffix(target.path, path) === null) return
-  const generation = ++fileEditorNavigationGeneration
-  const owner = fileEditorOwner()
-  const allowed = owner ? await owner.confirmLeave() : true
-  if (
-    !allowed ||
-    generation !== fileEditorNavigationGeneration ||
-    !sameFileEditorResource(target, selectedFileTarget())
-  ) {
-    throw new DOMException("File mutation cancelled or superseded", "AbortError")
-  }
-}
-
-function updateOpenFilePathAfterMove(previousPath: string, nextPath: string, scope: FileOperationScope): void {
-  const target = selectedFileTarget()
-  if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
-  const suffix = descendantSuffix(target.path, previousPath)
-  if (suffix === null) return
-  setSelectedFileTarget({
-    ...target,
-    path: suffix ? joinWorkbenchPath(nextPath, suffix) : normalizeWorkbenchPath(nextPath),
-  })
-  setFileWorkbenchOpen(true)
-}
-
-function closeFileEditorIfDeleted(path: string, scope: FileOperationScope): void {
-  const target = selectedFileTarget()
-  if (!target || target.sourceAbsolutePath || target.directory !== scope.directory.trim()) return
-  if (descendantSuffix(target.path, path) === null) return
-  fileEditorNavigationGeneration += 1
-  commitFileEditorTarget(null)
+  const prepared = await prepareFileEditorTarget(destination, true, authority)
+  if (prepared.status !== "ready") throw new FileEditorAdmissionError(prepared.status)
+  return prepared.handle
 }
 
 export function shortWorkbenchPath(path: string): string {
@@ -295,7 +352,8 @@ function fileQueryPath(path: string, params: Record<string, string>, scope: File
 }
 
 export async function loadFileDirectory(path: string, scope: FileOperationScope): Promise<FileNode[]> {
-  return (await apiJson(fileQueryPath("file", { path }, scope))) as FileNode[]
+  const authority = scope.authority ?? captureApiAuthority()
+  return (await apiJson(fileQueryPath("file", { path }, scope), { authority })) as FileNode[]
 }
 
 export async function uploadDroppedFiles(
@@ -303,8 +361,13 @@ export async function uploadDroppedFiles(
   files: File[],
   scope: FileOperationScope,
 ): Promise<FileUploadResult[]> {
+  assertFileEditorAvailable()
+  const authority = scope.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const payloads = await Promise.all(files.map(droppedFilePayload))
+  assertFileEditorAvailable()
   const result = (await apiJson(projectScopedPath("file/upload", scope.directory), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ targetDir, files: payloads }),
@@ -314,7 +377,11 @@ export async function uploadDroppedFiles(
 }
 
 export async function createFileItem(input: FileCreateRequest, scope: FileOperationScope): Promise<FileNode> {
+  assertFileEditorAvailable()
+  const authority = scope.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const result = (await apiJson(projectScopedPath("file/item", scope.directory), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
@@ -324,19 +391,34 @@ export async function createFileItem(input: FileCreateRequest, scope: FileOperat
 }
 
 export async function moveFileItem(path: string, newPath: string, scope: FileOperationScope): Promise<FileMoveResult> {
-  await admitFileMutation(path, scope)
-  const result = (await apiJson(projectScopedPath("file/item", scope.directory), {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ path, newPath }),
-  })) as FileMoveResult
-  updateOpenFilePathAfterMove(result.previousPath, result.path, scope)
-  bumpFileWorkbenchRevision()
-  return result
+  const authority = scope.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const target = selectedFileTarget()
+  let result: FileMoveResult
+  const admission = await admitFileMutation(path, scope, () => {
+    const suffix = descendantSuffix(target!.path, result.previousPath)
+    return { ...target!, path: suffix ? joinWorkbenchPath(result.path, suffix) : normalizeWorkbenchPath(result.path) }
+  }, authority)
+  try {
+    if (!admission) assertFileEditorAvailable()
+    result = (await apiJson(projectScopedPath("file/item", scope.directory), {
+      authority,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path, newPath }),
+    })) as FileMoveResult
+    admission?.commit()
+    bumpFileWorkbenchRevision()
+    return result
+  } finally { admission?.release() }
 }
 
 export async function copyFileItem(path: string, newPath: string, scope: FileOperationScope): Promise<FileCopyResult> {
+  assertFileEditorAvailable()
+  const authority = scope.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const result = (await apiJson(projectScopedPath("file/item/copy", scope.directory), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ path, newPath }),
@@ -346,11 +428,17 @@ export async function copyFileItem(path: string, newPath: string, scope: FileOpe
 }
 
 export async function deleteFileItem(path: string, scope: FileOperationScope): Promise<FileDeleteResult> {
-  await admitFileMutation(path, scope)
-  const result = (await apiJson(fileQueryPath("file/item", { path }, scope), {
-    method: "DELETE",
-  })) as FileDeleteResult
-  closeFileEditorIfDeleted(result.path, scope)
-  bumpFileWorkbenchRevision()
-  return result
+  const authority = scope.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const admission = await admitFileMutation(path, scope, () => null, authority)
+  try {
+    if (!admission) assertFileEditorAvailable()
+    const result = (await apiJson(fileQueryPath("file/item", { path }, scope), {
+      authority,
+      method: "DELETE",
+    })) as FileDeleteResult
+    admission?.commit()
+    bumpFileWorkbenchRevision()
+    return result
+  } finally { admission?.release() }
 }

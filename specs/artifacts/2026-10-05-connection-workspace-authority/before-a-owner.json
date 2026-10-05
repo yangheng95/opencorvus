@@ -1,0 +1,112 @@
+{
+  "time": "2026-10-05T12:27:05.3361435Z",
+  "side": "a",
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "connection-workspace-before-a-e8fbfb47-4a11-49a5-8d33-52eeb56febe3",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17948",
+    "pid": 73600
+  },
+  "listener": {
+    "ProcessId": 73600,
+    "ParentProcessId": 73416,
+    "CreationDate": "2026-10-05T20:26:07.434129+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17948 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-startup.json --startup-occurrence connection-workspace-before-a-e8fbfb47-4a11-49a5-8d33-52eeb56febe3 --log-level INFO"
+  },
+  "parent": {
+    "ProcessId": 73416,
+    "ParentProcessId": 63624,
+    "CreationDate": "2026-10-05T20:26:07.392582+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17948 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-startup.json --startup-occurrence connection-workspace-before-a-e8fbfb47-4a11-49a5-8d33-52eeb56febe3 --log-level INFO"
+  },
+  "launcher": {
+    "ProcessId": 63624,
+    "ParentProcessId": 76568,
+    "CreationDate": "2026-10-05T20:26:07.311147+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17948 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-startup.json --startup-occurrence connection-workspace-before-a-e8fbfb47-4a11-49a5-8d33-52eeb56febe3 --log-level INFO"
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-workspace-before-01\\a-home\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-workspace-before-01\\a-home\\data",
+      "home": "C:\\Users\\hengu"
+    }
+  },
+  "assets": [
+    "main-Dd5jeSV0.js",
+    "main-Yy88IPFU.css"
+  ],
+  "assetHTTP": [
+    {
+      "asset": "main-Dd5jeSV0.js",
+      "statusCode": 200,
+      "contentType": [
+        "application/javascript; charset=utf-8"
+      ],
+      "length": 1613078
+    },
+    {
+      "asset": "main-Yy88IPFU.css",
+      "statusCode": 200,
+      "contentType": [
+        "text/css; charset=utf-8"
+      ],
+      "length": 534684
+    }
+  ],
+  "project": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-project",
+  "log": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-home/log/dev.log",
+  "authExists": false,
+  "modelsExists": false,
+  "fixture": {
+    "length": 28,
+    "bytes": [
+      79,
+      119,
+      110,
+      101,
+      100,
+      32,
+      119,
+      111,
+      114,
+      107,
+      115,
+      112,
+      97,
+      99,
+      101,
+      32,
+      65,
+      32,
+      98,
+      97,
+      115,
+      101,
+      108,
+      105,
+      110,
+      101,
+      46,
+      10
+    ],
+    "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-project/authority-note.txt",
+    "content": "Owned workspace A baseline.\n"
+  },
+  "publicShutdown": {
+    "origin": "http://127.0.0.1:17948",
+    "method": "POST",
+    "path": "/shutdown",
+    "terminal": "Exact captured chain absent and port free after root page-close permission"
+  },
+  "externalSkillsDisabled": true,
+  "logLevel": "INFO",
+  "provenance": "Frozen current source API with settings diagnostics; old Dd5jeSV0/Yy88 client; no agent build"
+}

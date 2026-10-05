@@ -8,7 +8,14 @@
 // - Restore last workspace
 // - Set up a periodic reconnect loop
 
-import { configure as configureApi, onApiError } from "./api"
+import {
+  configure as configureApi,
+  onApiError,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "./api"
+import { refreshConnectionWorkspace } from "./connection-projection"
 import { checkConnection as checkServerConnection, startConnectionMonitor, stopConnectionMonitor } from "./connection"
 import { startWorkLedgerSSE, stopSSE, stopWorkLedgerSSE } from "./sse"
 import { loadAllLocales, setLocale } from "../utils/i18n"
@@ -122,8 +129,16 @@ async function loadInitialData(
   lifecycleGeneration: number,
   resolveInitialDirectory: () => Promise<boolean>,
 ): Promise<InitialDataResult> {
-  await resolveInitialDirectory()
+  const authority = captureApiAuthority()
+  const workspaceEpoch = settingsStore.workspaceEpoch
+  const owns = () =>
+    isCurrentInitLifecycle(lifecycleGeneration) &&
+    isApiAuthorityCurrent(authority) &&
+    settingsStore.workspaceEpoch === workspaceEpoch
+  if (workspaceEpoch === 0) await resolveInitialDirectory()
+  if (!owns()) return { loaded: false }
   const directory = await ensureWorkspaceDirectory()
+  if (!owns()) return { loaded: false }
   syncApiConfig()
   if (!directory) {
     clearTasksForMissingDirectory()
@@ -140,7 +155,8 @@ async function loadInitialData(
   }
   // Opening a client observes its directory. Git initialization is an explicit
   // operator action and may change identity while another client owns work.
-  const [tasksResult, metaResult] = await Promise.allSettled([loadTasks(), loadMeta()])
+  const [tasksResult, metaResult] = await Promise.allSettled([loadTasks({ authority }), loadMeta(directory, authority)])
+  if (!owns()) return { loaded: false }
   const unavailableDirectoryFailure = [tasksResult, metaResult].find(
     (result): result is PromiseRejectedResult =>
       result.status === "rejected" && isMissingProjectDirectoryError(result.reason, directory),
@@ -151,9 +167,9 @@ async function loadInitialData(
   ) {
     return { loaded: false }
   }
-  void refreshProjectMemory().catch((error) =>
-    AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
-  )
+  void refreshProjectMemory({ authority, directory }).catch((error) => {
+    if (owns()) AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) })
+  })
   if (settingsStore.directory.trim() !== directory) return { loaded: false }
   const issues: ProjectLoadIssue[] = []
   const appendFailure = (resource: ProjectLoadIssue["resource"], result: PromiseSettledResult<unknown>) => {
@@ -178,12 +194,13 @@ async function loadInitialData(
   const reconcileCapabilities = async () => {
     const [extensionsResult, configResult] = await Promise.allSettled([
       loadExtensions({
+        authority,
         directory,
         isCurrentDirectory: (candidate) => settingsStore.directory.trim() === candidate,
       }),
-      loadConfigInfo(CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS),
+      loadConfigInfo(CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, { authority }),
     ])
-    if (!isCurrentInitLifecycle(lifecycleGeneration) || settingsStore.directory.trim() !== directory) return
+    if (!owns() || settingsStore.directory.trim() !== directory) return
     const capabilityIssues: ProjectLoadIssue[] = []
     const appendCapabilityFailure = (resource: ProjectLoadIssue["resource"], result: PromiseSettledResult<unknown>) => {
       if (result.status !== "rejected") return
@@ -257,18 +274,27 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
 
   // 5. Check connection
-  const connected = await checkServerConnection()
+  let startupAuthority: ApiAuthority | undefined
+  const connected = await checkServerConnection({
+    onHealthy: (authority) => {
+      startupAuthority = authority
+      return undefined
+    },
+  })
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
 
-  if (connected) {
+  if (connected && startupAuthority && isApiAuthorityCurrent(startupAuthority)) {
     startWorkLedgerSSE()
     // 6. Load initial data
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded) await restoreInitialTaskSelection()
+    if (initialData.loaded && isApiAuthorityCurrent(startupAuthority))
+      await restoreInitialTaskSelection({ authority: startupAuthority })
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    void initialData.reconcileCapabilities?.()
-    await onConnected?.()
+    if (isApiAuthorityCurrent(startupAuthority)) {
+      void initialData.reconcileCapabilities?.()
+      await onConnected?.()
+    }
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
   }
 
@@ -279,10 +305,15 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
   startConnectionMonitor(async () => {
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     syncApiConfig()
+    const authority = captureApiAuthority()
     startWorkLedgerSSE()
     const initialData = await loadInitialData(lifecycleGeneration, resolveInitialDirectory)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded) await restoreInitialWorkspace()
+    if (!isApiAuthorityCurrent(authority)) return
+    if (initialData.loaded) await restoreInitialWorkspace(authority)
+    if (!isCurrentInitLifecycle(lifecycleGeneration)) return
+    if (!isApiAuthorityCurrent(authority)) return
+    await refreshConnectionWorkspace(authority)
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     void initialData.reconcileCapabilities?.()
     await onReconnect?.()
@@ -293,14 +324,15 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
 export function createInitialDirectoryResolver(
   resolve: () => Promise<boolean> = ensureDefaultDirectory,
 ): () => Promise<boolean> {
-  let resolution: Promise<boolean> | undefined
+  let resolution: { promise: Promise<boolean>; authority: ApiAuthority } | undefined
   return () => {
-    if (resolution) return resolution
+    if (resolution && isApiAuthorityCurrent(resolution.authority)) return resolution.promise
+    const authority = captureApiAuthority()
     const current = resolve().catch((error) => {
-      if (resolution === current) resolution = undefined
+      if (resolution?.promise === current) resolution = undefined
       throw error
     })
-    resolution = current
+    resolution = { promise: current, authority }
     return current
   }
 }
@@ -358,14 +390,19 @@ export function initialRestoreTaskID(
   return taskIDFromItem(running)
 }
 
-export async function restoreInitialTaskSelection(options: { search?: string } = {}): Promise<boolean> {
+export async function restoreInitialTaskSelection(
+  options: { search?: string; authority?: ApiAuthority } = {},
+): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  if (!isApiAuthorityCurrent(authority)) return false
   const deepLink = options.search === undefined ? currentTaskDeepLink() : taskDeepLinkFromSearch(options.search)
   if (deepLink) {
-    await selectTask(deepLink.taskID, { selectionEpoch: beginWorkspaceSelection() })
+    await selectTask(deepLink.taskID, { selectionEpoch: beginWorkspaceSelection(), authority })
+    if (!isApiAuthorityCurrent(authority)) return false
     bumpWorkspaceEpoch()
     return true
   }
-  return restoreInitialWorkspace()
+  return restoreInitialWorkspace(authority)
 }
 
 /**
@@ -373,7 +410,8 @@ export async function restoreInitialTaskSelection(options: { search?: string } =
  * persisted to settings before the overlay was last closed.
  * Returns true when a task was successfully re-selected, false otherwise.
  */
-export async function restoreInitialWorkspace(): Promise<boolean> {
+export async function restoreInitialWorkspace(authority = captureApiAuthority()): Promise<boolean> {
+  if (!isApiAuthorityCurrent(authority)) return false
   const { workspaceTaskID, workspaceDirectory, directory: activeDir } = settingsStore
   const tasks = boardStore.tasks
 
@@ -396,8 +434,9 @@ export async function restoreInitialWorkspace(): Promise<boolean> {
 
   if (taskID) {
     if (activeTaskID() !== taskID || !boardStore.board) {
-      await selectTask(taskID, { selectionEpoch: beginWorkspaceSelection() })
+      await selectTask(taskID, { selectionEpoch: beginWorkspaceSelection(), authority })
     }
+    if (!isApiAuthorityCurrent(authority)) return false
     // body.dataset.workspace/connection is updated reactively by main.tsx createEffect.
     bumpWorkspaceEpoch()
     return true
@@ -411,7 +450,7 @@ export async function restoreInitialWorkspace(): Promise<boolean> {
   }
 
   if ((workspaceTaskID || "").trim() || boardStore.selectedSource?.kind === "task" || boardStore.board?.task) {
-    await selectTask("", { selectionEpoch: beginWorkspaceSelection() })
+    await selectTask("", { selectionEpoch: beginWorkspaceSelection(), authority })
   }
   return false
 }

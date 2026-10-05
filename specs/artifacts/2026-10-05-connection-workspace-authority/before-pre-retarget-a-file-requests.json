@@ -1,0 +1,25 @@
+{
+  "captureUTC": "2026-10-05T12:38:25.9910646Z",
+  "side": "a",
+  "scope": "All existing A GET /file/content request records at pre-retarget checkpoint; query absent",
+  "rows": [
+    {
+      "time": "2026-10-05T12:37:02.518Z",
+      "requestID": "12dbeee5-6753-4e98-9533-3ea2e0443db6",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T12:37:02.528Z",
+      "requestID": "12dbeee5-6753-4e98-9533-3ea2e0443db6",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10
+    }
+  ]
+}

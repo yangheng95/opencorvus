@@ -12,7 +12,7 @@ import {
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson } from "./api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { createSignal } from "solid-js"
 import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
@@ -39,7 +39,9 @@ const [runtimeRowsRevision, setRuntimeRowsRevision] = createSignal(0)
 const runtimeRows = new Map<string, WorkLedgerItemRow>()
 let runtimeProjectDirectoryList: string[] = []
 
-export function setWorkLedgerRuntimeRows(rows: readonly WorkLedgerRow[]): void {
+export function setWorkLedgerRuntimeRows(rows: readonly WorkLedgerRow[], authority = captureApiAuthority()): void {
+  if (!isApiAuthorityCurrent(authority)) return
+  runtimeRows.clear()
   runtimeProjectDirectoryList = [
     ...new Set(rows.filter((row): row is WorkLedgerProjectRow => row.kind === "project").map((row) => row.directory)),
   ].sort((left, right) => left.localeCompare(right))
@@ -101,10 +103,14 @@ export function workLedgerPresentationLabel(row: WorkLedgerItemRow): string {
   return status === "active" ? t("task.status.running") : t("task.status.inactive")
 }
 
-export function __resetWorkLedgerRuntimeRowsForTest(): void {
+export function retireWorkLedgerProjection(): void {
   runtimeRows.clear()
   runtimeProjectDirectoryList = []
   setRuntimeRowsRevision((revision) => revision + 1)
+}
+
+export function __resetWorkLedgerRuntimeRowsForTest(): void {
+  retireWorkLedgerProjection()
 }
 
 export function workLedgerSessionInterruptible(sessionID: string): boolean {
@@ -118,6 +124,7 @@ export async function loadWorkLedger(
     limit?: number
     cursor?: WorkLedgerCursor | null
     signal?: AbortSignal
+    authority?: ApiAuthority
   } = {},
 ): Promise<WorkLedgerList> {
   const params = new URLSearchParams()
@@ -130,11 +137,11 @@ export async function loadWorkLedger(
     params.set("cursorRowKey", input.cursor.rowKey)
   }
   const suffix = params.toString() ? `?${params.toString()}` : ""
-  return WorkLedgerListSchema.parse(await apiJson<unknown>(`work-ledger${suffix}`, { signal: input.signal }))
+  return WorkLedgerListSchema.parse(await apiJson<unknown>(`work-ledger${suffix}`, { signal: input.signal, authority: input.authority }))
 }
 
 export async function loadArchivedWorkLedger(
-  input: { search?: string; limit?: number; cursor?: WorkLedgerCursor | null; signal?: AbortSignal } = {},
+  input: { search?: string; limit?: number; cursor?: WorkLedgerCursor | null; signal?: AbortSignal; authority?: ApiAuthority } = {},
 ): Promise<WorkLedgerArchiveList> {
   const params = new URLSearchParams()
   const search = input.search?.trim()
@@ -147,19 +154,20 @@ export async function loadArchivedWorkLedger(
   }
   const suffix = params.toString() ? `?${params.toString()}` : ""
   return WorkLedgerArchiveListSchema.parse(
-    await apiJson<unknown>(`work-ledger/archive${suffix}`, { signal: input.signal }),
+    await apiJson<unknown>(`work-ledger/archive${suffix}`, { signal: input.signal, authority: input.authority }),
   )
 }
 
-export async function setWorkLedgerProjectPinned(input: { projectID: string; pinned: boolean }): Promise<void> {
+export async function setWorkLedgerProjectPinned(input: { projectID: string; pinned: boolean; authority?: ApiAuthority }): Promise<void> {
   await apiJson(`work-ledger/project/${encodeURIComponent(input.projectID)}/pin`, {
+    authority: input.authority,
     method: "PATCH",
     body: JSON.stringify({ pinned: input.pinned }),
     headers: { "Content-Type": "application/json" },
   })
 }
 
-export async function setWorkLedgerItemPinned(input: { row: WorkLedgerItemRow; pinned: boolean }): Promise<void> {
+export async function setWorkLedgerItemPinned(input: { row: WorkLedgerItemRow; pinned: boolean; authority?: ApiAuthority }): Promise<void> {
   const itemID = input.row.kind === "task" ? input.row.id : input.row.sessionID
   const path = directoryScopedPath(
     `work-ledger/item/${input.row.kind}/${encodeURIComponent(itemID)}/pin`,
@@ -167,6 +175,7 @@ export async function setWorkLedgerItemPinned(input: { row: WorkLedgerItemRow; p
     "setWorkLedgerItemPinned",
   )
   await apiJson(path, {
+    authority: input.authority,
     method: "PATCH",
     body: JSON.stringify({ pinned: input.pinned }),
     headers: { "Content-Type": "application/json" },

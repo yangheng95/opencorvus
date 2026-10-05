@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\meta-project-scope.test.ts:
+(pass) metadata follows the selected session directory and exposes its non-Git facts [3.48ms]
+(pass) latest metadata request owns the result when an earlier request finishes later [0.64ms]
+(pass) failed metadata read yields a scoped error state [0.91ms]
+(pass) selection ABA settles the original metadata response owner [0.59ms]
+(pass) selection ABA settles the original metadata error owner [0.24ms]
+(pass) successor metadata retains busy ownership after old response settlement [0.62ms]
+(pass) successor metadata retains busy ownership after old error settlement [0.36ms]
+(pass) an empty current scope settles the canonical metadata projection [0.24ms]
+
+ 8 pass
+ 0 fail
+ 14 expect() calls
+Ran 8 tests across 1 file. [1219.00ms]

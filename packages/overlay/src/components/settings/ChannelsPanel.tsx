@@ -8,6 +8,8 @@ import type { ChannelListResponse } from "@opencorvus-ai/sdk"
 import { createSignal, createMemo, createEffect, For, Show, onCleanup } from "solid-js"
 import { t } from "../../utils/i18n"
 import { appStore } from "../../store/app"
+import { boardStore } from "../../store/board"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { currentProjectConfigRequestOptions, updateConfig } from "../../services/config"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { getHostTransport } from "../../services/host-transport-runtime"
@@ -37,6 +39,8 @@ const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStat
 type ChannelSaveKind = "channel" | "public-url"
 
 interface ChannelSaveOwner {
+  readonly authority: ApiAuthority
+  readonly selectionEpoch: number
   readonly directory: string
   readonly formKind: ChannelSaveKind
   readonly channelID: string
@@ -44,6 +48,8 @@ interface ChannelSaveOwner {
 }
 
 interface TutorialOpenOwner {
+  readonly authority: ApiAuthority
+  readonly selectionEpoch: number
   readonly directory: string
   readonly formIdentity: string
   readonly target: string
@@ -66,7 +72,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   const [tutorialOwner, setTutorialOwner] = createSignal<TutorialOpenOwner | null>(null)
   let saveGeneration = 0
   let tutorialGeneration = 0
-  let scopeIdentity = props.directory.trim()
+  let scopeIdentity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${props.directory.trim()}`
   let noticeGeneration = 0
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -90,8 +96,9 @@ export default function ChannelsPanel(props: { directory: string }) {
   const editingEntry = createMemo(() => channels().find((c) => c.id === editingID()) ?? null)
   createEffect(() => {
     const directory = props.directory.trim()
-    if (directory === scopeIdentity) return
-    scopeIdentity = directory
+    const identity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${directory}`
+    if (identity === scopeIdentity) return
+    scopeIdentity = identity
     invalidateSaveOwner()
     invalidateTutorialOwner()
     clearNotice()
@@ -156,6 +163,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   }
 
   function ownsSave(owner: ChannelSaveOwner): boolean {
+    if (!isApiAuthorityCurrent(owner.authority) || owner.selectionEpoch !== boardStore.selectEpoch) return false
     if (owner.generation !== saveGeneration || props.directory.trim() !== owner.directory) return false
     if (owner.formKind === "channel") {
       return editingID() === owner.channelID && editingOwner()?.directory === owner.directory
@@ -163,8 +171,10 @@ export default function ChannelsPanel(props: { directory: string }) {
     return true
   }
 
-  function beginSave(formKind: ChannelSaveKind, directory: string, channelID = ""): ChannelSaveOwner {
+  function beginSave(formKind: ChannelSaveKind, directory: string, channelID = "", authority = captureApiAuthority()): ChannelSaveOwner {
     const owner = {
+      authority,
+      selectionEpoch: boardStore.selectEpoch,
       directory,
       formKind,
       channelID,
@@ -196,7 +206,7 @@ export default function ChannelsPanel(props: { directory: string }) {
         if (value) values[field.key] = value
       }
     }
-    const owner = beginSave("channel", configOwner.directory, entry.id)
+    const owner = beginSave("channel", configOwner.directory, entry.id, configOwner.authority)
     const requestOptions = {
       ...configOwner,
       ownsResponse: () => ownsSave(owner),
@@ -221,7 +231,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   async function handleSavePublicUrl() {
     const configOwner = currentProjectConfigRequestOptions()
     const publicUrlSnapshot = localPublicUrl().trim()
-    const owner = beginSave("public-url", configOwner.directory)
+    const owner = beginSave("public-url", configOwner.directory, "", configOwner.authority)
     const requestOptions = {
       ...configOwner,
       ownsResponse: () => ownsSave(owner),
@@ -267,6 +277,8 @@ export default function ChannelsPanel(props: { directory: string }) {
 
   function ownsTutorial(owner: TutorialOpenOwner): boolean {
     return (
+      isApiAuthorityCurrent(owner.authority) &&
+      owner.selectionEpoch === boardStore.selectEpoch &&
       owner.generation === tutorialGeneration &&
       props.directory.trim() === owner.directory &&
       formIdentity() === owner.formIdentity
@@ -275,6 +287,8 @@ export default function ChannelsPanel(props: { directory: string }) {
 
   async function openTutorial(target: string, trigger: HTMLButtonElement) {
     const owner: TutorialOpenOwner = {
+      authority: captureApiAuthority(),
+      selectionEpoch: boardStore.selectEpoch,
       directory: props.directory.trim(),
       formIdentity: formIdentity(),
       target,

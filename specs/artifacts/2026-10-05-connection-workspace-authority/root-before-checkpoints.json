@@ -1,0 +1,90 @@
+[
+  {
+    "step": "initial",
+    "utc": "2026-10-05T12:31:12.854Z",
+    "tab": "16",
+    "origin": "http://127.0.0.1:17948",
+    "observed": "Online Port17948; a-project launcher; no selected Task or Session; no model chosen."
+  },
+  {
+    "step": "files-command-search",
+    "utc": "2026-10-05T12:31:12.854Z",
+    "observed": "Actual command palette with files returns No matching commands. No dirty-file or connection Save B has been performed."
+  },
+  {
+    "step": "select-real-empty-chat",
+    "utc": "2026-10-05T12:35:45.472Z",
+    "sessionID": "ses_-zUSotvzOzzZgeNQExal",
+    "requestEvidence": "before-a-empty-chat-create.json",
+    "selection": "project Chat row, not settings command"
+  },
+  {
+    "step": "open-owned-file",
+    "utc": "2026-10-05T12:36:42.100Z",
+    "path": "authority-note.txt"
+  },
+  {
+    "step": "edit-owned-unsaved-draft",
+    "utc": "2026-10-05T12:37:32.949Z",
+    "text": "Owned workspace A unsaved draft.\n"
+  },
+  {
+    "step": "network-original",
+    "utc": "2026-10-05T12:39:45.977Z",
+    "serverUrl": "http://127.0.0.1:17948",
+    "username": "opencorvus",
+    "password": "",
+    "proxyEnabled": false,
+    "offerGitInit": false,
+    "themePolicy": "system"
+  },
+  {
+    "step": "retarget-b-input",
+    "utc": "2026-10-05T12:39:54.280Z",
+    "serverUrl": "http://127.0.0.1:17949"
+  },
+  {
+    "step": "retarget-b-save",
+    "utc": "2026-10-05T12:40:01.548Z"
+  },
+  {
+    "step": "return-to-workspace-after-b",
+    "utc": "2026-10-05T12:40:28.084Z"
+  },
+  {
+    "step": "b-active-with-a-dirty-editor",
+    "utc": "2026-10-05T12:40:55.475Z",
+    "observed": "Main accessibility Online Port17949; Chat and a-project retained; exact A unsaved draft still present with dirty star and enabled File Save; no Save/Discard/Cancel decision was presented by connection Save.",
+    "fileSavePerformed": false
+  },
+  {
+    "step": "restore-a-input",
+    "utc": "2026-10-05T12:41:54.005Z",
+    "serverUrl": "http://127.0.0.1:17948"
+  },
+  {
+    "step": "restore-a-save",
+    "utc": "2026-10-05T12:43:38.982Z"
+  },
+  {
+    "step": "close-harmless-draft-on-restored-a",
+    "utc": "2026-10-05T12:44:01.414Z",
+    "observedBefore": "Online Port17948"
+  },
+  {
+    "step": "discard-owned-test-draft",
+    "utc": "2026-10-05T12:44:30.065Z",
+    "decision": "Discard literal unsaved marker after A connection restored; original files were never saved."
+  },
+  {
+    "step": "reload-after-explicit-discard",
+    "utc": "2026-10-05T12:47:52.148Z",
+    "purpose": "Only after the harmless draft was explicitly discarded and A restored; verify saved connection and clean view."
+  },
+  {
+    "step": "final-view-and-page-closed",
+    "utc": "2026-10-05T12:48:13.559Z",
+    "observed": "Reloaded Online Port17948; a-project launcher; no selected source, no open right dock or file draft; model unchosen.",
+    "pageClosed": true
+  }
+]

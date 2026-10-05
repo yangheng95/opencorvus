@@ -1,0 +1,19 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\capability-authority.test.ts:
+(pass) local transport catalog keeps B's same-scope pending owner after A settles [2.32ms]
+(pass) local transport settings keeps B's same-scope pending owner after A settles [0.44ms]
+(pass) local transport directory mutation retains its original accepted response and current retry path [0.59ms]
+(pass) local capability read and assignment carry one authority and preserve the actual retired assignment receipt [0.81ms]
+(pass) all logical entries preserve explicit stale authority through credential ABA as before-dispatch errors [0.34ms]
+
+packages\overlay\test\mission-skill-service.test.ts:
+(pass) Mission Skill service request ownership > coalesces one settings request per exact scope while keeping concurrent scopes separate [3.92ms]
+(pass) Mission Skill service request ownership > coalesces catalog requests by exact scope across an interleaved project-session-project sequence [15.38ms]
+(pass) Mission Skill service request ownership > returns the same wrapped settings failure to every coalesced caller and clears the pending request [4.91ms]
+(pass) Mission Skill service request ownership > returns the same wrapped catalog failure to every coalesced caller [13.08ms]
+
+ 9 pass
+ 0 fail
+ 37 expect() calls
+Ran 9 tests across 2 files. [1249.00ms]

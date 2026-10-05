@@ -1,6 +1,6 @@
 import { configure } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import type { HostTransport, TransportRequest } from "../src/services/host-transport"
+import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import { setAppStore } from "../src/store/app"
 import { setLocaleData } from "../src/utils/i18n"
@@ -62,20 +62,21 @@ for (const failure of ["cancel-code", "browser-blocked"] as const) {
     configure({ directory: "" })
     __setHostTransportForTest({
       kind: "browser",
-      async request(request) {
+    capabilities: HOST_CAPABILITIES.browser,
+      async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
         requests.push(request)
         return {
           status: 200,
           ok: true,
           headers: {},
-          body: request.path.endsWith("authorize")
+          body: (request.path.endsWith("authorize")
             ? {
                 url: "https://auth.example.test",
                 method: "code",
                 instructions: "Enter code",
                 flowID: "exact-occurrence",
               }
-            : { ok: true },
+            : { ok: true }) as T,
         }
       },
       openStream() {
@@ -84,7 +85,7 @@ for (const failure of ["cancel-code", "browser-blocked"] as const) {
       async native() {
         throw new Error("unused")
       },
-    } as HostTransport)
+    })
     setAppStore({ providerAuth: { "cancel-provider": [{ type: "oauth", label: "Browser" }] } })
     const cancelled: string[] = []
     const dialogs = { ...callbacks(cancelled), nativeOpen: async () => failure === "cancel-code" }

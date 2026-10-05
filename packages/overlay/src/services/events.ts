@@ -26,6 +26,7 @@ import {
 } from "../store/conversation-agents"
 import { markSessionConfigStale } from "./config"
 import { refreshActiveComposerModelFromSession } from "./composer-model"
+import { captureApiAuthority, isApiAuthorityCurrent } from "./api"
 import { markExpertSquadCatalogStale } from "./expert-squad"
 import {
   applyEvent as applyTreeWriterEvent,
@@ -173,9 +174,12 @@ function scheduleSelectedTaskRecovery(
   taskID = activeTaskID(),
   options: SelectedTaskRecoveryOptions = {},
 ): void {
+  const authority = options.authority ?? captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   const selectedTaskID = String(taskID || "")
   if (!selectedTaskID) return
-  void recovery.recoverConversation(reason, selectedTaskID, options).catch((error) => {
+  void recovery.recoverConversation(reason, selectedTaskID, { ...options, authority }).catch((error) => {
+    if (!isApiAuthorityCurrent(authority) || epoch !== boardStore.selectEpoch) return
     if (error instanceof DOMException && error.name === "AbortError") return
     console.error("[sse] selected-task recovery failed", reason, selectedTaskID, error)
   })
@@ -186,9 +190,12 @@ function scheduleRewindClearRecovery(
   reason: string,
   taskID = activeTaskID(),
 ): void {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   const selectedTaskID = String(taskID || "")
   if (!selectedTaskID) return
   void recovery.recoverAfterRewindClear(reason, selectedTaskID).catch((error) => {
+    if (!isApiAuthorityCurrent(authority) || epoch !== boardStore.selectEpoch) return
     if (error instanceof DOMException && error.name === "AbortError") return
     console.error("[sse] rewind clear recovery failed", reason, selectedTaskID, error)
   })
@@ -200,12 +207,20 @@ const BOARD_EVENT_DEBOUNCE = 500
 
 let tasksKickTimer: ReturnType<typeof setTimeout> | null = null
 
+export function retireEventProjection(): void {
+  if (tasksKickTimer) clearTimeout(tasksKickTimer)
+  tasksKickTimer = null
+}
+
 /**
  * Route a parsed SSE event to the appropriate Solid store or action.
  * @returns true if the event was consumed; false if it should be forwarded to
  * handleEventStreamEvent for board/task lifecycle processing.
  */
 export function routeSSEEvent(event: any, recovery: SelectedTaskRecoveryScheduler): boolean {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
+  const owns = () => isApiAuthorityCurrent(authority) && epoch === boardStore.selectEpoch
   const type: string = event.type || ""
   if (
     type === "agent.execution.lifecycle" &&
@@ -214,6 +229,7 @@ export function routeSSEEvent(event: any, recovery: SelectedTaskRecoverySchedule
     boardStore.selectedSource.sessionKind === "mission"
   ) {
     void refreshConversationTurnArtifacts().catch((error) => {
+      if (!owns()) return
       console.error("[sse] Mission turn Artifact refresh failed", error)
     })
   }
@@ -344,10 +360,12 @@ export function routeSSEEvent(event: any, recovery: SelectedTaskRecoverySchedule
       // Idempotent — duplicate task.rewound events keep the same cursor.
       void Promise.resolve()
         .then(() => {
+          if (!owns()) return
           pruneCardsAfterCursor(cursorTime)
           if (resetWorktree) scheduleBoard(0)
         })
         .catch((error) => {
+          if (!owns()) return
           console.error("[sse] rewind card pruning failed", error)
         })
       advanceHandledSelectedTaskSequence(event)
@@ -370,6 +388,7 @@ export function routeSSEEvent(event: any, recovery: SelectedTaskRecoverySchedule
     if (!changedSessionID) throw new Error("config.changed is missing canonical properties.sessionID")
     markSessionConfigStale(changedSessionID)
     void refreshActiveComposerModelFromSession(changedSessionID)?.catch((err: unknown) => {
+      if (!owns()) return
       console.error("[sse] Session config projection refresh failed", err)
     })
     advanceHandledSelectedTaskSequence(event)
@@ -429,22 +448,30 @@ function shouldRefreshSelectedBoard(type: string): boolean {
 }
 
 function scheduleTasksCompat(delay = 0): void {
+  const authority = captureApiAuthority()
   if (tasksKickTimer) clearTimeout(tasksKickTimer)
-  tasksKickTimer = setTimeout(() => {
+  const timer = setTimeout(() => {
+    if (tasksKickTimer !== timer) return
     tasksKickTimer = null
-    void loadTasks().catch((err) => {
+    if (!isApiAuthorityCurrent(authority)) return
+    void loadTasks({ authority }).catch((err) => {
+      if (!isApiAuthorityCurrent(authority)) return
       console.error("[task-list-sse] task refresh failed", err)
     })
   }, delay)
+  tasksKickTimer = timer
 }
 
 export function handleEventStreamEvent(event: any, recovery: SelectedTaskRecoveryScheduler): void {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   const type = normalizedEventType(event)
   if (
     (type === "task.completed" || type === "task.failed" || type === "task.cancelled") &&
     eventTaskID(event) === activeTaskID()
   ) {
     void refreshConversationTurnArtifacts().catch((error) => {
+      if (!isApiAuthorityCurrent(authority) || epoch !== boardStore.selectEpoch) return
       console.error("[sse] Task turn Artifact refresh failed", error)
     })
   }

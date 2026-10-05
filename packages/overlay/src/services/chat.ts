@@ -6,7 +6,7 @@
 // This module owns no render-side effects. Callers drive UI updates through
 // reactive Solid stores.
 
-import { apiJson } from "./api"
+import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import {
   messageStore,
   setChatRequest,
@@ -50,7 +50,9 @@ export function classifyPanelMessageTarget(input: {
   return tasks.some((item: any) => item?.task?.id === selectedTaskID) ? "reload" : "orphan"
 }
 
-async function resolvePanelMessageTaskID(): Promise<string> {
+async function resolvePanelMessageTaskID(authority: ApiAuthority): Promise<string> {
+  assertApiAuthorityCurrent(authority)
+  const epoch = boardStore.selectEpoch
   const selectedTaskID = String(activeTaskID() || "").trim()
   if (!selectedTaskID) return ""
 
@@ -61,7 +63,9 @@ async function resolvePanelMessageTaskID(): Promise<string> {
   })
 
   if (target === "orphan") {
-    await loadTasks()
+    await loadTasks({ authority })
+    assertApiAuthorityCurrent(authority)
+    if (epoch !== boardStore.selectEpoch) throw new DOMException("Chat target selection superseded", "AbortError")
     target = classifyPanelMessageTarget({
       selectedTaskID,
       boardTaskID: boardStore.board?.task?.id,
@@ -72,11 +76,13 @@ async function resolvePanelMessageTaskID(): Promise<string> {
   if (target === "task") return selectedTaskID
 
   if (target === "reload") {
-    await selectTask(selectedTaskID, { selectionEpoch: beginWorkspaceSelection() })
-    return String(activeTaskID() || "").trim()
+    await selectTask(selectedTaskID, { selectionEpoch: beginWorkspaceSelection(), authority })
+    assertApiAuthorityCurrent(authority)
+    if (activeTaskID() !== selectedTaskID) throw new DOMException("Chat target selection superseded", "AbortError")
+    return selectedTaskID
   }
 
-  await selectTask("", { selectionEpoch: beginWorkspaceSelection() })
+  await selectTask("", { selectionEpoch: beginWorkspaceSelection(), authority })
   return ""
 }
 
@@ -127,9 +133,11 @@ export function canComposeChat(): boolean {
 /**
  * Send a remote abort/cancel request for a single target.
  */
-async function abortChatTargetRemote(target: ChatAbortTarget): Promise<void> {
+async function abortChatTargetRemote(target: ChatAbortTarget, authority: ApiAuthority): Promise<void> {
+  assertApiAuthorityCurrent(authority)
   if (target.kind === "task") {
     await requestTaskCancellation({
+      authority,
       taskID: target.taskID,
       directory: target.directory,
       surface: "overlay.chat_request_stop",
@@ -139,7 +147,7 @@ async function abortChatTargetRemote(target: ChatAbortTarget): Promise<void> {
   }
   if (target.kind === "mission") {
     const aborted = await abortMission(
-      { missionID: target.missionID, directory: target.directory },
+      { missionID: target.missionID, directory: target.directory, authority },
       {
         surface: "overlay.chat_request_stop",
         reason: "Operator stopped the active Mission chat request",
@@ -151,6 +159,7 @@ async function abortChatTargetRemote(target: ChatAbortTarget): Promise<void> {
   await apiJson(
     directoryScopedPath(`session/${encodeURIComponent(target.sessionID)}/abort`, target.directory, "abort session"),
     {
+      authority,
       method: "POST",
     },
   )
@@ -165,10 +174,16 @@ async function abortChatTargetRemote(target: ChatAbortTarget): Promise<void> {
 export async function stopChatRequest(): Promise<boolean> {
   const request = messageStore.chatRequest
   if (!request) return false
+  assertApiAuthorityCurrent(request.authority)
 
   abortChatRequest()
-  await abortChatTargetRemote(request.target)
+  await abortChatTargetRemote(request.target, request.authority)
   return true
+}
+
+/** Retire the visible request owner; accepted HTTP work retains its real settlement. */
+export function retireChatRequestProjection(): void {
+  setChatRequest(null)
 }
 
 function sessionPromptParts(text: string, attachments: any[], metadata: any): any[] {
@@ -203,6 +218,7 @@ function missionExecutionForPrompt(sessionID: string): WorkLedgerMissionRow | nu
 }
 
 export async function promptSessionMessage(input: {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
   text: string
@@ -212,10 +228,15 @@ export async function promptSessionMessage(input: {
   model?: { providerID: string; modelID: string }
   onDispatch?: () => void
 }): Promise<any> {
+  const authority = input.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const epoch = boardStore.selectEpoch
+  const ownsProjection = () => isApiAuthorityCurrent(authority) && epoch === boardStore.selectEpoch
   const requestID = randomUUID()
   const controller = new AbortController()
   const mission = missionExecutionForPrompt(input.sessionID)
   const request: ChatRequestState = {
+    authority,
     requestID,
     controller,
     target: mission
@@ -229,6 +250,7 @@ export async function promptSessionMessage(input: {
       const model = input.model ? `${input.model.providerID}/${input.model.modelID}` : currentOpenCorvusModel()
       input.onDispatch?.()
       return await wakeMission({
+        authority,
         requestID,
         missionID: mission.missionID,
         directory: mission.directory,
@@ -240,12 +262,16 @@ export async function promptSessionMessage(input: {
       })
     }
     if (input.promptProfile) {
-      await setSessionExpertSquadActive(input.sessionID, input.promptProfile, input.directory)
+      await setSessionExpertSquadActive(input.sessionID, input.promptProfile, input.directory, authority)
     }
+    assertApiAuthorityCurrent(authority)
+    if (controller.signal.aborted) throw controller.signal.reason ?? new DOMException("Chat request aborted", "AbortError")
+    if (!ownsProjection()) throw new DOMException("Chat request source superseded", "AbortError")
     input.onDispatch?.()
     const result = await apiJson(
       directoryScopedPath(`session/${encodeURIComponent(input.sessionID)}/message`, input.directory, "session prompt"),
       {
+        authority,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -256,9 +282,10 @@ export async function promptSessionMessage(input: {
         signal: controller.signal,
       },
     )
-    ingestPersistedConversationMessage(result)
+    if (ownsProjection()) ingestPersistedConversationMessage(result)
     return result
   } catch (error) {
+    if (error instanceof ApiAuthorityChangedError) throw error
     // A locally aborted request is the successful completion of the operator's
     // explicit Stop action. The durable Mission/Task/Session cancellation is
     // dispatched by stopChatRequest; do not surface that local transport abort
@@ -266,7 +293,7 @@ export async function promptSessionMessage(input: {
     if (controller.signal.aborted) return undefined
     throw error
   } finally {
-    if (messageStore.chatRequest?.requestID === request.requestID) {
+    if (isApiAuthorityCurrent(authority) && messageStore.chatRequest?.requestID === request.requestID) {
       setChatRequest(null)
     }
   }
@@ -277,7 +304,10 @@ export async function panelMessage(
   attachmentsOrMeta: any[] | Record<string, any> = [],
   metadata: any = {},
   onDispatch?: () => void,
+  options: { authority?: ApiAuthority } = {},
 ): Promise<any> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const attachments = Array.isArray(attachmentsOrMeta) ? attachmentsOrMeta : []
   const meta = Array.isArray(attachmentsOrMeta) ? metadata : attachmentsOrMeta
   const promptProfile = typeof meta?.promptProfile === "string" ? meta.promptProfile : undefined
@@ -294,6 +324,7 @@ export async function panelMessage(
   const sessionID = activeSessionID()
   if (sessionID && !explicitTarget) {
     return promptSessionMessage({
+      authority,
       sessionID,
       directory: conversationSourceDirectory({ kind: "session", id: sessionID }),
       text,
@@ -308,12 +339,15 @@ export async function panelMessage(
   const requestID = randomUUID()
   const controller = new AbortController()
   const requestBase = {
+    authority,
     requestID,
     controller,
   }
   let request: ChatRequestState | undefined
   try {
-    const taskID = explicitTarget?.taskID || (await resolvePanelMessageTaskID())
+    const taskID = explicitTarget?.taskID || (await resolvePanelMessageTaskID(authority))
+    assertApiAuthorityCurrent(authority)
+    const epoch = boardStore.selectEpoch
     if (!taskID) throw new Error("panelMessage: an Assistant session or task must be selected")
     setConnectionStatus("online")
     const directory = explicitTarget?.directory || taskOwningDirectory(taskID)
@@ -325,6 +359,7 @@ export async function panelMessage(
     // conversation to continue, not a brand-new task.
     onDispatch?.()
     const result = await apiJson(taskScopedPath(taskID, directory, "/message"), {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -348,13 +383,15 @@ export async function panelMessage(
     // Server returned the persisted user Message + parts. Project them
     // through tree-writer immediately so the user sees their bubble before
     // the SSE round-trip lands; messageStore live ingestion is retired.
-    ingestPersistedConversationMessage(result.user_message)
-    await loadBoard()
+    if (isApiAuthorityCurrent(authority) && epoch === boardStore.selectEpoch) {
+      ingestPersistedConversationMessage(result.user_message)
+      await loadBoard({ authority })
+    }
     // The real conversation comes from board/transcript rehydration. Mirroring
     // the route response locally would create a second, fake assistant turn.
     return result
   } finally {
-    if (request && messageStore.chatRequest?.requestID === request.requestID) {
+    if (isApiAuthorityCurrent(authority) && request && messageStore.chatRequest?.requestID === request.requestID) {
       setChatRequest(null)
     }
   }

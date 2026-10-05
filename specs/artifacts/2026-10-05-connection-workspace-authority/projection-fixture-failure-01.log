@@ -1,0 +1,54 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\connection-projection-authority.test.ts:
+355 | }
+356 | 
+357 | export function markCardTreeVisibleChanged(): void {
+358 |   if (visibleChangeScheduled) return
+359 |   visibleChangeScheduled = true
+360 |   requestAnimationFrame(() => {
+        ^
+ReferenceError: requestAnimationFrame is not defined
+      at markCardTreeVisibleChanged (D:\myhexin-local\opencorvus\packages\overlay\src\store\card-tree.ts:360:3)
+      at markCardTreeVisibleChanged (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:432:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:3535:5)
+      at rebuildBoardDerivedCards (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:3528:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:3905:3)
+      at notifyBoardProjection (D:\myhexin-local\opencorvus\packages\overlay\src\store\board.ts:146:3)
+      at clearBoard (D:\myhexin-local\opencorvus\packages\overlay\src\store\board.ts:711:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\connection-projection-authority.test.ts:57:3)
+(fail) local transport metadata completes B's same-directory facts after A returns [2.84ms]
+(pass) local compound GET and mutator capture retain an exact stale continuation outcome [1.90ms]
+(pass) local board pending ownership keeps B loading while the old A finally settles [1.39ms]
+(pass) local global Task list uses B's pending owner and retains its exact rows after A [1.24ms]
+(pass) local same-ID Session mutation retains A receipt and B busy owner before B completes [0.99ms]
+ 8 |         throw new core.$ZodAsyncError();
+ 9 |     }
+10 |     if (result.issues.length) {
+11 |         const e = new (_params?.Err ?? _Err)(result.issues.map((iss) => util.finalizeIssue(iss, ctx, core.config())));
+12 |         util.captureStackTrace(e, _params?.callee);
+13 |         throw e;
+                   ^
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "active",
+      "idle",
+      "terminal"
+    ],
+    "path": [
+      "status"
+    ],
+    "message": "Invalid option: expected one of \"active\"|\"idle\"|\"terminal\""
+  }
+]
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\zod@4.4.3\node_modules\zod\v4\core\parse.js:13:15)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\connection-projection-authority.test.ts:186:29)
+(fail) Work Ledger replacement snapshot and retirement use the existing current map [1.58ms]
+(pass) local VCS and panel POST close settle their original operations with actual stream-close facts [1.35ms]
+
+ 5 pass
+ 2 fail
+ 20 expect() calls
+Ran 7 tests across 1 file. [1161.00ms]

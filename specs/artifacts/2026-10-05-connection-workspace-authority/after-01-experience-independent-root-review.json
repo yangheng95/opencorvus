@@ -1,0 +1,41 @@
+{
+  "reviewedAt": "2026-10-05T14:48:45.8399555Z",
+  "reviewer": "experience_audit",
+  "mode": "Independent personal image review of root-operated real page; reviewer did not operate the UI",
+  "screens": [
+    {
+      "visible": "A Chat selected; authority-note baseline; clean disabled Save",
+      "file": "after-root-03-editor-baseline.png"
+    },
+    {
+      "visible": "B URL17949; Unsaved changes authority-note; Cancel Discard Save; underlying Saving state",
+      "file": "after-root-04-connection-unsaved-dialog.png"
+    },
+    {
+      "visible": "A Chat selected; exact unsaved draft; star and blue Save; ordinary product review note retained",
+      "file": "after-root-05-cancel-preserves-a.png"
+    },
+    {
+      "visible": "New Chat launcher; ordinary prose retained; File tab retired; Files empty; existing a-project heading remains",
+      "file": "after-root-06-discard-b-launcher.png"
+    },
+    {
+      "visible": "Dirty saved-during-switch text; second review prose and selected canonical browser-use skill mention",
+      "file": "after-root-07-save-branch-reference-a.png"
+    },
+    {
+      "visible": "B URL17949; normal Save; notice explicitly states connection-specific references removed and draft text kept",
+      "file": "after-root-08-save-confirmed-reference-notice.png"
+    }
+  ],
+  "limits": [
+    "Online pixels do not independently show port; root actual AX supplies port",
+    "Screenshot08 does not show successor launcher prose itself",
+    "No interaction by child; no model/MCP/3D/native qualification",
+    "Query-less logs cannot identify file/directory target without separate root/file facts"
+  ],
+  "diskCheckpoint": "after-01-a/b-cancel-discard-observation-02.json retains earlier original28byte baselines",
+  "laterDiskCheckpoint": "root-after-save-disk.json records A50byte actual UI Save and B28byte baseline",
+  "requestCorrection": "Original cancel-discard request arrays were wrongly empty due unnormalized PowerShell DateTime timezone comparison; -02 uses explicit UTC normalization and preserves original disk facts",
+  "bProjectOrigin": "after-01-b-ledger-project-origin.json actual current B Project created before at12:40:01.877Z; not new after"
+}

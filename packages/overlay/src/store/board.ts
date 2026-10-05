@@ -5,6 +5,7 @@
 import { createStore, reconcile } from "solid-js/store"
 import { batch } from "solid-js"
 import { ApiError, apiJson, apiRequest } from "../services/api"
+import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { directoryScopedPath } from "../services/task-path"
 import { formatErrorDetails } from "../utils/error-details"
 import { t } from "../utils/i18n"
@@ -36,10 +37,9 @@ export const [boardStore, setBoardStore] = createStore({
   selectedSource: null as BoardSource | null,
   taskSequence: 0 as number,
   loading: false,
-  /** Monotonic counter incremented on each selectTask() call. Used to detect
-   *  superseded loads when the user rapidly switches tasks: async phases
-   *  capture the epoch at entry and bail out when boardStore.selectEpoch has
-   *  advanced past it. */
+  /** Monotonic workspace selection lifetime, advanced by admitted selection,
+   *  departure or explicit supersession. Ready reselection and cancellation
+   *  retain it; async phases capture it before awaiting. */
   selectEpoch: 0 as number,
   /** True between selectTask() entry and its async load chain completing
    *  (applyDirectory + hydrateTaskConversation + startSSE). Drives the top-of-
@@ -99,15 +99,16 @@ export const [boardStore, setBoardStore] = createStore({
 // ── Loaders ──
 
 export interface LoadBoardOptions {
+  authority?: ApiAuthority
   /** Wait for any older request, then issue this caller's own board reload and reject on failure. */
   requireFresh?: boolean
 }
 
 // Module-level runtime state (replaces .state proxy fields).
 let _boardRetryTimer: ReturnType<typeof setTimeout> | null = null
-let _boardLoading: Promise<void> | null = null
+let _boardLoading: { promise: Promise<void>; authority: ApiAuthority; selectionEpoch: number; taskID: string } | null = null
 let _boardQueued = false
-let _tasksLoading: Promise<void> | null = null
+let _tasksLoading: { promise: Promise<void>; authority: ApiAuthority } | null = null
 let _taskListGeneration = 0
 let _taskListPaginationRequest = 0
 
@@ -312,12 +313,15 @@ function clearBoardRetry(): void {
 }
 
 function retryBoard(): void {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   if (!activeTaskID() || _boardRetryTimer) return
   const delay = Math.min(1000 * Math.pow(2, Math.min(boardStore.boardRetryCount, 4)), 15000)
   setBoardRetryCount(boardStore.boardRetryCount + 1)
   _boardRetryTimer = setTimeout(() => {
     _boardRetryTimer = null
-    observeScheduledBoardLoad("retry", loadBoard())
+    if (!isApiAuthorityCurrent(authority) || epoch !== boardStore.selectEpoch) return
+    observeScheduledBoardLoad("retry", loadBoard({ authority }))
   }, delay)
 }
 
@@ -328,6 +332,13 @@ function observeScheduledBoardLoad(owner: string, promise: Promise<void>): void 
 }
 
 export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const epoch = boardStore.selectEpoch
+  if (_boardLoading && (!isApiAuthorityCurrent(_boardLoading.authority) || _boardLoading.selectionEpoch !== epoch || _boardLoading.taskID !== activeTaskID())) {
+    _boardLoading = null
+    _boardQueued = false
+  }
   let taskID = activeTaskID()
   if (!taskID) {
     setBoardStore("board", null)
@@ -338,22 +349,25 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
     const inFlightBeforeCall = _boardLoading
     if (!options.requireFresh) {
       _boardQueued = true
-      return inFlightBeforeCall
+      return inFlightBeforeCall.promise
     }
     try {
-      await inFlightBeforeCall
+      await inFlightBeforeCall.promise
     } catch {
       // The in-flight request started before the required-fresh boundary.
       // The caller needs its own post-mutation board request below.
     }
   }
+  assertApiAuthorityCurrent(authority)
+  if (epoch !== boardStore.selectEpoch) return
   taskID = activeTaskID()
   if (!taskID) {
     setBoardStore("board", null)
     setSnapshotVersion("")
     return
   }
-  const loading = (async () => {
+  const loading = { authority, selectionEpoch: epoch, taskID, promise: Promise.resolve().then(async () => {
+    const owns = () => _boardLoading === loading && isApiAuthorityCurrent(authority) && epoch === boardStore.selectEpoch && taskID === activeTaskID()
     let failed = false
     try {
       const headers: Record<string, string> = {}
@@ -361,10 +375,11 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
       const directory = selectedTaskOwningDirectory(taskID)
       const boardPath = directoryScopedPath(`task/${encodeURIComponent(taskID)}/board`, directory, "loadBoard")
       const res = await apiRequest<any>(boardPath, {
+        authority,
         headers,
         signal: AbortSignal.timeout(10000),
       })
-      if (taskID !== activeTaskID()) return
+      if (!owns()) return
       if (res.status === 304) {
         clearBoardRetry()
         return
@@ -398,6 +413,10 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
       // Agent cards are derived reactively from boardStore — no manual rebuild needed.
     } catch (e) {
       failed = true
+      if (!owns()) {
+        if (options.requireFresh) throw e
+        return
+      }
       if (!options.requireFresh) {
         const message = e instanceof Error ? e.message : String(e)
         AppLog.error("board", "Selected task board refresh failed", {
@@ -412,6 +431,7 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
       if (taskID === activeTaskID() && !options.requireFresh) retryBoard()
       if (options.requireFresh) throw e
     } finally {
+      if (owns()) {
       _boardLoading = null
       setBoardStore("loading", false)
       if (_boardQueued || boardStore.boardQueued) {
@@ -419,15 +439,17 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
         setBoardQueued(false)
         if (!failed && !_boardRetryTimer) {
           queueMicrotask(() => {
-            observeScheduledBoardLoad("queued", loadBoard())
+            if (isApiAuthorityCurrent(authority) && epoch === boardStore.selectEpoch)
+              observeScheduledBoardLoad("queued", loadBoard({ authority }))
           })
         }
       }
+      }
     }
-  })()
+  }) }
   _boardLoading = loading
   setBoardStore("loading", true)
-  return loading
+  return loading.promise
 }
 
 /**
@@ -502,9 +524,14 @@ function reconcileTaskItems(next: any[], previous: any[]): any[] {
   return reconciled
 }
 
-export function clearTasksForMissingDirectory(): void {
+export function retireTaskListRequests(): void {
   _tasksLoading = null
   invalidateTaskListPagination()
+  setBoardStore("tasksLoadingMore", false)
+}
+
+export function clearTasksForMissingDirectory(): void {
+  retireTaskListRequests()
   applyTasks([], [])
   setBoardStore("tasksError", "")
   setBoardStore("tasksLoaded", true)
@@ -516,41 +543,46 @@ export function clearTasksForMissingDirectory(): void {
 }
 
 export interface LoadTasksOptions {
+  authority?: ApiAuthority
   /** Require a request that starts after the caller's mutation boundary. */
   requireFresh?: boolean
 }
 
 export async function loadTasks(options: LoadTasksOptions = {}): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  if (_tasksLoading && !isApiAuthorityCurrent(_tasksLoading.authority)) _tasksLoading = null
   if (_tasksLoading) {
     const inFlightBeforeCall = _tasksLoading
-    if (!options.requireFresh) return inFlightBeforeCall
+    if (!options.requireFresh) return inFlightBeforeCall.promise
     try {
-      await inFlightBeforeCall
+      await inFlightBeforeCall.promise
     } catch {
       // This request started before the required-fresh boundary. loadTasksOnce()
       // already recorded its failure in boardStore.tasksError; the caller still
       // needs a new post-mutation request below.
     }
-    if (_tasksLoading && _tasksLoading !== inFlightBeforeCall) return _tasksLoading
+    assertApiAuthorityCurrent(authority)
+    if (_tasksLoading && _tasksLoading !== inFlightBeforeCall) return _tasksLoading.promise
   }
-  const loading = loadTasksOnce()
+  const loading = { authority, promise: loadTasksOnce(authority) }
   _tasksLoading = loading
   try {
-    await loading
+    await loading.promise
   } finally {
     if (_tasksLoading === loading) _tasksLoading = null
   }
 }
 
-async function loadTasksOnce(): Promise<void> {
+async function loadTasksOnce(authority: ApiAuthority): Promise<void> {
   // Let-it-crash: any fetch/parse error lands in boardStore.tasksError so the
   // UI surfaces the failure explicitly. The previous silent catch left the UI
   // stuck on an empty list with no indication that the backend was unreachable.
   invalidateTaskListPagination()
   const generation = _taskListGeneration
   try {
-    const data = await apiJson(taskListPagePath({ limit: TASK_LIST_PAGE_SIZE + 1 }))
-    if (generation !== _taskListGeneration) return
+    const data = await apiJson(taskListPagePath({ limit: TASK_LIST_PAGE_SIZE + 1 }), { authority })
+    if (!isApiAuthorityCurrent(authority) || generation !== _taskListGeneration) return
     const page = taskPageFromResponse(data, TASK_LIST_PAGE_SIZE)
     const tasks = sortedTasks({ tasks: page.tasks })
     const seen = new Set(tasks.map((item: any) => item?.task?.requestID).filter(Boolean))
@@ -563,16 +595,18 @@ async function loadTasksOnce(): Promise<void> {
     setBoardStore("tasksCursorUpdated", page.cursor?.updated ?? null)
     setBoardStore("tasksCursorTaskID", page.cursor?.taskID ?? "")
   } catch (e) {
-    if (generation !== _taskListGeneration) return
+    if (!isApiAuthorityCurrent(authority) || generation !== _taskListGeneration) return
     setBoardStore("tasksError", e instanceof Error ? e.message : String(e))
     throw e
   }
 }
 
-export async function loadMoreTasks(): Promise<void> {
-  if (_tasksLoading) {
-    await _tasksLoading
+export async function loadMoreTasks(authority = captureApiAuthority()): Promise<void> {
+  assertApiAuthorityCurrent(authority)
+  if (_tasksLoading && isApiAuthorityCurrent(_tasksLoading.authority)) {
+    await _tasksLoading.promise
   }
+  assertApiAuthorityCurrent(authority)
   if (!boardStore.tasksHasMore || boardStore.tasksLoadingMore) return
   const generation = _taskListGeneration
   const paginationRequest = _taskListPaginationRequest + 1
@@ -590,9 +624,10 @@ export async function loadMoreTasks(): Promise<void> {
         cursorUpdated: cursorUpdated as number,
         cursorTaskID,
       }),
+      { authority },
     )
     const page = taskPageFromResponse(data, TASK_LIST_PAGE_SIZE)
-    if (generation !== _taskListGeneration) return
+    if (!isApiAuthorityCurrent(authority) || generation !== _taskListGeneration) return
     const currentByID = new Map(boardStore.tasks.map((item: any) => [item?.task?.id, item]))
     for (const item of page.tasks) {
       const id = item?.task?.id
@@ -607,11 +642,11 @@ export async function loadMoreTasks(): Promise<void> {
     setBoardStore("tasksCursorUpdated", page.cursor?.updated ?? null)
     setBoardStore("tasksCursorTaskID", page.cursor?.taskID ?? "")
   } catch (e) {
-    if (generation !== _taskListGeneration) return
+    if (!isApiAuthorityCurrent(authority) || generation !== _taskListGeneration) return
     setBoardStore("tasksError", e instanceof Error ? e.message : String(e))
     throw e
   } finally {
-    if (paginationRequest === _taskListPaginationRequest) {
+    if (isApiAuthorityCurrent(authority) && paginationRequest === _taskListPaginationRequest) {
       setBoardStore("tasksLoadingMore", false)
     }
   }
@@ -649,7 +684,8 @@ function taskPageFromResponse(
  * Cancels pending retry timers and resets all per-task reload machinery so that
  * the next loadBoard() call starts from a clean slate.
  */
-export function clearBoard(): void {
+export function retireBoardRequests(): void {
+  _boardLoading = null
   clearBoardRetry()
   if (boardLoadTimer) {
     clearTimeout(boardLoadTimer)
@@ -657,8 +693,14 @@ export function clearBoard(): void {
   }
   boardLoadDeadline = 0
   _boardQueued = false
+  setBoardStore({ loading: false, boardQueued: false })
+}
+
+export function clearBoard(): void {
+  retireBoardRequests()
   setBoardStore({
     board: null,
+    loading: false,
     taskSequence: 0,
     boardEtag: "",
     boardQueued: false,
@@ -706,6 +748,8 @@ const BOARD_MAX_DELAY_MS = 2000
  * @param delay Delay in milliseconds before calling loadBoard. Defaults to 0.
  */
 export function scheduleBoard(delay = 0): void {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   clearBoardRetry()
   const now = Date.now()
   // First scheduling in a burst: set deadline
@@ -723,7 +767,8 @@ export function scheduleBoard(delay = 0): void {
   boardLoadTimer = setTimeout(() => {
     boardLoadTimer = null
     boardLoadDeadline = 0
-    observeScheduledBoardLoad("debounced", loadBoard())
+    if (isApiAuthorityCurrent(authority) && epoch === boardStore.selectEpoch)
+      observeScheduledBoardLoad("debounced", loadBoard({ authority }))
   }, effectiveDelay)
 }
 

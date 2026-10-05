@@ -1,8 +1,9 @@
-import { createEffect, createMemo, createResource, createSignal, lazy, onCleanup, Show } from "solid-js"
-import { ApiError, apiJson } from "../services/api"
+import { batch, createEffect, createMemo, createSignal, lazy, onCleanup, Show, untrack } from "solid-js"
+import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   closeFileEditor,
   fileEditorRevealRevision,
+  fileEditorReserved,
   registerFileEditorBeforeNavigate,
   selectedFileTarget,
   shortWorkbenchPath,
@@ -28,18 +29,20 @@ function fileContentPath(target: FileEditorTarget): string {
   return `file/${target.sourceAbsolutePath ? "source-content" : "content"}?${query.toString()}`
 }
 
-async function readFileContent(target: FileEditorTarget | null): Promise<FileContent | null> {
+async function readFileContent(target: FileEditorTarget | null, authority: ApiAuthority): Promise<FileContent | null> {
   if (!target) return null
-  return (await apiJson(fileContentPath(target))) as FileContent
+  return (await apiJson(fileContentPath(target), { authority })) as FileContent
 }
 
 async function writeFileContent(
   target: FileEditorTarget,
   content: string,
   expectedRevision: string,
+  authority: ApiAuthority,
 ): Promise<FileContent> {
   if (target.sourceAbsolutePath) throw new Error("Absolute source files are read-only")
   return (await apiJson(projectScopedPath("file/content", target.directory), {
+    authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ path: target.path, content, expectedRevision }),
@@ -89,8 +92,10 @@ export function FileEditorPane() {
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
   const [leaveReason, setLeaveReason] = createSignal<"leave" | "reload">("leave")
-  let pendingLeaveDecision: Promise<boolean> | undefined
-  let settleLeaveDecision: ((allowed: boolean) => void) | undefined
+  let pendingLeaveDecision: Promise<number | null> | undefined
+  let settleLeaveDecision: ((revision: number | null) => void) | undefined
+  let decisionRevision = 0
+  let loadGeneration = 0
   let draftRevision = 0
   let saveGeneration = 0
   let reloadGeneration = 0
@@ -111,96 +116,110 @@ export function FileEditorPane() {
     { equals: sameFileResourceTarget },
   )
 
-  const [content, { mutate: setContent }] = createResource(contentTarget, async (target) => {
-    try {
-      const next = await readFileContent(target)
-      if (target && ownsFileTarget(target)) setLoadError("")
-      return next
-    } catch (err) {
-      if (target && ownsFileTarget(target)) setLoadError(errorMessage(err))
-      return null
-    }
-  })
-
-  createEffect(() => {
-    const current = selectedFileTarget()
-    const identity = current ? `${current.directory}\u0000${current.path}` : ""
-    if (identity === activeTargetIdentity) return
-    activeTargetIdentity = identity
-    saveGeneration += 1
-    reloadGeneration += 1
-    draftRevision += 1
-    setSaving(false)
-    setReloading(false)
-  })
-
-  createEffect(() => {
-    const next = content()
-    setError("")
-    draftRevision += 1
-    if (!canEdit(next)) {
-      setDraft("")
-      setSavedBaseline(null)
-      return
-    }
-    setDraft(next!.content)
-    setSavedBaseline({ content: next!.content, revision: next!.revision })
-  })
-
+  const [content, setContent] = createSignal<FileContent | null>(null)
+  const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
   const path = createMemo(() => target()?.path ?? "")
   const contentLoadError = createMemo(() => loadError())
   const textContent = createMemo(() => canEdit(content()))
   const writable = createMemo(() => textContent() && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
+  const identityOf = (file: FileEditorTarget | null) => file
+    ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
+  const isBusy = () => loading() || saving() || reloading() || identityOf(target()) !== activeTargetIdentity
+
+  const applyContent = (next: FileContent | null) => batch(() => {
+    setContent(next)
+    setError("")
+    draftRevision += 1
+    setDraft(canEdit(next) ? next!.content : "")
+    setSavedBaseline(canEdit(next) ? { content: next!.content, revision: next!.revision } : null)
+  })
+
+  createEffect(() => {
+    const file = contentTarget()
+    const authority = captureApiAuthority()
+    untrack(() => {
+      const identity = identityOf(file)
+      const retainDraft = identity === activeTargetIdentity && dirty()
+      activeTargetIdentity = identity
+      const generation = ++loadGeneration
+      saveGeneration += 1
+      reloadGeneration += 1
+      setSaving(false)
+      setReloading(false)
+      setLoading(false)
+      finishLeaveDecision(false)
+      if (retainDraft) return
+      applyContent(null)
+      setLoadError("")
+      if (!file) return
+      setLoading(true)
+      const current = () => generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
+      void readFileContent(file, authority).then((next) => {
+        if (current()) applyContent(next)
+      }, (cause) => {
+        if (current()) setLoadError(errorMessage(cause))
+      }).finally(() => {
+        if (current()) setLoading(false)
+      })
+    })
+  })
 
   const save = async (): Promise<boolean> => {
     const file = target()
-    if (!file || !writable() || !dirty() || saving() || reloading()) return !dirty()
+    if (fileEditorReserved() || isBusy()) return false
+    if (!file || !writable() || !dirty()) return !dirty()
     const expectedRevision = savedBaseline()?.revision
     if (!expectedRevision) {
       setError(t("file_editor.revision_required"))
       return false
     }
+    const authority = captureApiAuthority()
     const submittedDraft = draft()
     const submittedRevision = draftRevision
     const requestGeneration = ++saveGeneration
     setSaving(true)
     setError("")
     try {
-      const next = await writeFileContent(file, submittedDraft, expectedRevision)
-      if (requestGeneration !== saveGeneration || !ownsFileTarget(file)) return false
+      const next = await writeFileContent(file, submittedDraft, expectedRevision, authority)
+      if (requestGeneration !== saveGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return false
       setSavedBaseline({ content: next.content, revision: next.revision })
       const ownsSubmittedDraft = draftRevision === submittedRevision
       if (ownsSubmittedDraft) setDraft(next.content)
+      draftRevision += 1
       return ownsSubmittedDraft
     } catch (err) {
-      if (requestGeneration === saveGeneration && ownsFileTarget(file)) setError(errorMessage(err))
+      if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setError(errorMessage(err))
       return false
     } finally {
-      if (requestGeneration === saveGeneration && ownsFileTarget(file)) setSaving(false)
+      if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setSaving(false)
     }
   }
 
   const updateDraft = (next: string) => {
+    if (fileEditorReserved()) return
     draftRevision += 1
     setDraft(next)
   }
 
-  const finishLeaveDecision = (allowed: boolean) => {
+  const finishLeaveDecision = (allowed: boolean, approvedRevision = decisionRevision) => {
     const settle = settleLeaveDecision
     settleLeaveDecision = undefined
     pendingLeaveDecision = undefined
     setLeaveDialogOpen(false)
-    settle?.(allowed)
+    setLeaveSaving(false)
+    settle?.(allowed ? approvedRevision : null)
   }
 
-  const decideBeforeNavigate = (reason: "leave" | "reload" = "leave"): Promise<boolean> => {
-    if (!dirty()) return Promise.resolve(true)
+  const decideBeforeNavigate = (reason: "leave" | "reload" = "leave"): Promise<number | null> => {
+    if (fileEditorReserved() || isBusy()) return Promise.resolve(null)
+    if (!dirty()) return Promise.resolve(draftRevision)
     if (pendingLeaveDecision) return pendingLeaveDecision
+    decisionRevision = draftRevision
     setLeaveReason(reason)
     setLeaveDialogOpen(true)
-    pendingLeaveDecision = new Promise<boolean>((resolve) => {
+    pendingLeaveDecision = new Promise<number | null>((resolve) => {
       settleLeaveDecision = resolve
     })
     return pendingLeaveDecision
@@ -209,8 +228,11 @@ export function FileEditorPane() {
   const unregisterBeforeNavigate = registerFileEditorBeforeNavigate({
     confirmLeave: decideBeforeNavigate,
     isDirty: dirty,
+    getRevision: () => draftRevision,
+    isBusy,
   })
   onCleanup(() => {
+    loadGeneration += 1
     reloadGeneration += 1
     saveGeneration += 1
     unregisterBeforeNavigate()
@@ -219,36 +241,52 @@ export function FileEditorPane() {
 
   const reload = async (): Promise<void> => {
     const file = target()
-    if (!file || saving() || reloading()) return
+    if (!file || fileEditorReserved() || isBusy()) return
     const generation = ++reloadGeneration
-    if (!(await decideBeforeNavigate("reload"))) return
-    if (generation !== reloadGeneration || !ownsFileTarget(file)) return
+    const authority = captureApiAuthority()
+    const approvedRevision = await decideBeforeNavigate("reload")
+    if (approvedRevision === null || approvedRevision !== draftRevision || fileEditorReserved()) return
+    if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
     const requestedDraftRevision = draftRevision
     setReloading(true)
     setError("")
     try {
-      const next = await readFileContent(file)
-      if (generation !== reloadGeneration || !ownsFileTarget(file)) return
+      const next = await readFileContent(file, authority)
+      if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
       if (draftRevision !== requestedDraftRevision) {
         setError(t("file_editor.reload_edited"))
         return
       }
       setLoadError("")
-      setContent(next)
+      applyContent(next)
     } catch (cause) {
-      if (generation === reloadGeneration && ownsFileTarget(file)) setError(errorMessage(cause))
+      if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setError(errorMessage(cause))
     } finally {
-      if (generation === reloadGeneration && ownsFileTarget(file)) setReloading(false)
+      if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setReloading(false)
+    }
+  }
+
+  const closeCurrentFile = async (): Promise<void> => {
+    const file = target()
+    const authority = captureApiAuthority()
+    const generation = loadGeneration
+    try {
+      await closeFileEditor()
+    } catch (cause) {
+      if (generation === loadGeneration && isApiAuthorityCurrent(authority) && (!file || ownsFileTarget(file))) {
+        setError(errorMessage(cause))
+      }
     }
   }
 
   const saveAndLeave = async () => {
     if (leaveSaving()) return
+    const decision = pendingLeaveDecision
     setLeaveSaving(true)
     try {
-      if (await save()) finishLeaveDecision(true)
+      if (await save() && decision === pendingLeaveDecision) finishLeaveDecision(true, draftRevision)
     } finally {
-      setLeaveSaving(false)
+      if (decision === pendingLeaveDecision) setLeaveSaving(false)
     }
   }
 
@@ -296,7 +334,7 @@ export function FileEditorPane() {
             data-dirty={dirty() ? "true" : "false"}
             title={`${t("common.save")} (Ctrl/Cmd+S)`}
             aria-keyshortcuts="Control+s Meta+s"
-            disabled={!dirty() || saving() || reloading()}
+            disabled={!dirty() || isBusy() || fileEditorReserved()}
             onClick={() => void save()}
           >
             {saving() ? t("common.saving") : t("common.save")}
@@ -307,7 +345,7 @@ export function FileEditorPane() {
             size="icon"
             tone="neutral"
             data-ui="file-editor-reload"
-            disabled={saving() || reloading() || content.loading}
+            disabled={isBusy() || fileEditorReserved()}
             title={t("file_editor.reload")}
             aria-label={t("file_editor.reload")}
             onClick={() => void reload()}
@@ -321,7 +359,8 @@ export function FileEditorPane() {
             tone="neutral"
             data-chrome="icon-action"
             data-ui="file-editor-close"
-            onClick={() => void closeFileEditor()}
+            disabled={isBusy() || fileEditorReserved()}
+            onClick={() => void closeCurrentFile()}
             title={t("workspace.close")}
             aria-label={t("workspace.close")}
           >
@@ -330,7 +369,7 @@ export function FileEditorPane() {
         </header>
         <div class="file-editor-body">
           <Show
-            when={!content.loading}
+            when={!loading()}
             fallback={
               <div class="file-editor-empty">
                 <p>{t("diff.loading")}</p>
@@ -368,7 +407,7 @@ export function FileEditorPane() {
                   lineRangeRevealRevision={fileEditorRevealRevision()}
                   ariaLabel={t("file_editor.title")}
                   onValueChange={updateDraft}
-                  readOnly={!!target()?.sourceAbsolutePath}
+                  readOnly={!!target()?.sourceAbsolutePath || fileEditorReserved()}
                 />
               </Show>
             </Show>

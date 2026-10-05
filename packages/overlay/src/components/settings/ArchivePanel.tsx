@@ -1,5 +1,11 @@
 import { Feedback } from "../ui/Feedback"
-import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
+import { For, Show, createEffect, createSignal, onCleanup, untrack } from "solid-js"
+import {
+  ApiAuthorityChangedError,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "../../services/api"
 import { loadArchivedWorkLedger, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
 import { deleteMission, setMissionArchived } from "../../services/mission"
@@ -48,15 +54,18 @@ export default function ArchivePanel() {
   let panelElement: HTMLDivElement | undefined
   let headingElement: HTMLSpanElement | undefined
 
-  const ownsRequest = (generation: number) => generation === requestGeneration
+  const ownsRequest = (generation: number, authority: ApiAuthority) =>
+    generation === requestGeneration && isApiAuthorityCurrent(authority)
 
   const focusAfterAction = (
     rowKey: string,
     previousIndex: number,
     previousFocus: HTMLElement | null,
     committed: boolean,
+    ownsAction: () => boolean,
   ) => {
     queueMicrotask(() => {
+      if (!ownsAction()) return
       if (!committed && previousFocus?.isConnected) {
         previousFocus.focus({ preventScroll: true })
         return
@@ -81,6 +90,7 @@ export default function ArchivePanel() {
     const requestController = new AbortController()
     controller = requestController
     const generation = ++requestGeneration
+    const authority = captureApiAuthority()
     setLoading(true)
     setError("")
     try {
@@ -88,12 +98,18 @@ export default function ArchivePanel() {
         limit: ARCHIVE_PAGE_SIZE,
         cursor,
         signal: requestController.signal,
+        authority,
       })
-      if (!ownsRequest(generation)) return
+      if (!ownsRequest(generation, authority)) return
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
     } catch (cause) {
-      if (requestController.signal.aborted || !ownsRequest(generation)) return
+      if (
+        requestController.signal.aborted ||
+        !ownsRequest(generation, authority) ||
+        cause instanceof ApiAuthorityChangedError
+      )
+        return
       const message = cause instanceof Error ? cause.message : String(cause)
       setError(message)
       reportError({
@@ -103,7 +119,7 @@ export default function ArchivePanel() {
         details: formatErrorDetails(cause),
       })
     } finally {
-      if (ownsRequest(generation)) {
+      if (ownsRequest(generation, authority)) {
         if (controller === requestController) controller = undefined
         setLoading(false)
       }
@@ -121,24 +137,26 @@ export default function ArchivePanel() {
     controller?.abort()
     controller = undefined
     const generation = ++requestGeneration
+    const authority = captureApiAuthority()
+    const ownsAction = () => ownsRequest(generation, authority)
     setBusyID(rowKey)
     setError("")
     let committed = false
     try {
       if (action === "restore") {
         if (row.kind === "mission") {
-          await setMissionArchived({ missionID: row.missionID, directory: row.directory }, false)
+          await setMissionArchived({ missionID: row.missionID, directory: row.directory, authority }, false)
         } else if (row.kind === "chat") {
           await setConversationSessionArchived(
-            { sessionID: row.sessionID, directory: row.directory, experience: row.experience },
+            { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
             false,
           )
         } else {
-          await setTaskArchived({ taskID: row.id, directory: row.directory }, false)
+          await setTaskArchived({ taskID: row.id, directory: row.directory, authority }, false)
         }
       } else if (row.kind === "mission") {
         await deleteMission(
-          { missionID: row.missionID, directory: row.directory },
+          { missionID: row.missionID, directory: row.directory, authority },
           {
             surface: "overlay.archive_panel",
             reason: "Operator deleted the archived Mission from Archive",
@@ -149,17 +167,22 @@ export default function ArchivePanel() {
           sessionID: row.sessionID,
           directory: row.directory,
           experience: row.experience,
+          authority,
         })
       } else {
-        await deleteTask(row.id, {
-          surface: "overlay.archive_panel",
-          reason: "Operator deleted the archived task from Archive",
-        })
+        await deleteTask(
+          row.id,
+          {
+            surface: "overlay.archive_panel",
+            reason: "Operator deleted the archived task from Archive",
+          },
+          { authority },
+        )
       }
-      if (!ownsRequest(generation)) return
+      if (!ownsAction()) return
       committed = true
     } catch (cause) {
-      if (!ownsRequest(generation)) return
+      if (!ownsAction() || cause instanceof ApiAuthorityChangedError) return
       const message = cause instanceof Error ? cause.message : String(cause)
       setError(message)
       reportError({
@@ -169,7 +192,7 @@ export default function ArchivePanel() {
         details: formatErrorDetails(cause),
       })
       setBusyID("")
-      focusAfterAction(rowKey, previousIndex, previousFocus, false)
+      focusAfterAction(rowKey, previousIndex, previousFocus, false, ownsAction)
       return
     }
 
@@ -189,12 +212,13 @@ export default function ArchivePanel() {
         limit: ARCHIVE_PAGE_SIZE,
         cursor: null,
         signal: requestController.signal,
+        authority,
       })
-      if (!ownsRequest(generation)) return
+      if (!ownsAction()) return
       setRows(result.rows)
       setNextCursor(result.nextCursor)
     } catch (cause) {
-      if (requestController.signal.aborted || !ownsRequest(generation)) return
+      if (requestController.signal.aborted || !ownsAction() || cause instanceof ApiAuthorityChangedError) return
       const message = cause instanceof Error ? cause.message : String(cause)
       setError(message)
       reportError({
@@ -204,7 +228,7 @@ export default function ArchivePanel() {
         details: formatErrorDetails(cause),
       })
     } finally {
-      if (!ownsRequest(generation)) return
+      if (!ownsAction()) return
       if (controller === requestController) controller = undefined
       setLoading(false)
       setBusyID("")
@@ -222,11 +246,22 @@ export default function ArchivePanel() {
             }),
         )
       }
-      focusAfterAction(rowKey, previousIndex, previousFocus, committed)
+      focusAfterAction(rowKey, previousIndex, previousFocus, committed, ownsAction)
     }
   }
 
-  onMount(() => void load(false))
+  createEffect(() => {
+    captureApiAuthority()
+    requestGeneration += 1
+    controller?.abort()
+    controller = undefined
+    setRows([])
+    setNextCursor(null)
+    setBusyID("")
+    setLoading(false)
+    setError("")
+    untrack(() => void load(false))
+  })
   onCleanup(() => {
     requestGeneration += 1
     controller?.abort()

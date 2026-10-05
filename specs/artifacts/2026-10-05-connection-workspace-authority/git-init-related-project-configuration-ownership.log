@@ -1,0 +1,24 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\project-configuration-ownership.test.ts:
+(pass) admitted transient A/B/A selections advance the shared selection epoch before directory storage changes [7.66ms]
+(pass) stable project config projects and returns its exact accepted response [4.59ms]
+(pass) project ABA preserves a pending PATCH's accepted A return and the current A projection [1.07ms]
+(pass) retained project options keep their captured selection even when passed after A/B/A [0.86ms]
+(pass) a committed reconciliation error preserves its original receipt after project ABA [1.44ms]
+(pass) GET-to-PATCH retains original project request and saved return across UI departure [2.18ms]
+(pass) permission tail retires queued A authority and then applies a newly authored B choice [1.92ms]
+(pass) locale preference completes its current global choice with the stable original project sync [2.85ms]
+(pass) accepted A locale sync retirement preserves the legitimate global choice and current B projection [1.20ms]
+(pass) a project leg retired before dispatch leaves global locale persistence current and permits the next B choice [1.52ms]
+(pass) current backend locale failure keeps its exact API error and restores the durable global locale [2.82ms]
+(pass) real local persistence failure after project sync remains the original error and releases the same locale tail [3.49ms]
+(pass) the single locale tail retires its old scoped leg and drains the newer global choice [2.50ms]
+(pass) local persistence failure remains observable after an accepted old backend leg retires [1.73ms]
+(pass) retired project reload returns its existing empty outcome while current configuration, issues and directory retain ownership [6.16ms]
+(pass) current project reload publishes exact accepted configuration and extension failure issues [2.00ms]
+
+ 16 pass
+ 0 fail
+ 43 expect() calls
+Ran 16 tests across 1 file. [2.05s]

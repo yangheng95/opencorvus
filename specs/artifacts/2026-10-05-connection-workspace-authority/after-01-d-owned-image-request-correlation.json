@@ -1,0 +1,85 @@
+{
+  "observedAt": "2026-10-05T14:58:39.1703475Z",
+  "owner": "after-01-a-owner.json",
+  "rootActualImages": [
+    "after-root-d01-owned-upload-thumbnail.png",
+    "after-root-d02-owned-full-image-preview.png"
+  ],
+  "requests": [
+    {
+      "time": "2026-10-05T14:54:46.01Z",
+      "requestID": "5a3bc428-c747-4715-86f7-502bef371b6c",
+      "method": "OPTIONS",
+      "path": "/attachment",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:54:46.01Z",
+      "requestID": "5a3bc428-c747-4715-86f7-502bef371b6c",
+      "method": "OPTIONS",
+      "path": "/attachment",
+      "status": "completed",
+      "statusCode": 204,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-05T14:54:46.014Z",
+      "requestID": "202cb825-65ee-45fa-8f34-75a2bbc7ce31",
+      "method": "POST",
+      "path": "/attachment",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:54:46.03Z",
+      "requestID": "202cb825-65ee-45fa-8f34-75a2bbc7ce31",
+      "method": "POST",
+      "path": "/attachment",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 16
+    },
+    {
+      "time": "2026-10-05T14:54:46.035Z",
+      "requestID": "1d8e2756-a4d5-4de7-9594-69d915bd520e",
+      "method": "GET",
+      "path": "/attachment/prj_hzth4QzZIwFhtLhhNICZ/4d6f2495d673a9ac596481851b1ce150c2ed6c7d5252984cde29f3c13e5ec9f0.png",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:54:46.071Z",
+      "requestID": "1d8e2756-a4d5-4de7-9594-69d915bd520e",
+      "method": "GET",
+      "path": "/attachment/prj_hzth4QzZIwFhtLhhNICZ/4d6f2495d673a9ac596481851b1ce150c2ed6c7d5252984cde29f3c13e5ec9f0.png",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 36
+    },
+    {
+      "time": "2026-10-05T14:55:29.071Z",
+      "requestID": "e50e428d-aca1-4445-a4c4-231d40e1e4dd",
+      "method": "GET",
+      "path": "/attachment/prj_hzth4QzZIwFhtLhhNICZ/4d6f2495d673a9ac596481851b1ce150c2ed6c7d5252984cde29f3c13e5ec9f0.png",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:55:29.073Z",
+      "requestID": "e50e428d-aca1-4445-a4c4-231d40e1e4dd",
+      "method": "GET",
+      "path": "/attachment/prj_hzth4QzZIwFhtLhhNICZ/4d6f2495d673a9ac596481851b1ce150c2ed6c7d5252984cde29f3c13e5ec9f0.png",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2
+    }
+  ],
+  "boundary": "Actual POST upload and GET resource logs; no model/Provider request or raw body claim",
+  "uiOperator": "root",
+  "independentD01ImageReviewer": "experience_audit"
+}

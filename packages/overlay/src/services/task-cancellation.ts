@@ -1,4 +1,4 @@
-import { apiJson } from "./api"
+import { apiJson, type ApiAuthority } from "./api"
 import { taskScopedPath } from "./task-path"
 import {
   TaskCancellationRequestBody,
@@ -8,6 +8,7 @@ import {
 export type TaskCancellationSurface = TaskCancellationRequestSurface
 
 export type TaskCancellationRequest = {
+  authority?: ApiAuthority
   taskID: string
   directory: string
 } & TaskCancellationRequestBody
@@ -27,6 +28,7 @@ export async function requestTaskCancellation(input: TaskCancellationRequest): P
     reason: input.reason,
   })
   await apiJson(taskScopedPath(taskID, directory, "/cancel"), {
+    authority: input.authority,
     method: "POST",
     headers: {
       "Content-Type": "application/json",

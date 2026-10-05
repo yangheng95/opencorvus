@@ -44,6 +44,7 @@ import {
   taskRuntimeActivityKey,
 } from "./task-runtime-activity"
 import { refreshActiveComposerModelFromSession } from "./composer-model"
+import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 
 let sseHandle: StreamHandle | null = null
 let sseRetryTimer: any = null
@@ -57,6 +58,7 @@ let selectedTaskStreamGeneration = 0
 // standing up the real HostTransport + 3 s timers. Production path: onClose
 // sets a 3 s timer that calls this with the live deps below.
 export interface SseReconnectDeps {
+  authority?: ApiAuthority
   taskID: string
   directory: string
   after: number
@@ -73,6 +75,7 @@ export interface SseReconnectDeps {
 }
 
 export interface SseStartOptions {
+  authority?: ApiAuthority
   replayLive?: boolean
   directory?: string
   connectionStatus?: Extract<SseConnectionStatus, "connecting" | "reconnecting">
@@ -208,6 +211,8 @@ function logMalformedSsePayload(input: {
 }
 
 export async function performSseReconnect(deps: SseReconnectDeps): Promise<void> {
+  const authority = deps.authority ?? captureApiAuthority()
+  if (!isApiAuthorityCurrent(authority)) return
   if (deps.isCurrent?.() === false || deps.currentTaskID() !== deps.taskID) return
   const startedAt = Date.now()
   recordConversationRecoveryStarted({
@@ -232,6 +237,7 @@ export async function performSseReconnect(deps: SseReconnectDeps): Promise<void>
     const directory = deps.directory.trim()
     if (!directory) throw new Error("SSE reconnect requires a project directory")
     await deps.beforeRestart?.(deps.taskID, nextSequence)
+    if (!isApiAuthorityCurrent(authority)) return
     if (deps.isCurrent?.() === false || deps.currentTaskID() !== deps.taskID) {
       throw new DOMException("task changed before restart", "AbortError")
     }
@@ -239,11 +245,12 @@ export async function performSseReconnect(deps: SseReconnectDeps): Promise<void>
       { kind: "task", id: deps.taskID },
       nextSequence,
       deps.replayLive === false
-        ? { replayLive: false, directory, connectionStatus: deps.connectionStatus ?? "reconnecting" }
-        : { directory, connectionStatus: deps.connectionStatus ?? "reconnecting" },
+        ? { authority, replayLive: false, directory, connectionStatus: deps.connectionStatus ?? "reconnecting" }
+        : { authority, directory, connectionStatus: deps.connectionStatus ?? "reconnecting" },
     )
     await deps.afterRestart?.(deps.taskID, nextSequence)
   } catch (err) {
+    if (!isApiAuthorityCurrent(authority)) return
     recordConversationRecoveryFailed({
       channel: "sse-reconnect",
       reason: "sse stream reconnect",
@@ -266,11 +273,13 @@ export async function performSseReconnect(deps: SseReconnectDeps): Promise<void>
     })
     if (deps.isCurrent?.() === false || deps.currentTaskID() !== deps.taskID) return
     deps.scheduleRetry(() => {
+      if (!isApiAuthorityCurrent(authority)) return
       if (deps.isCurrent?.() === false || deps.currentTaskID() !== deps.taskID) return
-      observeSseReconnect("scheduled-retry", performSseReconnect(deps))
+      observeSseReconnect("scheduled-retry", performSseReconnect({ ...deps, authority }))
     }, deps.retryDelayMs)
     return
   }
+  if (!isApiAuthorityCurrent(authority)) return
   recordConversationRecoverySucceeded({
     channel: "sse-reconnect",
     reason: "sse stream reconnect",
@@ -282,7 +291,9 @@ export async function performSseReconnect(deps: SseReconnectDeps): Promise<void>
 }
 
 function observeSseReconnect(owner: string, promise: Promise<void>): void {
+  const authority = captureApiAuthority()
   void promise.catch((error) => {
+    if (!isApiAuthorityCurrent(authority)) return
     AppLog.error("sse", `unhandled reconnect owner failure: ${owner}`, {
       error: formatErrorDetails(error),
       diagnosticID: `sse:reconnect-owner:${owner}`,
@@ -294,7 +305,9 @@ function observeSseReconnect(owner: string, promise: Promise<void>): void {
 }
 
 function refreshComposerModelAfterSelectedStreamConnect(eventType: "task.connected" | "session.connected"): void {
+  const authority = captureApiAuthority()
   void refreshActiveComposerModelFromSession()?.catch((error) => {
+    if (!isApiAuthorityCurrent(authority)) return
     AppLog.error("sse", `failed to hydrate Composer model after ${eventType}`, {
       eventType,
       error: formatErrorDetails(error),
@@ -342,8 +355,11 @@ export function isSelectedTaskSSEConnected(taskID: string): boolean {
 const selectedTaskRecoveryScheduler = createSelectedTaskRecoveryScheduler(startSSE)
 
 export function startSSE(source: BoardSource, after = 0, options: SseStartOptions = {}) {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   stopSSE()
   const streamGeneration = ++selectedTaskStreamGeneration
+  const owns = () => isApiAuthorityCurrent(authority) && streamGeneration === selectedTaskStreamGeneration
   setSseStatus(options.connectionStatus ?? "connecting")
   sseSource = source
   const taskID = source.kind === "task" ? source.id : ""
@@ -365,7 +381,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
   const armWatchdog = (handle: StreamHandle) => {
     clearSelectedStreamWatchdog()
     sseWatchdogTimer = setTimeout(() => {
-      if (handle !== sseHandle) return
+      if (!owns() || handle !== sseHandle) return
       console.warn("[sse] selected task stream stalled; reconnecting", { taskID })
       setSseStatus(failureStatus())
       handle.close("watchdog")
@@ -381,6 +397,12 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
     // clears cardTreeStore and produces the visible scroll jump.
     if (streamGeneration !== selectedTaskStreamGeneration || handle !== sseHandle) return
     clearSelectedStreamWatchdog()
+    if (!isApiAuthorityCurrent(authority)) {
+      sseHandle = null
+      sseTaskID = ""
+      sseSource = null
+      return
+    }
     pauseSelectedTaskSseStreamActivity(taskID)
     setSseStatus(liveReplayExpiredClose ? "connecting" : failureStatus())
     sseHandle = null
@@ -394,7 +416,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
           source,
           directory,
           connectionStatus: failureStatus(),
-          isCurrent: () => streamGeneration === selectedTaskStreamGeneration,
+          isCurrent: owns,
           restart: startSSE,
         })
       }, STREAM_RECONNECT_DELAY_MS)
@@ -406,17 +428,18 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
       observeSseReconnect(
         "stream-close",
         performSseReconnect({
+          authority,
           taskID: source.id,
           directory,
           after,
           currentTaskID: () => activeTaskID(),
-          isCurrent: () => streamGeneration === selectedTaskStreamGeneration,
+          isCurrent: owns,
           resumeAfter: () => boardStore.taskSequence,
           restart: startSSE,
           replayLive: liveReplayExpiredClose ? false : replayLive,
           connectionStatus: liveReplayExpiredClose ? "connecting" : failureStatus(),
           beforeRestart: liveReplayExpiredClose
-            ? (restartedTaskID) => mergeLatestConversationTail(restartedTaskID, { directory })
+            ? (restartedTaskID) => mergeLatestConversationTail(restartedTaskID, { directory, authority })
             : undefined,
           scheduleRetry: (fn, ms) => {
             sseRetryTimer = setTimeout(() => {
@@ -433,6 +456,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
   }
   const handle = transport.openStream(
     {
+      authority,
       path: `${source.kind}/${encodeURIComponent(source.id)}/events`,
       query: {
         directory,
@@ -442,13 +466,13 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
     },
     {
       onOpen: () => {
-        if (handle !== sseHandle) return
+        if (!owns() || handle !== sseHandle) return
         opened = true
         setSseStatus("connected")
         armWatchdog(handle)
       },
       onEvent: (data) => {
-        if (handle !== sseHandle) return
+        if (!owns() || handle !== sseHandle) return
         armWatchdog(handle)
         // Per 07-panel-reactivity.md constraint 1 and root CLAUDE.md rule 1:
         // tree-writer's `let it crash` is meaningless if onEvent silently
@@ -503,11 +527,11 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
         // handle so onClose runs the business reconnect policy: reopen from
         // the current persisted sequence without clearing the mounted
         // conversation.
-        if (handle !== sseHandle) return
+        if (!owns() || handle !== sseHandle) return
         setSseStatus(failureStatus())
         handle.close("transport-error")
       },
-      onClose: (_reason) => {
+      onClose: (_reason, _info) => {
         handleClosed(_reason)
       },
     },
@@ -570,14 +594,16 @@ export function setWorkLedgerChangeHandler(handler: ((event: WorkLedgerStreamEve
   if (!handler) stopWorkLedgerSSE()
 }
 
-export function startWorkLedgerSSE() {
+export function startWorkLedgerSSE(authority = captureApiAuthority()) {
+  assertApiAuthorityCurrent(authority)
   stopWorkLedgerSSE()
   if (!workLedgerChangeHandler) return
   const transport = getHostTransport()
   const handle = transport.openStream(
-    { path: "work-ledger/events" },
+    { path: "work-ledger/events", authority },
     {
       onEvent: (data) => {
+        if (!isApiAuthorityCurrent(authority) || handle !== workLedgerHandle) return
         let event: unknown
         try {
           event = JSON.parse(data)
@@ -626,17 +652,18 @@ export function startWorkLedgerSSE() {
           })
         }
       },
-      onClose: (_reason) => {
+      onClose: (_reason, info) => {
         if (handle !== workLedgerHandle) return
         workLedgerHandle = null
         if (workLedgerRetryTimer) clearTimeout(workLedgerRetryTimer)
+        if (info?.current === false || !isApiAuthorityCurrent(authority)) return
         workLedgerRetryTimer = setTimeout(() => {
           workLedgerRetryTimer = null
-          startWorkLedgerSSE()
+          if (isApiAuthorityCurrent(authority)) startWorkLedgerSSE(authority)
         }, 3000)
       },
       onError: () => {
-        if (handle !== workLedgerHandle) return
+        if (!isApiAuthorityCurrent(authority) || handle !== workLedgerHandle) return
         handle.close("transport-error")
       },
     },

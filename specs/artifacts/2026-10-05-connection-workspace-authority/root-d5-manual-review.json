@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-10-05T16:09:50.626Z",
+  "operator": "root",
+  "browser": "7",
+  "tabs": {
+    "a": "20",
+    "d": "21"
+  },
+  "build": {
+    "js": "main-D5kQK7tX.js",
+    "css": "main-BX09nL6b.css"
+  },
+  "scope": "Manual real-page interactions and personally viewed screenshots; no UI automation tests.",
+  "observations": [
+    {
+      "files": [
+        "after-final-d5-a01-clean-launcher.png"
+      ],
+      "observed": "Real clean A launcher after replaced stale tabs 17/18/19 were absent."
+    },
+    {
+      "files": [
+        "after-final-d5-a02-unsaved-connection-dialog.png",
+        "after-final-d5-a03-cancel-preserves-editor.png"
+      ],
+      "observed": "Actual Network Save B requires original file decision; Cancel retains original unsaved literal, ordinary composer prose and Online A."
+    },
+    {
+      "files": [
+        "after-final-d5-a04-b-discard-departure.png"
+      ],
+      "observed": "Actual Discard switches Online B, retires selected A Chat/editor, retains ordinary prose, directory-free launcher and empty file view. Empty a-project ledger row is previously persisted B fact."
+    },
+    {
+      "files": [
+        "after-final-d5-a05-save-switch-feedback.png",
+        "after-final-d5-a06-b-saved-prose.png"
+      ],
+      "observed": "Actual dialog Save writes original A literal, B baseline retained. Canonical UI-selected browser-use mention retired and both authored prose paragraphs retained. Physical fixture restoration separately guarded and recorded."
+    },
+    {
+      "files": [
+        "after-final-d5-a07-provider-page.png",
+        "after-final-d5-a08-provider-settled.png",
+        "after-final-d5-a09-openai-configure.png",
+        "after-final-d5-a10-channel-page.png"
+      ],
+      "observed": "Initial Provider placeholder separately labeled; settled provider list/search/OpenAI configure and Channel list personally viewed. No Connect/auth/key/Channel write invoked. Three other providers marked Connected despite auth/models file absence; inherited/config inputs not isolated or exercised."
+    },
+    {
+      "files": [
+        "after-final-d5-d01-attachment-status-layout.png",
+        "after-final-d5-d02-preview-zoom.png",
+        "after-final-d5-d03-attachment-narrow-dock.png",
+        "after-final-d5-d04-attachment-removed.png"
+      ],
+      "observed": "Actual filechooser PNG upload/preview zoom100→125/close/open Files dock/remove. Independent status row no longer consumes footer; full model label readable in wide composer, existing narrow icon layout retained; status removed with attachment."
+    }
+  ],
+  "restoration": "A endpoint 17948 clean launcher/no draft/editor; D original endpoint17951 clean launcher/no stagedattachment/dock. Source fixtures baseline restored. Services remain owned/running.",
+  "limits": [
+    "D5 build precedes newly found Git initialization selection/accepted-result fix and is not final overall qualification.",
+    "No real model/Provider request, OAuth terminal or same-scope reopened model selection await qualified here.",
+    "No actual delayed same-API A→B→A or native lifecycle qualification.",
+    "Cff editor conflict/reload/rename evidence remains separate; not relabeled D5.",
+    "No screenshot/asset/static state substitutes for behavior."
+  ]
+}

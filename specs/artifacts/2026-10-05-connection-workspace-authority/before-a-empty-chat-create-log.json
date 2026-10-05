@@ -1,0 +1,22 @@
+[
+  {
+    "time": "2026-10-05T12:34:31.635Z",
+    "service": "server",
+    "requestID": "7927d1a1-d1da-44c1-92aa-9045388f8595",
+    "method": "POST",
+    "path": "/coding/chat/session",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T12:34:31.672Z",
+    "service": "server",
+    "requestID": "7927d1a1-d1da-44c1-92aa-9045388f8595",
+    "method": "POST",
+    "path": "/coding/chat/session",
+    "status": "completed",
+    "statusCode": 201,
+    "duration": 37
+  }
+]

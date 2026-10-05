@@ -46,8 +46,9 @@ import { PreviewableImage } from "./ImagePreview"
 import { Button } from "./ui/Button"
 import { TextField } from "./ui/TextField"
 import { randomUUID } from "../utils/random-id"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 
-type BrowserPreviewScopedTarget = BrowserPreviewTarget & { directory: string }
+type BrowserPreviewScopedTarget = BrowserPreviewTarget & { directory: string; authority: ApiAuthority }
 
 type BrowserPreviewEvidenceImage = {
   directory: string
@@ -55,9 +56,11 @@ type BrowserPreviewEvidenceImage = {
   evidenceID: string
   viewportID: BrowserPreviewViewportID
   url: string
+  resourceUrl: string
+  authority: ApiAuthority
 }
 
-type BrowserPreviewEvidenceImageRequest = Omit<BrowserPreviewEvidenceImage, "url">
+type BrowserPreviewEvidenceImageRequest = Omit<BrowserPreviewEvidenceImage, "url" | "resourceUrl">
 
 type BrowserPreviewEvidenceImageLoadResult =
   | (BrowserPreviewEvidenceImage & { status: "loaded" })
@@ -68,6 +71,7 @@ type BrowserPreviewRenderedEvidence = Omit<BrowserPreviewEvidence, "id" | "viewp
   viewportID: BrowserPreviewViewportID
 }
 type BrowserPreviewLatestEvidenceScope = {
+  authority: ApiAuthority
   directory: string
   taskID: string
   targetID: string
@@ -186,23 +190,43 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     nativeLeaseRevision()
     return activeNativeLease
   }
-  const [targetLoadError, setTargetLoadError] = createSignal<{ taskID: string; directory: string; message: string }>()
+  const [targetLoadError, setTargetLoadError] = createSignal<{
+    taskID: string
+    directory: string
+    message: string
+    authority: ApiAuthority
+  }>()
+  let targetLoadSequence = 0
   const panelActive = createMemo(() => props.active())
   const [target] = createResource(
     () => {
       const taskID = props.taskID()
       const directory = props.directory()
       if (!taskID || !directory) return undefined
-      return { taskID, directory, refreshKey: props.refreshKey() }
+      return { taskID, directory, refreshKey: props.refreshKey(), authority: captureApiAuthority() }
     },
     async (scope) => {
+      const sequence = ++targetLoadSequence
+      const owns = () =>
+        sequence === targetLoadSequence &&
+        isApiAuthorityCurrent(scope.authority) &&
+        props.taskID() === scope.taskID &&
+        props.directory() === scope.directory
+      setTargetLoadError(undefined)
       try {
         return {
-          ...(await loadTaskBrowserPreviewTarget({ taskID: scope.taskID, directory: scope.directory })),
+          ...(await loadTaskBrowserPreviewTarget(scope)),
           directory: scope.directory,
+          authority: scope.authority,
         } satisfies BrowserPreviewScopedTarget
       } catch (error) {
-        setTargetLoadError({ taskID: scope.taskID, directory: scope.directory, message: String(error) })
+        if (owns())
+          setTargetLoadError({
+            taskID: scope.taskID,
+            directory: scope.directory,
+            message: String(error),
+            authority: scope.authority,
+          })
         return undefined
       }
     },
@@ -212,7 +236,13 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const directory = props.directory()
     if (!taskID || !directory) return undefined
     const resolved = target()
-    if (!resolved || resolved.taskID !== taskID || resolved.directory !== directory) return undefined
+    if (
+      !resolved ||
+      !isApiAuthorityCurrent(resolved.authority) ||
+      resolved.taskID !== taskID ||
+      resolved.directory !== directory
+    )
+      return undefined
     return resolved
   })
   const currentTarget = createMemo(scopedTarget)
@@ -222,7 +252,8 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const directory = props.directory()
     if (!taskID || !directory) return undefined
     const loadError = targetLoadError()
-    if (loadError?.taskID === taskID && loadError.directory === directory) return loadError.message
+    if (loadError?.taskID === taskID && loadError.directory === directory && isApiAuthorityCurrent(loadError.authority))
+      return loadError.message
     return target.error
   })
   const latestEvidenceScope = createMemo<BrowserPreviewLatestEvidenceScope | undefined>(() => {
@@ -232,7 +263,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const evidenceID = currentTarget()?.latestEvidenceIDs?.[viewportID()]
     const directory = props.directory()
     if (!taskID || !directory || !targetID || !evidenceID) return undefined
-    return { taskID, directory, evidenceID, targetID, viewportID: viewportID() }
+    return { taskID, directory, evidenceID, targetID, viewportID: viewportID(), authority: captureApiAuthority() }
   })
   let latestEvidenceAbort: AbortController | undefined
   const [latestEvidence] = createResource(
@@ -320,7 +351,15 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const latest = latestEvidence()
     const taskID = props.taskID()
     const targetID = resolved.id
-    if (!scope || !latest || latest.status !== "loaded" || !taskID || !targetID) return undefined
+    if (
+      !scope ||
+      !latest ||
+      !isApiAuthorityCurrent(latest.authority) ||
+      latest.status !== "loaded" ||
+      !taskID ||
+      !targetID
+    )
+      return undefined
     if (
       latest.taskID !== scope.taskID ||
       latest.directory !== scope.directory ||
@@ -347,7 +386,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const scope = latestEvidenceScope()
     if (!scope || latestEvidence.loading || renderedEvidence()) return undefined
     const latest = latestEvidence()
-    if (!latest || latest.status !== "failed") return undefined
+    if (!latest || !isApiAuthorityCurrent(latest.authority) || latest.status !== "failed") return undefined
     if (
       latest.taskID !== scope.taskID ||
       latest.directory !== scope.directory ||
@@ -474,33 +513,42 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
       }
       const directory = props.directory()
       if (!directory) return undefined
-      return { taskID: evidence.taskID, directory, evidenceID: evidence.id, viewportID: evidence.viewportID }
+      return {
+        taskID: evidence.taskID,
+        directory,
+        evidenceID: evidence.id,
+        viewportID: evidence.viewportID,
+        authority: captureApiAuthority(),
+      }
     },
     async (scope): Promise<BrowserPreviewEvidenceImageLoadResult> => {
       captureImageAbort?.abort()
       const controller = new AbortController()
       captureImageAbort = controller
       try {
-        const url = await loadTaskBrowserPreviewEvidenceCaptureObjectUrl({
+        const capture = await loadTaskBrowserPreviewEvidenceCaptureObjectUrl({
           ...scope,
           signal: controller.signal,
         })
         const currentEvidence = renderedEvidence()
         const stillOwnsScope =
           panelActive() &&
+          isApiAuthorityCurrent(scope.authority) &&
+          captureImageAbort === controller &&
           !controller.signal.aborted &&
           props.directory() === scope.directory &&
           currentEvidence?.taskID === scope.taskID &&
           currentEvidence.id === scope.evidenceID &&
           currentEvidence.viewportID === scope.viewportID
         if (!stillOwnsScope) {
-          URL.revokeObjectURL(url)
+          URL.revokeObjectURL(capture.url)
           throw new DOMException("Browser Preview capture scope changed", "AbortError")
         }
         return {
           ...scope,
           status: "loaded",
-          url,
+          url: capture.url,
+          resourceUrl: capture.resourceUrl,
         }
       } catch (error) {
         if (isAbortError(error)) throw error
@@ -519,7 +567,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const image = captureImage()
     const directory = props.directory()
     if (!evidence?.id || !image) return undefined
-    if (image.status !== "loaded") return undefined
+    if (image.status !== "loaded" || !isApiAuthorityCurrent(image.authority)) return undefined
     if (
       image.taskID !== evidence.taskID ||
       image.evidenceID !== evidence.id ||
@@ -536,7 +584,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
       return undefined
     }
     const result = captureImage()
-    if (!result || result.status !== "failed") return undefined
+    if (!result || result.status !== "failed" || !isApiAuthorityCurrent(result.authority)) return undefined
     if (
       result.taskID !== evidence.taskID ||
       result.evidenceID !== evidence.id ||
@@ -555,15 +603,19 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
       setTargetLoadError(undefined)
       return
     }
-    const error = target.error
-    if (error) setTargetLoadError({ taskID, directory, message: String(error) })
   })
 
   createEffect(() => {
     const taskID = props.taskID()
     const directory = props.directory()
     const resolved = target()
-    if (taskID && directory && resolved?.taskID === taskID && resolved.directory === directory)
+    if (
+      taskID &&
+      directory &&
+      resolved?.taskID === taskID &&
+      resolved.directory === directory &&
+      isApiAuthorityCurrent(resolved.authority)
+    )
       setTargetLoadError(undefined)
   })
 
@@ -1201,9 +1253,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   const addressNavigationSupported = createMemo(
     () => browserPreviewNativeSurfaceAvailable() && browserPreviewNativeUrlNavigationAvailable(),
   )
-  const addressExternalOpenSupported = createMemo(
-    () => getHostTransport().capabilities.nativeCommands["open-url"],
-  )
+  const addressExternalOpenSupported = createMemo(() => getHostTransport().capabilities.nativeCommands["open-url"])
   const addressActionBusy = createMemo(() => addressSubmitting() || addressExternalOpening())
   const addressInputAvailable = createMemo(
     () => (addressNavigationSupported() || addressExternalOpenSupported()) && !addressActionBusy(),
@@ -1360,6 +1410,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
 
   onCleanup(() => {
     latestEvidenceAbort?.abort()
+    targetLoadSequence += 1
     captureImageAbort?.abort()
     nativePanelDisposed = true
     setBrowserMenuOpen(false)
@@ -1801,6 +1852,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
                     {(image) => (
                       <PreviewableImage
                         src={image().url}
+                        resourceUrl={image().resourceUrl}
                         alt={evidence().summary}
                         triggerClass="browser-preview-evidence-shot"
                         imageClass="browser-preview-evidence-image"

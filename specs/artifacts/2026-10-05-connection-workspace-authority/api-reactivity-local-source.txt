@@ -1,0 +1,27 @@
+import { strict as assert } from "node:assert"
+import { createComputed, createRoot, createSignal } from "../packages/overlay/node_modules/solid-js/dist/solid.js"
+import { captureApiAuthority, configure, getServerUrl, onAuthChange, renewApiAuthority } from "../packages/overlay/src/services/api-state"
+const result = createRoot((dispose) => {
+  const [endpoint, setEndpoint] = createSignal("http://a.invalid/prefix")
+  const applied: string[] = []
+  const projections: Array<{revision:number,url:string}> = []
+  createComputed(() => { const url = endpoint(); configure({serverUrl:url}); applied.push(url) })
+  createComputed(() => { projections.push({revision:captureApiAuthority().revision,url:getServerUrl()}) })
+  const initial = captureApiAuthority().revision
+  const notifications: number[] = []
+  const off = onAuthChange(() => notifications.push(captureApiAuthority().revision))
+  configure({username:"dummy",password:"DUMMY_NON_CREDENTIAL"})
+  renewApiAuthority()
+  setEndpoint("http://b.invalid/prefix")
+  assert.deepEqual(projections, [
+    {revision:initial,url:"http://a.invalid/prefix"},
+    {revision:initial+1,url:"http://a.invalid/prefix"},
+    {revision:initial+2,url:"http://a.invalid/prefix"},
+    {revision:initial+3,url:"http://b.invalid/prefix"},
+  ])
+  assert.deepEqual(applied,["http://a.invalid/prefix","http://b.invalid/prefix"])
+  assert.deepEqual(notifications,[initial+1,initial+2,initial+3])
+  off(); dispose()
+  return { qualification:"Pure production API state with Solid browser-condition reactive primitive; no DOM, UI, network, backend or Provider",status:"passed",applied,projections,notifications }
+})
+console.log(JSON.stringify(result,null,2))

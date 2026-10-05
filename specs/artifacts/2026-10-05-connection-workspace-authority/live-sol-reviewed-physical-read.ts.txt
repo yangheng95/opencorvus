@@ -1,0 +1,21 @@
+import { Database } from "bun:sqlite"
+import fs from "node:fs"
+const phase = process.argv[2]
+if (!phase || !/^[a-z0-9-]+$/.test(phase)) throw new Error("Explicit evidence phase required")
+const database = "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-cli-01/runtime/data/opencorvus.db"
+const db = new Database(database, { readonly: true })
+const facts = db.transaction(() => {
+  const owners = db.query("SELECT o.*, s.kind, s.parent_id, s.project_id AS actual_session_project FROM session_prompt_owner o LEFT JOIN session s ON s.id=o.session_id ORDER BY o.session_id").all()
+  const messages = db.query("SELECT id, session_id, time_created, data FROM message ORDER BY time_created,id").all().map((row: any) => {
+    const data = JSON.parse(row.data)
+    return { id: row.id, sessionID: row.session_id, role: data.role, parentID: data.parentID, time: data.time,
+      finish: data.finish, modelID: data.modelID, providerID: data.providerID, error: data.error }
+  })
+  const lifecycles = db.query("SELECT id, aggregate_type, aggregate_id, project_id, task_id, session_id, source, emitted_at, seq, payload FROM protocol_event WHERE type=? ORDER BY emitted_at,seq").all("agent.execution.lifecycle").map((row: any) => ({ ...row, payload: row.payload ? JSON.parse(row.payload) : null }))
+  return { owners, messages, lifecycles }
+})()
+db.close()
+const evidence = { observedAt: new Date().toISOString(), phase, database, readonly: true,
+  boundary: "One coherent read transaction of every durable Project/Session owner and actual Message/lifecycle facts. No live process registry imported or inferred from an empty checker map.", ...facts }
+fs.writeFileSync(`D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/live-sol-durable-${phase}.json`, JSON.stringify(evidence, null, 2), { flag: "wx" })
+console.log(JSON.stringify(evidence, null, 2))

@@ -1,0 +1,28 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\meta-vcs-actions.test.ts:
+(pass) commit retains the accepted outcome and current metadata error with its diagnostic cause [4.41ms]
+(pass) commit propagates its original POST error [0.57ms]
+(pass) commit preserves the successor projection after different-project selection [0.51ms]
+(pass) commit preserves the successor projection after same-directory-ABA selection [0.19ms]
+(pass) commit returns the original typed API retirement response receipt [0.91ms]
+(pass) push retains the accepted outcome and current metadata error with its diagnostic cause [0.66ms]
+(pass) push propagates its original POST error [0.13ms]
+(pass) push preserves the successor projection after different-project selection [0.12ms]
+(pass) push preserves the successor projection after same-directory-ABA selection [0.12ms]
+(pass) push returns the original typed API retirement response receipt [0.15ms]
+(pass) switch-branch retains the accepted outcome and current metadata error with its diagnostic cause [0.71ms]
+(pass) switch-branch propagates its original POST error [0.20ms]
+(pass) switch-branch preserves the successor projection after different-project selection [0.13ms]
+(pass) switch-branch preserves the successor projection after same-directory-ABA selection [0.13ms]
+(pass) switch-branch returns the original typed API retirement response receipt [0.20ms]
+(pass) accepted commit metadata failure permits the separately accepted push and its fresh projection [1.13ms]
+(pass) VCS action service > streams the generated commit message through the project-scoped POST route [1.89ms]
+(pass) VCS action service > rejects frames with fields outside the shared stream schema [0.96ms]
+(pass) VCS action service > commits the exact edited message and refreshes canonical VCS information [0.76ms]
+(pass) VCS action service > pushes the configured branch and refreshes canonical VCS information [0.51ms]
+
+ 20 pass
+ 0 fail
+ 50 expect() calls
+Ran 20 tests across 1 file. [1392.00ms]

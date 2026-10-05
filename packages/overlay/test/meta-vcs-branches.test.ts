@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { configure as configureApi } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { loadVcsBranches, switchVcsBranch } from "../src/services/meta"
 import { boardStore } from "../src/store/board"
 import { applySettings, DEFAULT_SETTINGS, setSettingsStore } from "../src/store/settings"
@@ -13,6 +13,7 @@ function fakeTransport(
 ): HostTransport {
   return {
     kind: "tauri",
+    capabilities: HOST_CAPABILITIES.tauri,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       return (await responder(request)) as TransportResponse<T>
     },

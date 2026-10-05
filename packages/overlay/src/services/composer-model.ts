@@ -3,10 +3,12 @@ import { activeSessionID, activeTaskID, boardStore, rootTaskSessionID } from "..
 import { getSessionConfig, patchSessionConfig } from "./config"
 import { taskOwningDirectory } from "./task-directory"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 
 export interface ComposerModelSessionTarget {
   sessionID: string
   directory: string
+  authority?: ApiAuthority
 }
 
 let composerModelProjectionGeneration = 0
@@ -64,7 +66,17 @@ function beginComposerModelProjection(): number {
 }
 
 function ownsComposerModelProjection(generation: number, target: ComposerModelSessionTarget): boolean {
-  return generation === composerModelProjectionGeneration && activeTargetMatches(target)
+  return (
+    generation === composerModelProjectionGeneration &&
+    activeTargetMatches(target) &&
+    (!target.authority || isApiAuthorityCurrent(target.authority))
+  )
+}
+
+export function retireComposerModel(clearPreference: boolean): void {
+  composerModelSelectionGeneration += 1
+  clearComposerModelProjection()
+  if (clearPreference) setSettingsStore("lastSelectedModel", "")
 }
 
 /** Clear the current-view projection before changing Task or Session identity. */
@@ -79,13 +91,17 @@ export function restoreDraftComposerModel(): void {
   setAppStore("composerModel", settingsStore.lastSelectedModel)
 }
 
-async function rememberComposerModel(model: string, selectionGeneration: number): Promise<void> {
-  if (selectionGeneration !== composerModelSelectionGeneration) return
+async function rememberComposerModel(
+  model: string,
+  selectionGeneration: number,
+  authority: ApiAuthority,
+): Promise<void> {
+  if (selectionGeneration !== composerModelSelectionGeneration || !isApiAuthorityCurrent(authority)) return
   setSettingsStore("lastSelectedModel", model)
   if (!boardStore.selectedSource) restoreDraftComposerModel()
   await saveSettings({
     onFailure: ({ confirmed }) => {
-      if (selectionGeneration !== composerModelSelectionGeneration) return
+      if (selectionGeneration !== composerModelSelectionGeneration || !isApiAuthorityCurrent(authority)) return
       setSettingsStore("lastSelectedModel", confirmed.lastSelectedModel ?? "")
       if (!boardStore.selectedSource) restoreDraftComposerModel()
     },
@@ -100,6 +116,7 @@ export async function projectComposerModelFromSession(
   target: ComposerModelSessionTarget,
   ownsResponse: () => boolean,
 ): Promise<string> {
+  target = { ...target, authority: target.authority ?? captureApiAuthority() }
   const generation = beginComposerModelProjection()
   const saved = await getSessionConfig(target)
   const model = normalizedModel(saved.config.model)
@@ -114,20 +131,22 @@ export async function projectComposerModelFromSession(
  * create boundary. Passive Session reads never change that preference.
  */
 export async function selectComposerModel(model: string): Promise<void> {
+  const authority = captureApiAuthority()
   const selected = normalizedModel(model)
   if (!selected || selected !== model || !selected.includes("/")) {
     throw new Error("selectComposerModel: model must be a trimmed provider/model reference")
   }
 
   const previous = appStore.composerModel
-  const target = activeComposerModelSessionTarget()
+  const selectedTarget = activeComposerModelSessionTarget()
+  const target = selectedTarget ? { ...selectedTarget, authority } : null
   if (boardStore.selectedSource && !target) {
     throw new Error("selectComposerModel: selected root Session is not resolved")
   }
   const generation = beginComposerModelProjection()
   const selectionGeneration = ++composerModelSelectionGeneration
   setAppStore("composerModel", selected)
-  if (!target) return rememberComposerModel(selected, selectionGeneration)
+  if (!target) return rememberComposerModel(selected, selectionGeneration, authority)
 
   let savedModel: string
   try {
@@ -141,5 +160,5 @@ export async function selectComposerModel(model: string): Promise<void> {
     if (ownsComposerModelProjection(generation, target)) setAppStore("composerModel", previous)
     throw error
   }
-  await rememberComposerModel(savedModel, selectionGeneration)
+  await rememberComposerModel(savedModel, selectionGeneration, authority)
 }

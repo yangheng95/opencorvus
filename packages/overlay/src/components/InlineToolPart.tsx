@@ -8,7 +8,15 @@ import { StaticTextPart } from "./TextPart"
 import { FilePart } from "./FilePart"
 import { toolFileChangesFromState, type ToolFileChange } from "../utils/file-change-summary"
 import { STREAMING_ACTIVE_TEXT_LIMIT, visibleStreamingText } from "./text-part-model"
-import { apiJson, fetchResourceAsObjectUrl, peekResourceObjectUrl, resolveResourceUrl } from "../services/api"
+import {
+  apiJson,
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  fetchResourceAsObjectUrl,
+  peekResourceObjectUrl,
+  resolveResourceUrl,
+  type ApiAuthority,
+} from "../services/api"
 import { directoryScopedPath } from "../services/task-path"
 import { PreviewableImage } from "./ImagePreview"
 import { Icon } from "./ui/Icon"
@@ -35,6 +43,7 @@ const DEFERRED_TOOL_PART_CACHE_LIMIT = 128
 const deferredToolPartCache = new Map<string, Promise<any>>()
 
 type DeferredToolPartSource = {
+  authority: ApiAuthority
   sessionID: string
   messageID: string
   partID: string
@@ -50,10 +59,18 @@ async function sha256Text(value: string): Promise<string> {
 }
 
 function deferredToolPartCacheKey(source: DeferredToolPartSource): string {
-  return [source.directory, source.sessionID, source.messageID, source.partID, source.stateSha256].join("\u0000")
+  return [
+    source.authority.revision,
+    source.directory,
+    source.sessionID,
+    source.messageID,
+    source.partID,
+    source.stateSha256,
+  ].join("\u0000")
 }
 
 function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
+  assertApiAuthorityCurrent(source.authority)
   const key = deferredToolPartCacheKey(source)
   const cached = deferredToolPartCache.get(key)
   if (cached) return cached
@@ -63,6 +80,7 @@ function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
       source.directory,
       "deferred conversation Tool Part",
     ),
+    { authority: source.authority },
   )
     .then(async (loaded) => {
       if (
@@ -83,6 +101,7 @@ function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
       if (new TextEncoder().encode(output).byteLength !== source.outputBytes) {
         throw new Error(`Deferred Tool Part ${source.partID} output changed during read`)
       }
+      assertApiAuthorityCurrent(source.authority)
       return loaded
     })
     .catch((error) => {
@@ -129,11 +148,11 @@ function hasToolPayloadValue(value: unknown): boolean {
 function BrowserEvidenceImage(props: { url: string; alt: string }) {
   const authed = () => props.url.startsWith("/")
   const [objectUrl] = createResource(
-    () => (authed() ? props.url : null),
-    (url: string | null) => (url ? fetchResourceAsObjectUrl(url) : null),
+    () => (authed() ? { url: props.url, authority: captureApiAuthority() } : null),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     { initialValue: authed() ? (peekResourceObjectUrl(props.url) ?? null) : null },
   )
-  const resolved = () => (authed() ? objectUrl() : resolveResourceUrl(props.url))
+  const resolved = () => (authed() ? !objectUrl.loading && objectUrl() : resolveResourceUrl(props.url))
 
   return (
     <Show when={!objectUrl.error}>
@@ -141,6 +160,7 @@ function BrowserEvidenceImage(props: { url: string; alt: string }) {
         {(src) => (
           <PreviewableImage
             src={src()}
+            resourceUrl={authed() ? props.url : undefined}
             imageClass="msg-browser-evidence__image"
             triggerClass="msg-browser-evidence__trigger"
             alt={props.alt}
@@ -350,6 +370,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
       throw new Error(`Deferred Tool Part ${partID || "<missing>"} has incomplete persisted identity`)
     }
     return {
+      authority: captureApiAuthority(),
       sessionID,
       messageID,
       partID,
@@ -360,7 +381,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     }
   }
   const [persistedPart] = createResource(deferredSource, readDeferredToolPart)
-  const part = () => persistedPart() || props.part
+  const part = () => (!persistedPart.loading && persistedPart()) || props.part
   const state = () => part().state || {}
   const toolName = () => part().tool || "unknown"
   const input = () => state().input || {}
@@ -373,8 +394,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   }
   const raw = () => {
     const st = state()
-    const r =
-      typeof st.raw === "string" ? (typeof part()._targetRaw === "string" ? part()._targetRaw : st.raw) : ""
+    const r = typeof st.raw === "string" ? (typeof part()._targetRaw === "string" ? part()._targetRaw : st.raw) : ""
     return status() === "completed" ? r : visibleStreamingText(r)
   }
   const output = () => stripAnsi(state().output || "")
@@ -483,7 +503,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     ),
   )
   const bodyReady = () => !persistedPart.loading && !persistedPart.error && (!deferredSource() || !!persistedPart())
-  const inputPayload = () => status() === "pending" && raw() ? raw() : toolPayloadText(state().input)
+  const inputPayload = () => (status() === "pending" && raw() ? raw() : toolPayloadText(state().input))
 
   const showChip = () => mode() !== "body"
   const showBody = () => mode() === "block" || mode() === "body"
@@ -513,11 +533,16 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           <div class="msg-tool-error">{String(persistedPart.error?.message || persistedPart.error)}</div>
         </Show>
         <Show when={bodyReady()}>
-          <Show when={hasToolPayloadValue(state().input) || raw()} fallback={<div class="msg-tool-state">{t("tool.no_arguments")}</div>}>
+          <Show
+            when={hasToolPayloadValue(state().input) || raw()}
+            fallback={<div class="msg-tool-state">{t("tool.no_arguments")}</div>}
+          >
             <ToolPayload label={t("tool.input")} value={inputPayload()} live={status() === "pending"} collapsed />
           </Show>
           <Show when={status() === "pending" || status() === "running"}>
-            <div class="msg-tool-state" role="status">{t(status() === "pending" ? "tool.receiving_input" : "tool.awaiting_result")}</div>
+            <div class="msg-tool-state" role="status">
+              {t(status() === "pending" ? "tool.receiving_input" : "tool.awaiting_result")}
+            </div>
           </Show>
           <Show when={status() === "completed" && !hasResultBody()}>
             <div class="msg-tool-state">{t("tool.empty_result")}</div>

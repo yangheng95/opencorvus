@@ -1,6 +1,11 @@
 import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
 import { createResource, Show, Switch, Match } from "solid-js"
-import { fetchResourceAsObjectUrl, peekResourceObjectUrl, resolveResourceUrl } from "../services/api"
+import {
+  captureApiAuthority,
+  fetchResourceAsObjectUrl,
+  peekResourceObjectUrl,
+  resolveResourceUrl,
+} from "../services/api"
 import { t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
 
@@ -143,17 +148,22 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
 function AuthedImage(props: { url: string; alt: string; thumbnail: boolean }) {
   const displayUrl = () =>
     props.thumbnail ? `${props.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}` : props.url
-  const [objectUrl] = createResource(displayUrl, (raw) => fetchResourceAsObjectUrl(raw), {
-    initialValue: peekResourceObjectUrl(displayUrl()),
-  })
+  const [objectUrl] = createResource(
+    () => ({ url: displayUrl(), authority: captureApiAuthority() }),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
+    {
+      initialValue: peekResourceObjectUrl(displayUrl()),
+    },
+  )
 
   return (
     <Show when={!objectUrl.error} fallback={<LoadError name={props.alt} />}>
-      <Show when={objectUrl()}>
+      <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class={props.thumbnail ? "msg-image-attachment" : "msg-img-wrap"}>
             <PreviewableImage
               src={resolved()}
+              resourceUrl={props.url}
               alt={props.alt}
               triggerClass={props.thumbnail ? "msg-image-attachment__trigger" : undefined}
               imageClass={props.thumbnail ? "msg-image-attachment__image" : undefined}
@@ -169,15 +179,15 @@ function AuthedImage(props: { url: string; alt: string; thumbnail: boolean }) {
 
 function AuthedVideo(props: { url: string; name: string; mime: string }) {
   const [objectUrl] = createResource(
-    () => props.url,
-    (raw) => fetchResourceAsObjectUrl(raw),
+    () => ({ url: props.url, authority: captureApiAuthority() }),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
       initialValue: peekResourceObjectUrl(props.url),
     },
   )
   return (
     <Show when={!objectUrl.error} fallback={<LoadError name={props.name} />}>
-      <Show when={objectUrl()}>
+      <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-video-wrap">
             <video class="md-video" src={resolved()} controls preload="metadata">
@@ -193,15 +203,15 @@ function AuthedVideo(props: { url: string; name: string; mime: string }) {
 
 function AuthedAudio(props: { url: string; name: string; mime: string }) {
   const [objectUrl] = createResource(
-    () => props.url,
-    (raw) => fetchResourceAsObjectUrl(raw),
+    () => ({ url: props.url, authority: captureApiAuthority() }),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
       initialValue: peekResourceObjectUrl(props.url),
     },
   )
   return (
     <Show when={!objectUrl.error} fallback={<LoadError name={props.name} />}>
-      <Show when={objectUrl()}>
+      <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-audio-wrap">
             <audio class="md-audio" src={resolved()} controls preload="metadata">
@@ -217,15 +227,15 @@ function AuthedAudio(props: { url: string; name: string; mime: string }) {
 
 function AuthedPdf(props: { url: string; name: string }) {
   const [objectUrl] = createResource(
-    () => props.url,
-    (raw) => fetchResourceAsObjectUrl(raw),
+    () => ({ url: props.url, authority: captureApiAuthority() }),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
       initialValue: peekResourceObjectUrl(props.url),
     },
   )
   return (
     <Show when={!objectUrl.error} fallback={<LoadError name={props.name} />}>
-      <Show when={objectUrl()}>
+      <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-pdf-wrap">
             <iframe class="md-pdf" src={resolved()} title={props.name} />
@@ -245,13 +255,13 @@ function FallbackDownload(props: { url: string; name: string; mime: string; auth
   // authed proxy so the download link points at a blob URL the browser can
   // open inline or save.
   const [objectUrl] = createResource(
-    () => (props.authed && props.url ? props.url : null),
-    (u: string | null) => (u ? fetchResourceAsObjectUrl(u) : null),
+    () => (props.authed && props.url ? { url: props.url, authority: captureApiAuthority() } : null),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     { initialValue: props.authed ? peekResourceObjectUrl(props.url) : null },
   )
   const href = () => {
     if (!props.url) return ""
-    if (props.authed) return objectUrl() || ""
+    if (props.authed) return (!objectUrl.loading && objectUrl()) || ""
     return props.url
   }
 

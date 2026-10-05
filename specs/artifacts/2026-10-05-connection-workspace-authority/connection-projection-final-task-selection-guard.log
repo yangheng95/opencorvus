@@ -1,0 +1,15 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\task-selection-guard.test.ts:
+(pass) applyTasks clears orphaned selection even when board is missing [0.51ms]
+(pass) applyTasks preserves the admitted in-flight selection and its switching state [0.08ms]
+(pass) classifyPanelMessageTarget treats stale selected task as orphan [0.07ms]
+(pass) classifyPanelMessageTarget forces reload when task exists but board is stale [0.07ms]
+(pass) classifyPanelMessageTarget sends directly when board already matches [0.04ms]
+(pass) supersedePendingWorkspaceSelection clears a partial selection and transfers epoch ownership [1.13ms]
+(pass) supersedePendingWorkspaceSelection preserves a stable selection under the new epoch [0.06ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [1044.00ms]

@@ -1,5 +1,6 @@
 import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
-import { apiJson, getServerUrl } from "../services/api"
+import { apiJson, captureApiAuthority, getServerUrl, isApiAuthorityCurrent } from "../services/api"
+import { fileEditorReserved } from "../services/file-workbench"
 import {
   createSideChat,
   listSideChats,
@@ -85,7 +86,7 @@ export function SideChatPanel(props: {
   let scroll!: HTMLDivElement
   let textarea: HTMLTextAreaElement | undefined
   let follow: AutoScrollController | undefined
-  const sourceKey = () => JSON.stringify(props.source)
+  const sourceKey = () => `${captureApiAuthority().revision}\0${JSON.stringify(props.source)}`
   const session = createMemo(() => sessions().find((item) => item.id === selected()))
   const key = () => composerDraftKey("side-chat", getServerUrl(), props.source?.directory ?? "", selected())
   const inherited = createMemo(() => new Set(session()?.metadata.sideChat.inheritedMessageIDs ?? []))
@@ -111,54 +112,64 @@ export function SideChatPanel(props: {
   createEffect(
     on(sourceKey, async () => {
       const current = ++generation
+      const authority = captureApiAuthority()
       const source = props.source
       setSessions([])
       setSelected("")
       setTranscript(undefined)
       setError("")
+      setCreating(false)
       if (!source) return
       try {
-        const items = await listSideChats(source)
-        if (current !== generation) return
+        const items = await listSideChats({ ...source, authority })
+        if (current !== generation || !isApiAuthorityCurrent(authority)) return
         setSessions((current) => [
           ...current,
           ...items.filter((item) => !current.some((saved) => saved.id === item.id)),
         ])
         setSelected((current) => current || items[0]?.id || "")
       } catch (error) {
-        if (current === generation) report(error)
+        if (current === generation && isApiAuthorityCurrent(authority)) report(error)
       }
     }),
   )
   async function create(request?: SideChatRequest) {
+    if (fileEditorReserved()) return
     const source = request?.source ?? props.source
     if (!source || creating()) return
     const current = generation
+    const authority = captureApiAuthority()
+    if (source.authority && !isApiAuthorityCurrent(source.authority)) return
+    const owns = () => current === generation && isApiAuthorityCurrent(authority)
     setCreating(true)
     setError("")
     try {
-      const created = await createSideChat(source)
-      if (current !== generation) return
+      const created = await createSideChat({ ...source, authority })
+      if (!owns()) return
       setSessions((items) => [created, ...items.filter((item) => item.id !== created.id)])
       setSelected(created.id)
       if (request?.quotation) setComposerQuotation(key(), request.quotation)
       if (request?.prompt) setComposerDraft(key(), request.prompt)
       if (request) props.consumeRequest(request)
-      queueMicrotask(() => textarea?.focus())
+      queueMicrotask(() => {
+        if (owns()) textarea?.focus()
+      })
     } catch (error) {
-      if (current === generation) report(error)
+      if (owns()) report(error)
     } finally {
-      setCreating(false)
+      if (owns()) setCreating(false)
     }
   }
   createEffect(() => {
     const request = props.request
     if (
       !request ||
+      fileEditorReserved() ||
       creating() ||
       request === attemptedRequest ||
       !props.source ||
-      sourceKey() !== JSON.stringify(request.source)
+      props.source.sessionID !== request.source.sessionID ||
+      props.source.directory !== request.source.directory
     )
       return
     attemptedRequest = request
@@ -177,14 +188,28 @@ export function SideChatPanel(props: {
         setTracking(true)
         const source = props.source
         if (!source || !selected()) return
+        const authority = captureApiAuthority()
+        const current = generation
+        const sessionID = selected()
+        const owns = () => current === generation && selected() === sessionID && isApiAuthorityCurrent(authority)
         const dispose = connectSideChat(
-          { ...source, sessionID: selected() },
+          { ...source, sessionID, authority },
           {
-            transcript: setTranscript,
-            connection: setConnected,
-            activity: setActive,
-            interactions: setInteractions,
-            error: report,
+            transcript: (value) => {
+              if (owns()) setTranscript(value)
+            },
+            connection: (value) => {
+              if (owns()) setConnected(value)
+            },
+            activity: (value) => {
+              if (owns()) setActive(value)
+            },
+            interactions: (value) => {
+              if (owns()) setInteractions(value)
+            },
+            error: (error) => {
+              if (owns()) report(error)
+            },
           },
         )
         onCleanup(dispose)
@@ -197,14 +222,23 @@ export function SideChatPanel(props: {
     follow?.contentChanged()
   })
   function quote(quotation: Quotation) {
+    if (fileEditorReserved()) return
+    const current = generation
+    const authority = captureApiAuthority()
     setComposerQuotation(key(), quotation)
-    queueMicrotask(() => textarea?.focus())
+    queueMicrotask(() => {
+      if (current === generation && isApiAuthorityCurrent(authority)) textarea?.focus()
+    })
   }
   async function send() {
+    if (fileEditorReserved()) return
     const source = props.source
     const text = composerDraftText(key()).trim()
     if (!source || !selected() || !text || running() || !connected()) return
     const target = { ...source, sessionID: selected() }
+    const authority = captureApiAuthority()
+    const current = generation
+    const owns = () => current === generation && selected() === target.sessionID && isApiAuthorityCurrent(authority)
     const draftKey = key()
     const quoted = composerQuotation(draftKey)
     const submission = composerSubmission(draftKey, quotedPrompt(text, quoted))
@@ -212,6 +246,7 @@ export function SideChatPanel(props: {
     setError("")
     try {
       await apiJson(sideChatPath(target, "/message"), {
+        authority,
         method: "POST",
         timeoutMilliseconds: null,
         headers: { "Content-Type": "application/json" },
@@ -221,26 +256,31 @@ export function SideChatPanel(props: {
           parts: [{ type: "text", text: submission.text }],
         }),
       })
-      if (quotedPrompt(composerDraftText(draftKey).trim(), composerQuotation(draftKey)) === submission.text)
+      if (owns() && quotedPrompt(composerDraftText(draftKey).trim(), composerQuotation(draftKey)) === submission.text)
         clearComposerDraft(draftKey)
     } catch (error) {
-      if (selected() === target.sessionID) report(error)
+      if (owns()) report(error)
     } finally {
-      if (selected() === target.sessionID) setSending(false)
+      if (owns()) setSending(false)
     }
   }
   async function stop() {
     if (!props.source || !selected()) return
+    const authority = captureApiAuthority()
+    const current = generation
+    const sessionID = selected()
+    const owns = () => current === generation && selected() === sessionID && isApiAuthorityCurrent(authority)
     setStopping(true)
     try {
-      await apiJson(sideChatPath({ ...props.source, sessionID: selected() }, "/abort"), {
+      await apiJson(sideChatPath({ ...props.source, sessionID }, "/abort"), {
+        authority,
         method: "POST",
         timeoutMilliseconds: null,
       })
     } catch (error) {
-      report(error)
+      if (owns()) report(error)
     } finally {
-      setStopping(false)
+      if (owns()) setStopping(false)
     }
   }
   return (
@@ -249,7 +289,10 @@ export function SideChatPanel(props: {
         <SelectControl<SideChatSession>
           options={sessions()}
           value={session()}
-          onChange={(item) => item && setSelected(item.id)}
+          onChange={(item) => {
+            if (!fileEditorReserved() && item) setSelected(item.id)
+          }}
+          disabled={fileEditorReserved()}
           optionValue="id"
           optionTextValue={sessionLabel}
           ariaLabel={t("side_chat.choose")}
@@ -265,7 +308,7 @@ export function SideChatPanel(props: {
           variant="ghost"
           size="icon"
           tone="neutral"
-          disabled={creating() || !props.source}
+          disabled={fileEditorReserved() || creating() || !props.source}
           onClick={() => void create()}
           title={t("side_chat.new")}
           aria-label={t("side_chat.new")}
@@ -281,7 +324,13 @@ export function SideChatPanel(props: {
           actions={
             <>
               <Show when={props.request && !creating()}>
-                <Button variant="outline" size="sm" tone="neutral" onClick={() => void create(props.request)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  disabled={fileEditorReserved()}
+                  onClick={() => void create(props.request)}
+                >
                   {t("side_chat.retry")}
                 </Button>
               </Show>
@@ -321,7 +370,9 @@ export function SideChatPanel(props: {
                       variant="ghost"
                       size="mini"
                       tone="neutral"
+                      disabled={fileEditorReserved()}
                       onClick={() =>
+                        !fileEditorReserved() &&
                         props.onQuoteInMain({
                           sessionID: message().sessionID,
                           messageID: id,
@@ -359,7 +410,9 @@ export function SideChatPanel(props: {
                       variant="outline"
                       size="sm"
                       tone="neutral"
+                      disabled={fileEditorReserved()}
                       onClick={() => {
+                        if (fileEditorReserved()) return
                         setComposerDraft(key(), t(label))
                         textarea?.focus()
                       }}
@@ -383,16 +436,25 @@ export function SideChatPanel(props: {
           }}
         >
           <Show when={composerQuotation(key())}>
-            {(value) => <QuotationChip quotation={value()} onRemove={() => setComposerQuotation(key(), undefined)} />}
+            {(value) => (
+              <QuotationChip
+                quotation={value()}
+                onRemove={() => {
+                  if (!fileEditorReserved()) setComposerQuotation(key(), undefined)
+                }}
+              />
+            )}
           </Show>
           <AutoGrowTextarea
             ref={(element) => (textarea = element)}
             value={composerDraftText(key())}
             surface="composer"
-            disabled={sending()}
+            disabled={sending() || fileEditorReserved()}
             aria-label={t("side_chat.placeholder")}
             placeholder={t("side_chat.placeholder")}
-            onInput={(event) => setComposerDraft(key(), event.currentTarget.value)}
+            onInput={(event) => {
+              if (!fileEditorReserved()) setComposerDraft(key(), event.currentTarget.value)
+            }}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey && !event.isComposing && event.keyCode !== 229) {
                 event.preventDefault()
@@ -413,7 +475,7 @@ export function SideChatPanel(props: {
                   variant="solid"
                   tone="neutral"
                   size="icon"
-                  disabled={!connected() || !composerDraftText(key()).trim()}
+                  disabled={fileEditorReserved() || !connected() || !composerDraftText(key()).trim()}
                   aria-label={t("side_chat.send")}
                 >
                   <Icon name="arrow-up" />

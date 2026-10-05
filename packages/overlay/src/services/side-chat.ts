@@ -1,4 +1,4 @@
-import { apiJson } from "./api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
 import { prepareStandaloneQuestionInteractions } from "./tree-writer"
@@ -12,6 +12,7 @@ import {
 } from "./subagent-conversation"
 
 export interface SideChatSource {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
 }
@@ -24,10 +25,10 @@ export function sideChatPath(target: SideChatSource, suffix: string): string {
   return `session/${encodeURIComponent(target.sessionID)}${suffix}?${new URLSearchParams({ directory: target.directory })}`
 }
 export function listSideChats(source: SideChatSource): Promise<SideChatSession[]> {
-  return apiJson(sideChatPath(source, "/side-chat"))
+  return apiJson(sideChatPath(source, "/side-chat"), { authority: source.authority })
 }
 export function createSideChat(source: SideChatSource): Promise<SideChatSession> {
-  return apiJson(sideChatPath(source, "/side-chat"), { method: "POST" })
+  return apiJson(sideChatPath(source, "/side-chat"), { method: "POST", authority: source.authority })
 }
 
 /** Owns only this Session's stream. Its ordered connection snapshot repairs reconnect gaps. */
@@ -41,6 +42,8 @@ export function connectSideChat(
     interactions: (pending: InteractionData[]) => void
   },
 ) {
+  const authority = target.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   let disposed = false
   let handle: StreamHandle | undefined
   let retry: ReturnType<typeof setTimeout> | undefined
@@ -50,32 +53,34 @@ export function connectSideChat(
   let connectionGeneration = 0
   const pending = new Map<string, InteractionData>()
   const lifetime = new AbortController()
+  const owns = () => !disposed && isApiAuthorityCurrent(authority)
   async function refreshActivity() {
     const version = lifecycleVersion
     try {
       const statuses = (await apiJson(`session/status?${new URLSearchParams({ directory: target.directory })}`, {
+        authority,
         signal: lifetime.signal,
       })) as Record<string, { type: string }>
-      if (!disposed && version === lifecycleVersion)
+      if (owns() && version === lifecycleVersion)
         handlers.activity(["streaming", "retry"].includes(statuses[target.sessionID]?.type))
     } catch (error) {
-      if (!disposed) handlers.error(error)
+      if (owns()) handlers.error(error)
     }
   }
   function connect() {
-    if (disposed) return
+    if (!owns()) return
     const generation = ++connectionGeneration
     lifecycleVersion++
     handle = getHostTransport().openStream(
-      { path: `session/${encodeURIComponent(target.sessionID)}/events`, query: { directory: target.directory } },
+      { path: `session/${encodeURIComponent(target.sessionID)}/events`, query: { directory: target.directory }, authority },
       {
         onEvent(data) {
-          if (disposed || generation !== connectionGeneration) return
+          if (!owns() || generation !== connectionGeneration) return
           try {
             const event = JSON.parse(data)
             if (event.type === "session.connected") {
               base = parseSubagentConversation(
-                { ...target, source: { kind: "session", id: target.sessionID } },
+                { ...target, authority, source: { kind: "session", id: target.sessionID } },
                 event.payload.conversationSnapshot,
               )
               live = createSubagentConversationLiveProjection(target.sessionID)
@@ -127,12 +132,18 @@ export function connectSideChat(
           }
         },
         onError(error) {
-          if (disposed || generation !== connectionGeneration) return
+          if (!owns() || generation !== connectionGeneration) return
           handlers.error(error)
           handle?.close("transport-error")
         },
-        onClose() {
-          if (disposed || generation !== connectionGeneration) return
+        onClose(_reason, info) {
+          if (generation !== connectionGeneration) return
+          if (info?.current === false || !owns()) {
+            if (retry) clearTimeout(retry)
+            lifetime.abort()
+            disposed = true
+            return
+          }
           handlers.connection(false)
           if (retry) clearTimeout(retry)
           retry = setTimeout(connect, STREAM_RECONNECT_DELAY_MS)

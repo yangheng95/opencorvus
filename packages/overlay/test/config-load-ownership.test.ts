@@ -66,6 +66,7 @@ test("project config reload projects the selected server and project after an ea
   })
   const loading = loadConfigInfo()
   setSettingsStore("serverUrl", "http://server-b:7878")
+  configure({ serverUrl: "http://server-b:7878" })
   setAppStore("config", { permission_mode: "ask", locale: "zh-CN" })
   pending.resolve()
   await loading

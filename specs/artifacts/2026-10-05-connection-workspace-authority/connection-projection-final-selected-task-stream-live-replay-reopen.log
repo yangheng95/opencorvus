@@ -1,0 +1,44 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\selected-task-stream-live-replay-reopen.test.ts:
+[recovery-diagnostics] {
+  event: "conversation-recovery.started",
+  channel: "sse-reconnect",
+  reason: "sse stream reconnect",
+  taskID: "tsk_live_replay_reopen",
+  source: "sse-reconnect",
+}
+[recovery-diagnostics] {
+  event: "conversation-recovery.failed",
+  channel: "sse-reconnect",
+  reason: "sse stream reconnect",
+  taskID: "tsk_live_replay_reopen",
+  source: "sse-reconnect",
+  durationMs: 2,
+  error: "transport request is not served by this test",
+}
+(pass) a live-replay-expired close reopens immediately instead of paying the failure backoff [21.49ms]
+(pass) selected stream lifecycle distinguishes initial connection from failure reconnect [3.52ms]
+(pass) an initial stream error remains initial connection work until a stream has opened [0.16ms]
+[recovery-diagnostics] {
+  event: "conversation-recovery.started",
+  channel: "sse-reconnect",
+  reason: "sse stream reconnect",
+  taskID: "tsk_live_replay_reopen",
+  source: "sse-reconnect",
+}
+[recovery-diagnostics] {
+  event: "conversation-recovery.succeeded",
+  channel: "sse-reconnect",
+  reason: "sse stream reconnect",
+  taskID: "tsk_live_replay_reopen",
+  source: "sse-reconnect",
+  durationMs: 1,
+  resumeSequence: 0,
+}
+(pass) an initial stream close retries as initial connection work [3028.67ms]
+
+ 4 pass
+ 0 fail
+ 9 expect() calls
+Ran 4 tests across 1 file. [4.22s]

@@ -41,6 +41,7 @@ describe.serial("Mission Skill service request ownership", () => {
     const sessionGate = deferred<void>()
     const requests: TransportRequest[] = []
     const response = {
+      issues: [],
       roots: { global: "D:/global/mission-skills", project: "D:/project/.opencorvus/mission-skills" },
       mission_skills: [],
     }
@@ -73,7 +74,7 @@ describe.serial("Mission Skill service request ownership", () => {
     const projectGate = deferred<void>()
     const sessionGate = deferred<void>()
     const requests: TransportRequest[] = []
-    const response = { mission_skills: [] }
+    const response = { issues: [], mission_skills: [] }
     __setHostTransportForTest(
       transport(async (request) => {
         requests.push(request)

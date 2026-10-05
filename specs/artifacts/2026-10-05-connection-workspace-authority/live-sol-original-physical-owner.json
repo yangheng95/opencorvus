@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-05T16:32:54.6099151Z",
+  "expected": {
+    "ProcessId": 65020,
+    "ParentProcessId": 75936,
+    "CreationDate": "2026-10-06T00:17:25.746475+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\startup.json 17952 live-sol-cli-01-20de14b3-6d65-4070-8c96-25645231fa99"
+  },
+  "current": {
+    "ProcessId": 65020,
+    "ParentProcessId": 75936,
+    "CreationDate": "2026-10-06T00:17:25.746475+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\startup.json 17952 live-sol-cli-01-20de14b3-6d65-4070-8c96-25645231fa99"
+  },
+  "exactOriginalOccurrence": true,
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17952,
+      "OwningProcess": 65020
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, onCleanup, Show } from "solid-js"
+import { createEffect, createMemo, createResource, createSignal, onCleanup, Show } from "solid-js"
 import type { JSX } from "solid-js"
 import {
   beginImagePreviewRequest,
@@ -9,6 +9,12 @@ import {
   openImagePreviewForRequest,
 } from "../services/image-preview"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import {
+  ApiAuthorityChangedError,
+  captureApiAuthority,
+  fetchResourceAsObjectUrl,
+  isApiAuthorityCurrent,
+} from "../services/api"
 import {
   calculateImagePreviewFitScale,
   calculateImagePreviewOpenScale,
@@ -73,6 +79,7 @@ export function PreviewableImage(props: {
   imageDataUI?: string
   imageAttributes?: PreviewableImageAttributes
   previewLoader?: PreviewImageLoader
+  resourceUrl?: string
 }) {
   const alt = () => props.alt || ""
   const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: alt() }))
@@ -93,15 +100,27 @@ export function PreviewableImage(props: {
     event.stopPropagation()
     if (pendingRequestRevision !== null) cancelImagePreviewRequest(pendingRequestRevision)
     const requestRevision = beginImagePreviewRequest()
+    const resourceUrl = props.resourceUrl ?? (props.src.startsWith("/") ? props.src : undefined)
+    const authority = resourceUrl ? captureApiAuthority() : undefined
     pendingRequestRevision = requestRevision
     try {
       const src = await loadPreviewSource()
       if (pendingRequestRevision !== requestRevision) return
-      openImagePreviewForRequest(requestRevision, src, alt())
+      openImagePreviewForRequest(
+        requestRevision,
+        src,
+        alt(),
+        resourceUrl && authority ? { resourceUrl, authority } : undefined,
+      )
     } catch (error) {
       if (!imagePreviewRequestIsCurrent(requestRevision)) return
       cancelImagePreviewRequest(requestRevision)
-      if (isAbortError(error)) return
+      if (
+        isAbortError(error) ||
+        error instanceof ApiAuthorityChangedError ||
+        (authority && !isApiAuthorityCurrent(authority))
+      )
+        return
       reportError({
         title: t("image_preview.title"),
         message: t("image_preview.copy_status.source_unavailable"),
@@ -140,6 +159,20 @@ export function PreviewableImage(props: {
 }
 
 export function ImagePreviewHost() {
+  const [resource] = createResource(
+    () => {
+      const state = imagePreviewState()
+      return state.open && state.resourceUrl
+        ? { url: state.resourceUrl, revision: state.revision, authority: captureApiAuthority() }
+        : null
+    },
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
+  )
+  const previewSource = () => {
+    const state = imagePreviewState()
+    if (!state.open) return ""
+    return state.resourceUrl ? (!resource.loading && !resource.error && resource()) || "" : state.src
+  }
   const [scale, setScale] = createSignal(1)
   const [imageSize, setImageSize] = createSignal<ImagePreviewSize>({ width: 0, height: 0 })
   const [bodyGeometry, setBodyGeometry] = createSignal<ImagePreviewBodyGeometry | null>(null)
@@ -177,6 +210,7 @@ export function ImagePreviewHost() {
 
   createEffect(() => {
     const state = imagePreviewState()
+    const src = previewSource()
     copyGeneration += 1
     setCopyInFlight(false)
     clearCopyFeedback()
@@ -191,6 +225,7 @@ export function ImagePreviewHost() {
     setBodyGeometry(null)
     applyOpenScaleOnFrame.schedule()
     queueMicrotask(() => {
+      if (imagePreviewState().revision !== state.revision || previewSource() !== src) return
       if (imageRef?.complete) measureLoadedImage(imageRef)
     })
   })
@@ -382,11 +417,16 @@ export function ImagePreviewHost() {
     const image = imageRef
     const clipboardWrite = navigator.clipboard?.write
     const preview = imagePreviewState()
+    const src = previewSource()
+    const authority = preview.resourceUrl ? captureApiAuthority() : undefined
     const operationGeneration = ++copyGeneration
     const ownsOperation = () =>
       operationGeneration === copyGeneration &&
       imagePreviewState().open &&
-      imagePreviewState().revision === preview.revision
+      imagePreviewRequestIsCurrent(preview.revision) &&
+      imagePreviewState().revision === preview.revision &&
+      previewSource() === src &&
+      (!authority || isApiAuthorityCurrent(authority))
     clearCopyFeedback()
     if (!image || !image.complete || imageSize().width <= 0 || imageSize().height <= 0) {
       showCopyFeedback({ tone: "error", key: IMAGE_COPY_LOADING_KEY })
@@ -399,7 +439,8 @@ export function ImagePreviewHost() {
 
     setCopyInFlight(true)
     try {
-      const blob = await fetchPreviewImageBlob(preview.src)
+      const blob = await fetchPreviewImageBlob(src)
+      if (!ownsOperation()) return
       await clipboardWrite.call(navigator.clipboard, [new ClipboardItem({ "image/png": blob })])
       if (ownsOperation()) showCopyFeedback({ tone: "success", key: IMAGE_COPY_SUCCESS_KEY })
     } catch (error) {
@@ -413,9 +454,10 @@ export function ImagePreviewHost() {
 
   function downloadPreviewImage(): void {
     const preview = imagePreviewState()
-    if (!preview.src) return
+    const src = previewSource()
+    if (!src) return
     const download = document.createElement("a")
-    download.href = preview.src
+    download.href = src
     download.download = preview.alt.split(/[\\/]/).pop()?.trim() || t("image_preview.title")
     download.rel = "noopener noreferrer"
     document.body.append(download)
@@ -525,13 +567,21 @@ export function ImagePreviewHost() {
             <ContextMenu.Trigger as="div" class="image-preview-dialog__image-menu-target">
               <img
                 class="image-preview-dialog__image"
-                src={imagePreviewState().src}
+                src={previewSource() || undefined}
                 alt={imagePreviewState().alt}
                 ref={(element) => {
                   imageRef = element
                 }}
-                onLoad={(event) => measureLoadedImage(event.currentTarget)}
+                onLoad={(event) => {
+                  if (previewSource() && event.currentTarget.getAttribute("src") === previewSource())
+                    measureLoadedImage(event.currentTarget)
+                }}
               />
+              <Show when={imagePreviewState().resourceUrl && resource.error}>
+                <div class="msg-file-error" role="alert">
+                  {t("image_preview.copy_status.source_unavailable")}
+                </div>
+              </Show>
             </ContextMenu.Trigger>
             <ContextMenu.Portal mount={bodyRef}>
               <ContextMenu.Content

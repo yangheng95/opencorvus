@@ -1,0 +1,24 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\connection-projection-authority.test.ts:
+(pass) local transport metadata completes B's same-directory facts after A returns [4.20ms]
+(pass) local compound GET and mutator capture retain an exact stale continuation outcome [0.89ms]
+(pass) local board pending ownership keeps B loading while the old A finally settles [1.41ms]
+(pass) local global Task list uses B's pending owner and retains its exact rows after A [1.36ms]
+(pass) local same-ID Session mutation retains A receipt and B busy owner before B completes [1.05ms]
+(pass) Work Ledger replacement snapshot and retirement use the existing current map [1.15ms]
+(pass) local VCS and panel POST close settle their original operations with actual stream-close facts [1.35ms]
+(pass) project memory refresh and acknowledgement follow one directory and authority [0.76ms]
+(pass) global and scoped reference pending owners return B's current catalog after A retires [1.07ms]
+(pass) Chat prompt-profile completion on A retains its receipt while B remains the active request authority [1.09ms]
+(pass) explicit Chat Stop uses its captured target and stale Stop has a local admission outcome [0.63ms]
+(pass) MCP stream same-ID replacement publishes B capability events after late A close [0.75ms]
+(pass) panel stream preserves the original completed result when authority retires before close [1.07ms]
+(pass) Mission board preserves B's completed current snapshot when A's page settles later [1.10ms]
+(pass) sequential Skill removal preserves the first accepted A response when its authority retires [0.82ms]
+(pass) accepted Chat creation returns its canonical ID when later view hydration retires [1.93ms]
+
+ 16 pass
+ 0 fail
+ 49 expect() calls
+Ran 16 tests across 1 file. [1052.00ms]

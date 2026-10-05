@@ -1,0 +1,37 @@
+{
+  "time": "2026-10-05T14:45:56.820Z",
+  "method": "GET",
+  "url": "http://127.0.0.1:17949/work-ledger",
+  "status": 200,
+  "requestID": "e5d64f3a-5287-41c5-96a5-196c6f50213d",
+  "body": {
+    "rows": [
+      {
+        "kind": "project",
+        "id": "prj_hzth4QzZIwFhtLhhNICZ",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-workspace-before-01\\a-project",
+        "created": 1791204001877,
+        "updated": 1791204001877,
+        "pinned": false
+      }
+    ],
+    "nextCursor": null
+  },
+  "databaseRead": {
+    "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/b-home/data/opencorvus.db",
+    "readonly": true,
+    "query": "SELECT id, worktree, name, time_created, time_updated, generation FROM project ORDER BY time_created",
+    "projects": [
+      {
+        "id": "prj_hzth4QzZIwFhtLhhNICZ",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-workspace-before-01\\a-project",
+        "name": null,
+        "time_created": 1791204001877,
+        "time_updated": 1791204001877,
+        "generation": "1b68dd81-a154-466b-85ad-fef8e56159d7"
+      }
+    ]
+  },
+  "boundary": "Owned actual public HTTP and readonly SQLite metadata; no query-directory inference or UI claim"
+}

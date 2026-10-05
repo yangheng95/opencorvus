@@ -1,0 +1,2791 @@
+{
+  "qualification": "Read-only TypeScript AST source inventory; call expressions, not runtime or UI tests",
+  "summary": {
+    "apiJson": {
+      "calls": 191,
+      "files": 49
+    },
+    "apiRequest": {
+      "calls": 6,
+      "files": 6
+    },
+    "apiJsonWithTimeout": {
+      "calls": 7,
+      "files": 1
+    },
+    "serverSettledRequest": {
+      "calls": 13,
+      "files": 6
+    },
+    "configure": {
+      "calls": 1,
+      "files": 1
+    },
+    "configureApi": {
+      "calls": 11,
+      "files": 6
+    },
+    "onApiError": {
+      "calls": 1,
+      "files": 1
+    },
+    "request": {
+      "calls": 15,
+      "files": 4
+    },
+    "openStream": {
+      "calls": 6,
+      "files": 5
+    },
+    "ApiError": {
+      "calls": 7,
+      "files": 6
+    }
+  },
+  "calls": [
+    {
+      "file": "packages/overlay/src/components/FileEditorPane.tsx",
+      "line": 33,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "readFileContent",
+      "arguments": [
+        "fileContentPath(target)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/FileEditorPane.tsx",
+      "line": 42,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "writeFileContent",
+      "arguments": [
+        "projectScopedPath(\"file/content\", target.directory)",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ path: target.path, content, expectedRevision }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/FileExplorerPanel.tsx",
+      "line": 224,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "searchFiles",
+      "arguments": [
+        "`find/file?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/InlineToolPart.tsx",
+      "line": 60,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "readDeferredToolPart",
+      "arguments": [
+        "directoryScopedPath(\n      `session/${encodeURIComponent(source.sessionID)}/message/${encodeURIComponent(source.messageID)}/part/${encodeURIComponent(source.partID)}`,\n      source.directory,\n      \"deferred conversation Tool Part\",\n    )"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/LogViewer.tsx",
+      "line": 72,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "fetchServerLogs",
+      "arguments": [
+        "\"log/tail?n=500\""
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/MemoryPanel.tsx",
+      "line": 159,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "memoryPath(\"panel/knowledge/memory\", directory, { taskID })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/MemoryPanel.tsx",
+      "line": 200,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "memoryPath(\"panel/knowledge/memory/search\", directory)",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          query: q.trim(),\n          taskID: currentTaskID() || undefined,\n          limit: 20,\n        }),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/MemoryPanel.tsx",
+      "line": 252,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, source.directory)",
+        "{\n        method: \"DELETE\",\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/MemoryPanel.tsx",
+      "line": 292,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, directory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/MissionCreateDialog.tsx",
+      "line": 140,
+      "name": "request",
+      "expression": "request",
+      "function": "",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionCreateDialog.tsx",
+      "line": 155,
+      "name": "request",
+      "expression": "request",
+      "function": "",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionCreateDialog.tsx",
+      "line": 441,
+      "name": "request",
+      "expression": "request",
+      "function": "",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionCreateDialog.tsx",
+      "line": 449,
+      "name": "request",
+      "expression": "request",
+      "function": "submit",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionCreateDialog.tsx",
+      "line": 578,
+      "name": "request",
+      "expression": "request",
+      "function": "MissionCreateDialog",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionDraftEditDialog.tsx",
+      "line": 59,
+      "name": "request",
+      "expression": "request",
+      "function": "submit",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionDraftEditDialog.tsx",
+      "line": 101,
+      "name": "request",
+      "expression": "request",
+      "function": "MissionDraftEditDialog",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionDraftEditDialog.tsx",
+      "line": 101,
+      "name": "request",
+      "expression": "request",
+      "function": "MissionDraftEditDialog",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/MissionDraftEditDialog.tsx",
+      "line": 120,
+      "name": "request",
+      "expression": "request",
+      "function": "MissionDraftEditDialog",
+      "arguments": []
+    },
+    {
+      "file": "packages/overlay/src/components/settings/PermissionsPanel.tsx",
+      "line": 118,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "permissionRecords",
+      "arguments": [
+        "directoryScopedPath(\"permission/grants\", directory, \"permission grants\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/PermissionsPanel.tsx",
+      "line": 119,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "permissionRecords",
+      "arguments": [
+        "directoryScopedPath(\"permission/history\", directory, \"permission history\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/PermissionsPanel.tsx",
+      "line": 187,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "directoryScopedPath(`permission/grants/${encodeURIComponent(grantID)}/revoke`, grantDirectory)",
+        "{\n        method: \"POST\",\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/ProvidersPanel.tsx",
+      "line": 523,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "handleDiscoverModels",
+      "arguments": [
+        "path",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          api,\n          apiKey: formApiKey().trim() || undefined,\n          providerID: formProviderId() || undefined,\n        }),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/ProvidersPanel.tsx",
+      "line": 586,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "handleSave",
+      "arguments": [
+        "`auth/${id}`",
+        "{\n          method: \"PUT\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({ type: \"api\", key: apiKey }),\n        }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/ProvidersPanel.tsx",
+      "line": 688,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "handleSaveApiKey",
+      "arguments": [
+        "`auth/${providerId}`",
+        "{\n        method: \"PUT\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ type: \"api\", key: value }),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/ProvidersPanel.tsx",
+      "line": 780,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "handleDelete",
+      "arguments": [
+        "path",
+        "{ method: \"DELETE\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/settings/SkillMarketPanel.tsx",
+      "line": 298,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "currentDirectory",
+      "arguments": [
+        "{ directory }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/SideChatPanel.tsx",
+      "line": 214,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "send",
+      "arguments": [
+        "sideChatPath(target, \"/message\")",
+        "{\n        method: \"POST\",\n        timeoutMilliseconds: null,\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          messageID: submission.messageID,\n          agent: \"chat\",\n          parts: [{ type: \"text\", text: submission.text }],\n        }),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/components/SideChatPanel.tsx",
+      "line": 236,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "stop",
+      "arguments": [
+        "sideChatPath({ ...props.source, sessionID: selected() }, \"/abort\")",
+        "{\n        method: \"POST\",\n        timeoutMilliseconds: null,\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/main.tsx",
+      "line": 1295,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "copyActiveConversationDebug",
+      "arguments": [
+        "taskScopedPath(selectedSource.id, String(selectedSource.directory), \"/debug/task-root-ingresses\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/main.tsx",
+      "line": 2008,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "",
+      "arguments": [
+        "{\r\n      serverUrl: settingsStore.serverUrl,\r\n      username: settingsStore.username,\r\n      password: settingsStore.password,\r\n      directory: activeDirectory(),\r\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/api.ts",
+      "line": 104,
+      "name": "request",
+      "expression": "transport.request",
+      "function": "apiRequest",
+      "arguments": [
+        "{\n    path: pathOnly,\n    query,\n    method,\n    body: bodyFromInit(init),\n    headers: headersFromInit(init),\n    signal: init?.signal ?? undefined,\n    timeoutMilliseconds: init?.timeoutMilliseconds,\n    responseKind: init?.responseKind ?? \"json\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/api.ts",
+      "line": 225,
+      "name": "request",
+      "expression": "transport.request",
+      "function": "apiJson",
+      "arguments": [
+        "{\n    path: pathOnly,\n    query,\n    method,\n    body: bodyFromInit(init),\n    headers: headersFromInit(init),\n    signal: init?.signal ?? undefined,\n    timeoutMilliseconds: init?.timeoutMilliseconds,\n    responseKind: \"json\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/api.ts",
+      "line": 236,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "apiJson",
+      "arguments": [
+        "res.status",
+        "path",
+        "res.body",
+        "res.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/api.ts",
+      "line": 266,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "apiJsonWithTimeout",
+      "arguments": [
+        "path",
+        "{ ...init, signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/api.ts",
+      "line": 485,
+      "name": "request",
+      "expression": "transport.request",
+      "function": "",
+      "arguments": [
+        "{\n        path: pathOnly,\n        query,\n        method: \"GET\",\n        responseKind: \"binary\",\n        signal: controller.signal,\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/api.ts",
+      "line": 492,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "",
+      "arguments": [
+        "res.status",
+        "raw",
+        "res.body",
+        "res.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/attachment-upload.ts",
+      "line": 40,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "uploadComposerBytes",
+      "arguments": [
+        "directoryScopedPath(`attachment?${query.toString()}`, directory, \"upload attachment\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": input.mime },\n      body: input.bytes as unknown as BodyInit,\n      timeoutMilliseconds: null,\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/attachment-upload.ts",
+      "line": 57,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "uploadComposerDirectoryReference",
+      "arguments": [
+        "directoryScopedPath(\"attachment/directory-reference\", directory, \"reference directory attachment\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ path }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 31,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "listAutomations",
+      "arguments": [
+        "automationPath()",
+        "{ signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 37,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "createAutomation",
+      "arguments": [
+        "automationPath()",
+        "{\n    method: \"POST\",\n    headers: jsonHeaders,\n    body: JSON.stringify(input),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 45,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateAutomation",
+      "arguments": [
+        "automationPath(`/${encodeURIComponent(id)}`)",
+        "{\n    method: \"PATCH\",\n    headers: jsonHeaders,\n    body: JSON.stringify(input),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 61,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "runAutomationNow",
+      "arguments": [
+        "automationPath(`/${encodeURIComponent(id)}/run`)",
+        "{ method: \"POST\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 65,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "listAutomationRuns",
+      "arguments": [
+        "automationPath(`/${encodeURIComponent(id)}/runs`)",
+        "{ signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 73,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteAutomation",
+      "arguments": [
+        "`${automationPath(`/${encodeURIComponent(id)}`)}?${query}`",
+        "{ method: \"DELETE\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/automations.ts",
+      "line": 77,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "resolveAutomationProjectID",
+      "arguments": [
+        "directoryScopedPath(\"project/current\", directory, \"automationProject\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/browser-preview.ts",
+      "line": 66,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadTaskBrowserPreviewTarget",
+      "arguments": [
+        "taskBrowserPreviewPath(input.taskID, input.directory)",
+        "{\n    signal: input.signal,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/browser-preview.ts",
+      "line": 77,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadTaskBrowserPreviewEvidence",
+      "arguments": [
+        "taskBrowserPreviewPath(input.taskID, input.directory, `/evidence/${encodeURIComponent(input.evidenceID)}`)",
+        "{ signal: input.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/browser-preview.ts",
+      "line": 94,
+      "name": "apiRequest",
+      "expression": "apiRequest",
+      "function": "loadTaskBrowserPreviewEvidenceCaptureObjectUrl",
+      "arguments": [
+        "path",
+        "{\n    responseKind: \"binary\",\n    signal: input.signal,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/browser-preview.ts",
+      "line": 99,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "loadTaskBrowserPreviewEvidenceCaptureObjectUrl",
+      "arguments": [
+        "response.status",
+        "path",
+        "response.body",
+        "response.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/chat.ts",
+      "line": 151,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "abortChatTargetRemote",
+      "arguments": [
+        "directoryScopedPath(`session/${encodeURIComponent(target.sessionID)}/abort`, target.directory, \"abort session\")",
+        "{\n      method: \"POST\",\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/chat.ts",
+      "line": 246,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "promptSessionMessage",
+      "arguments": [
+        "directoryScopedPath(`session/${encodeURIComponent(input.sessionID)}/message`, input.directory, \"session prompt\")",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({\n          messageID: `msg_${requestID}`,\n          parts: sessionPromptParts(input.text, input.attachments ?? [], input.metadata ?? {}),\n          model: input.model ?? currentOpenCorvusPromptModel(),\n        }),\n        signal: controller.signal,\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/chat.ts",
+      "line": 327,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "panelMessage",
+      "arguments": [
+        "taskScopedPath(taskID, directory, \"/message\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({\n        text,\n        source: typeof requestMetadata.source === \"string\" ? requestMetadata.source : \"panel\",\n        model: currentOpenCorvusModel(),\n        ...(Object.keys(requestMetadata).length > 0 ? { metadata: requestMetadata } : {}),\n        ...(promptProfile ? { promptProfile } : {}),\n        ...(attachments.length > 0\n          ? {\n              attachments: attachments.map((att) => ({\n                mime: att.mime,\n                url: att.url,\n                ...(att.filename ? { filename: att.filename } : {}),\n              })),\n            }\n          : {}),\n      }),\n      signal: controller.signal,\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/computer.ts",
+      "line": 19,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "request",
+      "arguments": [
+        "`computer/${path}`",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(identity),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/computer.ts",
+      "line": 27,
+      "name": "request",
+      "expression": "request",
+      "function": "getComputerOwnership",
+      "arguments": [
+        "\"status\"",
+        "identity"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/computer.ts",
+      "line": 31,
+      "name": "request",
+      "expression": "request",
+      "function": "takeOverComputer",
+      "arguments": [
+        "\"takeover\"",
+        "identity"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/computer.ts",
+      "line": 35,
+      "name": "request",
+      "expression": "request",
+      "function": "returnComputerControl",
+      "arguments": [
+        "\"return\"",
+        "identity"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 34,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "providerInfoRequests",
+      "arguments": [
+        "directoryOwnedPath(\"provider\", options)",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 35,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "providerInfoRequests",
+      "arguments": [
+        "directoryOwnedPath(\"provider/auth\", options)",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 129,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "loadConfigInfo",
+      "arguments": [
+        "directoryOwnedPath(\"config\", options)",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 130,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "loadConfigInfo",
+      "arguments": [
+        "directoryOwnedPath(\"channel\", options)",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 177,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "loadProviderInfo",
+      "arguments": [
+        "\"global/providers\"",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 178,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "loadProviderInfo",
+      "arguments": [
+        "\"global/providers/auth\"",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config-load.ts",
+      "line": 179,
+      "name": "apiJsonWithTimeout",
+      "expression": "apiJsonWithTimeout",
+      "function": "loadProviderInfo",
+      "arguments": [
+        "\"global/config\"",
+        "timeoutMilliseconds"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 151,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "patchConfig",
+      "arguments": [
+        "configRequestPath(options)",
+        "{\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(diff),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 171,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "patchGlobalConfig",
+      "arguments": [
+        "\"global/config\"",
+        "{\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(diff),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 308,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "getSessionConfig",
+      "arguments": [
+        "directoryScopedPath(`session/${encodeURIComponent(sessionID)}/config`, input.directory, \"getSessionConfig\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 319,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "patchSessionConfig",
+      "arguments": [
+        "directoryScopedPath(`session/${encodeURIComponent(sessionID)}/config`, input.directory, \"patchSessionConfig\")",
+        "{\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(input.diff),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 339,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "getTaskOperatorModelContext",
+      "arguments": [
+        "directoryScopedPath(\n      `task/${encodeURIComponent(taskID)}/operator-model-context`,\n      input.directory,\n      \"getTaskOperatorModelContext\",\n    )"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 364,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "getProviderAccountUsage",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 371,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "testNetworkProxy",
+      "arguments": [
+        "\"config/proxy/test\"",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ proxy }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 443,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateConfigPath",
+      "arguments": [
+        "configPath"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 453,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateConfigPath",
+      "arguments": [
+        "configPath",
+        "{\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(diff),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/config.ts",
+      "line": 480,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "reloadProjectScope",
+      "arguments": [
+        "{ directory }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/connection.ts",
+      "line": 151,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "syncLocalServerUrl",
+      "arguments": [
+        "{ serverUrl: next }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/connection.ts",
+      "line": 189,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "",
+      "arguments": [
+        "{ serverUrl: confirmed.serverUrl }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/connection.ts",
+      "line": 197,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "restartLocalServer",
+      "arguments": [
+        "{ serverUrl: previousServerUrl }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/connection.ts",
+      "line": 202,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "restartLocalServer",
+      "arguments": [
+        "{ serverUrl: next }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/connection.ts",
+      "line": 231,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "checkConnection",
+      "arguments": [
+        "\"global/health\"",
+        "{ signal: AbortSignal.timeout(5000) }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-artifact.ts",
+      "line": 80,
+      "name": "apiRequest",
+      "expression": "apiRequest",
+      "function": "readChunk",
+      "arguments": [
+        "taskScopedPath(input.taskID, input.directory, \"/artifact-read\")",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({\n      locator: input.locator,\n      byte_offset: input.byteOffset,\n      max_bytes: READ_CHUNK_BYTES,\n    }),\n    responseKind: \"binary\",\n    signal: input.signal,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-artifact.ts",
+      "line": 91,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "readChunk",
+      "arguments": [
+        "response.status",
+        "\"Conversation Artifact read\"",
+        "response.body",
+        "response.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-capability.ts",
+      "line": 28,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadConversationCapability",
+      "arguments": [
+        "path(directory, experience)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-capability.ts",
+      "line": 37,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateConversationCapability",
+      "arguments": [
+        "path(directory, experience)",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(assignment),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 206,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadConversationSessions",
+      "arguments": [
+        "conversationSessionsPath({ experience: options.experience, directory, limit: 30, searchQuery, cursor })",
+        "{\n        signal: options.signal,\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 257,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "createConversationSessionFromPath",
+      "arguments": [
+        "options.path",
+        "{\n    method: \"POST\",\n    ...(options.body\n      ? {\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify(options.body),\n        }\n      : {}),\n    signal: options.signal,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 349,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "conversationSessionPath({ sessionID, directory: inputDirectory, experience: options.experience })",
+        "{\n        signal: options.signal,\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 430,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "renameConversationSession",
+      "arguments": [
+        "conversationSessionPath(target)",
+        "{\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ title: trimmed }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 454,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "stopConversationSession",
+      "arguments": [
+        "conversationSessionPath(target, \"/abort\")",
+        "{ method: \"POST\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 473,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteConversationSession",
+      "arguments": [
+        "conversationSessionPath(target)",
+        "serverSettledRequest({ method: \"DELETE\" })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 473,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "deleteConversationSession",
+      "arguments": [
+        "{ method: \"DELETE\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 518,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "setConversationSessionArchived",
+      "arguments": [
+        "conversationSessionPath(target, \"/archive\")",
+        "archived ? serverSettledRequest(request) : request"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation-session.ts",
+      "line": 520,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "setConversationSessionArchived",
+      "arguments": [
+        "request"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation.ts",
+      "line": 294,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "refreshConversationTurnArtifacts",
+      "arguments": [
+        "directoryScopedPath(path, directory, \"refresh conversation turn artifacts\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation.ts",
+      "line": 587,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "continueConversationReplay",
+      "arguments": [
+        "`task/${encodeURIComponent(taskID)}/conversation/events?directory=${encodeURIComponent(directory)}&after=${encodeURIComponent(String(replay.cursor))}&until=${encodeURIComponent(String(replay.latestSequence))}&limit=${encodeURIComponent(String(replay.limit))}${sinceQuery}`",
+        "{ signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation.ts",
+      "line": 657,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "hydrateConversation",
+      "arguments": [
+        "conversationHydratePath(source, tailLimit, requestDirectory)",
+        "{ signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation.ts",
+      "line": 772,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "mergeLatestConversationTail",
+      "arguments": [
+        "`task/${encodeURIComponent(selectedTaskID)}/conversation?directory=${encodeURIComponent(directory)}&tail_limit=${encodeURIComponent(String(tailLimit))}`",
+        "{ signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation.ts",
+      "line": 881,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadOlderConversationHistory",
+      "arguments": [
+        "conversationHistoryPath(source, {\n        directory,\n        before,\n        beforeOrderKey,\n        beforeID,\n        limit: CONVERSATION_HISTORY_PAGE_LIMIT,\n      })",
+        "{ signal: controller.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/conversation.ts",
+      "line": 953,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadConversationSessionHistory",
+      "arguments": [
+        "`task/${encodeURIComponent(selectedTaskID)}/conversation/session/${encodeURIComponent(targetSessionID)}?directory=${encodeURIComponent(directory)}`",
+        "{ signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/dialog.ts",
+      "line": 91,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "saveGoalDialog",
+      "arguments": [
+        "directoryScopedPath(`goal/${encodeURIComponent(goalID)}`, owner.directory, \"update goal\")",
+        "{\n        method: \"PATCH\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ title }),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/dialog.ts",
+      "line": 125,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "openBuildSessionDialog",
+      "arguments": [
+        "`session/${sessionID}/message`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/diff.ts",
+      "line": 211,
+      "name": "apiRequest",
+      "expression": "apiRequest",
+      "function": "readObservedTextSide",
+      "arguments": [
+        "taskScopedPath(\n        input.taskID,\n        taskOwningDirectory(input.taskID),\n        `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,\n      )",
+        "{ responseKind: \"binary\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/diff.ts",
+      "line": 219,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "readObservedTextSide",
+      "arguments": [
+        "response.status",
+        "\"build observation content\"",
+        "response.body",
+        "response.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad-install-handoff.ts",
+      "line": 39,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "importExactExpertSquadHandoff",
+      "arguments": [
+        "`expert-squad/import-exact-file?${params.toString()}`",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({\n      archiveBase64: input.archiveBase64,\n      filename: input.filename,\n      installationScope: input.installationScope,\n      expectedNamespace: input.handoff.namespace,\n      expectedID: input.handoff.id,\n      expectedVersion: input.handoff.version,\n      expectedPackageDigest: input.handoff.packageDigest,\n    }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 64,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "repairObsoleteBundledExpertSquads",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/repair-bundled\", directory, \"repairObsoleteBundledExpertSquads\")",
+        "serverSettledRequest({ method: \"POST\", body: JSON.stringify({}) })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 66,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "repairObsoleteBundledExpertSquads",
+      "arguments": [
+        "{ method: \"POST\", body: JSON.stringify({}) }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 165,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadCatalog",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 190,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadSettings",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 208,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "inspectExpertSquad",
+      "arguments": [
+        "`expert-squad/inspect?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 228,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "searchExpertSquads",
+      "arguments": [
+        "`expert-squad/search?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 233,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadInventoryStatus",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 243,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadDiagnostics",
+      "arguments": [
+        "`expert-squad/diagnostics?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 252,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadConfiguration",
+      "arguments": [
+        "`${path}&id=${encodeURIComponent(id)}&installationScope=${encodeURIComponent(installationScope)}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 263,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateExpertSquadConfiguration",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/configuration\", directory, \"updateExpertSquadConfiguration\")",
+        "{\n      method: \"PUT\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ id, installationScope, updates }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 317,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "importExpertSquadFolder",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/import-folder\", input.directory, \"importExpertSquadFolder\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({\n        sourceDirectory,\n        expectedCurrentPackageDigest: input.expectedCurrentPackageDigest,\n        installationScope: input.installationScope,\n      }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 336,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "importExpertSquadArchive",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/import-file\", input.directory, \"importExpertSquadArchive\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({\n        archiveBase64,\n        filename: input.filename,\n        expectedCurrentPackageDigest: input.expectedCurrentPackageDigest,\n        installationScope: input.installationScope,\n      }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 354,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "releaseExpertSquadPayload",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/release-payload\", directory, \"releaseExpertSquadPayload\")",
+        "{\n      method: \"POST\",\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 384,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadMarket",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 392,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadMarketDetail",
+      "arguments": [
+        "`expert-squad/market/detail?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 402,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "installExpertSquadMarketPackage",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/install-payload\", directory, \"installExpertSquadMarketPackage\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ id, installationScope }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 423,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateExpertSquadPackage",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/update\", directory, \"updateExpertSquadPackage\")",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ id, installationScope, source, expectedCurrentPackageDigest }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 439,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "uninstallExpertSquadPackage",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/uninstall\", directory, \"uninstallExpertSquadPackage\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ id, installationScope, replacementID: BASE_EXPERT_SQUAD_ID }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 459,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "exportExpertSquadArchive",
+      "arguments": [
+        "directoryScopedPath(\"expert-squad/export\", directory, \"exportExpertSquadArchive\")",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ id, installationScope }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 491,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadEvolutionHistory",
+      "arguments": [
+        "`expert-squad/evolution-history?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 517,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadExpertSquadEvolutionHistoryDetail",
+      "arguments": [
+        "`expert-squad/evolution-history/detail?${new URLSearchParams({ directory }).toString()}`",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 542,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "executeExpertSquadEvolutionMutation",
+      "arguments": [
+        "`expert-squad/evolution-authorization?${new URLSearchParams({ directory }).toString()}`",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(authorizationBody),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/expert-squad.ts",
+      "line": 554,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "executeExpertSquadEvolutionMutation",
+      "arguments": [
+        "`expert-squad/evolution-mutation?${new URLSearchParams({ directory }).toString()}`",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(mutationBody),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 219,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadInstalledSkills",
+      "arguments": [
+        "directoryOwnedPath(\"skill/installed\", options)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 228,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadSkillIssues",
+      "arguments": [
+        "directoryOwnedPath(\"skill/issues\", options)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 241,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadSkillMountMatrix",
+      "arguments": [
+        "skillMountPath(\"skill/mounts\", options)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 250,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "setSkillMountOverride",
+      "arguments": [
+        "directoryOwnedPath(\"skill/mount\", options)",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(input),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 259,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMcpStatus",
+      "arguments": [
+        "directoryOwnedPath(\"mcp\", options)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 268,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadProjectMcpStatus",
+      "arguments": [
+        "directoryOwnedPath(\"mcp/project\", options)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 287,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "removeSkillSource",
+      "arguments": [
+        "directoryOwnedPath(\"skill/remove\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ source, kind }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 306,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "installSkill",
+      "arguments": [
+        "directory ? directoryOwnedPath(\"skill/install\", options) : \"global/skill/install\"",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ kind, value, policy: policy || undefined }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 315,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "searchSkillMarket",
+      "arguments": [
+        "`global/skill/market/search?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 320,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "inspectSkillMarket",
+      "arguments": [
+        "`global/skill/market/detail?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 328,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "installSkillMarket",
+      "arguments": [
+        "\"global/skill/market/install\"",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ id, expected_hash: expectedHash, policy }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 344,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "updateSkill",
+      "arguments": [
+        "directoryOwnedPath(\"skill/update\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ name: identity, source }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 357,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "importSkillFile",
+      "arguments": [
+        "directoryOwnedPath(\"skill/import-file\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ filename, content, policy: policy || undefined }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 375,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "importSkillPackage",
+      "arguments": [
+        "directoryOwnedPath(\"skill/import-file\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ sourceName, files, policy: policy || undefined }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/extensions.ts",
+      "line": 388,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "importSkillArchive",
+      "arguments": [
+        "directoryOwnedPath(\"skill/import-file\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ filename, archiveBase64, policy: policy || undefined }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/file-workbench.ts",
+      "line": 298,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadFileDirectory",
+      "arguments": [
+        "fileQueryPath(\"file\", { path }, scope)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/file-workbench.ts",
+      "line": 307,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "uploadDroppedFiles",
+      "arguments": [
+        "projectScopedPath(\"file/upload\", scope.directory)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ targetDir, files: payloads }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/file-workbench.ts",
+      "line": 317,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "createFileItem",
+      "arguments": [
+        "projectScopedPath(\"file/item\", scope.directory)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(input),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/file-workbench.ts",
+      "line": 328,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "moveFileItem",
+      "arguments": [
+        "projectScopedPath(\"file/item\", scope.directory)",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ path, newPath }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/file-workbench.ts",
+      "line": 339,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "copyFileItem",
+      "arguments": [
+        "projectScopedPath(\"file/item/copy\", scope.directory)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ path, newPath }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/file-workbench.ts",
+      "line": 350,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteFileItem",
+      "arguments": [
+        "fileQueryPath(\"file/item\", { path }, scope)",
+        "{\n    method: \"DELETE\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/global-composer-references.ts",
+      "line": 11,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadGlobalComposerReferences",
+      "arguments": [
+        "\"global/composer-references\""
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/global-composer-references.ts",
+      "line": 29,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "searchGlobalComposerExpertSquads",
+      "arguments": [
+        "`global/composer-expert-squads?${params.toString()}`"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/init.ts",
+      "line": 75,
+      "name": "onApiError",
+      "expression": "onApiError",
+      "function": "startMissingProjectDirectoryRecovery",
+      "arguments": [
+        "(error) => {\n    const directory = [activeDirectory(), settingsStore.directory]\n      .map((candidate) => candidate.trim())\n      .find((candidate) => candidate && isMissingProjectDirectoryError(error, candidate))\n    if (!directory) return\n    void recoverMissingActiveDirectory(error, directory).catch((recoveryError) => {\n      AppLog.error(\"project-load\", \"Failed to leave unavailable Project\", {\n        directory,\n        error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),\n      })\n    })\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/init.ts",
+      "line": 95,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "syncApiConfig",
+      "arguments": [
+        "{\n    serverUrl: settingsStore.serverUrl,\n    username: settingsStore.username,\n    password: settingsStore.password,\n    directory: settingsStore.directory,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 56,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"permission/:id/reply\", \"permission reply\")",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ decision: action }),\n        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 67,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"question/:id/reply\", \"question reply\")",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ answers }),\n        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 77,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"interaction/:id/reply\", \"interaction reply\")",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ decision: action, autoReply }),\n        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 89,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"interaction/:id/reply\", \"interaction reply\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({\n        autoReply,\n        ...(answers ? { answers } : {}),\n        ...(message ? { message } : {}),\n      }),\n      signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 109,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"permission/:id/reply\", \"permission reject\")",
+        "{\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ decision: \"deny\" }),\n        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 118,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"question/:id/reject\", \"question reject\")",
+        "{\n        method: \"POST\",\n        signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interaction-reply.ts",
+      "line": 125,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "interactionPath(target, \"interaction/:id/reject\", \"interaction reject\")",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ autoReply }),\n      signal: AbortSignal.timeout(REPLY_TIMEOUT_MS),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interactive-artifact.ts",
+      "line": 20,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadSessionInteractiveArtifact",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interactive-artifact.ts",
+      "line": 45,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "requestMcpApp",
+      "arguments": [
+        "path",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(input.request),\n    signal: input.signal,\n    timeoutMilliseconds: null,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/interactive-artifact.ts",
+      "line": 128,
+      "name": "openStream",
+      "expression": "getHostTransport().openStream",
+      "function": "",
+      "arguments": [
+        "{\n          path: `session/${encodeURIComponent(input.sessionID)}/interactive-artifact/${encodeURIComponent(input.artifactID)}/mcp-app/events`,\n          query: { directory: input.directory },\n        }",
+        "{\n          onEvent(data) {\n            try {\n              const value = parseMcpAppHostEvent(data)\n              if (value.type === \"mcp-app.connected\") next.connectedEvent = value\n              for (const subscriber of [...subscribers.values()]) subscriber.onEvent(value)\n            } catch (error) {\n              for (const subscriber of [...subscribers.values()]) subscriber.onError(error)\n            }\n          },\n          onError(error) {\n            for (const subscriber of [...subscribers.values()]) subscriber.onError(error)\n          },\n          onClose(reason) {\n            next.connectedEvent = undefined\n            if (sharedMcpAppEventStreams.get(key) === next && subscribers.size > 0) {\n              for (const subscriber of [...subscribers.values()]) {\n                subscriber.onError(new Error(`MCP App Host event stream closed: ${reason}`))\n              }\n              clearTimeout(next.retry)\n              next.retry = setTimeout(connect, STREAM_RECONNECT_DELAY_MS)\n            }\n          },\n        }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 413,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "testProviderConnection",
+      "arguments": [
+        "providerOperationPath(`provider/${providerID}/test`, `global/providers/${providerID}/test`, options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ modelID }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 508,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "providerAuthInputs",
+      "arguments": [
+        "providerAuthPath(providerID, \"auth/prompts\", options)",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ method: methodIndex, inputs }),\n      signal: AbortSignal.timeout(300_000),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 559,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "executeProviderAuth",
+      "arguments": [
+        "providerAuthPath(providerID, \"auth/execute\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ method: methodIndex, inputs }),\n    signal: AbortSignal.timeout(300_000),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 608,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "authorizeProvider",
+      "arguments": [
+        "providerAuthPath(providerID, \"oauth/authorize\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ method: match.index, inputs: collected }),\n    signal: AbortSignal.timeout(300_000),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 634,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "providerAuthPath(providerID, \"oauth/cancel\", options)",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 669,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "authorizeProvider",
+      "arguments": [
+        "providerAuthPath(providerID, \"oauth/callback\", options)",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ method: match.index, code, flowID: authorization.flowID }),\n      signal: AbortSignal.timeout(300_000),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/llm.ts",
+      "line": 680,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "authorizeProvider",
+      "arguments": [
+        "providerAuthPath(providerID, \"oauth/callback\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),\n    signal: AbortSignal.timeout(300_000),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mailbox.ts",
+      "line": 33,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMailbox",
+      "arguments": [
+        "`mailbox?${params.toString()}`",
+        "{ signal: input.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mailbox.ts",
+      "line": 40,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "acknowledgeMailboxItem",
+      "arguments": [
+        "`mailbox/${encodeURIComponent(messageID)}`",
+        "{\n    method: \"PATCH\",\n    body: JSON.stringify({ action }),\n    headers: { \"Content-Type\": \"application/json\" },\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mailbox.ts",
+      "line": 48,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "markAllMailboxItemsRead",
+      "arguments": [
+        "\"mailbox/read-all\"",
+        "{ method: \"PATCH\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mailbox.ts",
+      "line": 52,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteMailboxItem",
+      "arguments": [
+        "`mailbox/${encodeURIComponent(messageID)}`",
+        "{ method: \"DELETE\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mailbox.ts",
+      "line": 56,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteMailboxItems",
+      "arguments": [
+        "\"mailbox\"",
+        "{\n    method: \"DELETE\",\n    body: JSON.stringify({ messageIDs }),\n    headers: { \"Content-Type\": \"application/json\" },\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mcp.ts",
+      "line": 138,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "addMcpServer",
+      "arguments": [
+        "mcpPath(\"mcp\", options)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(request),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mcp.ts",
+      "line": 147,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "connectMcp",
+      "arguments": [
+        "mcpPath(`mcp/${encodeURIComponent(name)}/connect`, options)",
+        "{\n    method: \"POST\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mcp.ts",
+      "line": 154,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "disconnectMcp",
+      "arguments": [
+        "mcpPath(`mcp/${encodeURIComponent(name)}/disconnect`, options)",
+        "{\n    method: \"POST\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mcp.ts",
+      "line": 161,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "removeMcpAuth",
+      "arguments": [
+        "mcpPath(`mcp/${encodeURIComponent(name)}/auth`, options)",
+        "{\n    method: \"DELETE\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mcp.ts",
+      "line": 173,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteAllMcp",
+      "arguments": [
+        "mcpPath(\"mcp\", options)",
+        "{\n    method: \"DELETE\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ names }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 78,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMeta",
+      "arguments": [
+        "projectScopedPath(\"path\", directory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 79,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMeta",
+      "arguments": [
+        "projectScopedPath(\"vcs\", directory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 101,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadVcsBranches",
+      "arguments": [
+        "projectScopedPath(\"vcs/branches\", directory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 121,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "switchVcsBranch",
+      "arguments": [
+        "projectScopedPath(\"vcs/branch\", directory)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ branch: requested }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 131,
+      "name": "openStream",
+      "expression": "getHostTransport().openStream",
+      "function": "streamVcsCommitMessage",
+      "arguments": [
+        "{\n      path: \"vcs/commit-message/stream\",\n      method: \"POST\",\n      body: {\n        kind: \"json\",\n        value: {\n          ...(options.taskID ? { taskID: options.taskID } : {}),\n          ...(options.sessionID ? { sessionID: options.sessionID } : {}),\n        },\n      },\n      headers: { \"Content-Type\": \"application/json\" },\n      signal: options.signal,\n    }",
+        "{\n      onEvent: (data) => {\n        if (terminal) return\n        let event: unknown\n        try {\n          event = JSON.parse(data)\n        } catch (error) {\n          terminal = true\n          options.onError(\n            new Error(\"Malformed VCS commit-message stream event\", {\n              cause: error instanceof Error ? error : undefined,\n            }),\n          )\n          return\n        }\n        const parsed = VcsCommitMessageStreamEvent.safeParse(event)\n        if (!parsed.success) {\n          terminal = true\n          options.onError(new Error(\"Invalid VCS commit-message stream event\", { cause: parsed.error }))\n          return\n        }\n        const payload: VcsCommitMessageEvent = parsed.data\n        if (payload.type === \"delta\" && typeof payload.delta === \"string\") {\n          options.onDelta(payload.delta)\n          return\n        }\n        if (payload.type === \"done\" && typeof payload.message === \"string\") {\n          terminal = true\n          options.onDone(payload.message)\n          return\n        }\n        if (payload.type === \"error\" && typeof payload.message === \"string\") {\n          terminal = true\n          options.onError(new Error(payload.message))\n          return\n        }\n        terminal = true\n        options.onError(new Error(\"Unknown VCS commit-message stream event\"))\n      },\n      onError: (error) => {\n        if (terminal) return\n        terminal = true\n        options.onError(error)\n      },\n      onClose: (reason) => {\n        if (terminal || options.signal?.aborted) return\n        terminal = true\n        options.onError(new Error(`VCS commit-message stream closed before completion: ${reason}`))\n      },\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 201,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "commitVcsChanges",
+      "arguments": [
+        "projectScopedPath(\"vcs/commit\", directory)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ message: requested }),\n    timeoutMilliseconds: null,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/meta.ts",
+      "line": 212,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "pushVcsBranch",
+      "arguments": [
+        "projectScopedPath(\"vcs/push\", directory)",
+        "{\n    method: \"POST\",\n    timeoutMilliseconds: null,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission-skill.ts",
+      "line": 38,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "missionSkillGet",
+      "arguments": [
+        "path"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission-skill.ts",
+      "line": 78,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "ensureMissionSkillDirectory",
+      "arguments": [
+        "path",
+        "{\n    method: \"POST\",\n    headers: { \"content-type\": \"application/json\" },\n    body: JSON.stringify({ source }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 191,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMissionStats",
+      "arguments": [
+        "`gateway/stats${suffix}`",
+        "{ signal: opts.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 213,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMissions",
+      "arguments": [
+        "`mission${suffix}`",
+        "{ signal: opts.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 227,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMissionStatus",
+      "arguments": [
+        "`mission/${encodeURIComponent(missionID)}/status?${params.toString()}`",
+        "{\n    signal: input.signal,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 237,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadTaskStatus",
+      "arguments": [
+        "`task/${encodeURIComponent(taskID)}/status?${params.toString()}`",
+        "{\n    signal: input.signal,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 265,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "wakeMission",
+      "arguments": [
+        "`mission/wake?${params.toString()}`",
+        "serverSettledRequest({\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n      signal: input.signal,\n    })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 267,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "wakeMission",
+      "arguments": [
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n      signal: input.signal,\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 290,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "createMissionDraft",
+      "arguments": [
+        "`mission/draft?${params.toString()}`",
+        "serverSettledRequest({\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n      signal: input.signal,\n    })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 292,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "createMissionDraft",
+      "arguments": [
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n      signal: input.signal,\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 310,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "dispatchMission",
+      "arguments": [
+        "missionActionPath(target, \"/dispatch\")",
+        "serverSettledRequest({\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n    })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 312,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "dispatchMission",
+      "arguments": [
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(body),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 325,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "editMissionDraft",
+      "arguments": [
+        "missionActionPath(input, \"/draft\")",
+        "serverSettledRequest({\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ request, expectedRequest: input.expectedRequest } satisfies MissionEditDraftData[\"body\"]),\n    })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 327,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "editMissionDraft",
+      "arguments": [
+        "{\n      method: \"PATCH\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify({ request, expectedRequest: input.expectedRequest } satisfies MissionEditDraftData[\"body\"]),\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 350,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "renameMission",
+      "arguments": [
+        "missionActionPath(target, \"/title\")",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ title: trimmed }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 362,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "abortMission",
+      "arguments": [
+        "missionActionPath(target, \"/abort\")",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(body),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 375,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteMission",
+      "arguments": [
+        "missionActionPath(target)",
+        "serverSettledRequest({\n        method: \"DELETE\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify(body),\n      })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 377,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "deleteMission",
+      "arguments": [
+        "{\n        method: \"DELETE\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify(body),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 413,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "setMissionArchived",
+      "arguments": [
+        "missionActionPath(target, \"/archive\")",
+        "archived ? serverSettledRequest(request) : request"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/mission.ts",
+      "line": 415,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "setMissionArchived",
+      "arguments": [
+        "request"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-archive.ts",
+      "line": 28,
+      "name": "apiRequest",
+      "expression": "apiRequest",
+      "function": "downloadZipArchive",
+      "arguments": [
+        "input.path",
+        "{\n    responseKind: \"binary\",\n    timeoutMilliseconds: ZIP_ARCHIVE_DOWNLOAD_TIMEOUT_MILLISECONDS,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-archive.ts",
+      "line": 33,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "downloadZipArchive",
+      "arguments": [
+        "response.status",
+        "input.path",
+        "response.body",
+        "response.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-directory.ts",
+      "line": 26,
+      "name": "configure",
+      "expression": "configure",
+      "function": "setProjectDirectoryContext",
+      "arguments": [
+        "{ directory }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-git.ts",
+      "line": 23,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "initializeProjectDirectoryGit",
+      "arguments": [
+        "`project/current/init-git?${query.toString()}`",
+        "serverSettledRequest({ method: \"POST\", signal: options.signal })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-git.ts",
+      "line": 25,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "initializeProjectDirectoryGit",
+      "arguments": [
+        "{ method: \"POST\", signal: options.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-memory.ts",
+      "line": 12,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "refreshProjectMemory",
+      "arguments": [
+        "\"experimental/project-memory\""
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-memory.ts",
+      "line": 18,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "organizeProjectMemory",
+      "arguments": [
+        "\"experimental/project-memory/organize\"",
+        "{\n    method: \"POST\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/project-memory.ts",
+      "line": 26,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "acknowledgeProjectMemoryNotice",
+      "arguments": [
+        "\"experimental/project-memory/notice/acknowledge\"",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ generation }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/provider-refresh.ts",
+      "line": 38,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "requestProviderRefresh",
+      "arguments": [
+        "path",
+        "{ method: \"POST\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/rewind.ts",
+      "line": 26,
+      "name": "apiRequest",
+      "expression": "apiRequest",
+      "function": "submitTaskRewind",
+      "arguments": [
+        "path",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({\n      anchor: { kind: \"cursorTime\", cursorTime: input.cursorTime, anchorEventID: input.anchorID },\n      resetWorktree: input.resetWorktree,\n      reason: \"user rewind card\",\n    }),\n    responseKind: \"text\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/session-debug.ts",
+      "line": 330,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "directoryScopedPath(rootEndpoint, directory, \"loadPersistedChatDebugProjection.root\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/session-debug.ts",
+      "line": 336,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "directoryScopedPath(treeEndpoint, directory, \"loadPersistedChatDebugProjection.tree\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/side-chat.ts",
+      "line": 27,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "listSideChats",
+      "arguments": [
+        "sideChatPath(source, \"/side-chat\")"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/side-chat.ts",
+      "line": 30,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "createSideChat",
+      "arguments": [
+        "sideChatPath(source, \"/side-chat\")",
+        "{ method: \"POST\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/side-chat.ts",
+      "line": 56,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "refreshActivity",
+      "arguments": [
+        "`session/status?${new URLSearchParams({ directory: target.directory })}`",
+        "{\n        signal: lifetime.signal,\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/side-chat.ts",
+      "line": 69,
+      "name": "openStream",
+      "expression": "getHostTransport().openStream",
+      "function": "connect",
+      "arguments": [
+        "{ path: `session/${encodeURIComponent(target.sessionID)}/events`, query: { directory: target.directory } }",
+        "{\n        onEvent(data) {\n          if (disposed || generation !== connectionGeneration) return\n          try {\n            const event = JSON.parse(data)\n            if (event.type === \"session.connected\") {\n              base = parseSubagentConversation(\n                { ...target, source: { kind: \"session\", id: target.sessionID } },\n                event.payload.conversationSnapshot,\n              )\n              live = createSubagentConversationLiveProjection(target.sessionID)\n              pending.clear()\n              handlers.interactions([])\n              handlers.connection(true)\n              void refreshActivity()\n            } else if (base) {\n              live = observeSubagentConversationLiveEvent(live, event, base)\n            }\n            if (base && event.type !== \"session.heartbeat\")\n              handlers.transcript(projectSubagentConversationLive(base, live))\n            if (event.type === \"agent.execution.lifecycle\" && event.session_id === target.sessionID) {\n              const latestInput =\n                base &&\n                projectSubagentConversationLive(base, live).messages.findLast((message) => message.info.role === \"user\")\n              if (event.payload.inputMessageID === latestInput?.messageID) {\n                lifecycleVersion++\n                handlers.activity([\"streaming\", \"retry\"].includes(event.payload.status?.type))\n              }\n            }\n            if (event.type === \"session.error\") handlers.error(event.payload.error ?? event.payload)\n            if (event.session_id === target.sessionID) {\n              const payload = event.payload\n              const id = payload?.id ?? payload?.requestID\n              if (event.type === \"question.asked\") {\n                const [question] = prepareStandaloneQuestionInteractions([{ ...payload, orderKey: event.orderKey }])\n                pending.set(id, { ...question, directory: target.directory })\n                handlers.interactions([...pending.values()])\n              } else if (event.type === \"permission.asked\") {\n                pending.set(id, {\n                  id,\n                  type: \"permission\",\n                  title: payload.toolName,\n                  body: `${payload.summary}\\n\\n\\`\\`\\`json\\n${JSON.stringify(payload.scope, null, 2)}\\n\\`\\`\\``,\n                  status: \"pending\",\n                  payload: { choices: payload.choices },\n                  replyEndpoint: \"permission\",\n                  directory: target.directory,\n                })\n                handlers.interactions([...pending.values()])\n              } else if ([\"question.replied\", \"question.rejected\", \"permission.replied\"].includes(event.type)) {\n                pending.delete(id)\n                handlers.interactions([...pending.values()])\n              }\n            }\n          } catch (error) {\n            handlers.error(error)\n          }\n        },\n        onError(error) {\n          if (disposed || generation !== connectionGeneration) return\n          handlers.error(error)\n          handle?.close(\"transport-error\")\n        },\n        onClose() {\n          if (disposed || generation !== connectionGeneration) return\n          handlers.connection(false)\n          if (retry) clearTimeout(retry)\n          retry = setTimeout(connect, STREAM_RECONNECT_DELAY_MS)\n        },\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/sse.ts",
+      "line": 434,
+      "name": "openStream",
+      "expression": "transport.openStream",
+      "function": "startSSE",
+      "arguments": [
+        "{\n      path: `${source.kind}/${encodeURIComponent(source.id)}/events`,\n      query: {\n        directory,\n        ...(source.kind === \"task\" && after > 0 ? { after: String(after) } : {}),\n        ...(source.kind === \"task\" ? selectedLiveReplayQuery({ include: replayLive }) : {}),\n      },\n    }",
+        "{\n      onOpen: () => {\n        if (handle !== sseHandle) return\n        opened = true\n        setSseStatus(\"connected\")\n        armWatchdog(handle)\n      },\n      onEvent: (data) => {\n        if (handle !== sseHandle) return\n        armWatchdog(handle)\n        // Per 07-panel-reactivity.md constraint 1 and root CLAUDE.md rule 1:\n        // tree-writer's `let it crash` is meaningless if onEvent silently\n        // swallows malformed input or dispatch failures. Both paths surface\n        // through AppLog so the operator can diagnose an empty panel.\n        let event: any\n        try {\n          event = JSON.parse(data)\n        } catch (error) {\n          logMalformedSsePayload({ stream: \"selected-task\", taskID, directory, data, error })\n          return\n        }\n        try {\n          if (event.type === \"task.heartbeat\" || event.type === \"session.heartbeat\") return\n          if (event.type === \"task.connected\" || event.type === \"session.connected\") {\n            if (event.type === \"session.connected\") {\n              if (source.kind !== \"session\") {\n                throw new Error(`session.connected arrived on ${source.kind} stream ${source.id}`)\n              }\n              mergeSessionConnectionSnapshot(source, event.payload)\n            }\n            refreshComposerModelAfterSelectedStreamConnect(event.type)\n            return\n          }\n          recordSelectedTaskSseUpdate(event, taskID)\n          if (event.type === \"task.live_replay_expired\") {\n            liveReplayExpiredClose = true\n            resetSelectedLiveCursor()\n          }\n          const handled = routeSSEEvent(event, selectedTaskRecoveryScheduler)\n          if (!handled) {\n            handleEventStreamEvent(event, selectedTaskRecoveryScheduler)\n          }\n        } catch (err) {\n          const diagnostic = dispatchEventDiagnostic(event)\n          const errorDetails = boundedErrorDetails(err)\n          AppLog.error(\"sse\", `dispatch error for event ${event?.type || \"<unknown>\"}`, {\n            taskID,\n            eventType: event?.type || \"<unknown>\",\n            error: errorDetails,\n            event: diagnostic,\n            diagnosticID: `sse:dispatch-error:${taskID}`,\n            diagnosticTitle: \"Conversation event failed to render\",\n            diagnosticMessage: `Event type ${event?.type || \"<unknown>\"} threw while updating the conversation panel.`,\n            diagnosticDetails: dispatchNotificationDetails(errorDetails, event),\n          })\n        }\n      },\n      onError: () => {\n        // SSE (Server-Sent Events) errors can happen after the browser\n        // transport has already dropped live-only message deltas. Close the\n        // handle so onClose runs the business reconnect policy: reopen from\n        // the current persisted sequence without clearing the mounted\n        // conversation.\n        if (handle !== sseHandle) return\n        setSseStatus(failureStatus())\n        handle.close(\"transport-error\")\n      },\n      onClose: (_reason) => {\n        handleClosed(_reason)\n      },\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/sse.ts",
+      "line": 577,
+      "name": "openStream",
+      "expression": "transport.openStream",
+      "function": "startWorkLedgerSSE",
+      "arguments": [
+        "{ path: \"work-ledger/events\" }",
+        "{\n      onEvent: (data) => {\n        let event: unknown\n        try {\n          event = JSON.parse(data)\n        } catch (error) {\n          logMalformedSsePayload({ stream: \"work-ledger\", data, error })\n          return\n        }\n        const parsed = WorkLedgerEvent.safeParse(event)\n        if (!parsed.success) {\n          const error = parsed.error\n          logMalformedSsePayload({ stream: \"work-ledger\", data, error })\n          return\n        }\n        if (parsed.data.type === \"mailbox.changed\") {\n          dispatchMailboxRefresh()\n          return\n        }\n        if (parsed.data.type === \"work-ledger.connected\") {\n          dispatchMailboxRefresh()\n        }\n        if (parsed.data.type === \"work-ledger.heartbeat\") return\n        const workLedgerEvent: WorkLedgerStreamEvent = parsed.data\n        try {\n          if (workLedgerEvent.type === \"work-ledger.changed\" && workLedgerEvent.taskID) {\n            handleTaskListNotification(\n              {\n                type: workLedgerEvent.sourceType,\n                taskID: workLedgerEvent.taskID,\n                sequence: workLedgerEvent.sequence,\n              },\n              { directory: workLedgerEvent.directory || settingsStore.directory },\n              selectedTaskRecoveryScheduler,\n            )\n          }\n          workLedgerChangeHandler?.(workLedgerEvent)\n        } catch (err) {\n          const errorDetails = boundedErrorDetails(err)\n          AppLog.error(\"sse\", \"work ledger change handler failed\", {\n            eventType: workLedgerEvent.type,\n            error: errorDetails,\n            event: dispatchEventDiagnostic(workLedgerEvent),\n            diagnosticID: \"work-ledger-sse:dispatch-error\",\n            diagnosticTitle: \"Work Ledger event failed to render\",\n            diagnosticMessage: \"A Work Ledger change event threw while refreshing the sidebar.\",\n            diagnosticDetails: dispatchNotificationDetails(errorDetails, workLedgerEvent),\n          })\n        }\n      },\n      onClose: (_reason) => {\n        if (handle !== workLedgerHandle) return\n        workLedgerHandle = null\n        if (workLedgerRetryTimer) clearTimeout(workLedgerRetryTimer)\n        workLedgerRetryTimer = setTimeout(() => {\n          workLedgerRetryTimer = null\n          startWorkLedgerSSE()\n        }, 3000)\n      },\n      onError: () => {\n        if (handle !== workLedgerHandle) return\n        handle.close(\"transport-error\")\n      },\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/subagent-conversation.ts",
+      "line": 548,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadSubagentConversation",
+      "arguments": [
+        "subagentConversationPath({ ...input, sessionID, directory })",
+        "{ signal: input.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task-cancellation.ts",
+      "line": 29,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "requestTaskCancellation",
+      "arguments": [
+        "taskScopedPath(taskID, directory, \"/cancel\")",
+        "{\n    method: \"POST\",\n    headers: {\n      \"Content-Type\": \"application/json\",\n    },\n    body: JSON.stringify(body),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 446,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "setTaskArchived",
+      "arguments": [
+        "`${taskRecordPath(taskID)}/archive?${params.toString()}`",
+        "archived ? serverSettledRequest(request) : request"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 448,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "setTaskArchived",
+      "arguments": [
+        "request"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 507,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteTask",
+      "arguments": [
+        "taskRecordPath(taskID)",
+        "serverSettledRequest({\n        method: \"DELETE\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify(body),\n      })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 509,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "deleteTask",
+      "arguments": [
+        "{\n        method: \"DELETE\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify(body),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 546,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "renameTask",
+      "arguments": [
+        "taskPath(taskID, \"/title\")",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ title: trimmed }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 621,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "submitMessage",
+      "arguments": [
+        "directoryScopedPath(`session/${encodeURIComponent(selectedSource.id)}/message`, directory, \"submitMessage\")",
+        "{\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({\n            messageID: `msg_${requestID}`,\n            parts: [\n              {\n                type: \"text\",\n                text,\n                ...(options.metadata ? { metadata: options.metadata } : {}),\n              },\n            ],\n            model: currentOpenCorvusPromptModel(),\n            ...(attachments.length > 0 ? { attachments } : {}),\n          }),\n          signal: controller.signal,\n        }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 694,
+      "name": "openStream",
+      "expression": "getHostTransport().openStream",
+      "function": "",
+      "arguments": [
+        "{\n        path: \"panel/message/stream\",\n        method: \"POST\",\n        body: { kind: \"json\", value: requestPayload },\n        headers: { \"Content-Type\": \"application/json\" },\n        signal: controller.signal,\n      }",
+        "{\n        onOpen: () => {\n          markActivity()\n          observeStreamHook(() => options.onOpen?.())\n        },\n        onEvent: (data) => {\n          let decoded: unknown\n          try {\n            decoded = JSON.parse(data)\n          } catch (error) {\n            const parseError = new Error(`Malformed panel message stream event for request ${requestID}`)\n            AppLog.error(\"task\", \"malformed panel message stream event\", {\n              requestID,\n              taskID: activeTaskID(),\n              error: formatErrorDetails(error),\n              payloadSample: String(data || \"\").slice(0, 500),\n              diagnosticID: `task:panel-message-stream-parse-error:${requestID}`,\n              diagnosticTitle: \"Malformed message stream event\",\n              diagnosticMessage: \"OpenCorvus received a malformed message stream event.\",\n              diagnosticDetails: `${formatErrorDetails(error)}\\n\\npayload sample:\\n${String(data || \"\").slice(0, 500)}`,\n            })\n            rejectStream(parseError)\n            return\n          }\n          const parsed = UnknownPanelMessageStreamEvent.safeParse(decoded)\n          if (!parsed.success) {\n            rejectStream(\n              new Error(`Panel message stream event violated the transport contract for request ${requestID}`, {\n                cause: parsed.error,\n              }),\n            )\n            return\n          }\n          const ev = parsed.data\n          markActivity()\n          observeStreamHook(() => options.onEvent?.(ev))\n          if (ev?.type === \"done\") result = ev.result\n        },\n        onError: (err) => {\n          if (settled) return\n          settled = true\n          cleanup()\n          reject(err)\n        },\n        onClose: (_reason) => {\n          if (settled) return\n          settled = true\n          cleanup()\n          if (result !== null && result !== undefined) {\n            resolve(result)\n          } else {\n            reject(new Error(\"Panel stream ended without a final result\"))\n          }\n        },\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 829,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "path",
+        "{\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body,\n      signal,\n    }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 883,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "sendOperatorSteer",
+      "arguments": [
+        "taskPath(taskID, `/session/${encodeURIComponent(sessionID)}/operator-steer`)",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ request_id: requestID, message: text }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/task.ts",
+      "line": 898,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "cancelAgentSession",
+      "arguments": [
+        "taskPath(taskID, `/session/${encodeURIComponent(sessionID)}/cancel`)",
+        "{\n    method: \"POST\",\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/trace.ts",
+      "line": 99,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "fetchSessionTrace",
+      "arguments": [
+        "tracePath(\"session\", sessionID, directory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/trace.ts",
+      "line": 121,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "fetchTaskTrace",
+      "arguments": [
+        "tracePath(\"task\", taskID, directory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/usage.ts",
+      "line": 25,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadUsageStatistics",
+      "arguments": [
+        "`/global/usage?${query}`",
+        "{ signal: input.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/work-ledger.ts",
+      "line": 133,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadWorkLedger",
+      "arguments": [
+        "`work-ledger${suffix}`",
+        "{ signal: input.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/work-ledger.ts",
+      "line": 150,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadArchivedWorkLedger",
+      "arguments": [
+        "`work-ledger/archive${suffix}`",
+        "{ signal: input.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/work-ledger.ts",
+      "line": 155,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "setWorkLedgerProjectPinned",
+      "arguments": [
+        "`work-ledger/project/${encodeURIComponent(input.projectID)}/pin`",
+        "{\n    method: \"PATCH\",\n    body: JSON.stringify({ pinned: input.pinned }),\n    headers: { \"Content-Type\": \"application/json\" },\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/work-ledger.ts",
+      "line": 169,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "setWorkLedgerItemPinned",
+      "arguments": [
+        "path",
+        "{\n    method: \"PATCH\",\n    body: JSON.stringify({ pinned: input.pinned }),\n    headers: { \"Content-Type\": \"application/json\" },\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 275,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "enterDirectoryFreeWorkspace",
+      "arguments": [
+        "{ directory: \"\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 517,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "promoteAnonymousProject",
+      "arguments": [
+        "`project/current/promote-anonymous?${query.toString()}`",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ destinationParent: parent, name: projectName }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 541,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "renameProjectRecord",
+      "arguments": [
+        "`project/current?${query.toString()}`",
+        "{\n    method: \"PATCH\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ name: projectName }),\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 579,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "",
+      "arguments": [
+        "`project/current?${query.toString()}`",
+        "serverSettledRequest({\n          method: \"DELETE\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify(body),\n        })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 581,
+      "name": "serverSettledRequest",
+      "expression": "serverSettledRequest",
+      "function": "",
+      "arguments": [
+        "{\n          method: \"DELETE\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify(body),\n        }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 730,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "syncActiveDirectoryApiContext",
+      "arguments": [
+        "{ directory }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 779,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadDiscoveredProjects",
+      "arguments": [
+        "\"global/projects/discover\""
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 944,
+      "name": "configureApi",
+      "expression": "configureApi",
+      "function": "applyDirectory",
+      "arguments": [
+        "{ directory: next }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 950,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "applyDirectory",
+      "arguments": [
+        "`vcs?${new URLSearchParams({ directory: next })}`",
+        "{ signal: options.signal }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/workspace.ts",
+      "line": 1292,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "createAnonymousProject",
+      "arguments": [
+        "\"global/projects/anonymous\"",
+        "{ method: \"POST\" }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/worktree.ts",
+      "line": 39,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadProjectWorktrees",
+      "arguments": [
+        "projectWorktreesPath(projectDirectory)"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/services/worktree.ts",
+      "line": 44,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "deleteProjectWorktree",
+      "arguments": [
+        "projectWorktreesPath(projectDirectory)",
+        "{\n    method: \"DELETE\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ directory }),\n    timeoutMilliseconds: PROJECT_WORKTREE_DELETE_TIMEOUT_MILLISECONDS,\n  }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/store/board.ts",
+      "line": 363,
+      "name": "apiRequest",
+      "expression": "apiRequest",
+      "function": "",
+      "arguments": [
+        "boardPath",
+        "{\n        headers,\n        signal: AbortSignal.timeout(10000),\n      }"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/store/board.ts",
+      "line": 372,
+      "name": "ApiError",
+      "expression": "ApiError",
+      "function": "",
+      "arguments": [
+        "res.status",
+        "boardPath",
+        "res.body",
+        "res.headers"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/store/board.ts",
+      "line": 552,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadTasksOnce",
+      "arguments": [
+        "taskListPagePath({ limit: TASK_LIST_PAGE_SIZE + 1 })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/store/board.ts",
+      "line": 587,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "loadMoreTasks",
+      "arguments": [
+        "taskListPagePath({\n        limit: TASK_LIST_PAGE_SIZE + 1,\n        cursorUpdated: cursorUpdated as number,\n        cursorTaskID,\n      })"
+      ]
+    },
+    {
+      "file": "packages/overlay/src/utils/log.ts",
+      "line": 121,
+      "name": "apiJson",
+      "expression": "apiJson",
+      "function": "flush",
+      "arguments": [
+        "\"log\"",
+        "{\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify({ entries: payload }),\n  }"
+      ]
+    }
+  ]
+}

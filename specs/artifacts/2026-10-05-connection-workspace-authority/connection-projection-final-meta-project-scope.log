@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\meta-project-scope.test.ts:
+(pass) metadata follows the selected session directory and exposes its non-Git facts [2.54ms]
+(pass) latest metadata request owns the result when an earlier request finishes later [0.46ms]
+(pass) failed metadata read yields a scoped error state [0.68ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [1293.00ms]

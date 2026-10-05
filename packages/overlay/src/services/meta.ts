@@ -4,7 +4,8 @@
 import { boardStore, setBoardStore, setPath, setVcs } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { AppLog } from "../utils/log"
-import { apiJson } from "./api"
+import { formatErrorDetails } from "../utils/error-details"
+import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import type { StreamHandle } from "./host-transport"
 import {
@@ -37,6 +38,7 @@ export interface VcsCommitResult {
 }
 
 export interface VcsCommitMessageStreamOptions {
+  authority?: ApiAuthority
   taskID?: string
   sessionID?: string
   signal?: AbortSignal
@@ -58,7 +60,15 @@ export interface VcsCommitMessageStreamOptions {
  */
 let metaRequest = 0
 
-export async function loadMeta(directory = activeProjectDirectory()): Promise<void> {
+export function retireMetaProjection(clear = true): void {
+  metaRequest += 1
+  setBoardStore({ vcsLoading: false, vcsError: "", ...(clear ? { path: null, vcs: null, vcsDirectory: "" } : {}) })
+}
+
+export async function loadMeta(directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<void> {
+  assertApiAuthorityCurrent(authority)
+  if (directory !== activeProjectDirectory()) return
+  const selectionEpoch = boardStore.selectEpoch
   const epoch = settingsStore.directoryEpoch
   const request = ++metaRequest
   if (!directory) {
@@ -66,7 +76,7 @@ export async function loadMeta(directory = activeProjectDirectory()): Promise<vo
     return
   }
   const isCurrent = () =>
-    request === metaRequest && epoch === settingsStore.directoryEpoch && directory === activeProjectDirectory()
+    isApiAuthorityCurrent(authority) && request === metaRequest && selectionEpoch === boardStore.selectEpoch && epoch === settingsStore.directoryEpoch && directory === activeProjectDirectory()
   setBoardStore({
     vcsDirectory: directory,
     vcsLoading: true,
@@ -75,14 +85,15 @@ export async function loadMeta(directory = activeProjectDirectory()): Promise<vo
   })
   try {
     const [path, vcs] = await Promise.all([
-      apiJson(projectScopedPath("path", directory)),
-      apiJson(projectScopedPath("vcs", directory)),
+      apiJson(projectScopedPath("path", directory), { authority }),
+      apiJson(projectScopedPath("vcs", directory), { authority }),
     ])
     if (!isCurrent()) return
     const resolvedDirectory = path && typeof path.directory === "string" ? path.directory.trim() : ""
     setPath(resolvedDirectory ? { directory: resolvedDirectory } : null)
     setVcs(vcs ?? null)
   } catch (e) {
+    if (!isCurrent()) return
     AppLog.debug("meta", "loadMeta failed", {
       error: String(e),
     })
@@ -90,15 +101,39 @@ export async function loadMeta(directory = activeProjectDirectory()): Promise<vo
     setBoardStore({ vcs: null, vcsError: e instanceof Error ? e.message : String(e) })
     throw e
   } finally {
-    if (isCurrent()) setBoardStore("vcsLoading", false)
+    if (request === metaRequest) setBoardStore("vcsLoading", false)
+  }
+}
+
+/** An accepted write remains accepted when only its current metadata refresh fails. */
+async function refreshMetaAfterAcceptedMutation(
+  action: "switch-branch" | "commit" | "push",
+  directory: string,
+  authority: ApiAuthority,
+  selectionEpoch: number,
+): Promise<void> {
+  const owns = () => isApiAuthorityCurrent(authority) && selectionEpoch === boardStore.selectEpoch && directory === activeProjectDirectory()
+  if (!owns()) return
+  try {
+    await loadMeta(directory, authority)
+  } catch (cause) {
+    if (!owns()) return
+    // loadMeta retains the current scoped vcsError for the existing runtime-panel alert.
+    AppLog.warn("meta", "VCS mutation accepted; metadata refresh failed", {
+      action,
+      directory,
+      accepted: true,
+      cause,
+      details: formatErrorDetails(cause),
+    })
   }
 }
 
 // ── Diff helpers ──
 
 // VCS means Version Control System; these functions own its project-scoped branch request boundary.
-export async function loadVcsBranches(directory = activeProjectDirectory()): Promise<VcsBranch[]> {
-  const result = await apiJson(projectScopedPath("vcs/branches", directory))
+export async function loadVcsBranches(directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<VcsBranch[]> {
+  const result = await apiJson(projectScopedPath("vcs/branches", directory), { authority })
   if (!Array.isArray(result)) throw new Error("vcs/branches returned a non-array payload")
   return result.map((item, index) => {
     if (
@@ -115,21 +150,26 @@ export async function loadVcsBranches(directory = activeProjectDirectory()): Pro
   })
 }
 
-export async function switchVcsBranch(branch: string, directory = activeProjectDirectory()): Promise<void> {
+export async function switchVcsBranch(branch: string, directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<void> {
+  const selectionEpoch = boardStore.selectEpoch
   const requested = branch.trim()
   if (!requested) throw new Error("switchVcsBranch requires a branch")
   await apiJson(projectScopedPath("vcs/branch", directory), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ branch: requested }),
   })
-  if (directory === activeProjectDirectory()) await loadMeta(directory)
+  await refreshMetaAfterAcceptedMutation("switch-branch", directory, authority, selectionEpoch)
 }
 
 export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): StreamHandle {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   let terminal = false
   return getHostTransport().openStream(
     {
+      authority,
       path: "vcs/commit-message/stream",
       method: "POST",
       body: {
@@ -144,7 +184,7 @@ export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): 
     },
     {
       onEvent: (data) => {
-        if (terminal) return
+        if (terminal || !isApiAuthorityCurrent(authority)) return
         let event: unknown
         try {
           event = JSON.parse(data)
@@ -182,38 +222,48 @@ export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): 
         options.onError(new Error("Unknown VCS commit-message stream event"))
       },
       onError: (error) => {
-        if (terminal) return
+        if (terminal || !isApiAuthorityCurrent(authority)) return
         terminal = true
         options.onError(error)
       },
-      onClose: (reason) => {
+      onClose: (reason, info) => {
         if (terminal || options.signal?.aborted) return
         terminal = true
+        if (info?.current === false || !isApiAuthorityCurrent(authority)) {
+          options.onError(info
+            ? new ApiAuthorityChangedError(authority, { phase: "stream_closed", reason, info })
+            : new Error("Retired VCS stream closed without its transport authority receipt"))
+          return
+        }
         options.onError(new Error(`VCS commit-message stream closed before completion: ${reason}`))
       },
     },
   )
 }
 
-export async function commitVcsChanges(message: string, directory: string): Promise<VcsCommitResult> {
+export async function commitVcsChanges(message: string, directory: string, authority = captureApiAuthority()): Promise<VcsCommitResult> {
+  const selectionEpoch = boardStore.selectEpoch
   const requested = message.trim()
   if (!requested) throw new Error("commitVcsChanges requires a message")
   const result = await apiJson<VcsCommitResult>(projectScopedPath("vcs/commit", directory), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: requested }),
     timeoutMilliseconds: null,
   })
-  await loadMeta()
+  await refreshMetaAfterAcceptedMutation("commit", directory, authority, selectionEpoch)
   return result
 }
 
-export async function pushVcsBranch(directory: string): Promise<void> {
+export async function pushVcsBranch(directory: string, authority = captureApiAuthority()): Promise<void> {
+  const selectionEpoch = boardStore.selectEpoch
   await apiJson(projectScopedPath("vcs/push", directory), {
+    authority,
     method: "POST",
     timeoutMilliseconds: null,
   })
-  await loadMeta()
+  await refreshMetaAfterAcceptedMutation("push", directory, authority, selectionEpoch)
 }
 
 /**

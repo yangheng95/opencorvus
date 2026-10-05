@@ -2,7 +2,6 @@
 // Responsibilities:
 // - Select a task (stop SSE, clear the board, load board + transcript, start SSE)
 // - Delete a task
-// - Create a task (direct API)
 // - Submit a message to the current task (direct API)
 // - Retry / cancel / interrupt a task (direct API)
 // This module owns no render-side effects. Callers are responsible for
@@ -18,11 +17,10 @@ import {
 } from "@opencorvus-ai/transport-protocol"
 
 import { apiJson, ApiError, serverSettledRequest } from "./api"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import type { StreamHandle } from "./host-transport"
 import { getHostTransport } from "./host-transport-runtime"
 import { isSelectedTaskSSEConnected, startSSE, stopSSE } from "./sse"
-import { showAppDialog } from "./app-dialog"
-import { initGitCurrent } from "../utils/git"
 import { t } from "../utils/i18n"
 import { abortChatRequest, setChatAttachments, messageStore } from "../store/messages"
 import { clearConversationUiState, loadConversationUiStateForTask } from "../store/conversation-ui"
@@ -62,7 +60,6 @@ import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { formatErrorDetails } from "./diagnostics"
 import { cardTreeStore } from "../store/card-tree"
 import { AppLog } from "../utils/log"
-import { isImplicitProjectDirectory } from "../utils/project-directory"
 import { requestTaskCancellation, type TaskCancellationSurface } from "./task-cancellation"
 import {
   clearComposerModelProjection,
@@ -82,6 +79,7 @@ export interface Attachment {
 }
 
 export interface SubmitMessageOptions {
+  authority?: ApiAuthority
   /** Pre-allocated requestID (UUID). Generated internally if omitted. */
   requestID?: string
   /** Metadata forwarded to the panel message endpoint. */
@@ -96,31 +94,8 @@ export interface SubmitMessageOptions {
   onEvent?: (event: PanelMessageStreamEvent) => void | Promise<void>
 }
 
-export interface CreateTaskOptions {
-  text: string
-  attachments?: Attachment[]
-  metadata?: Record<string, unknown>
-  /** Optional priority override; the server defaults to "normal". */
-  priority?: "critical" | "high" | "normal" | "low"
-  /** Optional OpenCorvus model override for this new task. */
-  model?: string
-  /** Optional expert squad id forwarded through the existing task overlay field. */
-  promptProfile?: string
-  /** Title override. Server falls back to the request body when omitted. */
-  title?: string
-  signal?: AbortSignal
-  budget?: {
-    maxExecutorGroups?: number
-  }
-}
-
-export interface CreateTaskResult {
-  taskID: string
-  projectID: string
-  directory: string
-}
-
 export interface SelectTaskOptions {
+  authority?: ApiAuthority
   selectionEpoch: number
   directory?: string
   /** Keep staged new-request files when only the composer intent changes. */
@@ -249,6 +224,8 @@ function hasConversationPanelState(): boolean {
 }
 
 export async function selectTask(taskID: string, options: SelectTaskOptions): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   if (!ownsWorkspaceSelection(options.selectionEpoch)) return
   const nextTaskID = taskID || ""
   const explicitDirectory = options.directory?.trim() ?? ""
@@ -268,7 +245,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
     if (nextTaskID && boardStore.board && !boardStore.taskSwitching && !isSelectedTaskSSEConnected(nextTaskID)) {
       const directory = String(boardStore.board?.task?.directory || settingsStore.directory || "").trim()
       if (!directory) throw new Error("selectTask: selected task has no project directory")
-      startSSE({ kind: "task", id: nextTaskID }, boardStore.taskSequence, { directory })
+      startSSE({ kind: "task", id: nextTaskID }, boardStore.taskSequence, { directory, authority })
     }
     return
   }
@@ -327,7 +304,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
   }
 
   // ── Async phase ──────────────────────────────────────────────────────
-  const stale = () => boardStore.selectEpoch !== epoch
+  const stale = () => !isApiAuthorityCurrent(authority) || boardStore.selectEpoch !== epoch
 
   try {
     let selectedDirectory = ""
@@ -338,6 +315,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
       const needsProjectSwitch = taskDirectory && taskDirectory !== settingsStore.directory
       if (needsProjectSwitch) {
         const applied = await applyDirectory(taskDirectory, {
+          authority,
           save: true,
           preserveSelection: true,
           selectionEpoch: epoch,
@@ -346,12 +324,13 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
         if (stale()) return
       }
       if (explicitDirectory && !needsProjectSwitch) {
-        await loadTasks({ requireFresh: true })
+        await loadTasks({ requireFresh: true, authority })
         if (stale()) return
       }
 
       const conversationDirectory = (taskDirectory || settingsStore.directory || "").trim()
       const lastSequence = await hydrateTaskConversation(nextTaskID, {
+        authority,
         scrollIntent: "bottom",
         resetCause: "task-switch-hydrate",
         tailLimit: TASK_SELECTION_INITIAL_TAIL_LIMIT,
@@ -360,12 +339,12 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
       if (stale()) return
 
       selectedDirectory = taskOwningDirectory(nextTaskID)
-      startSSE({ kind: "task", id: nextTaskID }, lastSequence, { directory: selectedDirectory })
+      startSSE({ kind: "task", id: nextTaskID }, lastSequence, { directory: selectedDirectory, authority })
       const rootSessionID = rootTaskSessionID()
       if (!rootSessionID) throw new Error(`selectTask: task ${nextTaskID} has no root session`)
       await projectComposerModelFromSession(
-        { sessionID: rootSessionID, directory: selectedDirectory },
-        () => ownsWorkspaceSelection(epoch) && activeTaskID() === nextTaskID,
+        { sessionID: rootSessionID, directory: selectedDirectory, authority },
+        () => !stale() && ownsWorkspaceSelection(epoch) && activeTaskID() === nextTaskID,
       )
       if (stale()) return
     } catch (error) {
@@ -396,34 +375,37 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
   } finally {
     // Only clear the progress flag if we are still the active selection.
     // A newer selectTask() call has taken over and will manage its own flag.
-    if (boardStore.selectEpoch === epoch) {
+    if (!stale()) {
       setBoardStore("taskSwitching", false)
     }
   }
 }
 
 export async function retrySelectedTaskSelection(): Promise<void> {
+  const authority = captureApiAuthority()
   const failure = boardStore.taskSelectionError
   if (!failure) return
   if (boardStore.selectedSource?.kind !== "task" || boardStore.selectedSource.id !== failure.taskID) return
   const admission = await requestWorkspaceSelection({ kind: "task", id: failure.taskID, directory: failure.directory })
   if (admission.kind === "unchanged") return
-  await selectTask(failure.taskID, { directory: failure.directory, selectionEpoch: admission.epoch })
+  await selectTask(failure.taskID, { directory: failure.directory, selectionEpoch: admission.epoch, authority })
 }
 
 // ── Public: deleteTask ──
 
 export function setTaskArchived(
-  target: { taskID: string; directory: string },
+  target: { taskID: string; directory: string; authority?: ApiAuthority },
   archived: true,
   provenance: TaskCancellationRequestBodyValue,
 ): Promise<boolean>
-export function setTaskArchived(target: { taskID: string; directory: string }, archived: false): Promise<boolean>
+export function setTaskArchived(target: { taskID: string; directory: string; authority?: ApiAuthority }, archived: false): Promise<boolean>
 export async function setTaskArchived(
-  target: { taskID: string; directory: string },
+  target: { taskID: string; directory: string; authority?: ApiAuthority },
   archived: boolean,
   provenance?: TaskCancellationRequestBodyValue,
 ): Promise<boolean> {
+  const authority = target.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const taskID = target.taskID.trim()
   const directory = target.directory.trim()
   if (!taskID || !directory) {
@@ -439,6 +421,7 @@ export async function setTaskArchived(
   )
   const params = new URLSearchParams({ directory })
   const request = {
+    authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -447,10 +430,12 @@ export async function setTaskArchived(
     `${taskRecordPath(taskID)}/archive?${params.toString()}`,
     archived ? serverSettledRequest(request) : request,
   )
+  if (!isApiAuthorityCurrent(authority)) return true
   if (archived) {
     reconcileRemovedTaskAfterCommit(taskID, "archive")
   } else {
-    void loadTasks({ requireFresh: true }).catch((error) => {
+    void loadTasks({ requireFresh: true, authority }).catch((error) => {
+      if (!isApiAuthorityCurrent(authority)) return
       AppLog.error("task", "failed to refresh tasks after confirmed restore", {
         taskID,
         error: formatErrorDetails(error),
@@ -500,19 +485,23 @@ function isCommittedTaskDeletion(error: unknown, taskID: string): error is ApiEr
  * Returns true on durable success. Invalid client-side input returns false;
  * backend failures before commit reject so callers can surface the original error.
  */
-export async function deleteTask(taskID: string, provenance: TaskCancellationRequestBodyValue): Promise<boolean> {
+export async function deleteTask(taskID: string, provenance: TaskCancellationRequestBodyValue, options: { authority?: ApiAuthority } = {}): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   if (!taskID) return false
   const body = TaskCancellationRequestBody.parse(provenance)
   try {
     await apiJson(
       taskRecordPath(taskID),
       serverSettledRequest({
+        authority,
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       }),
     )
   } catch (error) {
+    if (!isApiAuthorityCurrent(authority)) throw error
     if (error instanceof ApiError && error.status === 404) {
       // Desired state is already durable.
     } else if (isCommittedTaskDeletion(error, taskID)) {
@@ -528,7 +517,7 @@ export async function deleteTask(taskID: string, provenance: TaskCancellationReq
       throw error
     }
   }
-  reconcileRemovedTaskAfterCommit(taskID, "delete")
+  if (isApiAuthorityCurrent(authority)) reconcileRemovedTaskAfterCommit(taskID, "delete")
   return true
 }
 
@@ -539,18 +528,20 @@ export async function deleteTask(taskID: string, provenance: TaskCancellationReq
  * Zod schema (1–200 chars after trim). Invalid client-side input returns false;
  * backend and refresh failures reject so the row can surface the original error.
  */
-export async function renameTask(taskID: string, title: string): Promise<boolean> {
+export async function renameTask(taskID: string, title: string, authority = captureApiAuthority()): Promise<boolean> {
   if (!taskID) return false
   const trimmed = title.trim()
   if (!trimmed || trimmed.length > 200) return false
   await apiJson(taskPath(taskID, "/title"), {
+    authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title: trimmed }),
   })
-  await loadTasks({ requireFresh: true })
-  if (activeTaskID() === taskID) {
-    await loadBoard()
+  if (!isApiAuthorityCurrent(authority)) return true
+  await loadTasks({ requireFresh: true, authority })
+  if (isApiAuthorityCurrent(authority) && activeTaskID() === taskID) {
+    await loadBoard({ authority })
   }
   return true
 }
@@ -583,6 +574,10 @@ export async function submitMessage(
   attachments: Attachment[] = [],
   options: SubmitMessageOptions = {},
 ): Promise<unknown> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const selectionEpoch = boardStore.selectEpoch
+  const ownsProjection = () => isApiAuthorityCurrent(authority) && selectionEpoch === boardStore.selectEpoch
   const requestID = options.requestID ?? randomUUID()
   const timeoutMs = CHAT_REQUEST_TIMEOUT_MS
   const controller = new AbortController()
@@ -608,6 +603,7 @@ export async function submitMessage(
           throw new Error(`Mission Work Ledger identity is unavailable for Session ${selectedSource.id}`)
         }
         return await wakeMission({
+          authority,
           requestID,
           missionID: mission.missionID,
           directory: mission.directory,
@@ -621,6 +617,7 @@ export async function submitMessage(
       const result = await apiJson(
         directoryScopedPath(`session/${encodeURIComponent(selectedSource.id)}/message`, directory, "submitMessage"),
         {
+          authority,
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -638,7 +635,7 @@ export async function submitMessage(
           signal: controller.signal,
         },
       )
-      ingestPersistedConversationMessage(result)
+      if (ownsProjection()) ingestPersistedConversationMessage(result)
       return result
     } finally {
       if (inactivityTimer) clearTimeout(inactivityTimer)
@@ -693,6 +690,7 @@ export async function submitMessage(
 
     handle = getHostTransport().openStream(
       {
+        authority,
         path: "panel/message/stream",
         method: "POST",
         body: { kind: "json", value: requestPayload },
@@ -701,10 +699,12 @@ export async function submitMessage(
       },
       {
         onOpen: () => {
+          if (!isApiAuthorityCurrent(authority)) return
           markActivity()
-          observeStreamHook(() => options.onOpen?.())
+          if (ownsProjection()) observeStreamHook(() => options.onOpen?.())
         },
         onEvent: (data) => {
+          if (!isApiAuthorityCurrent(authority)) return
           let decoded: unknown
           try {
             decoded = JSON.parse(data)
@@ -734,7 +734,7 @@ export async function submitMessage(
           }
           const ev = parsed.data
           markActivity()
-          observeStreamHook(() => options.onEvent?.(ev))
+          if (ownsProjection()) observeStreamHook(() => options.onEvent?.(ev))
           if (ev?.type === "done") result = ev.result
         },
         onError: (err) => {
@@ -743,15 +743,21 @@ export async function submitMessage(
           cleanup()
           reject(err)
         },
-        onClose: (_reason) => {
+        onClose: (reason, info) => {
           if (settled) return
           settled = true
           cleanup()
           if (result !== null && result !== undefined) {
             resolve(result)
-          } else {
-            reject(new Error("Panel stream ended without a final result"))
+            return
           }
+          if (info?.current === false || !isApiAuthorityCurrent(authority)) {
+            reject(info
+              ? new ApiAuthorityChangedError(authority, { phase: "stream_closed", reason, info })
+              : new Error("Retired panel stream closed without its transport authority receipt"))
+            return
+          }
+          reject(new Error("Panel stream ended without a final result"))
         },
       },
     )
@@ -764,90 +770,6 @@ export async function submitMessage(
       controller.signal.addEventListener("abort", abortListener, { once: true })
     }
   })
-}
-
-// ── Public: createTask ──
-
-/**
- * Server-side: W2-V32 (commit aa14f20e7) removed every auto git-init in the
- * project bootstrap, so task creation throws WorktreeNotGitError when the
- * active directory is not a git repo. Detect that single error and offer the
- * user the explicit init gesture, then retry once. Any other failure (or a
- * declined prompt) propagates to the caller so the existing handlers in
- * panelMessage / submitChat surface it normally.
- */
-function isWorktreeNotGitError(err: unknown): err is ApiError {
-  if (!(err instanceof ApiError)) return false
-  if (err.status !== 412) return false
-  const body = err.body as { name?: unknown } | null
-  return !!body && typeof body === "object" && body.name === "WorktreeNotGitError"
-}
-
-async function offerInitGitAndRetry(): Promise<boolean> {
-  const result = await showAppDialog({
-    title: t("git.init"),
-    message: t("git.init_required"),
-    cancel: true,
-    okLabel: t("common.ok"),
-  })
-  if (!result.confirmed) return false
-  return await initGitCurrent({ notify: false })
-}
-
-/**
- * Create a new task via direct API. Returns the task_id immediately.
- * No LLM round-trip — the backend persists the task in ~10ms.
- */
-export async function createTask(options: CreateTaskOptions): Promise<CreateTaskResult> {
-  const { text, attachments = [], metadata = {}, signal, budget } = options
-  if (!text) throw new Error("createTask: text is required")
-  const requestID = randomUUID()
-  const body = JSON.stringify({
-    request: text,
-    requestID,
-    metadata,
-    source: "panel",
-    ...(options.model ? { model: options.model } : {}),
-    ...(options.promptProfile ? { promptProfile: options.promptProfile } : {}),
-    ...(options.priority ? { priority: options.priority } : {}),
-    ...(options.title ? { title: options.title } : {}),
-    ...(budget ? { budget } : {}),
-    ...(attachments.length > 0
-      ? {
-          attachments: attachments.map((att) => ({
-            mime: att.mime,
-            url: att.url,
-            ...(att.filename ? { filename: att.filename } : {}),
-          })),
-        }
-      : {}),
-  })
-  const creationDirectory = activeDirectory()
-  const shouldCreateImplicitProject = !creationDirectory || isImplicitProjectDirectory(creationDirectory)
-  const path = shouldCreateImplicitProject ? "global/tasks" : "task"
-  const post = () =>
-    apiJson(path, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body,
-      signal,
-    })
-  let result: any
-  try {
-    result = await post()
-  } catch (err) {
-    if (shouldCreateImplicitProject || !isWorktreeNotGitError(err)) throw err
-    const initialized = await offerInitGitAndRetry()
-    if (!initialized) throw err
-    result = await post()
-  }
-  const taskID = typeof result?.task_id === "string" ? result.task_id.trim() : ""
-  const projectID = typeof result?.project_id === "string" ? result.project_id.trim() : ""
-  const directory = typeof result?.directory === "string" ? result.directory.trim() : ""
-  if (!taskID || !projectID || !directory) {
-    throw new Error(`${path} returned an invalid task/project identity`)
-  }
-  return { taskID, projectID, directory }
 }
 
 // ── Public: sendOperatorSteer ──
@@ -909,14 +831,16 @@ export async function cancelTask(
   taskID: string,
   input: { surface: TaskCancellationSurface; reason: string },
 ): Promise<void> {
+  const authority = captureApiAuthority()
   if (!taskID) return
   await requestTaskCancellation({
+    authority,
     taskID,
     directory: taskOwningDirectory(taskID),
     surface: input.surface,
     reason: input.reason,
   })
-  await loadBoard()
+  if (isApiAuthorityCurrent(authority)) await loadBoard({ authority })
 }
 
 // ── Public: interruptTask ──
@@ -926,17 +850,20 @@ export async function cancelTask(
  * the task via direct API. This is the unified "stop" operation.
  */
 export async function interruptTask(taskID: string): Promise<boolean> {
+  const authority = captureApiAuthority()
   if (!taskID) return false
   try {
     await requestTaskCancellation({
+      authority,
       taskID,
       directory: taskOwningDirectory(taskID),
       surface: "overlay.interrupt_task",
       reason: "Operator interrupted the active task",
     })
-    await loadBoard()
+    if (isApiAuthorityCurrent(authority)) await loadBoard({ authority })
     return true
   } catch (e) {
+    if (e instanceof ApiAuthorityChangedError) throw e
     console.error("[interruptTask] failed", { error: String(e), taskID })
     return false
   }

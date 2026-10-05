@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test"
-import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import {
   closeFileEditor,
@@ -90,6 +90,7 @@ test("a successful file mutation advances the exact workbench revision", async (
   const requests: TransportRequest[] = []
   __setHostTransportForTest({
     kind: "tauri",
+    capabilities: HOST_CAPABILITIES.tauri,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       requests.push(request)
       return {

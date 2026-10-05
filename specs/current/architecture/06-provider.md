@@ -334,6 +334,13 @@ callback 由 executor 持有单一 completion Promise，重入观察同一次 ex
 终态不能重放。`cancel` 携带 exact flowID/method/scope，只能通过 failPending 原子结算 pending；exchange 先赢得
 claim 时仍返回 typed 409。已终态取消可幂等回收 executor。CLI/Overlay 取消 code prompt 时必须调用 cancel；
 Overlay 打开外部页面失败时也须回收 pending，不能静默遗留续租。
+Overlay 每个交互式认证动作捕获一次 ApiAuthority，贯穿 method 选择、prompt、execute、authorize、callback 与 cancel；
+打开下一 dialog 或消费 dialog 回答前复核原 token，不能在 await 后借用新连接发送旧输入。
+上述 Overlay cancel 义务只在原 ApiAuthority 仍有效时通过原 flowID/method/scope 执行。原连接退休后，
+客户端返回本地 ApiAuthorityChangedError，不通过新连接或旧凭据快照重放 cancel，也不能宣称原服务已经物理取消。
+失联 pending 继续由既有 durable owner、Project disposal 与下述五分钟绝对期限结算；此客户端修复没有实际验证其终态或期限。
+原请求 accepted、committed_with_residue、transport failure 等真实结果仍保留原 private outcome；退休只停止旧界面反馈，
+不能把已接受事实改称失败或自动重试到新连接。exchange/credential_ready 保持其原有独立终态协议。
 `pending` authorization 的有效 lease 为进程 lease 与 `timeCreated + PENDING_AUTHORIZATION_TIMEOUT_MS` 的较早者；
 总期限为五分钟，续租只能维持存活证明，不能延长该期限。所有 admission、claim、renewal 和 recovery 使用同一
 `ownerLeaseExpiresAt` 定义。后台 renewal observer 或后续 admission/callback 将到期 occurrence 结算为 `failed`，

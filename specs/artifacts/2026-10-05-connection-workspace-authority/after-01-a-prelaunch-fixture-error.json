@@ -1,0 +1,23 @@
+{
+  "time": "2026-10-05T14:22:15.5219025Z",
+  "phase": "prelaunch-fixture-validation",
+  "error": "Declared literal is 37 UTF-8 bytes; prior plan incorrectly stated 36",
+  "literal": "Owned editor qualification baseline.\n",
+  "actualLiteralByteLength": 37,
+  "actualPngSignature": [
+    137,
+    80,
+    78,
+    71,
+    13,
+    10,
+    26,
+    10
+  ],
+  "runtime": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-after-01/a-runtime",
+  "runtimeChildren": [],
+  "newNoteExists": false,
+  "newImageExists": false,
+  "startupOrProcessLaunchReached": false,
+  "listeners": []
+}

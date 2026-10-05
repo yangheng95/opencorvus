@@ -1,5 +1,5 @@
 import { batch } from "solid-js"
-import { apiJson } from "./api"
+import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { directoryScopedPath } from "./task-path"
 import {
   applyEvent as replayTaskEventToTree,
@@ -69,6 +69,7 @@ let historyAbort: AbortController | null = null
 let tailMergeEpoch = 0
 let tailMergeAbort: AbortController | null = null
 let historySource: BoardSource | null = null
+let historyAuthority: ApiAuthority | null = null
 let historyState: HistoryState = {
   oldestTimestamp: null,
   oldestOrderKey: null,
@@ -114,6 +115,7 @@ export function cancelConversationReplay(): void {
   tailMergeAbort = null
   historyLoading = false
   historySource = null
+  historyAuthority = null
   historyState = {
     oldestTimestamp: null,
     oldestOrderKey: null,
@@ -121,6 +123,12 @@ export function cancelConversationReplay(): void {
     hasMore: false,
     limit: CONVERSATION_HISTORY_PAGE_LIMIT,
   }
+}
+
+/** Retire the existing source-directory cache only on an admitted namespace departure. */
+export function retireConversationSource(clear = true): void {
+  cancelConversationReplay()
+  if (clear) sourceDirectoryByKey.clear()
 }
 
 export function resetConversationProjection(options: { scrollIntent?: "preserve" | "bottom"; cause?: string }): void {
@@ -282,6 +290,8 @@ function parseConversationTurnArtifacts(
 }
 
 export async function refreshConversationTurnArtifacts(): Promise<void> {
+  const authority = captureApiAuthority()
+  const epoch = boardStore.selectEpoch
   const source = boardStore.selectedSource
   const directory = String(source?.directory || (boardStore.board as any)?.directory || "").trim()
   if (!source || !directory) return
@@ -291,8 +301,9 @@ export async function refreshConversationTurnArtifacts(): Promise<void> {
       ? `task/${encodeURIComponent(source.id)}/turn-artifacts`
       : `session/${encodeURIComponent(source.id)}/turn-artifacts`
   const summaries = parseConversationTurnArtifacts(
-    await apiJson(directoryScopedPath(path, directory, "refresh conversation turn artifacts")),
+    await apiJson(directoryScopedPath(path, directory, "refresh conversation turn artifacts"), { authority }),
   )
+  if (!isApiAuthorityCurrent(authority) || epoch !== boardStore.selectEpoch || !activeSourceMatches(source)) return
   batch(() => applyConversationTurnArtifacts(summaries))
 }
 
@@ -396,7 +407,7 @@ function commitConversationEvents(input: {
         }
       })
     } catch (error) {
-      if (!(error instanceof DOMException && error.name === "AbortError")) {
+      if (!(error instanceof ApiAuthorityChangedError) && !(error instanceof DOMException && error.name === "AbortError")) {
         rollbackConversationProjection(`${input.cause}-rollback`)
       }
       throw error
@@ -508,13 +519,15 @@ function hydratedConversationRootSessionID(source: BoardSource, board: Record<st
   return sessionID
 }
 
-function assertActiveReplay(source: BoardSource, epoch: number, signal: AbortSignal): void {
+function assertActiveReplay(source: BoardSource, epoch: number, signal: AbortSignal, authority: ApiAuthority): void {
+  assertApiAuthorityCurrent(authority)
   if (signal.aborted) throw signal.reason ?? new DOMException("Conversation replay aborted", "AbortError")
   if (epoch !== replayEpoch) throw new DOMException("Conversation replay superseded", "AbortError")
   if (!activeSourceMatches(source)) throw new DOMException("Conversation replay source changed", "AbortError")
 }
 
-function assertActiveHistory(source: BoardSource, epoch: number, signal: AbortSignal): void {
+function assertActiveHistory(source: BoardSource, epoch: number, signal: AbortSignal, authority: ApiAuthority): void {
+  assertApiAuthorityCurrent(authority)
   if (signal.aborted) throw signal.reason ?? new DOMException("Conversation history aborted", "AbortError")
   if (epoch !== historyEpoch) throw new DOMException("Conversation history superseded", "AbortError")
   if (!activeSourceMatches(source) || !sourceMatches(historySource, source)) {
@@ -522,7 +535,8 @@ function assertActiveHistory(source: BoardSource, epoch: number, signal: AbortSi
   }
 }
 
-function assertActiveSessionHistory(taskID: string, epoch: number, signal: AbortSignal): void {
+function assertActiveSessionHistory(taskID: string, epoch: number, signal: AbortSignal, authority: ApiAuthority): void {
+  assertApiAuthorityCurrent(authority)
   if (signal.aborted) throw signal.reason ?? new DOMException("Conversation history aborted", "AbortError")
   if (epoch !== historyEpoch) throw new DOMException("Conversation history superseded", "AbortError")
   if (activeTaskID() !== taskID) throw new DOMException("Conversation history source changed", "AbortError")
@@ -531,7 +545,8 @@ function assertActiveSessionHistory(taskID: string, epoch: number, signal: Abort
   }
 }
 
-function assertActiveTailMerge(taskID: string, epoch: number, signal: AbortSignal): void {
+function assertActiveTailMerge(taskID: string, epoch: number, signal: AbortSignal, authority: ApiAuthority): void {
+  assertApiAuthorityCurrent(authority)
   if (signal.aborted) throw signal.reason ?? new DOMException("Conversation tail merge aborted", "AbortError")
   if (epoch !== tailMergeEpoch) throw new DOMException("Conversation tail merge superseded", "AbortError")
   if (activeTaskID() !== taskID) throw new DOMException("Conversation tail merge task changed", "AbortError")
@@ -577,18 +592,19 @@ async function continueConversationReplay(
   initialReplay: EventReplay,
   epoch: number,
   signal: AbortSignal,
+  authority: ApiAuthority,
 ): Promise<EventReplay> {
   let replay = initialReplay
   while (!replay.complete) {
-    assertActiveReplay({ kind: "task", id: taskID }, epoch, signal)
+    assertActiveReplay({ kind: "task", id: taskID }, epoch, signal, authority)
     await waitForReplayTurn(signal)
     const sinceQuery =
       replay.sinceTimestamp === null ? "" : `&since=${encodeURIComponent(String(replay.sinceTimestamp))}`
     const page = await apiJson(
       `task/${encodeURIComponent(taskID)}/conversation/events?directory=${encodeURIComponent(directory)}&after=${encodeURIComponent(String(replay.cursor))}&until=${encodeURIComponent(String(replay.latestSequence))}&limit=${encodeURIComponent(String(replay.limit))}${sinceQuery}`,
-      { signal },
+      { signal, authority },
     )
-    assertActiveReplay({ kind: "task", id: taskID }, epoch, signal)
+    assertActiveReplay({ kind: "task", id: taskID }, epoch, signal, authority)
     const events = requireArray(page?.events, "events")
     const nextReplay = parseEventReplay(page?.eventReplay)
     if (!nextReplay.complete && nextReplay.cursor <= replay.cursor) {
@@ -598,7 +614,7 @@ async function continueConversationReplay(
       events,
       taskID,
       cause: "conversation-protocol-replay",
-      assertActive: () => assertActiveReplay({ kind: "task", id: taskID }, epoch, signal),
+      assertActive: () => assertActiveReplay({ kind: "task", id: taskID }, epoch, signal, authority),
     })
     replay = nextReplay
   }
@@ -608,6 +624,7 @@ async function continueConversationReplay(
 export async function hydrateTaskConversation(
   taskID: string,
   options: {
+    authority?: ApiAuthority
     signal?: AbortSignal
     scrollIntent?: "preserve" | "bottom"
     resetCause?: string
@@ -621,6 +638,7 @@ export async function hydrateTaskConversation(
 export async function loadConversation(
   source: BoardSource,
   options: {
+    authority?: ApiAuthority
     signal?: AbortSignal
     scrollIntent?: "preserve" | "bottom"
     resetCause?: string
@@ -634,6 +652,7 @@ export async function loadConversation(
 export async function hydrateConversation(
   source: BoardSource,
   options: {
+    authority?: ApiAuthority
     signal?: AbortSignal
     scrollIntent?: "preserve" | "bottom"
     resetCause?: string
@@ -641,6 +660,8 @@ export async function hydrateConversation(
     directory?: string
   } = {},
 ): Promise<number> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   cancelConversationReplay()
   const controller = linkedReplayController(options.signal)
   replayAbort = controller
@@ -654,8 +675,8 @@ export async function hydrateConversation(
     )
     const requestDirectory = conversationRequestDirectory(source, options.directory)
     if (requestDirectory) registerConversationSourceDirectory(source, requestDirectory)
-    const data = await apiJson(conversationHydratePath(source, tailLimit, requestDirectory), { signal })
-    assertActiveReplay(source, epoch, signal)
+    const data = await apiJson(conversationHydratePath(source, tailLimit, requestDirectory), { signal, authority })
+    assertActiveReplay(source, epoch, signal, authority)
     const board = requireObject(data?.board, "board")
     const rootSessionID = hydratedConversationRootSessionID(source, board)
     const responseDirectory = source.kind === "task" ? hydratedTaskDirectory(board, source.id) : requestDirectory
@@ -705,16 +726,17 @@ export async function hydrateConversation(
             events,
             ...(source.kind === "task" ? { taskID: source.id } : {}),
             cause: "conversation-hydrate-events",
-            assertActive: () => assertActiveReplay(source, epoch, signal),
+            assertActive: () => assertActiveReplay(source, epoch, signal, authority),
           })
         })
         applyConversationTurnArtifacts(turnArtifacts)
       } catch (error) {
-        rollbackConversationProjection(`${hydrateCause}-rollback`, options.scrollIntent ?? "preserve")
+        if (isApiAuthorityCurrent(authority) && epoch === replayEpoch) rollbackConversationProjection(`${hydrateCause}-rollback`, options.scrollIntent ?? "preserve")
         throw error
       }
     })
     historySource = source
+    historyAuthority = authority
     historyState = history
     if (source.kind === "task") {
       recordHydratedSelectedTaskActivity({
@@ -727,8 +749,9 @@ export async function hydrateConversation(
 
     if (source.kind === "task" && history.hasMore && !replay.complete) {
       backgroundReplay = true
-      void continueConversationReplay(source.id, directory, replay, epoch, signal)
+      void continueConversationReplay(source.id, directory, replay, epoch, signal, authority)
         .catch((error) => {
+          if (!isApiAuthorityCurrent(authority)) return
           if (error instanceof DOMException && error.name === "AbortError") return
           logConversationAsyncError("background protocol replay failed", error, {
             taskID: source.id,
@@ -741,7 +764,7 @@ export async function hydrateConversation(
       return Math.max(lastSequence, replay.latestSequence)
     }
     const finalReplay =
-      source.kind === "task" ? await continueConversationReplay(source.id, directory, replay, epoch, signal) : replay
+      source.kind === "task" ? await continueConversationReplay(source.id, directory, replay, epoch, signal, authority) : replay
     return Math.max(lastSequence, finalReplay.latestSequence)
   } finally {
     if (replayAbort === controller && !backgroundReplay) replayAbort = null
@@ -751,11 +774,14 @@ export async function hydrateConversation(
 export async function mergeLatestConversationTail(
   taskID: string,
   options: {
+    authority?: ApiAuthority
     signal?: AbortSignal
     tailLimit?: number
     directory?: string
   } = {},
 ): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const selectedTaskID = String(taskID || "")
   if (!selectedTaskID) throw new Error("conversation tail merge requires a taskID")
   const directory = options.directory?.trim() || conversationSourceDirectory({ kind: "task", id: selectedTaskID })
@@ -771,9 +797,9 @@ export async function mergeLatestConversationTail(
     )
     const data = await apiJson(
       `task/${encodeURIComponent(selectedTaskID)}/conversation?directory=${encodeURIComponent(directory)}&tail_limit=${encodeURIComponent(String(tailLimit))}`,
-      { signal },
+      { signal, authority },
     )
-    assertActiveTailMerge(selectedTaskID, epoch, signal)
+    assertActiveTailMerge(selectedTaskID, epoch, signal, authority)
     const board = requireObject(data?.board, "board")
     const transcript = requireArray(data?.transcript, "transcript")
     const events = requireArray(data?.events, "events")
@@ -806,16 +832,17 @@ export async function mergeLatestConversationTail(
             events,
             taskID: selectedTaskID,
             cause: "conversation-tail-merge-events",
-            assertActive: () => assertActiveTailMerge(selectedTaskID, epoch, signal),
+            assertActive: () => assertActiveTailMerge(selectedTaskID, epoch, signal, authority),
           })
         })
         applyConversationTurnArtifacts(turnArtifacts)
       } catch (error) {
-        rollbackConversationProjection("conversation-tail-merge-rollback")
+        if (isApiAuthorityCurrent(authority) && epoch === tailMergeEpoch) rollbackConversationProjection("conversation-tail-merge-rollback")
         throw error
       }
     })
     historySource = { kind: "task", id: selectedTaskID }
+    historyAuthority = authority
     historyState = history
     recordHydratedSelectedTaskActivity({
       board,
@@ -831,6 +858,7 @@ export async function mergeLatestConversationTail(
 export function canLoadOlderConversationHistory(source: BoardSource | null = boardStore.selectedSource): boolean {
   return (
     !!source &&
+    !!historyAuthority && isApiAuthorityCurrent(historyAuthority) &&
     sourceMatches(source, historySource) &&
     historyState.hasMore &&
     historyState.oldestTimestamp !== null &&
@@ -863,7 +891,9 @@ export function conversationCardContainsMessage(cardID: string, messageID: strin
 
 export async function loadOlderConversationHistory(
   source: BoardSource | null = boardStore.selectedSource,
+  authority = captureApiAuthority(),
 ): Promise<boolean> {
+  assertApiAuthorityCurrent(authority)
   if (!source) return false
   if (!canLoadOlderConversationHistory(source)) return false
   const directory = conversationSourceDirectory(source)
@@ -877,7 +907,7 @@ export async function loadOlderConversationHistory(
   historyAbort = controller
   const epoch = ++historyEpoch
   try {
-    assertActiveHistory(source, epoch, controller.signal)
+    assertActiveHistory(source, epoch, controller.signal, authority)
     const page = await apiJson(
       conversationHistoryPath(source, {
         directory,
@@ -886,9 +916,9 @@ export async function loadOlderConversationHistory(
         beforeID,
         limit: CONVERSATION_HISTORY_PAGE_LIMIT,
       }),
-      { signal: controller.signal },
+      { signal: controller.signal, authority },
     )
-    assertActiveHistory(source, epoch, controller.signal)
+    assertActiveHistory(source, epoch, controller.signal, authority)
     const transcript = requireArray(page?.transcript, "transcript")
     const events = requireArray(page?.events, "events")
     const view = requireObject(page?.view, "view")
@@ -906,20 +936,20 @@ export async function loadOlderConversationHistory(
           commitConversationEvents({
             events,
             cause: "older-conversation-history-events",
-            assertActive: () => assertActiveHistory(source, epoch, controller.signal),
+            assertActive: () => assertActiveHistory(source, epoch, controller.signal, authority),
           })
         })
       } catch (error) {
-        rollbackConversationProjection("older-conversation-history-rollback")
+        if (isApiAuthorityCurrent(authority) && epoch === historyEpoch) rollbackConversationProjection("older-conversation-history-rollback")
         throw error
       }
     })
-    assertActiveHistory(source, epoch, controller.signal)
+    assertActiveHistory(source, epoch, controller.signal, authority)
     historyState = nextHistory
     return true
   } catch (error) {
     if (!(error instanceof DOMException && error.name === "AbortError")) {
-      logConversationAsyncError("older history load failed", error, {
+      if (isApiAuthorityCurrent(authority)) logConversationAsyncError("older history load failed", error, {
         ...(source.kind === "task" ? { taskID: source.id } : { sessionID: source.id }),
         source: "older-history",
       })
@@ -936,8 +966,10 @@ export async function loadOlderConversationHistory(
 export async function loadConversationSessionHistory(
   sessionID: string,
   taskID = activeTaskID(),
-  options: { directory?: string } = {},
+  options: { directory?: string; authority?: ApiAuthority } = {},
 ): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const selectedTaskID = String(taskID || "")
   const targetSessionID = String(sessionID || "")
   if (!selectedTaskID || !targetSessionID) return false
@@ -949,12 +981,12 @@ export async function loadConversationSessionHistory(
   const epoch = ++historyEpoch
   const signal = controller.signal
   try {
-    assertActiveSessionHistory(selectedTaskID, epoch, signal)
+    assertActiveSessionHistory(selectedTaskID, epoch, signal, authority)
     const page = await apiJson(
       `task/${encodeURIComponent(selectedTaskID)}/conversation/session/${encodeURIComponent(targetSessionID)}?directory=${encodeURIComponent(directory)}`,
-      { signal },
+      { signal, authority },
     )
-    assertActiveSessionHistory(selectedTaskID, epoch, signal)
+    assertActiveSessionHistory(selectedTaskID, epoch, signal, authority)
     const transcript = requireArray(page?.transcript, "transcript")
     const events = requireArray(page?.events, "events")
     const view = requireObject(page?.view, "view")
@@ -968,19 +1000,19 @@ export async function loadConversationSessionHistory(
           commitConversationEvents({
             events,
             cause: "conversation-session-history-events",
-            assertActive: () => assertActiveSessionHistory(selectedTaskID, epoch, signal),
+            assertActive: () => assertActiveSessionHistory(selectedTaskID, epoch, signal, authority),
           })
         })
       } catch (error) {
-        rollbackConversationProjection("conversation-session-history-rollback")
+        if (isApiAuthorityCurrent(authority) && epoch === historyEpoch) rollbackConversationProjection("conversation-session-history-rollback")
         throw error
       }
     })
-    assertActiveSessionHistory(selectedTaskID, epoch, signal)
+    assertActiveSessionHistory(selectedTaskID, epoch, signal, authority)
     return true
   } catch (error) {
     if (!(error instanceof DOMException && error.name === "AbortError")) {
-      logConversationAsyncError("session history hydrate failed", error, {
+      if (isApiAuthorityCurrent(authority)) logConversationAsyncError("session history hydrate failed", error, {
         taskID: selectedTaskID,
         sessionID: targetSessionID,
         source: "session-history",
@@ -999,11 +1031,14 @@ export async function loadConversationHistoryUntilCard(
   cardID: string,
   taskID = activeTaskID(),
   options: {
+    authority?: ApiAuthority
     messageID?: string
     sessionID?: string
     directory?: string
   } = {},
 ): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const targetCardID = String(cardID || "")
   if (!targetCardID) return false
   const targetMessageID = String(options.messageID || "")
@@ -1013,15 +1048,16 @@ export async function loadConversationHistoryUntilCard(
   const targetSessionID = String(options.sessionID || "")
   const selectedSource = boardStore.selectedSource
   if (!loaded() && targetSessionID && selectedSource?.kind !== "session") {
-    await loadConversationSessionHistory(targetSessionID, taskID, { directory: options.directory })
+    await loadConversationSessionHistory(targetSessionID, taskID, { directory: options.directory, authority })
   }
   if (!loaded() && targetSessionID && selectedSource?.kind === "session") {
-    await loadOlderConversationHistory(selectedSource)
+    await loadOlderConversationHistory(selectedSource, authority)
   }
   const taskSource: BoardSource = { kind: "task", id: taskID }
   while (!loaded() && canLoadOlderConversationHistory(taskSource)) {
-    const loaded = await loadOlderConversationHistory(taskSource)
+    const loaded = await loadOlderConversationHistory(taskSource, authority)
     if (!loaded) break
   }
+  assertApiAuthorityCurrent(authority)
   return loaded()
 }

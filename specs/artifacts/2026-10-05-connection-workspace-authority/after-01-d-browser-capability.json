@@ -1,0 +1,25 @@
+{
+  "time": "2026-10-05T14:29:12.5397976Z",
+  "requestedUrl": "http://127.0.0.1:17951/ui/",
+  "firstAction": "cua.createBrowserTab('iab', owned URL, {visible:false})",
+  "firstResult": "Browser is not available: iab",
+  "inventoryAction": "cua.getState()",
+  "inventory": {
+    "apps": [],
+    "browsers": [
+      {
+        "id": "1",
+        "family": "chrome",
+        "tabs": [],
+        "error": "User unavailable"
+      }
+    ]
+  },
+  "newPageCreated": false,
+  "settingsChanged": false,
+  "viewportChanged": false,
+  "themeChanged": false,
+  "actualUIQualified": false,
+  "boundary": "No retry, user profile control, alternative automation, DOM assertion, or fabricated screenshot",
+  "ownerServices": "A/B/C/D remain running awaiting root coordination"
+}

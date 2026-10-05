@@ -1,0 +1,19 @@
+{
+  "extends": "../packages/overlay/tsconfig.json",
+  "include": [
+    "../packages/overlay/src/**/*.ts",
+    "../packages/overlay/src/**/*.tsx",
+    "../packages/overlay/src/**/*.js",
+    "../packages/overlay/test/provider-auth-authority.test.ts",
+    "../packages/overlay/test/llm-provider-operation-scope.test.ts",
+    "../packages/overlay/test/llm-auth-cancel.test.ts",
+    "../packages/overlay/test/provider-refresh.test.ts",
+    "../packages/overlay/test/provider-form.test.ts"
+  ],
+  "compilerOptions": {
+    "types": [
+      "../packages/overlay/node_modules/vite/client",
+      "../packages/opencorvus/node_modules/@types/bun"
+    ]
+  }
+}

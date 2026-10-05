@@ -3,6 +3,9 @@ import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS } from "../src/services/host-trans
 import { createTauriTransport } from "../src/services/tauri-transport"
 
 const originalFetch = globalThis.fetch
+function fixtureFetch(respond: (...args: Parameters<typeof fetch>) => Promise<Response>): typeof fetch {
+  return Object.assign(respond, { preconnect: originalFetch.preconnect })
+}
 const originalAbortSignalTimeout = AbortSignal.timeout
 
 afterEach(() => {
@@ -12,7 +15,7 @@ afterEach(() => {
 
 describe("tauri transport error body", () => {
   test("preserves JSON response bodies on non-2xx API responses", async () => {
-    globalThis.fetch = async () =>
+    globalThis.fetch = fixtureFetch(async () =>
       new Response(
         JSON.stringify({
           name: "DirectoryRequiredError",
@@ -24,7 +27,7 @@ describe("tauri transport error body", () => {
           status: 400,
           headers: { "Content-Type": "application/json", "X-OpenCorvus-Request-ID": "transport-response-1" },
         },
-      )
+      ))
 
     const res = await createTauriTransport().request({ path: "tasks" })
 
@@ -47,13 +50,13 @@ describe("tauri transport error body", () => {
       timeoutMilliseconds = milliseconds
       return timeoutController.signal
     }) as typeof AbortSignal.timeout
-    globalThis.fetch = async (_url, init) =>
+    globalThis.fetch = fixtureFetch(async (_url, init) =>
       new Promise<Response>((_resolve, reject) => {
         capturedSignal = init?.signal ?? undefined
         capturedSignal?.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")), {
           once: true,
         })
-      })
+      }))
 
     const request = createTauriTransport()
       .request({ path: "tasks" })
@@ -71,13 +74,13 @@ describe("tauri transport error body", () => {
 
   test("preserves caller-owned abort signals", async () => {
     const callerController = new AbortController()
-    globalThis.fetch = async (_url, init) => {
+    globalThis.fetch = fixtureFetch(async (_url, init) => {
       expect(init?.signal).toBe(callerController.signal)
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       })
-    }
+    })
 
     const res = await createTauriTransport().request({
       path: "tasks",
@@ -90,7 +93,7 @@ describe("tauri transport error body", () => {
 
   test("server-settled requests resolve with the actual server response", async () => {
     let completeResponse!: (response: Response) => void
-    globalThis.fetch = async () => new Promise<Response>((resolve) => { completeResponse = resolve })
+    globalThis.fetch = fixtureFetch(async () => new Promise<Response>((resolve) => { completeResponse = resolve }))
 
     const request = createTauriTransport().request({
       path: "project/current/worktrees",
@@ -109,13 +112,13 @@ describe("tauri transport error body", () => {
 
   test("server-settled requests preserve the caller signal and its AbortError result", async () => {
     const callerController = new AbortController()
-    globalThis.fetch = async (_url, init) =>
+    globalThis.fetch = fixtureFetch(async (_url, init) =>
       new Promise<Response>((_resolve, reject) => {
         expect(init?.signal).toBe(callerController.signal)
         init?.signal?.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")), {
           once: true,
         })
-      })
+      }))
 
     const request = createTauriTransport().request({
       path: "task/tsk_slow",

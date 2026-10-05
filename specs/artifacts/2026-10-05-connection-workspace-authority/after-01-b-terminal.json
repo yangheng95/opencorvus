@@ -1,0 +1,32 @@
+{
+  "time": "2026-10-05T16:37:22.0657059Z",
+  "states": [
+    {
+      "role": "listener",
+      "pid": 75888,
+      "expectedCreationDate": "2026-10-05T22:24:05.467285+08:00",
+      "present": false,
+      "samePIDReused": false,
+      "current": null
+    },
+    {
+      "role": "parent",
+      "pid": 57336,
+      "expectedCreationDate": "2026-10-05T22:24:05.427592+08:00",
+      "present": false,
+      "samePIDReused": false,
+      "current": null
+    },
+    {
+      "role": "launcher",
+      "pid": 71320,
+      "expectedCreationDate": "2026-10-05T22:24:05.346307+08:00",
+      "present": false,
+      "samePIDReused": false,
+      "current": null
+    }
+  ],
+  "listeners": [],
+  "physicalCompletion": true,
+  "note": "No fabricated exit code; no entity or fixture deletion"
+}

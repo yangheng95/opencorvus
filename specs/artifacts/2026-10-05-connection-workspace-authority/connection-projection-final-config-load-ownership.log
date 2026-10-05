@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\config-load-ownership.test.ts:
+(pass) default provider refresh loads the active project's catalog and retains its saved authorization [2.39ms]
+(pass) a completed global read leaves the newly selected project's config as the current projection [0.54ms]
+(pass) project config reload projects the selected server and project after an earlier server finishes [1.08ms]
+
+ 3 pass
+ 0 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [1349.00ms]

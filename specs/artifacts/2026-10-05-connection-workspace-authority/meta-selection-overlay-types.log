@@ -1,0 +1,7 @@
+$ tsc --noEmit
+src/components/settings/ProvidersPanel.tsx(602,13): error TS2554: Expected 3 arguments, but got 2.
+src/components/settings/ProvidersPanel.tsx(615,15): error TS2554: Expected 3 arguments, but got 2.
+src/components/settings/ProvidersPanel.tsx(616,32): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ authority: ApiAuthority; directory: string; isCurrentDirectory: (candidate: string) => boolean; }'.
+src/components/settings/ProvidersPanel.tsx(721,13): error TS2554: Expected 3 arguments, but got 2.
+src/components/settings/ProvidersPanel.tsx(727,39): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ authority: ApiAuthority; directory: string; isCurrentDirectory: (candidate: string) => boolean; }'.
+src/components/settings/ProvidersPanel.tsx(811,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ authority: ApiAuthority; directory: string; isCurrentDirectory: (candidate: string) => boolean; }'.

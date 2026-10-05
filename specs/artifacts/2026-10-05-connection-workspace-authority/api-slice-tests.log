@@ -1,0 +1,74 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\api-authority.test.ts:
+(pass) authority follows applied connection ABA and explicit same-URL renewal, while directory retains its owner [0.52ms]
+(pass) Response fixture current API request preserves exact target, payload and public error notification [4.20ms]
+(pass) supplied stale API and direct transport tokens produce the exact local pre-dispatch contract [1.29ms]
+(pass) Response fixture retired mutation retains its actual 200 receipt privately [0.77ms]
+(pass) Response fixture retired mutation retains its actual 409 receipt privately [0.29ms]
+(pass) Response fixture obsolete binary body retains actual bytes and request headers [0.37ms]
+(pass) actual thrown local transport failure retains its exact object and unknown remote outcome [0.38ms]
+(pass) Response fixture caller continuation carries one authority through GET then stale PATCH [0.50ms]
+(pass) Response fixture named errors publish only the current connection's actual notification [0.66ms]
+(pass) Response fixture resource cache retires A bytes and joins only B's exact pending owner [2.43ms]
+(pass) external resource Blob keeps its original cache ownership across API authority renewal [0.43ms]
+
+packages\overlay\test\tauri-transport-stream-branches.test.ts:
+(pass) tauri HostTransport stream branch coverage > unauthenticated GET streams deliver the native EventSource lifecycle [1.57ms]
+(pass) tauri HostTransport stream branch coverage > auth changes settle native EventSource streams with their retired authority [0.41ms]
+(pass) tauri HostTransport stream branch coverage > native EventSource publishes one terminal transport failure to the business reconnect owner [0.57ms]
+(pass) tauri HostTransport stream branch coverage > authenticated GET streams use fetch SSE so Authorization headers are sent [4.14ms]
+(pass) tauri HostTransport stream branch coverage > auth changes abort authenticated fetch SSE streams and report auth-changed once [1.01ms]
+(pass) tauri HostTransport stream branch coverage > POST streams use fetch SSE with the JSON request body [0.79ms]
+(pass) tauri HostTransport stream branch coverage > Response fixture POST body retires with its exact close authority while B completes its own projection [1.23ms]
+
+packages\overlay\test\tauri-transport-error-body.test.ts:
+(pass) tauri transport error body > preserves JSON response bodies on non-2xx API responses [4.05ms]
+(pass) tauri transport error body > aborts stalled requests with the transport default timeout [15.79ms]
+(pass) tauri transport error body > preserves caller-owned abort signals [0.52ms]
+(pass) tauri transport error body > server-settled requests resolve with the actual server response [0.34ms]
+(pass) tauri transport error body > server-settled requests preserve the caller signal and its AbortError result [0.38ms]
+
+packages\overlay\test\blob-cache.test.ts:
+(pass) blob URL cache > repeated reads and peek share the materialized Blob and its exact bytes [0.88ms]
+(pass) blob URL cache > server-relative query and successful content type reach the materialized Blob [0.56ms]
+(pass) blob URL cache > concurrent consumers receive the same completed Blob and request identity [0.31ms]
+(pass) blob URL cache > last-consumer cancellation reports its reason and a fresh retry completes with bytes [0.92ms]
+(pass) blob URL cache > a remaining shared consumer completes after the other consumer receives AbortError [1.07ms]
+(pass) blob URL cache > host-relative failure preserves its raw path and public body before a successful retry [1.60ms]
+(pass) blob URL cache > a failed full-window request releases the next resource slot to complete [7.85ms]
+
+packages\overlay\test\api-error.test.ts:
+(pass) apiJson + ApiError > materializes one binary named UTF8 JSON body for every diagnostic [0.58ms]
+(pass) apiJson + ApiError > materializes one binary message JSON body for every diagnostic [0.08ms]
+(pass) apiJson + ApiError > materializes one binary problem JSON body for every diagnostic [0.04ms]
+(pass) apiJson + ApiError > materializes one binary plain authentication response body for every diagnostic [0.10ms]
+(pass) apiJson + ApiError > materializes one binary malformed JSON text body for every diagnostic [0.04ms]
+(pass) apiJson + ApiError > materializes one binary empty bytes body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > preserves the actual x-opencorvus-request-id response correlation in complete diagnostics [0.60ms]
+(pass) apiJson + ApiError > preserves the actual X-OpenCorvus-Request-ID response correlation in complete diagnostics [0.11ms]
+(pass) apiJson + ApiError > binary archive failure preserves decoded public body and its response correlation [0.52ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 500 diagnostic [0.11ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 400 diagnostic [0.03ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 502 diagnostic [0.02ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 503 diagnostic [0.02ms]
+(pass) apiJson + ApiError > applies an explicit empty Basic Auth username [0.33ms]
+(pass) apiJson + ApiError > 2xx returns the parsed body unchanged [0.23ms]
+(pass) apiJson + ApiError > 4xx throws ApiError carrying status / path / body / readable message [0.25ms]
+(pass) apiJson + ApiError > ApiError prefers `message` over `error` when both are present [0.19ms]
+(pass) apiJson + ApiError > ApiError renders the message carried by a NamedError envelope [0.23ms]
+(pass) apiJson + ApiError > ApiError falls back to status + path when body is empty [0.28ms]
+(pass) apiJson + ApiError > ApiError with a string body uses the string as detail [0.27ms]
+(pass) apiJson + ApiError > apiJsonWithTimeout preserves ApiError status / path / body [0.38ms]
+
+packages\overlay\test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [1.36ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.57ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [1.50ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [1.00ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.65ms]
+
+ 56 pass
+ 0 fail
+ 264 expect() calls
+Ran 56 tests across 6 files. [1423.00ms]

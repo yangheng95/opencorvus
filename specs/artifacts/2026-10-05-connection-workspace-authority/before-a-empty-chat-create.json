@@ -1,0 +1,33 @@
+{
+  "time": "2026-10-05T12:34:31.5977907Z",
+  "completedUTC": "2026-10-05T12:34:31.7289926Z",
+  "method": "POST",
+  "origin": "http://127.0.0.1:17948",
+  "path": "/coding/chat/session?directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-05%2Fconnection-workspace-before-01%2Fa-project",
+  "requestBody": "{}",
+  "statusCode": 201,
+  "requestID": [
+    "7927d1a1-d1da-44c1-92aa-9045388f8595"
+  ],
+  "responseBody": "{\"session\":{\"id\":\"ses_-zUSotvzOzzZgeNQExal\",\"slug\":\"witty-mountain\",\"version\":\"local\",\"projectID\":\"prj_hzth4QzZIwFhtLhhNICZ\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-05\\\\connection-workspace-before-01\\\\a-project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791203671638,\"updated\":1791203671638}}}",
+  "matchedOwners": [
+    {
+      "role": "listener",
+      "pid": 73600,
+      "creationDate": "2026-10-05T20:26:07.434129+08:00",
+      "matched": true
+    },
+    {
+      "role": "parent",
+      "pid": 73416,
+      "creationDate": "2026-10-05T20:26:07.392582+08:00",
+      "matched": true
+    },
+    {
+      "role": "launcher",
+      "pid": 63624,
+      "creationDate": "2026-10-05T20:26:07.311147+08:00",
+      "matched": true
+    }
+  ]
+}

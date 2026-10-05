@@ -1,5 +1,8 @@
 # Artifact entry points
 
+- [Connection workspace authority](2026-10-05-connection-workspace-authority/README.md): actual before visual evidence, source contracts, root integration and scoped qualification.
+- [Skill mount latency qualification](2026-10-05-skill-mount-cold-start-latency/README.md): actual HTTP phase measurements and shared DEBUG logger repair; original slow-request cause remains open.
+
 - [Windows restart actual evidence](2026-10-05-windows-restart-ownership-transfer/README.md): twelve actual source scenarios, exact process settlement, SDK boundary and retained failures.
 
 - [Composer upload lifetime evidence](2026-10-05-composer-upload-lifetime/README.md): real delayed responses, anonymous activation and established-project/navigation controls.
@@ -101,3 +104,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 
 - [Historical WorkBuddy and fixed-round benchmark source](2026-08-25-benchmark-history/README.md): exact committed August experiment materials; current-runtime limitations are explicit.
 - [2026-10-05 — Product iteration](2026-10-05-product-iteration/README.md)
+
+- [Expanded Tool input/output detail boundary review](2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): actual saved Read screenshot and independent request/outcome contract analysis; source-only minimal label recommendation, implementation and next real visual qualification pending Root.

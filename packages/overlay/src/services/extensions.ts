@@ -12,7 +12,7 @@ import type {
   SkillUpdateResponse,
 } from "@opencorvus-ai/sdk"
 import { appStore, setSkills, setMcp, setSkillMounts } from "../store/app"
-import { apiJson } from "./api"
+import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 
 // ── Types ──
 
@@ -74,6 +74,7 @@ export type AgentSkillMountMatrix = SkillMountsResponse
 export type SkillMountOverrideInput = NonNullable<SkillSetMountOverrideData["body"]>
 
 export interface SkillMountRequestOptions {
+  authority?: ApiAuthority
   sessionID?: string
   expertSquadID?: string
   refresh?: boolean
@@ -83,6 +84,7 @@ export interface SkillMountRequestOptions {
 }
 
 export interface DirectoryOwnedRequestOptions {
+  authority?: ApiAuthority
   directory?: string
   isCurrentDirectory?: (directory: string) => boolean
 }
@@ -138,14 +140,16 @@ function directoryOwnedPath(base: string, options: Pick<DirectoryOwnedRequestOpt
 }
 
 function ownsDirectoryRequest(options: DirectoryOwnedRequestOptions): boolean {
+  if (options.authority && !isApiAuthorityCurrent(options.authority)) return false
   const directory = String(options.directory || "").trim()
   return !directory || !options.isCurrentDirectory || options.isCurrentDirectory(directory)
 }
 
 function commitOwnedSkillMountMatrix(
   matrix: AgentSkillMountMatrix,
-  options: Pick<SkillMountRequestOptions, "directory" | "isCurrentDirectory">,
+  options: Pick<SkillMountRequestOptions, "directory" | "isCurrentDirectory" | "authority">,
 ): AgentSkillMountMatrix {
+  if (!ownsDirectoryRequest(options)) return matrix
   const directory = String(options.directory || "").trim()
   if (directory && options.isCurrentDirectory && !options.isCurrentDirectory(directory)) return matrix
   return commitSkillMountMatrix(matrix)
@@ -198,7 +202,10 @@ function errorMessage(error: unknown): string {
 export async function loadExtensions(
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ skills: SkillDescriptor[]; mcp: Record<string, any>; issues: ExtensionLoadIssue[] }> {
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  assertApiAuthorityCurrent(options.authority)
   const [matrixResult, mcpResult] = await Promise.allSettled([loadSkillMountMatrix(options), loadMcpStatus(options)])
+  assertApiAuthorityCurrent(options.authority)
   const issues: ExtensionLoadIssue[] = []
   let skills = appStore.skills
   let mcp = appStore.mcp
@@ -216,7 +223,8 @@ export async function loadExtensions(
 }
 
 export async function loadInstalledSkills(options: DirectoryOwnedRequestOptions = {}): Promise<SkillDescriptor[]> {
-  const skills = await apiJson(directoryOwnedPath("skill/installed", options))
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  const skills = await apiJson(directoryOwnedPath("skill/installed", options), { authority: options.authority })
   if (!Array.isArray(skills)) {
     throw new Error("skill/installed returned a non-array payload")
   }
@@ -225,7 +233,7 @@ export async function loadInstalledSkills(options: DirectoryOwnedRequestOptions 
 }
 
 export async function loadSkillIssues(options: DirectoryOwnedRequestOptions = {}): Promise<SkillLoadIssue[]> {
-  const issues = await apiJson(directoryOwnedPath("skill/issues", options))
+  const issues = await apiJson(directoryOwnedPath("skill/issues", options), { authority: options.authority })
   if (!Array.isArray(issues)) {
     throw new Error("skill/issues returned a non-array payload")
   }
@@ -238,7 +246,8 @@ export async function loadSkillIssues(options: DirectoryOwnedRequestOptions = {}
 }
 
 export async function loadSkillMountMatrix(options: SkillMountRequestOptions = {}): Promise<AgentSkillMountMatrix> {
-  const matrix = await apiJson<AgentSkillMountMatrix>(skillMountPath("skill/mounts", options))
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  const matrix = await apiJson<AgentSkillMountMatrix>(skillMountPath("skill/mounts", options), { authority: options.authority })
   if (options.commit === false) return matrix
   return commitOwnedSkillMountMatrix(matrix, options)
 }
@@ -247,7 +256,9 @@ export async function setSkillMountOverride(
   input: SkillMountOverrideInput,
   options: DirectoryOwnedRequestOptions & { commit?: boolean } = {},
 ): Promise<AgentSkillMountMatrix> {
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
   const matrix = await apiJson<AgentSkillMountMatrix>(directoryOwnedPath("skill/mount", options), {
+    authority: options.authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
@@ -256,7 +267,8 @@ export async function setSkillMountOverride(
 }
 
 export async function loadMcpStatus(options: DirectoryOwnedRequestOptions = {}): Promise<Record<string, any>> {
-  const mcp = await apiJson(directoryOwnedPath("mcp", options))
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  const mcp = await apiJson(directoryOwnedPath("mcp", options), { authority: options.authority })
   if (!mcp || typeof mcp !== "object" || Array.isArray(mcp)) {
     throw new Error("mcp returned a non-object payload")
   }
@@ -265,7 +277,8 @@ export async function loadMcpStatus(options: DirectoryOwnedRequestOptions = {}):
 }
 
 export async function loadProjectMcpStatus(options: DirectoryOwnedRequestOptions = {}): Promise<Record<string, any>> {
-  const mcp = await apiJson(directoryOwnedPath("mcp/project", options))
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  const mcp = await apiJson(directoryOwnedPath("mcp/project", options), { authority: options.authority })
   if (!mcp || typeof mcp !== "object" || Array.isArray(mcp)) {
     throw new Error("mcp/project returned a non-object payload")
   }
@@ -285,6 +298,7 @@ export async function removeSkillSource(
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<void> {
   await apiJson(directoryOwnedPath("skill/remove", options), {
+    authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ source, kind }),
@@ -304,6 +318,7 @@ export async function installSkill(
   const directory = String(options.directory || "").trim()
   if (!directory && kind === "path") throw new Error("Project directory is required for a path Skill source")
   await apiJson(directory ? directoryOwnedPath("skill/install", options) : "global/skill/install", {
+    authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ kind, value, policy: policy || undefined }),
@@ -342,6 +357,7 @@ export async function updateSkill(
   const identity = name.trim()
   if (!identity) throw new Error("Skill name is required for update")
   return await apiJson(directoryOwnedPath("skill/update", options), {
+    authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: identity, source }),
@@ -355,6 +371,7 @@ export async function importSkillFile(
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
+    authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ filename, content, policy: policy || undefined }),
@@ -373,6 +390,7 @@ export async function importSkillPackage(
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
+    authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sourceName, files, policy: policy || undefined }),
@@ -386,6 +404,7 @@ export async function importSkillArchive(
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
+    authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ filename, archiveBase64, policy: policy || undefined }),
@@ -416,6 +435,8 @@ export async function deleteSkill(
 export async function deleteAllSkills(
   options: DirectoryOwnedRequestOptions & { skills?: readonly SkillDescriptor[] } = {},
 ): Promise<void> {
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  assertApiAuthorityCurrent(options.authority)
   const skills: readonly SkillDescriptor[] = options.skills ?? appStore.skills
   const custom = skills.filter((item) => !item.builtin)
   const list = custom.filter(skillRemovable)
@@ -425,6 +446,7 @@ export async function deleteAllSkills(
     try {
       await removeSkillSource(item.source!, skillRemoveKind(item), options)
     } catch (error) {
+      if (error instanceof ApiAuthorityChangedError) throw error
       removalError = error
       break
     }
@@ -433,6 +455,7 @@ export async function deleteAllSkills(
   try {
     await loadInstalledSkills(options)
   } catch (refreshError) {
+    if (refreshError instanceof ApiAuthorityChangedError) throw refreshError
     if (removalError) {
       throw new Error(
         `Failed to delete all skills: ${errorMessage(removalError)}; failed to refresh installed skills: ${errorMessage(

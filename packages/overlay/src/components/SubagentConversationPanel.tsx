@@ -10,7 +10,7 @@ import {
   onMount,
   type Accessor,
 } from "solid-js"
-import { boardStore, type BoardSource } from "../store/board"
+import { boardStore } from "../store/board"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import {
   createSubagentConversationLiveProjection,
@@ -24,7 +24,9 @@ import {
   subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
   type SubagentConversationTranscript,
+  type SubagentConversationTarget,
 } from "../services/subagent-conversation"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
@@ -156,6 +158,7 @@ export function SubagentConversationPanel(props: {
     const record = selectedRecord()
     if (!record) return null
     return subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { ...source },
       sessionID,
       directory,
@@ -172,11 +175,7 @@ export function SubagentConversationPanel(props: {
       transcriptAbort?.abort()
       const controller = new AbortController()
       transcriptAbort = controller
-      const target = JSON.parse(serialized) as {
-        source: BoardSource
-        sessionID: string
-        directory: string
-      }
+      const target = JSON.parse(serialized) as SubagentConversationTarget
       try {
         const previous = context.value?.targetKey === serialized ? context.value : undefined
         const delta = await loadSubagentConversation({
@@ -185,6 +184,10 @@ export function SubagentConversationPanel(props: {
           afterLiveEpoch: target.source.kind === "task" ? previous?.liveEpoch : undefined,
           signal: controller.signal,
         })
+        // Solid owns settlement of the original resource request. Retain its
+        // actual value, but only the current source may merge prior cursors.
+        if (!isApiAuthorityCurrent(target.authority) || transcriptAbort !== controller || requestKey() !== serialized)
+          return delta
         return previous ? mergeSubagentConversation(previous, delta) : delta
       } finally {
         if (transcriptAbort === controller) transcriptAbort = undefined

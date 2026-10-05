@@ -5,7 +5,7 @@ import { ListboxItem, ListboxRoot } from "./ui/Listbox"
 import { Tooltip } from "./ui/Tooltip"
 import { createEffect, createMemo, createResource, createSignal, For, onCleanup, Show } from "solid-js"
 import { appStore } from "../store/app"
-import { activeTaskID } from "../store/board"
+import { boardStore, activeTaskID } from "../store/board"
 import { Icon } from "./ui/Icon"
 import { useDisclosure } from "../solid/disclosure"
 import {
@@ -16,6 +16,7 @@ import {
   type ProviderRateLimitsUsage,
 } from "../services/config"
 import { loadProviderInfo } from "../services/config-load"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { openConfigDialog } from "../services/config-dialog-control"
 import { activeDirectory } from "../services/workspace"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -80,8 +81,13 @@ function errorMessage(error: unknown): string {
 }
 
 function runModelSelectorAction(label: string, action: () => void | Promise<void>): void {
+  const authority = captureApiAuthority()
+  const selectionEpoch = boardStore.selectEpoch
+  const directory = activeDirectory().trim()
+  const owns = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch && activeDirectory().trim() === directory
   try {
     void Promise.resolve(action()).catch((error) => {
+      if (!owns()) return
       reportError({
         id: `model-selector:${label}`,
         title: t("model_selector.group"),
@@ -90,6 +96,7 @@ function runModelSelectorAction(label: string, action: () => void | Promise<void
       })
     })
   } catch (error) {
+    if (!owns()) return
     reportError({
       id: `model-selector:${label}`,
       title: t("model_selector.group"),
@@ -326,18 +333,34 @@ export function ComposerModelSelector() {
       .filter((group) => group.models.length > 0)
   })
 
+  createEffect(() => {
+    captureApiAuthority().revision
+    boardStore.selectEpoch
+    activeDirectory().trim()
+    providerLoadsInFlight = 0
+    setProviderLoading(false)
+    disclosure.close()
+    setQuery("")
+  })
+
   async function loadProviderInfoOnOpen(): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     const directory = activeDirectory().trim()
+    const owns = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch && activeDirectory().trim() === directory
     providerLoadsInFlight += 1
     setProviderLoading(true)
     try {
       await loadProviderInfo(undefined, {
+        authority,
         directory,
-        isCurrentDirectory: (candidate) => activeDirectory().trim() === candidate,
+        isCurrentDirectory: (candidate) => candidate === directory && owns(),
       })
     } finally {
-      providerLoadsInFlight -= 1
-      setProviderLoading(providerLoadsInFlight > 0)
+      if (owns()) {
+        providerLoadsInFlight -= 1
+        setProviderLoading(providerLoadsInFlight > 0)
+      }
     }
   }
 
@@ -348,8 +371,8 @@ export function ComposerModelSelector() {
   }
 
   async function pickModel(value: string) {
-    await selectComposerModel(value)
     disclosure.close()
+    await selectComposerModel(value)
   }
 
   function configureProvider() {

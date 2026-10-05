@@ -1,4 +1,4 @@
-import { apiJson, serverSettledRequest } from "./api"
+import { apiJson, serverSettledRequest, type ApiAuthority } from "./api"
 
 export interface ProjectGitInitializationResult {
   created: boolean
@@ -6,6 +6,7 @@ export interface ProjectGitInitializationResult {
 
 export interface ProjectGitInitializationOptions {
   signal?: AbortSignal
+  authority?: ApiAuthority
 }
 
 /**
@@ -22,6 +23,6 @@ export async function initializeProjectDirectoryGit(
   const query = new URLSearchParams({ directory: target })
   return await apiJson(
     `project/current/init-git?${query.toString()}`,
-    serverSettledRequest({ method: "POST", signal: options.signal }),
+    serverSettledRequest({ method: "POST", signal: options.signal, authority: options.authority }),
   )
 }

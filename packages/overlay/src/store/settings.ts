@@ -146,9 +146,18 @@ export const [settingsStore, setSettingsStore] = createStore<OverlaySettings>({ 
 
 export interface SettingsSaveAction {
   overrides?: Partial<OverlaySettings>
+  /** Runs at the existing queue head; owns any reservation until this save settles. */
+  prepare?: (snapshot: Readonly<OverlaySettings>) => Promise<SettingsSavePreparation>
   /** Publish an explicit saved fact synchronously before the next queued snapshot. */
   onConfirmed?: (confirmed: Readonly<PersistedOverlaySettings>) => undefined
   onFailure?: (input: { error: unknown; confirmed: Readonly<PersistedOverlaySettings> }) => void
+}
+
+export interface SettingsSavePreparation {
+  overrides?: Partial<OverlaySettings>
+  assertCurrent?: () => void
+  onConfirmed?: (confirmed: Readonly<PersistedOverlaySettings>) => undefined
+  release: () => void
 }
 
 export class SettingsActivationError extends Error {
@@ -218,12 +227,17 @@ export async function saveSettings(action: SettingsSaveAction = {}): Promise<voi
     release = resolve
   })
   await previous
+  let preparation: SettingsSavePreparation | undefined
   try {
     const snapshot = { ...settingsStore, ...action.overrides }
     const outcome: SettingsSaveOutcome = await (async () => {
       try {
-        const payload = bootstrapOverlaySettings(snapshot)
+        const initialPayload = bootstrapOverlaySettings(snapshot)
+        parseServerBaseUrl(initialPayload.serverUrl)
+        preparation = await action.prepare?.(snapshot)
+        const payload = bootstrapOverlaySettings({ ...snapshot, ...preparation?.overrides })
         parseServerBaseUrl(payload.serverUrl)
+        preparation?.assertCurrent?.()
         const saved = await getHostTransport().native({ kind: "settings.save", payload })
         if (saved !== true) throw new Error("settings.save did not confirm persistence")
         return { kind: "saved", payload }
@@ -234,6 +248,7 @@ export async function saveSettings(action: SettingsSaveAction = {}): Promise<voi
     if (outcome.kind === "saved") {
       confirmedPersistedSettings = outcome.payload
       try {
+        preparation?.onConfirmed?.(outcome.payload)
         action.onConfirmed?.(outcome.payload)
       } catch (error) {
         throw new SettingsActivationError(error)
@@ -254,7 +269,11 @@ export async function saveSettings(action: SettingsSaveAction = {}): Promise<voi
     }
     throw outcome.error
   } finally {
-    release()
+    try {
+      preparation?.release()
+    } finally {
+      release()
+    }
   }
 }
 

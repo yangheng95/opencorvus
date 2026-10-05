@@ -2,6 +2,7 @@
 // Check config accessors and config update helpers.
 
 import { ApiError, apiJson, configure as configureApi } from "./api"
+import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { appStore, setAppStore, type ProjectLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
 import { t } from "../utils/i18n"
@@ -9,7 +10,7 @@ import { loadConfigInfo } from "./config-load"
 import { loadExtensions } from "./extensions"
 import { loadMeta } from "./meta"
 import { activeProjectDirectory, restoreWorkspaceDirectory } from "./project-directory"
-import { loadTasks, clearTasksForMissingDirectory } from "../store/board"
+import { boardStore, loadTasks, clearTasksForMissingDirectory } from "../store/board"
 import { sanitizeLocale } from "../utils/i18n"
 import { createSignal } from "solid-js"
 import { AppLog } from "../utils/log"
@@ -106,17 +107,20 @@ export function buildCheckConfigFromSpecs(task: any, selection: Record<string, b
 // ── Config Update ──
 
 export interface ConfigRequestOptions {
+  authority?: ApiAuthority
   directory?: string
   isCurrentDirectory?: (directory: string) => boolean
   ownsResponse?: () => boolean
 }
 
 export function currentProjectConfigRequestOptions(): ConfigRequestOptions {
+  const selectionEpoch = boardStore.selectEpoch
   const directory = activeProjectDirectory().trim()
   if (!directory) throw new Error("Project config update requires an active directory")
   return {
+    authority: captureApiAuthority(),
     directory,
-    isCurrentDirectory: (candidate) => activeProjectDirectory().trim() === candidate,
+    isCurrentDirectory: (candidate) => boardStore.selectEpoch === selectionEpoch && activeProjectDirectory().trim() === candidate,
   }
 }
 
@@ -125,7 +129,9 @@ function configRequestPath(options: ConfigRequestOptions = {}): string {
   return directory ? `config?directory=${encodeURIComponent(directory)}` : "config"
 }
 
-function configResponseStillOwned(options: ConfigRequestOptions): boolean {
+function configResponseStillOwned(options: ConfigRequestOptions, selectionEpoch: number): boolean {
+  if (boardStore.selectEpoch !== selectionEpoch) return false
+  if (options.authority && !isApiAuthorityCurrent(options.authority)) return false
   const directory = options.directory?.trim()
   const ownsDirectory = !directory || !options.isCurrentDirectory || options.isCurrentDirectory(directory)
   return ownsDirectory && (!options.ownsResponse || options.ownsResponse())
@@ -145,37 +151,43 @@ function committedConfigFromError(error: unknown): Record<string, any> | undefin
  * Updates appStore.config with the server response.
  */
 export async function patchConfig(diff: Record<string, any>, options: ConfigRequestOptions = {}): Promise<any> {
+  const selectionEpoch = boardStore.selectEpoch
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
   if (!appStore.connected) throw new Error("Cannot patch config while disconnected")
   let saved: Record<string, any>
   try {
     saved = await apiJson(configRequestPath(options), {
+      authority: options.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
     })
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options)) setAppStore("config", committed)
+    if (committed && configResponseStillOwned(options, selectionEpoch)) setAppStore("config", committed)
     throw error
   }
-  if (configResponseStillOwned(options)) setAppStore("config", saved)
+  if (configResponseStillOwned(options, selectionEpoch)) setAppStore("config", saved)
   return saved
 }
 
 export async function patchGlobalConfig(
   diff: Record<string, any>,
-  options: Pick<ConfigRequestOptions, "ownsResponse"> = {},
+  options: Pick<ConfigRequestOptions, "ownsResponse" | "authority"> = {},
 ): Promise<any> {
+  const selectionEpoch = boardStore.selectEpoch
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
   if (!appStore.connected) throw new Error("Cannot patch global config while disconnected")
   try {
     return await apiJson("global/config", {
+      authority: options.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
     })
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options)) setAppStore("config", committed)
+    if (committed && configResponseStillOwned(options, selectionEpoch)) setAppStore("config", committed)
     throw error
   }
 }
@@ -242,6 +254,7 @@ export type ProviderAccountUsageResponse =
     }
 
 export interface SessionConfigRequest {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
 }
@@ -251,11 +264,13 @@ export interface SessionConfigPatchRequest extends SessionConfigRequest {
 }
 
 export interface TaskOperatorModelContextRequest {
+  authority?: ApiAuthority
   taskID: string
   directory: string
 }
 
 export interface DirectoryScopedRequest {
+  authority?: ApiAuthority
   directory: string
 }
 
@@ -307,10 +322,12 @@ export async function getSessionConfig(input: SessionConfigRequest): Promise<Ses
   if (!sessionID) throw new Error("getSessionConfig: sessionID is required")
   return await apiJson(
     directoryScopedPath(`session/${encodeURIComponent(sessionID)}/config`, input.directory, "getSessionConfig"),
+    { authority: input.authority },
   )
 }
 
 export async function patchSessionConfig(input: SessionConfigPatchRequest): Promise<SessionConfigResponse> {
+  const authority = input.authority ?? captureApiAuthority()
   if (!appStore.connected) {
     throw new Error("Cannot patch session config while disconnected")
   }
@@ -319,12 +336,13 @@ export async function patchSessionConfig(input: SessionConfigPatchRequest): Prom
   const saved = await apiJson(
     directoryScopedPath(`session/${encodeURIComponent(sessionID)}/config`, input.directory, "patchSessionConfig"),
     {
+      authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input.diff),
     },
   )
-  markSessionConfigStale(sessionID)
+  if (isApiAuthorityCurrent(authority)) markSessionConfigStale(sessionID)
   return saved
 }
 
@@ -342,6 +360,7 @@ export async function getTaskOperatorModelContext(
       input.directory,
       "getTaskOperatorModelContext",
     ),
+    { authority: input.authority },
   )
 }
 
@@ -364,11 +383,13 @@ export async function getProviderAccountUsage(input: {
   return await apiJson(path)
 }
 
-export async function testNetworkProxy(proxy: NetworkProxyDraft): Promise<NetworkProxyTestResult> {
+export async function testNetworkProxy(proxy: NetworkProxyDraft, authority = captureApiAuthority()): Promise<NetworkProxyTestResult> {
+  assertApiAuthorityCurrent(authority)
   if (!appStore.connected) {
     throw new Error("Cannot test network proxy while disconnected")
   }
   return await apiJson("config/proxy/test", {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ proxy }),
@@ -427,40 +448,46 @@ export async function updateConfig(
   mutator: (config: Record<string, any>) => void,
   options: ConfigRequestOptions = {},
 ): Promise<any> {
+  const selectionEpoch = boardStore.selectEpoch
+  options = { ...options, authority: options.authority ?? captureApiAuthority() }
   const configPath = configRequestPath(options)
-  return await updateConfigPath(configPath, mutator, () => configResponseStillOwned(options))
+  return await updateConfigPath(configPath, mutator, () => configResponseStillOwned(options, selectionEpoch), options.authority)
 }
 
-export async function updateGlobalConfig(mutator: (config: Record<string, any>) => void): Promise<any> {
-  return await updateConfigPath("global/config", mutator, () => !settingsStore.directory.trim())
+export async function updateGlobalConfig(mutator: (config: Record<string, any>) => void, authority = captureApiAuthority()): Promise<any> {
+  const selectionEpoch = boardStore.selectEpoch
+  return await updateConfigPath("global/config", mutator, () => boardStore.selectEpoch === selectionEpoch && !settingsStore.directory.trim(), authority)
 }
 
 async function updateConfigPath(
   configPath: string,
   mutator: (config: Record<string, any>) => void,
   ownsResponse: () => boolean,
+  authority: ApiAuthority,
 ): Promise<any> {
-  const current = await apiJson(configPath)
+  const current = await apiJson(configPath, { authority })
+  assertApiAuthorityCurrent(authority)
   const next = structuredClone(current || {})
   mutator(next)
   const diff = mergePatchDiff(current || {}, next)
   if (diff === undefined) {
-    if (ownsResponse()) setAppStore("config", current)
+    if (isApiAuthorityCurrent(authority) && ownsResponse()) setAppStore("config", current)
     return current
   }
   let saved: Record<string, any>
   try {
     saved = await apiJson(configPath, {
+      authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
     })
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && ownsResponse()) setAppStore("config", committed)
+    if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setAppStore("config", committed)
     throw error
   }
-  if (ownsResponse()) setAppStore("config", saved)
+  if (isApiAuthorityCurrent(authority) && ownsResponse()) setAppStore("config", saved)
   return saved
 }
 
@@ -471,8 +498,12 @@ async function updateConfigPath(
  * provider/config state). Delegates to the during the Solid migration; direct
  * port available for post-migration use.
  */
-export async function reloadProjectScope(options: { restoreWorkspace?: boolean } = {}): Promise<ProjectLoadIssue[]> {
+export async function reloadProjectScope(options: { restoreWorkspace?: boolean; authority?: ApiAuthority } = {}): Promise<ProjectLoadIssue[]> {
+  const authority = options.authority ?? captureApiAuthority()
+  const selectionEpoch = boardStore.selectEpoch
+  assertApiAuthorityCurrent(authority)
   const directory = activeProjectDirectory().trim()
+  const owns = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch && activeProjectDirectory().trim() === directory
   if (!directory) {
     clearTasksForMissingDirectory()
     return []
@@ -480,17 +511,19 @@ export async function reloadProjectScope(options: { restoreWorkspace?: boolean }
   configureApi({ directory })
   const [configResult, extensionsResult, metaResult, tasksResult] = await Promise.allSettled([
     loadConfigInfo(undefined, {
+      authority,
       directory,
-      isCurrentDirectory: (candidate) => activeProjectDirectory().trim() === candidate,
+      isCurrentDirectory: (candidate) => candidate === directory && owns(),
     }),
     loadExtensions({
+      authority,
       directory,
-      isCurrentDirectory: (candidate) => activeProjectDirectory().trim() === candidate,
+      isCurrentDirectory: (candidate) => candidate === directory && owns(),
     }),
-    loadMeta(),
-    loadTasks(),
+    loadMeta(directory, authority),
+    loadTasks({ authority }),
   ])
-  if (activeProjectDirectory().trim() !== directory) return []
+  if (!owns()) return []
   const issues: ProjectLoadIssue[] = []
   const appendFailure = (resource: ProjectLoadIssue["resource"], result: PromiseSettledResult<unknown>) => {
     if (result.status === "rejected") {

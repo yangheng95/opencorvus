@@ -1,9 +1,66 @@
 import { joinServerBaseUrl, routeRequiresProjectDirectory } from "@opencorvus-ai/transport-protocol"
 import { DEFAULT_SERVER } from "./default-server"
+import type { StreamCloseInfo, TransportResponse } from "./host-transport"
+import { batch, createSignal, untrack } from "solid-js"
 
 let serverUrl = DEFAULT_SERVER
 let authCredentials = { username: "opencorvus", password: "" }
 let directoryContext = ""
+const [authorityRevision, setAuthorityRevision] = createSignal(0)
+
+export interface ApiAuthority {
+  readonly revision: number
+}
+
+export type ApiAuthorityOutcome =
+  | { phase: "before_dispatch" }
+  | { phase: "response"; response: TransportResponse<unknown> }
+  | { phase: "transport_failure"; cause: unknown }
+  | { phase: "stream_closed"; reason: string; info: StreamCloseInfo }
+
+/** A retired client authority, never a fabricated server rejection. */
+export class ApiAuthorityChangedError extends Error {
+  override readonly name = "ApiAuthorityChangedError"
+  readonly phase: ApiAuthorityOutcome["phase"]
+  readonly expectedRevision: number
+  readonly currentRevision: number
+  #outcome: ApiAuthorityOutcome
+
+  constructor(authority: ApiAuthority, outcome: ApiAuthorityOutcome) {
+    super("The API connection changed during this operation.")
+    this.phase = outcome.phase
+    this.expectedRevision = authority.revision
+    this.currentRevision = authorityRevision()
+    this.#outcome = outcome
+  }
+
+  get outcome(): ApiAuthorityOutcome {
+    return this.#outcome
+  }
+}
+
+export function captureApiAuthority(): ApiAuthority {
+  return Object.freeze({ revision: authorityRevision() })
+}
+
+export function isApiAuthorityCurrent(authority: ApiAuthority): boolean {
+  return authority.revision === authorityRevision()
+}
+
+export function assertApiAuthorityCurrent(
+  authority: ApiAuthority,
+  outcome: ApiAuthorityOutcome = { phase: "before_dispatch" },
+): void {
+  if (!isApiAuthorityCurrent(authority)) throw new ApiAuthorityChangedError(authority, outcome)
+}
+
+/** Call only on an explicit confirmed native rotation, including a reused URL. */
+export function renewApiAuthority(): void {
+  batch(() => {
+    setAuthorityRevision((current) => current + 1)
+    untrack(fireAuthChange)
+  })
+}
 
 const authChangeListeners = new Set<() => void>()
 
@@ -25,21 +82,23 @@ function fireAuthChange(): void {
 }
 
 export function configure(opts: { serverUrl?: string; username?: string; password?: string; directory?: string }) {
-  let credentialChanged = false
-  if (opts.serverUrl && opts.serverUrl !== serverUrl) {
-    serverUrl = opts.serverUrl
-    credentialChanged = true
-  }
-  if (opts.username !== undefined && opts.username !== authCredentials.username) {
-    authCredentials.username = opts.username
-    credentialChanged = true
-  }
-  if (opts.password !== undefined && opts.password !== authCredentials.password) {
-    authCredentials.password = opts.password
-    credentialChanged = true
-  }
-  if (opts.directory !== undefined) directoryContext = String(opts.directory || "").trim()
-  if (credentialChanged) fireAuthChange()
+  batch(() => {
+    let credentialChanged = false
+    if (opts.serverUrl && opts.serverUrl !== serverUrl) {
+      serverUrl = opts.serverUrl
+      credentialChanged = true
+    }
+    if (opts.username !== undefined && opts.username !== authCredentials.username) {
+      authCredentials.username = opts.username
+      credentialChanged = true
+    }
+    if (opts.password !== undefined && opts.password !== authCredentials.password) {
+      authCredentials.password = opts.password
+      credentialChanged = true
+    }
+    if (opts.directory !== undefined) directoryContext = String(opts.directory || "").trim()
+    if (credentialChanged) renewApiAuthority()
+  })
 }
 
 export function getServerUrl(): string {

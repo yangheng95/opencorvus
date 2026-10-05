@@ -9,6 +9,9 @@ import { showAppDialog } from "../services/app-dialog"
 import { activeDirectory, clearProjectScopeData } from "../services/workspace"
 import { reloadProjectScope } from "../services/config"
 import { initializeProjectDirectoryGit } from "../services/project-git"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+import { AppLog } from "./log"
+import { formatErrorDetails } from "./error-details"
 
 // ── Internal helpers ──
 
@@ -118,10 +121,11 @@ export function canInitGit(): boolean {
  * project endpoint. This primitive has no reload, notification, or retry
  * behavior so startup can await it before any project-scoped load begins.
  */
-export async function initializeActiveDirectoryGit(): Promise<{ created: boolean }> {
+export async function initializeActiveDirectoryGit(authority = captureApiAuthority()): Promise<{ created: boolean }> {
+  assertApiAuthorityCurrent(authority)
   const directory = activeDirectory()
   if (!directory) throw new Error("Git initialization requires an active directory")
-  return await initializeProjectDirectoryGit(directory)
+  return await initializeProjectDirectoryGit(directory, { authority })
 }
 
 /**
@@ -130,26 +134,47 @@ export async function initializeActiveDirectoryGit(): Promise<{ created: boolean
  * do not block it on boardStore.vcs because that metadata can still be null
  * immediately after switching to a new directory. Calls resetProjectScope +
  * reloadProjectScope on success and shows a native notification. Returns
- * true on success, false on error.
+ * true once initialization is accepted; secondary view failures retain that
+ * accepted fact. Original request failures keep their existing error contract.
  */
-export async function initGitCurrent(options: { notify?: boolean } = {}): Promise<boolean> {
+export async function initGitCurrent(options: { notify?: boolean; authority?: ApiAuthority } = {}): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const dir = activeDirectory()
+  const selectionEpoch = boardStore.selectEpoch
+  const owns = () => isApiAuthorityCurrent(authority) && selectionEpoch === boardStore.selectEpoch && activeDirectory() === dir
   if (!dir) return false
+  let result: { created: boolean }
   try {
-    const result = await initializeActiveDirectoryGit()
-    // Reload project scope after git init (config, extensions, meta).
-    clearProjectScopeData()
-    await reloadProjectScope({ restoreWorkspace: false })
-    if (options.notify !== false) {
-      const msg = result?.created ? t("git.init_done", { dir }) : t("git.init_exists", { dir })
-      await showAppDialog({ title: t("git.init"), message: msg, kind: "info" })
-    }
-    return true
+    result = await initializeActiveDirectoryGit(authority)
   } catch (e) {
-    console.error("[git] Failed to initialize Git", e)
-    if (options.notify !== false) {
-      await showAppDialog({ title: t("git.init"), message: String(e), kind: "error" })
+    if (e instanceof ApiAuthorityChangedError) throw e
+    if (!isApiAuthorityCurrent(authority)) throw e
+    if (owns()) console.error("[git] Failed to initialize Git", e)
+    if (owns() && options.notify !== false) {
+      await showAppDialog({ title: t("git.init"), message: String(e), kind: "error", openingGuard: owns })
     }
     return false
   }
+  if (!owns()) return true
+  let phase: "refresh" | "notification" = "refresh"
+  try {
+    clearProjectScopeData()
+    await reloadProjectScope({ restoreWorkspace: false, authority })
+    if (!owns()) return true
+    if (options.notify !== false) {
+      phase = "notification"
+      const msg = result.created ? t("git.init_done", { dir }) : t("git.init_exists", { dir })
+      await showAppDialog({ title: t("git.init"), message: msg, kind: "info", openingGuard: owns })
+    }
+  } catch (cause) {
+    if (owns()) AppLog.warn("git", "Git initialization accepted; view update failed", {
+      accepted: true, directory: dir, phase, cause, details: formatErrorDetails(cause),
+      diagnosticID: `git:init-${phase}-failed`,
+      diagnosticTitle: "Git initialization accepted; view update failed",
+      diagnosticMessage: cause instanceof Error ? cause.message : String(cause),
+      diagnosticDetails: formatErrorDetails(cause),
+    })
+  }
+  return true
 }

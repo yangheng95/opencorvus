@@ -1,6 +1,5 @@
 // Contract test for renameTask:
 // - sends PATCH task/<id>/title with the trimmed title body
-// - rejects empty / overlong titles without making a network call
 // - rejects failure on non-2xx so the row can surface the original API error
 //
 // We stub the HostTransport so the assertions are entirely synchronous and

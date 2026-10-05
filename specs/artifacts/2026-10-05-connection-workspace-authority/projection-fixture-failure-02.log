@@ -1,0 +1,34 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\connection-projection-authority.test.ts:
+355 | }
+356 | 
+357 | export function markCardTreeVisibleChanged(): void {
+358 |   if (visibleChangeScheduled) return
+359 |   visibleChangeScheduled = true
+360 |   requestAnimationFrame(() => {
+        ^
+TypeError: requestAnimationFrame is not a function. (In 'requestAnimationFrame(() => {
+    visibleChangeScheduled = !1;
+    setCardTreeStore("visibleVersion", (version) => version + 1);
+  })', 'requestAnimationFrame' is undefined)
+      at markCardTreeVisibleChanged (D:\myhexin-local\opencorvus\packages\overlay\src\store\card-tree.ts:360:3)
+      at markCardTreeVisibleChanged (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:432:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:3535:5)
+      at rebuildBoardDerivedCards (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:3528:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\src\services\tree-writer.ts:3905:3)
+      at notifyBoardProjection (D:\myhexin-local\opencorvus\packages\overlay\src\store\board.ts:146:3)
+      at clearBoard (D:\myhexin-local\opencorvus\packages\overlay\src\store\board.ts:711:3)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\connection-projection-authority.test.ts:69:3)
+(fail) local transport metadata completes B's same-directory facts after A returns [4.41ms]
+(pass) local compound GET and mutator capture retain an exact stale continuation outcome [0.95ms]
+(pass) local board pending ownership keeps B loading while the old A finally settles [1.33ms]
+(pass) local global Task list uses B's pending owner and retains its exact rows after A [1.29ms]
+(pass) local same-ID Session mutation retains A receipt and B busy owner before B completes [0.98ms]
+(pass) Work Ledger replacement snapshot and retirement use the existing current map [1.07ms]
+(pass) local VCS and panel POST close settle their original operations with actual stream-close facts [1.46ms]
+
+ 6 pass
+ 1 fail
+ 23 expect() calls
+Ran 7 tests across 1 file. [1078.00ms]

@@ -1,0 +1,24 @@
+{
+  "time": "2026-10-05T12:34:49.7358114Z",
+  "method": "GET",
+  "path": "/work-ledger?limit=20",
+  "statusCode": 200,
+  "requestID": [
+    "68bdce8a-fd48-401d-a95a-8761ac794f94"
+  ],
+  "selectedRows": [
+    {
+      "kind": "chat",
+      "experience": "chat",
+      "id": "ses_-zUSotvzOzzZgeNQExal",
+      "sessionID": "ses_-zUSotvzOzzZgeNQExal",
+      "title": "Chat",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-05\\connection-workspace-before-01\\a-project",
+      "created": 1791203671638,
+      "started": 1791203671638,
+      "updated": 1791203671638,
+      "pinned": false,
+      "status": "idle"
+    }
+  ]
+}

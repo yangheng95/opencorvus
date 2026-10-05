@@ -16,6 +16,7 @@
  */
 
 import type { StreamCloseInitiator } from "@opencorvus-ai/transport-protocol"
+import type { ApiAuthority } from "./api-state"
 
 export type HostKind = "tauri" | "browser"
 
@@ -35,6 +36,8 @@ export type RequestBody =
 export type ResponseKind = "json" | "text" | "binary"
 
 export interface TransportRequest {
+  /** One captured connection authority; supplied stale tokens are never renewed. */
+  authority?: ApiAuthority
   /**
    * Server-relative path, e.g. `task/abc/conversation`. Leading `/` is
    * stripped. NEVER include scheme/host — those are added by the
@@ -75,6 +78,7 @@ export interface TransportResponse<T = unknown> {
 // ── Streaming (SSE) ──
 
 export interface StreamOpenRequest {
+  authority?: ApiAuthority
   /** Same path semantics as TransportRequest.path. */
   path: string
   /**
@@ -92,13 +96,18 @@ export interface StreamOpenRequest {
   signal?: AbortSignal
 }
 
+export interface StreamCloseInfo {
+  readonly authority: ApiAuthority
+  readonly current: boolean
+}
+
 export interface StreamHandlers {
   onOpen?: () => void
   /** Each event's decoded `data` field. */
   onEvent: (data: string) => void
   onError?: (err: Error) => void
   /** Fires on disconnect for any reason (server close, network, abort). */
-  onClose?: (reason: string) => void
+  onClose?: (reason: string, info?: StreamCloseInfo) => void
 }
 
 export interface StreamHandle {

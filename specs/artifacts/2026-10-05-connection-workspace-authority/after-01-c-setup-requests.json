@@ -1,0 +1,82 @@
+[
+  {
+    "time": "2026-10-05T14:25:00.928Z",
+    "service": "server",
+    "requestID": "8d2d6c20-2212-4d6e-8b66-41ddee7481ab",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T14:25:00.93Z",
+    "service": "server",
+    "requestID": "8d2d6c20-2212-4d6e-8b66-41ddee7481ab",
+    "method": "GET",
+    "path": "/global/health",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T14:25:00.982Z",
+    "service": "server",
+    "requestID": "d65bc81a-5020-408b-af63-ccf83ba2bcf8",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T14:25:00.983Z",
+    "service": "server",
+    "requestID": "d65bc81a-5020-408b-af63-ccf83ba2bcf8",
+    "method": "GET",
+    "path": "/ui/",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  },
+  {
+    "time": "2026-10-05T14:25:00.992Z",
+    "service": "server",
+    "requestID": "a979e82f-073c-429a-9bc7-42f8ba0a660c",
+    "method": "GET",
+    "path": "/ui/assets/main-CffQfy5K.js",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T14:25:00.994Z",
+    "service": "server",
+    "requestID": "a979e82f-073c-429a-9bc7-42f8ba0a660c",
+    "method": "GET",
+    "path": "/ui/assets/main-CffQfy5K.js",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 2
+  },
+  {
+    "time": "2026-10-05T14:25:01.026Z",
+    "service": "server",
+    "requestID": "8f0b9667-44e3-44bb-8086-6534f7ed823c",
+    "method": "GET",
+    "path": "/ui/assets/main-Yy88IPFU.css",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T14:25:01.027Z",
+    "service": "server",
+    "requestID": "8f0b9667-44e3-44bb-8086-6534f7ed823c",
+    "method": "GET",
+    "path": "/ui/assets/main-Yy88IPFU.css",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  }
+]

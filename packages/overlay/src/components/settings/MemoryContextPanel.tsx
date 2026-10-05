@@ -1,5 +1,6 @@
 import { Feedback } from "../ui/Feedback"
-import { createMemo, createSignal, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, onCleanup, Show } from "solid-js"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import type { WorkLedgerCursor, WorkLedgerRow, WorkLedgerTaskRow } from "../../services/work-ledger"
 import { loadWorkLedger } from "../../services/work-ledger"
 import { activeTaskID } from "../../store/board"
@@ -74,10 +75,13 @@ export function MemoryContextPanel() {
   const [selectedTask, setSelectedTask] = createSignal<MemoryTaskOption | null>(null)
   const [loadingTasks, setLoadingTasks] = createSignal(true)
   const [taskLoadError, setTaskLoadError] = createSignal("")
-  const controller = new AbortController()
-
-  onCleanup(() => controller.abort())
-  onMount(() => {
+  createEffect(() => {
+    const authority = captureApiAuthority()
+    const controller = new AbortController()
+    const ownsLoad = () => !controller.signal.aborted && isApiAuthorityCurrent(authority)
+    setTasks([])
+    setSelectedTask(null)
+    onCleanup(() => controller.abort())
     void (async () => {
       setLoadingTasks(true)
       setTaskLoadError("")
@@ -85,7 +89,8 @@ export function MemoryContextPanel() {
         const rows: WorkLedgerRow[] = []
         let cursor: WorkLedgerCursor | null = null
         do {
-          const result = await loadWorkLedger({ cursor, signal: controller.signal })
+          const result = await loadWorkLedger({ cursor, signal: controller.signal, authority })
+          if (!ownsLoad()) return
           rows.push(...result.rows)
           cursor = result.nextCursor
         } while (cursor)
@@ -94,12 +99,12 @@ export function MemoryContextPanel() {
         const activeID = activeTaskID()
         setSelectedTask(options.find((task) => task.id === activeID) ?? null)
       } catch (error) {
-        if (controller.signal.aborted) return
+        if (!ownsLoad()) return
         setTasks([])
         setSelectedTask(null)
         setTaskLoadError(error instanceof Error ? error.message : String(error))
       } finally {
-        if (!controller.signal.aborted) setLoadingTasks(false)
+        if (ownsLoad()) setLoadingTasks(false)
       }
     })()
   })

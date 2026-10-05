@@ -2,6 +2,7 @@ import { appStore } from "../store/app"
 import { activeSessionID, activeTaskID, boardStore, rootTaskSessionID } from "../store/board"
 import { expertSquadCatalogRefreshToken, type ExpertSquadCatalogScope } from "./expert-squad"
 import { activeProjectDirectory } from "./project-directory"
+import { captureApiAuthority } from "./api"
 
 export type ExpertSquadCatalogScopeState =
   | ({ kind: "project"; directory: string } & ExpertSquadCatalogScope)
@@ -57,9 +58,11 @@ export function composerReferenceCatalogScope(): ComposerReferenceCatalogScopeSt
 }
 
 export function composerReferenceCatalogRequestKey(): string {
+  const authority = captureApiAuthority()
+  const prefix = `api:${authority.revision}:`
   const scope = composerReferenceCatalogScope()
-  if (scope.kind === "global") return `composer-reference:global:${expertSquadCatalogRefreshToken()}`
+  if (scope.kind === "global") return `${prefix}composer-reference:global:${expertSquadCatalogRefreshToken()}`
   if (scope.kind === "unavailable") return ""
-  if (scope.kind === "pending") return `composer-reference:pending-task:${scope.taskID}:${scope.directory}`
-  return expertSquadCatalogRequestKeyForScope(scope)
+  if (scope.kind === "pending") return `${prefix}composer-reference:pending-task:${scope.taskID}:${scope.directory}`
+  return `${prefix}${expertSquadCatalogRequestKeyForScope(scope)}`
 }

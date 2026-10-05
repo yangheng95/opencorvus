@@ -1,4 +1,4 @@
-import { apiJson } from "./api"
+import { apiJson, captureApiAuthority, type ApiAuthority } from "./api"
 import { directoryScopedPath } from "./task-path"
 import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 
@@ -33,6 +33,7 @@ export async function uploadComposerBytes(input: {
   mime: string
   filename: string
   directory: string
+  authority?: ApiAuthority
 }): Promise<StoredAttachmentReference> {
   const directory = input.directory.trim()
   if (!directory) throw new Error("Attachment upload requires an active project directory")
@@ -40,6 +41,7 @@ export async function uploadComposerBytes(input: {
   return await apiJson<StoredAttachmentReference>(
     directoryScopedPath(`attachment?${query.toString()}`, directory, "upload attachment"),
     {
+      authority: input.authority,
       method: "POST",
       headers: { "Content-Type": input.mime },
       body: input.bytes as unknown as BodyInit,
@@ -51,12 +53,14 @@ export async function uploadComposerBytes(input: {
 export async function uploadComposerDirectoryReference(
   path: string,
   directoryInput: string,
+  authority = captureApiAuthority(),
 ): Promise<StoredDirectoryReference> {
   const directory = directoryInput.trim()
   if (!directory) throw new Error("Directory reference requires an active project directory")
   return await apiJson<StoredDirectoryReference>(
     directoryScopedPath("attachment/directory-reference", directory, "reference directory attachment"),
     {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path }),
@@ -69,7 +73,9 @@ export async function uploadComposerDataUrl(input: {
   mime: string
   filename: string
   directory: string
+  authority?: ApiAuthority
 }): Promise<StoredAttachmentReference> {
+  const authority = input.authority ?? captureApiAuthority()
   const response = await fetch(input.dataUrl)
   if (!response.ok) throw new Error(`Could not read composer attachment ${input.filename}`)
   return await uploadComposerBytes({
@@ -77,5 +83,6 @@ export async function uploadComposerDataUrl(input: {
     mime: input.mime,
     filename: input.filename,
     directory: input.directory,
+    authority,
   })
 }

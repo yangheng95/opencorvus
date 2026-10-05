@@ -1,5 +1,5 @@
 import type { InteractiveArtifactReadSessionArtifactResponses } from "@opencorvus-ai/sdk"
-import { apiJson } from "./api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { directoryScopedPath } from "./task-path"
 import { STREAM_RECONNECT_DELAY_MS, type StreamHandle } from "./host-transport"
 import { getHostTransport } from "./host-transport-runtime"
@@ -8,6 +8,7 @@ export type InteractiveArtifact = InteractiveArtifactReadSessionArtifactResponse
 export type InteractiveArtifactPayload = InteractiveArtifact["payload"]
 
 export async function loadSessionInteractiveArtifact(input: {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
   artifactID: string
@@ -17,10 +18,11 @@ export async function loadSessionInteractiveArtifact(input: {
     input.directory,
     "loadSessionInteractiveArtifact",
   )
-  return apiJson<InteractiveArtifact>(path)
+  return apiJson<InteractiveArtifact>(path, { authority: input.authority })
 }
 
 export async function requestMcpApp<T>(input: {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
   artifactID: string
@@ -43,6 +45,7 @@ export async function requestMcpApp<T>(input: {
     "requestMcpApp",
   )
   return apiJson<T>(path, {
+    authority: input.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input.request),
@@ -69,6 +72,7 @@ type McpAppEventSubscriber = {
 }
 
 type SharedMcpAppEventStream = {
+  authority: ApiAuthority
   handle: StreamHandle
   subscribers: Map<symbol, McpAppEventSubscriber>
   connectedEvent?: McpAppHostEvent
@@ -76,6 +80,17 @@ type SharedMcpAppEventStream = {
 }
 
 const sharedMcpAppEventStreams = new Map<string, SharedMcpAppEventStream>()
+
+export function retireMcpAppEventStreams(): void {
+  const previous = [...sharedMcpAppEventStreams.values()]
+  sharedMcpAppEventStreams.clear()
+  for (const owner of previous) {
+    clearTimeout(owner.retry)
+    owner.connectedEvent = undefined
+    owner.handle.close("superseded")
+    owner.subscribers.clear()
+  }
+}
 
 function parseMcpAppHostEvent(data: string): McpAppHostEvent {
   const value = JSON.parse(data) as McpAppHostEvent
@@ -107,31 +122,44 @@ function parseMcpAppHostEvent(data: string): McpAppHostEvent {
 }
 
 export function openMcpAppHostEventStream(input: {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
   artifactID: string
   onEvent: (event: McpAppHostEvent) => void
   onError: (error: unknown) => void
 }): StreamHandle {
+  const authority = input.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const key = `${input.directory}\u0000${input.sessionID}`
   const token = Symbol(input.artifactID)
   const subscriber = { onEvent: input.onEvent, onError: input.onError }
   let shared = sharedMcpAppEventStreams.get(key)
+  if (shared && !isApiAuthorityCurrent(shared.authority)) {
+    sharedMcpAppEventStreams.delete(key)
+    clearTimeout(shared.retry)
+    shared.handle.close("superseded")
+    shared = undefined
+  }
   if (!shared) {
     const subscribers = new Map<symbol, McpAppEventSubscriber>([[token, subscriber]])
     const next: SharedMcpAppEventStream = {
+      authority,
       subscribers,
       handle: { close() {} },
     }
     const connect = () => {
+      if (!isApiAuthorityCurrent(authority) || sharedMcpAppEventStreams.get(key) !== next) return
       next.connectedEvent = undefined
       next.handle = getHostTransport().openStream(
         {
+          authority,
           path: `session/${encodeURIComponent(input.sessionID)}/interactive-artifact/${encodeURIComponent(input.artifactID)}/mcp-app/events`,
           query: { directory: input.directory },
         },
         {
           onEvent(data) {
+            if (!isApiAuthorityCurrent(authority) || sharedMcpAppEventStreams.get(key) !== next) return
             try {
               const value = parseMcpAppHostEvent(data)
               if (value.type === "mcp-app.connected") next.connectedEvent = value
@@ -141,10 +169,16 @@ export function openMcpAppHostEventStream(input: {
             }
           },
           onError(error) {
+            if (!isApiAuthorityCurrent(authority) || sharedMcpAppEventStreams.get(key) !== next) return
             for (const subscriber of [...subscribers.values()]) subscriber.onError(error)
           },
-          onClose(reason) {
+          onClose(reason, info) {
             next.connectedEvent = undefined
+            if (info?.current === false || !isApiAuthorityCurrent(authority)) {
+              clearTimeout(next.retry)
+              if (sharedMcpAppEventStreams.get(key) === next) sharedMcpAppEventStreams.delete(key)
+              return
+            }
             if (sharedMcpAppEventStreams.get(key) === next && subscribers.size > 0) {
               for (const subscriber of [...subscribers.values()]) {
                 subscriber.onError(new Error(`MCP App Host event stream closed: ${reason}`))
@@ -166,7 +200,7 @@ export function openMcpAppHostEventStream(input: {
     if (shared.connectedEvent) {
       const connectedEvent = shared.connectedEvent
       queueMicrotask(() => {
-        if (shared!.subscribers.has(token)) subscriber.onEvent(connectedEvent)
+        if (isApiAuthorityCurrent(authority) && sharedMcpAppEventStreams.get(key) === shared && shared!.subscribers.has(token)) subscriber.onEvent(connectedEvent)
       })
     }
   }

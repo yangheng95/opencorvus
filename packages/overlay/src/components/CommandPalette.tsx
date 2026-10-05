@@ -32,6 +32,7 @@ import { openConfigDialog } from "../services/config-dialog-control"
 import { CONFIG_SECTIONS } from "../store/dialog"
 import { t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { useDisclosure } from "../solid/disclosure"
 import { useHotkey } from "../solid/hotkey"
 import { Dialog } from "./ui/Dialog"
@@ -233,8 +234,9 @@ export function CommandPalette(props: {
 
   createEffect(
     on(
-      palette.open,
-      (open) => {
+      () => ({ open: palette.open(), authority: captureApiAuthority() }),
+      ({ open, authority }) => {
+        setLedgerRows([])
         if (!open) {
           setPaletteQuery("")
           ledgerController?.abort()
@@ -245,12 +247,18 @@ export function CommandPalette(props: {
         const controller = new AbortController()
         ledgerController?.abort()
         ledgerController = controller
-        void loadWorkLedger({ limit: 12, signal: controller.signal })
+        void loadWorkLedger({ limit: 12, signal: controller.signal, authority })
           .then((result) => {
-            if (ledgerController !== controller) return
+            if (ledgerController !== controller || !isApiAuthorityCurrent(authority)) return
             setLedgerRows(paletteLedgerRows(result.rows).slice(0, 9))
           })
           .catch((err) => {
+            if (
+              ledgerController !== controller ||
+              !isApiAuthorityCurrent(authority) ||
+              err instanceof ApiAuthorityChangedError
+            )
+              return
             if (err instanceof DOMException && err.name === "AbortError") return
             reportError({
               title: t("common.error"),
@@ -300,9 +308,11 @@ export function CommandPalette(props: {
 
   function runCommand(cmd: Command | null) {
     if (!cmd) return
+    const authority = captureApiAuthority()
     close()
     try {
       void Promise.resolve(cmd.run()).catch((err) => {
+        if (!isApiAuthorityCurrent(authority) || err instanceof ApiAuthorityChangedError) return
         if (err instanceof DOMException && err.name === "AbortError") return
         reportError({
           title: t("common.error"),
@@ -311,6 +321,7 @@ export function CommandPalette(props: {
         })
       })
     } catch (err) {
+      if (!isApiAuthorityCurrent(authority) || err instanceof ApiAuthorityChangedError) return
       if (err instanceof DOMException && err.name === "AbortError") return
       reportError({
         title: t("common.error"),

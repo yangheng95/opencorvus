@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\side-chat-transport.test.ts:
+(pass) side permission decisions target the exact project-scoped Permission request [1.95ms]
+(pass) the side stream projects actionable questions and permission requests into their canonical reply contracts [0.99ms]
+
+ 2 pass
+ 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [1155.00ms]

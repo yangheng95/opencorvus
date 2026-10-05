@@ -13,6 +13,7 @@ import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { applyDirectory, ownsWorkspaceSelection } from "./workspace"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "./diagnostics"
@@ -30,8 +31,17 @@ type ConversationSessionsResponse = {
 
 let sessionListLoadOwner: symbol | null = null
 let sessionListLoadMoreOwner: symbol | null = null
+let sessionActionOwner: symbol | null = null
+
+export function retireConversationSessionProjection(clear = true): void {
+  sessionListLoadOwner = null
+  sessionListLoadMoreOwner = null
+  sessionActionOwner = null
+  setConversationStore({ loading: false, loadingMore: false, actionBusyID: "", error: "", nextCursor: null, ...(clear ? { sessions: [], searchQuery: "" } : {}) })
+}
 
 export type SelectConversationSessionOptions = {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
   experience: ConversationExperience
@@ -40,6 +50,7 @@ export type SelectConversationSessionOptions = {
 }
 
 export type ConversationSessionActionTarget = {
+  authority?: ApiAuthority
   sessionID: string
   directory: string
   experience: ConversationExperience
@@ -176,6 +187,7 @@ function conversationSessionPath(target: ConversationSessionActionTarget, suffix
 }
 
 export async function loadConversationSessions(options: {
+  authority?: ApiAuthority
   experience: ConversationExperience
   directory: string
   signal?: AbortSignal
@@ -184,6 +196,8 @@ export async function loadConversationSessions(options: {
   cursor?: ConversationSessionCursor | null
   isCurrentSource?: () => boolean
 }): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   assertNotAborted(options.signal)
   const directory = String(options.directory || "").trim()
   if (!directory) throw new Error("loadConversationSessions: directory is required")
@@ -192,8 +206,12 @@ export async function loadConversationSessions(options: {
   const cursor = append ? (options.cursor ?? conversationSessionStore.nextCursor) : null
   const token = Symbol("conversation-session-session-list")
   if (append) sessionListLoadMoreOwner = token
-  else sessionListLoadOwner = token
-  const ownsOwner = () => (append ? sessionListLoadMoreOwner === token : sessionListLoadOwner === token)
+  else {
+    sessionListLoadOwner = token
+    sessionListLoadMoreOwner = null
+    setConversationStore("loadingMore", false)
+  }
+  const ownsOwner = () => isApiAuthorityCurrent(authority) && (append ? sessionListLoadMoreOwner === token : sessionListLoadOwner === token)
   const ownsRequest = () => {
     if (!ownsOwner()) return false
     if (conversationSessionStore.searchQuery.trim() !== searchQuery) return false
@@ -206,6 +224,7 @@ export async function loadConversationSessions(options: {
     const listed = (await apiJson(
       conversationSessionsPath({ experience: options.experience, directory, limit: 30, searchQuery, cursor }),
       {
+        authority,
         signal: options.signal,
       },
     )) as ConversationSessionsResponse
@@ -245,16 +264,20 @@ export function setConversationSearchQuery(query: string): void {
 }
 
 async function createConversationSessionFromPath(options: {
+  authority?: ApiAuthority
   selectionEpoch: number
   path: string
   experience: ConversationExperience
   signal?: AbortSignal
   body?: Record<string, unknown>
 }): Promise<string> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const selectionEpoch = options.selectionEpoch
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Conversation creation superseded", "AbortError")
   assertNotAborted(options.signal)
   const response = (await apiJson(options.path, {
+    authority,
     method: "POST",
     ...(options.body
       ? {
@@ -264,21 +287,30 @@ async function createConversationSessionFromPath(options: {
       : {}),
     signal: options.signal,
   })) as ConversationSessionResponse
+  if (!isApiAuthorityCurrent(authority)) return sessionIDFromResponse(response)
   if (!ownsWorkspaceSelection(selectionEpoch)) {
     throw new DOMException("Conversation creation superseded", "AbortError")
   }
   assertNotAborted(options.signal)
   setSessionRow(response.session)
-  return selectConversationSession({
-    sessionID: sessionIDFromResponse(response),
-    directory: String(response.session.directory || ""),
-    experience: options.experience,
-    signal: options.signal,
-    selectionEpoch,
-  })
+  try {
+    return await selectConversationSession({
+      authority,
+      sessionID: sessionIDFromResponse(response),
+      directory: String(response.session.directory || ""),
+      experience: options.experience,
+      signal: options.signal,
+      selectionEpoch,
+    })
+  } catch (error) {
+    // Creation already has its canonical receipt; retired view hydration does not undo it.
+    if (!isApiAuthorityCurrent(authority) && error instanceof ApiAuthorityChangedError) return sessionIDFromResponse(response)
+    throw error
+  }
 }
 
 export async function createConversationSession(options: {
+  authority?: ApiAuthority
   selectionEpoch: number
   directory: string
   experience: ConversationExperience
@@ -289,6 +321,7 @@ export async function createConversationSession(options: {
   if (!directory) throw new Error("createConversationSession: directory is required")
   const params = new URLSearchParams({ directory })
   return createConversationSessionFromPath({
+    authority: options.authority,
     selectionEpoch: options.selectionEpoch,
     path: `coding/${options.experience}/session?${params.toString()}`,
     experience: options.experience,
@@ -298,6 +331,7 @@ export async function createConversationSession(options: {
 }
 
 export async function createGlobalConversationSession(options: {
+  authority?: ApiAuthority
   selectionEpoch: number
   experience: ConversationExperience
   model?: string
@@ -305,6 +339,7 @@ export async function createGlobalConversationSession(options: {
 }): Promise<string> {
   const model = options.model?.trim()
   return createConversationSessionFromPath({
+    authority: options.authority,
     selectionEpoch: options.selectionEpoch,
     path: `global/${options.experience}`,
     experience: options.experience,
@@ -314,6 +349,8 @@ export async function createGlobalConversationSession(options: {
 }
 
 export async function selectConversationSession(options: SelectConversationSessionOptions): Promise<string> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const requestedSessionID = String(options.sessionID || "").trim()
   if (!requestedSessionID) throw new Error("selectConversationSession: sessionID is required")
   const inputDirectory = String(options.directory || "").trim()
@@ -344,11 +381,12 @@ export async function selectConversationSession(options: SelectConversationSessi
   })
   const currentActivation = (async () => {
     const sessionID = requestedSessionID
-    const stale = () => !ownsWorkspaceSelection(selectionEpoch)
+    const stale = () => !isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(selectionEpoch)
     assertNotAborted(options.signal)
     const claimed = (await apiJson(
       conversationSessionPath({ sessionID, directory: inputDirectory, experience: options.experience }),
       {
+        authority,
         signal: options.signal,
       },
     )) as ConversationSessionResponse | undefined
@@ -358,6 +396,7 @@ export async function selectConversationSession(options: SelectConversationSessi
     if (!directory) throw new Error("selectConversationSession: session directory is required")
     assertNotAborted(options.signal)
     const applied = await applyDirectory(directory, {
+      authority,
       save: true,
       restoreWorkspace: false,
       preserveSelection: true,
@@ -376,12 +415,13 @@ export async function selectConversationSession(options: SelectConversationSessi
     setBoardStore("selectedSource", source)
     try {
       await projectComposerModelFromSession(
-        { sessionID, directory },
+        { sessionID, directory, authority },
         () => !stale() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === sessionID,
       )
       assertNotAborted(options.signal)
       if (stale()) throw new DOMException("Coding assistant selection superseded", "AbortError")
       await hydrateConversation(source, {
+        authority,
         signal: options.signal,
         scrollIntent: "bottom",
         resetCause: "conversation-session-hydrate",
@@ -389,7 +429,7 @@ export async function selectConversationSession(options: SelectConversationSessi
       })
       assertNotAborted(options.signal)
       if (!stale() && isConversationSource(source)) {
-        startSSE(source, 0, { directory })
+        startSSE(source, 0, { directory, authority })
       }
       return sessionID
     } finally {
@@ -400,7 +440,7 @@ export async function selectConversationSession(options: SelectConversationSessi
     return await currentActivation
   } catch (error) {
     if (
-      ownsWorkspaceSelection(selectionEpoch) &&
+      isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch) &&
       boardStore.selectedSource?.kind === "session" &&
       boardStore.selectedSource.id === requestedSessionID
     ) {
@@ -412,7 +452,7 @@ export async function selectConversationSession(options: SelectConversationSessi
     }
     throw error
   } finally {
-    if (ownsWorkspaceSelection(selectionEpoch)) setBoardStore("taskSwitching", false)
+    if (isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch)) setBoardStore("taskSwitching", false)
   }
 }
 
@@ -420,62 +460,81 @@ export async function renameConversationSession(
   target: ConversationSessionActionTarget,
   title: string,
 ): Promise<boolean> {
+  const authority = target.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const owner = Symbol("rename")
+  const owns = () => sessionActionOwner === owner && isApiAuthorityCurrent(authority)
   const id = target.sessionID.trim()
   const trimmed = title.trim()
   if (!id || !target.directory.trim() || !trimmed || trimmed.length > 200) {
     throw new Error("renameConversationSession: sessionID, directory, and 1-200 character title are required")
   }
+  sessionActionOwner = owner
   setConversationStore("actionBusyID", id)
   try {
     const response = (await apiJson(conversationSessionPath(target), {
+      authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: trimmed }),
     })) as ConversationSessionResponse
+    if (!owns()) return true
     setSessionRow(response.session)
     if (isConversationSource() && boardStore.selectedSource?.id === id && boardStore.board) {
       setBoardStore("board", "title", response.session.title || trimmed)
     }
     return true
   } catch (error) {
-    console.error("[conversation-session] rename failed", { sessionID: id, error })
+    if (owns()) console.error("[conversation-session] rename failed", { sessionID: id, error })
     throw error
   } finally {
-    setConversationStore("actionBusyID", "")
+    if (owns()) setConversationStore("actionBusyID", "")
   }
 }
 
 export async function stopConversationSession(target: ConversationSessionActionTarget): Promise<boolean> {
+  const authority = target.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const owner = Symbol("stop")
+  const owns = () => sessionActionOwner === owner && isApiAuthorityCurrent(authority)
   const id = target.sessionID.trim()
   if (!id || !target.directory.trim()) throw new Error("stopConversationSession: sessionID and directory are required")
+  sessionActionOwner = owner
   setConversationStore("actionBusyID", id)
   try {
     if (isConversationSource() && boardStore.selectedSource?.id === id) abortChatRequest()
-    await apiJson(conversationSessionPath(target, "/abort"), { method: "POST" })
+    await apiJson(conversationSessionPath(target, "/abort"), { method: "POST", authority })
     return true
   } catch (error) {
-    console.error("[conversation-session] stop failed", { sessionID: id, error })
+    if (owns()) console.error("[conversation-session] stop failed", { sessionID: id, error })
     throw error
   } finally {
-    setConversationStore("actionBusyID", "")
+    if (owns()) setConversationStore("actionBusyID", "")
   }
 }
 
 export async function deleteConversationSession(target: ConversationSessionActionTarget): Promise<boolean> {
+  const authority = target.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const owner = Symbol("delete")
+  const owns = () => sessionActionOwner === owner && isApiAuthorityCurrent(authority)
   const id = target.sessionID.trim()
   if (!id || !target.directory.trim()) {
     throw new Error("deleteConversationSession: sessionID and directory are required")
   }
+  sessionActionOwner = owner
   setConversationStore("actionBusyID", id)
+  const selectionEpoch = boardStore.selectEpoch
   const wasSelected = isConversationSource() && boardStore.selectedSource?.id === id
   try {
     try {
-      await apiJson(conversationSessionPath(target), serverSettledRequest({ method: "DELETE" }))
+      await apiJson(conversationSessionPath(target), serverSettledRequest({ method: "DELETE", authority }))
     } catch (error) {
       if (!(error instanceof ApiError && error.status === 404)) throw error
     }
+    if (!owns()) return true
     reconcileSessionAfterCommit(id, "delete", () => {
-      if (wasSelected) {
+      if (wasSelected && selectionEpoch === boardStore.selectEpoch) {
         abortChatRequest()
         cancelConversationReplay()
         stopSSE()
@@ -492,10 +551,10 @@ export async function deleteConversationSession(target: ConversationSessionActio
     })
     return true
   } catch (error) {
-    console.error("[conversation-session] delete failed", { sessionID: id, error })
+    if (owns()) console.error("[conversation-session] delete failed", { sessionID: id, error })
     throw error
   } finally {
-    setConversationStore("actionBusyID", "")
+    if (owns()) setConversationStore("actionBusyID", "")
   }
 }
 
@@ -503,14 +562,21 @@ export async function setConversationSessionArchived(
   target: ConversationSessionActionTarget,
   archived: boolean,
 ): Promise<boolean> {
+  const authority = target.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const owner = Symbol("archive")
+  const owns = () => sessionActionOwner === owner && isApiAuthorityCurrent(authority)
   const id = target.sessionID.trim()
   if (!id || !target.directory.trim()) {
     throw new Error("setConversationSessionArchived: sessionID and directory are required")
   }
+  sessionActionOwner = owner
   setConversationStore("actionBusyID", id)
+  const selectionEpoch = boardStore.selectEpoch
   const wasSelected = isConversationSource() && boardStore.selectedSource?.id === id
   try {
     const request = {
+      authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ archived }),
@@ -519,12 +585,13 @@ export async function setConversationSessionArchived(
       conversationSessionPath(target, "/archive"),
       archived ? serverSettledRequest(request) : request,
     )) as ConversationSessionResponse
+    if (!owns()) return true
     reconcileSessionAfterCommit(id, archived ? "archive" : "restore", () => {
       if (!archived) {
         setSessionRow(response.session)
         return
       }
-      if (wasSelected) {
+      if (wasSelected && selectionEpoch === boardStore.selectEpoch) {
         abortChatRequest()
         cancelConversationReplay()
         stopSSE()
@@ -541,9 +608,9 @@ export async function setConversationSessionArchived(
     })
     return true
   } catch (error) {
-    console.error("[conversation-session] archive update failed", { sessionID: id, archived, error })
+    if (owns()) console.error("[conversation-session] archive update failed", { sessionID: id, archived, error })
     throw error
   } finally {
-    setConversationStore("actionBusyID", "")
+    if (owns()) setConversationStore("actionBusyID", "")
   }
 }

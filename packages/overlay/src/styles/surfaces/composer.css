@@ -522,12 +522,12 @@
 
 .composer-attachment-loader-count {
   min-width: 0;
-  overflow: hidden;
+  padding-inline: var(--ui-gap-3xs);
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-tight);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 /* Compose meta: attachment/runtime controls and model selection beneath

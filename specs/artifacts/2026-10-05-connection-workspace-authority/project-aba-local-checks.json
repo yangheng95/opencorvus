@@ -1,0 +1,38 @@
+{
+  "qualification": "Local non-UI service contracts and TypeScript checks; no real HTTP/UI/model/Git/worktree action claimed",
+  "productionFiles": [
+    "packages/overlay/src/components/TaskDirBar.tsx",
+    "packages/overlay/src/components/FileExplorerPanel.tsx",
+    "packages/overlay/src/services/config.ts",
+    "packages/overlay/src/services/permission-mode.ts",
+    "packages/overlay/src/services/locale-preference.ts"
+  ],
+  "newTest": "packages/overlay/test/project-configuration-ownership.test.ts",
+  "focused": {
+    "exitCode": 0,
+    "tests": 109,
+    "assertions": 324,
+    "files": 14,
+    "rawLog": "project-aba-focused-02.log"
+  },
+  "formalTypes": {
+    "command": "bun run --cwd packages/overlay typecheck",
+    "execSession": 41261,
+    "exitCode": 0
+  },
+  "explicitTypes": {
+    "command": "bunx tsc --noEmit --project .tmp-product-iteration/project-aba-tsconfig.json",
+    "execSession": 78767,
+    "exitCode": 0,
+    "includes": "All overlay src plus the original five file/workspace/worktree tests and nine directly related config/locale/meta/connection files"
+  },
+  "retainedFirstFailure": {
+    "kind": "Observed tool diagnostic, not a reconstructed raw log",
+    "execSession": 77272,
+    "exitCode": 1,
+    "diagnostic": "packages/overlay/test/meta-vcs-branches.test.ts(14,3): error TS2741: Property capabilities is missing in the existing HostTransport fixture",
+    "repair": "Canonical HOST_CAPABILITIES.tauri and its import only; original test kept in explicit include"
+  },
+  "reviewDiff": ".tmp-product-iteration/project-aba-current.diff",
+  "remaining": "Root owns actual UI qualification. Independent meta.ts transient selection ABA boundary reported to root; this five-file patch does not claim that separate child projection closed."
+}

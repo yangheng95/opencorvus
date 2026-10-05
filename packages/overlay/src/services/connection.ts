@@ -8,14 +8,26 @@
 // Render-side effects (DOM badge updates) remain
 // this module updates the Solid appStore.connectionStatus.
 
-import { apiJson, configure as configureApi, DEFAULT_SERVER } from "./api"
+import {
+  apiJson,
+  configure as configureApi,
+  DEFAULT_SERVER,
+  captureApiAuthority,
+  assertApiAuthorityCurrent,
+  isApiAuthorityCurrent,
+  renewApiAuthority,
+  type ApiAuthority,
+} from "./api"
+import { batch } from "solid-js"
 import { appStore, setAppStore, setConnectionStatus } from "../store/app"
-import { settingsStore, applySettings, saveSettings } from "../store/settings"
+import { settingsStore, setSettingsStore, saveSettings } from "../store/settings"
 import { getHostTransport } from "./host-transport-runtime"
 import { makeMonitorTick } from "./monitor-tick"
 import { createVisibilityInterval, type VisibilityInterval } from "../utils/visibility-interval"
 import { formatErrorDetails, reportError } from "./diagnostics"
 import { t } from "../utils/i18n"
+import { retireConnectionProjections } from "./connection-projection"
+import { retireComposerModel } from "./composer-model"
 
 // ── Helpers ──
 
@@ -111,14 +123,17 @@ export interface LocalServerInfo {
  * Queries Tauri for the current managed local server URL and, if it differs
  * from the stored value, persists the new URL.
  */
-export async function localServerInfo(): Promise<LocalServerInfo | null> {
+export async function localServerInfo(authority = captureApiAuthority()): Promise<LocalServerInfo | null> {
   if (!hostOwnsLocalServer()) return null
+  assertApiAuthorityCurrent(authority)
   try {
     const info = (await getHostTransport().native({ kind: "server.info" })) as LocalServerInfo | undefined
+    assertApiAuthorityCurrent(authority)
     if (info && typeof info.url === "string") return info
     reportManagedServerFailure({ error: "server.info returned no managed server URL" })
     return null
   } catch (error) {
+    if (!isApiAuthorityCurrent(authority)) throw error
     reportManagedServerFailure({ error })
     return null
   }
@@ -126,6 +141,41 @@ export async function localServerInfo(): Promise<LocalServerInfo | null> {
 
 export interface SyncLocalServerUrlOptions {
   force?: boolean
+  authority?: ApiAuthority
+}
+
+async function confirmManagedConnection(
+  info: LocalServerInfo,
+  authority: ApiAuthority,
+  rotated: boolean,
+): Promise<void> {
+  assertApiAuthorityCurrent(authority)
+  const next = normalizeUrl(info.url, settingsStore.serverUrl)
+  const changed = next !== normalizeUrl(settingsStore.serverUrl, settingsStore.serverUrl)
+  const publish = () =>
+    batch(() => {
+      if (changed || rotated) {
+        retireConnectionProjections(false)
+        retireComposerModel(false)
+      }
+      setSettingsStore("serverUrl", next)
+      configureApi({ serverUrl: next })
+      if (rotated && !changed) renewApiAuthority()
+      if (changed || rotated) setConnectionStatus("connecting")
+      setAppStore("serverPid", typeof info.pid === "number" ? info.pid : undefined)
+    })
+  if (!changed) {
+    publish()
+    return
+  }
+  await saveSettings({
+    overrides: { serverUrl: next },
+    prepare: async () => ({ assertCurrent: () => assertApiAuthorityCurrent(authority), release: () => {} }),
+    onConfirmed: () => {
+      publish()
+      return undefined
+    },
+  })
 }
 
 /**
@@ -135,20 +185,18 @@ export interface SyncLocalServerUrlOptions {
 export async function syncLocalServerUrl(options: SyncLocalServerUrlOptions = {}): Promise<LocalServerInfo | null> {
   if (!hostOwnsLocalServer()) return null
   if (!options.force && !usesManagedLocalServer()) return null
-  const info = await localServerInfo()
+  const authority = options.authority ?? captureApiAuthority()
+  const previousPid = appStore.serverPid
+  const info = await localServerInfo(authority)
   if (!info) return null
   // Stash the sidecar PID even when the URL hasn't changed — overlay restart
   // / hot reload can land in a fresh process whose PID is the only thing
   // that's different from the in-memory app store.
-  setAppStore("serverPid", typeof info.pid === "number" ? info.pid : undefined)
-  const next = normalizeUrl(info.url, settingsStore.serverUrl)
-  if (normalizeUrl(settingsStore.serverUrl, settingsStore.serverUrl) === next) {
-    return info
-  }
-  // Update the settings store + persist + push to API client
-  applySettings({ ...settingsStore, serverUrl: next })
-  await saveSettings()
-  configureApi({ serverUrl: next })
+  await confirmManagedConnection(
+    info,
+    authority,
+    typeof previousPid === "number" && typeof info.pid === "number" && previousPid !== info.pid,
+  )
   return info
 }
 
@@ -158,13 +206,16 @@ export async function syncLocalServerUrl(options: SyncLocalServerUrlOptions = {}
  */
 export async function restartLocalServer(): Promise<LocalServerInfo | null> {
   if (!canRestartManagedLocalServer()) return null
+  const authority = captureApiAuthority()
   let info: LocalServerInfo | undefined
   try {
     info = (await getHostTransport().native({ kind: "server.restart" })) as LocalServerInfo | undefined
   } catch (error) {
+    if (!isApiAuthorityCurrent(authority)) throw error
     reportManagedServerFailure({ title: t("diagnostics.managed_server_restart_failed_title"), error })
     return null
   }
+  assertApiAuthorityCurrent(authority)
   if (!info || typeof info.url !== "string") {
     reportManagedServerFailure({
       title: t("diagnostics.managed_server_restart_failed_title"),
@@ -172,34 +223,18 @@ export async function restartLocalServer(): Promise<LocalServerInfo | null> {
     })
     return null
   }
-  setAppStore("serverPid", typeof info.pid === "number" ? info.pid : undefined)
-  const previousServerUrl = settingsStore.serverUrl
-  const next = normalizeUrl(info.url, settingsStore.serverUrl)
-  applySettings({ ...settingsStore, serverUrl: next })
-  let failureReported = false
   try {
-    await saveSettings({
-      overrides: { serverUrl: next },
-      onFailure: ({ error, confirmed }) => {
-        applySettings({
-          ...settingsStore,
-          serverUrl: confirmed.serverUrl,
-          autoServer: confirmed.autoServer,
-        })
-        configureApi({ serverUrl: confirmed.serverUrl })
-        reportManagedServerFailure({ title: t("diagnostics.managed_server_restart_failed_title"), error })
-        failureReported = true
-      },
-    })
+    await confirmManagedConnection(info, authority, true)
   } catch (error) {
-    if (!failureReported) {
-      applySettings({ ...settingsStore, serverUrl: previousServerUrl })
-      configureApi({ serverUrl: previousServerUrl })
-      reportManagedServerFailure({ title: t("diagnostics.managed_server_restart_failed_title"), error })
-    }
+    if (!isApiAuthorityCurrent(authority)) throw error
+    // The acknowledged native restart is a real occurrence even when preference persistence failed.
+    retireConnectionProjections(false)
+    renewApiAuthority()
+    setAppStore("serverPid", typeof info.pid === "number" ? info.pid : undefined)
+    setConnectionStatus("offline")
+    reportManagedServerFailure({ title: t("diagnostics.managed_server_restart_failed_title"), error, info })
     return null
   }
-  configureApi({ serverUrl: next })
   return info
 }
 
@@ -213,14 +248,20 @@ export async function restartLocalServer(): Promise<LocalServerInfo | null> {
 export interface CheckConnectionOptions {
   /** Preserve an existing online presentation while a periodic probe is in flight. */
   background?: boolean
+  authority?: ApiAuthority
+  /** Synchronous receipt of the exact successful probe, before the caller resumes. */
+  onHealthy?: (authority: ApiAuthority) => undefined
 }
 
 export async function checkConnection(options: CheckConnectionOptions = {}): Promise<boolean> {
-  const managed = usesManagedLocalServer()
+  const managed = canRestartManagedLocalServer()
+  if (options.authority) assertApiAuthorityCurrent(options.authority)
   let managedInfo: LocalServerInfo | null = null
   if (managed) {
-    managedInfo = await syncLocalServerUrl()
+    managedInfo = await syncLocalServerUrl({ authority: options.authority })
   }
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   if (!options.background || !appStore.connected) setConnectionStatus("connecting")
 
   const attempts = managed ? 8 : 1
@@ -228,7 +269,8 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
 
   for (let i = 0; i < attempts; i++) {
     try {
-      const health: any = await apiJson("global/health", { signal: AbortSignal.timeout(5000) })
+      const health: any = await apiJson("global/health", { signal: AbortSignal.timeout(5000), authority })
+      if (!isApiAuthorityCurrent(authority)) return false
       const paths = health?.paths
       if (
         paths &&
@@ -247,15 +289,18 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
         throw new Error(`OpenCorvus health probe reported an unavailable database: ${detail}`)
       }
       setConnectionStatus("online")
+      options.onHealthy?.(authority)
       return true
     } catch (e) {
+      if (!isApiAuthorityCurrent(authority)) return false
       lastError = e
       if (i >= attempts - 1) break
       await wait(350)
-      managedInfo = await syncLocalServerUrl()
+      if (!isApiAuthorityCurrent(authority)) return false
     }
   }
 
+  if (!isApiAuthorityCurrent(authority)) return false
   setConnectionStatus("offline")
   console.warn("[connection] connection failed", String(lastError))
   if (managed) {

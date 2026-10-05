@@ -1,0 +1,128 @@
+[
+  {
+    "time": "2026-10-05T14:39:33.562Z",
+    "step": "A real Chat and authority-note.txt baseline presented",
+    "screenshot": "after-root-03-editor-baseline.png",
+    "serverPort": 17948,
+    "notes": "Initial and Files screenshots preceded this timestamp; exact earlier action times are not reconstructed."
+  },
+  {
+    "time": "2026-10-05T14:40:24.445Z",
+    "step": "Actual B Save opened unsaved-file Save/Discard/Cancel dialog",
+    "screenshot": "after-root-04-connection-unsaved-dialog.png",
+    "observed": "Connection fields and Save disabled; original A file named."
+  },
+  {
+    "time": "2026-10-05T14:40:40.495Z",
+    "step": "Cancelled B Save; returned to original A Chat",
+    "screenshot": "after-root-05-cancel-preserves-a.png",
+    "observed": "Online port17948, A unsaved literal and ordinary composer prose retained."
+  },
+  {
+    "time": "2026-10-05T14:41:21.865Z",
+    "step": "Discard confirmed; actual B Online and launcher presented",
+    "screenshot": "after-root-06-discard-b-launcher.png",
+    "observed": "A selected Chat/editor retired; ordinary prose preserved; Choose model; Files empty in directory-free scope. Sidebar retains an a-project heading; source analysis needed before treating it as an error."
+  },
+  {
+    "time": "2026-10-05T14:43:50.145Z",
+    "step": "A second dirty draft plus genuine canonical browser-use Skill mention",
+    "screenshot": "after-root-07-save-branch-reference-a.png",
+    "observed": "Mention inserted by Enter from real candidate list; no Send/model request."
+  },
+  {
+    "time": "2026-10-05T14:44:27.194Z",
+    "step": "Actual Save decision dispatch for A file during B connection transaction",
+    "expectedLiteral": "Owned workspace A saved during connection switch.\n"
+  },
+  {
+    "time": "2026-10-05T14:44:36.148Z",
+    "step": "B connection Saved with actual reference-retirement notice",
+    "screenshot": "after-root-08-save-confirmed-reference-notice.png"
+  },
+  {
+    "time": "2026-10-05T14:45:20.829Z",
+    "step": "Saved A file then B launcher with both actual ordinary prose paragraphs",
+    "screenshot": "after-root-09-save-b-prose-preserved.png",
+    "diskReceipt": "root-after-save-disk.json"
+  },
+  {
+    "time": "2026-10-05T14:46:25.095Z",
+    "step": "Connection restored A through actual Network Save; cleared owned launcher prose; on-disk owned A fixture restored by exact literal guarded shell",
+    "fixtureReceipt": "root-after-authority-fixture-restored.json"
+  },
+  {
+    "time": "2026-10-05T14:48:09.082Z",
+    "step": "Owned tab reloaded after restoring A connection and empty current launcher draft",
+    "screenshot": "after-root-10-restored-clean-reload.png",
+    "notes": "A CLI default project may restore project scope; no prior selected Chat/editor/draft/model is expected."
+  },
+  {
+    "time": "2026-10-05T14:51:26.743Z",
+    "step": "Root C tab18 Files/Editor baseline and Reload Cancel/Discard qualified",
+    "screenshots": [
+      "after-root-c01-environment.png",
+      "after-root-c02-editor-baseline.png",
+      "after-root-c03-reload-dialog.png",
+      "after-root-c04-reload-cancel-preserves.png",
+      "after-root-c05-reload-baseline-restored.png"
+    ],
+    "notes": "Actions precede this receipt time; original baseline restored by actual Discard and reload. New dirty conflict probe now visible."
+  },
+  {
+    "time": "2026-10-05T14:51:59.663Z",
+    "step": "Actual file Save rejected with disk-conflict recovery contract",
+    "screenshot": "after-root-c06-actual-save-conflict.png",
+    "inputReceipt": "root-c-external-conflict-input.json",
+    "observed": "Original dirty text remains; feedback explicitly directs Reload to review current disk version."
+  },
+  {
+    "time": "2026-10-05T14:52:14.881Z",
+    "step": "Actual Reload accepted external content; restored original fixture through current revision UI Save",
+    "screenshot": "after-root-c07-conflict-reload-current-disk.png"
+  },
+  {
+    "time": "2026-10-05T14:53:03.446Z",
+    "step": "Actual Explorer Rename changed filename and followed current editor target",
+    "screenshot": "after-root-c09-rename-editor-follows-path.png",
+    "actualTarget": "editor-qualification-renamed.txt",
+    "observed": "Baseline content unchanged; Save disabled."
+  },
+  {
+    "time": "2026-10-05T14:53:57.379Z",
+    "step": "Owned fixture filename restored through actual Explorer Rename",
+    "screenshot": "after-root-c10-rename-path-restored.png",
+    "actualTarget": "editor-qualification-note.txt"
+  },
+  {
+    "time": "2026-10-05T14:55:44.815Z",
+    "step": "Actual owned PNG chooser upload and thumbnail/full-res image preview",
+    "screenshots": [
+      "after-root-d01-owned-upload-thumbnail.png",
+      "after-root-d02-owned-full-image-preview.png"
+    ],
+    "observed": "Image preview visible at100%; close/download/zoomcontrols; source is real staged attachment. Footer counters compress launch references/model controls; follow-up analysis before source change."
+  },
+  {
+    "time": "2026-10-05T15:02:49.575Z",
+    "step": "D page real Mission Skill/Chat capability/Memory/Archive and B resource departure",
+    "screenshots": [
+      "after-root-d03-side-chat-empty.png",
+      "after-root-d04-mission-skill-detail.png",
+      "after-root-d05-chat-capability-panel.png",
+      "after-root-d06-memory-empty.png",
+      "after-root-d07-archive-empty.png",
+      "after-root-d08-b-resource-retirement.png"
+    ],
+    "observed": "Actual B Online launcher; old uploaded attachment retired. Opening Side Chat displayed Side chat1 after settlement; server child creation must be correlated, not assumed absent.",
+    "limitations": "No model Send, actual live transcript, browser capture, populated MCP/3D/artifact or memory search qualified."
+  },
+  {
+    "time": "2026-10-05T15:04:37.923Z",
+    "step": "D original Network endpoint restored via real Save; closed inactive Side Chat dock; no staged draft left"
+  },
+  {
+    "time": "2026-10-05T15:05:00.590Z",
+    "step": "C original Network endpoint restored via real Save; owned editor fixture restored clean and closed"
+  }
+]

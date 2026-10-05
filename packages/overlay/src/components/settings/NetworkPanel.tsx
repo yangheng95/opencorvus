@@ -1,6 +1,7 @@
 import { createEffect, createMemo, createSignal, onCleanup } from "solid-js"
 import { appStore } from "../../store/app"
-import { activeTaskID } from "../../store/board"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
+import { boardStore, activeTaskID } from "../../store/board"
 import {
   currentProjectConfigRequestOptions,
   patchConfig,
@@ -54,6 +55,8 @@ interface ProxyInput {
 
 interface NetworkOperationOwner {
   generation: number
+  authority: ApiAuthority
+  selectionEpoch: number
   taskID: string
   directory: string
   configGeneration: number
@@ -86,7 +89,7 @@ export default function NetworkPanel() {
   createEffect(() => {
     const taskID = String(activeTaskID() || "").trim()
     const directory = activeProjectDirectory().trim()
-    const nextScopeIdentity = `${taskID}\u0000${directory}`
+    const nextScopeIdentity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${taskID}\u0000${directory}`
     const scopeChanged = nextScopeIdentity !== scopeIdentity
     if (scopeChanged) {
       scopeIdentity = nextScopeIdentity
@@ -113,6 +116,8 @@ export default function NetworkPanel() {
   function captureOwner(): NetworkOperationOwner {
     return {
       generation: ++operationGeneration,
+      authority: captureApiAuthority(),
+      selectionEpoch: boardStore.selectEpoch,
       taskID: String(activeTaskID() || "").trim(),
       directory: activeProjectDirectory().trim(),
       configGeneration,
@@ -121,6 +126,8 @@ export default function NetworkPanel() {
 
   function ownsScope(owner: NetworkOperationOwner): boolean {
     return (
+      isApiAuthorityCurrent(owner.authority) &&
+      owner.selectionEpoch === boardStore.selectEpoch &&
       owner.generation === operationGeneration &&
       owner.taskID === String(activeTaskID() || "").trim() &&
       owner.directory === activeProjectDirectory().trim()
@@ -215,7 +222,7 @@ export default function NetworkPanel() {
     setSaving(true)
     try {
       const nextProxy = input.proxyUrl ? proxyDraft(input) : null
-      const savedConfig = await patchConfig({ network: { proxy: nextProxy } }, currentProjectConfigRequestOptions())
+      const savedConfig = await patchConfig({ network: { proxy: nextProxy } }, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
       if (!savedConfig) {
         if (ownsScope(owner)) setError(t("network.proxy.save_failed"))
         return
@@ -238,7 +245,7 @@ export default function NetworkPanel() {
 
     setDeleting(true)
     try {
-      const savedConfig = await patchConfig({ network: { proxy: null } }, currentProjectConfigRequestOptions())
+      const savedConfig = await patchConfig({ network: { proxy: null } }, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
       if (!savedConfig) {
         if (ownsScope(owner)) setError(t("network.proxy.delete_failed", { reason: t("network.proxy.save_failed") }))
         return
@@ -263,7 +270,7 @@ export default function NetworkPanel() {
 
     setTesting(true)
     try {
-      const result = await testNetworkProxy(proxyDraft(input))
+      const result = await testNetworkProxy(proxyDraft(input), owner.authority)
       if (ownsUnchangedConfig(owner)) setTestResult(result)
     } catch (err) {
       if (ownsUnchangedConfig(owner)) {

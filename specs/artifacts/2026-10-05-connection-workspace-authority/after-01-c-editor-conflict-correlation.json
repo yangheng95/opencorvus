@@ -1,0 +1,212 @@
+{
+  "observedAtUtc": "2026-10-05T14:53:49.2362623Z",
+  "owner": "after-01-a-owner.json",
+  "rootManual": "root-after-checkpoints.json",
+  "externalInput": "root-c-external-conflict-input.json",
+  "requests": [
+    {
+      "time": "2026-10-05T14:49:38.19Z",
+      "requestID": "2e68efba-aad5-491c-a9ee-ed1b84348030",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:49:38.193Z",
+      "requestID": "2e68efba-aad5-491c-a9ee-ed1b84348030",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3
+    },
+    {
+      "time": "2026-10-05T14:50:48.901Z",
+      "requestID": "2e3344f5-9ce7-42e5-a34d-cd5133a129ee",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:50:48.905Z",
+      "requestID": "2e3344f5-9ce7-42e5-a34d-cd5133a129ee",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 4
+    },
+    {
+      "time": "2026-10-05T14:51:46.645Z",
+      "requestID": "294654ac-2f7b-44ad-ab2c-ec019859dd6f",
+      "method": "OPTIONS",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:51:46.645Z",
+      "requestID": "294654ac-2f7b-44ad-ab2c-ec019859dd6f",
+      "method": "OPTIONS",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 204,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-05T14:51:46.646Z",
+      "requestID": "b8c994d9-9326-4d9b-b18b-ac568018f6f2",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:51:46.654Z",
+      "requestID": "b8c994d9-9326-4d9b-b18b-ac568018f6f2",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": null,
+      "statusCode": 409,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:51:46.655Z",
+      "requestID": "b8c994d9-9326-4d9b-b18b-ac568018f6f2",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 409,
+      "duration": 9
+    },
+    {
+      "time": "2026-10-05T14:52:00.083Z",
+      "requestID": "53ddbe3c-c685-4bdc-afe3-311584064e2d",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:52:00.087Z",
+      "requestID": "53ddbe3c-c685-4bdc-afe3-311584064e2d",
+      "method": "GET",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 4
+    },
+    {
+      "time": "2026-10-05T14:52:14.58Z",
+      "requestID": "b559b26e-5f62-4981-88c9-a2ef1d6c75c4",
+      "method": "OPTIONS",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:52:14.58Z",
+      "requestID": "b559b26e-5f62-4981-88c9-a2ef1d6c75c4",
+      "method": "OPTIONS",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 204,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-05T14:52:14.582Z",
+      "requestID": "a0928526-9428-4210-a5f6-46450c008f88",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": "started",
+      "statusCode": null,
+      "duration": null
+    },
+    {
+      "time": "2026-10-05T14:52:14.611Z",
+      "requestID": "a0928526-9428-4210-a5f6-46450c008f88",
+      "method": "PATCH",
+      "path": "/file/content",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 29
+    }
+  ],
+  "actualLoggedError": {
+    "time": "2026-10-05T14:51:46.654Z",
+    "requestID": "b8c994d9-9326-4d9b-b18b-ac568018f6f2",
+    "status": 409,
+    "name": "FileWriteConflictError",
+    "message": "FileWriteConflictError: File changed since it was loaded: editor-qualification-note.txt. Reload the current file before saving.",
+    "dataPath": "editor-qualification-note.txt",
+    "dataMessage": "File changed since it was loaded: editor-qualification-note.txt. Reload the current file before saving."
+  },
+  "actualResponseBodyCaptured": false,
+  "publicBodyContract": {
+    "source": "src/server/routes/file.ts409; src/file/index.ts WriteConflictError; src/server/error-handler.ts named-error toObject; packages/util/src/error.ts",
+    "shape": "{name: FileWriteConflictError, data: {path: string, message: string}}",
+    "boundary": "Contract source plus actual logged named error, not a captured response body"
+  },
+  "disk": {
+    "path": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/a-project/editor-qualification-note.txt",
+    "length": 37,
+    "bytes": [
+      79,
+      119,
+      110,
+      101,
+      100,
+      32,
+      101,
+      100,
+      105,
+      116,
+      111,
+      114,
+      32,
+      113,
+      117,
+      97,
+      108,
+      105,
+      102,
+      105,
+      99,
+      97,
+      116,
+      105,
+      111,
+      110,
+      32,
+      98,
+      97,
+      115,
+      101,
+      108,
+      105,
+      110,
+      101,
+      46,
+      10
+    ],
+    "utf8": "Owned editor qualification baseline.\n",
+    "lastWriteUtc": "2026-10-05T14:52:14.6030631Z"
+  },
+  "independentVisualReview": {
+    "images": [
+      "after-root-c06-actual-save-conflict.png",
+      "after-root-c07-conflict-reload-current-disk.png"
+    ],
+    "visible": "c06 dirty input and star retained, feedback explains disk change and reload; c07 external content displayed, clean Save",
+    "reviewerOperatedUI": false
+  },
+  "scopeBoundary": "Log paths contain no query; target identity from root fixture/input and screenshot, not inferred from path"
+}

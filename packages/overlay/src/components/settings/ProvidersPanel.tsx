@@ -8,7 +8,8 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, on, onClea
 import { t } from "../../utils/i18n"
 import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
 import { updateConfig, updateGlobalConfig } from "../../services/config"
-import { apiJson, ApiError } from "../../services/api"
+import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
+import { boardStore } from "../../store/board"
 import { loadProviderInfo } from "../../services/config-load"
 import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
 import {
@@ -119,10 +120,14 @@ export default function ProvidersPanel() {
   const [discoveringModels, setDiscoveringModels] = createSignal(false)
   const [formNotice, setFormNotice] = createSignal<string | null>(null)
 
-  function providerLoadOptions(directory = activeDirectory().trim()) {
+  function providerLoadOptions(directory = activeDirectory().trim(), authority = captureApiAuthority()) {
+    const selectionEpoch = boardStore.selectEpoch
+    const scopeGeneration = providerTestScopeGeneration
     return {
+      authority,
       directory,
-      isCurrentDirectory: (candidate: string) => activeDirectory().trim() === candidate,
+      isCurrentDirectory: (candidate: string) => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === selectionEpoch &&
+        scopeGeneration === providerTestScopeGeneration && activeDirectory().trim() === candidate,
     }
   }
 
@@ -134,13 +139,11 @@ export default function ProvidersPanel() {
   async function updateActiveProviderConfig(
     directory: string,
     mutator: (config: Record<string, any>) => void,
+    options: ReturnType<typeof providerLoadOptions>,
   ): Promise<any> {
     return directory.trim()
-      ? await updateConfig(mutator, {
-          directory,
-          isCurrentDirectory: (candidate) => activeDirectory().trim() === candidate.trim(),
-        })
-      : await updateGlobalConfig(mutator)
+      ? await updateConfig(mutator, options)
+      : await updateGlobalConfig(mutator, options.authority)
   }
 
   function formatRelative(ms: number): string {
@@ -157,13 +160,13 @@ export default function ProvidersPanel() {
   let providerTestScopeGeneration = 0
   const providerTestGenerations = new Map<string, number>()
 
-  async function refreshProviderCatalog(directory: string): Promise<void> {
+  async function refreshProviderCatalog(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
     const sequence = ++providerRefreshSequence
     setProviderRefreshError(null)
     setRefreshingProviders(true)
     try {
-      const result = await requestProviderCatalogRefresh(directory)
-      if (sequence !== providerRefreshSequence || activeDirectory().trim() !== directory) return
+      const result = await requestProviderCatalogRefresh(directory, options.authority)
+      if (sequence !== providerRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
         setProviderRefreshError(t("provider.catalog_refresh.failed", { reason: result.error || "unknown" }))
         return
@@ -177,21 +180,21 @@ export default function ProvidersPanel() {
         )
       }
     } catch (e) {
-      if (sequence === providerRefreshSequence && activeDirectory().trim() === directory) {
+      if (sequence === providerRefreshSequence && options.isCurrentDirectory(directory)) {
         setProviderRefreshError(t("provider.catalog_refresh.failed", { reason: describeFailure(e) }))
       }
     } finally {
-      if (sequence === providerRefreshSequence) setRefreshingProviders(false)
+      if (sequence === providerRefreshSequence && options.isCurrentDirectory(directory)) setRefreshingProviders(false)
     }
   }
 
-  async function refreshProviderModels(directory: string): Promise<void> {
+  async function refreshProviderModels(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
     const sequence = ++modelRefreshSequence
     setModelRefreshError(null)
     setRefreshingModels(true)
     try {
-      const result = await requestProviderModelsRefresh(directory)
-      if (sequence !== modelRefreshSequence || activeDirectory().trim() !== directory) return
+      const result = await requestProviderModelsRefresh(directory, options.authority)
+      if (sequence !== modelRefreshSequence || !options.isCurrentDirectory(directory)) return
       if (!result.ok) {
         setModelRefreshError(t("provider.model_refresh.failed", { reason: result.error || "unknown" }))
         return
@@ -205,35 +208,44 @@ export default function ProvidersPanel() {
         )
       }
     } catch (e) {
-      if (sequence === modelRefreshSequence && activeDirectory().trim() === directory) {
+      if (sequence === modelRefreshSequence && options.isCurrentDirectory(directory)) {
         setModelRefreshError(t("provider.model_refresh.failed", { reason: describeFailure(e) }))
       }
     } finally {
-      if (sequence === modelRefreshSequence) setRefreshingModels(false)
+      if (sequence === modelRefreshSequence && options.isCurrentDirectory(directory)) setRefreshingModels(false)
     }
   }
 
-  async function reloadProviderInfo(directory: string): Promise<void> {
+  async function reloadProviderInfo(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
     try {
-      await loadProviderInfo(undefined, providerLoadOptions(directory))
+      await loadProviderInfo(undefined, options)
     } catch (error) {
-      if (activeDirectory().trim() === directory) setFormError(describeFailure(error))
+      if (options.isCurrentDirectory(directory)) setFormError(describeFailure(error))
     }
   }
 
   createEffect(
     on(
-      () => activeDirectory().trim(),
-      (directory) => {
+      () => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const,
+      ([directory]) => {
         providerTestScopeGeneration += 1
+        providerRefreshSequence += 1
+        modelRefreshSequence += 1
         providerTestGenerations.clear()
+        setRefreshingProviders(false)
+        setRefreshingModels(false)
+        setAuthing(new Set<string>())
+        setSavingKey(new Set<string>())
+        setDeletingProviders(new Set<string>())
+        setFormError(null)
+        setApiKeyInputs(new Map<string, string>())
         setTesting(new Set<string>())
         setTestResults(new Map<string, ProviderTestResult>())
         setLastProvidersRefreshedAt(null)
         setLastModelsRefreshedAt(null)
         setProviderRefreshError(null)
         setModelRefreshError(null)
-        void reloadProviderInfo(directory)
+        void reloadProviderInfo(directory, providerLoadOptions(directory))
       },
     ),
   )
@@ -241,15 +253,17 @@ export default function ProvidersPanel() {
   async function handleRefreshCatalog(): Promise<void> {
     if (refreshingProviders()) return
     const directory = activeDirectory().trim()
-    await refreshProviderCatalog(directory)
-    if (activeDirectory().trim() === directory) await reloadProviderInfo(directory)
+    const options = providerLoadOptions(directory)
+    await refreshProviderCatalog(directory, options)
+    if (options.isCurrentDirectory(directory)) await reloadProviderInfo(directory, options)
   }
 
   async function handleRefreshModels(): Promise<void> {
     if (refreshingModels()) return
     const directory = activeDirectory().trim()
-    await refreshProviderModels(directory)
-    if (activeDirectory().trim() === directory) await reloadProviderInfo(directory)
+    const options = providerLoadOptions(directory)
+    await refreshProviderModels(directory, options)
+    if (options.isCurrentDirectory(directory)) await reloadProviderInfo(directory, options)
   }
 
   async function handleTest(providerId: string, models: Record<string, ProviderModel>) {
@@ -264,15 +278,16 @@ export default function ProvidersPanel() {
     }
     const directory = activeDirectory().trim()
     const scopeGeneration = providerTestScopeGeneration
+    const options = providerLoadOptions(directory)
     const generation = (providerTestGenerations.get(providerId) ?? 0) + 1
     providerTestGenerations.set(providerId, generation)
     const ownsResult = () =>
       scopeGeneration === providerTestScopeGeneration &&
       generation === providerTestGenerations.get(providerId) &&
-      directory === activeDirectory().trim()
+      options.isCurrentDirectory(directory)
     setTesting((prev) => new Set(prev).add(providerId))
     try {
-      const result = await testProviderConnection(providerId, modelID, { directory })
+      const result = await testProviderConnection(providerId, modelID, options)
       if (!ownsResult()) return
       setTestResults((prev) => {
         const next = new Map(prev)
@@ -297,7 +312,7 @@ export default function ProvidersPanel() {
     }
   }
 
-  const authCallbacks: AuthDialogCallbacks = {
+  const authCallbacks = (owns: () => boolean): AuthDialogCallbacks => ({
     nativePrompt: (message, opts) => nativePrompt(message, opts),
     nativeSelect: (message, opts) =>
       nativeSelect(message, {
@@ -311,32 +326,41 @@ export default function ProvidersPanel() {
     nativeOpen,
     externalUrlNeedsUserGesture: getHostTransport().capabilities.ui.externalUrlNeedsUserGesture,
     showLlmNotice: (message, tone = "info", _duration, link) => {
+      if (!owns()) return
       void nativeMessage(message, { title: t("llm.title"), kind: tone, link }).catch((error) => {
-        setFormError(t("provider.auth.failed", { reason: describeFailure(error) }))
+        if (owns()) setFormError(t("provider.auth.failed", { reason: describeFailure(error) }))
       })
     },
-    onAuthCancelled: dismissProviderAuth,
-  }
+    onAuthCancelled: (providerID) => { if (owns()) dismissProviderAuth(providerID) },
+  })
 
-  async function refreshAuthState(directory = activeDirectory().trim()) {
-    await loadProviderInfo(undefined, providerLoadOptions(directory))
+  async function refreshAuthState(options: ReturnType<typeof providerLoadOptions>) {
+    if (options.isCurrentDirectory(options.directory)) await loadProviderInfo(undefined, options)
   }
 
   async function handleAuth(providerId: string) {
     if (!providerAuthMethods(providerId).length || authing().has(providerId)) return
     const directory = activeDirectory().trim()
+    const options = providerLoadOptions(directory)
+    const owns = () => options.isCurrentDirectory(directory)
     setFormError(null)
     setAuthing((prev) => new Set(prev).add(providerId))
     try {
-      const ok = await authenticateSelectedProvider(providerId, authCallbacks, { directory })
-      if (ok) {
-        await refreshAuthState(directory)
-        await nativeMessage(t("llm.status.connected"), {
-          title: t("llm.title"),
-          kind: "success",
-        })
+      const ok = await authenticateSelectedProvider(providerId, authCallbacks(owns), options)
+      if (ok && owns()) {
+        try {
+          await refreshAuthState(options)
+          if (!owns()) return
+          await nativeMessage(t("llm.status.connected"), {
+            title: t("llm.title"),
+            kind: "success",
+          })
+        } catch (error) {
+          if (owns()) setFormError(t("provider.auth.completed_with_issues", { reason: describeFailure(error) }))
+        }
       }
     } catch (e) {
+      if (!owns()) return
       const body = e instanceof ApiError ? e.body : undefined
       setFormError(
         body && typeof body === "object" && "name" in body && body.name === "ProviderAuthOAuthExchangeActiveError"
@@ -344,6 +368,7 @@ export default function ProvidersPanel() {
           : t("provider.auth.failed", { reason: describeFailure(e) }),
       )
     } finally {
+      if (!owns()) return
       setAuthing((prev) => {
         const next = new Set(prev)
         next.delete(providerId)
@@ -377,10 +402,13 @@ export default function ProvidersPanel() {
   onCleanup(() => {
     formOccurrence += 1
     discoveryRevision += 1
+    providerTestScopeGeneration += 1
+    providerRefreshSequence += 1
+    modelRefreshSequence += 1
   })
   createEffect(
     on(
-      () => activeDirectory().trim(),
+      () => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const,
       () => cancel(),
       { defer: true },
     ),
@@ -514,13 +542,15 @@ export default function ProvidersPanel() {
     }
     const occurrence = formOccurrence
     const revision = ++discoveryRevision
-    const ownsResponse = () => occurrence === formOccurrence && revision === discoveryRevision
+    const options = providerLoadOptions(directory)
+    const ownsResponse = () => occurrence === formOccurrence && revision === discoveryRevision && options.isCurrentDirectory(directory)
     setDiscoveringModels(true)
     try {
       const path = directory
         ? providerScopedPath("provider/discover-models", directory)
         : "global/providers/discover-models"
       const result = (await apiJson(path, {
+        authority: options.authority,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -570,7 +600,8 @@ export default function ProvidersPanel() {
 
     const apiKey = formApiKey().trim()
     const occurrence = formOccurrence
-    const ownsForm = () => occurrence === formOccurrence
+    const options = providerLoadOptions(directory)
+    const ownsForm = () => occurrence === formOccurrence && options.isCurrentDirectory(directory)
     invalidateDiscovery()
     setSaving(true)
     let configCommitted = false
@@ -580,17 +611,18 @@ export default function ProvidersPanel() {
         removeDisabledProvider(cfg, id)
         cfg.provider = cfg.provider || {}
         cfg.provider[id] = applyProviderForm({ id, current: cfg.provider[id], initial, values })
-      })
+      }, options)
       configCommitted = true
       if (apiKey) {
         const authResult = (await apiJson(`auth/${id}`, {
+          authority: options.authority,
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ type: "api", key: apiKey }),
         })) as AuthMutationResult
         credentialIssues = authResult.issues
-        await updateActiveProviderConfig(directory, (cfg) => removeProjectApiKeyOverride(cfg, id))
-        await refreshAuthState(directory)
+        await updateActiveProviderConfig(directory, (cfg) => removeProjectApiKeyOverride(cfg, id), options)
+        await refreshAuthState(options)
       }
 
       if (!ownsForm()) return
@@ -682,29 +714,39 @@ export default function ProvidersPanel() {
     const value = apiKeyInput(providerId).trim()
     if (!value || savingKey().has(providerId)) return
     const directory = activeDirectory().trim()
+    const options = providerLoadOptions(directory)
+    const owns = () => options.isCurrentDirectory(directory)
     setFormError(null)
     setSavingKey((prev) => new Set(prev).add(providerId))
     try {
       const authResult = (await apiJson(`auth/${providerId}`, {
+        authority: options.authority,
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "api", key: value }),
       })) as AuthMutationResult
-      clearApiKeyInput(providerId)
+      if (owns()) clearApiKeyInput(providerId)
       const followups: Array<{ phase: string; run: () => Promise<unknown> }> = [
         {
           phase: "config.credential-cleanup",
           run: () =>
             updateActiveProviderConfig(directory, (cfg) => {
               removeProjectApiKeyOverride(cfg, providerId)
-            }),
+            }, options),
         },
         {
           phase: "provider.reload",
-          run: () => refreshAuthState(directory),
+          run: () => refreshAuthState(options),
         },
       ]
-      const settled = await Promise.allSettled(followups.map((operation) => operation.run()))
+      const settled: PromiseSettledResult<unknown>[] = []
+      for (const operation of followups) {
+        try {
+          settled.push({ status: "fulfilled", value: await operation.run() })
+        } catch (reason) {
+          settled.push({ status: "rejected", reason })
+        }
+      }
       const followupIssues = settled.flatMap((result, index) =>
         result.status === "rejected"
           ? [
@@ -716,6 +758,7 @@ export default function ProvidersPanel() {
           : [],
       )
       const issues = [...authResult.issues, ...followupIssues]
+      if (!owns()) return
       if (issues.length > 0) {
         setFormError(
           t("provider.api_key.saved_with_issues", {
@@ -724,8 +767,10 @@ export default function ProvidersPanel() {
         )
       }
     } catch (e) {
+      if (!owns()) return
       setFormError(t("provider.api_key.save_failed", { reason: describeFailure(e) }))
     } finally {
+      if (!owns()) return
       setSavingKey((prev) => {
         const next = new Set(prev)
         next.delete(providerId)
@@ -771,31 +816,45 @@ export default function ProvidersPanel() {
   async function handleDelete(id: string) {
     if (deletingProviders().has(id)) return
     const directory = activeDirectory().trim()
+    const options = providerLoadOptions(directory)
+    const owns = () => options.isCurrentDirectory(directory)
     setFormError(null)
     setDeletingProviders((prev) => new Set(prev).add(id))
     try {
       const path = directory
         ? providerScopedPath(`provider/${encodeURIComponent(id)}`, directory)
         : `global/providers/${encodeURIComponent(id)}`
-      const receipt = (await apiJson(path, { method: "DELETE" })) as {
+      const receipt = (await apiJson(path, { method: "DELETE", authority: options.authority })) as {
         status: "committed" | "committed_with_residue"
         residue: Array<{ owner: string; message: string }>
       }
-      if (receipt.status === "committed_with_residue") {
-        const reason = receipt.residue.map((item) => `${item.owner}: ${item.message}`).join("; ")
-        setFormError(t("provider.form.error.delete_residue", { id, reason }))
-      }
-      await refreshAuthState(directory)
+      if (!owns()) return
+      const residueNotice = receipt.status === "committed_with_residue"
+        ? t("provider.form.error.delete_residue", {
+            id,
+            reason: receipt.residue.map((item) => `${item.owner}: ${item.message}`).join("; "),
+          })
+        : ""
+      if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
       setTestResults((prev) => {
         const next = new Map(prev)
         next.delete(id)
         return next
       })
+      try {
+        await refreshAuthState(options)
+      } catch (error) {
+        if (!owns()) return
+        const refreshNotice = t("provider.form.error.delete_refresh_failed", { id, reason: describeFailure(error) })
+        setFormError([residueNotice, refreshNotice].filter(Boolean).join("\n"))
+      }
     } catch (e) {
+      if (!owns()) return
       console.error("[providers] delete failed", e)
       setFormError(t("provider.form.error.delete_failed", { id, reason: describeFailure(e) }))
     } finally {
+      if (!owns()) return
       setDeletingProviders((prev) => {
         const next = new Set(prev)
         next.delete(id)

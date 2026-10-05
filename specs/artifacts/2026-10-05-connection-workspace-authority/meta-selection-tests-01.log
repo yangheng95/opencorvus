@@ -1,0 +1,123 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\connection-projection-authority.test.ts:
+(pass) local transport metadata completes B's same-directory facts after A returns [4.26ms]
+(pass) local compound GET and mutator capture retain an exact stale continuation outcome [0.88ms]
+(pass) local board pending ownership keeps B loading while the old A finally settles [1.18ms]
+(pass) local global Task list uses B's pending owner and retains its exact rows after A [1.25ms]
+(pass) local same-ID Session mutation retains A receipt and B busy owner before B completes [1.38ms]
+(pass) Work Ledger replacement snapshot and retirement use the existing current map [1.46ms]
+(pass) local VCS and panel POST close settle their original operations with actual stream-close facts [1.52ms]
+(pass) project memory refresh and acknowledgement follow one directory and authority [0.79ms]
+(pass) global and scoped reference pending owners return B's current catalog after A retires [1.14ms]
+(pass) Chat prompt-profile completion on A retains its receipt while B remains the active request authority [1.08ms]
+(pass) explicit Chat Stop uses its captured target and stale Stop has a local admission outcome [0.71ms]
+(pass) MCP stream same-ID replacement publishes B capability events after late A close [0.72ms]
+(pass) panel stream preserves the original completed result when authority retires before close [1.54ms]
+(pass) Mission board preserves B's completed current snapshot when A's page settles later [1.22ms]
+(pass) sequential Skill removal preserves the first accepted A response when its authority retires [0.89ms]
+(pass) accepted Chat creation returns its canonical ID when later view hydration retires [1.94ms]
+
+packages\overlay\test\meta-project-scope.test.ts:
+(pass) metadata follows the selected session directory and exposes its non-Git facts [0.92ms]
+(pass) latest metadata request owns the result when an earlier request finishes later [0.34ms]
+(pass) failed metadata read yields a scoped error state [0.57ms]
+(pass) selection ABA settles the original metadata response owner [0.34ms]
+(pass) selection ABA settles the original metadata error owner [0.12ms]
+(pass) successor metadata retains busy ownership after old response settlement [0.34ms]
+(pass) successor metadata retains busy ownership after old error settlement [0.15ms]
+(pass) an empty current scope settles the canonical metadata projection [0.14ms]
+
+packages\overlay\test\meta-vcs-actions.test.ts:
+(pass) commit retains the accepted outcome and current metadata error with its diagnostic cause [2.50ms]
+(pass) commit propagates its original POST error [0.20ms]
+(pass) commit preserves the successor projection after different-project selection [0.25ms]
+(pass) commit preserves the successor projection after same-directory-ABA selection [0.08ms]
+93 |     configureApi({ serverUrl: "http://retired-meta.invalid" })
+94 |     const response = ok(accepted)
+95 |     pending.resolve(response)
+96 |     const result = await operation
+97 |     expect(result).toBeInstanceOf(ApiAuthorityChangedError)
+98 |     expect((result as ApiAuthorityChangedError).authority).toBe(authority)
+                                                                ^
+error: expect(received).toBe(expected)
+
+Expected: {
+  revision: 48,
+}
+Received: undefined
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\meta-vcs-actions.test.ts:98:60)
+(fail) commit returns the original typed API retirement response receipt [0.57ms]
+(pass) push retains the accepted outcome and current metadata error with its diagnostic cause [0.53ms]
+(pass) push propagates its original POST error [0.08ms]
+(pass) push preserves the successor projection after different-project selection [0.06ms]
+(pass) push preserves the successor projection after same-directory-ABA selection [0.06ms]
+92 |     await started.promise
+93 |     configureApi({ serverUrl: "http://retired-meta.invalid" })
+94 |     const response = ok(accepted)
+95 |     pending.resolve(response)
+96 |     const result = await operation
+97 |     expect(result).toBeInstanceOf(ApiAuthorityChangedError)
+                        ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class ApiAuthorityChangedError extends Error]
+Received value: undefined
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\meta-vcs-actions.test.ts:97:20)
+(fail) push returns the original typed API retirement response receipt [0.34ms]
+(pass) switch-branch retains the accepted outcome and current metadata error with its diagnostic cause [0.35ms]
+(pass) switch-branch propagates its original POST error [0.07ms]
+(pass) switch-branch preserves the successor projection after different-project selection [0.06ms]
+(pass) switch-branch preserves the successor projection after same-directory-ABA selection [0.06ms]
+92 |     await started.promise
+93 |     configureApi({ serverUrl: "http://retired-meta.invalid" })
+94 |     const response = ok(accepted)
+95 |     pending.resolve(response)
+96 |     const result = await operation
+97 |     expect(result).toBeInstanceOf(ApiAuthorityChangedError)
+                        ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class ApiAuthorityChangedError extends Error]
+Received value: undefined
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\meta-vcs-actions.test.ts:97:20)
+(fail) switch-branch returns the original typed API retirement response receipt [0.29ms]
+(pass) VCS action service > streams the generated commit message through the project-scoped POST route [0.88ms]
+(pass) VCS action service > rejects frames with fields outside the shared stream schema [0.73ms]
+(pass) VCS action service > commits the exact edited message and refreshes canonical VCS information [0.47ms]
+(pass) VCS action service > pushes the configured branch and refreshes canonical VCS information [0.37ms]
+
+packages\overlay\test\meta-vcs-branches.test.ts:
+(pass) VCS branch service > loads exact branch records through the project-scoped route [0.60ms]
+(pass) VCS branch service > rejects a malformed branch payload instead of manufacturing options [0.17ms]
+(pass) VCS branch service > switches one exact branch and refreshes the canonical VCS store through loadMeta [0.32ms]
+
+tmp\gallery-project\packages\overlay\test\meta-vcs-actions.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+error: Cannot find module '@opencorvus-ai/transport-protocol' from 'D:\myhexin-local\opencorvus\tmp\gallery-project\packages\overlay\src\services\meta.ts'
+-------------------------------
+
+
+tmp\gallery-project\packages\overlay\test\meta-vcs-branches.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+error: Cannot find module 'solid-js/store' from 'D:\myhexin-local\opencorvus\tmp\gallery-project\packages\overlay\src\store\settings.ts'
+-------------------------------
+
+
+5 tests failed:
+(fail) commit returns the original typed API retirement response receipt [0.57ms]
+(fail) push returns the original typed API retirement response receipt [0.34ms]
+(fail) switch-branch returns the original typed API retirement response receipt [0.29ms]
+
+ 43 pass
+ 5 fail
+ 2 errors
+ 112 expect() calls
+Ran 48 tests across 6 files. [1.71s]

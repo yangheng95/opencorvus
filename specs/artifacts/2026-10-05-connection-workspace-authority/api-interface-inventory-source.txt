@@ -1,0 +1,9 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import ts from '../node_modules/typescript'
+const wanted=new Set(['apiJson','apiRequest','apiJsonWithTimeout','serverSettledRequest','configure','configureApi','onApiError','request','openStream','ApiError'])
+const calls=[]
+async function walk(dir){for(const ent of await fs.readdir(dir,{withFileTypes:true})){const file=path.join(dir,ent.name);if(ent.isDirectory())await walk(file);else if(/\.tsx?$/.test(file)){const text=await fs.readFile(file,'utf8');const source=ts.createSourceFile(file,text,ts.ScriptTarget.Latest,true);function visit(node){if(ts.isCallExpression(node)||ts.isNewExpression(node)){const e=node.expression;const name=ts.isPropertyAccessExpression(e)?e.name.text:ts.isIdentifier(e)?e.text:'';if(wanted.has(name)){let owner=node.parent;while(owner&&!ts.isFunctionLike(owner))owner=owner.parent;calls.push({file:file.replaceAll('\\','/'),line:source.getLineAndCharacterOfPosition(node.getStart()).line+1,name,expression:e.getText(source),function:owner?.name?.getText(source)??'',arguments:node.arguments?.map(x=>x.getText(source))??[]})}}ts.forEachChild(node,visit)}visit(source)}}}
+await walk('packages/overlay/src')
+const summary=Object.fromEntries([...wanted].map(name=>[name,{calls:calls.filter(x=>x.name===name).length,files:new Set(calls.filter(x=>x.name===name).map(x=>x.file)).size}]))
+await fs.writeFile('.tmp-product-iteration/connection-api-interface-inventory.json',JSON.stringify({qualification:'Read-only TypeScript AST source inventory; call expressions, not runtime or UI tests',summary,calls},null,2));console.log(JSON.stringify(summary,null,2));console.log(JSON.stringify(calls.filter(x=>['request','openStream','configure','configureApi'].includes(x.name)).map(x=>({file:x.file,line:x.line,expression:x.expression})),null,2))

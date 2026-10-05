@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\meta-vcs-branches.test.ts:
+(pass) VCS branch service > loads exact branch records through the project-scoped route [4.01ms]
+(pass) VCS branch service > rejects a malformed branch payload instead of manufacturing options [0.51ms]
+(pass) VCS branch service > switches one exact branch and refreshes the canonical VCS store through loadMeta [2.07ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [1495.00ms]

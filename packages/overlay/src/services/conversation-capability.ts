@@ -1,5 +1,5 @@
 import { appStore } from "../store/app"
-import { apiJson } from "./api"
+import { apiJson, assertApiAuthorityCurrent, captureApiAuthority } from "./api"
 import type {
   ChatCapabilitySettings,
   ConversationCapabilityUpdate,
@@ -23,18 +23,23 @@ function path(directory: string, experience: ConversationExperience) {
 export async function loadConversationCapability<Experience extends ConversationExperience>(
   directory: string,
   experience: Experience,
+  authority = captureApiAuthority(),
 ): Promise<SettingsByExperience[Experience]> {
+  assertApiAuthorityCurrent(authority)
   if (!appStore.connected) throw new Error(`Cannot load ${experience} capabilities while disconnected`)
-  return await apiJson<SettingsByExperience[Experience]>(path(directory, experience))
+  return await apiJson<SettingsByExperience[Experience]>(path(directory, experience), { authority })
 }
 
 export async function updateConversationCapability<Experience extends ConversationExperience>(
   directory: string,
   experience: Experience,
   assignment: ConversationCapabilityAssignment,
+  authority = captureApiAuthority(),
 ): Promise<SettingsByExperience[Experience]> {
+  assertApiAuthorityCurrent(authority)
   if (!appStore.connected) throw new Error(`Cannot update ${experience} capabilities while disconnected`)
   return await apiJson<SettingsByExperience[Experience]>(path(directory, experience), {
+    authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(assignment),

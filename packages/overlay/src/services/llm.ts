@@ -11,7 +11,7 @@
 // directly — callers are responsible for store mutations after API calls.
 
 import { appStore } from "../store/app"
-import { apiJson } from "./api"
+import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 import type { ProviderAccountUsageCapability } from "./config"
 import { t } from "../utils/i18n"
 
@@ -23,6 +23,7 @@ function record(value: any): value is Record<string, any> {
 
 type ProviderRequestOptions = {
   directory?: string
+  authority?: ApiAuthority
 }
 
 function providerPath(path: string, options: ProviderRequestOptions = {}): string {
@@ -410,7 +411,10 @@ export async function testProviderConnection(
   modelID: string,
   options: ProviderRequestOptions = {},
 ): Promise<ProviderTestResult> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   return apiJson(providerOperationPath(`provider/${providerID}/test`, `global/providers/${providerID}/test`, options), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ modelID }),
@@ -501,17 +505,22 @@ export async function providerAuthInputs(
   callbacks: Pick<AuthDialogCallbacks, "nativePrompt" | "nativeSelect">,
   options: ProviderRequestOptions = {},
 ): Promise<Record<string, string> | null> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  options = { ...options, authority }
   const inputs: Record<string, string> = {}
   const label = providerLabel(providerID)
 
   while (true) {
     const prompts = await apiJson(providerAuthPath(providerID, "auth/prompts", options), {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ method: methodIndex, inputs }),
       signal: AbortSignal.timeout(300_000),
     })
 
+    assertApiAuthorityCurrent(authority)
     const list: AuthPrompt[] = Array.isArray(prompts)
       ? (prompts.map(providerAuthPrompt).filter(Boolean) as AuthPrompt[])
       : []
@@ -539,6 +548,7 @@ export async function providerAuthInputs(
       })
     }
 
+    assertApiAuthorityCurrent(authority)
     if (value == null) return null
     inputs[prompt.key] = String(value).trim()
   }
@@ -556,7 +566,10 @@ export async function executeProviderAuth(
   inputs: Record<string, string>,
   options: ProviderRequestOptions = {},
 ): Promise<true> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   await apiJson(providerAuthPath(providerID, "auth/execute", options), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ method: methodIndex, inputs }),
@@ -577,6 +590,9 @@ export async function authorizeProvider(
   callbacks: AuthDialogCallbacks,
   options: ProviderRequestOptions = {},
 ): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  options = { ...options, authority }
   const methods = providerAuthMethods(providerID)
   const explicitChoice = typeof methodIndex === "number"
   const match = explicitChoice ? methods.find((m) => m.index === methodIndex) : providerPreferredOauthMethod(providerID)
@@ -593,6 +609,7 @@ export async function authorizeProvider(
         kind: "info",
       },
     )
+    assertApiAuthorityCurrent(authority)
     if (!confirmed) {
       callbacks.onAuthCancelled(providerID)
       return false
@@ -600,12 +617,14 @@ export async function authorizeProvider(
   }
 
   const collected = await providerAuthInputs(providerID, match.index, callbacks, options)
+  assertApiAuthorityCurrent(authority)
   if (collected == null) {
     callbacks.onAuthCancelled(providerID)
     return false
   }
 
   const authorization = await apiJson(providerAuthPath(providerID, "oauth/authorize", options), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ method: match.index, inputs: collected }),
@@ -627,19 +646,26 @@ export async function authorizeProvider(
   // would refuse the window — silently, because window.open cannot report it.
   // Such a host gets the URL as a button on the dialog that follows: opening
   // it from that click is the one moment the browser will allow.
+  assertApiAuthorityCurrent(authority)
   const authLink = callbacks.externalUrlNeedsUserGesture
     ? { url: authorization.url, label: t("llm.auth_open_page") }
     : undefined
   const cancel = () =>
     apiJson(providerAuthPath(providerID, "oauth/cancel", options), {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),
     })
   if (!authLink) {
     try {
-      if ((await callbacks.nativeOpen(authorization.url)) === false) throw new Error(t("llm.auth_open_failed"))
+      const opened = await callbacks.nativeOpen(authorization.url)
+      assertApiAuthorityCurrent(authority)
+      if (opened === false) throw new Error(t("llm.auth_open_failed"))
     } catch (error) {
+      // A retired observer cannot cancel the original flow through a new API.
+      // Its durable owner retains the existing bounded pending lifetime.
+      if (!isApiAuthorityCurrent(authority)) throw error
       try {
         await cancel()
       } catch (cleanupError) {
@@ -661,12 +687,14 @@ export async function authorizeProvider(
         link: authLink,
       },
     )
+    assertApiAuthorityCurrent(authority)
     if (code == null) {
       await cancel()
       callbacks.onAuthCancelled(providerID)
       return false
     }
     await apiJson(providerAuthPath(providerID, "oauth/callback", options), {
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ method: match.index, code, flowID: authorization.flowID }),
@@ -678,6 +706,7 @@ export async function authorizeProvider(
   // Implicit / device-code flow: show instructions and wait for server callback
   callbacks.showLlmNotice(authorization.instructions || authorization.url, "warn", 0, authLink)
   await apiJson(providerAuthPath(providerID, "oauth/callback", options), {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ method: match.index, flowID: authorization.flowID }),
@@ -699,10 +728,14 @@ export async function runProviderAuthMethod(
   callbacks: AuthDialogCallbacks,
   options: ProviderRequestOptions = {},
 ): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  options = { ...options, authority }
   if (method.type === "oauth") {
     return authorizeProvider(providerID, method.index, callbacks, options)
   }
   const inputs = await providerAuthInputs(providerID, method.index, callbacks, options)
+  assertApiAuthorityCurrent(authority)
   if (inputs == null) {
     callbacks.onAuthCancelled(providerID)
     return false
@@ -715,6 +748,7 @@ export async function runProviderAuthMethod(
     okLabel: t("common.submit"),
     cancelLabel: t("common.cancel"),
   })
+  assertApiAuthorityCurrent(authority)
   if (key == null) {
     callbacks.onAuthCancelled(providerID)
     return false
@@ -739,6 +773,9 @@ export async function authenticateSelectedProvider(
   callbacks: AuthDialogCallbacks,
   options: ProviderRequestOptions = {},
 ): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  options = { ...options, authority }
   const methods = providerAuthMethods(providerID)
   if (!providerID || methods.length === 0) return false
 
@@ -760,6 +797,7 @@ export async function authenticateSelectedProvider(
     selectValue: String(initialAuthMethod(providerID, methods).index),
   })
 
+  assertApiAuthorityCurrent(authority)
   if (value == null) return false
   const method = methods.find((m) => String(m.index) === value)
   if (!method) return false

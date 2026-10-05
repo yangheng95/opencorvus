@@ -15,13 +15,23 @@ import {
 import { formatErrorDetails } from "./diagnostics"
 import { AppLog } from "../utils/log"
 import type { SseConnectionStatus } from "../store/messages"
+import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 
 let recoveryGeneration = 0
 let recoveryAbort: AbortController | null = null
 let rewindClearTaskID = ""
-let rewindClearPromise: Promise<number> | null = null
+let rewindClearPromise: { promise: Promise<number>; authority: ApiAuthority; selectionEpoch: number } | null = null
+
+export function retireSelectedTaskRecovery(): void {
+  recoveryGeneration += 1
+  recoveryAbort?.abort(new DOMException("Selected task projection retired", "AbortError"))
+  recoveryAbort = null
+  rewindClearPromise = null
+  rewindClearTaskID = ""
+}
 
 export interface SelectedTaskRecoveryOptions {
+  authority?: ApiAuthority
   requireFreshBoard?: boolean
 }
 
@@ -29,6 +39,7 @@ export type RestartSelectedTaskStream = (
   source: { kind: "task"; id: string },
   after: number,
   options: {
+    authority?: ApiAuthority
     replayLive?: boolean
     directory: string
     connectionStatus?: Extract<SseConnectionStatus, "connecting" | "reconnecting">
@@ -54,7 +65,9 @@ function abortError(message: string): DOMException {
   return new DOMException(message, "AbortError")
 }
 
-function assertCurrentRecovery(taskID: string, generation: number, signal: AbortSignal): void {
+function assertCurrentRecovery(taskID: string, generation: number, signal: AbortSignal, authority: ApiAuthority, selectionEpoch: number): void {
+  assertApiAuthorityCurrent(authority)
+  if (selectionEpoch !== boardStore.selectEpoch) throw abortError("Selected task recovery selection changed")
   if (signal.aborted) throw signal.reason ?? abortError("Selected task recovery aborted")
   if (generation !== recoveryGeneration) throw abortError("Selected task recovery superseded")
   if (activeTaskID() !== taskID) throw abortError("Selected task recovery task changed")
@@ -105,13 +118,16 @@ export async function recoverSelectedTaskConversation(
   restartStream: RestartSelectedTaskStream,
   options: SelectedTaskRecoveryOptions = {},
 ): Promise<number> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const selectionEpoch = boardStore.selectEpoch
   const taskID = String(requestedTaskID || "")
   if (!taskID) throw new Error(`selected-task recovery requires a taskID: ${reason}`)
   if (activeTaskID() !== taskID) {
     throw abortError("Selected task recovery task changed")
   }
-  if (rewindClearPromise && rewindClearTaskID === taskID) {
-    return rewindClearPromise
+  if (rewindClearPromise && rewindClearPromise.selectionEpoch === selectionEpoch && isApiAuthorityCurrent(rewindClearPromise.authority) && rewindClearTaskID === taskID) {
+    return rewindClearPromise.promise
   }
 
   recoveryAbort?.abort(abortError("Selected task recovery superseded"))
@@ -128,7 +144,7 @@ export async function recoverSelectedTaskConversation(
   })
 
   try {
-    assertCurrentRecovery(taskID, generation, controller.signal)
+    assertCurrentRecovery(taskID, generation, controller.signal, authority, selectionEpoch)
     const sequence = resumeSequence()
     if (cannotReplayWithoutFullRefresh(reason)) {
       throw new Error(`Selected task recovery refused full conversation refresh after load: ${reason}`)
@@ -138,14 +154,15 @@ export async function recoverSelectedTaskConversation(
     if (!replayLive) resetSelectedLiveCursor()
     if (replayLive) cancelConversationReplay()
     if (options.requireFreshBoard === true) {
-      await loadBoard({ requireFresh: true })
-      assertCurrentRecovery(taskID, generation, controller.signal)
+      await loadBoard({ requireFresh: true, authority })
+      assertCurrentRecovery(taskID, generation, controller.signal, authority, selectionEpoch)
     }
     if (!replayLive) {
-      await mergeLatestConversationTail(taskID, { directory, signal: controller.signal })
-      assertCurrentRecovery(taskID, generation, controller.signal)
+      await mergeLatestConversationTail(taskID, { directory, signal: controller.signal, authority })
+      assertCurrentRecovery(taskID, generation, controller.signal, authority, selectionEpoch)
     }
     restartStream({ kind: "task", id: taskID }, sequence, {
+      authority,
       replayLive,
       directory,
       connectionStatus: replayLive ? "reconnecting" : "connecting",
@@ -160,6 +177,7 @@ export async function recoverSelectedTaskConversation(
     })
     return sequence
   } catch (error) {
+    if (!isApiAuthorityCurrent(authority)) throw error
     const input = {
       channel: "selected-task-recovery",
       reason,
@@ -184,14 +202,17 @@ export async function recoverSelectedTaskAfterRewindClear(
   reason: string,
   requestedTaskID: string,
   restartStream: RestartSelectedTaskStream,
+  authority = captureApiAuthority(),
 ): Promise<number> {
+  assertApiAuthorityCurrent(authority)
+  const selectionEpoch = boardStore.selectEpoch
   const taskID = String(requestedTaskID || "")
   if (!taskID) throw new Error(`rewind clear recovery requires a taskID: ${reason}`)
   if (activeTaskID() !== taskID) {
     throw abortError("Rewind clear recovery task changed")
   }
-  if (rewindClearPromise && rewindClearTaskID === taskID) {
-    return rewindClearPromise
+  if (rewindClearPromise && rewindClearPromise.selectionEpoch === selectionEpoch && isApiAuthorityCurrent(rewindClearPromise.authority) && rewindClearTaskID === taskID) {
+    return rewindClearPromise.promise
   }
 
   recoveryAbort?.abort(abortError("Selected task recovery superseded"))
@@ -211,17 +232,18 @@ export async function recoverSelectedTaskAfterRewindClear(
   let run: Promise<number>
   run = (async () => {
     try {
-      assertCurrentRecovery(taskID, generation, controller.signal)
+      assertCurrentRecovery(taskID, generation, controller.signal, authority, selectionEpoch)
       resetSelectedLiveCursor()
       const directory = conversationSourceDirectory({ kind: "task", id: taskID })
       const sequence = await hydrateTaskConversation(taskID, {
+        authority,
         signal: controller.signal,
         scrollIntent: "bottom",
         resetCause: "task-rewind-clear",
         directory,
       })
-      assertCurrentRecovery(taskID, generation, controller.signal)
-      restartStream({ kind: "task", id: taskID }, sequence, { directory, connectionStatus: "connecting" })
+      assertCurrentRecovery(taskID, generation, controller.signal, authority, selectionEpoch)
+      restartStream({ kind: "task", id: taskID }, sequence, { directory, connectionStatus: "connecting", authority })
       recordConversationRecoverySucceeded({
         channel: "rewind-clear",
         reason,
@@ -232,6 +254,7 @@ export async function recoverSelectedTaskAfterRewindClear(
       })
       return sequence
     } catch (error) {
+      if (!isApiAuthorityCurrent(authority)) throw error
       const input = {
         channel: "rewind-clear",
         reason,
@@ -249,12 +272,12 @@ export async function recoverSelectedTaskAfterRewindClear(
       throw error
     } finally {
       if (recoveryAbort === controller) recoveryAbort = null
-      if (rewindClearPromise === run) {
+      if (rewindClearPromise?.promise === run) {
         rewindClearPromise = null
         rewindClearTaskID = ""
       }
     }
   })()
-  rewindClearPromise = run
+  rewindClearPromise = { promise: run, authority, selectionEpoch }
   return run
 }

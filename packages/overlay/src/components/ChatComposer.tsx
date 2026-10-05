@@ -36,7 +36,14 @@ import {
   uploadComposerBytes,
   uploadComposerDirectoryReference,
 } from "../services/attachment-upload"
-import { ApiError, fetchResourceAsObjectUrl } from "../services/api"
+import {
+  ApiError,
+  fetchResourceAsObjectUrl,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "../services/api"
+import { fileEditorReserved } from "../services/file-workbench"
 import {
   SCREENSHOT_BROWSER_THUMBNAIL_VARIANT,
   type VisibleComposerReferences,
@@ -161,9 +168,10 @@ export interface ChatComposerProps {
     webSearch: boolean,
     directives: ComposerSubmitDirectives,
     markDispatched: () => void,
+    authority: ApiAuthority,
   ) => void | Promise<void>
   /** Resolve and activate the Project that owns a real attachment upload. */
-  resolveAttachmentDirectory: (selectionEpoch: number) => ComposerProjectOperation
+  resolveAttachmentDirectory: (selectionEpoch: number, authority: ApiAuthority) => ComposerProjectOperation
   /** Called when the user clicks the stop button while busy. */
   onStop?: () => void
   onSideChat?: (prompt: string) => Promise<void>
@@ -316,9 +324,6 @@ const SUPPORTED_COMPOSER_FILE_ACCEPT = [
 
 interface ComposerAttachmentLoadersProps {
   disabled: boolean
-  fileCount: number
-  folderCount: number
-  uploadingCount: number
   parallelism: number | null
   unattended: boolean | null
   runControlBusy: boolean
@@ -363,25 +368,6 @@ function ComposerAttachmentLoaders(props: ComposerAttachmentLoadersProps): JSX.E
         aria-hidden="true"
         onChange={handleFileSelection}
       />
-      <Show
-        when={props.uploadingCount > 0}
-        fallback={
-          <Show when={props.fileCount > 0 || props.folderCount > 0}>
-            <span class="composer-attachment-loader-count" role="status" aria-live="polite">
-              {t("chat.attachment_loader.count", {
-                files: props.fileCount,
-                fileLimit: COMPOSER_FILE_ATTACHMENT_LIMIT,
-                folders: props.folderCount,
-                folderLimit: COMPOSER_FOLDER_ATTACHMENT_LIMIT,
-              })}
-            </span>
-          </Show>
-        }
-      >
-        <span class="composer-attachment-loader-count" role="status" aria-live="polite">
-          {t("chat.attachment_loader.uploading", { count: props.uploadingCount })}
-        </span>
-      </Show>
       <DropdownMenu.Root placement="top-start" gutter={6} fitViewport>
         <DropdownMenu.Trigger
           as={Button}
@@ -505,7 +491,13 @@ function chooseAttachmentFilename(original: string | undefined, mime: string): s
 
 function ComposerAttachmentThumbnail(props: { attachment: ChatAttachment }): JSX.Element {
   const thumbnailUrl = () => `${props.attachment.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}`
-  const [source] = createResource(thumbnailUrl, (url) => fetchResourceAsObjectUrl(url))
+  const [source] = createResource(
+    () => ({ url: thumbnailUrl(), authority: captureApiAuthority() }),
+    async (input) => {
+      const url = await fetchResourceAsObjectUrl(input.url, { authority: input.authority })
+      return isApiAuthorityCurrent(input.authority) ? url : undefined
+    },
+  )
   return (
     <Show
       when={source()}
@@ -519,6 +511,7 @@ function ComposerAttachmentThumbnail(props: { attachment: ChatAttachment }): JSX
           imageClass="chat-attachment-thumb"
           imageDataUI="composer-image-attachment-thumbnail"
           previewLoader={() => fetchResourceAsObjectUrl(props.attachment.url)}
+          resourceUrl={props.attachment.url}
         />
       )}
     </Show>
@@ -593,6 +586,17 @@ export function ChatComposer(props: ChatComposerProps) {
     ),
   )
   const [submitting, setSubmitting] = createSignal(false)
+  let submissionGeneration = 0
+  createEffect(
+    on(
+      () => captureApiAuthority().revision,
+      () => {
+        submissionGeneration += 1
+        setSubmitting(false)
+        setSubmissionError("")
+      },
+    ),
+  )
   const uploads = createComposerUploadLifetime()
   const uploadingCount = uploads.count
   onCleanup(uploads.dispose)
@@ -604,6 +608,12 @@ export function ChatComposer(props: ChatComposerProps) {
   )
   const attachmentCounts = createMemo(() => composerAttachmentCounts(attachments()))
   const [savingRunControl, setSavingRunControl] = createSignal<"parallelism" | "unattended" | null>(null)
+  createEffect(
+    on(
+      () => [captureApiAuthority().revision, boardStore.selectEpoch],
+      () => setSavingRunControl(null),
+    ),
+  )
   const [textareaResizeHeight, setTextareaResizeHeight] = createSignal<number | null>(null)
   const runControlState = createMemo(() => composerRunControlState(appStore.config))
   const activeExpertSquad = createMemo(() => props.expertSquads.find((squad) => squad.id === props.activeExpertSquadID))
@@ -687,10 +697,18 @@ export function ChatComposer(props: ChatComposerProps) {
 
   async function saveRunControl(owner: "parallelism" | "unattended", diff: Record<string, unknown>) {
     if (savingRunControl()) return
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = activeProjectDirectory()
+    const owns = () =>
+      isApiAuthorityCurrent(authority) &&
+      boardStore.selectEpoch === selectionEpoch &&
+      activeProjectDirectory() === directory
     setSavingRunControl(owner)
     try {
-      await patchConfig(diff, currentProjectConfigRequestOptions())
+      await patchConfig(diff, { ...currentProjectConfigRequestOptions(), authority, ownsResponse: owns })
     } catch (error) {
+      if (!owns()) return
       reportError({
         id: `composer-run-control:${owner}`,
         title: t("chat.run_control_save_failed"),
@@ -698,7 +716,7 @@ export function ChatComposer(props: ChatComposerProps) {
         details: formatErrorDetails(error),
       })
     } finally {
-      setSavingRunControl(null)
+      if (owns()) setSavingRunControl(null)
     }
   }
 
@@ -737,9 +755,10 @@ export function ChatComposer(props: ChatComposerProps) {
   }
 
   function writeDraftText(next: string): void {
-    writeText(next)
+    if (fileEditorReserved()) return
     const key = normalizeComposerDraftKey(props.draftKey)
     if (key) setComposerDraft(key, next)
+    writeText(next)
   }
 
   function resetMentionInteraction(): void {
@@ -850,6 +869,8 @@ export function ChatComposer(props: ChatComposerProps) {
   // ── Attachment handling ──
 
   async function addAttachment(file: File, displayName?: string) {
+    const authority = captureApiAuthority()
+    if (fileEditorReserved()) return
     if (!canAcceptComposerAttachment()) return
     if (!file) return
     if (composerAttachmentCapacity(attachments(), "file") === 0) {
@@ -870,12 +891,12 @@ export function ChatComposer(props: ChatComposerProps) {
     try {
       const originEpoch = boardStore.selectEpoch
       const capturedInput = captureComposerFile(file)
-      const operation = props.resolveAttachmentDirectory(originEpoch)
-      token = uploads.register(operation)
+      const operation = props.resolveAttachmentDirectory(originEpoch, authority)
+      token = uploads.register(operation, authority)
       const [captured, resolution] = await Promise.all([capturedInput, operation.promise])
       if (!uploads.isCurrent(token)) throw new DOMException("Attachment input superseded", "AbortError")
       const { directory } = resolution
-      const reference = await uploadComposerBytes({ ...captured, filename, directory })
+      const reference = await uploadComposerBytes({ ...captured, filename, directory, authority })
       if (!uploads.isCurrent(token)) return
       if (composerAttachmentCapacity(attachments(), "file") === 0) {
         showComposerMessage(
@@ -890,6 +911,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       setAttachments((prev) => [...prev, { ...reference, kind: "file" }])
     } catch (err) {
+      if (!isApiAuthorityCurrent(authority)) return
       if (err instanceof DOMException && err.name === "AbortError") return
       if (token && (!uploads.has(token) || !ownsWorkspaceSelection(token.operation.selectionEpoch()))) return
       console.warn("[ChatComposer] attachment upload failed for", sourceName, err)
@@ -929,6 +951,8 @@ export function ChatComposer(props: ChatComposerProps) {
   }
 
   async function addFolder(): Promise<void> {
+    const authority = captureApiAuthority()
+    if (fileEditorReserved()) return
     if (composerAttachmentCapacity(attachments(), "folder") === 0) {
       showComposerMessage(
         "attachment-folder-limit",
@@ -945,12 +969,12 @@ export function ChatComposer(props: ChatComposerProps) {
     let token: ComposerUploadToken | undefined
     try {
       const selectedPath = await pickDirectory(pickerDirectory || undefined)
-      if (!selectedPath || !ownsWorkspaceSelection(pickerEpoch)) return
-      const operation = props.resolveAttachmentDirectory(pickerEpoch)
-      token = uploads.register(operation)
+      if (!selectedPath || !ownsWorkspaceSelection(pickerEpoch) || !isApiAuthorityCurrent(authority)) return
+      const operation = props.resolveAttachmentDirectory(pickerEpoch, authority)
+      token = uploads.register(operation, authority)
       const { directory } = await operation.promise
       if (!uploads.isCurrent(token)) throw new DOMException("Directory attachment superseded", "AbortError")
-      const reference = await uploadComposerDirectoryReference(selectedPath, directory)
+      const reference = await uploadComposerDirectoryReference(selectedPath, directory, authority)
       if (!uploads.isCurrent(token)) return
       if (composerAttachmentCapacity(attachments(), "folder") === 0) {
         showComposerMessage(
@@ -965,6 +989,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       setAttachments((prev) => [...prev, { ...reference, kind: "folder", mime: DIRECTORY_REFERENCE_MIME }])
     } catch (err) {
+      if (!isApiAuthorityCurrent(authority)) return
       if (err instanceof DOMException && err.name === "AbortError") return
       if (token && (!uploads.has(token) || !ownsWorkspaceSelection(token.operation.selectionEpoch()))) return
       showComposerMessage(
@@ -999,6 +1024,7 @@ export function ChatComposer(props: ChatComposerProps) {
 
   async function handleSubmit(e: SubmitEvent) {
     e.preventDefault()
+    if (fileEditorReserved()) return
     if (submitting()) return
     if (uploadingCount() > 0) return
     if (!props.enabled) return
@@ -1007,6 +1033,9 @@ export function ChatComposer(props: ChatComposerProps) {
     if (!trimmed) return
     const sentAttachments = [...attachments()]
     const submittedDraftKey = props.draftKey
+    const authority = captureApiAuthority()
+    const generation = ++submissionGeneration
+    const owns = () => generation === submissionGeneration && isApiAuthorityCurrent(authority)
     const quotation = composerQuotation(submittedDraftKey)
     setSubmissionError("")
     setSubmitting(true)
@@ -1014,12 +1043,14 @@ export function ChatComposer(props: ChatComposerProps) {
       const command = sideCommand()
       if (command && props.onSideChat) {
         await props.onSideChat(command[1]?.trim() ?? "")
+        if (!owns()) return
         writeDraftText("")
         return
       }
       const directives = resolveComposerMentionDirectives(trimmed, mentionCatalog())
       let dispatched = false
       const markDispatched = () => {
+        if (!owns()) return
         if (dispatched) return
         dispatched = true
         setText("")
@@ -1045,9 +1076,11 @@ export function ChatComposer(props: ChatComposerProps) {
           missionSkillNames: directives.missionSkillNames,
         },
         markDispatched,
+        authority,
       )
       if (!dispatched) throw new Error("Composer submission completed without crossing the dispatch boundary")
     } catch (error) {
+      if (!owns()) return
       if (error instanceof DOMException && error.name === "AbortError") return
       console.error("[ChatComposer] submit failed", error)
       if (quotation && !composerDraftText(submittedDraftKey) && !composerQuotation(submittedDraftKey)) {
@@ -1056,7 +1089,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       setSubmissionError(submitErrorMessage(error))
     } finally {
-      setSubmitting(false)
+      if (owns()) setSubmitting(false)
     }
   }
 
@@ -1466,6 +1499,21 @@ export function ChatComposer(props: ChatComposerProps) {
           </For>
         </div>
       </Show>
+      <Show when={uploadingCount() > 0 || attachmentCounts().files > 0 || attachmentCounts().folders > 0}>
+        <div class="composer-attachment-loader-count" role="status" aria-live="polite">
+          <Show
+            when={uploadingCount() > 0}
+            fallback={t("chat.attachment_loader.count", {
+              files: attachmentCounts().files,
+              fileLimit: COMPOSER_FILE_ATTACHMENT_LIMIT,
+              folders: attachmentCounts().folders,
+              folderLimit: COMPOSER_FOLDER_ATTACHMENT_LIMIT,
+            })}
+          >
+            {t("chat.attachment_loader.uploading", { count: uploadingCount() })}
+          </Show>
+        </div>
+      </Show>
 
       <form
         ref={formRef}
@@ -1530,7 +1578,7 @@ export function ChatComposer(props: ChatComposerProps) {
               id={props.textareaID ?? "chatTextarea"}
               class="chat-textarea"
               rows={1}
-              disabled={!props.enabled}
+              disabled={!props.enabled || fileEditorReserved()}
               placeholder={
                 props.enabled ? props.placeholder?.trim() || t("chat.placeholder") : t("chat.placeholder_disabled")
               }
@@ -1584,9 +1632,6 @@ export function ChatComposer(props: ChatComposerProps) {
           <div class="chat-compose-meta-left">
             <ComposerAttachmentLoaders
               disabled={!canAcceptComposerAttachment() || uploadingCount() > 0}
-              fileCount={attachmentCounts().files}
-              folderCount={attachmentCounts().folders}
-              uploadingCount={uploadingCount()}
               parallelism={runControlState().parallelism}
               unattended={runControlState().unattended}
               runControlBusy={savingRunControl() !== null || props.busy}

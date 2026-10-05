@@ -1,5 +1,6 @@
 import { Feedback } from "../ui/Feedback"
-import { createEffect, createSignal, For, Show } from "solid-js"
+import { createEffect, createSignal, For, Show, onCleanup } from "solid-js"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import {
   loadConversationCapability,
   updateConversationCapability,
@@ -33,6 +34,10 @@ export default function ConversationCapabilityPanel(props: {
   let loadGeneration = 0
   let mutationGeneration = 0
   let mutationScope = ""
+  onCleanup(() => {
+    loadGeneration++
+    mutationGeneration++
+  })
 
   const productLabel = () => (props.experience === "chat" ? "Chat" : "Work")
 
@@ -52,10 +57,16 @@ export default function ConversationCapabilityPanel(props: {
   }
 
   createEffect(() => {
+    const authority = captureApiAuthority()
     const currentDirectory = directory()
     const currentExperience = props.experience
-    const currentScope = `${currentExperience}:${currentDirectory}`
+    const currentScope = `${authority.revision}:${currentExperience}:${currentDirectory}`
     const requestGeneration = ++loadGeneration
+    const owns = () =>
+      requestGeneration === loadGeneration &&
+      directory() === currentDirectory &&
+      props.experience === currentExperience &&
+      isApiAuthorityCurrent(authority)
     if (mutationScope && mutationScope !== currentScope) {
       mutationScope = ""
       mutationGeneration++
@@ -65,67 +76,45 @@ export default function ConversationCapabilityPanel(props: {
     setError("")
     setLoading(!!currentDirectory)
     if (!currentDirectory) return
-    void loadConversationCapability(currentDirectory, currentExperience)
+    void loadConversationCapability(currentDirectory, currentExperience, authority)
       .then((next) => {
-        if (
-          requestGeneration !== loadGeneration ||
-          directory() !== currentDirectory ||
-          props.experience !== currentExperience
-        ) {
-          return
-        }
+        if (!owns()) return
         setSettings(next)
       })
       .catch((cause) => {
-        if (
-          requestGeneration !== loadGeneration ||
-          directory() !== currentDirectory ||
-          props.experience !== currentExperience
-        ) {
-          return
-        }
+        if (!owns()) return
         setError(cause instanceof Error ? cause.message : String(cause))
       })
       .finally(() => {
-        if (
-          requestGeneration === loadGeneration &&
-          directory() === currentDirectory &&
-          props.experience === currentExperience
-        ) {
-          setLoading(false)
-        }
+        if (owns()) setLoading(false)
       })
   })
 
   async function mutateAssignment(next: ConversationCapabilityAssignment) {
+    const authority = captureApiAuthority()
     const currentDirectory = directory()
     const currentExperience = props.experience
     const requestGeneration = ++mutationGeneration
-    mutationScope = `${currentExperience}:${currentDirectory}`
+    const owns = () =>
+      requestGeneration === mutationGeneration &&
+      directory() === currentDirectory &&
+      props.experience === currentExperience &&
+      isApiAuthorityCurrent(authority)
+    mutationScope = `${authority.revision}:${currentExperience}:${currentDirectory}`
     setSaving(true)
     setError("")
     try {
-      const response = await updateConversationCapability(currentDirectory, currentExperience, next)
-      if (
-        requestGeneration !== mutationGeneration ||
-        directory() !== currentDirectory ||
-        props.experience !== currentExperience
-      ) {
-        return
-      }
+      const response = await updateConversationCapability(currentDirectory, currentExperience, next, authority)
+      if (!owns()) return
       loadGeneration++
       setLoading(false)
       setSettings(response)
     } catch (cause) {
-      if (
-        requestGeneration === mutationGeneration &&
-        directory() === currentDirectory &&
-        props.experience === currentExperience
-      ) {
+      if (owns()) {
         setError(cause instanceof Error ? cause.message : String(cause))
       }
     } finally {
-      if (requestGeneration === mutationGeneration) {
+      if (owns()) {
         mutationScope = ""
         setSaving(false)
       }

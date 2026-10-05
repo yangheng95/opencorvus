@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\meta-vcs-actions.test.ts:
+(pass) VCS action service > streams the generated commit message through the project-scoped POST route [2.00ms]
+(pass) VCS action service > rejects frames with fields outside the shared stream schema [0.92ms]
+(pass) VCS action service > commits the exact edited message and refreshes canonical VCS information [2.14ms]
+(pass) VCS action service > pushes the configured branch and refreshes canonical VCS information [0.58ms]
+
+ 4 pass
+ 0 fail
+ 11 expect() calls
+Ran 4 tests across 1 file. [1199.00ms]

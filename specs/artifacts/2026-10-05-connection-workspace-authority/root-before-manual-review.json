@@ -1,0 +1,32 @@
+{
+  "kind": "actual-page-manual-visual-review",
+  "reviewer": "root",
+  "page": "owned IAB tab 16, http://127.0.0.1:17948/ui",
+  "frontend": "main-Dd5jeSV0.js / main-Yy88IPFU.css",
+  "screenshotsReviewed": 9,
+  "sourceReceipts": ["root-before-checkpoints.json", "before-a-empty-chat-create.json"],
+  "observations": [
+    "The empty New Chat launcher did not expose Files through the observed menu or command search; this is a separate UI candidate, not evidence that Files is always inaccessible.",
+    "One real empty A Chat was created by the canonical HTTP endpoint and selected from the real project row. No message, prompt or model request was created.",
+    "Environment information -> Tools -> Files opened the actual authored A file. The baseline bytes and the unsaved draft were visually reviewed.",
+    "Actual B Connection Save presented no file Save/Discard/Cancel decision. On return, B Online was shown while A Chat/project and the exact unsaved file remained actionable with enabled file Save.",
+    "Online is visible in the screenshot; Port17949 is corroborated by actual accessibility observation. No file Save or cross-backend file write was performed.",
+    "After restoring A, actual Close workspace presented the existing Unsaved changes decision. Explicit Discard removed only the owned test draft. Clean reload returned to the A project launcher with no selected source or file editor.",
+    "All nine before images were personally displayed and inspected during the actual interaction sequence. The real owned empty Chat remains in A's database; no empty-database restoration is claimed."
+  ],
+  "supportingFacts": {
+    "bSelectedSourceEvent404Count": 17,
+    "bothAuthoredFilesRetainedBaselineBytes": true,
+    "pageClosed": true,
+    "bothPublicShutdownAcknowledged": true,
+    "allSixOwnedProcessOccurrencesPhysicallyAbsent": true,
+    "bothPortsFree": true,
+    "authOrModelCatalogCopied": false
+  },
+  "limits": [
+    "This is before evidence; it cannot qualify the current source edits.",
+    "No draft loss, wrong-disk write, filesystem isolation failure or backend scheduler root cause was established.",
+    "No private browser storage read or mutation was used. No user process/window, Provider credential or model was operated.",
+    "Initial open-file checkpoint identifies the initial attempt; the actual successful request is corroborated by the corresponding server receipt."
+  ]
+}

@@ -6,9 +6,9 @@ import { Feedback } from "./ui/Feedback"
 // searchMemory (10511–10540), openMemoryDetail (10586–10610), deleteMemory
 // (10612–10621), and knowledgeScopeLabel (10542–10547).
 
-import { createSignal, createMemo, createEffect, For, Show } from "solid-js"
+import { createSignal, createMemo, createEffect, onCleanup, untrack, For, Show } from "solid-js"
 import { t } from "../utils/i18n"
-import { apiJson } from "../services/api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { syncActiveDirectoryApiContext } from "../services/workspace"
@@ -49,6 +49,8 @@ interface MemoryDetailState {
 interface MemoryFilesSource {
   taskID: string | undefined
   directory: string
+  authority: ApiAuthority
+  generation: number
 }
 
 // ── Helpers ──
@@ -68,10 +70,13 @@ async function showMemoryMessage(
   owner: string,
   message: string,
   options: { title?: string; kind?: string } = {},
+  isCurrent: () => boolean,
 ): Promise<void> {
+  if (!isCurrent()) return
   try {
     await nativeMessage(message, options)
   } catch (error) {
+    if (!isCurrent()) return
     reportError({
       id: `memory-panel:${owner}`,
       title: t("common.error"),
@@ -121,13 +126,31 @@ export function MemoryPanel(props: MemoryPanelProps) {
     return syncActiveDirectoryApiContext().trim()
   }
   let memoryLoadOwner: symbol | null = null
+  let sourceGeneration = 0
 
-  function sourceMatches(taskID: string | undefined, directory: string): boolean {
-    return String(currentTaskID() || "") === String(taskID || "") && currentDirectory() === directory
+  function captureSource(): MemoryFilesSource {
+    return {
+      taskID: currentTaskID(),
+      directory: currentDirectory(),
+      authority: captureApiAuthority(),
+      generation: sourceGeneration,
+    }
+  }
+
+  function sourceMatches(source: MemoryFilesSource): boolean {
+    return (
+      isActive() &&
+      source.generation === sourceGeneration &&
+      isApiAuthorityCurrent(source.authority) &&
+      String(currentTaskID() || "") === String(source.taskID || "") &&
+      currentDirectory() === source.directory
+    )
   }
 
   function deleteKey(fileID: string, source = filesSource()): string {
-    return source ? `${source.taskID ?? ""}\u0000${source.directory}\u0000${fileID}` : ""
+    return source
+      ? `${source.authority.revision}\u0000${source.generation}\u0000${source.taskID ?? ""}\u0000${source.directory}\u0000${fileID}`
+      : ""
   }
 
   function memoryPath(path: string, directory: string, params: Record<string, string> = {}): string {
@@ -142,7 +165,12 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   // ── Data loading ──
 
-  const loadMemory = async (taskID = currentTaskID(), directory = currentDirectory()) => {
+  const loadMemory = async (source = captureSource()) => {
+    if (!sourceMatches(source)) return
+    const { taskID, directory, authority } = source
+    const token = Symbol("memory-load")
+    memoryLoadOwner = token
+    const ownsLoad = () => memoryLoadOwner === token && sourceMatches(source)
     if (!taskID || !directory) {
       setFiles([])
       setFilesSource(null)
@@ -150,22 +178,21 @@ export function MemoryPanel(props: MemoryPanelProps) {
       setExpandedFileId(null)
       setDetailStates({})
       setErrorMessage("")
+      setLoading(false)
       return
     }
-    const token = Symbol("memory-load")
-    memoryLoadOwner = token
     setLoading(true)
     try {
-      const data = await apiJson(memoryPath("panel/knowledge/memory", directory, { taskID }))
-      if (!sourceMatches(taskID, directory)) return
+      const data = await apiJson(memoryPath("panel/knowledge/memory", directory, { taskID }), { authority })
+      if (!ownsLoad()) return
       setFiles(Array.isArray(data) ? data : [])
-      setFilesSource({ taskID, directory })
+      setFilesSource(source)
       setSearchMode(false)
       setExpandedFileId(null)
       setDetailStates({})
       setErrorMessage("")
     } catch (err) {
-      if (sourceMatches(taskID, directory)) {
+      if (ownsLoad()) {
         setFiles([])
         setFilesSource(null)
         setSearchMode(false)
@@ -174,7 +201,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
         setErrorMessage(err instanceof Error ? err.message : String(err))
       }
     } finally {
-      if (memoryLoadOwner === token) {
+      if (ownsLoad()) {
         memoryLoadOwner = null
         setLoading(false)
       }
@@ -182,31 +209,35 @@ export function MemoryPanel(props: MemoryPanelProps) {
   }
 
   const doSearch = async (q: string) => {
+    const source = captureSource()
+    if (!sourceMatches(source)) return
     if (!q || !q.trim()) {
       return loadMemory()
     }
     const directory = currentDirectory()
     if (!currentTaskID() || !directory) {
-      return loadMemory(currentTaskID(), directory)
+      return loadMemory(source)
     }
     const taskID = currentTaskID()
     const query = q.trim()
     const token = Symbol("memory-search")
     memoryLoadOwner = token
+    const ownsSearch = () => memoryLoadOwner === token && sourceMatches(source) && searchQuery().trim() === query
     setLoading(true)
     try {
       // Body-only branch — no implicit fallback to old results, every search
       // call either succeeds or surfaces the error to the operator below.
       const results = await apiJson(memoryPath("panel/knowledge/memory/search", directory), {
+        authority: source.authority,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: q.trim(),
-          taskID: currentTaskID() || undefined,
+          taskID: taskID || undefined,
           limit: 20,
         }),
       })
-      if (!sourceMatches(taskID, directory) || searchQuery().trim() !== query) return
+      if (!ownsSearch()) return
       const mapped: MemoryFile[] = (Array.isArray(results) ? results : []).map((r: any) => ({
         id: r.fileId,
         title: r.fileTitle,
@@ -217,21 +248,26 @@ export function MemoryPanel(props: MemoryPanelProps) {
         timeUpdated: r.timeCreated || 0,
       }))
       setFiles(mapped)
-      setFilesSource({ taskID, directory })
+      setFilesSource(source)
       setSearchMode(true)
       setExpandedFileId(null)
       setDetailStates({})
       setErrorMessage("")
     } catch (err) {
-      if (!sourceMatches(taskID, directory) || searchQuery().trim() !== query) return
+      if (!ownsSearch()) return
       const msg = err instanceof Error ? err.message : String(err)
       setErrorMessage(msg)
       console.error("[MemoryPanel] search failed", err)
-      void showMemoryMessage("search-failed", t("memory.search_failed", { error: msg }), {
-        title: t("memory.search_failed_title"),
-      })
+      void showMemoryMessage(
+        "search-failed",
+        t("memory.search_failed", { error: msg }),
+        {
+          title: t("memory.search_failed_title"),
+        },
+        () => sourceMatches(source),
+      )
     } finally {
-      if (memoryLoadOwner === token) {
+      if (memoryLoadOwner === token && sourceMatches(source)) {
         memoryLoadOwner = null
         setLoading(false)
       }
@@ -244,35 +280,43 @@ export function MemoryPanel(props: MemoryPanelProps) {
   }
 
   const handleDeleteInline = async (fileId: string, source = filesSource()) => {
-    if (!source || !sourceMatches(source.taskID, source.directory)) return
+    if (!source || !sourceMatches(source)) return
     const operationKey = deleteKey(fileId, source)
     if (!operationKey || deletingKeys().has(operationKey)) return
     setDeletingKeys((current) => new Set([...current, operationKey]))
     try {
       await apiJson(memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, source.directory), {
+        authority: source.authority,
         method: "DELETE",
       })
-      if (!sourceMatches(source.taskID, source.directory)) return
-      await loadMemory(source.taskID, source.directory)
-      if (!sourceMatches(source.taskID, source.directory)) return
+      if (!sourceMatches(source)) return
+      await loadMemory(source)
+      if (!sourceMatches(source)) return
       setDetailStates((current) => {
         const next = { ...current }
         delete next[fileId]
         return next
       })
     } catch (err) {
-      if (!sourceMatches(source.taskID, source.directory)) return
+      if (!sourceMatches(source)) return
       const msg = err instanceof Error ? err.message : String(err)
       console.error("[MemoryPanel] inline delete failed", err)
-      await showMemoryMessage("delete-failed", t("memory.delete_failed", { error: msg }), {
-        title: t("memory.delete_failed_title"),
-      })
+      await showMemoryMessage(
+        "delete-failed",
+        t("memory.delete_failed", { error: msg }),
+        {
+          title: t("memory.delete_failed_title"),
+        },
+        () => sourceMatches(source),
+      )
       requestAnimationFrame(() => {
+        if (!sourceMatches(source)) return
         document
           .querySelector<HTMLButtonElement>(`[data-action="delete-memory"][data-id="${CSS.escape(fileId)}"]`)
           ?.focus()
       })
     } finally {
+      if (!sourceMatches(source)) return
       setDeletingKeys((current) => {
         const next = new Set(current)
         next.delete(operationKey)
@@ -282,15 +326,20 @@ export function MemoryPanel(props: MemoryPanelProps) {
   }
 
   const loadMemoryDetail = async (fileId: string) => {
-    const taskID = currentTaskID()
-    const directory = currentDirectory()
+    const source = captureSource()
+    if (!sourceMatches(source)) return
+    const { directory, authority } = source
+    const pending: MemoryDetailState = { loading: true, error: "", detail: detailStates()[fileId]?.detail ?? null }
+    const ownsDetail = () => sourceMatches(source) && detailStates()[fileId] === pending
     setDetailStates((current) => ({
       ...current,
-      [fileId]: { loading: true, error: "", detail: current[fileId]?.detail ?? null },
+      [fileId]: pending,
     }))
     try {
-      const data = await apiJson(memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, directory))
-      if (!sourceMatches(taskID, directory)) return
+      const data = await apiJson(memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, directory), {
+        authority,
+      })
+      if (!ownsDetail()) return
       const f = data.file
       setDetailStates((current) => ({
         ...current,
@@ -308,7 +357,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
         },
       }))
     } catch (e: any) {
-      if (!sourceMatches(taskID, directory)) return
+      if (!ownsDetail()) return
       setDetailStates((current) => ({
         ...current,
         [fileId]: {
@@ -327,12 +376,28 @@ export function MemoryPanel(props: MemoryPanelProps) {
     if (next && !detailStates()[next]) void loadMemoryDetail(next)
   }
 
-  // Reload when taskID changes (reactive)
+  // The retained panel retires its source even while inactive.
   createEffect(() => {
-    if (!isActive()) return
-    const taskID = currentTaskID()
-    const directory = currentDirectory()
-    void loadMemory(taskID, directory)
+    const active = isActive()
+    currentTaskID()
+    currentDirectory()
+    captureApiAuthority()
+    sourceGeneration += 1
+    memoryLoadOwner = null
+    setFiles([])
+    setFilesSource(null)
+    setSearchMode(false)
+    setSearchQuery("")
+    setExpandedFileId(null)
+    setDetailStates({})
+    setDeletingKeys(new Set<string>())
+    setLoading(false)
+    setErrorMessage("")
+    if (active) untrack(() => void loadMemory())
+    onCleanup(() => {
+      sourceGeneration += 1
+      memoryLoadOwner = null
+    })
   })
 
   const badge = createMemo(() => {
@@ -342,7 +407,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   const filesSourceActive = createMemo(() => {
     const source = filesSource()
-    return !!source && sourceMatches(source.taskID, source.directory)
+    return !!source && sourceMatches(source)
   })
 
   const emptyHint = createMemo(() => {

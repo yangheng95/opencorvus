@@ -19,7 +19,13 @@ import {
   clearTasksForMissingDirectory,
   type BoardSource,
 } from "../store/board"
-import { closeFileEditor } from "./file-workbench"
+import {
+  closeFileEditor,
+  prepareFileEditorClose,
+  fileEditorReserved,
+  FileEditorAdmissionError,
+  type FileEditorCloseHandle,
+} from "./file-workbench"
 import { abortChatRequest } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
@@ -27,7 +33,16 @@ import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-re
 import { projectDirectoryKey } from "../utils/project-directory"
 import { AppLog } from "../utils/log"
 import { t } from "../utils/i18n"
-import { apiJson, ApiError, configure as configureApi, serverSettledRequest } from "./api"
+import {
+  apiJson,
+  ApiError,
+  configure as configureApi,
+  serverSettledRequest,
+  captureApiAuthority,
+  assertApiAuthorityCurrent,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import type { ProjectEditorID } from "./host-transport"
 import { nativeMessage, showAppDialog } from "./app-dialog"
@@ -42,6 +57,7 @@ import { cancelConversationReplay, resetConversationProjection } from "./convers
 import { clearBrowserPreviewRevisionCursors } from "./browser-preview"
 import { restoreDraftComposerModel } from "./composer-model"
 import { initializeProjectDirectoryGit } from "./project-git"
+import { retireConnectionProjections } from "./connection-projection"
 import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
@@ -88,6 +104,7 @@ export interface EnterEmptyWorkspaceOptions {
 
 let tasksSeq = 0
 interface GlobalComposerProjectAllocation {
+  authority: ApiAuthority
   originEpoch: number
   epoch: number
   sequence: number
@@ -209,6 +226,7 @@ export function clearWorkspaceRuntime(): void {
     setBoardStore({
       board: null,
       loading: false,
+      taskSwitching: false,
     })
   })
 }
@@ -349,8 +367,8 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
  * first durable boundary. Concurrent attachment ingresses share one Project.
  */
 export type GlobalComposerProjectRequest =
-  | { kind: "attachment"; selectionEpoch: number }
-  | { kind: "admitted"; selectionEpoch: number }
+  | { kind: "attachment"; selectionEpoch: number; authority?: ApiAuthority }
+  | { kind: "admitted"; selectionEpoch: number; authority?: ApiAuthority }
 
 export interface GlobalComposerProjectResolution {
   directory: string
@@ -358,6 +376,7 @@ export interface GlobalComposerProjectResolution {
 }
 
 function assertComposerProjectAllocationCurrent(owner: GlobalComposerProjectAllocation): void {
+  assertApiAuthorityCurrent(owner.authority)
   if (
     globalComposerProjectAllocation !== owner ||
     owner.sequence !== workspaceAdmissionSequence ||
@@ -378,9 +397,12 @@ function rejectedComposerProjectOperation(selectionEpoch: number, error: unknown
 
 export function resolveGlobalComposerProject(request: GlobalComposerProjectRequest): ComposerProjectOperation {
   try {
+    const authority = request.authority ?? captureApiAuthority()
+    assertApiAuthorityCurrent(authority)
     const existing = globalComposerProjectAllocation
     if (
       existing &&
+      isApiAuthorityCurrent(existing.authority) &&
       (existing.epoch === request.selectionEpoch ||
         (request.kind === "attachment" && existing.originEpoch === request.selectionEpoch))
     ) {
@@ -394,12 +416,13 @@ export function resolveGlobalComposerProject(request: GlobalComposerProjectReque
       return {
         promise: Promise.resolve({ directory: current, selectionEpoch: request.selectionEpoch }),
         selectionEpoch: () => request.selectionEpoch,
-        isCurrent: () => ownsWorkspaceSelection(request.selectionEpoch),
+        isCurrent: () => ownsWorkspaceSelection(request.selectionEpoch) && isApiAuthorityCurrent(authority),
       }
 
     // Install the sole owner synchronously, before admission can migrate its
     // epoch. Inputs share both its pending Promise and accepted identity.
     const owner: GlobalComposerProjectAllocation = {
+      authority,
       originEpoch: request.selectionEpoch,
       epoch: request.selectionEpoch,
       sequence: workspaceAdmissionSequence,
@@ -421,13 +444,14 @@ export function resolveGlobalComposerProject(request: GlobalComposerProjectReque
             })
             assertComposerProjectAllocationCurrent(owner)
           }
-          const directory = await createAnonymousProject()
+          const directory = await createAnonymousProject(authority)
           assertComposerProjectAllocationCurrent(owner)
           const activated = await applyDirectory(directory, {
             save: false,
             persist: false,
             restoreWorkspace: false,
             selectionEpoch: owner.epoch,
+            authority,
           })
           assertComposerProjectAllocationCurrent(owner)
           if (!activated) throw new DOMException("Global Composer Project activation superseded", "AbortError")
@@ -445,6 +469,7 @@ export function resolveGlobalComposerProject(request: GlobalComposerProjectReque
       promise: owner.promise,
       selectionEpoch: () => owner.epoch,
       isCurrent: () =>
+        isApiAuthorityCurrent(authority) &&
         ownsWorkspaceSelection(owner.epoch) &&
         (owner.phase === "fulfilled" ||
           (owner.phase === "pending" &&
@@ -469,9 +494,11 @@ export interface GlobalComposerSubmissionContext {
  */
 export async function resolveGlobalComposerSubmissionContext(
   selectionEpoch: number,
+  authority = captureApiAuthority(),
 ): Promise<GlobalComposerSubmissionContext> {
   const model = appStore.composerModel.trim() || undefined
-  const { directory } = await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch }).promise
+  const { directory } = await resolveGlobalComposerProject({ kind: "admitted", selectionEpoch, authority }).promise
+  assertApiAuthorityCurrent(authority)
   return { directory, model }
 }
 
@@ -488,7 +515,7 @@ export type ProjectDeleteOutcome =
   | { status: "deleted"; result: ProjectDeleteResult }
   | { status: "already_absent"; directory: string }
 
-const projectDeletionOperations = new Map<string, Promise<ProjectDeleteOutcome>>()
+const projectDeletionOperations = new Map<string, { authority: ApiAuthority; promise: Promise<ProjectDeleteOutcome> }>()
 
 export interface ProjectRenameResult {
   id: string
@@ -507,7 +534,9 @@ export async function promoteAnonymousProject(
   directory: string,
   destinationParent: string,
   name: string,
+  authority = captureApiAuthority(),
 ): Promise<AnonymousProjectPromotionResult> {
+  assertApiAuthorityCurrent(authority)
   const source = directory.trim()
   const parent = destinationParent.trim()
   const projectName = name.trim()
@@ -515,6 +544,7 @@ export async function promoteAnonymousProject(
     throw new Error("Anonymous project conversion requires source, parent, and name")
   const query = new URLSearchParams({ directory: source })
   const result: unknown = await apiJson(`project/current/promote-anonymous?${query.toString()}`, {
+    authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ destinationParent: parent, name: projectName }),
@@ -532,13 +562,19 @@ export async function promoteAnonymousProject(
 }
 
 /** Rename one project record without renaming its workspace directory. */
-export async function renameProjectRecord(directory: string, name: string): Promise<ProjectRenameResult> {
+export async function renameProjectRecord(
+  directory: string,
+  name: string,
+  authority = captureApiAuthority(),
+): Promise<ProjectRenameResult> {
+  assertApiAuthorityCurrent(authority)
   const projectDirectory = directory.trim()
   const projectName = name.trim()
   if (!projectDirectory) throw new Error("renameProjectRecord requires a project directory")
   if (!projectName) throw new Error("renameProjectRecord requires a project name")
   const query = new URLSearchParams({ directory: projectDirectory })
   const result: unknown = await apiJson(`project/current?${query.toString()}`, {
+    authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: projectName }),
@@ -564,13 +600,15 @@ export async function renameProjectRecord(directory: string, name: string): Prom
 export async function deleteProjectState(
   directory: string,
   provenance: TaskCancellationRequestBodyValue,
+  authority = captureApiAuthority(),
 ): Promise<ProjectDeleteOutcome> {
+  assertApiAuthorityCurrent(authority)
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error("deleteProjectState requires a project directory")
   const body = TaskCancellationRequestBody.parse(provenance)
   const operationKey = projectDirectoryKey(projectDirectory)
   const existing = projectDeletionOperations.get(operationKey)
-  if (existing) return existing
+  if (existing && isApiAuthorityCurrent(existing.authority)) return existing.promise
 
   const operation = (async (): Promise<ProjectDeleteOutcome> => {
     const query = new URLSearchParams({ directory: projectDirectory })
@@ -579,6 +617,7 @@ export async function deleteProjectState(
       result = await apiJson(
         `project/current?${query.toString()}`,
         serverSettledRequest({
+          authority,
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -617,11 +656,12 @@ export async function deleteProjectState(
     }
     return { status: "deleted", result: result as ProjectDeleteResult }
   })()
-  projectDeletionOperations.set(operationKey, operation)
+  const pending = { authority, promise: operation }
+  projectDeletionOperations.set(operationKey, pending)
   try {
     return await operation
   } finally {
-    if (projectDeletionOperations.get(operationKey) === operation) projectDeletionOperations.delete(operationKey)
+    if (projectDeletionOperations.get(operationKey) === pending) projectDeletionOperations.delete(operationKey)
   }
 }
 
@@ -775,8 +815,8 @@ export function addRecentDirectory(dir: string): void {
   saveRecentDirectories(dirs.slice(0, MAX_RECENT_DIRS))
 }
 
-export async function loadDiscoveredProjects(): Promise<ProjectDiscovery> {
-  const result = await apiJson("global/projects/discover")
+export async function loadDiscoveredProjects(authority = captureApiAuthority()): Promise<ProjectDiscovery> {
+  const result = await apiJson("global/projects/discover", { authority })
   const root = typeof result?.root === "string" ? result.root : ""
   const defaultDirectory = typeof result?.defaultDirectory === "string" ? result.defaultDirectory.trim() : ""
   const projects = Array.isArray(result?.projects)
@@ -795,6 +835,7 @@ export async function loadDiscoveredProjects(): Promise<ProjectDiscovery> {
 // ── applyDirectory ──
 
 export interface ApplyDirectoryOptions {
+  authority?: ApiAuthority
   /** Explicit caller cancellation; ordinary wall-clock time does not cancel project mutations. */
   signal?: AbortSignal
   /** Shared selection intent that must still own boardStore.selectEpoch. */
@@ -841,6 +882,7 @@ export function beginWorkspaceSelection(): number {
  * projection behind.
  */
 export function supersedePendingWorkspaceSelection(): number {
+  if (fileEditorReserved()) return boardStore.selectEpoch
   const pending = boardStore.taskSwitching
   const epoch = beginWorkspaceSelection()
   if (!pending) return epoch
@@ -854,6 +896,29 @@ export function ownsWorkspaceSelection(epoch: number): boolean {
 }
 
 let workspaceAdmissionSequence = 0
+
+/** This intent belongs to the same admission sequence as ordinary navigation. */
+export function createWorkspaceDepartureIntent(): () => Promise<FileEditorCloseHandle> {
+  if (fileEditorReserved()) throw new FileEditorAdmissionError("busy")
+  let sequence = workspaceAdmissionSequence
+  const previousEpoch = boardStore.selectEpoch
+  const authority = captureApiAuthority()
+  const isCurrent = () =>
+    sequence === workspaceAdmissionSequence && ownsWorkspaceSelection(previousEpoch) && isApiAuthorityCurrent(authority)
+  return async () => {
+    if (!isCurrent()) throw new FileEditorAdmissionError("superseded")
+    sequence = ++workspaceAdmissionSequence
+    const prepared = await prepareFileEditorClose({
+      isCurrent,
+      commit: () => {
+        retireConnectionProjections(true)
+        enterDirectoryFreeWorkspace("", beginWorkspaceSelection())
+      },
+    })
+    if (prepared.status !== "ready") throw new FileEditorAdmissionError(prepared.status)
+    return prepared.handle
+  }
+}
 
 export type WorkspaceAdmission = { kind: "unchanged" } | { kind: "admitted"; epoch: number }
 
@@ -887,6 +952,7 @@ async function admitWorkspaceSelection(
   target?: BoardSource,
   observer?: { requested: (sequence: number) => void; committed: (epoch: number) => void },
 ): Promise<WorkspaceAdmission> {
+  if (fileEditorReserved()) throw new FileEditorAdmissionError("busy")
   const sequence = ++workspaceAdmissionSequence
   observer?.requested(sequence)
   if (target && isWorkspaceSelectionReady(target)) return { kind: "unchanged" }
@@ -904,8 +970,11 @@ async function admitWorkspaceSelection(
 }
 
 export async function applyDirectory(next: string, options: ApplyDirectoryOptions): Promise<boolean> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
+  const owns = () => ownsWorkspaceSelection(options.selectionEpoch) && isApiAuthorityCurrent(authority)
   const selectionEpoch = options.selectionEpoch
-  if (!ownsWorkspaceSelection(selectionEpoch)) return false
+  if (!owns()) return false
   const save = options.save === true ? next : options.save === false ? "" : null
 
   const curDir = settingsStore.directory
@@ -921,8 +990,8 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   }
 
   console.log("[applyDir] checking connection")
-  const ok = await checkConnection({ background: true })
-  if (!ownsWorkspaceSelection(selectionEpoch)) return false
+  const ok = await checkConnection({ background: true, authority })
+  if (!owns()) return false
   if (!ok) {
     console.warn("[applyDir] connection failed, rejecting switch")
     throw new Error("Failed to set directory")
@@ -947,8 +1016,8 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   // The preference offers initialization on an explicit directory opening;
   // browsing alone never authorizes a repository identity mutation.
   if (settingsStore.initGit) {
-    const vcs = await apiJson(`vcs?${new URLSearchParams({ directory: next })}`, { signal: options.signal })
-    if (!ownsWorkspaceSelection(selectionEpoch)) return false
+    const vcs = await apiJson(`vcs?${new URLSearchParams({ directory: next })}`, { signal: options.signal, authority })
+    if (!owns()) return false
     if (vcs?.initialized === false) {
       const choice = await showAppDialog({
         title: t("git.init"),
@@ -956,10 +1025,10 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
         cancel: true,
         okLabel: t("git.init"),
       })
-      if (!ownsWorkspaceSelection(selectionEpoch)) return false
-      if (choice.confirmed) await initializeProjectDirectoryGit(next, { signal: options.signal })
+      if (!owns()) return false
+      if (choice.confirmed) await initializeProjectDirectoryGit(next, { signal: options.signal, authority })
     }
-    if (!ownsWorkspaceSelection(selectionEpoch)) return false
+    if (!owns()) return false
   }
 
   // Clear transient provider-test state so a result from the previous project
@@ -981,7 +1050,7 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
     await saveSettings()
   }
 
-  if (!ownsWorkspaceSelection(selectionEpoch)) return false
+  if (!owns()) return false
 
   if (options.save === true && next) addRecentDirectory(next)
 
@@ -995,9 +1064,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   }
 
   console.log("[applyDir] reloading project scope")
-  await reloadProjectScope(options)
+  await reloadProjectScope({ ...options, authority })
 
-  if (epoch !== settingsStore.directoryEpoch || !ownsWorkspaceSelection(selectionEpoch)) {
+  if (epoch !== settingsStore.directoryEpoch || !owns()) {
     console.log("[applyDir] superseded after reload, discarding")
     return false
   }
@@ -1018,11 +1087,13 @@ export async function setActiveDirectory(
   value: string,
   options: Omit<ApplyDirectoryOptions, "selectionEpoch"> = {},
 ): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const next = typeof value === "string" ? value.trim() : ""
   if (!next || next === settingsStore.directory) return
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
-  const applied = await applyDirectory(next, { ...options, persist: false, selectionEpoch: admission.epoch })
+  const applied = await applyDirectory(next, { ...options, authority, persist: false, selectionEpoch: admission.epoch })
   if (!applied) throw new DOMException("Project navigation superseded", "AbortError")
 }
 
@@ -1032,6 +1103,7 @@ export async function setActiveDirectory(
  * Open a native directory picker and apply the selected directory.
  */
 export async function browseDirectory(): Promise<void> {
+  const authority = captureApiAuthority()
   try {
     const host = getHostTransport()
     const selected = host.capabilities.ui.manualWorkspacePathEntry
@@ -1049,7 +1121,8 @@ export async function browseDirectory(): Promise<void> {
         }).then((result) => (result.confirmed ? String(result.value || "").trim() : ""))
       : await pickDirectory(activeDirectory())
     if (!selected) return
-    await setDirectory(selected)
+    assertApiAuthorityCurrent(authority)
+    await setDirectory(selected, { authority })
   } catch (e) {
     if (e instanceof DOMException && e.name === "AbortError") return
     AppLog.error("ui", "Failed to set working directory", { error: String(e) })
@@ -1225,16 +1298,18 @@ export async function openProjectFile(target: string, location?: Partial<FileRef
 }
 
 async function openProjectPathInWorkbench(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
+  const authority = captureApiAuthority()
   const directory = activeDirectory().trim()
   const rawTarget = typeof target === "string" ? target.trim() : ""
   if (!directory || !rawTarget) return
   const { openFileEditor, openSourceFileEditor } = await import("./file-workbench")
+  assertApiAuthorityCurrent(authority)
   const range = fileReferenceRange(location)
   if (isAbsoluteEditorPath(rawTarget)) {
-    await openSourceFileEditor(rawTarget, { directory }, range)
+    await openSourceFileEditor(rawTarget, { directory, authority }, range)
     return
   }
-  await openFileEditor(rawTarget, { directory }, range)
+  await openFileEditor(rawTarget, { directory, authority }, range)
 }
 
 function isAbsoluteEditorPath(path: string): boolean {
@@ -1262,11 +1337,13 @@ export async function setDirectory(
   value: string,
   options: Omit<ApplyDirectoryOptions, "selectionEpoch"> = {},
 ): Promise<void> {
+  const authority = options.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const next = typeof value === "string" ? value.trim() : ""
   if (!next) throw new Error(t("cwd.path_required"))
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
-  const applied = await applyDirectory(next, { ...options, save: true, selectionEpoch: admission.epoch })
+  const applied = await applyDirectory(next, { ...options, authority, save: true, selectionEpoch: admission.epoch })
   if (!applied) throw new DOMException("Project navigation superseded", "AbortError")
 }
 
@@ -1277,19 +1354,24 @@ export async function setDirectory(
  * directory, or select the server's explicit launch directory. A directory-free
  * startup remains write-free until the operator submits real work.
  */
-export async function ensureDefaultDirectory(): Promise<boolean> {
+export async function ensureDefaultDirectory(authority = captureApiAuthority()): Promise<boolean> {
+  assertApiAuthorityCurrent(authority)
+  const workspaceEpoch = settingsStore.workspaceEpoch
+  const directoryEpoch = settingsStore.directoryEpoch
   if (settingsStore.directory) return true
   if (settingsStore.savedDirectory) {
     setProjectDirectoryContext(settingsStore.savedDirectory, false)
     return true
   }
-  const discovery = await loadDiscoveredProjects()
+  const discovery = await loadDiscoveredProjects(authority)
+  assertApiAuthorityCurrent(authority)
+  if (workspaceEpoch !== settingsStore.workspaceEpoch || directoryEpoch !== settingsStore.directoryEpoch) return false
   setProjectDirectoryContext(discovery.defaultDirectory, false)
   return Boolean(discovery.defaultDirectory)
 }
 
-async function createAnonymousProject(): Promise<string> {
-  const result: unknown = await apiJson("global/projects/anonymous", { method: "POST" })
+async function createAnonymousProject(authority: ApiAuthority): Promise<string> {
+  const result: unknown = await apiJson("global/projects/anonymous", { method: "POST", authority })
   if (
     !result ||
     typeof result !== "object" ||

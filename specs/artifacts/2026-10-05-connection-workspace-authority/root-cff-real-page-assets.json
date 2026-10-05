@@ -1,0 +1,45 @@
+{
+  "observedAt": "2026-10-05T15:10:35.707Z",
+  "qualification": "Actual operated page provenance from prior integrated freeze; later source followups await rebuilt page qualification",
+  "pages": [
+    {
+      "tabId": "17",
+      "url": "http://127.0.0.1:17948/ui/",
+      "assets": {
+        "scripts": [
+          "http://127.0.0.1:17948/ui/assets/main-CffQfy5K.js"
+        ],
+        "styles": [
+          "http://127.0.0.1:17948/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+          "http://127.0.0.1:17948/ui/assets/main-Yy88IPFU.css"
+        ]
+      }
+    },
+    {
+      "tabId": "18",
+      "url": "http://127.0.0.1:17950/ui/",
+      "assets": {
+        "scripts": [
+          "http://127.0.0.1:17950/ui/assets/main-CffQfy5K.js"
+        ],
+        "styles": [
+          "http://127.0.0.1:17950/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+          "http://127.0.0.1:17950/ui/assets/main-Yy88IPFU.css"
+        ]
+      }
+    },
+    {
+      "tabId": "19",
+      "url": "http://127.0.0.1:17951/ui/",
+      "assets": {
+        "scripts": [
+          "http://127.0.0.1:17951/ui/assets/main-CffQfy5K.js"
+        ],
+        "styles": [
+          "http://127.0.0.1:17951/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+          "http://127.0.0.1:17951/ui/assets/main-Yy88IPFU.css"
+        ]
+      }
+    }
+  ]
+}

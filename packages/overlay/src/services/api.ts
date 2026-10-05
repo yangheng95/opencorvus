@@ -11,10 +11,25 @@ import { joinServerBaseUrl } from "@opencorvus-ai/transport-protocol"
 import { getHostTransport } from "./host-transport-runtime"
 import type { ResponseKind, TransportResponse } from "./host-transport"
 import { bytesToArrayBuffer } from "../utils/binary"
-import { getServerUrl, requestTarget, splitPathQuery } from "./api-state"
+import {
+  ApiAuthorityChangedError,
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  getServerUrl,
+  isApiAuthorityCurrent,
+  onAuthChange,
+  requestTarget,
+  splitPathQuery,
+  type ApiAuthority,
+} from "./api-state"
 
 export { DEFAULT_SERVER }
 export {
+  ApiAuthorityChangedError,
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  renewApiAuthority,
   ProjectDirectoryRequiredError,
   apiHeaders,
   apiUrl,
@@ -23,6 +38,7 @@ export {
   onAuthChange,
   queryWithDirectory,
 } from "./api-state"
+export type { ApiAuthority, ApiAuthorityOutcome } from "./api-state"
 
 /**
  * Build a TransportRequest body from a legacy RequestInit.body. Most callers
@@ -93,24 +109,37 @@ function headersFromInit(init?: RequestInit): Record<string, string> | undefined
  * `apiJson` is still the preferred surface for plain JSON.
  */
 export interface ApiRequestInit extends RequestInit {
+  authority?: ApiAuthority
   responseKind?: ResponseKind
   timeoutMilliseconds?: number | null
 }
 
 export async function apiRequest<T = unknown>(path: string, init?: ApiRequestInit): Promise<TransportResponse<T>> {
+  const authority = init?.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const transport = getHostTransport()
   const method = methodFromInit(init)
   const { pathOnly, query } = requestTarget(path, method)
-  return transport.request<T>({
-    path: pathOnly,
-    query,
-    method,
-    body: bodyFromInit(init),
-    headers: headersFromInit(init),
-    signal: init?.signal ?? undefined,
-    timeoutMilliseconds: init?.timeoutMilliseconds,
-    responseKind: init?.responseKind ?? "json",
-  })
+  let response: TransportResponse<T>
+  try {
+    response = await transport.request<T>({
+      authority,
+      path: pathOnly,
+      query,
+      method,
+      body: bodyFromInit(init),
+      headers: headersFromInit(init),
+      signal: init?.signal ?? undefined,
+      timeoutMilliseconds: init?.timeoutMilliseconds,
+      responseKind: init?.responseKind ?? "json",
+    })
+  } catch (error) {
+    if (error instanceof ApiAuthorityChangedError) throw error
+    assertApiAuthorityCurrent(authority, { phase: "transport_failure", cause: error })
+    throw error
+  }
+  assertApiAuthorityCurrent(authority, { phase: "response", response })
+  return response
 }
 
 /**
@@ -162,8 +191,9 @@ export function onApiError(listener: ApiErrorListener): () => void {
   return () => apiErrorListeners.delete(listener)
 }
 
-function publishApiError(error: ApiError): void {
+function publishApiError(error: ApiError, authority: ApiAuthority): void {
   for (const listener of apiErrorListeners) {
+    if (!isApiAuthorityCurrent(authority)) return
     try {
       listener(error)
     } catch (listenerError) {
@@ -203,6 +233,7 @@ function pickServerErrorDetail(body: unknown): string {
 }
 
 export interface ApiJsonInit extends RequestInit {
+  authority?: ApiAuthority
   timeoutMilliseconds?: number | null
 }
 
@@ -219,22 +250,13 @@ export function serverSettledRequest(init: ApiJsonInit): ApiJsonInit {
 // service wrappers bind generated API response contracts at the request edge.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function apiJson<T = any>(path: string, init?: ApiJsonInit): Promise<T> {
-  const transport = getHostTransport()
-  const method = methodFromInit(init)
-  const { pathOnly, query } = requestTarget(path, method)
-  const res = await transport.request<T>({
-    path: pathOnly,
-    query,
-    method,
-    body: bodyFromInit(init),
-    headers: headersFromInit(init),
-    signal: init?.signal ?? undefined,
-    timeoutMilliseconds: init?.timeoutMilliseconds,
-    responseKind: "json",
-  })
+  const authority = init?.authority ?? captureApiAuthority()
+  const res = await apiRequest<T>(path, { ...init, authority, responseKind: "json" })
+  assertApiAuthorityCurrent(authority, { phase: "response", response: res })
   if (!res.ok) {
     const error = new ApiError(res.status, path, res.body, res.headers)
-    publishApiError(error)
+    publishApiError(error, authority)
+    assertApiAuthorityCurrent(authority, { phase: "response", response: res })
     throw error
   }
   return res.body
@@ -265,7 +287,7 @@ export async function apiJsonWithTimeout<T = unknown>(
   try {
     return (await apiJson(path, { ...init, signal })) as T
   } catch (error) {
-    if (error instanceof ApiError) throw error
+    if (error instanceof ApiError || error instanceof ApiAuthorityChangedError) throw error
     throw new Error(`${path}: ${errorMessage(error)}`, {
       cause: error instanceof Error ? error : undefined,
     })
@@ -310,8 +332,8 @@ export function resolveResourceUrl(raw: string): string {
 // already-loaded image while the stale blob URL was revoked, producing
 // visible flicker.
 //
-// Decoupling: keep a module-level map from the raw persisted URL to the
-// blob object URL. The cache owns the blob's lifetime; component mounts
+// Decoupling: one module-level map uses the persisted URL and, for host-relative
+// resources, its API authority. The cache owns the blob's lifetime; component mounts
 // only read from it. When the cache grows past its cap, it evicts the
 // least-recently-used entry and revokes its blob URL at eviction time —
 // no per-component cleanup needed.
@@ -325,7 +347,11 @@ const BLOB_CACHE_MAX = 256
 // of image-binary closure state. 64 is twice the typical viewport thumbnail
 // count.
 const BLOB_INFLIGHT_MAX = 64
-const blobCache = new Map<string, string>()
+interface CachedBlob {
+  readonly url: string
+  readonly authority?: ApiAuthority
+}
+const blobCache = new Map<string, CachedBlob>()
 interface BlobInFlightEntry {
   readonly controller: AbortController
   readonly promise: Promise<string>
@@ -336,9 +362,29 @@ interface BlobInFlightEntry {
 const blobInFlight = new Map<string, BlobInFlightEntry>()
 const blobInFlightWaiters: Array<() => void> = []
 
-function touchCache(raw: string, url: string): void {
-  blobCache.delete(raw)
-  blobCache.set(raw, url)
+function resourceAuthority(raw: string, authority?: ApiAuthority): ApiAuthority | undefined {
+  if (/^(?:data|blob|file|https?):/i.test(raw)) return undefined
+  const captured = authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(captured)
+  return captured
+}
+
+function resourceCacheKey(raw: string, authority?: ApiAuthority): string {
+  return authority ? JSON.stringify([authority.revision, raw]) : raw
+}
+
+onAuthChange(() => {
+  for (const [key, cached] of blobCache) {
+    if (cached.authority && !isApiAuthorityCurrent(cached.authority)) {
+      blobCache.delete(key)
+      URL.revokeObjectURL(cached.url)
+    }
+  }
+})
+
+function touchCache(key: string, cached: CachedBlob): void {
+  blobCache.delete(key)
+  blobCache.set(key, cached)
 }
 
 /**
@@ -353,7 +399,7 @@ function evictToFitOne(): void {
     if (oldest === undefined) return
     const url = blobCache.get(oldest)
     blobCache.delete(oldest)
-    if (url) URL.revokeObjectURL(url)
+    if (url) URL.revokeObjectURL(url.url)
   }
 }
 
@@ -410,9 +456,10 @@ function releaseInFlightSlot(): void {
  */
 export function peekResourceObjectUrl(raw: string): string | undefined {
   if (!raw) return undefined
-  const cached = blobCache.get(raw)
-  if (cached) touchCache(raw, cached)
-  return cached
+  const key = resourceCacheKey(raw, resourceAuthority(raw))
+  const cached = blobCache.get(key)
+  if (cached) touchCache(key, cached)
+  return cached?.url
 }
 
 /**
@@ -425,28 +472,33 @@ export function peekResourceObjectUrl(raw: string): string | undefined {
  * The returned URL is owned by the module-level cache — callers MUST NOT
  * `URL.revokeObjectURL` it. Blobs are revoked on LRU eviction.
  *
- * Concurrent calls for the same raw URL share a single in-flight fetch, so
+ * Concurrent calls for the same resource authority share a single in-flight fetch, so
  * two components mounting at the same moment don't double the network
  * traffic. Throws on network / HTTP errors — no fallback to the raw URL,
  * since that would silently mask origin / auth mistakes.
  */
-export async function fetchResourceAsObjectUrl(raw: string, options: { signal?: AbortSignal } = {}): Promise<string> {
+export async function fetchResourceAsObjectUrl(
+  raw: string,
+  options: { signal?: AbortSignal; authority?: ApiAuthority } = {},
+): Promise<string> {
   const signal = options.signal
   if (signal?.aborted) throw resourceAbortReason(signal)
-  const cached = blobCache.get(raw)
+  const authority = resourceAuthority(raw, options.authority)
+  const key = resourceCacheKey(raw, authority)
+  const cached = blobCache.get(key)
   if (cached) {
-    touchCache(raw, cached)
-    return cached
+    touchCache(key, cached)
+    return cached.url
   }
-  let inFlight = blobInFlight.get(raw)
+  let inFlight = blobInFlight.get(key)
   if (!inFlight) {
-    inFlight = createBlobInFlightEntry(raw)
-    blobInFlight.set(raw, inFlight)
+    inFlight = createBlobInFlightEntry(raw, key, authority)
+    blobInFlight.set(key, inFlight)
   }
   return consumeBlobInFlightEntry(inFlight, signal)
 }
 
-function createBlobInFlightEntry(raw: string): BlobInFlightEntry {
+function createBlobInFlightEntry(raw: string, key: string, authority?: ApiAuthority): BlobInFlightEntry {
   const controller = new AbortController()
   let slotReserved = false
   const pending = (async () => {
@@ -457,6 +509,7 @@ function createBlobInFlightEntry(raw: string): BlobInFlightEntry {
     slotReserved = true
     const transport = getHostTransport()
     try {
+      if (authority) assertApiAuthorityCurrent(authority)
       // Resource URLs may already be absolute (server-relative paths
       // start with "/" — those go through transport; data:/blob:/http(s)/
       // file: URLs short-circuit to plain fetch since transport can't
@@ -467,7 +520,7 @@ function createBlobInFlightEntry(raw: string): BlobInFlightEntry {
         const blob = await res.blob()
         const objectUrl = URL.createObjectURL(blob)
         evictToFitOne()
-        blobCache.set(raw, objectUrl)
+        blobCache.set(key, { url: objectUrl })
         return objectUrl
       }
       if (/^https?:/i.test(raw)) {
@@ -478,24 +531,30 @@ function createBlobInFlightEntry(raw: string): BlobInFlightEntry {
         const blob = await res.blob()
         const objectUrl = URL.createObjectURL(blob)
         evictToFitOne()
-        blobCache.set(raw, objectUrl)
+        blobCache.set(key, { url: objectUrl })
         return objectUrl
       }
       const { pathOnly, query } = splitPathQuery(raw.replace(/^\/+/, ""))
       const res = await transport.request<Uint8Array>({
+        authority,
         path: pathOnly,
         query,
         method: "GET",
         responseKind: "binary",
         signal: controller.signal,
       })
+      if (authority) assertApiAuthorityCurrent(authority, { phase: "response", response: res })
       if (!res.ok) throw new ApiError(res.status, raw, res.body, res.headers)
       const ct = res.headers["content-type"] || res.headers["Content-Type"] || "application/octet-stream"
       const blob = new Blob([bytesToArrayBuffer(res.body as Uint8Array)], { type: ct })
       const objectUrl = URL.createObjectURL(blob)
       evictToFitOne()
-      blobCache.set(raw, objectUrl)
+      blobCache.set(key, { url: objectUrl, authority })
       return objectUrl
+    } catch (error) {
+      if (error instanceof ApiAuthorityChangedError) throw error
+      if (authority) assertApiAuthorityCurrent(authority, { phase: "transport_failure", cause: error })
+      throw error
     } finally {
       if (slotReserved) releaseInFlightSlot()
     }
@@ -505,11 +564,11 @@ function createBlobInFlightEntry(raw: string): BlobInFlightEntry {
   pending.then(
     () => {
       entry.settled = true
-      blobInFlight.delete(raw)
+      if (blobInFlight.get(key) === entry) blobInFlight.delete(key)
     },
     () => {
       entry.settled = true
-      blobInFlight.delete(raw)
+      if (blobInFlight.get(key) === entry) blobInFlight.delete(key)
     },
   )
   return entry

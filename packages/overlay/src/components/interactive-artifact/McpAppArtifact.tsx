@@ -9,14 +9,20 @@ import {
   type McpUiStyles,
 } from "@modelcontextprotocol/ext-apps/app-bridge"
 import { ListToolsRequestSchema, type CallToolResult } from "@modelcontextprotocol/sdk/types.js"
-import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import {
   loadSessionInteractiveArtifact,
   openMcpAppHostEventStream,
   requestMcpApp,
 } from "../../services/interactive-artifact"
-import { ApiError } from "../../services/api"
+import {
+  ApiError,
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "../../services/api"
 import type { StreamHandle } from "../../services/host-transport"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { promptSessionMessage } from "../../services/chat"
@@ -100,12 +106,35 @@ type Confirmation = {
   resolve: (approved: boolean) => void
 }
 
-export function McpAppArtifact(props: {
+interface McpAppArtifactProps {
   payload: McpAppPayload
   sessionID: string
   artifactID: string
   directory: string
-}) {
+}
+
+export function McpAppArtifact(props: McpAppArtifactProps) {
+  const scope = createMemo(() => ({
+    sessionID: props.sessionID,
+    artifactID: props.artifactID,
+    directory: props.directory,
+    authority: captureApiAuthority(),
+  }))
+  return (
+    <Show when={scope()} keyed>
+      {(current) => <McpAppInstance {...current} payload={props.payload} />}
+    </Show>
+  )
+}
+
+function McpAppInstance(props: McpAppArtifactProps & { authority: ApiAuthority }) {
+  const authority = props.authority
+  let disposed = false
+  const owns = () => !disposed && isApiAuthorityCurrent(authority)
+  const assertCurrent = () => {
+    assertApiAuthorityCurrent(authority)
+    if (disposed || teardownPromise) throw new DOMException("MCP App view retired", "AbortError")
+  }
   let frame!: HTMLIFrameElement
   let shell!: HTMLElement
   let bridge: AppBridge | undefined
@@ -130,11 +159,11 @@ export function McpAppArtifact(props: {
   const [hostTheme, setHostTheme] = createSignal<"light" | "dark">(appliedColorScheme())
 
   const setBridgeHostContext = (context: Parameters<AppBridge["sendHostContextChange"]>[0]) => {
-    if (!bridgeConnected() || teardownPromise) return
+    if (!owns() || !bridgeConnected() || teardownPromise) return
     try {
       bridge?.sendHostContextChange(context)
     } catch (error) {
-      if (teardownPromise) return
+      if (!owns() || teardownPromise) return
       setHostError(hostErrorDetail(error))
       AppLog.warn("mcp-app", "Host context delivery failed", {
         artifactID: props.artifactID,
@@ -155,6 +184,7 @@ export function McpAppArtifact(props: {
     params: Record<string, unknown> | undefined,
     signal?: AbortSignal,
   ) => {
+    assertCurrent()
     try {
       const result = await requestMcpApp<T>({
         sessionID: props.sessionID,
@@ -162,16 +192,18 @@ export function McpAppArtifact(props: {
         directory: props.directory,
         request: { method, ...(params ? { params } : {}) },
         signal,
+        authority,
       })
-      setHostError("")
+      if (owns()) setHostError("")
       return result
     } catch (error) {
-      setHostError(hostErrorDetail(error))
+      if (owns()) setHostError(hostErrorDetail(error))
       throw error
     }
   }
 
   const askConfirmation = (input: Omit<Confirmation, "resolve">): Promise<boolean> => {
+    assertCurrent()
     if (confirmation()) return Promise.resolve(false)
     return new Promise<boolean>((resolve) => setConfirmation({ ...input, resolve }))
   }
@@ -190,6 +222,7 @@ export function McpAppArtifact(props: {
   }
 
   const applyDisplayMode = async (requested: McpUiDisplayMode): Promise<McpUiDisplayMode> => {
+    if (!owns() || teardownPromise) return "inline"
     const supported = bridge?.getAppCapabilities()?.availableDisplayModes ?? ["inline"]
     const mode = DISPLAY_MODES.includes(requested) && supported.includes(requested) ? requested : "inline"
     try {
@@ -197,18 +230,25 @@ export function McpAppArtifact(props: {
         if (shell.matches(":popover-open")) shell.hidePopover()
         shell.removeAttribute("popover")
         await shell.requestFullscreen()
+        if (!owns() || teardownPromise) {
+          await leaveTopLayer()
+          return "inline"
+        }
       } else if (mode === "pip") {
         if (document.fullscreenElement === shell) await document.exitFullscreen()
+        assertCurrent()
         setDisplayMode("pip")
         shell.setAttribute("popover", "manual")
         shell.showPopover()
       } else {
         await leaveTopLayer()
       }
+      assertCurrent()
       setDisplayMode(mode)
       return mode
     } catch (error) {
       await leaveTopLayer()
+      if (!owns()) return "inline"
       setDisplayMode("inline")
       setHostError(hostErrorDetail(error))
       return "inline"
@@ -216,11 +256,12 @@ export function McpAppArtifact(props: {
   }
 
   const deliverToolLifecycle = (payload: McpAppPayload) => {
+    if (!owns() || teardownPromise) return
     setLifecyclePayload(payload)
     if (!appInitialized) return
     lifecycleQueue = lifecycleQueue
       .then(async () => {
-        if (!bridge) return
+        if (!bridge || !owns() || teardownPromise) return
         const lifecycle = payload.tool.lifecycle
         const fingerprint = JSON.stringify(lifecycle)
         if (fingerprint === lifecycleFingerprint) return
@@ -229,6 +270,7 @@ export function McpAppArtifact(props: {
         } else {
           if (!fullInputSent) {
             await bridge.sendToolInput({ arguments: lifecycle.input })
+            if (!owns() || teardownPromise) return
             fullInputSent = true
           }
           if (lifecycle.status === "completed") {
@@ -240,9 +282,10 @@ export function McpAppArtifact(props: {
             await bridge.sendToolCancelled({ reason: lifecycle.message })
           }
         }
-        lifecycleFingerprint = fingerprint
+        if (owns() && !teardownPromise) lifecycleFingerprint = fingerprint
       })
       .catch((error) => {
+        if (!owns() || teardownPromise) return
         AppLog.error("mcp-app", "Tool lifecycle delivery failed", {
           artifactID: props.artifactID,
           error: String(error),
@@ -271,12 +314,13 @@ export function McpAppArtifact(props: {
           })
         })
       }
-      setClosed(true)
+      if (owns()) setClosed(true)
     })()
     return teardownPromise
   }
 
   const download = async (contents: McpUiDownloadFileRequest["params"]["contents"]): Promise<void> => {
+    assertCurrent()
     if (contents.length === 0 || contents.length > MCP_APP_MAX_DOWNLOAD_FILES) {
       throw new Error(`MCP App downloads must contain 1-${MCP_APP_MAX_DOWNLOAD_FILES} resources`)
     }
@@ -286,6 +330,7 @@ export function McpAppArtifact(props: {
       detail: t("artifact.mcp_app.confirm_download_detail", { count: contents.length }),
     })
     if (!approved) throw new Error("MCP App download was rejected")
+    assertCurrent()
 
     let totalBytes = 0
     for (const content of contents) {
@@ -298,6 +343,7 @@ export function McpAppArtifact(props: {
             ).contents
           : [content.resource as unknown as Record<string, unknown>]
       for (const resource of resources) {
+        assertCurrent()
         const uri = typeof resource.uri === "string" ? resource.uri : "mcp-app-download"
         const mimeType = typeof resource.mimeType === "string" ? resource.mimeType : "application/octet-stream"
         const payload = mcpAppDownloadBytes(resource, MCP_APP_MAX_DOWNLOAD_BYTES - totalBytes)
@@ -364,6 +410,7 @@ export function McpAppArtifact(props: {
     bridge.onreadresource = (params, extra) => hostRequest("resources/read", params, extra.signal) as any
     bridge.onlistprompts = (params, extra) => hostRequest("prompts/list", params, extra.signal) as any
     bridge.onmessage = async ({ role, content }) => {
+      assertCurrent()
       if (role !== "user" || content.some((item) => item.type !== "text")) {
         return { isError: true }
       }
@@ -373,6 +420,7 @@ export function McpAppArtifact(props: {
         .trim()
       if (!text) return { isError: true }
       await promptSessionMessage({
+        authority,
         sessionID: props.sessionID,
         directory: props.directory,
         text,
@@ -387,6 +435,7 @@ export function McpAppArtifact(props: {
     bridge.onupdatemodelcontext = (params, extra) =>
       hostRequest("ui/update-model-context", params, extra.signal).then(() => ({}))
     bridge.onloggingmessage = (params) => {
+      if (!owns()) return
       const level = params.level === "critical" ? "error" : params.level
       const method =
         level === "debug" || level === "info" || level === "warning" || level === "error"
@@ -401,6 +450,7 @@ export function McpAppArtifact(props: {
     }
     bridge.onopenlink = async ({ url }) => {
       try {
+        assertCurrent()
         if (!canOpenLinks) throw new Error("This OpenCorvus Host cannot open external links")
         const parsed = externalUrl(url)
         const approved = await askConfirmation({
@@ -409,9 +459,11 @@ export function McpAppArtifact(props: {
           detail: parsed.href,
         })
         if (!approved) return { isError: true }
+        assertCurrent()
         await hostTransport.native({ kind: "open-url", url: parsed.href })
         return {}
       } catch (error) {
+        if (!owns()) return { isError: true }
         AppLog.warn("mcp-app", "Open-link request rejected", {
           artifactID: props.artifactID,
           error: String(error),
@@ -424,6 +476,7 @@ export function McpAppArtifact(props: {
         await download(contents)
         return {}
       } catch (error) {
+        if (!owns()) return { isError: true }
         AppLog.warn("mcp-app", "Download request rejected", {
           artifactID: props.artifactID,
           error: String(error),
@@ -441,10 +494,12 @@ export function McpAppArtifact(props: {
       })
     }
     bridge.onsizechange = ({ height: requestedHeight }) => {
+      if (!owns() || teardownPromise) return
       if (typeof requestedHeight !== "number" || !Number.isFinite(requestedHeight)) return
       setHeight(Math.max(MCP_APP_MIN_HEIGHT, Math.min(Math.ceil(requestedHeight), maximumHeight())))
     }
     bridge.oninitialized = () => {
+      if (!owns() || teardownPromise) return
       appInitialized = true
       setBridgeConnected(true)
       setAvailableModes(bridge?.getAppCapabilities()?.availableDisplayModes ?? ["inline"])
@@ -453,7 +508,7 @@ export function McpAppArtifact(props: {
 
     const appTransport = new PostMessageTransport(frame.contentWindow!, frame.contentWindow!)
     void bridge.connect(appTransport).catch((error) => {
-      if (teardownPromise) return
+      if (!owns() || teardownPromise) return
       setHostError(hostErrorDetail(error))
       AppLog.warn("mcp-app", "App bridge connection failed", {
         artifactID: props.artifactID,
@@ -463,19 +518,22 @@ export function McpAppArtifact(props: {
     frame.srcdoc = sourceDocument
     frame.allow = buildAllowAttribute(permissions)
     eventStream = openMcpAppHostEventStream({
+      authority,
       sessionID: props.sessionID,
       artifactID: props.artifactID,
       directory: props.directory,
       onEvent(event) {
+        if (!owns() || teardownPromise) return
         if (event.type === "mcp-app.connected" || event.type === "mcp-app.lifecycle_changed") {
           if (event.type === "mcp-app.lifecycle_changed" && event.artifactID !== props.artifactID) return
           void loadSessionInteractiveArtifact({
+            authority,
             sessionID: props.sessionID,
             artifactID: props.artifactID,
             directory: props.directory,
           })
             .then((artifact) => {
-              if (teardownPromise || artifact.timeUpdated < lifecycleTimeUpdated) return
+              if (!owns() || teardownPromise || artifact.timeUpdated < lifecycleTimeUpdated) return
               if (artifact.payload.renderer === "mcp-app@1") {
                 lifecycleTimeUpdated = artifact.timeUpdated
                 setHostError("")
@@ -483,6 +541,7 @@ export function McpAppArtifact(props: {
               }
             })
             .catch((error) => {
+              if (!owns() || teardownPromise) return
               setHostError(hostErrorDetail(error))
               AppLog.warn("mcp-app", "Tool lifecycle refresh failed", {
                 artifactID: props.artifactID,
@@ -508,6 +567,7 @@ export function McpAppArtifact(props: {
                 ? bridge?.sendPromptListChanged()
                 : undefined
         void notification?.catch((error) => {
+          if (!owns() || teardownPromise) return
           AppLog.warn("mcp-app", "Capability list-changed delivery failed", {
             artifactID: props.artifactID,
             event: event.type,
@@ -516,6 +576,7 @@ export function McpAppArtifact(props: {
         })
       },
       onError(error) {
+        if (!owns() || teardownPromise) return
         setHostError(hostErrorDetail(error))
         AppLog.warn("mcp-app", "Capability event stream failed", {
           artifactID: props.artifactID,
@@ -535,6 +596,7 @@ export function McpAppArtifact(props: {
     resizeObserver.observe(frame)
 
     const syncTopLayer = () => {
+      if (!owns()) return
       if (document.fullscreenElement !== shell && !shell.matches(":popover-open") && displayMode() !== "inline") {
         shell.removeAttribute("popover")
         setDisplayMode("inline")
@@ -543,6 +605,7 @@ export function McpAppArtifact(props: {
     document.addEventListener("fullscreenchange", syncTopLayer)
     shell.addEventListener("toggle", syncTopLayer)
     onCleanup(() => {
+      disposed = true
       document.removeEventListener("fullscreenchange", syncTopLayer)
       shell.removeEventListener("toggle", syncTopLayer)
       void leaveTopLayer()
@@ -600,7 +663,9 @@ export function McpAppArtifact(props: {
                           {(resource) => (
                             <DropdownMenu.Item
                               onSelect={() =>
-                                void download([resource]).catch((error) => setHostError(hostErrorDetail(error)))
+                                void download([resource]).catch((error) => {
+                                  if (owns()) setHostError(hostErrorDetail(error))
+                                })
                               }
                             >
                               <Icon name="download" size="compact" />

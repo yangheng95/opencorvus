@@ -1,0 +1,102 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\git-init-current.test.ts:
+(pass) accepted init retains exact successor projection after different-project [2.26ms]
+(pass) accepted init retains exact successor projection after same-directory-ABA [0.18ms]
+(pass) original init API retirement retains the exact POST response receipt [0.69ms]
+(pass) accepted init returns true when a secondary refresh retires into the successor API [0.83ms]
+(pass) accepted init keeps true and original diagnostic cause on current refresh failure [0.78ms]
+71 | 
+72 | function reportMissingI18nKey(key: string, expected: string): void {
+73 |   const signature = `${currentLocale}:${expected}:${key}`
+74 |   if (reportedMissingI18nKeys.has(signature)) return
+75 |   reportedMissingI18nKeys.add(signature)
+76 |   console.error(new MissingI18nKeyError(currentLocale, key, expected))
+                     ^
+MissingI18nKeyError: Missing i18n string for locale en-US: git.init_done
+   locale: "en-US",
+      key: "git.init_done",
+ expected: "string",
+
+      at reportMissingI18nKey (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:76:17)
+      at runtimeLocaleValue (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:82:5)
+      at t (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:98:17)
+      at initGitCurrent (D:\myhexin-local\opencorvus\packages\overlay\src\utils\git.ts:167:36)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:134:16)
+
+71 | 
+72 | function reportMissingI18nKey(key: string, expected: string): void {
+73 |   const signature = `${currentLocale}:${expected}:${key}`
+74 |   if (reportedMissingI18nKeys.has(signature)) return
+75 |   reportedMissingI18nKeys.add(signature)
+76 |   console.error(new MissingI18nKeyError(currentLocale, key, expected))
+                     ^
+MissingI18nKeyError: Missing i18n string for locale en-US: git.init
+   locale: "en-US",
+      key: "git.init",
+ expected: "string",
+
+      at reportMissingI18nKey (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:76:17)
+      at runtimeLocaleValue (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:82:5)
+      at t (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:98:17)
+      at initGitCurrent (D:\myhexin-local\opencorvus\packages\overlay\src\utils\git.ts:168:36)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:134:16)
+
+(pass) accepted init keeps true and original diagnostic cause on current notification failure [0.91ms]
+[git] Failed to initialize Git 136 |   expect(warning).toMatchObject({ level: "warn", service: "git", message: "Git initialization accepted; view update failed", extra: { accepted: true, phase, directory: "C:/tmp/opencorvus-new-project" } })
+137 |   expect((warning?.extra as { cause: unknown }).cause).toBe(cause)
+138 | })
+139 | 
+140 | test("current original write failure keeps false and its error dialog contract", async () => {
+141 |   const cause = new Error("write denied")
+                          ^
+error: write denied
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:141:21)
+
+(pass) current original write failure keeps false and its error dialog contract [0.54ms]
+71 | 
+72 | function reportMissingI18nKey(key: string, expected: string): void {
+73 |   const signature = `${currentLocale}:${expected}:${key}`
+74 |   if (reportedMissingI18nKeys.has(signature)) return
+75 |   reportedMissingI18nKeys.add(signature)
+76 |   console.error(new MissingI18nKeyError(currentLocale, key, expected))
+                     ^
+MissingI18nKeyError: Missing i18n string for locale en-US: git.init_exists
+   locale: "en-US",
+      key: "git.init_exists",
+ expected: "string",
+
+      at reportMissingI18nKey (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:76:17)
+      at runtimeLocaleValue (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:82:5)
+      at t (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:98:17)
+      at initGitCurrent (D:\myhexin-local\opencorvus\packages\overlay\src\utils\git.ts:167:66)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:158:16)
+
+(pass) accepted idempotent init retains canonical returned refresh issues and its success dialog [0.61ms]
+(pass) queued init success dialog consumes the original selection opening guard [0.41ms]
+[git] Failed to initialize Git 161 | })
+162 | 
+163 | test.each(["success", "error"] as const)("queued init %s dialog consumes the original selection opening guard", async (outcome) => {
+164 |   const guards: boolean[] = []
+165 |   __setHostTransportForTest(fakeTransport(() => {
+166 |     if (outcome === "error") throw new Error("write denied")
+                                             ^
+error: write denied
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:166:40)
+      at request (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:52:21)
+      at apiRequest (D:\myhexin-local\opencorvus\packages\overlay\src\services\api.ts:125:32)
+      at apiJson (D:\myhexin-local\opencorvus\packages\overlay\src\services\api.ts:254:21)
+      at initializeProjectDirectoryGit (D:\myhexin-local\opencorvus\packages\overlay\src\services\project-git.ts:24:16)
+      at initializeActiveDirectoryGit (D:\myhexin-local\opencorvus\packages\overlay\src\utils\git.ts:128:16)
+      at initGitCurrent (D:\myhexin-local\opencorvus\packages\overlay\src\utils\git.ts:149:20)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\git-init-current.test.ts:175:16)
+
+(pass) queued init error dialog consumes the original selection opening guard [8.40ms]
+(pass) Git initialization utilities > startup primitive only initializes through the canonical endpoint [0.62ms]
+(pass) Git initialization utilities > posts init-git even when VCS metadata has not loaded yet [0.48ms]
+(pass) Git initialization utilities > preserves explicit caller cancellation while waiting for Git initialization settlement [0.56ms]
+
+ 13 pass
+ 0 fail
+ 43 expect() calls
+Ran 13 tests across 1 file. [1216.00ms]

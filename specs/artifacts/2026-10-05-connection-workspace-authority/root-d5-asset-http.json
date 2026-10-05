@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-10-05T16:10:19.1009408Z",
+  "assets": [
+    {
+      "port": 17948,
+      "asset": "main-D5kQK7tX.js",
+      "status": 200,
+      "contentLength": 1641038
+    },
+    {
+      "port": 17948,
+      "asset": "main-BX09nL6b.css",
+      "status": 200,
+      "contentLength": 534701
+    },
+    {
+      "port": 17951,
+      "asset": "main-D5kQK7tX.js",
+      "status": 200,
+      "contentLength": 1641038
+    },
+    {
+      "port": 17951,
+      "asset": "main-BX09nL6b.css",
+      "status": 200,
+      "contentLength": 534701
+    }
+  ],
+  "boundary": "Actual HTTP returned asset identity; paired with real DOM asset records and manual screenshots, not functional acceptance alone."
+}

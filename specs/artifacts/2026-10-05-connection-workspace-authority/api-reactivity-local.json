@@ -1,0 +1,31 @@
+{
+  "qualification": "Pure production API state with Solid browser-condition reactive primitive; no DOM, UI, network, backend or Provider",
+  "status": "passed",
+  "applied": [
+    "http://a.invalid/prefix",
+    "http://b.invalid/prefix"
+  ],
+  "projections": [
+    {
+      "revision": 1,
+      "url": "http://a.invalid/prefix"
+    },
+    {
+      "revision": 2,
+      "url": "http://a.invalid/prefix"
+    },
+    {
+      "revision": 3,
+      "url": "http://a.invalid/prefix"
+    },
+    {
+      "revision": 4,
+      "url": "http://b.invalid/prefix"
+    }
+  ],
+  "notifications": [
+    2,
+    3,
+    4
+  ]
+}

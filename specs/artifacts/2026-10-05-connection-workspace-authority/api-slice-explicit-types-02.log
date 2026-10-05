@@ -1,0 +1,5 @@
+packages/overlay/test/api-authority.test.ts(1,41): error TS2307: Cannot find module 'bun:test' or its corresponding type declarations.
+packages/overlay/test/blob-cache.test.ts(1,63): error TS2307: Cannot find module 'bun:test' or its corresponding type declarations.
+packages/overlay/test/blob-cache.test.ts(24,36): error TS2339: Property 'preconnect' does not exist on type '{ (input: URL | RequestInfo, init?: RequestInit): Promise<Response>; (input: string | URL | Request, init?: RequestInit): Promise<...>; }'.
+packages/overlay/test/tauri-transport-error-body.test.ts(1,51): error TS2307: Cannot find module 'bun:test' or its corresponding type declarations.
+packages/overlay/test/tauri-transport-stream-branches.test.ts(1,51): error TS2307: Cannot find module 'bun:test' or its corresponding type declarations.

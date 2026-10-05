@@ -10,6 +10,43 @@
 
 ## Single Writer
 
+### Applied connection ownership
+
+API-state owns one reactive authority revision for the applied URL and credentials.
+Logical reads, mutations, pagination, batches, streams and compound operations
+capture it once; their existing request/selection owners additionally fence values,
+public errors, cleanup, finally and retries. Directory/workspace epochs keep their
+separate scope role. Authority changes retire business stream/replay owners before
+closing transport, then rebind the current selected and global projections. The
+native same-URL replacement path advances that same revision explicitly and marks
+connecting so the existing monitor observes the replacement even after PID state
+has been published.
+
+Binary resource caches retain their existing maps and semaphore. Host-relative
+entries include the same authority revision; exact pending-entry ownership keeps
+an obsolete completion from replacing the successor entry. Component resource
+sources subscribe to that revision, and full-resolution image previews retain the
+canonical raw host-relative target beside the resolved object URL. Standalone
+absolute/data/blob/file resources retain their independent identities. Old stream
+close callbacks settle the original operation using the actual close fact; a known
+final result remains known, and no automatic mutation retry targets the successor
+connection. GET projection retirement and control-message POST disconnect retain
+their distinct backend execution semantics.
+
+The existing selection epoch also binds project-local presentation. A selection
+that leaves and returns to the same directory does not re-admit an earlier form,
+menu, search or configuration response. Accepted original configuration/VCS
+results and explicitly committed errors remain original facts; obsolete UI
+projection, feedback and finally retire. Source-local busy state resets through
+its existing source effect, without another epoch or request owner.
+
+Child transcript keys include the same captured API authority beside the actual
+source, child Session and directory. The existing resource and refresh generation
+retire queued reads/live frames on key change; loader and ordered snapshot parser
+receive that original authority. Delta reuse requires the exact same key and
+current resource owner. Side Chat supplies its existing captured stream token to
+that shared parser. This retires a GET projection, not a child execution.
+
 `tree-writer.ts` is the only service that creates or mutates store-backed
 conversation cards. `cardTreeStore` is the renderer source. `messages.ts`
 retains message content and hydration indexes; it is not a second rendered

@@ -1,0 +1,9 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\work-ledger-notification-stream.test.ts:
+(pass) Work Ledger and Mailbox notifications share one app-lifetime physical stream [2.63ms]
+
+ 1 pass
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [1110.00ms]

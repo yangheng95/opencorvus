@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
-import { configure } from "../src/services/api"
+import { ApiAuthorityChangedError, captureApiAuthority, configure, type ApiAuthority } from "../src/services/api"
 import {
   loadTaskBrowserPreviewEvidenceCaptureObjectUrl,
   loadTaskBrowserPreviewEvidence,
@@ -18,6 +18,45 @@ const EVIDENCE_CAPTURE_BYTES = new Uint8Array([
   0x44, 0x41, 0x54, 0x78, 0x9c, 0x63, 0x00, 0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0d, 0x0a, 0x2d, 0xb4, 0x00, 0x00,
   0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 ])
+
+test.each([
+  {
+    name: "target",
+    read: (authority: ApiAuthority) =>
+      loadTaskBrowserPreviewTarget({ taskID: TASK_ID, directory: SAVED_DIRECTORY, authority }),
+  },
+  {
+    name: "evidence",
+    read: (authority: ApiAuthority) =>
+      loadTaskBrowserPreviewEvidence({
+        taskID: TASK_ID,
+        directory: SAVED_DIRECTORY,
+        evidenceID: "art_owned",
+        authority,
+      }),
+  },
+  {
+    name: "capture",
+    read: (authority: ApiAuthority) =>
+      loadTaskBrowserPreviewEvidenceCaptureObjectUrl({
+        taskID: TASK_ID,
+        directory: SAVED_DIRECTORY,
+        evidenceID: "art_owned",
+        authority,
+      }),
+  },
+])("browser preview $name retains the caller's retired authority as a typed admission outcome", async ({ read }) => {
+  const authority = captureApiAuthority()
+  configure({ serverUrl: "http://owned-next.invalid" })
+  let failure: unknown
+  try {
+    await read(authority)
+  } catch (error) {
+    failure = error
+  }
+  expect(failure).toBeInstanceOf(ApiAuthorityChangedError)
+  expect((failure as ApiAuthorityChangedError).outcome).toEqual({ phase: "before_dispatch" })
+})
 
 function fakePreviewTransport(capture: (req: TransportRequest) => void): HostTransport {
   return {
@@ -146,14 +185,21 @@ test("browser preview service loads persisted evidence screenshot bytes through 
     },
   })
 
-  const objectUrl = await loadTaskBrowserPreviewEvidenceCaptureObjectUrl({
+  const authority = captureApiAuthority()
+  const capture = await loadTaskBrowserPreviewEvidenceCaptureObjectUrl({
     taskID: TASK_ID,
     directory: SAVED_DIRECTORY,
     evidenceID: "art_previewevidence00000001",
+    authority,
   })
 
-  expect(objectUrl).toStartWith("blob:")
-  URL.revokeObjectURL(objectUrl)
+  expect(capture.url).toStartWith("blob:")
+  expect(capture.resourceUrl).toBe(
+    `/task/${TASK_ID}/browser-preview/evidence/art_previewevidence00000001/capture.png?directory=D%3A%2Fworkspace%2Fapp`,
+  )
+  expect(capture.authority).toBe(authority)
+  expect(new Uint8Array(await (await fetch(capture.url)).arrayBuffer())).toEqual(EVIDENCE_CAPTURE_BYTES)
+  URL.revokeObjectURL(capture.url)
   expect(captured?.path).toBe(`task/${TASK_ID}/browser-preview/evidence/art_previewevidence00000001/capture.png`)
   expect(captured?.method).toBe("GET")
   expect(captured?.responseKind).toBe("binary")

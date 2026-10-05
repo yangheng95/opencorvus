@@ -1,0 +1,121 @@
+[
+  {
+    "path": "/channel",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.395Z",
+    "firstRequestID": "7beda391-5bb9-4d83-987b-5d1f6a780494"
+  },
+  {
+    "path": "/chat/capability",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.464Z",
+    "firstRequestID": "a9badc47-1235-46ca-b9ca-d020c1835112"
+  },
+  {
+    "path": "/config",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.391Z",
+    "firstRequestID": "7ae90e1b-8b77-459c-9364-ce9ee158ffb4"
+  },
+  {
+    "path": "/expert-squad/catalog",
+    "status": 404,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.373Z",
+    "firstRequestID": "500798f0-b515-462d-ad56-159c9f045078"
+  },
+  {
+    "path": "/expert-squad/search",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.4Z",
+    "firstRequestID": "739e5c0e-0817-4357-bad1-b7b7cb093bc7"
+  },
+  {
+    "path": "/global/health",
+    "status": 200,
+    "count": 6,
+    "firstTime": "2026-10-05T12:40:01.578Z",
+    "firstRequestID": "fdd9ebce-ccba-476a-b02e-b6a5796b3b42"
+  },
+  {
+    "path": "/global/tasks",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.42Z",
+    "firstRequestID": "91cedbd3-c912-4ff4-b661-2ab245b60049"
+  },
+  {
+    "path": "/mailbox",
+    "status": 200,
+    "count": 2,
+    "firstTime": "2026-10-05T12:40:01.816Z",
+    "firstRequestID": "4ccbdb25-94be-4f39-9239-b4405743056a"
+  },
+  {
+    "path": "/mcp",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.435Z",
+    "firstRequestID": "0180cfea-2bb1-485e-a4c7-89bbcca5e560"
+  },
+  {
+    "path": "/mission",
+    "status": 200,
+    "count": 2,
+    "firstTime": "2026-10-05T12:40:02.427Z",
+    "firstRequestID": "2db7ab17-1ab8-417a-973d-0b7b0141b9fb"
+  },
+  {
+    "path": "/mission-skill/catalog",
+    "status": 404,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.373Z",
+    "firstRequestID": "026d1c7e-4e9d-474d-8a5a-39b1d3ae1cce"
+  },
+  {
+    "path": "/path",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.404Z",
+    "firstRequestID": "7e8576e2-1d6a-45ea-804e-4d7c63c09e07"
+  },
+  {
+    "path": "/session/ses_-zUSotvzOzzZgeNQExal/events",
+    "status": 404,
+    "count": 17,
+    "firstTime": "2026-10-05T12:40:04.583Z",
+    "firstRequestID": "012fff62-94cf-4174-abe1-75f69fc0f908"
+  },
+  {
+    "path": "/skill/mounts",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.641Z",
+    "firstRequestID": "1b96096b-fd54-43f8-9d2f-254c5628d4b7"
+  },
+  {
+    "path": "/vcs",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:02.405Z",
+    "firstRequestID": "f59a0e81-926c-4dd8-b166-fbba7d5f12df"
+  },
+  {
+    "path": "/work-ledger",
+    "status": 200,
+    "count": 2,
+    "firstTime": "2026-10-05T12:40:02.426Z",
+    "firstRequestID": "9cf2227f-f3ad-4bba-bf49-3cc6ff014053"
+  },
+  {
+    "path": "/work-ledger/events",
+    "status": 200,
+    "count": 1,
+    "firstTime": "2026-10-05T12:40:04.58Z",
+    "firstRequestID": "6c607a29-1db2-4780-8f46-934dfd196b86"
+  }
+]

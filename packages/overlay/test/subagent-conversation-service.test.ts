@@ -1,6 +1,8 @@
 import { afterEach, expect, test } from "bun:test"
 
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { HOST_CAPABILITIES } from "../src/services/host-transport"
+import { ApiAuthorityChangedError, captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import enUS from "../src/i18n/en-US.json"
 import {
@@ -13,8 +15,12 @@ import {
   projectSubagentConversationCard,
   subagentConversationTargetKey,
   subagentConversationTranscriptRevision,
+  parseSubagentConversation,
+  type SubagentConversationTarget,
 } from "../src/services/subagent-conversation"
 import { setLocaleData } from "../src/utils/i18n"
+import { connectSideChat } from "../src/services/side-chat"
+import type { StreamHandlers, StreamOpenRequest } from "../src/services/host-transport"
 
 setLocaleData("en-US", enUS)
 
@@ -25,6 +31,7 @@ function orderKey(time: number, id: string): string {
 function transport(requests: TransportRequest[], response: Record<string, unknown>): HostTransport {
   return {
     kind: "tauri",
+    capabilities: HOST_CAPABILITIES.tauri,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       requests.push(request)
       return { status: 200, ok: true, headers: {}, body: response as T }
@@ -35,10 +42,7 @@ function transport(requests: TransportRequest[], response: Record<string, unknow
     async native() {
       throw new Error("native not used in subagent conversation tests")
     },
-    onUiCommand() {
-      return { unsubscribe() {} }
-    },
-  } as unknown as HostTransport
+  }
 }
 
 function payload() {
@@ -93,7 +97,10 @@ function payload() {
   }
 }
 
-afterEach(() => __setHostTransportForTest(undefined))
+afterEach(() => {
+  __setHostTransportForTest(undefined)
+  configure({ serverUrl: "http://127.0.0.1:7878", password: "" })
+})
 
 test("task child transcript uses the exact task/session route and canonical order", async () => {
   const requests: TransportRequest[] = []
@@ -397,6 +404,7 @@ test("a new transcript target owns a fresh initial observation and refresh caden
 test("task transcript delta replaces changed messages and removes deleted messages", () => {
   const current = {
     targetKey: subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { kind: "task", id: "task-one" },
       sessionID: "child-session",
       directory: "/repo-one",
@@ -413,6 +421,7 @@ test("task transcript delta replaces changed messages and removes deleted messag
   } as any
   const delta = {
     targetKey: subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { kind: "task", id: "task-one" },
       sessionID: "child-session",
       directory: "/repo-one",
@@ -437,6 +446,7 @@ test("task transcript delta replaces changed messages and removes deleted messag
 test("task transcript snapshot replaces the prior live epoch", () => {
   const current = {
     targetKey: subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { kind: "task", id: "task-one" },
       sessionID: "child-session",
       directory: "/repo-one",
@@ -450,6 +460,7 @@ test("task transcript snapshot replaces the prior live epoch", () => {
   } as any
   const snapshot = {
     targetKey: subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { kind: "task", id: "task-one" },
       sessionID: "child-session",
       directory: "/repo-one",
@@ -474,6 +485,7 @@ test("task transcript snapshot replaces the prior live epoch", () => {
 test("a same-named session in another project replaces the prior target transcript", () => {
   const current = {
     targetKey: subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { kind: "task", id: "task-one" },
       sessionID: "child-session",
       directory: "/repo-one",
@@ -487,6 +499,7 @@ test("a same-named session in another project replaces the prior target transcri
   } as any
   const nextProject = {
     targetKey: subagentConversationTargetKey({
+      authority: captureApiAuthority(),
       source: { kind: "task", id: "task-two" },
       sessionID: "child-session",
       directory: "/repo-two",
@@ -503,4 +516,149 @@ test("a same-named session in another project replaces the prior target transcri
     targetKey: nextProject.targetKey,
     messages: [{ messageID: "project-two-message" }],
   })
+})
+
+test("current Task and Mission/Chat child reads retain the supplied authority and exact public routes", async () => {
+  const authority = captureApiAuthority()
+  const requests: TransportRequest[] = []
+  __setHostTransportForTest(transport(requests, payload()))
+  const targets: SubagentConversationTarget[] = [
+    { source: { kind: "task", id: "task one" }, sessionID: "child-session", directory: "D:/owned", authority },
+    { source: { kind: "session", id: "mission-root", sessionKind: "mission" }, sessionID: "child-session", directory: "D:/owned", authority },
+    { source: { kind: "session", id: "chat-root", sessionKind: "conversation", experience: "chat" }, sessionID: "child-session", directory: "D:/owned", authority },
+  ]
+  const transcripts = await Promise.all(targets.map((target) => loadSubagentConversation(target)))
+  expect(requests.map(({ path, query, authority }) => ({ path, query, authority }))).toEqual([
+    { path: "task/task%20one/conversation/session/child-session", query: { directory: "D:/owned" }, authority },
+    { path: "session/child-session/conversation", query: { directory: "D:/owned", tail_limit: "2000" }, authority },
+    { path: "session/child-session/conversation", query: { directory: "D:/owned", tail_limit: "2000" }, authority },
+  ])
+  expect(transcripts.map((value) => value.targetKey)).toEqual(targets.map(subagentConversationTargetKey))
+  expect(transcripts.map((value) => value.messages.map((message) => message.messageID))).toEqual([
+    ["message-early", "message-late"], ["message-early", "message-late"], ["message-early", "message-late"],
+  ])
+})
+
+test("a supplied retired child target produces the exact local admission error after credential ABA", async () => {
+  const authority = captureApiAuthority()
+  configure({ password: "dummy-local-credential-marker" })
+  configure({ password: "" })
+  await expect(loadSubagentConversation({ source: { kind: "task", id: "task-one" }, sessionID: "child-session", directory: "D:/owned", authority })).rejects.toMatchObject({
+    name: "ApiAuthorityChangedError", phase: "before_dispatch", expectedRevision: authority.revision,
+    currentRevision: captureApiAuthority().revision,
+  })
+})
+
+test("Side Chat's ordered snapshot parser retains the connection's captured authority", () => {
+  const authority = captureApiAuthority()
+  let handlers: StreamHandlers | undefined
+  let request: StreamOpenRequest | undefined
+  const values: string[] = []
+  __setHostTransportForTest({
+    ...transport([], {}),
+    openStream(input, nextHandlers) {
+      request = input
+      handlers = nextHandlers
+      return { close() {} }
+    },
+  })
+  const close = connectSideChat({ sessionID: "child-session", directory: "D:/owned", authority }, {
+    transcript(value) { values.push(value.targetKey) },
+    connection() {}, activity() {}, interactions() {},
+    error(error) { throw error },
+  })
+  try {
+    if (!handlers) throw new Error("Expected actual local stream handlers")
+    handlers.onEvent(JSON.stringify({ type: "session.connected", payload: { conversationSnapshot: payload() } }))
+    expect(request).toMatchObject({ authority, path: "session/child-session/events", query: { directory: "D:/owned" } })
+    expect(values.map((value) => JSON.parse(value))).toEqual([{
+      source: { kind: "session", id: "child-session" }, sessionID: "child-session", directory: "D:/owned", authority,
+    }])
+  } finally { close() }
+})
+
+test("held A read retains its exact response while B returns its own child transcript", async () => {
+  const a = captureApiAuthority()
+  const target = { source: { kind: "task" as const, id: "task-one" }, sessionID: "child-session", directory: "D:/owned" }
+  const held = Promise.withResolvers<TransportResponse>()
+  const aResponse: TransportResponse = { status: 200, ok: true, headers: {}, body: payload() }
+  const bPayload = payload()
+  bPayload.transcript[0]!.parts[0]!.text = "B child result"
+  const fixture = transport([], bPayload)
+  __setHostTransportForTest({
+    ...fixture,
+    async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
+      if (request.authority?.revision === a.revision) return await held.promise as TransportResponse<T>
+      return fixture.request<T>(request)
+    },
+  })
+  const old = loadSubagentConversation({ ...target, authority: a }).catch((error: unknown) => error)
+  renewApiAuthority()
+  const b = captureApiAuthority()
+  const current = await loadSubagentConversation({ ...target, authority: b })
+  held.resolve(aResponse)
+  const error = await old
+  expect(error).toBeInstanceOf(ApiAuthorityChangedError)
+  if (!(error instanceof ApiAuthorityChangedError)) throw new Error("Expected original authority outcome")
+  expect(error.phase).toBe("response")
+  if (error.outcome.phase !== "response") throw new Error("Expected actual response outcome")
+  expect(error.outcome.response).toBe(aResponse)
+  expect(current.messages.at(-1)?.parts[0]?.text).toBe("B child result")
+  expect(JSON.parse(current.targetKey)).toEqual({ ...target, authority: b })
+})
+
+test("same child identifiers under a new authority replace the prior delta base", () => {
+  const target = { source: { kind: "task" as const, id: "task-one" }, sessionID: "child-session", directory: "D:/owned" }
+  const a = captureApiAuthority()
+  const before = parseSubagentConversation({ ...target, authority: a }, payload())
+  renewApiAuthority()
+  const b = captureApiAuthority()
+  const nextPayload = payload()
+  nextPayload.transcriptMode = "delta"
+  nextPayload.transcript[0]!.parts[0]!.text = "New source"
+  const next = parseSubagentConversation({ ...target, authority: b }, nextPayload)
+  expect([JSON.parse(before.targetKey), JSON.parse(next.targetKey)]).toEqual([{ ...target, authority: a }, { ...target, authority: b }])
+  expect(mergeSubagentConversation(before, next)).toBe(next)
+  expect(next.messages.at(-1)?.parts[0]?.text).toBe("New source")
+})
+
+test("a new authority owns refresh cadence while the retired in-flight request settles", async () => {
+  const target = { source: { kind: "task" as const, id: "task-one" }, sessionID: "child-session", directory: "D:/owned" }
+  const aKey = subagentConversationTargetKey({ ...target, authority: captureApiAuthority() })
+  const firstStarted = Promise.withResolvers<void>()
+  const releaseFirst = Promise.withResolvers<void>()
+  const secondStarted = Promise.withResolvers<void>()
+  const releaseSecond = Promise.withResolvers<void>()
+  const trailing = Promise.withResolvers<void>()
+  const completed: string[] = []
+  let key = aKey
+  let index = 0
+  const controller = createSubagentTranscriptRefreshController(async () => {
+    const indexAtStart = ++index
+    const ownedKey = key
+    if (indexAtStart === 1) { firstStarted.resolve(); await releaseFirst.promise }
+    if (indexAtStart === 2) { secondStarted.resolve(); await releaseSecond.promise }
+    completed.push(ownedKey)
+    if (indexAtStart === 3) trailing.resolve()
+  }, 1)
+  try {
+    controller.observe(aKey, "1")
+    controller.observe(aKey, "2")
+    await firstStarted.promise
+    renewApiAuthority()
+    key = subagentConversationTargetKey({ ...target, authority: captureApiAuthority() })
+    controller.observe(key, "1")
+    controller.observe(key, "2")
+    await secondStarted.promise
+    controller.observe(key, "3")
+    releaseFirst.resolve()
+    await Promise.resolve()
+    releaseSecond.resolve()
+    await trailing.promise
+    expect(completed).toEqual([aKey, key, key])
+  } finally {
+    releaseFirst.resolve()
+    releaseSecond.resolve()
+    controller.dispose()
+  }
 })

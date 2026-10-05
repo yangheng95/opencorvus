@@ -1,10 +1,17 @@
 import { afterEach, expect, test } from "bun:test"
-import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { captureApiAuthority, renewApiAuthority } from "../src/services/api"
+import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import {
   closeFileEditor,
+  copyFileItem,
+  createFileItem,
+  loadFileDirectory,
+  uploadDroppedFiles,
   deleteFileItem,
   fileWorkbenchOpen,
+  fileEditorReserved,
+  prepareFileEditorClose,
   fileWorkbenchRevision,
   moveFileItem,
   openFileEditor,
@@ -14,7 +21,7 @@ import {
 } from "../src/services/file-workbench"
 
 function registerDecision(confirmLeave: () => Promise<boolean>) {
-  return registerFileEditorBeforeNavigate({ confirmLeave, isDirty: () => true })
+  return registerFileEditorBeforeNavigate({ confirmLeave: async () => (await confirmLeave()) ? 0 : null, getRevision: () => 0, isBusy: () => false, isDirty: () => true })
 }
 
 let unregister: (() => void) | undefined
@@ -40,7 +47,7 @@ function moved(previousPath: string, path: string) {
   return {
     previousPath,
     path,
-    node: { name: path.split("/").at(-1), path, absolute: `/repo/${path}`, type: "file", ignored: false },
+    node: { name: path.split("/").at(-1), path, absolute: `/repo/${path}`, type: "file" as const, ignored: false },
   }
 }
 
@@ -161,5 +168,230 @@ test("each successful mutation remains reconciled when a later batch member fail
   expect({ target: selectedFileTarget(), revision: fileWorkbenchRevision() }).toEqual({
     target: null,
     revision: revision + 2,
+  })
+})
+
+
+test("prepared close holds the approved draft until durable commit and commits its boundary exactly once", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  let revision = 7
+  let currentView = true
+  const commits: string[] = []
+  unregister = registerFileEditorBeforeNavigate({
+    confirmLeave: async () => revision,
+    getRevision: () => revision,
+    isDirty: () => true,
+    isBusy: () => false,
+  })
+  const result = await prepareFileEditorClose({ isCurrent: () => currentView, commit: () => commits.push("durable B") })
+  expect(result.status).toBe("ready")
+  if (result.status !== "ready") throw new Error("Expected ready admission")
+  expect({ held: fileEditorReserved(), current: result.handle.isCurrent(), target: selectedFileTarget()?.path }).toEqual({
+    held: true, current: true, target: "draft.md",
+  })
+  expect(await prepareFileEditorClose()).toEqual({ status: "busy" })
+  expect(await openFileEditor("other.md", { directory: "/b" })).toBe(false)
+  await expect(deleteFileItem("draft.md", { directory: "/a" })).rejects.toMatchObject({ name: "AbortError", reason: "busy" })
+  expect(selectedFileTarget()).toEqual({ directory: "/a", path: "draft.md" })
+  // Persistence has succeeded. Closing the initiating view cannot retract that fact.
+  currentView = false
+  result.handle.commit()
+  result.handle.commit()
+  result.handle.release()
+  expect({ commits, held: fileEditorReserved(), target: selectedFileTarget(), revision }).toEqual({
+    commits: ["durable B"], held: false, target: null, revision: 7,
+  })
+})
+
+test("failed persistence releases admission and retains the exact saved or dirty owner revision", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  let revision = 3
+  unregister = registerFileEditorBeforeNavigate({
+    // A real Save decision may advance the buffer's saved baseline before preferences fail.
+    confirmLeave: async () => ++revision,
+    getRevision: () => revision,
+    isBusy: () => false,
+    isDirty: () => false,
+  })
+  const result = await prepareFileEditorClose()
+  if (result.status !== "ready") throw new Error("Expected ready admission")
+  expect(result.handle.isCurrent()).toBe(true)
+  result.handle.release()
+  expect({ revision, held: fileEditorReserved(), target: selectedFileTarget() }).toEqual({
+    revision: 4, held: false, target: { directory: "/a", path: "draft.md" },
+  })
+  expect(await openFileEditor("next.md", { directory: "/a" })).toBe(true)
+  expect(selectedFileTarget()?.path).toBe("next.md")
+})
+
+test("busy work, cancellation and changed approval revisions have explicit preparation outcomes", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  let busy = true
+  let revision = 1
+  let approval: number | null = null
+  unregister = registerFileEditorBeforeNavigate({
+    confirmLeave: async () => approval,
+    getRevision: () => revision,
+    isBusy: () => busy,
+    isDirty: () => true,
+  })
+  expect(await prepareFileEditorClose()).toEqual({ status: "busy" })
+  busy = false
+  expect(await prepareFileEditorClose()).toEqual({ status: "cancelled" })
+  approval = 1
+  revision = 2
+  expect(await prepareFileEditorClose()).toEqual({ status: "superseded" })
+  expect({ held: fileEditorReserved(), target: selectedFileTarget(), revision }).toEqual({
+    held: false, target: { directory: "/a", path: "draft.md" }, revision: 2,
+  })
+})
+
+test("an affected rename holds its target through the actual pending transport and releases on exact failure", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  unregister = registerDecision(async () => true)
+  let settle!: (value: TransportResponse<unknown>) => void
+  let entered!: () => void
+  const dispatched = new Promise<void>((resolve) => { entered = resolve })
+  __setHostTransportForTest({
+    kind: "browser",
+    capabilities: HOST_CAPABILITIES.browser,
+    async request<T>() {
+      entered()
+      return await new Promise<TransportResponse<unknown>>((resolve) => { settle = resolve }) as TransportResponse<T>
+    },
+    openStream() { throw new Error("This fixture only implements HTTP requests") },
+    async native() { throw new Error("This fixture only implements HTTP requests") },
+  } as HostTransport)
+  const operation = moveFileItem("draft.md", "renamed.md", { directory: "/a" })
+  await dispatched
+  expect({ held: fileEditorReserved(), preparation: await prepareFileEditorClose() }).toEqual({
+    held: true, preparation: { status: "busy" },
+  })
+  settle({ status: 409, ok: false, headers: {}, body: { name: "FileWriteConflictError" } })
+  await expect(operation).rejects.toMatchObject({ name: "ApiError", status: 409, body: { name: "FileWriteConflictError" } })
+  expect({ held: fileEditorReserved(), target: selectedFileTarget() }).toEqual({
+    held: false, target: { directory: "/a", path: "draft.md" },
+  })
+})
+
+test("a retired rename retains its real response receipt and releases the original target admission", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  unregister = registerDecision(async () => true)
+  let settle!: (value: TransportResponse<unknown>) => void
+  let entered!: () => void
+  const dispatched = new Promise<void>((resolve) => { entered = resolve })
+  __setHostTransportForTest({
+    kind: "browser",
+    capabilities: HOST_CAPABILITIES.browser,
+    async request<T>() {
+      entered()
+      return await new Promise<TransportResponse<unknown>>((resolve) => { settle = resolve }) as TransportResponse<T>
+    },
+    openStream() { throw new Error("This fixture only implements HTTP requests") },
+    async native() { throw new Error("This fixture only implements HTTP requests") },
+  } as HostTransport)
+  const operation = moveFileItem("draft.md", "renamed.md", { directory: "/a" })
+  await dispatched
+  renewApiAuthority()
+  const receipt = moved("draft.md", "renamed.md")
+  settle({ status: 200, ok: true, headers: {}, body: receipt })
+  await expect(operation).rejects.toMatchObject({
+    name: "ApiAuthorityChangedError", outcome: { phase: "response", response: { status: 200, body: receipt } },
+  })
+  expect({ held: fileEditorReserved(), target: selectedFileTarget() }).toEqual({
+    held: false, target: { directory: "/a", path: "draft.md" },
+  })
+})
+
+test("authority renewal during a file decision yields its typed retirement and preserves the authored target", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  let approve!: (revision: number) => void
+  unregister = registerFileEditorBeforeNavigate({
+    confirmLeave: () => new Promise<number>((resolve) => { approve = resolve }),
+    getRevision: () => 9,
+    isDirty: () => true,
+    isBusy: () => false,
+  })
+  const preparation = prepareFileEditorClose()
+  renewApiAuthority()
+  approve(9)
+  await expect(preparation).rejects.toMatchObject({
+    name: "ApiAuthorityChangedError", outcome: { phase: "before_dispatch" },
+  })
+  expect({ held: fileEditorReserved(), target: selectedFileTarget() }).toEqual({
+    held: false, target: { directory: "/a", path: "draft.md" },
+  })
+})
+
+
+test("all file operation entry points preserve a caller's retired logical authority", async () => {
+  const scope = { directory: "/a", authority: captureApiAuthority() }
+  renewApiAuthority()
+  const operations = [
+    () => loadFileDirectory("", scope),
+    () => uploadDroppedFiles("", [], scope),
+    () => createFileItem({ path: "created.md", type: "file" }, scope),
+    () => moveFileItem("first.md", "moved.md", scope),
+    () => copyFileItem("first.md", "copied.md", scope),
+    () => deleteFileItem("first.md", scope),
+  ]
+  for (const operation of operations) {
+    await expect(operation()).rejects.toMatchObject({
+      name: "ApiAuthorityChangedError", expectedRevision: scope.authority.revision,
+      outcome: { phase: "before_dispatch" },
+    })
+  }
+})
+
+test("a batch retains its first accepted copy and uses the same authority for the next member", async () => {
+  const scope = { directory: "/a", authority: captureApiAuthority() }
+  const receipt = { sourcePath: "first.md", path: "copied.md", node: moved("first.md", "copied.md").node }
+  transport(() => ({ body: receipt }))
+  expect(await copyFileItem("first.md", "copied.md", scope)).toEqual(receipt)
+  const committedRevision = fileWorkbenchRevision()
+  renewApiAuthority()
+  await expect(copyFileItem("second.md", "copied-second.md", scope)).rejects.toMatchObject({
+    name: "ApiAuthorityChangedError", outcome: { phase: "before_dispatch" },
+  })
+  expect(fileWorkbenchRevision()).toBe(committedRevision)
+})
+
+
+test("file opens consume the caller's exact current authority while retaining resource-only target identity", async () => {
+  const scope = { directory: "/owned/project", authority: captureApiAuthority() }
+  expect(await openFileEditor("notes.md", scope, { startLine: 2, endLine: 3 })).toBe(true)
+  expect(selectedFileTarget()).toEqual({ directory: "/owned/project", path: "notes.md", range: { startLine: 2, endLine: 3 } })
+  expect(await openSourceFileEditor("/owned/source.ts", scope)).toBe(true)
+  expect(selectedFileTarget()).toEqual({ directory: "/owned/project", path: "/owned/source.ts", sourceAbsolutePath: "/owned/source.ts" })
+  renewApiAuthority()
+  for (const operation of [
+    () => openFileEditor("later.md", scope),
+    () => openSourceFileEditor("/owned/later.ts", scope),
+  ]) {
+    await expect(operation()).rejects.toMatchObject({
+      name: "ApiAuthorityChangedError", expectedRevision: scope.authority.revision,
+      outcome: { phase: "before_dispatch" },
+    })
+  }
+  expect(selectedFileTarget()).toEqual({ directory: "/owned/project", path: "/owned/source.ts", sourceAbsolutePath: "/owned/source.ts" })
+})
+
+test("the supplied open authority remains the decision owner across its actual wait", async () => {
+  await openFileEditor("draft.md", { directory: "/a" })
+  const authority = captureApiAuthority()
+  let approve!: (revision: number) => void
+  unregister = registerFileEditorBeforeNavigate({
+    confirmLeave: () => new Promise<number>((resolve) => { approve = resolve }),
+    getRevision: () => 12, isDirty: () => true, isBusy: () => false,
+  })
+  const opened = openFileEditor("next.md", { directory: "/a", authority })
+  renewApiAuthority()
+  approve(12)
+  await expect(opened).rejects.toMatchObject({
+    name: "ApiAuthorityChangedError", expectedRevision: authority.revision,
+    outcome: { phase: "before_dispatch" },
+  })
+  expect({ held: fileEditorReserved(), target: selectedFileTarget() }).toEqual({
+    held: false, target: { directory: "/a", path: "draft.md" },
   })
 })

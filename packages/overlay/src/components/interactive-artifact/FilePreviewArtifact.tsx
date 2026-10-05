@@ -2,7 +2,12 @@ import * as pdfjs from "pdfjs-dist"
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url"
 import { Match, Show, Switch, createEffect, createResource, createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { fetchResourceAsObjectUrl } from "../../services/api"
+import {
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  fetchResourceAsObjectUrl,
+  type ApiAuthority,
+} from "../../services/api"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { CodeEditor } from "../ui/CodeEditor"
@@ -12,18 +17,29 @@ type FilePreviewPayload = Extract<InteractiveArtifactPayload, { renderer: "file-
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker
 
-async function loadText(url: string): Promise<string> {
-  const objectUrl = await fetchResourceAsObjectUrl(url)
+async function loadText(source: { url: string; authority?: ApiAuthority }): Promise<string> {
+  const objectUrl = await fetchResourceAsObjectUrl(source.url, { authority: source.authority })
   const response = await fetch(objectUrl)
   if (!response.ok) throw new Error(`Text preview failed with HTTP ${response.status}`)
-  return response.text()
+  const text = await response.text()
+  if (source.authority) assertApiAuthorityCurrent(source.authority)
+  return text
 }
 
 function TextPreview(props: { payload: FilePreviewPayload }) {
-  const [text] = createResource(() => props.payload.source.url, loadText)
+  const [text] = createResource(
+    () => ({
+      url: props.payload.source.url,
+      authority: props.payload.source.url.startsWith("/") ? captureApiAuthority() : undefined,
+    }),
+    loadText,
+  )
   return (
     <Show when={!text.error} fallback={<div class="msg-artifact-render-error">{String(text.error)}</div>}>
-      <Show when={text()} fallback={<div class="msg-artifact-file__loading">{t("artifact.file.loading_text")}</div>}>
+      <Show
+        when={!text.loading && text()}
+        fallback={<div class="msg-artifact-file__loading">{t("artifact.file.loading_text")}</div>}
+      >
         {(source) => (
           <CodeEditor
             class="msg-artifact-code"
@@ -51,8 +67,11 @@ function PdfPreview(props: { payload: FilePreviewPayload }) {
   const [currentDocument, setCurrentDocument] = createSignal<pdfjs.PDFDocumentProxy>()
   let sourceGeneration = 0
   const [source] = createResource(
-    () => props.payload.source.url,
-    (url) => fetchResourceAsObjectUrl(url),
+    () => ({
+      url: props.payload.source.url,
+      authority: props.payload.source.url.startsWith("/") ? captureApiAuthority() : undefined,
+    }),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
   )
 
   onMount(() => {
@@ -64,7 +83,7 @@ function PdfPreview(props: { payload: FilePreviewPayload }) {
   onCleanup(() => resizeObserver?.disconnect())
 
   createEffect(() => {
-    const url = source()
+    const url = source.loading ? undefined : source()
     const generation = ++sourceGeneration
     setCurrentDocument(undefined)
     setPage(1)
@@ -88,7 +107,7 @@ function PdfPreview(props: { payload: FilePreviewPayload }) {
         setPageCount(loaded.numPages)
       })
       .catch((reason: unknown) => {
-        if (generation !== sourceGeneration || reason instanceof Error && reason.name === "AbortException") return
+        if (generation !== sourceGeneration || (reason instanceof Error && reason.name === "AbortException")) return
         setError(reason instanceof Error ? reason.message : String(reason))
       })
     onCleanup(() => {
@@ -124,10 +143,11 @@ function PdfPreview(props: { payload: FilePreviewPayload }) {
         target.style.height = `${Math.ceil(natural.height * displayScale)}px`
         renderTask = pdfPage.render({ canvas: target, canvasContext: context, viewport })
         await renderTask.promise
+        if (disposed || currentDocument() !== loaded || page() !== pageNumber) return
         target.dataset.ready = "true"
       })
       .catch((reason: unknown) => {
-        if (disposed || reason instanceof Error && reason.name === "RenderingCancelledException") return
+        if (disposed || (reason instanceof Error && reason.name === "RenderingCancelledException")) return
         setError(reason instanceof Error ? reason.message : String(reason))
       })
     onCleanup(() => {

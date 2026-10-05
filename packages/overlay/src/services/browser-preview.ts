@@ -1,4 +1,4 @@
-import { ApiError, apiJson, apiRequest } from "./api"
+import { ApiError, apiJson, apiRequest, captureApiAuthority, type ApiAuthority } from "./api"
 import { bytesToArrayBuffer } from "../utils/binary"
 import type { BrowserPreviewReadTaskEvidenceResponses, BrowserPreviewTaskTargetResponses } from "@opencorvus-ai/sdk"
 import { createSignal } from "solid-js"
@@ -62,9 +62,11 @@ export async function loadTaskBrowserPreviewTarget(input: {
   taskID: string
   directory: string
   signal?: AbortSignal
+  authority?: ApiAuthority
 }): Promise<BrowserPreviewTarget> {
   return apiJson<BrowserPreviewTarget>(taskBrowserPreviewPath(input.taskID, input.directory), {
     signal: input.signal,
+    authority: input.authority,
   })
 }
 
@@ -73,10 +75,11 @@ export async function loadTaskBrowserPreviewEvidence(input: {
   directory: string
   evidenceID: string
   signal?: AbortSignal
+  authority?: ApiAuthority
 }): Promise<BrowserPreviewEvidence> {
   return apiJson<BrowserPreviewEvidence>(
     taskBrowserPreviewPath(input.taskID, input.directory, `/evidence/${encodeURIComponent(input.evidenceID)}`),
-    { signal: input.signal },
+    { signal: input.signal, authority: input.authority },
   )
 }
 
@@ -85,7 +88,9 @@ export async function loadTaskBrowserPreviewEvidenceCaptureObjectUrl(input: {
   directory: string
   evidenceID: string
   signal?: AbortSignal
-}): Promise<string> {
+  authority?: ApiAuthority
+}): Promise<{ url: string; resourceUrl: string; authority: ApiAuthority }> {
+  const authority = input.authority ?? captureApiAuthority()
   const path = taskBrowserPreviewPath(
     input.taskID,
     input.directory,
@@ -94,9 +99,13 @@ export async function loadTaskBrowserPreviewEvidenceCaptureObjectUrl(input: {
   const response = await apiRequest<Uint8Array>(path, {
     responseKind: "binary",
     signal: input.signal,
+    authority,
   })
-  if (!response.ok)
-    throw new ApiError(response.status, path, response.body, response.headers)
+  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers)
   const contentType = response.headers["content-type"] || response.headers["Content-Type"] || "image/png"
-  return URL.createObjectURL(new Blob([bytesToArrayBuffer(response.body)], { type: contentType }))
+  return {
+    url: URL.createObjectURL(new Blob([bytesToArrayBuffer(response.body)], { type: contentType })),
+    resourceUrl: `/${path}`,
+    authority,
+  }
 }

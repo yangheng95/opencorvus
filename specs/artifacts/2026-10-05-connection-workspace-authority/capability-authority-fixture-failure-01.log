@@ -1,0 +1,101 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\capability-authority.test.ts:
+(pass) local transport catalog keeps B's same-scope pending owner after A settles [2.38ms]
+(pass) local transport settings keeps B's same-scope pending owner after A settles [0.36ms]
+78 |   expect(retired).toBeInstanceOf(ApiAuthorityChangedError)
+79 |   if (!(retired instanceof ApiAuthorityChangedError)) throw new Error("Expected typed retirement")
+80 |   expect(retired.outcome).toEqual({ phase: "response", response: accepted })
+81 |   const b = captureApiAuthority()
+82 |   expect(await ensureMissionSkillDirectory({ ...scope, authority: b }, "global")).toBe("D:/owned/b/mission-skills")
+83 |   expect(seen.map((request) => ({ method: request.method, body: request.body, authority: request.authority }))).toEqual([
+                                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "authority": {
+        "revision": 7,
+      },
+-     "body": "{"source":"project"}",
++     "body": {
++       "kind": "json",
++       "value": {
++         "source": "project",
++       },
++     },
+      "method": "POST",
+    },
+    {
+      "authority": {
+        "revision": 8,
+      },
+-     "body": "{"source":"global"}",
++     "body": {
++       "kind": "json",
++       "value": {
++         "source": "global",
++       },
++     },
+      "method": "POST",
+    },
+  ]
+
+- Expected  - 2
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\capability-authority.test.ts:83:113)
+(fail) local transport directory mutation retains its original accepted response and current retry path [0.93ms]
+102 |   gate.resolve(accepted)
+103 |   const retired = await old
+104 |   expect(retired).toBeInstanceOf(ApiAuthorityChangedError)
+105 |   if (!(retired instanceof ApiAuthorityChangedError)) throw new Error("Expected typed retirement")
+106 |   expect(retired.outcome).toEqual({ phase: "response", response: accepted })
+107 |   expect(seen.map((request) => ({ path: request.path, method: request.method, body: request.body, authority: request.authority }))).toEqual([
+                                                                                                                                          ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "authority": {
+        "revision": 10,
+      },
+      "body": undefined,
+      "method": "GET",
+      "path": "chat/capability",
+    },
+    {
+      "authority": {
+        "revision": 10,
+      },
+-     "body": "{"kind":"skill","ref":"owned-skill","assigned":true}",
++     "body": {
++       "kind": "json",
++       "value": {
++         "assigned": true,
++         "kind": "skill",
++         "ref": "owned-skill",
++       },
++     },
+      "method": "PATCH",
+      "path": "chat/capability",
+    },
+  ]
+
+- Expected  - 1
++ Received  + 8
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\capability-authority.test.ts:107:133)
+(fail) local capability read and assignment carry one authority and preserve the actual retired assignment receipt [0.92ms]
+(pass) all logical entries preserve explicit stale authority through credential ABA as before-dispatch errors [0.30ms]
+
+packages\overlay\test\mission-skill-service.test.ts:
+(pass) Mission Skill service request ownership > coalesces one settings request per exact scope while keeping concurrent scopes separate [10.69ms]
+(pass) Mission Skill service request ownership > coalesces catalog requests by exact scope across an interleaved project-session-project sequence [16.16ms]
+(pass) Mission Skill service request ownership > returns the same wrapped settings failure to every coalesced caller and clears the pending request [17.62ms]
+(pass) Mission Skill service request ownership > returns the same wrapped catalog failure to every coalesced caller [14.61ms]
+
+ 7 pass
+ 2 fail
+ 34 expect() calls
+Ran 9 tests across 2 files. [1117.00ms]

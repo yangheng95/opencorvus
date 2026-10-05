@@ -279,6 +279,13 @@ operator action. A non-Git identity mutation with an active project prompt owner
 returns `OwnedPromptControllersError` before disk mutation. Existing Git access
 remains idempotent.
 
+An explicit initialization captures the current API authority, selection epoch
+and directory. Its accepted POST remains successful even if a later view refresh
+or notification fails. Only that original selection may clear/reload its
+projection or open the queued result dialog; successor and same-directory ABA
+selections retain their own state. Physical prompt ownership includes legitimate
+standby and is independent of the visible idle status.
+
 > Current sources: `packages/opencorvus/src/engine/model.ts`,
 > `packages/opencorvus/src/workbench/board.ts`,
 > `packages/overlay/src/store/board.ts`,
@@ -306,11 +313,33 @@ Network keeps the server URL, username and password in the mounted editor's
 local draft. Typing and unrelated preference saves retain the applied connection;
 explicit departure disposes that unsaved editor normally. Connection Save uses
 the single preference transaction defined in [05-config](05-config.md) to publish
-those three fields only after persistence is confirmed. The existing main reactive
-API projection then applies them. Persistence failure retains the draft and the
+those three fields only after persistence is confirmed. The confirmed connection
+owner applies them through the sole API configure primitive; main synchronizes
+the current derived directory. Persistence failure retains the draft and the
 applied connection; activation failure is labelled as a saved fact that could
 not be applied. Closing the editor can retire its feedback and optional refresh,
 but cannot suppress the transaction's confirmed connection publication.
+
+A different manually saved endpoint admits a workspace departure before writing
+preferences. The existing file decision owner reserves its exact target and draft
+revision through persistence; keyboard edits, Save/Reload and affected Explorer
+mutations honor that same reservation. Cancel retains the current workspace.
+Discard closes only after acknowledgement; a confirmed A file Save remains a
+real saved baseline if the later preference write fails. CodeMirror reconfigures
+its existing editable/read-only Compartment when that owner changes, preserving
+the mounted editor, selection and history.
+
+Successful departure clears the old selected source, project/ledger projections,
+source-bound image popup, attachments, quotation/submission identities and model
+projection. Canonical mention ranges use the existing parser/removal semantics.
+The sole composer record writer updates a temporary parsed preparation before
+each real record mutation; confirmed commit performs no parse and retains the
+latest ordinary prose through the existing global launcher draft key. A concise
+localized notice accompanies actual reference removal. Credentials-only and
+confirmed owned native rotation preserve the workspace/dirty file, retire old
+async owners and rehydrate the selected view under the exact new API token.
+Late receipts remain truthful and cannot restore old quotation, retry IDs or
+loading/finally state into the new view.
 
 Connection address admission belongs to the shared operational base parser,
 not HTML input validity or an online probe. HTTP(S) bases retain their hostname,
@@ -734,7 +763,12 @@ context。没有结构化 reference 的普通 Code / Work 请求仍进入各自 
 
 Composer toolbar follows its own available width and UI scale: full labels,
 then icons with current-value titles, then one popover containing the same
-controls. Attachments and send/stop stay directly accessible. Model readiness
+controls. Attachments and send/stop stay directly accessible. Model and
+launch-reference controls retain the toolbar's available space: the single
+attachment count/indexing status lives beside the attachment area above the
+input shell and can wrap. It remains visible during pending uploads without a
+chip, independently of input admission, and does not compete in the footer.
+Model readiness
 comes from the canonical composer model projection even when the popover is
 closed. Per-project explicit launch intent restores from Overlay preferences;
 opening historical Task/Session/Mission occurrences projects their own mode

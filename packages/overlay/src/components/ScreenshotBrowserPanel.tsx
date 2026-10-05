@@ -11,7 +11,7 @@ import {
   type ScreenshotBrowserItem,
   type ScreenshotBrowserRow,
 } from "../utils/screenshot-browser"
-import { fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../services/api"
+import { captureApiAuthority, fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../services/api"
 import { fullStampWithRelative, compactDetailStamp, shortStamp } from "../utils/time"
 import { t } from "../utils/i18n"
 import { roleLabel } from "../utils/message"
@@ -91,23 +91,22 @@ function ScreenshotThumbnail(props: { item: ScreenshotBrowserItem }) {
       : "",
   )
   const [objectUrl] = createResource(
-    () => (loadAllowed() && !sourceError() ? props.item.thumbnailSrc : null),
-    async (url: string | null) => {
+    () => (loadAllowed() && !sourceError() ? { url: props.item.thumbnailSrc, authority: captureApiAuthority() } : null),
+    async (source) => {
       thumbnailLoadController?.abort(new DOMException("Screenshot thumbnail source changed", "AbortError"))
       thumbnailLoadController = undefined
-      if (!url) return null
-      const cached = peekResourceObjectUrl(url)
+      const cached = peekResourceObjectUrl(source.url)
       if (cached) return cached
       const controller = new AbortController()
       thumbnailLoadController = controller
       try {
-        return await fetchResourceAsObjectUrl(url, { signal: controller.signal })
+        return await fetchResourceAsObjectUrl(source.url, { signal: controller.signal, authority: source.authority })
       } finally {
         if (thumbnailLoadController === controller) thumbnailLoadController = undefined
       }
     },
   )
-  const src = () => (loadAllowed() && !sourceError() ? objectUrl() : null)
+  const src = () => (loadAllowed() && !sourceError() && !objectUrl.loading ? objectUrl() : null)
   const thumbnailError = () => sourceError() || (objectUrl.error ? t("screenshots.thumbnail_load_failed") : "")
 
   onMount(() => {
@@ -159,6 +158,7 @@ function ScreenshotThumbnail(props: { item: ScreenshotBrowserItem }) {
           {(resolved) => (
             <PreviewableImage
               src={resolved()}
+              resourceUrl={props.item.src}
               alt={props.item.alt}
               previewLoader={() => fetchResourceAsObjectUrl(props.item.src)}
               triggerClass="screenshot-browser__thumb-trigger"

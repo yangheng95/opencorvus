@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import { configure } from "../src/services/api"
-import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { testProviderConnection } from "../src/services/llm"
 
@@ -9,6 +9,7 @@ const requests: TransportRequest[] = []
 function transport(): HostTransport {
   return {
     kind: "browser",
+    capabilities: HOST_CAPABILITIES.browser,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       requests.push(request)
       return {

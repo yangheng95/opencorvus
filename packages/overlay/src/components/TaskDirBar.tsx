@@ -14,6 +14,7 @@ import {
   untrack,
 } from "solid-js"
 import { activeSessionID, activeTaskID, boardStore, loadBoard } from "../store/board"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { appStore } from "../store/app"
 import { activeDirectory, browseDirectory, openDirectory, pathRevealLabelKey } from "../services/workspace"
 import {
@@ -152,6 +153,11 @@ function vcsArrowsFor(value: ProjectVcsInfo | null): string {
 
 export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps) {
   const dir = createMemo(directoryMemo)
+  let disposed = false
+  onCleanup(() => { disposed = true })
+  const ownsAuthority = (authority: ApiAuthority) => !disposed && isApiAuthorityCurrent(authority)
+  const ownsProject = (authority: ApiAuthority, directory: string, selectionEpoch: number) =>
+    ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch && dir().trim() === directory
   const projectName = createMemo(() => dir().split(/[\\/]/).filter(Boolean).at(-1) || t("project_runtime.local"))
   const deliveries = createProjectDeliveries({ onOpen: () => closeRuntimePanel() })
   const environmentAnchorShift = createMemo(() => {
@@ -244,7 +250,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const changeGroupsRequestKey = createMemo(() => {
     const taskID = activeTaskID()
     const groups = changeGroups()
-    return taskID && groups.length > 0 ? `${taskID}:${changeGroupsRevisionKey(groups)}` : false
+    return taskID && groups.length > 0 ? `${captureApiAuthority().revision}:${taskID}:${changeGroupsRevisionKey(groups)}` : false
   })
   const [resolvedChangeGroups] = createResource(changeGroupsRequestKey, async (key) => ({
     key,
@@ -309,13 +315,14 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const taskID = activeTaskID().trim()
     const directory = dir().trim()
     if (!appStore.connected || !runtimePanelOpen() || !taskID || !directory) return undefined
-    return { taskID, directory, refreshKey: browserPreviewRevision() }
+    return { taskID, directory, refreshKey: browserPreviewRevision(), authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch }
   })
   const [browserInformation] = createResource(
     browserInformationScope,
-    async (scope): Promise<ProjectRuntimeBrowserInformation> => {
+    async (scope): Promise<ProjectRuntimeBrowserInformation | undefined> => {
       try {
-        const target = await loadTaskBrowserPreviewTarget({ taskID: scope.taskID, directory: scope.directory })
+        const target = await loadTaskBrowserPreviewTarget({ taskID: scope.taskID, directory: scope.directory, authority: scope.authority })
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope()) return undefined
         return {
           status: "loaded",
           taskID: scope.taskID,
@@ -323,6 +330,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           url: target.url?.trim() ?? "",
         }
       } catch (error) {
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope()) return undefined
         const message = errorMessage(error)
         AppLog.warn("ui", "Failed to load project Browser information", {
           taskID: scope.taskID,
@@ -337,7 +345,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const scope = browserInformationScope()
     const information = browserInformation()
     return Boolean(
-      scope &&
+      scope && ownsAuthority(scope.authority) &&
         !browserInformation.loading &&
         information?.status === "loaded" &&
         information?.taskID === scope.taskID &&
@@ -348,15 +356,17 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const fileInformationScope = createMemo(() => {
     const directory = dir().trim()
     if (!appStore.connected || !runtimePanelOpen() || !directory) return undefined
-    return { directory, refreshKey: fileWorkbenchRevision() }
+    return { directory, refreshKey: fileWorkbenchRevision(), authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch }
   })
   const [fileInformation] = createResource(
     fileInformationScope,
-    async (scope): Promise<ProjectRuntimeFileInformation> => {
+    async (scope): Promise<ProjectRuntimeFileInformation | undefined> => {
       try {
-        const items = await loadFileDirectory("", { directory: scope.directory })
+        const items = await loadFileDirectory("", { directory: scope.directory, authority: scope.authority })
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== fileInformationScope()) return undefined
         return { status: "loaded", directory: scope.directory, count: items.length }
       } catch (error) {
+        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== fileInformationScope()) return undefined
         const message = errorMessage(error)
         AppLog.warn("ui", "Failed to load project Files information", {
           directory: scope.directory,
@@ -370,7 +380,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const scope = fileInformationScope()
     const information = fileInformation()
     return Boolean(
-      scope &&
+      scope && ownsAuthority(scope.authority) &&
         !fileInformation.loading &&
         information?.status === "loaded" &&
         information.directory === scope.directory &&
@@ -501,6 +511,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       variables[key] = item.value
     }
 
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = dir().trim()
+    const ownsSave = () => ownsProject(authority, directory, selectionEpoch)
     setLocalEnvironmentBusy(true)
     setLocalEnvironmentError("")
     try {
@@ -512,13 +526,14 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             setup_script: localEnvironmentSetupScript().trim() || null,
           },
         },
-        currentProjectConfigRequestOptions(),
+        { ...currentProjectConfigRequestOptions(), authority },
       )
-      setLocalEnvironmentOpen(false)
+      if (ownsSave()) setLocalEnvironmentOpen(false)
     } catch (error) {
+      if (!ownsSave()) return
       setLocalEnvironmentError(t("project_runtime.local_environment_save_failed", { error: errorMessage(error) }))
     } finally {
-      setLocalEnvironmentBusy(false)
+      if (ownsSave()) setLocalEnvironmentBusy(false)
     }
   }
 
@@ -543,7 +558,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   function generateCommitMessage(force = false): void {
     if (!vcs()?.dirty) return
-    const key = commitMessageKey()
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = dir().trim()
+    const key = `${authority.revision}:${commitMessageKey()}`
     if (!force && commitMessageGenerationKey === key && commitMessage().trim()) return
     disposeCommitMessageStream()
     commitMessageGenerationKey = key
@@ -551,21 +569,27 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setCommitMessageGenerating(true)
     setGitActionError("")
     setGitActionNotice("")
-    commitMessageStream = streamVcsCommitMessage({
+    let stream: ReturnType<typeof streamVcsCommitMessage>
+    const ownsStream = () => ownsProject(authority, directory, selectionEpoch) && commitMessageStream === stream
+    stream = streamVcsCommitMessage({
+      authority,
       taskID: activeTaskID().trim() || undefined,
       sessionID: activeSessionID().trim() || undefined,
-      onDelta: (delta) => setCommitMessage((current) => current + delta),
+      onDelta: (delta) => { if (ownsStream()) setCommitMessage((current) => current + delta) },
       onDone: (message) => {
+        if (!ownsStream()) return
         commitMessageStream = undefined
         setCommitMessage(message)
         setCommitMessageGenerating(false)
       },
       onError: (error) => {
+        if (!ownsStream()) return
         commitMessageStream = undefined
         setCommitMessageGenerating(false)
         setGitActionError(t("project_runtime.commit_message_failed", { error: error.message }))
       },
     })
+    commitMessageStream = stream
   }
 
   function toggleGitAction(): void {
@@ -590,20 +614,22 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const message = commitMessage().trim()
     const directory = dir().trim()
     if (!message || !directory || commitMessageGenerating() || gitBusy()) return
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
-    const ownsPresentation = () => gitOperationID === operationID && dir().trim() === directory
+    const ownsPresentation = () => gitOperationID === operationID && ownsProject(authority, directory, selectionEpoch)
     setGitBusy(true)
     setGitActionError("")
     setGitActionNotice("")
     try {
-      const result = await commitVcsChanges(message, directory)
+      const result = await commitVcsChanges(message, directory, authority)
       if (ownsPresentation()) {
         setGitActionNotice(t("project_runtime.commit_success", { commit: result.commit }))
         setCommitMessage("")
         commitMessageGenerationKey = ""
       }
       if (pushAfterCommit) {
-        await pushVcsBranch(directory)
+        await pushVcsBranch(directory, authority)
         if (ownsPresentation()) {
           setGitActionNotice(t("project_runtime.commit_push_success", { commit: result.commit }))
         }
@@ -613,27 +639,29 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         setGitActionError(t("project_runtime.git_action_failed", { error: errorMessage(error) }))
       }
     } finally {
-      setGitBusy(false)
+      if (ownsPresentation()) setGitBusy(false)
     }
   }
 
   async function pushChanges(): Promise<void> {
     const directory = dir().trim()
     if (!directory || gitBusy()) return
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
-    const ownsPresentation = () => gitOperationID === operationID && dir().trim() === directory
+    const ownsPresentation = () => gitOperationID === operationID && ownsProject(authority, directory, selectionEpoch)
     setGitBusy(true)
     setGitActionError("")
     setGitActionNotice("")
     try {
-      await pushVcsBranch(directory)
+      await pushVcsBranch(directory, authority)
       if (ownsPresentation()) setGitActionNotice(t("project_runtime.push_success"))
     } catch (error) {
       if (ownsPresentation()) {
         setGitActionError(t("project_runtime.git_action_failed", { error: errorMessage(error) }))
       }
     } finally {
-      setGitBusy(false)
+      if (ownsPresentation()) setGitBusy(false)
     }
   }
 
@@ -643,9 +671,13 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   function openGoalSummary(deliverySliceID: string): void {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = dir().trim()
     props.onOpenRightDockPanel("goals")
     closeRuntimePanel()
     void focusGoalSummary(deliverySliceID).catch((error) => {
+      if (!ownsProject(authority, directory, selectionEpoch)) return
       reportError({
         id: `delivery-slice-summary:focus:${deliverySliceID}`,
         title: t("common.error"),
@@ -681,27 +713,31 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     void closeNativeMenuSurface(branchMenuOwner)
   })
 
-  async function syncBranches(): Promise<void> {
+  async function syncBranches(authority = captureApiAuthority(), selectionEpoch = boardStore.selectEpoch): Promise<void> {
     const projectDirectory = dir().trim()
-    if (!appStore.connected || !projectDirectory || branchLoadDirectory() === projectDirectory) return
+    if (!ownsProject(authority, projectDirectory, selectionEpoch) || !appStore.connected || !projectDirectory || branchLoadDirectory() === projectDirectory) return
     setBranchLoadDirectory(projectDirectory)
     setBranchError("")
     try {
-      const items = await loadVcsBranches(projectDirectory)
-      if (dir().trim() !== projectDirectory) return
+      const items = await loadVcsBranches(projectDirectory, authority)
+      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
       setBranches(items)
     } catch (err) {
-      if (dir().trim() !== projectDirectory) return
+      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
       const message = errorMessage(err)
       setBranches([])
       setBranchError(message)
       AppLog.warn("ui", "Failed to load project branches", { directory: projectDirectory, error: message })
     } finally {
-      if (branchLoadDirectory() === projectDirectory) setBranchLoadDirectory("")
+      if (ownsProject(authority, projectDirectory, selectionEpoch) && branchLoadDirectory() === projectDirectory) setBranchLoadDirectory("")
     }
   }
 
   async function openLocalMenu(anchor: HTMLElement): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = dir().trim()
+    const ownsMenu = () => ownsProject(authority, directory, selectionEpoch)
     if (localMenuOpen()) {
       await closeNativeMenuSurface(localMenuOwner)
       return
@@ -736,23 +772,27 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             ],
           },
         ],
-        onDismiss: () => setLocalMenuOpen(false),
-        onError: (error) =>
+        onDismiss: () => { if (ownsMenu()) setLocalMenuOpen(false) },
+        onError: (error) => {
+          if (!ownsMenu()) return
           reportError({
             id: "project-runtime-local-menu:close",
             title: t("common.error"),
             message: errorMessage(error),
             details: formatErrorDetails(error),
-          }),
+          })
+        },
         onAction: (itemID) => {
+          if (!ownsMenu()) return
           if (itemID === "local-open") {
-            void openDirectory(dir())
+            void openDirectory(directory)
             return
           }
           if (itemID === "local-browse") void browseDirectory()
         },
       })
     } catch (error) {
+      if (!ownsMenu()) return
       setLocalMenuOpen(false)
       reportError({
         id: "project-runtime-local-menu:open",
@@ -764,6 +804,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   async function openBranchMenu(anchor: HTMLElement): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = dir().trim()
+    const ownsMenu = () => ownsProject(authority, directory, selectionEpoch)
     if (branchMenuOpen()) {
       await closeNativeMenuSurface(branchMenuOwner)
       return
@@ -771,8 +815,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
     setLocalMenuOpen(false)
     setBranchMenuOpen(true)
-    await syncBranches()
-    if (!branchMenuOpen()) return
+    await syncBranches(authority, selectionEpoch)
+    if (!ownsMenu() || !branchMenuOpen()) return
 
     const branchActions = new Map<string, VcsBranch>()
     const items = branchError()
@@ -818,8 +862,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         variant: "compact-list",
         maxHeight: document.documentElement.clientHeight * 0.5,
         groups: [{ items }],
-        onDismiss: () => setBranchMenuOpen(false),
+        onDismiss: () => { if (ownsMenu()) setBranchMenuOpen(false) },
         onError: (error) => {
+          if (!ownsMenu()) return
           setBranchError(errorMessage(error))
           reportError({
             id: "project-runtime-branch-menu:close",
@@ -829,6 +874,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           })
         },
         onAction: (itemID) => {
+          if (!ownsMenu()) return
           if (itemID === "branch-retry") {
             setBranchError("")
             void openBranchMenu(anchor)
@@ -839,22 +885,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         },
       })
     } catch (error) {
+      if (!ownsMenu()) return
       setBranchMenuOpen(false)
       setBranchError(errorMessage(error))
     }
   }
 
   async function selectBranch(branch: VcsBranch): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     const projectDirectory = dir().trim()
     if (!projectDirectory || branch.current || branchSwitchBusy()) return
     setBranchSwitchBusy(branch.name)
     setBranchError("")
     try {
-      await switchVcsBranch(branch.name, projectDirectory)
-      if (dir().trim() !== projectDirectory) return
-      await syncBranches()
+      await switchVcsBranch(branch.name, projectDirectory, authority)
+      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
+      await syncBranches(authority, selectionEpoch)
     } catch (err) {
-      if (dir().trim() !== projectDirectory) return
+      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
       const message = errorMessage(err)
       setBranchError(message)
       openRuntimePanel()
@@ -864,7 +913,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         error: message,
       })
     } finally {
-      setBranchSwitchBusy("")
+      if (ownsProject(authority, projectDirectory, selectionEpoch)) setBranchSwitchBusy("")
     }
   }
 
@@ -879,7 +928,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     })
   }
 
-  async function syncWorktrees(options: { requireFresh?: boolean } = {}): Promise<void> {
+  async function syncWorktrees(options: { requireFresh?: boolean; authority?: ApiAuthority; selectionEpoch?: number } = {}): Promise<void> {
+    const authority = options.authority ?? captureApiAuthority()
+    const selectionEpoch = options.selectionEpoch ?? boardStore.selectEpoch
+    if (!ownsAuthority(authority) || boardStore.selectEpoch !== selectionEpoch) return
     const projectDirectory = dir().trim()
     if (!appStore.connected || !projectDirectory || vcs()?.initialized !== true) {
       invalidateWorktreeProjection()
@@ -891,8 +943,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     clearWorktreeProjectionRetry()
     const requestGeneration = ++worktreeProjectionGeneration
     try {
-      const items = await loadProjectWorktrees(projectDirectory)
-      if (!ownsWorktreeProjection(requestGeneration, projectDirectory)) return
+      const items = await loadProjectWorktrees(projectDirectory, authority)
+      if (!ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) return
       setWorktrees(items)
       setWorktreeDirectory(projectDirectory)
       if (error()) {
@@ -900,7 +952,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       }
       setError("")
     } catch (err) {
-      if (!ownsWorktreeProjection(requestGeneration, projectDirectory)) return
+      if (!ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) return
       const message = err instanceof Error ? err.message : String(err)
       if (worktreeDirectory() !== projectDirectory) {
         setWorktrees([])
@@ -910,7 +962,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         setError(message)
         AppLog.warn("ui", "Failed to load project worktrees", { directory: projectDirectory, error: message })
       }
-      scheduleWorktreeProjectionRetry(requestGeneration, projectDirectory)
+      scheduleWorktreeProjectionRetry(requestGeneration, projectDirectory, authority, selectionEpoch)
       if (options.requireFresh) throw err
     }
   }
@@ -926,22 +978,22 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     clearWorktreeProjectionRetry()
   }
 
-  function ownsWorktreeProjection(generation: number, projectDirectory: string): boolean {
-    return generation === worktreeProjectionGeneration && appStore.connected && dir().trim() === projectDirectory
+  function ownsWorktreeProjection(generation: number, projectDirectory: string, authority: ApiAuthority, selectionEpoch: number): boolean {
+    return generation === worktreeProjectionGeneration && appStore.connected && ownsProject(authority, projectDirectory, selectionEpoch)
   }
 
-  function scheduleWorktreeProjectionRetry(generation: number, projectDirectory: string): void {
-    if (!ownsWorktreeProjection(generation, projectDirectory)) return
+  function scheduleWorktreeProjectionRetry(generation: number, projectDirectory: string, authority: ApiAuthority, selectionEpoch: number): void {
+    if (!ownsWorktreeProjection(generation, projectDirectory, authority, selectionEpoch)) return
     if (worktreeProjectionRetryTimer !== undefined) return
     worktreeProjectionRetryTimer = setTimeout(() => {
       worktreeProjectionRetryTimer = undefined
-      if (!ownsWorktreeProjection(generation, projectDirectory)) return
-      void syncWorktrees()
+      if (!ownsWorktreeProjection(generation, projectDirectory, authority, selectionEpoch)) return
+      void syncWorktrees({ authority, selectionEpoch })
     }, WORKTREE_PROJECTION_RETRY_MS)
   }
 
-  function ownsWorktreeOperation(projectDirectory: string): boolean {
-    return dir().trim() === projectDirectory && worktreeDirectory() === projectDirectory
+  function ownsWorktreeOperation(projectDirectory: string, authority: ApiAuthority, selectionEpoch: number): boolean {
+    return ownsProject(authority, projectDirectory, selectionEpoch) && worktreeDirectory() === projectDirectory
   }
 
   function bulkDeleteBusyFor(projectDirectory: string): boolean {
@@ -950,35 +1002,45 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   async function refreshWorktrees(event: MouseEvent): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     event.stopPropagation()
     const projectDirectory = dir().trim()
     if (!projectDirectory || refreshingWorktreeDirectory() === projectDirectory) return
     setRefreshingWorktreeDirectory(projectDirectory)
     setOperationError("")
     try {
-      await syncWorktrees({ requireFresh: true })
+      await syncWorktrees({ requireFresh: true, authority, selectionEpoch })
     } catch (err) {
-      if (dir().trim() === projectDirectory)
+      if (ownsProject(authority, projectDirectory, selectionEpoch))
         setOperationError(t("worktree.refresh_failed", { error: errorMessage(err) }))
     } finally {
-      if (refreshingWorktreeDirectory() === projectDirectory) setRefreshingWorktreeDirectory("")
+      if (ownsProject(authority, projectDirectory, selectionEpoch) && refreshingWorktreeDirectory() === projectDirectory) setRefreshingWorktreeDirectory("")
     }
   }
 
   async function handleInitGit(event: MouseEvent): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     event.stopPropagation()
     if (!canInitGit() || gitBusy()) return
+    const directory = dir().trim()
+    const operationID = ++gitOperationID
+    const ownsPresentation = () => gitOperationID === operationID && ownsProject(authority, directory, selectionEpoch)
     setGitBusy(true)
     try {
-      await initGitCurrent()
+      await initGitCurrent({ authority })
     } catch (err) {
+      if (!ownsPresentation()) return
       AppLog.error("ui", "Failed to initialize git repository", { error: errorMessage(err) })
     } finally {
-      setGitBusy(false)
+      if (ownsPresentation()) setGitBusy(false)
     }
   }
 
   async function removeWorktree(item: ProjectWorktreeInfo, event: MouseEvent): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     event.stopPropagation()
     const projectDirectory = worktreeDirectory() || dir().trim()
     if (!item.removable || deletingWorktrees().has(item.directory) || bulkDeleteBusyFor(projectDirectory)) return
@@ -991,16 +1053,16 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       okTone: "danger",
     })
     if (!confirmed.confirmed) return
-    if (dir().trim() !== projectDirectory || worktreeDirectory() !== projectDirectory) return
+    if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
     setDeleting([item.directory], true)
     setOperationError("")
     try {
       try {
-        await deleteProjectWorktree(projectDirectory, item.directory)
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        await deleteProjectWorktree(projectDirectory, item.directory, authority)
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         setWorktrees((current) => current.filter((candidate) => candidate.directory !== item.directory))
       } catch (err) {
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         const message = errorMessage(err)
         setOperationError(t("worktree.delete_failed", { error: message }))
         openRuntimePanel()
@@ -1008,12 +1070,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         return
       }
       try {
-        await syncWorktrees({ requireFresh: true })
-        if (!ownsWorktreeOperation(projectDirectory)) return
-        await loadBoard({ requireFresh: true })
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        await syncWorktrees({ requireFresh: true, authority, selectionEpoch })
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
+        await loadBoard({ requireFresh: true, authority })
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
       } catch (err) {
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         const message = errorMessage(err)
         setOperationError(t("worktree.delete_reload_failed", { error: message }))
         openRuntimePanel()
@@ -1023,11 +1085,13 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         })
       }
     } finally {
-      setDeleting([item.directory], false)
+      if (ownsProject(authority, projectDirectory, selectionEpoch)) setDeleting([item.directory], false)
     }
   }
 
   async function deleteAllWorktrees(event: MouseEvent): Promise<void> {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     event.stopPropagation()
     const targets = removableWorktrees()
     const projectDirectory = worktreeDirectory() || dir().trim()
@@ -1040,20 +1104,21 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       okTone: "danger",
     })
     if (!confirmed.confirmed) return
-    if (dir().trim() !== projectDirectory || worktreeDirectory() !== projectDirectory) return
+    if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
     const directories = targets.map((item) => item.directory)
     setBulkDeleteOperationDirectory(projectDirectory)
     setDeleting(directories, true)
     setOperationError("")
     try {
       try {
-        await deleteProjectWorktrees(projectDirectory, directories)
+        await deleteProjectWorktrees(projectDirectory, directories, authority)
       } catch (err) {
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         let message = errorMessage(err)
         try {
-          await syncWorktrees({ requireFresh: true })
+          await syncWorktrees({ requireFresh: true, authority, selectionEpoch })
         } catch (syncErr) {
+          if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
           const syncMessage = errorMessage(syncErr)
           message = `${message}; ${syncMessage}`
           AppLog.error("ui", "Failed to reload project worktrees after cleanup failure", {
@@ -1061,19 +1126,20 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             error: syncMessage,
           })
         }
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         setOperationError(t("worktree.delete_all_failed", { error: message }))
         openRuntimePanel()
         AppLog.error("ui", "Failed to delete all removable project worktrees", { directories, error: message })
         return
       }
       try {
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         setWorktrees((current) => current.filter((candidate) => !directories.includes(candidate.directory)))
-        await syncWorktrees({ requireFresh: true })
-        if (!ownsWorktreeOperation(projectDirectory)) return
-        await loadBoard({ requireFresh: true })
+        await syncWorktrees({ requireFresh: true, authority, selectionEpoch })
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
+        await loadBoard({ requireFresh: true, authority })
       } catch (err) {
-        if (!ownsWorktreeOperation(projectDirectory)) return
+        if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
         const message = errorMessage(err)
         setOperationError(t("worktree.delete_all_reload_failed", { error: message }))
         openRuntimePanel()
@@ -1083,14 +1149,26 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         })
       }
     } finally {
-      setDeleting(directories, false)
-      if (bulkDeleteOperationDirectory() === projectDirectory) setBulkDeleteOperationDirectory("")
+      if (ownsProject(authority, projectDirectory, selectionEpoch)) setDeleting(directories, false)
+      if (ownsProject(authority, projectDirectory, selectionEpoch) && bulkDeleteOperationDirectory() === projectDirectory) setBulkDeleteOperationDirectory("")
     }
   }
 
   createEffect(() => {
     const connected = appStore.connected
+    captureApiAuthority()
+    boardStore.selectEpoch
     dir()
+    gitOperationID += 1
+    setGitBusy(false)
+    setBranchSwitchBusy("")
+    setLocalEnvironmentOpen(false)
+    setLocalEnvironmentBusy(false)
+    setLocalEnvironmentError("")
+    setDeletingWorktrees(new Set<string>())
+    setBulkDeleteOperationDirectory("")
+    setRefreshingWorktreeDirectory("")
+    setOperationError("")
     invalidateWorktreeProjection()
     setLocalMenuOpen(false)
     setBranchMenuOpen(false)
@@ -1148,10 +1226,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   })
 
   createEffect(() => {
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     const eligible = runtimePanelOpen() && appStore.connected && vcs()?.initialized === true
     dir()
     untrack(() => {
-      if (eligible) void syncWorktrees()
+      if (eligible) void syncWorktrees({ authority, selectionEpoch })
       else {
         invalidateWorktreeProjection()
         setWorktrees([])
@@ -1163,8 +1243,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   createEffect(() => {
     const directory = dir().trim()
+    const authority = captureApiAuthority()
+    boardStore.selectEpoch
     if (runtimePanelOpen() && appStore.connected && directory)
-      untrack(() => void loadMeta(directory).catch(() => undefined))
+      untrack(() => void loadMeta(directory, authority).catch(() => undefined))
   })
 
   const ActionsMenu = () => {
@@ -1180,30 +1262,40 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       })
     }
     async function changeOpen(next: boolean): Promise<void> {
+      const authority = captureApiAuthority()
+      const selectionEpoch = boardStore.selectEpoch
       const current = ++generation
-      if (!next) {
-        setOpen(false)
-        await revealNativeSurfaces(owner)
-        return
+      try {
+        if (!next) {
+          setOpen(false)
+          await revealNativeSurfaces(owner)
+          return
+        }
+        setPanelPinned(true)
+        setLocalMenuOpen(false)
+        setBranchMenuOpen(false)
+        await occludeNativeSurfaces(owner)
+        if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch) setOpen(true)
+      } catch (error) {
+        if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch) handleError(error)
       }
-      setPanelPinned(true)
-      setLocalMenuOpen(false)
-      setBranchMenuOpen(false)
-      await occludeNativeSurfaces(owner)
-      if (generation === current) setOpen(true)
     }
     onCleanup(() => {
       generation++
-      void revealNativeSurfaces(owner).catch(handleError)
+      void revealNativeSurfaces(owner).catch((error) => {
+        AppLog.warn("ui", "Failed to release project runtime menu surface", { error: errorMessage(error) })
+      })
     })
     createEffect(() => {
       dir()
-      void changeOpen(false).catch(handleError)
+      captureApiAuthority()
+      boardStore.selectEpoch
+      void changeOpen(false)
     })
     return (
       <DropdownMenu.Root
         open={open()}
-        onOpenChange={(next) => void changeOpen(next).catch(handleError)}
+        onOpenChange={(next) => void changeOpen(next)}
         placement="left-start"
         getAnchorRect={() => panelShell.getBoundingClientRect()}
         gutter={12}

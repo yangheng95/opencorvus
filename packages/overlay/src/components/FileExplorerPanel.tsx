@@ -5,7 +5,6 @@ import {
   createResource,
   createSignal,
   For,
-  on,
   onCleanup,
   Show,
   untrack,
@@ -13,10 +12,12 @@ import {
 } from "solid-js"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Virtualizer, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
-import { apiJson } from "../services/api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { boardStore } from "../store/board"
 import { showAppDialog } from "../services/app-dialog"
 import {
   copyFileItem,
+  fileEditorReserved,
   createFileItem,
   deleteFileItem,
   loadFileDirectory,
@@ -66,6 +67,8 @@ type FileMutationOperation = {
   kind: FileMutationKind
   directory: string
 }
+type ExplorerOperationScope = FileOperationScope & { selectionEpoch: number }
+
 type ExplorerDropStatus = "move" | "upload" | "invalid"
 
 export interface FileExplorerPanelProps {
@@ -212,7 +215,7 @@ function FileExplorerContextMenuItem(props: {
   )
 }
 
-async function searchFiles(query: string, scope: FileOperationScope): Promise<string[]> {
+async function searchFiles(query: string, scope: ExplorerOperationScope): Promise<string[]> {
   const directory = scope.directory.trim()
   if (!directory) throw new Error("searchFiles: directory is required")
   const params = new URLSearchParams({
@@ -221,7 +224,7 @@ async function searchFiles(query: string, scope: FileOperationScope): Promise<st
     limit: String(SEARCH_LIMIT),
     directory,
   })
-  return (await apiJson(`find/file?${params.toString()}`)) as string[]
+  return (await apiJson(`find/file?${params.toString()}`, { authority: scope.authority })) as string[]
 }
 
 export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
@@ -243,45 +246,44 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [mutationOperation, setMutationOperation] = createSignal<FileMutationOperation | null>(null)
   const [mutationMessage, setMutationMessage] = createSignal("")
   const [mutationMessageStatus, setMutationMessageStatus] = createSignal<"active" | "error">("active")
-  const [searchErrorMessage, setSearchErrorMessage] = createSignal("")
   const active = createMemo(() => props.active?.() ?? true)
   const directory = createMemo(() => (props.directory ? props.directory().trim() : ""))
   const uploading = createMemo(() => uploadOperation()?.directory === directory())
+  let disposed = false
+  onCleanup(() => { disposed = true })
   let directoryLoadSequence = 0
   let uploadOperationSequence = 0
   let mutationOperationSequence = 0
   let uploadInputRef: HTMLInputElement | undefined
   let uploadInputTargetDir = ""
-  let uploadInputScope: FileOperationScope | null = null
+  let uploadInputScope: ExplorerOperationScope | null = null
   const directoryLoadTokens = new Map<string, number>()
   const requiredDirectoryLoadTokens = new Map<string, number>()
 
-  createEffect(
-    on(
-      directory,
-      () => {
-        setQuery("")
-        setExpandedPaths(new Set([""]))
-        setMutationOperation(null)
-        setMutationMessage("")
-        setMutationMessageStatus("active")
-        setSearchErrorMessage("")
-        mutationOperationSequence += 1
-      },
-      { defer: true },
-    ),
-  )
+  createEffect(() => {
+    directory()
+    captureApiAuthority()
+    boardStore.selectEpoch
+    setQuery("")
+    setExpandedPaths(new Set<string>([""]))
+    setMutationOperation(null)
+    setMutationMessage("")
+    setMutationMessageStatus("active")
+    mutationOperationSequence += 1
+  })
 
-  function currentOperationScope(): FileOperationScope | null {
+  function currentOperationScope(): ExplorerOperationScope | null {
     const projectDirectory = directory().trim()
-    return projectDirectory ? { directory: projectDirectory } : null
+    return projectDirectory ? { directory: projectDirectory, authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch } : null
   }
 
-  function ownsExplorerOperation(scope: FileOperationScope): boolean {
-    return directory().trim() === scope.directory.trim()
+  function ownsExplorerOperation(scope: ExplorerOperationScope): boolean {
+    return !disposed && scope.selectionEpoch === boardStore.selectEpoch && !!scope.authority && isApiAuthorityCurrent(scope.authority) && directory().trim() === scope.directory.trim()
   }
 
-  const loadDirectory = async (path: string, opts?: { force?: boolean; required?: boolean }) => {
+  const loadDirectory = async (path: string, opts?: { force?: boolean; required?: boolean; scope?: ExplorerOperationScope }) => {
+    const scope = opts?.scope ?? currentOperationScope()
+    if (!scope || !ownsExplorerOperation(scope)) return
     const normalizedPath = normalizeExplorerPath(path)
     if (!opts?.force && (childrenByPath().has(normalizedPath) || loadingPaths().has(normalizedPath))) return
     if (!opts?.required && requiredDirectoryLoadTokens.has(normalizedPath)) return
@@ -290,8 +292,6 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (opts?.required) directoryLoadTokens.delete(normalizedPath)
     tokenMap.set(normalizedPath, token)
     const ownsLoad = () => tokenMap.get(normalizedPath) === token
-    const scope = currentOperationScope()
-    if (!scope) return
     setLoadingPaths((prev) => new Set(prev).add(normalizedPath))
     setDirectoryErrors((prev) => {
       const next = new Map(prev)
@@ -335,7 +335,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   createEffect(() => {
     const currentDirectory = directory()
-    if (!active() || !currentDirectory) return
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const enabled = active()
     setChildrenByPath(new Map())
     setLoadingPaths(new Set<string>())
     setDirectoryErrors(new Map())
@@ -349,18 +351,23 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     directoryLoadSequence += 1
     directoryLoadTokens.clear()
     requiredDirectoryLoadTokens.clear()
-    const timer = window.setTimeout(() => void loadDirectory(""), INITIAL_DIRECTORY_LOAD_DELAY_MS)
+    if (!enabled || !currentDirectory) return
+    const scope = { directory: currentDirectory, authority, selectionEpoch }
+    const timer = window.setTimeout(() => void loadDirectory("", { scope }), INITIAL_DIRECTORY_LOAD_DELAY_MS)
     onCleanup(() => window.clearTimeout(timer))
   })
 
   createEffect(() => {
     const currentDirectory = directory()
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     if (!active() || !currentDirectory) return
+    const scope = { directory: currentDirectory, authority, selectionEpoch }
     const interval = window.setInterval(() => {
       const paths = new Set(["", ...expandedPaths()])
       for (const path of paths) {
         if (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) {
-          void loadDirectory(path, { force: true })
+          void loadDirectory(path, { force: true, scope })
         }
       }
     }, ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
@@ -369,7 +376,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   createEffect(() => {
     const currentDirectory = directory()
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
     if (!active() || !currentDirectory) return
+    const scope = { directory: currentDirectory, authority, selectionEpoch }
     const selectedTarget = selectedFileTarget()
     if (!selectedTarget || selectedTarget.directory !== currentDirectory) return
     const selected = selectedTarget.path
@@ -382,42 +392,39 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     setExpandedPaths((prev) => new Set([...prev, "", ...ancestors]))
     untrack(() => {
-      for (const path of ["", ...ancestors]) void loadDirectory(path)
+      for (const path of ["", ...ancestors]) void loadDirectory(path, { scope })
     })
   })
 
+  const searchSource = createMemo(() => {
+    const currentDirectory = directory()
+    if (!active() || !currentDirectory) return undefined
+    return { query: deferredQuery(), directory: currentDirectory, authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch }
+  })
   const [searchResults, { refetch: refetchSearch }] = createResource(
-    () => {
-      const currentDirectory = directory()
-      if (!active() || !currentDirectory) return undefined
-      return { query: deferredQuery(), directory: currentDirectory }
-    },
+    searchSource,
     async (source) => {
-      if (!source.query) {
-        setSearchErrorMessage("")
-        return { query: source.query, paths: [] }
-      }
-      const scope = currentOperationScope()
-      if (!scope) return { query: source.query, paths: [] }
+      if (!source.query) return { source, query: source.query, paths: [] as string[], error: "" }
       try {
-        const results = await searchFiles(source.query, scope)
-        if (!ownsExplorerOperation(scope)) return { query: source.query, paths: [] }
-        setSearchErrorMessage("")
-        return { query: source.query, paths: results }
+        const paths = await searchFiles(source.query, source)
+        return { source, query: source.query, paths, error: "" }
       } catch (error) {
-        if (!ownsExplorerOperation(scope)) return { query: source.query, paths: [] }
-        setSearchErrorMessage(error instanceof Error ? error.message : String(error))
-        return { query: source.query, paths: [] }
+        return { source, query: source.query, paths: [] as string[], error: error instanceof Error ? error.message : String(error) }
       }
     },
   )
+  const searchErrorMessage = createMemo(() => {
+    const result = searchResults()
+    return result && result.source === searchSource() && ownsExplorerOperation(result.source) ? result.error : ""
+  })
 
   const rows = createMemo<ExplorerRow[]>(() => {
     const search = deferredQuery()
     if (search) {
       const current = searchResults()
       const latest = searchResults.latest
-      const resolved = current?.query === search ? current : latest?.query === search ? latest : undefined
+      const owned = (result: typeof current) => result?.query === search && result.source === searchSource() && ownsExplorerOperation(result.source)
+      const resolved = owned(current) ? current : owned(latest) ? latest : undefined
       return (resolved?.paths ?? []).map((path) => ({
         kind: "search",
         key: `search:${path}`,
@@ -476,7 +483,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const target = selectedFileTarget()
     return target && target.directory === directory() ? normalizeExplorerPath(target.path) : ""
   })
-  const commandBusy = createMemo(() => mutationOperation()?.directory === directory())
+  const commandBusy = createMemo(() => fileEditorReserved() || mutationOperation()?.directory === directory())
 
   function uniquePaths(paths: string[]): string[] {
     return [...new Set(paths.map(normalizeExplorerPath))]
@@ -628,12 +635,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     setDropStatus(status)
   }
 
-  async function moveSelectionsToDirectory(items: ExplorerSelection[], targetDirInput: string): Promise<void> {
+  async function moveSelectionsToDirectory(items: ExplorerSelection[], targetDirInput: string, capturedScope?: ExplorerOperationScope): Promise<void> {
     if (items.length === 0) {
       setMutationError(t("explorer.select_required"))
       return
     }
-    const scope = currentOperationScope()
+    const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
       setMutationError(t("explorer.directory_required"))
       return
@@ -644,10 +651,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.drop_move_invalid"))
       return
     }
-    await runMutation("move", scope, async () => {
+    await runMutation("move", scope, async (ownsOperation) => {
       const moved: FileMoveResult[] = []
       try {
         for (const item of targets) {
+          if (!ownsOperation()) return
           const nextPath = joinExplorerPath(targetDir, item.name)
           if (nextPath === item.path) continue
           moved.push(await moveFileItem(item.path, nextPath, scope))
@@ -658,13 +666,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             moved.length === 1
               ? t("explorer.move_success", { path: moved[0]?.path ?? "" })
               : t("explorer.move_many_success", { count: moved.length, target: targetDir || "." })
-          await applyMoveResults(moved, message, scope)
+          await applyMoveResults(moved, message, scope, ownsOperation)
         }
       }
     })
   }
 
   async function handleExplorerDrop(event: DragEvent, targetDirInput: string): Promise<void> {
+    const scope = currentOperationScope()
+    if (!scope || !ownsExplorerOperation(scope)) return
     const targetDir = normalizeExplorerPath(targetDirInput)
     const status = dragTargetStatus(event, targetDir)
     if (!status) return
@@ -672,16 +682,16 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     event.stopPropagation()
     try {
       if (status === "upload") {
-        await uploadFiles(targetDir, dataTransferFiles(event.dataTransfer))
+        await uploadFiles(targetDir, dataTransferFiles(event.dataTransfer), scope)
         return
       }
       if (status === "invalid") {
         setMutationError(t("explorer.drop_move_invalid"))
         return
       }
-      await moveSelectionsToDirectory(draggedItems(), targetDir)
+      await moveSelectionsToDirectory(draggedItems(), targetDir, scope)
     } finally {
-      clearExplorerDrag()
+      if (ownsExplorerOperation(scope)) clearExplorerDrag()
     }
   }
 
@@ -692,21 +702,23 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     if (!ownsExplorerOperation(scope)) return
-    void openFileEditor(path, scope)
+    void openFileEditor(path, scope).catch((error) => {
+      if (ownsExplorerOperation(scope)) setMutationError(mutationErrorMessage(error))
+    })
   }
 
   async function runMutation(
     kind: FileMutationKind,
-    scope: FileOperationScope,
-    fn: () => Promise<void>,
+    scope: ExplorerOperationScope,
+    fn: (isCurrent: () => boolean) => Promise<void>,
   ): Promise<void> {
-    if (commandBusy()) return
+    if (commandBusy() || !ownsExplorerOperation(scope)) return
     const token = ++mutationOperationSequence
     setMutationOperation({ token, kind, directory: scope.directory.trim() })
     setMutationMessage("")
-    const ownsMutationOperation = () => mutationOperation()?.token === token
+    const ownsMutationOperation = () => mutationOperation()?.token === token && ownsExplorerOperation(scope)
     try {
-      await fn()
+      await fn(ownsMutationOperation)
     } catch (error) {
       if (!(error instanceof DOMException && error.name === "AbortError") &&
           ownsMutationOperation() && ownsExplorerOperation(scope)) {
@@ -741,12 +753,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
   }
 
-  async function refreshDirectories(paths: string[]): Promise<void> {
-    await Promise.all(uniquePaths(paths).map((path) => loadDirectory(path, { force: true, required: true })))
+  async function refreshDirectories(paths: string[], scope: ExplorerOperationScope): Promise<void> {
+    await Promise.all(uniquePaths(paths).map((path) => loadDirectory(path, { force: true, required: true, scope })))
   }
 
-  async function refreshActiveSearchResults(): Promise<void> {
-    if (!deferredQuery()) return
+  async function refreshActiveSearchResults(scope: ExplorerOperationScope): Promise<void> {
+    if (!ownsExplorerOperation(scope) || !deferredQuery()) return
     await refetchSearch()
   }
 
@@ -756,11 +768,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.directory_required"))
       return
     }
-    await runMutation("refresh", scope, async () => {
-      await refreshDirectories(["", ...expandedPaths()])
-      if (!ownsExplorerOperation(scope)) return
-      await refreshActiveSearchResults()
-      if (!ownsExplorerOperation(scope)) return
+    await runMutation("refresh", scope, async (ownsOperation) => {
+      await refreshDirectories(["", ...expandedPaths()], scope)
+      if (!ownsOperation()) return
+      await refreshActiveSearchResults(scope)
+      if (!ownsOperation()) return
       setMutationSuccess(t("explorer.refresh_success"))
     })
   }
@@ -790,9 +802,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   async function applyMoveResults(
     results: FileMoveResult[],
     message: string,
-    scope: FileOperationScope,
+    scope: ExplorerOperationScope,
+    ownsOperation: () => boolean,
   ): Promise<void> {
-    if (!ownsExplorerOperation(scope)) return
+    if (!ownsOperation()) return
     const refreshTargets: string[] = []
     const cacheTargets: string[] = []
     const subtreeTargets: string[] = []
@@ -812,19 +825,20 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     clearDirectoryCaches(cacheTargets, subtreeTargets)
     setSelectedItems(nextSelection)
     setSelectionAnchorPath(results.at(-1)?.path ?? "")
-    await refreshDirectories(refreshTargets)
-    if (!ownsExplorerOperation(scope)) return
-    await refreshActiveSearchResults()
-    if (!ownsExplorerOperation(scope)) return
+    await refreshDirectories(refreshTargets, scope)
+    if (!ownsOperation()) return
+    await refreshActiveSearchResults(scope)
+    if (!ownsOperation()) return
     setMutationSuccess(message)
   }
 
   async function applyCopyResults(
     results: FileCopyResult[],
     message: string,
-    scope: FileOperationScope,
+    scope: ExplorerOperationScope,
+    ownsOperation: () => boolean,
   ): Promise<void> {
-    if (!ownsExplorerOperation(scope)) return
+    if (!ownsOperation()) return
     const refreshTargets: string[] = []
     const cacheTargets: string[] = []
     const nextSelection = new Map<string, ExplorerSelection>()
@@ -844,10 +858,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     clearDirectoryCaches(cacheTargets)
     setSelectedItems(nextSelection)
     setSelectionAnchorPath(results.at(-1)?.path ?? "")
-    await refreshDirectories(refreshTargets)
-    if (!ownsExplorerOperation(scope)) return
-    await refreshActiveSearchResults()
-    if (!ownsExplorerOperation(scope)) return
+    await refreshDirectories(refreshTargets, scope)
+    if (!ownsOperation()) return
+    await refreshActiveSearchResults(scope)
+    if (!ownsOperation()) return
     setMutationSuccess(message)
   }
 
@@ -877,7 +891,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.name_required"))
       return
     }
-    await runMutation(type === "file" ? "create-file" : "create-directory", scope, async () => {
+    await runMutation(type === "file" ? "create-file" : "create-directory", scope, async (ownsOperation) => {
       const node = await createFileItem(
         {
           path: joinExplorerPath(targetDir, name),
@@ -886,16 +900,17 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         },
         scope,
       )
-      if (!ownsExplorerOperation(scope)) return
+      if (!ownsOperation()) return
       const parent = parentPath(node.path)
       setExpandedPaths((prev) => new Set([...prev, parent]))
       clearDirectoryCaches([parent])
-      await refreshDirectories([parent])
-      if (!ownsExplorerOperation(scope)) return
-      await refreshActiveSearchResults()
-      if (!ownsExplorerOperation(scope)) return
+      await refreshDirectories([parent], scope)
+      if (!ownsOperation()) return
+      await refreshActiveSearchResults(scope)
+      if (!ownsOperation()) return
       setSingleSelection(selectionFromNode(node))
       if (type === "file") await openFileEditor(node.path, scope)
+      if (!ownsOperation()) return
       setMutationSuccess(t("explorer.create_success", { path: node.path }))
     })
   }
@@ -931,9 +946,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     const nextPath = joinExplorerPath(parentPath(item.path), name)
     if (normalizeExplorerPath(nextPath) === item.path) return
-    await runMutation("rename", scope, async () => {
+    await runMutation("rename", scope, async (ownsOperation) => {
       const result = await moveFileItem(item.path, nextPath, scope)
-      await applyMoveResults([result], t("explorer.rename_success", { path: result.path }), scope)
+      await applyMoveResults([result], t("explorer.rename_success", { path: result.path }), scope, ownsOperation)
     })
   }
 
@@ -967,9 +982,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     if (nextPath === item.path) return
-    await runMutation("move", scope, async () => {
+    await runMutation("move", scope, async (ownsOperation) => {
       const result = await moveFileItem(item.path, nextPath, scope)
-      await applyMoveResults([result], t("explorer.move_success", { path: result.path }), scope)
+      await applyMoveResults([result], t("explorer.move_success", { path: result.path }), scope, ownsOperation)
     })
   }
 
@@ -1006,15 +1021,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.name_required"))
       return
     }
-    await moveSelectionsToDirectory(items, targetDir)
+    await moveSelectionsToDirectory(items, targetDir, scope)
   }
 
-  async function copySelectionsToDirectory(items: ExplorerSelection[], targetDirInput: string): Promise<void> {
+  async function copySelectionsToDirectory(items: ExplorerSelection[], targetDirInput: string, capturedScope?: ExplorerOperationScope): Promise<void> {
     if (items.length === 0) {
       setMutationError(t("explorer.select_required"))
       return
     }
-    const scope = currentOperationScope()
+    const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
       setMutationError(t("explorer.directory_required"))
       return
@@ -1025,9 +1040,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.copy_invalid"))
       return
     }
-    await runMutation("copy", scope, async () => {
+    await runMutation("copy", scope, async (ownsOperation) => {
       const copied: FileCopyResult[] = []
       for (const item of targets) {
+        if (!ownsOperation()) return
         const nextPath = joinExplorerPath(targetDir, item.name)
         copied.push(await copyFileItem(item.path, nextPath, scope))
       }
@@ -1035,7 +1051,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         copied.length === 1
           ? t("explorer.copy_success", { path: copied[0]?.path ?? "" })
           : t("explorer.copy_many_success", { count: copied.length, target: targetDir || "." })
-      await applyCopyResults(copied, message, scope)
+      await applyCopyResults(copied, message, scope, ownsOperation)
     })
   }
 
@@ -1072,9 +1088,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.copy_invalid"))
       return
     }
-    await runMutation("copy", scope, async () => {
+    await runMutation("copy", scope, async (ownsOperation) => {
       const result = await copyFileItem(item.path, nextPath, scope)
-      await applyCopyResults([result], t("explorer.copy_success", { path: result.path }), scope)
+      await applyCopyResults([result], t("explorer.copy_success", { path: result.path }), scope, ownsOperation)
     })
   }
 
@@ -1111,10 +1127,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationError(t("explorer.name_required"))
       return
     }
-    await copySelectionsToDirectory(items, targetDir)
+    await copySelectionsToDirectory(items, targetDir, scope)
   }
 
-  async function deleteItems(items: ExplorerSelection[], capturedScope?: FileOperationScope): Promise<void> {
+  async function deleteItems(items: ExplorerSelection[], capturedScope?: ExplorerOperationScope): Promise<void> {
     if (items.length === 0) {
       setMutationError(t("explorer.select_required"))
       return
@@ -1125,21 +1141,22 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const targets = topLevelActionSelections(items)
-    await runMutation("delete", scope, async () => {
+    await runMutation("delete", scope, async (ownsOperation) => {
       const deletedPaths: string[] = []
       try {
         for (const item of targets) {
+          if (!ownsOperation()) return
           const deleted = await deleteFileItem(item.path, scope)
           deletedPaths.push(normalizeExplorerPath(deleted.path))
         }
       } finally {
-        if (deletedPaths.length > 0) await applyDeleteResults(deletedPaths, scope)
+        if (deletedPaths.length > 0) await applyDeleteResults(deletedPaths, scope, ownsOperation)
       }
     })
   }
 
-  async function applyDeleteResults(deletedPaths: string[], scope: FileOperationScope): Promise<void> {
-    if (!ownsExplorerOperation(scope)) return
+  async function applyDeleteResults(deletedPaths: string[], scope: ExplorerOperationScope, ownsOperation: () => boolean): Promise<void> {
+    if (!ownsOperation()) return
     const parents = deletedPaths.map(parentPath)
     setExpandedPaths((prev) => {
       const next = new Set<string>()
@@ -1151,10 +1168,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
     clearSelection()
     clearDirectoryCaches([...parents, ...deletedPaths], deletedPaths)
-    await refreshDirectories(parents)
-    if (!ownsExplorerOperation(scope)) return
-    await refreshActiveSearchResults()
-    if (!ownsExplorerOperation(scope)) return
+    await refreshDirectories(parents, scope)
+    if (!ownsOperation()) return
+    await refreshActiveSearchResults(scope)
+    if (!ownsOperation()) return
     setMutationSuccess(
       deletedPaths.length === 1
         ? t("explorer.delete_success", { path: deletedPaths[0] ?? "" })
@@ -1216,7 +1233,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   async function uploadFiles(
     targetDirInput: string,
     files: File[],
-    capturedScope?: FileOperationScope | null,
+    capturedScope?: ExplorerOperationScope,
   ): Promise<void> {
     const scope = capturedScope ?? currentOperationScope()
     if (!scope) {
@@ -1224,7 +1241,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setUploadMessage(t("explorer.directory_required"))
       return
     }
-    if (!ownsExplorerOperation(scope)) return
+    if (!ownsExplorerOperation(scope) || fileEditorReserved()) return
     const targetDir = normalizeExplorerPath(targetDirInput)
     if (files.length === 0) return
     const uploadToken = ++uploadOperationSequence
@@ -1237,7 +1254,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       if (!ownsUploadOperation()) return
       setExpandedPaths((prev) => new Set([...prev, targetDir]))
       try {
-        await loadDirectory(targetDir, { force: true, required: true })
+        await loadDirectory(targetDir, { force: true, required: true, scope })
         if (!ownsUploadOperation()) return
       } catch (error) {
         if (!ownsUploadOperation()) return
@@ -1269,7 +1286,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     uploadInputTargetDir = ""
     uploadInputScope = null
     input.value = ""
-    await uploadFiles(targetDir, files, scope)
+    if (scope) await uploadFiles(targetDir, files, scope)
   }
 
   function renderItemContextMenu(item: ExplorerSelection, options: { isDirectory: boolean; expanded?: boolean }) {

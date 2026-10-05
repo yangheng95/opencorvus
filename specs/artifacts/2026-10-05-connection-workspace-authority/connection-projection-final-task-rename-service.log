@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\task-rename-service.test.ts:
+(pass) renameTask service contract > PATCHes task/<id>/title with the trimmed title [4.37ms]
+(pass) renameTask service contract > server error rejects with the API error [0.72ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [1158.00ms]

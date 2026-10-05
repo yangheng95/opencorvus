@@ -7,7 +7,18 @@ import "@fontsource-variable/geist/index.css"
 import "@fontsource-variable/noto-sans-sc/index.css"
 import "@fontsource-variable/jetbrains-mono/index.css"
 import { insert, render } from "solid-js/web"
-import { batch, createRoot, createEffect, createMemo, createSignal, For, onCleanup, onMount, untrack } from "solid-js"
+import {
+  batch,
+  createRoot,
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  onCleanup,
+  onMount,
+  on,
+  untrack,
+} from "solid-js"
 import { App } from "./components/App"
 import { Icon, LUCIDE_ICON_NAMES, REGISTERED_ICONS, type IconName } from "./components/ui/Icon"
 import { Conversation } from "./components/Conversation"
@@ -55,6 +66,7 @@ import {
   hasUnsavedFileChanges,
   fileEditorRevealRevision,
   fileWorkbenchOpen,
+  fileEditorReserved,
 } from "./services/file-workbench"
 import { initApp } from "./services/init"
 import {
@@ -77,7 +89,14 @@ import { selectTask, cancelTask, setTaskArchived, renameTask, downloadTaskProjec
 import { canComposeChat, stopChatRequest } from "./services/chat"
 import { isTaskInterruptable } from "./store/board"
 import { loadAllLocales, localeTag, setLocale } from "./utils/i18n"
-import { apiJson, configure as configureApi } from "./services/api"
+import {
+  apiJson,
+  configure as configureApi,
+  captureApiAuthority,
+  assertApiAuthorityCurrent,
+  isApiAuthorityCurrent,
+  ApiAuthorityChangedError,
+} from "./services/api"
 import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
 import {
@@ -158,7 +177,7 @@ import { openGoalDialog } from "./services/dialog"
 import { closeConfigDialog, openConfigDialog } from "./services/config-dialog-control"
 import { installClipboardApiKeyPrompt } from "./services/clipboard-api-key-prompt"
 import { cardTreeStore } from "./store/card-tree"
-import { composerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
+import { workspaceComposerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
 import { normalizeDebugDirectory } from "./utils/debug-text"
 import {
   cancelConversationReplay,
@@ -333,12 +352,23 @@ function reportOverlayRuntimeError(scope: string, error: unknown): void {
 }
 
 function runMainAsync(scope: string, action: () => void | Promise<void>): void {
+  const report = (error: unknown) => {
+    if (error instanceof ApiAuthorityChangedError) {
+      AppLog.warn(scope, "Operation belongs to a previous connection", {
+        phase: error.phase,
+        expectedRevision: error.expectedRevision,
+        currentRevision: error.currentRevision,
+      })
+      return
+    }
+    reportOverlayRuntimeError(scope, error)
+  }
   try {
     void Promise.resolve(action()).catch((error) => {
-      reportOverlayRuntimeError(scope, error)
+      report(error)
     })
   } catch (error) {
-    reportOverlayRuntimeError(scope, error)
+    report(error)
   }
 }
 
@@ -443,15 +473,17 @@ function sideChatSource() {
   const source = boardStore.selectedSource
   const sessionID = source?.kind === "session" ? source.id : rootTaskSessionID()
   const directory = activeDirectory().trim()
-  return sessionID && directory ? { sessionID, directory } : undefined
+  return sessionID && directory ? { sessionID, directory, authority: captureApiAuthority() } : undefined
 }
 
 function quoteInMain(quotation: Quotation) {
+  if (fileEditorReserved()) return
   setComposerQuotation(panelComposerDraftKey(), quotation)
   queueMicrotask(() => document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")?.focus())
 }
 
 function requestSideChat(quotation?: Quotation, prompt?: string) {
+  if (fileEditorReserved()) return
   const source = sideChatSource()
   if (!source) throw new Error(t("side_chat.source_required"))
   setSideChatRequest({ source, quotation, prompt })
@@ -509,19 +541,23 @@ function revealCurrentConversationFromBoard(): void {
 }
 
 async function selectTaskWithUILifecycle(taskID: string, directory: string): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection({ kind: "task", id: taskID, directory })
+  assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
     revealCurrentConversationFromBoard()
     return
   }
   await closeConfigDialog()
+  assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   const row = workLedgerActiveItem({ taskID, sessionID: undefined })
   if (row?.kind === "task") {
     setComposerIntent({ productPillar: row.productPillar, conversationTarget: "mission" })
   }
   resetCenterWorkbenchToPrimaryPanel("task")
-  await selectTask(taskID, { directory, selectionEpoch: admission.epoch })
+  await selectTask(taskID, { directory, selectionEpoch: admission.epoch, authority })
+  if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(admission.epoch)
 }
 
@@ -530,6 +566,7 @@ async function selectConversationWithUILifecycle(
   directory: string,
   experience: "chat" | "work",
 ): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection({
     kind: "session",
     id: sessionID,
@@ -537,16 +574,19 @@ async function selectConversationWithUILifecycle(
     sessionKind: "conversation",
     experience,
   })
+  assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
     revealCurrentConversationFromBoard()
     return
   }
   await closeConfigDialog()
+  assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   setComposerIntent({ productPillar: productPillarFromConversationExperience(experience), conversationTarget: "chat" })
   bumpWorkspaceEpoch()
   resetCenterWorkbenchToPrimaryPanel("chat")
-  await selectConversationSession({ sessionID, directory, experience, selectionEpoch: admission.epoch })
+  await selectConversationSession({ sessionID, directory, experience, selectionEpoch: admission.epoch, authority })
+  if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(admission.epoch)
 }
 
@@ -629,28 +669,38 @@ function isMissionSessionSource(): boolean {
 }
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
+  const authority = captureApiAuthority()
   setMissionSharedRefreshToken((value) => value + 1)
   if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
-    void refreshProjectMemory().catch((error) =>
-      AppLog.warn("project-memory", "Project MEMORY.MD notice refresh failed", { error: String(error) }),
-    )
+    void refreshProjectMemory({ authority }).catch((error) => {
+      if (isApiAuthorityCurrent(authority))
+        AppLog.warn("project-memory", "Project MEMORY.MD notice refresh failed", { error: String(error) })
+    })
   }
   const selectedSource = boardStore.selectedSource
   const missionHandoff = activeMissionHandoff(event, selectedSource)
   if (missionHandoff) {
     runMainAsync("work-ledger.mission-handoff", async () => {
       try {
-        const opened = await openMissionSession(missionHandoff, missionHandoff.directory, beginWorkspaceSelection())
+        const opened = await openMissionSession(
+          missionHandoff,
+          missionHandoff.directory,
+          beginWorkspaceSelection(),
+          authority,
+        )
         if (!opened) return
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return
         throw error
       }
-      await archiveConversationHandoffCaller({
-        sessionID: missionHandoff.callerSessionID,
-        directory: missionHandoff.directory,
-        experience: missionHandoff.callerExperience,
-      })
+      await archiveConversationHandoffCaller(
+        {
+          sessionID: missionHandoff.callerSessionID,
+          directory: missionHandoff.directory,
+          experience: missionHandoff.callerExperience,
+        },
+        authority,
+      )
     })
     return
   }
@@ -660,12 +710,13 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
     const selectionEpoch = beginWorkspaceSelection()
     try {
       await selectConversationSession({
+        authority,
         sessionID: conversationHandoff.sessionID,
         directory: conversationHandoff.directory,
         experience: conversationHandoff.experience,
         selectionEpoch,
       })
-      if (!ownsWorkspaceSelection(selectionEpoch)) return
+      if (!ownsWorkspaceSelection(selectionEpoch) || !isApiAuthorityCurrent(authority)) return
       setComposerIntent({
         productPillar: productPillarFromConversationExperience(conversationHandoff.experience),
         conversationTarget: "chat",
@@ -675,20 +726,28 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
       if (error instanceof DOMException && error.name === "AbortError") return
       throw error
     }
-    await archiveConversationHandoffCaller({
-      sessionID: conversationHandoff.callerSessionID,
-      directory: conversationHandoff.directory,
-      experience: conversationHandoff.callerExperience,
-    })
+    await archiveConversationHandoffCaller(
+      {
+        sessionID: conversationHandoff.callerSessionID,
+        directory: conversationHandoff.directory,
+        experience: conversationHandoff.callerExperience,
+      },
+      authority,
+    )
   })
 }
 
-async function archiveConversationHandoffCaller(target: {
-  sessionID: string
-  directory: string
-  experience: "chat" | "work"
-}): Promise<void> {
-  const archived = await setConversationSessionArchived(target, true)
+async function archiveConversationHandoffCaller(
+  target: {
+    sessionID: string
+    directory: string
+    experience: "chat" | "work"
+  },
+  authority = captureApiAuthority(),
+): Promise<void> {
+  assertApiAuthorityCurrent(authority)
+  const archived = await setConversationSessionArchived({ ...target, authority }, true)
+  if (!isApiAuthorityCurrent(authority)) return
   if (!archived) throw new Error(t("coding_assistant.archive_failed"))
   setMissionSharedRefreshToken((value) => value + 1)
 }
@@ -699,7 +758,12 @@ function focusComposerInput(): void {
   })
 }
 
-async function applyComposerIntent(intent: ComposerIntent, selectionEpoch: number): Promise<void> {
+async function applyComposerIntent(
+  intent: ComposerIntent,
+  selectionEpoch: number,
+  authority = captureApiAuthority(),
+): Promise<void> {
+  assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(selectionEpoch)
   const currentDraftKey = panelComposerDraftKey()
   const launcherDraftKey = newRequestComposerDraftKey()
@@ -708,16 +772,19 @@ async function applyComposerIntent(intent: ComposerIntent, selectionEpoch: numbe
   setComposerIntent(intent)
   runMainAsync("composer.remember-project-intent", () => rememberProjectComposerIntent(activeDirectory(), intent))
   resetCenterWorkbenchToPrimaryPanel(intent.conversationTarget === "mission" ? "mission" : "chat")
-  await selectTask("", { preserveComposerAttachments: true, selectionEpoch })
+  await selectTask("", { preserveComposerAttachments: true, selectionEpoch, authority })
+  if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(selectionEpoch)
   focusComposerInput()
 }
 
 async function handleComposerIntentChange(intent: ComposerIntent): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
   await closeConfigDialog()
-  await applyComposerIntent(intent, admission.epoch)
+  assertApiAuthorityCurrent(authority)
+  await applyComposerIntent(intent, admission.epoch, authority)
 }
 
 async function selectWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
@@ -729,14 +796,18 @@ async function openWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
 }
 
 async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
   await closeConfigDialog()
+  assertApiAuthorityCurrent(authority)
   await openGlobalChatLauncher(admission.epoch)
-  await applyComposerIntent(intent, admission.epoch)
+  assertApiAuthorityCurrent(authority)
+  await applyComposerIntent(intent, admission.epoch, authority)
 }
 
 async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
+  const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.new_chat_missing_directory"))
   const model = appStore.composerModel.trim()
@@ -755,7 +826,9 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
     okLabel: t("multica_import.confirm_action"),
   })
   if (!confirmation.confirmed) return
+  assertApiAuthorityCurrent(authority)
   const admission = await requestWorkspaceSelection()
+  assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") return
   const selectionEpoch = admission.epoch
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Mission action superseded", "AbortError")
@@ -763,36 +836,48 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
   setMissionLauncherSubmitting(true)
   try {
     const result = await wakeMission({
+      authority,
       directory: projectDirectory,
       text: t("multica_import.mission_request"),
       model,
       productPillar: "code",
       expertSquadIDs: [],
     })
-    await openMissionSession(result, projectDirectory, selectionEpoch)
+    if (!isApiAuthorityCurrent(authority)) return
+    await openMissionSession(result, projectDirectory, selectionEpoch, authority)
+    if (!isApiAuthorityCurrent(authority)) return
     setMissionSharedRefreshToken((value) => value + 1)
   } finally {
-    setMissionLauncherSubmitting(false)
+    if (isApiAuthorityCurrent(authority)) setMissionLauncherSubmitting(false)
   }
 }
 
 async function selectWorkLedgerProject(directory: string): Promise<void> {
+  const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.new_chat_missing_directory"))
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
   await closeConfigDialog()
+  assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   const intent = projectComposerIntent(settingsStore.serverUrl, projectDirectory)
   setComposerIntent(intent)
   resetCenterWorkbenchToPrimaryPanel(intent.conversationTarget === "mission" ? "mission" : "chat")
-  await applyDirectory(projectDirectory, { save: true, restoreWorkspace: false, selectionEpoch: admission.epoch })
+  await applyDirectory(projectDirectory, {
+    save: true,
+    restoreWorkspace: false,
+    selectionEpoch: admission.epoch,
+    authority,
+  })
+  if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(admission.epoch)
   bumpWorkspaceEpoch()
   focusComposerInput()
 }
 
 async function deleteWorkLedgerProject(directory: string): Promise<void> {
+  const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.delete_missing_directory"))
   const dialog = await showAppDialog({
@@ -803,11 +888,16 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
     okTone: "danger",
   })
   if (!dialog.confirmed) return
-
-  const outcome = await deleteProjectState(projectDirectory, {
-    surface: "overlay.work_ledger",
-    reason: "Operator deleted the project from Work Ledger",
-  })
+  assertApiAuthorityCurrent(authority)
+  const outcome = await deleteProjectState(
+    projectDirectory,
+    {
+      surface: "overlay.work_ledger",
+      reason: "Operator deleted the project from Work Ledger",
+    },
+    authority,
+  )
+  if (!isApiAuthorityCurrent(authority)) return
   const diagnosticID =
     outcome.status === "deleted"
       ? `project:delete:${outcome.result.projectID}`
@@ -855,6 +945,7 @@ async function openWorkLedgerProjectDirectory(directory: string): Promise<void> 
 }
 
 async function renameWorkLedgerProject(directory: string, currentName: string): Promise<void> {
+  const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.rename_missing_directory"))
   const dialog = await showAppDialog({
@@ -873,11 +964,14 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
   const name = String(dialog.value || "").trim()
   if (!name) throw new Error(t("project.rename_name_required"))
   if (name === currentName.trim()) return
-  await renameProjectRecord(projectDirectory, name)
+  assertApiAuthorityCurrent(authority)
+  await renameProjectRecord(projectDirectory, name, authority)
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function promoteWorkLedgerAnonymousProject(directory: string): Promise<void> {
+  const authority = captureApiAuthority()
   const source = directory.trim()
   if (!source) throw new Error(t("project.promote_anonymous_missing_directory"))
   const nameDialog = await showAppDialog({
@@ -896,10 +990,19 @@ async function promoteWorkLedgerAnonymousProject(directory: string): Promise<voi
   if (!name) throw new Error(t("project.rename_name_required"))
   const destinationParent = await pickDirectory()
   if (!destinationParent) return
+  assertApiAuthorityCurrent(authority)
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
-  const result = await promoteAnonymousProject(source, destinationParent, name)
-  await applyDirectory(result.directory, { save: true, restoreWorkspace: false, selectionEpoch: admission.epoch })
+  assertApiAuthorityCurrent(authority)
+  const result = await promoteAnonymousProject(source, destinationParent, name, authority)
+  if (!isApiAuthorityCurrent(authority)) return
+  await applyDirectory(result.directory, {
+    save: true,
+    restoreWorkspace: false,
+    selectionEpoch: admission.epoch,
+    authority,
+  })
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
   if (result.cleanupPending) {
     reportWarning({
@@ -956,17 +1059,22 @@ function missionBoardProjectDirectories(): string[] {
 }
 
 async function createMissionBoardDraft(input: MissionManualCreateRequest): Promise<void> {
-  await createMissionDraft(input)
+  const authority = captureApiAuthority()
+  await createMissionDraft({ ...input, authority })
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
+  assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") return
   const selectionEpoch = admission.epoch
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Mission action superseded", "AbortError")
   resetCenterWorkbenchToPrimaryPanel("mission")
   const result = await wakeMission({
+    authority,
     directory: input.directory,
     text: input.request,
     productPillar: input.productPillar,
@@ -974,20 +1082,24 @@ async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<vo
   })
   setMissionSharedRefreshToken((value) => value + 1)
   assertUserNavigationCurrent(selectionEpoch)
-  await openMissionSession(result, input.directory, selectionEpoch)
+  if (!isApiAuthorityCurrent(authority)) return
+  await openMissionSession(result, input.directory, selectionEpoch, authority)
   assertUserNavigationCurrent(selectionEpoch)
 }
 
 async function dispatchMissionBoardDraft(mission: MissionRecord): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
+  assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") return
   const selectionEpoch = admission.epoch
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Mission action superseded", "AbortError")
   resetCenterWorkbenchToPrimaryPanel("mission")
-  const result = await dispatchMission({ missionID: mission.missionID, directory: mission.directory })
+  const result = await dispatchMission({ missionID: mission.missionID, directory: mission.directory, authority })
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
   assertUserNavigationCurrent(selectionEpoch)
-  await openMissionSession(result, mission.directory, selectionEpoch)
+  await openMissionSession(result, mission.directory, selectionEpoch, authority)
   assertUserNavigationCurrent(selectionEpoch)
 }
 
@@ -1003,13 +1115,15 @@ async function confirmDeleteMissionBoardMission(mission: MissionRecord): Promise
 }
 
 async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
+  const authority = captureApiAuthority()
   const deleted = await deleteMission(
-    { missionID: mission.missionID, directory: mission.directory },
+    { missionID: mission.missionID, directory: mission.directory, authority },
     {
       surface: "overlay.work_ledger",
       reason: "Operator permanently deleted the Mission from Mission Board",
     },
   )
+  if (!isApiAuthorityCurrent(authority)) return deleted
   if (!deleted) throw new Error(t("mission_board.delete.failed"))
 
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === mission.sessionID) {
@@ -1032,19 +1146,23 @@ async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolea
 }
 
 async function abortWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
+  const authority = captureApiAuthority()
   const ok = await abortMission(
-    { missionID: row.missionID, directory: row.directory },
+    { missionID: row.missionID, directory: row.directory, authority },
     {
       surface: "overlay.work_ledger",
       reason: "Operator aborted the Mission from Work Ledger",
     },
   )
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("mission.error.action.abort"))
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function downloadWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
+  const authority = captureApiAuthority()
   const ok = await downloadMissionProjectArchive({ missionID: row.missionID, directory: row.directory })
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("work_ledger.action.mission_download_failed"))
   reportSuccess({
     id: `mission:download-project:${row.missionID}`,
@@ -1054,6 +1172,7 @@ async function downloadWorkLedgerMission(row: WorkLedgerMissionRow): Promise<voi
 }
 
 async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
+  const authority = captureApiAuthority()
   const dialog = await showAppDialog({
     title: t("work_ledger.action.rename_mission"),
     input: true,
@@ -1068,15 +1187,19 @@ async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void>
   if (!dialog.confirmed) return
   const title = String(dialog.value || "").trim()
   if (!title || title === (row.title || "").trim()) return
-  await renameMission({ missionID: row.missionID, directory: row.directory }, title)
+  assertApiAuthorityCurrent(authority)
+  await renameMission({ missionID: row.missionID, directory: row.directory, authority }, title)
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function archiveWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
-  await setMissionArchived({ missionID: row.missionID, directory: row.directory }, true, {
+  const authority = captureApiAuthority()
+  await setMissionArchived({ missionID: row.missionID, directory: row.directory, authority }, true, {
     surface: "overlay.work_ledger",
     reason: "Operator archived the Mission from Work Ledger",
   })
+  if (!isApiAuthorityCurrent(authority)) return
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === row.sessionID) {
     void selectTask("", { selectionEpoch: beginWorkspaceSelection() }).catch((error) => {
       runPostCommitUiEffect(
@@ -1097,15 +1220,19 @@ async function archiveWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void
 }
 
 async function cancelWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
+  const authority = captureApiAuthority()
   await cancelTask(row.id, {
     surface: "overlay.work_ledger",
     reason: "Operator cancelled the task from Work Ledger",
   })
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
+  const authority = captureApiAuthority()
   const ok = await downloadTaskProjectArchive({ taskID: row.id, directory: row.directory })
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("task.download_project_failed", { error: row.id }))
   reportSuccess({
     id: `task:download-project:${row.id}`,
@@ -1115,6 +1242,7 @@ async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
 }
 
 async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
+  const authority = captureApiAuthority()
   const dialog = await showAppDialog({
     title: t("task.rename_button_title"),
     input: true,
@@ -1129,16 +1257,20 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   if (!dialog.confirmed) return
   const title = String(dialog.value || "").trim()
   if (!title || title === (row.title || "").trim()) return
-  const ok = await renameTask(row.id, title)
+  assertApiAuthorityCurrent(authority)
+  const ok = await renameTask(row.id, title, authority)
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("task.rename_placeholder"))
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function archiveWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
-  const ok = await setTaskArchived({ taskID: row.id, directory: row.directory }, true, {
+  const authority = captureApiAuthority()
+  const ok = await setTaskArchived({ taskID: row.id, directory: row.directory, authority }, true, {
     surface: "overlay.work_ledger",
     reason: "Operator archived the task from Work Ledger",
   })
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("task.archive_failed"))
   runPostCommitUiEffect({ id: `task:archive-refresh:${row.id}`, title: "Task archive committed" }, () =>
     setMissionSharedRefreshToken((value) => value + 1),
@@ -1146,16 +1278,20 @@ async function archiveWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
 }
 
 async function stopWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
+  const authority = captureApiAuthority()
   const ok = await stopConversationSession({
+    authority,
     sessionID: row.sessionID,
     directory: row.directory,
     experience: row.experience,
   })
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error("Coding assistant stop failed")
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
+  const authority = captureApiAuthority()
   const dialog = await showAppDialog({
     title: t("work_ledger.action.rename_chat"),
     input: true,
@@ -1170,18 +1306,22 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
   if (!dialog.confirmed) return
   const title = String(dialog.value || "").trim()
   if (!title || title === (row.title || "").trim()) return
+  assertApiAuthorityCurrent(authority)
   await renameConversationSession(
-    { sessionID: row.sessionID, directory: row.directory, experience: row.experience },
+    { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
     title,
   )
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function archiveWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
+  const authority = captureApiAuthority()
   const ok = await setConversationSessionArchived(
-    { sessionID: row.sessionID, directory: row.directory, experience: row.experience },
+    { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
     true,
   )
+  if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("coding_assistant.archive_failed"))
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === row.sessionID) {
     void selectTask("", { selectionEpoch: beginWorkspaceSelection() }).catch((error) => {
@@ -1206,7 +1346,9 @@ async function setActiveWorkLedgerItemPinned(
   row: WorkLedgerTaskRow | WorkLedgerMissionRow | WorkLedgerChatRow,
   pinned: boolean,
 ): Promise<void> {
-  await setWorkLedgerItemPinned({ row, pinned })
+  const authority = captureApiAuthority()
+  await setWorkLedgerItemPinned({ row, pinned, authority })
+  if (!isApiAuthorityCurrent(authority)) return
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
@@ -1343,20 +1485,24 @@ async function openMissionWithUILifecycle(
   result: Parameters<typeof openMissionSession>[0],
   directory: string,
 ): Promise<void> {
+  const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection({
     kind: "session",
     id: result.sessionID,
     directory,
     sessionKind: "mission",
   })
+  assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
     revealCurrentConversationFromBoard()
     return
   }
   await closeConfigDialog()
+  assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   resetCenterWorkbenchToPrimaryPanel("mission")
-  await openMissionSession(result, directory, admission.epoch)
+  await openMissionSession(result, directory, admission.epoch, authority)
+  if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(admission.epoch)
 }
 
@@ -1370,10 +1516,13 @@ async function openMissionSession(
   },
   directory: string,
   selectionEpoch: number,
+  authority = captureApiAuthority(),
 ): Promise<boolean> {
+  assertApiAuthorityCurrent(authority)
+  const owns = () => ownsWorkspaceSelection(selectionEpoch) && isApiAuthorityCurrent(authority)
   const missionDirectory = directory.trim()
   if (!missionDirectory) throw new Error("openMissionSession: directory is required")
-  if (!ownsWorkspaceSelection(selectionEpoch)) {
+  if (!owns()) {
     return false
   }
   const source = {
@@ -1400,30 +1549,30 @@ async function openMissionSession(
       restoreWorkspace: false,
       preserveSelection: true,
       selectionEpoch,
+      authority,
     })
-    if (!applied || !ownsWorkspaceSelection(selectionEpoch)) {
+    if (!applied || !owns()) {
       return false
     }
     await projectComposerModelFromSession(
-      { sessionID: result.sessionID, directory: missionDirectory },
+      { sessionID: result.sessionID, directory: missionDirectory, authority },
       () =>
-        ownsWorkspaceSelection(selectionEpoch) &&
-        boardStore.selectedSource?.kind === "session" &&
-        boardStore.selectedSource.id === result.sessionID,
+        owns() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === result.sessionID,
     )
-    if (!ownsWorkspaceSelection(selectionEpoch)) return false
+    if (!owns()) return false
     setComposerIntent({ productPillar: result.productPillar, conversationTarget: "mission" })
     await loadConversation(source, {
       scrollIntent: "bottom",
       resetCause: "mission-session-hydrate",
       directory: missionDirectory,
+      authority,
     })
-    if (!ownsWorkspaceSelection(selectionEpoch)) return false
-    startSSE(source, 0, { directory: missionDirectory })
+    if (!owns()) return false
+    startSSE(source, 0, { directory: missionDirectory, authority })
     setPrimaryCenterPanel("mission")
     return true
   } catch (error) {
-    if (!ownsWorkspaceSelection(selectionEpoch)) return false
+    if (!owns()) return false
     if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === result.sessionID) {
       batch(() => {
         resetConversationProjection({ scrollIntent: "bottom", cause: "mission-session-switch-failed" })
@@ -1433,7 +1582,7 @@ async function openMissionSession(
     }
     throw error
   } finally {
-    if (ownsWorkspaceSelection(selectionEpoch)) setBoardStore("taskSwitching", false)
+    if (owns()) setBoardStore("taskSwitching", false)
   }
 }
 
@@ -1500,7 +1649,9 @@ function removeCenterWorkbenchTabs(matches: (tab: CenterWorkbenchTab) => boolean
 function closeCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
   if (panel === "conversation") return
   if (panel === "file") {
-    void closeFileEditor()
+    runUserNavigation("workspace.close-file", async () => {
+      await closeFileEditor()
+    })
     return
   }
   removeCenterWorkbenchTabs((tab) => tab.panel === panel)
@@ -1510,7 +1661,9 @@ function closeRightDockTab(tabID: string): void {
   const tab = untrack(centerWorkbenchPanels).find((item) => item.id === tabID)
   if (!tab || tab.panel === "conversation") return
   if (tab.panel === "file") {
-    void closeFileEditor()
+    runUserNavigation("workspace.close-file", async () => {
+      await closeFileEditor()
+    })
     return
   }
   removeCenterWorkbenchTabs((item) => item.id === tabID)
@@ -1736,30 +1889,32 @@ async function refreshExpertSquads(
   scope: ExpertSquadCatalogScope | Extract<ComposerReferenceCatalogScopeState, { kind: "global" }>,
   requestKey: string,
 ): Promise<void> {
+  const authority = captureApiAuthority()
+  const owns = () => isApiAuthorityCurrent(authority) && requestKey === composerReferenceCatalogRequestKey()
   if (requestKey === expertSquadLoadedRequestKey) return
   if (expertSquadInFlight?.requestKey === requestKey) return await expertSquadInFlight.promise
   const sequence = ++expertSquadLoadSequence
   const promise = (async () => {
     try {
       if (scope.kind === "global") {
-        const catalog = await loadGlobalComposerReferences()
-        if (sequence !== expertSquadLoadSequence) return
+        const catalog = await loadGlobalComposerReferences(authority)
+        if (sequence !== expertSquadLoadSequence || !owns()) return
         setComposerExpertSquadCatalogSnapshot(createGlobalComposerReferenceCatalogSnapshot(requestKey, catalog))
         expertSquadLoadedRequestKey = requestKey
         return
       }
-      const catalogPromise = loadExpertSquadCatalog(scope)
+      const catalogPromise = loadExpertSquadCatalog({ ...scope, authority })
       const activeInspectionPromise = catalogPromise.then((catalog) =>
-        inspectExpertSquad({ directory: scope.directory, id: catalog.active.effective }),
+        inspectExpertSquad({ directory: scope.directory, id: catalog.active.effective, authority }),
       )
       const [catalog, squads, missionSkillCatalog, chatCapability, activeInspection] = await Promise.allSettled([
         catalogPromise,
-        searchExpertSquads({ directory: scope.directory, productPillar: composerIntent().productPillar }),
-        loadMissionSkillCatalog(scope),
-        loadConversationCapability(scope.directory, "chat"),
+        searchExpertSquads({ directory: scope.directory, productPillar: composerIntent().productPillar, authority }),
+        loadMissionSkillCatalog({ ...scope, authority }),
+        loadConversationCapability(scope.directory, "chat", authority),
         activeInspectionPromise,
       ])
-      if (sequence !== expertSquadLoadSequence) return
+      if (sequence !== expertSquadLoadSequence || !owns()) return
       setComposerExpertSquadCatalogSnapshot(
         createComposerReferenceCatalogSnapshotFromSettled(requestKey, composerExpertSquadCatalogSnapshot(), {
           catalog,
@@ -1777,7 +1932,7 @@ async function refreshExpertSquads(
         requestKey,
       })
     } catch (error) {
-      if (sequence !== expertSquadLoadSequence) return
+      if (sequence !== expertSquadLoadSequence || !owns()) return
       expertSquadLoadedRequestKey = ""
       AppLog.warn("composer-reference", "Reference catalog reconciliation failed", {
         error: runtimeErrorMessage(error),
@@ -1864,16 +2019,11 @@ async function searchComposerExpertSquads(
 }
 
 function newRequestComposerDraftKey(): string {
-  const directory = activeDirectory()
-  return directory ? composerDraftKey("launcher", "new", directory) : composerDraftKey("launcher", "new")
+  return workspaceComposerDraftKey("", "", activeDirectory())
 }
 
 const panelComposerDraftKey = () => {
-  const taskID = activeTaskID()
-  if (taskID) return composerDraftKey("task", taskID)
-  const sessionID = activeSessionID()
-  if (sessionID) return composerDraftKey("session", sessionID)
-  return newRequestComposerDraftKey()
+  return workspaceComposerDraftKey(activeTaskID(), activeSessionID(), activeDirectory())
 }
 
 function missionSubmitActive(): boolean {
@@ -2006,12 +2156,32 @@ function OverlayRoot() {
   createEffect(() => {
     if (!settingsHydrated()) return
     configureApi({
-      serverUrl: settingsStore.serverUrl,
-      username: settingsStore.username,
-      password: settingsStore.password,
       directory: activeDirectory(),
     })
   })
+
+  createEffect(
+    on(
+      () => captureApiAuthority().revision,
+      () => {
+        setSideChatRequest(undefined)
+        setMissionLauncherSubmitting(false)
+        setExpertSquadLauncherSubmitting(false)
+        setAssistantLauncherSubmitting(false)
+        setComposerStopping(false)
+      },
+    ),
+  )
+
+  createEffect(
+    on(
+      () => settingsStore.workspaceEpoch,
+      () => {
+        setSelectedSubagentSessionID("")
+        pendingPrimaryBrowserPreviewNavigation = undefined
+      },
+    ),
+  )
 
   createEffect(() => {
     runMainAsync("locale.apply-settings", () => setLocale(settingsStore.locale))
@@ -2353,15 +2523,17 @@ function OverlayRoot() {
           onComposerIntentChange={(intent) =>
             runUserNavigation("composer.mode-change", () => handleComposerIntentChange(intent))
           }
-          resolveAttachmentDirectory={(selectionEpoch) => {
+          resolveAttachmentDirectory={(selectionEpoch, authority) => {
+            assertApiAuthorityCurrent(authority)
             const intent = { ...composerIntent() }
             const needsProject = !activeDirectory().trim()
             const sourceDraftKey = panelComposerDraftKey()
             const sourceDraft = composerDraftText(sourceDraftKey)
-            const operation = resolveGlobalComposerProject({ kind: "attachment", selectionEpoch })
+            const operation = resolveGlobalComposerProject({ kind: "attachment", selectionEpoch, authority })
             return {
               ...operation,
               promise: operation.promise.then((resolution) => {
+                assertApiAuthorityCurrent(authority)
                 assertUserNavigationCurrent(resolution.selectionEpoch)
                 const { directory } = resolution
                 if (needsProject)
@@ -2376,7 +2548,8 @@ function OverlayRoot() {
               }),
             }
           }}
-          onSubmit={async (text, attachments, webSearch, directives, markDispatched) => {
+          onSubmit={async (text, attachments, webSearch, directives, markDispatched, authority) => {
+            assertApiAuthorityCurrent(authority)
             const submittedIntent = { ...composerIntent() }
             const submittedWithoutProject = !activeDirectory().trim()
             const submitRoute = resolveComposerSubmitRoute(directives)
@@ -2386,14 +2559,16 @@ function OverlayRoot() {
               setExpertSquadLauncherSubmitting(true)
               try {
                 const admission = await requestWorkspaceSelection()
+                assertApiAuthorityCurrent(authority)
                 if (admission.kind === "unchanged") return
                 const selectionEpoch = admission.epoch
-                const { directory, model } = await resolveGlobalComposerSubmissionContext(selectionEpoch)
+                const { directory, model } = await resolveGlobalComposerSubmissionContext(selectionEpoch, authority)
                 if (!ownsWorkspaceSelection(selectionEpoch))
                   throw new DOMException("Mission submission superseded", "AbortError")
                 resetCenterWorkbenchToPrimaryPanel("mission")
                 markDispatched()
                 const result = await wakeMission({
+                  authority,
                   directory,
                   text,
                   attachments,
@@ -2401,7 +2576,9 @@ function OverlayRoot() {
                   productPillar: intentRoute.productPillar,
                   expertSquadIDs: submitRoute.kind === "mission" ? submitRoute.expertSquadIDs : undefined,
                 })
-                await openMissionSession(result, directory, selectionEpoch)
+                if (!isApiAuthorityCurrent(authority)) return result
+                await openMissionSession(result, directory, selectionEpoch, authority)
+                if (!isApiAuthorityCurrent(authority)) return result
                 if (submittedWithoutProject)
                   runMainAsync("composer.remember-created-project", () =>
                     rememberProjectComposerIntent(directory, submittedIntent),
@@ -2409,13 +2586,14 @@ function OverlayRoot() {
                 setMissionSharedRefreshToken((value) => value + 1)
                 return result
               } finally {
-                setExpertSquadLauncherSubmitting(false)
+                if (isApiAuthorityCurrent(authority)) setExpertSquadLauncherSubmitting(false)
               }
             }
             if (conversationSubmitActive()) {
               setAssistantLauncherSubmitting(true)
               try {
                 const admission = await requestWorkspaceSelection()
+                assertApiAuthorityCurrent(authority)
                 if (admission.kind === "unchanged") return
                 const selectionEpoch = admission.epoch
                 resetCenterWorkbenchToPrimaryPanel("chat")
@@ -2424,6 +2602,7 @@ function OverlayRoot() {
                 if (!experience) throw new Error("Conversation submit resolved without a conversation experience")
                 if (directory) {
                   await createConversationSession({
+                    authority,
                     selectionEpoch,
                     directory,
                     experience,
@@ -2431,10 +2610,12 @@ function OverlayRoot() {
                   })
                 } else
                   await createGlobalConversationSession({
+                    authority,
                     selectionEpoch,
                     experience,
                     model: appStore.composerModel || undefined,
                   })
+                assertApiAuthorityCurrent(authority)
                 if (!ownsWorkspaceSelection(selectionEpoch))
                   throw new DOMException("Conversation submission superseded", "AbortError")
                 if (submittedWithoutProject) {
@@ -2443,7 +2624,8 @@ function OverlayRoot() {
                     rememberProjectComposerIntent(createdDirectory, submittedIntent),
                   )
                 }
-                const result = await panelMessage(text, attachments, metadata, markDispatched)
+                const result = await panelMessage(text, attachments, metadata, markDispatched, { authority })
+                if (!isApiAuthorityCurrent(authority)) return result
                 const source = boardStore.selectedSource
                 if (
                   source?.kind === "session" &&
@@ -2455,11 +2637,12 @@ function OverlayRoot() {
                 setMissionSharedRefreshToken((value) => value + 1)
                 return result
               } finally {
-                setAssistantLauncherSubmitting(false)
+                if (isApiAuthorityCurrent(authority)) setAssistantLauncherSubmitting(false)
               }
             }
             const refreshMissionLedger = isMissionSessionSource()
-            const result = await panelMessage(text, attachments, metadata, markDispatched)
+            const result = await panelMessage(text, attachments, metadata, markDispatched, { authority })
+            if (!isApiAuthorityCurrent(authority)) return result
             if (refreshMissionLedger) setMissionSharedRefreshToken((value) => value + 1)
             return result
           }}

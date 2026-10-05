@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\config-service-fail-fast.test.ts:
+(pass) config service fail-fast writes > patchConfig rejects while disconnected instead of returning null [0.68ms]
+(pass) config service fail-fast writes > patchConfig rejects backend failures without mutating the config store [1.49ms]
+(pass) config service fail-fast writes > patchConfig projects a committed receipt before surfacing runtime reconciliation failure [0.34ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [1359.00ms]

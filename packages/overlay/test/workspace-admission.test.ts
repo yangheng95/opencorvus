@@ -34,7 +34,7 @@ async function prepare(confirmLeave: () => Promise<boolean>) {
     taskSwitching: false,
   })
   await openFileEditor(file.path, file)
-  unregister = registerFileEditorBeforeNavigate({ confirmLeave, isDirty: () => true })
+  unregister = registerFileEditorBeforeNavigate({ confirmLeave: async () => (await confirmLeave()) ? 0 : null, getRevision: () => 0, isBusy: () => false, isDirty: () => true })
   return boardStore.selectEpoch
 }
 
@@ -163,7 +163,7 @@ test("a superseded composer allocation returns AbortError even when another sour
 
 test("dirty state reads the registered owner and follows its lifetime", () => {
   let dirty = true
-  unregister = registerFileEditorBeforeNavigate({ confirmLeave: async () => true, isDirty: () => dirty })
+  unregister = registerFileEditorBeforeNavigate({ confirmLeave: async () => 0, getRevision: () => 0, isBusy: () => false, isDirty: () => dirty })
   expect(hasUnsavedFileChanges()).toBe(true)
   dirty = false
   expect(hasUnsavedFileChanges()).toBe(false)

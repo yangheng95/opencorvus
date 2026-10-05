@@ -1,7 +1,7 @@
 # Specs Storage Index
 
 - [Connection publication and workspace authority](records/2026-10/2026-10-05-connection-workspace-authority.md)
-- [Connection workspace authority investigation](artifacts/2026-10-05-connection-workspace-authority/README.md)
+- [Connection workspace authority investigation and root integration](artifacts/2026-10-05-connection-workspace-authority/README.md)
 
 - [Skill mount cold-start latency qualification](records/2026-10/2026-10-05-skill-mount-cold-start-latency.md)
 - [Skill mount latency evidence](artifacts/2026-10-05-skill-mount-cold-start-latency/README.md)
@@ -877,7 +877,8 @@ Latest Mission Board User Interface repair and permanent-delete plan: [`2026-08-
 
 Latest Mission Board creation and summary implementation plan: [`2026-08-06-mission-board-creation-and-summary-implementation-plan.md`](records/2026-08/2026-08-06-mission-board-creation-and-summary-implementation-plan.md).
 
-Latest Mission Board status-summary and creation visual evidence: [`navigation summary`](artifacts/mission-board-summary-and-create.png), [`manual draft`](artifacts/mission-board-manual-draft.png), and [`Artificial Intelligence creation`](artifacts/mission-board-ai-create.png).
+Latest Mission Board status-summary and creation visual evidence: [
+avigation summary`](artifacts/mission-board-summary-and-create.png), [`manual draft`](artifacts/mission-board-manual-draft.png), and [`Artificial Intelligence creation`](artifacts/mission-board-ai-create.png).
 
 Latest Mission Board creation and summary design: [`2026-08-06-mission-board-creation-and-summary-design.md`](records/2026-08/2026-08-06-mission-board-creation-and-summary-design.md).
 
@@ -894,7 +895,8 @@ Latest transactional schema migration plan: [`2026-08-06-transactional-schema-mi
 Latest Conversation bottom turn control and per-model usage plan: [`2026-08-06-conversation-turn-control-and-model-usage.md`](records/2026-08/2026-08-06-conversation-turn-control-and-model-usage.md).
 
 
-Latest VCS model-context and remote-action repair: [`2026-08-06-vcs-model-context-and-remote-actions-repair.md`](records/2026-08/2026-08-06-vcs-model-context-and-remote-actions-repair.md), with [`no-remote`](artifacts/vcs-no-remote-actions.png) and [`configured-remote`](artifacts/vcs-remote-actions.png) visual evidence.
+Latest VCS model-context and remote-action repair: [`2026-08-06-vcs-model-context-and-remote-actions-repair.md`](records/2026-08/2026-08-06-vcs-model-context-and-remote-actions-repair.md), with [
+o-remote`](artifacts/vcs-no-remote-actions.png) and [`configured-remote`](artifacts/vcs-remote-actions.png) visual evidence.
 
 Latest Session `memory.md` single-source design: [`2026-08-06-session-memory-markdown.md`](records/2026-08/2026-08-06-session-memory-markdown.md).
 
@@ -2465,3 +2467,15 @@ bun run docs:check
 - [Historical WorkBuddy and fixed-round benchmark source](artifacts/2026-08-25-benchmark-history/README.md): exact committed August experiment materials; current-runtime limitations are explicit.
 
 - [Automatic native and website release repair](records/2026-09/2026-09-21-automatic-native-website-release.md).
+
+- [Same-backend project ABA and queued configuration ownership](artifacts/2026-10-05-connection-workspace-authority/root-review-project-aba.md): follow-up analysis and proposed acceptance for the existing B authority work; no implementation or actual ABA claim.
+
+- [Next real Sol B qualification plan](artifacts/2026-10-05-connection-workspace-authority/live-sol-e2e-next-plan.md): preparation only; exact paired model dependency and independent credential/projection/outbound checks.
+
+The current connection-workspace authority record also includes metadata selection ABA, owner-specific busy settlement and accepted VCS mutation/read-failure service qualification; exact evidence and real-page limits remain in its existing artifact index.
+
+- [Git initialization selection and accepted-result review](artifacts/2026-10-05-connection-workspace-authority/root-review-git-init-selection.md): current-source findings and proposed local qualification; implementation remains pending Root authorization.
+
+- [Expanded Tool input/output detail boundary review](artifacts/2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): actual saved Read screenshot and independent request/outcome contract analysis; source-only minimal label recommendation, implementation and next real visual qualification pending Root.
+
+- [Live Sol Prompt-controller guard audit](artifacts/2026-10-05-connection-workspace-authority/live-sol-owned-prompt-guard-audit.md): shared ownership/standby/terminal/recovery audit; actual owner classification remains pending Root evidence.

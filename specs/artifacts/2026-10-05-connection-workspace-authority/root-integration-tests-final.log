@@ -1,0 +1,147 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-3f665b2bfd616ca5\debug\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/connection-settings-transaction.test.ts test/settings-save-transaction.test.ts test/composer-draft.test.ts test/workspace-admission.test.ts test/global-composer-project.test.ts test/connection-startup-diagnostics.test.ts
+bun test v1.3.14 (0d9b296a)
+
+test\connection-settings-transaction.test.ts:
+(pass) local confirmed departure retains exact A file until ack and commits cleared B pointers before the queued preference [12.43ms]
+(pass) local persistence failure releases the same reservation and retains exact original source/draft [1.59ms]
+(pass) local Cancel returns its explicit admission contract and the next queued preference persists A [0.61ms]
+(pass) local draft parsing happens at the writer before ack; confirmed activation consumes prepared prose [1.01ms]
+(pass) local same-endpoint reauthentication preserves selected scope and dirty file while returning its exact new token [0.55ms]
+(pass) local activation error truthfully retains durable acknowledgement and releases prepare before the next save [0.62ms]
+(pass) local acknowledged same-URL native restart retires once, marks connecting and preserves the file [1.43ms]
+(pass) local old health completion settles its caller while B retains its current public connection facts [2.26ms]
+(pass) local same-directory project deletion keeps B's pending operation distinct from A's actual response [5.50ms]
+(pass) local discovery's original authority retains B's explicit directory on late A completion [1.37ms]
+(pass) local supplied health authority reports the acknowledged native handoff, then a fresh exact probe succeeds [1.73ms]
+
+ 11 pass
+ 0 fail
+ 40 expect() calls
+Ran 11 tests across 1 file. [324.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\settings-save-transaction.test.ts:
+(pass) confirmed connection publication precedes a queued preference snapshot and survives cold read [10.67ms]
+(pass) native failure reports the confirmed A document and a later explicit retry commits B [1.49ms]
+(pass) queued B and C transactions merge the latest unrelated workspace and preference fields [0.98ms]
+(pass) activation failure exposes its durable fact and the queue admits the next explicit transaction [1.21ms]
+(pass) ordinary overrides retain the existing persistence-only action contract [0.42ms]
+(pass) operational admission failure reconciles provisional state before the queued correction commits [1.19ms]
+(pass) structural save admission shares the existing confirmed failure callback and retry contract [1.12ms]
+(pass) an old readable invalid address can be corrected without rewriting historical intent identities [1.11ms]
+(pass) cold load and a later preference save preserve an explicitly empty Basic username [0.99ms]
+
+ 9 pass
+ 0 fail
+ 37 expect() calls
+Ran 9 tests across 1 file. [294.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\composer-draft.test.ts:
+(pass) composer draft records > saves draft text under the task or mission key [12.75ms]
+(pass) composer draft records > empty text clears the scoped draft [0.13ms]
+(pass) composer draft records > retains the newest scoped drafts when trimming the cache [0.10ms]
+(pass) composer draft records > parses only persisted draft entries with text and timestamp [0.33ms]
+(pass) composer draft records > treats corrupt persisted JSON as empty draft state [0.16ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [375.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\workspace-admission.test.ts:
+(pass) cancelled admission retains the exact source, file and public epoch [8.49ms]
+(pass) a failed save decision retains the authored target with its typed failure [0.38ms]
+(pass) approved admission closes the file and produces exactly one new selection epoch [0.39ms]
+(pass) a committed background fact supersedes a waiting decision while retaining its file owner [0.59ms]
+(pass) the latest user request consumes a shared decision and owns the sole new epoch [1.16ms]
+(pass) selecting the current ready source invalidates an older navigation and preserves the draft [1.48ms]
+(pass) explicitly revealing the same file supersedes an outstanding close [0.62ms]
+(pass) the null-target fast path respects the external commit predicate [0.39ms]
+(pass) a superseded composer allocation returns AbortError even when another source has a directory [0.50ms]
+(pass) dirty state reads the registered owner and follows its lifetime [0.17ms]
+(pass) ready Task, Chat and Mission identities include their directory and matching view [0.58ms]
+(pass) a prior Task error leaves the ready current Chat and Mission selectable as unchanged [0.39ms]
+
+ 12 pass
+ 0 fail
+ 41 expect() calls
+Ran 12 tests across 1 file. [450.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\global-composer-project.test.ts:
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) concurrent attachment inputs share one admission, anonymous Project and complete receipt [28.70ms]
+(pass) a shared cancelled decision returns AbortError to every input and retains its original facts [0.58ms]
+(pass) a newer admission sequence invalidates same-lineage joins before the public epoch changes [0.88ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) an old completion preserves a replacement allocation and its concurrent join [1.92ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) same-lineage inputs join until directory activation finishes even after directory becomes visible [1.85ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) admitted Mission input consumes its exact epoch and established attachment input returns that owner [1.35ms]
+(pass) a late allocation response reports AbortError and retains a newer established Project [0.65ms]
+[applyDir] checking connection
+[applyDir] switching {
+  from: "",
+  to: "D:/owned/anonymous",
+  save: "",
+}
+[applyDir] reloading project scope
+[applyDir] done, tasks= 0
+(pass) a live upload follows its own admission epoch and remains current after its allocation pointer settles [2.99ms]
+(pass) a rejected operation remains an observable named rejection with terminal currentness [0.27ms]
+(pass) an allocation failure retains its current error identity until its live input settles [0.58ms]
+
+ 10 pass
+ 0 fail
+ 29 expect() calls
+Ran 10 tests across 1 file. [473.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\connection-startup-diagnostics.test.ts:
+(pass) managed server startup diagnostics > localServerInfo records native startup failure in AppLog [54.29ms]
+(pass) managed server startup diagnostics > repeated managed-server failures remain independently observable [1.44ms]
+[connection] connection failed Error: health refused
+(pass) managed server startup diagnostics > checkConnection includes managed sidecar log path when the health probe fails [2562.80ms]
+(pass) managed server startup diagnostics > background health probe preserves online presentation until it settles [13.39ms]
+[connection] connection failed Error: background health refused
+(pass) managed server startup diagnostics > failed background health probe still transitions online state to offline [4.28ms]
+[connection] connection failed Error: OpenCorvus health probe reported an unavailable database: SQLITE_IOERR_VNODE: disk I/O error
+(pass) managed server startup diagnostics > durable database-unavailable health retains runtime paths and transitions offline [1.08ms]
+
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [3.02s]

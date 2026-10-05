@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { STREAM_INSTANCE_QUERY_KEY, STREAM_LIFECYCLE_EVENT_NAME } from "@opencorvus-ai/transport-protocol"
-import { configure } from "../src/services/api"
+import { captureApiAuthority, configure } from "../src/services/api"
+import type { StreamCloseInfo } from "../src/services/host-transport"
 import { createTauriTransport } from "../src/services/tauri-transport"
 
 const originalFetch = globalThis.fetch
@@ -108,17 +109,20 @@ describe("tauri HostTransport stream branch coverage", () => {
     globalThis.removeEventListener(STREAM_LIFECYCLE_EVENT_NAME, lifecycleListener)
   })
 
-  test("auth changes close native EventSource streams so business reconnect can reopen them", () => {
+  test("auth changes settle native EventSource streams with their retired authority", () => {
     globalThis.EventSource = FakeEventSource as unknown as typeof EventSource
     configure({ serverUrl: "http://overlay.test", username: "opencorvus", password: "", directory: "" })
 
-    const errors: string[] = []
     const closes: string[] = []
+    const settled: StreamCloseInfo[] = []
+    const authority = captureApiAuthority()
     createTauriTransport().openStream(
       { path: "task/tsk_stream/events", query: { after: "9" } },
       {
-        onError: (error) => errors.push(error.message),
-        onClose: (reason) => closes.push(reason ?? ""),
+        onClose: (reason, info) => {
+          closes.push(reason)
+          settled.push(info!)
+        },
         onEvent: () => undefined,
       },
     )
@@ -127,8 +131,8 @@ describe("tauri HostTransport stream branch coverage", () => {
     createdSources[0]!.emit("open")
     configure({ password: "rotated" })
 
-    expect(errors).toEqual(["event-source auth-changed"])
     expect(closes).toEqual(["auth-changed"])
+    expect(settled).toEqual([{ authority, current: false }])
     expect(createdSources[0]!.closed).toBe(true)
 
   })
@@ -273,6 +277,46 @@ describe("tauri HostTransport stream branch coverage", () => {
     expect((requests[0]!.init?.headers as Record<string, string>)["Content-Type"]).toBe("application/json")
     expect(requests[0]!.init?.body).toBe(JSON.stringify({ taskID: "tsk_stream", text: "hello" }))
     expect(events).toEqual(['{"kind":"accepted"}'])
+  })
+
+  test("Response fixture POST body retires with its exact close authority while B completes its own projection", async () => {
+    configure({ serverUrl: "http://a.invalid", password: "", directory: "" })
+    const a = captureApiAuthority()
+    const cancellation: string[] = []
+    globalThis.fetch = (async (url) => {
+      if (String(url).startsWith("http://a.invalid/")) {
+        return new Response(new ReadableStream<Uint8Array>({
+          start(controller) {
+            controller.enqueue(new TextEncoder().encode("data: a-first\n\ndata: a-later\n\n"))
+          },
+          cancel() { cancellation.push("a-reader-cancelled") },
+        }), { headers: { "content-type": "text/event-stream" } })
+      }
+      return sseResponse("data: b-current\n\n")
+    }) as typeof fetch
+    const transport = createTauriTransport("browser")
+    let projection = "initial"
+    const closes: Array<{ reason: string; info: StreamCloseInfo }> = []
+    let finishB!: () => void
+    const done = new Promise<void>((resolve) => { finishB = resolve })
+    transport.openStream({ path: "panel/message/stream", method: "POST", authority: a }, {
+      onEvent(data) {
+        projection = data
+        configure({ serverUrl: "http://b.invalid" })
+        transport.openStream({ path: "panel/message/stream", method: "POST" }, {
+          onEvent(data) { projection = data },
+          onClose(reason, info) { closes.push({ reason, info: info! }); finishB() },
+        })
+      },
+      onClose(reason, info) { closes.push({ reason, info: info! }) },
+    })
+    await done
+    expect(projection).toBe("b-current")
+    expect(cancellation).toEqual(["a-reader-cancelled"])
+    expect(closes).toEqual([
+      { reason: "auth-changed", info: { authority: a, current: false } },
+      { reason: "post-stream-done", info: { authority: captureApiAuthority(), current: true } },
+    ])
   })
 })
 

@@ -1,4 +1,5 @@
 import { createStore } from "solid-js/store"
+import type { ApiAuthority } from "../services/api"
 
 export type ChatAbortTarget =
   | { kind: "session"; sessionID: string; directory: string }
@@ -6,6 +7,7 @@ export type ChatAbortTarget =
   | { kind: "mission"; missionID: string; directory: string }
 
 export interface ChatRequestState {
+  authority: ApiAuthority
   requestID: string
   controller: AbortController
   target: ChatAbortTarget

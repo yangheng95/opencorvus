@@ -1,0 +1,99 @@
+{
+  "recorded_on": "2026-10-06",
+  "provenance": "Existing tool execution transcript from this Provider implementation; retrospective metadata, not a new test execution or reconstructed raw log.",
+  "local_only": true,
+  "final_checks": [
+    {
+      "command": "bun test ./packages/overlay/test/provider-auth-authority.test.ts ./packages/overlay/test/llm-provider-operation-scope.test.ts ./packages/overlay/test/llm-auth-cancel.test.ts ./packages/overlay/test/provider-refresh.test.ts ./packages/overlay/test/provider-form.test.ts",
+      "result": {
+        "pass": 27,
+        "fail": 0,
+        "assertions": 47
+      },
+      "raw_log": "provider-authority-tests-final.log"
+    },
+    {
+      "command": "bun test ./packages/overlay/test/provider-auth-authority.test.ts ./packages/overlay/test/llm-auth-cancel.test.ts ./packages/overlay/test/provider-refresh.test.ts ./packages/overlay/test/i18n-catalog-contract.test.ts",
+      "result": {
+        "pass": 19,
+        "fail": 0,
+        "assertions": 35
+      },
+      "raw_log": "provider-postaccepted-service-final.log"
+    },
+    {
+      "command": "bun run --cwd packages/overlay typecheck",
+      "exit_code": 0,
+      "evidence": "Original direct command session 82467 completed exit 0 after follow-up; earlier final log contains only the tsc banner, not an exit receipt.",
+      "raw_log": "provider-authority-overlay-types-final.log"
+    },
+    {
+      "command": "bunx tsc -p .tmp-product-iteration/provider-authority-tsconfig.json",
+      "exit_code": 0,
+      "evidence": "Original direct follow-up session 77199 completed exit 0 with empty stdout; no raw explicit-types log file exists.",
+      "configuration": "provider-authority-tsconfig.json"
+    },
+    {
+      "command": "bun run --cwd packages/overlay check:i18n",
+      "exit_code": 0,
+      "result": "2 locales, 2029 top-level keys",
+      "evidence": "Existing tool transcript, no saved raw log."
+    },
+    {
+      "command": "bun run docs:check",
+      "exit_code": 0,
+      "result": "345 operations, 25 groups",
+      "evidence": "Existing tool transcript, no saved raw log."
+    }
+  ],
+  "original_failures": [
+    {
+      "kind": "Bun path filter",
+      "result": "27 owned cases passed, three ignored gallery-copy errors caused the original command to fail.",
+      "cause": "Paths omitted explicit ./; Bun discovered tmp/gallery-project test copies with unresolved solid-js/store.",
+      "repair": "Use explicit ./ paths.",
+      "raw_log_available": false
+    },
+    {
+      "kind": "locale fixture diagnostics",
+      "cause": "Prior partial locale fixture leaked into the new service tests and logged missing i18n strings.",
+      "repair": "Load actual en-US catalog as data in the new local service fixture.",
+      "raw_log_available": false
+    },
+    {
+      "kind": "explicit test typecheck",
+      "exit_code": 1,
+      "diagnostic": "llm-auth-cancel.test.ts(66,13): TS2322 generic request return was not assignable to TransportResponse<T>.",
+      "cause": "Existing HostTransport cast had hidden canonical response typing; inspected fixtures also lacked capabilities.",
+      "repair": "Supply HOST_CAPABILITIES and the canonical generic request signature/response instead of casting the complete transport; original tests remain in explicit scope.",
+      "raw_log_available": false
+    },
+    {
+      "kind": "documentation script encoding",
+      "cause": "Windows cp1252 decode stopped before documentation write.",
+      "repair": "Read/write explicit UTF-8.",
+      "raw_log_available": false
+    },
+    {
+      "kind": "diff stdout encoding",
+      "cause": "Windows cp1252 stdout could not print saved bilingual diff.",
+      "repair": "Review the already-saved diff via Get-Content; no source rewrite.",
+      "raw_log_available": false
+    }
+  ],
+  "security_review": {
+    "scope": "Each selected file was read in full; only test names/counts, public repository paths/compiler arguments and sanitized retrospective outcomes.",
+    "credential_content": "None",
+    "real_auth_models_read": "None",
+    "provider_request": "None; local HostTransport fixtures and explicit dummy dialog values only."
+  },
+  "qualification_limits": [
+    "No component UI automation was added or run.",
+    "Local transport contracts do not prove actual HTTP/UI behavior.",
+    "No real Auth/Provider/model/credential was read or used by this owner.",
+    "No actual original OAuth flow cancellation/physical terminal/five-minute deadline timing was qualified.",
+    "Root owns final D5 build review and actual component page/screenshots; this evidence does not claim those outcomes.",
+    "Known post-acceptance Auth/delete refresh feedback and same-scope reopened model menu require actual manual qualification."
+  ],
+  "config_note": "Exact archived copy of .tmp-product-iteration/provider-authority-tsconfig.json; relative paths are meaningful at its original location, not from the artifact directory."
+}

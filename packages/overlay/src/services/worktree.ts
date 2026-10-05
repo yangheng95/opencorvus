@@ -3,7 +3,7 @@ import {
   ProjectWorktreeList,
   type ProjectWorktreeInfo,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson } from "./api"
+import { apiJson, ApiAuthorityChangedError, captureApiAuthority, type ApiAuthority } from "./api"
 
 export const PROJECT_WORKTREE_DELETE_TIMEOUT_MILLISECONDS = 15 * 60 * 1000
 
@@ -35,13 +35,14 @@ function projectWorktreesPath(projectDirectory: string): string {
   return `project/current/worktrees?directory=${encodeURIComponent(directory)}`
 }
 
-export async function loadProjectWorktrees(projectDirectory: string): Promise<ProjectWorktreeInfo[]> {
-  return ProjectWorktreeList.parse(await apiJson<unknown>(projectWorktreesPath(projectDirectory)))
+export async function loadProjectWorktrees(projectDirectory: string, authority: ApiAuthority = captureApiAuthority()): Promise<ProjectWorktreeInfo[]> {
+  return ProjectWorktreeList.parse(await apiJson<unknown>(projectWorktreesPath(projectDirectory), { authority }))
 }
 
-export async function deleteProjectWorktree(projectDirectory: string, directory: string): Promise<boolean> {
+export async function deleteProjectWorktree(projectDirectory: string, directory: string, authority: ApiAuthority = captureApiAuthority()): Promise<boolean> {
   if (!directory) throw new Error("deleteProjectWorktree requires a target directory")
   const result = await apiJson<unknown>(projectWorktreesPath(projectDirectory), {
+    authority,
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ directory }),
@@ -51,15 +52,16 @@ export async function deleteProjectWorktree(projectDirectory: string, directory:
   return true
 }
 
-export async function deleteProjectWorktrees(projectDirectory: string, directories: string[]): Promise<number> {
+export async function deleteProjectWorktrees(projectDirectory: string, directories: string[], authority: ApiAuthority = captureApiAuthority()): Promise<number> {
   const targets = directories.filter((directory) => directory.trim())
   const failures: ProjectWorktreeDeleteFailure[] = []
   let deleted = 0
   for (const directory of targets) {
     try {
-      await deleteProjectWorktree(projectDirectory, directory)
+      await deleteProjectWorktree(projectDirectory, directory, authority)
       deleted += 1
     } catch (error) {
+      if (error instanceof ApiAuthorityChangedError) throw error
       failures.push({
         directory,
         error: error instanceof Error ? error.message : String(error),

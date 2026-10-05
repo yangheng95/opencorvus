@@ -29,7 +29,7 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson, ApiError, serverSettledRequest } from "./api"
+import { apiJson, ApiError, serverSettledRequest, type ApiAuthority } from "./api"
 import { downloadProjectArchive } from "./project-archive"
 import type { BoardSource } from "../store/board"
 import type { WorkLedgerStreamEvent } from "./sse"
@@ -77,6 +77,7 @@ export interface MissionStats {
 // the Overlay adds only transport ownership fields.
 export type MissionWakeBody = MissionWakeData["body"]
 export type MissionWakeInput = MissionWakeBody & {
+  authority?: ApiAuthority
   /** Project directory that owns the Mission session and wake request. */
   directory: string
   signal?: AbortSignal
@@ -85,6 +86,7 @@ export type MissionWakeInput = MissionWakeBody & {
 export type MissionWakeResult = MissionWakeResponse
 export type MissionDraftBody = MissionCreateDraftData["body"]
 export type MissionDraftInput = MissionDraftBody & {
+  authority?: ApiAuthority
   directory: string
   signal?: AbortSignal
 }
@@ -161,6 +163,7 @@ export function missionPage(records: MissionRecord[], visibleLimit: number): Mis
 }
 
 export interface MissionActionTarget {
+  authority?: ApiAuthority
   missionID: string
   directory: string
 }
@@ -168,12 +171,14 @@ export interface MissionActionTarget {
 export type MissionDraftEditInput = MissionEditDraftData["body"] & MissionActionTarget
 
 export interface MissionStatusRequest {
+  authority?: ApiAuthority
   missionID: string
   directory: string
   signal?: AbortSignal
 }
 
 export interface TaskStatusRequest {
+  authority?: ApiAuthority
   taskID: string
   directory: string
   signal?: AbortSignal
@@ -182,17 +187,18 @@ export interface TaskStatusRequest {
 // ── API helpers ──
 
 export async function loadMissionStats(
-  opts: { directory?: string; limit?: number; signal?: AbortSignal } = {},
+  opts: { directory?: string; limit?: number; signal?: AbortSignal; authority?: ApiAuthority } = {},
 ): Promise<MissionStats> {
   const params = new URLSearchParams()
   if (opts.directory) params.set("directory", opts.directory)
   if (typeof opts.limit === "number") params.set("limit", String(opts.limit))
   const suffix = params.toString() ? `?${params.toString()}` : ""
-  return (await apiJson(`gateway/stats${suffix}`, { signal: opts.signal })) as MissionStats
+  return (await apiJson(`gateway/stats${suffix}`, { signal: opts.signal, authority: opts.authority })) as MissionStats
 }
 
 export async function loadMissions(
   opts: {
+    authority?: ApiAuthority
     directory?: string
     search?: string
     limit?: number
@@ -210,7 +216,7 @@ export async function loadMissions(
   if (opts.cursorSessionID) params.set("cursorSessionID", opts.cursorSessionID)
   if (typeof opts.archived === "boolean") params.set("archived", String(opts.archived))
   const suffix = params.toString() ? `?${params.toString()}` : ""
-  const data = await apiJson<MissionListResponse>(`mission${suffix}`, { signal: opts.signal })
+  const data = await apiJson<MissionListResponse>(`mission${suffix}`, { signal: opts.signal, authority: opts.authority })
   if (!Array.isArray(data)) {
     throw new Error(
       `loadMissions: server returned non-array body (got ${typeof data}). Server contract has drifted from MissionRecord[].`,
@@ -225,6 +231,7 @@ export async function loadMissionStatus(input: MissionStatusRequest): Promise<Mi
   if (!missionID || !directory) throw new Error("loadMissionStatus: missionID and directory are required")
   const params = new URLSearchParams({ directory })
   return await apiJson<MissionStatusResponse>(`mission/${encodeURIComponent(missionID)}/status?${params.toString()}`, {
+    authority: input.authority,
     signal: input.signal,
   })
 }
@@ -235,6 +242,7 @@ export async function loadTaskStatus(input: TaskStatusRequest): Promise<TaskStat
   if (!taskID || !directory) throw new Error("loadTaskStatus: taskID and directory are required")
   const params = new URLSearchParams({ directory })
   return await apiJson<TaskStatusResponse>(`task/${encodeURIComponent(taskID)}/status?${params.toString()}`, {
+    authority: input.authority,
     signal: input.signal,
   })
 }
@@ -265,6 +273,7 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
   return await apiJson<MissionWakeResponse>(
     `mission/wake?${params.toString()}`,
     serverSettledRequest({
+      authority: input.authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -290,6 +299,7 @@ export async function createMissionDraft(input: MissionDraftInput): Promise<Miss
   return await apiJson<MissionCreateDraftResponse>(
     `mission/draft?${params.toString()}`,
     serverSettledRequest({
+      authority: input.authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -310,6 +320,7 @@ export async function dispatchMission(
   return await apiJson<MissionDispatchResponse>(
     missionActionPath(target, "/dispatch"),
     serverSettledRequest({
+      authority: target.authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -325,6 +336,7 @@ export async function editMissionDraft(input: MissionDraftEditInput): Promise<Mi
   return await apiJson<MissionEditDraftResponse>(
     missionActionPath(input, "/draft"),
     serverSettledRequest({
+      authority: input.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ request, expectedRequest: input.expectedRequest } satisfies MissionEditDraftData["body"]),
@@ -348,6 +360,7 @@ export async function renameMission(target: MissionActionTarget, title: string):
     throw new Error("renameMission: missionID, directory, and 1-200 character title are required")
   }
   return await apiJson<MissionRenameResponse>(missionActionPath(target, "/title"), {
+    authority: target.authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ title: trimmed }),
@@ -360,6 +373,7 @@ export async function abortMission(
 ): Promise<boolean> {
   const body = TaskCancellationRequestBody.parse(provenance)
   return (await apiJson(missionActionPath(target, "/abort"), {
+    authority: target.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -375,6 +389,7 @@ export async function deleteMission(
     return (await apiJson(
       missionActionPath(target),
       serverSettledRequest({
+        authority: target.authority,
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -406,6 +421,7 @@ export async function setMissionArchived(
       : { archived },
   )
   const request = {
+    authority: target.authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

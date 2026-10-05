@@ -1,0 +1,80 @@
+{
+  "reviewer": "root",
+  "kind": "Personally operated real-page interactions and visually reviewed screenshots",
+  "pageProvenance": "root-cff-real-page-assets.json",
+  "actionChronology": "root-after-checkpoints.json",
+  "assetFreeze": {
+    "javascript": "main-CffQfy5K.js",
+    "stylesheet": "main-Yy88IPFU.css",
+    "status": "These observations precede the later child-transcript, project-selection, queued-config and attachment-layout source followups. Final rebuilt-page qualification is still required."
+  },
+  "ownership": "Root assumed final UI implementation, operation and visual-review ownership. Child screenshots reviews are independent reviews; no child personally operated these pages.",
+  "screenshotsPersonallyViewed": {
+    "rootA": [
+      "after-root-01-initial-a.png",
+      "after-root-02-files-entry.png",
+      "after-root-03-editor-baseline.png",
+      "after-root-04-connection-unsaved-dialog.png",
+      "after-root-05-cancel-preserves-a.png",
+      "after-root-06-discard-b-launcher.png",
+      "after-root-07-save-branch-reference-a.png",
+      "after-root-08-save-confirmed-reference-notice.png",
+      "after-root-09-save-b-prose-preserved.png",
+      "after-root-10-restored-clean-reload.png"
+    ],
+    "rootC": [
+      "after-root-c01-environment.png",
+      "after-root-c02-editor-baseline.png",
+      "after-root-c03-reload-dialog.png",
+      "after-root-c04-reload-cancel-preserves.png",
+      "after-root-c05-reload-baseline-restored.png",
+      "after-root-c06-actual-save-conflict.png",
+      "after-root-c07-conflict-reload-current-disk.png",
+      "after-root-c08-current-save-restores-baseline.png",
+      "after-root-c09-rename-editor-follows-path.png",
+      "after-root-c10-rename-path-restored.png"
+    ],
+    "rootD": [
+      "after-root-d01-owned-upload-thumbnail.png",
+      "after-root-d02-owned-full-image-preview.png",
+      "after-root-d03-side-chat-empty.png",
+      "after-root-d04-mission-skill-detail.png",
+      "after-root-d05-chat-capability-panel.png",
+      "after-root-d06-memory-empty.png",
+      "after-root-d07-archive-empty.png",
+      "after-root-d08-b-resource-retirement.png"
+    ]
+  },
+  "actualFindings": [
+    "A selected real Chat and owned text file render correctly. B Connection Save opens the actual Save/Discard/Cancel decision and disables the connection form while awaiting that decision.",
+    "Cancel preserves A Online port17948, the exact dirty file literal and ordinary composer prose. The unsaved indicator and File Save remain usable.",
+    "Discard confirms B Online port17949, retires the selected A Chat/editor, presents the directory-free launcher and preserves ordinary prose. Both original owned files retained baseline content at that earlier checkpoint.",
+    "The second branch inserted a canonical browser-use Skill mention by Enter from the actual candidate list. Save in the file decision wrote50 bytes to original A authority-note.txt; B authority-note.txt retained28 baseline bytes. The real A PATCH/file/content returned200 before successor B projections.",
+    "B Connection Save displayed the actual reference-retirement notice. The launcher preserved both ordinary prose paragraphs and removed that source-bound mention. No Send was clicked.",
+    "Restored A connection through the real form, cleared the current launcher draft and restored the exact owned authority file with a guarded filesystem write after its editor retired. This restoration is not relabeled as a UI Save. Clean page reload presents the CLI default A project, with no selected old Chat/editor/draft/model.",
+    "C-origin page connected A and selected its actual Chat. Reload Cancel preserved a dirty editor buffer; Discard and reload restored its original37-byte disk baseline.",
+    "An exact guarded external modification of the owned editor file produced a real409 FileWriteConflictError on UI Save. The actual page retained the dirty buffer and displayed readable reload guidance. Reload then showed the actual external content; a current-revision UI Save restored the37-byte baseline.",
+    "Actual Explorer Rename changed the file to editor-qualification-renamed.txt and moved the editor target to that returned path. A second actual Rename restored editor-qualification-note.txt; content remained the baseline and Save was disabled.",
+    "D-origin page used a real chooser to upload the approved owned PNG. Actual POST/attachment and binary GET requests returned200. Thumbnail and full-resolution100-percent image preview displayed the image and normal controls.",
+    "Opening Side Chat presented its actual empty interface and subsequently displayed Side chat1. Any real child Session creation remains a server fact to correlate; opening the panel is not claimed to have produced no persisted entities.",
+    "Mission Skill detail, Chat capability settings, Memory no-Task state and Archive empty state were presented and personally viewed. No setting mutation, search result, execution or populated artifact is inferred from those views.",
+    "D B Connection Save retired the staged image attachment and selected A source. C and D endpoints were subsequently restored through actual Network Save; owned file contents/name were restored and temporary docks closed where recorded. Services remain live pending final rebuilt-page work and exact physical cleanup."
+  ],
+  "resolvedObservation": {
+    "emptyBProjectHeading": "Actual B HTTP and readonly persistent metadata establish that its a-project row was created in the before window at12:40:01.877Z. It is retained B data, not a stale after UI heading. The specific before bootstrap query remains unknown.",
+    "receipt": "after-01-b-ledger-project-origin.json"
+  },
+  "newProblem": {
+    "attachmentFooterCompression": "D01 at1280px shows attachment count consuming footer width and truncating launch-reference/model labels. Root read the complete investigation and implemented the single existing status relocation; the rebuilt page is still pending.",
+    "plan": "root-review-composer-attachment-layout.md"
+  },
+  "limitations": [
+    "No UI automated test, component rendering, DOM assertion, snapshot comparison or screenshot baseline was executed.",
+    "No model Send, actual streamed model execution, Task/Mission control termination, held native preference failure or native same-URL GUI restart was qualified by these interactions.",
+    "Same-backend delayed project A-to-B-to-A and queued permission/locale races remain source/local-contract findings, not actual delayed HTTP/UI reproductions.",
+    "Live child transcripts, model-generated File/Tool Parts, populated MCP/3D/interactive artifacts, browser captures and nonempty Memory/Archive behavior remain unpresented in this matrix.",
+    "Health/status/log rows without directory query or response body cannot independently establish UI scope or a raw HTTP error body. Dedicated receipts separate captured facts from source contracts.",
+    "OS configuration isolation is not claimed. Auth/catalog presence is metadata-only; no Provider qualification follows from initial absence or Choose model.",
+    "Final source qualification and service physical cleanup remain pending. The overall autonomous product-iteration goal continues."
+  ]
+}

@@ -1,0 +1,20 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\workspace-admission.test.ts:
+(pass) cancelled admission retains the exact source, file and public epoch [1.53ms]
+(pass) a failed save decision retains the authored target with its typed failure [0.23ms]
+(pass) approved admission closes the file and produces exactly one new selection epoch [0.25ms]
+(pass) a committed background fact supersedes a waiting decision while retaining its file owner [0.30ms]
+(pass) the latest user request consumes a shared decision and owns the sole new epoch [0.28ms]
+(pass) selecting the current ready source invalidates an older navigation and preserves the draft [0.44ms]
+(pass) explicitly revealing the same file supersedes an outstanding close [0.23ms]
+(pass) the null-target fast path respects the external commit predicate [0.19ms]
+(pass) a superseded composer allocation returns AbortError even when another source has a directory [0.30ms]
+(pass) dirty state reads the registered owner and follows its lifetime [0.11ms]
+(pass) ready Task, Chat and Mission identities include their directory and matching view [0.34ms]
+(pass) a prior Task error leaves the ready current Chat and Mission selectable as unchanged [0.36ms]
+
+ 12 pass
+ 0 fail
+ 41 expect() calls
+Ran 12 tests across 1 file. [1335.00ms]

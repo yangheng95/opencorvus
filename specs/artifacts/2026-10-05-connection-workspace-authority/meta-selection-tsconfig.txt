@@ -1,0 +1,26 @@
+{
+  "extends": "../packages/overlay/tsconfig.json",
+  "include": [
+    "../packages/overlay/src/**/*.ts",
+    "../packages/overlay/src/**/*.tsx",
+    "../packages/overlay/src/**/*.js",
+    "../packages/overlay/test/api-authority.test.ts",
+    "../packages/overlay/test/tauri-transport-stream-branches.test.ts",
+    "../packages/overlay/test/tauri-transport-error-body.test.ts",
+    "../packages/overlay/test/blob-cache.test.ts",
+    "../packages/overlay/test/connection-projection-authority.test.ts",
+    "../packages/overlay/test/config-load-ownership.test.ts",
+    "../packages/overlay/test/meta-vcs-actions.test.ts",
+    "../packages/overlay/test/git-init-current.test.ts",
+    "../packages/overlay/test/task-selection-guard.test.ts",
+    "../packages/overlay/test/task-rename-service.test.ts",
+    "../packages/overlay/test/meta-project-scope.test.ts",
+    "../packages/overlay/test/meta-vcs-branches.test.ts"
+  ],
+  "compilerOptions": {
+    "types": [
+      "../packages/overlay/node_modules/vite/client",
+      "../packages/opencorvus/node_modules/@types/bun"
+    ]
+  }
+}

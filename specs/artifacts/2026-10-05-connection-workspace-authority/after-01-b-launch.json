@@ -1,0 +1,13 @@
+{
+  "time": "2026-10-05T14:24:05.6803951Z",
+  "occurrence": "connection-workspace-after-b-8f764e50-6142-480c-b315-a84a74bb03ea",
+  "startupReceipt": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-after-01/b-runtime/startup.json",
+  "launcher": {
+    "ProcessId": 71320,
+    "ParentProcessId": 64960,
+    "CreationDate": "2026-10-05T22:24:05.346307+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17949 --project-dir C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-before-01/b-project --startup-receipt C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-after-01/b-runtime/startup.json --startup-occurrence connection-workspace-after-b-8f764e50-6142-480c-b315-a84a74bb03ea --log-level INFO"
+  },
+  "runtime": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-05/connection-workspace-after-01/b-runtime"
+}

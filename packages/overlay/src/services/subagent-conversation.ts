@@ -4,7 +4,7 @@ import type { AgentActivityRecord } from "../utils/agent-activity"
 import { conversationMessageDisplayStage, isDelegatedContextMessage } from "../utils/message-origin"
 import { orderedMessageParts, roleLabel } from "../utils/message"
 import { compareTimelineOrderKeys, requireTimelineOrderKeyDomain } from "../utils/timeline-order"
-import { apiJson } from "./api"
+import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api"
 import { formatErrorDetails } from "./diagnostics"
 
 export interface SubagentTranscriptMessage {
@@ -324,15 +324,19 @@ export function projectSubagentConversationLive(
   return { ...base, messages }
 }
 
-export function subagentConversationTargetKey(input: {
+export interface SubagentConversationTarget {
   source: BoardSource
   sessionID: string
   directory: string
-}): string {
+  authority: ApiAuthority
+}
+
+export function subagentConversationTargetKey(input: SubagentConversationTarget): string {
   return JSON.stringify({
     source: input.source,
     sessionID: input.sessionID.trim(),
     directory: input.directory.trim(),
+    authority: input.authority,
   })
 }
 
@@ -533,6 +537,7 @@ function subagentConversationPath(input: {
 }
 
 export async function loadSubagentConversation(input: {
+  authority?: ApiAuthority
   source: BoardSource
   sessionID: string
   directory: string
@@ -540,20 +545,22 @@ export async function loadSubagentConversation(input: {
   afterLiveEpoch?: number
   signal?: AbortSignal
 }): Promise<SubagentConversationTranscript> {
+  const authority = input.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const sessionID = String(input.sessionID || "").trim()
   const directory = String(input.directory || "").trim()
   if (!sessionID) throw new Error("subagent conversation requires a sessionID")
   if (!directory) throw new Error(`subagent conversation ${sessionID} requires a project directory`)
   const payload = requireObject(
-    await apiJson(subagentConversationPath({ ...input, sessionID, directory }), { signal: input.signal }),
+    await apiJson(subagentConversationPath({ ...input, sessionID, directory }), { signal: input.signal, authority }),
     `subagent conversation ${sessionID}`,
   )
-  return parseSubagentConversation({ ...input, sessionID, directory }, payload)
+  return parseSubagentConversation({ ...input, sessionID, directory, authority }, payload)
 }
 
 /** Shared hydration parser for HTTP reads and the ordered Session connection snapshot. */
 export function parseSubagentConversation(
-  input: { source: BoardSource; sessionID: string; directory: string },
+  input: SubagentConversationTarget,
   payload: Record<string, any>,
 ): SubagentConversationTranscript {
   const { sessionID } = input
@@ -626,6 +633,7 @@ export function parseSubagentConversation(
       source: input.source,
       sessionID,
       directory: input.directory,
+      authority: input.authority,
     }),
     sessionID,
     messages,

@@ -1,0 +1,33 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\provider-auth-authority.test.ts:
+(pass) API authentication preserves one entry token and exact body in global scope [2.66ms]
+(pass) API authentication preserves one entry token and exact body in D:/dummy-project scope [0.41ms]
+(pass) API key modal completion returns the original typed retirement contract [0.53ms]
+(pass) method selection preserves original authority after native renewal [0.34ms]
+(pass) text prompt-loop completion retains its original token [0.39ms]
+(pass) select prompt-loop completion retains its original token [0.32ms]
+(pass) OAuth code dialog answer retires with the original authority [1.39ms]
+(pass) OAuth code dialog cancel retires with the original authority [0.23ms]
+(pass) current OAuth device callback joins the exact authorize occurrence [0.50ms]
+(pass) execute retains a retired accepted response as its exact private outcome [0.34ms]
+(pass) provider refresh accepts an explicit current entry token [1.00ms]
+
+packages\overlay\test\llm-auth-cancel.test.ts:
+(pass) provider auth cancellation > default OAuth confirmation cancellation is reported through the callback contract [0.71ms]
+(pass) cancel-code releases the exact pending OAuth occurrence through the service [1.24ms]
+(pass) browser-blocked releases the exact pending OAuth occurrence through the service [0.54ms]
+
+packages\overlay\test\provider-refresh.test.ts:
+(pass) provider refresh requests > refreshes project models through the directory-scoped route [2.66ms]
+(pass) provider refresh requests > refreshes the global provider catalog when no directory is active [0.11ms]
+(pass) provider refresh requests > records unsuccessful refresh results and partial issues in the application log [0.55ms]
+(pass) provider refresh requests > records transport failures before rethrowing them [0.45ms]
+
+packages\overlay\test\i18n-catalog-contract.test.ts:
+(pass) i18n catalog contract > maps a placeholder mismatch to the catalog contract error [0.64ms]
+
+ 19 pass
+ 0 fail
+ 35 expect() calls
+Ran 19 tests across 4 files. [1132.00ms]

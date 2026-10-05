@@ -1,0 +1,31 @@
+{
+  "time": "2026-10-05T12:49:21.9092344Z",
+  "side": "a",
+  "matchedOwners": [
+    {
+      "role": "listener",
+      "pid": 73600,
+      "creationDate": "2026-10-05T20:26:07.434129+08:00",
+      "matched": true
+    },
+    {
+      "role": "parent",
+      "pid": 73416,
+      "creationDate": "2026-10-05T20:26:07.392582+08:00",
+      "matched": true
+    },
+    {
+      "role": "launcher",
+      "pid": 63624,
+      "creationDate": "2026-10-05T20:26:07.311147+08:00",
+      "matched": true
+    }
+  ],
+  "response": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXB9naz00joi7IS8Q8"
+  },
+  "rootPageClosed": true,
+  "fixtureEntityRetained": true,
+  "note": "Admission only; separate physical review required"
+}

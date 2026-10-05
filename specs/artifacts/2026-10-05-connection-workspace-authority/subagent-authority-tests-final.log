@@ -1,0 +1,32 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\subagent-conversation-service.test.ts:
+(pass) task child transcript uses the exact task/session route and canonical order [2.89ms]
+(pass) persisted child transcript projects exact live Part snapshots and later deltas [1.19ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.31ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.11ms]
+(pass) standalone child transcript is rooted at the selected session [0.31ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.21ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.09ms]
+(pass) bursty transcript revisions coalesce into one refresh [34.35ms]
+(pass) a revision received during refresh schedules one trailing refresh [49.41ms]
+(pass) queued revisions refresh once when the immediate target load settles [35.10ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [18.55ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [0.38ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.10ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.10ms]
+(pass) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.53ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.33ms]
+(pass) Side Chat's ordered snapshot parser retains the connection's captured authority [0.80ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.49ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.15ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [43.55ms]
+
+packages\overlay\test\side-chat-transport.test.ts:
+(pass) side permission decisions target the exact project-scoped Permission request [1.11ms]
+(pass) the side stream projects actionable questions and permission requests into their canonical reply contracts [0.58ms]
+
+ 22 pass
+ 0 fail
+ 48 expect() calls
+Ran 22 tests across 2 files. [1415.00ms]

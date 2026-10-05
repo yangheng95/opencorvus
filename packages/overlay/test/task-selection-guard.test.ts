@@ -29,17 +29,18 @@ test("applyTasks clears orphaned selection even when board is missing", () => {
   expect(orphaned).toBe(1)
 })
 
-test("applyTasks does not clear selection during an in-flight task switch", () => {
-  let orphaned = 0
+test("applyTasks preserves the admitted in-flight selection and its switching state", () => {
   setOrphanedSelectionHandler(() => {
-    orphaned += 1
+    setBoardStore("selectedSource", null)
   })
   setBoardStore("selectedSource", { kind: "task", id: "tsk_loading" })
   setBoardStore("taskSwitching", true)
 
   applyTasks([])
 
-  expect(orphaned).toBe(0)
+  expect({ source: boardStore.selectedSource, switching: boardStore.taskSwitching }).toEqual({
+    source: { kind: "task", id: "tsk_loading" }, switching: true,
+  })
 })
 
 test("classifyPanelMessageTarget treats stale selected task as orphan", () => {

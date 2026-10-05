@@ -1,4 +1,4 @@
-import { apiJson } from "./api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { AppLog } from "../utils/log"
 
 export interface ProviderRefreshIssue {
@@ -32,10 +32,13 @@ function errorMessage(error: unknown): string {
 async function requestProviderRefresh(
   resource: ProviderRefreshResource,
   directory: string,
+  authority: ApiAuthority,
 ): Promise<ProviderRefreshResult> {
+  assertApiAuthorityCurrent(authority)
   const path = refreshPath(resource, directory)
   try {
-    const result = (await apiJson(path, { method: "POST" })) as ProviderRefreshResult
+    const result = (await apiJson(path, { method: "POST", authority })) as ProviderRefreshResult
+    if (!isApiAuthorityCurrent(authority)) return result
     if (!result.ok) {
       AppLog.error("provider-refresh", `Provider ${resource} refresh failed`, {
         directory,
@@ -52,6 +55,7 @@ async function requestProviderRefresh(
     }
     return result
   } catch (error) {
+    if (!isApiAuthorityCurrent(authority)) throw error
     AppLog.error("provider-refresh", `Provider ${resource} refresh request failed`, {
       directory,
       error: errorMessage(error),
@@ -61,10 +65,10 @@ async function requestProviderRefresh(
   }
 }
 
-export function requestProviderCatalogRefresh(directory: string): Promise<ProviderRefreshResult> {
-  return requestProviderRefresh("catalog", directory)
+export function requestProviderCatalogRefresh(directory: string, authority = captureApiAuthority()): Promise<ProviderRefreshResult> {
+  return requestProviderRefresh("catalog", directory, authority)
 }
 
-export function requestProviderModelsRefresh(directory: string): Promise<ProviderRefreshResult> {
-  return requestProviderRefresh("models", directory)
+export function requestProviderModelsRefresh(directory: string, authority = captureApiAuthority()): Promise<ProviderRefreshResult> {
+  return requestProviderRefresh("models", directory, authority)
 }

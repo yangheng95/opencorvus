@@ -1,0 +1,20 @@
+[
+  {
+    "time": "2026-10-05T12:49:21.857Z",
+    "requestID": "1cd9c237-f5d4-45f4-9941-a3c0999a909b",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "started",
+    "statusCode": null,
+    "duration": null
+  },
+  {
+    "time": "2026-10-05T12:49:21.858Z",
+    "requestID": "1cd9c237-f5d4-45f4-9941-a3c0999a909b",
+    "method": "POST",
+    "path": "/shutdown",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 1
+  }
+]

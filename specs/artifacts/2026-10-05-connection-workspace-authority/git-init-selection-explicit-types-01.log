@@ -1,0 +1,2 @@
+packages/overlay/test/git-init-current.test.ts(110,21): error TS2749: 'ApiAuthorityChangedError' refers to a value, but is being used as a type here. Did you mean 'typeof ApiAuthorityChangedError'?
+packages/overlay/test/git-init-current.test.ts(111,21): error TS2749: 'ApiAuthorityChangedError' refers to a value, but is being used as a type here. Did you mean 'typeof ApiAuthorityChangedError'?

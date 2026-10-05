@@ -34,6 +34,12 @@ import { openConfigDialog } from "../services/config-dialog-control"
 import { dialogStore } from "../store/dialog"
 import { showAppDialog } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import {
+  ApiAuthorityChangedError,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  type ApiAuthority,
+} from "../services/api"
 import { appStore } from "../store/app"
 import { activeProjectDirectory } from "../services/project-directory"
 import { cancelMissionBoardLoad, missionBoardStore, reloadMissionBoard } from "../services/mission-board"
@@ -379,14 +385,30 @@ function WorkLedgerRowView(props: {
   const hasActions = () => true
   const rowActions = useTaskRowActionsKeyboard(hasActions)
 
+  let actionGeneration = 0
+  createEffect(() => {
+    captureApiAuthority()
+    row()
+    actionGeneration += 1
+    setBusy(false)
+  })
+  onCleanup(() => {
+    actionGeneration += 1
+  })
+
   async function runAction(actionName: string, action: () => void | Promise<void>) {
     if (busy()) return
+    const authority = captureApiAuthority()
+    const generation = ++actionGeneration
+    const current = row()
+    const ownsAction = () => generation === actionGeneration && isApiAuthorityCurrent(authority) && row() === current
     setBusy(true)
     try {
       await action()
+      if (!ownsAction()) return
       props.onAfterAction()
     } catch (error) {
-      const current = row()
+      if (!ownsAction() || error instanceof ApiAuthorityChangedError) return
       reportError({
         id: `work-ledger:${current.kind}:${actionName}:${current.id}`,
         title: t("common.error"),
@@ -394,7 +416,7 @@ function WorkLedgerRowView(props: {
         details: formatErrorDetails(error),
       })
     } finally {
-      setBusy(false)
+      if (ownsAction()) setBusy(false)
     }
   }
 
@@ -417,6 +439,7 @@ function WorkLedgerRowView(props: {
 
   async function confirmAndStopCurrentRow(): Promise<void> {
     const current = row()
+    const authority = captureApiAuthority()
     const confirmation = await showAppDialog({
       title: t("work_ledger.stop_confirm.title", { kind: stopKindLabel(current) }),
       message: t("work_ledger.stop_confirm.message", { title: current.title || current.id }),
@@ -424,7 +447,14 @@ function WorkLedgerRowView(props: {
       okLabel: t("work_ledger.stop_confirm.action"),
       okTone: "danger",
     })
-    if (!confirmation.confirmed || row().id !== current.id || row().kind !== current.kind || !canStop()) return
+    if (
+      !isApiAuthorityCurrent(authority) ||
+      !confirmation.confirmed ||
+      row().id !== current.id ||
+      row().kind !== current.kind ||
+      !canStop()
+    )
+      return
     if (current.kind === "mission") return props.onAbortMission(current)
     if (current.kind === "chat") return props.onStopChat(current)
     return props.onCancelTask(current)
@@ -946,11 +976,14 @@ export function WorkLedger(props: WorkLedgerProps) {
     })
   }
 
-  async function reload(): Promise<void> {
+  async function reload(authority: ApiAuthority = captureApiAuthority()): Promise<void> {
+    if (!isApiAuthorityCurrent(authority)) return
     controller?.abort()
     const nextController = new AbortController()
     controller = nextController
     const sequence = ++loadSequence
+    const ownsLoad = () =>
+      sequence === loadSequence && controller === nextController && isApiAuthorityCurrent(authority)
     setLoading(true)
     setError("")
     try {
@@ -961,30 +994,40 @@ export function WorkLedger(props: WorkLedgerProps) {
           limit: WORK_LEDGER_PAGE_SIZE,
           cursor,
           signal: nextController.signal,
+          authority,
         })
-        if (sequence !== loadSequence) return
+        if (!ownsLoad()) return
         for (const row of result.rows) merged.set(ledgerRowKey(row), row)
         cursor = result.nextCursor
       } while (cursor)
-      if (sequence !== loadSequence) return
+      if (!ownsLoad()) return
       loadedRows = [...merged.values()]
-      setWorkLedgerRuntimeRows(loadedRows)
+      setWorkLedgerRuntimeRows(loadedRows, authority)
       renderGroups()
     } catch (nextError) {
       if (nextError instanceof DOMException && nextError.name === "AbortError") return
-      if (sequence !== loadSequence) return
+      if (!ownsLoad() || nextError instanceof ApiAuthorityChangedError) return
       setError(nextError instanceof Error ? nextError.message : String(nextError))
     } finally {
-      if (sequence === loadSequence) {
+      if (ownsLoad()) {
         setLoading(false)
       }
     }
   }
 
   createEffect((previousKey: string | undefined) => {
+    const authority = captureApiAuthority()
     const connectionStatus = appStore.connectionStatus
-    const key = `${connectionStatus}:${props.refreshToken ?? 0}`
+    const key = `${authority.revision}:${connectionStatus}:${props.refreshToken ?? 0}`
     if (key === previousKey) return key
+    if (!previousKey?.startsWith(`${authority.revision}:`)) {
+      loadSequence += 1
+      controller?.abort()
+      controller = null
+      loadedRows = []
+      renderGroups()
+      setError("")
+    }
     if (connectionStatus !== "online") {
       cancelMissionBoardLoad(connectionStatus === "connecting")
       loadSequence += 1
@@ -995,14 +1038,16 @@ export function WorkLedger(props: WorkLedgerProps) {
       return key
     }
     const timer = setTimeout(() => {
-      void reload()
-      void reloadMissionBoard()
+      if (!isApiAuthorityCurrent(authority)) return
+      void reload(authority)
+      void reloadMissionBoard(authority)
     }, 120)
     onCleanup(() => clearTimeout(timer))
     return key
   })
 
   onCleanup(() => {
+    loadSequence += 1
     controller?.abort()
     organizationPreferenceOwner.invalidate()
     sortPreferenceOwner.invalidate()
@@ -1045,9 +1090,13 @@ export function WorkLedger(props: WorkLedgerProps) {
   }
 
   function startGlobalChat(): void {
+    const authority = captureApiAuthority()
     void Promise.resolve()
-      .then(() => props.onCreateGlobalChat())
+      .then(() => {
+        if (isApiAuthorityCurrent(authority)) return props.onCreateGlobalChat()
+      })
       .catch((nextError) => {
+        if (!isApiAuthorityCurrent(authority) || nextError instanceof ApiAuthorityChangedError) return
         if (nextError instanceof DOMException && nextError.name === "AbortError") return
         reportError({
           id: "work-ledger:new-chat",
@@ -1063,17 +1112,19 @@ export function WorkLedger(props: WorkLedgerProps) {
   }
 
   async function updateProjectPinned(project: WorkLedgerProjectRow, pinned: boolean): Promise<void> {
+    const authority = captureApiAuthority()
     try {
-      await setWorkLedgerProjectPinned({ projectID: project.id, pinned })
-      await reload()
+      await setWorkLedgerProjectPinned({ projectID: project.id, pinned, authority })
+      await reload(authority)
     } catch (nextError) {
+      if (!isApiAuthorityCurrent(authority) || nextError instanceof ApiAuthorityChangedError) return
       reportError({
         id: `project:pin:${project.id}`,
         title: t("common.error"),
         message: nextError instanceof Error ? nextError.message : String(nextError),
         details: formatErrorDetails(nextError),
       })
-      await reload()
+      await reload(authority)
     }
   }
 

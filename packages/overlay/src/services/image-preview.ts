@@ -1,10 +1,17 @@
 import { createSignal } from "solid-js"
+import { assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api-state"
+
+export interface ImagePreviewResource {
+  resourceUrl: string
+  authority: ApiAuthority
+}
 
 export interface ImagePreviewState {
   open: boolean
   src: string
   alt: string
   revision: number
+  resourceUrl?: string
 }
 
 let imagePreviewRevision = 0
@@ -32,16 +39,29 @@ export function cancelImagePreviewRequest(requestRevision: number): void {
   imagePreviewRevision += 1
 }
 
-export function openImagePreviewForRequest(requestRevision: number, src: string, alt = ""): boolean {
+export function openImagePreviewForRequest(
+  requestRevision: number,
+  src: string,
+  alt = "",
+  resource?: ImagePreviewResource,
+): boolean {
   if (!src || !imagePreviewRequestIsCurrent(requestRevision)) return false
-  setImagePreviewState({ open: true, src, alt, revision: requestRevision })
+  if (resource) assertApiAuthorityCurrent(resource.authority)
+  const resourceUrl = resource?.resourceUrl ?? (src.startsWith("/") ? src : undefined)
+  if (resourceUrl && !resourceUrl.startsWith("/")) throw new Error("Image preview resource must be host-relative")
+  setImagePreviewState({ open: true, src, alt, revision: requestRevision, ...(resourceUrl ? { resourceUrl } : {}) })
   return true
 }
 
-export function openImagePreview(src: string, alt = ""): void {
+export function openImagePreview(src: string, alt = "", resourceUrl?: string): void {
   if (!src) return
   const revision = beginImagePreviewRequest()
-  setImagePreviewState({ open: true, src, alt, revision })
+  openImagePreviewForRequest(
+    revision,
+    src,
+    alt,
+    resourceUrl ? { resourceUrl, authority: captureApiAuthority() } : undefined,
+  )
 }
 
 export function closeImagePreview(): void {

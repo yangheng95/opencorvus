@@ -1,6 +1,6 @@
 import { Show, createEffect, createResource, createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../../services/api"
+import { captureApiAuthority, fetchResourceAsObjectUrl, peekResourceObjectUrl } from "../../services/api"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { ArtifactFrame } from "./ArtifactFrame"
@@ -12,13 +12,22 @@ export function Model3dArtifact(props: { payload: Model3dPayload }) {
   let host: HTMLDivElement | undefined
   const [viewer, setViewer] = createSignal<HTMLElement>()
   const [modelUrl] = createResource(
-    () => props.payload.source.url,
-    (url) => fetchResourceAsObjectUrl(url),
+    () => ({
+      url: props.payload.source.url,
+      authority: props.payload.source.url.startsWith("/") ? captureApiAuthority() : undefined,
+    }),
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     { initialValue: peekResourceObjectUrl(props.payload.source.url) },
   )
   const [posterUrl] = createResource(
-    () => props.payload.poster?.url,
-    (url) => fetchResourceAsObjectUrl(url),
+    () =>
+      props.payload.poster
+        ? {
+            url: props.payload.poster.url,
+            authority: props.payload.poster.url.startsWith("/") ? captureApiAuthority() : undefined,
+          }
+        : undefined,
+    (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     { initialValue: props.payload.poster ? peekResourceObjectUrl(props.payload.poster.url) : undefined },
   )
 
@@ -47,12 +56,18 @@ export function Model3dArtifact(props: { payload: Model3dPayload }) {
 
   createEffect(() => {
     const element = viewer()
-    const source = modelUrl()
-    if (!element || !source) return
+    const source = modelUrl.loading ? undefined : modelUrl()
+    if (!element) return
+    if (!source) {
+      element.removeAttribute("src")
+      element.removeAttribute("poster")
+      delete element.dataset.ready
+      return
+    }
     configureModelViewer(element, {
       src: source,
       alt: props.payload.alt,
-      poster: posterUrl(),
+      poster: posterUrl.loading ? undefined : posterUrl(),
       exposure: props.payload.exposure,
       cameraOrbit: props.payload.cameraOrbit,
       animation: props.payload.animation,
@@ -85,7 +100,7 @@ export function Model3dArtifact(props: { payload: Model3dPayload }) {
               host = element
             }}
           />
-          <Show when={!modelUrl()}>
+          <Show when={modelUrl.loading || !modelUrl()}>
             <div class="msg-artifact-state msg-artifact-model3d-loading" role="status">
               {t("artifact.model3d.loading")}
             </div>

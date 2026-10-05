@@ -1,0 +1,77 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\subagent-conversation-service.test.ts:
+(pass) task child transcript uses the exact task/session route and canonical order [2.59ms]
+(pass) persisted child transcript projects exact live Part snapshots and later deltas [1.29ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.45ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.16ms]
+(pass) standalone child transcript is rooted at the selected session [0.41ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.24ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.07ms]
+(pass) bursty transcript revisions coalesce into one refresh [30.96ms]
+(pass) a revision received during refresh schedules one trailing refresh [48.68ms]
+(pass) queued revisions refresh once when the immediate target load settles [50.60ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [28.75ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [2.31ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.11ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.08ms]
+527 |     { source: { kind: "task", id: "task one" }, sessionID: "child-session", directory: "D:/owned", authority },
+528 |     { source: { kind: "session", id: "mission-root", sessionKind: "mission" }, sessionID: "child-session", directory: "D:/owned", authority },
+529 |     { source: { kind: "session", id: "chat-root", sessionKind: "conversation", experience: "chat" }, sessionID: "child-session", directory: "D:/owned", authority },
+530 |   ]
+531 |   const transcripts = await Promise.all(targets.map((target) => loadSubagentConversation(target)))
+532 |   expect(requests.map(({ path, query, authority }) => ({ path, query, authority }))).toEqual([
+                                                                                           ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "authority": {
+        "revision": 0,
+      },
+      "path": "task/task%20one/conversation/session/child-session",
+      "query": {
+        "directory": "D:/owned",
+-       "limit": "2000",
+      },
+    },
+    {
+      "authority": {
+        "revision": 0,
+      },
+      "path": "session/child-session/conversation",
+      "query": {
+        "directory": "D:/owned",
+        "tail_limit": "2000",
+      },
+    },
+    {
+      "authority": {
+        "revision": 0,
+      },
+      "path": "session/child-session/conversation",
+      "query": {
+        "directory": "D:/owned",
+        "tail_limit": "2000",
+      },
+    },
+  ]
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:532:86)
+(fail) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.96ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.37ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.54ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.14ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [37.01ms]
+
+packages\overlay\test\side-chat-transport.test.ts:
+(pass) side permission decisions target the exact project-scoped Permission request [0.96ms]
+(pass) the side stream projects actionable questions and permission requests into their canonical reply contracts [0.93ms]
+
+ 20 pass
+ 1 fail
+ 44 expect() calls
+Ran 21 tests across 2 files. [1291.00ms]

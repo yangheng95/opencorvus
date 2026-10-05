@@ -22,7 +22,15 @@ import {
   STREAM_LIFECYCLE_PROTOCOL,
 } from "@opencorvus-ai/transport-protocol"
 import type { StreamCloseInitiator, StreamLifecycleEvent } from "@opencorvus-ai/transport-protocol"
-import { apiHeaders as apiHeadersFromState, apiUrl as apiUrlFromState, onAuthChange } from "./api-state"
+import {
+  ApiAuthorityChangedError,
+  apiHeaders as apiHeadersFromState,
+  apiUrl as apiUrlFromState,
+  assertApiAuthorityCurrent,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  onAuthChange,
+} from "./api-state"
 import type {
   HostTransport,
   NativeCommand,
@@ -225,6 +233,7 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
   const controller = new AbortController()
   const signal = input.signal ? mergeAbort(input.signal, controller.signal) : controller.signal
   let closed = false
+  let reader: ReadableStreamDefaultReader<Uint8Array> | undefined
   const closeWithReason = (reason: string): void => {
     if (closed) return
     closed = true
@@ -232,6 +241,7 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
     try {
       controller.abort()
     } catch {}
+    void reader?.cancel().catch(() => undefined)
     try {
       handlers.onClose?.(reason)
     } catch {}
@@ -270,6 +280,10 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
       closeWithReason("post-stream-fetch-error")
       return
     }
+    if (closed) {
+      await res.body?.cancel()
+      return
+    }
     if (!res.ok || !res.body) {
       try {
         handlers.onError?.(new Error(`POST stream ${res.status}: ${res.statusText}`))
@@ -280,8 +294,11 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
     try {
       handlers.onOpen?.()
     } catch {}
-
-    const reader = res.body.getReader()
+    if (closed) {
+      await res.body.cancel()
+      return
+    }
+    reader = res.body.getReader()
     const decoder = new TextDecoder()
     let buf = ""
     const consume = (chunk: string, flush = false) => {
@@ -289,6 +306,7 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
       const blocks = buf.split(/\r?\n\r?\n/)
       buf = flush ? "" : blocks.pop() || ""
       for (const block of blocks) {
+        if (closed) return
         const data = block
           .split(/\r?\n/)
           .filter((line) => line.startsWith("data:"))
@@ -305,6 +323,7 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
       // eslint-disable-next-line no-constant-condition
       while (true) {
         const { done, value } = await reader.read()
+        if (closed) break
         if (done) {
           consume(decoder.decode(), true)
           break
@@ -319,6 +338,7 @@ function openPostStream(input: StreamOpenRequest, handlers: StreamHandlers): Str
         } catch {}
       }
     } finally {
+      reader.releaseLock()
       closeWithReason("post-stream-done")
     }
   })().catch((err) => {
@@ -361,8 +381,8 @@ function headersToObject(headers: Headers): Record<string, string> {
  * change" thunks. Every stream opened via this transport registers a
  * thunk that closes itself with reason "auth-changed". When the user
  * rotates the sidecar password (configure({password})), api.ts fires
- * its auth-change event and we drain the set, prompting the business
- * reconnect timer in services/sse.ts to re-open with fresh headers.
+ * its auth-change event and we drain the set. Close delivers the retired
+ * authority to the original owner; only a current business owner may reconnect.
  *
  * Without this, the browser's native EventSource keeps its original
  * URL + (lack of) headers forever; the only way to pick up a new
@@ -409,6 +429,8 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
     kind,
     capabilities: HOST_CAPABILITIES[kind],
     async request<T = unknown>(input: TransportRequest): Promise<TransportResponse<T>> {
+      const authority = input.authority ?? captureApiAuthority()
+      assertApiAuthorityCurrent(authority)
       const url = buildUrl(input.path, input.query)
       const signal = transportRequestSignal(input)
       const init: RequestInit = applyBody(
@@ -419,19 +441,44 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
         },
         input.body,
       )
-      const res = await fetch(url.toString(), init)
-      const body =
-        res.ok || input.responseKind === "binary"
-          ? await readResponse<T>(res, input.responseKind)
-          : await readErrorResponse<T>(res)
-      return {
-        status: res.status,
-        ok: res.ok,
-        headers: headersToObject(res.headers),
-        body,
+      let response: TransportResponse<T>
+      try {
+        const res = await fetch(url.toString(), init)
+        const body =
+          res.ok || input.responseKind === "binary"
+            ? await readResponse<T>(res, input.responseKind)
+            : await readErrorResponse<T>(res)
+        response = {
+          status: res.status,
+          ok: res.ok,
+          headers: headersToObject(res.headers),
+          body,
+        }
+      } catch (error) {
+        if (error instanceof ApiAuthorityChangedError) throw error
+        assertApiAuthorityCurrent(authority, { phase: "transport_failure", cause: error })
+        throw error
       }
+      assertApiAuthorityCurrent(authority, { phase: "response", response })
+      return response
     },
     openStream(input: StreamOpenRequest, handlers: StreamHandlers): StreamHandle {
+      const authority = input.authority ?? captureApiAuthority()
+      assertApiAuthorityCurrent(authority)
+      const consumer = handlers
+      handlers = {
+        onOpen: () => {
+          if (isApiAuthorityCurrent(authority)) consumer.onOpen?.()
+        },
+        onEvent: (data) => {
+          if (isApiAuthorityCurrent(authority)) consumer.onEvent(data)
+        },
+        onError: (error) => {
+          if (isApiAuthorityCurrent(authority)) consumer.onError?.(error)
+        },
+        // Close settles the original owner even when its UI/retry authority retired.
+        onClose: (reason) => consumer.onClose?.(reason, { authority, current: isApiAuthorityCurrent(authority) }),
+      }
       const method = input.method ?? "GET"
       if (method === "POST") {
         return openPostStream(input, handlers)
@@ -486,9 +533,6 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
       }
       const forceClose = () => {
         if (closed) return
-        try {
-          handlers.onError?.(new Error("event-source auth-changed"))
-        } catch {}
         closeWithReason("auth-changed", "transport")
       }
       activeStreamForceClose.add(forceClose)
@@ -503,6 +547,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
         ;(stuckTimer as { unref?: () => void }).unref!()
       }
       source.addEventListener("open", () => {
+        if (closed) return
         opened = true
         clearTimeout(stuckTimer)
         emitStreamLifecycle({
@@ -517,6 +562,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
         } catch {}
       })
       source.addEventListener("message", (e) => {
+        if (closed) return
         try {
           handlers.onEvent((e as MessageEvent).data as string)
         } catch {}

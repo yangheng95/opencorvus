@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-05T16:13:58.1568430Z",
+  "sourceRoot": "C:\\Users\\hengu\\AppData\\Local\\opencorvus",
+  "explicitRoot": false,
+  "auth": {
+    "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+    "openaiAvailable": true,
+    "lastWriteUtc": "2026-10-04T15:48:55.8607343Z",
+    "type": "oauth",
+    "length": 2147,
+    "validExpiry": true
+  },
+  "catalog": {
+    "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+    "lastWriteUtc": "2026-10-04T15:48:10.1379969Z",
+    "explicitOverride": false,
+    "exactTargetDeclared": true,
+    "length": 9155406,
+    "adjacentToAuth": true
+  },
+  "managedConfigPresent": false,
+  "managedLegacyPresent": false,
+  "port17952Listeners": [],
+  "boundary": "Authorized root read kept raw credential/catalog solely in memory. Expiry availability and declared catalog entry are separate preconditions, not network usability or Provider projection."
+}

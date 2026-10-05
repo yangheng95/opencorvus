@@ -1,0 +1,104 @@
+{
+  "observedAtUtc": "2026-10-05T16:22:23.1470829Z",
+  "sessionID": "ses_-zUSnzJiKzzhCI4lCitZ",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\project",
+  "statusHTTP": 200,
+  "statuses": {
+    "ses_hEgmWCMwAG52SPzTwgmu": {
+      "type": "idle"
+    },
+    "ses_-zUSnzJiKzzhCI4lCitZ": {
+      "type": "idle"
+    }
+  },
+  "messageHTTP": 200,
+  "conversationHTTP": 200,
+  "inputMessages": [
+    {
+      "id": "msg_25d5c4e3-0d28-48be-b503-d115e280ce87",
+      "sessionID": "ses_-zUSnzJiKzzhCI4lCitZ",
+      "role": "user",
+      "time": {
+        "created": 1791217165684
+      },
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      }
+    }
+  ],
+  "assistantMessages": [
+    {
+      "id": "msg_g0VXC0gU200eCFjxUIc8",
+      "sessionID": "ses_-zUSnzJiKzzhCI4lCitZ",
+      "parentID": "msg_25d5c4e3-0d28-48be-b503-d115e280ce87",
+      "role": "assistant",
+      "time": {
+        "created": 1791217165902,
+        "completed": 1791217171457
+      },
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "finish": "tool-calls",
+      "error": null
+    },
+    {
+      "id": "msg_g0VXC0hwl00WAEpM8KOp",
+      "sessionID": "ses_-zUSnzJiKzzhCI4lCitZ",
+      "parentID": "msg_25d5c4e3-0d28-48be-b503-d115e280ce87",
+      "role": "assistant",
+      "time": {
+        "created": 1791217171527,
+        "completed": 1791217180821
+      },
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "finish": "stop",
+      "error": null
+    }
+  ],
+  "toolParts": [
+    {
+      "id": "prt_g0VXC0hXH00EGO7djDwq",
+      "sessionID": "ses_-zUSnzJiKzzhCI4lCitZ",
+      "messageID": "msg_g0VXC0gU200eCFjxUIc8",
+      "type": "tool",
+      "callID": "call_9qaX7PDRSiwGfov26xTSGliI",
+      "tool": "read",
+      "state": {
+        "status": "completed",
+        "input": {
+          "filePath": "qualification-note.txt"
+        },
+        "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\project\\qualification-note.txt</path>\n<type>file</type>\n<content>1: Owned actual model marker: a5856bb4-188e-4e77-a32c-e54a75a6be55\n\n(End of file - total 1 lines)\n</content>",
+        "title": "qualification-note.txt",
+        "metadata": {
+          "preview": "Owned actual model marker: a5856bb4-188e-4e77-a32c-e54a75a6be55",
+          "truncated": false,
+          "loaded": [],
+          "lines": 1,
+          "totalLines": 1
+        },
+        "time": {
+          "start": 1791217169947,
+          "end": 1791217171355
+        }
+      },
+      "orderKey": "v1:0001791217171326:0000000000000031:0000000000000000:part:prt_g0VXC0hXH00EGO7djDwq"
+    }
+  ],
+  "physicalFixture": {
+    "length": 64,
+    "text": "Owned actual model marker: a5856bb4-188e-4e77-a32c-e54a75a6be55\n",
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-cli-01\\project\\qualification-note.txt"
+  },
+  "exactMarkerInRead": true,
+  "exactMarkerInReply": true,
+  "exactDirectoryInReply": true,
+  "originalProbeError": {
+    "boundary": "Expected route contract, not product failure; original HTTP status not retained",
+    "cause": "Root initial status read omitted required directory query; original error response observed, then real directory query supplied",
+    "name": "DirectoryRequiredError"
+  },
+  "boundary": "Real public HTTP plus persisted Message/tool/result and physical authored file; no mock/DOM assertions or synthetic messages."
+}

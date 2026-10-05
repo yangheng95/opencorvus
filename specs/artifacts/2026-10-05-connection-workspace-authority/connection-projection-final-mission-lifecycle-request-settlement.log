@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\mission-lifecycle-request-settlement.test.ts:
+(pass) Mission wake, draft creation, editing, and dispatch settle on the authoritative server response [1.94ms]
+(pass) Mission wake projects uploaded attachments into its request contract (missionID=%s) [0.34ms]
+(pass) Mission wake projects uploaded attachments into its request contract (missionID=mission_attachment_follow_up) [0.09ms]
+
+ 3 pass
+ 0 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [1024.00ms]

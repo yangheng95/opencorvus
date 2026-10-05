@@ -1,6 +1,7 @@
 import { Feedback } from "../ui/Feedback"
 import type { MissionSkillSettingsResponse } from "@opencorvus-ai/sdk"
-import { For, Show, createEffect, createMemo, createSignal } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, onCleanup, untrack } from "solid-js"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
 import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../../services/workspace"
@@ -48,7 +49,7 @@ function invocation(name: string): string {
 
 export default function MissionSkillPanel() {
   const currentScope = createMemo(expertSquadSettingsScope)
-  const currentScopeIdentity = createMemo(() => scopeIdentity(currentScope()))
+  const currentScopeIdentity = createMemo(() => `${captureApiAuthority().revision}:${scopeIdentity(currentScope())}`)
   const [catalog, setCatalog] = createSignal<MissionSkillSettingsResponse | null>(null)
   const [catalogIdentity, setCatalogIdentity] = createSignal("")
   const [selectedName, setSelectedName] = createSignal("")
@@ -61,6 +62,10 @@ export default function MissionSkillPanel() {
   const [noticeTone, setNoticeTone] = createSignal<"active" | "error">("active")
   let loadSequence = 0
   let operationGeneration = 0
+  onCleanup(() => {
+    loadSequence++
+    operationGeneration++
+  })
 
   const scopedCatalog = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalog() : null))
   const skills = createMemo(() => scopedCatalog()?.mission_skills ?? [])
@@ -95,15 +100,24 @@ export default function MissionSkillPanel() {
   }
 
   function beginOperation(skillName: string) {
+    const authority = captureApiAuthority()
     const generation = ++operationGeneration
     const identity = operationIdentity(skillName)
     setNotice("")
     return {
-      owns: () => generation === operationGeneration && operationIdentity(skillName) === identity,
+      authority,
+      owns: () =>
+        generation === operationGeneration &&
+        operationIdentity(skillName) === identity &&
+        isApiAuthorityCurrent(authority),
     }
   }
 
-  async function refresh(scope = currentScope(), expectedIdentity = scopeIdentity(scope)): Promise<void> {
+  async function refresh(
+    scope = currentScope(),
+    expectedIdentity = currentScopeIdentity(),
+    authority = captureApiAuthority(),
+  ): Promise<void> {
     if (scope.kind === "unavailable") {
       loadSequence++
       setCatalog(null)
@@ -113,22 +127,24 @@ export default function MissionSkillPanel() {
       return
     }
     const sequence = ++loadSequence
+    const owns = () =>
+      sequence === loadSequence && currentScopeIdentity() === expectedIdentity && isApiAuthorityCurrent(authority)
     setLoading(true)
     setError("")
     try {
-      const next = await loadMissionSkillSettings(scope)
-      if (sequence !== loadSequence || currentScopeIdentity() !== expectedIdentity) return
+      const next = await loadMissionSkillSettings({ ...scope, authority })
+      if (!owns()) return
       setCatalog(next)
       setCatalogIdentity(expectedIdentity)
       setSelectedName((current) =>
         next.mission_skills.some((skill) => skill.name === current) ? current : (next.mission_skills[0]?.name ?? ""),
       )
     } catch (cause) {
-      if (sequence === loadSequence && currentScopeIdentity() === expectedIdentity) {
+      if (owns()) {
         setError(cause instanceof Error ? cause.message : String(cause))
       }
     } finally {
-      if (sequence === loadSequence && currentScopeIdentity() === expectedIdentity) setLoading(false)
+      if (owns()) setLoading(false)
     }
   }
 
@@ -138,7 +154,7 @@ export default function MissionSkillPanel() {
     setDetailOpen(false)
     operationGeneration += 1
     setNotice("")
-    void refresh(currentScope(), identity)
+    untrack(() => void refresh(currentScope(), identity))
     return identity
   }, "")
 
@@ -153,6 +169,7 @@ export default function MissionSkillPanel() {
   async function openPath(target: string, skillName: string): Promise<void> {
     const owner = beginOperation(skillName)
     try {
+      if (!owner.owns()) return
       const outcome = await revealPath(target)
       if (!owner.owns()) return
       const notice = pathRevealNoticeKey(outcome)
@@ -172,7 +189,7 @@ export default function MissionSkillPanel() {
     if (scope.kind === "unavailable") return
     const owner = beginOperation(selectedSkill()?.name ?? "")
     try {
-      const target = await ensureMissionSkillDirectory(scope, source)
+      const target = await ensureMissionSkillDirectory({ ...scope, authority: owner.authority }, source)
       if (!owner.owns()) return
       const outcome = await revealPath(target)
       if (!owner.owns()) return
@@ -191,6 +208,7 @@ export default function MissionSkillPanel() {
   async function copyInvocation(skill: MissionSkillSettingsItem): Promise<void> {
     const owner = beginOperation(skill.name)
     try {
+      if (!owner.owns()) return
       await copyText(invocation(skill.name))
       if (!owner.owns()) return
       setNoticeTone("active")

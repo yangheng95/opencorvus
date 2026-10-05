@@ -1,6 +1,6 @@
 # 2026-10 Records
 
-- [Connection publication and workspace authority](2026-10-05-connection-workspace-authority.md)
+- [Connection publication, file reservation and workspace authority](2026-10-05-connection-workspace-authority.md)
 
 - [Skill mount cold-start latency qualification](2026-10-05-skill-mount-cold-start-latency.md)
 

@@ -70,6 +70,7 @@ function installTransport(reply?: (request: TransportRequest) => Promise<unknown
     openStream() {
       return { close() {} }
     },
+    async native() { throw new Error("This fixture only implements HTTP requests") },
   } as HostTransport)
   return creations
 }
@@ -81,8 +82,10 @@ test("concurrent attachment inputs share one admission, anonymous Project and co
   unregister = registerFileEditorBeforeNavigate({
     confirmLeave: async () => {
       decisions.push("approved")
-      return true
+      return 0
     },
+    getRevision: () => 0,
+    isBusy: () => false,
     isDirty: () => true,
   })
   const origin = boardStore.selectEpoch
@@ -101,7 +104,7 @@ test("concurrent attachment inputs share one admission, anonymous Project and co
 test("a shared cancelled decision returns AbortError to every input and retains its original facts", async () => {
   installTransport()
   await openFileEditor("draft.md", { directory: "D:/owned/previous" })
-  unregister = registerFileEditorBeforeNavigate({ confirmLeave: async () => false, isDirty: () => true })
+  unregister = registerFileEditorBeforeNavigate({ confirmLeave: async () => null, getRevision: () => 0, isBusy: () => false, isDirty: () => true })
   const origin = boardStore.selectEpoch
   const first = resolveGlobalComposerProject({ kind: "attachment", selectionEpoch: origin }).promise
   const second = resolveGlobalComposerProject({ kind: "attachment", selectionEpoch: origin }).promise
@@ -124,8 +127,10 @@ test("a newer admission sequence invalidates same-lineage joins before the publi
   unregister = registerFileEditorBeforeNavigate({
     confirmLeave: () => {
       entered.resolve()
-      return decision.promise
+      return decision.promise.then((allowed) => allowed ? 0 : null)
     },
+    getRevision: () => 0,
+    isBusy: () => false,
     isDirty: () => true,
   })
   const origin = boardStore.selectEpoch

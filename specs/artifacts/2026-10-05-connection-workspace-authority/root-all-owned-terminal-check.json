@@ -1,0 +1,121 @@
+{
+  "observedAtUtc": "2026-10-05T16:40:22.5295254Z",
+  "matrix": [
+    {
+      "side": "a",
+      "processes": [
+        {
+          "role": "listener",
+          "pid": 59896,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "parent",
+          "pid": 61060,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "launcher",
+          "pid": 26216,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        }
+      ],
+      "authExists": false,
+      "modelsExists": true
+    },
+    {
+      "side": "b",
+      "processes": [
+        {
+          "role": "listener",
+          "pid": 75888,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "parent",
+          "pid": 57336,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "launcher",
+          "pid": 71320,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        }
+      ],
+      "authExists": false,
+      "modelsExists": false
+    },
+    {
+      "side": "c",
+      "processes": [
+        {
+          "role": "listener",
+          "pid": 45776,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "parent",
+          "pid": 43540,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "launcher",
+          "pid": 51292,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        }
+      ],
+      "authExists": false,
+      "modelsExists": false
+    },
+    {
+      "side": "d",
+      "processes": [
+        {
+          "role": "listener",
+          "pid": 49912,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "parent",
+          "pid": 4424,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        },
+        {
+          "role": "launcher",
+          "pid": 70352,
+          "originalOccurrencePresent": false,
+          "currentPIDPresent": false
+        }
+      ],
+      "authExists": false,
+      "modelsExists": false
+    }
+  ],
+  "allPortListeners": [],
+  "sourcePair": [
+    {
+      "name": "auth.json",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "length": 2147,
+      "lastWriteUtc": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "name": "models.json",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "length": 9155406,
+      "lastWriteUtc": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "boundary": "Independent post-settlement process/port and presence metadata. Source file metadata compared to preconditions; no raw source credential/catalog or fabricated exit codes."
+}

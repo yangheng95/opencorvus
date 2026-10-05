@@ -1,0 +1,61 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\meta-project-scope.test.ts:
+(pass) metadata follows the selected session directory and exposes its non-Git facts [2.42ms]
+(pass) latest metadata request owns the result when an earlier request finishes later [0.54ms]
+(pass) failed metadata read yields a scoped error state [0.62ms]
+(pass) selection ABA settles the original metadata response owner [0.41ms]
+(pass) selection ABA settles the original metadata error owner [0.28ms]
+(pass) successor metadata retains busy ownership after old response settlement [0.80ms]
+(pass) successor metadata retains busy ownership after old error settlement [0.45ms]
+(pass) an empty current scope settles the canonical metadata projection [0.23ms]
+
+packages\overlay\test\meta-vcs-actions.test.ts:
+(pass) commit retains the accepted outcome and current metadata error with its diagnostic cause [1.28ms]
+(pass) commit propagates its original POST error [0.24ms]
+(pass) commit preserves the successor projection after different-project selection [0.27ms]
+(pass) commit preserves the successor projection after same-directory-ABA selection [0.09ms]
+(pass) commit returns the original typed API retirement response receipt [0.48ms]
+(pass) push retains the accepted outcome and current metadata error with its diagnostic cause [0.29ms]
+(pass) push propagates its original POST error [0.07ms]
+(pass) push preserves the successor projection after different-project selection [0.08ms]
+(pass) push preserves the successor projection after same-directory-ABA selection [0.07ms]
+(pass) push returns the original typed API retirement response receipt [0.10ms]
+(pass) switch-branch retains the accepted outcome and current metadata error with its diagnostic cause [0.34ms]
+(pass) switch-branch propagates its original POST error [0.11ms]
+(pass) switch-branch preserves the successor projection after different-project selection [0.07ms]
+(pass) switch-branch preserves the successor projection after same-directory-ABA selection [0.05ms]
+(pass) switch-branch returns the original typed API retirement response receipt [0.08ms]
+(pass) accepted commit metadata failure permits the separately accepted push and its fresh projection [0.47ms]
+(pass) VCS action service > streams the generated commit message through the project-scoped POST route [1.07ms]
+(pass) VCS action service > rejects frames with fields outside the shared stream schema [0.80ms]
+(pass) VCS action service > commits the exact edited message and refreshes canonical VCS information [0.49ms]
+(pass) VCS action service > pushes the configured branch and refreshes canonical VCS information [0.30ms]
+
+packages\overlay\test\meta-vcs-branches.test.ts:
+(pass) VCS branch service > loads exact branch records through the project-scoped route [0.95ms]
+(pass) VCS branch service > rejects a malformed branch payload instead of manufacturing options [0.25ms]
+(pass) VCS branch service > switches one exact branch and refreshes the canonical VCS store through loadMeta [0.37ms]
+
+packages\overlay\test\connection-projection-authority.test.ts:
+(pass) local transport metadata completes B's same-directory facts after A returns [3.00ms]
+(pass) local compound GET and mutator capture retain an exact stale continuation outcome [0.88ms]
+(pass) local board pending ownership keeps B loading while the old A finally settles [1.24ms]
+(pass) local global Task list uses B's pending owner and retains its exact rows after A [1.29ms]
+(pass) local same-ID Session mutation retains A receipt and B busy owner before B completes [1.01ms]
+(pass) Work Ledger replacement snapshot and retirement use the existing current map [1.12ms]
+(pass) local VCS and panel POST close settle their original operations with actual stream-close facts [1.54ms]
+(pass) project memory refresh and acknowledgement follow one directory and authority [0.86ms]
+(pass) global and scoped reference pending owners return B's current catalog after A retires [1.08ms]
+(pass) Chat prompt-profile completion on A retains its receipt while B remains the active request authority [1.14ms]
+(pass) explicit Chat Stop uses its captured target and stale Stop has a local admission outcome [0.64ms]
+(pass) MCP stream same-ID replacement publishes B capability events after late A close [0.65ms]
+(pass) panel stream preserves the original completed result when authority retires before close [0.98ms]
+(pass) Mission board preserves B's completed current snapshot when A's page settles later [1.06ms]
+(pass) sequential Skill removal preserves the first accepted A response when its authority retires [0.82ms]
+(pass) accepted Chat creation returns its canonical ID when later view hydration retires [1.89ms]
+
+ 47 pass
+ 0 fail
+ 120 expect() calls
+Ran 47 tests across 4 files. [1185.00ms]
