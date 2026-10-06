@@ -1,0 +1,12 @@
+{
+  "owner": {
+    "pid": 44196,
+    "processInstanceID": "win32:639268805898985869",
+    "occurrenceID": "46280138-8dbf-4cc8-970c-bae44c509c12"
+  },
+  "grandchildPID": 74676,
+  "occurrence": "native-owned-21i-manual-join-58404b40-15f6-4c9c-a0ff-2a3ee52d8222",
+  "physicalObservation": "dead_or_reused",
+  "observedAtUtc": "2026-10-06T10:49:50.094Z",
+  "boundary": "Real parent physical exit; original exit code remains owned by the eventual whole-tree terminal fact"
+}

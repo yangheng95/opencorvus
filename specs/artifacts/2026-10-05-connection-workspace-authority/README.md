@@ -202,3 +202,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Real explorer and completed resource delivery plan](explore-delivery-implementation-plan.md) and [evidence](explore-delivery-implementation/README.md): independent three-stage Sol qualification after pushed747f, original07 failed history retained.
 
 - [Immutable resource materialization plan](resource-materialization-implementation-plan.md) and [evidence](resource-materialization-implementation/README.md): native no-replace cache publication, positive backend and genuine repeated-read/download qualification; failed timing and next complete-read publication audit retained.
+
+- [Native owned qualification21](native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.

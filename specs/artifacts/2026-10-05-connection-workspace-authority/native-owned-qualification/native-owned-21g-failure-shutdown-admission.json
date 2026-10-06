@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-06T10:48:20.8290391Z",
+  "occurrence": "native-owned-21g-failure-f1a7d628-9d5e-4574-b6c5-6990ab48dfc3",
+  "owner": {
+    "pid": 39748,
+    "processInstanceID": "win32:639268804929889587",
+    "occurrenceID": "71652fd4-0c6d-4e7a-826e-27f30e0f8668"
+  },
+  "pageClosed": false,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXGVrHr00H00sARPeG"
+  }
+}

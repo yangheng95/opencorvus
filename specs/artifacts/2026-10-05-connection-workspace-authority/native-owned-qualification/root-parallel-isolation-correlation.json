@@ -1,0 +1,34 @@
+{
+  "stillLiveOwnObservation": {
+    "presence": [
+      {
+        "processInstanceID": "win32:639268805869573307",
+        "processID": 36096,
+        "state": "exact_live",
+        "originalOccurrencePresent": true
+      },
+      {
+        "processInstanceID": "win32:639268805858798951",
+        "processID": 6316,
+        "state": "exact_live",
+        "originalOccurrencePresent": true
+      }
+    ],
+    "observedAtUtc": "2026-10-06T10:50:01.0627201Z",
+    "listeners": [
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 17982,
+        "OwningProcess": 36096
+      }
+    ],
+    "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21",
+    "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+    "phase": "supervision-76692-2",
+    "nativeSettlement": null
+  },
+  "otherPhysicalClosed": "2026-10-06T10:49:58.3496321Z",
+  "otherOccurrence": "native-owned-21i-manual-join-58404b40-15f6-4c9c-a0ff-2a3ee52d8222",
+  "boundary": "Existing immutable real observations correlated after independent runtime closure; no recreated live state or Task/Mission isolation claim",
+  "available": true
+}

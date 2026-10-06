@@ -1,0 +1,11 @@
+19 |   try { await fs.writeFile(stage, JSON.stringify(value, null, 2), { flag: "wx" }); await Filesystem.renameNoReplace(stage, target) }
+20 |   finally { await fs.rm(stage, { force: true }) }
+21 | }
+22 | if (mode === "early-target-exit") {
+23 |   await Bun.sleep(5000)
+24 |   const error = new Error("Explicit actual checker Target failure before serve")
+                         ^
+error: Explicit actual checker Target failure before serve
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\native-owned-target-21.ts:24:21
+
+Bun v1.3.14 (Windows x64)

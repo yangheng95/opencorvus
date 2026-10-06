@@ -1,0 +1,12 @@
+{
+  "owner": {
+    "pid": 67348,
+    "processInstanceID": "win32:639268805898395539",
+    "occurrenceID": "a8356311-dd50-4572-bc85-ff925be4c6cd"
+  },
+  "grandchildPID": 38876,
+  "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21",
+  "physicalObservation": "dead_or_reused",
+  "observedAtUtc": "2026-10-06T10:49:50.044Z",
+  "boundary": "Real parent physical exit; original exit code remains owned by the eventual whole-tree terminal fact"
+}

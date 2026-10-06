@@ -1,0 +1,7 @@
+Exception: D:\myhexin-local\opencorvus\.tmp-product-iteration\owned-settlement-qualification-19.ps1:79
+Line |
+  79 |  … $taskProcess.HasExited){throw 'Actual serve exited before readiness'}
+     |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Actual serve exited before readiness
+
+

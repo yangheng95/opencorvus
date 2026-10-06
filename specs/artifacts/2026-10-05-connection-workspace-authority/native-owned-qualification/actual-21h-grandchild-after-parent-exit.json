@@ -1,0 +1,12 @@
+{
+  "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21",
+  "parentPID": 67348,
+  "parentObservation": "dead_or_reused",
+  "grandchild": {
+    "pid": 38876,
+    "processInstanceID": "win32:639268805899129956",
+    "occurrenceID": "1d5d5410-8938-44d9-a7d7-6b280b64caad"
+  },
+  "grandchildObservation": "exact_live",
+  "observedAtUtc": "2026-10-06T10:49:50.046Z"
+}

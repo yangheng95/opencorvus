@@ -106,3 +106,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [2026-10-05 — Product iteration](2026-10-05-product-iteration/README.md)
 
 - [Expanded Tool input/output detail boundary review](2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): actual saved Read screenshot and independent request/outcome contract analysis; source-only minimal label recommendation, implementation and next real visual qualification pending Root.
+
+- [Native owned qualification21](2026-10-05-connection-workspace-authority/native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.

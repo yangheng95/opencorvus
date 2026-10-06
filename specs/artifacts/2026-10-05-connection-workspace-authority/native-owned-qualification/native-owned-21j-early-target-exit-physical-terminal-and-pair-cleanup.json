@@ -1,0 +1,63 @@
+{
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "native-owned-21j-early-target-exit-567727b7-052f-4625-81be-be092df326f4",
+    "outcome": "settled",
+    "host": {
+      "pid": 66688,
+      "processInstanceID": "win32:639268807542626005",
+      "occurrenceID": "c35c63ee-e4cb-4044-941e-9016b3fd7129"
+    },
+    "target": {
+      "pid": 2680,
+      "processInstanceID": "win32:639268807550275376",
+      "occurrenceID": "ecef36b5-34bc-491b-adf0-95ab95597756"
+    },
+    "observedAtUtc": "2026-10-06T10:52:40.265Z",
+    "terminal": {
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21j\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21j\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ],
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 2680,
+        "processInstanceID": "win32:639268807550275376",
+        "occurrenceID": "ecef36b5-34bc-491b-adf0-95ab95597756"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 66688,
+        "processInstanceID": "win32:639268807542626005",
+        "occurrenceID": "c35c63ee-e4cb-4044-941e-9016b3fd7129"
+      }
+    }
+  ],
+  "occurrence": "native-owned-21j-early-target-exit-567727b7-052f-4625-81be-be092df326f4",
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-06T10:52:41.2847990Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true
+}

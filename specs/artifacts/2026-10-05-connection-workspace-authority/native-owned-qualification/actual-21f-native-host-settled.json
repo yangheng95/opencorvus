@@ -1,0 +1,23 @@
+{
+  "occurrence": "native-owned-21f-failure-f48fc864-07f1-43cd-af47-f02fc76d77b4",
+  "outcome": "settled",
+  "host": {
+    "pid": 21008,
+    "processInstanceID": "win32:639268803572144505",
+    "occurrenceID": "b78ff511-1f82-469a-87d7-94a321f65848"
+  },
+  "target": {
+    "pid": 40380,
+    "processInstanceID": "win32:639268803579748585",
+    "occurrenceID": "dd458f61-1868-4285-9e8a-f5d950afa4f1"
+  },
+  "observedAtUtc": "2026-10-06T10:46:00.616Z",
+  "terminal": {
+    "exitCode": 1,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

@@ -1,0 +1,23 @@
+grandchild-stderr-ready
+52 | }
+53 | await fact("short-children.json", { occurrence, outcomes: short })
+54 | const parent = Bun.spawn([process.execPath, import.meta.path, run, portText, occurrence, "child-parent"], { stdout: "inherit", stderr: "inherit" })
+55 | assert.equal(await parent.exited, 0)
+56 | const grandchild = JSON.parse(await fs.readFile(path.join(evidence, "grandchild-ready.json"), "utf8"))
+57 | assert.equal(physical.observeRuntimeProcessOccurrence(grandchild.owner), "exact_live")
+            ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'dead_or_reused'
+- 'exact_live'
+
+ generatedMessage: true,
+     actual: "dead_or_reused",
+   expected: "exact_live",
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\native-owned-target-21.ts:57:8
+
+Bun v1.3.14 (Windows x64)

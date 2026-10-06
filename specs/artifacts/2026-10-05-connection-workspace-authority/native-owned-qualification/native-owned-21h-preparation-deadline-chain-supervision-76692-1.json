@@ -1,0 +1,28 @@
+{
+  "presence": [
+    {
+      "processInstanceID": "win32:639268805869573307",
+      "processID": 36096,
+      "state": "exact_live",
+      "originalOccurrencePresent": true
+    },
+    {
+      "processInstanceID": "win32:639268805858798951",
+      "processID": 6316,
+      "state": "exact_live",
+      "originalOccurrencePresent": true
+    }
+  ],
+  "observedAtUtc": "2026-10-06T10:49:55.2348567Z",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17982,
+      "OwningProcess": 36096
+    }
+  ],
+  "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "phase": "supervision-76692-1",
+  "nativeSettlement": null
+}

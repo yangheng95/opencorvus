@@ -1,0 +1,42 @@
+{
+  "occurrence": "native-owned-21i-manual-join-58404b40-15f6-4c9c-a0ff-2a3ee52d8222",
+  "admissions": [
+    {
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\tmp\\supervisor-ytNjvj",
+      "request": {
+        "kind": "command",
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "-e",
+          "const {spawn}=require('node:child_process');const fs=require('node:fs');\nconst out=fs.openSync(\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-06\\\\native-owned-21i\\\\evidence\\\\actual-grandchild-stdout.log\",'wx');const err=fs.openSync(\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-06\\\\native-owned-21i\\\\evidence\\\\actual-grandchild-stderr.log\",'wx');\nconst child=spawn(process.execPath,['-e',\"const fs=require('node:fs');const net=require('node:net');\\nconst server=net.createServer(s=>s.end('actual-owned-grandchild\\\\n'));\\nprocess.on('exit',code=>fs.writeFileSync(\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-06\\\\\\\\native-owned-21i\\\\\\\\evidence\\\\\\\\actual-grandchild-node-self-exit.json\\\",JSON.stringify({pid:process.pid,code,observedAtUtc:new Date().toISOString()}),{flag:'wx'}));\\nserver.listen(17985,'127.0.0.1',()=>{fs.writeFileSync(\\\"C:\\\\\\\\Users\\\\\\\\hengu\\\\\\\\.codex\\\\\\\\opencorvus-product-iteration\\\\\\\\2026-10-06\\\\\\\\native-owned-21i\\\\\\\\evidence\\\\\\\\actual-grandchild-node-ready.json\\\",JSON.stringify({pid:process.pid,parentPID:process.ppid,port:17985,occurrence:\\\"native-owned-21i-manual-join-58404b40-15f6-4c9c-a0ff-2a3ee52d8222\\\",observedAtUtc:new Date().toISOString()}),{flag:'wx'});process.stdout.write('grandchild-stdout-ready\\\\n');process.stderr.write('grandchild-stderr-ready\\\\n')});\\nsetInterval(()=>process.stdout.write('grandchild-live-output\\\\n'),100);\"],{detached:true,stdio:['ignore',out,err],windowsHide:true});fs.closeSync(out);fs.closeSync(err);child.unref();\nconst deadline=Date.now()+20000;const ready=\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-06\\\\native-owned-21i\\\\evidence\\\\actual-grandchild-node-ready.json\";\nconst release=\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-06\\\\native-owned-21i\\\\evidence\\\\release-node-parent.json\";\nconst timer=setInterval(()=>{if(fs.existsSync(ready)&&fs.existsSync(release)){clearInterval(timer);process.stdout.write('actual-parent-exit\\n');process.stderr.write('actual-parent-stderr-exit\\n');process.exit(0)}if(Date.now()>deadline)process.exit(1)},20);"
+        ],
+        "detached": false,
+        "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+        "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\tmp\\supervisor-ytNjvj\\ready.json",
+        "request_id": "e9990469-c506-4fc9-a7f5-57f00a59543f",
+        "launch_failed_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\tmp\\supervisor-ytNjvj\\launch-failed.json",
+        "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\tmp\\supervisor-ytNjvj\\cancel",
+        "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\tmp\\supervisor-ytNjvj\\settled.json",
+        "owner_pid": 76204,
+        "owner_process_instance_id": "win32:639268805870202012",
+        "runtime_occurrence_id": "a6d5db71-f7da-4e21-9fc4-7db94862fc95"
+      },
+      "ready": {
+        "protocol": 3,
+        "detached": false,
+        "request_id": "e9990469-c506-4fc9-a7f5-57f00a59543f",
+        "helper_pid": 59840,
+        "target_pid": 44196,
+        "target_process_instance_id": "win32:639268805898985869",
+        "runtime_occurrence_id": "a6d5db71-f7da-4e21-9fc4-7db94862fc95"
+      },
+      "helper": {
+        "protocol": 1,
+        "request_id": "e9990469-c506-4fc9-a7f5-57f00a59543f",
+        "helper_pid": 59840,
+        "helper_process_instance_id": "win32:639268805898471485",
+        "runtime_occurrence_id": "a6d5db71-f7da-4e21-9fc4-7db94862fc95"
+      }
+    }
+  ]
+}

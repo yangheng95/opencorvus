@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-10-06T10:36:38.0337646Z",
+  "occurrence": "native-owned-21-failure-c114cdd9-cda6-4163-839a-2d29b5d85e43",
+  "owner": {
+    "pid": 44604,
+    "processInstanceID": "win32:639268797944494744",
+    "occurrenceID": "44cf0873-5345-42c2-8458-c3b9a44f5af1"
+  },
+  "pageClosed": false,
+  "dispatch": false,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "reason": "Original Target occurrence already exited; no shutdown dispatched"
+}

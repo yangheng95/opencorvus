@@ -1,0 +1,63 @@
+{
+  "nativeSettlement": {
+    "occurrence": "native-owned-21g-failure-f1a7d628-9d5e-4574-b6c5-6990ab48dfc3",
+    "outcome": "settled",
+    "host": {
+      "pid": 72384,
+      "processInstanceID": "win32:639268804922186960",
+      "occurrenceID": "9ed59089-129d-456f-b978-96ca3df3c5ec"
+    },
+    "target": {
+      "pid": 39748,
+      "processInstanceID": "win32:639268804929889587",
+      "occurrenceID": "71652fd4-0c6d-4e7a-826e-27f30e0f8668"
+    },
+    "observedAtUtc": "2026-10-06T10:48:21.071Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-06T10:48:22.5431326Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21g\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21g\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ],
+  "listeners": null,
+  "occurrence": "native-owned-21g-failure-f1a7d628-9d5e-4574-b6c5-6990ab48dfc3",
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 39748,
+        "processInstanceID": "win32:639268804929889587",
+        "occurrenceID": "71652fd4-0c6d-4e7a-826e-27f30e0f8668"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 72384,
+        "processInstanceID": "win32:639268804922186960",
+        "occurrenceID": "9ed59089-129d-456f-b978-96ca3df3c5ec"
+      },
+      "originalOccurrencePresent": false
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+/** Real no-Provider native ownership checker Target; never a Task or UI test. */
+import assert from "node:assert/strict"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+const packageRoot = path.resolve(import.meta.dir, "../packages/opencorvus")
+const source = (relative: string) => pathToFileURL(path.join(packageRoot, relative)).href
+const { installProcessShims } = await import(source("src/runtime/shims.ts"))
+installProcessShims()
+const { Filesystem } = await import(source("src/util/filesystem.ts"))
+const physical = await import(source("src/runtime/process-occurrence.ts"))
+const [run, portText, occurrence, mode = "serve"] = process.argv.slice(2)
+assert(run && portText && occurrence && path.isAbsolute(run))
+const evidence = path.join(run, "evidence")
+const port = Number(portText)
+const fact = async (name: string, value: unknown) => {
+  const target = path.join(evidence, name)
+  const stage = `${target}.${process.pid}.stage`
+  try { await fs.writeFile(stage, JSON.stringify(value, null, 2), { flag: "wx" }); await Filesystem.renameNoReplace(stage, target) }
+  finally { await fs.rm(stage, { force: true }) }
+}
+assert.equal(mode, "serve")
+const short: {pid: number; exitCode: number; stdout: string; stderr: string}[] = []
+for (let index = 0; index < 24; index++) {
+  const expected = `actual-short-${index}\n`
+  const child = Bun.spawn([process.execPath, "-e", `process.stdout.write(${JSON.stringify(expected)})`], { stdout: "pipe", stderr: "pipe" })
+  const [stdout, stderr, exitCode] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited])
+  assert.equal(exitCode, 0); assert.equal(stdout, expected)
+  short.push({ pid: child.pid, exitCode, stdout, stderr })
+}
+await fact("short-children.json", { occurrence, outcomes: short })
+const node = Bun.which("node")
+assert(node && path.isAbsolute(node), "Actual Node parent is required for surviving-grandchild qualification")
+const { ProcessSupervisor } = await import(source("src/shell/process-supervisor.ts"))
+const nodeReady = path.join(evidence, "actual-grandchild-node-ready.json")
+const nodeExit = path.join(evidence, "actual-grandchild-node-self-exit.json")
+const grandchildCode = `const fs=require('node:fs');const net=require('node:net');
+const server=net.createServer(s=>s.end('actual-owned-grandchild\\n'));
+process.on('exit',code=>fs.writeFileSync(${JSON.stringify(nodeExit)},JSON.stringify({pid:process.pid,code,observedAtUtc:new Date().toISOString()}),{flag:'wx'}));
+server.listen(${port + 1},'127.0.0.1',()=>{fs.writeFileSync(${JSON.stringify(nodeReady)},JSON.stringify({pid:process.pid,parentPID:process.ppid,port:${port + 1},occurrence:${JSON.stringify(occurrence)},observedAtUtc:new Date().toISOString()}),{flag:'wx'});process.stdout.write('grandchild-stdout-ready\\n');process.stderr.write('grandchild-stderr-ready\\n')});
+setInterval(()=>process.stdout.write('grandchild-live-output\\n'),100);`
+const parentCode = `const {spawn}=require('node:child_process');const fs=require('node:fs');
+const child=spawn(process.execPath,['-e',${JSON.stringify(grandchildCode)}],{stdio:'inherit',windowsHide:true});child.unref();
+const deadline=Date.now()+20000;const ready=${JSON.stringify(nodeReady)};
+const timer=setInterval(()=>{if(fs.existsSync(ready)){clearInterval(timer);process.stdout.write('actual-parent-exit\\n');process.exit(0)}if(Date.now()>deadline)process.exit(1)},20);`
+const parent = await ProcessSupervisor.spawnHostCommand({ executable: node,
+  args: ["-e", parentCode],
+  env: process.env, cwd: packageRoot, owner: occurrence, stdin: "ignore", terminateChildrenOnRootExit: false })
+parent.stdout?.pipe(process.stdout, { end: false }); parent.stderr?.pipe(process.stderr, { end: false })
+void parent.settled?.catch((error: unknown) => process.stderr.write(`Actual owned-tree parent settlement: ${String(error)}\n`))
+const parentOwner = physical.observedProcessOccurrence(parent.pid)
+assert(parentOwner, "Actual short-lived Node parent must retain its native identity")
+const parentDeadline = Date.now() + 20_000
+while (physical.observeRuntimeProcessOccurrence(parentOwner) === "exact_live") {
+  assert(Date.now() < parentDeadline, "Actual Node parent exit timed out"); await Bun.sleep(20)
+}
+const grandchildProcess = JSON.parse(await fs.readFile(nodeReady, "utf8"))
+const grandchildOwner = physical.observedProcessOccurrence(grandchildProcess.pid)
+assert(grandchildOwner, "Actual Node grandchild must retain its native identity")
+const grandchild = { ...grandchildProcess, owner: grandchildOwner }
+await fact("grandchild-ready.json", grandchild)
+assert.equal(physical.observeRuntimeProcessOccurrence(grandchild.owner), "exact_live")
+await fact("child-parent-exit.json", { owner: parentOwner, grandchildPID: grandchild.owner.pid, occurrence,
+  physicalObservation: "dead_or_reused", observedAtUtc: new Date().toISOString(),
+  boundary: "Real parent physical exit; original exit code remains owned by the eventual whole-tree terminal fact" })
+await fact("grandchild-after-parent-exit.json", { occurrence, parentPID: parent.pid, parentObservation: "dead_or_reused",
+  grandchild: grandchild.owner, grandchildObservation: "exact_live", observedAtUtc: new Date().toISOString() })
+const nested = await ProcessSupervisor.spawnHostCommand({ executable: process.execPath,
+  args: ["-e", "process.stdout.write('nested-native-stdout\\n');process.stderr.write('nested-native-stderr\\n');await Bun.sleep(300)"],
+  env: process.env, cwd: packageRoot, owner: occurrence, stdin: "ignore", terminateChildrenOnRootExit: true })
+const text = async (stream: NodeJS.ReadableStream | null) => {
+  assert(stream); const chunks: Buffer[] = []; for await (const chunk of stream) chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk); return Buffer.concat(chunks).toString()
+}
+const [stdout, stderr] = await Promise.all([text(nested.stdout), text(nested.stderr), nested.settled])
+const terminal = await nested.terminalFact
+assert.equal(stdout, "nested-native-stdout\n"); assert.equal(stderr, "nested-native-stderr\n"); assert.equal(terminal?.exitCode, 0)
+await fact("nested-native-settled.json", { occurrence, targetPID: nested.pid, stdout, stderr, terminal, authoritativeSettlement: "fulfilled" })
+await fact("grandchild-after-nested-settlement.json", { occurrence, owner: grandchild.owner,
+  observation: physical.observeRuntimeProcessOccurrence(grandchild.owner), observedAtUtc: new Date().toISOString() })
+const managedParent = physical.observedProcessOccurrence(process.ppid)
+assert(managedParent)
+process.argv = [process.execPath, path.join(packageRoot, "src/index.ts"), "serve", "--hostname", "127.0.0.1",
+  "--port", portText, "--project-dir", path.join(run, "project"), "--startup-receipt", path.join(run, "startup.json"),
+  "--startup-occurrence", occurrence, "--parent-pid", String(managedParent.pid),
+  "--parent-process-instance-id", managedParent.processInstanceID, "--log-level", "DEBUG"]
+await import(source("src/index.ts"))

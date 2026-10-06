@@ -1,0 +1,63 @@
+{
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "native-owned-21i-manual-join-58404b40-15f6-4c9c-a0ff-2a3ee52d8222",
+    "outcome": "settled",
+    "host": {
+      "pid": 73880,
+      "processInstanceID": "win32:639268805859439553",
+      "occurrenceID": "94ce138a-84c1-4591-a62c-9872da594eb9"
+    },
+    "target": {
+      "pid": 76204,
+      "processInstanceID": "win32:639268805870202012",
+      "occurrenceID": "de667184-9d45-43a5-be20-a068ac768866"
+    },
+    "observedAtUtc": "2026-10-06T10:49:56.68Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-06T10:49:58.3496321Z",
+  "occurrence": "native-owned-21i-manual-join-58404b40-15f6-4c9c-a0ff-2a3ee52d8222",
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\data\\auth.json"
+    },
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21i\\runtime\\data\\models.json"
+    }
+  ],
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 76204,
+        "processInstanceID": "win32:639268805870202012",
+        "occurrenceID": "de667184-9d45-43a5-be20-a068ac768866"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 73880,
+        "processInstanceID": "win32:639268805859439553",
+        "occurrenceID": "94ce138a-84c1-4591-a62c-9872da594eb9"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

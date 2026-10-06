@@ -1,0 +1,30 @@
+{
+  "occurrence": "native-owned-21b-failure-773859cf-9806-48be-867d-75f67df662a2",
+  "outcome": "ready",
+  "host": {
+    "pid": 55444,
+    "processInstanceID": "win32:639268798854637407",
+    "occurrenceID": "795f8fdf-d19e-46c6-93a1-fe843a77a842"
+  },
+  "parent": {
+    "pid": 40076,
+    "processInstanceID": "win32:639268798835172631",
+    "occurrenceID": "bd90a277-693c-4245-bf3f-b9371e6e8b96"
+  },
+  "target": {
+    "pid": 76652,
+    "processInstanceID": "win32:639268798862244431",
+    "occurrenceID": "28e81308-6c56-40e6-b5ab-a3cad54f951e"
+  },
+  "targetBirthAtMs": 1791283086224,
+  "observedAtUtc": "2026-10-06T10:38:06.278Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-owned-target-21.ts",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21b",
+    "17980",
+    "native-owned-21b-failure-773859cf-9806-48be-867d-75f67df662a2",
+    "serve"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

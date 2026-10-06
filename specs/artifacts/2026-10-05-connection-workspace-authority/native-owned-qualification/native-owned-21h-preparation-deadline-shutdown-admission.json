@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-06T10:50:07.5271580Z",
+  "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21",
+  "owner": {
+    "pid": 36096,
+    "processInstanceID": "win32:639268805869573307",
+    "occurrenceID": "74fd5e52-aa02-47d2-8be4-902061a7fb26"
+  },
+  "pageClosed": false,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXGWJ2k00q2K2u9Ewo"
+  }
+}

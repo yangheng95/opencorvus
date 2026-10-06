@@ -1,0 +1,53 @@
+{
+  "firstFailure": {
+    "pid": 2680,
+    "occurrence": "native-owned-21j-early-target-exit-567727b7-052f-4625-81be-be092df326f4",
+    "error": {
+      "name": "Error",
+      "message": "Explicit actual checker Target failure before serve"
+    },
+    "boundary": "Real deliberate no-Provider checker exception; no Task or product failure claim"
+  },
+  "nativeSettlement": {
+    "occurrence": "native-owned-21j-early-target-exit-567727b7-052f-4625-81be-be092df326f4",
+    "outcome": "settled",
+    "host": {
+      "pid": 66688,
+      "processInstanceID": "win32:639268807542626005",
+      "occurrenceID": "c35c63ee-e4cb-4044-941e-9016b3fd7129"
+    },
+    "target": {
+      "pid": 2680,
+      "processInstanceID": "win32:639268807550275376",
+      "occurrenceID": "ecef36b5-34bc-491b-adf0-95ab95597756"
+    },
+    "observedAtUtc": "2026-10-06T10:52:40.265Z",
+    "terminal": {
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "admission": {
+    "observedAtUtc": "2026-10-06T10:52:35.9300701Z",
+    "occurrence": "native-owned-21j-early-target-exit-567727b7-052f-4625-81be-be092df326f4",
+    "owner": {
+      "pid": 2680,
+      "processInstanceID": "win32:639268807550275376",
+      "occurrenceID": "ecef36b5-34bc-491b-adf0-95ab95597756"
+    },
+    "pageClosed": false,
+    "dispatch": false,
+    "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+    "reason": "Original Target live without listener; no public stop dispatched; await the same native physical settlement"
+  },
+  "pairedCleanupComplete": true,
+  "occurrence": "native-owned-21j-early-target-exit-567727b7-052f-4625-81be-be092df326f4",
+  "observedAtUtc": "2026-10-06T10:52:41.3012174Z",
+  "boundary": "Actual early exception and exit1 retained; no health, public shutdown, Task, Provider or UI pass",
+  "case": "early-target-exit",
+  "physicalCompletion": true
+}

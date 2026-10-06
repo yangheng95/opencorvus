@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-10-06T10:45:58.0801318Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21f",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21f\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21f\\project",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21f\\evidence",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\native-owned-qualification",
+  "evidencePrefix": "native-owned-21f-failure",
+  "occurrence": "native-owned-21f-failure-f48fc864-07f1-43cd-af47-f02fc76d77b4",
+  "port": 17980,
+  "owner": {
+    "processInstanceID": "win32:639268803579748585",
+    "ProcessId": 40380
+  },
+  "host": {
+    "pid": 21008,
+    "processInstanceID": "win32:639268803572144505",
+    "occurrenceID": "b78ff511-1f82-469a-87d7-94a321f65848"
+  },
+  "nativeTarget": {
+    "pid": 40380,
+    "processInstanceID": "win32:639268803579748585",
+    "occurrenceID": "dd458f61-1868-4285-9e8a-f5d950afa4f1"
+  },
+  "targetBirthAtMs": 1791283557974,
+  "qualification": "Actual no-Provider development serve; no Task/Session seeded, no copied authority"
+}

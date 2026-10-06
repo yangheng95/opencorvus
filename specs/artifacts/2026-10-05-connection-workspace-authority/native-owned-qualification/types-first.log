@@ -1,0 +1,14 @@
+.tmp-product-iteration/native-owned-target-21.ts(51,14): error TS2345: Argument of type '{ pid: number; exitCode: number; stdout: string; }' is not assignable to parameter of type 'never'.
+.tmp-product-iteration/native-owned-target-21.ts(65,106): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(array: WithImplicitCoercion<ArrayLike<number>>): Buffer<ArrayBuffer>', gave the following error.
+    Argument of type 'string | Buffer<ArrayBufferLike>' is not assignable to parameter of type 'WithImplicitCoercion<ArrayLike<number>>'.
+      Type 'string' is not assignable to type 'WithImplicitCoercion<ArrayLike<number>>'.
+  Overload 2 of 3, '(arrayBuffer: WithImplicitCoercion<ArrayBufferLike>, byteOffset?: number | undefined, length?: number | undefined): Buffer<ArrayBufferLike>', gave the following error.
+    Argument of type 'string | Buffer<ArrayBufferLike>' is not assignable to parameter of type 'WithImplicitCoercion<ArrayBufferLike>'.
+      Type 'string' is not assignable to type 'WithImplicitCoercion<ArrayBufferLike>'.
+  Overload 3 of 3, '(string: WithImplicitCoercion<string>, encoding?: BufferEncoding | undefined): Buffer<ArrayBuffer>', gave the following error.
+    Argument of type 'string | Buffer<ArrayBufferLike>' is not assignable to parameter of type 'WithImplicitCoercion<string>'.
+      Type 'Buffer<ArrayBufferLike>' is not assignable to type 'WithImplicitCoercion<string>'.
+        Type 'Buffer<ArrayBufferLike>' is not assignable to type '{ valueOf(): string; }'.
+          The types returned by 'valueOf()' are incompatible between these types.
+            Type 'Buffer<ArrayBufferLike>' is not assignable to type 'string'.

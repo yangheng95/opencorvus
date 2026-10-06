@@ -1,0 +1,28 @@
+{
+  "phase": "supervision-74264-1",
+  "occurrence": "native-owned-21g-failure-f1a7d628-9d5e-4574-b6c5-6990ab48dfc3",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "observedAtUtc": "2026-10-06T10:48:20.0050445Z",
+  "presence": [
+    {
+      "processID": 39748,
+      "processInstanceID": "win32:639268804929889587",
+      "state": "exact_live",
+      "originalOccurrencePresent": true
+    },
+    {
+      "processID": 72384,
+      "processInstanceID": "win32:639268804922186960",
+      "state": "exact_live",
+      "originalOccurrencePresent": true
+    }
+  ],
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17980,
+      "OwningProcess": 39748
+    }
+  ],
+  "nativeSettlement": null
+}

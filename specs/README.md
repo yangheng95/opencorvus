@@ -2543,3 +2543,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Real explorer and completed resource delivery](artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation-plan.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation/README.md).
 
 - [Immutable resource materialization](artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation-plan.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation/README.md): readonly cache reuse and genuine formal downloads, with failed timed acceptance and next publication audit explicitly retained.
+
+- [Native owned qualification21](artifacts/2026-10-05-connection-workspace-authority/native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.

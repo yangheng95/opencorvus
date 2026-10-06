@@ -1,0 +1,23 @@
+actual-parent-stderr-exit
+78 | while (physical.observeRuntimeProcessOccurrence(parentOwner) === "exact_live") {
+79 |   assert(Date.now() < parentDeadline, "Actual Node parent exit timed out"); await Bun.sleep(20)
+80 | }
+81 | const grandchild = { ...grandchildProcess, owner: grandchildOwner }
+82 | await fact("grandchild-ready.json", grandchild)
+83 | assert.equal(physical.observeRuntimeProcessOccurrence(grandchild.owner), "exact_live")
+            ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'dead_or_reused'
+- 'exact_live'
+
+ generatedMessage: true,
+     actual: "dead_or_reused",
+   expected: "exact_live",
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\native-owned-target-21.ts:83:8
+
+Bun v1.3.14 (Windows x64)

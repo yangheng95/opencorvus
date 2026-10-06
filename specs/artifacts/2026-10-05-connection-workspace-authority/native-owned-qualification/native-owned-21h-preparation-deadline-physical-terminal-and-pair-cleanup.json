@@ -1,0 +1,63 @@
+{
+  "observedAtUtc": "2026-10-06T10:50:09.1912106Z",
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21h\\runtime\\data\\auth.json"
+    },
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\native-owned-21h\\runtime\\data\\models.json"
+    }
+  ],
+  "chain": [
+    {
+      "expected": {
+        "pid": 36096,
+        "processInstanceID": "win32:639268805869573307",
+        "occurrenceID": "74fd5e52-aa02-47d2-8be4-902061a7fb26"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 6316,
+        "processInstanceID": "win32:639268805858798951",
+        "occurrenceID": "7c9bbd68-0a1d-4c94-88af-aeff36c922d5"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21",
+    "outcome": "settled",
+    "host": {
+      "pid": 6316,
+      "processInstanceID": "win32:639268805858798951",
+      "occurrenceID": "7c9bbd68-0a1d-4c94-88af-aeff36c922d5"
+    },
+    "target": {
+      "pid": 36096,
+      "processInstanceID": "win32:639268805869573307",
+      "occurrenceID": "74fd5e52-aa02-47d2-8be4-902061a7fb26"
+    },
+    "observedAtUtc": "2026-10-06T10:50:07.767Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "occurrence": "native-owned-21h-preparation-deadline-65012bc1-dfaf-420a-9d57-74a350502f21"
+}

@@ -1,0 +1,26 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "../packages/opencorvus/node_modules/@types/bun"
+    ],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "../packages/opencorvus/src/**/*.ts"
+  ],
+  "files": [
+    "../.tmp-product-iteration/live-sol-cli-owned.ts",
+    "../.tmp-product-iteration/native-owned-target-21.ts"
+  ],
+  "exclude": [
+    "../packages/opencorvus/src/skill/builtin/**/*",
+    "../packages/opencorvus/dist/**/*"
+  ]
+}
