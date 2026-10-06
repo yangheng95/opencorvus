@@ -1,0 +1,46 @@
+[
+  {
+    "name": "engine_task",
+    "sql": "CREATE TABLE \"engine_task\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"session_id\" text,\n  \"request_id\" text,\n  \"global_creation_allocation_id\" text,\n  \"source\" text NOT NULL DEFAULT 'api',\n  \"product_pillar\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"request\" text NOT NULL,\n  \"attachments\" text,\n  \"system_artifacts\" text NOT NULL DEFAULT '[]',\n  \"priority\" text NOT NULL DEFAULT 'normal',\n  \"budget\" text,\n  \"metadata\" text,\n  \"time_archived\" integer,\n  \"time_pinned\" integer,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"session_id\") REFERENCES \"session\"(\"id\") ON DELETE SET NULL,\n  CONSTRAINT \"engine_task_excludes_git_projection\" CHECK (json_type(\"metadata\", '$.git') IS NULL)\n)"
+  },
+  {
+    "name": "engine_task_creation_contract",
+    "sql": "CREATE TABLE \"engine_task_creation_contract\" (\n  \"task_id\" text PRIMARY KEY NOT NULL,\n  \"fingerprint\" text NOT NULL,\n  \"contract\" text NOT NULL,\n  \"creator_tool_part_id\" text,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"task_id\") REFERENCES \"engine_task\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"creator_tool_part_id\") REFERENCES \"tool_part_request\"(\"id\") ON DELETE RESTRICT,\n  CONSTRAINT \"engine_task_creation_contract_fingerprint_shape\" CHECK (length(\"fingerprint\") = 64\n          AND json_type(\"contract\") = 'object'\n          AND json_extract(\"contract\", '$.protocol') = 'task-creation-contract-v2'\n          AND json_type(\"contract\", '$.request') = 'object'\n          AND json_type(\"contract\", '$.resolved') = 'object'\n          AND \"creator_tool_part_id\" IS json_extract(\"contract\", '$.request.input.creator.tool_part_id')\n          AND \"creator_tool_part_id\" IS json_extract(\"contract\", '$.resolved.creator.tool_part_id'))\n)"
+  },
+  {
+    "name": "engine_task_root_ingress",
+    "sql": "CREATE TABLE \"engine_task_root_ingress\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"task_id\" text NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"execution_epoch\" integer NOT NULL,\n  \"sequence\" integer NOT NULL,\n  \"source\" text NOT NULL,\n  \"source_id\" text NOT NULL,\n  \"inline_payload\" text,\n  \"policy_id\" text NOT NULL,\n  \"time_accepted\" integer NOT NULL,\n  FOREIGN KEY (\"task_id\") REFERENCES \"engine_task\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"policy_id\") REFERENCES \"engine_task_root_ingress_policy\"(\"id\") ON DELETE RESTRICT\n)"
+  },
+  {
+    "name": "engine_task_root_ingress_policy",
+    "sql": "CREATE TABLE \"engine_task_root_ingress_policy\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"semantic_turn_limit\" integer NOT NULL,\n  \"activation_limit\" integer NOT NULL,\n  \"absolute_deadline\" integer,\n  \"time_created\" integer NOT NULL\n)"
+  },
+  {
+    "name": "engine_task_wait_registration",
+    "sql": "CREATE TABLE \"engine_task_wait_registration\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"task_id\" text NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"execution_epoch\" integer NOT NULL,\n  \"due_at\" integer NOT NULL,\n  \"reason\" text NOT NULL,\n  \"tool_part_id\" text NOT NULL,\n  \"creator_ingress_id\" text NOT NULL,\n  \"creator_activation_id\" text NOT NULL,\n  \"input_digest\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"task_id\") REFERENCES \"engine_task\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"creator_ingress_id\") REFERENCES \"engine_task_root_ingress\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "engine_task_wait_settlement",
+    "sql": "CREATE TABLE \"engine_task_wait_settlement\" (\n  \"wait_id\" text PRIMARY KEY NOT NULL,\n  \"ingress_id\" text NOT NULL,\n  \"disposition\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"wait_id\") REFERENCES \"engine_task_wait_registration\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"ingress_id\") REFERENCES \"engine_task_root_ingress\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "protocol_delivery_receipt",
+    "sql": "CREATE TABLE \"protocol_delivery_receipt\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"inbox_id\" text NOT NULL,\n  \"receipt\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"inbox_id\") REFERENCES \"protocol_inbox\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "protocol_event",
+    "sql": "CREATE TABLE \"protocol_event\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"kind\" text NOT NULL,\n  \"type\" text NOT NULL,\n  \"aggregate_type\" text NOT NULL,\n  \"aggregate_id\" text NOT NULL,\n  \"project_id\" text,\n  \"task_id\" text,\n  \"session_id\" text,\n  \"interaction_id\" text,\n  \"stream_id\" text,\n  \"source\" text NOT NULL,\n  \"target\" text,\n  \"causation_id\" text,\n  \"correlation_id\" text,\n  \"reply_to\" text,\n  \"seq\" integer NOT NULL,\n  \"deadline_ms\" integer,\n  \"emitted_at\" integer NOT NULL,\n  \"payload\" text,\n  CONSTRAINT \"protocol_event_task_identity_shape\" CHECK (\"aggregate_type\" <> 'task' OR \"task_id\" IS NULL),\n  CONSTRAINT \"protocol_event_session_identity_shape\" CHECK (\"aggregate_type\" <> 'session' OR \"session_id\" IS NULL),\n  CONSTRAINT \"protocol_event_payload_envelope_shape\" CHECK (\n      json_type(\"payload\", '$.taskID') IS NULL\n      AND json_type(\"payload\", '$.sessionID') IS NULL\n      AND json_type(\"payload\", '$.interactionID') IS NULL\n      AND json_type(\"payload\", '$.orderKey') IS NULL\n      AND (\"type\" <> 'task.updated' OR json_type(\"payload\", '$.status') IS NULL)\n      AND (\"type\" NOT IN ('task.completed','task.failed','task.cancelled') OR json_type(\"payload\", '$.timeCompleted') IS NULL)\n    )\n)"
+  },
+  {
+    "name": "protocol_inbox",
+    "sql": "CREATE TABLE \"protocol_inbox\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"envelope_id\" text NOT NULL,\n  \"actor\" text NOT NULL,\n  \"actor_id\" text NOT NULL,\n  \"visible_at\" integer NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"envelope_id\") REFERENCES \"protocol_event\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "session_prompt_owner",
+    "sql": "CREATE TABLE \"session_prompt_owner\" (\n  \"session_id\" text PRIMARY KEY NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"directory\" text NOT NULL,\n  \"generation\" text NOT NULL,\n  \"owner_pid\" integer NOT NULL,\n  \"owner_process_instance_id\" text NOT NULL,\n  \"owner_occurrence_id\" text NOT NULL,\n  \"time_acquired\" integer NOT NULL,\n  FOREIGN KEY (\"session_id\") REFERENCES \"session\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "task_plan",
+    "sql": "CREATE TABLE \"task_plan\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"session_id\" text NOT NULL,\n  \"parent_id\" text,\n  \"goal\" text NOT NULL,\n  \"status\" text NOT NULL DEFAULT 'pending',\n  \"priority\" integer NOT NULL DEFAULT 0,\n  \"notes\" text,\n  \"progress_pct\" integer NOT NULL DEFAULT 0,\n  \"time_created\" integer NOT NULL,\n  \"time_updated\" integer NOT NULL,\n  FOREIGN KEY (\"session_id\") REFERENCES \"session\"(\"id\") ON DELETE CASCADE\n)"
+  }
+]

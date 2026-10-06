@@ -1,0 +1,49 @@
+{
+  "boundary": "Independent native physical/listener/copied-pair/source metadata facts; not override of failed timing checker",
+  "page": {
+    "tab": "3",
+    "closed": true,
+    "browser": "9",
+    "boundary": "Own22 tab successfully closed after real screenshot/native download; original auto-stop admission PageClosed=false is preserved"
+  },
+  "host": {
+    "owner": {
+      "pid": 46032,
+      "processInstanceID": "win32:639268812621515363",
+      "occurrenceID": "75b0162a-75ab-4eef-b73b-2988fd223d7f"
+    },
+    "state": "dead_or_reused"
+  },
+  "sourceMetadata": [
+    {
+      "modifiedUtc": "2026-10-04T15:48:55.8607343Z",
+      "bytes": 2147,
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json"
+    },
+    {
+      "modifiedUtc": "2026-10-04T15:48:10.1379969Z",
+      "bytes": 9155406,
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json"
+    }
+  ],
+  "listeners": [],
+  "target": {
+    "owner": {
+      "pid": 74872,
+      "processInstanceID": "win32:639268812629326293",
+      "occurrenceID": "48a9d5c2-a365-4978-9a15-29d8e490f4c7"
+    },
+    "state": "dead_or_reused"
+  },
+  "copiedPair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "observedAtUtc": "2026-10-06T11:25:12.1608761Z"
+}

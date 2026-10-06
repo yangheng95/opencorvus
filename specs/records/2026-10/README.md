@@ -103,3 +103,5 @@ Actual19a/b/c now qualify real first-failure/short-preparation/competing-join cl
 Actual20 fails in private incomplete-CIM observation and correctly stops the recorded service/pair; missing candidate ancestry and real UI/publication/download remain unqualified. The binding Recall preserves facts and defines the next dynamic-observation repair boundary.
 
 - [Native owned qualification21](../../artifacts/2026-10-05-connection-workspace-authority/native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.
+
+- [Post-native complete-read acceptance22](../../artifacts/2026-10-05-connection-workspace-authority/post-native-complete-read-acceptance-plan.md): a fresh real streamed Sol Task and manual formal download after qualified production native ownership21; old20 remains unchanged.

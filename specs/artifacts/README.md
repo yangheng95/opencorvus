@@ -108,3 +108,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Expanded Tool input/output detail boundary review](2026-10-05-connection-workspace-authority/root-review-tool-detail-label.md): actual saved Read screenshot and independent request/outcome contract analysis; source-only minimal label recommendation, implementation and next real visual qualification pending Root.
 
 - [Native owned qualification21](2026-10-05-connection-workspace-authority/native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.
+
+- [Post-native complete-read acceptance22](2026-10-05-connection-workspace-authority/post-native-complete-read-acceptance-plan.md): a fresh real streamed Sol Task and manual formal download after qualified production native ownership21; old20 remains unchanged.

@@ -204,3 +204,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Immutable resource materialization plan](resource-materialization-implementation-plan.md) and [evidence](resource-materialization-implementation/README.md): native no-replace cache publication, positive backend and genuine repeated-read/download qualification; failed timing and next complete-read publication audit retained.
 
 - [Native owned qualification21](native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.
+
+- [Post-native complete-read acceptance22](post-native-complete-read-acceptance-plan.md): a fresh real streamed Sol Task and manual formal download after qualified production native ownership21; old20 remains unchanged.

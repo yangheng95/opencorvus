@@ -1,0 +1,86 @@
+{
+  "publishedVerification": [
+    {
+      "sessionID": "ses_hbg7Uu489PC8e2Kixkm9",
+      "readRefs": [
+        "ar_XqzGGy_M1CzMM0HU",
+        "ar_3fd19-G9x-yFRZmg",
+        "ar_rWF1lruopn6e_BQd",
+        "ar_r3t8Z_BYHOFw614C",
+        "ar_GuOw3xNteYxdIjWP"
+      ],
+      "output": {
+        "locator": {
+          "source": "engine_artifact",
+          "artifact_id": "art_hnhrPEeByQMfnR8Fxk1V",
+          "catalog_revision": 14,
+          "expected_sha256": "bbef405451166b753382c6ed3c84d1024e4f7570377e97d35e9d5efb9d627f00"
+        },
+        "sha256": "bbef405451166b753382c6ed3c84d1024e4f7570377e97d35e9d5efb9d627f00"
+      },
+      "status": "completed",
+      "partID": "prt_g0VXGbPPd00al3Rl8Wot"
+    }
+  ],
+  "materialized": [
+    {
+      "partID": "prt_g0VXGbC2D00gqWa4ZaR5",
+      "sessionID": "ses_hbg7Uu489PC8e2Kixkm9",
+      "status": "completed",
+      "readRef": "ar_r3t8Z_BYHOFw614C",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hFP663IUbu78VRMy2URI",
+            "task_id": "tsk_g00VXGZn3C00EB2OvDZa",
+            "snapshot_id": "07e78ffb-53cb-5307-a006-7d9912bf1c3a",
+            "manifest_sha256": "367aa6b3211b5587b141b4f6483084fc47f4de26e1b606fd5bc90354097f8225"
+          },
+          "tree": "resources",
+          "path": "hello.txt",
+          "media_type": "text/plain",
+          "bytes": 26,
+          "sha256": "91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e"
+        }
+      },
+      "complete": true,
+      "byteStart": 0,
+      "byteEnd": 26,
+      "totalBytes": 26,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-22\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXGZn3C00EB2OvDZa\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt"
+    },
+    {
+      "partID": "prt_g0VXGbDXb00Qx9hzPflJ",
+      "sessionID": "ses_hbg7Uu489PC8e2Kixkm9",
+      "status": "completed",
+      "readRef": "ar_GuOw3xNteYxdIjWP",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hFP663IUbu78VRMy2URI",
+            "task_id": "tsk_g00VXGZn3C00EB2OvDZa",
+            "snapshot_id": "07e78ffb-53cb-5307-a006-7d9912bf1c3a",
+            "manifest_sha256": "367aa6b3211b5587b141b4f6483084fc47f4de26e1b606fd5bc90354097f8225"
+          },
+          "tree": "resources",
+          "path": "hello.txt",
+          "media_type": "text/plain",
+          "bytes": 26,
+          "sha256": "91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e"
+        }
+      },
+      "complete": true,
+      "byteStart": 0,
+      "byteEnd": 26,
+      "totalBytes": 26,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-22\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXGZn3C00EB2OvDZa\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt"
+    }
+  ],
+  "taskID": "tsk_g00VXGZn3C00EB2OvDZa",
+  "boundary": "Actual public Tool request/outcome and accepted source refs; not narrative, UI, terminal Task or timing acceptance",
+  "publicTranscript": "actual-22-mid-transcript.json"
+}
