@@ -222,3 +222,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Exact Provider response reader observation34](response-reader-observation-plan.md):38 positive tests and genuine streamed Sol Task/manual UI/whole native cleanup qualified; exact byte/chunk/EOF facts through existing reader, formal caller correlation unknown.
 
 - [Reference keyboard scroll35/36/37](reference-scroll-plan.md): actual37 Reference/Model/Mention/Scheduled keyboard and scroll fixes qualified; original35/36 failures retained, genuine FileChanges row and broader matrix unqualified.
+
+- [Genuine file row acceptance38](file-row-live-plan.md): actual streamed Sol26-byte publication, two complete materialized reads, formal completion/download and terminal file-row keys qualified within original bounds; active-update focus/count findings remain.

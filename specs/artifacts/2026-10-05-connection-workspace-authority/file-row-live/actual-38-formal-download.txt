@@ -1,0 +1,35 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 256-259, 322-346
++									374 container
++										375 text orchestrator
++										376 text 1m 12s
++										377 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										378 container
++											379 button (collapsed) Secondary Actions: Expand, Description: artifact_select · Selected Artifact source (用于最终验收：独立验证报告确认同一发布资源两次完整物化读取、两次实际只读字节检查、使用两次真实读取凭据发布，并保留查询范围及Git换行警告。)
++												380 text artifact_select
++												381 text Selected Artifact source (用于最终验收：独立验证报告确认同一发布资源两次完整物化读取、两次实际只读字节检查、使用两次真实读取凭据发布，并保留查询范围及Git换行警告。)
++												382 image
++											383 text 独立验证已通过。我核对了两次完整物化读取的回执、两次实际只读文件检查，以及验证报告的发布参数：它们针对同一个已发布资源，两次均确认26字节、UTF-8无 BOM、无 CR，且只有末尾一个 LF；报告也确实引用了这两次读取凭据。 现在将真实的 
++											384 link Description: hello.txt, Value: localhost:18004/ui/#
++											385 text  文件资源放入本任务的交付区域并结束任务。查询范围限制和 Git 换行警告会保留在记录中；没有声称已测试下载界面或您已下载文件。
++											386 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++												387 text manage_task
++												388 text action=complete_task
++												389 image
++											390 container 1 file
++												391 container
++													392 text Agent delivery 1 file 文件交付与变更行验收38
++												393 button (collapsed) hello.txt producer · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++													394 text hello.txt
++													395 text producer
++													396 text  · 
++													397 text 26 B
++													398 text Preview
++												399 button Copy filename
++												400 button Description: Download: hello.txt, Help: Download
++												401 button (collapsed) Inspect delivery records (1), Secondary Actions: Expand
++										402 button Copy message
++										403 pop up button (collapsed) Description: View model usage for this turn: 378K Token, Secondary Actions: Expand
++										404 text Oct 7, 02:04 AM
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18004/ui/

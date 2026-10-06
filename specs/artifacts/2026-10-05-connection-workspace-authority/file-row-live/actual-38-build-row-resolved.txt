@@ -1,0 +1,16 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 193-194, 196-197
+~							34 container Description: Running · 5m 6s, ID: taskStatus
+~								134 text 5m 6s
+~												191 text 我会先核对原始要求、项目查询与发布的实际证据，再对同一不可变资源连续进行两次完整物化读取和只读字节检查，最后发布带有两次真实读取凭据的独立验证报告。 artifact_search Artifact queries (2)
+~										192 text producer hello.txt Added + 1 - 0 +
++										193 text 1
++										194 text Hello from a formal Task.
+~										195 container producer - ses_htwn1k0C8NbgwGB3wzGD
++											196 text Tool edits · producer 1
++										197 Help: hello.txt, Value: hello.txt Added, ID: change-row-0
+~										198 container producer - ses_htwn1k0C8NbgwGB3wzGD
++											199 text Build comparison · producer 584c888f2378 1
++										200 (selected) Help: hello.txt, Value: hello.txt Added, ID: change-row-1
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18004/ui/

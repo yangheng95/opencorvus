@@ -1,0 +1,15 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 118-120, 133-135
+~							34 container Description: Running · 4m 26s, ID: taskStatus
+~								36 text 4m 26s
+~										87 text 21s
++										133 text producer hello.txt Added + 1 - 0 +
++										134 text 1
++										135 text Hello from a formal Task.
+~											137 text Tool edits · producer 1
+~										138 (selected) Help: hello.txt, Value: hello.txt Added, ID: change-row-0
++										139 container producer - ses_htwn1k0C8NbgwGB3wzGD
++											140 text Build comparison · producer 584c888f2378 1
++										141 Help: hello.txt, Value: hello.txt Added, ID: change-row-1
+The focused UI element is 3 button (collapsed) Description: Show sidebar, Secondary Actions: Expand

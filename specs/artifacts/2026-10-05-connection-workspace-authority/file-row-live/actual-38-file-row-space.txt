@@ -1,0 +1,6 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~								179 container Description: Running · 3m 46s, ID: taskStatus
+~									181 text 3m 46s
+~													307 text bash node -e 'const fs = require("node:fs"); const assert = require("node:assert/strict"); const actual = fs.readFileSync(... 提交后再次核验，实际文件仍为精确的 26 字节，末字节为 LF，没有 BOM 或 CR。Git 曾提示未来重新检出可能转换换行，但本次实际文件未受影响；现在将这些已核验的真实字节发布为 Task 文件资源。 artifact_snapshot Published Artifact snapshot (1 files) artifact_publish {"artifact_type":"task-resource-qa/development-report","schema_version":1,"label":"hello.txt真实文件资源产出记录","source_read_...
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18004/ui/

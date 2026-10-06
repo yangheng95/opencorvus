@@ -1,0 +1,53 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 262-277, 374-402
++									406 container
++										407 text orchestrator
++										408 text 1m 12s
++										409 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										410 container
++											411 button (collapsed) Secondary Actions: Expand, Description: artifact_select · Selected Artifact source (用于最终验收：独立验证报告确认同一发布资源两次完整物化读取、两次实际只读字节检查、使用两次真实读取凭据发布，并保留查询范围及Git换行警告。)
++												412 text artifact_select
++												413 text Selected Artifact source (用于最终验收：独立验证报告确认同一发布资源两次完整物化读取、两次实际只读字节检查、使用两次真实读取凭据发布，并保留查询范围及Git换行警告。)
++												414 image
++											415 text 独立验证已通过。我核对了两次完整物化读取的回执、两次实际只读文件检查，以及验证报告的发布参数：它们针对同一个已发布资源，两次均确认26字节、UTF-8无 BOM、无 CR，且只有末尾一个 LF；报告也确实引用了这两次读取凭据。 现在将真实的 
++											416 link Description: hello.txt, Value: localhost:18004/ui/#
++											417 text  文件资源放入本任务的交付区域并结束任务。查询范围限制和 Git 换行警告会保留在记录中；没有声称已测试下载界面或您已下载文件。
++											418 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++												419 text manage_task
++												420 text action=complete_task
++												421 image
++											422 container 1 file
++												423 container
++													424 text Agent delivery 1 file 文件交付与变更行验收38
++												425 button (expanded) hello.txt producer · 26 B Preview, Help: hello.txt, Secondary Actions: Collapse
++													426 text hello.txt
++													427 text producer
++													428 text  · 
++													429 text 26 B
++													430 text Preview
++												431 button Copy filename
++												432 button Description: Download: hello.txt, Help: Download
++												433 text text/plain 26 bytes
++												434 container 91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e
++													435 text sha256: 91d5d1acf4e0
++												436 container hello.txt
++													437 container
++														438 text Code
++														439 heading hello.txt, Value: 3
++															440 text hello.txt
++														441 button Copy text
++														442 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-11237-trigger, Secondary Actions: Expand
++														443 button Open hello.txt in artifact workspace
++													444 text hello.txt
++													445 container
++														446 text entry area Description: hello.txt, Value: Hello from a formal Task.
+
+
++															447 text Hello from a formal Task.
++													448 text Plain text
++												449 button (collapsed) Inspect delivery records (1), Secondary Actions: Expand
++										450 button Copy message
++										451 pop up button (collapsed) Description: View model usage for this turn: 378K Token, Secondary Actions: Expand
++										452 text Oct 7, 02:04 AM
+The focused UI element is 425 button (expanded) hello.txt producer · 26 B Preview, Help: hello.txt, Secondary Actions: Collapse

@@ -1,0 +1,6 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~							34 container Description: Running · 5m 56s, ID: taskStatus
+~								134 text 5m 56s
+~												225 text artifact_read Artifacts (1) bash node -e 'const fs=require("node:fs"),a=require("node:assert/strict"); const p="C:/Users/hengu/.codex/opencorvus-produ... artifact_read Artifacts (1) bash
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18004/ui/

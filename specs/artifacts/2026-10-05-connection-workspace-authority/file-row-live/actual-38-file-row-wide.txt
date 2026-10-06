@@ -1,0 +1,32 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 227-232, 248-262, 307-313
+~								179 container Description: Running · 4m 3s, ID: taskStatus
+~									181 text 4m 3s
++										307 container
++											308 text orchestrator
++											309 text 44s
++											310 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++											311 container
++												312 button (collapsed) Description: read_agent_message, Secondary Actions: Expand
++													313 text read_agent_message
++													314 image
++												315 text 项目查询已完成：列表返回当前这一个任务，报告查询取得了它的当前摘要、看板和计划信息，未返回错误。这不是完整历史报告枚举；该范围限制已保留在观察报告中。接下来制作并发布 
++												316 link Description: hello.txt, Value: localhost:18004/ui/#
++												317 text ，再检查发布后的不可变资源。
++												318 button (collapsed) Description: dispatch_agent · target=producer, Secondary Actions: Expand
++													319 text dispatch_agent
++													320 text target=producer
++													321 image
++											322 button Copy message
++											323 pop up button (collapsed) Description: View model usage for this turn: 266K Token, Secondary Actions: Expand
++											324 text Oct 7, 01:58 AM
++													325 text 提交后再次核验，实际文件仍为精确的 26 字节，末字节为 LF，没有 BOM 或 CR。Git 曾提示未来重新检出可能转换换行，但本次实际文件未受影响；现在将这些已核验的真实字节发布为 Task 文件资源。 artifact_snapshot Published Artifact snapshot (1 files) artifact_publish Published task-resource-qa/development-report 已制作并发布真实的 `hello.txt` 文件资源，产出记录已绑定该资源。 - 实际内容：`Hello from a formal Task.\n` - 已直接核验完整字节：**26 字节，UTF-8，无 BOM、无 CR，仅末尾一个 LF**；提交后复核仍通过。 - 已发布资源：`resources/hello.txt` - 资源快照身份：`95e...
++										326 pop up button (collapsed) Description: Composer settings, Secondary Actions: Expand
++											327 text producer hello.txt Added + 1 - 0 +
++											328 text 1
++											329 text Hello from a formal Task.
++											330 container producer - ses_htwn1k0C8NbgwGB3wzGD
++												331 text Tool edits · producer 1
++											332 (selected) Help: hello.txt, Value: hello.txt Added, ID: change-row-0
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18004/ui/

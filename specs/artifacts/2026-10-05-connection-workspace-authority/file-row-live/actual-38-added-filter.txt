@@ -1,0 +1,47 @@
+Browser tab: 19, Title: "OpenCorvus", URL: "http://localhost:18004/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 44-62, 133-141
+~							34 container Description: Running · 4m 47s, ID: taskStatus
+~								36 text 4m 47s
++									133 container
++										134 text User
++										135 text 请先真实查询当前项目的 Task 列表和报告，再制作并发布可下载的 hello.txt。文件内容只有 Hello from a formal Task. 后接一个 LF 换行，使用 UTF-8 编码、没有 BOM，共26字节。请由独立参与者连续两次完整物化读取同一个已发布资源，从实际只读文件检查内容和字节数，再使用这两次真实完整读取的 source_read_refs 发布独立验证报告。完成后，通过本正式 Task 的交付区域提供真实文件资源，并结束 Task。请保留真实失败和未完成事项；无需访问网站或启动其他服务。
++									136 container
++										137 text orchestrator
++										138 text 11s
++										139 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										140 text 我会先真实查询当前项目的任务列表和报告，再制作文件。发布后，由独立验证者连续两次完整物化读取同一资源，检查实际文件的内容、编码和字节数，并发布验证报告；通过验证后再交付文件并结束任务。
++										141 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++											142 text dispatch_agent
++											143 text target=mission
++											144 image
++									145 container Sub-agent progress
++										146 container
++											147 button Open the full mission conversation
++											148 text mission
++											149 container mission activity
++												150 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												151 text read_agent_message Task participant evidence 已成功查询到当前项目的 1 个任务，并取得该任务的状态摘要、看板和计划信息：任务仍在执行，暂无计划 Goal 或规划 Artifact，待处理交互数为 0。调度前的根参与者证据未列出任何工具调用；接下来将发布本次真实查询的观察报告，明确这不是文件交付验收，也不代表任务已完成。 artifact_publish Published task-resource-qa/project-observation-report 已完成本步骤的只读观察，并发布观察报告。 ### 实际查询及结果 1. **当前项目 Task 列表：查询成功** - 工具：`panel_query_task` - 实际参数：`{}` - 返回 1 个任务： - ID：`tsk_g00VXIFzVg00M7Ze8eKS` - 名称：`文件交付与变更行验收38` - 状态：`active` 2. **...
+~										87 text 42s
++										152 button (collapsed) Description: artifact_select · Selected Artifact source (确认发布的hello.txt完整文本为指定内容后接LF，共26字节；后续独立验证仍须从两次物化只读文件检查。), Secondary Actions: Expand
++											153 text artifact_select
++											154 text Selected Artifact source (确认发布的hello.txt完整文本为指定内容后接LF，共26字节；后续独立验证仍须从两次物化只读文件检查。)
++											155 image
++										156 container
++											157 link Description: hello.txt, Value: localhost:18004/ui/#
++											158 text  已发布，我也完整读取了发布资源：内容为指定文本加末尾 LF，共26字节。制作记录保留了 Git 对未来检出的换行转换警告；本次已发布的快照符合要求。现在由独立验证者连续两次物化读取同一资源，逐次检查实际只读文件，并用两次读取凭据发布验证报告。
++										159 button (collapsed) Description: dispatch_agent, Secondary Actions: Expand
++											160 text dispatch_agent
++											161 text 1 running
++										162 text producer hello.txt Added + 1 - 0 +
++										163 text 1
++										164 text Hello from a formal Task.
+~										124 checkbox All, Value: 0, ID: group-cl-1572-item-cl-1573
+~										127 checkbox Added, Value: 1, ID: group-cl-1572-item-cl-1576
++										165 container producer - ses_htwn1k0C8NbgwGB3wzGD
++											166 text Tool edits · producer 1
++										167 (selected) Help: hello.txt, Value: hello.txt Added, ID: change-row-0
++										168 container producer - ses_htwn1k0C8NbgwGB3wzGD
++											169 text Build comparison · producer 584c888f2378 1
++										170 Help: hello.txt, Value: hello.txt Added, ID: change-row-1
+The focused UI element is 127 checkbox Added, Value: 1, ID: group-cl-1572-item-cl-1576
