@@ -1,0 +1,29 @@
+{
+  "observedAtUtc": "2026-10-06T03:18:23.5710721Z",
+  "uiStatus": 200,
+  "finalUri": "http://127.0.0.1:17963/ui/",
+  "assets": [
+    {
+      "source": "./assets/main-DJB4YffB.js",
+      "url": "http://127.0.0.1:17963/ui/assets/main-DJB4YffB.js",
+      "status": 200,
+      "length": 1655632
+    },
+    {
+      "source": "./assets/main-b6JpMtFG.css",
+      "url": "http://127.0.0.1:17963/ui/assets/main-b6JpMtFG.css",
+      "status": 200,
+      "length": 535014
+    }
+  ],
+  "authority": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ]
+}

@@ -59,3 +59,7 @@ The next bounded Task outcome/context plan uses genuine failed07 history for vis
 The authority record also indexes the sidebar pointer coordinate repair discovered in actual08, using the actual outer shell width and existing pane bounds/persistence with owned09 manual acceptance pending.
 
 Actual09 now qualifies delta/reverse/no-motion, keyboard boundaries, collapse/reopen and nondefault persisted reload through Root-viewed images; whole owned17962 chain settles and original history remains. Settings geometry/provenance candidates continue separately.
+
+The authority record indexes the next Settings geometry before investigation after pushed e867e838; stable untouched current value and live scale behavior require actual qualification before production admission.
+
+Before10 subsequently proves the stable/current-scale failures; actual after10 qualifies current230/105% bounds and steps, pointer/reopen/default restoration with full17963/17964 physical cleanup and retained history. Source/type/build reviews support this UI delivery; further provenance/usability matrices remain open.

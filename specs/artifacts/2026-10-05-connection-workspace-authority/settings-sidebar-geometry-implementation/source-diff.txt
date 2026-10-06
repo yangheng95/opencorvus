@@ -1,0 +1,154 @@
+diff --git a/packages/overlay/src/components/ConfigDialogHost.tsx b/packages/overlay/src/components/ConfigDialogHost.tsx
+index f94bb941..3f59d81a 100644
+--- a/packages/overlay/src/components/ConfigDialogHost.tsx
++++ b/packages/overlay/src/components/ConfigDialogHost.tsx
+@@ -1,4 +1,4 @@
+-import { For, Show, createEffect, createMemo, lazy, on, onCleanup } from "solid-js"
++import { For, Show, createEffect, createMemo, createSignal, lazy, on, onCleanup } from "solid-js"
+ import type { JSX } from "solid-js"
+ // Settings panels are the largest components in the app and none of them render
+ // until the operator opens this page and selects their tab, so they load on
+@@ -50,6 +50,7 @@ import {
+ import { OVERLAY_VERSION } from "../utils/version"
+ import brandLogoUrl from "../opencorvus-logo-dark.svg"
+ import { currentUIScale } from "../utils/layout-tokens"
++import { createAnimationFrameScheduler } from "../utils/animation-frame"
+ import { Icon, type IconName } from "./ui/Icon"
+ import {
+   clampConfigSidebarWidth,
+@@ -274,7 +275,38 @@ export interface ConfigDialogHostProps {
+ }
+ 
+ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+-  const resizeBounds = createMemo(() => configSidebarResizeBounds(currentUIScale()))
++  const [sidebarElement, setSidebarElement] = createSignal<HTMLElement>()
++  const [sidebarGeometry, setSidebarGeometry] = createSignal<{ width?: number; scale: number }>({
++    scale: currentUIScale(),
++  })
++  createEffect(() => {
++    const sidebar = sidebarElement()
++    if (!dialogStore.config.open || !sidebar) return
++    setSidebarGeometry({ scale: currentUIScale() })
++    let active = true
++    const measureOnFrame = createAnimationFrameScheduler(() => {
++      if (!active || !dialogStore.config.open || sidebarElement() !== sidebar || !sidebar.isConnected) return
++      const width = sidebar.getBoundingClientRect().width
++      if (!Number.isFinite(width) || width <= 0) return
++      const scale = currentUIScale()
++      setSidebarGeometry((previous) =>
++        previous.width === width && previous.scale === scale ? previous : { width, scale },
++      )
++    })
++    const sizeObserver = new ResizeObserver(measureOnFrame.schedule)
++    sizeObserver.observe(sidebar, { box: "border-box" })
++    const scaleObserver = new MutationObserver(measureOnFrame.schedule)
++    scaleObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["style"] })
++    measureOnFrame.schedule()
++    onCleanup(() => {
++      active = false
++      sizeObserver.disconnect()
++      scaleObserver.disconnect()
++      measureOnFrame.cancel()
++      setSidebarGeometry({ scale: currentUIScale() })
++    })
++  })
++  const resizeBounds = createMemo(() => configSidebarResizeBounds(sidebarGeometry().scale))
+   const configuredSidebarWidth = createMemo(() => {
+     const width = dialogStore.config.sidebarWidth
+     if (typeof width !== "number" || !Number.isFinite(width) || width <= 0) return null
+@@ -288,14 +320,9 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+       "min-width": `${width}px`,
+     }
+   })
+-  const currentSidebarWidth = () => {
+-    const width = configuredSidebarWidth()
+-    if (width != null) return width
+-    const rendered = document.getElementById("configSidebar")?.getBoundingClientRect().width
+-    if (typeof rendered === "number" && Number.isFinite(rendered) && rendered > 0) {
+-      return clampConfigSidebarWidth(rendered, resizeBounds())
+-    }
+-    return resizeBounds().min
++  const renderedSidebarWidth = () => {
++    const width = sidebarGeometry().width
++    return width === undefined ? undefined : Math.round(width)
+   }
+ 
+   const aboutTechnicalRows = createMemo(() => {
+@@ -322,7 +349,9 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+       `${t(tab.labelKey)} ${tab.id} ${(tab.searchTerms ?? []).join(" ")}`.toLowerCase().includes(query),
+     )
+   })
+-  const visibleConfigTabIDs = createMemo(() => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]))
++  const visibleConfigTabIDs = createMemo(
++    () => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]),
++  )
+   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
+   const closeSettings = closeConfigDialog
+   let page: HTMLElement | undefined
+@@ -495,13 +524,13 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+   const startResize = useResizable({
+     onStart: (event) => {
+       if (event.button !== 0) return false
+-      const sidebar = document.getElementById("configSidebar")
+-      if (!sidebar) return false
++      const sidebar = sidebarElement()
++      if (!sidebar?.isConnected) return false
+       resizeHandle = event.currentTarget as HTMLDivElement
+       resizeHandle.dataset.active = "true"
+       document.body.dataset.resizing = "true"
+       event.preventDefault()
+-      const bounds = resizeBounds()
++      const bounds = configSidebarResizeBounds(currentUIScale())
+       resizeStartWidth = sidebar.getBoundingClientRect().width
+       resizeMin = bounds.min
+       resizeMax = bounds.max
+@@ -518,7 +547,13 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+     },
+   })
+   const handleResizeKeyDown: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (event) => {
+-    const next = nextConfigSidebarKeyboardWidth(currentSidebarWidth(), event.key, resizeBounds())
++    const sidebar = sidebarElement()
++    if (!sidebar?.isConnected) return
++    const bounds = configSidebarResizeBounds(currentUIScale())
++    const requestedWidth = dialogStore.config.sidebarWidth
++    const width =
++      requestedWidth == null ? sidebar.getBoundingClientRect().width : clampConfigSidebarWidth(requestedWidth, bounds)
++    const next = nextConfigSidebarKeyboardWidth(width, event.key, bounds)
+     if (next === undefined) return
+     event.preventDefault()
+     setConfigSidebarWidth(next)
+@@ -544,7 +579,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+           orientation="vertical"
+           class="config-dialog-layout"
+         >
+-          <nav class="config-sidebar" id="configSidebar" style={sidebarStyle()}>
++          <nav ref={setSidebarElement} class="config-sidebar" id="configSidebar" style={sidebarStyle()}>
+             <Button
+               type="button"
+               variant="ghost"
+@@ -624,7 +659,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
+             aria-label={t("config.title")}
+             aria-valuemin={Math.round(resizeBounds().min)}
+             aria-valuemax={Math.round(resizeBounds().max)}
+-            aria-valuenow={currentSidebarWidth()}
++            aria-valuenow={renderedSidebarWidth()}
+             tabIndex={0}
+             title={t("config.title")}
+             onPointerDown={startResize}
+diff --git a/specs/current/architecture/07-panel.md b/specs/current/architecture/07-panel.md
+index 5ee1ed49..5beb5a47 100644
+--- a/specs/current/architecture/07-panel.md
++++ b/specs/current/architecture/07-panel.md
+@@ -229,6 +229,12 @@ open config tab or primary surface; Chats/Mission Board navigation closes the
+ config page through its existing native-surface reveal lifecycle before opening
+ the selected primary surface. Settings owns search focus, scoped Escape/Back
+ and focus restoration; nested action dialogs keep the shared modal primitive.
++Its resize separator projects the mounted sidebar's actual width and applied
++CSS scale through one local frame-scheduled geometry owner. Size and root-style
++observation retire with that open node; CSS default measurements do not become
++user-requested width settings. Keyboard actions accumulate from the current
++explicit request, or the actual box when unset, using current event-time scale.
++Pointer actions retain the actual starting box and displacement contract.
+ The config store owns the one settings-search query. Explicit page-open and
+ close actions clear that query so a rail selection opens its exact target even
+ when the preceding page was filtered.

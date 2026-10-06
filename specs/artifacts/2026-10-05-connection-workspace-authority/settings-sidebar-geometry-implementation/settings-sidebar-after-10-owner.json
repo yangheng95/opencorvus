@@ -1,0 +1,47 @@
+{
+  "evidencePrefix": "settings-sidebar-after-10",
+  "observedAtUtc": "2026-10-06T03:31:46.2348092Z",
+  "runRoot": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/settings-sidebar-after-10",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project",
+  "port": 17964,
+  "occurrence": "settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590",
+  "listener": {
+    "ProcessId": 51628,
+    "ParentProcessId": 69804,
+    "CreationDate": "2026-10-06T11:30:53.623112+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+  },
+  "owners": [
+    {
+      "ProcessId": 76716,
+      "ParentProcessId": 47780,
+      "CreationDate": "2026-10-06T11:30:53.497502+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+    },
+    {
+      "ProcessId": 68648,
+      "ParentProcessId": 76716,
+      "CreationDate": "2026-10-06T11:30:53.507893+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 69804,
+      "ParentProcessId": 76716,
+      "CreationDate": "2026-10-06T11:30:53.575+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+    },
+    {
+      "ProcessId": 51628,
+      "ParentProcessId": 69804,
+      "CreationDate": "2026-10-06T11:30:53.623112+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+    }
+  ],
+  "purpose": "Actual final Settings geometry qualification through retained Task07 history; no new model input/pair"
+}

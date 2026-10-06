@@ -229,12 +229,6 @@ open config tab or primary surface; Chats/Mission Board navigation closes the
 config page through its existing native-surface reveal lifecycle before opening
 the selected primary surface. Settings owns search focus, scoped Escape/Back
 and focus restoration; nested action dialogs keep the shared modal primitive.
-Its resize separator projects the mounted sidebar's actual width and applied
-CSS scale through one local frame-scheduled geometry owner. Size and root-style
-observation retire with that open node; CSS default measurements do not become
-user-requested width settings. Keyboard actions accumulate from the current
-explicit request, or the actual box when unset, using current event-time scale.
-Pointer actions retain the actual starting box and displacement contract.
 The config store owns the one settings-search query. Explicit page-open and
 close actions clear that query so a rail selection opens its exact target even
 when the preceding page was filtered.

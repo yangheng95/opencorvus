@@ -2520,3 +2520,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Current Task outcome/context plan](artifacts/2026-10-05-connection-workspace-authority/task-outcome-context-implementation-plan.md): separate current terminal feedback and exact selected Task composer context, using genuine failed07 history and existing activity/label/icon owners.
 
 - [Sidebar pointer resize plan](artifacts/2026-10-05-connection-workspace-authority/sidebar-pointer-resize-implementation-plan.md): source-qualified fixed-rail coordinate repair, rendered-width displacement and owned real-page qualification.
+
+- [Settings sidebar geometry plan](artifacts/2026-10-05-connection-workspace-authority/settings-sidebar-geometry-implementation-plan.md): source-qualified initial accessible-width candidate, stable before investigation and required single measured projection.

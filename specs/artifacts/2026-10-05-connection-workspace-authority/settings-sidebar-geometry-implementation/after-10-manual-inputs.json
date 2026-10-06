@@ -1,0 +1,116 @@
+{
+  "browser": "7",
+  "tab": "34",
+  "url": "http://127.0.0.1:17964/ui/",
+  "initial": {
+    "width": 230.39584350585935,
+    "aria": "230",
+    "scale": "1.000"
+  },
+  "stable": {
+    "observedAtUtc": "2026-10-06T03:33:31.967Z",
+    "width": 230.39584350585935,
+    "aria": "230"
+  },
+  "defaultReopened": {
+    "width": 230.39584350585935,
+    "aria": "230",
+    "styleWidth": ""
+  },
+  "zoom105": {
+    "action": "actual View Zoom slider ArrowRight to105",
+    "cssScale": "1.050",
+    "min": "147",
+    "max": "466"
+  },
+  "keyboard": {
+    "firstRight": 247,
+    "twoFurtherRights": 281,
+    "twoLefts": 247,
+    "home": 147,
+    "end": 466,
+    "boundary": "Consecutive real key calls without an observation between the paired keys; exact same-RAF scheduling was not instrumented"
+  },
+  "pointer": [
+    {
+      "from": [
+        529,
+        360
+      ],
+      "to": [
+        489,
+        360
+      ],
+      "width": 426
+    },
+    {
+      "from": [
+        489,
+        360
+      ],
+      "to": [
+        529,
+        360
+      ],
+      "width": 466
+    },
+    {
+      "click": [
+        529,
+        360
+      ],
+      "width": 466
+    }
+  ],
+  "explicitReopened": {
+    "width": 466,
+    "aria": "466"
+  },
+  "scaleRestored100": {
+    "action": "View Zoom slider ArrowLeft to100",
+    "width": 444,
+    "min": "140",
+    "max": "444"
+  },
+  "finalDefault": {
+    "action": "Owned full reload then actual Settings reopen clears ephemeral explicit width",
+    "width": 230.39584350585935,
+    "aria": "230",
+    "styleWidth": "",
+    "scale": "1.000"
+  },
+  "mainRestored": {
+    "handle": {
+      "height": 684,
+      "id": "leftPaneResizer",
+      "max": "723",
+      "min": "208",
+      "now": "280",
+      "width": 1,
+      "x": 336,
+      "y": 36
+    },
+    "observedAtUtc": "2026-10-06T03:36:17.769Z",
+    "resizing": null,
+    "rightDockOpen": "false",
+    "scale": "1.000",
+    "sidebar": {
+      "height": 684,
+      "id": "leftActivityShell",
+      "max": null,
+      "min": null,
+      "now": null,
+      "width": 280,
+      "x": 56,
+      "y": 36
+    }
+  },
+  "limits": [
+    "No native desktop zoom hotkey/external CSS mutation/transform/writing-mode/ultra-narrow/viewport change was exercised",
+    "No close during held-pointer drag/cancel/blur failure/persistence error was exercised",
+    "Initial pre-measure frame and exact stale-callback timing were not instrumented; observed stable close/reopen values are qualified",
+    "Existing minimum147 clips some navigation labels in the actual Home image; bounds/layout policy was preserved and fuller narrow-navigation usability remains a separate investigation",
+    "An immediate main AX snapshot during105% close reported50; no simultaneous DOM geometry was taken there. Final100% actual main rect/ARIA is280; do not infer a stable main geometry defect from that intermediate AX value"
+  ],
+  "boundary": "Root personally viewed every after image; real manual acceptance only, no UI automated test/new model input/task/pair. Formal download remains unqualified."
+}

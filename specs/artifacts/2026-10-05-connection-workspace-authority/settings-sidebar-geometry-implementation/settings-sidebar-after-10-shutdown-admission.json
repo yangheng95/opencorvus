@@ -1,0 +1,56 @@
+{
+  "observedAtUtc": "2026-10-06T03:38:02.1694558Z",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXElWdC00S0FrUmRlk"
+  },
+  "owners": [
+    {
+      "expected": {
+        "ProcessId": 68648,
+        "ParentProcessId": 76716,
+        "CreationDate": "2026-10-06T11:30:53.507893+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": true,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 51628,
+        "ParentProcessId": 69804,
+        "CreationDate": "2026-10-06T11:30:53.623112+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+      },
+      "originalOccurrencePresent": true,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 69804,
+        "ParentProcessId": 76716,
+        "CreationDate": "2026-10-06T11:30:53.575+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+      },
+      "originalOccurrencePresent": true,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 76716,
+        "ParentProcessId": 47780,
+        "CreationDate": "2026-10-06T11:30:53.497502+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17964 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-sidebar-after-10\\startup.json --startup-occurrence settings-sidebar-after-10-1437b9aa-72f4-4f29-a3d5-380492d6b590 --log-level INFO"
+      },
+      "originalOccurrencePresent": true,
+      "samePIDReused": false
+    }
+  ],
+  "boundary": "Admission only; every observed physical occurrence and listener are checked next",
+  "ownedPagesClosed": true
+}

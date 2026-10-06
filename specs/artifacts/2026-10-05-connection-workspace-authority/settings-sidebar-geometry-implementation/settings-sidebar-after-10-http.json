@@ -1,0 +1,29 @@
+{
+  "observedAtUtc": "2026-10-06T03:31:46.3940450Z",
+  "uiStatus": 200,
+  "finalUri": "http://127.0.0.1:17964/ui/",
+  "assets": [
+    {
+      "source": "./assets/main-sDpPpfRr.js",
+      "url": "http://127.0.0.1:17964/ui/assets/main-sDpPpfRr.js",
+      "status": 200,
+      "length": 1656238
+    },
+    {
+      "source": "./assets/main-b6JpMtFG.css",
+      "url": "http://127.0.0.1:17964/ui/assets/main-b6JpMtFG.css",
+      "status": 200,
+      "length": 535014
+    }
+  ],
+  "authority": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ]
+}

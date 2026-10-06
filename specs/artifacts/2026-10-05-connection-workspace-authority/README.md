@@ -179,3 +179,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Task outcome/context implementation plan](task-outcome-context-implementation-plan.md) and [evidence](task-outcome-context-implementation/README.md): current failed-state clarity and true Task presentation without altering liveness, input provenance or execution routing.
 
 - [Sidebar pointer resize binding plan](sidebar-pointer-resize-implementation-plan.md) and [evidence](sidebar-pointer-resize-implementation/README.md): actual rendered origin plus displacement, real09 delta/reverse/no-motion/keyboard/collapse/nondefault reload and complete owned physical closure; next settings/provenance issues remain open.
+
+- [Settings sidebar geometry plan](settings-sidebar-geometry-implementation-plan.md) and [evidence](settings-sidebar-geometry-implementation/README.md): stable before/current105% defects, single actual box/CSS-scale repair, real after default/keyboard/pointer/reopen/scale acceptance and complete owned cleanup; further provenance/usability boundaries stay open.

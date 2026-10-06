@@ -1,0 +1,37 @@
+{
+  "browser": "7",
+  "tab": "33",
+  "url": "http://127.0.0.1:17963/ui/",
+  "untouchedInitialAt": "2026-10-06T03:18:44.796Z",
+  "untouchedStableAt": "2026-10-06T03:19:28.593Z",
+  "untouchedInitialWidth": 230.39584350585935,
+  "untouchedStableWidth": 230.39584350585935,
+  "ariaInitial": "140",
+  "ariaStable": "140",
+  "viewMenuZoom": {
+    "original": 100,
+    "action": "actual Zoom slider ArrowRight",
+    "observed": 105,
+    "cssScale": "1.050",
+    "ariaMin": "140",
+    "ariaMax": "444",
+    "expectedCurrentHelperBounds": {
+      "min": 147,
+      "max": 466.2,
+      "step": 16.8
+    }
+  },
+  "keyboardAt105": {
+    "key": "ArrowRight",
+    "observedWidth": 246,
+    "observedAria": "246",
+    "currentScaleHelperExpectedWidth": 247
+  },
+  "restore": {
+    "action": "actual Zoom slider ArrowLeft to100, full owned-page reload then reopen Settings restores unconfigured responsive default",
+    "scale": "1.000",
+    "width": 230.39584350585935,
+    "styleWidth": ""
+  },
+  "boundary": "Root personally viewed real initial/stable/zoom/key/restored screenshots. This is before failure evidence; no production fix/new model input/task/pair."
+}

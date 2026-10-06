@@ -1,0 +1,36 @@
+{
+  "observedAtUtc": "2026-10-06T03:38:04.4500731Z",
+  "originalOwnedIDs": [
+    76716,
+    68648,
+    69804,
+    51628
+  ],
+  "remainingProcesses": [],
+  "listeners": [],
+  "authority": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "beforeMessages": 12,
+  "afterMessages": 12,
+  "retainedMessageIDsEqual": true,
+  "taskOpenedEvents": [
+    {
+      "id": "pev_g0VXEP9np00253HGyiJV",
+      "type": "task.execution.opened",
+      "aggregate_id": "tsk_g00VXEP9g1005gc0dysi",
+      "emitted_at": 1791252550665,
+      "payload": "{\"execution_epoch\":1}"
+    }
+  ],
+  "promptOwners": 0,
+  "inboxCount": 0,
+  "boundary": "Independent OS/pair/history proof after before33 and after34 closures and exact public shutdown; no new Task/model input/pair/kill"
+}
