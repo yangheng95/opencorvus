@@ -1,0 +1,31 @@
+Browser tab: 16, Title: "OpenCorvus", URL: "http://localhost:18001/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 34
++								64 container
++									65 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									66 container
++										67 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
++										68 button 引用键盘滚动初次观察35（真实文字任务） Completed
++											69 text 引用键盘滚动初次观察35（真实文字任务）
++											70 container Completed
++												71 text Completed
++										72 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand
++									73 button (expanded) Description: Collapse Anonymous 8f9251, Secondary Actions: Collapse
++									74 container
++										75 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										76 button Reply with OK.
++										77 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-211-trigger, Secondary Actions: Expand
++								78 container Recents
++									79 text Recents
++									80 container
++										81 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
++										82 button 引用键盘滚动初次观察35（真实文字任务） Completed
++											83 text 引用键盘滚动初次观察35（真实文字任务）
++											84 container Completed
++												85 text Completed
++										86 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-218-trigger, Secondary Actions: Expand
++									87 container
++										88 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										89 button Reply with OK.
++										90 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-224-trigger, Secondary Actions: Expand
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18001/ui/

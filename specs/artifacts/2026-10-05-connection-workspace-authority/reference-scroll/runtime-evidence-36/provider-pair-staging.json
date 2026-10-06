@@ -1,0 +1,48 @@
+{
+  "sourcePairBefore": [
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "bytes": 2147,
+      "modifiedAt": "2026-10-04T15:48:55.860Z",
+      "createdAt": "2026-10-04T15:48:55.860Z"
+    },
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "bytes": 9155406,
+      "modifiedAt": "2026-10-04T15:48:10.137Z",
+      "createdAt": "2026-10-04T15:48:10.134Z"
+    }
+  ],
+  "sourcePairAfter": [
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "bytes": 2147,
+      "modifiedAt": "2026-10-04T15:48:55.860Z",
+      "createdAt": "2026-10-04T15:48:55.860Z"
+    },
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "bytes": 9155406,
+      "modifiedAt": "2026-10-04T15:48:10.137Z",
+      "createdAt": "2026-10-04T15:48:10.134Z"
+    }
+  ],
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-36\\runtime\\data\\auth.json",
+      "bytes": 2082,
+      "modifiedAt": "2026-10-06T16:25:26.375Z",
+      "createdAt": "2026-10-06T16:25:26.375Z"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-36\\runtime\\data\\models.json",
+      "bytes": 9155406,
+      "modifiedAt": "2026-10-06T16:25:26.379Z",
+      "createdAt": "2026-10-06T16:25:26.375Z"
+    }
+  ],
+  "stagingOwner": "stageDiagnosticProvider",
+  "credential": "selected existing OpenAI entry",
+  "catalog": "complete adjacent models.json",
+  "boundary": "Metadata only; content redactor remains in memory; copied refresh prohibited"
+}

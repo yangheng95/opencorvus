@@ -547,6 +547,16 @@ move into the Composer, while the installed Item still owns the selection.
 The Composer reference picker owns Escape as disclosure dismissal in both its
 search and Listbox. Its current directives remain selected until an explicit
 selection change; clearing the last selected reference remains available.
+Shared Listbox items use the installed library's default li/option element;
+the library owns keyboard and pointer selection without a competing native
+button activation. File changes retain their explicit keyboard/click open
+action. The editable reference Listbox's scrollRef is the existing bounded
+results container, so its keyboard-focused item scrolls within that owner.
+An enabled item consumes Enter/Space browser defaults through its direct
+listener when that exact item is the event target. Kobalte retains selection
+and existing caller key handlers; nested interactive targets keep their own
+defaults. This prevents native Space page scrolling without duplicating the
+selection algorithm or manually forwarding caller event-handler unions.
 
 Feedback is the shared inline loading/failure/notice primitive for settings,
 ledger lists and message submission. Optional diagnostics use the existing

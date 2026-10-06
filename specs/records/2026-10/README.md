@@ -119,3 +119,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Composer reference catalog feedback31/32/33](../../artifacts/2026-10-05-connection-workspace-authority/catalog-feedback-plan.md): actual error masking31 and clipping32 retained; source-qualified feedback, explicit retry and bounded detail scrolling qualified on33 with complete owned closure.
 
 - [Exact Provider response reader observation34](../../artifacts/2026-10-05-connection-workspace-authority/response-reader-observation-plan.md):38 positive tests and genuine streamed Sol Task/manual UI/whole native cleanup qualified; exact byte/chunk/EOF facts through existing reader, formal caller correlation unknown.
+
+- [Reference keyboard scroll35/36/37](../../artifacts/2026-10-05-connection-workspace-authority/reference-scroll-plan.md): actual37 Reference/Model/Mention/Scheduled keyboard and scroll fixes qualified; original35/36 failures retained, genuine FileChanges row and broader matrix unqualified.
