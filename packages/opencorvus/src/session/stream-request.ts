@@ -10,3 +10,5 @@ export const StreamRequestIdentity = z
     apiModelID: z.string().min(1),
   })
   .strict()
+
+export type StreamRequestIdentity = z.infer<typeof StreamRequestIdentity>

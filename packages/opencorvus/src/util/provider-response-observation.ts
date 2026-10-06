@@ -1,7 +1,13 @@
 import type { ReadableStreamActivitySettlement } from "./stream-activity"
+import type { StreamRequestIdentity } from "../session/stream-request"
+
+export type ProviderRequestContext = Readonly<{
+  sessionID: string
+  streamRequest: Readonly<StreamRequestIdentity>
+}>
 
 export interface ProviderResponseObserver {
-  onBind(): void
+  onBind(context?: ProviderRequestContext): void
   onChunk(byteLength: number): void
   onSettlement(settlement: ReadableStreamActivitySettlement): void
   onObservationError(): void
@@ -36,7 +42,7 @@ export function registerProviderResponseObserver(response: Response, observer: P
     }
   }
   observers.set(response, {
-    onBind: () => forward(() => observer.onBind()),
+    onBind: (context) => forward(() => observer.onBind(context)),
     onChunk: (byteLength) => forward(() => observer.onChunk(byteLength)),
     onSettlement: (settlement) => forward(() => observer.onSettlement(settlement)),
     onObservationError,

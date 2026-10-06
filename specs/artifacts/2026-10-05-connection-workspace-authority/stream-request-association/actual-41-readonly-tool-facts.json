@@ -1,0 +1,45 @@
+{
+  "observedAtUtc": "2026-10-06T19:46:10.043Z",
+  "access": "same isolated readonly transaction after exact native closure; exact Task Session lineage; raw canonical facts and production-normalized durable outputs",
+  "selected": {
+    "occurrence": "stream-request-41-61ab2f1d-ceb5-42be-9c4c-3ad1ec351312",
+    "taskID": "tsk_g00VXIgwPT00zLv0y5gq",
+    "projectID": "prj_hf1uBtQnmdoZ7erYPFyv",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\project",
+    "requestID": "1a163efd-f4db-4b05-9e90-5f83bc0d8975",
+    "requestSentAt": "2026-10-06T19:44:50.8028761Z",
+    "acceptedObservedAt": "2026-10-06T19:44:55.5907224Z"
+  },
+  "requests": [
+    {
+      "id": "prt_g0VXIgyg4003sZZMkFr2",
+      "message_id": "msg_hsWmtToLWSSVt5cBmPx7",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_AzE3Y2WfzNSdsAZjopFn0fy6\",\"tool\":\"manage_task\",\"input\":{\"summary\":\"已在真实会话中回复指定文字“正式响应关联验收已就绪。”；未创建文件或其他产物，未访问网站、启动服务或改动项目文件。\",\"evidence_locators\":[{\"source\":\"session\",\"session_id\":\"ses_-zUShJ2ZszzixSEYgWyT\"}],\"deliverable_artifact_locators\":[],\"accepted_delivery_slice_revision_ids\":[],\"workflow_id\":null,\"action\":\"complete_task\"},\"time\":{\"start\":1791315903632}}",
+      "time_created": 1791315905809,
+      "session_id": "ses_-zUShJ2ZszzixSEYgWyT",
+      "project_id": "prj_hf1uBtQnmdoZ7erYPFyv",
+      "kind": "orchestrator"
+    }
+  ],
+  "progress": [],
+  "outcomes": [
+    {
+      "id": "prt_h1ciV4ksZ3BJIxVX2amP",
+      "request_part_id": "prt_g0VXIgyg4003sZZMkFr2",
+      "data": "{\"outcome\":\"completed\",\"resultAttemptID\":\"per_hlJn3ZjFUPNL5nNEtkFb\",\"title\":\"Task Completed\",\"metadata\":{\"opencorvusToolResultControl\":{\"kind\":\"immediate_park\"}},\"time\":{\"end\":1791315907734}}",
+      "time_created": 1791315907735
+    }
+  ],
+  "results": [
+    {
+      "outcomeID": "prt_h1ciV4ksZ3BJIxVX2amP",
+      "requestID": "prt_g0VXIgyg4003sZZMkFr2",
+      "stored": {
+        "attempt_id": "per_hlJn3ZjFUPNL5nNEtkFb",
+        "result": "{\"kind\":\"json\",\"value\":{\"title\":\"Task Completed\",\"output\":\"Task tsk_g00VXIgwPT00zLv0y5gq completed: 已在真实会话中回复指定文字“正式响应关联验收已就绪。”；未创建文件或其他产物，未访问网站、启动服务或改动项目文件。.\",\"metadata\":{\"opencorvusToolResultControl\":{\"kind\":\"immediate_park\"}}}}",
+        "time_created": 1791315907728
+      },
+      "output": "Task tsk_g00VXIgwPT00zLv0y5gq completed: 已在真实会话中回复指定文字“正式响应关联验收已就绪。”；未创建文件或其他产物，未访问网站、启动服务或改动项目文件。."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+$ bun script/run-tests.ts test/provider-request-association.test.ts
+[1/1] START test/provider-request-association.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) concurrent same-model callers retain the actual Session and distinct agent identities [2185.45ms]
+(pass) delayed SDK use and successive physical responses retain the original copied caller [1662.86ms]
+(pass) context-free consumers preserve the production model cache and real streamed output [1666.84ms]
+(pass) one real SDK multi-step stream binds both HTTP responses to its original caller [1735.08ms]
+
+ 4 pass
+ 0 fail
+ 26 expect() calls
+Ran 4 tests across 1 file. [9.07s]
+[1/1] DONE test/provider-request-association.test.ts exit=0 duration=9.28s

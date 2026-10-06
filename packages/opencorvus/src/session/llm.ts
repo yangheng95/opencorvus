@@ -35,6 +35,7 @@ import { fingerprintPromptComposition, toolPayloadTexts } from "@/session/prompt
 import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
 import { RequestBudget } from "./request-budget"
 import { ContextBudget } from "./context-budget"
+import { StreamRequestIdentity } from "./stream-request"
 
 export namespace LLM {
   const log = Log.create({ service: "llm" })
@@ -173,6 +174,13 @@ export namespace LLM {
   export async function stream(input: StreamInput): Promise<StreamResult> {
     const requestID = input.user?.id ?? input.requestID
     if (!requestID) throw new Error("LLM.stream requires a real user Message or request occurrence identity")
+    const streamRequest = StreamRequestIdentity.parse({
+      requestID,
+      agentID: input.agentID,
+      providerID: input.model.providerID,
+      modelID: input.model.id,
+      apiModelID: input.model.api.id,
+    })
     const config = input.config ?? (await EffectiveConfig.effective({ sessionID: input.sessionID }))
     const agent = input.agent
     const l = log
@@ -187,7 +195,7 @@ export namespace LLM {
       providerID: input.model.providerID,
     })
     const [language, cfg, provider, auth] = await Promise.all([
-      Provider.getLanguage(input.model, { config }),
+      Provider.getLanguage(input.model, { config, requestContext: { sessionID: input.sessionID, streamRequest } }),
       Promise.resolve(config),
       Provider.getProvider(input.model.providerID, { config }),
       Auth.get(input.model.providerID),
@@ -348,13 +356,7 @@ export namespace LLM {
           sessionID: input.sessionID,
           orderKey: sessionLifecycleOrderKey(input.sessionID),
           error,
-          streamRequest: {
-            requestID,
-            agentID: input.agentID,
-            providerID: input.model.providerID,
-            modelID: input.model.id,
-            apiModelID: input.model.api.id,
-          },
+          streamRequest,
         })
         l.error("stream error", {
           error,

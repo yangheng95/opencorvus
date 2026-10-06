@@ -34,7 +34,7 @@ import {
   withStreamActivity,
   type ReadableStreamActivitySettlement,
 } from "@/util/stream-activity"
-import { takeProviderResponseObserver } from "@/util/provider-response-observation"
+import { takeProviderResponseObserver, type ProviderRequestContext } from "@/util/provider-response-observation"
 import { DurableExecutionCapacity } from "@/runtime/durable-execution-capacity"
 import { globalExecutionCapacity } from "@/runtime/execution-capacity"
 
@@ -835,7 +835,11 @@ export namespace Provider {
     return globalStateFor(config).then((state) => state.database)
   }
 
-  async function getSDK(model: Model, opts?: { config?: Config.Info; state?: Promise<ProviderState> }) {
+  async function getSDK(
+    model: Model,
+    opts?: { config?: Config.Info; state?: Promise<ProviderState>; requestContext?: ProviderRequestContext },
+  ) {
+    const requestContext = opts?.requestContext
     try {
       using _ = log.time("getSDK", {
         providerID: model.providerID,
@@ -893,7 +897,7 @@ export namespace Provider {
       const declarativeOptions = { ...options }
       delete declarativeOptions["fetch"]
       const sdkSource =
-        customFetch || containsRuntimeCapability(declarativeOptions)
+        requestContext || customFetch || containsRuntimeCapability(declarativeOptions)
           ? undefined
           : canonicalDigestSource("opencorvus.provider.sdk-instance.v1", {
               providerID: model.providerID,
@@ -1052,7 +1056,7 @@ export namespace Provider {
               onChunk: observeChunk,
               onSettlement: settleResponse,
             })
-            responseObserver?.onBind()
+            responseObserver?.onBind(requestContext)
 
             // Return a new Response with the wrapped body, preserving headers/status
             return new Response(wrapped, {
@@ -1069,7 +1073,7 @@ export namespace Provider {
               onChunk: observeChunk,
               onSettlement: settleResponse,
             })
-            responseObserver?.onBind()
+            responseObserver?.onBind(requestContext)
             return new Response(wrapped, {
               status: response.status,
               statusText: response.statusText,
@@ -1155,8 +1159,16 @@ export namespace Provider {
 
   export async function getLanguage(
     model: Model,
-    opts?: { config?: Config.Info; state?: Promise<ProviderState> },
+    opts?: { config?: Config.Info; state?: Promise<ProviderState>; requestContext?: ProviderRequestContext },
   ): Promise<LanguageModel> {
+    // A delayed SDK step retains this caller's immutable provenance. Shared
+    // models and SDKs only own context-free declarative Provider state.
+    const requestContext = opts?.requestContext
+      ? Object.freeze({
+          sessionID: opts.requestContext.sessionID,
+          streamRequest: Object.freeze({ ...opts.requestContext.streamRequest }),
+        })
+      : undefined
     const s = await (opts?.state ?? stateFor(opts?.config))
     const provider = s.providers[model.providerID]
     const canonical = provider?.models[model.id]
@@ -1171,15 +1183,15 @@ export namespace Provider {
     }
 
     const key = `${canonical.providerID}/${canonical.id}`
-    if (s.models.has(key)) return s.models.get(key)!
+    if (!requestContext && s.models.has(key)) return s.models.get(key)!
 
-    const sdk = await getSDK(canonical, opts)
+    const sdk = await getSDK(canonical, { ...opts, requestContext })
 
     try {
       const language = s.modelLoaders[canonical.providerID]
         ? await s.modelLoaders[canonical.providerID](sdk, canonical.api.id, provider.options)
         : sdk.languageModel(canonical.api.id)
-      s.models.set(key, language)
+      if (!requestContext) s.models.set(key, language)
       return language
     } catch (e) {
       if (e instanceof NoSuchModelError)

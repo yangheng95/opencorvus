@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
-import { registerProviderResponseObserver } from "../src/util/provider-response-observation"
+import { registerProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
 import type { ReadableStreamActivitySettlement } from "../src/util/stream-activity"
 
 export interface ProviderResponseReaderObservation {
@@ -14,6 +14,8 @@ export interface ProviderResponseReaderObservation {
   lastByteReadAt?: number | null
   terminal?: { kind: ReadableStreamActivitySettlement; at: number }
   observationError?: "callback_failed"
+  identityState?: "observed" | "unknown" | "redacted"
+  requestContext?: ProviderRequestContext
 }
 
 export class ProviderAuditProbeConfigurationError extends Error {
@@ -268,7 +270,7 @@ export class RealProviderAudit implements Disposable {
         if (observed.state === "awaiting_binding") {
           try {
             registerProviderResponseObserver(response, {
-              onBind: () => {
+              onBind: (context) => {
                 if (observed.state !== "awaiting_binding") throw new Error("Response reader observation already has its owner")
                 observed.state = "reading"
                 observed.boundAt = Date.now()
@@ -276,6 +278,14 @@ export class RealProviderAudit implements Disposable {
                 observed.byteCount = 0
                 observed.firstByteReadAt = null
                 observed.lastByteReadAt = null
+                const identityRedactor = observation?.redactor ?? toolDeclarations?.redactor
+                if (!context) observed.identityState = "unknown"
+                else if ([context.sessionID, ...Object.values(context.streamRequest)]
+                  .some((value) => identityRedactor?.containsCredential(value))) observed.identityState = "redacted"
+                else {
+                  observed.identityState = "observed"
+                  observed.requestContext = { sessionID: context.sessionID, streamRequest: { ...context.streamRequest } }
+                }
               },
               onChunk: (byteLength) => {
                 if (observed.state !== "reading") throw new Error("Response reader observation requires its bound reader")

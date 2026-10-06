@@ -1,0 +1,978 @@
+{
+  "wholeDurationMs": 37104,
+  "wholeMaximumMs": 900000,
+  "observedAt": "2026-10-06T19:49:09.6557180Z",
+  "monitorSource": "task-observation-42788-a3971dda-0ad5-457e-8469-c504c0a01ab9-15.json",
+  "lifecycle": {
+    "taskID": "tsk_g00VXIgwPT00zLv0y5gq",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXIgwYU00GMSi4YEbd",
+    "openedAt": 1791315894915,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXIgziD00CyAD4EJDr",
+    "terminalAt": 1791315905834
+  },
+  "requests": [
+    {
+      "actualRequest": {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "response_reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791315876938,
+          "boundAt": 1791315876940,
+          "chunkCount": 51,
+          "byteCount": 34228,
+          "firstByteReadAt": 1791315876942,
+          "lastByteReadAt": 1791315882550,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hmPaQ5bNcT7QFj8V59IB",
+            "streamRequest": {
+              "requestID": "msg_he9gkSmrwKEbbjb9FwbR",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1791315882554
+          }
+        },
+        "tool_declarations": {
+          "state": "absent",
+          "entries": []
+        },
+        "status": 200
+      },
+      "matchingMessageIDs": [
+        "msg_he9gkSmrwKEbbjb9FwbR"
+      ],
+      "requestIdentityKind": "persisted real Message",
+      "session": {
+        "id": "ses_hmPaQ5bNcT7QFj8V59IB",
+        "project_id": "prj_hTu2MpBbXTbVTPeTJEfO",
+        "parent_id": null,
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\runtime\\data\\projects\\2026\\10\\07\\aecc6ae2-70a9-46b9-a76a-df1268327f44",
+        "title": "Reply with OK.",
+        "kind": "assistant",
+        "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"55c1780a-a13e-4059-85bd-62781568ed61\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_he9gkSmrwKEbbjb9FwbR\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}",
+        "time_created": 1791315874870,
+        "time_updated": 1791315879005
+      }
+    },
+    {
+      "actualRequest": {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "response_reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791315877309,
+          "boundAt": 1791315877311,
+          "chunkCount": 38,
+          "byteCount": 487021,
+          "firstByteReadAt": 1791315877313,
+          "lastByteReadAt": 1791315878831,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hmPaQ5bNcT7QFj8V59IB",
+            "streamRequest": {
+              "requestID": "msg_he9gkSmrwKEbbjb9FwbR",
+              "agentID": "chat",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1791315878967
+          }
+        },
+        "tool_declarations": {
+          "state": "array",
+          "entries": [
+            {
+              "index": 0,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "capability_search"
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "apply_patch"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "bash"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "delegate_agent"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "edit"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "external_code_search"
+                }
+              ]
+            },
+            {
+              "index": 6,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "glob"
+                }
+              ]
+            },
+            {
+              "index": 7,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "memory"
+                }
+              ]
+            },
+            {
+              "index": 8,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "mission_state"
+                }
+              ]
+            },
+            {
+              "index": 9,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_cancel_task"
+                }
+              ]
+            },
+            {
+              "index": 10,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_create_task"
+                }
+              ]
+            },
+            {
+              "index": 11,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_delete_goal"
+                }
+              ]
+            },
+            {
+              "index": 12,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_query_task"
+                }
+              ]
+            },
+            {
+              "index": 13,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_query_task_artifacts"
+                }
+              ]
+            },
+            {
+              "index": 14,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_respond_interaction"
+                }
+              ]
+            },
+            {
+              "index": 15,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_select_workspace"
+                }
+              ]
+            },
+            {
+              "index": 16,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_send_task_message"
+                }
+              ]
+            },
+            {
+              "index": 17,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_update_checks"
+                }
+              ]
+            },
+            {
+              "index": 18,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_update_goal"
+                }
+              ]
+            },
+            {
+              "index": 19,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_wake_mission"
+                }
+              ]
+            },
+            {
+              "index": 20,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "panel_wake_work"
+                }
+              ]
+            },
+            {
+              "index": 21,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "planner"
+                }
+              ]
+            },
+            {
+              "index": 22,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "publish_interactive_artifact"
+                }
+              ]
+            },
+            {
+              "index": 23,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "question"
+                }
+              ]
+            },
+            {
+              "index": 24,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "read"
+                }
+              ]
+            },
+            {
+              "index": 25,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "schedule"
+                }
+              ]
+            },
+            {
+              "index": 26,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "search_code"
+                }
+              ]
+            },
+            {
+              "index": 27,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "skill_market"
+                }
+              ]
+            },
+            {
+              "index": 28,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "todo"
+                }
+              ]
+            },
+            {
+              "index": 29,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "webfetch"
+                }
+              ]
+            },
+            {
+              "index": 30,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "websearch"
+                }
+              ]
+            },
+            {
+              "index": 31,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "write"
+                }
+              ]
+            }
+          ]
+        },
+        "status": 200
+      },
+      "matchingMessageIDs": [
+        "msg_he9gkSmrwKEbbjb9FwbR"
+      ],
+      "requestIdentityKind": "persisted real Message",
+      "session": {
+        "id": "ses_hmPaQ5bNcT7QFj8V59IB",
+        "project_id": "prj_hTu2MpBbXTbVTPeTJEfO",
+        "parent_id": null,
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\runtime\\data\\projects\\2026\\10\\07\\aecc6ae2-70a9-46b9-a76a-df1268327f44",
+        "title": "Reply with OK.",
+        "kind": "assistant",
+        "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"55c1780a-a13e-4059-85bd-62781568ed61\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_he9gkSmrwKEbbjb9FwbR\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}",
+        "time_created": 1791315874870,
+        "time_updated": 1791315879005
+      }
+    },
+    {
+      "actualRequest": {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "response_reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791315896384,
+          "boundAt": 1791315896386,
+          "chunkCount": 58,
+          "byteCount": 58772,
+          "firstByteReadAt": 1791315896386,
+          "lastByteReadAt": 1791315901488,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_-zUShJ3S6zz2TgG4vRKo",
+            "streamRequest": {
+              "requestID": "tsk_g00VXIgwPT00zLv0y5gq",
+              "agentID": "memory",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1791315901494
+          }
+        },
+        "tool_declarations": {
+          "state": "absent",
+          "entries": []
+        },
+        "status": 200
+      },
+      "matchingMessageIDs": [],
+      "requestIdentityKind": "actual Task occurrence input to internal memory participant",
+      "session": {
+        "id": "ses_-zUShJ3S6zz2TgG4vRKo",
+        "project_id": "prj_hf1uBtQnmdoZ7erYPFyv",
+        "parent_id": null,
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\project",
+        "title": "正式响应关联验收41",
+        "kind": "root",
+        "metadata": "{\"taskConfigSnapshot\":{\"prompt_profile\":{\"active\":\"task-resource-qa\"},\"permission_mode\":\"full_access\",\"$schema\":\"https://opencorvus.ai/config.json\",\"model\":\"openai/gpt-6.1-sol\",\"small_model\":\"openai/gpt-6.1-sol\",\"agent\":{},\"plugin\":[],\"experimental\":{\"auto_question\":true},\"command\":{},\"terminal\":{\"default_profile_id\":\"powershell\",\"profiles\":{\"powershell\":{\"label\":\"Windows PowerShell\",\"command\":\"C:\\\\WINDOWS\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"pwsh\":{\"label\":\"PowerShell\",\"command\":\"C:\\\\Users\\\\hengu\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"cmd\":{\"label\":\"Command Prompt\",\"command\":\"C:\\\\WINDOWS\\\\system32\\\\cmd.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"command-prompt\"},\"git-bash\":{\"label\":\"Git Bash\",\"command\":\"C:\\\\Program Files\\\\Git\\\\bin\\\\bash.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"bash\"}}},\"username\":\"\",\"mcp\":{\"browser\":{\"type\":\"local\",\"command\":[\"C:\\\\Users\\\\hengu\\\\.bun\\\\bin\\\\bun.exe\",\"mcp\",\"browser\"],\"timeout\":30000},\"computer\":{\"type\":\"local\",\"command\":[\"C:\\\\Users\\\\hengu\\\\.bun\\\\bin\\\\bun.exe\",\"D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\src\\\\mcp\\\\computer\\\\stdio.ts\"],\"timeout\":30000}}},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"task-resource-qa\"}}}",
+        "time_created": 1791315895438,
+        "time_updated": 1791315895438
+      }
+    },
+    {
+      "actualRequest": {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "response_reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791315901875,
+          "boundAt": 1791315901877,
+          "chunkCount": 88,
+          "byteCount": 644192,
+          "firstByteReadAt": 1791315901883,
+          "lastByteReadAt": 1791315905819,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_-zUShJ2ZszzixSEYgWyT",
+            "streamRequest": {
+              "requestID": "msg_task-root-control_art_hNdgo99PDvoht5CF6GRY_art_hNdgo99PDvoht5CF6GRY",
+              "agentID": "orchestrator",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            }
+          },
+          "terminal": {
+            "kind": "eof",
+            "at": 1791315905968
+          }
+        },
+        "tool_declarations": {
+          "state": "array",
+          "entries": [
+            {
+              "index": 0,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "capability_search"
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "artifact_read"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "artifact_search"
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "artifact_select"
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "artifact_snapshot"
+                }
+              ]
+            },
+            {
+              "index": 5,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "cancel_subagent"
+                }
+              ]
+            },
+            {
+              "index": 6,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "dispatch_agent"
+                }
+              ]
+            },
+            {
+              "index": 7,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "evolve_expert_squad_from_feedback"
+                }
+              ]
+            },
+            {
+              "index": 8,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "manage_task"
+                }
+              ]
+            },
+            {
+              "index": 9,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "no_action"
+                }
+              ]
+            },
+            {
+              "index": 10,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "publish_interactive_artifact"
+                }
+              ]
+            },
+            {
+              "index": 11,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "question"
+                }
+              ]
+            },
+            {
+              "index": 12,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "read_agent_message"
+                }
+              ]
+            },
+            {
+              "index": 13,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "read_context"
+                }
+              ]
+            },
+            {
+              "index": 14,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "read_task_message"
+                }
+              ]
+            },
+            {
+              "index": 15,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "respond_agent_coordination"
+                }
+              ]
+            },
+            {
+              "index": 16,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "scheduler_message"
+                }
+              ]
+            },
+            {
+              "index": 17,
+              "type": "function",
+              "type_state": "present",
+              "name_state": "observed",
+              "names": [
+                {
+                  "path": "name",
+                  "state": "present",
+                  "value": "wait"
+                }
+              ]
+            }
+          ]
+        },
+        "status": 200
+      },
+      "matchingMessageIDs": [
+        "msg_task-root-control_art_hNdgo99PDvoht5CF6GRY_art_hNdgo99PDvoht5CF6GRY"
+      ],
+      "requestIdentityKind": "persisted real Message",
+      "session": {
+        "id": "ses_-zUShJ2ZszzixSEYgWyT",
+        "project_id": "prj_hf1uBtQnmdoZ7erYPFyv",
+        "parent_id": "ses_-zUShJ3S6zz2TgG4vRKo",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\project",
+        "title": "Agent: 正式响应关联验收41",
+        "kind": "orchestrator",
+        "metadata": null,
+        "time_created": 1791315898799,
+        "time_updated": 1791315899526
+      }
+    }
+  ],
+  "qualification": "actual four streamed Sol HTTP200 exact bound responses carry immutable formal caller and actual Session, all EOF; preflight memory/chat share real Session/request with distinct executing agents; Task memory/orchestrator separate actual identities; historical23/24/40 binding not recovered; semantic SDK/retry/restart/vendor matrices remain unknown",
+  "independentClosure": {
+    "observedAtUtc": "2026-10-06T19:46:08.4277569Z",
+    "occurrence": "stream-request-41-61ab2f1d-ceb5-42be-9c4c-3ad1ec351312",
+    "host": {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 66252,
+        "processInstanceID": "win32:639269126668110373",
+        "occurrenceID": "f1c8039f-0c54-4b3b-8141-b94b89629145"
+      }
+    },
+    "target": {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 42788,
+        "processInstanceID": "win32:639269126675706351",
+        "occurrenceID": "35d6326a-632d-4061-996c-d136956d7400"
+      }
+    },
+    "listeners": [],
+    "copiedAuthPresent": false,
+    "copiedModelsPresent": false,
+    "sourcePairMetadata": [
+      {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+        "bytes": 2147,
+        "modifiedAt": "2026-10-04T15:48:55.8607343Z"
+      },
+      {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+        "bytes": 9155406,
+        "modifiedAt": "2026-10-04T15:48:10.1379969Z"
+      }
+    ],
+    "page": "own IAB9 tab22 closed before sole public shutdown"
+  },
+  "taskDurationMs": 10919,
+  "nativeClosure": {
+    "listeners": null,
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 42788,
+          "processInstanceID": "win32:639269126675706351",
+          "occurrenceID": "35d6326a-632d-4061-996c-d136956d7400"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 66252,
+          "processInstanceID": "win32:639269126668110373",
+          "occurrenceID": "f1c8039f-0c54-4b3b-8141-b94b89629145"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "pairedCleanupComplete": true,
+    "copiedPair": [
+      {
+        "copiedLength": 2082,
+        "outcome": "removed",
+        "presentAfter": false,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\runtime\\data\\auth.json"
+      },
+      {
+        "copiedLength": 9155406,
+        "outcome": "removed",
+        "presentAfter": false,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\runtime\\data\\models.json"
+      }
+    ],
+    "nativeSettlement": {
+      "occurrence": "stream-request-41-61ab2f1d-ceb5-42be-9c4c-3ad1ec351312",
+      "outcome": "settled",
+      "host": {
+        "pid": 66252,
+        "processInstanceID": "win32:639269126668110373",
+        "occurrenceID": "f1c8039f-0c54-4b3b-8141-b94b89629145"
+      },
+      "target": {
+        "pid": 42788,
+        "processInstanceID": "win32:639269126675706351",
+        "occurrenceID": "35d6326a-632d-4061-996c-d136956d7400"
+      },
+      "observedAtUtc": "2026-10-06T19:45:30.264Z",
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+    },
+    "physicalCompletion": true,
+    "observedAtUtc": "2026-10-06T19:45:32.0190552Z",
+    "occurrence": "stream-request-41-61ab2f1d-ceb5-42be-9c4c-3ad1ec351312",
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+  },
+  "ui": {
+    "screenshot": "actual-41-completed.png",
+    "result": "Root manually sees Completed10s and genuine required response; no files requested; own tab22 closed before shutdown"
+  }
+}

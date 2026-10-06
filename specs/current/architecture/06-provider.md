@@ -186,8 +186,14 @@ chunk 数、byte 数及首尾非空读取时间，物理清理完成后记录 `e
 缓冲或解析响应体，不新增 reader、重试、超时或容量策略。无 body、HTTP 错误、fetch 失败和
 未绑定响应保留各自明确状态；重构或替换 `Response` 后不猜测关联，未观测不等于零字节 EOF。
 audit 的现有发布回调通过唯一保护边界执行，失败记录关联请求的 `callback_failed`，保留原响应、
-原错误和预算错误；每 chunk 只更新内存标量。当前 fetch 层没有完整的正式执行 agent、Session
-和 stream request 身份传递，不能据此宣称已关联物理请求与持久化语义事件。
+原错误和预算错误；每 chunk 只更新内存标量。`LLM.stream` 从实际输入构造既有
+`StreamRequestIdentity`，与真实 SessionID 一起显式传给请求拥有的 language/SDK/fetch 闭包。
+Provider 在首次异步边界前冻结复制该上下文；携带上下文的实例不读写共享 model/SDK 缓存。
+同一实例的延迟 step 与物理重试保留原因果 caller，多个实例互不改变身份。context-free 调用
+保持原缓存合同，缺少身份的直接 helper 仍为 unknown。现有 exact Response 的安全 onBind
+交付该上下文，audit 仅在未命中已知 credential redactor 时记录 observed 身份；否则为 redacted。
+替换 Response 不推测关联。此身份不计 SDK 事件、不定义物理 attempt、不证明语义进度或恢复正确性，
+也不改变 byte/semantic timeout、重试、容量和执行轮次。
 
 ## Token 与计费统计单一链路
 

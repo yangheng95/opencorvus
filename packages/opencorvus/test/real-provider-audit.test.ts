@@ -6,7 +6,7 @@ import nativeProviderAudit from "../script/native-provider-audit-plugin"
 import { latestAuditSnapshotFiles } from "../script/audit-snapshot"
 import { requireProcessProviderAudit } from "../script/real-provider-audit"
 import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CopiedOAuthRefreshForbiddenError, CredentialRedactor, RealProviderAudit, ProviderAuditProbeConfigurationError } from "../script/real-provider-audit"
-import { takeProviderResponseObserver } from "../src/util/provider-response-observation"
+import { takeProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
 import { settlementTrackedReadableStream } from "../src/util/stream-activity"
 
 function requestMetadata(entry: RealProviderAudit["requests"][number]) {
@@ -14,14 +14,41 @@ function requestMetadata(entry: RealProviderAudit["requests"][number]) {
   return metadata
 }
 
-async function consumeObservedResponse(response: Response): Promise<string> {
+async function consumeObservedResponse(response: Response, context?: ProviderRequestContext): Promise<string> {
   const observer = takeProviderResponseObserver(response)
   if (!observer || !response.body) throw new Error("Expected exact owned response binding")
   const wrapped = settlementTrackedReadableStream({ source: response.body,
     onChunk: (chunk) => observer.onChunk(chunk.byteLength), onSettlement: observer.onSettlement })
-  observer.onBind()
+  observer.onBind(context)
   return await new Response(wrapped).text()
 }
+
+test("exact reader binding projects genuine caller, unknown caller and credential-redacted identity states", async () => {
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0,
+    fetch: () => new Response("actual identity observation bytes") })
+  const redactor = new CredentialRedactor()
+  redactor.collect({ provider: { key: "identity-fixture-secret" } })
+  const context = { sessionID: "session-owned", streamRequest: { requestID: "request-owned", agentID: "agent-owned",
+    providerID: "provider-owned", modelID: "catalog-owned", apiModelID: "authorized-model" } }
+  const originalContext = structuredClone(context)
+  try {
+    using audit = new RealProviderAudit("authorized-model", 3, undefined, undefined, undefined, { redactor })
+    const request = () => fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
+    const values = [await consumeObservedResponse(await request(), context)]
+    context.streamRequest.agentID = "later caller edit"
+    values.push(await consumeObservedResponse(await request()))
+    values.push(await consumeObservedResponse(await request(), { ...originalContext, sessionID: "identity-fixture-secret" }))
+    expect(values).toEqual(Array(3).fill("actual identity observation bytes"))
+    expect(audit.requests.map((entry) => ({ state: entry.response_reader.state,
+      identityState: entry.response_reader.identityState, terminal: entry.response_reader.terminal?.kind })))
+      .toEqual([
+        { state: "settled", identityState: "observed", terminal: "eof" },
+        { state: "settled", identityState: "unknown", terminal: "eof" },
+        { state: "settled", identityState: "redacted", terminal: "eof" },
+      ])
+    expect(audit.requests[0]!.response_reader.requestContext).toEqual(originalContext)
+  } finally { await server.stop(true) }
+})
 
 test("throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error", async () => {
   const submitted = { model: "authorized-model", stream: true, input: "owned publication qualification" }

@@ -1,0 +1,65 @@
+{
+  "listeners": null,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 42788,
+        "processInstanceID": "win32:639269126675706351",
+        "occurrenceID": "35d6326a-632d-4061-996c-d136956d7400"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 66252,
+        "processInstanceID": "win32:639269126668110373",
+        "occurrenceID": "f1c8039f-0c54-4b3b-8141-b94b89629145"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "copiedLength": 2082,
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\runtime\\data\\auth.json"
+    },
+    {
+      "copiedLength": 9155406,
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-41\\runtime\\data\\models.json"
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "stream-request-41-61ab2f1d-ceb5-42be-9c4c-3ad1ec351312",
+    "outcome": "settled",
+    "host": {
+      "pid": 66252,
+      "processInstanceID": "win32:639269126668110373",
+      "occurrenceID": "f1c8039f-0c54-4b3b-8141-b94b89629145"
+    },
+    "target": {
+      "pid": 42788,
+      "processInstanceID": "win32:639269126675706351",
+      "occurrenceID": "35d6326a-632d-4061-996c-d136956d7400"
+    },
+    "observedAtUtc": "2026-10-06T19:45:30.264Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-06T19:45:32.0190552Z",
+  "occurrence": "stream-request-41-61ab2f1d-ceb5-42be-9c4c-3ad1ec351312",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

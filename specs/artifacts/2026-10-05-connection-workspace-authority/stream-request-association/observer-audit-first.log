@@ -1,0 +1,50 @@
+$ bun script/run-tests.ts ./test/provider-response-observation.test.ts ./test/real-provider-audit.test.ts
+[1/2] START test/provider-response-observation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact Response registration retains its actual owner through a typed conflict [0.70ms]
+(pass) controlled split and empty chunks preserve exact bytes and joined EOF scalars [8.75ms]
+(pass) cancelled waits for actual upstream cleanup before publishing physical settlement [0.72ms]
+(pass) aborted waits for actual upstream cleanup before publishing physical settlement [0.39ms]
+(pass) actual read error retains its producer error and error settlement [0.24ms]
+(pass) an already-aborted owner retains its exact abort reason and joins upstream cleanup [0.29ms]
+(pass) diagnostic callback failures preserve the actual response output and EOF [1.86ms]
+(pass) two concurrent real HTTP responses retain exact object ownership and actual SSE bytes [9.28ms]
+
+ 8 pass
+ 0 fail
+ 27 expect() calls
+Ran 8 tests across 1 file. [1176.00ms]
+[1/2] DONE test/provider-response-observation.test.ts exit=0 duration=1.40s
+[2/2] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact reader binding projects genuine caller, unknown caller and credential-redacted identity states [13.98ms]
+(pass) throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error [5.20ms]
+(pass) concurrent real local HTTP audit entries report their exact reader bytes and EOF [5.34ms]
+(pass) real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states [7.89ms]
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [4.74ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [5.00ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [6.71ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [4.56ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [3.68ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [3.16ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [22.63ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [0.54ms]
+(pass) copied OAuth access expires with an explicit authority error [0.15ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.40ms]
+(pass) the last authorized streaming request completes before the next is refused [0.35ms]
+(pass) the audit reports exact model and streaming contract errors [1.36ms]
+(pass) an exhausted cumulative balance returns the budget error [0.13ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.17ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [6.49ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.34ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.48ms]
+
+ 21 pass
+ 0 fail
+ 94 expect() calls
+Ran 21 tests across 1 file. [1190.00ms]
+[2/2] DONE test/real-provider-audit.test.ts exit=0 duration=1.36s
