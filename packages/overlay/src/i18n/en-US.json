@@ -185,6 +185,8 @@
   "chat.disabled_unavailable": "Composer unavailable. Check the connection and current view.",
   "chat.disabled_submitting": "Your message is being processed.",
   "chat.disabled_model_required": "Choose a model before sending a message.",
+  "chat.model_config_failed_title": "Model configuration unavailable",
+  "chat.model_config_failed_inline": "You can still read this conversation. Review the details or choose a model before sending a message.",
   "chat.disabled_empty": "Type a message to enable Send.",
   "chat.usage_aria": "Session usage estimate",
   "chat.empty": "Conversation updates will appear here",

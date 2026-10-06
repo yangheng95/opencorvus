@@ -1,0 +1,32 @@
+{
+  "sourceDatabase": {
+    "length": 8855552,
+    "lastWriteTimeUtc": "2026-10-06T22:27:16.1213535Z"
+  },
+  "boundary": "Real closed-history clone; no Task rearm or synthesized messages; original immutable resource paths retained",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      }
+    }
+  ],
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "observedAtUtc": "2026-10-06T22:58:18.5764712Z",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/history-composer-52",
+  "credentialStaging": "None; auth.json and models.json absent at source and clone",
+  "port": 18015,
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50"
+}

@@ -185,6 +185,8 @@
   "chat.disabled_unavailable": "输入区暂不可用，请检查连接与当前视图。",
   "chat.disabled_submitting": "正在处理你的消息。",
   "chat.disabled_model_required": "请先选择模型，再发送消息。",
+  "chat.model_config_failed_title": "模型配置暂不可用",
+  "chat.model_config_failed_inline": "你仍可阅读这段对话。请查看详情或选择模型后再发送消息。",
   "chat.disabled_empty": "输入消息后即可发送。",
   "chat.usage_aria": "会话用量估计",
   "chat.empty": "对话进展会显示在这里",

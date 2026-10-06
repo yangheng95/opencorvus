@@ -2583,3 +2583,7 @@ The current connection-workspace authority record also includes metadata selecti
 - [Explorer selection lifecycle46](artifacts/2026-10-05-connection-workspace-authority/explorer-selection-lifecycle-plan.md): authoritative-list selection reconciliation; real removal/type replacement/filter/hidden-descendant/menu/current-file visuals passed, extended gesture matrices remain open.
 
 - [Explorer initial loading48 and genuine50](artifacts/2026-10-05-connection-workspace-authority/explorer-initial-loading-plan.md): initial Loading→list visuals passed; genuine50 full checks/formal Task/resource/snapshot/native notes download passed, whole886676ms;44 generation cause and pointer candidate51 remain open.
+
+- [Subagent progress activation51](artifacts/2026-10-05-connection-workspace-authority/subagent-progress-activation-plan.md): pointer outcome and hidden activation geometry reviewed; real keyboard/header comparison pending.
+
+- [History and Composer config isolation52](artifacts/2026-10-05-connection-workspace-authority/history-composer-config-isolation-plan.md): single passive-read owner;9 local service tests/43 assertions and real Task/Session history visuals passed; ordinary Session stream400 retained as shared audit53, all52 scopes closed.

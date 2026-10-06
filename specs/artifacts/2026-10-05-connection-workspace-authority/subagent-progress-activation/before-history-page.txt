@@ -1,0 +1,108 @@
+Browser tab: 29, Title: "OpenCorvus", URL: "http://127.0.0.1:18014/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18014/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 container
+											37 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+											38 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-175-trigger, Secondary Actions: Expand
+											39 button New chat for this project
+										40 container
+											41 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+											42 button 文件加载与完整正式交付验收50 Completed
+												43 text 文件加载与完整正式交付验收50
+												44 container Completed
+													45 text Completed
+											46 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+										47 button (expanded) Description: Collapse Anonymous 432ef3, Secondary Actions: Collapse
+										48 container
+											49 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											50 button Reply with OK.
+											51 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-196-trigger, Secondary Actions: Expand
+									52 container Recents
+										53 text Recents
+										54 container
+											55 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+											56 button 文件加载与完整正式交付验收50 Completed
+												57 text 文件加载与完整正式交付验收50
+												58 container Completed
+													59 text Completed
+											60 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+										61 container
+											62 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											63 button Reply with OK.
+											64 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+							65 container Connection Diagnostics
+								66 container Description: Connection Diagnostics · Online · Port 18014, ID: connBadge
+									67 text Online
+					68 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					69 container chatSection
+						70 container Description: Loading task, ID: taskSwitchProgress
+						71 container
+							72 text 文件加载与完整正式交付验收50
+							73 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-239-trigger, Secondary Actions: Expand
+							74 container Completed
+								75 text Completed
+							76 container Description: Not running · 9m 26s, ID: taskStatus
+								77 text 9m 26s
+							78 button Side chat
+							79 container solidChatHeaderRuntimeActions
+								80 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								81 checkbox Description: Open right dock, Value: 0
+						82 container
+							83 container Description: Conversation, ID: chatScroll
+								84 container
+									85 text Conversation could not be loaded 文件加载与完整正式交付验收50 HTTP 400 session/ses_-zUSggUQgzzprQcl946c/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject Request ID: afbbb2c5-d603-4e71-ba41-de1f3bac7619 ApiError: API 400 s...
+									86 button Retry
+							87 container chatHomeComposition
+								88 container chatForm
+									89 splitter Description: Drag to resize the message input, Value: 42
+									90 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									91 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									92 text Code
+									93 text Task
+									94 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
+									95 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									96 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+										97 text Choose model
+									98 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+		99 container 文件加载与完整正式交付验收50 28m ago Started Oct 07, 2026, 06:18 AM project, ID: tooltip-cl-181-content
+			100 text 文件加载与完整正式交付验收50
+			101 text 28m ago
+			102 text Started
+			103 text Oct 07, 2026, 06:18 AM
+			104 text project
+
+The focused UI element is 42 button 文件加载与完整正式交付验收50 Completed

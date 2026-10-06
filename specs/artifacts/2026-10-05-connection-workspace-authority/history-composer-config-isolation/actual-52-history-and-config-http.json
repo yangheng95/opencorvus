@@ -1,0 +1,209 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "requestID": "bcfe7724-7da9-459b-9947-e6e2d7c6ccbe",
+      "status": 200,
+      "time": "2026-10-06T22:59:20.229Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "requestID": "834d2398-1591-4a17-9bbe-b0b4acec6786",
+      "status": 400,
+      "time": "2026-10-06T22:59:20.284Z"
+    },
+    {
+      "method": "GET",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "requestID": "d8e5a0d6-bf71-4097-8b9b-006537bee6dd",
+      "status": 200,
+      "time": "2026-10-06T22:59:20.391Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "requestID": "f23c1c7c-c2bb-417b-b247-4adaf8347337",
+      "status": 400,
+      "time": "2026-10-06T22:59:20.438Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "requestID": "35e0d448-8e71-405a-87b8-86cac719868f",
+      "status": 400,
+      "time": "2026-10-06T22:59:57.322Z"
+    },
+    {
+      "method": "GET",
+      "path": "/coding/chat/session/ses_h0wiOTw2b6yPztYlG8J4",
+      "requestID": "d9c1cc35-8a80-4a01-b12b-3f3db828769a",
+      "status": 200,
+      "time": "2026-10-06T23:00:18.872Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/conversation",
+      "requestID": "b3a15a80-14cb-48bf-9725-0d65384db437",
+      "status": 200,
+      "time": "2026-10-06T23:00:19.138Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/config",
+      "requestID": "005a16c4-0498-4186-ba09-e59fc8fc71c3",
+      "status": 400,
+      "time": "2026-10-06T23:00:19.162Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "879eae3b-bbe6-469d-a362-cd33ff02173f",
+      "status": 400,
+      "time": "2026-10-06T23:00:19.216Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "9e07a454-fa41-498c-b953-38614319c053",
+      "status": 400,
+      "time": "2026-10-06T23:00:22.236Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "0bddbe0c-b629-4297-85a9-948e94d0f532",
+      "status": 400,
+      "time": "2026-10-06T23:00:25.250Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "8b48f047-6523-4238-90ce-25ca3b6963b3",
+      "status": 400,
+      "time": "2026-10-06T23:00:28.270Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "6341c44b-1557-49f0-80bb-e4a54a314f67",
+      "status": 400,
+      "time": "2026-10-06T23:00:31.288Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "94ca6fdf-8937-40f8-92fa-6e25ba17e1d7",
+      "status": 400,
+      "time": "2026-10-06T23:00:34.302Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "bf5095c0-687b-494d-9cc0-c2a0fdf44b2b",
+      "status": 400,
+      "time": "2026-10-06T23:00:37.326Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "bd030e2f-2990-45fe-82d6-bcf66ead0c7a",
+      "status": 400,
+      "time": "2026-10-06T23:00:40.337Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "6da73ce3-4e56-4857-8225-de99673251ad",
+      "status": 400,
+      "time": "2026-10-06T23:00:43.349Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "61160116-93fc-4f8b-902e-3e176f53ed37",
+      "status": 400,
+      "time": "2026-10-06T23:00:46.368Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "f61335ed-d5b5-4e18-a164-b759a9d3fdfb",
+      "status": 400,
+      "time": "2026-10-06T23:00:49.385Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "8bc18476-9a5f-417c-8e6b-60b05f4cd5cf",
+      "status": 400,
+      "time": "2026-10-06T23:00:52.401Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "165a39a2-d5f6-4ff5-ac47-c1cb2391fc5e",
+      "status": 400,
+      "time": "2026-10-06T23:00:55.417Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "d31a1532-ef34-4c23-9385-2c74329f3ddc",
+      "status": 400,
+      "time": "2026-10-06T23:00:58.435Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "0635615a-1ffc-4e43-a0b8-a396cf831fcf",
+      "status": 400,
+      "time": "2026-10-06T23:01:01.448Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "3de86c93-5f35-4c36-86a7-636e625452b3",
+      "status": 400,
+      "time": "2026-10-06T23:01:04.456Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "5f52e709-83a4-4553-b0fc-a445619c093a",
+      "status": 400,
+      "time": "2026-10-06T23:01:07.466Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "b7eacbc3-8205-49ec-ac3d-f7fad9ed9445",
+      "status": 400,
+      "time": "2026-10-06T23:01:10.482Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "2281f65d-859c-48e2-8587-142d8a2d8875",
+      "status": 400,
+      "time": "2026-10-06T23:01:13.500Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "021ea809-2f03-4e91-b6af-7ab9fd5f8ca5",
+      "status": 400,
+      "time": "2026-10-06T23:01:16.515Z"
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "requestID": "2617fe06-f24b-4aad-b84f-5c3ff486fd8a",
+      "status": 400,
+      "time": "2026-10-06T23:01:19.531Z"
+    }
+  ],
+  "nativeOccurrence": "history-composer-52-ead5db7a-94b9-482c-89da-aa8dccf9c806",
+  "source": "Actual native dev.log records after exact Target birth; successful config recovery not exercised"
+}

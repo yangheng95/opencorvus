@@ -1556,12 +1556,6 @@ async function openMissionSession(
     if (!applied || !owns()) {
       return false
     }
-    await projectComposerModelFromSession(
-      { sessionID: result.sessionID, directory: missionDirectory, authority },
-      () =>
-        owns() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === result.sessionID,
-    )
-    if (!owns()) return false
     setComposerIntent({ productPillar: result.productPillar, conversationTarget: "mission" })
     await loadConversation(source, {
       scrollIntent: "bottom",
@@ -1571,6 +1565,11 @@ async function openMissionSession(
     })
     if (!owns()) return false
     startSSE(source, 0, { directory: missionDirectory, authority })
+    void projectComposerModelFromSession(
+      { sessionID: result.sessionID, directory: missionDirectory, authority },
+      () =>
+        owns() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === result.sessionID,
+    )
     setPrimaryCenterPanel("mission")
     return true
   } catch (error) {

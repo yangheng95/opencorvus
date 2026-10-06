@@ -1,0 +1,43 @@
+{
+  "closure": "Own page30 closed; sole public shutdown and exact independent Host/Target/port/pair absence receipts",
+  "checks": {
+    "buildSeconds": 52.8,
+    "rendererSurface": 0,
+    "rootDocsBeforeFinalIndex": 0,
+    "overlayI18n": 0,
+    "overlayTypes": 0,
+    "overlayBuild": 0
+  },
+  "services": {
+    "tests": 9,
+    "boundary": "Positive pure service fixtures, not UI or end-to-end",
+    "assertions": 43,
+    "exitCode": 0,
+    "checker": "bun run script/run-unit-tests.ts test/composer-model-projection.test.ts test/history-composer-isolation.test.ts"
+  },
+  "sourceScope": "Shared passive Composer config projection; backend config validation unchanged",
+  "streams": {
+    "ordinarySession": {
+      "qualification": "FAILED; shared Project read/reconnect audit53 active",
+      "requestCount": 21,
+      "status": 400
+    },
+    "task": {
+      "scope": "Actual Task events request",
+      "status": 200
+    }
+  },
+  "observedAtUtc": "2026-10-06T23:06:35.5037954Z",
+  "manual": {
+    "newDraft": "Actual New chat/Inherit configuration view retires selected-scope issue",
+    "typedDraft": "Own unsent text with Choose model and disabled Send",
+    "task": "Actual completed50 history, two formal resources and completed status visible after config400 and manual retry",
+    "ordinarySession": "Actual original Reply with OK and OK reply visible; own Session/directory config400"
+  },
+  "limitations": [
+    "No model/config recovery success exercised",
+    "Mission/rebind/restart/full concurrency matrix unknown",
+    "Pointer51 comparison pending",
+    "Original44 generation failure remains unresolved"
+  ]
+}

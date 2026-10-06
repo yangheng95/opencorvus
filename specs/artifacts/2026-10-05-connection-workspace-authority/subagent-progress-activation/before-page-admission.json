@@ -1,0 +1,24 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "subagent-activation-51-before-681521d7-f810-464e-9225-3afbfe2c15db",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18014",
+    "pid": 65356
+  },
+  "assets": [
+    "main-BI307Bc7.js",
+    "main-CTTRNzw5.css"
+  ],
+  "observedAtUtc": "2026-10-06T22:45:41.1691148Z",
+  "purpose": "Actual copied closed50 history through real native/UI routes, no Task rearm",
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-activation-51-before\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-activation-51-before\\runtime\\data",
+      "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-activation-51-before\\home"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "occurrence": "subagent-activation-51-before-681521d7-f810-464e-9225-3afbfe2c15db",
+  "outcome": "settled",
+  "host": {
+    "pid": 64208,
+    "processInstanceID": "win32:639269235110099807",
+    "occurrenceID": "d11da4e5-3468-44d4-b8e2-111fa4a1b8d1"
+  },
+  "target": {
+    "pid": 65356,
+    "processInstanceID": "win32:639269235118220613",
+    "occurrenceID": "9f1e5def-0a61-45d9-ba03-24d3f387e65e"
+  },
+  "observedAtUtc": "2026-10-06T22:48:20.747Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

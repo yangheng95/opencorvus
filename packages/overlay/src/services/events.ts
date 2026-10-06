@@ -387,10 +387,7 @@ export function routeSSEEvent(event: any, recovery: SelectedTaskRecoverySchedule
     const changedSessionID = typeof properties.sessionID === "string" ? properties.sessionID.trim() : ""
     if (!changedSessionID) throw new Error("config.changed is missing canonical properties.sessionID")
     markSessionConfigStale(changedSessionID)
-    void refreshActiveComposerModelFromSession(changedSessionID)?.catch((err: unknown) => {
-      if (!owns()) return
-      console.error("[sse] Session config projection refresh failed", err)
-    })
+    void refreshActiveComposerModelFromSession(changedSessionID)
     advanceHandledSelectedTaskSequence(event)
     markHandledSelectedLiveEvent(event)
     return true

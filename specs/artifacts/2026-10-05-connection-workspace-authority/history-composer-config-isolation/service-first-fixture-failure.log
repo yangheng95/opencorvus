@@ -1,0 +1,62 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-3f665b2bfd616ca5\debug\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/composer-model-projection.test.ts
+bun test v1.3.14 (0d9b296a)
+
+test\composer-model-projection.test.ts:
+(pass) canonical ready configuration publishes its model and clears the issue [4.27ms]
+71 | 
+72 | function reportMissingI18nKey(key: string, expected: string): void {
+73 |   const signature = `${currentLocale}:${expected}:${key}`
+74 |   if (reportedMissingI18nKeys.has(signature)) return
+75 |   reportedMissingI18nKeys.add(signature)
+76 |   console.error(new MissingI18nKeyError(currentLocale, key, expected))
+                     ^
+MissingI18nKeyError: Missing i18n string for locale en-US: chat.model_config_failed_title
+   locale: "en-US",
+      key: "chat.model_config_failed_title",
+ expected: "string",
+
+      at reportMissingI18nKey (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:76:17)
+      at runtimeLocaleValue (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:82:5)
+      at t (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:98:17)
+      at projectComposerModelFromSession (D:\myhexin-local\opencorvus\packages\overlay\src\services\composer-model.ts:158:14)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\composer-model-projection.test.ts:58:24)
+
+(pass) typed config failure clears the current model and retry settles the same owner [1.92ms]
+(pass) same API selection ABA retires the original read [0.48ms]
+(pass) changed API authority retires the original read [0.45ms]
+255 |       }
+256 |       return
+257 |     }
+258 |     if (action.onFailure) {
+259 |       if (!confirmedPersistedSettings) {
+260 |         throw new Error("settings save failure callback requires a confirmed persisted settings snapshot", {
+                        ^
+error: settings save failure callback requires a confirmed persisted settings snapshot
+      at saveSettings (D:\myhexin-local\opencorvus\packages\overlay\src\store\settings.ts:260:19)
+      at async rememberComposerModel (D:\myhexin-local\opencorvus\packages\overlay\src\services\composer-model.ts:116:9)
+      at async selectComposerModel (D:\myhexin-local\opencorvus\packages\overlay\src\services\composer-model.ts:216:9)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\composer-model-projection.test.ts:102:9)
+
+237 |         preparation = await action.prepare?.(snapshot)
+238 |         const payload = bootstrapOverlaySettings({ ...snapshot, ...preparation?.overrides })
+239 |         parseServerBaseUrl(payload.serverUrl)
+240 |         preparation?.assertCurrent?.()
+241 |         const saved = await getHostTransport().native({ kind: "settings.save", payload })
+242 |         if (saved !== true) throw new Error("settings.save did not confirm persistence")
+                                            ^
+error: settings.save did not confirm persistence
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\src\store\settings.ts:242:39)
+      at async saveSettings (D:\myhexin-local\opencorvus\packages\overlay\src\store\settings.ts:245:40)
+      at async rememberComposerModel (D:\myhexin-local\opencorvus\packages\overlay\src\services\composer-model.ts:116:9)
+      at async selectComposerModel (D:\myhexin-local\opencorvus\packages\overlay\src\services\composer-model.ts:216:9)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\composer-model-projection.test.ts:102:9)
+(fail) explicit canonical selection wins against an older passive read [2.03ms]
+(pass) explicit write failure restores the original model and original typed issue [0.54ms]
+
+ 5 pass
+ 1 fail
+ 20 expect() calls
+Ran 6 tests across 1 file. [233.00ms]
+error: script "test:unit" exited with code 1

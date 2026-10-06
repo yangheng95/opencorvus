@@ -1,15 +1,23 @@
+import { batch } from "solid-js"
 import { appStore, setAppStore } from "../store/app"
 import { activeSessionID, activeTaskID, boardStore, rootTaskSessionID } from "../store/board"
 import { getSessionConfig, patchSessionConfig } from "./config"
 import { taskOwningDirectory } from "./task-directory"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
+import { formatErrorDetails, reportError } from "./diagnostics"
+import { t } from "../utils/i18n"
 
 export interface ComposerModelSessionTarget {
   sessionID: string
   directory: string
   authority?: ApiAuthority
 }
+
+export type ComposerModelProjectionResult =
+  | { status: "ready"; model: string }
+  | { status: "failed"; error: unknown }
+  | { status: "retired" }
 
 let composerModelProjectionGeneration = 0
 let composerModelSelectionGeneration = 0
@@ -47,7 +55,9 @@ function activeComposerModelSessionTarget(): ComposerModelSessionTarget | null {
  * Session when that root Session's config changes outside the selection
  * response that initiated the write.
  */
-export function refreshActiveComposerModelFromSession(changedSessionID?: string): Promise<string> | undefined {
+export function refreshActiveComposerModelFromSession(
+  changedSessionID?: string,
+): Promise<ComposerModelProjectionResult> | undefined {
   const target = activeComposerModelSessionTarget()
   if (!target) return undefined
   const changed = changedSessionID?.trim()
@@ -82,13 +92,19 @@ export function retireComposerModel(clearPreference: boolean): void {
 /** Clear the current-view projection before changing Task or Session identity. */
 export function clearComposerModelProjection(): void {
   beginComposerModelProjection()
-  setAppStore("composerModel", "")
+  batch(() => {
+    setAppStore("composerModel", "")
+    setAppStore("composerModelIssue", null)
+  })
 }
 
 /** Initialize a new draft from the last explicit choice, without changing Session config. */
 export function restoreDraftComposerModel(): void {
   beginComposerModelProjection()
-  setAppStore("composerModel", settingsStore.lastSelectedModel)
+  batch(() => {
+    setAppStore("composerModel", settingsStore.lastSelectedModel)
+    setAppStore("composerModelIssue", null)
+  })
 }
 
 async function rememberComposerModel(
@@ -110,18 +126,43 @@ async function rememberComposerModel(
 
 /**
  * Project the canonical effective model of one persisted root Session into
- * the current Composer view. The caller owns selection-response ordering.
+ * the current Composer view. Passive configuration reads settle independently
+ * of historical conversation loading; failures retain their original error.
+ * The caller owns selection-response ordering.
  */
 export async function projectComposerModelFromSession(
   target: ComposerModelSessionTarget,
   ownsResponse: () => boolean,
-): Promise<string> {
+): Promise<ComposerModelProjectionResult> {
   target = { ...target, authority: target.authority ?? captureApiAuthority() }
   const generation = beginComposerModelProjection()
-  const saved = await getSessionConfig(target)
-  const model = normalizedModel(saved.config.model)
-  if (ownsResponse() && ownsComposerModelProjection(generation, target)) setAppStore("composerModel", model)
-  return model
+  const selectionEpoch = boardStore.selectEpoch
+  const owns = () =>
+    boardStore.selectEpoch === selectionEpoch && ownsResponse() && ownsComposerModelProjection(generation, target)
+  if (!owns()) return { status: "retired" }
+  const issue = appStore.composerModelIssue
+  if (issue) setAppStore("composerModelIssue", { error: issue.error, retrying: true })
+  let result: Exclude<ComposerModelProjectionResult, { status: "retired" }>
+  try {
+    const saved = await getSessionConfig(target)
+    result = { status: "ready", model: normalizedModel(saved.config.model) }
+  } catch (error) {
+    result = { status: "failed", error }
+  }
+  if (!owns()) return { status: "retired" }
+  batch(() => {
+    setAppStore("composerModel", result.status === "ready" ? result.model : "")
+    setAppStore("composerModelIssue", result.status === "failed" ? { error: result.error, retrying: false } : null)
+  })
+  if (result.status === "failed") {
+    reportError({
+      id: "composer-model:projection",
+      title: t("chat.model_config_failed_title"),
+      message: result.error instanceof Error ? result.error.message : String(result.error),
+      details: formatErrorDetails(result.error),
+    })
+  }
+  return result
 }
 
 /**
@@ -138,6 +179,9 @@ export async function selectComposerModel(model: string): Promise<void> {
   }
 
   const previous = appStore.composerModel
+  const previousIssue = appStore.composerModelIssue
+    ? { error: appStore.composerModelIssue.error, retrying: false }
+    : null
   const selectedTarget = activeComposerModelSessionTarget()
   const target = selectedTarget ? { ...selectedTarget, authority } : null
   if (boardStore.selectedSource && !target) {
@@ -146,6 +190,7 @@ export async function selectComposerModel(model: string): Promise<void> {
   const generation = beginComposerModelProjection()
   const selectionGeneration = ++composerModelSelectionGeneration
   setAppStore("composerModel", selected)
+  setAppStore("composerModelIssue", previousIssue)
   if (!target) return rememberComposerModel(selected, selectionGeneration, authority)
 
   let savedModel: string
@@ -155,9 +200,19 @@ export async function selectComposerModel(model: string): Promise<void> {
       diff: { model: selected },
     })
     savedModel = normalizedModel(saved.config.model)
-    if (ownsComposerModelProjection(generation, target)) setAppStore("composerModel", savedModel)
+    if (ownsComposerModelProjection(generation, target)) {
+      batch(() => {
+        setAppStore("composerModel", savedModel)
+        setAppStore("composerModelIssue", null)
+      })
+    }
   } catch (error) {
-    if (ownsComposerModelProjection(generation, target)) setAppStore("composerModel", previous)
+    if (ownsComposerModelProjection(generation, target)) {
+      batch(() => {
+        setAppStore("composerModel", previous)
+        setAppStore("composerModelIssue", previousIssue)
+      })
+    }
     throw error
   }
   await rememberComposerModel(savedModel, selectionGeneration, authority)

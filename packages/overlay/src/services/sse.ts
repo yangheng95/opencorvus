@@ -304,21 +304,6 @@ function observeSseReconnect(owner: string, promise: Promise<void>): void {
   })
 }
 
-function refreshComposerModelAfterSelectedStreamConnect(eventType: "task.connected" | "session.connected"): void {
-  const authority = captureApiAuthority()
-  void refreshActiveComposerModelFromSession()?.catch((error) => {
-    if (!isApiAuthorityCurrent(authority)) return
-    AppLog.error("sse", `failed to hydrate Composer model after ${eventType}`, {
-      eventType,
-      error: formatErrorDetails(error),
-      diagnosticID: `sse:composer-model-hydration:${eventType}`,
-      diagnosticTitle: "Composer model refresh failed",
-      diagnosticMessage: `The selected root Session model could not be refreshed after ${eventType}.`,
-      diagnosticDetails: formatErrorDetails(error),
-    })
-  })
-}
-
 /**
  * A `task.live_replay_expired` close is not a failure: the server is up, it
  * answered us, and it asked us to reopen with a reset live cursor. Paying the
@@ -494,7 +479,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
               }
               mergeSessionConnectionSnapshot(source, event.payload)
             }
-            refreshComposerModelAfterSelectedStreamConnect(event.type)
+            void refreshActiveComposerModelFromSession()
             return
           }
           recordSelectedTaskSseUpdate(event, taskID)

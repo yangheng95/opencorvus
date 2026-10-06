@@ -70,8 +70,8 @@ export async function refreshConnectionWorkspace(authority = captureApiAuthority
     })
     if (!owns()) return
     const sessionID = source.kind === "session" ? source.id : rootTaskSessionID()
-    if (sessionID) await projectComposerModelFromSession({ sessionID, directory, authority }, owns)
-    if (owns()) startSSE(source, sequence, { authority, directory })
+    startSSE(source, sequence, { authority, directory })
+    if (sessionID) void projectComposerModelFromSession({ sessionID, directory, authority }, owns)
   } finally {
     if (owns()) setBoardStore("taskSwitching", false)
   }

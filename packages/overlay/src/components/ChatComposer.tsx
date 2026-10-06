@@ -79,6 +79,7 @@ import {
   unattendedConfigPatch,
 } from "../services/composer-run-controls"
 import { composerPrimaryAction } from "../services/composer-primary-action"
+import { refreshActiveComposerModelFromSession } from "../services/composer-model"
 import { isComposerImeKeyboardEvent } from "../services/composer-keyboard"
 import {
   applyComposerMentionOption,
@@ -1456,6 +1457,29 @@ export function ChatComposer(props: ChatComposerProps) {
 
   return (
     <div class="chat-composer-stack">
+      <Show when={appStore.composerModelIssue}>
+        {(issue) => (
+          <Feedback
+            tone="warning"
+            title={t("chat.model_config_failed_title")}
+            details={formatErrorDetails(issue().error)}
+            actions={
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                disabled={issue().retrying}
+                onClick={() => void refreshActiveComposerModelFromSession()}
+              >
+                {t(issue().retrying ? "common.retrying" : "common.retry")}
+              </Button>
+            }
+          >
+            {t("chat.model_config_failed_inline")}
+          </Feedback>
+        )}
+      </Show>
       <Show when={composerQuotation(props.draftKey)}>
         {(quote) => (
           <QuotationChip quotation={quote()} onRemove={() => setComposerQuotation(props.draftKey, undefined)} />

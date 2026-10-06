@@ -1,0 +1,13 @@
+{
+  "body": {
+    "name": "ProviderModelNotFoundError",
+    "data": {
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol",
+      "suggestions": []
+    }
+  },
+  "observedAtUtc": "2026-10-06T22:47:40.8439168Z",
+  "scope": "Actual no-Provider history presentation config GET; not a model Task or credential preflight",
+  "status": 400
+}

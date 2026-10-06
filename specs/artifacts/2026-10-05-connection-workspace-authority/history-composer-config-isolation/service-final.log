@@ -1,0 +1,25 @@
+bun test v1.3.14 (0d9b296a)
+
+test\composer-model-projection.test.ts:
+(pass) canonical ready configuration publishes its model and clears the issue [4.18ms]
+(pass) typed config failure clears the current model and retry settles the same owner [1.95ms]
+(pass) same API selection ABA retires the original read [0.38ms]
+(pass) changed API authority retires the original read [0.40ms]
+(pass) explicit canonical selection wins against an older passive read [1.80ms]
+(pass) explicit write failure restores the original model and original typed issue [0.64ms]
+(pass) passive saved configuration and pending explicit write settle to the canonical confirmed model [0.82ms]
+
+ 7 pass
+ 0 fail
+ 30 expect() calls
+Ran 7 tests across 1 file. [221.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\history-composer-isolation.test.ts:
+(pass) actual Task selection retains successful persisted history and SSE when current Composer config returns typed400 [19.36ms]
+(pass) a typed historical load failure retains the original Task selection error contract [1.09ms]
+
+ 2 pass
+ 0 fail
+ 13 expect() calls
+Ran 2 tests across 1 file. [277.00ms]

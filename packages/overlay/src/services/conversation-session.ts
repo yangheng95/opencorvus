@@ -414,12 +414,6 @@ export async function selectConversationSession(options: SelectConversationSessi
     }
     setBoardStore("selectedSource", source)
     try {
-      await projectComposerModelFromSession(
-        { sessionID, directory, authority },
-        () => !stale() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === sessionID,
-      )
-      assertNotAborted(options.signal)
-      if (stale()) throw new DOMException("Coding assistant selection superseded", "AbortError")
       await hydrateConversation(source, {
         authority,
         signal: options.signal,
@@ -430,6 +424,10 @@ export async function selectConversationSession(options: SelectConversationSessi
       assertNotAborted(options.signal)
       if (!stale() && isConversationSource(source)) {
         startSSE(source, 0, { directory, authority })
+        void projectComposerModelFromSession(
+          { sessionID, directory, authority },
+          () => !stale() && boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === sessionID,
+        )
       }
       return sessionID
     } finally {

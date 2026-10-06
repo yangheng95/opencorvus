@@ -342,11 +342,10 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
       startSSE({ kind: "task", id: nextTaskID }, lastSequence, { directory: selectedDirectory, authority })
       const rootSessionID = rootTaskSessionID()
       if (!rootSessionID) throw new Error(`selectTask: task ${nextTaskID} has no root session`)
-      await projectComposerModelFromSession(
+      void projectComposerModelFromSession(
         { sessionID: rootSessionID, directory: selectedDirectory, authority },
         () => !stale() && ownsWorkspaceSelection(epoch) && activeTaskID() === nextTaskID,
       )
-      if (stale()) return
     } catch (error) {
       if (stale() && isAbortError(error)) return
       if (!stale()) {

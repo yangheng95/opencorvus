@@ -1,0 +1,39 @@
+{
+  "occurrence": "history-composer-52-ead5db7a-94b9-482c-89da-aa8dccf9c806",
+  "outcome": "ready",
+  "host": {
+    "pid": 50304,
+    "processInstanceID": "win32:639269243442294568",
+    "occurrenceID": "86f6b56d-f165-407a-b4da-da704ef3893c"
+  },
+  "parent": {
+    "pid": 2244,
+    "processInstanceID": "win32:639269243423421345",
+    "occurrenceID": "0807dc9a-0ea8-437f-bcb8-ffaea0527757"
+  },
+  "target": {
+    "pid": 74352,
+    "processInstanceID": "win32:639269243450552186",
+    "occurrenceID": "844d12f2-558a-42e6-b018-bf6aac7de042"
+  },
+  "targetBirthAtMs": 1791327545055,
+  "observedAtUtc": "2026-10-06T22:59:05.104Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18015",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\history-composer-52\\startup.json",
+    "--startup-occurrence",
+    "history-composer-52-ead5db7a-94b9-482c-89da-aa8dccf9c806",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

@@ -1,0 +1,23 @@
+{
+  "occurrence": "history-composer-52-ead5db7a-94b9-482c-89da-aa8dccf9c806",
+  "outcome": "settled",
+  "host": {
+    "pid": 50304,
+    "processInstanceID": "win32:639269243442294568",
+    "occurrenceID": "86f6b56d-f165-407a-b4da-da704ef3893c"
+  },
+  "target": {
+    "pid": 74352,
+    "processInstanceID": "win32:639269243450552186",
+    "occurrenceID": "844d12f2-558a-42e6-b018-bf6aac7de042"
+  },
+  "observedAtUtc": "2026-10-06T23:01:49.027Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

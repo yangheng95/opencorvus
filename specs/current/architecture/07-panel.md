@@ -12,6 +12,18 @@ Active-work Stop retains precedence and only its existing stopping state disable
 it. Availability is a derived presentation value, not a second state, model owner
 or dispatch policy; directory-free Chat remains a valid ready context.
 
+Historical conversation hydration and its existing SSE (Server-Sent Events)
+stream settle independently of passive Composer model configuration. The single
+Composer model service publishes ready/failed/retired reads only for its current
+API authority, selection epoch, root Session/directory, projection generation
+and caller ownership. A current failure clears the model and retains its original
+typed error in one transient Composer issue, with Details and owner-scoped Retry;
+successful reads or confirmed model writes clear that issue. Historical selection
+failure remains owned by the history request. Persisted sources with an empty
+model retain their existing Send availability requirement. Backend config and
+execution validation, draft preferences and explicit write-error contracts remain
+unchanged.
+
 ## File comparison evidence
 
 One current diff service and Tool reducer project recorded comparisons. FileChange

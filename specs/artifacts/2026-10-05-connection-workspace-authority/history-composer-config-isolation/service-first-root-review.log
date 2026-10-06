@@ -1,0 +1,43 @@
+bun test v1.3.14 (0d9b296a)
+
+test\composer-model-projection.test.ts:
+(pass) canonical ready configuration publishes its model and clears the issue [5.60ms]
+71 | 
+72 | function reportMissingI18nKey(key: string, expected: string): void {
+73 |   const signature = `${currentLocale}:${expected}:${key}`
+74 |   if (reportedMissingI18nKeys.has(signature)) return
+75 |   reportedMissingI18nKeys.add(signature)
+76 |   console.error(new MissingI18nKeyError(currentLocale, key, expected))
+                     ^
+MissingI18nKeyError: Missing i18n string for locale en-US: chat.model_config_failed_title
+   locale: "en-US",
+      key: "chat.model_config_failed_title",
+ expected: "string",
+
+      at reportMissingI18nKey (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:76:17)
+      at runtimeLocaleValue (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:82:5)
+      at t (D:\myhexin-local\opencorvus\packages\overlay\src\utils\i18n.ts:98:17)
+      at projectComposerModelFromSession (D:\myhexin-local\opencorvus\packages\overlay\src\services\composer-model.ts:158:14)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\composer-model-projection.test.ts:110:24)
+
+(pass) typed config failure clears the current model and retry settles the same owner [3.07ms]
+(pass) same API selection ABA retires the original read [0.58ms]
+(pass) changed API authority retires the original read [0.70ms]
+(pass) explicit canonical selection wins against an older passive read [2.74ms]
+(pass) explicit write failure restores the original model and original typed issue [1.60ms]
+(pass) passive saved configuration and pending explicit write settle to the canonical confirmed model [1.47ms]
+
+ 7 pass
+ 0 fail
+ 30 expect() calls
+Ran 7 tests across 1 file. [284.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\history-composer-isolation.test.ts:
+(pass) actual Task selection retains successful persisted history and SSE when current Composer config returns typed400 [34.82ms]
+(pass) a typed historical load failure retains the original Task selection error contract [1.70ms]
+
+ 2 pass
+ 0 fail
+ 13 expect() calls
+Ran 2 tests across 1 file. [356.00ms]

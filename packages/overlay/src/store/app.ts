@@ -91,6 +91,8 @@ export interface AppState {
   projectLoadIssues: ProjectLoadIssue[]
   /** Current draft or selected root Session model projected into the Composer. */
   composerModel: string
+  /** Current passive root Session config failure; owned by the Composer projection. */
+  composerModelIssue: { error: unknown; retrying: boolean } | null
   // ── Providers ──
   /** LLM provider catalog from models.dev / server */
   providerCatalog: any
@@ -153,6 +155,7 @@ const DEFAULT_APP_STATE: AppState = {
   configLoadIssues: [],
   projectLoadIssues: [],
   composerModel: "",
+  composerModelIssue: null,
   providerCatalog: null,
   providerAuth: null,
   providerLoadIssues: [],
