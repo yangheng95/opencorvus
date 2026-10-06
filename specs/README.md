@@ -2522,3 +2522,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Sidebar pointer resize plan](artifacts/2026-10-05-connection-workspace-authority/sidebar-pointer-resize-implementation-plan.md): source-qualified fixed-rail coordinate repair, rendered-width displacement and owned real-page qualification.
 
 - [Settings sidebar geometry plan](artifacts/2026-10-05-connection-workspace-authority/settings-sidebar-geometry-implementation-plan.md): source-qualified initial accessible-width candidate, stable before investigation and required single measured projection.
+
+- [Human participant identity and request presentation](artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation-plan.md): duplicated dynamic identity validation, canonical human reservation and subsequent genuine request display qualification.

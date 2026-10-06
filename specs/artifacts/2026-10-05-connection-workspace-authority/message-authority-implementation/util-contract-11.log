@@ -1,0 +1,14 @@
+bun test v1.3.14 (0d9b296a)
+
+test\dynamic-agent-id.test.ts:
+(pass) parses exact worker identity research-worker [2.14ms]
+(pass) parses exact worker identity user-reviewer [0.05ms]
+(pass) parses exact worker identity universal-build [0.01ms]
+(pass) returns the reserved participant error for user [0.70ms]
+(pass) returns the reserved participant error for orchestrator [0.09ms]
+(pass) returns the reserved participant error for shared [0.06ms]
+
+ 6 pass
+ 0 fail
+ 6 expect() calls
+Ran 6 tests across 1 file. [146.00ms]

@@ -1,0 +1,126 @@
+[
+  {
+    "input": "",
+    "before": [
+      {
+        "origin": "string",
+        "code": "too_small",
+        "minimum": 1,
+        "inclusive": true,
+        "path": [],
+        "message": "Too small: expected string to have >=1 characters"
+      },
+      {
+        "origin": "string",
+        "code": "invalid_format",
+        "format": "regex",
+        "pattern": "/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/",
+        "path": [],
+        "message": "dynamic agent id must be kebab-case"
+      }
+    ],
+    "after": [
+      {
+        "origin": "string",
+        "code": "invalid_format",
+        "format": "regex",
+        "pattern": "/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/",
+        "path": [],
+        "message": "dynamic agent id must be kebab-case"
+      },
+      {
+        "origin": "string",
+        "code": "too_small",
+        "minimum": 1,
+        "inclusive": true,
+        "path": [],
+        "message": "Too small: expected string to have >=1 characters"
+      }
+    ]
+  },
+  {
+    "input": "Bad ID",
+    "before": [
+      {
+        "origin": "string",
+        "code": "invalid_format",
+        "format": "regex",
+        "pattern": "/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/",
+        "path": [],
+        "message": "dynamic agent id must be kebab-case"
+      }
+    ],
+    "after": [
+      {
+        "origin": "string",
+        "code": "invalid_format",
+        "format": "regex",
+        "pattern": "/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/",
+        "path": [],
+        "message": "dynamic agent id must be kebab-case"
+      }
+    ]
+  },
+  {
+    "input": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "before": [
+      {
+        "origin": "string",
+        "code": "too_big",
+        "maximum": 64,
+        "inclusive": true,
+        "path": [],
+        "message": "Too big: expected string to have <=64 characters"
+      },
+      {
+        "origin": "string",
+        "code": "invalid_format",
+        "format": "regex",
+        "pattern": "/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/",
+        "path": [],
+        "message": "dynamic agent id must be kebab-case"
+      }
+    ],
+    "after": [
+      {
+        "origin": "string",
+        "code": "invalid_format",
+        "format": "regex",
+        "pattern": "/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/",
+        "path": [],
+        "message": "dynamic agent id must be kebab-case"
+      },
+      {
+        "origin": "string",
+        "code": "too_big",
+        "maximum": 64,
+        "inclusive": true,
+        "path": [],
+        "message": "Too big: expected string to have <=64 characters"
+      }
+    ]
+  },
+  {
+    "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "before": [
+      {
+        "origin": "string",
+        "code": "too_big",
+        "maximum": 64,
+        "inclusive": true,
+        "path": [],
+        "message": "Too big: expected string to have <=64 characters"
+      }
+    ],
+    "after": [
+      {
+        "origin": "string",
+        "code": "too_big",
+        "maximum": 64,
+        "inclusive": true,
+        "path": [],
+        "message": "Too big: expected string to have <=64 characters"
+      }
+    ]
+  }
+]

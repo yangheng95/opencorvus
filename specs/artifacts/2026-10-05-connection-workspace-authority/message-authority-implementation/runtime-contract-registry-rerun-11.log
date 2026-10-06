@@ -1,0 +1,18 @@
+$ bun script/run-tests.ts test/dynamic-agent-id.test.ts
+[1/1] START test/dynamic-agent-id.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) parses package and platform projected worker identities [1.54ms]
+(pass) reports the human identity at the projected worker field [0.74ms]
+(pass) parses a worker execution override and its nullable overlay [7.04ms]
+(pass) reports the human identity at both runtime configuration keys [0.61ms]
+(pass) parses the explicit scheduler skill owner and ordinary worker mount [0.23ms]
+(pass) reports the human identity at the skill mount owner key [0.19ms]
+(pass) projects the canonical Base worker and returns Registry's reserved identity error [8.28ms]
+
+ 7 pass
+ 0 fail
+ 13 expect() calls
+Ran 7 tests across 1 file. [1425.00ms]
+[1/1] DONE test/dynamic-agent-id.test.ts exit=0 duration=1.65s

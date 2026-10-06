@@ -1,0 +1,9 @@
+# Independent Sol identity review
+
+Read-only Sol_provider review of the final util/backend/SDK implementation finds no source blocker or new identity double owner. Util owns common syntax and orchestrator/shared/user reservation; backend reexports it, SDK adds existing length and package-only universal-build constraints. Util wildcard subpath covers the new module, output remains string and previous public export paths remain. Skill's explicit orchestrator exception remains valid.
+
+Reviewer flags SDK issue-array ordering for empty or simultaneously invalid syntax/length; actual sdk-error-order-comparison.json confirms those two multi-error arrays reverse order, while the observed malformed-only and overlong-only objects retain the same errors. There is no promise of byte-identical error arrays. Current Registry wraps its validator in the existing contextual invalid-ID Error; runtime-contract-registry-rerun-11.log verifies that exact error as well as the nested manifest Zod issue.
+
+Sol_e2e_plan's source/metadata audit identifies both former validators and all common-schema consumers, confirms platform universal-build must remain valid in runtime, and finds no user worker in observed retained07 Base or current repo manifests. Other private global/project packages are unexamined. Sol_meta corrects the delegate-agent reachability claim because coding/chat/work restriction precedes that author's write. Panel live/recovery author values and current semantic consumers remain the relevant audited author pathways. Evolution's additional operator provenance protections mean no permission bypass is established.
+
+These independent source reports do not prove current UI presentation or historical imported participant safety. Shared display classifier is untouched in this checkpoint.

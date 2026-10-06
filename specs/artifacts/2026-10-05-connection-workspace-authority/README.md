@@ -181,3 +181,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Sidebar pointer resize binding plan](sidebar-pointer-resize-implementation-plan.md) and [evidence](sidebar-pointer-resize-implementation/README.md): actual rendered origin plus displacement, real09 delta/reverse/no-motion/keyboard/collapse/nondefault reload and complete owned physical closure; next settings/provenance issues remain open.
 
 - [Settings sidebar geometry plan](settings-sidebar-geometry-implementation-plan.md) and [evidence](settings-sidebar-geometry-implementation/README.md): stable before/current105% defects, single actual box/CSS-scale repair, real after default/keyboard/pointer/reopen/scale acceptance and complete owned cleanup; further provenance/usability boundaries stay open.
+
+- [Human participant identity plan](message-authority-implementation-plan.md) and [evidence](message-authority-implementation/README.md): current dynamic ID collision/public admission repair; display-source omission and genuine UI qualification remain separately bounded.

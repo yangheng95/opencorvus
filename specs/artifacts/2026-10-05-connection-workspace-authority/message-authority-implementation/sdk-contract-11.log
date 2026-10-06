@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+test\dynamic-agent-id.test.ts:
+(pass) parses package workers and the existing maximum identity length [4.32ms]
+(pass) returns the package reserved identity error for user [1.03ms]
+(pass) returns the package reserved identity error for orchestrator [0.12ms]
+(pass) returns the package reserved identity error for shared [0.07ms]
+(pass) returns the package reserved identity error for universal-build [0.06ms]
+(pass) returns the existing package length error above 64 characters [0.46ms]
+(pass) reports the human identity at the workflow agent field [3.51ms]
+(pass) reports the human identity at the package projection key [4.46ms]
+
+ 8 pass
+ 0 fail
+ 10 expect() calls
+Ran 8 tests across 1 file. [168.00ms]

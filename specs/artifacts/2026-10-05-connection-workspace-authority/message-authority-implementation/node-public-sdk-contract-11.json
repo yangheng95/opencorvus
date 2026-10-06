@@ -1,0 +1,26 @@
+[
+  {
+    "input": "research-worker",
+    "output": "research-worker"
+  },
+  {
+    "input": "user",
+    "output": [
+      {
+        "code": "custom",
+        "message": "dynamic agent id \"user\" is reserved",
+        "path": []
+      }
+    ]
+  },
+  {
+    "input": "universal-build",
+    "output": [
+      {
+        "code": "custom",
+        "message": "dynamic agent id \"universal-build\" is reserved",
+        "path": []
+      }
+    ]
+  }
+]

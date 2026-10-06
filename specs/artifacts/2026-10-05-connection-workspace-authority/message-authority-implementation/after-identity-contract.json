@@ -1,0 +1,81 @@
+{
+  "time": "2026-10-06T04:06:33.762Z",
+  "rows": [
+    {
+      "input": "research-worker",
+      "runtime": {
+        "success": true,
+        "data": "research-worker"
+      },
+      "package": {
+        "success": true,
+        "data": "research-worker"
+      }
+    },
+    {
+      "input": "user",
+      "runtime": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"user\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      },
+      "package": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"user\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      }
+    },
+    {
+      "input": "orchestrator",
+      "runtime": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"orchestrator\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      },
+      "package": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"orchestrator\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      }
+    },
+    {
+      "input": "shared",
+      "runtime": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"shared\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      },
+      "package": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"shared\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      }
+    },
+    {
+      "input": "universal-build",
+      "runtime": {
+        "success": true,
+        "data": "universal-build"
+      },
+      "package": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"dynamic agent id \\\"universal-build\\\" is reserved\",\n    \"path\": []\n  }\n]"
+        }
+      }
+    }
+  ]
+}

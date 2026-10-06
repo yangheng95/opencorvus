@@ -1,7 +1,6 @@
 import z from "zod"
 import { ProductPillarSchema, type ProductPillar } from "@opencorvus-ai/util/product-pillar"
 import { CapabilityRefCodec, EncodedCapabilityRef } from "@opencorvus-ai/util/capability-ref"
-import { DynamicAgentIDSchema } from "@opencorvus-ai/util/dynamic-agent-id"
 
 function decodedCapabilityRef(value: string) {
   try {
@@ -15,6 +14,7 @@ export const EXPERT_SQUAD_ID_PATTERN = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
 export const EXPERT_SQUAD_SCHEMA_VERSION = 2
 export const EXPERT_SQUAD_VERSION_PATTERN = /^(\d{4})\.(\d{2})\.(\d{2})\.([1-9]\d*)$/
 
+const RESERVED_DYNAMIC_AGENT_IDS = new Set(["orchestrator", "shared", "universal-build"])
 const NonBlankStringSchema = z.string().trim().min(1)
 const NonEmptyStringSchema = z.string().min(1)
 
@@ -64,10 +64,13 @@ export const ExpertSquadVersionSchema = z
     }
   })
 
-export const ExpertSquadDynamicAgentIDSchema = DynamicAgentIDSchema.min(1)
+export const ExpertSquadDynamicAgentIDSchema = z
+  .string()
+  .min(1)
   .max(64)
+  .regex(EXPERT_SQUAD_ID_PATTERN, "dynamic agent id must be kebab-case")
   .superRefine((agentID, context) => {
-    if (agentID !== "universal-build") return
+    if (!RESERVED_DYNAMIC_AGENT_IDS.has(agentID)) return
     context.addIssue({ code: "custom", message: `dynamic agent id "${agentID}" is reserved` })
   })
 

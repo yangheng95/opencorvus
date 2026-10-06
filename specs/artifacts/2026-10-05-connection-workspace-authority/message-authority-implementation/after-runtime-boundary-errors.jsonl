@@ -1,0 +1,3 @@
+{"name":"identity","result":[{"code":"custom","message":"dynamic agent id \"user\" is reserved","path":["agentID"]}]}
+{"name":"override","result":[{"code":"invalid_key","origin":"record","issues":[{"code":"custom","message":"dynamic agent id \"user\" is reserved","path":[]}],"path":["example","agents","user"],"message":"Invalid key in record"}]}
+{"name":"skill","result":[{"code":"invalid_key","origin":"record","issues":[{"code":"custom","message":"dynamic agent id \"user\" is reserved","path":[]}],"path":["example","user"],"message":"Invalid key in record"}]}
