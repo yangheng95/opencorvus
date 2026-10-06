@@ -1,0 +1,17 @@
+# Independent real explorer and resource delivery qualification
+
+Read [the binding Recall](../explore-delivery-implementation-plan.md). Preparation and real acceptance are distinct. Original formal07 remains failed; no completion or download is claimed here before actual evidence.
+
+Prior Panel14 normal commit/push/full outgoing review logs are retained as delivery provenance. No authority content belongs here.
+
+Actual15 preparation fails before any model request or Task because the project-only QA profile was placed in process-wide inline config. Structured source-correlated cause and original receipts are retained. Canonical global/project configuration repair produces actual15b preflight2 streamed Sol200 requests, full project revision/model/grant admission and one genuine Task202.
+
+Actual15b qualifies the previously repaired dynamic mission/explore query under the real SessionLoop and Provider: stored ToolPart input{} returns the correct current Project Task ID/title/active. Root's actual query screenshot/public Session outputs retain that bounded proof. The three-stage delivery does not complete: real producer semantic inactivity approximately180s triggers one retry, then cumulative20 model request budget exhaustion terminalizes the same Task epoch. Formal resources/declarations/download and independent verifier remain unmet. Do not call the Task completed or treat empty failed declarations as a bug.
+
+The proposed preflight directory patch is withdrawn because SessionStatus activity is process-global; its local test and original candidate are historical `.txt`/patch evidence only, with no production/test-tree change left. The unconditional managed Build instruction is also withdrawn because actual dispatch uses use_worktree:false and the runtime stage-tool owner supplies the snapshot contract. All current failure facts remain immutable.
+
+Pending Tool input drafts are real Bus events outside durable ToolRequest facts; source coverage and absent monitor projection are separate unknowns. Actual producer log metadata establishes last heartbeat06:52:47.801 -> idle retry06:55:47.837 -> attempt2 done06:55:56.305. Screenshot differences did not establish later arrival timestamps; no false-inactivity or production convergence fault is qualified. ProviderActivity SQL records tie logical request/outcomes to real Session/Message/model identities, without headers/body/secrets and without equating logical activities with audit HTTP counts.
+
+Root operates and personally views actual page41, failed status, query table and original request wrapping. Some early native scroll/key attempts did not reach the requested region; their original screenshots remain retained. Semantic heading click finally presents the full actual User request before image. No scrolling-product defect is inferred from those tool attempts. `actual-15b-user-request-visible-before.png` is the qualified next UX lead: Host technical policy/audit wrapping inside a user-authored Part.
+
+Page41 closes; public shutdown and complete original root75452/conhost71040/17972 settlement precede copied2082B auth and9155406B catalog deletion. First15 root8224/conhost74872/17971 also settles. Both histories/Projects/Git remain, and source credential/catalog are not written. Final readonly durable owners0 and unresolved inbox0 retain actual closure. Unlimited Goal stays active; next work addresses genuine creator content and resolves observer evidence gaps before new full-chain acceptance.

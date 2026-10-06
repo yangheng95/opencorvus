@@ -1,0 +1,46 @@
+{
+  "copiedPair": [
+    {
+      "copiedLength": 2082,
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\runtime\\data\\auth.json"
+    },
+    {
+      "copiedLength": 9155406,
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\runtime\\data\\models.json"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "expected": {
+        "ProcessId": 74872,
+        "ParentProcessId": 8224,
+        "CreationDate": "2026-10-06T14:42:43.839159+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 8224,
+        "ParentProcessId": 27120,
+        "CreationDate": "2026-10-06T14:42:43.828692+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\startup.json 17971 explore-delivery-15-e98ef0ff-7db3-4808-9aaa-dc0d91787866 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\task-selection.json D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\explore-delivery-definition-15.json"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    }
+  ],
+  "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write",
+  "observedAtUtc": "2026-10-06T06:44:18.1092889Z",
+  "listeners": null,
+  "occurrence": "explore-delivery-15-e98ef0ff-7db3-4808-9aaa-dc0d91787866"
+}

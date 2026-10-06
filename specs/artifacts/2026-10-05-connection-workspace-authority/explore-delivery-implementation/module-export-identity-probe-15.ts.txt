@@ -1,0 +1,34 @@
+import fs from "node:fs/promises"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+import { bootstrapIsolatedTestRuntime, removeIsolatedTestRuntime } from "@opencorvus-ai/util/test-runtime-environment"
+
+const evidence = path.resolve(import.meta.dir, "../specs/artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation")
+const runtime = await bootstrapIsolatedTestRuntime("runner")
+try {
+  const rows: unknown[] = []
+  for (const [moduleName, relative, exportName, functionNames] of [
+    ["SessionStatus", "../packages/opencorvus/src/session/status", "SessionStatus", ["getActivity", "registerActivityMonitor"]],
+    ["Instance", "../packages/opencorvus/src/project/instance", "Instance", ["provide", "disposeAll"]],
+    ["Database", "../packages/opencorvus/src/storage/db", "Database", ["transaction", "use"]],
+    ["Config", "../packages/opencorvus/src/config/config", "Config", ["get", "getGlobal"]],
+  ] as const) {
+    const physical = path.resolve(import.meta.dir, relative + ".ts")
+    const fromURL = await import(pathToFileURL(physical).href)
+    const fromRelative = await import(relative)
+    const fromPhysical = await import(physical)
+    rows.push({ moduleName, fileURL: pathToFileURL(physical).href, relative, physical,
+      namespaceEqual: { relative: fromURL === fromRelative, physical: fromURL === fromPhysical },
+      ownerEqual: { relative: fromURL[exportName] === fromRelative[exportName], physical: fromURL[exportName] === fromPhysical[exportName] },
+      functions: functionNames.map((name) => ({ name,
+        relative: fromURL[exportName][name] === fromRelative[exportName][name],
+        physical: fromURL[exportName][name] === fromPhysical[exportName][name] })) })
+  }
+  await fs.writeFile(path.join(evidence, "module-export-identity-probe-15.json"), JSON.stringify({
+    executable: process.execPath, pid: process.pid, runtimeRoot: runtime.runtimeRoot,
+    observedAt: new Date().toISOString(), rows,
+    boundary: "Export reference identity only in fresh isolated no-auth environment. No functions/monitor/Database ownership called; no model, server, Task or UI qualification.",
+  }, null, 2), { flag: "wx" })
+} finally {
+  await removeIsolatedTestRuntime(runtime)
+}

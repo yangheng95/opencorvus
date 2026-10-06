@@ -1,0 +1,68 @@
+param(
+  [Parameter(Mandatory=$true)][string]$RunRoot,
+  [Parameter(Mandatory=$true)][ValidateRange(1,65535)][int]$Port,
+  [Parameter(Mandatory=$true)][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix,
+  [Parameter(Mandatory=$true)][string]$DefinitionPath
+)
+$ErrorActionPreference = 'Stop'
+$taskRunRoot = [IO.Path]::GetFullPath($RunRoot)
+$taskRuntime = Join-Path $taskRunRoot 'runtime'
+$taskProject = Join-Path $taskRunRoot 'project'
+$taskEvidence = Join-Path $taskRunRoot 'evidence'
+$taskReceipt = Join-Path $taskRunRoot 'startup.json'
+$taskWrapper = 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts'
+$taskBun = 'C:/Users/hengu/.bun/bin/bun.exe'
+$taskAuth = 'C:/Users/hengu/AppData/Local/opencorvus/data/auth.json'
+$taskPort = $Port
+$taskOccurrence = $EvidencePrefix + '-' + [Guid]::NewGuid().ToString()
+$taskSelection = Join-Path $taskRunRoot 'task-selection.json'
+$taskDefinitionPath = [IO.Path]::GetFullPath($DefinitionPath)
+$taskDefinition = Get-Content -Raw -LiteralPath $taskDefinitionPath | ConvertFrom-Json
+$taskProfile = [string]$taskDefinition.manifest.id
+if($taskProfile -ne 'task-resource-qa' -or $taskDefinition.manifest.namespace -ne 'qa'){throw 'Reviewed QA package identity required'}
+$taskRequestBudget = 20
+if (Test-Path -LiteralPath $taskRunRoot) { throw 'Fresh owned occurrence already exists' }
+$taskListeners = @(Get-NetTCPConnection -ErrorAction Stop | Where-Object { $_.State -eq 'Listen' -and $_.LocalPort -eq $taskPort })
+if ($taskListeners.Count) { throw 'Chosen owned port is occupied' }
+foreach ($taskPath in @($taskWrapper,$taskBun,$taskAuth,'C:/Users/hengu/AppData/Local/opencorvus/data/models.json')) { if (!(Test-Path -LiteralPath $taskPath)) { throw 'Required owned/source input missing' } }
+if ((Test-Path -LiteralPath 'C:/ProgramData/opencorvus/opencorvus.jsonc') -or (Test-Path -LiteralPath 'C:/ProgramData/opencorvus/opencorvus.json')) { throw 'Non-owned managed configuration needs review' }
+$taskProxy = Get-ItemProperty -LiteralPath 'HKCU:/Software/Microsoft/Windows/CurrentVersion/Internet Settings' -ErrorAction Stop
+if (($taskProxy.ProxyServer -match '@') -or $taskProxy.AutoConfigURL) { throw 'System proxy credential/PAC input needs specific review; values suppressed' }
+foreach ($taskPath in @($taskRuntime,$taskProject,$taskEvidence,(Join-Path $taskRunRoot 'home'),(Join-Path $taskRunRoot 'appdata'),(Join-Path $taskRunRoot 'localappdata'),(Join-Path $taskRunRoot 'temp'),(Join-Path $taskRunRoot 'xdg-config'),(Join-Path $taskRunRoot 'xdg-data'),(Join-Path $taskRunRoot 'xdg-cache'),(Join-Path $taskRunRoot 'xdg-state'))) { [IO.Directory]::CreateDirectory($taskPath) | Out-Null }
+$taskOriginalEnvironment = @{}
+Get-ChildItem Env: | ForEach-Object { $taskOriginalEnvironment[$_.Name] = $_.Value }
+$taskEnvironment = @{}
+foreach ($taskName in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')) { if ($taskOriginalEnvironment.ContainsKey($taskName)) { $taskEnvironment[$taskName] = $taskOriginalEnvironment[$taskName] } }
+$taskOwnedHome = Join-Path $taskRunRoot 'home'
+$taskEnvironment.HOME = $taskOwnedHome
+$taskEnvironment.USERPROFILE = $taskOwnedHome
+$taskEnvironment.HOMEDRIVE = 'C:'
+$taskEnvironment.HOMEPATH = $taskOwnedHome.Substring(2).Replace('/','\')
+$taskEnvironment.APPDATA = Join-Path $taskRunRoot 'appdata'
+$taskEnvironment.LOCALAPPDATA = Join-Path $taskRunRoot 'localappdata'
+$taskEnvironment.TEMP = Join-Path $taskRunRoot 'temp'
+$taskEnvironment.TMP = $taskEnvironment.TEMP
+$taskEnvironment.TMPDIR = $taskEnvironment.TEMP
+$taskEnvironment.XDG_CONFIG_HOME = Join-Path $taskRunRoot 'xdg-config'
+$taskEnvironment.XDG_DATA_HOME = Join-Path $taskRunRoot 'xdg-data'
+$taskEnvironment.XDG_CACHE_HOME = Join-Path $taskRunRoot 'xdg-cache'
+$taskEnvironment.XDG_STATE_HOME = Join-Path $taskRunRoot 'xdg-state'
+$taskEnvironment.OPENCORVUS_HOME = $taskRuntime
+$taskEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS = '1'
+$taskEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE = '1'
+$taskEnvironment.OPENCORVUS_TASK_PROCESS_MODE = 'native'
+try {
+  Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+  foreach ($taskName in $taskEnvironment.Keys) { [Environment]::SetEnvironmentVariable($taskName,$taskEnvironment[$taskName],'Process') }
+  $taskArguments = @($taskWrapper,$taskAuth,$taskRuntime,$taskProject,$taskEvidence,$taskReceipt,[string]$taskPort,$taskOccurrence,$taskSelection,$taskDefinitionPath)
+  if (@($taskArguments | Where-Object { $_ -match '[\s"]' }).Count) { throw 'Known launch arguments require explicit quoting review' }
+  $taskProcess = Start-Process -FilePath $taskBun -ArgumentList $taskArguments -WorkingDirectory 'D:/myhexin-local/opencorvus/packages/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $taskRunRoot 'stdout.log') -RedirectStandardError (Join-Path $taskRunRoot 'stderr.log') -PassThru
+  $taskOwner = Get-CimInstance Win32_Process -Filter "ProcessId=$($taskProcess.Id)" | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+  $taskLaunchFact = [ordered]@{ observedAtUtc = [DateTime]::UtcNow.ToString('o'); runRoot = $taskRunRoot; runtime = $taskRuntime; project = $taskProject; evidence = $taskEvidence; evidencePrefix = $EvidencePrefix; receipt = $taskReceipt; occurrence = $taskOccurrence; port = $taskPort; owner = $taskOwner; observedProcessChain = @($taskOwner); taskSelectionPath = $taskSelection; taskSelectionRequired = $true; definitionPath = $taskDefinitionPath; handleAdmissionMilliseconds = 600000; environmentNames = @($taskEnvironment.Keys | Sort-Object); taskProcessMode = 'native'; promptProfile = $taskProfile; requestBudget = $taskRequestBudget; requestBudgetScope = 'One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset'; inactivityMilliseconds = 180000; taskMaximumMilliseconds = 900000; taskMaximumScope = 'Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration'; sourcePair = 'Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline'; cleanup = 'Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure'; uiAutomation = 'None' }
+  $taskLaunchStream = [IO.File]::Open((Join-Path $taskRunRoot 'launch-owner.json'),[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
+  try { $taskLaunchBytes = [Text.UTF8Encoding]::new($false).GetBytes(($taskLaunchFact | ConvertTo-Json -Depth 8)); $taskLaunchStream.Write($taskLaunchBytes,0,$taskLaunchBytes.Length) } finally { $taskLaunchStream.Dispose() }
+  Write-Output "Owned Sol CLI launched PID $($taskProcess.Id), occurrence $taskOccurrence; parent cleanup remains required."
+} finally {
+  Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+  foreach ($taskName in $taskOriginalEnvironment.Keys) { [Environment]::SetEnvironmentVariable($taskName,$taskOriginalEnvironment[$taskName],'Process') }
+}

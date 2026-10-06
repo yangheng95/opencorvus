@@ -189,3 +189,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Settings navigation plan](settings-navigation-implementation-plan.md) and [evidence](settings-navigation-implementation/README.md): narrow destination-label clipping, shared rail ownership and next true before/after13.
 
 - [Panel actor identity plan](panel-actor-identity-implementation-plan.md) and [evidence](panel-actor-identity-implementation/README.md): current legal exploration grant/default query identity investigation after pushed navigation13; mutation reachability hypothesis withdrawn.
+
+- [Real explorer and completed resource delivery plan](explore-delivery-implementation-plan.md) and [evidence](explore-delivery-implementation/README.md): independent three-stage Sol qualification after pushed747f, original07 failed history retained.

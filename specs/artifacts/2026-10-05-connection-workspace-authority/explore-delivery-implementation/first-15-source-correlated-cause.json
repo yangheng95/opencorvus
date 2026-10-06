@@ -1,0 +1,36 @@
+[
+  {
+    "level": "error",
+    "time": "2026-10-06T06:42:50.651Z",
+    "service": "project.open",
+    "stage": "config.validate",
+    "requestID": null,
+    "method": null,
+    "path": null,
+    "statusCode": null,
+    "status": "failed",
+    "error": "ConfigCandidateValidationError: PromptProfileNotFoundError: Unknown prompt profile \"task-resource-qa\""
+  },
+  {
+    "level": "error",
+    "time": "2026-10-06T06:42:50.653Z",
+    "service": "server",
+    "stage": null,
+    "requestID": "5c5b9fb3-36d0-44ac-addf-5dd58e152c1b",
+    "method": "POST",
+    "path": "/global/chat/start",
+    "statusCode": 500,
+    "status": null,
+    "error": {
+      "type": "ConfigCandidateValidationError",
+      "message": "ConfigCandidateValidationError: PromptProfileNotFoundError: Unknown prompt profile \"task-resource-qa\"",
+      "stack": "ConfigCandidateValidationError: ConfigCandidateValidationError: PromptProfileNotFoundError: Unknown prompt profile \"task-resource-qa\"\n    at validateConfigCandidate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\candidate-validation.ts:40:15)\n    at processTicksAndRejections (native:7:39)",
+      "data": {
+        "type": "Object",
+        "message": "PromptProfileNotFoundError: Unknown prompt profile \"task-resource-qa\"",
+        "stack": ""
+      },
+      "name": "ConfigCandidateValidationError"
+    }
+  }
+]

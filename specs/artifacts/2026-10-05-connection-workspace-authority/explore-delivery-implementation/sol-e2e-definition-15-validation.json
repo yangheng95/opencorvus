@@ -1,0 +1,56 @@
+{
+  "qualification": "SDK render only; no installation/Instance/Provider",
+  "namespace": "qa",
+  "id": "task-resource-qa",
+  "version": "2026.10.06.1",
+  "outputs": [
+    "README.md",
+    "agents/mission/system.md",
+    "agents/orchestrator/system.md",
+    "agents/producer/system.md",
+    "agents/verifier/system.md",
+    "expert-squad.jsonc",
+    "selector.md"
+  ],
+  "agents": [
+    {
+      "id": "mission",
+      "baseRole": "explore"
+    },
+    {
+      "id": "producer",
+      "baseRole": "build"
+    },
+    {
+      "id": "verifier",
+      "baseRole": "delegated-worker"
+    }
+  ],
+  "workflow": {
+    "query-produce-verify": {
+      "label": "Observe, Produce, Verify",
+      "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+      "nodes": {
+        "inspect": {
+          "agent_id": "mission",
+          "description": "Observe the current Project Task list and report the actual result or precise error.",
+          "depends_on": []
+        },
+        "produce": {
+          "agent_id": "producer",
+          "description": "Create and publish the requested text resource after the observation is available.",
+          "depends_on": [
+            "inspect"
+          ]
+        },
+        "verify": {
+          "agent_id": "verifier",
+          "description": "Independently verify original requirements against the settled producer result and immutable resource.",
+          "depends_on": [
+            "produce"
+          ]
+        }
+      }
+    }
+  }
+}

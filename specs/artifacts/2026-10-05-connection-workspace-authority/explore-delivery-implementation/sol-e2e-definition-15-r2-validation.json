@@ -1,0 +1,20 @@
+{
+  "qualification": "SDK renderer only; revised managed Build and completion prompts, no install/Instance/Provider",
+  "id": "task-resource-qa",
+  "outputs": [
+    "README.md",
+    "agents/mission/system.md",
+    "agents/orchestrator/system.md",
+    "agents/producer/system.md",
+    "agents/verifier/system.md",
+    "expert-squad.jsonc",
+    "selector.md"
+  ],
+  "publicationAuthority": "actual scoped commit -> successful merge_back.primary_head -> artifact_snapshot.source_commit -> minted resource_set -> artifact_publish",
+  "completionFields": [
+    "summary",
+    "workflow_id",
+    "evidence_locators",
+    "deliverable_artifact_locators"
+  ]
+}

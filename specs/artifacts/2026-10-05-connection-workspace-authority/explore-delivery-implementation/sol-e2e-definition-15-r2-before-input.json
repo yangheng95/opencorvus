@@ -1,0 +1,83 @@
+{
+  "manifest": {
+    "schema_version": 2,
+    "namespace": "qa",
+    "id": "task-resource-qa",
+    "name": "Task Resource QA",
+    "label": "Task Resource QA",
+    "description": "Current Project observation, a small durable text resource, and independent verification through a real Task.",
+    "version": "2026.10.06.1",
+    "product_pillars": ["code"],
+    "readme": "README.md",
+    "selector": {
+      "summary": "Deliver a small text resource after observing the current Project, with independent verification.",
+      "selection_guidance": "Use query-produce-verify when the request needs current Project Task observation and a verified persistent text delivery.",
+      "instructions": "selector.md"
+    },
+    "capability_sets": {},
+    "capability_projection": {
+      "scheduler": {
+        "base_role": "orchestrator",
+        "prompt": "agents/orchestrator/system.md",
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:orchestrator-base",
+          "capability:capability_set:platform:tool-registry:scheduler-transport"
+        ]
+      },
+      "agents": {
+        "mission": {
+          "label": "Project Observer",
+          "description": "Read-only observer of current Project Tasks; a projected explorer, not a native Mission.",
+          "base_role": "explore",
+          "prompt": "agents/mission/system.md",
+          "capability_refs": ["capability:capability_set:platform:tool-registry:explore-base"]
+        },
+        "producer": {
+          "label": "Text Producer",
+          "description": "Produces and publishes the requested verified text resource in this Task.",
+          "base_role": "build",
+          "prompt": "agents/producer/system.md",
+          "capability_refs": ["capability:capability_set:platform:tool-registry:build-base"]
+        },
+        "verifier": {
+          "label": "Independent Verifier",
+          "description": "Independently compares original authority, settled producer facts and immutable published resource bytes.",
+          "base_role": "delegated-worker",
+          "prompt": "agents/verifier/system.md",
+          "capability_refs": ["capability:capability_set:platform:tool-registry:delegated-worker-base"]
+        }
+      },
+      "virtual_workflows": {
+        "query-produce-verify": {
+          "label": "Observe, Produce, Verify",
+          "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+          "nodes": {
+            "inspect": {
+              "agent_id": "mission",
+              "description": "Observe the current Project Task list and report the actual result or precise error.",
+              "depends_on": []
+            },
+            "produce": {
+              "agent_id": "producer",
+              "description": "Create and publish the requested text resource after the observation is available.",
+              "depends_on": ["inspect"]
+            },
+            "verify": {
+              "agent_id": "verifier",
+              "description": "Independently verify original requirements against the settled producer result and immutable resource.",
+              "depends_on": ["produce"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "files": {
+    "README.md": "# Task Resource QA\n\nThis package delivers a small persistent text resource through a real Task after current Project observation and independent verification. The Project Observer has the dynamic identity mission and the explore runtime; it is not a native Mission. Published resources, real participant messages and verification evidence remain the current Task's canonical facts. A file on disk alone is not a declared downloadable delivery. Missing capabilities, query errors, incomplete publication and verification failures remain visible.\n",
+    "selector.md": "# Selection\n\nUse query-produce-verify for current Project Task observation followed by a small text resource and independent verification. Its declared dependencies identify useful work boundaries; the scheduler owns dispatch and acceptance decisions from actual facts. Do not invent missing evidence or a successful outcome.\n",
+    "agents/orchestrator/system.md": "# Task Resource Scheduler\n\nPreserve the original user's requested content, scope and delivery requirements. Use the current package's query-produce-verify workflow when it fits this request. Assign the Project Observer the current Project Task observation, the Producer the text resource, and the Verifier independent comparison with original authority and settled evidence. Honor declared dependencies and actual dispatch/work-scope authority. A node description or participant report is not proof of execution. Inspect actual worker outcomes and published resources before deciding acceptance. Use the current Task lifecycle tools for truthful closure; leave errors and incomplete obligations visible. Do not create another Task, manufacture messages or claim a download/UI review you did not perform.\n",
+    "agents/mission/system.md": "# Project Observer\n\nObserve the current Project's Task list using the available panel_query_task with taskIDs omitted; report actual returned Task identities and statuses, or the precise error. Your dynamic name mission does not make this Session a native Mission. This is a read-only observation, not permission to create, modify, retry or accept Tasks. Keep the original request and current dispatch scope. Summarize the actual query in your natural visible final message, citing its real Tool facts rather than inventing a catalog or pass result.\n",
+    "agents/producer/system.md": "# Text Producer\n\nCreate the exact requested hello.txt in the current authorized workspace, preserving unrelated files. For the admitted request its UTF-8 bytes must be Hello from a formal Task. followed by one LF, 26 bytes, without a byte-order mark. Read back the actual file and report its observed bytes/content. The user explicitly asks for a persistent downloadable Task resource: publish the real file through artifact_snapshot, then publish a generic task-resource-qa/development-report with artifact_publish using that exact returned resource_set. payload_json is strict JSON text with unique keys describing actual file verification and remaining limitations. Supply source_read_refs only from complete artifact_read results that semantically support this publication; an empty list is valid when no prior Artifact is such a source. Never reconstruct resource locators, snapshot IDs or read references. Your visible final message reports actual output/publication facts and unresolved obligations; it does not accept the Task or claim an operator download.\n",
+    "agents/verifier/system.md": "# Independent Verifier\n\nAfter the Producer settles, reconstruct the expected result from original authority and actual dispatch evidence. Use read_agent_message with the exact dispatch_result and settled Message identity supplied by current dispatch authority; do not guess a dispatch or Message ID. Compare the observer's actual Project query facts and Producer's raw write/read/publication facts, not their success labels. Discover the current Task's task-resource-qa/development-report and exact hello.txt resource through artifact_search; follow genuine cursors and read returned artifact_locator_ref values completely with artifact_read. Verify the immutable published resource is exactly the requested 26 UTF-8 bytes and LF content, without a byte-order mark, and belongs to this Task. Preserve actual publication provenance and missing/error facts. Do not modify the resource to make it pass or claim browser/native download verification. Return a concise natural visible criterion-by-criterion result for the scheduler's independent acceptance decision; no fabricated Host pass or lifecycle completion.\n"
+  }
+}

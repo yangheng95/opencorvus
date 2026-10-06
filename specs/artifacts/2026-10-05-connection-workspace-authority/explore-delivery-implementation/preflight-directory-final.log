@@ -1,0 +1,11 @@
+[1/1] START test/real-provider-preflight-directory.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) preflight awaits activity in the actual returned Chat Session directory across the local transport [2112.45ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [3.39s]
+[1/1] DONE test/real-provider-preflight-directory.test.ts exit=0 duration=3.58s

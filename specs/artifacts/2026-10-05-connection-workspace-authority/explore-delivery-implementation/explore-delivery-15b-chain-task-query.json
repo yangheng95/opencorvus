@@ -1,0 +1,41 @@
+{
+  "phase": "task-query",
+  "boundary": "Read-only exact birth/command ancestry; earlier-born numeric parent matches excluded; no process control or credentials",
+  "processes": [
+    {
+      "ProcessId": 75452,
+      "ParentProcessId": 68600,
+      "CreationDate": "2026-10-06T14:47:39.451745+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15b\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15b\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15b\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15b\\startup.json 17972 explore-delivery-15b-9061e1f0-504d-4c95-ba60-1dc50c34307d C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15b\\task-selection.json D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\explore-delivery-definition-15.json"
+    },
+    {
+      "ProcessId": 71040,
+      "ParentProcessId": 75452,
+      "CreationDate": "2026-10-06T14:47:39.463063+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    }
+  ],
+  "occurrence": "explore-delivery-15b-9061e1f0-504d-4c95-ba60-1dc50c34307d",
+  "observedAtUtc": "2026-10-06T06:51:09.1620980Z",
+  "presence": [
+    {
+      "samePIDReused": false,
+      "processID": 75452,
+      "originalOccurrencePresent": true
+    },
+    {
+      "samePIDReused": false,
+      "processID": 71040,
+      "originalOccurrencePresent": true
+    }
+  ],
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17972,
+      "OwningProcess": 75452
+    }
+  ]
+}

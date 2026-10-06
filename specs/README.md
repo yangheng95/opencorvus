@@ -2530,3 +2530,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Readable Settings navigation](artifacts/2026-10-05-connection-workspace-authority/settings-navigation-implementation-plan.md): supported narrow widths, existing rail primitive and real layout qualification.
 
 - [Panel actor runtime identity](artifacts/2026-10-05-connection-workspace-authority/panel-actor-identity-implementation-plan.md): legitimate explore-base grants, name-based default-query classification and held actual authority qualification.
+
+- [Real explorer and completed resource delivery](artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation-plan.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation/README.md).

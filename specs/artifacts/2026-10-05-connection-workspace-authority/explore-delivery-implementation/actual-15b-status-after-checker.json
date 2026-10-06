@@ -1,0 +1,64 @@
+{
+  "url": "http://127.0.0.1:17972/task/tsk_g00VXFXyOK00KAtGQUer?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-06%5Clive-sol-explore-delivery-15b%5Cproject",
+  "body": {
+    "id": "tsk_g00VXFXyOK00KAtGQUer",
+    "orderKey": "v1:0001791269428572:0000000000000010:0000000000000000:task:tsk_g00VXFXyOK00KAtGQUer",
+    "projectID": "prj_hYtzUBMRNFDhXnN8f9c7",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15b\\project",
+    "sessionID": "ses_-zUSkS1UXzzHDhKcLVow",
+    "requestID": "522321da-7db6-42c8-930b-06fa3d3201c0",
+    "source": "api",
+    "productPillar": "code",
+    "title": "Explore and text delivery",
+    "request": "先观察当前项目中的真实 Task 列表并报告实际结果，然后交付正式 Task 的持久可下载 UTF-8 文件 hello.txt。内容必须精确为 Hello from a formal Task. 后接一个 LF 换行，没有 BOM，共 26 字节。请由独立参与者核验真实产出和发布资源，并在 Task 交付区提供下载。仅在此隔离项目创建所需文件，不启动服务、访问网站或改动已有文件。",
+    "status": "failed",
+    "executionLifecycle": {
+      "taskID": "tsk_g00VXFXyOK00KAtGQUer",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXFXyW001ivgkRd3yt",
+      "openedAt": 1791269428572,
+      "status": "failed",
+      "terminalEventID": "pev_g0VXFZN8V000iO2fdgBf",
+      "terminalAt": 1791269762017,
+      "terminalError": "Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+      "terminalReason": "interrupted"
+    },
+    "terminalReason": "interrupted",
+    "priority": "normal",
+    "packageRevisionBinding": {
+      "scope": "project",
+      "project_id": "prj_hYtzUBMRNFDhXnN8f9c7",
+      "namespace": "qa",
+      "id": "task-resource-qa",
+      "version": "2026.10.06.1",
+      "package_digest": "451efd14ee4b24d8c8f755cd64002e84016542c38bc256f476792ed67857f3bf"
+    },
+    "error": "Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED",
+    "metadata": {
+      "actor": "user",
+      "checks": {
+        "artifact": {
+          "require_changed_files": true,
+          "require_diff": true,
+          "mode": "strict"
+        },
+        "judge": {
+          "enabled": true,
+          "mode": "strict"
+        },
+        "spec_check": {
+          "enabled": true,
+          "mode": "strict"
+        }
+      }
+    },
+    "time": {
+      "created": 1791269428572,
+      "updated": 1791269762017,
+      "started": 1791269428572,
+      "completed": 1791269762017
+    }
+  },
+  "status": 200,
+  "observedAt": "2026-10-06T06:58:21.4375104Z"
+}

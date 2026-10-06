@@ -1,0 +1,31 @@
+[1/1] START test/real-provider-preflight-directory.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+2279 |       if (parent.role === "assistant" && parent.time?.completed !== undefined) {
+2280 |         const isCheckpointAppend =
+2281 |           options.completedCompactionCheckpoint === true &&
+2282 |           part.type === "compaction" &&
+2283 |           existingPart === undefined
+2284 |         if (!isCheckpointAppend) throw new HostProcessingFaultError(`Part ${id} is immutable after assistant completion`)
+                                                  ^
+HostProcessingFaultError: Part prt_g0VXFUV1L00BJZldmTzi is immutable after assistant completion
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2284:44)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) preflight awaits activity in the actual returned Chat Session directory across the local transport [2071.18ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [3.29s]
+[1/1] DONE test/real-provider-preflight-directory.test.ts exit=1 duration=3.47s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\real-provider-preflight-directory.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\real-provider-preflight-directory.test.ts

@@ -1,0 +1,2 @@
+bun .tmp-product-iteration/module-export-identity-probe-15.ts
+node --max-old-space-size=8192 node_modules/typescript/bin/tsc -p .tmp-product-iteration/module-export-identity-probe-15.tsconfig.json

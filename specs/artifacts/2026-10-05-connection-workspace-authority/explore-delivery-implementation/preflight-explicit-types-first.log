@@ -1,0 +1,3 @@
+.tmp-product-iteration/live-sol-cli-owned.ts(171,25): error TS2345: Argument of type '{ identity: any; packageRevision: any; builtInToolIDs: any; defaultTools: any; }' is not assignable to parameter of type 'never'.
+packages/opencorvus/script/task-control-check.ts(113,31): error TS2504: Type 'ReadableStream<Uint8Array<ArrayBufferLike>>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+packages/opencorvus/script/task-control-check.ts(264,31): error TS2504: Type 'ReadableStream<Uint8Array<ArrayBufferLike>>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.

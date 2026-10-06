@@ -1,0 +1,113 @@
+{
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "pid": 70804,
+  "runtimeRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-712xfB\\runner-70804-jDC1B2\\runtime-root",
+  "observedAt": "2026-10-06T07:08:33.268Z",
+  "rows": [
+    {
+      "moduleName": "SessionStatus",
+      "fileURL": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/session/status.ts",
+      "relative": "../packages/opencorvus/src/session/status",
+      "physical": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\session\\status.ts",
+      "namespaceEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "ownerEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "functions": [
+        {
+          "name": "getActivity",
+          "relative": true,
+          "physical": true
+        },
+        {
+          "name": "registerActivityMonitor",
+          "relative": true,
+          "physical": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Instance",
+      "fileURL": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/project/instance.ts",
+      "relative": "../packages/opencorvus/src/project/instance",
+      "physical": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts",
+      "namespaceEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "ownerEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "functions": [
+        {
+          "name": "provide",
+          "relative": true,
+          "physical": true
+        },
+        {
+          "name": "disposeAll",
+          "relative": true,
+          "physical": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Database",
+      "fileURL": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/storage/db.ts",
+      "relative": "../packages/opencorvus/src/storage/db",
+      "physical": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\db.ts",
+      "namespaceEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "ownerEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "functions": [
+        {
+          "name": "transaction",
+          "relative": true,
+          "physical": true
+        },
+        {
+          "name": "use",
+          "relative": true,
+          "physical": true
+        }
+      ]
+    },
+    {
+      "moduleName": "Config",
+      "fileURL": "file:///D:/myhexin-local/opencorvus/packages/opencorvus/src/config/config.ts",
+      "relative": "../packages/opencorvus/src/config/config",
+      "physical": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\config\\config.ts",
+      "namespaceEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "ownerEqual": {
+        "relative": true,
+        "physical": true
+      },
+      "functions": [
+        {
+          "name": "get",
+          "relative": true,
+          "physical": true
+        },
+        {
+          "name": "getGlobal",
+          "relative": true,
+          "physical": true
+        }
+      ]
+    }
+  ],
+  "boundary": "Export reference identity only in fresh isolated no-auth environment. No functions/monitor/Database ownership called; no model, server, Task or UI qualification."
+}

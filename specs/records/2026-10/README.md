@@ -77,3 +77,7 @@ Final Settings navigation13 now has genuine before/intermediate/final manual ima
 Pushed navigation f828677a is followed by the held Panel actor runtime-identity Recall, legitimate explore-base query grants and native/projected classification investigation; the broader worker-mutation hypothesis is withdrawn.
 
 Panel actor14 now has actual qualified backend0/2→2/27 output/error evidence, canonical current Session identity with explicit nonblank Tool actor integrity, unchanged query declarations, and source/new-test types0; full Provider/SessionLoop qualification remains separate.
+
+Independent explorer and completed resource delivery15 is bound by the authority artifact Recall after normally pushed747f; genuine full-chain acceptance remains pending.
+
+Actual15b qualifies genuine projected alias query, while formal delivery fails after idle/retry and20 limit. Both owned runs close completely; withdrawn preflight/managed-build assumptions and next human-content lead remain explicit in the Recall.

@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-10-06T06:44:16.6508782Z",
+  "occurrence": "explore-delivery-15-e98ef0ff-7db3-4808-9aaa-dc0d91787866",
+  "owner": {
+    "ProcessId": 8224,
+    "ParentProcessId": 27120,
+    "CreationDate": "2026-10-06T14:42:43.828692+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\startup.json 17971 explore-delivery-15-e98ef0ff-7db3-4808-9aaa-dc0d91787866 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-explore-delivery-15\\task-selection.json D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\explore-delivery-definition-15.json"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Shutdown admission is distinct from physical settlement and copied-pair cleanup",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXFWPg5002zDw6OzRt"
+  }
+}

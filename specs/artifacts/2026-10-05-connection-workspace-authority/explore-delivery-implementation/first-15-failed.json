@@ -1,0 +1,10 @@
+{
+  "pid": 8224,
+  "occurrence": "explore-delivery-15-e98ef0ff-7db3-4808-9aaa-dc0d91787866",
+  "error": {
+    "name": "AssertionError",
+    "message": "Provider preflight /global/chat/start: HTTP 500"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

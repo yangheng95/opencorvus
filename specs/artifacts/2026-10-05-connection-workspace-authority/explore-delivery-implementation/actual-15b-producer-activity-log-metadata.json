@@ -1,0 +1,86 @@
+[
+  {
+    "time": "2026-10-06T06:52:29.202Z",
+    "service": "session.processor",
+    "message": "activity terminal",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFYRpk00lLm6C6rQy",
+    "outcome": "done",
+    "cls": null,
+    "attempt": null,
+    "backoffMs": null,
+    "lastHeartbeat": null
+  },
+  {
+    "time": "2026-10-06T06:52:34.969Z",
+    "service": "session.processor",
+    "message": "activity terminal",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFYTq500N7zhSv1PH",
+    "outcome": "done",
+    "cls": null,
+    "attempt": null,
+    "backoffMs": null,
+    "lastHeartbeat": null
+  },
+  {
+    "time": "2026-10-06T06:52:39.467Z",
+    "service": "session.processor",
+    "message": "activity terminal",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFYVLY00TAzr6ccHG",
+    "outcome": "done",
+    "cls": null,
+    "attempt": null,
+    "backoffMs": null,
+    "lastHeartbeat": null
+  },
+  {
+    "time": "2026-10-06T06:52:43.418Z",
+    "service": "session.processor",
+    "message": "activity terminal",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFYWVf00yZDWpBXzu",
+    "outcome": "done",
+    "cls": null,
+    "attempt": null,
+    "backoffMs": null,
+    "lastHeartbeat": null
+  },
+  {
+    "time": "2026-10-06T06:55:47.837Z",
+    "service": "session.processor",
+    "message": "activity retry",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFYXYR00HIHyklx2A",
+    "outcome": null,
+    "cls": "idle",
+    "attempt": 1,
+    "backoffMs": 1189.4504601920496,
+    "lastHeartbeat": "tool-input-delta@2026-10-06T06:52:47.801Z"
+  },
+  {
+    "time": "2026-10-06T06:55:56.305Z",
+    "service": "session.processor",
+    "message": "activity terminal",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFYXYR00HIHyklx2A",
+    "outcome": "done",
+    "cls": null,
+    "attempt": null,
+    "backoffMs": null,
+    "lastHeartbeat": null
+  },
+  {
+    "time": "2026-10-06T06:55:56.726Z",
+    "service": "session.processor",
+    "message": "activity terminal",
+    "sessionID": "ses_haVND8iaVcGMYjQDEHZL",
+    "activityID": "act_g0VXFZLkA00xYWYRGGC0",
+    "outcome": "failed",
+    "cls": "unknown",
+    "attempt": null,
+    "backoffMs": null,
+    "lastHeartbeat": null
+  }
+]

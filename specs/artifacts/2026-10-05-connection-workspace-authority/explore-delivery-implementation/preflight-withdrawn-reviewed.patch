@@ -1,0 +1,158 @@
+diff --git a/packages/opencorvus/script/automation-project-target-real.ts b/packages/opencorvus/script/automation-project-target-real.ts
+index c9c41ba5..10a2e0a1 100644
+--- a/packages/opencorvus/script/automation-project-target-real.ts
++++ b/packages/opencorvus/script/automation-project-target-real.ts
+@@ -148,7 +148,7 @@ try {
+     serverURL: server.url,
+     model: model!,
+     inactivityMs,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   const request = async <T>(route: string, body?: unknown, method = "GET", directory = directories[0]!) => {
+     const url = new URL(route, server.url)
+diff --git a/packages/opencorvus/script/automationbench-factorial-host.ts b/packages/opencorvus/script/automationbench-factorial-host.ts
+index 28c0c6a4..468d5090 100644
+--- a/packages/opencorvus/script/automationbench-factorial-host.ts
++++ b/packages/opencorvus/script/automationbench-factorial-host.ts
+@@ -116,7 +116,7 @@ try {
+     serverURL: server.url,
+     model,
+     inactivityMs: 60_000,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   await fs.writeFile(path.join(runDirectory, "preflight.json"), JSON.stringify(preflight, null, 2))
+   await receipt("running")
+diff --git a/packages/opencorvus/script/check-mission-task-duplex-e2e.ts b/packages/opencorvus/script/check-mission-task-duplex-e2e.ts
+index 54271f81..c533a650 100644
+--- a/packages/opencorvus/script/check-mission-task-duplex-e2e.ts
++++ b/packages/opencorvus/script/check-mission-task-duplex-e2e.ts
+@@ -197,7 +197,7 @@ const base = server.url.toString().replace(/\/$/, "")
+ const missionURL = new URL(`${base}/mission/wake`)
+ missionURL.searchParams.set("directory", projectDirectory)
+ 
+-preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: INACTIVITY_MS, activity: SessionStatus.getActivity })
++preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: INACTIVITY_MS, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+ const missionPrompt = [
+   `Prove autonomous direct coordination between one Mission and two child Task schedulers. The acceptance nonce is ${nonce}.`,
+   "Launch exactly two active child Tasks, first titled 'Duplex responder B' and then 'Duplex initiator A'. Do not create another Task.",
+diff --git a/packages/opencorvus/script/dynamic-expert-squad-e2e.ts b/packages/opencorvus/script/dynamic-expert-squad-e2e.ts
+index 8bb44340..61048f76 100644
+--- a/packages/opencorvus/script/dynamic-expert-squad-e2e.ts
++++ b/packages/opencorvus/script/dynamic-expert-squad-e2e.ts
+@@ -354,7 +354,7 @@ try {
+     serverURL: server.url,
+     model,
+     inactivityMs: INACTIVITY_MS,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   process.stdout.write(`[dynamic-e2e] provider=${model} connected\n`)
+ 
+diff --git a/packages/opencorvus/script/evolution-diagnostic.ts b/packages/opencorvus/script/evolution-diagnostic.ts
+index 1f25eeb9..f36afc26 100644
+--- a/packages/opencorvus/script/evolution-diagnostic.ts
++++ b/packages/opencorvus/script/evolution-diagnostic.ts
+@@ -210,7 +210,7 @@ try {
+     await fs.writeFile(path.join(root, "launch.json"), redactor.redact(JSON.stringify({
+       ...result, phase: "before-streaming-preflight", launchedAt: new Date().toISOString(),
+     }, null, 2)) + "\n", { flag: "wx" })
+-    result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, pollIntervalMs, activity: SessionStatus.getActivity })
++    result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, pollIntervalMs, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+     await json("preflight.json", result.preflight)
+     const wake = await fetchJSON("/mission/wake", { text: missionRequest, model, productPillar: "work", expertSquadIDs: ["data-analysis"] })
+     missionID = wake.missionID
+diff --git a/packages/opencorvus/script/interactive-renderers-real.ts b/packages/opencorvus/script/interactive-renderers-real.ts
+index fbae79d0..595c3ef3 100644
+--- a/packages/opencorvus/script/interactive-renderers-real.ts
++++ b/packages/opencorvus/script/interactive-renderers-real.ts
+@@ -77,7 +77,7 @@ try {
+   cleanup = async () => { await server.stop(true); await Instance.disposeAll(); Database.close() }
+   audit.localOrigins.add(server.url.origin)
+   evidence.pageURL = new URL("/ui/", server.url).href
+-  evidence.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: 180_000, activity: SessionStatus.getActivity })
++  evidence.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: 180_000, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+   const request = async (route: string, body?: unknown, projectDirectory?: string): Promise<any> => {
+     const url = new URL(route, server.url)
+     if (projectDirectory) url.searchParams.set("directory", projectDirectory)
+diff --git a/packages/opencorvus/script/mission-dispatch-e2e.ts b/packages/opencorvus/script/mission-dispatch-e2e.ts
+index 2abae6cc..f6e76085 100644
+--- a/packages/opencorvus/script/mission-dispatch-e2e.ts
++++ b/packages/opencorvus/script/mission-dispatch-e2e.ts
+@@ -155,7 +155,7 @@ try {
+     serverURL: server.url,
+     model,
+     inactivityMs: 180_000,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   const request = async (route: string, body: unknown, method = "POST") => {
+     const url = new URL(route, server.url)
+diff --git a/packages/opencorvus/script/read-agent-message-e2e.ts b/packages/opencorvus/script/read-agent-message-e2e.ts
+index a5fe990a..050dab41 100644
+--- a/packages/opencorvus/script/read-agent-message-e2e.ts
++++ b/packages/opencorvus/script/read-agent-message-e2e.ts
+@@ -164,7 +164,7 @@ try {
+     serverURL: server.url,
+     model,
+     inactivityMs,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   const prompt = [
+     `Prove actual causal Tool evidence transfer for ${nonce}. This is a small read-only execution and independent historical-evidence verification task.`,
+diff --git a/packages/opencorvus/script/real-provider-audit.ts b/packages/opencorvus/script/real-provider-audit.ts
+index 5f6cef85..6e0aa195 100644
+--- a/packages/opencorvus/script/real-provider-audit.ts
++++ b/packages/opencorvus/script/real-provider-audit.ts
+@@ -241,7 +241,7 @@ export class RealProviderAudit implements Disposable {
+     serverURL: URL
+     model: string
+     inactivityMs: number
+-    activity: (sessionID: string) => unknown
++    activity: (sessionID: string, directory: string) => unknown | Promise<unknown>
+     pollIntervalMs?: number
+   }) {
+     this.localOrigins.add(input.serverURL.origin)
+@@ -259,12 +259,13 @@ export class RealProviderAudit implements Disposable {
+     }
+     const firstRequest = this.requests.length
+     const chat = await request("/global/chat/start", { requestID: crypto.randomUUID(), text: "Reply with OK.", model: input.model })
++    assert(typeof chat.session.directory === "string" && chat.session.directory.length > 0, "Provider preflight requires its actual Chat Session directory")
+     let signature = ""
+     let lastActivity = Date.now()
+     for (;;) {
+       const messages = await request(`/session/${chat.session.id}/message`, undefined, chat.session.directory)
+       const assistant = messages.find((entry: any) => entry.info.role === "assistant" && entry.info.parentID === chat.messageID)
+-      const next = JSON.stringify({ messages, activity: input.activity(chat.session.id) })
++      const next = JSON.stringify({ messages, activity: await input.activity(chat.session.id, chat.session.directory) })
+       if (next !== signature) { signature = next; lastActivity = Date.now() }
+       if (this.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
+       if (assistant?.info.error) throw new Error(`PROVIDER_PREFLIGHT: ${JSON.stringify(assistant.info.error)}`)
+diff --git a/packages/opencorvus/script/runtime-dispatch-e2e.ts b/packages/opencorvus/script/runtime-dispatch-e2e.ts
+index 3854b50c..cbf3c1da 100644
+--- a/packages/opencorvus/script/runtime-dispatch-e2e.ts
++++ b/packages/opencorvus/script/runtime-dispatch-e2e.ts
+@@ -141,7 +141,7 @@ try {
+     return await response.json() as any
+   }
+   result.phase = "provider_preflight"
+-  result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, activity: SessionStatus.getActivity })
++  result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+   result.phase = "task_execution"
+   const created = await request("/task?init-git=true", {
+     title: scenario.title, request: scenario.request,
+diff --git a/packages/opencorvus/script/task-control-check.ts b/packages/opencorvus/script/task-control-check.ts
+index 52916c63..a408de48 100644
+--- a/packages/opencorvus/script/task-control-check.ts
++++ b/packages/opencorvus/script/task-control-check.ts
+@@ -505,7 +505,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
+ 
+   try {
+     if (phase === "seed-ingress") {
+-      const preflight = await audit.preflight({ serverURL: server.url, model: selectedModel, inactivityMs: INACTIVITY_MS, activity: SessionStatus.getActivity })
++      const preflight = await audit.preflight({ serverURL: server.url, model: selectedModel, inactivityMs: INACTIVITY_MS, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+       await fs.writeFile(path.join(runtimeRoot, "provider-preflight.json"), JSON.stringify(preflight, null, 2))
+       const lifecycleAccepted = await createTask({
+         title: "Real terminal lifecycle convergence",

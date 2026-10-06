@@ -1,0 +1,32 @@
+{
+  "include": [
+    "../packages/opencorvus/src/**/*",
+    "./live-sol-cli-owned.ts",
+    "../packages/opencorvus/script/real-provider-audit.ts",
+    "../packages/opencorvus/test/real-provider-preflight-directory.test.ts",
+    "../packages/opencorvus/script/automation-project-target-real.ts",
+    "../packages/opencorvus/script/automationbench-factorial-host.ts",
+    "../packages/opencorvus/script/check-mission-task-duplex-e2e.ts",
+    "../packages/opencorvus/script/evolution-diagnostic.ts",
+    "../packages/opencorvus/script/mission-dispatch-e2e.ts",
+    "../packages/opencorvus/script/interactive-renderers-real.ts",
+    "../packages/opencorvus/script/dynamic-expert-squad-e2e.ts",
+    "../packages/opencorvus/script/read-agent-message-e2e.ts",
+    "../packages/opencorvus/script/runtime-dispatch-e2e.ts",
+    "../packages/opencorvus/script/task-control-check.ts"
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable"
+    ]
+  },
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "exclude": [
+    "../packages/opencorvus/src/skill/builtin/**/*",
+    "../packages/opencorvus/dist/**/*"
+  ]
+}

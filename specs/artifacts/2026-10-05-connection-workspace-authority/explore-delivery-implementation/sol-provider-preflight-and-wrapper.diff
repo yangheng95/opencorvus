@@ -1,0 +1,353 @@
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-automation-project-target-real.before.txt
++++ packages\opencorvus\script\automation-project-target-real.ts
+@@ -148,7 +148,7 @@
+     serverURL: server.url,
+     model: model!,
+     inactivityMs,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   const request = async <T>(route: string, body?: unknown, method = "GET", directory = directories[0]!) => {
+     const url = new URL(route, server.url)
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-automationbench-factorial-host.before.txt
++++ packages\opencorvus\script\automationbench-factorial-host.ts
+@@ -116,7 +116,7 @@
+     serverURL: server.url,
+     model,
+     inactivityMs: 60_000,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   await fs.writeFile(path.join(runDirectory, "preflight.json"), JSON.stringify(preflight, null, 2))
+   await receipt("running")
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-check-mission-task-duplex-e2e.before.txt
++++ packages\opencorvus\script\check-mission-task-duplex-e2e.ts
+@@ -197,7 +197,7 @@
+ const missionURL = new URL(`${base}/mission/wake`)
+ missionURL.searchParams.set("directory", projectDirectory)
+ 
+-preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: INACTIVITY_MS, activity: SessionStatus.getActivity })
++preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: INACTIVITY_MS, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+ const missionPrompt = [
+   `Prove autonomous direct coordination between one Mission and two child Task schedulers. The acceptance nonce is ${nonce}.`,
+   "Launch exactly two active child Tasks, first titled 'Duplex responder B' and then 'Duplex initiator A'. Do not create another Task.",
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-evolution-diagnostic.before.txt
++++ packages\opencorvus\script\evolution-diagnostic.ts
+@@ -210,7 +210,7 @@
+     await fs.writeFile(path.join(root, "launch.json"), redactor.redact(JSON.stringify({
+       ...result, phase: "before-streaming-preflight", launchedAt: new Date().toISOString(),
+     }, null, 2)) + "\n", { flag: "wx" })
+-    result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, pollIntervalMs, activity: SessionStatus.getActivity })
++    result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, pollIntervalMs, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+     await json("preflight.json", result.preflight)
+     const wake = await fetchJSON("/mission/wake", { text: missionRequest, model, productPillar: "work", expertSquadIDs: ["data-analysis"] })
+     missionID = wake.missionID
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-mission-dispatch-e2e.before.txt
++++ packages\opencorvus\script\mission-dispatch-e2e.ts
+@@ -155,7 +155,7 @@
+     serverURL: server.url,
+     model,
+     inactivityMs: 180_000,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   const request = async (route: string, body: unknown, method = "POST") => {
+     const url = new URL(route, server.url)
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-interactive-renderers-real.before.txt
++++ packages\opencorvus\script\interactive-renderers-real.ts
+@@ -77,7 +77,7 @@
+   cleanup = async () => { await server.stop(true); await Instance.disposeAll(); Database.close() }
+   audit.localOrigins.add(server.url.origin)
+   evidence.pageURL = new URL("/ui/", server.url).href
+-  evidence.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: 180_000, activity: SessionStatus.getActivity })
++  evidence.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs: 180_000, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+   const request = async (route: string, body?: unknown, projectDirectory?: string): Promise<any> => {
+     const url = new URL(route, server.url)
+     if (projectDirectory) url.searchParams.set("directory", projectDirectory)
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-dynamic-expert-squad-e2e.before.txt
++++ packages\opencorvus\script\dynamic-expert-squad-e2e.ts
+@@ -354,7 +354,7 @@
+     serverURL: server.url,
+     model,
+     inactivityMs: INACTIVITY_MS,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   process.stdout.write(`[dynamic-e2e] provider=${model} connected\n`)
+ 
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-read-agent-message-e2e.before.txt
++++ packages\opencorvus\script\read-agent-message-e2e.ts
+@@ -164,7 +164,7 @@
+     serverURL: server.url,
+     model,
+     inactivityMs,
+-    activity: SessionStatus.getActivity,
++    activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }),
+   })
+   const prompt = [
+     `Prove actual causal Tool evidence transfer for ${nonce}. This is a small read-only execution and independent historical-evidence verification task.`,
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-runtime-dispatch-e2e.before.txt
++++ packages\opencorvus\script\runtime-dispatch-e2e.ts
+@@ -141,7 +141,7 @@
+     return await response.json() as any
+   }
+   result.phase = "provider_preflight"
+-  result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, activity: SessionStatus.getActivity })
++  result.preflight = await audit.preflight({ serverURL: server.url, model, inactivityMs, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+   result.phase = "task_execution"
+   const created = await request("/task?init-git=true", {
+     title: scenario.title, request: scenario.request,
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\preflight-task-control-check.before.txt
++++ packages\opencorvus\script\task-control-check.ts
+@@ -505,7 +505,7 @@
+ 
+   try {
+     if (phase === "seed-ingress") {
+-      const preflight = await audit.preflight({ serverURL: server.url, model: selectedModel, inactivityMs: INACTIVITY_MS, activity: SessionStatus.getActivity })
++      const preflight = await audit.preflight({ serverURL: server.url, model: selectedModel, inactivityMs: INACTIVITY_MS, activity: (sessionID, directory) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+       await fs.writeFile(path.join(runtimeRoot, "provider-preflight.json"), JSON.stringify(preflight, null, 2))
+       const lifecycleAccepted = await createTask({
+         title: "Real terminal lifecycle convergence",
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\real-provider-audit.before.txt
++++ packages\opencorvus\script\real-provider-audit.ts
+@@ -241,7 +241,7 @@
+     serverURL: URL
+     model: string
+     inactivityMs: number
+-    activity: (sessionID: string) => unknown
++    activity: (sessionID: string, directory: string) => unknown | Promise<unknown>
+     pollIntervalMs?: number
+   }) {
+     this.localOrigins.add(input.serverURL.origin)
+@@ -259,12 +259,13 @@
+     }
+     const firstRequest = this.requests.length
+     const chat = await request("/global/chat/start", { requestID: crypto.randomUUID(), text: "Reply with OK.", model: input.model })
++    assert(typeof chat.session.directory === "string" && chat.session.directory.length > 0, "Provider preflight requires its actual Chat Session directory")
+     let signature = ""
+     let lastActivity = Date.now()
+     for (;;) {
+       const messages = await request(`/session/${chat.session.id}/message`, undefined, chat.session.directory)
+       const assistant = messages.find((entry: any) => entry.info.role === "assistant" && entry.info.parentID === chat.messageID)
+-      const next = JSON.stringify({ messages, activity: input.activity(chat.session.id) })
++      const next = JSON.stringify({ messages, activity: await input.activity(chat.session.id, chat.session.directory) })
+       if (next !== signature) { signature = next; lastActivity = Date.now() }
+       if (this.exhausted) throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
+       if (assistant?.info.error) throw new Error(`PROVIDER_PREFLIGHT: ${JSON.stringify(assistant.info.error)}`)
+--- specs\artifacts\2026-10-05-connection-workspace-authority\explore-delivery-implementation\sol-provider-wrapper.before.txt
++++ .tmp-product-iteration\live-sol-cli-owned.ts
+@@ -6,9 +6,10 @@
+ 
+ // Nonsecret arguments only: source auth, owned runtime, owned project, owned evidence,
+ // owned startup receipt, proposed port, unique startup occurrence. Environment is parent-owned.
+-const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence, taskSelectionPath] = process.argv.slice(2)
+-assert(authSource && runtime && project && evidenceRoot && receiptPath && portText && occurrence && taskSelectionPath,
+-  "Expected eight nonsecret owned/source arguments including the actual Task selection")
++const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence, taskSelectionPath, definitionPath] = process.argv.slice(2)
++assert(authSource && runtime && project && evidenceRoot && receiptPath && portText && occurrence && taskSelectionPath && definitionPath,
++  "Expected nine nonsecret owned/source arguments including the actual Task selection and QA definition")
++assert(path.isAbsolute(definitionPath))
+ for (const value of [authSource, runtime, project, evidenceRoot, receiptPath]) assert(path.isAbsolute(value))
+ assert(path.isAbsolute(taskSelectionPath))
+ assert.equal(path.dirname(path.resolve(taskSelectionPath)), path.dirname(path.resolve(runtime)))
+@@ -60,6 +61,20 @@
+     initialFiles, status: "clean", metadataOwner: "ensureGitProjectMetadata", hooks: "normal Git invocation",
+     qualification: "Actual initial Git object/files; no mutable-source hash acceptance" })
+ 
++  const { writeExpertSquadPackage } = await import(pathToFileURL(path.resolve(packageRoot, "../sdk/js/src/expert-squad-authoring.ts")).href)
++  const { ExpertSquadPackageLocations } = await import(source("src/expert-squad/locations.ts"))
++  const { ExpertSquadRegistry } = await import(source("src/expert-squad/registry.ts"))
++  const definition = JSON.parse(await fs.readFile(definitionPath, "utf8"))
++  const profileID = definition.manifest.id
++  const installed = await writeExpertSquadPackage({
++    directory: path.join(ExpertSquadPackageLocations.project(project).packagesRoot, definition.manifest.namespace, profileID),
++    definition,
++  })
++  await ExpertSquadRegistry.invalidateAvailable()
++  await publish("qa-package-installed.json", { definitionPath, profileID, namespace: definition.manifest.namespace,
++    version: definition.manifest.version, ...installed, boundary: "SDK canonical project installation before first Instance/Resolver" })
++  const maxRequests = 20
++
+   await fs.mkdir(path.join(runtime, "data"), { recursive: true })
+   for (const name of ["auth.json", "models.json"]) {
+     try {
+@@ -85,9 +100,9 @@
+   const snapshot = createAuditSnapshotPublisher(evidenceRoot, "provider")
+   const state = installProcessProviderAudit(() => {
+     const persist = () => snapshot({ pid: process.pid, executable: process.execPath,
+-      model: audit.modelID, maxRequests: 12, requests: audit.requests,
++      model: audit.modelID, maxRequests, requests: audit.requests,
+       exhausted: audit.exhausted, observedAt: new Date().toISOString() })
+-    const audit = new RealProviderAudit("gpt-6.1-sol", 12, persist,
++    const audit = new RealProviderAudit("gpt-6.1-sol", maxRequests, persist,
+       { copiedOAuthExpiresAt: access.copiedOAuthExpiresAt }, undefined, { redactor })
+     persist()
+     return { audit, persist }
+@@ -100,15 +115,14 @@
+     import(source("src/provider/provider.ts")), import(source("src/session/status.ts")),
+     import(source("src/runtime/process-occurrence.ts")), import(source("src/server/shutdown.ts")),
+   ])
+-  const [{ EffectiveConfig }, { Config }, { PromptProfileResolver }, { getLoadedBuiltInPackages },
+-    { ExpertSquadRegistry }, modelResolver, { HostAgentRegistry }, { HelperAgentRegistry },
++  const [{ EffectiveConfig }, { Config }, { PromptProfileResolver },
++    modelResolver, { HostAgentRegistry }, { HelperAgentRegistry },
+     { PrimaryAssistantRegistry }, { UNIVERSAL_BUILD_AGENT_ID }, { configuredTaskProcessMode },
+     { Database, eq }, { EngineTaskTable }, { projectTaskRowInTransaction },
+     { readTaskDurableActivityScope }, { taskLifecycleProjectionInTransaction },
+     { listOwnedPromptSessionsForTask }, { observeMissionTaskDuplexActivity }, { Identifier }] = await Promise.all([
+     import(source("src/config/effective.ts")), import(source("src/config/config.ts")),
+-    import(source("src/expert-squad/prompt-profile-resolver.ts")), import(source("src/expert-squad/builtin/index.ts")),
+-    import(source("src/expert-squad/registry.ts")), import(source("src/agent/model.ts")),
++    import(source("src/expert-squad/prompt-profile-resolver.ts")), import(source("src/agent/model.ts")),
+     import(source("src/agent/host-agent-registry.ts")), import(source("src/agent/helper-agent-registry.ts")),
+     import(source("src/agent/primary-assistant-registry.ts")), import(source("src/agent/universal-build.ts")),
+     import(source("src/engine/task-execution-capsule-binding.ts")), import(source("src/storage/db.ts")),
+@@ -120,30 +134,44 @@
+   const qualifyModels = async (opts?: { taskID: string }) => {
+     assert.equal(configuredTaskProcessMode(), "native")
+     const config = await EffectiveConfig.effective(opts)
+-    assert.equal(config.prompt_profile.active, "base")
++    assert.equal(config.prompt_profile.active, profileID)
+     assert.equal(config.model, "openai/gpt-6.1-sol")
+     assert.equal(config.small_model, "openai/gpt-6.1-sol")
+     const revision = await PromptProfileResolver.resolveActivePackageRevision({ config, projectDirectory: project, scope: "project" })
+-    assert.equal(revision.scope, "built_in")
+-    const embedded = getLoadedBuiltInPackages().find((pkg: any) => pkg.id === revision.id && pkg.namespace === revision.namespace)
+-    assert(embedded, "Active immutable built-in package must be the loaded package")
+-    assert.equal(embedded.id, "base")
+-    assert.equal(embedded.version, revision.version)
+-    assert.equal(embedded.packageDigest, revision.packageDigest)
+-    const preview = Config.mergeOverlay(config, { model: "openai/gpt-6.1-sol", prompt_profile: { active: "base" } })
++    assert.equal(revision.scope, "project")
++    assert.equal(revision.projectID, Instance.project.id)
++    const loadedPackage = await ExpertSquadRegistry.loadPackageRevisionSnapshot(revision.packageDigest)
++    assert.equal(loadedPackage.id, profileID)
++    assert.equal(loadedPackage.namespace, definition.manifest.namespace)
++    assert.equal(loadedPackage.version, revision.version)
++    assert.equal(loadedPackage.packageDigest, revision.packageDigest)
++    const preview = Config.mergeOverlay(config, { model: "openai/gpt-6.1-sol", prompt_profile: { active: profileID } })
+     const matrix: Array<{ kind: string; agentID: string; baseRole?: string; capabilityOwner?: string; providerID: string; modelID: string; intendedProviderID?: string; intendedModelID?: string }> = []
+     const expectedRef = { providerID: "openai", modelID: "gpt-6.1-sol" }
+-    const entries = ExpertSquadRegistry.agentProjectionEntries(embedded.manifest).map((entry: any) => ({
++    const entries = ExpertSquadRegistry.agentProjectionEntries(loadedPackage.manifest).map((entry: any) => ({
+       agentID: entry.agentID, baseRole: entry.baseRole, capabilityOwner: "package",
+     }))
+     entries.push({ agentID: UNIVERSAL_BUILD_AGENT_ID, baseRole: "build", capabilityOwner: "platform" })
++    const workerGrants: Array<{ identity: unknown; packageRevision: unknown; builtInToolIDs: string[];
++      defaultTools: Array<{ ref: string; providerName: string }> }> = []
+     for (const entry of entries) {
+-      const identity = { expertSquadID: embedded.id, ...entry }
++      const identity = { expertSquadID: loadedPackage.id, ...entry }
+       const ref = modelResolver.configuredProjectedWorkerModelRef(config, identity)
+       const intended = modelResolver.configuredProjectedWorkerModelRef(preview, identity)
+       assert.deepEqual(ref, expectedRef, `Actual projected model ${entry.agentID}`)
+       assert.deepEqual(intended, expectedRef, `Intended projected model ${entry.agentID}`)
+       matrix.push({ kind: "projected-worker", ...entry, ...ref, intendedProviderID: intended.providerID, intendedModelID: intended.modelID })
++      const { workerCapability } = await PromptProfileResolver.resolveWorkerTurnProjection({
++        config, projectDirectory: project, packageRevision: revision, agentID: entry.agentID,
++      })
++      if (entry.agentID === "mission") {
++        assert.equal(workerCapability.identity.baseRole, "explore")
++        assert.equal(workerCapability.identity.sessionKind, "explore")
++        assert(workerCapability.builtInToolIDs.includes("panel_query_task"), "Actual explorer must receive its query grant")
++      }
++      workerGrants.push({ identity: workerCapability.identity, packageRevision: workerCapability.packageRevision,
++        builtInToolIDs: workerCapability.builtInToolIDs,
++        defaultTools: workerCapability.defaultTools.map((tool: any) => ({ ref: tool.ref, providerName: tool.providerName })) })
+     }
+     for (const [kind, registry] of [["host", HostAgentRegistry], ["helper", HelperAgentRegistry], ["primary", PrimaryAssistantRegistry]] as const) {
+       for (const agent of await registry.list({ config })) {
+@@ -154,8 +182,15 @@
+     }
+     const projected = await Provider.getModel(expectedRef.providerID, expectedRef.modelID, { config })
+     assert.equal(projected.api.id, "gpt-6.1-sol")
++    assert.equal(new Set(matrix.map((entry) => `${entry.kind}:${entry.agentID}`)).size, matrix.length)
++    const { schedulerCapability } = await PromptProfileResolver.resolveSchedulerTurnProjection({
++      config, projectDirectory: project, packageRevision: revision,
++    })
+     return { projectID: Instance.project.id, directory: Instance.directory, packageRevision: revision,
+-      processMode: configuredTaskProcessMode(), matrix, providerAPIModel: projected.api.id,
++      processMode: configuredTaskProcessMode(), matrix, workerGrants,
++      schedulerGrants: { identity: schedulerCapability.identity, packageRevision: schedulerCapability.packageRevision,
++        builtInToolIDs: schedulerCapability.builtInToolIDs, virtualWorkflows: schedulerCapability.virtualWorkflows },
++      providerAPIModel: projected.api.id,
+       boundary: "Available actual registry identities and intended configuration; no prediction of dispatch or request origin" }
+   }
+   const admission = await Instance.provide({ directory: project, fn: async () => {
+@@ -194,9 +229,9 @@
+     }
+     const preflight = await state.audit.preflight({ serverURL: expectedURL,
+       model: "openai/gpt-6.1-sol", inactivityMs: 180_000,
+-      activity: SessionStatus.getActivity })
++      activity: (sessionID: string, directory: string) => Instance.provide({ directory, fn: () => SessionStatus.getActivity(sessionID) }) })
+     await publish("preflight-ready.json", { pid: process.pid, owner, occurrence, port, preflight,
+-      maxRequests: 12, budgetScope: "preflight-and-entire-formal-task-cumulative-same-process",
++      maxRequests, budgetScope: "preflight-and-entire-formal-task-cumulative-same-process",
+       nextAction: "root-owned-genuine-cli-task-create", credentialCleanup: "parent-owned-after-physical-exit" })
+     const handleDeadline = Date.now() + 600_000
+     let handle: { occurrence: string; taskID: string; projectID: string; directory: string; requestID: string; requestSentAt: string; acceptedObservedAt: string } | undefined
+--- /dev/null
++++ packages\opencorvus\test\real-provider-preflight-directory.test.ts
+@@ -0,0 +1,62 @@
++import { afterAll, expect, test } from "bun:test"
++import { RealProviderAudit } from "../script/real-provider-audit"
++import { Identifier } from "../src/id/id"
++import { Instance } from "../src/project/instance"
++import { Session } from "../src/session"
++import { SessionStatus } from "../src/session/status"
++import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
++
++afterAll(resetMemoryDatabase)
++
++test("preflight awaits activity in the actual returned Chat Session directory across the local transport", async () => {
++  await using project = await memoryProject("preflight-chat-directory")
++  const identity = await Instance.provide({ directory: project.path, fn: async () => {
++    const session = await Session.create({ kind: "assistant", title: "Owned preflight Chat" })
++    const input = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
++      role: "user", author: "user", agent: "work", model: { providerID: "test", modelID: "authorized-model" },
++      time: { created: Date.now() } })
++    const now = Date.now()
++    const assistant = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
++      role: "assistant", parentID: input.id, author: "work", agent: "work", providerID: "test", modelID: "authorized-model",
++      path: { cwd: project.path, root: project.path }, cost: 0,
++      tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
++      time: { created: now } })
++    const text = await Session.updatePart({ id: Identifier.ascending("part"), sessionID: session.id,
++      messageID: assistant.id, type: "text", text: "OK" })
++    if (assistant.role !== "assistant") throw new Error("Expected actual assistant Message")
++    const { orderKey: _orderKey, ...fields } = assistant
++    const completed = await Session.updateMessage({ ...fields, time: { created: now, completed: now + 1 }, finish: "stop" })
++    return { session, input, assistant: completed, text }
++  } })
++  const reads: string[] = []
++  const provider = Bun.serve({ hostname: "127.0.0.1", port: 0,
++    fetch: async (request) => Response.json({ accepted: await request.json() }) })
++  const host = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
++    const url = new URL(request.url)
++    if (url.pathname === "/global/chat/start") {
++      await fetch(provider.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
++      return Response.json({ session: { id: identity.session.id, directory: identity.session.directory }, messageID: identity.input.id })
++    }
++    reads.push(url.searchParams.get("directory") ?? "")
++    return Response.json([{ info: identity.assistant, parts: [identity.text] }])
++  } })
++  const activities: Array<{ sessionID: string; suppliedDirectory: string; activeDirectory: string; awaited: boolean }> = []
++  try {
++    using audit = new RealProviderAudit("authorized-model", 20)
++    const result = await audit.preflight({ serverURL: host.url, model: "test/authorized-model", inactivityMs: 180_000,
++      activity: (sessionID, directory) => Instance.provide({ directory, fn: async () => {
++        await new Promise<void>((resolve) => setTimeout(resolve, 10))
++        activities.push({ sessionID, suppliedDirectory: directory, activeDirectory: Instance.directory, awaited: true })
++        return SessionStatus.getActivity(sessionID)
++      } }) })
++    expect(result).toEqual({ sessionID: identity.session.id, credential: "usable", catalog: "projected",
++      actualModel: "authorized-model", streaming: true })
++    expect(reads).toEqual([identity.session.directory])
++    expect(activities).toEqual([{ sessionID: identity.session.id, suppliedDirectory: identity.session.directory,
++      activeDirectory: identity.session.directory, awaited: true }])
++    expect(audit.requests).toEqual([{ model: "authorized-model", streaming: true, status: 200 }])
++  } finally {
++    await host.stop(true)
++    await provider.stop(true)
++  }
++}, 30_000)

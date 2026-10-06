@@ -1,0 +1,62 @@
+import { afterAll, expect, test } from "bun:test"
+import { RealProviderAudit } from "../script/real-provider-audit"
+import { Identifier } from "../src/id/id"
+import { Instance } from "../src/project/instance"
+import { Session } from "../src/session"
+import { SessionStatus } from "../src/session/status"
+import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+afterAll(resetMemoryDatabase)
+
+test("preflight awaits activity in the actual returned Chat Session directory across the local transport", async () => {
+  await using project = await memoryProject("preflight-chat-directory")
+  const identity = await Instance.provide({ directory: project.path, fn: async () => {
+    const session = await Session.create({ kind: "assistant", title: "Owned preflight Chat" })
+    const input = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
+      role: "user", author: "user", agent: "work", model: { providerID: "test", modelID: "authorized-model" },
+      time: { created: Date.now() } })
+    const now = Date.now()
+    const assistant = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
+      role: "assistant", parentID: input.id, author: "work", agent: "work", providerID: "test", modelID: "authorized-model",
+      path: { cwd: project.path, root: project.path }, cost: 0,
+      tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+      time: { created: now } })
+    const text = await Session.updatePart({ id: Identifier.ascending("part"), sessionID: session.id,
+      messageID: assistant.id, type: "text", text: "OK" })
+    if (assistant.role !== "assistant") throw new Error("Expected actual assistant Message")
+    const { orderKey: _orderKey, ...fields } = assistant
+    const completed = await Session.updateMessage({ ...fields, time: { created: now, completed: now + 1 }, finish: "stop" })
+    return { session, input, assistant: completed, text }
+  } })
+  const reads: string[] = []
+  const provider = Bun.serve({ hostname: "127.0.0.1", port: 0,
+    fetch: async (request) => Response.json({ accepted: await request.json() }) })
+  const host = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+    const url = new URL(request.url)
+    if (url.pathname === "/global/chat/start") {
+      await fetch(provider.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
+      return Response.json({ session: { id: identity.session.id, directory: identity.session.directory }, messageID: identity.input.id })
+    }
+    reads.push(url.searchParams.get("directory") ?? "")
+    return Response.json([{ info: identity.assistant, parts: [identity.text] }])
+  } })
+  const activities: Array<{ sessionID: string; suppliedDirectory: string; activeDirectory: string; awaited: boolean }> = []
+  try {
+    using audit = new RealProviderAudit("authorized-model", 20)
+    const result = await audit.preflight({ serverURL: host.url, model: "test/authorized-model", inactivityMs: 180_000,
+      activity: (sessionID, directory) => Instance.provide({ directory, fn: async () => {
+        await new Promise<void>((resolve) => setTimeout(resolve, 10))
+        activities.push({ sessionID, suppliedDirectory: directory, activeDirectory: Instance.directory, awaited: true })
+        return SessionStatus.getActivity(sessionID)
+      } }) })
+    expect(result).toEqual({ sessionID: identity.session.id, credential: "usable", catalog: "projected",
+      actualModel: "authorized-model", streaming: true })
+    expect(reads).toEqual([identity.session.directory])
+    expect(activities).toEqual([{ sessionID: identity.session.id, suppliedDirectory: identity.session.directory,
+      activeDirectory: identity.session.directory, awaited: true }])
+    expect(audit.requests).toEqual([{ model: "authorized-model", streaming: true, status: 200 }])
+  } finally {
+    await host.stop(true)
+    await provider.stop(true)
+  }
+}, 30_000)
