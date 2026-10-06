@@ -129,3 +129,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Semantic Diff request40](../../artifacts/2026-10-05-connection-workspace-authority/diff-request-stability-plan.md): exact scope/target/evidence request identity; actual40 large/small Diff, live updates, keys and formal files qualify within bounds; original39 paint and recovered semantic-idle cause remain open.
 
 - [Formal physical caller association41](../../artifacts/2026-10-05-connection-workspace-authority/stream-request-association-plan.md): immutable request-owned Provider context;33 positive contracts and real41 four Sol caller bindings/EOF/native closure qualify; semantic recovery and vendor limits remain open.
+
+- [Current artifact preview identity42](../../artifacts/2026-10-05-connection-workspace-authority/artifact-preview-identity-plan.md): current request/result/error/render owner and one browser-safe key; source/data checks pass; original42 semantic-idle failure retained, visuals/files unqualified.

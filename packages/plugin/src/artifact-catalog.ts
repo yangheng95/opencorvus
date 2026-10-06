@@ -1,5 +1,8 @@
 import { createHash, randomBytes } from "node:crypto"
 import { z } from "zod"
+import { artifactReadLocatorKey } from "./artifact-read-locator-key.js"
+
+export { artifactReadLocatorKey } from "./artifact-read-locator-key.js"
 import {
   ArtifactIdentifierSchema,
   ArtifactProducerSchema,
@@ -869,7 +872,8 @@ function canonicalizeArtifactJSONValue(
   value: unknown,
   ancestors: Set<object>,
 ): ArtifactJSONValue | typeof ArtifactJSONInvalid {
-  if (value === null || typeof value === "boolean" || typeof value === "string") return value
+  if (value === null) return null
+  if (typeof value === "boolean" || typeof value === "string") return value
   if (typeof value === "number") return Number.isFinite(value) ? value : ArtifactJSONInvalid
   if (!value || typeof value !== "object") return ArtifactJSONInvalid
   if (ancestors.has(value)) return ArtifactJSONInvalid
@@ -1064,10 +1068,6 @@ export type ArtifactReadWindowFact = Readonly<{
   request: ArtifactReadInput
   chunk: ArtifactReadChunk
 }>
-
-export function artifactReadLocatorKey(locator: ArtifactReadLocator): string {
-  return JSON.stringify(locator)
-}
 
 function artifactReadLocatorSHA256(locator: ArtifactReadLocator): string {
   if (locator.source === "engine_artifact") return locator.expected_sha256

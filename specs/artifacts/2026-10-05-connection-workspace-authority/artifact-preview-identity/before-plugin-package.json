@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@opencorvus-ai/plugin",
+  "version": "0.1.23",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "prepack": "bun run build",
+    "prepublishOnly": "bun run build"
+  },
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "bun": "./src/index.ts",
+      "types": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./tool": {
+      "source": "./src/tool.ts",
+      "bun": "./src/tool.ts",
+      "types": "./src/tool.ts",
+      "import": "./dist/tool.js",
+      "default": "./dist/tool.js"
+    },
+    "./files": {
+      "source": "./src/files.ts",
+      "bun": "./src/files.ts",
+      "types": "./src/files.ts",
+      "import": "./dist/files.js",
+      "default": "./dist/files.js"
+    },
+    "./artifact-catalog": {
+      "source": "./src/artifact-catalog.ts",
+      "bun": "./src/artifact-catalog.ts",
+      "types": "./src/artifact-catalog.ts",
+      "import": "./dist/artifact-catalog.js",
+      "default": "./dist/artifact-catalog.js"
+    },
+    "./project-path": {
+      "source": "./src/project-path.ts",
+      "bun": "./src/project-path.ts",
+      "types": "./src/project-path.ts",
+      "import": "./dist/project-path.js",
+      "default": "./dist/project-path.js"
+    },
+    "./task-artifact": {
+      "source": "./src/task-artifact.ts",
+      "bun": "./src/task-artifact.ts",
+      "types": "./src/task-artifact.ts",
+      "import": "./dist/task-artifact.js",
+      "default": "./dist/task-artifact.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "@types/node": "catalog:",
+    "@opencorvus-ai/sdk": "workspace:*",
+    "@opencorvus-ai/util": "workspace:*",
+    "hono": "catalog:",
+    "property-information": "7.2.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "@typescript/native-preview": "catalog:"
+  }
+}

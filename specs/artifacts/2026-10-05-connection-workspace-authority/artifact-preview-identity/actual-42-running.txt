@@ -1,0 +1,55 @@
+Browser tab: 23, Title: "OpenCorvus", URL: "http://localhost:18008/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 34, 44-45, 50-54, 59-63
++								59 container
++									60 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									61 container
++										62 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
++										63 button 产物预览身份验收42
++										64 image Running
++										65 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
++									66 button (expanded) Description: Collapse Anonymous 9bc3f8, Secondary Actions: Collapse
++									67 container
++										68 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										69 button Reply with OK.
++										70 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
++								71 container Recents
++									72 text Recents
++									73 container
++										74 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
++										75 button 产物预览身份验收42
++										76 image Running
++										77 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-204-trigger, Secondary Actions: Expand
++									78 container
++										79 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										80 button Reply with OK.
++										81 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-210-trigger, Secondary Actions: Expand
++					82 container
++						83 text 产物预览身份验收42
++						84 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-215-trigger, Secondary Actions: Expand
++						85 container Description: Running · 35s, ID: taskStatus
++							86 text Running
++							87 text 35s
++						88 button Side chat
++						89 container solidChatHeaderRuntimeActions
++							90 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							91 checkbox Description: Open right dock, Value: 0
++							92 container
++								93 container
++									94 text User
++									95 text 请先真实查询当前项目的 Task 列表及报告，保留实际范围、结果和限制。随后按顺序制作两个文件：先创建 hello.txt，内容为 Hello from a formal Task. 后接一个LF，UTF-8无BOM、共26字节，并完整检查；再创建 notes.txt，内容为 Notes from a formal Task. 后接一个LF，连续重复20行，UTF-8无BOM、共520字节，并完整检查。请把两个真实文件一起发布为本 Task 的正式资源，提供包含两文件的可浏览只读快照作为正式交付的一部分。由独立参与者对同一 hello 发布资源先后执行两次完整只读物化，每次重新打开实际缓存检查全部26字节；然后完整物化 notes，检查实际缓存全部520字节和20行内容。发布包含真实读取凭证的独立验收记录，在真实正式交付中给出两个文件及快照，随后结束 Task。不要访问网站或启动服务，不得用模型自述替代实际检查，也不要宣称用户已下载。
++								96 container
++									97 text orchestrator
++									98 text 31s
++									99 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									100 text 我会先真实查询当前项目的任务列表及报告，记录查询覆盖范围和限制；随后按指定顺序制作并发布两个文件，再由独立验收人员检查发布资源的实际缓存字节和重复读取凭证。全程不访问网站、不启动服务。
++									101 button (collapsed) Description: dispatch_agent, Secondary Actions: Expand
++										102 text dispatch_agent
++										103 text 1 running
++								104 text Code
++								105 text Task
++								106 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+~									57 text openai/gpt-6.1-sol
+~								58 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18008/ui/

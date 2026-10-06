@@ -1,0 +1,470 @@
+{
+  "observedAt": "2026-10-06T20:19:25.7749167Z",
+  "unmet": [
+    "genuine two-file publication",
+    "independent materialized reads/provenance",
+    "current resource/snapshot visual review",
+    "current preview switching/exports",
+    "formal notes download",
+    "Task completed"
+  ],
+  "durableCounts": {
+    "canonicalToolRequests": 0,
+    "messages": 5,
+    "sessions": 3,
+    "canonicalOutcomes": 0,
+    "owners": 0,
+    "events": 15,
+    "pending": 0,
+    "parts": 9
+  },
+  "requests": [
+    {
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791317322766,
+        "boundAt": 1791317322769,
+        "chunkCount": 35,
+        "byteCount": 37538,
+        "firstByteReadAt": 1791317322771,
+        "lastByteReadAt": 1791317328687,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h8RZ688jxHq5HB3EBugC",
+          "streamRequest": {
+            "requestID": "msg_hyhpmDm9AwsDrfTV5qLW",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791317328688
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true
+    },
+    {
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791317323985,
+        "boundAt": 1791317323987,
+        "chunkCount": 37,
+        "byteCount": 486700,
+        "firstByteReadAt": 1791317323987,
+        "lastByteReadAt": 1791317325331,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_h8RZ688jxHq5HB3EBugC",
+          "streamRequest": {
+            "requestID": "msg_hyhpmDm9AwsDrfTV5qLW",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791317325439
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true
+    },
+    {
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791317370872,
+        "boundAt": 1791317370874,
+        "chunkCount": 171,
+        "byteCount": 168685,
+        "firstByteReadAt": 1791317370874,
+        "lastByteReadAt": 1791317386869,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUShCrtizzzvyafPgPN",
+          "streamRequest": {
+            "requestID": "tsk_g00VXIn7yf00V6Ut4yt3",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791317386886
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true
+    },
+    {
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791317375830,
+        "boundAt": 1791317375832,
+        "chunkCount": 5639,
+        "byteCount": 3602443,
+        "firstByteReadAt": 1791317375843,
+        "lastByteReadAt": 1791317565605,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUShCr1PzznyRMRRMlA",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        },
+        "terminal": {
+          "kind": "aborted",
+          "at": 1791317565621
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true
+    },
+    {
+      "status": 200,
+      "reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791317568736,
+        "boundAt": 1791317568738,
+        "chunkCount": 6,
+        "byteCount": 23240,
+        "firstByteReadAt": 1791317568742,
+        "lastByteReadAt": 1791317568783,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUShCr1PzznyRMRRMlA",
+          "streamRequest": {
+            "requestID": "msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp",
+            "agentID": "orchestrator",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          }
+        },
+        "terminal": {
+          "kind": "aborted",
+          "at": 1791317568813
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "streaming": true
+    }
+  ],
+  "requestsAtFirstFailure": 4,
+  "sourceChecks": "3 positive plugin data tests; Overlay/plugin types/docs/browser build52.45s; original Node/types failures retained",
+  "nativeClosure": {
+    "nativeSettlement": {
+      "occurrence": "artifact-preview-42-b8e9b632-38a2-4442-843a-5d1da44b34af",
+      "outcome": "settled",
+      "host": {
+        "pid": 60028,
+        "processInstanceID": "win32:639269141125367629",
+        "occurrenceID": "4afe1e1f-98d8-4538-9358-e02dc4a92b80"
+      },
+      "target": {
+        "pid": 66968,
+        "processInstanceID": "win32:639269141132997861",
+        "occurrenceID": "53b1889f-36e0-4896-b41d-13d377017c8a"
+      },
+      "observedAtUtc": "2026-10-06T20:12:49.139Z",
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+    },
+    "physicalCompletion": true,
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 66968,
+          "processInstanceID": "win32:639269141132997861",
+          "occurrenceID": "53b1889f-36e0-4896-b41d-13d377017c8a"
+        }
+      },
+      {
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 60028,
+          "processInstanceID": "win32:639269141125367629",
+          "occurrenceID": "4afe1e1f-98d8-4538-9358-e02dc4a92b80"
+        }
+      }
+    ],
+    "observedAtUtc": "2026-10-06T20:12:50.3713485Z",
+    "copiedPair": [
+      {
+        "presentAfter": false,
+        "copiedLength": 2082,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-42\\runtime\\data\\auth.json"
+      },
+      {
+        "presentAfter": false,
+        "copiedLength": 9155406,
+        "outcome": "removed",
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-42\\runtime\\data\\models.json"
+      }
+    ],
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "listeners": null,
+    "occurrence": "artifact-preview-42-b8e9b632-38a2-4442-843a-5d1da44b34af",
+    "pairedCleanupComplete": true
+  },
+  "wholeMaximumMs": 900000,
+  "rootAction": "own tab23 first failure screenshot preserved and closed; sole public shutdown follower joined original owner; no original Task rearm; shared SDK/processor/semantic audit next",
+  "outcome": "FAILED original TASK_ACTIVITY_INACTIVITY; UI/file/snapshot/download acceptance not reached",
+  "originalLifecycleEvents": [
+    {
+      "id": "pev_g0VXIn99F00VN6HQ5W0o",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 5,
+      "deadline_ms": null,
+      "emitted_at": 1791317373849,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXIn9Al002Uw3yCyF5",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 6,
+      "deadline_ms": null,
+      "emitted_at": 1791317373943,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXInx2g002Ro8TOwGh",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 7,
+      "deadline_ms": null,
+      "emitted_at": 1791317565641,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"retry\",\"attempt\":1,\"message\":\"idle: backoff 1018.1551968413423ms; last heartbeat tool-input-delta@2026-10-06T20:09:45.612Z\",\"next\":1791317566642.1553}}"
+    },
+    {
+      "id": "pev_g0VXInxJy00s1lJMtAo4",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 8,
+      "deadline_ms": null,
+      "emitted_at": 1791317566714,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXInxs700jXOG8SNtx",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 9,
+      "deadline_ms": null,
+      "emitted_at": 1791317568831,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXInxss005uuRaAVWQ",
+      "kind": "event",
+      "type": "session.error",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 10,
+      "deadline_ms": null,
+      "emitted_at": 1791317568878,
+      "payload": "{\"error\":{\"name\":\"MessageAbortedError\",\"data\":{\"message\":\"Orchestrator execution signal aborted\",\"cancellation\":{\"actor\":\"orchestrator\",\"source\":\"orchestrator.abort_cascade\",\"surface\":\"orchestrator\",\"requestID\":\"1e42eb66-107c-4e3b-9108-c72c0bdb86e2\",\"reason\":\"Orchestrator execution signal aborted\",\"targetSessionID\":\"ses_-zUShCr1PzznyRMRRMlA\",\"taskID\":\"tsk_g00VXIn7yf00V6Ut4yt3\"}}},\"failureOccurrence\":{\"session_id\":\"ses_-zUShCr1PzznyRMRRMlA\",\"assistant_message_id\":\"msg_hdh01jFvcKNAhmACgYed\",\"error_name\":\"MessageAbortedError\"},\"summary\":\"Orchestrator execution signal aborted\"}"
+    },
+    {
+      "id": "pev_g0VXInxto006kDcoZETd",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 13,
+      "deadline_ms": null,
+      "emitted_at": 1791317568936,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXInxuM00VOzAvZsup",
+      "kind": "event",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXIn7yf00V6Ut4yt3",
+      "project_id": "prj_hNwSuL2JTQrG4nt5COch",
+      "task_id": null,
+      "session_id": "ses_-zUShCr1PzznyRMRRMlA",
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "session.bridge",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 14,
+      "deadline_ms": null,
+      "emitted_at": 1791317568970,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_hV2ERO0XD6TgQnl0dDOp_art_hV2ERO0XD6TgQnl0dDOp\",\"status\":{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Orchestrator execution signal aborted\"}}"
+    }
+  ],
+  "lastSnapshot": "task-observation-66968-8e3d21b6-8202-4122-b3d0-bbb32dde8d6d-23.json",
+  "wholeClosureElapsedMs": 201022,
+  "independentClosure": {
+    "observedAtUtc": "2026-10-06T20:14:52.4751307Z",
+    "occurrence": "artifact-preview-42-b8e9b632-38a2-4442-843a-5d1da44b34af",
+    "host": {
+      "expected": {
+        "pid": 60028,
+        "processInstanceID": "win32:639269141125367629",
+        "occurrenceID": "4afe1e1f-98d8-4538-9358-e02dc4a92b80"
+      },
+      "state": "dead_or_reused"
+    },
+    "target": {
+      "expected": {
+        "pid": 66968,
+        "processInstanceID": "win32:639269141132997861",
+        "occurrenceID": "53b1889f-36e0-4896-b41d-13d377017c8a"
+      },
+      "state": "dead_or_reused"
+    },
+    "listeners": [],
+    "copiedAuthPresent": false,
+    "copiedModelsPresent": false,
+    "sourcePairMetadata": [
+      {
+        "bytes": 2147,
+        "modifiedAt": "2026-10-04T15:48:55.8607343Z",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json"
+      },
+      {
+        "bytes": 9155406,
+        "modifiedAt": "2026-10-04T15:48:10.1379969Z",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json"
+      }
+    ],
+    "page": "own IAB9 tab23 closed after original offline first-failure capture; shutdown call joined prior sole owner"
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXIn7yf00V6Ut4yt3",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXIn86q00r08MtzOva",
+    "openedAt": 1791317369349,
+    "status": "active"
+  },
+  "finalRequests": 5,
+  "snapshotCount": 23,
+  "originalFailure": {
+    "pid": 66968,
+    "occurrence": "artifact-preview-42-b8e9b632-38a2-4442-843a-5d1da44b34af",
+    "error": {
+      "name": "Error",
+      "message": "TASK_ACTIVITY_INACTIVITY"
+    },
+    "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+    "credentialCleanup": "unverified-parent-owned"
+  }
+}

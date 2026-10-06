@@ -1,0 +1,9 @@
+{
+  "title": "产物预览身份验收42",
+  "request": "请先真实查询当前项目的 Task 列表及报告，保留实际范围、结果和限制。随后按顺序制作两个文件：先创建 hello.txt，内容为 Hello from a formal Task. 后接一个LF，UTF-8无BOM、共26字节，并完整检查；再创建 notes.txt，内容为 Notes from a formal Task. 后接一个LF，连续重复20行，UTF-8无BOM、共520字节，并完整检查。请把两个真实文件一起发布为本 Task 的正式资源，提供包含两文件的可浏览只读快照作为正式交付的一部分。由独立参与者对同一 hello 发布资源先后执行两次完整只读物化，每次重新打开实际缓存检查全部26字节；然后完整物化 notes，检查实际缓存全部520字节和20行内容。发布包含真实读取凭证的独立验收记录，在真实正式交付中给出两个文件及快照，随后结束 Task。不要访问网站或启动服务，不得用模型自述替代实际检查，也不要宣称用户已下载。",
+  "model": "openai/gpt-6.1-sol",
+  "source": "product-experience-artifact-preview-identity-42",
+  "requestID": "b4a81630-a68f-485d-8380-4ab64e1b99d4",
+  "requestSentAt": "2026-10-06T20:09:25.2733073Z",
+  "acceptedObservedAt": "2026-10-06T20:09:29.9713081Z"
+}

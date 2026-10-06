@@ -42,6 +42,12 @@ lineage；Delivery Slice 不记录、复用或回收 workspace。
 
 ## Plugin —— 进程内插件
 
+The public `artifact-read-locator-key` entry owns the existing exact locator
+identity function as a runtime-neutral data primitive. Host artifact catalog
+imports and re-exports that same implementation; browser consumers import the
+thin entry without the catalog's Node.js storage/cryptography dependencies.
+Locator schemas and serialization rules remain owned by the public catalog.
+
 **代码**：`src/plugin/index.ts`
 
 - 通过 `@opencorvus-ai/plugin` SDK 加载第三方 Hook / auth plugin

@@ -17,6 +17,10 @@ import type {
   TaskArtifactSnapshotFile,
   TaskArtifactSnapshotManifest,
 } from "@opencorvus-ai/plugin/task-artifact"
+import {
+  artifactReadLocatorKey,
+  type ArtifactReadLocator as CanonicalArtifactReadLocator,
+} from "@opencorvus-ai/plugin/artifact-read-locator-key"
 import type { InteractiveArtifactPayload } from "../services/interactive-artifact"
 import {
   loadConversationArtifactContent,
@@ -29,6 +33,8 @@ import type { ArtifactCodeLanguage } from "./interactive-artifact/CodeArtifact"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { SearchField } from "./ui/SearchField"
+import { captureApiAuthority } from "../services/api"
+import { activeProjectDirectory } from "../services/project-directory"
 
 // Loaded with the artifact the inspector is actually opening; keeping these
 // static held CodeMirror and its grammars in the startup bundle.
@@ -62,6 +68,7 @@ type ResourceSelection = {
 
 type ArtifactContentRequest = {
   taskID: string
+  title: string
   locator: ArtifactReadLocator
 }
 
@@ -111,22 +118,50 @@ function codeLanguage(mediaType: string): ArtifactCodeLanguage | undefined {
 }
 
 function createArtifactContentResource(source: () => ArtifactContentRequest | undefined) {
+  const request = createMemo(
+    () => {
+      const input = source()
+      if (!input) return undefined
+      const authority = captureApiAuthority()
+      const locatorKey = artifactReadLocatorKey(input.locator as CanonicalArtifactReadLocator)
+      return {
+        key: JSON.stringify([authority.revision, activeProjectDirectory(), input.taskID, locatorKey, input.title]),
+        input: { ...input, locator: JSON.parse(locatorKey) as ArtifactReadLocator },
+        authority,
+      }
+    },
+    undefined,
+    { equals: (previous, current) => previous?.key === current?.key },
+  )
   let activeController: AbortController | undefined
-  const resource = createResource(source, async (request) => {
+  const [resource] = createResource(request, async (current) => {
     activeController?.abort()
     const controller = new AbortController()
     activeController = controller
     try {
-      return await loadConversationArtifactContent({ ...request, signal: controller.signal })
+      const content = await loadConversationArtifactContent({
+        taskID: current.input.taskID,
+        locator: current.input.locator,
+        authority: current.authority,
+        signal: controller.signal,
+      })
+      return { request: current, content }
     } finally {
       if (activeController === controller) activeController = undefined
     }
   })
+  const ready = createMemo(() => {
+    const current = request()
+    if (!current || resource.loading || resource.error) return undefined
+    const resolved = resource()
+    return resolved?.request.key === current.key ? resolved : undefined
+  })
+  const error = createMemo(() => (request() && !resource.loading ? resource.error : undefined))
   createEffect(() => {
-    if (!source()) activeController?.abort()
+    if (!request()) activeController?.abort()
   })
   onCleanup(() => activeController?.abort())
-  return resource
+  return [resource, ready, error] as const
 }
 
 function useObjectURL(content: () => ConversationArtifactContent): () => string {
@@ -312,14 +347,15 @@ function SnapshotArtifactView(props: {
         )
       : resources()
   })
-  const [resourceContent] = createArtifactContentResource(() => {
+  const [resourceContent, readyResource, resourceError] = createArtifactContentResource(() => {
     const selected = selection()
-    return selected ? { taskID: props.taskID, locator: selected.locator } : undefined
+    return selected ? { taskID: props.taskID, title: selected.file.path, locator: selected.locator } : undefined
   })
 
   createEffect(() => {
     void selection()
-    void resourceContent()
+    void readyResource()
+    void resourceContent.loading
     props.onContentChanged?.()
   })
 
@@ -373,32 +409,72 @@ function SnapshotArtifactView(props: {
             {t("chat.artifacts.loading")}
           </div>
         </Show>
-        <Show when={resourceContent.error}>
+        <Show when={resourceError()}>
           <div class="conversation-artifact-inspector__status" role="alert">
-            {String(resourceContent.error)}
+            {String(resourceError())}
           </div>
         </Show>
-        <Show when={selection() && resourceContent()}>
-          {(content) => <ArtifactContentView title={selection()!.file.path} content={content()} />}
+        <Show when={readyResource()} keyed>
+          {(resolved) => <ArtifactContentView title={resolved.request.input.title} content={resolved.content} />}
         </Show>
       </div>
     </ArtifactFrame>
   )
 }
 
-export function ConversationArtifactInspector(props: {
+type ArtifactInspectorProps = {
   taskID: string
   title: string
   locator: ArtifactReadLocator
   onContentChanged?: () => void
-}) {
-  const [content] = createArtifactContentResource(() => ({ taskID: props.taskID, locator: props.locator }))
+}
+
+function ArtifactInspectorContent(props: ArtifactInspectorProps) {
+  const [content, ready, error] = createArtifactContentResource(() => ({
+    taskID: props.taskID,
+    title: props.title,
+    locator: props.locator,
+  }))
 
   createEffect(() => {
-    void content()
+    void ready()
+    void content.loading
     props.onContentChanged?.()
   })
 
+  return (
+    <div class="conversation-artifact-inspector" data-ui="conversation-artifact-inspector">
+      <Show when={content.loading}>
+        <div class="conversation-artifact-inspector__status" role="status">
+          {t("chat.artifacts.loading")}
+        </div>
+      </Show>
+      <Show when={error()}>
+        <div class="conversation-artifact-inspector__status" role="alert">
+          {String(error())}
+        </div>
+      </Show>
+      <Show when={ready()} keyed>
+        {(loaded) => (
+          <Show
+            when={loaded.request.input.locator.source === "task_artifact_snapshot"}
+            fallback={<ArtifactContentView title={loaded.request.input.title} content={loaded.content} />}
+          >
+            <SnapshotArtifactView
+              taskID={loaded.request.input.taskID}
+              title={loaded.request.input.title}
+              locator={loaded.request.input.locator}
+              content={loaded.content}
+              onContentChanged={props.onContentChanged}
+            />
+          </Show>
+        )}
+      </Show>
+    </div>
+  )
+}
+
+export function ConversationArtifactInspector(props: ArtifactInspectorProps) {
   return (
     <ErrorBoundary
       fallback={(error) => (
@@ -407,34 +483,7 @@ export function ConversationArtifactInspector(props: {
         </div>
       )}
     >
-      <div class="conversation-artifact-inspector" data-ui="conversation-artifact-inspector">
-        <Show when={content.loading}>
-          <div class="conversation-artifact-inspector__status" role="status">
-            {t("chat.artifacts.loading")}
-          </div>
-        </Show>
-        <Show when={content.error}>
-          <div class="conversation-artifact-inspector__status" role="alert">
-            {String(content.error)}
-          </div>
-        </Show>
-        <Show when={content()}>
-          {(loaded) => (
-            <Show
-              when={props.locator.source === "task_artifact_snapshot"}
-              fallback={<ArtifactContentView title={props.title} content={loaded()} />}
-            >
-              <SnapshotArtifactView
-                taskID={props.taskID}
-                title={props.title}
-                locator={props.locator}
-                content={loaded()}
-                onContentChanged={props.onContentChanged}
-              />
-            </Show>
-          )}
-        </Show>
-      </div>
+      <ArtifactInspectorContent {...props} />
     </ErrorBoundary>
   )
 }

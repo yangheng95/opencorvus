@@ -1389,6 +1389,16 @@ status changes. Completed text-only turns keep the compact default. This
 visibility rule is renderer-independent and does not inspect tool names,
 titles, prose, or payload content.
 
+Artifact inspector previews use one current request owner for connection
+authority, owning Project directory, Task, exact locator and title. The existing
+reader returns content together with that request; only its matching successful
+ready result supplies title, filename, content and export. Pending/error/removed
+targets retire the previous displayed renderer. Equivalent semantic requests
+retain their owner; a genuine snapshot request change retires its resource
+selection and search along with the renderer. The same helper owns outer and
+selected-resource loading, without another cache, reader or directory resolver.
+The local error boundary contains the request-owning body and child renderers.
+
 `ArtifactFrame` is the only native artifact work surface. It presents the same
 mounted renderer in compact Conversation form and, when supported, through the
 browser Fullscreen API; it never creates a second renderer tree or copies the

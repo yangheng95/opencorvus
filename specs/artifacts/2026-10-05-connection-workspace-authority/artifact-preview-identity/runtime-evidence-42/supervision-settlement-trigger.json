@@ -1,0 +1,18 @@
+{
+  "preparationDeadlineMs": 1791317913299,
+  "pid": 66968,
+  "reason": "immutable-wrapper-failure",
+  "totalDeadlineMs": 1791318269349,
+  "pinned": {
+    "taskID": "tsk_g00VXIn7yf00V6Ut4yt3",
+    "projectID": "prj_hNwSuL2JTQrG4nt5COch",
+    "rootSessionID": "ses_-zUShCrtizzzvyafPgPN",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXIn86q00r08MtzOva",
+    "openedAt": 1791317369349
+  },
+  "observedAtUtc": "2026-10-06T20:12:48.0119441Z",
+  "boundary": "Pinned Task boundary cached once; no progress renewal; stop request is distinct from physical settlement",
+  "occurrence": "artifact-preview-42-b8e9b632-38a2-4442-843a-5d1da44b34af",
+  "firstFailedPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-42\\evidence\\failed.json"
+}

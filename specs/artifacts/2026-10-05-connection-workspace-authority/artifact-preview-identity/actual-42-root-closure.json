@@ -1,0 +1,36 @@
+{
+  "observedAtUtc": "2026-10-06T20:14:52.4751307Z",
+  "occurrence": "artifact-preview-42-b8e9b632-38a2-4442-843a-5d1da44b34af",
+  "host": {
+    "expected": {
+      "pid": 60028,
+      "processInstanceID": "win32:639269141125367629",
+      "occurrenceID": "4afe1e1f-98d8-4538-9358-e02dc4a92b80"
+    },
+    "state": "dead_or_reused"
+  },
+  "target": {
+    "expected": {
+      "pid": 66968,
+      "processInstanceID": "win32:639269141132997861",
+      "occurrenceID": "53b1889f-36e0-4896-b41d-13d377017c8a"
+    },
+    "state": "dead_or_reused"
+  },
+  "listeners": [],
+  "copiedAuthPresent": false,
+  "copiedModelsPresent": false,
+  "sourcePairMetadata": [
+    {
+      "bytes": 2147,
+      "modifiedAt": "2026-10-04T15:48:55.8607343Z",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json"
+    },
+    {
+      "bytes": 9155406,
+      "modifiedAt": "2026-10-04T15:48:10.1379969Z",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json"
+    }
+  ],
+  "page": "own IAB9 tab23 closed after original offline first-failure capture; shutdown call joined prior sole owner"
+}

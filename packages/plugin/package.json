@@ -39,6 +39,13 @@
       "import": "./dist/artifact-catalog.js",
       "default": "./dist/artifact-catalog.js"
     },
+    "./artifact-read-locator-key": {
+      "source": "./src/artifact-read-locator-key.ts",
+      "bun": "./src/artifact-read-locator-key.ts",
+      "types": "./src/artifact-read-locator-key.ts",
+      "import": "./dist/artifact-read-locator-key.js",
+      "default": "./dist/artifact-read-locator-key.js"
+    },
     "./project-path": {
       "source": "./src/project-path.ts",
       "bun": "./src/project-path.ts",

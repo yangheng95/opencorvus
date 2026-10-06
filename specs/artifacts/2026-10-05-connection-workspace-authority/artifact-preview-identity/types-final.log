@@ -1,0 +1,2 @@
+$ tsc --noEmit
+../plugin/src/artifact-catalog.ts(872,82): error TS2322: Type 'unknown' is not assignable to type 'ArtifactJSONValue | unique symbol'.

@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\plugin\test\artifact-read-locator-key.test.ts:
+(pass) Host catalog and runtime-neutral consumers share the exact public function owner [0.14ms]
+(pass) validated immutable engine, snapshot and resource locators retain their declared identities [12.44ms]
+(pass) canonical Artifact JSON preserves actual nullable and primitive values [1.26ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [2.07s]
