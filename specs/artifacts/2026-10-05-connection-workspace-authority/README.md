@@ -185,3 +185,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Human participant identity plan](message-authority-implementation-plan.md) and [evidence](message-authority-implementation/README.md): current dynamic ID collision/public admission repair; display-source omission and genuine UI qualification remain separately bounded.
 
 - [Genuine request presentation plan](genuine-request-presentation-implementation-plan.md) and [evidence](genuine-request-presentation-implementation/README.md): current author/receiving-channel projection and actual before/after12 qualification; no new model Task.
+
+- [Settings navigation plan](settings-navigation-implementation-plan.md) and [evidence](settings-navigation-implementation/README.md): narrow destination-label clipping, shared rail ownership and next true before/after13.

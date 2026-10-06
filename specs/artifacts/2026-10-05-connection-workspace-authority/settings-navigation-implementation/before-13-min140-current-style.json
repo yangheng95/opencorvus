@@ -1,0 +1,638 @@
+{
+  "list": [
+    {
+      "layout": "strip",
+      "orientation": "vertical"
+    }
+  ],
+  "observedAtUtc": "2026-10-06T05:10:54.033Z",
+  "scale": "1.000",
+  "sidebar": {
+    "box": {
+      "bottom": 720,
+      "height": 684,
+      "left": 56,
+      "right": 196,
+      "top": 36,
+      "width": 140,
+      "x": 56,
+      "y": 36
+    },
+    "clientWidth": 140,
+    "scrollWidth": 210
+  },
+  "tabs": [
+    {
+      "box": {
+        "bottom": 218.2291717529297,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 186.2291717529297,
+        "width": 108,
+        "x": 72,
+        "y": 186.2291717529297
+      },
+      "id": "config-tab-general",
+      "label": "General",
+      "labels": [
+        {
+          "box": {
+            "bottom": 211.6770839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 164.78125,
+            "top": 192.78125,
+            "width": 50.78125,
+            "x": 114,
+            "y": 192.78125
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "General"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 252.2291717529297,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 220.2291717529297,
+        "width": 108,
+        "x": 72,
+        "y": 220.2291717529297
+      },
+      "id": "config-tab-appearance",
+      "label": "Appearance",
+      "labels": [
+        {
+          "box": {
+            "bottom": 245.6770839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 190.75,
+            "top": 226.78125,
+            "width": 76.75,
+            "x": 114,
+            "y": 226.78125
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Appearance"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 286.2291717529297,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 254.2291717529297,
+        "width": 108,
+        "x": 72,
+        "y": 254.2291717529297
+      },
+      "id": "config-tab-network",
+      "label": "Network",
+      "labels": [
+        {
+          "box": {
+            "bottom": 279.6770839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 169.17708587646484,
+            "top": 260.78125,
+            "width": 55.17708587646485,
+            "x": 114,
+            "y": 260.78125
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Network"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 320.22918701171875,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 288.22918701171875,
+        "width": 108,
+        "x": 72,
+        "y": 288.22918701171875
+      },
+      "id": "config-tab-usage",
+      "label": "Usage",
+      "labels": [
+        {
+          "box": {
+            "bottom": 313.6770839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 154.5625,
+            "top": 294.78125,
+            "width": 40.5625,
+            "x": 114,
+            "y": 294.78125
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Usage"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 387.125,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 355.125,
+        "width": 108,
+        "x": 72,
+        "y": 355.125
+      },
+      "id": "config-tab-code",
+      "label": "Chat",
+      "labels": [
+        {
+          "box": {
+            "bottom": 380.5729274749756,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 144.375,
+            "top": 361.6770935058594,
+            "width": 30.375,
+            "x": 114,
+            "y": 361.6770935058594
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Chat"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 421.125,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 389.125,
+        "width": 108,
+        "x": 72,
+        "y": 389.125
+      },
+      "id": "config-tab-work",
+      "label": "Work",
+      "labels": [
+        {
+          "box": {
+            "bottom": 414.5729274749756,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 147.70833587646484,
+            "top": 395.6770935058594,
+            "width": 33.708335876464844,
+            "x": 114,
+            "y": 395.6770935058594
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Work"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 506.9166870117187,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 474.9166870117187,
+        "width": 108,
+        "x": 72,
+        "y": 474.9166870117187
+      },
+      "id": "config-tab-mission-skill",
+      "label": "Mission Card",
+      "labels": [
+        {
+          "box": {
+            "bottom": 500.3645839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 196.875,
+            "top": 481.46875,
+            "width": 82.875,
+            "x": 114,
+            "y": 481.46875
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Mission Card"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 540.9166870117188,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 508.9166870117187,
+        "width": 108,
+        "x": 72,
+        "y": 508.9166870117187
+      },
+      "id": "config-tab-scheduled",
+      "label": "Scheduled tasks",
+      "labels": [
+        {
+          "box": {
+            "bottom": 534.3645839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 220.6041717529297,
+            "top": 515.46875,
+            "width": 106.60417175292967,
+            "x": 114,
+            "y": 515.46875
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Scheduled tasks"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 626.7083740234375,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 594.7083740234375,
+        "width": 108,
+        "x": 72,
+        "y": 594.7083740234375
+      },
+      "id": "config-tab-expert-squad-install",
+      "label": "Squad Market",
+      "labels": [
+        {
+          "box": {
+            "bottom": 620.156270980835,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 204.1666717529297,
+            "top": 601.2604370117188,
+            "width": 90.16667175292967,
+            "x": 114,
+            "y": 601.2604370117188
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Squad Market"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 660.7083740234375,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 628.7083740234375,
+        "width": 108,
+        "x": 72,
+        "y": 628.7083740234375
+      },
+      "id": "config-tab-expert-squad",
+      "label": "Installed Expert Squads",
+      "labels": [
+        {
+          "box": {
+            "bottom": 654.156270980835,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 266.1666717529297,
+            "top": 635.2604370117188,
+            "width": 152.1666717529297,
+            "x": 114,
+            "y": 635.2604370117188
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Installed Expert Squads"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 746.5,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 714.5,
+        "width": 108,
+        "x": 72,
+        "y": 714.5
+      },
+      "id": "config-tab-providers",
+      "label": "Providers",
+      "labels": [
+        {
+          "box": {
+            "bottom": 739.9479579925537,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 173.95833587646484,
+            "top": 721.0521240234375,
+            "width": 59.95833587646485,
+            "x": 114,
+            "y": 721.0521240234375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Providers"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 780.5,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 748.5,
+        "width": 108,
+        "x": 72,
+        "y": 748.5
+      },
+      "id": "config-tab-skill",
+      "label": "Skill Library",
+      "labels": [
+        {
+          "box": {
+            "bottom": 773.9479579925537,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 188.42708587646484,
+            "top": 755.0521240234375,
+            "width": 74.42708587646484,
+            "x": 114,
+            "y": 755.0521240234375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Skill Library"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 814.5,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 782.5,
+        "width": 108,
+        "x": 72,
+        "y": 782.5
+      },
+      "id": "config-tab-mcp",
+      "label": "MCP Connections",
+      "labels": [
+        {
+          "box": {
+            "bottom": 807.9479579925537,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 228.59375,
+            "top": 789.0521240234375,
+            "width": 114.59375,
+            "x": 114,
+            "y": 789.0521240234375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "MCP Connections"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 848.5,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 816.5,
+        "width": 108,
+        "x": 72,
+        "y": 816.5
+      },
+      "id": "config-tab-channel",
+      "label": "Channel",
+      "labels": [
+        {
+          "box": {
+            "bottom": 841.9479579925537,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 166.86458587646484,
+            "top": 823.0521240234375,
+            "width": 52.86458587646485,
+            "x": 114,
+            "y": 823.0521240234375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Channel"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 915.3958740234376,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 883.3958740234375,
+        "width": 108,
+        "x": 72,
+        "y": 883.3958740234375
+      },
+      "id": "config-tab-memory",
+      "label": "Memory & Context",
+      "labels": [
+        {
+          "box": {
+            "bottom": 908.843770980835,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 232.5416717529297,
+            "top": 889.9479370117188,
+            "width": 118.54167175292967,
+            "x": 114,
+            "y": 889.9479370117188
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Memory & Context"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 982.2916870117188,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 950.2916870117188,
+        "width": 108,
+        "x": 72,
+        "y": 950.2916870117188
+      },
+      "id": "config-tab-archive",
+      "label": "Archive",
+      "labels": [
+        {
+          "box": {
+            "bottom": 975.7395839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 161.64583587646484,
+            "top": 956.84375,
+            "width": 47.64583587646485,
+            "x": 114,
+            "y": 956.84375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Archive"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 1016.2916870117188,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 984.2916870117188,
+        "width": 108,
+        "x": 72,
+        "y": 984.2916870117188
+      },
+      "id": "config-tab-changelog",
+      "label": "Release notes",
+      "labels": [
+        {
+          "box": {
+            "bottom": 1009.7395839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 204.5416717529297,
+            "top": 990.84375,
+            "width": 90.54167175292967,
+            "x": 114,
+            "y": 990.84375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "Release notes"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    },
+    {
+      "box": {
+        "bottom": 1050.2916870117188,
+        "height": 32,
+        "left": 72,
+        "right": 180,
+        "top": 1018.2916870117188,
+        "width": 108,
+        "x": 72,
+        "y": 1018.2916870117188
+      },
+      "id": "config-tab-about",
+      "label": "About",
+      "labels": [
+        {
+          "box": {
+            "bottom": 1043.7395839691162,
+            "height": 18.89583396911621,
+            "left": 114,
+            "right": 152.29166793823242,
+            "top": 1024.84375,
+            "width": 38.29166793823242,
+            "x": 114,
+            "y": 1024.84375
+          },
+          "flexShrink": "1",
+          "minWidth": "auto",
+          "text": "About"
+        }
+      ],
+      "lineHeight": "18.9px",
+      "padding": "4px 16px",
+      "whiteSpace": "nowrap"
+    }
+  ]
+}

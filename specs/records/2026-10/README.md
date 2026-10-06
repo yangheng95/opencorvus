@@ -69,3 +69,7 @@ The authority record now indexes shared human participant identity validation an
 Identity493a is normally pushed after actual public SDK/Registry qualification; the next genuine request presentation Recall admits true before12 on retained failed07 without new model authority.
 
 Actual after12 now qualifies canonical human request display and technical Handoff/reload/reselect/old Chat through Root screenshots, exact public immutable participant comparison and complete physical/history closure; live/new-input and historical collision matrices remain outside that proof.
+
+Pushed41c54 is followed by the readable Settings navigation Recall; unchanged before13 and CSS cascade investigation precede any label/layout implementation.
+
+Final Settings navigation13 now has genuine before/intermediate/final manual images, bilingual/scaled/keyboard/search qualification and complete physical/history closure; its shared intrinsic-height rail and compact spacing supersede the earlier held layout candidate.

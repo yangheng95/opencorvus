@@ -1,0 +1,55 @@
+{
+  "observedAtUtc": "2026-10-06T05:19:31.6922721Z",
+  "currentOwners": [],
+  "listeners": [],
+  "pairedCopies": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "excludedCandidates": [
+    {
+      "candidate": {
+        "ProcessId": 58056,
+        "ParentProcessId": 22352,
+        "CreationDate": "2026-10-01T20:34:30.414333+08:00",
+        "ExecutablePath": "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe"
+      },
+      "currentParent": {
+        "ProcessId": 22352,
+        "CreationDate": "2026-10-06T13:03:59.338677+08:00"
+      },
+      "reason": "Candidate predates exact current parent occurrence"
+    },
+    {
+      "candidate": {
+        "ProcessId": 68488,
+        "ParentProcessId": 22352,
+        "CreationDate": "2026-10-01T20:34:30.994806+08:00",
+        "ExecutablePath": "C:\\Program Files\\Microsoft OneDrive\\26.173.0906.0008\\OneDrive.Sync.Service.exe"
+      },
+      "currentParent": {
+        "ProcessId": 22352,
+        "CreationDate": "2026-10-06T13:03:59.338677+08:00"
+      },
+      "reason": "Candidate predates exact current parent occurrence"
+    }
+  ],
+  "previouslyExcludedCurrent": [
+    {
+      "ProcessId": 58056,
+      "CreationDate": "2026-10-01T20:34:30.414333+08:00",
+      "ExecutablePath": "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe"
+    },
+    {
+      "ProcessId": 68488,
+      "CreationDate": "2026-10-01T20:34:30.994806+08:00",
+      "ExecutablePath": "C:\\Program Files\\Microsoft OneDrive\\26.173.0906.0008\\OneDrive.Sync.Service.exe"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "recordedAtUtc": "2026-10-06T05:05:58.1698666Z",
+  "action": "First settings before13 current owner collector",
+  "error": "Descendant birth contradicts parent",
+  "outcome": "Stopped before owner receipt/HTTP projection",
+  "unknown": "Initial rejected candidate fields were not retained; later direct-chain scan finds no older candidate",
+  "sourceIssue": "Collector matches numeric ParentProcessId before checking birth and throws on an impossible descendant instead of excluding it",
+  "boundary": "No product scheduling/ownership failure or actual specific PID reuse is established"
+}

@@ -1,0 +1,130 @@
+{
+  "evidencePrefix": "settings-navigation-before-13",
+  "observedAtUtc": "2026-10-06T05:07:43.7108016Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-navigation-before-13",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project",
+  "port": 17967,
+  "occurrence": "settings-navigation-before-13-90ed5f85-3051-4526-9d69-4bbd854ea420",
+  "listener": {
+    "ProcessId": 71216,
+    "ParentProcessId": 51736,
+    "CreationDate": "2026-10-06T13:03:59.433479+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17967 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-navigation-before-13\\startup.json --startup-occurrence settings-navigation-before-13-90ed5f85-3051-4526-9d69-4bbd854ea420 --log-level INFO"
+  },
+  "owners": [
+    {
+      "ProcessId": 71216,
+      "ParentProcessId": 51736,
+      "CreationDate": "2026-10-06T13:03:59.433479+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17967 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-navigation-before-13\\startup.json --startup-occurrence settings-navigation-before-13-90ed5f85-3051-4526-9d69-4bbd854ea420 --log-level INFO"
+    },
+    {
+      "ProcessId": 51736,
+      "ParentProcessId": 38172,
+      "CreationDate": "2026-10-06T13:03:59.399423+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17967 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-navigation-before-13\\startup.json --startup-occurrence settings-navigation-before-13-90ed5f85-3051-4526-9d69-4bbd854ea420 --log-level INFO"
+    },
+    {
+      "ProcessId": 38172,
+      "ParentProcessId": 76596,
+      "CreationDate": "2026-10-06T13:03:59.327644+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17967 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-navigation-before-13\\startup.json --startup-occurrence settings-navigation-before-13-90ed5f85-3051-4526-9d69-4bbd854ea420 --log-level INFO"
+    },
+    {
+      "ProcessId": 22352,
+      "ParentProcessId": 38172,
+      "CreationDate": "2026-10-06T13:03:59.338677+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    }
+  ],
+  "excludedEarlierParentCandidates": [
+    {
+      "candidate": {
+        "ProcessId": 58056,
+        "ParentProcessId": 22352,
+        "CreationDate": "2026-10-01T20:34:30.414333+08:00",
+        "ExecutablePath": "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe"
+      },
+      "currentParent": {
+        "ProcessId": 22352,
+        "CreationDate": "2026-10-06T13:03:59.338677+08:00"
+      },
+      "reason": "Candidate predates current parent occurrence"
+    },
+    {
+      "candidate": {
+        "ProcessId": 68488,
+        "ParentProcessId": 22352,
+        "CreationDate": "2026-10-01T20:34:30.994806+08:00",
+        "ExecutablePath": "C:\\Program Files\\Microsoft OneDrive\\26.173.0906.0008\\OneDrive.Sync.Service.exe"
+      },
+      "currentParent": {
+        "ProcessId": 22352,
+        "CreationDate": "2026-10-06T13:03:59.338677+08:00"
+      },
+      "reason": "Candidate predates current parent occurrence"
+    }
+  ],
+  "listeners": {
+    "LocalAddress": "127.0.0.1",
+    "LocalPort": 17967,
+    "OwningProcess": 71216
+  },
+  "health": {
+    "status": 200,
+    "body": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime\\data",
+        "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\settings-navigation-before-13\\home"
+      }
+    }
+  },
+  "uiStatus": 200,
+  "assets": [
+    {
+      "url": "http://localhost:17967/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "status": 200,
+      "bytes": 6426
+    },
+    {
+      "url": "http://localhost:17967/ui/assets/main-CB2_MhuG.js",
+      "status": 200,
+      "bytes": 1656288
+    },
+    {
+      "url": "http://localhost:17967/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+      "status": 200,
+      "bytes": 91924
+    },
+    {
+      "url": "http://localhost:17967/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "status": 200,
+      "bytes": 140006
+    },
+    {
+      "url": "http://localhost:17967/ui/assets/main-b6JpMtFG.css",
+      "status": 200,
+      "bytes": 535014
+    },
+    {
+      "url": "http://localhost:17967/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "status": 200,
+      "bytes": 6426
+    },
+    {
+      "url": "http://localhost:17967/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+      "status": 200,
+      "bytes": 6426
+    }
+  ],
+  "purpose": "Original Task history/manual presentation only; no new model input"
+}

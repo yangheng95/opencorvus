@@ -2526,3 +2526,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Human participant identity and request presentation](artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation-plan.md): duplicated dynamic identity validation, canonical human reservation and subsequent genuine request display qualification.
 
 - [Genuine Task request presentation](artifacts/2026-10-05-connection-workspace-authority/genuine-request-presentation-implementation-plan.md): canonical author/current main ownership and real retained-history disclosure qualification.
+
+- [Readable Settings navigation](artifacts/2026-10-05-connection-workspace-authority/settings-navigation-implementation-plan.md): supported narrow widths, existing rail primitive and real layout qualification.

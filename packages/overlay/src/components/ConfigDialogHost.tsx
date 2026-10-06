@@ -597,7 +597,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               size="md"
               value={settingsSearch()}
               inputRef={(element) => (settingsSearchInput = element)}
-              placeholder={t("settings.search_placeholder")}
+              placeholder={t("common.search")}
+              ariaLabel={t("settings.search_placeholder")}
               onValueChange={setSettingsSearch}
               onClear={() => setSettingsSearch("")}
               clearDataUI="config-search-clear"
@@ -607,7 +608,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                 <SettingsEmpty>{t("settings.search_no_results")}</SettingsEmpty>
               </div>
             </Show>
-            <TabList size="md" tone="neutral" data-ui="settings-dialog-tablist">
+            <TabList size="md" tone="neutral" layout="rail" data-ui="settings-dialog-tablist">
               <For each={CONFIG_NAV_GROUPS}>
                 {(group) => (
                   <Show when={group.tabs.some((tab) => visibleConfigTabIDs().has(tab.id))}>
@@ -623,7 +624,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                           aria-controls={configPanelID(tab.id)}
                         >
                           <Icon class="config-nav-icon" name={tab.icon} size="medium" />
-                          <span>{t(tab.labelKey)}</span>
+                          <span class="config-nav-label">{t(tab.labelKey)}</span>
                           <Show when={tab.badgeID}>
                             <span class="config-nav-badge" id={tab.badgeID} />
                           </Show>
@@ -644,7 +645,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                     aria-controls={configPanelID(tab.id)}
                   >
                     <Icon class="config-nav-icon" name={tab.icon} size="medium" />
-                    <span>{t(tab.labelKey)}</span>
+                    <span class="config-nav-label">{t(tab.labelKey)}</span>
                   </Tab>
                 )}
               </For>

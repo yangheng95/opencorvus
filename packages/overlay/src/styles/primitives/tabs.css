@@ -47,6 +47,7 @@
 
 .oc-tabs[data-layout="rail"] .oc-tab {
   width: 100%;
+  flex-shrink: 0;
   min-height: var(--oc-density-control-height);
   height: auto;
   justify-content: flex-start;

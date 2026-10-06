@@ -1322,40 +1322,24 @@ button.s-row:focus-visible {
 }
 
 .config-sidebar .oc-tabs {
-  display: flex;
   flex: 1 1 auto;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--ui-gap-3xs);
-  width: 100%;
   min-height: 100%;
-  height: auto;
-  padding: 0;
-  background: transparent;
 }
 
-/* Settings sidebar tabs keep the local rail layout, while Kobalte owns tab
-   semantics through the shared `.oc-tab` primitive. */
+/* The shared rail owns layout; Settings keeps its compact row density. */
+.config-sidebar .oc-tabs[data-layout="rail"] .oc-tab {
+  min-height: calc(32px * var(--ui-scale));
+  padding: var(--ui-gap-xs);
+  border: none;
+}
+
 .config-sidebar .oc-tab {
   --oc-tab-bg: transparent;
   --oc-tab-color: var(--text-strong);
 
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   gap: var(--ui-gap-md);
-  width: 100%;
-  min-height: calc(32px * var(--ui-scale));
-  height: auto;
-  padding: var(--ui-gap-xs) var(--ui-gap-xl);
-  border: none;
-  border-radius: var(--oc-radius-soft);
   background: var(--oc-tab-bg);
   color: var(--oc-tab-color);
-  font-size: var(--ui-font-body);
-  font-family: var(--font);
-  font-weight: var(--ui-font-weight-body);
-  text-align: left;
   transition:
     background var(--ui-duration-base),
     color var(--ui-duration-base);
@@ -1393,6 +1377,11 @@ button.s-row:focus-visible {
   height: calc(18px * var(--ui-scale));
   flex-shrink: 0;
   opacity: var(--ui-opacity-dim);
+}
+
+.config-nav-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .config-sidebar .oc-tab[data-selected] .config-nav-icon {

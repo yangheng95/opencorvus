@@ -229,6 +229,11 @@ open config tab or primary surface; Chats/Mission Board navigation closes the
 config page through its existing native-surface reveal lifecycle before opening
 the selected primary surface. Settings owns search focus, scoped Escape/Back
 and focus restoration; nested action dialogs keep the shared modal primitive.
+Its navigation uses the shared Tabs rail layout and allows destination labels
+to wrap within the measured sidebar. Settings owns compact row density and
+selection colors; the shared primitive owns vertical layout and tab semantics.
+Rail rows retain their intrinsic content height as the navigation scrolls.
+The search field keeps a concise visible hint and a complete accessible name.
 Its resize separator projects the mounted sidebar's actual width and applied
 CSS scale through one local frame-scheduled geometry owner. Size and root-style
 observation retire with that open node; CSS default measurements do not become
