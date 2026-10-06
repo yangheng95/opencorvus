@@ -1,0 +1,15 @@
+{
+  "pid": 23788,
+  "occurrence": "pending-tool-44-defe6d43-1b59-4871-b483-9b3639ce486e",
+  "owner": {
+    "pid": 23788,
+    "processInstanceID": "win32:639269193480231385",
+    "occurrenceID": "9f2448ea-84c5-4a6d-9d2e-6561f70f8925"
+  },
+  "parent": {
+    "pid": 44604,
+    "processInstanceID": "win32:639269193479862397",
+    "occurrenceID": "ea171b0f-2944-42cd-b7d1-c97f47604c13"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

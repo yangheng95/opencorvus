@@ -234,3 +234,7 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Current artifact preview identity42](artifact-preview-identity-plan.md): current request/result/error/render owner and one browser-safe key; source/data checks pass; original42 semantic-idle failure retained, visuals/files unqualified.
 
 - [Real SDK consumption and semantic decisions43](sdk-consumption-observation-plan.md): safe consumption and exact activity/attempt observations qualify through real43; original Task fails on whitespace-only Tool deltas, formal delivery remains unmet.
+
+- [Pending Tool structure44](pending-tool-structure-plan.md): bounded current-attempt JSON and actual outgoing schema shape observation qualified; original real Sol44 Task failed, incomplete JSON/whitespace cause remains open.
+
+- [Current Explorer row identity45](explorer-row-stability-plan.md): scoped stable render identities and current metadata/menu accessors; actual44 file refresh/focus/menu/current-file visuals passed, extended selection and formal delivery remain open.

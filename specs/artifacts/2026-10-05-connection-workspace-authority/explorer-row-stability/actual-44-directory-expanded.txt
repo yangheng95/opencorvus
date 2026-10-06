@@ -1,0 +1,11 @@
+Browser tab: 25, Title: "OpenCorvus", URL: "http://localhost:18010/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 239
+~								75 container Description: Running · 7m 27s, ID: taskStatus
+~									167 text 7m 27s
++													250 text artifact_read Artifacts (1) bash python -c "from pathlib import Path; p=Path(r'C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\live-sol-... artifact_read Artifacts (1) bash
+~										244 button (expanded) .opencorvus, ID: contextmenu-cl-4408-trigger, Secondary Actions: Collapse
++										251 button (collapsed) .r, Help: .opencorvus/.r, ID: contextmenu-cl-4627-trigger, Secondary Actions: Expand
++										252 button (collapsed) expert-squads, Help: .opencorvus/expert-squads, ID: contextmenu-cl-4631-trigger, Secondary Actions: Expand
++										253 button opencorvus.jsonc, Help: .opencorvus/opencorvus.jsonc, ID: contextmenu-cl-4635-trigger
+The focused UI element is 244 button (expanded) .opencorvus, ID: contextmenu-cl-4408-trigger, Secondary Actions: Collapse

@@ -3,7 +3,7 @@ import { streamText, stepCountIs, tool, jsonSchema } from "ai"
 import { Config } from "@/config/config"
 import { Provider } from "@/provider/provider"
 import { Instance } from "@/project/instance"
-import { RealProviderAudit } from "../script/real-provider-audit"
+import { CredentialRedactor, RealProviderAudit } from "../script/real-provider-audit"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -48,7 +48,7 @@ async function withLocalProvider(run: (fixture: {
           models: { [modelID]: { name: "Local stream", limit: { context: 10000, output: 1000 } } } },
       } })
       const model = await Provider.getModel(providerID, modelID, { config })
-      using audit = new RealProviderAudit(modelID, 20)
+      using audit = new RealProviderAudit(modelID, 20, undefined, undefined, undefined, { redactor: new CredentialRedactor() })
       await run({ config, model, audit, accepted })
     } })
   } finally { await server.stop(true) }
@@ -62,12 +62,22 @@ test("concurrent same-model callers retain the actual Session and distinct agent
     ]
     const languages = await Promise.all(callers.map((requestContext) => Provider.getLanguage(model, { config, requestContext })))
     const values = await Promise.all(languages.map((language, index) => streamText({ model: language,
-      prompt: callers[index]!.streamRequest.requestID, maxRetries: 0 }).text))
+      prompt: callers[index]!.streamRequest.requestID, maxRetries: 0,
+      tools: { observe: tool({ inputSchema: jsonSchema<Record<string, unknown>>(index === 0
+        ? { type: "object", properties: { value: { type: "string" } }, required: ["value"], additionalProperties: false }
+        : { type: "object", properties: { value: { type: ["string", "null"] }, count: { type: "number" } }, required: ["value", "count"], additionalProperties: false }) }) },
+    }).text))
     expect(values).toEqual(["reply:request-a", "reply:request-b"])
     expect(accepted.toSorted()).toEqual(["request-a", "request-b"])
     expect(audit.requests.map((request) => request.response_reader.requestContext).sort((a, b) =>
       a!.streamRequest.requestID.localeCompare(b!.streamRequest.requestID))).toEqual(callers)
     expect(audit.requests.map((request) => request.response_reader.terminal?.kind)).toEqual(["eof", "eof"])
+    expect(audit.requests.map((request) => ({ context: request.response_reader.requestContext,
+      shapes: request.tool_declarations!.entries[0]!.schema_shapes })).sort((left, right) =>
+      left.context!.streamRequest.requestID.localeCompare(right.context!.streamRequest.requestID))).toEqual([
+      { context: callers[0], shapes: [{ path: "function.parameters", strict: "unknown", rootKind: "object", additionalProperties: "false", propertiesCount: 1, requiredCount: 1, nullableCount: 0, unknownNullableCount: 0 }] },
+      { context: callers[1], shapes: [{ path: "function.parameters", strict: "unknown", rootKind: "object", additionalProperties: "false", propertiesCount: 2, requiredCount: 2, nullableCount: 1, unknownNullableCount: 0 }] },
+    ])
   })
 }, 60_000)
 
@@ -109,7 +119,7 @@ test("context-free consumers preserve the production model cache and real stream
 }, 60_000)
 
 test("one real SDK multi-step stream binds both HTTP responses to its original caller", async () => {
-  const requests: Array<{ messages: Array<{ role: string; content: unknown }> }> = []
+  const requests: Array<{ messages: Array<{ role: string; content: unknown }>; tools: unknown[] }> = []
   const executions: string[] = []
   const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
     const body = await request.json() as typeof requests[number]
@@ -134,7 +144,7 @@ test("one real SDK multi-step stream binds both HTTP responses to its original c
       const caller = { ...context("multi-step-worker", "multi-step-request"),
         activity: { id: "activity-multi-step", attempt: 2, assistantMessageID: "assistant-multi-step" } }
       const language = await Provider.getLanguage(model, { config, requestContext: caller })
-      using audit = new RealProviderAudit(modelID, 2)
+      using audit = new RealProviderAudit(modelID, 2, undefined, undefined, undefined, { redactor: new CredentialRedactor() })
       const result = streamText({ model: language, prompt: "Perform the actual lookup", maxRetries: 0,
         stopWhen: stepCountIs(2), tools: { lookup: tool({
           inputSchema: jsonSchema<{ value: string }>({ type: "object", properties: { value: { type: "string" } },
@@ -150,6 +160,15 @@ test("one real SDK multi-step stream binds both HTTP responses to its original c
       const steps = await result.steps
       expect(steps.map((step) => step.finishReason)).toEqual(["tool-calls", "stop"])
       expect(steps[0]!.toolResults[0]).toMatchObject({ toolName: "lookup", output: "actual-tool-result" })
+      expect(requests.map((request) => request.tools)).toEqual([
+        [{ type: "function", function: { name: "lookup", parameters: { type: "object", properties: { value: { type: "string" } }, required: ["value"], additionalProperties: false } } }],
+        [{ type: "function", function: { name: "lookup", parameters: { type: "object", properties: { value: { type: "string" } }, required: ["value"], additionalProperties: false } } }],
+      ])
+      expect(audit.requests.map((request) => ({ context: request.response_reader.requestContext,
+        shapes: request.tool_declarations!.entries[0]!.schema_shapes }))).toEqual([
+        { context: caller, shapes: [{ path: "function.parameters", strict: "unknown", rootKind: "object", additionalProperties: "false", propertiesCount: 1, requiredCount: 1, nullableCount: 0, unknownNullableCount: 0 }] },
+        { context: caller, shapes: [{ path: "function.parameters", strict: "unknown", rootKind: "object", additionalProperties: "false", propertiesCount: 1, requiredCount: 1, nullableCount: 0, unknownNullableCount: 0 }] },
+      ])
       expect(audit.requests.map((request) => ({ context: request.response_reader.requestContext,
         terminal: request.response_reader.terminal?.kind }))).toEqual([
         { context: caller, terminal: "eof" }, { context: caller, terminal: "eof" },

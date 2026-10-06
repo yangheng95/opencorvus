@@ -1,0 +1,15 @@
+bun script/run-tests.ts test/pending-tool-input-observation.test.ts
+[1/1] START test/pending-tool-input-observation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) aggregates complete JSON root value types and exact Unicode/whitespace lengths [0.46ms]
+(pass) classifies native syntax, non-object and JSON-only empty inputs without trimming the parser input [0.36ms]
+(pass) shares one whole-input budget and observes later fitting drafts after an oversized draft [0.09ms]
+(pass) records an invalid diagnostic budget as bookkeeping failure while retaining exact pending lengths [0.04ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [1200.00ms]
+[1/1] DONE test/pending-tool-input-observation.test.ts exit=0 duration=1.37s

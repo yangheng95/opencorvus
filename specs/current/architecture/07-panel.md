@@ -108,6 +108,18 @@ resource or its ancestor. The file-workbench service reconciles every successful
 physical result immediately. Explorer refreshes all completed members even when
 a later batch member fails, without owning a second editor target mapping.
 
+Explorer rows retain their render identity through equivalent directory refreshes.
+The key derives from the existing API authority revision, directory, committed
+selection epoch, row kind, physical node type and exact normalized path. Ordinary
+and virtual rows use those string keys and read current metadata through the same
+row projection; menu labels and actions consume current accessors. Name, ignored,
+loading, error, depth and expansion updates do not replace the row owner. Actual
+removal, rename, type or scope changes retire it. Search/filter retirement,
+virtual-window retirement and switching across the existing virtualization
+threshold can remount rows; stable focus across those boundaries is not promised.
+Existing multi-selection snapshots and guarded filesystem operation ownership
+remain with their current owners.
+
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns
 grammar metadata and cached dynamic loading; Markdown fences use that same

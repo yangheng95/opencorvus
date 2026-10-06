@@ -1,0 +1,10 @@
+{
+  "pid": 23788,
+  "occurrence": "pending-tool-44-defe6d43-1b59-4871-b483-9b3639ce486e",
+  "error": {
+    "name": "Error",
+    "message": "TASK_ACTIVITY_INACTIVITY"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

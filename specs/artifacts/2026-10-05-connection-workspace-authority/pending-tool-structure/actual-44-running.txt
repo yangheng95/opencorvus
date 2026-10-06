@@ -1,0 +1,34 @@
+Browser tab: 25, Title: "OpenCorvus", URL: "http://localhost:18010/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 64, 76, 90, 98-108, 127-133
++										127 image Running
++										128 image Running
+~							88 container Description: Running · 19s, ID: taskStatus
++								129 text 19s
++									130 container
++										131 text User
++										132 text 请先真实查询当前项目的 Task 列表及报告，保留实际范围、结果和限制。随后按顺序制作两个文件：先创建 hello.txt，内容为 Hello from a formal Task. 后接一个LF，UTF-8无BOM、共26字节，并完整检查；再创建 notes.txt，内容为 Notes from a formal Task. 后接一个LF，连续重复20行，UTF-8无BOM、共520字节，并完整检查。请把两个真实文件一起发布为本 Task 的正式资源，提供包含两文件的可浏览只读快照作为正式交付的一部分。由独立参与者对同一 hello 发布资源先后执行两次完整只读物化，每次重新打开实际缓存检查全部26字节；然后完整物化 notes，检查实际缓存全部520字节和20行内容。发布包含真实读取凭证的独立验收记录，在真实正式交付中给出两个文件及快照，随后结束 Task。不要访问网站或启动服务，不得用模型自述替代实际检查，也不要宣称用户已下载。
++									133 container
++										134 text orchestrator
++										135 text 11s
++										136 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										137 text 我会先查询当前项目的任务列表及可取得的报告，保留查询范围、实际结果和限制；随后按指定顺序制作并发布两个文件，再由独立参与者检查发布资源的实际缓存字节。全程不访问网站、不启动服务，也不会把检查结果描述为用户已下载。
++										138 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++											139 text dispatch_agent
++											140 text target=mission
++											141 image
++									142 container Sub-agent progress
++										143 container
++											144 button Open the full mission conversation
++											145 text mission
++											146 container mission activity
++												147 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												148 text 我会先真实查询当前项目的任务列表，再按返回的任务标识查看可取得的报告与状态，并记录查询范围、完整性和限制。此阶段只读观察，不创建文件或任务，也不访问网站。 panel_query_task { "task
++								149 container
++									150 tab (selected, settable, boolean) Description: Files, Value: 1, ID: tabs-cl-64-trigger-explorer
++									151 button Close tab
++							152 container Description: Files, ID: centerWorkbenchExplorer
++								153 container Explorer
++									154 search text field (settable) Search files
++									155 text No files in this directory
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18010/ui/

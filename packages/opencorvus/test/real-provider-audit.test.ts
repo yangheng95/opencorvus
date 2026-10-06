@@ -11,8 +11,39 @@ import { settlementTrackedReadableStream } from "../src/util/stream-activity"
 
 function requestMetadata(entry: RealProviderAudit["requests"][number]) {
   const { response_reader, ...metadata } = entry
-  return metadata
+  return metadata.tool_declarations ? { ...metadata, tool_declarations: declarationMetadata(metadata.tool_declarations) } : metadata
 }
+
+function declarationMetadata(declaration: NonNullable<RealProviderAudit["requests"][number]["tool_declarations"]>) {
+  return { ...declaration, entries: declaration.entries.map(({ schema_shapes, ...entry }) => entry) }
+}
+
+test("actual HTTP flat and nested schemas publish bounded structural facts with unchanged input acknowledgement", async () => {
+  const tools = [
+    { type: "function", name: "flat", strict: true, parameters: { type: "object", additionalProperties: false,
+      properties: { first: { type: "string" }, second: { type: ["string", "null"] }, third: { anyOf: [{ type: "number" }, { type: "null" }] }, fourth: { $ref: "#/$defs/opaque" } }, required: ["first", "second", "third", "fourth"] } },
+    { type: "function", function: { name: "nested", strict: false, parameters: { type: "object", additionalProperties: true,
+      properties: { first: { oneOf: [{ type: "boolean" }, { type: "null" }] }, second: { type: "integer" }, third: { anyOf: [] } }, required: ["first"] } } },
+    { type: "function", name: "absent" },
+    { type: "function", name: "malformed", strict: "invalid", parameters: { type: 42, additionalProperties: "invalid" } },
+    { type: "function", name: "booleanSchema", parameters: true },
+    { type: "function", name: "invalidSchema", parameters: null },
+  ]
+  const submitted = { model: "authorized-model", stream: true, tools }
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => Response.json({ accepted: await request.json() }) })
+  try {
+    using audit = new RealProviderAudit("authorized-model", 12, undefined, undefined, undefined, { redactor: new CredentialRedactor() })
+    expect(await (await fetch(server.url, { method: "POST", body: JSON.stringify(submitted) })).json()).toEqual({ accepted: submitted })
+    expect(audit.requests[0]!.tool_declarations!.entries.map((entry) => ({ index: entry.index, shapes: entry.schema_shapes }))).toEqual([
+      { index: 0, shapes: [{ path: "parameters", strict: "true", rootKind: "object", additionalProperties: "false", propertiesCount: 4, requiredCount: 4, nullableCount: 2, unknownNullableCount: 1 }] },
+      { index: 1, shapes: [{ path: "function.parameters", strict: "false", rootKind: "object", additionalProperties: "true", propertiesCount: 3, requiredCount: 1, nullableCount: 1, unknownNullableCount: 1 }] },
+      { index: 2, shapes: [{ path: "parameters", strict: "unknown", rootKind: "unknown", additionalProperties: "unknown" }] },
+      { index: 3, shapes: [{ path: "parameters", strict: "invalid", rootKind: "invalid", additionalProperties: "invalid" }] },
+      { index: 4, shapes: [{ path: "parameters", strict: "unknown", rootKind: "unknown", additionalProperties: "unknown" }] },
+      { index: 5, shapes: [{ path: "parameters", strict: "unknown", rootKind: "invalid", additionalProperties: "unknown" }] },
+    ])
+  } finally { await server.stop(true) }
+})
 
 async function consumeObservedResponse(response: Response, context?: ProviderRequestContext): Promise<string> {
   const observer = takeProviderResponseObserver(response)
@@ -197,7 +228,7 @@ test("actual local HTTP reports precise tools structural states with unchanged a
       const response = await fetch(server.url, { method: "POST", body: JSON.stringify(submitted) })
       expect(await response.json()).toEqual({ accepted: submitted })
     }
-    expect(audit.requests.map((entry) => ({ status: entry.status, declaration: entry.tool_declarations }))).toEqual([
+    expect(audit.requests.map((entry) => ({ status: entry.status, declaration: declarationMetadata(entry.tool_declarations!) }))).toEqual([
       { status: 202, declaration: { state: "absent", entries: [] } },
       { status: 202, declaration: { state: "null", entries: [] } },
       { status: 202, declaration: { state: "array", entries: [] } },

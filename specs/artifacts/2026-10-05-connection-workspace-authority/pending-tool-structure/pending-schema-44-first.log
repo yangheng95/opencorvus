@@ -1,0 +1,46 @@
+[1/2] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) actual HTTP flat and nested schemas publish bounded structural facts with unchanged input acknowledgement [7.24ms]
+(pass) exact reader binding projects genuine caller, unknown caller and credential-redacted identity states [12.05ms]
+(pass) throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error [5.44ms]
+(pass) concurrent real local HTTP audit entries report their exact reader bytes and EOF [7.04ms]
+(pass) real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states [5.63ms]
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [4.62ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [6.83ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [4.81ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [4.88ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [4.45ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [3.70ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [20.94ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [0.58ms]
+(pass) copied OAuth access expires with an explicit authority error [0.14ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.43ms]
+(pass) the last authorized streaming request completes before the next is refused [0.34ms]
+(pass) the audit reports exact model and streaming contract errors [1.29ms]
+(pass) an exhausted cumulative balance returns the budget error [0.12ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.13ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [6.89ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.32ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.45ms]
+
+ 22 pass
+ 0 fail
+ 97 expect() calls
+Ran 22 tests across 1 file. [1359.00ms]
+[1/2] DONE test/real-provider-audit.test.ts exit=0 duration=1.52s
+[2/2] START test/provider-request-association.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) concurrent same-model callers retain the actual Session and distinct agent identities [2062.66ms]
+(pass) delayed SDK use and successive physical responses retain the original copied caller [1641.79ms]
+(pass) context-free consumers preserve the production model cache and real streamed output [2474.51ms]
+(pass) one real SDK multi-step stream binds both HTTP responses to its original caller [1848.62ms]
+
+ 4 pass
+ 0 fail
+ 28 expect() calls
+Ran 4 tests across 1 file. [9.60s]
+[2/2] DONE test/provider-request-association.test.ts exit=0 duration=9.77s

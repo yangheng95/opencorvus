@@ -1,0 +1,26 @@
+Browser tab: 25, Title: "OpenCorvus", URL: "http://localhost:18010/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 190-195, 230-242, 267
+~								168 container Description: Running · 2m 30s, ID: taskStatus
+~									170 text 2m 30s
++										267 container
++											268 text User
++											269 text 请先真实查询当前项目的 Task 列表及报告，保留实际范围、结果和限制。随后按顺序制作两个文件：先创建 hello.txt，内容为 Hello from a formal Task. 后接一个LF，UTF-8无BOM、共26字节，并完整检查；再创建 notes.txt，内容为 Notes from a formal Task. 后接一个LF，连续重复20行，UTF-8无BOM、共520字节，并完整检查。请把两个真实文件一起发布为本 Task 的正式资源，提供包含两文件的可浏览只读快照作为正式交付的一部分。由独立参与者对同一 hello 发布资源先后执行两次完整只读物化，每次重新打开实际缓存检查全部26字节；然后完整物化 notes，检查实际缓存全部520字节和20行内容。发布包含真实读取凭证的独立验收记录，在真实正式交付中给出两个文件及快照，随后结束 Task。不要访问网站或启动服务，不得用模型自述替代实际检查，也不要宣称用户已下载。
++										270 container
++											271 text orchestrator
++											272 text 11s
++											273 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++											274 text 我会先查询当前项目的任务列表及可取得的报告，保留查询范围、实际结果和限制；随后按指定顺序制作并发布两个文件，再由独立参与者检查发布资源的实际缓存字节。全程不访问网站、不启动服务，也不会把检查结果描述为用户已下载。
++											275 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++												276 text dispatch_agent
++												277 text target=mission
++												278 image
++										279 container Sub-agent progress
++											280 container
++												281 button Open the full mission conversation
++												282 text mission
++												283 container mission activity
++													284 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++													285 text read_agent_message Task participant evidence 实际列表返回了一个活动中的任务；详细查询取得了当前执行摘要、看板摘要和空的计划条目，没有提供终态报告。列表接口未返回分页游标或总数，因此只能记录本次返回范围，不能据此断言已枚举全部历史任务。接下来将这些真实返回值和派发前证据的边界发布为持久观察记录。 artifact_publish Published task-resource-qa/project-task-observation 已完成本阶段的真实只读观察，并发布持久记录。未制作 `hello.txt` 或 `notes.txt`，未修改文件、创建任务、访问网站或启动服务。 ### 实际查询与结果 1. **项目任务列表** - 调用：`panel_query_task`，未指定任务 ID；其余可选参数未设置。 - 返回一个任务： | Task ID | 标题 | 状态 | |...
++													286 text artifact_select Selected Artifact source (制作前确认同Task已执行项目任务及报告查询，保留最近任务范围、返回一条活动Task及未证明历史完整性的限制。) artifact_select Selected Artifact source (以原始请求不可变快照确定两文件精确字节、顺序、共同发布及独立缓存验收义务。) read . @1+2000 (5 lines) glob .
+The focused UI element is 228 button README.md, ID: contextmenu-cl-354-trigger

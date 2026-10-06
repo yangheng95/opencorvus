@@ -1,0 +1,53 @@
+# Current Explorer row identity45
+
+## Recall
+
+Human requires continuous autonomous UI (User Interface)/UX (User Experience)/functional improvement until explicit stop, with gpt-6.1-sol children only and one delegation level. Current main/upstream9a808ab7ee5282d073668f11a931dc17cfeb3eb3 normally delivers43 actual SDK (Software Development Kit) consumption and exact activity/attempt observation. All owned services/pages/copied credential/catalog pairs through43 are closed. Original43 Task failed; actual hello/notes source Editor visuals qualify, formal ArtifactInspector/delivery/download do not. Goal remains active. Existing complete credential/catalog use and genuine streamed Sol are authorized; user processes/windows, credential logging/refresh/mutation, extra branches/worktrees/releases, UI automation and old Task rearm are excluded.
+
+Root personally opened original43 localhost18009/ui in own IAB9 tab24, inspected Files, and saved actual-43-explorer-live.png. Two freshly read AX (Accessibility) targets failed with No node; ContextMenu IDs changed as directory data refreshed. Current screenshot coordinates opened hello; after a timed wake the actual Editor displayed its body. Later fresh Files→notes AX click succeeded and all20 lines displayed. Those facts identify a real refresh-sensitive surface, but do not prove the exact two failures were ordinary keyboard focus loss. Original screenshots remain in sdk-consumption-observation; no hidden DOM test or pixel assertion is admitted.
+
+## Depth, source and impact analysis before implementation
+
+Root and Sol_meta read FileExplorerPanel.tsx directory/authority/selectEpoch effects, loadDirectory lifecycle,15s active refresh, rows projection, tree/search branches, ordinary/virtual rendering, row/menu callbacks, selection/drag/mutation scopes and sole main.tsx2744 entry. Root reads FileChangesView.tsx existing scoped string-key plus non-keyed Show/accessor primitive and architecture07-panel.md Editor/Explorer contracts. Searches cover Explorer definitions/callers and touched test paths. Sol_meta finds no existing UI automated/render/source-assertion tests in these paths; none are run or introduced.
+
+Observable source root: rows421–461 makes new row/node objects whenever children/loading/error/expanded changes. For1645 and Virtua1647 consume those objects as identity. Each15s successful refresh recreates nodes even when exact files are unchanged, and request-start/finally loading updates recreate row objects too. Existing row.key is only descriptive; it does not preserve the mounted ContextMenu/Button owner. Therefore unrelated data refresh can retire a physical row owner. AX changes are consistent with this source path, but exact temporal causality of the two browser failures remains unknown.
+
+The current renderRow1406 captures row/node/item/isDirectory statically, and renderItemContextMenu1292 captures item/options. Stabilizing only renderer keys would leave old name/ignored/depth/loading/error/expanded/menu state in those captures. Both sole menu call sites1462/1537 must become current accessors. All File operations already enter currentOperationScope/ownsExplorerOperation; openExplorerFile698 routes to the one file-workbench Editor owner. No API, mutation, directory, permission, selection, upload or Editor owner may change.
+
+Root-file activity has been repaired separately; its FileChangesView scoped string identities and current non-keyed Show reads are mature existing primitives, not an Explorer cache. This patch reuses that rendering model locally without abstracting unrelated views or mutating retained row objects. Scheduling/Mission/retry machinery is not changed. General dead-code cleanup, alternate tree services, extra Listbox, host/tool gates and platform-specific abstractions are excluded.
+
+## Single current implementation
+
+Current row key includes existing API authority revision, exact current directory, committed board selectEpoch, row.kind, node.type for tree rows, and exact normalized row path. Current metadata (name, ignored, depth, loading, error, expanded) is excluded from identity and remains reactive data. One derived current row map and string-key list come from the same rows memo; no persistent row cache, shadow selection or second data owner.
+
+For and Virtua consume those string keys. Each key uses non-keyed Show around its current map entry; the current row accessor feeds rendering, metadata and menu callbacks. Real removal/rename/type/scope change retires the old owner. Search/tree switching retires rows because kind differs; a filtered-out row can remount on return. Crossing the120-row For/Virtua threshold or leaving the virtual window changes the renderer owner naturally; this slice does not promise cross-threshold focus retention.
+
+Both renderItemContextMenu callers pass current selection and options accessors; labels and callback targets read their current values. Asynchronous operations still capture their admitted existing operation scope at action time. The selectedItems Map intentionally holds existing selection snapshots; same-path type replacement and stale multiselection require separate verification, and this patch must not claim all selected snapshots are live metadata. If required, report that limitation rather than introducing a parallel reconciler.
+
+## Implementation and acceptance
+
+Root owns FileExplorerPanel.tsx and architecture/spec edits and all real page interaction/screenshots. Sol_meta only reviews effects; no child edits UI or operates Root pages. Save reviewed before-source snapshots. No UI tests. Run Overlay typecheck/build and declared docs check, then start fresh real native development /ui under the same600 preparation/900 whole/180 semantic/96 request bounds and actual Sol qualification. The pending-Tool structure44 observation can share that fresh isolated run; its data acceptance remains separately labeled.
+
+Root manually focuses an actual file row, crosses15s unchanged refresh and a genuine sibling-file update, then uses native Enter/Space to open the exact selected path. Open a real ContextMenu across a refresh and inspect current actions/expanded label. Check exact hello/notes source previews and actual formal resource/snapshot/download only when reached. Expanded directory loading/error transitions, search and true rename/type/scope retirement must be explicitly qualified or left unknown. Existing owned fixture directories may exercise virtual rendering through real UI, but fixture facts cannot stand in for genuine Task/Provider completion.
+
+Visual qualification requires actual screenshots tied to the touched Files region before/after changes. Lint/types/build/text cannot replace it. Preserve first failures, immediately close only owned pages/services and copied pairs before offline diagnosis, complete scoped commit/fetch/upstream merge/full outgoing review/normal push, then continue Goal. Original43 and its missing final deliverables remain unchanged.
+
+## Status
+
+Implementation and scoped actual45 refresh/focus/menu qualification passed in fresh44. Original43 AX failure causality and additional selection/search/virtual/retirement matrices remain unknown. Original44 Task FAILED independently of this visual outcome.
+
+## Source45 freeze for actual44 visual qualification
+
+Root implemented scoped string keys, one derived current map/key list, For/Virtua non-keyed current Show accessors and reactive metadata/menu targets in the one FileExplorerPanel. Sol_meta independent read-only review finds no stale static row/node/item/options capture or new owner; kind branch untrack is constrained by key kind/node.type. Existing selectedItems snapshots, filtering/window/120-row renderer retirement remain limitations.
+
+Overlay typecheck0 and actual declared browser build52.63s plus renderer-public-surface check0 qualify source. Initial attempted build:browser command was not a declared script; its original first log is preserved, package.json was read and actual declared build rerun0. No UI test was created or run. Architecture07 and four spec indices updated; docs:check0. Real focus/menu/refresh visuals are pending fresh actual44 on18010 and will be separately saved here; no keyboard repair is claimed before that observation.
+
+## Actual44 manual visual qualification45
+
+Root personally interacted with genuine development localhost18010/ui in own IAB9 tab25 and viewed each saved screenshot. actual-44-focus-before-refresh at Task2m00 shows native keyboard focus on README row cl354. actual-44-focus-after-refresh at2m30, after a timed wake crossing the existing15s refresh, shows the same focus/owner. actual-44-focus-live-files at3m19 shows actual producer hello/notes added above README and the same cl354 focus despite its shifted position. These are actual page interactions and visual observations, not DOM/component/UI tests.
+
+actual-44-menu-before-refresh at3m35 and actual-44-menu-after-refresh at4m10 show the same open file menu cl2242 across another real refresh. Escape restores README focus; native Return opens the current README. actual-44-enter-current-file at5m34 shows its real Editor body, Isolated formal Task resource qualification. A middle-frame Loading diff label cleared on the later screenshot and is not classified as a persistent failure.
+
+After Files reactivation creates a natural new view owner, actual-44-directory-expanded at7m27 shows expanded .opencorvus cl4408 with its actual .r/expert-squads/config children. actual-44-directory-current-menu at7m38 shows Collapse, proving the current expanded accessor rather than a stale initial label. No after-refresh directory-menu screenshot or actual Collapse action was captured; those remain unknown. Source authority/scope/type/rename retirement, search/filter, virtual window/120-row threshold and existing selectedItems snapshot behavior are not qualified by this run.
+
+Sol_meta independently inspected all eight saved images/text and current source diff, confirmed this scoped evidence and found no new source blocker. Original43 two AX failures are not retroactively assigned a proven cause. Genuine44 Task later failed semantic idle during its second independent hello cache check; Files error in pending-tool-structure/actual-44-first-failure.png follows public backend shutdown and is not evidence of a refresh identity regression. Task formal completion, current ArtifactInspector and delivery/download remain unmet. Page25 closed and exact Host/Target/18010/copied pair independently closed; see pending-tool-structure actual44 receipts. Existing stale multiselection is the next candidate requiring manual reproduction before repair.

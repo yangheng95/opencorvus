@@ -34,6 +34,78 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+test("real idle retry scopes pending JSON observations to each actual attempt before external cancellation", async () => {
+  await processorFixture(async ({ controller, processor, process, taskID, sessionID }) => {
+    if (!taskID) throw new Error("Expected actual Task binding")
+    const entered = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const recorded: Parameters<typeof AgentTrace.recordLLMStreamObservation>[0][] = []
+    const original = AgentTrace.recordLLMStreamObservation
+    using recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation((input) => {
+      recorded.push(structuredClone(input))
+      original(input)
+    })
+    using engine = spyOn(EngineConfig, "get").mockResolvedValue({
+      ...EngineConfig.defaults,
+      activity: { ...EngineConfig.defaults.activity, session_llm_idle_ms: 150 },
+    })
+    using backoff = spyOn(DefaultLLMActivityPolicy, "backoffMs").mockReturnValue(0)
+    using stream = spyOn(LLM, "stream").mockImplementation(async (input) => ({
+      fullStream: (async function* () {
+        const attempt = input.activity?.attempt
+        if (attempt !== 0 && attempt !== 1) throw new Error("Expected actual initial or retry attempt")
+        const id = attempt === 0 ? "first-draft" : "retry-draft"
+        yield { type: "start" }
+        yield { type: "tool-input-start", id, toolName: "echo" }
+        yield { type: "tool-input-delta", id, delta: attempt === 0 ? '{"a":1,"b":2}' : '{"n":null}' }
+        if (attempt === 0) {
+          await new Promise<never>((_, reject) => {
+            if (input.abort.aborted) reject(input.abort.reason)
+            else input.abort.addEventListener("abort", () => reject(input.abort.reason), { once: true })
+          })
+        } else yield { type: "tool-input-end", id }
+      })(),
+    }) as Awaited<ReturnType<typeof LLM.stream>>)
+    const running = process({}, { onChunk: async ({ chunk }: { chunk: { type: string } }) => {
+      if (chunk.type === "tool-input-end") { entered.resolve(); await release.promise }
+    } })
+    try {
+      await entered.promise
+      controller.abort(new DOMException("Close the owned retry input observation", "AbortError"))
+      const aborted = recorded.filter((entry) => entry.phase === "aborted")
+      const activityID = aborted[0]!.activity.id
+      expect(aborted.map((entry) => ({ taskID: entry.taskID, sessionID: entry.sessionID, activity: entry.activity }))).toEqual(
+        [0, 1].map((attempt) => ({ taskID, sessionID, activity: { id: activityID, attempt, assistantMessageID: processor.message.id } })),
+      )
+      expect(aborted.map((entry) => entry.pendingToolInputs)).toEqual([
+        {
+          pendingCount: 1, totalUTF16Length: 13, observedUTF16Length: 13, trimmedUTF16Length: 13,
+          nonWhitespaceUTF16Length: 13, trailingWhitespaceUTF16Length: 0, rootFieldCount: 2,
+          states: { complete_json: 1, syntax_error: 0, non_object: 0, empty: 0, unobserved_size_limit: 0 },
+          valueTypes: { null: 0, array: 0, object: 0, string: 0, number: 2, boolean: 0 },
+          bookkeepingFailures: 0, sourceUTF16Budget: Math.floor(AgentTrace.eventByteBudget() / 2),
+        },
+        {
+          pendingCount: 1, totalUTF16Length: 10, observedUTF16Length: 10, trimmedUTF16Length: 10,
+          nonWhitespaceUTF16Length: 10, trailingWhitespaceUTF16Length: 0, rootFieldCount: 1,
+          states: { complete_json: 1, syntax_error: 0, non_object: 0, empty: 0, unobserved_size_limit: 0 },
+          valueTypes: { null: 1, array: 0, object: 0, string: 0, number: 0, boolean: 0 },
+          bookkeepingFailures: 0, sourceUTF16Budget: Math.floor(AgentTrace.eventByteBudget() / 2),
+        },
+      ])
+      release.resolve()
+      expect(await running).toBe("stop")
+      expect(processor.message.error).toMatchObject({ name: "MessageAbortedError" })
+      expect(AgentTrace.readTaskEvents(taskID).filter((event) => event.kind === "llm_stream_observation")
+        .map((event) => event.payload)).toEqual(recorded.map(({ taskID: _task, sessionID: _session, ...entry }) => entry))
+    } finally {
+      controller.abort(new DOMException("Release owned retry fixture", "AbortError"))
+      release.resolve()
+      await running
+    }
+  }, { bindTask: true })
+}, 30_000)
+
 async function processorFixture(
   run: (input: {
     directory: string
@@ -264,6 +336,48 @@ test("abort during an awaited caller hook publishes its immediate hook phase and
       expect(AgentTrace.readTaskEvents(taskID).filter((entry) => entry.kind === "llm_stream_observation").map((entry) => entry.payload.phase))
         .toEqual(["aborted", "settled"])
     } finally { hookRelease.resolve(); await running; stream.mockRestore(); recorder.mockRestore() }
+  }, { bindTask: true })
+}, 30_000)
+
+test("an aborted current attempt records its exact pending JSON structure through the canonical Trace owner", async () => {
+  await processorFixture(async ({ controller, processor, process, taskID }) => {
+    if (!taskID) throw new Error("Expected actual Task binding")
+    const entered = Promise.withResolvers<void>()
+    const release = Promise.withResolvers<void>()
+    const recorded: Parameters<typeof AgentTrace.recordLLMStreamObservation>[0][] = []
+    const original = AgentTrace.recordLLMStreamObservation
+    const recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation((input) => {
+      recorded.push(structuredClone(input))
+      original(input)
+    })
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+      yield { type: "start" }
+      yield { type: "tool-input-start", id: "complete-input", toolName: "echo" }
+      yield { type: "tool-input-delta", id: "complete-input", delta: '{"n":null} \n' }
+      yield { type: "tool-input-start", id: "partial-input", toolName: "echo" }
+      yield { type: "tool-input-delta", id: "partial-input", delta: '{"x":' }
+      yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
+    const running = process({}, { onChunk: async ({ chunk }: any) => {
+      if (chunk.type === "finish") { entered.resolve(); await release.promise }
+    } })
+    try {
+      await entered.promise
+      controller.abort(new DOMException("Close the owned pending input observation", "AbortError"))
+      const aborted = recorded.find((entry) => entry.phase === "aborted")
+      expect(aborted).toMatchObject({ taskID, activity: { assistantMessageID: processor.message.id, attempt: 0 },
+        observation: { phase: "hook" }, pendingToolInputs: { pendingCount: 2, totalUTF16Length: 17,
+          observedUTF16Length: 17, trimmedUTF16Length: 15, nonWhitespaceUTF16Length: 15,
+          trailingWhitespaceUTF16Length: 2, rootFieldCount: 1, valueTypes: { null: 1 },
+          states: { complete_json: 1, syntax_error: 1 }, bookkeepingFailures: 0,
+          sourceUTF16Budget: Math.floor(AgentTrace.eventByteBudget() / 2) } })
+      release.resolve()
+      expect(await running).toBe("stop")
+      expect(processor.message.error).toMatchObject({ name: "MessageAbortedError" })
+      expect(recorded.find((entry) => entry.phase === "settled")).toMatchObject({ pendingToolInputs: aborted!.pendingToolInputs })
+      expect(AgentTrace.readTaskEvents(taskID)).toContainEqual(expect.objectContaining({ kind: "llm_stream_observation",
+        payload: expect.objectContaining({ phase: "aborted", pendingToolInputs: aborted!.pendingToolInputs }) }))
+    } finally { release.resolve(); await running; stream.mockRestore(); recorder.mockRestore() }
   }, { bindTask: true })
 }, 30_000)
 

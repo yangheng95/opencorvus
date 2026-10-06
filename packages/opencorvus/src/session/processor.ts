@@ -54,6 +54,7 @@ import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { AgentTrace } from "@/trace"
 import { createLLMStreamObservation, llmStreamEventType } from "@/util/llm-stream-observation"
+import { observePendingToolInputStructure } from "@/util/pending-tool-input-observation"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -898,8 +899,15 @@ export namespace SessionProcessor {
                 const activity = { id: run.id, attempt: run.attempt, assistantMessageID: input.assistantMessage.id }
                 const recordObservation = (phase: "aborted" | "settled") => {
                   try {
+                    if (!AgentTrace.isEnabled()) return
                     const taskID = taskIDForSession(input.sessionID)
                     if (!taskID) return
+                    const rawInputs: string[] = []
+                    for (const callID of attemptScopes.get(run.attempt)?.toolCallIDs ?? []) {
+                      const part = toolcalls[callID]
+                      if (part?.state.status === "pending") rawInputs.push(part.state.raw)
+                    }
+                    const sourceUTF16Budget = Math.floor(AgentTrace.eventByteBudget() / 2)
                     AgentTrace.recordLLMStreamObservation({
                       taskID,
                       sessionID: input.sessionID,
@@ -907,6 +915,10 @@ export namespace SessionProcessor {
                       activity,
                       phase,
                       observation: observation.snapshot(),
+                      pendingToolInputs: {
+                        ...observePendingToolInputStructure(rawInputs, sourceUTF16Budget),
+                        sourceUTF16Budget,
+                      },
                     })
                   } catch {
                     log.warn("stream observation failed", { sessionID: input.sessionID, activityID: run.id, phase })

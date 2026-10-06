@@ -1,0 +1,21 @@
+bun script/run-tests.ts test/session/processor-producer-boundary.test.ts
+[1/1] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real idle retry scopes pending JSON observations to each actual attempt before external cancellation [2877.67ms]
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [2192.34ms]
+(pass) processor observation records accepted and rejected current event identities in the canonical Task trace [1833.76ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [1828.05ms]
+(pass) an aborted current attempt records its exact pending JSON structure through the canonical Trace owner [1722.57ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1749.21ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2124.27ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2183.13ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2265.17ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1760.19ms]
+
+ 10 pass
+ 0 fail
+ 39 expect() calls
+Ran 10 tests across 1 file. [22.34s]
+[1/1] DONE test/session/processor-producer-boundary.test.ts exit=0 duration=22.53s

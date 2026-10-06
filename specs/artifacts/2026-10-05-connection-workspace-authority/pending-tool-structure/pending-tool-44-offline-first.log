@@ -1,0 +1,17 @@
+1 | import fs from "node:fs"
+2 | import assert from "node:assert/strict"
+3 | import path from "node:path"
+4 | 
+5 | const root = "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/pending-tool-structure"
+6 | const read = (name: string) => JSON.parse(fs.readFileSync(path.join(root, name), "utf8").replace(/^\uFEFF/, ""))
+                                                 ^
+ENOENT: no such file or directory, open 'D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\pending-tool-structure\runtime-evidence-44\task-boundary-admitted.json'
+    path: "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\pending-tool-structure\\runtime-evidence-44\\task-boundary-admitted.json",
+ syscall: "open",
+   errno: -2,
+    code: "ENOENT"
+
+      at read (D:\myhexin-local\opencorvus\.tmp-product-iteration\pending-tool-44-offline.ts:6:46)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\pending-tool-44-offline.ts:33:16
+
+Bun v1.3.14 (Windows x64)

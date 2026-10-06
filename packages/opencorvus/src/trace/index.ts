@@ -54,6 +54,7 @@ import type { PromptCompositionFingerprint } from "@/session/prompt-composition"
 import type { StreamRequestIdentity } from "@/session/stream-request"
 import type { ProviderRequestContext } from "@/util/provider-response-observation"
 import type { createLLMStreamObservation } from "@/util/llm-stream-observation"
+import type { observePendingToolInputStructure } from "@/util/pending-tool-input-observation"
 
 const log = Log.create({ service: "agent-trace" })
 
@@ -88,6 +89,11 @@ export namespace AgentTrace {
 
   export function isEnabled(): boolean {
     return ENABLED
+  }
+
+  /** Single configured bound for Trace events and their diagnostic source work. */
+  export function eventByteBudget(): number {
+    return envBytes("OPENCORVUS_AGENT_TRACE_EVENT_MAX_BYTES", DEFAULT_EVENT_BYTES)
   }
 
   /** Resolve the directory trace files live in. Exposed for callers that need
@@ -341,7 +347,7 @@ export namespace AgentTrace {
       kind: string
       payload?: unknown
     }
-    const max = envBytes("OPENCORVUS_AGENT_TRACE_EVENT_MAX_BYTES", DEFAULT_EVENT_BYTES)
+    const max = eventByteBudget()
     const line = safeStringify(redacted)
     if (byteLength(line) <= max || typeof redacted.taskID !== "string" || redacted.payload === undefined)
       return redacted
@@ -492,6 +498,7 @@ export namespace AgentTrace {
     activity: NonNullable<ProviderRequestContext["activity"]>
     phase: "aborted" | "settled"
     observation: ReturnType<ReturnType<typeof createLLMStreamObservation>["snapshot"]>
+    pendingToolInputs: ReturnType<typeof observePendingToolInputStructure> & { sourceUTF16Budget: number }
   }) {
     if (!ENABLED) return
     const bucket = sessionBucket(input.sessionID)
@@ -507,6 +514,7 @@ export namespace AgentTrace {
         activity: input.activity,
         phase: input.phase,
         observation: input.observation,
+        pendingToolInputs: input.pendingToolInputs,
       },
     })
   }

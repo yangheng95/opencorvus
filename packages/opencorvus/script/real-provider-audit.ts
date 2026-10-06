@@ -159,6 +159,70 @@ export function assertCopiedOAuthAccess(expiresAt: number) {
 }
 
 /** Test-runner evidence only. Retain identities/positions, never prompt bodies, headers or credentials. */
+export type ProviderToolSchemaShape = {
+  path: "parameters" | "function.parameters"
+  strict: "true" | "false" | "unknown" | "invalid"
+  rootKind: "object" | "array" | "string" | "number" | "integer" | "boolean" | "null" | "unknown" | "invalid"
+  propertiesCount?: number
+  requiredCount?: number
+  nullableCount?: number
+  unknownNullableCount?: number
+  additionalProperties: "true" | "false" | "unknown" | "invalid"
+}
+
+function schemaBoolean(owner: Record<string, unknown>, field: string): ProviderToolSchemaShape["strict"] {
+  if (!Object.hasOwn(owner, field)) return "unknown"
+  return owner[field] === true ? "true" : owner[field] === false ? "false" : "invalid"
+}
+
+function nullableSchema(value: unknown): boolean | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined
+  const schema = value as Record<string, unknown>
+  if (Object.hasOwn(schema, "$ref") || Object.hasOwn(schema, "not") || Object.hasOwn(schema, "allOf")) return undefined
+  const types = ["object", "array", "string", "number", "integer", "boolean", "null"]
+  if (typeof schema.type === "string" && types.includes(schema.type)) return schema.type === "null"
+  if (Array.isArray(schema.type) && schema.type.length > 0 && schema.type.every((type) => typeof type === "string" && types.includes(type))) return schema.type.includes("null")
+  const union = Object.hasOwn(schema, "anyOf") ? schema.anyOf : schema.oneOf
+  if (!Array.isArray(union) || union.length === 0) return undefined
+  // Recognize explicit immediate branches only; nested or unresolved domains
+  // are unknown diagnostics, not a second schema normalizer.
+  let unknown = false
+  for (const branch of union) {
+    if (!branch || typeof branch !== "object" || Array.isArray(branch)) { unknown = true; continue }
+    const node = branch as Record<string, unknown>
+    if (Object.hasOwn(node, "$ref") || Object.hasOwn(node, "not") || Object.hasOwn(node, "allOf") || Object.hasOwn(node, "anyOf") || Object.hasOwn(node, "oneOf")) { unknown = true; continue }
+    if (node.type === "null") return true
+    if (Array.isArray(node.type) && node.type.length > 0 && node.type.every((type) => typeof type === "string" && types.includes(type))) {
+      if (node.type.includes("null")) return true
+    } else if (typeof node.type !== "string" || !types.includes(node.type)) unknown = true
+  }
+  return unknown ? undefined : false
+}
+
+function projectSchemaShape(owner: Record<string, unknown>, path: ProviderToolSchemaShape["path"]): ProviderToolSchemaShape {
+  const value = owner.parameters
+  const shape: ProviderToolSchemaShape = { path, strict: schemaBoolean(owner, "strict"), rootKind: "unknown", additionalProperties: "unknown" }
+  if (!Object.hasOwn(owner, "parameters") || typeof value === "boolean") return shape
+  if (!value || typeof value !== "object" || Array.isArray(value)) return { ...shape, rootKind: "invalid" }
+  const schema = value as Record<string, unknown>
+  const kinds = ["object", "array", "string", "number", "integer", "boolean", "null"] as const
+  if (Object.hasOwn(schema, "type")) shape.rootKind = kinds.find((kind) => kind === schema.type) ?? (Array.isArray(schema.type) ? "unknown" : "invalid")
+  shape.additionalProperties = schemaBoolean(schema, "additionalProperties")
+  if (schema.properties && typeof schema.properties === "object" && !Array.isArray(schema.properties)) {
+    const values = Object.values(schema.properties)
+    shape.propertiesCount = values.length
+    shape.nullableCount = 0
+    shape.unknownNullableCount = 0
+    for (const property of values) {
+      const nullable = nullableSchema(property)
+      if (nullable === true) shape.nullableCount++
+      else if (nullable === undefined) shape.unknownNullableCount++
+    }
+  }
+  if (Array.isArray(schema.required)) shape.requiredCount = schema.required.length
+  return shape
+}
+
 export type ProviderToolDeclarations = {
   state: "absent" | "null" | "array" | "invalid"
   entries: Array<{
@@ -167,6 +231,7 @@ export type ProviderToolDeclarations = {
     type_state: "present" | "absent" | "redacted" | "invalid"
     name_state: "absent" | "observed"
     names: Array<{ path: "name" | "function.name"; state: "present" | "redacted" | "invalid"; value?: string }>
+    schema_shapes: ProviderToolSchemaShape[]
   }>
 }
 
@@ -182,18 +247,21 @@ function projectToolDeclarations(parsed: Record<string, unknown>, redactor: Cred
   }
   return { state: "array", entries: parsed.tools.map((tool, index) => {
     const names: ProviderToolDeclarations["entries"][number]["names"] = []
+    const schema_shapes: ProviderToolSchemaShape[] = []
     if (!tool || typeof tool !== "object" || Array.isArray(tool))
-      return { index, type_state: "invalid", name_state: "absent", names }
+      return { index, type_state: "invalid", name_state: "absent", names, schema_shapes }
+    if (Object.hasOwn(tool, "parameters") || Object.hasOwn(tool, "name") || (tool.type === "function" && !Object.hasOwn(tool, "function"))) schema_shapes.push(projectSchemaShape(tool, "parameters"))
     if (Object.hasOwn(tool, "name")) names.push({ path: "name", ...identifier(tool.name) })
     if (Object.hasOwn(tool, "function")) {
       const fn = tool.function
       if (fn && typeof fn === "object" && !Array.isArray(fn)) {
+        schema_shapes.push(projectSchemaShape(fn, "function.parameters"))
         if (Object.hasOwn(fn, "name")) names.push({ path: "function.name", ...identifier(fn.name) })
       } else names.push({ path: "function.name", state: "invalid" })
     }
     const type = Object.hasOwn(tool, "type") ? identifier(tool.type) : { state: "absent" as const, value: undefined }
     return { index, ...(type.value === undefined ? {} : { type: type.value }), type_state: type.state,
-      name_state: names.length ? "observed" : "absent", names }
+      name_state: names.length ? "observed" : "absent", names, schema_shapes }
   }) }
 }
 

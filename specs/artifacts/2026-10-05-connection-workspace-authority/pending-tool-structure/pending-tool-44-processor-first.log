@@ -1,0 +1,36 @@
+$ bun script/run-tests.ts test/session/processor-producer-boundary.test.ts test/session/processor-llm-activity-retry.test.ts
+[1/2] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [3054.25ms]
+(pass) processor observation records accepted and rejected current event identities in the canonical Task trace [2135.95ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [2093.16ms]
+(pass) an aborted current attempt records its exact pending JSON structure through the canonical Trace owner [1996.39ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1994.81ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2293.78ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2496.07ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2379.99ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [2086.48ms]
+
+ 9 pass
+ 0 fail
+ 34 expect() calls
+Ran 9 tests across 1 file. [22.40s]
+[1/2] DONE test/session/processor-producer-boundary.test.ts exit=0 duration=22.61s
+[2/2] START test/session/processor-llm-activity-retry.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) SessionProcessor semantic LLM activity retry > retries a text start whose committed publication outlives its physical owner [3680.93ms]
+(pass) SessionProcessor semantic LLM activity retry > retries a reasoning start whose committed publication outlives its physical owner [3164.15ms]
+(pass) SessionProcessor semantic LLM activity retry > persists one recovered answer after the observed idle, network, idle sequence [2441.77ms]
+(pass) SessionProcessor semantic LLM activity retry > retries after Tool input chunks that do not mutate the pending draft [3178.61ms]
+(pass) SessionProcessor semantic LLM activity retry > recovers a parked stream after reasoning-end under the Session subscriber set [3056.07ms]
+(pass) SessionProcessor semantic LLM activity retry > an aborted reasoning stream settles its delayed delta publication and durable reasoning part [2754.32ms]
+
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [19.85s]
+[2/2] DONE test/session/processor-llm-activity-retry.test.ts exit=0 duration=20.07s

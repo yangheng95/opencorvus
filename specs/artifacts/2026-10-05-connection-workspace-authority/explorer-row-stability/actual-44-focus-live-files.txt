@@ -1,0 +1,8 @@
+Browser tab: 25, Title: "OpenCorvus", URL: "http://localhost:18010/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~								168 container Description: Running · 3m 19s, ID: taskStatus
+~									170 text 3m 19s
+~													286 text bash git diff --stat; git diff --cached; git status --short bash git add -- hello.txt notes.txt; git diff --cached --check; git diff --cached -- hello.txt notes.txt bash git commit -m "Add exact text resources for formal Task delivery" bash
++										287 button hello.txt, ID: contextmenu-cl-1926-trigger
++										288 button notes.txt, ID: contextmenu-cl-1929-trigger
+The focused UI element is 228 button README.md, ID: contextmenu-cl-354-trigger

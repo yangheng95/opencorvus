@@ -1,0 +1,47 @@
+{
+  "page": "Root-owned IAB9 tab25 closed before sole shutdown join",
+  "copiedPair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "sourceMetadata": [
+    {
+      "name": "auth.json",
+      "length": 2147,
+      "lastWriteTimeUtc": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "name": "models.json",
+      "length": 9155406,
+      "lastWriteTimeUtc": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "listeners": [],
+  "boundary": "Independent exact Host/Target birth identities and port observation; source metadata only",
+  "observedAtUtc": "2026-10-06T21:50:30.4405164Z",
+  "occurrence": "pending-tool-44-defe6d43-1b59-4871-b483-9b3639ce486e",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 52896,
+        "processInstanceID": "win32:639269193472692615",
+        "occurrenceID": "583070fe-47cb-410e-874d-e1952e71b840"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 23788,
+        "processInstanceID": "win32:639269193480231385",
+        "occurrenceID": "2cdb1a86-b863-4215-b2ab-2627951d1ea5"
+      }
+    }
+  ]
+}
