@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-06T21:58:27.8589199Z",
+  "assets": [
+    "main-DtAiqDyF.js",
+    "main-CTTRNzw5.css"
+  ],
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\explorer-selection-46-before-repaired\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\explorer-selection-46-before-repaired\\runtime\\data",
+      "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\explorer-selection-46-before-repaired\\home"
+    }
+  },
+  "credentialStaging": "None",
+  "modelTaskRequested": false,
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "explorer-selection-46-before-2192a526-a5be-4638-9dd7-57411af059e5",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18011",
+    "pid": 72212
+  }
+}

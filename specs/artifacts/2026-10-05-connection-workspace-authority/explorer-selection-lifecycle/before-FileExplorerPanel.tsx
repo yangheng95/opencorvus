@@ -1,5 +1,4 @@
 import {
-  batch,
   createDeferred,
   createEffect,
   createMemo,
@@ -315,10 +314,16 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     try {
       const nodes = await loadFileDirectory(normalizedPath, scope)
       if (!ownsLoad() || !ownsExplorerOperation(scope)) return
-      const normalizedNodes = nodes.map((node) => ({ ...node, path: normalizeExplorerPath(node.path) }))
-      batch(() => {
-        setChildrenByPath((prev) => new Map(prev).set(normalizedPath, normalizedNodes))
-        reconcileDirectorySelection(normalizedPath, normalizedNodes)
+      setChildrenByPath((prev) => {
+        const next = new Map(prev)
+        next.set(
+          normalizedPath,
+          nodes.map((node) => ({
+            ...node,
+            path: normalizeExplorerPath(node.path),
+          })),
+        )
+        return next
       })
     } catch (error) {
       if (!ownsLoad() || !ownsExplorerOperation(scope)) return
@@ -531,45 +536,6 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   function clearSelection(): void {
     setSelectedItems(new Map())
     setSelectionAnchorPath("")
-  }
-
-  function reconcileDirectorySelection(parent: string, nodes: readonly FileNode[]): void {
-    const children = new Map(nodes.map((node) => [node.path, node]))
-    const covered = (path: string) => path !== parent && isPathOrDescendant(path, parent)
-    const listedChild = (path: string) =>
-      children.get(joinExplorerPath(parent, path.slice(parent ? parent.length + 1 : 0).split("/")[0] ?? ""))
-    const currentItem = (item: ExplorerSelection): ExplorerSelection | undefined => {
-      if (!covered(item.path)) return item
-      const child = listedChild(item.path)
-      if (!child || (child.path !== item.path && child.type !== "directory")) return undefined
-      if (child.path !== item.path) return item
-      if (child.type !== item.type) return undefined
-      return child.name === item.name ? item : selectionFromNode(child)
-    }
-    const anchor = selectionAnchorPath()
-    const anchorItem = selectedItems().get(anchor)
-    setSelectedItems((previous) => {
-      const next = new Map<string, ExplorerSelection>()
-      let changed = false
-      for (const [path, item] of previous) {
-        const current = currentItem(item)
-        if (current) next.set(path, current)
-        if (current !== item) changed = true
-      }
-      return changed ? next : previous
-    })
-    if (anchor && covered(anchor)) {
-      const child = listedChild(anchor)
-      if (!child || (child.path !== anchor && child.type !== "directory") || (anchorItem && !currentItem(anchorItem)))
-        setSelectionAnchorPath("")
-    }
-    const dropDirectory = dropTargetPath()
-    const dropChild = dropDirectory && covered(dropDirectory) ? listedChild(dropDirectory) : undefined
-    if (
-      draggedItems().some((item) => !currentItem(item)) ||
-      (dropDirectory && covered(dropDirectory) && (!dropChild || dropChild.type !== "directory"))
-    )
-      clearExplorerDrag()
   }
 
   function isSelected(item: ExplorerSelection): boolean {

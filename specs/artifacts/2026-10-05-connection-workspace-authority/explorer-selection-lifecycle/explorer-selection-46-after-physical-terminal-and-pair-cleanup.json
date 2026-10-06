@@ -1,0 +1,63 @@
+{
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "occurrence": "explorer-selection-46-after-6db7431f-35d1-40c5-8d4b-2f56ea0122f3",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "explorer-selection-46-after-6db7431f-35d1-40c5-8d4b-2f56ea0122f3",
+    "outcome": "settled",
+    "host": {
+      "pid": 71716,
+      "processInstanceID": "win32:639269211691220307",
+      "occurrenceID": "b476c10f-000d-4877-a964-e66efd643e7f"
+    },
+    "target": {
+      "pid": 72516,
+      "processInstanceID": "win32:639269211699209961",
+      "occurrenceID": "94c1f2b1-8020-42cb-b80d-061fa6603f26"
+    },
+    "observedAtUtc": "2026-10-06T22:11:21.487Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "expected": {
+        "pid": 72516,
+        "processInstanceID": "win32:639269211699209961",
+        "occurrenceID": "94c1f2b1-8020-42cb-b80d-061fa6603f26"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 71716,
+        "processInstanceID": "win32:639269211691220307",
+        "occurrenceID": "b476c10f-000d-4877-a964-e66efd643e7f"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-06T22:11:23.1405849Z",
+  "listeners": null,
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\explorer-selection-46-after\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\explorer-selection-46-after\\runtime\\data\\models.json",
+      "outcome": "already_absent"
+    }
+  ]
+}

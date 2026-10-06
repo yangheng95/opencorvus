@@ -1,0 +1,10 @@
+Browser tab: 27, Title: "OpenCorvus", URL: "http://127.0.0.1:18012/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~									114 container contextmenu-cl-214-trigger
++										115 button (collapsed) .opencorvus, ID: contextmenu-cl-216-trigger, Secondary Actions: Expand
++										116 button .gitattributes, ID: contextmenu-cl-220-trigger
++										117 button .gitignore, ID: contextmenu-cl-223-trigger
++										118 button alpha.txt, ID: contextmenu-cl-226-trigger
++										119 button keep.txt, ID: contextmenu-cl-229-trigger
++										120 button switch.txt, ID: contextmenu-cl-232-trigger
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18012/ui/

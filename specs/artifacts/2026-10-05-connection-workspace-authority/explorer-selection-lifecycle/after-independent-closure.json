@@ -1,0 +1,35 @@
+{
+  "listeners": [],
+  "boundary": "No-Provider native development positive visual qualification; not model or Task acceptance",
+  "observedAtUtc": "2026-10-06T22:11:24.9953137Z",
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "page": "Root-owned IAB9 tab27 closed",
+  "occurrence": "explorer-selection-46-after-6db7431f-35d1-40c5-8d4b-2f56ea0122f3",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 71716,
+        "processInstanceID": "win32:639269211691220307",
+        "occurrenceID": "b476c10f-000d-4877-a964-e66efd643e7f"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 72516,
+        "processInstanceID": "win32:639269211699209961",
+        "occurrenceID": "94c1f2b1-8020-42cb-b80d-061fa6603f26"
+      }
+    }
+  ]
+}

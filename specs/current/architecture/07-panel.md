@@ -117,8 +117,13 @@ loading, error, depth and expansion updates do not replace the row owner. Actual
 removal, rename, type or scope changes retire it. Search/filter retirement,
 virtual-window retirement and switching across the existing virtualization
 threshold can remount rows; stable focus across those boundaries is not promised.
-Existing multi-selection snapshots and guarded filesystem operation ownership
-remain with their current owners.
+Successful token/scope-owned directory listings reconcile the existing selection
+Map with that exact parent's current members. Missing or type-replaced members
+and descendants under retired ancestors leave the selection; unchanged members
+retain order and read current metadata. Hidden rows, filters and failed listings
+do not establish retirement. Anchor and active drag/drop lifetime use the same
+listing fact. Already-entered filesystem actions retain their captured targets
+and guarded operation owner.
 
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns

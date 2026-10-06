@@ -1,0 +1,24 @@
+{
+  "purpose": "No-Provider native development visual reproduction, not Task acceptance",
+  "listeners": [],
+  "page": "Root IAB9 tab26 closed",
+  "observedAtUtc": "2026-10-06T22:02:13.5369138Z",
+  "chain": [
+    {
+      "expected": {
+        "pid": 44692,
+        "processInstanceID": "win32:639269206972491909",
+        "occurrenceID": "3f31132d-83fd-4d61-ac03-0797cfc5a704"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 72212,
+        "processInstanceID": "win32:639269206980211724",
+        "occurrenceID": "0c778c14-429d-4bf5-ab67-acc98fe825a3"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}
