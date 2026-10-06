@@ -1,0 +1,37 @@
+{
+  "observedAtUtc": "2026-10-06T03:07:46.1151152Z",
+  "originalOwnedIDs": [
+    73936,
+    27144,
+    76192,
+    71940
+  ],
+  "remainingProcesses": [],
+  "listeners": [],
+  "authority": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "beforeMessages": 12,
+  "afterMessages": 12,
+  "retainedMessageIDsEqual": true,
+  "taskOpenedEvents": [
+    {
+      "id": "pev_g0VXEP9np00253HGyiJV",
+      "type": "task.execution.opened",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXEP9g1005gc0dysi",
+      "emitted_at": 1791252550665,
+      "payload": "{\"execution_epoch\":1}"
+    }
+  ],
+  "promptOwnerCount": 0,
+  "inboxCount": 0,
+  "boundary": "Independent OS and retained-history observation after exact public shutdown; no new model/task/pair and no process kill."
+}

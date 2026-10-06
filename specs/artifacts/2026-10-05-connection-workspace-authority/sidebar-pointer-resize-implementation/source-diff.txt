@@ -1,0 +1,120 @@
+diff --git a/packages/overlay/src/services/pane.ts b/packages/overlay/src/services/pane.ts
+index e6b2db28..a439c60f 100644
+--- a/packages/overlay/src/services/pane.ts
++++ b/packages/overlay/src/services/pane.ts
+@@ -38,6 +38,8 @@ export interface PaneConfig {
+   bodyId: string
+   /** Left (sidebar) resize handle element id. */
+   leftHandleId: string
++  /** Element whose rendered width is controlled by sidebarVar. */
++  leftPaneId: string
+   /** Fixed inline chrome that shares the left side with the sidebar. */
+   leftFixedControlIds: readonly string[]
+   /** Element ids controlled by the left resize handle. */
+@@ -54,6 +56,7 @@ export interface PaneConfig {
+ export const PANEL_PANE_CONFIG: PaneConfig = {
+   bodyId: "panelBody",
+   leftHandleId: "leftPaneResizer",
++  leftPaneId: "leftActivityShell",
+   leftFixedControlIds: ["workspaceNavigation"],
+   leftControls: ["sidebar", "workspaceMain"],
+   remainingFixedControlIds: [],
+@@ -82,6 +85,8 @@ export interface PaneCallbacks {
+ interface PaneDrag {
+   config: PaneConfig
+   callbacks: PaneCallbacks
++  startClientX: number
++  startSidebarWidth: number
+   pendingClientX: number | null
+   resizeOnFrame: AnimationFrameScheduler
+ }
+@@ -89,7 +94,6 @@ interface PaneDrag {
+ let paneDrag: PaneDrag | null = null
+ 
+ interface PaneResizeBounds {
+-  bodyRect: DOMRect
+   min: number
+   max: number
+   now: number
+@@ -148,7 +152,7 @@ function paneHandleElement(config: PaneConfig): HTMLElement | null {
+ 
+ function renderedControlWidth(id: string): number {
+   const node = document.getElementById(id)
+-  if (!node) throw new Error(`Pane fixed control element not found: ${id}`)
++  if (!node) throw new Error(`Pane control element not found: ${id}`)
+   const style = getComputedStyle(node)
+   if (node.hidden || style.display === "none" || style.visibility === "hidden") return 0
+   return node.getBoundingClientRect().width
+@@ -241,7 +245,6 @@ function paneResizeBounds(state: PaneState, config: PaneConfig): PaneResizeBound
+   const max = Math.max(geometry.railMin, paneSidebarMax(geometry))
+   const now = resolveSidebarWidthFromGeometry(state, geometry)
+   return {
+-    bodyRect: geometry.bodyRect,
+     min: Math.round(geometry.railMin),
+     max: Math.round(max),
+     now: Math.round(clampNumber(now, geometry.railMin, max)),
+@@ -302,17 +305,20 @@ export function applyPaneWidths(sidebarWidth: number | null, callbacks: PaneCall
+ // ── Drag logic ──
+ 
+ /**
+- * Compute new sidebarWidth from a pointer X position.
++ * Compute sidebarWidth from the rendered starting width and pointer displacement.
+  * Mutates the PaneState values returned by callbacks.getState() by calling
+  * renderPaneLayout with a derived state — state is NOT mutated; the caller is
+  * responsible for updating their store in onWidthsChanged.
+  */
+-function resizePane(clientX: number, callbacks: PaneCallbacks, config: PaneConfig): void {
++function resizePane(clientX: number, drag: PaneDrag): void {
++  const { callbacks, config } = drag
+   const state = callbacks.getState()
+   const bounds = paneResizeBounds(state, config)
+   if (!bounds) return
+ 
+-  const newSidebarWidth = Math.round(clampNumber(clientX - bounds.bodyRect.left, bounds.min, bounds.max))
++  const newSidebarWidth = Math.round(
++    clampNumber(drag.startSidebarWidth + clientX - drag.startClientX, bounds.min, bounds.max),
++  )
+   renderPaneLayout({ ...state, sidebarWidth: newSidebarWidth }, config)
+ }
+ 
+@@ -321,7 +327,7 @@ function flushPendingPaneResize(): void {
+   const clientX = paneDrag.pendingClientX
+   if (clientX === null) return
+   paneDrag.pendingClientX = null
+-  resizePane(clientX, paneDrag.callbacks, paneDrag.config)
++  resizePane(clientX, paneDrag)
+ }
+ 
+ function onPaneResizeMove(event: PointerEvent): void {
+@@ -356,9 +362,14 @@ function startPaneResize(event: PointerEvent, callbacks: PaneCallbacks, config:
+   if (state.sidebarCollapsed) return
+   const handle = paneHandleElement(config)
+   if (!handle) return
++  const bounds = paneResizeBounds(state, config)
++  if (!bounds || bounds.handleWidth <= 0) return
++  const startSidebarWidth = renderedControlWidth(config.leftPaneId)
+   paneDrag = {
+     config,
+     callbacks,
++    startClientX: event.clientX,
++    startSidebarWidth,
+     pendingClientX: null,
+     resizeOnFrame: createAnimationFrameScheduler(flushPendingPaneResize),
+   }
+diff --git a/specs/current/architecture/07-panel.md b/specs/current/architecture/07-panel.md
+index c23b8943..5ee1ed49 100644
+--- a/specs/current/architecture/07-panel.md
++++ b/specs/current/architecture/07-panel.md
+@@ -208,7 +208,11 @@ geometry owners. No automatic zoom or alternate renderer is involved.
+ The desktop shell has a fixed icon rail and an independently resizable project
+ list. WorkLedger mounts its existing navigation once into App's explicit rail
+ outlet; the pane geometry owner reserves that rail's measured width. Sidebar
+-collapse leaves the rail available. Project groups initially expose five rows
++pointer resize captures the actual outer sidebar width and initial pointer
++position once, then applies pointer displacement within current pane bounds.
++The fixed rail and pointer grab offset do not enter the saved sidebar width.
++The same pane owner retains keyboard resize and final width persistence.
++Sidebar collapse leaves the rail available. Project groups initially expose five rows
+ with a disclosure for the rest. Recents derives eight updated items from the
+ same loaded ledger, preserving exact row actions and owning directories.
+ App owns the single mounted navigation rail beside a bounded page stack. The

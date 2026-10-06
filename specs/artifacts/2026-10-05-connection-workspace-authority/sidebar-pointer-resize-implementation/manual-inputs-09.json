@@ -1,0 +1,128 @@
+{
+  "tab": "32",
+  "browser": "7",
+  "url": "http://127.0.0.1:17962/ui/",
+  "manualActions": [
+    {
+      "kind": "drag",
+      "from": [
+        336.5,
+        360
+      ],
+      "to": [
+        288.5,
+        360
+      ],
+      "width": 232
+    },
+    {
+      "kind": "reverse",
+      "from": [
+        288.5,
+        360
+      ],
+      "to": [
+        336.5,
+        360
+      ],
+      "width": 280
+    },
+    {
+      "kind": "click-no-motion",
+      "at": [
+        336.5,
+        360
+      ],
+      "width": 280
+    },
+    {
+      "kind": "keyboard",
+      "key": "ArrowRight",
+      "targetWidth": 304
+    },
+    {
+      "kind": "keyboard",
+      "key": "ArrowLeft",
+      "targetWidth": 280
+    },
+    {
+      "kind": "keyboard",
+      "key": "Home",
+      "settledWidth": 208
+    },
+    {
+      "kind": "keyboard",
+      "key": "End",
+      "settledWidth": 723
+    },
+    {
+      "kind": "drag-restore-from-max",
+      "from": [
+        779.5,
+        360
+      ],
+      "to": [
+        336.5,
+        360
+      ],
+      "width": 280
+    },
+    {
+      "kind": "collapse-reopen",
+      "savedWidth": 280
+    },
+    {
+      "kind": "reload",
+      "savedWidth": 280
+    },
+    {
+      "kind": "drag-nondefault",
+      "from": [
+        336.5,
+        360
+      ],
+      "to": [
+        304.5,
+        360
+      ],
+      "width": 248
+    },
+    {
+      "kind": "reload-nondefault",
+      "hydratedWidth": 248,
+      "initialLoadingWidth": 280
+    },
+    {
+      "kind": "drag-restore",
+      "from": [
+        304.5,
+        360
+      ],
+      "to": [
+        336.5,
+        360
+      ],
+      "width": 280
+    },
+    {
+      "kind": "right-dock-smoke",
+      "openedThenClosed": true,
+      "sidebarWidth": 280
+    },
+    {
+      "kind": "settings-smoke",
+      "openedThenBack": true,
+      "sidebarWidth": 280
+    }
+  ],
+  "toolFailure": {
+    "action": "getByRole checkbox Open right dock check",
+    "result": "No DOM role matches before input; native AX checkbox86 click succeeded. This is an observer API role mismatch, not a product failure."
+  },
+  "limits": [
+    "keyboard capture rectangles include CSS transition intermediates; separately named settled minimum and maximum images qualify final geometry",
+    "no held-pointer intermediate frame, translated host, alternative scale, ultra-narrow viewport, multi-pointer/cancel/blur failure path was exercised",
+    "Settings rect/aria discrepancy is a separate candidate; captured frame may be transitional",
+    "No new model input, Task or paired credential staging"
+  ]
+}

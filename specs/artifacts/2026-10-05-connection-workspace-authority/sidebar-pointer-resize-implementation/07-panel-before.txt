@@ -208,11 +208,7 @@ geometry owners. No automatic zoom or alternate renderer is involved.
 The desktop shell has a fixed icon rail and an independently resizable project
 list. WorkLedger mounts its existing navigation once into App's explicit rail
 outlet; the pane geometry owner reserves that rail's measured width. Sidebar
-pointer resize captures the actual outer sidebar width and initial pointer
-position once, then applies pointer displacement within current pane bounds.
-The fixed rail and pointer grab offset do not enter the saved sidebar width.
-The same pane owner retains keyboard resize and final width persistence.
-Sidebar collapse leaves the rail available. Project groups initially expose five rows
+collapse leaves the rail available. Project groups initially expose five rows
 with a disclosure for the rest. Recents derives eight updated items from the
 same loaded ledger, preserving exact row actions and owning directories.
 App owns the single mounted navigation rail beside a bounded page stack. The

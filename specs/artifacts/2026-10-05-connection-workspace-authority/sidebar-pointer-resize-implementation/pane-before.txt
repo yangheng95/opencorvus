@@ -38,8 +38,6 @@ export interface PaneConfig {
   bodyId: string
   /** Left (sidebar) resize handle element id. */
   leftHandleId: string
-  /** Element whose rendered width is controlled by sidebarVar. */
-  leftPaneId: string
   /** Fixed inline chrome that shares the left side with the sidebar. */
   leftFixedControlIds: readonly string[]
   /** Element ids controlled by the left resize handle. */
@@ -56,7 +54,6 @@ export interface PaneConfig {
 export const PANEL_PANE_CONFIG: PaneConfig = {
   bodyId: "panelBody",
   leftHandleId: "leftPaneResizer",
-  leftPaneId: "leftActivityShell",
   leftFixedControlIds: ["workspaceNavigation"],
   leftControls: ["sidebar", "workspaceMain"],
   remainingFixedControlIds: [],
@@ -85,8 +82,6 @@ export interface PaneCallbacks {
 interface PaneDrag {
   config: PaneConfig
   callbacks: PaneCallbacks
-  startClientX: number
-  startSidebarWidth: number
   pendingClientX: number | null
   resizeOnFrame: AnimationFrameScheduler
 }
@@ -94,6 +89,7 @@ interface PaneDrag {
 let paneDrag: PaneDrag | null = null
 
 interface PaneResizeBounds {
+  bodyRect: DOMRect
   min: number
   max: number
   now: number
@@ -152,7 +148,7 @@ function paneHandleElement(config: PaneConfig): HTMLElement | null {
 
 function renderedControlWidth(id: string): number {
   const node = document.getElementById(id)
-  if (!node) throw new Error(`Pane control element not found: ${id}`)
+  if (!node) throw new Error(`Pane fixed control element not found: ${id}`)
   const style = getComputedStyle(node)
   if (node.hidden || style.display === "none" || style.visibility === "hidden") return 0
   return node.getBoundingClientRect().width
@@ -245,6 +241,7 @@ function paneResizeBounds(state: PaneState, config: PaneConfig): PaneResizeBound
   const max = Math.max(geometry.railMin, paneSidebarMax(geometry))
   const now = resolveSidebarWidthFromGeometry(state, geometry)
   return {
+    bodyRect: geometry.bodyRect,
     min: Math.round(geometry.railMin),
     max: Math.round(max),
     now: Math.round(clampNumber(now, geometry.railMin, max)),
@@ -305,20 +302,17 @@ export function applyPaneWidths(sidebarWidth: number | null, callbacks: PaneCall
 // ── Drag logic ──
 
 /**
- * Compute sidebarWidth from the rendered starting width and pointer displacement.
+ * Compute new sidebarWidth from a pointer X position.
  * Mutates the PaneState values returned by callbacks.getState() by calling
  * renderPaneLayout with a derived state — state is NOT mutated; the caller is
  * responsible for updating their store in onWidthsChanged.
  */
-function resizePane(clientX: number, drag: PaneDrag): void {
-  const { callbacks, config } = drag
+function resizePane(clientX: number, callbacks: PaneCallbacks, config: PaneConfig): void {
   const state = callbacks.getState()
   const bounds = paneResizeBounds(state, config)
   if (!bounds) return
 
-  const newSidebarWidth = Math.round(
-    clampNumber(drag.startSidebarWidth + clientX - drag.startClientX, bounds.min, bounds.max),
-  )
+  const newSidebarWidth = Math.round(clampNumber(clientX - bounds.bodyRect.left, bounds.min, bounds.max))
   renderPaneLayout({ ...state, sidebarWidth: newSidebarWidth }, config)
 }
 
@@ -327,7 +321,7 @@ function flushPendingPaneResize(): void {
   const clientX = paneDrag.pendingClientX
   if (clientX === null) return
   paneDrag.pendingClientX = null
-  resizePane(clientX, paneDrag)
+  resizePane(clientX, paneDrag.callbacks, paneDrag.config)
 }
 
 function onPaneResizeMove(event: PointerEvent): void {
@@ -362,14 +356,9 @@ function startPaneResize(event: PointerEvent, callbacks: PaneCallbacks, config: 
   if (state.sidebarCollapsed) return
   const handle = paneHandleElement(config)
   if (!handle) return
-  const bounds = paneResizeBounds(state, config)
-  if (!bounds || bounds.handleWidth <= 0) return
-  const startSidebarWidth = renderedControlWidth(config.leftPaneId)
   paneDrag = {
     config,
     callbacks,
-    startClientX: event.clientX,
-    startSidebarWidth,
     pendingClientX: null,
     resizeOnFrame: createAnimationFrameScheduler(flushPendingPaneResize),
   }

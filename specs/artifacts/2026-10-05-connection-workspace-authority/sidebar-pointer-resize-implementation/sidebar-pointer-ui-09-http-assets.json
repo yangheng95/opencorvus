@@ -1,0 +1,45 @@
+{
+  "observedAtUtc": "2026-10-06T03:01:19.3017017Z",
+  "requested": "http://127.0.0.1:17962/ui",
+  "finalUri": "http://127.0.0.1:17962/ui/",
+  "uiStatus": 200,
+  "assets": [
+    {
+      "source": "./assets/main-DJB4YffB.js",
+      "url": "http://127.0.0.1:17962/ui/assets/main-DJB4YffB.js",
+      "status": 200,
+      "length": 1655632,
+      "contentType": [
+        "application/javascript; charset=utf-8"
+      ]
+    },
+    {
+      "source": "./assets/native-menu-surface-contract-b_vimv-0.js",
+      "url": "http://127.0.0.1:17962/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+      "status": 200,
+      "length": 91924,
+      "contentType": [
+        "application/javascript; charset=utf-8"
+      ]
+    },
+    {
+      "source": "./assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "url": "http://127.0.0.1:17962/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "status": 200,
+      "length": 140006,
+      "contentType": [
+        "text/css; charset=utf-8"
+      ]
+    },
+    {
+      "source": "./assets/main-b6JpMtFG.css",
+      "url": "http://127.0.0.1:17962/ui/assets/main-b6JpMtFG.css",
+      "status": 200,
+      "length": 535014,
+      "contentType": [
+        "text/css; charset=utf-8"
+      ]
+    }
+  ],
+  "previousEmptyAssetListReason": "HTML uses relative ./assets paths; original /ui/assets-only observation did not match. This receipt resolves against actual final response URI."
+}
