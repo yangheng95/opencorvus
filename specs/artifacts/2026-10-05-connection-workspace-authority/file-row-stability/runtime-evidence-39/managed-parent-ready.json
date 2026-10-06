@@ -1,0 +1,15 @@
+{
+  "pid": 20328,
+  "occurrence": "file-row-stability-39-9eb79c9b-33f4-4a34-a724-42afe8d6d33f",
+  "owner": {
+    "pid": 20328,
+    "processInstanceID": "win32:639269078504196840",
+    "occurrenceID": "bcad1fec-5ca4-4a69-9391-ee4d31d44a8a"
+  },
+  "parent": {
+    "pid": 43120,
+    "processInstanceID": "win32:639269078503760843",
+    "occurrenceID": "6ce85b78-7f81-4870-917b-7981facdb831"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

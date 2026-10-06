@@ -552,6 +552,14 @@ the library owns keyboard and pointer selection without a competing native
 button activation. File changes retain their explicit keyboard/click open
 action. The editable reference Listbox's scrollRef is the existing bounded
 results container, so its keyboard-focused item scrolls within that owner.
+File comparison groups use the same complete observation identity as the
+merge projection. Rendered rows are keyed by selected Task scope, that group
+identity and exact recorded path; global list index is position only. Both
+ordinary For and virtualized range data consume these stable keys and read
+current row data reactively, keeping the same visible row owner across live
+evidence updates. A different scope/observation/path or actual removal retires
+its owner. Virtual viewport eviction and the 80-row renderer switch still
+retire nodes; stable identity does not promise focus through those boundaries.
 An enabled item consumes Enter/Space browser defaults through its direct
 listener when that exact item is the event target. Kobalte retains selection
 and existing caller key handlers; nested interactive targets keep their own

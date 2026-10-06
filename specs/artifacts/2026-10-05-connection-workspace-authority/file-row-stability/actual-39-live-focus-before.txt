@@ -1,0 +1,10 @@
+Browser tab: 20, Title: "OpenCorvus", URL: "http://localhost:18005/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 230, 237
+~							90 container Description: Running · 5m 42s, ID: taskStatus
+~								178 text 5m 42s
++												254 text read .opencorvus/.r/tasks/tsk_g00VXIMsUf00qtgFMX5g/intent/request.md @1+2000 (10 lines) artifact_search Artifact queries (1) artifact_read Artifacts (5) read_agent_message Task participant evidence
++										255 text producer hello.txt Added + 1 - 0 +
++										256 text 1
++										257 text Hello from a formal Task.
+The focused UI element is 252 (selected) Help: hello.txt, Value: hello.txt Added, ID: change-row-0

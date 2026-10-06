@@ -6,7 +6,7 @@ import {
   type CustomItemComponentProps,
   type VirtualizerHandle,
 } from "virtua/solid"
-import { summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
+import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
 import { t, tc } from "../utils/i18n"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
 import { Icon } from "./ui/Icon"
@@ -43,6 +43,7 @@ const CHANGE_STATUS_FILTERS: ChangeStatusFilter[] = ["all", "changed", "modified
 
 interface ChangeRowModel {
   group: ChangeGroup
+  groupKey: string
   item: FileChange
   key: string
   index: number
@@ -54,6 +55,7 @@ interface ChangeRowModel {
 }
 
 interface VisibleGroup {
+  key: string
   group: ChangeGroup
   label: string
   title: string
@@ -228,18 +230,21 @@ export function FileChangesView(props: FileChangesViewProps) {
     ]
     return refs.length === 1 ? refs[0] : ""
   })
+  const scopedGroupKey = (group: ChangeGroup) => JSON.stringify([props.scopeKey ?? "", changeGroupIdentity(group)])
   const allRows = createMemo<ChangeRowModel[]>(() => {
     let index = 0
     return groups().flatMap((group) => {
       const label = groupLabel(group)
       const title = groupTitle(group)
+      const groupKey = scopedGroupKey(group)
       return group.changes.map((item) => {
         const path = splitFilePath(item.file)
         const status = changeStatusLabel(item.status)
         const row: ChangeRowModel = {
           group,
+          groupKey,
           item,
-          key: `${group.id}:${index}:${item.file}`,
+          key: JSON.stringify([groupKey, item.file]),
           index,
           fileName: path.fileName,
           directory: path.directory,
@@ -265,14 +270,15 @@ export function FileChangesView(props: FileChangesViewProps) {
   const visibleGroups = createMemo<VisibleGroup[]>(() => {
     const byGroup = new Map<string, ChangeRowModel[]>()
     for (const row of filteredRows()) {
-      const bucket = byGroup.get(row.group.id) ?? []
+      const bucket = byGroup.get(row.groupKey) ?? []
       bucket.push(row)
-      byGroup.set(row.group.id, bucket)
+      byGroup.set(row.groupKey, bucket)
     }
     return groups().flatMap((group) => {
-      const rows = byGroup.get(group.id) ?? []
+      const key = scopedGroupKey(group)
+      const rows = byGroup.get(key) ?? []
       if (rows.length === 0) return []
-      return [{ group, label: groupLabel(group), title: groupTitle(group), rows }]
+      return [{ key, group, label: groupLabel(group), title: groupTitle(group), rows }]
     })
   })
   const statusCounts = createMemo<Record<ChangeStatusFilter, number>>(() => {
@@ -338,7 +344,11 @@ export function FileChangesView(props: FileChangesViewProps) {
       const position = filteredRows().findIndex((candidate) => candidate.key === row.key)
       if (position >= 0 && shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
       window.requestAnimationFrame(() => {
-        document.getElementById(`change-row-${row.index}`)?.scrollIntoView({ block: "nearest", inline: "nearest" })
+        const current = allRows().find((candidate) => candidate.key === row.key)
+        if (current)
+          document
+            .getElementById(`change-row-${current.index}`)
+            ?.scrollIntoView({ block: "nearest", inline: "nearest" })
       })
     })
   }
@@ -525,33 +535,43 @@ export function FileChangesView(props: FileChangesViewProps) {
                     <Show
                       when={shouldVirtualizeRows()}
                       fallback={
-                        <For each={visibleGroups()}>
-                          {(entry) => (
-                            <div class="changes-list-group" data-group-id={entry.group.id}>
-                              <Show when={hasGroupLabels()}>
-                                <div class="changes-group-header oc-section-heading" title={entry.title}>
-                                  <span class="changes-group-label">{entry.label}</span>
-                                  <span class="changes-group-meta">
-                                    <Show when={entry.group.commitRef}>
-                                      <span class="changes-group-commit">{shortCommit(entry.group.commitRef)}</span>
-                                    </Show>
-                                    <span>{entry.rows.length}</span>
-                                  </span>
+                        <For each={visibleGroups().map((entry) => entry.key)}>
+                          {(key) => (
+                            <Show when={visibleGroups().find((entry) => entry.key === key)}>
+                              {(entry) => (
+                                <div class="changes-list-group" data-group-id={entry().group.id}>
+                                  <Show when={hasGroupLabels()}>
+                                    <div class="changes-group-header oc-section-heading" title={entry().title}>
+                                      <span class="changes-group-label">{entry().label}</span>
+                                      <span class="changes-group-meta">
+                                        <Show when={entry().group.commitRef}>
+                                          <span class="changes-group-commit">
+                                            {shortCommit(entry().group.commitRef)}
+                                          </span>
+                                        </Show>
+                                        <span>{entry().rows.length}</span>
+                                      </span>
+                                    </div>
+                                  </Show>
+                                  <div class="changes-list-chunk" data-group-id={entry().group.id} data-active="true">
+                                    <For each={entry().rows.map((row) => row.key)}>
+                                      {(rowKey) => (
+                                        <Show when={filteredRows().find((row) => row.key === rowKey)}>
+                                          {(row) => (
+                                            <ChangeRow
+                                              node={nodeForRow(row())}
+                                              row={row()}
+                                              showScope={false}
+                                              onSelect={selectRow}
+                                            />
+                                          )}
+                                        </Show>
+                                      )}
+                                    </For>
+                                  </div>
                                 </div>
-                              </Show>
-                              <div class="changes-list-chunk" data-group-id={entry.group.id} data-active="true">
-                                <For each={entry.rows}>
-                                  {(row) => (
-                                    <ChangeRow
-                                      node={nodeForRow(row)}
-                                      row={row}
-                                      showScope={false}
-                                      onSelect={selectRow}
-                                    />
-                                  )}
-                                </For>
-                              </div>
-                            </div>
+                              )}
+                            </Show>
                           )}
                         </For>
                       }
@@ -560,19 +580,23 @@ export function FileChangesView(props: FileChangesViewProps) {
                         ref={(handle) => {
                           rowVirtualizer = handle
                         }}
-                        data={filteredRows()}
+                        data={filteredRows().map((row) => row.key)}
                         bufferSize={VIRTUAL_CHANGE_ROW_BUFFER_PIXELS}
                         itemSize={ESTIMATED_CHANGE_ROW_HEIGHT}
                         as={ChangesVirtualWindow}
                         item={ChangesVirtualItem}
                       >
-                        {(row) => (
-                          <ChangeRow
-                            node={nodeForRow(row)}
-                            row={row}
-                            showScope={hasGroupLabels()}
-                            onSelect={selectRow}
-                          />
+                        {(key) => (
+                          <Show when={filteredRows().find((row) => row.key === key)}>
+                            {(row) => (
+                              <ChangeRow
+                                node={nodeForRow(row())}
+                                row={row()}
+                                showScope={hasGroupLabels()}
+                                onSelect={selectRow}
+                              />
+                            )}
+                          </Show>
                         )}
                       </Virtualizer>
                     </Show>

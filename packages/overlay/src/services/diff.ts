@@ -34,6 +34,20 @@ export interface ChangeSummary {
   deletions: number | null
   hasUnresolvedChanges: boolean
 }
+export function changeGroupIdentity(group: ChangeGroup): string {
+  return JSON.stringify([
+    group.observationKind,
+    group.id,
+    group.taskID,
+    group.artifactID,
+    group.sessionID,
+    group.agentID,
+    group.diffBaseRef,
+    group.diffHeadRef,
+    group.commitRef,
+    group.publishedCommitRef,
+  ])
+}
 export function textComparisonCounts(before: string, after: string): { additions: number; deletions: number } {
   const counts = { additions: 0, deletions: 0 }
   for (const change of diffLines(before, after)) {

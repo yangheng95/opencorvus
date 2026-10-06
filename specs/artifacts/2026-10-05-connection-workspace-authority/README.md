@@ -224,3 +224,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Reference keyboard scroll35/36/37](reference-scroll-plan.md): actual37 Reference/Model/Mention/Scheduled keyboard and scroll fixes qualified; original35/36 failures retained, genuine FileChanges row and broader matrix unqualified.
 
 - [Genuine file row acceptance38](file-row-live-plan.md): actual streamed Sol26-byte publication, two complete materialized reads, formal completion/download and terminal file-row keys qualified within original bounds; active-update focus/count findings remain.
+
+- [Streaming file-row identity39](file-row-stability-plan.md): stable complete observation/path identities through For/Virtua; actual39 focus survives genuine updates and keys/filter/file delivery qualify; original big Review loading remains under investigation.

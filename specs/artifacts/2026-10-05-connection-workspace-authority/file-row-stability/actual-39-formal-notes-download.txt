@@ -1,0 +1,45 @@
+Browser tab: 20, Title: "OpenCorvus", URL: "http://localhost:18005/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 101-139
++								170 container
++									171 text orchestrator
++									172 text 1m 14s
++									173 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									174 container
++										175 button (collapsed) Secondary Actions: Expand, Description: artifact_select · Selected Artifact source (接受独立验证的查询与制作顺序、同一hello资源两次完整物化及实际只读字节检查、notes全量检查和真实source_read_refs发布证据；剩余最终资源交付与任务结束由本轮完成。)
++											176 text artifact_select
++											177 text Selected Artifact source (接受独立验证的查询与制作顺序、同一hello资源两次完整物化及实际只读字节检查、notes全量检查和真实source_read_refs发布证据；剩余最终资源交付与任务结束由本轮完成。)
++											178 image
++										179 text 独立验证通过：同一份 hello.txt 已连续两次完整物化，每次都实际读取并核验了全部 26 字节；notes.txt 的全部 212,992 字节和 8,192 次重复内容也检查通过，三次读取的实际文件均为只读。验证报告已用真实完整读取来源发布。 现在交付 
++										180 link Description: hello.txt, Value: localhost:18005/ui/#
++										181 text  和 
++										182 link Description: notes.txt, Value: localhost:18005/ui/#
++										183 text  两个真实文件资源，并结束任务。查询接口的范围限制及 Git 的未来换行转换警告已保留；本次发布资源的字节检查均正确，未访问网站或启动服务。
++										184 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											185 text manage_task
++											186 text action=complete_task
++											187 image
++										188 container 2 files
++											189 container
++												190 text Agent delivery 2 files 文件列表流式稳定性验收39
++											191 button (collapsed) hello.txt producer · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++												192 text hello.txt
++												193 text producer
++												194 text  · 
++												195 text 26 B
++												196 text Preview
++											197 button Copy filename
++											198 button Description: Download: hello.txt, Help: Download
++											199 button (collapsed) notes.txt producer · 208.0 KB Preview, Help: notes.txt, Secondary Actions: Expand
++												200 text notes.txt
++												201 text producer
++												202 text  · 
++												203 text 208.0 KB
++												204 text Preview
++											205 button Copy filename
++											206 button Description: Download: notes.txt, Help: Download
++											207 button (collapsed) Inspect delivery records (1), Secondary Actions: Expand
++									208 button Copy message
++									209 pop up button (collapsed) Description: View model usage for this turn: 521K Token, Secondary Actions: Expand
++									210 text Oct 7, 02:33 AM
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18005/ui/

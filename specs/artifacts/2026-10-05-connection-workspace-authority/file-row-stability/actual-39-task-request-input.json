@@ -1,0 +1,9 @@
+{
+  "title": "文件列表流式稳定性验收39",
+  "request": "请先真实查询当前项目的 Task 列表和报告，再按顺序实际制作两个文件。先制作 hello.txt，完整内容为 Hello from a formal Task. 后接一个 LF，UTF-8、无 BOM、共26字节；随后制作 notes.txt，完整内容为 Notes from a formal Task. 后接一个 LF，这一行连续重复8192次，UTF-8、无 BOM、共212992字节。请真实检查两份文件，发布同一正式 Task 的真实文件资源。由独立参与者连续两次完整物化读取同一个 hello.txt 发布资源，并分别检查实际只读文件的26字节；也完整物化读取 notes.txt，检查实际只读文件的全部重复内容和字节数。以实际完整读取的 source_read_refs 发布独立验证报告，最后从正式 Task 交付区域提供两个真实文件资源并结束 Task。请保留真实失败和未完成事项；无需访问网站或启动其他服务。",
+  "model": "openai/gpt-6.1-sol",
+  "source": "root-owned-streaming-file-row-stability-qualification",
+  "requestID": "2ee42884-e158-449d-9aa5-f16ff7c90e17",
+  "requestSentAt": "2026-10-06T18:25:09.3053582Z",
+  "acceptedObservedAt": "2026-10-06T18:25:13.9350766Z"
+}

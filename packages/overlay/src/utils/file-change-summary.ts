@@ -1,7 +1,7 @@
 import { cardTreeStore, publishedCardTreeVersion, type CardNode } from "../store/card-tree"
 import { boardStore } from "../store/board"
 import type { FileChange, FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
-import { summarizeFileChanges, textComparisonCounts, type ChangeGroup } from "../services/diff"
+import { changeGroupIdentity, summarizeFileChanges, textComparisonCounts, type ChangeGroup } from "../services/diff"
 import { relativePathFrom } from "./tool"
 import { projectedConversationMessageFacts, type ProjectedMessageFacts } from "../services/tree-writer"
 import { conversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
@@ -402,18 +402,7 @@ export function collectAgentFileChanges(node: CardNode, base: string): AgentFile
 export function mergeChangeGroups(groups: ChangeGroup[]): ChangeGroup[] {
   const map = new Map<string, ChangeGroup>()
   for (const group of groups) {
-    const key = JSON.stringify([
-      group.observationKind,
-      group.id,
-      group.taskID,
-      group.artifactID,
-      group.sessionID,
-      group.agentID,
-      group.diffBaseRef,
-      group.diffHeadRef,
-      group.commitRef,
-      group.publishedCommitRef,
-    ])
+    const key = changeGroupIdentity(group)
     const old = map.get(key)
     if (!old) {
       map.set(key, group)

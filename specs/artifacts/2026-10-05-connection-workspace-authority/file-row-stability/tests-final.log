@@ -1,0 +1,40 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-3f665b2bfd616ca5\debug\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts ./test/diff-change-group-identity.test.ts ./test/file-change-evidence-reducer.test.ts ./test/diff-resolution.test.ts
+bun test v1.3.14 (0d9b296a)
+
+test\diff-change-group-identity.test.ts:
+(pass) a live observation retains its identity as current file evidence changes [6.55ms]
+(pass) matching display ids retain separately scoped observation records [0.23ms]
+(pass) identity encoding retains literal field boundaries [0.11ms]
+
+ 3 pass
+ 0 fail
+ 4 expect() calls
+Ran 3 tests across 1 file. [164.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\file-change-evidence-reducer.test.ts:
+(pass) individual completed comparison preserves empty existing after and original receipt [3.76ms]
+(pass) normal cross-assistant original controls and intervening Read compose exact net interval [2.28ms]
+(pass) Write receipt and multiple step observations preserve the recorded two-Edit interval [0.32ms]
+(pass) exact replay deduplicates while conflicting receipt is explicit incomplete [0.72ms]
+(pass) unqualified batch, controls, step membership, branch and endpoint have precise incomplete reasons [1.35ms]
+(pass) canonical Patch keeps path-only coverage independently of exact Edit interval [0.97ms]
+(pass) actual deferred mutation without observed path retains unknown receipts [0.23ms]
+(pass) distinct saved/live intervals retain honest flags and revision includes endpoint changes [0.95ms]
+(pass) separate actual Session and actor scopes retain their own recorded endpoints [0.26ms]
+
+ 9 pass
+ 0 fail
+ 26 expect() calls
+Ran 9 tests across 1 file. [182.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\diff-resolution.test.ts:
+(pass) diff resolution > resolves the selected live group from the visible change collection [2.70ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [114.00ms]

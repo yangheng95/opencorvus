@@ -1,0 +1,34 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\diff-change-group-identity.test.ts:
+(pass) a live observation retains its identity as current file evidence changes [0.76ms]
+(pass) matching display ids retain separately scoped observation records [0.19ms]
+(pass) identity encoding retains literal field boundaries [0.11ms]
+
+packages\overlay\test\diff-resolution.test.ts:
+(pass) diff resolution > resolves the selected live group from the visible change collection [0.56ms]
+
+packages\overlay\test\file-change-evidence-reducer.test.ts:
+(pass) individual completed comparison preserves empty existing after and original receipt [1.90ms]
+(pass) normal cross-assistant original controls and intervening Read compose exact net interval [2.90ms]
+(pass) Write receipt and multiple step observations preserve the recorded two-Edit interval [0.48ms]
+(pass) exact replay deduplicates while conflicting receipt is explicit incomplete [0.98ms]
+(pass) unqualified batch, controls, step membership, branch and endpoint have precise incomplete reasons [1.56ms]
+(pass) canonical Patch keeps path-only coverage independently of exact Edit interval [0.58ms]
+(pass) actual deferred mutation without observed path retains unknown receipts [0.22ms]
+(pass) distinct saved/live intervals retain honest flags and revision includes endpoint changes [0.97ms]
+(pass) separate actual Session and actor scopes retain their own recorded endpoints [0.34ms]
+
+tmp\gallery-project\packages\overlay\test\diff-resolution.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+error: Cannot find module 'solid-js/store' from 'D:\myhexin-local\opencorvus\tmp\gallery-project\packages\overlay\src\store\board.ts'
+-------------------------------
+
+
+ 13 pass
+ 1 fail
+ 1 error
+ 31 expect() calls
+Ran 14 tests across 4 files. [2.55s]

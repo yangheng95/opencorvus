@@ -1,0 +1,7 @@
+Browser tab: 20, Title: "OpenCorvus", URL: "http://localhost:18005/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 230
+~									216 search text field (settable) Description: Filter changed files, Value: hello
++									234 button Clear file filter
+~											228 text Build comparison · producer 8d6231210418 1
+The focused UI element is 216 search text field (settable) Description: Filter changed files, Value: hello
