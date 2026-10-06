@@ -1,0 +1,12 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) projected explore worker mission queries its actual Project Tasks through resolved registry grants [2805.77ms]
+(pass) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [2082.60ms]
+
+ 2 pass
+ 0 fail
+ 24 expect() calls
+Ran 2 tests across 1 file. [7.18s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=0 duration=7.41s

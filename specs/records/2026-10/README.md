@@ -73,3 +73,7 @@ Actual after12 now qualifies canonical human request display and technical Hando
 Pushed41c54 is followed by the readable Settings navigation Recall; unchanged before13 and CSS cascade investigation precede any label/layout implementation.
 
 Final Settings navigation13 now has genuine before/intermediate/final manual images, bilingual/scaled/keyboard/search qualification and complete physical/history closure; its shared intrinsic-height rail and compact spacing supersede the earlier held layout candidate.
+
+Pushed navigation f828677a is followed by the held Panel actor runtime-identity Recall, legitimate explore-base query grants and native/projected classification investigation; the broader worker-mutation hypothesis is withdrawn.
+
+Panel actor14 now has actual qualified backend0/2→2/27 output/error evidence, canonical current Session identity with explicit nonblank Tool actor integrity, unchanged query declarations, and source/new-test types0; full Provider/SessionLoop qualification remains separate.

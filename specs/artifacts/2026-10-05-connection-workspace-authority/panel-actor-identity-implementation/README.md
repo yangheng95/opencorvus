@@ -1,0 +1,7 @@
+# Panel actor identity investigation evidence
+
+Read [binding Recall](../panel-actor-identity-implementation-plan.md). Root independently qualifies legitimate explore-base query grants and existing SessionMessageIdentity. Current lawful query schema/mode is actor-independent; the broader initialization union is excluded from this minimal execution repair.
+
+Actual direct backend real-context-02 baseline0/2/8 exposes canonical explore alias mission misclassified as Mission and ordinary researcher rejected. Earlier package/lineage/frozen-model/surface/harness preparation failures and first narrower baseline remain retained. Correct partition uses only actual defaultTools as runtime projection and the Registry as builtin owner, with real assistant/ToolPart/callID/Task execution authority.
+
+After canonical runtime actor/nonblank guard, exact checker2/27 qualifies Project Task identity/title/status/count, ordinary mode/empty params, explicit ID details and min1 too_small error, real native Mission empty-owned versus server UI Project1, and exact malformed actor Error. Configured backend/new-test types0 and their actual commands/compiler input are recorded. This is Resolver/descriptor/runtime admission/Registry/direct-context qualification, not full SessionLoop/Provider/UI. Nonempty Mission-owned tasks, other roles/projects and races remain unknown. No credentials/model calls/UI automation/Git release is used. Scoped review/commit/upstream push follows and Goal stays active.

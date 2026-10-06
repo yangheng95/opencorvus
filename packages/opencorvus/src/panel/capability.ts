@@ -72,12 +72,14 @@ export const PanelActor = z.enum(["panel_ui", "control_agent", "mission", "explo
 export type PanelActor = z.infer<typeof PanelActor>
 
 /**
- * Map a Tool.Context agent name to the panel actor identity.
+ * Map a declared role name to its fixed Panel actor/schema class.
  *
  * Only LLM agents that legitimately drive the panel are recognized.
  * External user-interface callers are not inferred from an agent name; they
  * must carry the server-created `panel-ui-request` context consumed by the
  * Panel tool.
+ * Runtime callers resolve SessionMessageIdentity first; projected worker
+ * names do not establish their runtime actor.
  */
 export function derivePanelActor(agent: string | undefined): Exclude<PanelActor, "panel_ui"> | undefined {
   if (agent === "control") return "control_agent"

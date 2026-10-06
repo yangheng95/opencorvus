@@ -1,0 +1,14 @@
+{
+  "observedAtUtc": "2026-10-06T06:09:02.9119284Z",
+  "backend": {
+    "command": "bun run --cwd packages/opencorvus typecheck",
+    "log": "backend-types-14.log",
+    "exitCode": 0
+  },
+  "newTest": {
+    "command": "node packages/opencorvus/node_modules/typescript/bin/tsc --project .tmp-product-iteration/panel-query-types-14.json",
+    "log": "new-test-types-14.log",
+    "configuration": "temporary exact-test inclusion extends the one current backend configuration; no product configuration change",
+    "exitCode": 0
+  }
+}

@@ -1,0 +1,35 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+292 |         assertFrozenSessionAgentRuntime(workerContract.runtime)
+293 |       } catch (error) {
+294 |         throw new Error(`Projected worker ${identity.agentID} runtime must be deeply frozen`, { cause: error })
+295 |       }
+296 |       if (!runtime.model) {
+297 |         throw new Error(`Projected worker ${identity.agentID} session-loop runtime requires a resolved model`)
+                        ^
+error: Projected worker mission session-loop runtime requires a resolved model
+      at set (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:297:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts:122:35)
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [4214.50ms]
+292 |         assertFrozenSessionAgentRuntime(workerContract.runtime)
+293 |       } catch (error) {
+294 |         throw new Error(`Projected worker ${identity.agentID} runtime must be deeply frozen`, { cause: error })
+295 |       }
+296 |       if (!runtime.model) {
+297 |         throw new Error(`Projected worker ${identity.agentID} session-loop runtime requires a resolved model`)
+                        ^
+error: Projected worker researcher session-loop runtime requires a resolved model
+      at set (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:297:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts:122:35)
+(fail) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [1825.56ms]
+
+ 0 pass
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [7.78s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=8.00s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts

@@ -1,0 +1,35 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+494 |   const panelUIRequest = panelUIRequestContext(ctx)
+495 |   const result = PanelSurface.safeParse(
+496 |     panelUIRequest?.surface ?? (ctx.agent === "control" ? controlContext(ctx).surface : ctx.extra?.surface),
+497 |   )
+498 |   if (!result.success) {
+499 |     throw new Error("panel tool requires ctx.extra.surface to authorize surface-specific actions.")
+                    ^
+error: panel tool requires ctx.extra.surface to authorize surface-specific actions.
+      at resolvePanelSurface (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\panel.ts:499:15)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\panel.ts:1438:15)
+      at processTicksAndRejections (unknown:7:39)
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [3022.44ms]
+460 |   if (panelUIRequestContext(ctx)) return "panel_ui" as const
+461 |   const session = await Session.get(ctx.sessionID)
+462 |   if (isRightSidebarConversationSession(session)) return "right_sidebar_conversation"
+463 |   const actor = derivePanelActor(ctx.agent)
+464 |   if (!actor) {
+465 |     throw new Error(
+                    ^
+error: panel tool does not recognize Session-bound agent "researcher"; panel_ui authority requires a server-created panel-ui-request context.
+      at resolvePanelActor (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\panel.ts:465:15)
+(fail) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [2035.81ms]
+
+ 0 pass
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [7.03s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=7.22s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts

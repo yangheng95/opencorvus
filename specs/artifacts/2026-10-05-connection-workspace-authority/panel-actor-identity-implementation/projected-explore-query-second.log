@@ -1,0 +1,67 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+76 | 	}
+77 | 	withStatement(callback) {
+78 | 		if (this.finalized) throw new Error("Cannot execute a finalized Bun SQLite prepared query");
+79 | 		let result;
+80 | 		try {
+81 | 			result = callback();
+     ^
+SQLiteError: worker_turn_descriptor: Task Project or dispatch lineage authority mismatch
+      errno: 1811,
+ byteOffset: -1,
+       code: "SQLITE_CONSTRAINT_TRIGGER"
+
+      at run (unknown:1:1)
+      at #run (bun:sqlite:185:20)
+      at withStatement (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:81:13)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\worker-turn-descriptor.ts:101:19
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1808:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at transaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1806:31)
+      at persistPrepared (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\worker-turn-descriptor.ts:81:9)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts:64:40
+      at processTicksAndRejections (unknown:7:39)
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [2568.43ms]
+76 | 	}
+77 | 	withStatement(callback) {
+78 | 		if (this.finalized) throw new Error("Cannot execute a finalized Bun SQLite prepared query");
+79 | 		let result;
+80 | 		try {
+81 | 			result = callback();
+     ^
+SQLiteError: worker_turn_descriptor: Task Project or dispatch lineage authority mismatch
+      errno: 1811,
+ byteOffset: -1,
+       code: "SQLITE_CONSTRAINT_TRIGGER"
+
+      at run (unknown:1:1)
+      at #run (bun:sqlite:185:20)
+      at withStatement (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:81:13)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\worker-turn-descriptor.ts:101:19
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1808:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at transaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1806:31)
+      at persistPrepared (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\worker-turn-descriptor.ts:81:9)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts:64:40
+      at processTicksAndRejections (unknown:7:39)
+(fail) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [1917.04ms]
+
+ 0 pass
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [6.32s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=6.50s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts

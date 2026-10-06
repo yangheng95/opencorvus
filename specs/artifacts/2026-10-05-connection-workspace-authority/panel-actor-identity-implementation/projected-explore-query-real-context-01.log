@@ -1,0 +1,39 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+491 |     }
+492 |     if (new Set(actual).size !== actual.length) throw new Error(`${context} must not contain duplicates`)
+493 |     const left = [...actual].sort()
+494 |     const right = [...expected].sort()
+495 |     if (JSON.stringify(left) !== JSON.stringify(right)) {
+496 |       throw new Error(
+                      ^
+error: Projected skill owner mission registry tool IDs mismatch: expected artifact_publish,artifact_read,artifact_search,artifact_select,artifact_snapshot,capability_search,external_code_search,glob,memory,panel_query_task,publish_interactive_artifact,read,read_agent_message,request_orchestrator_decision,search_code,send_mailbox_message,webfetch,websearch, found <none>
+      at assertExactStringSet (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:496:17)
+      at assertProjectedSkillSurface (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:471:5)
+      at set (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:285:21)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts:113:35)
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [3078.95ms]
+491 |     }
+492 |     if (new Set(actual).size !== actual.length) throw new Error(`${context} must not contain duplicates`)
+493 |     const left = [...actual].sort()
+494 |     const right = [...expected].sort()
+495 |     if (JSON.stringify(left) !== JSON.stringify(right)) {
+496 |       throw new Error(
+                      ^
+error: Projected skill owner researcher registry tool IDs mismatch: expected artifact_publish,artifact_read,artifact_search,artifact_select,artifact_snapshot,capability_search,external_code_search,glob,memory,panel_query_task,publish_interactive_artifact,read,read_agent_message,request_orchestrator_decision,search_code,send_mailbox_message,webfetch,websearch, found <none>
+      at assertExactStringSet (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:496:17)
+      at assertProjectedSkillSurface (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:471:5)
+      at set (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\runtime-contract.ts:285:21)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts:113:35)
+(fail) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [2056.61ms]
+
+ 0 pass
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [6.87s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=7.04s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts

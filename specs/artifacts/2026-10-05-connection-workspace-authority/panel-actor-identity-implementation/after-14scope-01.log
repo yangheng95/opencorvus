@@ -1,0 +1,27 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "uuid",
+    "pattern": "/^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/",
+    "path": [
+      "requestID"
+    ],
+    "message": "Invalid UUID"
+  }
+]
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [2756.42ms]
+(pass) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [1992.78ms]
+
+ 1 pass
+ 1 fail
+ 23 expect() calls
+Ran 2 tests across 1 file. [7.15s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=7.34s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts

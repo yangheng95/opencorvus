@@ -74,6 +74,17 @@ and generated clients; there are no executable compatibility aliases. Existing
 stored transcripts remain historical facts. The Panel chapter defines query
 receipts and the underlying effect/ownership boundaries.
 
+Panel execution resolves the current SessionMessageIdentity after its existing
+server-created UI and actual right-sidebar owners. A validated projected worker
+with the explore base role receives the read-only explorer actor, independently
+of its dynamic agent name. Native actors use the validated fixed registry role;
+other Session-bound calls require an explicit nonblank agent identity. Current
+projected Panel grants contain only query_task, whose declaration parameters
+and ordinary execution mode are actor-independent. Default explorer queries
+list the current Project, while native Mission queries retain Mission ownership.
+Explicit taskIDs requires at least one ID; an empty array is a schema error.
+Future projected Panel grant changes must review their schema and mode identity.
+
 ## Search and reveal contract
 
 One search accepts one to four queries, exact kind/owner filters, at most five

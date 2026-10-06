@@ -10,6 +10,8 @@ import { requireMissionTaskCreationOpenedOccurrence } from "@/task-api/task-crea
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
+import { resolveSessionMessageIdentity } from "@/session/message-identity"
+import { isProjectedWorkerRuntimeContract } from "@/session/runtime-contract"
 import { Question } from "@/question"
 import { captureWindowScreenshot } from "@/gui/screenshot"
 import {
@@ -460,7 +462,19 @@ async function resolvePanelActor(ctx: Tool.Context) {
   if (panelUIRequestContext(ctx)) return "panel_ui" as const
   const session = await Session.get(ctx.sessionID)
   if (isRightSidebarConversationSession(session)) return "right_sidebar_conversation"
-  const actor = derivePanelActor(ctx.agent)
+  if (typeof ctx.agent !== "string" || !ctx.agent.trim()) {
+    throw new Error("panel Session-bound execution requires an explicit nonblank agent identity.")
+  }
+  const identity = await resolveSessionMessageIdentity({
+    session,
+    requestedAgentID: ctx.agent,
+    config: await EffectiveConfig.effective({ sessionID: session.id }),
+  })
+  const actor = identity.runtimeContract
+    ? isProjectedWorkerRuntimeContract(identity.runtimeContract) && identity.baseRole === "explore"
+      ? "explore"
+      : undefined
+    : derivePanelActor(identity.agentID)
   if (!actor) {
     throw new Error(
       `panel tool does not recognize Session-bound agent "${ctx.agent || "<empty>"}"; ` +

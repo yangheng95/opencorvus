@@ -1,0 +1,15 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "include": [
+    "../packages/opencorvus/src/**/*",
+    "../packages/opencorvus/test/capability/panel-projected-explore-query.test.ts"
+  ],
+  "exclude": [
+    "../packages/opencorvus/script/**/*",
+    "../packages/opencorvus/src/skill/builtin/**/*",
+    "../packages/opencorvus/dist/**/*"
+  ],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

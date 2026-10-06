@@ -1,0 +1,45 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+718 |         ? await loadGlobalExternalPackageByID(profileID)
+719 |         : input.projectDirectory
+720 |           ? await loadExternalPackageByID(input.projectDirectory, profileID, input.reconcileEvolutionMutations)
+721 |           : undefined
+722 |     if (externalPackage) return { profileID, builtIn: false, pkg: externalPackage }
+723 |     throw new PromptProfileNotFoundError({
+                ^
+PromptProfileNotFoundError: PromptProfileNotFoundError: Unknown prompt profile "explore-query-contract"
+ data: {
+  message: "Unknown prompt profile \"explore-query-contract\"",
+  profileID: "explore-query-contract",
+  scope: "project",
+},
+
+      at packageForActiveProfile (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:723:11)
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [1925.27ms]
+718 |         ? await loadGlobalExternalPackageByID(profileID)
+719 |         : input.projectDirectory
+720 |           ? await loadExternalPackageByID(input.projectDirectory, profileID, input.reconcileEvolutionMutations)
+721 |           : undefined
+722 |     if (externalPackage) return { profileID, builtIn: false, pkg: externalPackage }
+723 |     throw new PromptProfileNotFoundError({
+                    ^
+PromptProfileNotFoundError: PromptProfileNotFoundError: Unknown prompt profile "explore-query-contract"
+ data: {
+  message: "Unknown prompt profile \"explore-query-contract\"",
+  profileID: "explore-query-contract",
+  scope: "project",
+},
+
+      at packageForActiveProfile (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:723:15)
+      at processTicksAndRejections (unknown:7:39)
+(fail) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [1785.23ms]
+
+ 0 pass
+ 2 fail
+Ran 2 tests across 1 file. [5.46s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=5.66s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts

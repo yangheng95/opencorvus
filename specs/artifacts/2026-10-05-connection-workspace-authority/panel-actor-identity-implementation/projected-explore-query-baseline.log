@@ -1,0 +1,34 @@
+[1/1] START test/capability/panel-projected-explore-query.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+150 | 
+151 | export async function requireMissionSession(sessionID: string): Promise<MissionSession> {
+152 |   const session = await Session.get(sessionID)
+153 |   const missionID = missionIDFromInfo(session)
+154 |   if (session.kind !== "mission" || !missionID) {
+155 |     throw new Error(`Session ${sessionID} is not a Mission session with canonical metadata.mission.id.`)
+                    ^
+error: Session ses_-zUSkhg9VzzvHyuEJko0 is not a Mission session with canonical metadata.mission.id.
+      at requireMissionSession (D:\myhexin-local\opencorvus\packages\opencorvus\src\mission\session.ts:155:15)
+      at processTicksAndRejections (unknown:7:39)
+(fail) projected explore worker mission queries its actual Project Tasks through resolved registry grants [3386.00ms]
+460 |   if (panelUIRequestContext(ctx)) return "panel_ui" as const
+461 |   const session = await Session.get(ctx.sessionID)
+462 |   if (isRightSidebarConversationSession(session)) return "right_sidebar_conversation"
+463 |   const actor = derivePanelActor(ctx.agent)
+464 |   if (!actor) {
+465 |     throw new Error(
+                    ^
+error: panel tool does not recognize Session-bound agent "researcher"; panel_ui authority requires a server-created panel-ui-request context.
+      at resolvePanelActor (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\panel.ts:465:15)
+(fail) projected explore worker researcher queries its actual Project Tasks through resolved registry grants [2102.32ms]
+
+ 0 pass
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [7.55s]
+[1/1] DONE test/capability/panel-projected-explore-query.test.ts exit=1 duration=7.75s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\capability\panel-projected-explore-query.test.ts
