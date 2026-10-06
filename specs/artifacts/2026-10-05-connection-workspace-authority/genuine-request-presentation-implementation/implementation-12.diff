@@ -1,0 +1,91 @@
+diff --git a/packages/overlay/src/services/tree-writer.ts b/packages/overlay/src/services/tree-writer.ts
+index 6c0dae8f..cb5bc618 100644
+--- a/packages/overlay/src/services/tree-writer.ts
++++ b/packages/overlay/src/services/tree-writer.ts
+@@ -2628,21 +2628,9 @@ function deriveRuntimeSessionStage(channelInput: unknown): string {
+ }
+ 
+ function deriveSessionStage(origin: MessageOrigin): string {
+-  // `channel` is the single authoritative signal stamped by the backend
+-  // bridge (task-message-protocol-bridge.overlayMeta). It is derived from
+-  // the session's DB `kind` plus the message role, so every semantically
+-  // distinct bubble already has a correct stage at the source.
+-  //
+-  // Reading this as a cascading derivation (channel → agent → resolvedRole →
+-  // role) previously routed root-session user messages to stage="build"
+-  // because `info.agent` on user rows is a Primary assistant identity. That
+-  // cascade conflated runtime identity with session kind and turned a user
+-  // bubble into a worker-stage card.
+-  //
+-  // Channel values:
+-  //   "main"      → root-session user bubble → stage "user"
+-  //   SessionKind → stage = kind (build / requirements / architect / ...)
+-  //   missing     → bridge bug — fail loud, do not guess
++  // Bridge channel owns the receiving Session; persisted author owns the
++  // participant. The shared projection keeps main input and human authors
++  // user-owned while agent-authored handoffs retain the receiving channel.
+   return conversationMessageDisplayStage(origin)
+ }
+ 
+diff --git a/packages/transport-protocol/src/index.ts b/packages/transport-protocol/src/index.ts
+index 8a262cdf..c27f08ce 100644
+--- a/packages/transport-protocol/src/index.ts
++++ b/packages/transport-protocol/src/index.ts
+@@ -573,17 +573,13 @@ export interface ConversationMessageOrigin {
+   source: string
+ }
+ 
+-/** Canonical sources whose non-main user-role messages are direct human input. */
+-export const CONVERSATION_DIRECT_HUMAN_MESSAGE_SOURCES = ["right-sidebar-conversation", "mission.operator"] as const
+-
+ /** A delegated prompt is a real provider-facing user message owned by the
+- * receiving non-main agent session, rather than a second human-authored turn. */
++ * receiving non-main agent session. Canonical author identifies the actual
++ * participant; provider role and origin source do not identify a human. */
+ export function isDelegatedContextMessage(origin: ConversationMessageOrigin): boolean {
+-  return (
+-    origin.role === "user" &&
+-    origin.channel !== "main" &&
+-    !(CONVERSATION_DIRECT_HUMAN_MESSAGE_SOURCES as readonly string[]).includes(origin.source)
+-  )
++  const author = String(origin.author || "").trim()
++  if (!author) throw new Error("conversation message origin is missing author")
++  return origin.role === "user" && origin.channel !== "main" && author !== "user"
+ }
+ 
+ /** Single display-ownership projection shared by the server conversation view
+@@ -597,7 +593,8 @@ export function conversationMessageDisplayStage(origin: ConversationMessageOrigi
+   if (channel === "filtered") {
+     throw new Error("conversation message origin cannot use the retired hidden channel")
+   }
+-  if (role === "user" && !isDelegatedContextMessage({ ...origin, role, channel })) return "user"
++  const delegatedContext = isDelegatedContextMessage({ ...origin, role, channel })
++  if (role === "user" && !delegatedContext) return "user"
+   if (channel === "main") return "user"
+   return channel
+ }
+diff --git a/specs/current/architecture/07-panel-reactivity.md b/specs/current/architecture/07-panel-reactivity.md
+index 91ade017..39e2f3e3 100644
+--- a/specs/current/architecture/07-panel-reactivity.md
++++ b/specs/current/architecture/07-panel-reactivity.md
+@@ -230,9 +230,17 @@ Provider-facing `role=user` does not by itself create a user-owned display
+ card. A delegated prompt in a non-main session is owned by the receiving
+ agent's canonical channel and agent identity, remains collapsed by its exact
+ message ID, and shares the adjacent agent segment when chronology permits.
+-Main-session input and explicitly sourced direct human replies remain
+-user-owned. The shared transport-protocol ownership projection is the single
+-source for server conversation views and Overlay live/hydrated rendering.
++Main-session input and canonical human-authored input (`author=user`) remain
++user-owned, including genuine Task creator requests in non-main Sessions.
++Other non-main provider user-role input belongs to its receiving agent;
++source provenance never grants human authorship. Missing author fails explicitly
++before any main/role shortcut. The shared transport-protocol ownership projection
++is the single source for server conversation views and Overlay live/hydrated
++rendering; the retired direct-human-source whitelist has no other classification
++path. Actual receiving Session/channel, Message/Part/input and parent identities
++stay immutable when presentation segments change. Historical imported dynamic
++`user` author collisions cannot be disambiguated by this projection; current
++package/runtime identity admission reserves that human participant name.
+ 
+ Assistant settlement (status, terminal reason, error and completion time) stays
+ with its exact Message projection. Adjacent-card regrouping derives settlement

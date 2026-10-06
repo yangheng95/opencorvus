@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+test\contract.test.ts:
+(pass) conversation message display ownership > assigns delegated provider user prompts to the receiving agent channel [3.99ms]
+(pass) conversation message display ownership > keeps main and explicit standalone human input user-owned [0.15ms]
+(pass) conversation message display ownership > projects real human input across receiving channels using its canonical author [0.11ms]
+(pass) conversation message display ownership > projects agent-authored input with operator provenance to its receiving channel [0.07ms]
+(pass) conversation message display ownership > returns the author error before role/channel/main short circuits [0.32ms]
+(pass) conversation message display ownership > rejects the retired hidden conversation channel [0.07ms]
+(pass) conversation message display ownership > rejects incomplete origin instead of guessing display ownership [0.07ms]
+
+ 7 pass
+ 26 filtered out
+ 0 fail
+ 23 expect() calls
+Ran 7 tests across 1 file. [197.00ms]

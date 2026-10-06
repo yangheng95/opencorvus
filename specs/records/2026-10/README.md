@@ -65,3 +65,7 @@ The authority record indexes the next Settings geometry before investigation aft
 Before10 subsequently proves the stable/current-scale failures; actual after10 qualifies current230/105% bounds and steps, pointer/reopen/default restoration with full17963/17964 physical cleanup and retained history. Source/type/build reviews support this UI delivery; further provenance/usability matrices remain open.
 
 The authority record now indexes shared human participant identity validation and the subsequent genuine Task request display investigation after pushed339c.
+
+Identity493a is normally pushed after actual public SDK/Registry qualification; the next genuine request presentation Recall admits true before12 on retained failed07 without new model authority.
+
+Actual after12 now qualifies canonical human request display and technical Handoff/reload/reselect/old Chat through Root screenshots, exact public immutable participant comparison and complete physical/history closure; live/new-input and historical collision matrices remain outside that proof.

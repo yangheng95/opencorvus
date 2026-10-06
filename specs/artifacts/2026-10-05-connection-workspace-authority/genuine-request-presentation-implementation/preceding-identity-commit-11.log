@@ -1,0 +1,34 @@
+[main 493a4723] fix: reserve human identity across worker admission
+ 39 files changed, 1819 insertions(+), 20 deletions(-)
+ create mode 100644 packages/opencorvus/test/dynamic-agent-id.test.ts
+ create mode 100644 packages/sdk/js/test/dynamic-agent-id.test.ts
+ create mode 100644 packages/util/src/dynamic-agent-id.ts
+ create mode 100644 packages/util/test/dynamic-agent-id.test.ts
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation-plan.md
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/README.md
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/after-identity-contract.json
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/after-runtime-boundary-errors.jsonl
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/before-default-sdk-manifest.js
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/before-identity-contract.json
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/before-runtime-dynamic-agent-id.ts
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/before-sdk-expert-squad-manifest-v2.ts
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/builtin-checker-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/contract-probe-11.ts
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/docs-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/independent-identity-review.md
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/node-public-sdk-contract-11.json
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/preceding-settings-commit-10.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/preceding-settings-push-10.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/runtime-contract-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/runtime-contract-registry-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/runtime-contract-registry-rerun-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/runtime-types-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/sdk-build-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/sdk-contract-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/sdk-error-order-comparison.json
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/sdk-error-order-observer-failure.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/sdk-public-contract-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/sdk-types-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/util-build-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/util-contract-11.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation/util-types-11.log

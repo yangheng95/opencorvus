@@ -230,9 +230,17 @@ Provider-facing `role=user` does not by itself create a user-owned display
 card. A delegated prompt in a non-main session is owned by the receiving
 agent's canonical channel and agent identity, remains collapsed by its exact
 message ID, and shares the adjacent agent segment when chronology permits.
-Main-session input and explicitly sourced direct human replies remain
-user-owned. The shared transport-protocol ownership projection is the single
-source for server conversation views and Overlay live/hydrated rendering.
+Main-session input and canonical human-authored input (`author=user`) remain
+user-owned, including genuine Task creator requests in non-main Sessions.
+Other non-main provider user-role input belongs to its receiving agent;
+source provenance never grants human authorship. Missing author fails explicitly
+before any main/role shortcut. The shared transport-protocol ownership projection
+is the single source for server conversation views and Overlay live/hydrated
+rendering; the retired direct-human-source whitelist has no other classification
+path. Actual receiving Session/channel, Message/Part/input and parent identities
+stay immutable when presentation segments change. Historical imported dynamic
+`user` author collisions cannot be disambiguated by this projection; current
+package/runtime identity admission reserves that human participant name.
 
 Assistant settlement (status, terminal reason, error and completion time) stays
 with its exact Message projection. Adjacent-card regrouping derives settlement

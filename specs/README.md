@@ -2524,3 +2524,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Settings sidebar geometry plan](artifacts/2026-10-05-connection-workspace-authority/settings-sidebar-geometry-implementation-plan.md): source-qualified initial accessible-width candidate, stable before investigation and required single measured projection.
 
 - [Human participant identity and request presentation](artifacts/2026-10-05-connection-workspace-authority/message-authority-implementation-plan.md): duplicated dynamic identity validation, canonical human reservation and subsequent genuine request display qualification.
+
+- [Genuine Task request presentation](artifacts/2026-10-05-connection-workspace-authority/genuine-request-presentation-implementation-plan.md): canonical author/current main ownership and real retained-history disclosure qualification.

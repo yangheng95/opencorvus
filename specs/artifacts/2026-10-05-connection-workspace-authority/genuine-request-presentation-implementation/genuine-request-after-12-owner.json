@@ -1,0 +1,102 @@
+{
+  "evidencePrefix": "genuine-request-after-12",
+  "observedAtUtc": "2026-10-06T04:33:42.3282333Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\genuine-request-after-12",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project",
+  "port": 17966,
+  "occurrence": "genuine-request-after-12-c79f6442-565b-45d9-bdd5-a06ac9b179cd",
+  "listener": {
+    "ProcessId": 75664,
+    "ParentProcessId": 57336,
+    "CreationDate": "2026-10-06T12:32:49.392224+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17966 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\genuine-request-after-12\\startup.json --startup-occurrence genuine-request-after-12-c79f6442-565b-45d9-bdd5-a06ac9b179cd --log-level INFO"
+  },
+  "owners": [
+    {
+      "ProcessId": 75664,
+      "ParentProcessId": 57336,
+      "CreationDate": "2026-10-06T12:32:49.392224+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17966 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\genuine-request-after-12\\startup.json --startup-occurrence genuine-request-after-12-c79f6442-565b-45d9-bdd5-a06ac9b179cd --log-level INFO"
+    },
+    {
+      "ProcessId": 57336,
+      "ParentProcessId": 35140,
+      "CreationDate": "2026-10-06T12:32:49.361191+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17966 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\genuine-request-after-12\\startup.json --startup-occurrence genuine-request-after-12-c79f6442-565b-45d9-bdd5-a06ac9b179cd --log-level INFO"
+    },
+    {
+      "ProcessId": 35140,
+      "ParentProcessId": 71448,
+      "CreationDate": "2026-10-06T12:32:49.292673+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17966 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\genuine-request-after-12\\startup.json --startup-occurrence genuine-request-after-12-c79f6442-565b-45d9-bdd5-a06ac9b179cd --log-level INFO"
+    },
+    {
+      "ProcessId": 36020,
+      "ParentProcessId": 35140,
+      "CreationDate": "2026-10-06T12:32:49.302902+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    }
+  ],
+  "listeners": {
+    "LocalAddress": "127.0.0.1",
+    "LocalPort": 17966,
+    "OwningProcess": 75664
+  },
+  "health": {
+    "status": 200,
+    "body": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime\\data",
+        "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\genuine-request-after-12\\home"
+      }
+    }
+  },
+  "uiStatus": 200,
+  "assets": [
+    {
+      "url": "http://localhost:17966/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "status": 200,
+      "bytes": 6426
+    },
+    {
+      "url": "http://localhost:17966/ui/assets/main-CB2_MhuG.js",
+      "status": 200,
+      "bytes": 1656288
+    },
+    {
+      "url": "http://localhost:17966/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+      "status": 200,
+      "bytes": 91924
+    },
+    {
+      "url": "http://localhost:17966/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "status": 200,
+      "bytes": 140006
+    },
+    {
+      "url": "http://localhost:17966/ui/assets/main-b6JpMtFG.css",
+      "status": 200,
+      "bytes": 535014
+    },
+    {
+      "url": "http://localhost:17966/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "status": 200,
+      "bytes": 6426
+    },
+    {
+      "url": "http://localhost:17966/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+      "status": 200,
+      "bytes": 6426
+    }
+  ],
+  "purpose": "Original Task history/manual presentation only; no new model input"
+}

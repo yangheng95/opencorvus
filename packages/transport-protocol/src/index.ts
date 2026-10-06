@@ -573,17 +573,13 @@ export interface ConversationMessageOrigin {
   source: string
 }
 
-/** Canonical sources whose non-main user-role messages are direct human input. */
-export const CONVERSATION_DIRECT_HUMAN_MESSAGE_SOURCES = ["right-sidebar-conversation", "mission.operator"] as const
-
 /** A delegated prompt is a real provider-facing user message owned by the
- * receiving non-main agent session, rather than a second human-authored turn. */
+ * receiving non-main agent session. Canonical author identifies the actual
+ * participant; provider role and origin source do not identify a human. */
 export function isDelegatedContextMessage(origin: ConversationMessageOrigin): boolean {
-  return (
-    origin.role === "user" &&
-    origin.channel !== "main" &&
-    !(CONVERSATION_DIRECT_HUMAN_MESSAGE_SOURCES as readonly string[]).includes(origin.source)
-  )
+  const author = String(origin.author || "").trim()
+  if (!author) throw new Error("conversation message origin is missing author")
+  return origin.role === "user" && origin.channel !== "main" && author !== "user"
 }
 
 /** Single display-ownership projection shared by the server conversation view
@@ -597,7 +593,8 @@ export function conversationMessageDisplayStage(origin: ConversationMessageOrigi
   if (channel === "filtered") {
     throw new Error("conversation message origin cannot use the retired hidden channel")
   }
-  if (role === "user" && !isDelegatedContextMessage({ ...origin, role, channel })) return "user"
+  const delegatedContext = isDelegatedContextMessage({ ...origin, role, channel })
+  if (role === "user" && !delegatedContext) return "user"
   if (channel === "main") return "user"
   return channel
 }

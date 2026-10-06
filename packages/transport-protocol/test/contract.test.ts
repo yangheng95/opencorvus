@@ -323,6 +323,31 @@ describe("conversation message display ownership", () => {
     ).toBe("user")
   })
 
+  test("projects real human input across receiving channels using its canonical author", () => {
+    for (const channel of ["orchestrator", "architect", "mission", "assistant"]) {
+      expect(conversationMessageDisplayStage({ role: "user", author: "user", channel, source: "" })).toBe("user")
+    }
+  })
+
+  test("projects agent-authored input with operator provenance to its receiving channel", () => {
+    const origin = { role: "user", author: "chat", channel: "mission", source: "mission.operator" }
+    expect(isDelegatedContextMessage(origin)).toBe(true)
+    expect(conversationMessageDisplayStage(origin)).toBe("mission")
+    expect(conversationMessageDisplayStage({ role: "user", author: "orchestrator", channel: "main", source: "" })).toBe(
+      "user",
+    )
+  })
+
+  test("returns the author error before role/channel/main short circuits", () => {
+    for (const role of ["user", "assistant"]) {
+      for (const channel of ["main", "orchestrator"]) {
+        const origin = { role, author: " ", channel, source: "" }
+        expect(() => isDelegatedContextMessage(origin)).toThrow("conversation message origin is missing author")
+        expect(() => conversationMessageDisplayStage(origin)).toThrow("conversation message origin is missing author")
+      }
+    }
+  })
+
   test("rejects the retired hidden conversation channel", () => {
     expect(() =>
       conversationMessageDisplayStage({

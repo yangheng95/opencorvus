@@ -1,0 +1,117 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+    - button "Formal text delivery Failed":
+      - generic: Formal text delivery
+      - generic "Failed":
+        - generic: Failed
+    - button "More actions":
+    - button "Collapse Anonymous 9507bc" [expanded]:
+      - generic: Anonymous 9507bc
+    - button "Project actions":
+    - button "New chat for this project":
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK." [active]:
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+      - button "Formal text delivery Failed":
+        - generic: Formal text delivery
+        - generic "Failed":
+          - generic: Failed
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 17966":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic: Reply with OK.
+  - status
+  - button "Project actions":
+  - generic "Not running":
+    - generic: Not running
+  - button "Side chat":
+  - button "Environment information":
+  - button "Open right dock":
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: Reply with OK.
+    - article:
+      - generic: chat
+      - generic "Session ran for 5s (between first message and terminal status)": 5s
+      - paragraph: OK
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Repository-aware coding and software work.":
+    - generic: Code
+  - generic: Chat
+  - button "View launch references":
+    - generic: View launch references
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model openai/gpt-6.1-sol. Click to change.":
+    - generic "openai/gpt-6.1-sol"
+  - button "Send" [disabled]:
+    - generic: Send
+  - button:
+  - button:
+- tooltip "Reply with OK. 3h ago Started Oct 06, 2026, 10:07 AM 8a650dde-217d-4611-977d-8d57119507bc":
+  - strong: Reply with OK.
+  - time: 3h ago
+  - generic: Started
+  - time: Oct 06, 2026, 10:07 AM
+  - generic: 8a650dde-217d-4611-977d-8d57119507bc

@@ -2628,21 +2628,9 @@ function deriveRuntimeSessionStage(channelInput: unknown): string {
 }
 
 function deriveSessionStage(origin: MessageOrigin): string {
-  // `channel` is the single authoritative signal stamped by the backend
-  // bridge (task-message-protocol-bridge.overlayMeta). It is derived from
-  // the session's DB `kind` plus the message role, so every semantically
-  // distinct bubble already has a correct stage at the source.
-  //
-  // Reading this as a cascading derivation (channel → agent → resolvedRole →
-  // role) previously routed root-session user messages to stage="build"
-  // because `info.agent` on user rows is a Primary assistant identity. That
-  // cascade conflated runtime identity with session kind and turned a user
-  // bubble into a worker-stage card.
-  //
-  // Channel values:
-  //   "main"      → root-session user bubble → stage "user"
-  //   SessionKind → stage = kind (build / requirements / architect / ...)
-  //   missing     → bridge bug — fail loud, do not guess
+  // Bridge channel owns the receiving Session; persisted author owns the
+  // participant. The shared projection keeps main input and human authors
+  // user-owned while agent-authored handoffs retain the receiving channel.
   return conversationMessageDisplayStage(origin)
 }
 

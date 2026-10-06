@@ -183,3 +183,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Settings sidebar geometry plan](settings-sidebar-geometry-implementation-plan.md) and [evidence](settings-sidebar-geometry-implementation/README.md): stable before/current105% defects, single actual box/CSS-scale repair, real after default/keyboard/pointer/reopen/scale acceptance and complete owned cleanup; further provenance/usability boundaries stay open.
 
 - [Human participant identity plan](message-authority-implementation-plan.md) and [evidence](message-authority-implementation/README.md): current dynamic ID collision/public admission repair; display-source omission and genuine UI qualification remain separately bounded.
+
+- [Genuine request presentation plan](genuine-request-presentation-implementation-plan.md) and [evidence](genuine-request-presentation-implementation/README.md): current author/receiving-channel projection and actual before/after12 qualification; no new model Task.
