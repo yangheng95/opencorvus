@@ -1,0 +1,120 @@
+$ bun script/run-tests.ts test/provider-response-observation.test.ts test/real-provider-audit.test.ts test/stream-activity-abort.test.ts test/stream-activity-pause-bound.test.ts
+[1/4] START test/provider-response-observation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact Response registration retains its actual owner through a typed conflict [0.62ms]
+(pass) controlled split and empty chunks preserve exact bytes and joined EOF scalars [8.03ms]
+(pass) cancelled waits for actual upstream cleanup before publishing physical settlement [0.66ms]
+(pass) aborted waits for actual upstream cleanup before publishing physical settlement [0.33ms]
+(pass) actual read error retains its producer error and error settlement [0.25ms]
+(pass) an already-aborted owner retains its exact abort reason and joins upstream cleanup [0.28ms]
+(pass) diagnostic callback failures preserve the actual response output and EOF [1.69ms]
+(pass) two concurrent real HTTP responses retain exact object ownership and actual SSE bytes [10.00ms]
+
+ 8 pass
+ 0 fail
+ 27 expect() calls
+Ran 8 tests across 1 file. [1298.00ms]
+[1/4] DONE test/provider-response-observation.test.ts exit=0 duration=1.48s
+[2/4] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error [10.10ms]
+(pass) concurrent real local HTTP audit entries report their exact reader bytes and EOF [10.15ms]
+103 |     const replacement = new Response(original.body, { status: original.status, headers: original.headers })
+104 |     expect({ absent: absent.status, error: await error.text(), direct: await direct.text(), replacement: await replacement.text() })
+105 |       .toEqual({ absent: 204, error: "actual HTTP error", direct: "direct", replacement: "replacement" })
+106 |     expect(accepted).toEqual(["absent", "error", "direct", "replacement"])
+107 |     expect(audit.requests.map((entry) => ({ status: entry.status, boundary: entry.response_reader.boundary, state: entry.response_reader.state })))
+108 |       .toEqual([
+             ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "boundary": "provider-source-reader",
+-     "state": "body_absent",
++     "state": "awaiting_binding",
+      "status": 204,
+    },
+    {
+      "boundary": "provider-source-reader",
+      "state": "http_error",
+      "status": 503,
+    },
+    {
+      "boundary": "provider-source-reader",
+      "state": "awaiting_binding",
+      "status": 200,
+    },
+    {
+      "boundary": "provider-source-reader",
+      "state": "awaiting_binding",
+      "status": 200,
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\real-provider-audit.test.ts:108:8)
+(fail) real local HTTP absent, error and directly consumed or replaced bodies retain explicit observation states [5.90ms]
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [5.47ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [9.47ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [6.05ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [8.75ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [4.98ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [4.86ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [23.82ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [0.62ms]
+(pass) copied OAuth access expires with an explicit authority error [0.16ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.42ms]
+(pass) the last authorized streaming request completes before the next is refused [0.41ms]
+(pass) the audit reports exact model and streaming contract errors [1.47ms]
+(pass) an exhausted cumulative balance returns the budget error [0.18ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.17ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [7.99ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.43ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.52ms]
+
+ 19 pass
+ 1 fail
+ 90 expect() calls
+Ran 20 tests across 1 file. [1267.00ms]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\real-provider-audit.test.ts
+[2/4] DONE test/real-provider-audit.test.ts exit=1 duration=1.42s
+[3/4] START test/stream-activity-abort.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) abortableIterable cancellation settlement > returns the exact abort outcome after requesting cleanup from a parked provider iterator [0.98ms]
+(pass) abortableIterable cancellation settlement > completes an ordinary consumer close after upstream cleanup completes [0.40ms]
+(pass) activity-tracked response stream settlement > returns the exact activity abort and requests cancellation of a parked response reader [59.33ms]
+(pass) activity-tracked response stream settlement > awaits ordinary consumer cancellation before reporting upstream response cleanup [1.21ms]
+(pass) activity-tracked response stream settlement > reports ordinary EOF and response read failure through the same settlement contract [0.57ms]
+
+ 5 pass
+ 0 fail
+ 13 expect() calls
+Ran 5 tests across 1 file. [1339.00ms]
+[3/4] DONE test/stream-activity-abort.test.ts exit=0 duration=1.49s
+[4/4] START test/stream-activity-pause-bound.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) stream activity pause bound > trips when one pause region never resumes [136.79ms]
+(pass) stream activity pause bound > resumed ownership restores the actual idle-abort contract [170.44ms]
+(pass) stream activity pause bound > nested owners share one handoff window instead of extending it [117.44ms]
+(pass) stream activity pause bound > durable progress renews the paused inactivity window for the exact Session [394.22ms]
+(pass) stream activity pause bound > rejects a non-positive pause bound [2.08ms]
+
+ 5 pass
+ 0 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [1.90s]
+[4/4] DONE test/stream-activity-pause-bound.test.ts exit=0 duration=2.08s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\real-provider-audit.test.ts
+error: script "test" exited with code 1

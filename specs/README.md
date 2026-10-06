@@ -2559,3 +2559,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Correct selection and dismissal ownership29/30](artifacts/2026-10-05-connection-workspace-authority/selection-events-plan.md): actual locale retention, reference Escape/explicit cancellation and lossless keyboard selection qualified;29 first newline retained, fresh30 full owned closure passes.
 
 - [Composer reference catalog feedback31/32/33](artifacts/2026-10-05-connection-workspace-authority/catalog-feedback-plan.md): actual error masking31 and clipping32 retained; source-qualified feedback, explicit retry and bounded detail scrolling qualified on33 with complete owned closure.
+
+- [Exact Provider response reader observation34](artifacts/2026-10-05-connection-workspace-authority/response-reader-observation-plan.md):38 positive tests and genuine streamed Sol Task/manual UI/whole native cleanup qualified; exact byte/chunk/EOF facts through existing reader, formal caller correlation unknown.

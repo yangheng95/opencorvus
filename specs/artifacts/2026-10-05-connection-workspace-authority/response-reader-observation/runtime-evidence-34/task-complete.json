@@ -1,0 +1,56 @@
+{
+  "pid": 27660,
+  "occurrence": "response-reader-34-4cab151e-7fb7-4a07-b923-9071a5092d6c",
+  "selected": {
+    "occurrence": "response-reader-34-4cab151e-7fb7-4a07-b923-9071a5092d6c",
+    "taskID": "tsk_g00VXHnjNi00KoYETnV4",
+    "projectID": "prj_hDuxNaqGR86DyEwtRQUX",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-34\\project",
+    "requestID": "e0612f23-8b38-42df-b605-108391d31113",
+    "requestSentAt": "2026-10-06T16:05:32.6513026Z",
+    "acceptedObservedAt": "2026-10-06T16:05:37.4097589Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXHnjNi00KoYETnV4",
+    "projectID": "prj_hDuxNaqGR86DyEwtRQUX",
+    "rootSessionID": "ses_-zUSiCGUmzzNson6Z5fb",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXHnjVq00jkM0cUr6a",
+    "openedAt": 1791302736794
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXHnjNi00KoYETnV4",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXHnjVq00jkM0cUr6a",
+    "openedAt": 1791302736794,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXHnn6E00VC6KaceqV",
+    "terminalAt": 1791302749248
+  },
+  "ownedPromptSessions": [],
+  "sessionIDs": [
+    "ses_-zUSiCGUmzzNson6Z5fb",
+    "ses_-zUSiCFbbzzPHoXqUlSZ"
+  ],
+  "artifactIDs": [
+    {
+      "id": "art_g0VXHnjVN00Zhl76sDB1",
+      "kind": "task_package_revision_binding"
+    },
+    {
+      "id": "art_g0VXHnjVe00cnyIamWer",
+      "kind": "task_execution_capsule_binding"
+    },
+    {
+      "id": "art_g0VXHnmce00ixDGr5ewC",
+      "kind": "task_completion_decision"
+    },
+    {
+      "id": "art_hL2atZw5ntqOvolCnH5U",
+      "kind": "task_root_ingress_disposition"
+    }
+  ],
+  "observedAt": "2026-10-06T16:05:51.850Z",
+  "requests": 4,
+  "qualification": "Exact durable Task completed and its physical prompt owners unwound; Root separately qualifies declared resource, real UI/native download and whole service chain"
+}

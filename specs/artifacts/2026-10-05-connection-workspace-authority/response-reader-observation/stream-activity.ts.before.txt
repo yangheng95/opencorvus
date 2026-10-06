@@ -96,14 +96,13 @@ export type ReadableStreamActivitySettlement = "eof" | "error" | "cancelled" | "
 export interface ActivityTrackedReadableStreamOptions<T> {
   source: ReadableStream<T>
   activity: StreamActivityMonitor
-  onChunk?: (chunk: T) => void
   onSettlement?: (settlement: ReadableStreamActivitySettlement) => void
 }
 
 export interface SettlementTrackedReadableStreamOptions<T> {
   source: ReadableStream<T>
   signal?: AbortSignal
-  onChunk?: (chunk: T) => void
+  onChunk?: () => void
   onSettlement: (settlement: ReadableStreamActivitySettlement) => void
 }
 
@@ -163,7 +162,7 @@ export function settlementTrackedReadableStream<T>(
           streamController.close()
           return
         }
-        options.onChunk?.(result.value)
+        options.onChunk?.()
         streamController.enqueue(result.value)
       } catch (error) {
         if (!beginSettlement()) return
@@ -195,10 +194,7 @@ export function activityTrackedReadableStream<T>(options: ActivityTrackedReadabl
   return settlementTrackedReadableStream({
     source: options.source,
     signal: options.activity.signal,
-    onChunk: (chunk) => {
-      options.activity.observe()
-      options.onChunk?.(chunk)
-    },
+    onChunk: () => options.activity.observe(),
     onSettlement: (settlement) => {
       options.activity.dispose()
       options.onSettlement?.(settlement)

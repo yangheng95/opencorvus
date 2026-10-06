@@ -1,20 +1,5 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
-import { registerProviderResponseObserver } from "../src/util/provider-response-observation"
-import type { ReadableStreamActivitySettlement } from "../src/util/stream-activity"
-
-export interface ProviderResponseReaderObservation {
-  boundary: "provider-source-reader"
-  state: "awaiting_response" | "awaiting_binding" | "reading" | "settled" | "body_absent" | "http_error" | "fetch_failed" | "binding_failed"
-  receivedAt?: number
-  boundAt?: number
-  chunkCount?: number
-  byteCount?: number
-  firstByteReadAt?: number | null
-  lastByteReadAt?: number | null
-  terminal?: { kind: ReadableStreamActivitySettlement; at: number }
-  observationError?: "callback_failed"
-}
 
 export class ProviderAuditProbeConfigurationError extends Error {
   override readonly name = "ProviderAuditProbeConfigurationError"
@@ -196,19 +181,11 @@ function projectToolDeclarations(parsed: Record<string, unknown>, redactor: Cred
 }
 
 export class RealProviderAudit implements Disposable {
-  readonly requests: Array<{ model: string; streaming: true; status?: number; input_evidence?: ProviderInputEvidence; tool_declarations?: ProviderToolDeclarations; response_reader: ProviderResponseReaderObservation }> = []
+  readonly requests: Array<{ model: string; streaming: true; status?: number; input_evidence?: ProviderInputEvidence; tool_declarations?: ProviderToolDeclarations }> = []
   readonly localOrigins = new Set<string>()
   readonly nativeFetch = globalThis.fetch
   exhausted = false
   readonly #wrapped: typeof fetch
-
-  #publish(entry?: (typeof this.requests)[number]) {
-    try {
-      this.onUpdate?.()
-    } catch {
-      if (entry) entry.response_reader.observationError = "callback_failed"
-    }
-  }
 
   constructor(readonly modelID: string, readonly maxRequests: number | null, readonly onUpdate?: () => void,
     readonly authority?: { copiedOAuthExpiresAt: number },
@@ -238,68 +215,19 @@ export class RealProviderAudit implements Disposable {
             assert.equal(parsed.stream, true, "Every real Provider request must stream")
             if (maxRequests !== null && this.requests.length >= maxRequests) {
               this.exhausted = true
-              this.#publish()
+              this.onUpdate?.()
               throw new Error("E2E_REQUEST_BUDGET_EXHAUSTED")
             }
             entry = { model: parsed.model, streaming: true,
-              response_reader: { boundary: "provider-source-reader", state: "awaiting_response" },
               ...(toolDeclarations ? { tool_declarations: projectToolDeclarations(parsed, toolDeclarations.redactor) } : {}),
               ...(observeInput ? { input_evidence: observeInput(body, parsed) } : {}) }
             this.requests.push(entry)
-            this.#publish(entry)
+            this.onUpdate?.()
           }
         }
       }
-      let response: Response
-      try {
-        response = await this.nativeFetch(input, init)
-      } catch (error) {
-        if (entry) {
-          entry.response_reader.state = "fetch_failed"
-          this.#publish(entry)
-        }
-        throw error
-      }
-      if (entry) {
-        entry.status = response.status
-        const observed = entry.response_reader
-        observed.receivedAt = Date.now()
-        observed.state = !response.body ? "body_absent" : !response.ok ? "http_error" : "awaiting_binding"
-        if (observed.state === "awaiting_binding") {
-          try {
-            registerProviderResponseObserver(response, {
-              onBind: () => {
-                if (observed.state !== "awaiting_binding") throw new Error("Response reader observation already has its owner")
-                observed.state = "reading"
-                observed.boundAt = Date.now()
-                observed.chunkCount = 0
-                observed.byteCount = 0
-                observed.firstByteReadAt = null
-                observed.lastByteReadAt = null
-              },
-              onChunk: (byteLength) => {
-                if (observed.state !== "reading") throw new Error("Response reader observation requires its bound reader")
-                observed.chunkCount! += 1
-                observed.byteCount! += byteLength
-                if (byteLength > 0) {
-                  const readAt = Date.now()
-                  observed.firstByteReadAt ??= readAt
-                  observed.lastByteReadAt = readAt
-                }
-              },
-              onSettlement: (kind) => {
-                observed.state = "settled"
-                observed.terminal = { kind, at: Date.now() }
-                this.#publish(entry)
-              },
-              onObservationError: () => { observed.observationError = "callback_failed" },
-            })
-          } catch {
-            observed.state = "binding_failed"
-          }
-        }
-        this.#publish(entry)
-      }
+      const response = await this.nativeFetch(input, init)
+      if (entry) { entry.status = response.status; this.onUpdate?.() }
       return response
     }, this.nativeFetch) as typeof fetch
     globalThis.fetch = this.#wrapped

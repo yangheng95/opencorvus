@@ -1,0 +1,22 @@
+{
+  "global": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-34\\runtime\\config\\opencorvus.jsonc",
+    "config": {
+      "model": "openai/gpt-6.1-sol",
+      "small_model": "openai/gpt-6.1-sol",
+      "prompt_profile": {
+        "active": "base"
+      }
+    }
+  },
+  "project": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-34\\project\\.opencorvus\\opencorvus.jsonc",
+    "config": {
+      "prompt_profile": {
+        "active": "task-resource-qa"
+      }
+    }
+  },
+  "inlineConfig": "absent",
+  "boundary": "Fresh canonical global Base and project-only QA configuration before first Instance; no environment profile switching"
+}

@@ -1,0 +1,91 @@
+{
+  "requests": [
+    {
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791302719334,
+        "boundAt": 1791302719336,
+        "chunkCount": 35,
+        "byteCount": 34529,
+        "firstByteReadAt": 1791302719338,
+        "lastByteReadAt": 1791302726182,
+        "terminal": {
+          "kind": "eof",
+          "at": 1791302726211
+        }
+      },
+      "status": 200,
+      "streaming": true,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791302720481,
+        "boundAt": 1791302720483,
+        "chunkCount": 35,
+        "byteCount": 486700,
+        "firstByteReadAt": 1791302720490,
+        "lastByteReadAt": 1791302722345,
+        "terminal": {
+          "kind": "eof",
+          "at": 1791302722347
+        }
+      },
+      "status": 200,
+      "streaming": true,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791302738480,
+        "boundAt": 1791302738482,
+        "chunkCount": 49,
+        "byteCount": 50829,
+        "firstByteReadAt": 1791302738484,
+        "lastByteReadAt": 1791302743350,
+        "terminal": {
+          "kind": "eof",
+          "at": 1791302743409
+        }
+      },
+      "status": 200,
+      "streaming": true,
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791302744446,
+        "boundAt": 1791302744448,
+        "chunkCount": 66,
+        "byteCount": 645348,
+        "firstByteReadAt": 1791302744450,
+        "lastByteReadAt": 1791302749260,
+        "terminal": {
+          "kind": "eof",
+          "at": 1791302749398
+        }
+      },
+      "status": 200,
+      "streaming": true,
+      "model": "gpt-6.1-sol"
+    }
+  ],
+  "actualRequestCount": 4,
+  "taskStatus": "completed",
+  "taskID": "tsk_g00VXHnjNi00KoYETnV4",
+  "wholeTaskClosureMs": 36069,
+  "epoch": 1,
+  "projectID": "prj_hDuxNaqGR86DyEwtRQUX",
+  "occurrence": "response-reader-34-4cab151e-7fb7-4a07-b923-9071a5092d6c",
+  "qualification": "Actual authorized streamed Sol in genuine Task, exact Response owner and source-reader scalars/EOF; formal actor/Session/stream request mapping remains unknown",
+  "finalSnapshot": "provider-27660-40623b70-5fe5-4449-a753-dcdace9d9ed5-13.json",
+  "taskElapsedMs": 12454,
+  "rootSessionID": "ses_-zUSiCGUmzzNson6Z5fb"
+}

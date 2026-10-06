@@ -179,6 +179,16 @@ release。abort 可立即终止下游读取，但只有上游 reader 的 cancel 
 上限。Provider 的业务重试、幂等、usage 和 Message 终态仍由原有 occurrence owner 管理；退避期间
 不持有物理槽，下一次真实 fetch 重新 admission。
 
+真实 Provider checker 的响应观测绑定实际 `Response` 对象，且只使用上述现有 body reader。
+`provider-response-observation.ts` 的瞬时 WeakMap 交接同一对象的诊断 owner；读取时仅记录实际
+chunk 数、byte 数及首尾非空读取时间，物理清理完成后记录 `eof/error/cancelled/aborted`。
+时间表示应用 source reader 收到字节，不表示网络到达，也不能替代持久化语义进度。观测不 tee、
+缓冲或解析响应体，不新增 reader、重试、超时或容量策略。无 body、HTTP 错误、fetch 失败和
+未绑定响应保留各自明确状态；重构或替换 `Response` 后不猜测关联，未观测不等于零字节 EOF。
+audit 的现有发布回调通过唯一保护边界执行，失败记录关联请求的 `callback_failed`，保留原响应、
+原错误和预算错误；每 chunk 只更新内存标量。当前 fetch 层没有完整的正式执行 agent、Session
+和 stream request 身份传递，不能据此宣称已关联物理请求与持久化语义事件。
+
 ## Token 与计费统计单一链路
 
 所有 bundled 与动态安装的语言模型 Provider 都必须通过 `llm/api.ts` 的共享流式

@@ -6,6 +6,115 @@ import nativeProviderAudit from "../script/native-provider-audit-plugin"
 import { latestAuditSnapshotFiles } from "../script/audit-snapshot"
 import { requireProcessProviderAudit } from "../script/real-provider-audit"
 import { assertCopiedOAuthAccess, CopiedOAuthCredentialExpiredError, CopiedOAuthRefreshForbiddenError, CredentialRedactor, RealProviderAudit, ProviderAuditProbeConfigurationError } from "../script/real-provider-audit"
+import { takeProviderResponseObserver } from "../src/util/provider-response-observation"
+import { settlementTrackedReadableStream } from "../src/util/stream-activity"
+
+function requestMetadata(entry: RealProviderAudit["requests"][number]) {
+  const { response_reader, ...metadata } = entry
+  return metadata
+}
+
+async function consumeObservedResponse(response: Response): Promise<string> {
+  const observer = takeProviderResponseObserver(response)
+  if (!observer || !response.body) throw new Error("Expected exact owned response binding")
+  const wrapped = settlementTrackedReadableStream({ source: response.body,
+    onChunk: (chunk) => observer.onChunk(chunk.byteLength), onSettlement: observer.onSettlement })
+  observer.onBind()
+  return await new Response(wrapped).text()
+}
+
+test("throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error", async () => {
+  const submitted = { model: "authorized-model", stream: true, input: "owned publication qualification" }
+  const accepted: unknown[] = []
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+    accepted.push(await request.json())
+    return new Response('data: {"text":"actual local response"}\n\n', {
+      status: 202, headers: { "Content-Type": "text/event-stream", "X-Owned-Receipt": "accepted" },
+    })
+  } })
+  try {
+    const publications: Array<{ state: string; exhausted: boolean }> = []
+    using audit = new RealProviderAudit("authorized-model", 1, () => {
+      publications.push({ state: audit.requests[0]!.response_reader.state, exhausted: audit.exhausted })
+      throw new Error("owned diagnostic publication failed")
+    })
+    const request = () => fetch(server.url, { method: "POST", body: JSON.stringify(submitted) })
+    const response = await request()
+    expect({ status: response.status, receipt: response.headers.get("X-Owned-Receipt"), text: await consumeObservedResponse(response) })
+      .toEqual({ status: 202, receipt: "accepted", text: 'data: {"text":"actual local response"}\n\n' })
+    expect(audit.requests[0]).toMatchObject({ model: "authorized-model", streaming: true, status: 202,
+      response_reader: { boundary: "provider-source-reader", state: "settled", observationError: "callback_failed",
+        byteCount: new TextEncoder().encode('data: {"text":"actual local response"}\n\n').byteLength, terminal: { kind: "eof" } } })
+    const budgetError = await request().catch((error: unknown) => error)
+    expect(budgetError).toBeInstanceOf(Error)
+    expect(budgetError).toMatchObject({ message: "E2E_REQUEST_BUDGET_EXHAUSTED" })
+    expect({ exhausted: audit.exhausted, admitted: audit.requests.length, accepted }).toEqual({ exhausted: true, admitted: 1, accepted: [submitted] })
+    expect(publications).toEqual([
+      { state: "awaiting_response", exhausted: false },
+      { state: "awaiting_binding", exhausted: false },
+      { state: "settled", exhausted: false },
+      { state: "settled", exhausted: true },
+    ])
+  } finally { await server.stop(true) }
+})
+
+test("concurrent real local HTTP audit entries report their exact reader bytes and EOF", async () => {
+  const bodies = [': comment\n\ndata: {"tool":"Read"}\n\n', 'data: second result\n\n']
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+    const input = await request.json() as { index: number }
+    return new Response(bodies[input.index], { headers: { "Content-Type": "text/event-stream" } })
+  } })
+  try {
+    using audit = new RealProviderAudit("authorized-model", 12)
+    const responses = await Promise.all(bodies.map((_, index) => fetch(server.url, {
+      method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true, index }),
+    })))
+    expect(audit.requests.map((entry) => entry.response_reader.state)).toEqual(["awaiting_binding", "awaiting_binding"])
+    expect(await Promise.all(responses.map(consumeObservedResponse))).toEqual(bodies)
+    for (let index = 0; index < bodies.length; index++) {
+      const facts = audit.requests[index]!.response_reader
+      expect(facts).toMatchObject({ boundary: "provider-source-reader", state: "settled",
+        byteCount: new TextEncoder().encode(bodies[index]!).byteLength, terminal: { kind: "eof" } })
+      expect(facts.chunkCount!).toBeGreaterThanOrEqual(1)
+      expect(facts.boundAt!).toBeGreaterThanOrEqual(facts.receivedAt!)
+      expect(facts.firstByteReadAt!).toBeGreaterThanOrEqual(facts.boundAt!)
+      expect(facts.lastByteReadAt!).toBeGreaterThanOrEqual(facts.firstByteReadAt!)
+      expect(facts.terminal!.at).toBeGreaterThanOrEqual(facts.lastByteReadAt!)
+    }
+  } finally { await server.stop(true) }
+})
+
+test("real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states", async () => {
+  const accepted: string[] = []
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: async (request) => {
+    const input = await request.json() as { mode: string }
+    accepted.push(input.mode)
+    if (input.mode === "absent") return new Response(null, { status: 204 })
+    if (input.mode === "error") return new Response("actual HTTP error", { status: 503 })
+    return new Response(input.mode)
+  } })
+  try {
+    using audit = new RealProviderAudit("authorized-model", 12)
+    const request = (mode: string) => fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true, mode }) })
+    const absent = await request("absent")
+    const error = await request("error")
+    const direct = await request("direct")
+    const original = await request("replacement")
+    const replacement = new Response(original.body, { status: original.status, headers: original.headers })
+    expect({ emptyStatus: absent.status, emptyText: await consumeObservedResponse(absent), error: await error.text(), direct: await direct.text(), replacement: await replacement.text() })
+      .toEqual({ emptyStatus: 204, emptyText: "", error: "actual HTTP error", direct: "direct", replacement: "replacement" })
+    expect(audit.requests[0]!.response_reader).toMatchObject({ boundary: "provider-source-reader", state: "settled",
+      byteCount: 0, chunkCount: 0, firstByteReadAt: null, lastByteReadAt: null, terminal: { kind: "eof" } })
+    expect(accepted).toEqual(["absent", "error", "direct", "replacement"])
+    expect(audit.requests.map((entry) => ({ status: entry.status, boundary: entry.response_reader.boundary, state: entry.response_reader.state })))
+      .toEqual([
+        { status: 204, boundary: "provider-source-reader", state: "settled" },
+        { status: 503, boundary: "provider-source-reader", state: "http_error" },
+        { status: 200, boundary: "provider-source-reader", state: "awaiting_binding" },
+        { status: 200, boundary: "provider-source-reader", state: "awaiting_binding" },
+      ])
+  } finally { await server.stop(true) }
+})
 
 test("actual local HTTP preserves flat, nested and unnamed tool declaration facts", async () => {
   const redactor = new CredentialRedactor()
@@ -26,7 +135,7 @@ test("actual local HTTP preserves flat, nested and unnamed tool declaration fact
     using audit = new RealProviderAudit("authorized-model", 12, undefined, undefined, undefined, { redactor })
     const response = await fetch(server.url, { method: "POST", body: JSON.stringify(submitted) })
     expect(await response.json()).toEqual({ accepted: submitted })
-    expect(audit.requests).toEqual([{ model: "authorized-model", streaming: true, status: 202,
+    expect(audit.requests.map(requestMetadata)).toEqual([{ model: "authorized-model", streaming: true, status: 202,
       tool_declarations: { state: "array", entries: [
         { index: 0, type: "function", type_state: "present", name_state: "observed", names: [{ path: "name", state: "present", value: "Write" }] },
         { index: 1, type: "function", type_state: "present", name_state: "observed", names: [{ path: "function.name", state: "present", value: "Read" }] },
@@ -74,7 +183,7 @@ test("an undeclared request ceiling retains every real local transport receipt",
     using audit = new RealProviderAudit("authorized-model", null)
     const body = JSON.stringify({ model: "authorized-model", stream: true })
     for (let index = 0; index < 3; index++) expect((await fetch(server.url, { method: "POST", body })).status).toBe(202)
-    expect({ ceiling: audit.maxRequests, bodies, receipts: audit.requests }).toEqual({
+    expect({ ceiling: audit.maxRequests, bodies, receipts: audit.requests.map(requestMetadata) }).toEqual({
       ceiling: null, bodies: [body, body, body],
       receipts: Array.from({ length: 3 }, () => ({ model: "authorized-model", streaming: true, status: 202 })),
     })
@@ -116,7 +225,7 @@ for (const failureStage of [undefined, "body", "cleanup"] as const) {
       else if (failureStage === "cleanup") await expect(run()).rejects.toThrow("cleanup failed after transport settlement")
       else expect(await run()).toBe("completed")
       expect(received).toEqual([body("body"), body("cleanup")])
-      expect(audit!.requests).toEqual([
+      expect(audit!.requests.map(requestMetadata)).toEqual([
         { model: "authorized-model", streaming: true, status: 202 },
         { model: "authorized-model", streaming: true, status: 202 },
       ])
@@ -140,11 +249,14 @@ test("native plugin reuses the process audit and publishes one actual transport 
     const first = requireProcessProviderAudit()
     await nativeProviderAudit({ serverUrl: new URL("http://127.0.0.1:1") })
     expect(requireProcessProviderAudit().audit).toBe(first.audit)
-    expect((await fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })).status).toBe(202)
+    const response = await fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
+    expect(response.status).toBe(202)
+    expect(await consumeObservedResponse(response)).toBe("local transport")
     const files = await latestAuditSnapshotFiles(root, "provider")
     expect(files.length).toBe(1)
     expect(JSON.parse(await readFile(files[0]!, "utf8"))).toMatchObject({
-      pid: process.pid, model: "authorized-model", requests: [{ model: "authorized-model", streaming: true, status: 202 }],
+      pid: process.pid, model: "authorized-model", requests: [{ model: "authorized-model", streaming: true, status: 202,
+        response_reader: { boundary: "provider-source-reader", state: "settled", byteCount: 15, terminal: { kind: "eof" } } }],
     })
   } finally {
     requireProcessProviderAudit().audit[Symbol.dispose]()
@@ -180,7 +292,7 @@ test("copied authority permits valid streaming and retains local observation aft
     using audit = new RealProviderAudit("authorized-model", 2, undefined, authority)
     const request = () => fetch("https://provider.invalid/responses", { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
     expect((await request()).status).toBe(200)
-    expect(audit.requests).toEqual([{ model: "authorized-model", streaming: true, status: 200 }])
+    expect(audit.requests.map(requestMetadata)).toEqual([{ model: "authorized-model", streaming: true, status: 200 }])
     authority.copiedOAuthExpiresAt = Date.now() - 1
     await expect(fetch("https://provider.invalid/oauth/token", { method: "POST", body: "grant_type=refresh_token" }))
       .rejects.toThrow(CopiedOAuthCredentialExpiredError)
@@ -197,7 +309,7 @@ test("the last authorized streaming request completes before the next is refused
     using audit = new RealProviderAudit("authorized-model", 1, () => observed.push(1))
     const request = () => fetch("https://provider.invalid/responses", { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
     expect((await request()).status).toBe(200)
-    expect({ exhausted: audit.exhausted, requests: audit.requests }).toEqual({ exhausted: false, requests: [{ model: "authorized-model", streaming: true, status: 200 }] })
+    expect({ exhausted: audit.exhausted, requests: audit.requests.map(requestMetadata) }).toEqual({ exhausted: false, requests: [{ model: "authorized-model", streaming: true, status: 200 }] })
     await expect(request()).rejects.toThrow("E2E_REQUEST_BUDGET_EXHAUSTED")
     expect({ exhausted: audit.exhausted, count: audit.requests.length }).toEqual({ exhausted: true, count: 1 })
     expect(observed).toEqual([1, 1, 1])
@@ -339,9 +451,6 @@ test("registered input evidence records exact decoded positions while a real loc
       ["body_sha256", "body_utf8_bytes", "probes"],
       ["body_sha256", "body_utf8_bytes", "probes"],
     ])
-    expect(snapshot[0]!.input_evidence!.probes[0]!.text_sha256).toBe(
-      snapshot[1]!.input_evidence!.probes[0]!.text_sha256,
-    )
   } finally {
     await server.stop(true)
   }

@@ -32,9 +32,7 @@ import {
   activityTrackedReadableStream,
   settlementTrackedReadableStream,
   withStreamActivity,
-  type ReadableStreamActivitySettlement,
 } from "@/util/stream-activity"
-import { takeProviderResponseObserver } from "@/util/provider-response-observation"
 import { DurableExecutionCapacity } from "@/runtime/durable-execution-capacity"
 import { globalExecutionCapacity } from "@/runtime/execution-capacity"
 
@@ -1034,25 +1032,13 @@ export namespace Provider {
             })
           }
 
-          const responseObserver = response.body ? takeProviderResponseObserver(response) : undefined
-          const observeChunk = responseObserver ? (chunk: Uint8Array) => responseObserver.onChunk(chunk.byteLength) : undefined
-          const settleResponse = (settlement: ReadableStreamActivitySettlement) => {
-            try {
-              responseObserver?.onSettlement(settlement)
-            } finally {
-              releaseCapacity()
-            }
-          }
-
           // For streaming responses, wrap the body so each chunk resets the timer.
           if (fetchActivity && response.body) {
             const wrapped = activityTrackedReadableStream({
               source: response.body,
               activity: fetchActivity,
-              onChunk: observeChunk,
-              onSettlement: settleResponse,
+              onSettlement: releaseCapacity,
             })
-            responseObserver?.onBind()
 
             // Return a new Response with the wrapped body, preserving headers/status
             return new Response(wrapped, {
@@ -1066,10 +1052,8 @@ export namespace Provider {
             const wrapped = settlementTrackedReadableStream({
               source: response.body,
               signal: opts.signal ?? undefined,
-              onChunk: observeChunk,
-              onSettlement: settleResponse,
+              onSettlement: releaseCapacity,
             })
-            responseObserver?.onBind()
             return new Response(wrapped, {
               status: response.status,
               statusText: response.statusText,

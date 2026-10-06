@@ -1,0 +1,35 @@
+{
+  "targetState": "dead_or_reused",
+  "observedAtUtc": "2026-10-06T16:07:44.5780460Z",
+  "sourcePairMetadata": [
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "modifiedAtUtc": "2026-10-04T15:48:55.8607343Z",
+      "bytes": 2147
+    },
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "modifiedAtUtc": "2026-10-04T15:48:10.1379969Z",
+      "bytes": 9155406
+    }
+  ],
+  "boundary": "Root independent exact native occurrence and port/pair metadata inspection; no credential contents",
+  "occurrence": "response-reader-34-4cab151e-7fb7-4a07-b923-9071a5092d6c",
+  "listeners": [],
+  "page": {
+    "browser": "9",
+    "tab": "15",
+    "closed": true
+  },
+  "hostState": "dead_or_reused",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-34\\runtime\\data\\auth.json",
+      "present": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-34\\runtime\\data\\models.json",
+      "present": false
+    }
+  ]
+}

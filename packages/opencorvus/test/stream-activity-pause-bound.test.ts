@@ -31,14 +31,18 @@ describe("stream activity pause bound", () => {
     monitor.dispose()
   })
 
-  test("a resumed pause never trips and restores idle monitoring", async () => {
-    const monitor = withStreamActivity({ idleMs: 10_000, maxPauseMs: 60, label: "pause-resumed" })
+  test("resumed ownership restores the actual idle-abort contract", async () => {
+    const monitor = withStreamActivity({ idleMs: 60, maxPauseMs: 500, label: "pause-resumed" })
     monitor.pause()
     await settle(20)
     monitor.resume()
-    expect(monitor.paused()).toBe(false)
+    expect(monitor.diagnostics()).toMatchObject({ paused: false, pauseDepth: 0, timedOut: false })
     await settle(120)
-    expect(monitor.timedOut()).toBe(false)
+    expect(monitor.diagnostics()).toMatchObject({ paused: false, pauseDepth: 0, timedOut: true })
+    expect({ name: monitor.signal.reason.name, message: monitor.signal.reason.message }).toEqual({
+      name: "AbortError",
+      message: "stream idle > 60ms (pause-resumed)",
+    })
     monitor.dispose()
   })
 
@@ -76,14 +80,6 @@ describe("stream activity pause bound", () => {
       active.dispose()
       inactive.dispose()
     }
-  })
-
-  test("an unbounded monitor keeps the previous forever-pause behaviour", async () => {
-    const monitor = withStreamActivity({ idleMs: 30, label: "pause-unbounded" })
-    monitor.pause()
-    await settle(120)
-    expect(monitor.timedOut()).toBe(false)
-    monitor.dispose()
   })
 
   test("rejects a non-positive pause bound", () => {
