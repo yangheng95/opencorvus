@@ -1,0 +1,47 @@
+{
+  "scope": "Native requests after exact54 Target birth; truthful pointer and keyboard producer reads",
+  "requests": [
+    {
+      "status": 200,
+      "method": "GET",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "requestID": "94320d0e-1bd9-48bd-b607-48741ce975d8",
+      "time": "2026-10-06T23:41:55.842Z"
+    },
+    {
+      "status": 400,
+      "method": "GET",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "requestID": "3fa3b6ae-c903-4b3e-b9eb-24181f82c950",
+      "time": "2026-10-06T23:41:55.899Z"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "requestID": "83b4dc1a-d00d-406b-a621-1db85e5e2ccc",
+      "time": "2026-10-06T23:41:56.007Z"
+    },
+    {
+      "status": 400,
+      "method": "GET",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "requestID": "e1e6b2cc-9709-46c6-8a4f-fad210dfdaf6",
+      "time": "2026-10-06T23:41:56.035Z"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation/session/ses_hGzJHWeYBSh6xDoVwkSy",
+      "requestID": "4b05fdb4-d58f-4c14-95ee-455147f1d700",
+      "time": "2026-10-06T23:43:20.048Z"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation/session/ses_hGzJHWeYBSh6xDoVwkSy",
+      "requestID": "952e35f5-e19b-4d42-9a9f-4924a49f5b8f",
+      "time": "2026-10-06T23:45:50.968Z"
+    }
+  ]
+}

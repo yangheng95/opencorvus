@@ -34,6 +34,12 @@ Snapshot/live ordering, durable terminal/error recovery and abort cleanup retain
 their existing owners. Session config and execution routes keep their runtime
 validation contract.
 
+Each subagent progress card exposes one visible header Open button with the
+same real Session callback used by article/header clicks. Pointer and keyboard
+activation share that control; nested Handoff disclosure and content actions
+retain their own propagation guards. The existing main subagent selection and
+Dock tab remain the sole navigation owners.
+
 ## File comparison evidence
 
 One current diff service and Tool reducer project recorded comparisons. FileChange

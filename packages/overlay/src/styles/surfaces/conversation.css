@@ -3322,18 +3322,7 @@
 }
 
 .subagent-progress-card__activation.oc-button {
-  position: absolute;
-  inset: 0;
-  width: auto;
-  min-width: 0;
-  height: auto;
-  min-height: auto;
-  padding: 0;
-  border: 0;
-  border-radius: inherit;
-  background: transparent;
-  opacity: var(--ui-opacity-hidden);
-  pointer-events: none;
+  flex-shrink: 0;
 }
 
 .subagent-progress-card__footer {

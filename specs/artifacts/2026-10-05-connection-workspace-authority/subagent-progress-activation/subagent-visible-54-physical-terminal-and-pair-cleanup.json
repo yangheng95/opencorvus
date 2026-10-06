@@ -1,0 +1,64 @@
+{
+  "listeners": null,
+  "observedAtUtc": "2026-10-06T23:51:55.0354668Z",
+  "nativeSettlement": {
+    "occurrence": "subagent-visible-54-103629d9-99c9-46cc-925b-08d97d64a33a",
+    "outcome": "settled",
+    "host": {
+      "pid": 75968,
+      "processInstanceID": "win32:639269268965523284",
+      "occurrenceID": "16dbb0ab-ab58-4593-a4fa-aa7b9a460827"
+    },
+    "target": {
+      "pid": 65424,
+      "processInstanceID": "win32:639269268973232063",
+      "occurrenceID": "2fa674a9-d202-4643-821c-1792af322d1c"
+    },
+    "observedAtUtc": "2026-10-06T23:51:53.378Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-visible-activation-54\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 2001983,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-visible-activation-54\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ],
+  "occurrence": "subagent-visible-54-103629d9-99c9-46cc-925b-08d97d64a33a",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 65424,
+        "processInstanceID": "win32:639269268973232063",
+        "occurrenceID": "2fa674a9-d202-4643-821c-1792af322d1c"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 75968,
+        "processInstanceID": "win32:639269268965523284",
+        "occurrenceID": "16dbb0ab-ab58-4593-a4fa-aa7b9a460827"
+      }
+    }
+  ],
+  "pairedCleanupComplete": true
+}

@@ -132,23 +132,27 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
       style={{ "--card-stage": stageAccent(role()) }}
       onClick={open}
     >
-      <Button
-        type="button"
-        class="subagent-progress-card__activation"
-        variant="ghost"
-        size="mini"
-        tone="neutral"
-        aria-label={t("subagent.progress.open", { agent: record().agentID })}
-        onClick={(event) => {
-          event.stopPropagation()
-          open()
-        }}
-      />
       <header class="subagent-progress-card__header">
         <span class="subagent-progress-card__identity">
           <Avatar role={role()} />
           <strong>{record().agentID}</strong>
         </span>
+        <Button
+          type="button"
+          class="subagent-progress-card__activation"
+          variant="ghost"
+          size="mini"
+          tone="neutral"
+          aria-label={t("subagent.progress.open", { agent: record().agentID })}
+          title={t("subagent.progress.open", { agent: record().agentID })}
+          onClick={(event) => {
+            event.stopPropagation()
+            open()
+          }}
+        >
+          {t("common.open")}
+          <Icon name="arrow-up-right" size="compact" />
+        </Button>
       </header>
       <div
         class="subagent-progress-card__events"

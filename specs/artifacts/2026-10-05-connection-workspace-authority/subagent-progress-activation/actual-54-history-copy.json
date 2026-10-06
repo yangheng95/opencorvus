@@ -1,0 +1,28 @@
+{
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/subagent-visible-activation-54",
+  "port": 18017,
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "credentialStaging": "None; original50 pair absent; no old Task rearm",
+  "observedAtUtc": "2026-10-06T23:39:42.9971489Z"
+}

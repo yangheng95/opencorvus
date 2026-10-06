@@ -1,0 +1,34 @@
+{
+  "boundary": "Real progress-card manual visual/interaction qualification; no Task rearm/model submission",
+  "observedAtUtc": "2026-10-06T23:54:46.0919949Z",
+  "listeners": [],
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 75968,
+        "processInstanceID": "win32:639269268965523284",
+        "occurrenceID": "16dbb0ab-ab58-4593-a4fa-aa7b9a460827"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 65424,
+        "processInstanceID": "win32:639269268973232063",
+        "occurrenceID": "2fa674a9-d202-4643-821c-1792af322d1c"
+      }
+    }
+  ],
+  "page": "Root-owned IAB9 page32 closed before sole public shutdown",
+  "authorityPair": [
+    {
+      "present": false,
+      "file": "auth.json"
+    },
+    {
+      "present": false,
+      "file": "models.json"
+    }
+  ]
+}

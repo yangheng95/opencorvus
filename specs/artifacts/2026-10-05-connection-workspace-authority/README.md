@@ -243,7 +243,7 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [Explorer initial loading48 and genuine50](explorer-initial-loading-plan.md): initial Loading→list visuals passed; genuine50 full checks/formal Task/resource/snapshot/native notes download passed, whole886676ms;44 generation cause and pointer candidate51 remain open.
 
-- [Subagent progress activation51](subagent-progress-activation-plan.md): pointer outcome and hidden activation geometry reviewed; real keyboard/header comparison pending.
+- [Subagent progress activation51](subagent-progress-activation-plan.md): visible header action qualified by actual54 pointer and natural Tab/Enter; nested collapse focus55 remains under investigation; owned scopes closed.
 
 - [History and Composer config isolation52](history-composer-config-isolation-plan.md): single passive-read owner;9 local service tests/43 assertions and real Task/Session history visuals passed; ordinary Session stream400 retained as shared audit53, all52 scopes closed.
 
