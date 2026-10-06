@@ -1,0 +1,16 @@
+bun script/run-tests.ts test/orchestrator-initial-task-render.test.ts
+[1/1] START test/orchestrator-initial-task-render.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a fresh typed Task ingress installs runtime authority before creator and control Messages (normal) [5327.76ms]
+(pass) a fresh typed Task ingress installs runtime authority before creator and control Messages (helper-and-primary) [4238.31ms]
+(pass) creator body preserves exact empty Task request [1.45ms]
+(pass) creator body preserves exact Unicode Task request [1.06ms]
+(pass) creator body preserves exact whitespace Task request [0.86ms]
+
+ 5 pass
+ 0 fail
+ 23 expect() calls
+Ran 5 tests across 1 file. [12.30s]
+[1/1] DONE test/orchestrator-initial-task-render.test.ts exit=0 duration=12.51s

@@ -548,10 +548,6 @@ export namespace Orchestrator {
         appendCreatorMessage,
         schedulerCapability.builtInToolIDs.includes("read"),
       )
-      const creatorInventoryText = materializeCreatorBeforeTypedControl
-        ? renderTaskAttachmentInventory(allAttachments, true, schedulerCapability.builtInToolIDs.includes("read"))
-        : ""
-      const enrichedUserText = appendCreatorMessage ? userText + inventoryText : ""
       const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
       const hasCurrentWakeIngress = isCurrentWakeIngress(event)
       const currentControlMessage =
@@ -585,9 +581,9 @@ export namespace Orchestrator {
         }))
         if (!(appendCreatorMessage && !hasCurrentWakeIngress)) {
           projection.push({ label: "runtime:orchestrator-current-ingress", text: currentIngressSystemNotice })
-          if (inventoryText.trim()) {
-            projection.push({ label: "runtime:orchestrator-attachment-inventory", text: inventoryText })
-          }
+        }
+        if (inventoryText.trim()) {
+          projection.push({ label: "runtime:orchestrator-attachment-inventory", text: inventoryText })
         }
         projection.push({
           label: "runtime:orchestrator-current-task-execution",
@@ -607,11 +603,11 @@ export namespace Orchestrator {
       // Build PromptInput.parts. Text only; attachment media is referenced by
       // URL/index in the prompt inventory.
       const parts: Array<{ type: "text"; text: string }> = appendCreatorMessage
-        ? [{ type: "text", text: enrichedUserText }]
+        ? [{ type: "text", text: userText }]
         : []
       const partsWithIds = parts.map((p) => ({ ...p, id: Identifier.ascending("part") }))
       const creatorPartsWithIds = [
-        { type: "text" as const, text: orchestratorUserText(task) + creatorInventoryText },
+        { type: "text" as const, text: orchestratorUserText(task) },
       ].map((part) => ({ ...part, id: Identifier.ascending("part") }))
 
       log.info("orchestrator starting", {
@@ -1197,7 +1193,7 @@ function assertSessionCreatorMessageAbsent(sessionID: string): void {
 }
 
 export function orchestratorUserText(task: Pick<TaskRow, "request"> & Partial<Pick<TaskRow, "id">>): string {
-  return renderUserRequestSection({ heading: "# User Request", request: task.request, taskID: task.id })
+  return task.request
 }
 
 export function renderTaskRuntimeDirectory(projectDirectory: string): string {
@@ -1310,7 +1306,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
       "This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.",
     )
     lines.push(
-      "On the initial Task wake, the creator request is already the normal `# User Request` in this Turn. It has no task-root message identity. Read that real participant message directly.",
+      "On the initial Task wake, the creator's original request is already in its real participant Message in this Turn. It has no task-root message identity. Read that Message directly.",
     )
   } else {
     lines.push(
@@ -1726,6 +1722,8 @@ async function buildSystemParts(
     }),
   )
   const ctx: string[] = []
+  ctx.push(renderUserRequestSection({ heading: "## Task Request Provenance", request: task.request, taskID: task.id }))
+  ctx.push("")
   ctx.push(renderTaskRuntimeDirectory(projectDirectory))
   ctx.push("")
   if (event?.rootMessage) {

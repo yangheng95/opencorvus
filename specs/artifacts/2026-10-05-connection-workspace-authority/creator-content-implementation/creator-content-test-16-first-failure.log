@@ -1,0 +1,291 @@
+bun script/run-tests.ts test/orchestrator-initial-task-render.test.ts
+[1/1] START test/orchestrator-initial-task-render.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+313 |             parentID: item.info.role === "assistant" ? item.info.parentID : undefined,
+314 |             role: item.info.role,
+315 |             author: item.info.author,
+316 |             parts: item.parts.length,
+317 |           })),
+318 |         }).toEqual({
+                 ^
+error: expect(received).toEqual(expected)
+
+@@ -1,9 +1,9 @@
+  {
+    "assistantMessageIDs": [
+-     Any<String>,
+-     Any<String>,
++     "msg_hjOgBiW6tlvnqDqFIXff",
++     "msg_hjOgBiW6tlvnqDqFIXff",
+    ],
+    "decisionRepairPrompts": [
+      false,
+      true,
+    ],
+@@ -22,25 +22,28 @@
+        "user",
+        "orchestrator",
+      ],
+    },
+    "persisted": [
+-     ObjectContaining {
++     {
+        "author": "user",
++       "id": "msg_g0VXFk0IH00f9YNvCXN7",
++       "parentID": undefined,
+        "parts": 1,
+        "role": "user",
+      },
+-     ObjectContaining {
++     {
+        "author": "orchestrator",
++       "id": "msg_task-root-control_art_h7rfIR9mGXJyOPiejZK7_art_h7rfIR9mGXJyOPiejZK7",
++       "parentID": undefined,
+        "parts": 1,
+        "role": "user",
+      },
+-     ObjectContaining {
++     {
+        "author": "orchestrator",
++       "id": "msg_hjOgBiW6tlvnqDqFIXff",
++       "parentID": "msg_task-root-control_art_h7rfIR9mGXJyOPiejZK7_art_h7rfIR9mGXJyOPiejZK7",
+        "parts": 4,
+        "role": "assistant",
+      },
+    ],
+    "promptSystemAudits": [
+@@ -72,65 +75,77 @@
+    "providerSteps": 2,
+    "providerToolRequests": [
+      {
+        "toolChoice": "auto",
+        "toolIDs": [
++         "apply_patch",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
++         "bash",
++         "browser_preview",
++         "browser_preview_capture",
+          "cancel_subagent",
+          "capability_search",
+          "dispatch_agent",
++         "edit",
+          "evolve_expert_squad_from_feedback",
++         "external_code_search",
++         "glob",
+          "manage_task",
+          "no_action",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "read_context",
+          "read_task_message",
+          "respond_agent_coordination",
+          "scheduler_message",
++         "search_code",
++         "todo",
+          "wait",
++         "webfetch",
++         "websearch",
++         "write",
+        ],
+      },
+      {
+        "toolChoice": "auto",
+        "toolIDs": [
++         "apply_patch",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
++         "bash",
++         "browser_preview",
++         "browser_preview_capture",
+          "cancel_subagent",
+          "capability_search",
+          "dispatch_agent",
++         "edit",
+          "evolve_expert_squad_from_feedback",
++         "external_code_search",
++         "glob",
+          "manage_task",
+          "no_action",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "read_context",
+          "read_task_message",
+          "respond_agent_coordination",
+          "scheduler_message",
++         "search_code",
++         "todo",
+          "wait",
++         "webfetch",
++         "websearch",
++         "write",
+        ],
+      },
+    ],
+    "retainAssistantOnToolContinuation": [
+      true,
+
+- Expected  - 5
++ Received  + 35
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts:318:12)
+(fail) a fresh typed Task ingress installs runtime authority before creator and control Messages (normal) [4766.54ms]
+313 |             parentID: item.info.role === "assistant" ? item.info.parentID : undefined,
+314 |             role: item.info.role,
+315 |             author: item.info.author,
+316 |             parts: item.parts.length,
+317 |           })),
+318 |         }).toEqual({
+                 ^
+error: expect(received).toEqual(expected)
+
+@@ -1,9 +1,9 @@
+  {
+    "assistantMessageIDs": [
+-     Any<String>,
+-     Any<String>,
++     "msg_ha0Neu0QAyXQU7yrzg4E",
++     "msg_ha0Neu0QAyXQU7yrzg4E",
+    ],
+    "decisionRepairPrompts": [
+      false,
+      true,
+    ],
+@@ -22,25 +22,28 @@
+        "user",
+        "orchestrator",
+      ],
+    },
+    "persisted": [
+-     ObjectContaining {
++     {
+        "author": "user",
++       "id": "msg_g0VXFk1RN001LymR7j9E",
++       "parentID": undefined,
+        "parts": 1,
+        "role": "user",
+      },
+-     ObjectContaining {
++     {
+        "author": "orchestrator",
++       "id": "msg_task-root-control_art_hPLTWW0yX3nD0J3FUgDk_art_hPLTWW0yX3nD0J3FUgDk",
++       "parentID": undefined,
+        "parts": 1,
+        "role": "user",
+      },
+-     ObjectContaining {
++     {
+        "author": "orchestrator",
++       "id": "msg_ha0Neu0QAyXQU7yrzg4E",
++       "parentID": "msg_task-root-control_art_hPLTWW0yX3nD0J3FUgDk_art_hPLTWW0yX3nD0J3FUgDk",
+        "parts": 4,
+        "role": "assistant",
+      },
+    ],
+    "promptSystemAudits": [
+@@ -72,65 +75,77 @@
+    "providerSteps": 2,
+    "providerToolRequests": [
+      {
+        "toolChoice": "auto",
+        "toolIDs": [
++         "apply_patch",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
++         "bash",
++         "browser_preview",
++         "browser_preview_capture",
+          "cancel_subagent",
+          "capability_search",
+          "dispatch_agent",
++         "edit",
+          "evolve_expert_squad_from_feedback",
++         "external_code_search",
++         "glob",
+          "manage_task",
+          "no_action",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "read_context",
+          "read_task_message",
+          "respond_agent_coordination",
+          "scheduler_message",
++         "search_code",
++         "todo",
+          "wait",
++         "webfetch",
++         "websearch",
++         "write",
+        ],
+      },
+      {
+        "toolChoice": "auto",
+        "toolIDs": [
++         "apply_patch",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
++         "bash",
++         "browser_preview",
++         "browser_preview_capture",
+          "cancel_subagent",
+          "capability_search",
+          "dispatch_agent",
++         "edit",
+          "evolve_expert_squad_from_feedback",
++         "external_code_search",
++         "glob",
+          "manage_task",
+          "no_action",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "read_context",
+          "read_task_message",
+          "respond_agent_coordination",
+          "scheduler_message",
++         "search_code",
++         "todo",
+          "wait",
++         "webfetch",
++         "websearch",
++         "write",
+        ],
+      },
+    ],
+    "retainAssistantOnToolContinuation": [
+      true,
+
+- Expected  - 5
++ Received  + 35
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts:318:12)
+(fail) a fresh typed Task ingress installs runtime authority before creator and control Messages (helper-and-primary) [4031.46ms]
+(pass) creator body preserves exact empty Task request [1.27ms]
+(pass) creator body preserves exact Unicode Task request [1.03ms]
+(pass) creator body preserves exact whitespace Task request [0.90ms]
+
+ 3 pass
+ 2 fail
+ 11 expect() calls
+Ran 5 tests across 1 file. [11.09s]
+[1/1] DONE test/orchestrator-initial-task-render.test.ts exit=1 duration=11.31s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts

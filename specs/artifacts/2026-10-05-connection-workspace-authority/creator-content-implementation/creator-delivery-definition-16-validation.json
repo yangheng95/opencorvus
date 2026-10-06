@@ -1,0 +1,19 @@
+{
+  "qualification": "SDK render only, no Instance/Provider/install",
+  "id": "task-resource-qa",
+  "namespace": "qa",
+  "version": "2026.10.06.2",
+  "outputs": [
+    "README.md",
+    "agents/mission/system.md",
+    "agents/orchestrator/system.md",
+    "agents/producer/system.md",
+    "agents/verifier/system.md",
+    "expert-squad.jsonc",
+    "selector.md"
+  ],
+  "changedFields": [
+    "manifest.version",
+    "files.agents/producer/system.md"
+  ]
+}

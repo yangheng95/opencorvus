@@ -81,3 +81,7 @@ Panel actor14 now has actual qualified backend0/2→2/27 output/error evidence, 
 Independent explorer and completed resource delivery15 is bound by the authority artifact Recall after normally pushed747f; genuine full-chain acceptance remains pending.
 
 Actual15b qualifies genuine projected alias query, while formal delivery fails after idle/retry and20 limit. Both owned runs close completely; withdrawn preflight/managed-build assumptions and next human-content lead remain explicit in the Recall.
+
+The authority artifact [creator-content Recall](../../artifacts/2026-10-05-connection-workspace-authority/creator-content-implementation-plan.md) admits the raw creator repair, existing system instruction owner and separately defined actual16 acceptance.
+
+Actual16 qualifies new raw creator content, genuine streamed Sol and source/local contracts; its formal delivery remains failed after same-batch readonly cache EPERM and later48 bound. Full owned cleanup retains history. Shared materialization repair is the next autonomous scope.

@@ -1,0 +1,59 @@
+bun script/run-tests.ts test/orchestrator-initial-task-render.test.ts
+[1/1] START test/orchestrator-initial-task-render.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+379 |         const [creator, control, assistant] = messages
+380 |         expect({ author: creator!.info.author, role: creator!.info.role,
+381 |           text: creator!.parts.filter((part) => part.type === "text").map((part) => part.text) }).toEqual({
+382 |           author: "user", role: "user", text: [originalRequest],
+383 |         })
+384 |         expect(stableRequestContexts).toEqual([true, true])
+                                            ^
+error: expect(received).toEqual(expected)
+
+  [
+-   true,
+-   true,
++   false,
++   false,
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts:384:39)
+(fail) a fresh typed Task ingress installs runtime authority before creator and control Messages (normal) [4934.60ms]
+379 |         const [creator, control, assistant] = messages
+380 |         expect({ author: creator!.info.author, role: creator!.info.role,
+381 |           text: creator!.parts.filter((part) => part.type === "text").map((part) => part.text) }).toEqual({
+382 |           author: "user", role: "user", text: [originalRequest],
+383 |         })
+384 |         expect(stableRequestContexts).toEqual([true, true])
+                                            ^
+error: expect(received).toEqual(expected)
+
+  [
+-   true,
+-   true,
++   false,
++   false,
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts:384:39)
+(fail) a fresh typed Task ingress installs runtime authority before creator and control Messages (helper-and-primary) [3899.58ms]
+(pass) creator body preserves exact empty Task request [1.34ms]
+(pass) creator body preserves exact Unicode Task request [1.22ms]
+(pass) creator body preserves exact whitespace Task request [1.00ms]
+
+ 3 pass
+ 2 fail
+ 17 expect() calls
+Ran 5 tests across 1 file. [11.07s]
+[1/1] DONE test/orchestrator-initial-task-render.test.ts exit=1 duration=11.26s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-initial-task-render.test.ts

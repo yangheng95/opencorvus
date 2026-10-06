@@ -1,0 +1,12 @@
+$ bun script/run-tests.ts test/intent-request-prompt.test.ts
+[1/1] START test/intent-request-prompt.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) renders the Task assignment with real participant provenance [0.16ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [1149.00ms]
+[1/1] DONE test/intent-request-prompt.test.ts exit=0 duration=1.31s

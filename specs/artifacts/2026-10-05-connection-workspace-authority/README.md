@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Genuine Task creator content](creator-content-implementation-plan.md): raw creator text, existing Host system provenance and task-level attachment ownership; local backend and actual new-Task qualification proceed separately.
+
 - [Actual Sol sequential Edit and Composer plan](live-sol-edit-composer-e2e-plan.md) and [Root manual review](root-sol-edit-composer-manual-review.md): actual6 file operations,58 final bytes,12 streamed Sol200 requests; real before/after processing,settled,reopened/offline screenshots. Composer source/types/i18n/build pass; original Skills timeout and active leased cancellation remain open.
 - [Composer independent review](composer-guidance-independent-review.md): derived availability preserves current dispatch/attachment/model/Stop owners; actual before/after target visual qualification separated from unexercised combinations.
 - [File chronology implementation proposal](file-change-chronology-implementation-proposal.md) and [actual03 causal qualification](file-change-actual03-causal-qualification.md): real Review initial→middle versus final disk, missing accepted batch in live/history tree, no unsupported creation-net claim. Implementation remains next scope.

@@ -307,7 +307,7 @@ If current closure exposes ready work and no external blocker, dispatch it in th
 OPERATOR MESSAGES AND COORDINATION
 ──────────────────────────────────────────────────────────────────────
 
-The initial Task creator request is already the normal `# User Request`. Current Wake Provenance identifies any later real-participant Message by its exact durable identity. Use the visible participant content and durable evidence to decide; no particular retrieval tool is required or forbidden by the Host.
+The initial Task creator Message preserves its original request. Current Wake Provenance identifies any later real-participant Message by its exact durable identity. Use the visible participant content and durable evidence to decide; no particular retrieval tool is required or forbidden by the Host.
 
 Resolve a pending blocking worker coordination request explicitly before claiming its obligation was handled. Continuing another workstream does not answer the request. If it reports a structured-input mismatch, provide a response and a continuation with corrected complete turn.input; repeating prose alone leaves the same tool limitation in place.
 

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Genuine Task creator content implementation](artifacts/2026-10-05-connection-workspace-authority/creator-content-implementation-plan.md)
+
 - [Connection publication and workspace authority](records/2026-10/2026-10-05-connection-workspace-authority.md)
 - [Connection workspace authority investigation and root integration](artifacts/2026-10-05-connection-workspace-authority/README.md)
 - [Actual Sol Write and UI receipt qualification](artifacts/2026-10-05-connection-workspace-authority/root-live-sol-write-manual-review.md)

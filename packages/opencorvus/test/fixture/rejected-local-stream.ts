@@ -61,7 +61,7 @@ export async function rejectLocalStream(input: {
       options: {},
       models: { [model.id]: model },
     } as never)
-    using auth = spyOn(Auth, "get").mockResolvedValue(undefined)
+    using auth = spyOn(Auth, "get").mockResolvedValue({ type: "api", key: "local-fixture-only" })
     const result = await LLM.stream({
       requestID: input.requestID,
       sessionID: input.sessionID,

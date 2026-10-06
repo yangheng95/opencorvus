@@ -1,7 +1,9 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { rejectLocalStream } from "./fixture/rejected-local-stream"
 import { listOrchestratorStreamErrorArtifacts } from "@/engine/store"
-import { Orchestrator } from "@/orchestrator/agent"
+import { Orchestrator, orchestratorUserText } from "@/orchestrator/agent"
+import { renderUserRequestSection } from "@/intent/request-prompt"
+import { AttachmentStore } from "@/storage/attachment-store"
 import { compileBoard } from "@/workbench/board"
 import { TaskBoard } from "@/engine/model"
 import { Bus } from "@/bus"
@@ -28,14 +30,21 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 const model = { providerID: "test", modelID: "orchestrator-initial-render" }
 
 const expectedRoutineToolIDs = [
+  "apply_patch",
   "artifact_read",
   "artifact_search",
   "artifact_select",
   "artifact_snapshot",
+  "bash",
+  "browser_preview",
+  "browser_preview_capture",
   "cancel_subagent",
   "capability_search",
   "dispatch_agent",
+  "edit",
   "evolve_expert_squad_from_feedback",
+  "external_code_search",
+  "glob",
   "manage_task",
   "no_action",
   "publish_interactive_artifact",
@@ -46,7 +55,12 @@ const expectedRoutineToolIDs = [
   "read_task_message",
   "respond_agent_coordination",
   "scheduler_message",
+  "search_code",
+  "todo",
   "wait",
+  "webfetch",
+  "websearch",
+  "write",
 ]
 
 function providerModel(): ProviderType.Model {
@@ -79,11 +93,14 @@ afterEach(async () => {
 })
 
 async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primary") {
+  const originalRequest = "Create one renderable Orchestrator conversation"
   using _durableDrain = streamCase === "normal" ? Bus.TestHooks.suppressAutomaticDurableDrain() : undefined
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      const attachment = await AttachmentStore.write(Instance.project.id, Buffer.from("Actual creator input 🙂\n", "utf8"),
+        "text/plain", "creator-input.txt")
       using _runner = TaskControlTestHooks.replaceTaskIngressRunner({
         runner: async (input) =>
           await Orchestrator.processTask(
@@ -111,6 +128,8 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
       const decisionRepairPrompts: boolean[] = []
       const providerToolRequests: Array<{ toolIDs: string[]; toolChoice: "auto" | "required" | "none" | object }> = []
       const promptSystemAudits: Array<{ countMatch: boolean; runtimeLabels: string[] }> = []
+      const stableRequestContexts: boolean[] = []
+      const runtimeAttachmentInventories: boolean[] = []
       const atomicCreatorCuts: Array<{ creatorID: string; controlIDs: string[] }> = []
       let providerSteps = 0
       const unsubscribeCreated = Bus.subscribe(Message.Event.Created, async (event) => {
@@ -149,6 +168,13 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
             toolChoice?: "auto" | "required" | "none" | { type: "tool"; toolName: string }
           }) {
             providerSteps += 1
+            const taskID = SessionRuntimeContractStore.get(assistant.sessionID)?.identity.taskID
+            if (!taskID) throw new Error("Actual Orchestrator runtime Task identity required")
+            const requestContext = renderUserRequestSection({ heading: "## Task Request Provenance", request: originalRequest, taskID })
+            stableRequestContexts.push(processInput.system.some((part, index) => processInput.systemLabels?.[index] === "runtime:orchestrator-wake-and-capabilities" && part.includes(requestContext)))
+            runtimeAttachmentInventories.push(processInput.system.some((part, index) =>
+              processInput.systemLabels?.[index] === "runtime:orchestrator-attachment-inventory" &&
+              part.includes(attachment.url) && part.includes("creator-input.txt")))
             if (providerSteps === 1 && streamCase === "helper-and-primary") {
               for (const agentID of ["memory", "orchestrator"])
                 await rejectLocalStream({
@@ -242,7 +268,8 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
           {
             requestID: `initial-render-${Identifier.ascending("artifact")}`,
             title: "Renderable initial Task",
-            request: "Create one renderable Orchestrator conversation",
+            request: originalRequest,
+            attachments: [{ url: attachment.url, mime: attachment.mime, filename: attachment.filename }],
             productPillar: "work",
             model: `${model.providerID}/${model.modelID}`,
             promptProfile: "base",
@@ -319,6 +346,7 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
                 "runtime:orchestrator-live-task-baseline",
                 "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
+                "runtime:orchestrator-attachment-inventory",
                 "runtime:orchestrator-current-task-execution",
               ],
             },
@@ -330,6 +358,7 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
                 "runtime:orchestrator-live-task-baseline",
                 "runtime:orchestrator-live-task-delta",
                 "runtime:orchestrator-current-ingress",
+                "runtime:orchestrator-attachment-inventory",
                 "runtime:orchestrator-current-task-execution",
               ],
             },
@@ -348,6 +377,14 @@ async function assertInitialTaskRender(streamCase: "normal" | "helper-and-primar
         })
         expect(new Set(assistantMessageIDs).size).toBe(1)
         const [creator, control, assistant] = messages
+        expect({ author: creator!.info.author, role: creator!.info.role,
+          text: creator!.parts.filter((part) => part.type === "text").map((part) => part.text) }).toEqual({
+          author: "user", role: "user", text: [originalRequest],
+        })
+        expect(stableRequestContexts).toEqual([true, true])
+        expect(runtimeAttachmentInventories).toEqual([true, true])
+        expect(task.attachments).toEqual([{ sha: attachment.sha, url: attachment.url, mime: attachment.mime,
+          size: attachment.size, filename: attachment.filename, intent: "task_input", source: "user-upload" }])
         expect({
           atomicCreatorCuts,
           creatorBeforeControl: creator!.info.time.created < control!.info.time.created,
@@ -380,3 +417,11 @@ test.each(["normal", "helper-and-primary"] as const)(
   assertInitialTaskRender,
   60_000,
 )
+
+test.each([
+  ["empty", ""],
+  ["Unicode", "请保留🙂与é\n第二行"],
+  ["whitespace", " \t\r\n  "],
+])("creator body preserves exact %s Task request", (_label, request) => {
+  expect(orchestratorUserText({ request })).toBe(request)
+})

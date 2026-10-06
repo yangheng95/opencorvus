@@ -1,0 +1,1 @@
+packages/opencorvus/test/fixture/rejected-local-stream.ts(64,55): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{ type: "oauth"; refresh: string; access: string; expires: number; accountId?: string | undefined; enterpriseUrl?: string | undefined; } | { type: "api"; key: string; metadata?: Record<string, string> | undefined; } | { ...; }'.
