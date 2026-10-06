@@ -1,0 +1,51 @@
+param(
+  [Parameter(Mandatory=$true)][string]$RunRoot,
+  [Parameter(Mandatory=$true)][string]$EvidenceRoot,
+  [Parameter(Mandatory=$true)][ValidatePattern('^[a-z0-9-]+$')][string]$Phase,
+  [string]$PreviousChainPath
+)
+$ErrorActionPreference='Stop'
+$taskRunRoot=[IO.Path]::GetFullPath($RunRoot)
+$taskEvidence=[IO.Path]::GetFullPath($EvidenceRoot)
+$taskOwner=Get-Content -Raw -LiteralPath (Join-Path $taskRunRoot 'launch-owner.json') | ConvertFrom-Json
+if([IO.Path]::GetFullPath($taskOwner.runRoot) -ne $taskRunRoot){throw 'Exact launch ownership required'}
+$taskTarget=Join-Path $taskEvidence ($taskOwner.evidencePrefix+'-chain-'+$Phase+'.json')
+if(Test-Path -LiteralPath $taskTarget){throw 'Observation phase already exists'}
+function Same-Occurrence($current,$expected){
+  return !!$current -and $current.ProcessId -eq $expected.ProcessId -and ([DateTime]$current.CreationDate).ToUniversalTime() -eq ([DateTime]$expected.CreationDate).ToUniversalTime() -and $current.CommandLine -eq $expected.CommandLine -and $current.ExecutablePath -eq $expected.ExecutablePath
+}
+$taskKnown=@{}
+foreach($entry in @($taskOwner.observedProcessChain)+@($taskOwner.owner)){$taskKnown[[string]$entry.ProcessId]=$entry}
+if($PreviousChainPath){
+  $taskPrevious=Get-Content -Raw -LiteralPath $PreviousChainPath | ConvertFrom-Json
+  if($taskPrevious.occurrence -ne $taskOwner.occurrence){throw 'Prior chain belongs to another occurrence'}
+  foreach($entry in @($taskPrevious.processes)){
+    if($taskKnown.ContainsKey([string]$entry.ProcessId) -and !(Same-Occurrence $entry $taskKnown[[string]$entry.ProcessId])){throw 'Conflicting prior exact process identity'}
+    $taskKnown[[string]$entry.ProcessId]=$entry
+  }
+}
+$taskAll=@(Get-CimInstance Win32_Process -ErrorAction Stop)
+do{
+  $taskAdded=$false
+  foreach($candidate in $taskAll){
+    $parent=$taskKnown[[string]$candidate.ParentProcessId]
+    if(!$parent){continue}
+    $actualParent=$taskAll | Where-Object ProcessId -eq $parent.ProcessId | Select-Object -First 1
+    if(!(Same-Occurrence $actualParent $parent)){continue}
+    if(([DateTime]$candidate.CreationDate).ToUniversalTime() -lt ([DateTime]$parent.CreationDate).ToUniversalTime()){continue}
+    if(!$taskKnown.ContainsKey([string]$candidate.ProcessId)){
+      if(!$candidate.CommandLine -or !$candidate.ExecutablePath){throw 'Incomplete actual owned descendant identity'}
+      $taskKnown[[string]$candidate.ProcessId]=$candidate | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+      $taskAdded=$true
+    }elseif(!(Same-Occurrence $candidate $taskKnown[[string]$candidate.ProcessId])){throw 'Owned descendant PID reused; exact review required'}
+  }
+}while($taskAdded)
+$taskPresence=@($taskKnown.Values | ForEach-Object{
+  $expected=$_;$current=$taskAll | Where-Object ProcessId -eq $expected.ProcessId | Select-Object -First 1
+  @{processID=$expected.ProcessId;originalOccurrencePresent=(Same-Occurrence $current $expected);samePIDReused=(!!$current -and !(Same-Occurrence $current $expected))}
+})
+$taskListeners=@(Get-NetTCPConnection -ErrorAction Stop | Where-Object {$_.State -eq 'Listen' -and $_.LocalPort -eq $taskOwner.port} | Select-Object LocalAddress,LocalPort,OwningProcess)
+$taskFact=@{observedAtUtc=[DateTime]::UtcNow.ToString('o');occurrence=$taskOwner.occurrence;phase=$Phase;processes=@($taskKnown.Values);presence=$taskPresence;listeners=$taskListeners;boundary='Read-only exact birth/command ancestry; earlier-born numeric parent matches excluded; no process control or credentials'}
+$taskStream=[IO.File]::Open($taskTarget,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
+try{$taskBytes=[Text.UTF8Encoding]::new($false).GetBytes(($taskFact | ConvertTo-Json -Depth 10));$taskStream.Write($taskBytes,0,$taskBytes.Length)}finally{$taskStream.Dispose()}
+Write-Output ($taskPresence | ConvertTo-Json -Compress)

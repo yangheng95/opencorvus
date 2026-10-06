@@ -1,0 +1,7 @@
+# Owned qualification settlement19 evidence
+
+Binding [Recall](../owned-qualification-settlement-plan.md). Source18 normal commit/push receipts, private before/final source snapshots, focused positive backend/physical checkers and actual no-Provider service settlement evidence are kept here. No original17 timing failure is overwritten; new genuine full-chain acceptance requires separate admission after this qualification.
+
+Actual19a/19b/19c current serve cases qualify first-failure, fixed short preparation and competing closure ownership with health200/shutdown200/exit0, complete chain/port/pair receipts and later joins. Root independent observation qualifies all six service occurrences settled/listeners0. No auth/catalog was staged, Task seeded, model invoked or browser/UI test used. First import-parameter error and outer shell's misleading0 are preserved; the corrected checker returns explicit failure. Typed DateTimeOffset conversion independently preserves the observed80ms lost by implicit locale strings. Final source snapshots/AST0/source+wrapper types0 and mature backend3+4pass support this bounded toolchain repair, not actual900s Task/parent-loss/all-fault acceptance.
+
+[Root read-tool observations](root-read-tool-observations.md) distinguishes the first empty redirected log from the actual outer error, and preserves the subsequent metadata-command typo/correction. Neither is a product finding or silently accepted check.

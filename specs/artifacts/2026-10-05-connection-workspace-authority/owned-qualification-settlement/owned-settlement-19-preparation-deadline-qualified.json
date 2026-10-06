@@ -1,0 +1,22 @@
+{
+  "pairedCleanupComplete": true,
+  "shutdownStatus": 200,
+  "boundary": "Real existing serve and sole supervisor/shutdown; no Provider, seeded Task, UI automation, fake HTTP server, timer extension or process kill",
+  "exitCode": 0,
+  "case": "preparation-deadline",
+  "trigger": {
+    "pinned": null,
+    "pid": 47016,
+    "boundary": "Pinned Task boundary cached once; no progress renewal; stop request is distinct from physical settlement",
+    "reason": "fixed-preparation-maximum",
+    "observedAtUtc": "2026-10-06T09:40:16.916905Z",
+    "preparationDeadlineMs": 1791279613676,
+    "totalDeadlineMs": null,
+    "firstFailedPath": null,
+    "occurrence": "owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237"
+  },
+  "observedAtUtc": "2026-10-06T09:40:19.0595284Z",
+  "physicalCompletion": true,
+  "healthStatus": 200,
+  "occurrence": "owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237"
+}

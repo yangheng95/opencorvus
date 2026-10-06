@@ -1,0 +1,43 @@
+{
+  "observedAtUtc": "2026-10-06T09:45:16.0219720Z",
+  "occurrences": [
+    {
+      "case": "failure",
+      "expectedPID": 37284,
+      "observation": "dead-or-reused",
+      "recordedPhysical": true
+    },
+    {
+      "case": "failure",
+      "expectedPID": 66196,
+      "observation": "dead-or-reused",
+      "recordedPhysical": true
+    },
+    {
+      "case": "preparation-deadline",
+      "expectedPID": 47016,
+      "observation": "dead-or-reused",
+      "recordedPhysical": true
+    },
+    {
+      "case": "preparation-deadline",
+      "expectedPID": 72128,
+      "observation": "dead-or-reused",
+      "recordedPhysical": true
+    },
+    {
+      "case": "manual-join",
+      "expectedPID": 70756,
+      "observation": "dead-or-reused",
+      "recordedPhysical": true
+    },
+    {
+      "case": "manual-join",
+      "expectedPID": 38800,
+      "observation": "dead-or-reused",
+      "recordedPhysical": true
+    }
+  ],
+  "listenerCount": 0,
+  "boundary": "Independent post-closure exact birth/executable/command CIM read; no process control or Provider acceptance"
+}

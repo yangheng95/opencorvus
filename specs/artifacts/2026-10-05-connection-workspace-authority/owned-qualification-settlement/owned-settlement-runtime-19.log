@@ -1,0 +1,28 @@
+$ bun script/run-tests.ts test/process-shutdown-task-lifecycle.test.ts test/runtime/process-occurrence-evidence.test.ts
+[1/2] START test/process-shutdown-task-lifecycle.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) hands off active occurrences in a mixed lifecycle batch across two Projects [3739.73ms]
+(pass) real listener shutdown settles a terminal Task Prompt tail and retains its completed occurrence [1934.08ms]
+(pass) real listener shutdown publishes pending Question abandonments across two Projects before protocol admission closes [3964.89ms]
+
+ 3 pass
+ 0 fail
+ 8 expect() calls
+Ran 3 tests across 1 file. [12.07s]
+[1/2] DONE test/process-shutdown-task-lifecycle.test.ts exit=0 duration=12.27s
+[2/2] START test/runtime/process-occurrence-evidence.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) required process identity retains exact live identity and a failed query cause [12.19ms]
+(pass) observes an exited Windows process as dead while its kernel object remains queryable [21.45ms]
+(pass) persisted process occurrence evidence > validates a historical managed envelope against the bound database runtime data root [11.41ms]
+(pass) persisted process occurrence evidence > maps path escape and identity tampering to explicit evidence errors [8.20ms]
+
+ 4 pass
+ 0 fail
+ 9 expect() calls
+Ran 4 tests across 1 file. [1109.00ms]
+[2/2] DONE test/runtime/process-occurrence-evidence.test.ts exit=0 duration=1.25s

@@ -93,3 +93,7 @@ Resource17 now qualifies the shared native no-replace repair with backend5/55, f
 [Complete-read publication Recall18](../../artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation-plan.md) binds the shared transport audit and private fixed-total settlement repair after normally pushed2948733e. Test-only delegation precedes production admission.
 
 The unique delivery audit repair now has real backend9/38, pure+assembler13/59, fullsource+exact types0 and current docs/architecture checks. Post-fix genuine Provider/timed acceptance is held for the next qualified private runner; original failures stay.
+
+[Owned settlement Recall19](../../artifacts/2026-10-05-connection-workspace-authority/owned-qualification-settlement-plan.md) admits only the existing private supervision/closure repair and holds actual execution until Root review.
+
+Actual19a/b/c now qualify real first-failure/short-preparation/competing-join closure and complete six-process/three-port/pair boundary. The original checker error and timing precision correction remain documented; genuine post18 Task acceptance is the next independent scope.

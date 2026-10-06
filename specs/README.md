@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Owned qualification settlement](artifacts/2026-10-05-connection-workspace-authority/owned-qualification-settlement-plan.md)
+
 - [Complete resource-read publication and bounded qualification](artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation-plan.md)
 
 - [Genuine Task creator content implementation](artifacts/2026-10-05-connection-workspace-authority/creator-content-implementation-plan.md)

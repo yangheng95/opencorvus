@@ -1,0 +1,21 @@
+[main 038cc95e] fix: accept complete materialized artifact read sources
+ 27 files changed, 1212 insertions(+), 17 deletions(-)
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation-plan.md
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/README.md
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-architecture-18-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-backend-18-baseline.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-backend-18-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-backend-18-types-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-docs-18-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-docs-18-plan.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-plugin-18-baseline-first.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-plugin-18-baseline.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-plugin-18-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-plugin-18-types-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-plugin-types-18.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-types-18-final.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-types-18-first-failure.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-types-18.json.txt
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/complete-read-types-18.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/resource-materialization-commit-17.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation/resource-materialization-push-17.log

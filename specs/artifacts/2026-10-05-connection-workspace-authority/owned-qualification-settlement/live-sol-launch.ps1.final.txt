@@ -1,0 +1,186 @@
+[CmdletBinding(DefaultParameterSetName='Launch')]
+param(
+  [Parameter(Mandatory=$true,ParameterSetName='Launch')][string]$RunRoot,
+  [Parameter(Mandatory=$true,ParameterSetName='Launch')][string]$EvidenceRoot,
+  [Parameter(Mandatory=$true,ParameterSetName='Launch')][ValidateRange(1,65535)][int]$Port,
+  [Parameter(Mandatory=$true,ParameterSetName='Launch')][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix,
+  [Parameter(Mandatory=$true,ParameterSetName='Launch')][string]$DefinitionPath,
+  [Parameter(Mandatory=$true,ParameterSetName='Launch')][ValidateRange(1,100)][int]$RequestBudget,
+  [Parameter(Mandatory=$true,ParameterSetName='Functions')][switch]$FunctionsOnly
+)
+function Write-OwnedLaunchFact([string]$Target,$Value) {
+  $stage=$Target+'.'+[Guid]::NewGuid().ToString()+'.stage'
+  $stream=[IO.File]::Open($stage,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
+  try{$bytes=[Text.UTF8Encoding]::new($false).GetBytes(($Value|ConvertTo-Json -Depth 12));$stream.Write($bytes,0,$bytes.Length)}finally{$stream.Dispose()}
+  try{[IO.File]::Move($stage,$Target)}finally{if(Test-Path -LiteralPath $stage){Remove-Item -LiteralPath $stage -ErrorAction Stop}}
+}
+function Watch-OwnedQualification {
+  param(
+    [Parameter(Mandatory=$true)]$LaunchReceipt,
+    [Parameter(Mandatory=$true)][string]$EvidenceRoot,
+    [Parameter(Mandatory=$true)][long]$PreparationDeadlineMilliseconds
+  )
+  $ErrorActionPreference='Stop'
+  $run=[IO.Path]::GetFullPath($LaunchReceipt.runRoot)
+  $evidence=[IO.Path]::GetFullPath($EvidenceRoot)
+  if($evidence -ne [IO.Path]::GetFullPath($LaunchReceipt.settlementEvidenceRoot)){throw 'Exact settlement evidence root required'}
+  $stored=$LaunchReceipt; $ownerValidated=$false
+  $previous=$null; $sequence=0; $boundary=$null
+  $physical=Join-Path $evidence ($stored.evidencePrefix+'-physical-terminal-and-pair-cleanup.json')
+  $closureError=Join-Path $evidence ($stored.evidencePrefix+'-settlement-error.json')
+  try {
+  $stored=Get-Content -Raw -LiteralPath (Join-Path $run 'launch-owner.json')|ConvertFrom-Json
+  if(!$stored.owner.ProcessId -or !$stored.owner.CreationDate -or !$stored.owner.ExecutablePath -or !$stored.owner.CommandLine -or !$stored.occurrence){throw 'Complete observed launch occurrence required'}
+  if($stored.occurrence -ne $LaunchReceipt.occurrence -or $stored.owner.ProcessId -ne $LaunchReceipt.owner.ProcessId -or $stored.owner.CreationDate -ne $LaunchReceipt.owner.CreationDate -or $stored.owner.ExecutablePath -ne $LaunchReceipt.owner.ExecutablePath -or $stored.owner.CommandLine -ne $LaunchReceipt.owner.CommandLine){throw 'Supervision receipt does not match exact stored owner'}
+  $ownerValidated=$true
+  $launched=([DateTimeOffset]$stored.owner.CreationDate).ToUnixTimeMilliseconds()
+  if($PreparationDeadlineMilliseconds -lt $launched){throw 'Preparation deadline precedes launch'}
+  for(;;){
+    if(Test-Path -LiteralPath $closureError){throw 'Existing exact settlement failed; retain pair and inspect receipt'}
+    if(Test-Path -LiteralPath $physical){
+      $result=Get-Content -Raw -LiteralPath $physical|ConvertFrom-Json
+      if($result.occurrence -ne $stored.occurrence -or !$result.physicalCompletion -or !$result.pairedCleanupComplete){throw 'Existing exact settlement incomplete'}
+      return $result
+    }
+    $sequence++
+    $phase='supervision-'+$PID+'-'+$sequence
+    $observe=@{RunRoot=$run;EvidenceRoot=$evidence;Phase=$phase}
+    if($previous){$observe.PreviousChainPath=$previous}
+    & (Join-Path $PSScriptRoot 'live-sol-observe-owned.ps1') @observe | Out-Null
+    $previous=Join-Path $evidence ($stored.evidencePrefix+'-chain-'+$phase+'.json')
+    $chain=Get-Content -Raw -LiteralPath $previous|ConvertFrom-Json
+    $now=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+    $reason=$null
+    $failurePath=Join-Path $stored.evidence 'failed.json'
+    if(Test-Path -LiteralPath $failurePath){
+      $failure=Get-Content -Raw -LiteralPath $failurePath|ConvertFrom-Json
+      if($failure.pid -ne $stored.owner.ProcessId -or $failure.occurrence -ne $stored.occurrence){throw 'Failure receipt belongs to another owner'}
+      $reason='immutable-wrapper-failure'
+    }
+    $boundaryPath=Join-Path $stored.evidence 'task-boundary-admitted.json'
+    if(!$boundary -and (Test-Path -LiteralPath $boundaryPath)){
+      $candidate=Get-Content -Raw -LiteralPath $boundaryPath|ConvertFrom-Json
+      if($candidate.pid -ne $stored.owner.ProcessId -or $candidate.occurrence -ne $stored.occurrence -or $candidate.selected.occurrence -ne $stored.occurrence -or $candidate.selected.taskID -ne $candidate.pinned.taskID -or $candidate.selected.projectID -ne $candidate.pinned.projectID -or [IO.Path]::GetFullPath($candidate.selected.directory) -ne [IO.Path]::GetFullPath($stored.project)){throw 'Task boundary does not match launch admission'}
+      $opened=[long]$candidate.pinned.openedAt
+      if($opened -lt $launched -or $opened -gt $now -or $opened -gt $PreparationDeadlineMilliseconds -or [long]$candidate.totalDeadlineMs -ne ($opened+900000) -or [long]$candidate.pinned.epoch -lt 1 -or !$candidate.pinned.openedEventID -or !$candidate.pinned.rootSessionID -or !$candidate.selected.requestID){throw 'Actual Task boundary must retain admitted identity and fixed 900000 milliseconds'}
+      $boundary=$candidate
+    }
+    if(!$reason -and $boundary -and $now -ge [long]$boundary.totalDeadlineMs){$reason='fixed-task-maximum'}
+    if(!$reason -and !$boundary -and $now -ge $PreparationDeadlineMilliseconds){$reason='fixed-preparation-maximum'}
+    $rootPresent=@($chain.presence|Where-Object {$_.processID -eq $stored.owner.ProcessId -and $_.originalOccurrencePresent}).Count
+    if(!$reason -and !$rootPresent){$reason='original-root-exited'}
+    if($reason){
+      Write-OwnedLaunchFact (Join-Path $stored.evidence 'supervision-settlement-trigger.json') @{occurrence=$stored.occurrence;pid=$stored.owner.ProcessId;observedAtUtc=[DateTime]::UtcNow.ToString('o');reason=$reason;preparationDeadlineMs=$PreparationDeadlineMilliseconds;totalDeadlineMs=if($boundary){$boundary.totalDeadlineMs}else{$null};firstFailedPath=if(Test-Path -LiteralPath $failurePath){$failurePath}else{$null};pinned=if($boundary){$boundary.pinned}else{$null};boundary='Pinned Task boundary cached once; no progress renewal; stop request is distinct from physical settlement'}
+      # Same helper owns public stop, physical settlement and paired cleanup; no failure rewrite.
+      & (Join-Path $PSScriptRoot 'live-sol-shutdown.ps1') -RunRoot $run -EvidenceRoot $evidence -EvidencePrefix $stored.evidencePrefix -KnownChainPath $previous -Reason $reason
+      return
+    }
+    Start-Sleep -Milliseconds 5000
+  } } catch {
+    $originalError=$_
+    $failureTarget=Join-Path $evidence ($stored.evidencePrefix+'-supervision-error.json')
+    if(!(Test-Path -LiteralPath $failureTarget)){
+      Write-OwnedLaunchFact $failureTarget @{occurrence=$stored.occurrence;ownerPID=$stored.owner.ProcessId;observedAtUtc=[DateTime]::UtcNow.ToString('o');errorType=$originalError.Exception.GetType().Name;message=$originalError.Exception.Message;boundary='Supervisor error, not a Task lifecycle verdict'}
+    }
+    if($ownerValidated -and !(Test-Path -LiteralPath $closureError) -and !(Test-Path -LiteralPath $physical)){
+      $triggerPath=Join-Path $stored.evidence 'supervision-settlement-trigger.json'
+      if(!(Test-Path -LiteralPath $triggerPath)){
+        Write-OwnedLaunchFact $triggerPath @{occurrence=$stored.occurrence;pid=$stored.owner.ProcessId;observedAtUtc=[DateTime]::UtcNow.ToString('o');reason='supervisor-error';preparationDeadlineMs=$PreparationDeadlineMilliseconds;totalDeadlineMs=if($boundary){$boundary.totalDeadlineMs}else{$null};firstFailedPath=if(Test-Path -LiteralPath (Join-Path $stored.evidence 'failed.json')){Join-Path $stored.evidence 'failed.json'}else{$null};pinned=if($boundary){$boundary.pinned}else{$null};boundary='Exact original owner observed at launch; settlement must independently observe full known chain and port; unavailable observations remain blockers'}
+      }
+      $settle=@{RunRoot=$run;EvidenceRoot=$evidence;EvidencePrefix=$stored.evidencePrefix;Reason='supervisor-error'}
+      if($previous){$settle.KnownChainPath=$previous}
+      & (Join-Path $PSScriptRoot 'live-sol-shutdown.ps1') @settle
+    }
+    throw $originalError
+  }
+}
+if($FunctionsOnly){return}
+$ErrorActionPreference = 'Stop'
+$taskRunRoot = [IO.Path]::GetFullPath($RunRoot)
+$taskRuntime = Join-Path $taskRunRoot 'runtime'
+$taskProject = Join-Path $taskRunRoot 'project'
+$taskEvidence = Join-Path $taskRunRoot 'evidence'
+$taskSettlementEvidence = [IO.Path]::GetFullPath($EvidenceRoot)
+$taskReceipt = Join-Path $taskRunRoot 'startup.json'
+$taskWrapper = 'D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts'
+$taskBun = 'C:/Users/hengu/.bun/bin/bun.exe'
+$taskAuth = 'C:/Users/hengu/AppData/Local/opencorvus/data/auth.json'
+$taskPort = $Port
+$taskOccurrence = $EvidencePrefix + '-' + [Guid]::NewGuid().ToString()
+$taskSelection = Join-Path $taskRunRoot 'task-selection.json'
+$taskDefinitionPath = [IO.Path]::GetFullPath($DefinitionPath)
+$taskDefinition = Get-Content -Raw -LiteralPath $taskDefinitionPath | ConvertFrom-Json
+$taskProfile = [string]$taskDefinition.manifest.id
+if($taskProfile -ne 'task-resource-qa' -or $taskDefinition.manifest.namespace -ne 'qa'){throw 'Reviewed QA package identity required'}
+$taskRequestBudget = $RequestBudget
+if (Test-Path -LiteralPath $taskRunRoot) { throw 'Fresh owned occurrence already exists' }
+$taskListeners = @(Get-NetTCPConnection -ErrorAction Stop | Where-Object { $_.State -eq 'Listen' -and $_.LocalPort -eq $taskPort })
+if ($taskListeners.Count) { throw 'Chosen owned port is occupied' }
+foreach ($taskPath in @($taskWrapper,$taskBun,$taskAuth,'C:/Users/hengu/AppData/Local/opencorvus/data/models.json')) { if (!(Test-Path -LiteralPath $taskPath)) { throw 'Required owned/source input missing' } }
+if ((Test-Path -LiteralPath 'C:/ProgramData/opencorvus/opencorvus.jsonc') -or (Test-Path -LiteralPath 'C:/ProgramData/opencorvus/opencorvus.json')) { throw 'Non-owned managed configuration needs review' }
+$taskProxy = Get-ItemProperty -LiteralPath 'HKCU:/Software/Microsoft/Windows/CurrentVersion/Internet Settings' -ErrorAction Stop
+if (($taskProxy.ProxyServer -match '@') -or $taskProxy.AutoConfigURL) { throw 'System proxy credential/PAC input needs specific review; values suppressed' }
+foreach ($taskPath in @($taskRuntime,$taskProject,$taskEvidence,(Join-Path $taskRunRoot 'home'),(Join-Path $taskRunRoot 'appdata'),(Join-Path $taskRunRoot 'localappdata'),(Join-Path $taskRunRoot 'temp'),(Join-Path $taskRunRoot 'xdg-config'),(Join-Path $taskRunRoot 'xdg-data'),(Join-Path $taskRunRoot 'xdg-cache'),(Join-Path $taskRunRoot 'xdg-state'))) { [IO.Directory]::CreateDirectory($taskPath) | Out-Null }
+$taskOriginalEnvironment = @{}
+Get-ChildItem Env: | ForEach-Object { $taskOriginalEnvironment[$_.Name] = $_.Value }
+$taskEnvironment = @{}
+foreach ($taskName in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')) { if ($taskOriginalEnvironment.ContainsKey($taskName)) { $taskEnvironment[$taskName] = $taskOriginalEnvironment[$taskName] } }
+$taskOwnedHome = Join-Path $taskRunRoot 'home'
+$taskEnvironment.HOME = $taskOwnedHome
+$taskEnvironment.USERPROFILE = $taskOwnedHome
+$taskEnvironment.HOMEDRIVE = 'C:'
+$taskEnvironment.HOMEPATH = $taskOwnedHome.Substring(2).Replace('/','\')
+$taskEnvironment.APPDATA = Join-Path $taskRunRoot 'appdata'
+$taskEnvironment.LOCALAPPDATA = Join-Path $taskRunRoot 'localappdata'
+$taskEnvironment.TEMP = Join-Path $taskRunRoot 'temp'
+$taskEnvironment.TMP = $taskEnvironment.TEMP
+$taskEnvironment.TMPDIR = $taskEnvironment.TEMP
+$taskEnvironment.XDG_CONFIG_HOME = Join-Path $taskRunRoot 'xdg-config'
+$taskEnvironment.XDG_DATA_HOME = Join-Path $taskRunRoot 'xdg-data'
+$taskEnvironment.XDG_CACHE_HOME = Join-Path $taskRunRoot 'xdg-cache'
+$taskEnvironment.XDG_STATE_HOME = Join-Path $taskRunRoot 'xdg-state'
+$taskEnvironment.OPENCORVUS_HOME = $taskRuntime
+$taskEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS = '1'
+$taskEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE = '1'
+$taskEnvironment.OPENCORVUS_TASK_PROCESS_MODE = 'native'
+try {
+  Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+  foreach ($taskName in $taskEnvironment.Keys) { [Environment]::SetEnvironmentVariable($taskName,$taskEnvironment[$taskName],'Process') }
+  $taskArguments = @($taskWrapper,$taskAuth,$taskRuntime,$taskProject,$taskEvidence,$taskReceipt,[string]$taskPort,$taskOccurrence,$taskSelection,$taskDefinitionPath,[string]$taskRequestBudget)
+  if (@($taskArguments | Where-Object { $_ -match '[\s"]' }).Count) { throw 'Known launch arguments require explicit quoting review' }
+  $taskProcess = Start-Process -FilePath $taskBun -ArgumentList $taskArguments -WorkingDirectory 'D:/myhexin-local/opencorvus/packages/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $taskRunRoot 'stdout.log') -RedirectStandardError (Join-Path $taskRunRoot 'stderr.log') -PassThru
+  $taskOwner = Get-CimInstance Win32_Process -Filter "ProcessId=$($taskProcess.Id)" | Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+  $taskLaunchFact = [ordered]@{ observedAtUtc = [DateTime]::UtcNow.ToString('o'); runRoot = $taskRunRoot; runtime = $taskRuntime; project = $taskProject; evidence = $taskEvidence; evidencePrefix = $EvidencePrefix; receipt = $taskReceipt; occurrence = $taskOccurrence; port = $taskPort; owner = $taskOwner; observedProcessChain = @($taskOwner); taskSelectionPath = $taskSelection; taskSelectionRequired = $true; definitionPath = $taskDefinitionPath; handleAdmissionMilliseconds = 600000; environmentNames = @($taskEnvironment.Keys | Sort-Object); taskProcessMode = 'native'; promptProfile = $taskProfile; requestBudget = $taskRequestBudget; requestBudgetScope = 'One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset'; inactivityMilliseconds = 180000; taskMaximumMilliseconds = 900000; taskMaximumScope = 'Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration'; sourcePair = 'Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline'; cleanup = 'Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure'; uiAutomation = 'None' }
+  $taskLaunchFact.settlementEvidenceRoot = $taskSettlementEvidence
+  $taskLaunchFact.preparationMaximumMilliseconds = 600000
+  [IO.Directory]::CreateDirectory($taskSettlementEvidence) | Out-Null
+  Write-OwnedLaunchFact (Join-Path $taskRunRoot 'launch-owner.json') $taskLaunchFact
+  Write-Output "Owned Sol CLI launched PID $($taskProcess.Id), occurrence $taskOccurrence; parent cleanup remains required."
+} finally {
+  Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+  foreach ($taskName in $taskOriginalEnvironment.Keys) { [Environment]::SetEnvironmentVariable($taskName,$taskOriginalEnvironment[$taskName],'Process') }
+}
+$taskNormalizedOwner = Get-Content -Raw -LiteralPath (Join-Path $taskRunRoot 'launch-owner.json') | ConvertFrom-Json
+$taskPreparationDeadline = ([DateTimeOffset]$taskNormalizedOwner.owner.CreationDate).ToUnixTimeMilliseconds() + 600000
+Watch-OwnedQualification -LaunchReceipt $taskNormalizedOwner -EvidenceRoot $taskSettlementEvidence -PreparationDeadlineMilliseconds $taskPreparationDeadline
+$taskFirstFailurePath = Join-Path $taskNormalizedOwner.evidence 'failed.json'
+$taskTriggerPath = Join-Path $taskNormalizedOwner.evidence 'supervision-settlement-trigger.json'
+$taskCompletePath = Join-Path $taskNormalizedOwner.evidence 'task-complete.json'
+if(Test-Path -LiteralPath $taskFirstFailurePath){
+  $taskFirstFailure = Get-Content -Raw -LiteralPath $taskFirstFailurePath | ConvertFrom-Json
+  if($taskFirstFailure.pid -ne $taskNormalizedOwner.owner.ProcessId -or $taskFirstFailure.occurrence -ne $taskNormalizedOwner.occurrence){throw "Task failure receipt identity mismatch: $taskFirstFailurePath"}
+  throw "Task qualification failed; original failure retained: $taskFirstFailurePath"
+}
+if(Test-Path -LiteralPath $taskTriggerPath){
+  $taskTrigger = Get-Content -Raw -LiteralPath $taskTriggerPath | ConvertFrom-Json
+  if($taskTrigger.pid -ne $taskNormalizedOwner.owner.ProcessId -or $taskTrigger.occurrence -ne $taskNormalizedOwner.occurrence){throw "Settlement trigger identity mismatch: $taskTriggerPath"}
+  if($taskTrigger.reason -in @('immutable-wrapper-failure','fixed-task-maximum','fixed-preparation-maximum','supervisor-error')){throw "Task qualification stopped at its admitted boundary: $taskTriggerPath"}
+}
+if(!(Test-Path -LiteralPath $taskCompletePath)){throw "Task completion receipt missing after physical settlement: $taskCompletePath"}
+$taskComplete = Get-Content -Raw -LiteralPath $taskCompletePath | ConvertFrom-Json
+$taskBoundPath = Join-Path $taskNormalizedOwner.evidence 'task-boundary-admitted.json'
+if(!(Test-Path -LiteralPath $taskBoundPath)){throw "Task boundary receipt missing after physical settlement: $taskBoundPath"}
+$taskBound = Get-Content -Raw -LiteralPath $taskBoundPath | ConvertFrom-Json
+if($taskBound.pid -ne $taskNormalizedOwner.owner.ProcessId -or $taskBound.occurrence -ne $taskNormalizedOwner.occurrence -or !$taskComplete.pinned.taskID -or !$taskComplete.pinned.rootSessionID -or $taskComplete.pinned.taskID -ne $taskBound.pinned.taskID -or $taskComplete.pinned.projectID -ne $taskBound.pinned.projectID -or $taskComplete.pinned.rootSessionID -ne $taskBound.pinned.rootSessionID -or $taskComplete.pinned.epoch -ne $taskBound.pinned.epoch -or $taskComplete.pinned.openedEventID -ne $taskBound.pinned.openedEventID -or $taskComplete.pinned.openedAt -ne $taskBound.pinned.openedAt -or $taskComplete.selected.requestID -ne $taskBound.selected.requestID){throw "Task completion and admitted boundary identities differ: $taskCompletePath"}
+if($taskComplete.pid -ne $taskNormalizedOwner.owner.ProcessId -or $taskComplete.occurrence -ne $taskNormalizedOwner.occurrence -or $taskComplete.selected.occurrence -ne $taskNormalizedOwner.occurrence -or $taskComplete.selected.taskID -ne $taskComplete.pinned.taskID -or $taskComplete.selected.projectID -ne $taskComplete.pinned.projectID -or [IO.Path]::GetFullPath($taskComplete.selected.directory) -ne [IO.Path]::GetFullPath($taskNormalizedOwner.project) -or $taskComplete.lifecycle.status -ne 'completed' -or $taskComplete.lifecycle.epoch -ne $taskComplete.pinned.epoch -or $taskComplete.lifecycle.openedEventID -ne $taskComplete.pinned.openedEventID -or @($taskComplete.ownedPromptSessions).Count -ne 0){throw "Task completion receipt does not bind the exact accepted occurrence: $taskCompletePath"}
+Write-Output 'Exact Task checker completion and physical settlement qualified; download and visual acceptance remain Root-owned.'

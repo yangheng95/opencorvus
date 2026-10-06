@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-06T09:40:19.0178798Z",
+  "listeners": null,
+  "occurrence": "owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237",
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "expected": {
+        "ProcessId": 47016,
+        "ParentProcessId": 56084,
+        "CreationDate": "2026-10-06T17:39:59.48381+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" src/index.ts serve --hostname 127.0.0.1 --port 17976 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\startup.json --startup-occurrence owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237 --parent-pid 56084 --parent-process-instance-id win32:639268763974903972 --log-level DEBUG"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 72128,
+        "ParentProcessId": 47016,
+        "CreationDate": "2026-10-06T17:39:59.493909+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    }
+  ],
+  "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write",
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\runtime\\data\\models.json",
+      "outcome": "already_absent"
+    }
+  ]
+}

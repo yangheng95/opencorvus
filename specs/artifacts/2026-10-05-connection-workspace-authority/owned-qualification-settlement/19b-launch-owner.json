@@ -1,0 +1,40 @@
+{
+  "observedAtUtc": "2026-10-06T09:40:00.1319956Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\project",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\evidence",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\owned-qualification-settlement",
+  "evidencePrefix": "owned-settlement-19-preparation-deadline",
+  "occurrence": "owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237",
+  "port": 17976,
+  "owner": {
+    "ProcessId": 47016,
+    "ParentProcessId": 56084,
+    "CreationDate": "2026-10-06T17:39:59.48381+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" src/index.ts serve --hostname 127.0.0.1 --port 17976 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\startup.json --startup-occurrence owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237 --parent-pid 56084 --parent-process-instance-id win32:639268763974903972 --log-level DEBUG"
+  },
+  "observedProcessChain": [
+    {
+      "ProcessId": 47016,
+      "ParentProcessId": 56084,
+      "CreationDate": "2026-10-06T17:39:59.48381+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" src/index.ts serve --hostname 127.0.0.1 --port 17976 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19b\\startup.json --startup-occurrence owned-settlement-19-preparation-deadline-cbcfe142-27f4-4516-9c8e-8cf97583f237 --parent-pid 56084 --parent-process-instance-id win32:639268763974903972 --log-level DEBUG"
+    },
+    {
+      "ProcessId": 72128,
+      "ParentProcessId": 47016,
+      "CreationDate": "2026-10-06T17:39:59.493909+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    }
+  ],
+  "parent": {
+    "pid": 56084,
+    "processInstanceID": "win32:639268763974903972",
+    "occurrenceID": "d9113f29-0676-4925-a550-1ab278b4a06f"
+  },
+  "qualification": "Actual no-Provider development serve; no Task/Session seeded, no copied authority"
+}

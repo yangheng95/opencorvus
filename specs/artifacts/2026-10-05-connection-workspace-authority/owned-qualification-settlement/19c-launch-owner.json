@@ -1,0 +1,40 @@
+{
+  "observedAtUtc": "2026-10-06T09:42:14.8839972Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\project",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\evidence",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\owned-qualification-settlement",
+  "evidencePrefix": "owned-settlement-19-manual-join",
+  "occurrence": "owned-settlement-19-manual-join-3f94c8c0-84ac-4270-9092-65d573724f92",
+  "port": 17977,
+  "owner": {
+    "ProcessId": 38800,
+    "ParentProcessId": 49948,
+    "CreationDate": "2026-10-06T17:42:14.169741+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" src/index.ts serve --hostname 127.0.0.1 --port 17977 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\startup.json --startup-occurrence owned-settlement-19-manual-join-3f94c8c0-84ac-4270-9092-65d573724f92 --parent-pid 49948 --parent-process-instance-id win32:639268765320312944 --log-level DEBUG"
+  },
+  "observedProcessChain": [
+    {
+      "ProcessId": 38800,
+      "ParentProcessId": 49948,
+      "CreationDate": "2026-10-06T17:42:14.169741+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" src/index.ts serve --hostname 127.0.0.1 --port 17977 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\startup.json --startup-occurrence owned-settlement-19-manual-join-3f94c8c0-84ac-4270-9092-65d573724f92 --parent-pid 49948 --parent-process-instance-id win32:639268765320312944 --log-level DEBUG"
+    },
+    {
+      "ProcessId": 70756,
+      "ParentProcessId": 38800,
+      "CreationDate": "2026-10-06T17:42:14.180012+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    }
+  ],
+  "parent": {
+    "pid": 49948,
+    "processInstanceID": "win32:639268765320312944",
+    "occurrenceID": "928770c3-6e9b-4308-8180-a41317e3e0a7"
+  },
+  "qualification": "Actual no-Provider development serve; no Task/Session seeded, no copied authority"
+}

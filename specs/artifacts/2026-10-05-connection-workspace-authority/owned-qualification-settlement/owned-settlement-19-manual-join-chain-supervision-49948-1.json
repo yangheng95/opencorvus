@@ -1,0 +1,41 @@
+{
+  "observedAtUtc": "2026-10-06T09:42:19.7312199Z",
+  "boundary": "Read-only exact birth/command ancestry; earlier-born numeric parent matches excluded; no process control or credentials",
+  "processes": [
+    {
+      "ProcessId": 70756,
+      "ParentProcessId": 38800,
+      "CreationDate": "2026-10-06T17:42:14.180012+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 38800,
+      "ParentProcessId": 49948,
+      "CreationDate": "2026-10-06T17:42:14.169741+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" src/index.ts serve --hostname 127.0.0.1 --port 17977 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\owned-settlement-19c\\startup.json --startup-occurrence owned-settlement-19-manual-join-3f94c8c0-84ac-4270-9092-65d573724f92 --parent-pid 49948 --parent-process-instance-id win32:639268765320312944 --log-level DEBUG"
+    }
+  ],
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17977,
+      "OwningProcess": 38800
+    }
+  ],
+  "presence": [
+    {
+      "samePIDReused": false,
+      "processID": 70756,
+      "originalOccurrencePresent": true
+    },
+    {
+      "samePIDReused": false,
+      "processID": 38800,
+      "originalOccurrencePresent": true
+    }
+  ],
+  "phase": "supervision-49948-1",
+  "occurrence": "owned-settlement-19-manual-join-3f94c8c0-84ac-4270-9092-65d573724f92"
+}

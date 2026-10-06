@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Owned qualification settlement plan](owned-qualification-settlement-plan.md) and [evidence](owned-qualification-settlement/README.md): enduring one-owner supervision, fixed real Task boundary and genuine public process/pair closure before new model acceptance.
+
 - [Complete-read publication plan](complete-read-publication-implementation-plan.md) and [evidence](complete-read-publication-implementation/README.md): actual17 legal materialized receipt and inline contamination, shared audit and private fixed-bound settlement.
 
 - [Genuine Task creator content](creator-content-implementation-plan.md): raw creator text, existing Host system provenance and task-level attachment ownership; local backend and actual new-Task qualification proceed separately.
