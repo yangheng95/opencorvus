@@ -6,7 +6,15 @@
 
 import { createResource, createMemo, Show } from "solid-js"
 import { ChangeLineStats, DiffView, changeStatusLabel, type FileChange } from "./DiffView"
-import { hasDiffBody, isKnownTextDiff, resolveDiff, type ChangeGroup, type DiffTarget } from "../services/diff"
+import {
+  changeGroupsRevisionKey,
+  hasDiffBody,
+  isKnownTextDiff,
+  resolveDiff,
+  type ChangeGroup,
+  type DiffTarget,
+} from "../services/diff"
+import { captureApiAuthority } from "../services/api"
 import { Panel } from "./ui/Panel"
 import { t } from "../utils/i18n"
 import type { JSX } from "solid-js"
@@ -20,16 +28,16 @@ export interface DiffPreviewPanelProps {
   groups?: readonly ChangeGroup[]
 }
 
+type DiffPreviewRequest = { scopeKey: string; target: DiffTarget; groups?: readonly ChangeGroup[] }
+
 export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
-  const [change] = createResource<
-    FileChange | null,
-    { scopeKey: string; target: DiffTarget; groups?: readonly ChangeGroup[] } | null
-  >(
+  const request = createMemo<{ key: string; value: DiffPreviewRequest } | null>(
     () => {
       const target = props.target
       const scopeKey = props.scopeKey.trim()
-      if (!target?.filePath || (!scopeKey && !props.groups)) return null
-      return {
+      const groups = props.groups
+      if (!target?.filePath || (!scopeKey && !groups)) return null
+      const value: DiffPreviewRequest = {
         scopeKey,
         target: {
           filePath: target.filePath,
@@ -37,9 +45,23 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
           sessionID: target.sessionID,
           agentID: target.agentID,
         },
-        groups: props.groups,
+        groups,
+      }
+      return {
+        key: JSON.stringify([
+          captureApiAuthority().revision,
+          scopeKey,
+          value.target,
+          groups === undefined ? null : changeGroupsRevisionKey(groups),
+        ]),
+        value,
       }
     },
+    null,
+    { equals: (previous, current) => previous?.key === current?.key },
+  )
+  const [change] = createResource<FileChange | null, DiffPreviewRequest | null>(
+    () => request()?.value ?? null,
     async (request) => {
       if (!request) return null
       return resolveDiff(request.target, request.groups)

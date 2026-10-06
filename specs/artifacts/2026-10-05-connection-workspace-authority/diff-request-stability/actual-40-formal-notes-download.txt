@@ -1,0 +1,41 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18006/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 326-329, 388-417
++									446 container
++										447 text orchestrator
++										448 text 1m 13s
++										449 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										450 container
++											451 button (collapsed) Secondary Actions: Expand, Description: artifact_select · Selected Artifact source (最终验收依据：独立者对同一hello资源连续两次完整物化后分别实际读取检查26字节，notes完整物化并实际检查212992字节全部8192行；报告发布使用真实完整读取引用，无内容阻塞。)
++												452 text artifact_select
++												453 text Selected Artifact source (最终验收依据：独立者对同一hello资源连续两次完整物化后分别实际读取检查26字节，notes完整物化并实际检查212992字节全部8192行；报告发布使用真实完整读取引用，无内容阻塞。)
++												454 image
++											455 text 独立验证已通过：同一个 hello.txt 发布资源经过连续两次完整物化读取，每次都重新检查了实际只读文件的全部 26 字节；notes.txt 的全部 212992 字节与指定行连续重复 8192 次完全一致。三次检查均确认了只读属性、UTF-8 无 BOM 和 LF 换行，独立验证报告也已使用实际完整读取引用发布。 现在将两份真实文件列入本正式任务的交付区域并结束任务。此前的脚本失败及修复记录保留，无未解决的交付问题；不声称已验证你的实际下载操作。
++											456 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++												457 text manage_task
++												458 text action=complete_task
++												459 image
++											460 container 2 files
++												461 container
++													462 text Agent delivery 2 files 记录Diff加载稳定性验收40
++												463 button (collapsed) hello.txt producer · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++													464 text hello.txt
++													465 text producer
++													466 text  · 
++													467 text 26 B
++													468 text Preview
++												469 button Copy filename
++												470 button Description: Download: hello.txt, Help: Download
++												471 button (collapsed) notes.txt producer · 208.0 KB Preview, Help: notes.txt, Secondary Actions: Expand
++													472 text notes.txt
++													473 text producer
++													474 text  · 
++													475 text 208.0 KB
++													476 text Preview
++												477 button Copy filename
++												478 button Description: Download: notes.txt, Help: Download
++												479 button (collapsed) Inspect delivery records (1), Secondary Actions: Expand
++										480 button Copy message
++										481 pop up button (collapsed) Description: View model usage for this turn: 484K Token, Secondary Actions: Expand
++										482 text Oct 7, 03:11 AM
+The focused UI element is 477 button Copy filename

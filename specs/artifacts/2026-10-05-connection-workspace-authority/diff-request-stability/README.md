@@ -1,0 +1,3 @@
+# Semantic Diff request stability evidence
+
+See [binding Recall and actual40 result](../diff-request-stability-plan.md). Current large/small Diff survives genuine participant updates and keyboard switching; formal two-file resources, three complete readonly materializations and exact notes download qualify. Task747452ms/whole873162ms remain within original bounds.63 streamed Sol requests include62 EOF and one original aborted reader; semantic retry cause and exact physical actor binding remain unresolved. Original39 paint discrepancy and separate snapshot refresh identity risk remain open. Original copy-filename misclick and qualification-tool type failure are preserved. No UI automation, seed file or old Task rearm is admitted.

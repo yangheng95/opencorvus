@@ -226,3 +226,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Genuine file row acceptance38](file-row-live-plan.md): actual streamed Sol26-byte publication, two complete materialized reads, formal completion/download and terminal file-row keys qualified within original bounds; active-update focus/count findings remain.
 
 - [Streaming file-row identity39](file-row-stability-plan.md): stable complete observation/path identities through For/Virtua; actual39 focus survives genuine updates and keys/filter/file delivery qualify; original big Review loading remains under investigation.
+
+- [Semantic Diff request40](diff-request-stability-plan.md): exact scope/target/evidence request identity; actual40 large/small Diff, live updates, keys and formal files qualify within bounds; original39 paint and recovered semantic-idle cause remain open.

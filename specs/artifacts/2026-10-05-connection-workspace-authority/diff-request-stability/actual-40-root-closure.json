@@ -1,0 +1,36 @@
+{
+  "observedAtUtc": "2026-10-06T19:17:19.6117770Z",
+  "occurrence": "diff-request-40-06eeca28-a906-4a7d-acd9-8c4a559d564a",
+  "host": {
+    "expected": {
+      "pid": 76736,
+      "processInstanceID": "win32:639269098943284374",
+      "occurrenceID": "ef810032-94cf-42d6-b0d2-561a8b7a5523"
+    },
+    "state": "dead_or_reused"
+  },
+  "target": {
+    "expected": {
+      "pid": 49880,
+      "processInstanceID": "win32:639269098950961357",
+      "occurrenceID": "1c0de4dd-0e52-45e2-bffa-acb16d889fee"
+    },
+    "state": "dead_or_reused"
+  },
+  "listeners": [],
+  "copiedAuthPresent": false,
+  "copiedModelsPresent": false,
+  "sourcePairMetadata": [
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "bytes": 2147,
+      "modifiedAt": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "bytes": 9155406,
+      "modifiedAt": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "page": "own IAB9 tab21 closed before same sole public shutdown"
+}

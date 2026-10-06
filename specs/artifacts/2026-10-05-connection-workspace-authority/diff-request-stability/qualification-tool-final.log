@@ -1,0 +1,40 @@
+{
+  "bashChecks": 12,
+  "taskDurationMs": 747452,
+  "provider": {
+    "streamedCount": 63,
+    "maxRequests": 96,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "eofCount": 62,
+    "aborted": [
+      {
+        "model": "gpt-6.1-sol",
+        "responseReader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791313320885,
+          "boundAt": 1791313320887,
+          "chunkCount": 3849,
+          "byteCount": 3137205,
+          "firstByteReadAt": 1791313320888,
+          "lastByteReadAt": 1791313502386,
+          "terminal": {
+            "kind": "aborted",
+            "at": 1791313502388
+          }
+        },
+        "actorBinding": "unknown; no formal stream request identity; array position and timestamps do not bind actor",
+        "status": 200,
+        "streaming": true
+      }
+    ],
+    "http200Count": 63,
+    "requests": 63
+  },
+  "materializedReads": 3,
+  "wholeDurationMs": 873162,
+  "retryCount": 1,
+  "publications": 3
+}

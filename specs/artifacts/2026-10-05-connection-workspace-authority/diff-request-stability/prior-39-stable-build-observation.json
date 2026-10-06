@@ -1,0 +1,171 @@
+{
+  "access": "original readonly production monitor observations; equal semantic payload is source investigation, not a UI test or integrity gate",
+  "firstSource": "task-observation-20328-64cdf18e-f941-4983-a1e1-43bb466a2995-337.json",
+  "lastSource": "task-observation-20328-64cdf18e-f941-4983-a1e1-43bb466a2995-810.json",
+  "firstObservedAt": "2026-10-06T18:29:22.335Z",
+  "lastObservedAt": "2026-10-06T18:34:46.135Z",
+  "before": {
+    "id": "art_hYsvAY81Yq2ocfhKrt5x",
+    "task_id": "tsk_g00VXIMsUf00qtgFMX5g",
+    "kind": "build_host_observation",
+    "label": "git-workspace",
+    "payload": {
+      "task_id": "tsk_g00VXIMsUf00qtgFMX5g",
+      "session_id": "ses_hvIH9Ae2zK77cnthmLQj",
+      "final_message_id": "msg_g0VXINsE80004wG8P6l4",
+      "execution_mode": "current_project",
+      "contribution_commit_ref": "8d6231210418",
+      "published_commit_ref": "8d6231210418",
+      "primary_base_commit_ref": "cc49294e05bb",
+      "primary_terminal_commit_ref": "8d6231210418",
+      "diff_base_ref": "fbefdb5c0f106ed8d103c10dd13ef39d13d620f4",
+      "diff_head_ref": "c2c2f95973bfde371a8738ada3099bc740d73161",
+      "diffs": [
+        {
+          "file": "hello.txt",
+          "additions": 1,
+          "deletions": 0,
+          "status": "added",
+          "is_binary": false,
+          "before": null,
+          "after": {
+            "oid": "292cc65cf98bd2ad1c495bac9bf6b03c78a39c12",
+            "bytes": 26
+          }
+        },
+        {
+          "file": "notes.txt",
+          "additions": 8192,
+          "deletions": 0,
+          "status": "added",
+          "is_binary": false,
+          "before": null,
+          "after": {
+            "oid": "a9c7e83d1ababda5ba90f7f3460886c8fc4ca82f",
+            "bytes": 212992
+          }
+        }
+      ],
+      "observed_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hF4Pw8ffU6iU4b488q7x",
+          "catalog_revision": 5,
+          "expected_sha256": "25d8ace35535654bdc40904bd79f4972dd11c2ede03e20aab54c98c27d830a3e"
+        }
+      ],
+      "source_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hF4Pw8ffU6iU4b488q7x",
+          "catalog_revision": 5,
+          "expected_sha256": "25d8ace35535654bdc40904bd79f4972dd11c2ede03e20aab54c98c27d830a3e"
+        }
+      ]
+    },
+    "payload_sha256": "9428b80647e16e8bf83802ac1619e0b4cd925ef1c1b62c5b7b9d08a4c04fb503",
+    "payload_bytes": 1207,
+    "payload_block_sha256s": [
+      "9428b80647e16e8bf83802ac1619e0b4cd925ef1c1b62c5b7b9d08a4c04fb503"
+    ],
+    "payload_block_index_sha256": "b1af8556275071b913826c5e809b09ee4cf36979d4887427c7b7c3d24c18dfe2",
+    "catalog_artifact_type": "opencorvus/core/build_host_observation",
+    "catalog_schema_diagnostic": null,
+    "catalog_producer": {
+      "owner_kind": "core",
+      "component_id": "engine-artifact",
+      "operation_id": "build_host_observation"
+    },
+    "catalog_import_source_task_id": null,
+    "catalog_resource_count": 0,
+    "catalog_resource_media_types": [],
+    "catalog_search_text": "opencorvus/core/build_host_observation\nengine-artifact\nbuild_host_observation",
+    "catalog_search_text_truncated": false,
+    "catalog_metadata_sha256": "333eb6fa94f99180cc8750a9add72f66761128d3086905cfc83c7b5c0257f6a1",
+    "catalog_revision": 10,
+    "time_created": 1791311361691,
+    "time_updated": 1791311361691
+  },
+  "after": {
+    "id": "art_hYsvAY81Yq2ocfhKrt5x",
+    "task_id": "tsk_g00VXIMsUf00qtgFMX5g",
+    "kind": "build_host_observation",
+    "label": "git-workspace",
+    "payload": {
+      "task_id": "tsk_g00VXIMsUf00qtgFMX5g",
+      "session_id": "ses_hvIH9Ae2zK77cnthmLQj",
+      "final_message_id": "msg_g0VXINsE80004wG8P6l4",
+      "execution_mode": "current_project",
+      "contribution_commit_ref": "8d6231210418",
+      "published_commit_ref": "8d6231210418",
+      "primary_base_commit_ref": "cc49294e05bb",
+      "primary_terminal_commit_ref": "8d6231210418",
+      "diff_base_ref": "fbefdb5c0f106ed8d103c10dd13ef39d13d620f4",
+      "diff_head_ref": "c2c2f95973bfde371a8738ada3099bc740d73161",
+      "diffs": [
+        {
+          "file": "hello.txt",
+          "additions": 1,
+          "deletions": 0,
+          "status": "added",
+          "is_binary": false,
+          "before": null,
+          "after": {
+            "oid": "292cc65cf98bd2ad1c495bac9bf6b03c78a39c12",
+            "bytes": 26
+          }
+        },
+        {
+          "file": "notes.txt",
+          "additions": 8192,
+          "deletions": 0,
+          "status": "added",
+          "is_binary": false,
+          "before": null,
+          "after": {
+            "oid": "a9c7e83d1ababda5ba90f7f3460886c8fc4ca82f",
+            "bytes": 212992
+          }
+        }
+      ],
+      "observed_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hF4Pw8ffU6iU4b488q7x",
+          "catalog_revision": 5,
+          "expected_sha256": "25d8ace35535654bdc40904bd79f4972dd11c2ede03e20aab54c98c27d830a3e"
+        }
+      ],
+      "source_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hF4Pw8ffU6iU4b488q7x",
+          "catalog_revision": 5,
+          "expected_sha256": "25d8ace35535654bdc40904bd79f4972dd11c2ede03e20aab54c98c27d830a3e"
+        }
+      ]
+    },
+    "payload_sha256": "9428b80647e16e8bf83802ac1619e0b4cd925ef1c1b62c5b7b9d08a4c04fb503",
+    "payload_bytes": 1207,
+    "payload_block_sha256s": [
+      "9428b80647e16e8bf83802ac1619e0b4cd925ef1c1b62c5b7b9d08a4c04fb503"
+    ],
+    "payload_block_index_sha256": "b1af8556275071b913826c5e809b09ee4cf36979d4887427c7b7c3d24c18dfe2",
+    "catalog_artifact_type": "opencorvus/core/build_host_observation",
+    "catalog_schema_diagnostic": null,
+    "catalog_producer": {
+      "owner_kind": "core",
+      "component_id": "engine-artifact",
+      "operation_id": "build_host_observation"
+    },
+    "catalog_import_source_task_id": null,
+    "catalog_resource_count": 0,
+    "catalog_resource_media_types": [],
+    "catalog_search_text": "opencorvus/core/build_host_observation\nengine-artifact\nbuild_host_observation",
+    "catalog_search_text_truncated": false,
+    "catalog_metadata_sha256": "333eb6fa94f99180cc8750a9add72f66761128d3086905cfc83c7b5c0257f6a1",
+    "catalog_revision": 10,
+    "time_created": 1791311361691,
+    "time_updated": 1791311361691
+  }
+}

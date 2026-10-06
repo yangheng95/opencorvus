@@ -1,0 +1,15 @@
+{
+  "pid": 49880,
+  "occurrence": "diff-request-40-06eeca28-a906-4a7d-acd9-8c4a559d564a",
+  "owner": {
+    "pid": 49880,
+    "processInstanceID": "win32:639269098950961357",
+    "occurrenceID": "66909ac5-d718-47fa-ab24-73f7bd4245d3"
+  },
+  "parent": {
+    "pid": 60236,
+    "processInstanceID": "win32:639269098950512212",
+    "occurrenceID": "506945ee-ee0b-42ed-b5e4-0524ed087314"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

@@ -1,0 +1,82 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18006/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18006/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (collapsed) Description: Show sidebar, Secondary Actions: Expand
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspaceMain
+				21 container chatSection
+					22 container Description: Loading task, ID: taskSwitchProgress
+					23 container
+						24 text 记录Diff加载稳定性验收40
+						25 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-215-trigger, Secondary Actions: Expand
+						26 container Description: Running · 24s, ID: taskStatus
+							27 text Running
+							28 text 24s
+						29 button Side chat
+						30 container solidChatHeaderRuntimeActions
+							31 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							32 checkbox Description: Close right dock, Value: 1
+					33 container
+						34 container Description: Conversation, ID: chatScroll
+							35 container
+								36 container
+									37 text User
+									38 text 请先真实查询当前项目的 Task 列表和报告，再按顺序实际制作两个文件。先制作 hello.txt，完整内容为 Hello from a formal Task. 后接一个 LF，UTF-8、无 BOM、共26字节；随后制作 notes.txt，完整内容为 Notes from a formal Task. 后接一个 LF，这一行连续重复8192次，UTF-8、无 BOM、共212992字节。请真实检查两份文件，发布同一正式 Task 的真实文件资源。由独立参与者连续两次完整物化读取同一个 hello.txt 发布资源，并分别检查实际只读文件的26字节；也完整物化读取 notes.txt，检查实际只读文件的全部重复内容和字节数。以实际完整读取的 source_read_refs 发布独立验证报告，最后从正式 Task 交付区域提供两个真实文件资源并结束 Task。请保留真实失败和未完成事项；无需访问网站或启动其他服务。
+								39 container
+									40 text orchestrator
+									41 text 10s
+									42 button (collapsed) Description: Handoff context, Secondary Actions: Expand
+									43 text 我会先实际查询当前项目的任务列表和报告，再按指定顺序制作并发布两份文件，最后由独立参与者检查发布资源的实际字节内容，包括对同一个 hello.txt 连续两次完整物化读取。
+									44 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
+										45 text dispatch_agent
+										46 text target=mission
+										47 image
+								48 container Sub-agent progress
+									49 container
+										50 button Open the full mission conversation
+										51 text mission
+										52 container mission activity
+											53 button (collapsed) Description: Handoff context, Secondary Actions: Expand
+											54 text 我会先用实际可用的任务查询能力观察当前项目的任务列表，再读取返回任务的报告与状态信息；本阶段只查询并发布观察证据，不制作文件、不创建任务。 panel_query_task Tasks panel_query_task {"taskIDs":["tsk_g00VXIVZ760
+						55 container chatHomeComposition
+							56 container chatForm
+								57 splitter Description: Drag to resize the message input, Value: 42
+								58 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								59 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								60 text Code
+								61 text Task
+								62 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
+								63 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								64 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+									65 text openai/gpt-6.1-sol
+								66 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+				67 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+				68 container Description: Tools panel, ID: rightDock
+					69 container tabs-cl-64
+						70 tab group Open tools
+							71 container
+								72 tab (selected, settable, boolean) Description: Review, Value: 1, ID: tabs-cl-64-trigger-diff
+								73 button Close tab
+						74 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+						75 button Close panel
+						76 container Description: Review, ID: centerWorkbenchDiff
+							77 container Files
+								78 text No file changes for this task
+
+The focused UI element is 3 button (collapsed) Description: Show sidebar, Secondary Actions: Expand

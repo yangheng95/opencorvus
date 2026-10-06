@@ -560,6 +560,13 @@ current row data reactively, keeping the same visible row owner across live
 evidence updates. A different scope/observation/path or actual removal retires
 its owner. Virtual viewport eviction and the 80-row renderer switch still
 retire nodes; stable identity does not promise focus through those boundaries.
+The Diff reader memo compares the current connection authority revision, Task
+scope, normalized target and complete visible group evidence revision using
+the existing group revision primitive. Equivalent freshly projected objects
+keep one resource request owner; a changed context/target/evidence uses the
+original strict resolver and truthful loading/error/incomplete state. This
+does not add an alternate content cache, selected-path fallback or a second
+HTTP reader/cancellation policy.
 An enabled item consumes Enter/Space browser defaults through its direct
 listener when that exact item is the event target. Kobalte retains selection
 and existing caller key handlers; nested interactive targets keep their own

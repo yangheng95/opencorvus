@@ -1,0 +1,9 @@
+Browser tab: 21, Title: "OpenCorvus", URL: "http://localhost:18006/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 284-286
+~							90 container Description: Running · 10m 58s, ID: taskStatus
+~								231 text 10m 58s
++												289 text 三次实际缓存文件检查均已通过：同一 hello 资源两次各读取并检查了全部26字节，notes 检查了全部212992字节及8192行；三次均确认 Windows 只读属性。先行查询和制作顺序已有真实工具记录支持，接下来核对制作者的失败修复与发布回执，并把尚未执行的最终交付、结束步骤明确留在报告中。 read_agent_message Task participant evidence read .opencorvus/.r/tasks/tsk_g00VXIVZ7600ZoPUE4Is/intent/request.md @1+2000 (10 lines) artifact_publish Published task-resource-qa/verification-report
++										290 text producer
++										291 text Added + 8,192 - 0
+The focused UI element is 229 (selected) Help: notes.txt, Value: notes.txt Added, ID: change-row-2
