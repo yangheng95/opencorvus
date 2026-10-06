@@ -1,0 +1,385 @@
+{
+  "pid": 43416,
+  "owner": {
+    "pid": 43416,
+    "processInstanceID": "win32:639268966052855436",
+    "occurrenceID": "5773b823-658d-4551-a5e5-97bb3840c9b7"
+  },
+  "model": "openai/gpt-6.1-sol",
+  "credential": "available",
+  "catalog": "projected",
+  "pairedModels": true,
+  "executionStarted": false,
+  "admission": {
+    "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-33\\project",
+    "packageRevision": {
+      "scope": "project",
+      "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+      "namespace": "qa",
+      "id": "task-resource-qa",
+      "version": "2026.10.06.2",
+      "packageDigest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+    },
+    "processMode": "native",
+    "matrix": [
+      {
+        "kind": "projected-worker",
+        "agentID": "mission",
+        "baseRole": "explore",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "producer",
+        "baseRole": "build",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "verifier",
+        "baseRole": "delegated-worker",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "universal-build",
+        "baseRole": "build",
+        "capabilityOwner": "platform",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "host",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "compaction",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "title",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "summary",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "coding",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "chat",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "work",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "control",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "mission",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      }
+    ],
+    "workerGrants": [
+      {
+        "identity": {
+          "agentID": "mission",
+          "baseRole": "explore",
+          "sessionKind": "explore",
+          "dispatchAdapterID": "explore",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "5ddb03c66630a22f87749e31af91febcee28d157f0700df85fec6a62598c5927"
+        },
+        "packageRevision": {
+          "scope": "project",
+          "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+          "namespace": "qa",
+          "id": "task-resource-qa",
+          "version": "2026.10.06.2",
+          "packageDigest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+        },
+        "builtInToolIDs": [
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "capability_search",
+          "external_code_search",
+          "glob",
+          "memory",
+          "panel_query_task",
+          "publish_interactive_artifact",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "search_code",
+          "send_mailbox_message",
+          "webfetch",
+          "websearch"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "producer",
+          "baseRole": "build",
+          "sessionKind": "build",
+          "dispatchAdapterID": "build",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "755364a48b38bc60654edacdb6faede6fb982a5c149f029227534391647083c6"
+        },
+        "packageRevision": {
+          "scope": "project",
+          "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+          "namespace": "qa",
+          "id": "task-resource-qa",
+          "version": "2026.10.06.2",
+          "packageDigest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+        },
+        "builtInToolIDs": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "browser_preview_capture",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "mission_state",
+          "planner",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "schedule",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "verifier",
+          "baseRole": "delegated-worker",
+          "sessionKind": "delegated-worker",
+          "dispatchAdapterID": "delegated_worker",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "f9825e2770ddac146258de926cae4ce8d5e42c6f701cfa7758242dd3c28af677"
+        },
+        "packageRevision": {
+          "scope": "project",
+          "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+          "namespace": "qa",
+          "id": "task-resource-qa",
+          "version": "2026.10.06.2",
+          "packageDigest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+        },
+        "builtInToolIDs": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "universal-build",
+          "baseRole": "build",
+          "sessionKind": "build",
+          "dispatchAdapterID": "build",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "81576bdc131180335a37bca3b14fa15885859846b6922e6f84833a9734e140ac"
+        },
+        "packageRevision": {
+          "scope": "project",
+          "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+          "namespace": "qa",
+          "id": "task-resource-qa",
+          "version": "2026.10.06.2",
+          "packageDigest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+        },
+        "builtInToolIDs": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "browser_preview_capture",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "mission_state",
+          "planner",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "schedule",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "defaultTools": []
+      }
+    ],
+    "schedulerGrants": {
+      "identity": {
+        "agentID": "orchestrator",
+        "baseRole": "orchestrator",
+        "sessionKind": "orchestrator",
+        "projectionHash": "dc4defcd024ce01cf3db507b27acee2c7b8b3c0d415ba2c4d8379c9a249039a1"
+      },
+      "packageRevision": {
+        "scope": "project",
+        "projectID": "prj_hOhuasJcP7wN92Ac8Njr",
+        "namespace": "qa",
+        "id": "task-resource-qa",
+        "version": "2026.10.06.2",
+        "packageDigest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+      },
+      "builtInToolIDs": [
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "capability_search",
+        "dispatch_agent",
+        "evolve_expert_squad_from_feedback",
+        "manage_task",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "skill",
+        "wait"
+      ],
+      "virtualWorkflows": {
+        "query-produce-verify": {
+          "label": "Observe, Produce, Verify",
+          "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+          "nodes": {
+            "inspect": {
+              "agent_id": "mission",
+              "description": "Observe the current Project Task list and report the actual result or precise error.",
+              "depends_on": []
+            },
+            "produce": {
+              "agent_id": "producer",
+              "description": "Create and publish the requested text resource after the observation is available.",
+              "depends_on": [
+                "inspect"
+              ]
+            },
+            "verify": {
+              "agent_id": "verifier",
+              "description": "Independently verify original requirements against the settled producer result and immutable resource.",
+              "depends_on": [
+                "produce"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "providerAPIModel": "gpt-6.1-sol",
+    "boundary": "Available actual registry identities and intended configuration; no prediction of dispatch or request origin"
+  }
+}

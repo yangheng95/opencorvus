@@ -1,0 +1,17 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-3f665b2bfd616ca5\debug\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/composer-expert-squad-catalog.test.ts
+bun test v1.3.14 (0d9b296a)
+
+test\composer-expert-squad-catalog.test.ts:
+(pass) Composer reference catalog source-qualified feedback > global typed issues remain current after a successful bounded Squad search [0.83ms]
+(pass) Composer reference catalog source-qualified feedback > failed then successful search settles its own source while retaining full-load issues [0.18ms]
+(pass) Composer reference catalog source-qualified feedback > a complete healthy global replacement publishes actual available items and healthy feedback [0.17ms]
+(pass) Composer reference catalog source-qualified feedback > settled Project sources publish actual Mission issues and explicit request failures [0.50ms]
+(pass) Composer reference catalog source-qualified feedback > a result for an older request returns the current snapshot facts [0.16ms]
+(pass) Composer Expert Squad bounded catalog > keeps the exact active and selected Squads alongside each bounded search page [0.38ms]
+
+ 6 pass
+ 0 fail
+ 26 expect() calls
+Ran 6 tests across 1 file. [197.00ms]

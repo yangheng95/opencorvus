@@ -1,0 +1,17 @@
+Browser tab: 13, Title: "OpenCorvus", URL: "http://localhost:17998/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 94-98, 101-160
+~			99 search text field (settable) Description: Search skill or squad names, Value: catalog-recovered
+~			100 button Clear
++			101 list Description: Select skills and expert squads, ID: composerReferenceListbox
++				102 text SKILLS
++				103 Value: catalog-recovered Mission Skill Owned repaired Mission Skill for catalog feedback acceptance., ID: composerReferenceListbox-item-cl-749
++					104 text catalog-recovered
++					105 text Mission Skill
++					106 text Owned repaired Mission Skill for catalog feedback acceptance.
++			107 text From the Squad Market
++			108 button Install more Expert Squads Squad Market Browse the Squad Market and install only what this project needs.
++				109 text Install more Expert Squads
++				110 text Squad Market
++				111 text Browse the Squad Market and install only what this project needs.
+The focused UI element is 99 search text field (settable) Description: Search skill or squad names, Value: catalog-recovered

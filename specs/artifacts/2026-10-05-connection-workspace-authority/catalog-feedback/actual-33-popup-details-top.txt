@@ -1,0 +1,10 @@
+Browser tab: 14, Title: "OpenCorvus", URL: "http://localhost:17999/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~				97 button (expanded) Details, Secondary Actions: Collapse
++				161 text mission skills: Mission Skill at C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-06\live-sol-publication-33\runtime\config\mission-skills\catalog-fault\SKILL.md was ignored: ConfigFrontmatterError: C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-06\live-sol-publication-33\runtime\config\mission-skills\catalog-fault\SKILL.md: Failed to parse YAML frontmatter: unexpected end of the stream within a flow collection (3:1)
+
+ 1 | 
+ 2 | name: [
+ 3 | 
+-----^
+The focused UI element is 97 button (expanded) Details, Secondary Actions: Collapse

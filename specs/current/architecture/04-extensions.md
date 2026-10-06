@@ -590,9 +590,13 @@ Composer 的 `@mission("<exact-name>")` 与 `@squad("<manifest-id>")` 都是可�
 Mission state files。Mission Skill 不新增 active field、workflow state machine、自动推进或
 Task-local squad switching；跨 squad 合作仍由 Mission 创建固定 `promptProfile` 的依赖阶段 Task。
 
-Composer 的 Expert Squad 与 Mission Skill catalog 请求并行执行，但只有两者同时成功后才以一个
-scope-keyed snapshot 发布。任一请求失败时 UI 显示同一个 catalog failure，不保留另一类资源的
-partial snapshot；键入和菜单导航不发起网络请求。
+Composer 的 Expert Squad catalog、bounded page、active inspection、Mission Skill 与 Chat capability
+请求并行结算到同一个带 scope/request key 的 snapshot；全局入口同样保留真实 Skill 与 Mission Skill
+response issues。唯一 problems 数组按数据源记录 request failure 与 catalog issue，界面错误文案由其
+派生。局部 bounded Squad search 只结算自己的 search problem，不清除其他目录的问题。完整加载失败
+也必须投影到同一个反馈面；显式重试沿既有当前 scope loader 合并并发请求，不自动重试提交。
+当前 Expert Squad catalog/page 的投影耦合及有效实体集合保持既定合同；可用的其他类目仍随该快照
+展示。键入 Squad 查询与引用搜索沿现有 bounded server search，不能被描述为全量目录枚举或无网络导航。
 
 随应用分发的唯一内置 Mission Skill 是 `general`。它只在用户精确选择
 `@mission("general")` 后加载，并把用户定义的目标交给既有 native Mission 协议、Mission state 与

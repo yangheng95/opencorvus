@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-06T14:55:46.3922281Z",
+  "occurrence": "catalog-feedback-31-d97954cd-c061-4c8c-a78a-7f8faffdef99",
+  "host": "dead_or_reused",
+  "target": "dead_or_reused",
+  "listeners": [],
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "sourceMetadata": [
+    {
+      "name": "auth.json",
+      "length": 2147,
+      "lastWriteTimeUtc": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "name": "models.json",
+      "length": 9155406,
+      "lastWriteTimeUtc": "2026-10-04T15:48:10.1379969Z"
+    }
+  ]
+}

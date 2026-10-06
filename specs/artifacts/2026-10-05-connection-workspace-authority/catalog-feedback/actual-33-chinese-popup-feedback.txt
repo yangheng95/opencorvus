@@ -1,0 +1,74 @@
+Browser tab: 14, Title: "OpenCorvus", URL: "http://localhost:17999/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~									81 pop up button (expanded) Description: Skill 与专家团, Secondary Actions: Collapse
+~		91 container popover-cl-44-content
+~			92 text 选择 Skill 与专家团
+~			93 text 多选结果会以可见引用写入输入内容。
++			94 search text field (settable) 搜索 Skill 或专家团名称
++			95 container
++				96 text 部分引用未能加载，可查看详情或重试。
++				97 button (collapsed) 详细信息, Secondary Actions: Expand
++					98 text 详细信息
++				99 button 重试
++			100 container
++				101 list Description: 选择 Skill 与专家团, ID: composerReferenceListbox
++					102 text SKILL
++					103 ID: composerReferenceListbox-item-cl-844, Value: browser-use Skill Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.
++						104 text browser-use
++						105 text Skill
++						106 text Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.
++					107 ID: composerReferenceListbox-item-cl-846, Value: computer-use Skill Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.
++						108 text computer-use
++						109 text Skill
++						110 text Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.
++					111 ID: composerReferenceListbox-item-cl-848, Value: design-taste-frontend Skill Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.
++						112 text design-taste-frontend
++						113 text Skill
++						114 text Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.
++					115 ID: composerReferenceListbox-item-cl-850, Value: grill-me Skill Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
++						116 text grill-me
++						117 text Skill
++						118 text Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
++					119 ID: composerReferenceListbox-item-cl-852, Value: research-report Skill Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.
++						120 text research-report
++						121 text Skill
++						122 text Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.
++					123 ID: composerReferenceListbox-item-cl-854, Value: work-artifacts Skill Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.
++						124 text work-artifacts
++						125 text Skill
++						126 text Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.
++					127 ID: composerReferenceListbox-item-cl-856, Value: general Mission Skill Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
++						128 text general
++						129 text Mission Skill
++						130 text Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
++					131 text 专家团
++					132 ID: composerReferenceListbox-item-cl-858, Value: Advanced 专家团 · advanced Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.
++						133 text Advanced
++						134 text 专家团
++						135 text  · 
++						136 text advanced
++						137 text Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.
++					138 ID: composerReferenceListbox-item-cl-860, Value: Base 专家团 · base Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++						139 text Base
++						140 text 专家团
++						141 text  · 
++						142 text base
++						143 text Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++					144 ID: composerReferenceListbox-item-cl-862, Value: Research Studio 专家团 · research-studio A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.
++						145 text Research Studio
++						146 text 专家团
++						147 text  · 
++						148 text research-studio
++						149 text A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.
++					150 ID: composerReferenceListbox-item-cl-864, Value: Generate Expert Squads 生成器 专家团 · squad-sdk Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.
++						151 text Generate Expert Squads
++						152 text 生成器
++						153 text 专家团
++						154 text  · 
++						155 text squad-sdk
++						156 text Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.
++				157 button 安装更多专家团 Squad 市场 浏览 Squad 市场，只安装当前项目需要的专家团。
++					158 text 安装更多专家团
++					159 text Squad 市场
++					160 text 浏览 Squad 市场，只安装当前项目需要的专家团。
+The focused UI element is 94 search text field (settable) 搜索 Skill 或专家团名称

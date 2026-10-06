@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-06T14:52:38.5809450Z",
+  "inputPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-31\\runtime\\config\\mission-skills\\catalog-fault\\SKILL.md",
+  "globalStatus": 200,
+  "missionIssues": [
+    {
+      "kind": "invalid_mission_skill",
+      "source": "global",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-31\\runtime\\config\\mission-skills\\catalog-fault\\SKILL.md",
+      "message": "Mission Skill at C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-31\\runtime\\config\\mission-skills\\catalog-fault\\SKILL.md was ignored: ConfigFrontmatterError: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-31\\runtime\\config\\mission-skills\\catalog-fault\\SKILL.md: Failed to parse YAML frontmatter: unexpected end of the stream within a flow collection (3:1)\n\n 1 | \n 2 | name: [\n 3 | \n-----^"
+    }
+  ],
+  "squadStatus": 200,
+  "squadIDs": [
+    "base",
+    "advanced"
+  ]
+}

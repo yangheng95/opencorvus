@@ -1,0 +1,15 @@
+Browser tab: 12, Title: "OpenCorvus", URL: "http://localhost:17997/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 75
++									94 container Drag files here · Drag the top edge to resize
++										95 text entry area (settable) Description: Drag files here · Drag the top edge to resize, Value: @mission , ID: chatTextarea
++										96 container
++											97 text Insert a reference ↑↓ navigate · Enter select · Esc close Mission Skill at C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-06\live-sol-publication-31\runtime\config\mission-skills\catalog-fault\SKILL.md was ignored: ConfigFrontmatterError: C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-06\live-sol-publication-31\runtime\config\mission-skills\catalog-fault\SKILL.md: Failed to parse YAML frontmatter: unexpected end of the stream within a flow collection (3:1) 1 | 2 | name: [ 3 | -----^
++											98 list Description: Available Skill, Mission Skill, and Expert Squad references, ID: composerMentionListbox
++												99 text Mission Skill
++												100 (selected) ID: composerMentionListbox-item-cl-339, Value: general Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow. Mission Skill
++													101 text general
++													102 text Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
++													103 text Mission Skill
+~									85 button Description: Send, Help: Send message (Enter to send, Shift+Enter for newline), ID: chatSend
+The focused UI element is 95 text entry area (settable) Description: Drag files here · Drag the top edge to resize, Value: @mission , ID: chatTextarea

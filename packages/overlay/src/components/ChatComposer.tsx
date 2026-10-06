@@ -189,6 +189,7 @@ export interface ChatComposerProps {
   skills: ComposerSkillOption[]
   missionSkills: ComposerSkillOption[]
   referenceCatalogError?: string
+  onReferenceCatalogRetry?: () => void
   expertSquads: ExpertSquadOption[]
   onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
   onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
@@ -1373,6 +1374,8 @@ export function ChatComposer(props: ChatComposerProps) {
               skills={props.skills}
               missionSkills={props.missionSkills}
               expertSquads={props.expertSquads}
+              catalogError={props.referenceCatalogError}
+              onCatalogRetry={props.onReferenceCatalogRetry}
               onExpertSquadQuery={props.onExpertSquadQuery}
               onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
               onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
@@ -1633,6 +1636,7 @@ export function ChatComposer(props: ChatComposerProps) {
                 options={activeMentionOptions()}
                 selectedKey={selectedMentionOption()?.key ?? ""}
                 error={props.referenceCatalogError}
+                onRetry={props.onReferenceCatalogRetry}
                 onHighlight={(option) => setHighlightedMentionKey(option.key)}
                 onSelect={selectMentionOption}
               />

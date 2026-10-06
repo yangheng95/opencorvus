@@ -1,0 +1,18 @@
+{
+  "reason": "original-root-exited",
+  "pinned": {
+    "taskID": "tsk_g00VXHVFZ700iTLZ6kxy",
+    "projectID": "prj_hEsFp2MSjkdAFGl9dxEM",
+    "rootSessionID": "ses_-zUSiUkJHzzU2oUCPvKM",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXHVFhI00CIl0ink6J",
+    "openedAt": 1791298332277
+  },
+  "boundary": "Pinned Task boundary cached once; no progress renewal; stop request is distinct from physical settlement",
+  "totalDeadlineMs": 1791299232277,
+  "occurrence": "catalog-feedback-31-d97954cd-c061-4c8c-a78a-7f8faffdef99",
+  "pid": 64716,
+  "preparationDeadlineMs": 1791298904742,
+  "observedAtUtc": "2026-10-06T14:53:58.3150139Z",
+  "firstFailedPath": null
+}

@@ -1,0 +1,65 @@
+{
+  "occurrence": "catalog-feedback-31-d97954cd-c061-4c8c-a78a-7f8faffdef99",
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "copiedLength": 2082,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-31\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-31\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "listeners": null,
+  "chain": [
+    {
+      "expected": {
+        "pid": 64716,
+        "processInstanceID": "win32:639268951047423552",
+        "occurrenceID": "aea81d45-bd32-49d4-b9c0-076f99df4025"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 76316,
+        "processInstanceID": "win32:639268951039777928",
+        "occurrenceID": "e5aa6fb4-6731-4aff-ae85-0e6753eb1b45"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "catalog-feedback-31-d97954cd-c061-4c8c-a78a-7f8faffdef99",
+    "outcome": "settled",
+    "host": {
+      "pid": 76316,
+      "processInstanceID": "win32:639268951039777928",
+      "occurrenceID": "e5aa6fb4-6731-4aff-ae85-0e6753eb1b45"
+    },
+    "target": {
+      "pid": 64716,
+      "processInstanceID": "win32:639268951047423552",
+      "occurrenceID": "aea81d45-bd32-49d4-b9c0-076f99df4025"
+    },
+    "observedAtUtc": "2026-10-06T14:53:56.324Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-06T14:53:58.1294448Z"
+}

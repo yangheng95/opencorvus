@@ -554,6 +554,16 @@ Disclosure and retain complete error text. A failed list retains existing data
 with an explicit stale-data notice. Unknown Provider counts are not displayed
 as a successful empty catalog. Composer presentation does not change the
 existing dispatch boundary or automatically retry a submission.
+Composer reference catalog problems retain their exact load/search source in
+the single scope-keyed snapshot. A successful Squad search settles only its
+own problem; full-load failures and typed Skill issues remain visible until
+a complete reload resolves them. Both editable reference entry points share
+concise Feedback, expandable complete diagnostics and an explicit retry through
+the existing coalesced current-scope loader. Feedback has no separate catalog
+state and does not retry a submission. Long diagnostics scroll inside the
+existing measured mention panel height and bounded reference Popover; they do
+not push dismissal controls beyond the clipping boundary. Reference search
+precedes feedback in focus order.
 
 Home headings, starter actions and the Composer use the same inherited reading
 column insets as the transcript. Home has no separate percentage-width rule or

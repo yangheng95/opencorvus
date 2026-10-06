@@ -1,0 +1,19 @@
+Browser tab: 13, Title: "OpenCorvus", URL: "http://localhost:17998/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 75
++									94 container Drag files here · Drag the top edge to resize
++										95 text entry area (settable) Description: Drag files here · Drag the top edge to resize, Value: @mission , ID: chatTextarea
++										96 container
++											97 text Insert a reference ↑↓ navigate · Enter select · Esc close
++											98 text Some references could not be loaded. See details or retry.
++											99 button (collapsed) Details, Secondary Actions: Expand
++												100 text Details
++											101 button Retry
++											102 list Description: Available Skill, Mission Skill, and Expert Squad references, ID: composerMentionListbox
++												103 text Mission Skill
++												104 (selected) ID: composerMentionListbox-item-cl-340, Value: general Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow. Mission Skill
++													105 text general
++													106 text Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
++													107 text Mission Skill
+~									85 button Description: Send, Help: Send message (Enter to send, Shift+Enter for newline), ID: chatSend
+The focused UI element is 95 text entry area (settable) Description: Drag files here · Drag the top edge to resize, Value: @mission , ID: chatTextarea

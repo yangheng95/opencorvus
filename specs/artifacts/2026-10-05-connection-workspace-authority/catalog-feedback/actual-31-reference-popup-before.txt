@@ -1,0 +1,70 @@
+Browser tab: 12, Title: "OpenCorvus", URL: "http://localhost:17997/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 91-93
+~									81 pop up button (expanded) Description: Skills & squads, Secondary Actions: Collapse
++		95 container popover-cl-44-content
++			96 text Select skills and expert squads
++			97 text Selections are written into the prompt as visible references.
++			98 search text field (settable) Search skill or squad names
++			99 container
++				100 list Description: Select skills and expert squads, ID: composerReferenceListbox
++					101 text SKILLS
++					102 ID: composerReferenceListbox-item-cl-655, Value: browser-use Skill Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.
++						103 text browser-use
++						104 text Skill
++						105 text Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.
++					106 ID: composerReferenceListbox-item-cl-657, Value: computer-use Skill Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.
++						107 text computer-use
++						108 text Skill
++						109 text Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.
++					110 ID: composerReferenceListbox-item-cl-659, Value: design-taste-frontend Skill Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.
++						111 text design-taste-frontend
++						112 text Skill
++						113 text Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.
++					114 ID: composerReferenceListbox-item-cl-661, Value: grill-me Skill Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
++						115 text grill-me
++						116 text Skill
++						117 text Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
++					118 ID: composerReferenceListbox-item-cl-663, Value: research-report Skill Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.
++						119 text research-report
++						120 text Skill
++						121 text Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.
++					122 ID: composerReferenceListbox-item-cl-665, Value: work-artifacts Skill Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.
++						123 text work-artifacts
++						124 text Skill
++						125 text Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.
++					126 ID: composerReferenceListbox-item-cl-667, Value: general Mission Skill Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
++						127 text general
++						128 text Mission Skill
++						129 text Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
++					130 text EXPERT SQUADS
++					131 ID: composerReferenceListbox-item-cl-669, Value: Advanced Expert Squad · advanced Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.
++						132 text Advanced
++						133 text Expert Squad
++						134 text  · 
++						135 text advanced
++						136 text Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.
++					137 ID: composerReferenceListbox-item-cl-671, Value: Base Expert Squad · base Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++						138 text Base
++						139 text Expert Squad
++						140 text  · 
++						141 text base
++						142 text Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++					143 ID: composerReferenceListbox-item-cl-673, Value: Research Studio Expert Squad · research-studio A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.
++						144 text Research Studio
++						145 text Expert Squad
++						146 text  · 
++						147 text research-studio
++						148 text A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.
++					149 ID: composerReferenceListbox-item-cl-675, Value: Generate Expert Squads Generator Expert Squad · squad-sdk Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.
++						150 text Generate Expert Squads
++						151 text Generator
++						152 text Expert Squad
++						153 text  · 
++						154 text squad-sdk
++						155 text Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.
++				156 button Install more Expert Squads Squad Market Browse the Squad Market and install only what this project needs.
++					157 text Install more Expert Squads
++					158 text Squad Market
++					159 text Browse the Squad Market and install only what this project needs.
+The focused UI element is 98 search text field (settable) Search skill or squad names
