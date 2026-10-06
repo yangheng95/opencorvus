@@ -1,6 +1,7 @@
 # Connection workspace authority investigation
 
 - [Genuine Task creator content](creator-content-implementation-plan.md): raw creator text, existing Host system provenance and task-level attachment ownership; local backend and actual new-Task qualification proceed separately.
+- [Resource materialization repair](resource-materialization-implementation-plan.md): actual16 same-batch Windows readonly cache EPERM; shared current publication, concurrency and isolation investigation precedes implementation.
 
 - [Actual Sol sequential Edit and Composer plan](live-sol-edit-composer-e2e-plan.md) and [Root manual review](root-sol-edit-composer-manual-review.md): actual6 file operations,58 final bytes,12 streamed Sol200 requests; real before/after processing,settled,reopened/offline screenshots. Composer source/types/i18n/build pass; original Skills timeout and active leased cancellation remain open.
 - [Composer independent review](composer-guidance-independent-review.md): derived availability preserves current dispatch/attachment/model/Stop owners; actual before/after target visual qualification separated from unexercised combinations.
@@ -193,3 +194,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Panel actor identity plan](panel-actor-identity-implementation-plan.md) and [evidence](panel-actor-identity-implementation/README.md): current legal exploration grant/default query identity investigation after pushed navigation13; mutation reachability hypothesis withdrawn.
 
 - [Real explorer and completed resource delivery plan](explore-delivery-implementation-plan.md) and [evidence](explore-delivery-implementation/README.md): independent three-stage Sol qualification after pushed747f, original07 failed history retained.
+
+- [Immutable resource materialization plan](resource-materialization-implementation-plan.md) and [evidence](resource-materialization-implementation/README.md): native no-replace cache publication, positive backend and genuine repeated-read/download qualification; failed timing and next complete-read publication audit retained.

@@ -1,0 +1,10 @@
+{
+  "pid": 66776,
+  "occurrence": "resource-materialization-17-198c0f8c-ada2-488d-97b1-28d915908525",
+  "error": {
+    "name": "Error",
+    "message": "TASK_ACTIVITY_INACTIVITY"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

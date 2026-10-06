@@ -1,0 +1,29 @@
+import fs from "node:fs/promises"
+import path from "node:path"
+
+const root = path.resolve(".tmp-product-iteration/resource-materialization-fs-probe-17")
+const runtime = process.versions.bun ? "bun" : "node"
+const facts = []
+for (const name of ["reader-chmod-rm-force", "reader-chmod-unlink"]) {
+  const target = path.join(root, runtime, name, "hello.txt")
+  const file = await fs.open(target, "r")
+  let stat, bytes
+  try {
+    bytes = await file.readFile()
+    stat = await file.stat()
+  } finally { await file.close() }
+  let writableHandle
+  try {
+    const write = await fs.open(target, "r+")
+    await write.close()
+    writableHandle = { outcome: "opened", bytesWritten: 0 }
+  } catch (error) {
+    writableHandle = { outcome: "error", name: error.name, code: error.code, message: error.message }
+  }
+  facts.push({ target, permissionBitsFromReadHandle: stat.mode & 0o777, nlink: stat.nlink,
+    bytes: [...bytes], actualText: bytes.toString("utf8"), writableHandle })
+}
+const result = { runtime, executable: process.execPath, observedAt: new Date().toISOString(),
+  boundary: "Only owned no-auth FS probe targets; bytes read then handle stat; r+ permission observation writes zero bytes", facts }
+await fs.writeFile(path.join(root, runtime, "readonly-check.json"), JSON.stringify(result, null, 2), { flag: "wx" })
+console.log(JSON.stringify(result))

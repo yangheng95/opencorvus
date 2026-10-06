@@ -1,6 +1,7 @@
 # Specs Storage Index
 
 - [Genuine Task creator content implementation](artifacts/2026-10-05-connection-workspace-authority/creator-content-implementation-plan.md)
+- [Immutable resource materialization repair](artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation-plan.md)
 
 - [Connection publication and workspace authority](records/2026-10/2026-10-05-connection-workspace-authority.md)
 - [Connection workspace authority investigation and root integration](artifacts/2026-10-05-connection-workspace-authority/README.md)
@@ -2534,3 +2535,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Panel actor runtime identity](artifacts/2026-10-05-connection-workspace-authority/panel-actor-identity-implementation-plan.md): legitimate explore-base grants, name-based default-query classification and held actual authority qualification.
 
 - [Real explorer and completed resource delivery](artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation-plan.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/explore-delivery-implementation/README.md).
+
+- [Immutable resource materialization](artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation-plan.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation/README.md): readonly cache reuse and genuine formal downloads, with failed timed acceptance and next publication audit explicitly retained.

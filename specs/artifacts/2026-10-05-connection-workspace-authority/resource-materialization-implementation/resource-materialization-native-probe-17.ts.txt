@@ -1,0 +1,29 @@
+import fs from "node:fs/promises"
+import path from "node:path"
+import { installProcessShims } from "../packages/opencorvus/src/runtime/shims"
+
+installProcessShims()
+const { Filesystem } = await import("../packages/opencorvus/src/util/filesystem")
+const root = path.resolve(import.meta.dir, "resource-materialization-native-probe-17")
+await fs.mkdir(root)
+const bytes = Buffer.from("Hello from a formal Task.\n", "utf8")
+const target = path.join(root, "hello.txt")
+const first = path.join(root, "first.stage")
+const second = path.join(root, "second.stage")
+await fs.writeFile(first, bytes, { flag: "wx" })
+await Filesystem.renameNoReplace(first, target)
+await fs.chmod(target, 0o444)
+await fs.writeFile(second, bytes, { flag: "wx" })
+let collision: unknown
+try { await Filesystem.renameNoReplace(second, target); collision = { outcome: "moved" } }
+catch (error) { const fact = error as NodeJS.ErrnoException
+  collision = { outcome: "error", name: fact.name, code: fact.code, errno: fact.errno, message: fact.message } }
+const handle = await fs.open(target, "r")
+let actual: Buffer, mode: number
+try { actual = await handle.readFile(); mode = (await handle.stat()).mode & 0o777 }
+finally { await handle.close() }
+const result = { observedAt: new Date().toISOString(), executable: process.execPath, platform: process.platform,
+  owner: "Existing Filesystem.renameNoReplace; no production cache mutation", root, collision,
+  target: { path: target, permissionBits: mode, bytes: [...actual], matchesExpected26Bytes: actual.equals(bytes) } }
+await fs.writeFile(path.join(root, "result.json"), JSON.stringify(result, null, 2), { flag: "wx" })
+console.log(JSON.stringify(result))

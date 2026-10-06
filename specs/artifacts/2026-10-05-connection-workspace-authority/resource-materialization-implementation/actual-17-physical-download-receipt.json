@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-10-06T09:04:18.2555340Z",
+  "method": "Actual IAB and Chrome formal Task delivery download buttons clicked; files independently inspected after event observation timeout",
+  "taskID": "tsk_g00VXFvvGe00SFCHCrQm",
+  "expected": "Hello from a formal Task. followed by LF; UTF-8 no BOM; 26 bytes",
+  "files": [
+    {
+      "path": "C:\\Users\\hengu\\Downloads\\hello.txt",
+      "bytes": 26,
+      "creationUtc": "2026-10-06T08:49:39.8550815Z",
+      "writeUtc": "2026-10-06T08:49:39.8560879Z",
+      "exactExpectedBytes": true,
+      "utf8Text": "Hello from a formal Task.\n"
+    },
+    {
+      "path": "C:\\Users\\hengu\\Downloads\\hello (1).txt",
+      "bytes": 26,
+      "creationUtc": "2026-10-06T08:58:14.5508494Z",
+      "writeUtc": "2026-10-06T08:58:14.5518588Z",
+      "exactExpectedBytes": true,
+      "utf8Text": "Hello from a formal Task.\n"
+    }
+  ],
+  "downloadEventObservation": "IAB 20s and Chrome 15s waitForEvent timed out; physical downloads succeeded; observer timeout is not a product failure",
+  "screenshots": [
+    "actual-17-completed-download-card.png",
+    "actual-17-completed-download-card-iab.png"
+  ],
+  "timingQualification": "Original 900s/180s checker remains failed; eventual functional completion is separately qualified"
+}

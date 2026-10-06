@@ -1,0 +1,47 @@
+{
+  "observedAt": "2026-10-06T08:10:51.731Z",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "platform": "win32",
+  "owner": "Existing Filesystem.renameNoReplace; no production cache mutation",
+  "root": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-native-probe-17",
+  "collision": {
+    "outcome": "error",
+    "name": "Error",
+    "code": "EEXIST",
+    "errno": 183,
+    "message": "MoveFileExW failed for D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-native-probe-17\\second.stage -> D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-native-probe-17\\hello.txt"
+  },
+  "target": {
+    "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-native-probe-17\\hello.txt",
+    "permissionBits": 292,
+    "bytes": [
+      72,
+      101,
+      108,
+      108,
+      111,
+      32,
+      102,
+      114,
+      111,
+      109,
+      32,
+      97,
+      32,
+      102,
+      111,
+      114,
+      109,
+      97,
+      108,
+      32,
+      84,
+      97,
+      115,
+      107,
+      46,
+      10
+    ],
+    "matchesExpected26Bytes": true
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "phase": "running",
+  "presence": [
+    {
+      "processID": 66776,
+      "samePIDReused": false,
+      "originalOccurrencePresent": true
+    },
+    {
+      "processID": 17800,
+      "samePIDReused": false,
+      "originalOccurrencePresent": true
+    }
+  ],
+  "processes": [
+    {
+      "ProcessId": 66776,
+      "ParentProcessId": 38172,
+      "CreationDate": "2026-10-06T16:22:21.018225+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-resource-materialization-17\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-resource-materialization-17\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-resource-materialization-17\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-resource-materialization-17\\startup.json 17974 resource-materialization-17-198c0f8c-ada2-488d-97b1-28d915908525 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-resource-materialization-17\\task-selection.json D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\creator-delivery-definition-16.json 96"
+    },
+    {
+      "ProcessId": 17800,
+      "ParentProcessId": 66776,
+      "CreationDate": "2026-10-06T16:22:21.029374+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    }
+  ],
+  "observedAtUtc": "2026-10-06T08:29:40.7385606Z",
+  "boundary": "Read-only exact birth/command ancestry; earlier-born numeric parent matches excluded; no process control or credentials",
+  "occurrence": "resource-materialization-17-198c0f8c-ada2-488d-97b1-28d915908525",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17974,
+      "OwningProcess": 66776
+    }
+  ]
+}

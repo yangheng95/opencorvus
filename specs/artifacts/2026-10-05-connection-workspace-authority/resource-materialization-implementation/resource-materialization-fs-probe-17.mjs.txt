@@ -1,0 +1,72 @@
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+
+const root = path.resolve('.tmp-product-iteration/resource-materialization-fs-probe-17');
+const runtime = process.versions.bun ? 'bun' : 'node';
+const dir = path.join(root, runtime);
+await fs.mkdir(root, { recursive: true });
+await fs.mkdir(dir); // exclusive occurrence: never reuse an existing runtime directory
+const bytes = Buffer.from('Hello from a formal Task.\n', 'utf8');
+const facts = [];
+async function op(label, action) {
+  try { const value = await action(); facts.push({ label, result: 'success', value }); return true; }
+  catch (error) { facts.push({ label, result: 'error', error: {
+    name: error.name, message: error.message, code: error.code, errno: error.errno,
+    syscall: error.syscall, path: error.path, dest: error.dest, stack: error.stack,
+  }}); return false; }
+}
+async function inspect(label, file) {
+  await op(label, async () => {
+    const [stat, actual] = await Promise.all([fs.stat(file), fs.readFile(file)]);
+    return { file, size: stat.size, mode: stat.mode, permissionBits: stat.mode & 0o777,
+      nlink: stat.nlink, bytes: [...actual], exactExpectedBytes: actual.equals(bytes) };
+  });
+}
+async function fresh(name) { const sub = path.join(dir, name); await fs.mkdir(sub); return sub; }
+
+// Current algorithm: second identical staged resource attempts to replace a readonly cache target.
+{
+  const sub = await fresh('rename-readonly'); const target = path.join(sub, 'hello.txt');
+  const first = path.join(sub, 'first.stage'); const second = path.join(sub, 'second.stage');
+  await fs.writeFile(first, bytes, { flag: 'wx' });
+  await op('rename.first.publish', () => fs.rename(first, target));
+  await op('rename.target.chmod0444', () => fs.chmod(target, 0o444));
+  await fs.writeFile(second, bytes, { flag: 'wx' });
+  await op('rename.second.replace-readonly', () => fs.rename(second, target));
+  await inspect('rename.final-target', target);
+}
+// Existing upload primitive: exclusive link, unlink stage, then readonly publication.
+{
+  const sub = await fresh('upload-link-unlink'); const stage = path.join(sub, 'stage');
+  const target = path.join(sub, 'hello.txt'); await fs.writeFile(stage, bytes, { flag: 'wx' });
+  await op('upload.link', () => fs.link(stage, target));
+  await op('upload.unlink-stage', () => fs.unlink(stage));
+  await op('upload.target.chmod0444', () => fs.chmod(target, 0o444));
+  await inspect('upload.final-target', target);
+}
+// Deterministic adversarial interleaving: reader chmods shared inode before publisher cleans stage.
+for (const cleanup of ['rm-force', 'unlink']) {
+  const sub = await fresh(`reader-chmod-${cleanup}`); const stage = path.join(sub, 'stage');
+  const target = path.join(sub, 'hello.txt'); await fs.writeFile(stage, bytes, { flag: 'wx' });
+  await op(`${cleanup}.publisher.link`, () => fs.link(stage, target));
+  await inspect(`${cleanup}.reader.verify-before-chmod`, target);
+  await op(`${cleanup}.reader.chmod-target0444`, () => fs.chmod(target, 0o444));
+  await inspect(`${cleanup}.stage-before-cleanup`, stage);
+  await op(`${cleanup}.publisher.cleanup`, () => cleanup === 'rm-force'
+    ? fs.rm(stage, { force: true }) : fs.unlink(stage));
+  await inspect(`${cleanup}.target-after-cleanup`, target);
+}
+// Exclusive publication collision must report the actual EEXIST, preserving target bytes.
+{
+  const sub = await fresh('exclusive-existing'); const target = path.join(sub, 'hello.txt');
+  const stage = path.join(sub, 'stage'); await fs.writeFile(target, bytes, { flag: 'wx' });
+  await fs.chmod(target, 0o444); await fs.writeFile(stage, bytes, { flag: 'wx' });
+  await op('exclusive.link-existing', () => fs.link(stage, target));
+  await inspect('exclusive.existing-target', target);
+  await inspect('exclusive.unpublished-stage', stage);
+}
+const result = { runtime, executable: process.execPath, platform: process.platform,
+  versions: { node: process.versions.node, bun: process.versions.bun }, dir,
+  boundary: 'Actual fs primitives; deterministic reader/publisher race ordering; no production cache, services or credentials', facts };
+await fs.writeFile(path.join(dir, 'result.json'), JSON.stringify(result, null, 2), { flag: 'wx' });
+console.log(JSON.stringify(result, null, 2));

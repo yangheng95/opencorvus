@@ -1,0 +1,88 @@
+{
+  "runtime": "bun",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "observedAt": "2026-10-06T08:07:47.612Z",
+  "boundary": "Only owned no-auth FS probe targets; bytes read then handle stat; r+ permission observation writes zero bytes",
+  "facts": [
+    {
+      "target": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\bun\\reader-chmod-rm-force\\hello.txt",
+      "permissionBitsFromReadHandle": 292,
+      "nlink": 1,
+      "bytes": [
+        72,
+        101,
+        108,
+        108,
+        111,
+        32,
+        102,
+        114,
+        111,
+        109,
+        32,
+        97,
+        32,
+        102,
+        111,
+        114,
+        109,
+        97,
+        108,
+        32,
+        84,
+        97,
+        115,
+        107,
+        46,
+        10
+      ],
+      "actualText": "Hello from a formal Task.\n",
+      "writableHandle": {
+        "outcome": "error",
+        "name": "Error",
+        "code": "EPERM",
+        "message": "EPERM: operation not permitted, open 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\bun\\reader-chmod-rm-force\\hello.txt'"
+      }
+    },
+    {
+      "target": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\bun\\reader-chmod-unlink\\hello.txt",
+      "permissionBitsFromReadHandle": 292,
+      "nlink": 1,
+      "bytes": [
+        72,
+        101,
+        108,
+        108,
+        111,
+        32,
+        102,
+        114,
+        111,
+        109,
+        32,
+        97,
+        32,
+        102,
+        111,
+        114,
+        109,
+        97,
+        108,
+        32,
+        84,
+        97,
+        115,
+        107,
+        46,
+        10
+      ],
+      "actualText": "Hello from a formal Task.\n",
+      "writableHandle": {
+        "outcome": "error",
+        "name": "Error",
+        "code": "EPERM",
+        "message": "EPERM: operation not permitted, open 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\bun\\reader-chmod-unlink\\hello.txt'"
+      }
+    }
+  ]
+}

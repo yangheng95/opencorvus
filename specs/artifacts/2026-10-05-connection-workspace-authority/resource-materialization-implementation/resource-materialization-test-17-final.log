@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/artifact-resource-materialization.test.ts
+[1/1] START test/artifact-resource-materialization.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) serial repeated immutable resource returns the same verified readonly bytes [2845.86ms]
+(pass) actual serial batch resolves distinct snapshots with identical bytes and basename [2381.74ms]
+(pass) parallel immutable readers converge on verified readonly bytes [1905.99ms]
+(pass) Task and Project ownership determines each materialization directory [4597.12ms]
+(pass) corrupt existing immutable cache returns its precise integrity error [1967.51ms]
+
+ 5 pass
+ 0 fail
+ 55 expect() calls
+Ran 5 tests across 1 file. [14.89s]
+[1/1] DONE test/artifact-resource-materialization.test.ts exit=0 duration=15.10s

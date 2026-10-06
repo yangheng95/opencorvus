@@ -1,0 +1,484 @@
+{
+  "runtime": "node",
+  "executable": "C:\\Program Files\\nodejs\\node.exe",
+  "platform": "win32",
+  "versions": {
+    "node": "25.7.0"
+  },
+  "dir": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node",
+  "boundary": "Actual fs primitives; deterministic reader/publisher race ordering; no production cache, services or credentials",
+  "facts": [
+    {
+      "label": "rename.first.publish",
+      "result": "success"
+    },
+    {
+      "label": "rename.target.chmod0444",
+      "result": "success"
+    },
+    {
+      "label": "rename.second.replace-readonly",
+      "result": "error",
+      "error": {
+        "name": "Error",
+        "message": "EPERM: operation not permitted, rename 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\second.stage' -> 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\hello.txt'",
+        "code": "EPERM",
+        "errno": -4048,
+        "syscall": "rename",
+        "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\second.stage",
+        "dest": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\hello.txt",
+        "stack": "Error: EPERM: operation not permitted, rename 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\second.stage' -> 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\hello.txt'\n    at async Module.rename (node:internal/fs/promises:781:10)\n    at async op (file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/resource-materialization-fs-probe-17.mjs:12:23)\n    at async file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/resource-materialization-fs-probe-17.mjs:35:3"
+      }
+    },
+    {
+      "label": "rename.final-target",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\rename-readonly\\hello.txt",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 1,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "upload.link",
+      "result": "success"
+    },
+    {
+      "label": "upload.unlink-stage",
+      "result": "success"
+    },
+    {
+      "label": "upload.target.chmod0444",
+      "result": "success"
+    },
+    {
+      "label": "upload.final-target",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\upload-link-unlink\\hello.txt",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 1,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "rm-force.publisher.link",
+      "result": "success"
+    },
+    {
+      "label": "rm-force.reader.verify-before-chmod",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\reader-chmod-rm-force\\hello.txt",
+        "size": 26,
+        "mode": 33206,
+        "permissionBits": 438,
+        "nlink": 2,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "rm-force.reader.chmod-target0444",
+      "result": "success"
+    },
+    {
+      "label": "rm-force.stage-before-cleanup",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\reader-chmod-rm-force\\stage",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 2,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "rm-force.publisher.cleanup",
+      "result": "success"
+    },
+    {
+      "label": "rm-force.target-after-cleanup",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\reader-chmod-rm-force\\hello.txt",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 1,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "unlink.publisher.link",
+      "result": "success"
+    },
+    {
+      "label": "unlink.reader.verify-before-chmod",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\reader-chmod-unlink\\hello.txt",
+        "size": 26,
+        "mode": 33206,
+        "permissionBits": 438,
+        "nlink": 2,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "unlink.reader.chmod-target0444",
+      "result": "success"
+    },
+    {
+      "label": "unlink.stage-before-cleanup",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\reader-chmod-unlink\\stage",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 2,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "unlink.publisher.cleanup",
+      "result": "success"
+    },
+    {
+      "label": "unlink.target-after-cleanup",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\reader-chmod-unlink\\hello.txt",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 1,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "exclusive.link-existing",
+      "result": "error",
+      "error": {
+        "name": "Error",
+        "message": "EEXIST: file already exists, link 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\stage' -> 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\hello.txt'",
+        "code": "EEXIST",
+        "errno": -4075,
+        "syscall": "link",
+        "path": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\stage",
+        "dest": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\hello.txt",
+        "stack": "Error: EEXIST: file already exists, link 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\stage' -> 'D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\hello.txt'\n    at async Module.link (node:internal/fs/promises:1054:10)\n    at async op (file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/resource-materialization-fs-probe-17.mjs:12:23)\n    at async file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/resource-materialization-fs-probe-17.mjs:64:3"
+      }
+    },
+    {
+      "label": "exclusive.existing-target",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\hello.txt",
+        "size": 26,
+        "mode": 33060,
+        "permissionBits": 292,
+        "nlink": 1,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    },
+    {
+      "label": "exclusive.unpublished-stage",
+      "result": "success",
+      "value": {
+        "file": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\resource-materialization-fs-probe-17\\node\\exclusive-existing\\stage",
+        "size": 26,
+        "mode": 33206,
+        "permissionBits": 438,
+        "nlink": 1,
+        "bytes": [
+          72,
+          101,
+          108,
+          108,
+          111,
+          32,
+          102,
+          114,
+          111,
+          109,
+          32,
+          97,
+          32,
+          102,
+          111,
+          114,
+          109,
+          97,
+          108,
+          32,
+          84,
+          97,
+          115,
+          107,
+          46,
+          10
+        ],
+        "exactExpectedBytes": true
+      }
+    }
+  ]
+}

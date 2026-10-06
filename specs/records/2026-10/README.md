@@ -85,3 +85,7 @@ Actual15b qualifies genuine projected alias query, while formal delivery fails a
 The authority artifact [creator-content Recall](../../artifacts/2026-10-05-connection-workspace-authority/creator-content-implementation-plan.md) admits the raw creator repair, existing system instruction owner and separately defined actual16 acceptance.
 
 Actual16 qualifies new raw creator content, genuine streamed Sol and source/local contracts; its formal delivery remains failed after same-batch readonly cache EPERM and later48 bound. Full owned cleanup retains history. Shared materialization repair is the next autonomous scope.
+
+The authority [resource materialization Recall](../../artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation-plan.md) holds implementation until actual Windows serial/parallel publication and cleanup semantics are qualified.
+
+Resource17 now qualifies the shared native no-replace repair with backend5/55, four actual Sol materialized reads and two genuine26B formal downloads, complete owned closure and source types0. Original timed acceptance remains failed; next shared publication-audit and private-runner settlement work are bound in the same Recall.

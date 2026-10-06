@@ -1,0 +1,401 @@
+$ bun script/run-tests.ts test/artifact-resource-materialization.test.ts
+[1/1] START test/artifact-resource-materialization.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+57 | }
+58 | 
+59 | async function qualify(result: Awaited<ReturnType<typeof readTaskArtifact>>, scope: TaskToolExecutionScope) {
+60 |   const chunk = result.chunk
+61 |   expect({ complete: chunk.complete, start: chunk.byte_start, end: chunk.byte_end,
+62 |     total: chunk.total_bytes, next: chunk.next_offset, attachment: chunk.attachment }).toEqual({
+     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "attachment": false,
+    "complete": true,
+-   "end": 26,
++   "end": 27,
+    "next": null,
+    "start": 0,
+-   "total": 26,
++   "total": 27,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at toEqual (unknown:1:1)
+      at qualify (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:62:88)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:54:3
+      at processTicksAndRejections (unknown:7:39)
+(fail) serial repeated immutable resource returns the same verified readonly bytes [2526.47ms]
+83 | test("actual serial batch resolves distinct snapshots with identical bytes and basename", async () => {
+84 |   await using project = await memoryProject()
+85 |   await Instance.provide({ directory: project.path, fn: async () => {
+86 |     const fixture = await establish(project.path)
+87 |     const second = await fixture.publish()
+88 |     expect([fixture.first.manifest.publication_sequence, second.manifest.publication_sequence]).toEqual([1, 2])
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    1,
+-   2,
++   1,
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:88:97)
+(fail) actual serial batch resolves distinct snapshots with identical bytes and basename [1935.51ms]
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pgZQ18\test-72400-beXcjD\fixtures\memory-1XhbY7\.opencorvus\.r\tasks\tsk_g00VXFsu5I00IrI1epUo\artifacts\materializations\reads\.e398e11c7f7cfc3cbde913412e3aad1c7418a6711aa39f338d38a129816f6499-058bdf8c-9e13-4026-b8fa-94e9d13a84c9.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pgZQ18\test-72400-beXcjD\fixtures\memory-1XhbY7\.opencorvus\.r\tasks\tsk_g00VXFsu5I00IrI1epUo\artifacts\materializations\reads\e398e11c7f7cfc3cbde913412e3aad1c7418a6711aa39f338d38a129816f6499-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pgZQ18\\test-72400-beXcjD\\fixtures\\memory-1XhbY7\\.opencorvus\\.r\\tasks\\tsk_g00VXFsu5I00IrI1epUo\\artifacts\\materializations\\reads\\.e398e11c7f7cfc3cbde913412e3aad1c7418a6711aa39f338d38a129816f6499-058bdf8c-9e13-4026-b8fa-94e9d13a84c9.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pgZQ18\\test-72400-beXcjD\\fixtures\\memory-1XhbY7\\.opencorvus\\.r\\tasks\\tsk_g00VXFsu5I00IrI1epUo\\artifacts\\materializations\\reads\\e398e11c7f7cfc3cbde913412e3aad1c7418a6711aa39f338d38a129816f6499-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:104:35)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:102:18)
+(fail) parallel immutable readers converge on verified readonly bytes [1986.16ms]
+57 | }
+58 | 
+59 | async function qualify(result: Awaited<ReturnType<typeof readTaskArtifact>>, scope: TaskToolExecutionScope) {
+60 |   const chunk = result.chunk
+61 |   expect({ complete: chunk.complete, start: chunk.byte_start, end: chunk.byte_end,
+62 |     total: chunk.total_bytes, next: chunk.next_offset, attachment: chunk.attachment }).toEqual({
+                                                                                            ^
+error: expect(received).toEqual(expected)
+
+  {
+    "attachment": false,
+    "complete": true,
+-   "end": 26,
++   "end": 27,
+    "next": null,
+    "start": 0,
+-   "total": 26,
++   "total": 27,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at qualify (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:62:88)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:117:30)
+(fail) Task and Project ownership determines each materialization directory [3179.26ms]
+57 | }
+58 | 
+59 | async function qualify(result: Awaited<ReturnType<typeof readTaskArtifact>>, scope: TaskToolExecutionScope) {
+60 |   const chunk = result.chunk
+61 |   expect({ complete: chunk.complete, start: chunk.byte_start, end: chunk.byte_end,
+62 |     total: chunk.total_bytes, next: chunk.next_offset, attachment: chunk.attachment }).toEqual({
+     ^
+error: expect(received).toEqual(expected)
+
+  {
+    "attachment": false,
+    "complete": true,
+-   "end": 26,
++   "end": 27,
+    "next": null,
+    "start": 0,
+-   "total": 26,
++   "total": 27,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at toEqual (unknown:1:1)
+      at qualify (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:62:88)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:107:6
+      at processTicksAndRejections (unknown:7:39)
+(fail) corrupt existing immutable cache returns its precise integrity error [1880.50ms]
+
+ 0 pass
+ 5 fail
+ 4 expect() calls
+Ran 5 tests across 1 file. [12.65s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+[1/1] DONE test/artifact-resource-materialization.test.ts exit=1 duration=12.81s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+error: script "test" exited with code 1
+$ bun script/run-tests.ts test/artifact-resource-materialization.test.ts
+[1/1] START test/artifact-resource-materialization.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-5SVYkn\test-51464-SyNAwG\fixtures\memory-WNk8yt\.opencorvus\.r\tasks\tsk_g00VXFt0Yj00av7zhOcT\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-b73ea675-4720-45a0-bd63-8dc2a45f7b12.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-5SVYkn\test-51464-SyNAwG\fixtures\memory-WNk8yt\.opencorvus\.r\tasks\tsk_g00VXFt0Yj00av7zhOcT\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5SVYkn\\test-51464-SyNAwG\\fixtures\\memory-WNk8yt\\.opencorvus\\.r\\tasks\\tsk_g00VXFt0Yj00av7zhOcT\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-b73ea675-4720-45a0-bd63-8dc2a45f7b12.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5SVYkn\\test-51464-SyNAwG\\fixtures\\memory-WNk8yt\\.opencorvus\\.r\\tasks\\tsk_g00VXFt0Yj00av7zhOcT\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:78:48)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:75:18)
+(fail) serial repeated immutable resource returns the same verified readonly bytes [2644.36ms]
+83 | test("actual serial batch resolves distinct snapshots with identical bytes and basename", async () => {
+84 |   await using project = await memoryProject()
+85 |   await Instance.provide({ directory: project.path, fn: async () => {
+86 |     const fixture = await establish(project.path)
+87 |     const second = await fixture.publish()
+88 |     expect([fixture.first.manifest.publication_sequence, second.manifest.publication_sequence]).toEqual([1, 2])
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    1,
+-   2,
++   1,
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:88:97)
+(fail) actual serial batch resolves distinct snapshots with identical bytes and basename [2002.60ms]
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-5SVYkn\test-51464-SyNAwG\fixtures\memory-32kD6C\.opencorvus\.r\tasks\tsk_g00VXFt1fv00J7xDBMaT\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-0fb358a6-feed-47d6-83a0-b75414210eef.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-5SVYkn\test-51464-SyNAwG\fixtures\memory-32kD6C\.opencorvus\.r\tasks\tsk_g00VXFt1fv00J7xDBMaT\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5SVYkn\\test-51464-SyNAwG\\fixtures\\memory-32kD6C\\.opencorvus\\.r\\tasks\\tsk_g00VXFt1fv00J7xDBMaT\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-0fb358a6-feed-47d6-83a0-b75414210eef.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5SVYkn\\test-51464-SyNAwG\\fixtures\\memory-32kD6C\\.opencorvus\\.r\\tasks\\tsk_g00VXFt1fv00J7xDBMaT\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:104:35)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:102:18)
+(fail) parallel immutable readers converge on verified readonly bytes [1985.47ms]
+(pass) Task and Project ownership determines each materialization directory [4892.57ms]
+128 |     const fixture = await establish(project.path)
+129 |     const target = await qualify(await fixture.read(), fixture.scope)
+130 |     await fs.chmod(target, 0o644)
+131 |     await fs.writeFile(target, "corrupt owned fixture")
+132 |     await fs.chmod(target, 0o444)
+133 |     await expect(fixture.read()).rejects.toThrow("artifact_read materialized cache path does not match the immutable locator")
+                                               ^
+error: expect(received).toThrow(expected)
+
+Expected substring: "artifact_read materialized cache path does not match the immutable locator"
+Received message: "EPERM: operation not permitted, rename 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5SVYkn\\test-51464-SyNAwG\\fixtures\\memory-HOqxcb\\.opencorvus\\.r\\tasks\\tsk_g00VXFt3Tl00Grf3n9Az\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-c3271eca-6280-42fb-b235-8eebfdbe08eb.tmp' -> 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-5SVYkn\\test-51464-SyNAwG\\fixtures\\memory-HOqxcb\\.opencorvus\\.r\\tasks\\tsk_g00VXFt3Tl00Grf3n9Az\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:133:42)
+(fail) corrupt existing immutable cache returns its precise integrity error [2042.66ms]
+
+ 1 pass
+ 4 fail
+ 25 expect() calls
+Ran 5 tests across 1 file. [14.79s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+[1/1] DONE test/artifact-resource-materialization.test.ts exit=1 duration=14.96s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+error: script "test" exited with code 1
+$ bun script/run-tests.ts test/artifact-resource-materialization.test.ts
+[1/1] START test/artifact-resource-materialization.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-hdAMPx\test-13356-klR6mG\fixtures\memory-oZPtW8\.opencorvus\.r\tasks\tsk_g00VXFt6VC00We65HB0U\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-fe2ebfab-523e-4c31-b7eb-7e1024872e51.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-hdAMPx\test-13356-klR6mG\fixtures\memory-oZPtW8\.opencorvus\.r\tasks\tsk_g00VXFt6VC00We65HB0U\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-hdAMPx\\test-13356-klR6mG\\fixtures\\memory-oZPtW8\\.opencorvus\\.r\\tasks\\tsk_g00VXFt6VC00We65HB0U\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-fe2ebfab-523e-4c31-b7eb-7e1024872e51.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-hdAMPx\\test-13356-klR6mG\\fixtures\\memory-oZPtW8\\.opencorvus\\.r\\tasks\\tsk_g00VXFt6VC00We65HB0U\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:79:48)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:76:18)
+(fail) serial repeated immutable resource returns the same verified readonly bytes [2630.86ms]
+84 | test("actual serial batch resolves distinct snapshots with identical bytes and basename", async () => {
+85 |   await using project = await memoryProject()
+86 |   await Instance.provide({ directory: project.path, fn: async () => {
+87 |     const fixture = await establish(project.path)
+88 |     const second = await fixture.publish()
+89 |     expect([fixture.first.manifest.publication_sequence, second.manifest.publication_sequence]).toEqual([1, 2])
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    1,
+-   2,
++   1,
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:89:97)
+(fail) actual serial batch resolves distinct snapshots with identical bytes and basename [2047.51ms]
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-hdAMPx\test-13356-klR6mG\fixtures\memory-8Dvm2f\.opencorvus\.r\tasks\tsk_g00VXFt7f800Zes6ihBY\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-b9e542a5-2cfe-4e82-a7fc-07a846bf7739.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-hdAMPx\test-13356-klR6mG\fixtures\memory-8Dvm2f\.opencorvus\.r\tasks\tsk_g00VXFt7f800Zes6ihBY\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-hdAMPx\\test-13356-klR6mG\\fixtures\\memory-8Dvm2f\\.opencorvus\\.r\\tasks\\tsk_g00VXFt7f800Zes6ihBY\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-b9e542a5-2cfe-4e82-a7fc-07a846bf7739.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-hdAMPx\\test-13356-klR6mG\\fixtures\\memory-8Dvm2f\\.opencorvus\\.r\\tasks\\tsk_g00VXFt7f800Zes6ihBY\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:105:35)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:103:18)
+(fail) parallel immutable readers converge on verified readonly bytes [2207.18ms]
+(pass) Task and Project ownership determines each materialization directory [4802.08ms]
+129 |     const fixture = await establish(project.path)
+130 |     const target = await qualify(await fixture.read(), fixture.scope)
+131 |     await fs.chmod(target, 0o644)
+132 |     await fs.writeFile(target, "corrupt owned fixture")
+133 |     await fs.chmod(target, 0o444)
+134 |     await expect(fixture.read()).rejects.toThrow("artifact_read materialized cache path does not match the immutable locator")
+                                               ^
+error: expect(received).toThrow(expected)
+
+Expected substring: "artifact_read materialized cache path does not match the immutable locator"
+Received message: "EPERM: operation not permitted, rename 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-hdAMPx\\test-13356-klR6mG\\fixtures\\memory-UIzYb2\\.opencorvus\\.r\\tasks\\tsk_g00VXFt9Rf00nWumfBgL\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-f40204bc-a569-4401-950a-4144a0b799dd.tmp' -> 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-hdAMPx\\test-13356-klR6mG\\fixtures\\memory-UIzYb2\\.opencorvus\\.r\\tasks\\tsk_g00VXFt9Rf00nWumfBgL\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:134:42)
+(fail) corrupt existing immutable cache returns its precise integrity error [1981.65ms]
+
+ 1 pass
+ 4 fail
+ 25 expect() calls
+Ran 5 tests across 1 file. [14.84s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+[1/1] DONE test/artifact-resource-materialization.test.ts exit=1 duration=15.01s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+error: script "test" exited with code 1
+$ bun script/run-tests.ts test/artifact-resource-materialization.test.ts
+[1/1] START test/artifact-resource-materialization.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pJHjpe\test-62624-O9tqu4\fixtures\memory-2IUpdV\.opencorvus\.r\tasks\tsk_g00VXFtGyH00Lk4hEOr7\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-ab6ba08e-e624-40b1-8281-0559aecec4a4.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pJHjpe\test-62624-O9tqu4\fixtures\memory-2IUpdV\.opencorvus\.r\tasks\tsk_g00VXFtGyH00Lk4hEOr7\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-2IUpdV\\.opencorvus\\.r\\tasks\\tsk_g00VXFtGyH00Lk4hEOr7\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-ab6ba08e-e624-40b1-8281-0559aecec4a4.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-2IUpdV\\.opencorvus\\.r\\tasks\\tsk_g00VXFtGyH00Lk4hEOr7\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:79:48)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:76:18)
+(fail) serial repeated immutable resource returns the same verified readonly bytes [2619.38ms]
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pJHjpe\test-62624-O9tqu4\fixtures\memory-06xLJR\.opencorvus\.r\tasks\tsk_g00VXFtHYK00NirVzqpi\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-48985e01-b8cd-48be-9208-563e486efd85.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pJHjpe\test-62624-O9tqu4\fixtures\memory-06xLJR\.opencorvus\.r\tasks\tsk_g00VXFtHYK00NirVzqpi\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-06xLJR\\.opencorvus\\.r\\tasks\\tsk_g00VXFtHYK00NirVzqpi\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-48985e01-b8cd-48be-9208-563e486efd85.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-06xLJR\\.opencorvus\\.r\\tasks\\tsk_g00VXFtHYK00NirVzqpi\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:94:45)
+      at async artifactReadBatch (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-batch.ts:128:28)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:93:25)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:86:18)
+(fail) actual serial batch resolves distinct snapshots with identical bytes and basename [2112.84ms]
+1878 |     await fs.mkdir(directory, { recursive: true })
+1879 |     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)
+1880 |     try {
+1881 |       await fs.writeFile(stage, bytes, { flag: "wx" })
+1882 |       try {
+1883 |         await fs.rename(stage, target)
+                        ^
+EPERM: operation not permitted, rename 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pJHjpe\test-62624-O9tqu4\fixtures\memory-T8NLBy\.opencorvus\.r\tasks\tsk_g00VXFtI9700xh9WOMXy\artifacts\materializations\reads\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-89079909-6609-41d1-a163-691a6e6ba168.tmp' -> 'C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-pJHjpe\test-62624-O9tqu4\fixtures\memory-T8NLBy\.opencorvus\.r\tasks\tsk_g00VXFtI9700xh9WOMXy\artifacts\materializations\reads\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'
+    path: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-T8NLBy\\.opencorvus\\.r\\tasks\\tsk_g00VXFtI9700xh9WOMXy\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-89079909-6609-41d1-a163-691a6e6ba168.tmp",
+    dest: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-T8NLBy\\.opencorvus\\.r\\tasks\\tsk_g00VXFtI9700xh9WOMXy\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt",
+ syscall: "rename",
+   errno: -1,
+    code: "EPERM"
+
+      at async readTaskArtifact (D:\myhexin-local\opencorvus\packages\opencorvus\src\artifact-catalog\index.ts:1883:18)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:108:35)
+      at async provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:106:18)
+(fail) parallel immutable readers converge on verified readonly bytes [2123.07ms]
+(pass) Task and Project ownership determines each materialization directory [4693.19ms]
+132 |     const fixture = await establish(project.path)
+133 |     const target = await qualify(await fixture.read(), fixture.scope)
+134 |     await fs.chmod(target, 0o644)
+135 |     await fs.writeFile(target, "corrupt owned fixture")
+136 |     await fs.chmod(target, 0o444)
+137 |     await expect(fixture.read()).rejects.toThrow("artifact_read materialized cache path does not match the immutable locator")
+                                               ^
+error: expect(received).toThrow(expected)
+
+Expected substring: "artifact_read materialized cache path does not match the immutable locator"
+Received message: "EPERM: operation not permitted, rename 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-D2qOsn\\.opencorvus\\.r\\tasks\\tsk_g00VXFtJrq004zOAIcFl\\artifacts\\materializations\\reads\\.bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-1bad7fe4-24a0-4eae-acff-91aa49266acd.tmp' -> 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pJHjpe\\test-62624-O9tqu4\\fixtures\\memory-D2qOsn\\.opencorvus\\.r\\tasks\\tsk_g00VXFtJrq004zOAIcFl\\artifacts\\materializations\\reads\\bd1d396ee3f264881e81012439f65f0629b48444e29b89f479c0d5ecfdff12bd-hello.txt'"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts:137:42)
+(fail) corrupt existing immutable cache returns its precise integrity error [1926.10ms]
+
+ 1 pass
+ 4 fail
+ 26 expect() calls
+Ran 5 tests across 1 file. [14.64s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+[1/1] DONE test/artifact-resource-materialization.test.ts exit=1 duration=14.81s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-resource-materialization.test.ts
+error: script "test" exited with code 1

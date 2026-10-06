@@ -18,6 +18,7 @@ import { TaskArtifactRefSchema, type TaskArtifactRef } from "@opencorvus-ai/plug
 import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { Filesystem } from "@/util/filesystem"
 import fuzzysort from "fuzzysort"
 import { insertEngineArtifact } from "@/engine/artifact"
 import {
@@ -1880,7 +1881,7 @@ export async function readTaskArtifact(input: {
     try {
       await fs.writeFile(stage, bytes, { flag: "wx" })
       try {
-        await fs.rename(stage, target)
+        await Filesystem.renameNoReplace(stage, target)
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
       }
