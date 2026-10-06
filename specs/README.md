@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Genuine complete-read publication acceptance](artifacts/2026-10-05-connection-workspace-authority/complete-read-live-acceptance-plan.md)
+
 - [Owned qualification settlement](artifacts/2026-10-05-connection-workspace-authority/owned-qualification-settlement-plan.md)
 
 - [Complete resource-read publication and bounded qualification](artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation-plan.md)

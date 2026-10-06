@@ -97,3 +97,7 @@ The unique delivery audit repair now has real backend9/38, pure+assembler13/59, 
 [Owned settlement Recall19](../../artifacts/2026-10-05-connection-workspace-authority/owned-qualification-settlement-plan.md) admits only the existing private supervision/closure repair and holds actual execution until Root review.
 
 Actual19a/b/c now qualify real first-failure/short-preparation/competing-join closure and complete six-process/three-port/pair boundary. The original checker error and timing precision correction remain documented; genuine post18 Task acceptance is the next independent scope.
+
+[Genuine complete-read acceptance20](../../artifacts/2026-10-05-connection-workspace-authority/complete-read-live-acceptance-plan.md) defines a fresh actual96/900s/180s scope after normally pushed3d117a8f, preserving all prior failures.
+
+Actual20 fails in private incomplete-CIM observation and correctly stops the recorded service/pair; missing candidate ancestry and real UI/publication/download remain unqualified. The binding Recall preserves facts and defines the next dynamic-observation repair boundary.

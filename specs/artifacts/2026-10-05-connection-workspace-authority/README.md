@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Genuine complete-read acceptance20](complete-read-live-acceptance-plan.md) and [evidence](complete-read-live-acceptance/README.md): fresh streamed Sol scope after source18 and qualified private settlement19; fixed96/900s/180s, real report sources/download/closure.
+
 - [Owned qualification settlement plan](owned-qualification-settlement-plan.md) and [evidence](owned-qualification-settlement/README.md): enduring one-owner supervision, fixed real Task boundary and genuine public process/pair closure before new model acceptance.
 
 - [Complete-read publication plan](complete-read-publication-implementation-plan.md) and [evidence](complete-read-publication-implementation/README.md): actual17 legal materialized receipt and inline contamination, shared audit and private fixed-bound settlement.

@@ -1,0 +1,53 @@
+{
+  "processes": [
+    {
+      "ProcessId": 59788,
+      "ParentProcessId": 51464,
+      "CreationDate": "2026-10-06T17:53:52.529942+08:00",
+      "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+      "CommandLine": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe --request C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-20\\runtime\\tmp\\supervisor-ftV21A\\request.json"
+    },
+    {
+      "ProcessId": 63180,
+      "ParentProcessId": 51464,
+      "CreationDate": "2026-10-06T17:53:45.534701+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 51464,
+      "ParentProcessId": 66860,
+      "CreationDate": "2026-10-06T17:53:45.48977+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-20\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-20\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-20\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-20\\startup.json 17978 complete-read-20-0d85a368-027d-4fb2-8d15-4a217b64eceb C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-20\\task-selection.json D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\creator-delivery-definition-16.json 96"
+    }
+  ],
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17978,
+      "OwningProcess": 51464
+    }
+  ],
+  "presence": [
+    {
+      "samePIDReused": false,
+      "originalOccurrencePresent": false,
+      "processID": 59788
+    },
+    {
+      "samePIDReused": false,
+      "originalOccurrencePresent": true,
+      "processID": 63180
+    },
+    {
+      "samePIDReused": false,
+      "originalOccurrencePresent": true,
+      "processID": 51464
+    }
+  ],
+  "phase": "supervision-66860-11",
+  "observedAtUtc": "2026-10-06T09:54:47.1914264Z",
+  "boundary": "Read-only exact birth/command ancestry; earlier-born numeric parent matches excluded; no process control or credentials",
+  "occurrence": "complete-read-20-0d85a368-027d-4fb2-8d15-4a217b64eceb"
+}

@@ -1,0 +1,10 @@
+{
+  "pid": 51464,
+  "occurrence": "complete-read-20-0d85a368-027d-4fb2-8d15-4a217b64eceb",
+  "error": {
+    "name": "InstanceProcessAdmissionClosedError",
+    "message": "Instance process admission is closed during runtime settlement"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

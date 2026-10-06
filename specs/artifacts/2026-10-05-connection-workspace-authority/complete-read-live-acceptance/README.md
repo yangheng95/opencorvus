@@ -1,0 +1,5 @@
+# Genuine complete-read acceptance20 evidence
+
+Binding [Recall](../complete-read-live-acceptance-plan.md). Source19 normal delivery logs and this fresh scope's preparation, genuine request/Tool publication, real desktop screenshots/physical download and complete final closure belong here. Prior timing failures are retained separately and cannot be replaced by this scope.
+
+Actual20 fails in private all-CIM observer at09:55:52.614, then real public shutdown200 settles recorded51464/63180/59788/17978 and removes copied pair. Candidate identity is lost/unknown, so full earlier descendant graph is not qualified. Final audit4/96 streamed Sol (3 status200/1 unspecified), durable owners0/inbox0, actual CLI request/soleepoch/boundary and failed1 parent are archived. Complete-read publication/file/download/UI acceptance are unmet; IAB9/tab2 navigation refuses and its data-URL cleanup binding is blocked. No screenshot or tab-close claim is made. Next inspector repair must qualify dynamic descendants without skipping unknown identities or rewriting this failed run.
