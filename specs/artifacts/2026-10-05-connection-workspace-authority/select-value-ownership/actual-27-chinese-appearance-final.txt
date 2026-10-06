@@ -1,0 +1,17 @@
+Browser tab: 8, Title: "OpenCorvus", URL: "http://localhost:17993/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 60-83
+~			22 container Description: 外观, ID: configDialog
+~							29 tab (selectable, settable, boolean) 通用, Value: 0, ID: config-tab-general
+~							30 tab (selected, settable, boolean) 外观, Value: 1, ID: config-tab-appearance
+~						55 heading 外观, Value: 1
+~							56 text 外观
+~						57 container Description: 外观, ID: config-panel-appearance
+~							58 container
+~								59 text 主题 选择 OpenCorvus 在此设备上的外观。
++								60 pop up button (collapsed) 主题 深色, ID: select-cl-479-trigger, Secondary Actions: Expand
++									61 text 深色
++								62 text 语言 选择 OpenCorvus 界面使用的语言。
++								63 pop up button (collapsed) 语言 简体中文, ID: select-cl-485-trigger, Secondary Actions: Expand
++									64 text 简体中文
+The focused UI element is 30 tab (selected, settable, boolean) 外观, Value: 1, ID: config-tab-appearance

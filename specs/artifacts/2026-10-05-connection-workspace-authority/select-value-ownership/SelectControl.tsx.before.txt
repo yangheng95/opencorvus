@@ -97,7 +97,6 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
       optionTextValue={props.optionTextValue}
       value={props.value}
       onChange={props.onChange}
-      placeholder={props.renderValue(null)}
       itemComponent={SelectControlItem}
       disabled={props.disabled}
       disallowEmptySelection={props.disallowEmptySelection}
@@ -118,7 +117,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         aria-errormessage={invalid() ? errorMessageID() : undefined}
         ref={props.triggerRef}
       >
-        <Select.Value<T> class="oc-select-value">{() => props.renderValue(props.value)}</Select.Value>
+        <span class="oc-select-value">{props.renderValue(props.value)}</span>
         <Select.Icon class="oc-select-icon">
           <Icon name="chevron-down" size="compact" />
         </Select.Icon>

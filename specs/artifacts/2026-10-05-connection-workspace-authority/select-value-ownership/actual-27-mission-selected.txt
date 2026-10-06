@@ -1,0 +1,12 @@
+Browser tab: 8, Title: "OpenCorvus", URL: "http://localhost:17993/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 80, 95-99
+~									75 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea, Value: 
+
+
+~									79 pop up button (collapsed) Select conversation target Mission, ID: select-cl-286-trigger, Secondary Actions: Expand
++										95 text Mission
++									96 text Expert Squad context ready
++									97 text OpenCorvus will create a dedicated project for this expert-squad Mission when you send it.
+The focused UI element is 75 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea, Value: 
+

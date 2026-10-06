@@ -114,3 +114,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Visible conversation runtime status23](2026-10-05-connection-workspace-authority/task-runtime-status-implementation-plan.md): current selected execution label/elapsed become visible from the existing single ledger/SSE source; real active/dock/Chat and terminal25 manual UI acceptance pass; original23/24 formal-delivery inactivity failures remain.
 
 - [Draft model inheritance26](2026-10-05-connection-workspace-authority/draft-model-inheritance-plan.md): a new draft inherits canonical configuration without a renderer model resolver or explicit preference write; real inherited Code/Work replies, English/Chinese layout and explicit preference restoration pass in owned26; original failures stay unchanged.
+
+- [Shared Select value ownership27](2026-10-05-connection-workspace-authority/select-value-ownership-plan.md): installed value registration restores actual control names/current values and manual keyboard behavior in Composer/Appearance; owned27 visual and service closure pass, null/stale variants remain unqualified.

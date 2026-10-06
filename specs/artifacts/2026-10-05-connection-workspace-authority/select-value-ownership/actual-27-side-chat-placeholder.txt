@@ -1,0 +1,74 @@
+Browser tab: 8, Title: "OpenCorvus", URL: "http://localhost:17993/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 35-38, 68-98
++									68 button (expanded) Description: 收起 project, Secondary Actions: Collapse
++				69 container workspaceMain
++					70 container chatSection
++						71 container Description: 正在加载 Task, ID: taskSwitchProgress
++						72 container
++							73 text 共享下拉控件验收27（真实简短任务）
++							74 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-497-trigger, Secondary Actions: Expand
++							75 container 已完成
++								76 text 已完成
++							77 container Description: 非进行中 · 11 秒, ID: taskStatus
++								78 text 11 秒
++							79 button 侧聊
++							80 container solidChatHeaderRuntimeActions
++								81 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
++								82 checkbox Description: 关闭右侧面板, Value: 1
++						83 container
++							84 container Description: 对话, ID: chatScroll
++								85 container
++									86 container
++										87 text 用户
++										88 text 请完成这个简短的正式 Task：在真实会话中回复一句“共享下拉控件验收服务已就绪。”，随后结束本 Task。只需要这句文字，不需要文件或其他产物；无需访问网站、启动服务或改动项目文件。
++									89 container
++										90 text orchestrator
++										91 text 9 秒
++										92 button (collapsed) Description: 调度上下文, Secondary Actions: Expand
++										93 text 共享下拉控件验收服务已就绪。
++										94 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											95 text manage_task
++											96 text action=complete_task
++											97 image
++										98 container 暂无交付文件
++											99 container
++												100 text Agent 交付 暂无交付文件 共享下拉控件验收27（真实简短任务）
++											101 text 此任务尚未发布交付文件。内部证据可在下方查看，但不能代替所需文档。
++							102 container chatHomeComposition
++								103 container chatForm
++									104 splitter Description: 拖拽调整消息输入框大小, Value: 42
++									105 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
++									106 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									107 text Code
++									108 text Task
++									109 pop up button (collapsed) Description: Task Resource QA, Secondary Actions: Expand
++									110 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-506-trigger, Secondary Actions: Expand
++									111 pop up button (collapsed) Description: OpenCorvus 模型 openai/gpt-6.1-sol，点击切换, Help: OpenCorvus 模型：openai/gpt-6.1-sol, Secondary Actions: Expand
++										112 text openai/gpt-6.1-sol
++									113 button (disabled) Description: 发送, Help: 输入消息后即可发送。, ID: chatSend
++					114 splitter Description: 调整右侧面板大小, Value: 50, ID: rightDockResizer
++					115 container Description: 工具面板, ID: rightDock
++						116 container tabs-cl-64
++							117 tab group 已打开的工具
++								118 container
++									119 tab (selected, settable, boolean) Description: 侧聊, Value: 1, ID: tabs-cl-64-trigger-side-chat
++									120 button 关闭标签页
++							121 pop up button (collapsed) Description: 添加工具, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
++							122 button 关闭面板
++							123 container Description: 侧聊, ID: centerWorkbenchSideChat
++								124 container 侧聊
++									125 pop up button (collapsed) 选择侧聊 侧聊 1, ID: select-cl-546-trigger, Secondary Actions: Expand
++										126 text 侧聊 1
++									127 button 新建侧聊
++									128 text 围绕当前对话提问，主任务继续运行。
++									129 container
++										130 text 在这里展开讨论 直接提问，或选中主对话中的一段文字开始。
++										131 button 解释一下这个方案
++										132 button 有哪些取舍？
++										133 button 我应该重点验证什么？
++									134 container
++										135 text entry area (settable) 问一个相关问题…
++										136 text 主对话保持原有进度
++										137 button (disabled) 发送侧聊问题
+The focused UI element is 135 text entry area (settable) 问一个相关问题…

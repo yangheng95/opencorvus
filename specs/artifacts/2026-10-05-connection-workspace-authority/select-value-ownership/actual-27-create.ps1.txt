@@ -1,0 +1,42 @@
+$ErrorActionPreference='Stop'
+$taskRoot27='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-publication-27'
+$taskEvidence27='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/select-value-ownership'
+$taskOwner27=Get-Content -Raw -LiteralPath "$taskRoot27/launch-owner.json" | ConvertFrom-Json
+$taskPreflight27=Get-Content -Raw -LiteralPath "$taskRoot27/evidence/preflight-ready.json" | ConvertFrom-Json
+if ($taskPreflight27.occurrence -ne $taskOwner27.occurrence -or $taskPreflight27.preflight.credential -ne 'usable' -or $taskPreflight27.preflight.catalog -ne 'projected' -or $taskPreflight27.preflight.actualModel -ne 'gpt-6.1-sol' -or !$taskPreflight27.preflight.streaming) { throw 'Exact27 live preflight not qualified' }
+$taskBun27=(Get-Command bun -ErrorAction Stop).Source
+$taskEnvironment27=[Environment]::GetEnvironmentVariables('Process')
+$taskKeep27=@('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')
+$taskRequest27='请完成这个简短的正式 Task：在真实会话中回复一句“共享下拉控件验收服务已就绪。”，随后结束本 Task。只需要这句文字，不需要文件或其他产物；无需访问网站、启动服务或改动项目文件。'
+$taskTitle27='共享下拉控件验收27（真实简短任务）'
+$taskRequestID27=[Guid]::NewGuid().ToString()
+$taskClientHome27=Join-Path $taskRoot27 'cli-home'
+$taskTemp27=Join-Path $taskRoot27 'cli-temp'
+$null=New-Item -ItemType Directory -Force -Path $taskClientHome27,$taskTemp27
+try {
+ foreach($taskName27 in @($taskEnvironment27.Keys)) { if($taskKeep27 -notcontains $taskName27) { [Environment]::SetEnvironmentVariable($taskName27,$null,'Process') } }
+ foreach($taskName27 in @('HOME','USERPROFILE','APPDATA','LOCALAPPDATA','XDG_CONFIG_HOME','XDG_DATA_HOME','XDG_CACHE_HOME','XDG_STATE_HOME')) { [Environment]::SetEnvironmentVariable($taskName27,$taskClientHome27,'Process') }
+ [Environment]::SetEnvironmentVariable('HOMEDRIVE',[IO.Path]::GetPathRoot($taskClientHome27).TrimEnd('\'),'Process')
+ [Environment]::SetEnvironmentVariable('HOMEPATH',$taskClientHome27.Substring([IO.Path]::GetPathRoot($taskClientHome27).Length-1),'Process')
+ foreach($taskName27 in @('TEMP','TMP','TMPDIR')) { [Environment]::SetEnvironmentVariable($taskName27,$taskTemp27,'Process') }
+ [Environment]::SetEnvironmentVariable('OPENCORVUS_HOME',$taskOwner27.runtime,'Process')
+ [Environment]::SetEnvironmentVariable('OPENCORVUS_DISABLE_EXTERNAL_SKILLS','1','Process')
+ [Environment]::SetEnvironmentVariable('OPENCORVUS_DISABLE_AUTOUPDATE','1','Process')
+ [Environment]::SetEnvironmentVariable('OPENCORVUS_TASK_PROCESS_MODE','native','Process')
+ $taskSentAt27=[DateTime]::UtcNow.ToString('o')
+ & $taskBun27 run 'packages/opencorvus/src/index.ts' task create --url 'http://127.0.0.1:17993' --dir $taskOwner27.project --pillar code --request $taskRequest27 --title $taskTitle27 --model 'openai/gpt-6.1-sol' --source 'root-owned-select-value-qualification' --request-id $taskRequestID27 --format json 1> "$taskEvidence27/actual-27-task-accepted-cli.json" 2> "$taskEvidence27/actual-27-task-create-first.log"
+ if($LASTEXITCODE -ne 0) { throw "Genuine27 Task CLI exit $LASTEXITCODE" }
+ $taskAcceptedAt27=[DateTime]::UtcNow.ToString('o')
+ $taskAccepted27=Get-Content -Raw -LiteralPath "$taskEvidence27/actual-27-task-accepted-cli.json" | ConvertFrom-Json
+ if (!$taskAccepted27.task_id -or !$taskAccepted27.project_id -or $taskAccepted27.directory -ne $taskOwner27.project) { throw 'Genuine27 Task acceptance contract mismatch' }
+ $taskSelection27=[ordered]@{occurrence=$taskOwner27.occurrence;taskID=$taskAccepted27.task_id;projectID=$taskAccepted27.project_id;directory=$taskAccepted27.directory;requestID=$taskRequestID27;requestSentAt=$taskSentAt27;acceptedObservedAt=$taskAcceptedAt27}
+ $taskSelection27 | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 -LiteralPath "$taskEvidence27/actual-27-task-selection.json"
+ [ordered]@{title=$taskTitle27;request=$taskRequest27;model='openai/gpt-6.1-sol';source='root-owned-select-value-qualification';requestID=$taskRequestID27;requestSentAt=$taskSentAt27;acceptedObservedAt=$taskAcceptedAt27} | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 -LiteralPath "$taskEvidence27/actual-27-task-request-input.json"
+ $taskStage27=Join-Path $taskRoot27 ('task-selection.'+[Guid]::NewGuid().ToString()+'.stage')
+ $taskSelection27 | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 -LiteralPath $taskStage27
+ [IO.File]::Move($taskStage27,$taskOwner27.taskSelectionPath)
+ $taskSelection27 | ConvertTo-Json -Depth 8
+} finally {
+ foreach($taskName27 in @([Environment]::GetEnvironmentVariables('Process').Keys)) { [Environment]::SetEnvironmentVariable($taskName27,$null,'Process') }
+ foreach($taskName27 in @($taskEnvironment27.Keys)) { [Environment]::SetEnvironmentVariable($taskName27,$taskEnvironment27[$taskName27],'Process') }
+}

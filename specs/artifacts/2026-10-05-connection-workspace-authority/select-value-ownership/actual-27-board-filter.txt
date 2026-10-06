@@ -1,0 +1,85 @@
+Browser tab: 8, Title: "OpenCorvus", URL: "http://localhost:17993/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:17993/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-417-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-419-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-421-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-423-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: 对话快捷入口, ID: workspaceNavigation
+					12 container 对话快捷入口
+						13 button 对话
+						14 button Mission 看板
+						15 button 定时
+						16 button 专家团
+						17 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button 设置
+					19 button 关于
+					20 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button 搜索任务或运行命令
+							26 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container 对话导航
+									30 button 新对话
+								31 container workLedgerProjectsScroll
+									32 text 项目
+									33 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+										37 container
+											38 container 有独立进度和结果的边界明确工作单元，通常由 Mission 创建并协调。
+											39 button 共享下拉控件验收27（真实简短任务） 已完成
+												40 text 共享下拉控件验收27（真实简短任务）
+												41 container 已完成
+													42 text 已完成
+											43 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+										44 button (expanded) Description: 收起 匿名项目 c5c388, Secondary Actions: Collapse
+										45 container
+											46 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											47 button Reply with OK.
+											48 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+									49 container 最近
+										50 text 最近
+										51 container
+											52 container 有独立进度和结果的边界明确工作单元，通常由 Mission 创建并协调。
+											53 button 共享下拉控件验收27（真实简短任务） 已完成
+												54 text 共享下拉控件验收27（真实简短任务）
+												55 container 已完成
+													56 text 已完成
+											57 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-267-trigger, Secondary Actions: Expand
+										58 container
+											59 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											60 button Reply with OK.
+											61 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-273-trigger, Secondary Actions: Expand
+							62 container 连接诊断
+								63 container Description: 连接诊断 · 在线 · 端口 17993, ID: connBadge
+									64 text 在线
+					65 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					66 container Mission 看板
+						67 container
+							68 heading Mission 看板, Value: 1, ID: missionBoardTitle
+								69 text Mission 看板
+							70 text 集中规划和跟踪各项目的长期任务。
+							71 button 创建 Mission
+						72 search text field (settable) 搜索 Mission...
+						73 pop up button (collapsed) 按项目筛选 全部项目, ID: select-cl-57-trigger, Secondary Actions: Expand
+							74 text 全部项目
+						75 button 刷新 Mission 看板
+						76 text 还没有 Mission
+						77 text 创建 Mission，以规划并跟踪各项目的工作。
+						78 button 创建 Mission
+		79 container Mission 看板 按看板查看 Mission 目标及其下属 Task 执行情况。, ID: tooltip-cl-108-content
+			80 text Mission 看板
+			81 text 按看板查看 Mission 目标及其下属 Task 执行情况。
+
+The focused UI element is 68 heading Mission 看板, Value: 1, ID: missionBoardTitle

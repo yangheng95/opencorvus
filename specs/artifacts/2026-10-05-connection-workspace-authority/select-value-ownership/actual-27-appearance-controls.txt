@@ -1,0 +1,17 @@
+Browser tab: 8, Title: "OpenCorvus", URL: "http://localhost:17993/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 60-83
+~			22 container Description: Appearance, ID: configDialog
+~							29 tab (selectable, settable, boolean) General, Value: 0, ID: config-tab-general
+~							30 tab (selected, settable, boolean) Appearance, Value: 1, ID: config-tab-appearance
+~						55 heading Appearance, Value: 1
+~							56 text Appearance
+~						57 container Description: Appearance, ID: config-panel-appearance
+~							58 container
+~								59 text Theme Choose how OpenCorvus appears on this device.
++								60 pop up button (collapsed) Theme System, ID: select-cl-363-trigger, Secondary Actions: Expand
++									61 text System
++								62 text Language Choose the language used throughout the OpenCorvus interface.
++								63 pop up button (collapsed) Language English, ID: select-cl-369-trigger, Secondary Actions: Expand
++									64 text English
+The focused UI element is 30 tab (selected, settable, boolean) Appearance, Value: 1, ID: config-tab-appearance

@@ -533,6 +533,9 @@ Button, TextField, SelectControl, Tabs, Disclosure and navigation rows own
 interactive states. Settings rows/groups and main/agent transcripts consume
 these contracts instead of restoring per-page card geometry. Sources retain
 their exact identities, indexes and destinations as lightweight links.
+SelectControl uses the installed Select.Value owner for current-value identity
+and accessible trigger labeling. Its same null renderer supplies the root
+placeholder; domain surfaces keep their existing value/option renderers.
 
 Feedback is the shared inline loading/failure/notice primitive for settings,
 ledger lists and message submission. Optional diagnostics use the existing

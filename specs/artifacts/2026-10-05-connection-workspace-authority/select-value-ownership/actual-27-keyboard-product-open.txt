@@ -1,0 +1,9 @@
+Browser tab: 8, Title: "OpenCorvus", URL: "http://localhost:17993/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~									77 pop up button (expanded) Select product mode Work, ID: select-cl-282-trigger, Secondary Actions: Collapse
++		94 list select-cl-282-listbox
++			95 Value: Code, ID: select-cl-282-listbox-item-cl-302
++				96 text Code
++			97 (selected) Value: Work, ID: select-cl-282-listbox-item-cl-305
++				98 text Work
+The focused UI element is 97 (selected) Value: Work, ID: select-cl-282-listbox-item-cl-305
