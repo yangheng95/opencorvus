@@ -818,6 +818,8 @@ directory-free launcher 从既有 Overlay settings 的 `lastSelectedModel` 恢�
 返回前写入根 Session 的 config overlay。未显式选择时请求保持继承语义；后续 prompt 禁止再次
 携带临时 Model，而是统一通过根 Session overlay、Project config 与 global config 的既定优先级
 解析。Provider catalog 只负责证明 Model 可用，不能替代这条持久化配置来源。
+新草稿未显式选择模型时显示“继承配置”，并允许有内容的普通提交；既有 Session 或 Task 的模型
+投影尚未完成时保留其等待状态。继承展示不计算、写入或传递一个前端推测的默认模型。
 首次显式 Mission 发送才通过 `/global/projects/anonymous` 创建并激活它的独立 Project。
 Directory-free launcher 的 reference catalog 只读取 built-in 与 user-global Agent Squad /
 Mission Skill，通过 `/global/composer-references` 投影最多二十项的 Expert Squad 首页，并通过

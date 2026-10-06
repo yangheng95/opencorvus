@@ -1,0 +1,15 @@
+{
+  "pid": 32876,
+  "occurrence": "draft-inherit-26-2f23577d-41c0-4695-9613-861393c93043",
+  "owner": {
+    "pid": 32876,
+    "processInstanceID": "win32:639268870120728911",
+    "occurrenceID": "0fe2ea9e-2ad8-4734-8fc3-4e75a45d8b2e"
+  },
+  "parent": {
+    "pid": 74964,
+    "processInstanceID": "win32:639268870120261693",
+    "occurrenceID": "397e0336-f7a5-42bd-a093-ea17d2fa414d"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

@@ -1,0 +1,31 @@
+{
+  "observedAtUtc": "2026-10-06T12:56:34.7398270Z",
+  "occurrence": "draft-inherit-26-2f23577d-41c0-4695-9613-861393c93043",
+  "hostState": "dead_or_reused",
+  "targetState": "dead_or_reused",
+  "listeners": [],
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "sourcePair": [
+    {
+      "Name": "auth.json",
+      "Length": 2147,
+      "LastWriteTimeUtc": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "Name": "models.json",
+      "Length": 9155406,
+      "LastWriteTimeUtc": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "ownPageClosedAtUtc": "2026-10-06T12:51:05.214Z",
+  "launcherExitCode": 0
+}

@@ -107,3 +107,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Post-native complete-read acceptance22](../../artifacts/2026-10-05-connection-workspace-authority/post-native-complete-read-acceptance-plan.md): a fresh real streamed Sol Task and manual formal download after qualified production native ownership21; old20 remains unchanged.
 
 - [Visible conversation runtime status23](../../artifacts/2026-10-05-connection-workspace-authority/task-runtime-status-implementation-plan.md): current selected execution label/elapsed become visible from the existing single ledger/SSE source; real active/dock/Chat and terminal25 manual UI acceptance pass; original23/24 formal-delivery inactivity failures remain.
+
+- [Draft model inheritance26](../../artifacts/2026-10-05-connection-workspace-authority/draft-model-inheritance-plan.md): a new draft inherits canonical configuration without a renderer model resolver or explicit preference write; real inherited Code/Work replies, English/Chinese layout and explicit preference restoration pass in owned26; original failures stay unchanged.
