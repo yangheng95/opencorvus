@@ -1,0 +1,15 @@
+{
+  "pid": 40576,
+  "occurrence": "mission-delivery-28-d3595b82-7a72-4432-ae33-4fa17d0a3182",
+  "owner": {
+    "pid": 40576,
+    "processInstanceID": "win32:639268903790316061",
+    "occurrenceID": "f4a4e91b-9d3b-4078-b2d2-600cf8fba03a"
+  },
+  "parent": {
+    "pid": 66860,
+    "processInstanceID": "win32:639268903789705258",
+    "occurrenceID": "9605d922-320b-4476-aade-4a4650f9c5d3"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

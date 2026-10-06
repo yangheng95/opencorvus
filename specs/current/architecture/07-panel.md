@@ -338,7 +338,9 @@ they do not count as usable delivery files. Resource cards offer direct download
 and the existing content preview. The environment popover derives its delivery
 inventory from the same current conversation projection, including message-owned
 interactive artifacts, and opens those same exact resources without another
-registry or publication protocol. Missing requested files remain explicit.
+registry or publication protocol. An empty resource inventory reports its actual
+download availability without inferring a required document. Task completion
+and review retain the exact request and occurrence contracts.
 
 Project metadata is scoped by its exact directory and latest request. The panel
 refreshes on opening/scope changes and exposes loading, error and disconnected
@@ -811,7 +813,7 @@ Push / Push actions live in the shared modal Dialog primitive, never in an
 inline expansion or a second VCS surface.
 
 Work Ledger 顶层只保留 New Chat，并与标题栏和命令面板共享同一个 global launcher。该入口
-以 Chat/Code 作为初始模式；Work 由同一个 Composer 内的 Code / Work selector 选择，Mission
+以 Work/Chat 作为初始模式；Code 与 Work 由同一个 Composer 内的 Code / Work selector 选择，Mission
 继续通过显式 reference 或 Chat 的语义 handoff 进入，禁止在 Work Ledger 重复创建 mode-specific
 入口。每次调用只清除会话与 Project runtime selection、进入 directory-free launcher 并聚焦
 composer；没有实际提交时禁止调用任何 Project 或 Session 写路由。首次 Code / Work 发送分别
@@ -824,6 +826,8 @@ directory-free launcher 从既有 Overlay settings 的 `lastSelectedModel` 恢�
 新草稿未显式选择模型时显示“继承配置”，并允许有内容的普通提交；既有 Session 或 Task 的模型
 投影尚未完成时保留其等待状态。继承展示不计算、写入或传递一个前端推测的默认模型。
 首次显式 Mission 发送才通过 `/global/projects/anonymous` 创建并激活它的独立 Project。
+Mission 草稿标题、输入提示与首页说明使用通用 Mission 语义；选择 Mission 目标本身不代表
+已选专家团或执行上下文已就绪。已选 Squad 的精确身份继续由同一份真实可见 reference 展示。
 Directory-free launcher 的 reference catalog 只读取 built-in 与 user-global Agent Squad /
 Mission Skill，通过 `/global/composer-references` 投影最多二十项的 Expert Squad 首页，并通过
 bounded server search 查询其余项，不需要也不得为查询目录而创建
@@ -862,7 +866,8 @@ prompt、默认 Skill/MCP assignment、typed office tool inventory 与 parent-on
 `BriefcaseBusiness` identity 在 Dock、Composer、Conversation header、Work Ledger 和 Archive
 保持一致。Work prompt 默认先规划最有利于审阅和复用的 interactive artifact 交付面，优先
 一个完整 primary artifact，并只在能提供不同证据、比较、顺序、结构或演示视角时增加互补
-artifact。Project 行内 New Chat 仍显式调用 project-scoped Chat route。因此每次真正提交的
+artifact。Project 行内 New Chat 恢复该 server/directory 已保存的 Composer intent；没有偏好时
+使用同一个 Work/Chat 默认值，实际提交按当前 intent 进入既有 Project scope route。每次真正提交的
 全局工作都有独立 Project owner，不会与上一次全局 Chat、Work 或 Mission 互相污染；未提交的
 launcher 不会出现在数据库或 Work Ledger。
 

@@ -1,0 +1,122 @@
+Browser tab: 9, Title: "OpenCorvus", URL: "http://localhost:17994/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:17994/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-404-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-406-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-408-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-410-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: 对话快捷入口, ID: workspaceNavigation
+					12 container 对话快捷入口
+						13 button 对话
+						14 button Mission 看板
+						15 button 定时
+						16 button 专家团
+						17 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button 设置
+					19 button 关于
+					20 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button 搜索任务或运行命令
+							26 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container 对话导航
+									30 button 新对话
+								31 container workLedgerProjectsScroll
+									32 text 项目
+									33 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 container
+											37 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+											38 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-176-trigger, Secondary Actions: Expand
+											39 button 为此项目新建 Chat
+										40 container
+											41 container 有独立进度和结果的边界明确工作单元，通常由 Mission 创建并协调。
+											42 button Mission 与交付提示验收28（真实文字任务） 已完成
+												43 text Mission 与交付提示验收28（真实文字任务）
+												44 container 已完成
+													45 text 已完成
+											46 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+										47 button (expanded) Description: 收起 匿名项目 d65937, Secondary Actions: Collapse
+										48 container
+											49 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											50 button Reply with OK.
+											51 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+									52 container 最近
+										53 text 最近
+										54 container
+											55 container 有独立进度和结果的边界明确工作单元，通常由 Mission 创建并协调。
+											56 button Mission 与交付提示验收28（真实文字任务） 已完成
+												57 text Mission 与交付提示验收28（真实文字任务）
+												58 container 已完成
+													59 text 已完成
+											60 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-269-trigger, Secondary Actions: Expand
+										61 container
+											62 container 在单个项目中直接进行交互式工作的对话；不会协调下级 Task。
+											63 button Reply with OK.
+											64 pop up button (collapsed) Description: 更多操作, ID: dropdownmenu-cl-275-trigger, Secondary Actions: Expand
+							65 container 连接诊断
+								66 container Description: 连接诊断 · 在线 · 端口 17994, ID: connBadge
+									67 text 在线
+					68 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					69 container chatSection
+						70 container Description: 正在加载 Task, ID: taskSwitchProgress
+						71 container
+							72 text Mission 与交付提示验收28（真实文字任务）
+							73 pop up button (collapsed) Description: 项目操作, ID: dropdownmenu-cl-485-trigger, Secondary Actions: Expand
+							74 container 已完成
+								75 text 已完成
+							76 container Description: 非进行中 · 15 秒, ID: taskStatus
+								77 text 15 秒
+							78 button 侧聊
+							79 container solidChatHeaderRuntimeActions
+								80 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand
+								81 checkbox Description: 打开右侧面板, Value: 0
+						82 container
+							83 container Description: 对话, ID: chatScroll
+								84 container
+									85 container
+										86 text 用户
+										87 text 请完成这个简短的正式 Task：在真实会话中回复一句“本轮只需要这句文字，任务已完成。”，随后结束本 Task。只需要这句文字，不需要文件或其他产物；无需访问网站、启动服务或改动项目文件。
+									88 container
+										89 text orchestrator
+										90 text 13 秒
+										91 button (collapsed) Description: 调度上下文, Secondary Actions: Expand
+										92 text 本轮只需要这句文字，任务已完成。
+										93 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
+											94 text manage_task
+											95 text action=complete_task
+											96 image
+										97 container 暂无交付文件
+											98 container
+												99 text Agent 交付 暂无交付文件 Mission 与交付提示验收28（真实文字任务）
+											100 text 本轮暂无可下载的交付文件。
+							101 container chatHomeComposition
+								102 container chatForm
+									103 splitter Description: 拖拽调整消息输入框大小, Value: 42
+									104 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+									105 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									106 text Code
+									107 text Task
+									108 pop up button (collapsed) Description: Task Resource QA, Secondary Actions: Expand
+									109 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									110 pop up button (collapsed) Description: OpenCorvus 模型 openai/gpt-6.1-sol，点击切换, Help: OpenCorvus 模型：openai/gpt-6.1-sol, Secondary Actions: Expand
+										111 text openai/gpt-6.1-sol
+									112 button (disabled) Description: 发送, Help: 输入消息后即可发送。, ID: chatSend
+		113 container Mission 与交付提示验收28（真实文字任务） 6 分钟前 开始时间 2026年10月06日 21:33 project, ID: tooltip-cl-182-content
+			114 text Mission 与交付提示验收28（真实文字任务）
+			115 text 6 分钟前
+			116 text 开始时间
+			117 text 2026年10月06日 21:33
+			118 text project
+
+The focused UI element is 42 button Mission 与交付提示验收28（真实文字任务） 已完成

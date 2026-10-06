@@ -111,3 +111,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Draft model inheritance26](../../artifacts/2026-10-05-connection-workspace-authority/draft-model-inheritance-plan.md): a new draft inherits canonical configuration without a renderer model resolver or explicit preference write; real inherited Code/Work replies, English/Chinese layout and explicit preference restoration pass in owned26; original failures stay unchanged.
 
 - [Shared Select value ownership27](../../artifacts/2026-10-05-connection-workspace-authority/select-value-ownership-plan.md): installed value registration restores actual control names/current values and manual keyboard behavior in Composer/Appearance; owned27 visual and service closure pass, null/stale variants remain unqualified.
+
+- [Truthful Mission and empty-delivery presentation28](../../artifacts/2026-10-05-connection-workspace-authority/mission-delivery-copy-plan.md): generic Mission and actual empty-resource copy pass English/Chinese manual UI and genuine Sol text Task in owned28; locale and reference Escape observations proceed separately.

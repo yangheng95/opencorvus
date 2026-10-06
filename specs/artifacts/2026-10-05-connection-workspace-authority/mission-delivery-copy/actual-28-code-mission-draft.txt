@@ -1,0 +1,96 @@
+Browser tab: 9, Title: "OpenCorvus", URL: "http://localhost:17994/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:17994/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									36 container
+										37 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+										38 button Mission 与交付提示验收28（真实文字任务） Completed
+											39 text Mission 与交付提示验收28（真实文字任务）
+											40 container Completed
+												41 text Completed
+										42 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+									43 button (expanded) Description: Collapse Anonymous d65937, Secondary Actions: Collapse
+									44 container
+										45 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										46 button Reply with OK.
+										47 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+								48 container Recents
+									49 text Recents
+									50 container
+										51 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+										52 button Mission 与交付提示验收28（真实文字任务） Completed
+											53 text Mission 与交付提示验收28（真实文字任务）
+											54 container Completed
+												55 text Completed
+										56 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-269-trigger, Secondary Actions: Expand
+									57 container
+										58 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										59 button Reply with OK.
+										60 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-275-trigger, Secondary Actions: Expand
+						61 container Connection Diagnostics
+							62 container Description: Connection Diagnostics · Online · Port 17994, ID: connBadge
+								63 text Online
+				64 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				65 container chatSection
+					66 container Description: Loading task, ID: taskSwitchProgress
+					67 container
+						68 container Description: Conversation, ID: chatScroll
+						69 container chatHomeComposition
+							70 heading What should we build?, Value: 1
+								71 text What should we build?
+							72 container chatForm
+								73 splitter Description: Drag to resize the message input, Value: 42
+								74 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea, Value: 
+
+								75 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								76 pop up button (collapsed) Select product mode Code, ID: select-cl-281-trigger, Secondary Actions: Expand
+									77 text Code
+								78 pop up button (collapsed) Select conversation target Mission, ID: select-cl-285-trigger, Secondary Actions: Expand
+									79 text Mission
+								80 pop up button (collapsed) Description: Skills & squads, Secondary Actions: Expand
+								81 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								82 pop up button (collapsed) Description: OpenCorvus model Inherit configuration. Click to change., Help: OpenCorvus model: Inherit configuration, Secondary Actions: Expand
+									83 text Inherit configuration
+								84 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+							85 container Suggested chat starters
+								86 text Mission draft
+								87 text OpenCorvus will create a dedicated project for this Mission when you send it.
+								88 button Build a webpage
+								89 button Create an expert squad
+								90 button Fix a bug
+								91 pop up button (collapsed) More, ID: dropdownmenu-cl-295-trigger, Secondary Actions: Expand
+
+The focused UI element is 74 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea, Value: 

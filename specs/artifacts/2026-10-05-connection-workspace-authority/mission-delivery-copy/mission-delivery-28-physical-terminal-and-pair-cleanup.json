@@ -1,0 +1,65 @@
+{
+  "occurrence": "mission-delivery-28-d3595b82-7a72-4432-ae33-4fa17d0a3182",
+  "listeners": null,
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 40576,
+        "processInstanceID": "win32:639268903790316061",
+        "occurrenceID": "d4202de9-bfb0-4e9f-9de5-c8ca485a7ceb"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 42388,
+        "processInstanceID": "win32:639268903781577753",
+        "occurrenceID": "9be1705b-275c-49ad-9d9d-c0924b236a97"
+      }
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "mission-delivery-28-d3595b82-7a72-4432-ae33-4fa17d0a3182",
+    "outcome": "settled",
+    "host": {
+      "pid": 42388,
+      "processInstanceID": "win32:639268903781577753",
+      "occurrenceID": "9be1705b-275c-49ad-9d9d-c0924b236a97"
+    },
+    "target": {
+      "pid": 40576,
+      "processInstanceID": "win32:639268903790316061",
+      "occurrenceID": "d4202de9-bfb0-4e9f-9de5-c8ca485a7ceb"
+    },
+    "observedAtUtc": "2026-10-06T13:41:24.324Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-28\\runtime\\data\\auth.json",
+      "copiedLength": 2082,
+      "presentAfter": false,
+      "outcome": "removed"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-28\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "outcome": "removed"
+    }
+  ],
+  "observedAtUtc": "2026-10-06T13:41:25.9690841Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

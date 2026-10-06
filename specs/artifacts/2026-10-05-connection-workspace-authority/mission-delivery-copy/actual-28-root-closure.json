@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-10-06T13:43:56.4037726Z",
+  "occurrence": "mission-delivery-28-d3595b82-7a72-4432-ae33-4fa17d0a3182",
+  "hostState": "dead_or_reused",
+  "targetState": "dead_or_reused",
+  "listeners": [],
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "sourceMetadata": [
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+      "bytes": 2147,
+      "modifiedAt": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+      "bytes": 9155406,
+      "modifiedAt": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "boundary": "Independent exact native identity/port/copy metadata observation after original public shutdown; no credential contents"
+}

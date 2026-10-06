@@ -212,3 +212,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Draft model inheritance26](draft-model-inheritance-plan.md): a new draft inherits canonical configuration without a renderer model resolver or explicit preference write; real inherited Code/Work replies, English/Chinese layout and explicit preference restoration pass in owned26; original failures stay unchanged.
 
 - [Shared Select value ownership27](select-value-ownership-plan.md): installed value registration restores actual control names/current values and manual keyboard behavior in Composer/Appearance; owned27 visual and service closure pass, null/stale variants remain unqualified.
+
+- [Truthful Mission and empty-delivery presentation28](mission-delivery-copy-plan.md): generic Mission and actual empty-resource copy pass English/Chinese manual UI and genuine Sol text Task in owned28; locale and reference Escape observations proceed separately.
