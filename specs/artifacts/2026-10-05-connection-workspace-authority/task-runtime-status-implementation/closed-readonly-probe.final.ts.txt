@@ -1,0 +1,32 @@
+import { Database } from "bun:sqlite"
+import fs from "node:fs"
+
+const caseNumber = process.argv.includes("--case24") ? 24 : 23
+const taskID = caseNumber === 24 ? "tsk_g00VXGpJP700c0UYL3kl" : "tsk_g00VXGm3Wm00Rl3QWP6H"
+const root = `C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-publication-${caseNumber}`
+const evidence = "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/task-runtime-status-implementation"
+const db = new Database(`${root}/runtime/data/opencorvus.db`, { readonly: true })
+try {
+  db.exec("BEGIN")
+  if (process.argv.includes("--session-facts")) {
+    const sessions = db.query("SELECT id,project_id,parent_id,directory,title,kind,metadata,time_created,time_updated FROM session ORDER BY time_created").all()
+    const messages = db.query("SELECT id,session_id,time_created,time_updated,data FROM message ORDER BY time_created").all()
+    const parts = db.query("SELECT id,message_id,time_created,time_updated,data FROM part ORDER BY time_created").all()
+    const requests = db.query("SELECT id,message_id,time_created,data FROM tool_part_request ORDER BY time_created").all()
+    const outcomes = db.query("SELECT id,request_part_id,time_created,data FROM tool_part_outcome ORDER BY time_created").all()
+    const progress = db.query("SELECT id,request_part_id,time_created,title,metadata FROM tool_part_progress ORDER BY time_created").all()
+    const owners = db.query("SELECT * FROM session_prompt_owner").all()
+    const pending = db.query("SELECT i.* FROM protocol_inbox i LEFT JOIN protocol_delivery_receipt r ON r.inbox_id=i.id WHERE r.id IS NULL").all()
+    fs.writeFileSync(`${evidence}/actual-${caseNumber}-readonly-session-facts.json`, JSON.stringify({ observedAtUtc: new Date().toISOString(), access: "readonly after exact native closure; own isolated preflight and Task sessions only", sessions, messages, parts, requests, outcomes, progress, owners, pending }, null, 2), { flag: "wx" })
+    db.exec("COMMIT")
+    console.log(JSON.stringify({ sessions: sessions.length, messages: messages.length, parts: parts.length, requests: requests.length, outcomes: outcomes.length, owners: owners.length, pending: pending.length }))
+    process.exit(0)
+  }
+  const schema = db.query("SELECT name,sql FROM sqlite_master WHERE type='table' AND (name IN ('session','message','part','session_prompt_owner','engine_task','protocol_event','protocol_inbox','protocol_delivery_receipt') OR name LIKE '%tool_part%') ORDER BY name").all()
+  fs.writeFileSync(`${evidence}/actual-${caseNumber}-readonly-schema.json`, JSON.stringify(schema, null, 2), { flag: "wx" })
+  const task = db.query("SELECT id,project_id,session_id,request_id,title,time_created FROM engine_task WHERE id=?").get(taskID)
+  const events = db.query("SELECT id,type,aggregate_type,aggregate_id,session_id,seq,emitted_at,payload FROM protocol_event WHERE task_id=? OR (aggregate_type='task' AND aggregate_id=?) ORDER BY emitted_at,seq").all(taskID, taskID)
+  fs.writeFileSync(`${evidence}/actual-${caseNumber}-readonly-task-events.json`, JSON.stringify({ observedAtUtc: new Date().toISOString(), database: `${root}/runtime/data/opencorvus.db`, access: "bun:sqlite readonly; explicit read transaction; no product imports or runtime bootstrap", task, events }, null, 2), { flag: "wx" })
+  db.exec("COMMIT")
+  console.log(JSON.stringify({ schemaTables: schema.length, task, events: events.length, access: "readonly" }))
+} finally { db.close() }

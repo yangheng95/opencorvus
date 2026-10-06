@@ -1,0 +1,10 @@
+Owned Sol Target PID 44448, Host PID 20156, occurrence complete-read-23-b9a062ca-454c-46f4-b1a3-188349d7efb6; native settlement remains required.
+Owned observed process chain settled and copied authority pair cleanup recorded.
+Exception: D:\myhexin-local\opencorvus\.tmp-product-iteration\live-sol-launch.ps1:203
+Line |
+ 203 |    throw "Task qualification failed; original failure retained: $taskF …
+     |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Task qualification failed; original failure retained:
+     | C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-06\live-sol-publication-23\evidence\failed.json
+
+

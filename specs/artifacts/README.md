@@ -110,3 +110,5 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Native owned qualification21](2026-10-05-connection-workspace-authority/native-owned-qualification-plan.md): one production foreground Job authority replaces the private incomplete-CIM tree inspector; original20 active/recovery and unmet UI/publication evidence remain unchanged.
 
 - [Post-native complete-read acceptance22](2026-10-05-connection-workspace-authority/post-native-complete-read-acceptance-plan.md): a fresh real streamed Sol Task and manual formal download after qualified production native ownership21; old20 remains unchanged.
+
+- [Visible conversation runtime status23](2026-10-05-connection-workspace-authority/task-runtime-status-implementation-plan.md): current selected execution label/elapsed become visible from the existing single ledger/SSE source; real active/dock/Chat and terminal25 manual UI acceptance pass; original23/24 formal-delivery inactivity failures remain.

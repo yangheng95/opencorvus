@@ -1,0 +1,165 @@
+{
+  "observedAtUtc": "2026-10-06T11:57:56.066Z",
+  "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-publication-23/runtime/data/opencorvus.db",
+  "access": "bun:sqlite readonly; explicit read transaction; no product imports or runtime bootstrap",
+  "task": {
+    "id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+    "project_id": "prj_hTMeXJ7PumUdMERuf4dO",
+    "session_id": "ses_-zUSjDwLOzzxMwtXmfEN",
+    "request_id": "4ac83a4c-a995-41e7-8218-a13a969c9416",
+    "title": "完整读取凭据与正式交付23",
+    "time_created": 1791287561244
+  },
+  "events": [
+    {
+      "id": "pev_g0VXGm3fC00k3OtYb9pG",
+      "type": "task.execution.opened",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDwLOzzxMwtXmfEN",
+      "seq": 3,
+      "emitted_at": 1791287561244,
+      "payload": "{\"execution_epoch\":1}"
+    },
+    {
+      "id": "pev_g0VXGm3ez001D1Aorrvu",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": null,
+      "seq": 1,
+      "emitted_at": 1791287561753,
+      "payload": "{\"artifactID\":\"art_g0VXGm3ek008Z4GQ4Y8D\",\"kind\":\"task_package_revision_binding\",\"catalogRevision\":1}"
+    },
+    {
+      "id": "pev_g0VXGm3fB00OKUwV01C3",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": null,
+      "seq": 2,
+      "emitted_at": 1791287561765,
+      "payload": "{\"artifactID\":\"art_g0VXGm3f1007feoU8Nhc\",\"kind\":\"task_execution_capsule_binding\",\"catalogRevision\":2}"
+    },
+    {
+      "id": "pev_g0VXGm3fG00g92o4jhOy",
+      "type": "task.created",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": null,
+      "seq": 4,
+      "emitted_at": 1791287561770,
+      "payload": "{\"summary\":\"Task started\"}"
+    },
+    {
+      "id": "pev_g0VXGm4fQ00u1GjAfJsZ",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 5,
+      "emitted_at": 1791287565623,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGm4gu00hg8YUpgGs",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 6,
+      "emitted_at": 1791287565716,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGmsEP00aUs55zy40",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 7,
+      "emitted_at": 1791287756148,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"retry\",\"attempt\":1,\"message\":\"idle: backoff 1051.1178164661842ms; last heartbeat tool-input-delta@2026-10-06T11:52:56.121Z\",\"next\":1791287757181.118}}"
+    },
+    {
+      "id": "pev_g0VXGmsW7006oGIt851Y",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 8,
+      "emitted_at": 1791287757247,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGmtl400k9Th39xdQ",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 9,
+      "emitted_at": 1791287762018,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGmtlW00G73LDbNp6",
+      "type": "session.error",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 10,
+      "emitted_at": 1791287762045,
+      "payload": "{\"error\":{\"name\":\"MessageAbortedError\",\"data\":{\"message\":\"Orchestrator execution signal aborted\",\"cancellation\":{\"actor\":\"orchestrator\",\"source\":\"orchestrator.abort_cascade\",\"surface\":\"orchestrator\",\"requestID\":\"c664788b-96f3-40e9-b906-de3b97dfa53f\",\"reason\":\"Orchestrator execution signal aborted\",\"targetSessionID\":\"ses_-zUSjDvVazzLjajCRIu1\",\"taskID\":\"tsk_g00VXGm3Wm00Rl3QWP6H\"}}},\"failureOccurrence\":{\"session_id\":\"ses_-zUSjDvVazzLjajCRIu1\",\"assistant_message_id\":\"msg_hHnGoe5z9jnpNU2rel92\",\"error_name\":\"MessageAbortedError\"},\"summary\":\"Orchestrator execution signal aborted\"}"
+    },
+    {
+      "id": "pev_g0VXGmtm900Q4hIB7JP5",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": null,
+      "seq": 11,
+      "emitted_at": 1791287762085,
+      "payload": "{\"artifactID\":\"art_g0VXGmtlp00moR2vLCsp\",\"kind\":\"task-infrastructure-error\",\"catalogRevision\":3}"
+    },
+    {
+      "id": "pev_g0VXGmtmC00tWzkft0dl",
+      "type": "task.infrastructure.failed",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": null,
+      "seq": 12,
+      "emitted_at": 1791287762088,
+      "payload": "{\"component\":\"process-recovery\",\"operation\":\"handoff-process-owned-task-execution\",\"summary\":\"process-recovery infrastructure failure\",\"details\":\"Server shutdown source=http-client reason=http.shutdown\",\"evidenceLocators\":[{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VXGmtlp00moR2vLCsp\",\"catalog_revision\":3,\"expected_sha256\":\"218fa982cf43f948def1e1cec5ad1c47be7db2f93e8bf043c13c3af48c18cc0a\"}]}"
+    },
+    {
+      "id": "pev_g0VXGmtmf007D6QI08A0",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 13,
+      "emitted_at": 1791287762117,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGmtnF00d1S4AoYKb",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": "ses_-zUSjDvVazzLjajCRIu1",
+      "seq": 14,
+      "emitted_at": 1791287762152,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h6VMUiwKtaw7DS1CCEtB_art_h6VMUiwKtaw7DS1CCEtB\",\"status\":{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Orchestrator execution signal aborted\"}}"
+    },
+    {
+      "id": "pev_g0VXGmtne00McINOrSui",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGm3Wm00Rl3QWP6H",
+      "session_id": null,
+      "seq": 15,
+      "emitted_at": 1791287762178,
+      "payload": "{\"artifactID\":\"art_g0VXGmtnR00fEBR7BRXk\",\"kind\":\"orchestrator-stream-error\",\"catalogRevision\":4}"
+    }
+  ]
+}

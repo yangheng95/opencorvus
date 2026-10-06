@@ -1,0 +1,65 @@
+{
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-06T12:23:51.2717806Z",
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "terminal-status-25-e4c60de5-2d58-447b-a56e-57a37e10e9e0",
+    "outcome": "settled",
+    "host": {
+      "pid": 54356,
+      "processInstanceID": "win32:639268860833067850",
+      "occurrenceID": "b3c357fc-900c-4144-b926-2da8d569c730"
+    },
+    "target": {
+      "pid": 6488,
+      "processInstanceID": "win32:639268860840893608",
+      "occurrenceID": "8312354f-d83b-450e-8fea-6273c4907423"
+    },
+    "observedAtUtc": "2026-10-06T12:23:49.618Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "terminal-status-25-e4c60de5-2d58-447b-a56e-57a37e10e9e0",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 6488,
+        "processInstanceID": "win32:639268860840893608",
+        "occurrenceID": "8312354f-d83b-450e-8fea-6273c4907423"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 54356,
+        "processInstanceID": "win32:639268860833067850",
+        "occurrenceID": "b3c357fc-900c-4144-b926-2da8d569c730"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2082,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-25\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-25\\runtime\\data\\models.json"
+    }
+  ]
+}

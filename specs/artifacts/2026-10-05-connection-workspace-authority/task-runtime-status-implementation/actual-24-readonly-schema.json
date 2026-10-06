@@ -1,0 +1,46 @@
+[
+  {
+    "name": "engine_task",
+    "sql": "CREATE TABLE \"engine_task\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"session_id\" text,\n  \"request_id\" text,\n  \"global_creation_allocation_id\" text,\n  \"source\" text NOT NULL DEFAULT 'api',\n  \"product_pillar\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"request\" text NOT NULL,\n  \"attachments\" text,\n  \"system_artifacts\" text NOT NULL DEFAULT '[]',\n  \"priority\" text NOT NULL DEFAULT 'normal',\n  \"budget\" text,\n  \"metadata\" text,\n  \"time_archived\" integer,\n  \"time_pinned\" integer,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"session_id\") REFERENCES \"session\"(\"id\") ON DELETE SET NULL,\n  CONSTRAINT \"engine_task_excludes_git_projection\" CHECK (json_type(\"metadata\", '$.git') IS NULL)\n)"
+  },
+  {
+    "name": "message",
+    "sql": "CREATE TABLE \"message\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"session_id\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  \"time_updated\" integer NOT NULL,\n  \"data\" text NOT NULL,\n  FOREIGN KEY (\"session_id\") REFERENCES \"session\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "part",
+    "sql": "CREATE TABLE \"part\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"message_id\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  \"time_updated\" integer NOT NULL,\n  \"data\" text NOT NULL,\n  FOREIGN KEY (\"message_id\") REFERENCES \"message\"(\"id\") ON DELETE CASCADE,\n  CONSTRAINT \"part_excludes_tool_effect_state\" CHECK (json_extract(\"data\", '$.type') NOT IN ('tool', 'tool-request', 'tool-outcome'))\n)"
+  },
+  {
+    "name": "protocol_delivery_receipt",
+    "sql": "CREATE TABLE \"protocol_delivery_receipt\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"inbox_id\" text NOT NULL,\n  \"receipt\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"inbox_id\") REFERENCES \"protocol_inbox\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "protocol_event",
+    "sql": "CREATE TABLE \"protocol_event\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"kind\" text NOT NULL,\n  \"type\" text NOT NULL,\n  \"aggregate_type\" text NOT NULL,\n  \"aggregate_id\" text NOT NULL,\n  \"project_id\" text,\n  \"task_id\" text,\n  \"session_id\" text,\n  \"interaction_id\" text,\n  \"stream_id\" text,\n  \"source\" text NOT NULL,\n  \"target\" text,\n  \"causation_id\" text,\n  \"correlation_id\" text,\n  \"reply_to\" text,\n  \"seq\" integer NOT NULL,\n  \"deadline_ms\" integer,\n  \"emitted_at\" integer NOT NULL,\n  \"payload\" text,\n  CONSTRAINT \"protocol_event_task_identity_shape\" CHECK (\"aggregate_type\" <> 'task' OR \"task_id\" IS NULL),\n  CONSTRAINT \"protocol_event_session_identity_shape\" CHECK (\"aggregate_type\" <> 'session' OR \"session_id\" IS NULL),\n  CONSTRAINT \"protocol_event_payload_envelope_shape\" CHECK (\n      json_type(\"payload\", '$.taskID') IS NULL\n      AND json_type(\"payload\", '$.sessionID') IS NULL\n      AND json_type(\"payload\", '$.interactionID') IS NULL\n      AND json_type(\"payload\", '$.orderKey') IS NULL\n      AND (\"type\" <> 'task.updated' OR json_type(\"payload\", '$.status') IS NULL)\n      AND (\"type\" NOT IN ('task.completed','task.failed','task.cancelled') OR json_type(\"payload\", '$.timeCompleted') IS NULL)\n    )\n)"
+  },
+  {
+    "name": "protocol_inbox",
+    "sql": "CREATE TABLE \"protocol_inbox\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"envelope_id\" text NOT NULL,\n  \"actor\" text NOT NULL,\n  \"actor_id\" text NOT NULL,\n  \"visible_at\" integer NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"envelope_id\") REFERENCES \"protocol_event\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "session",
+    "sql": "CREATE TABLE \"session\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"parent_id\" text,\n  \"slug\" text NOT NULL,\n  \"directory\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"version\" text NOT NULL,\n  \"kind\" text NOT NULL,\n  \"share_url\" text,\n  \"summary_additions\" integer,\n  \"summary_deletions\" integer,\n  \"summary_files\" integer,\n  \"permission\" text,\n  \"metadata\" text,\n  \"time_created\" integer NOT NULL,\n  \"time_updated\" integer NOT NULL,\n  \"time_archived\" integer,\n  \"time_pinned\" integer,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "session_prompt_owner",
+    "sql": "CREATE TABLE \"session_prompt_owner\" (\n  \"session_id\" text PRIMARY KEY NOT NULL,\n  \"project_id\" text NOT NULL,\n  \"directory\" text NOT NULL,\n  \"generation\" text NOT NULL,\n  \"owner_pid\" integer NOT NULL,\n  \"owner_process_instance_id\" text NOT NULL,\n  \"owner_occurrence_id\" text NOT NULL,\n  \"time_acquired\" integer NOT NULL,\n  FOREIGN KEY (\"session_id\") REFERENCES \"session\"(\"id\") ON DELETE CASCADE,\n  FOREIGN KEY (\"project_id\") REFERENCES \"project\"(\"id\") ON DELETE CASCADE\n)"
+  },
+  {
+    "name": "tool_part_outcome",
+    "sql": "CREATE TABLE \"tool_part_outcome\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"request_part_id\" text NOT NULL,\n  \"data\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"request_part_id\") REFERENCES \"tool_part_request\"(\"id\") ON DELETE CASCADE,\n  CONSTRAINT \"tool_part_outcome_fact_shape\" CHECK (\n      json_type(\"data\", '$.time.end') IN ('integer', 'real')\n      AND json_type(\"data\", '$.input') IS NULL AND json_type(\"data\", '$.status') IS NULL\n      AND (\n        COALESCE((json_extract(\"data\", '$.outcome')='completed'\n          AND json_type(\"data\", '$.title')='text'\n          AND json_type(\"data\", '$.metadata')='object'\n          AND json_type(\"data\", '$.failure') IS NULL\n          AND ((json_type(\"data\", '$.output')='text' AND json_type(\"data\", '$.resultAttemptID') IS NULL)\n            OR (json_type(\"data\", '$.output') IS NULL AND json_type(\"data\", '$.resultAttemptID')='text'))),0)\n        OR\n        COALESCE((json_extract(\"data\", '$.outcome')='failed'\n          AND json_type(\"data\", '$.failure')='object'\n          AND json_type(\"data\", '$.output') IS NULL\n          AND json_type(\"data\", '$.resultAttemptID') IS NULL\n          AND json_type(\"data\", '$.title') IS NULL),0)\n      )\n    )\n)"
+  },
+  {
+    "name": "tool_part_progress",
+    "sql": "CREATE TABLE \"tool_part_progress\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"request_part_id\" text NOT NULL,\n  \"title\" text,\n  \"metadata\" text,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"request_part_id\") REFERENCES \"tool_part_request\"(\"id\") ON DELETE CASCADE,\n  CONSTRAINT \"tool_part_progress_fact_shape\" CHECK (\n      (\"title\" IS NOT NULL OR \"metadata\" IS NOT NULL)\n      AND (\"metadata\" IS NULL OR json_type(\"metadata\") = 'object')\n    )\n)"
+  },
+  {
+    "name": "tool_part_request",
+    "sql": "CREATE TABLE \"tool_part_request\" (\n  \"id\" text PRIMARY KEY NOT NULL,\n  \"message_id\" text NOT NULL,\n  \"data\" text NOT NULL,\n  \"time_created\" integer NOT NULL,\n  FOREIGN KEY (\"message_id\") REFERENCES \"message\"(\"id\") ON DELETE CASCADE,\n  CONSTRAINT \"tool_part_request_fact_shape\" CHECK (\n      json_extract(\"data\", '$.type') = 'tool-request'\n      AND json_type(\"data\", '$.callID') = 'text'\n      AND json_type(\"data\", '$.tool') = 'text'\n      AND json_type(\"data\", '$.time.start') IN ('integer', 'real')\n      AND json_type(\"data\", '$.state') IS NULL\n    )\n)"
+  }
+]

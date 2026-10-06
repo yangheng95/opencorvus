@@ -1,0 +1,1185 @@
+{
+  "observedAtUtc": "2026-10-06T12:19:58.615Z",
+  "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-publication-24/runtime/data/opencorvus.db",
+  "access": "bun:sqlite readonly; explicit read transaction; no product imports or runtime bootstrap",
+  "task": {
+    "id": "tsk_g00VXGpJP700c0UYL3kl",
+    "project_id": "prj_hm777ogG6lrsYtpUveq3",
+    "session_id": "ses_-zUSjAgU5zzyi9x4e4B3",
+    "request_id": "b8f912b0-ec13-42dd-82ba-3f889c0f78bc",
+    "title": "运行状态与正式文件交付24（独立完整读取验收）",
+    "time_created": 1791288337257
+  },
+  "events": [
+    {
+      "id": "pev_g0VXGpJWX00t9SIAYilZ",
+      "type": "task.execution.opened",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAgU5zzyi9x4e4B3",
+      "seq": 3,
+      "emitted_at": 1791288337257,
+      "payload": "{\"execution_epoch\":1}"
+    },
+    {
+      "id": "pev_g0VXGpJWI0009p1JSbNH",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 1,
+      "emitted_at": 1791288337702,
+      "payload": "{\"artifactID\":\"art_g0VXGpJW300q1w9tJttI\",\"kind\":\"task_package_revision_binding\",\"catalogRevision\":1}"
+    },
+    {
+      "id": "pev_g0VXGpJWW00EpsFQ3ZQS",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 2,
+      "emitted_at": 1791288337716,
+      "payload": "{\"artifactID\":\"art_g0VXGpJWK00KUE6RCIPZ\",\"kind\":\"task_execution_capsule_binding\",\"catalogRevision\":2}"
+    },
+    {
+      "id": "pev_g0VXGpJWb00Zq2s3A8i3",
+      "type": "task.created",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 4,
+      "emitted_at": 1791288337721,
+      "payload": "{\"summary\":\"Task started\"}"
+    },
+    {
+      "id": "pev_g0VXGpKXR00RmjsKaCBD",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 5,
+      "emitted_at": 1791288341617,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h0CHXOR7TgAm055BnvTZ_art_h0CHXOR7TgAm055BnvTZ\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpKYu004RWnnwmj6",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 6,
+      "emitted_at": 1791288341707,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h0CHXOR7TgAm055BnvTZ_art_h0CHXOR7TgAm055BnvTZ\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpNTb00GdYh0POuj",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 7,
+      "emitted_at": 1791288352911,
+      "payload": "{\"artifactID\":\"art_g0VXGpNTG00adEV15YPb\",\"kind\":\"dispatch_lineage\",\"catalogRevision\":3}"
+    },
+    {
+      "id": "pev_g0VXGpNby006OQUfVXMY",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 8,
+      "emitted_at": 1791288353430,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h0CHXOR7TgAm055BnvTZ_art_h0CHXOR7TgAm055BnvTZ\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGpNcV00t8nP1jUjE",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 9,
+      "emitted_at": 1791288353463,
+      "payload": "{\"artifactID\":\"art_hptTSyJ94rp5FOose4vJ\",\"kind\":\"task_root_ingress_disposition\",\"catalogRevision\":4}"
+    },
+    {
+      "id": "pev_g0VXGpNgF00H30ly808M",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 10,
+      "emitted_at": 1791288353694,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpNhV00o8yAk3HkD",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 11,
+      "emitted_at": 1791288353773,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpPJZ00k1C47hsun",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 12,
+      "emitted_at": 1791288359977,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpPKf0034p44vKkl",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 13,
+      "emitted_at": 1791288360045,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpQYf00PpXFlC2uo",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 14,
+      "emitted_at": 1791288364757,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpQZt00htgYcTLYe",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 15,
+      "emitted_at": 1791288364833,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpUug00ko0FLcAUl",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 16,
+      "emitted_at": 1791288381497,
+      "payload": "{\"artifactID\":\"art_h60cVBAIAxNQDhy5vPzy\",\"kind\":\"expert_output\",\"catalogRevision\":5}"
+    },
+    {
+      "id": "pev_g0VXGpV2F00AecwLCuRF",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 17,
+      "emitted_at": 1791288381966,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpV3D00XrON2x6nq",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 18,
+      "emitted_at": 1791288382027,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpYAt00Ao17LSgEa",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 19,
+      "emitted_at": 1791288394035,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGpYBB00lsC08ooGq",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 20,
+      "emitted_at": 1791288394053,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGpYBd00BDVldVDub",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hcYodrzC9leWijxNtrH1",
+      "seq": 21,
+      "emitted_at": 1791288394081,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpNVF00lXkMlt4Kb\",\"status\":{\"type\":\"terminal\",\"reason\":\"completed\",\"final_message_id\":\"msg_g0VXGpUyc00zQLKARSjP\"}}"
+    },
+    {
+      "id": "pev_g0VXGpYC200gszEh4JY1",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 22,
+      "emitted_at": 1791288394106,
+      "payload": "{\"artifactID\":\"art_g0VXGpYBp00Mp19XpAbu\",\"kind\":\"dispatch_settlement\",\"catalogRevision\":6}"
+    },
+    {
+      "id": "pev_g0VXGpYOp00jtxxyUK5C",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 23,
+      "emitted_at": 1791288394899,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpYQg00OMxfXJAVq",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 24,
+      "emitted_at": 1791288395014,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpa8k00HdN7jhApD",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 25,
+      "emitted_at": 1791288401590,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpaAX00hdKiV3X93",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 26,
+      "emitted_at": 1791288401700,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpc61005BVWLtE8n",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 27,
+      "emitted_at": 1791288409109,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpc7Z00vOQs6uTQd",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 28,
+      "emitted_at": 1791288409205,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpdgo00mW5R7V9OM",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 29,
+      "emitted_at": 1791288415234,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpdiA00YNYu1LvoM",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 30,
+      "emitted_at": 1791288415318,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpfRH00Y0nQ4rVSi",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 31,
+      "emitted_at": 1791288421958,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpfSp00CO5BFFrLO",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 32,
+      "emitted_at": 1791288422054,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpjc600slp5eNHlw",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 33,
+      "emitted_at": 1791288438005,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpjda00iU7HXzgni",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 34,
+      "emitted_at": 1791288438098,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpnMa008GxkHQUQ6",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 35,
+      "emitted_at": 1791288452420,
+      "payload": "{\"artifactID\":\"art_g0VXGpnMJ005XepEOQmD\",\"kind\":\"dispatch_lineage\",\"catalogRevision\":7}"
+    },
+    {
+      "id": "pev_g0VXGpnsS00y4Cm7aP6L",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 36,
+      "emitted_at": 1791288454395,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_he79v4WX2AUEkPD0lvNc_art_he79v4WX2AUEkPD0lvNc\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGpnt100gG3rr7ptS",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 37,
+      "emitted_at": 1791288454431,
+      "payload": "{\"artifactID\":\"art_h8oDXCUqZTvgi6Fjxsx4\",\"kind\":\"task_root_ingress_disposition\",\"catalogRevision\":8}"
+    },
+    {
+      "id": "pev_g0VXGpnxT00F95CtfhbQ",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 38,
+      "emitted_at": 1791288454707,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpnyu00OUac9W7kQ",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 39,
+      "emitted_at": 1791288454796,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpqj900Pl8RidWcG",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 40,
+      "emitted_at": 1791288465350,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpqkG0048e2Q7rCW",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 41,
+      "emitted_at": 1791288465420,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpsDf00m5MUVfQN6",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 42,
+      "emitted_at": 1791288471086,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpsEt00O2EOHkCJd",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 43,
+      "emitted_at": 1791288471163,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGptWz00h07103KlY",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 44,
+      "emitted_at": 1791288476129,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGptXz00G4gN8tIbN",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 45,
+      "emitted_at": 1791288476190,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpvMN00pzotGh02s",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 46,
+      "emitted_at": 1791288483159,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpvNR00ZdxdGv7G4",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 47,
+      "emitted_at": 1791288483225,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpykH00PnfHmyJp0",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 48,
+      "emitted_at": 1791288496172,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpylT00vfJVKfv1B",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 49,
+      "emitted_at": 1791288496247,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpzko00s8WuBHWPE",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 50,
+      "emitted_at": 1791288500050,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGpzlq00PMbNM6DMY",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 51,
+      "emitted_at": 1791288500114,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq2FV00qbgRyOEwZ",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 52,
+      "emitted_at": 1791288509640,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq2GV00ANndJlE3r",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 53,
+      "emitted_at": 1791288509703,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq4M200ThjGzzuzK",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 54,
+      "emitted_at": 1791288517734,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq4N700XUqNm7EB8",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 55,
+      "emitted_at": 1791288517801,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq5q30085jcCemLj",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 56,
+      "emitted_at": 1791288523439,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq5r6002CNbb59Qv",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 57,
+      "emitted_at": 1791288523504,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq7Ru000SHGAS30X",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 58,
+      "emitted_at": 1791288529630,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq7So00uW4dRAcBB",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 59,
+      "emitted_at": 1791288529686,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq9xh00F7XYO64gV",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 60,
+      "emitted_at": 1791288539289,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGq9ys00V3s7GJuSz",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 61,
+      "emitted_at": 1791288539362,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqBmy00C6pE9V14s",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 62,
+      "emitted_at": 1791288546312,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqBnu00XuP3Z6KKg",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 63,
+      "emitted_at": 1791288546370,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqFof00NqodIGZCc",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 64,
+      "emitted_at": 1791288561793,
+      "payload": "{\"artifactID\":\"art_hgm1xUVR5Bh0EWl1KEhF\",\"kind\":\"expert_output\",\"catalogRevision\":9}"
+    },
+    {
+      "id": "pev_g0VXGqFwu00WDWeb6zM3",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 65,
+      "emitted_at": 1791288562304,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqFxw00UsmvdXDKF",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 66,
+      "emitted_at": 1791288562368,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqJMF00OkxUUZr5T",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 67,
+      "emitted_at": 1791288575406,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGqJMU00JxsR32c82",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 68,
+      "emitted_at": 1791288575422,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGqJN8007LVhIcTK3",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hvzVPAJAjY9fdEc0rDDu",
+      "seq": 69,
+      "emitted_at": 1791288575462,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGpnlZ00jeuPOBVYh\",\"status\":{\"type\":\"terminal\",\"reason\":\"completed\",\"final_message_id\":\"msg_g0VXGqFtt00mWcD3Spbw\"}}"
+    },
+    {
+      "id": "pev_g0VXGqJkG00SwBPD2Ur0",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 70,
+      "emitted_at": 1791288576896,
+      "payload": "{\"artifactID\":\"art_hX3ZyCPVZBeZLQ1Zohxv\",\"kind\":\"build_host_observation\",\"catalogRevision\":10}"
+    },
+    {
+      "id": "pev_g0VXGqJkW00ngHUO3qR4",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 71,
+      "emitted_at": 1791288576911,
+      "payload": "{\"artifactID\":\"art_g0VXGqJkL00D0hzcEhQl\",\"kind\":\"dispatch_settlement\",\"catalogRevision\":11}"
+    },
+    {
+      "id": "pev_g0VXGqJxW00JpuQ1Heh9",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 72,
+      "emitted_at": 1791288577717,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqJzu000LjFdRnRQ",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 73,
+      "emitted_at": 1791288577866,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqLnT005CX1oUbdM",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 74,
+      "emitted_at": 1791288584783,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqLpU00NkvpBxksS",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 75,
+      "emitted_at": 1791288584908,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqOZx00Cne1v3KHH",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 76,
+      "emitted_at": 1791288595477,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqObi00BfV2Pr0CF",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 77,
+      "emitted_at": 1791288595586,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqR3r00ot7FJ7R5a",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 78,
+      "emitted_at": 1791288605019,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqR5e00PvDOGibfT",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 79,
+      "emitted_at": 1791288605130,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqSnE00lkanC5c11",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 80,
+      "emitted_at": 1791288611676,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqSpB0004c5qtUiW",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 81,
+      "emitted_at": 1791288611796,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqUEp004MYf3uHDy",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 82,
+      "emitted_at": 1791288617231,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqUGu00fKS7odf0w",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 83,
+      "emitted_at": 1791288617360,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqZox00mvhy5Da3F",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 84,
+      "emitted_at": 1791288638691,
+      "payload": "{\"artifactID\":\"art_g0VXGqZof00Xy5H6tO06\",\"kind\":\"dispatch_lineage\",\"catalogRevision\":12}"
+    },
+    {
+      "id": "pev_g0VXGqZyh00ZATiTaR94",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 85,
+      "emitted_at": 1791288639294,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGqZzF00EnTbOTH7g",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 86,
+      "emitted_at": 1791288639329,
+      "payload": "{\"artifactID\":\"art_hm6p2kWctnqnodLSOsXC\",\"kind\":\"task_root_ingress_disposition\",\"catalogRevision\":13}"
+    },
+    {
+      "id": "pev_g0VXGqa3O00qoMDcV5Gy",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 87,
+      "emitted_at": 1791288639585,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqa5A00jS2kwvHuv",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 88,
+      "emitted_at": 1791288639696,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqdhw00PKRtOFq5D",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 89,
+      "emitted_at": 1791288653632,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqdj300ZOllkmaAF",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 90,
+      "emitted_at": 1791288653701,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqfLU00R7rJYVLkj",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 91,
+      "emitted_at": 1791288659928,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqfMY00o11647UTG",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 92,
+      "emitted_at": 1791288659994,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqguC002xtAPnVJk",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 93,
+      "emitted_at": 1791288665924,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqgxI008BcZz291i",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 94,
+      "emitted_at": 1791288666115,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqkCs00MRrcKtqUT",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 95,
+      "emitted_at": 1791288678614,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqkEV00e90hRUOLO",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 96,
+      "emitted_at": 1791288678715,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqn3N000oOFNW5TS",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 97,
+      "emitted_at": 1791288689557,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqn4X005anxgp411",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 98,
+      "emitted_at": 1791288689629,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqp4u00ABgxpkimI",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 99,
+      "emitted_at": 1791288697340,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqp6G00gQymSaxbh",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 100,
+      "emitted_at": 1791288697424,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqqWn00NakM7G10W",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 101,
+      "emitted_at": 1791288702912,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGqqXu00Of87GIBs5",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 102,
+      "emitted_at": 1791288702982,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGrehr00LDCUTmlPB",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 103,
+      "emitted_at": 1791288895799,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"retry\",\"attempt\":1,\"message\":\"idle: backoff 1008.0080193607246ms; last heartbeat tool-input-delta@2026-10-06T12:11:55.766Z\",\"next\":1791288896780.008}}"
+    },
+    {
+      "id": "pev_g0VXGreyt00OlGCXCBnY",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 104,
+      "emitted_at": 1791288896855,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXGrfqw00g8dlc1lG1",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 105,
+      "emitted_at": 1791288900206,
+      "payload": "{\"artifactID\":\"art_g0VXGrfqg00ODDP5bFfA\",\"kind\":\"task-infrastructure-error\",\"catalogRevision\":14}"
+    },
+    {
+      "id": "pev_g0VXGrfqy00sHFUbYkvv",
+      "type": "task.infrastructure.failed",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 106,
+      "emitted_at": 1791288900208,
+      "payload": "{\"component\":\"process-recovery\",\"operation\":\"handoff-process-owned-task-execution\",\"summary\":\"process-recovery infrastructure failure\",\"details\":\"Server shutdown source=http-client reason=http.shutdown\",\"evidenceLocators\":[{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VXGrfqg00ODDP5bFfA\",\"catalog_revision\":14,\"expected_sha256\":\"12e65aad450c702fdae4e825a227a9f8bdef47ab0f44a1cc05f02e5941115816\"}]}"
+    },
+    {
+      "id": "pev_g0VXGrfrZ00R31qLbSP7",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 107,
+      "emitted_at": 1791288900245,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGrfsJ00Jr6Zxwhyq",
+      "type": "session.error",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 108,
+      "emitted_at": 1791288900290,
+      "payload": "{\"error\":{\"name\":\"MessageAbortedError\",\"data\":{\"message\":\"Server shutdown source=http-client reason=http.shutdown\",\"cancellation\":{\"actor\":\"runtime\",\"source\":\"process.shutdown\",\"surface\":\"runtime\",\"requestID\":\"20b600ac-7f4c-4a20-8023-48791d405561\",\"reason\":\"Server shutdown source=http-client reason=http.shutdown\",\"targetSessionID\":\"ses_hOjlwzGwD8e361BfMd4B\",\"taskID\":\"tsk_g00VXGpJP700c0UYL3kl\"}}},\"failureOccurrence\":{\"session_id\":\"ses_hOjlwzGwD8e361BfMd4B\",\"assistant_message_id\":\"msg_g0VXGqqSu00YlrFrhXih\",\"error_name\":\"MessageAbortedError\"},\"summary\":\"Server shutdown source=http-client reason=http.shutdown\"}"
+    },
+    {
+      "id": "pev_g0VXGrfsj00mA2ZN0Mla",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 109,
+      "emitted_at": 1791288900317,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGrfsy00vFey9Evj1",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 110,
+      "emitted_at": 1791288900331,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXGrftb00iHECBPQVs",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_-zUSjAff3zzYBKcW6EKB",
+      "seq": 111,
+      "emitted_at": 1791288900371,
+      "payload": "{\"inputMessageID\":\"msg_task-root-control_art_h1VRZDa1EQAlKHkJZJCM_art_h1VRZDa1EQAlKHkJZJCM\",\"status\":{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Server shutdown source=http-client reason=http.shutdown\"}}"
+    },
+    {
+      "id": "pev_g0VXGrfwz00bpsG69oXj",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 112,
+      "emitted_at": 1791288900580,
+      "payload": "{\"inputMessageID\":\"msg_g0VXGqZqM00V8jkayq6N\",\"status\":{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Server shutdown source=http-client reason=http.shutdown\"}}"
+    },
+    {
+      "id": "pev_g0VXGrfxI002jeM70U3D",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 113,
+      "emitted_at": 1791288900600,
+      "payload": "{\"artifactID\":\"art_g0VXGrfx600xvy1hEsWY\",\"kind\":\"task-infrastructure-error\",\"catalogRevision\":15}"
+    },
+    {
+      "id": "pev_g0VXGrfxK00HSg7CVmRX",
+      "type": "task.infrastructure.failed",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 114,
+      "emitted_at": 1791288900602,
+      "payload": "{\"component\":\"dispatch-agent\",\"operation\":\"execute-detached-worker\",\"summary\":\"dispatch-agent infrastructure failure\",\"details\":\"ExecutionCancellationError: Server shutdown source=http-client reason=http.shutdown\",\"errorName\":\"ExecutionCancellationError\",\"evidenceLocators\":[{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VXGrfx600xvy1hEsWY\",\"catalog_revision\":15,\"expected_sha256\":\"b9551a49181f9922d4e39404174222474219b72f8b4481c7b563580c05085bbf\"}]}"
+    },
+    {
+      "id": "pev_g0VXGrfxc00GPwUv6ukB",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 115,
+      "emitted_at": 1791288900620,
+      "payload": "{\"artifactID\":\"art_g0VXGrfxQ00pTQDe2aB1\",\"kind\":\"dispatch_settlement\",\"catalogRevision\":16}"
+    },
+    {
+      "id": "pev_g0VXGrfyO00peOCpB0Iy",
+      "type": "artifact.persisted",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": null,
+      "seq": 116,
+      "emitted_at": 1791288900667,
+      "payload": "{\"artifactID\":\"art_g0VXGrfyC00lkyoxE6FH\",\"kind\":\"task-infrastructure-error\",\"catalogRevision\":17}"
+    },
+    {
+      "id": "pev_g0VXGrfyP00qzAQgtgZY",
+      "type": "task.infrastructure.failed",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXGpJP700c0UYL3kl",
+      "session_id": "ses_hOjlwzGwD8e361BfMd4B",
+      "seq": 117,
+      "emitted_at": 1791288900669,
+      "payload": "{\"component\":\"dispatch-agent\",\"operation\":\"execute-detached-worker\",\"summary\":\"dispatch-agent infrastructure failure\",\"details\":\"ExecutionCancellationError: Server shutdown source=http-client reason=http.shutdown\",\"errorName\":\"ExecutionCancellationError\",\"evidenceLocators\":[{\"source\":\"engine_artifact\",\"artifact_id\":\"art_g0VXGrfyC00lkyoxE6FH\",\"catalog_revision\":17,\"expected_sha256\":\"b9551a49181f9922d4e39404174222474219b72f8b4481c7b563580c05085bbf\"}]}"
+    }
+  ]
+}
