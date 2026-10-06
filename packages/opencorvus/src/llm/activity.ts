@@ -250,6 +250,8 @@ export class LLMActivityAbortedError extends LLMActivityError {
 }
 
 export interface LLMActivityRun {
+  /** The existing logical activity occurrence that owns this attempt. */
+  readonly id: string
   /** Composite signal: external | total | first-byte | idle. Each source
    *  carries an `_activity_cause` marker on its DOMException reason so
    *  classify() can recover the cause without string-matching. */
@@ -665,6 +667,7 @@ export async function withLLMActivity<T>(
       }
 
       const run: LLMActivityRun = {
+        id,
         signal: composed,
         attempt,
         bump: (kind: HeartbeatKind) => {

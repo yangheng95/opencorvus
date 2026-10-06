@@ -1,0 +1,22 @@
+Retained tool output transcript, concatenated initial exec and final write_stdin output; not a redirected original stdout log.
+Command: bun run script/run-tests.ts test/session/processor-producer-boundary.test.ts
+CWD: D:/myhexin-local/opencorvus/packages/opencorvus
+
+[1/1] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [2640.22ms]
+(pass) processor observation records accepted and rejected current event identities in the canonical Task trace [1830.78ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [1846.05ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1788.54ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2246.57ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2247.89ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2144.25ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1880.56ms]
+
+ 8 pass
+ 0 fail
+ 29 expect() calls
+Ran 8 tests across 1 file. [18.22s]
+[1/1] DONE test/session/processor-producer-boundary.test.ts exit=0 duration=18.41s

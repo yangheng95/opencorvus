@@ -1,0 +1,11 @@
+Browser tab: 24, Title: "OpenCorvus", URL: "http://localhost:18009/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 100
+~						85 container Description: Running · 12s, ID: taskStatus
+~							87 text 12s
+~									98 text 8s
++									104 text 我会先实际查询当前项目的任务列表和报告，并保留查询范围与限制；随后按指定顺序制作和发布两个文件，最后由独立参与者检查发布资源的完整字节及只读物化结果。全程不访问网站、不启动服务。
++									105 button (collapsed) Description: dispatch_agent, Secondary Actions: Expand
++										106 text dispatch_agent
++										107 text 1 running
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18009/ui/

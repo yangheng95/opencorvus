@@ -1,0 +1,69 @@
+bun script/run-tests.ts test/provider-request-association.test.ts test/real-provider-audit.test.ts test/llm/activity.test.ts
+[1/3] START test/provider-request-association.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) concurrent same-model callers retain the actual Session and distinct agent identities [2078.10ms]
+(pass) delayed SDK use and successive physical responses retain the original copied caller [1700.07ms]
+(pass) context-free consumers preserve the production model cache and real streamed output [1905.49ms]
+(pass) one real SDK multi-step stream binds both HTTP responses to its original caller [1568.15ms]
+
+ 4 pass
+ 0 fail
+ 26 expect() calls
+Ran 4 tests across 1 file. [8.99s]
+[1/3] DONE test/provider-request-association.test.ts exit=0 duration=9.18s
+[2/3] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) exact reader binding projects genuine caller, unknown caller and credential-redacted identity states [17.04ms]
+(pass) throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error [5.18ms]
+(pass) concurrent real local HTTP audit entries report their exact reader bytes and EOF [4.74ms]
+(pass) real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states [6.84ms]
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [5.11ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [4.64ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [6.50ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [5.35ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [3.93ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [3.29ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [22.22ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [0.53ms]
+(pass) copied OAuth access expires with an explicit authority error [0.15ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.46ms]
+(pass) the last authorized streaming request completes before the next is refused [0.32ms]
+(pass) the audit reports exact model and streaming contract errors [1.37ms]
+(pass) an exhausted cumulative balance returns the budget error [0.13ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.12ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [5.62ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.27ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.39ms]
+
+ 21 pass
+ 0 fail
+ 95 expect() calls
+Ran 21 tests across 1 file. [1119.00ms]
+[2/3] DONE test/real-provider-audit.test.ts exit=0 duration=1.26s
+[3/3] START test/llm/activity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) LLM semantic activity > collects streamed helper text through one semantic activity lifecycle [2.64ms]
+(pass) LLM semantic activity > restarts a helper stream once after a bounded first-byte stall [32.83ms]
+(pass) LLM semantic activity > settles a non-replayable helper stream on its first bounded timeout [31.05ms]
+(pass) LLM semantic activity > recovers through the observed idle, network, idle transient sequence [69.00ms]
+(pass) LLM semantic activity > settles transport-only idle after the first-byte retry budget [65.18ms]
+(pass) LLM semantic activity > settles bracket-only reasoning framing through the semantic idle contract [60.86ms]
+(pass) LLM semantic activity > settles repeated first-byte stalls after its one retry budget [54.26ms]
+(pass) LLM semantic activity > terminates a typed missing Provider credential after one attempt [0.62ms]
+(pass) LLM semantic activity > lets the idle authority preempt an immediately resolving no-op provider stream [52.90ms]
+(pass) LLM semantic activity > retries an attempt whose transport emits only repeated no-op first-byte observations [47.72ms]
+(pass) LLM semantic activity > keeps one attempt alive while nonempty semantic deltas arrive inside the idle window [78.65ms]
+(pass) LLM semantic activity > classifies the observed OpenAI socket closure as network and recovers on the next attempt [0.61ms]
+(pass) LLM semantic activity > classifies only accepted nonempty chunk payloads as semantic progress [0.09ms]
+
+ 13 pass
+ 0 fail
+ 38 expect() calls
+Ran 13 tests across 1 file. [1.52s]
+[3/3] DONE test/llm/activity.test.ts exit=0 duration=1.67s

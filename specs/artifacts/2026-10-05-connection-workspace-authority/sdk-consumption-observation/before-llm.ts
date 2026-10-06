@@ -1,0 +1,409 @@
+import { Provider } from "@/provider/provider"
+import { ProviderLLM } from "@/provider/llm"
+import { Log } from "@/util/log"
+import { Bus } from "@/bus"
+import type { ModelMessage, PrepareStepFunction, StopCondition, Tool, ToolSet } from "ai"
+// Use the wrapped streamText from @/llm/api — its Proxy returns
+// `abortableIterable(fullStream, composed)`, which is the only thing that
+// rescues a Bun-fetch-backed reader.read() from parking forever when the
+// LLM-activity gate fires its abort signal. Importing the raw "ai" form
+// bypassed the Proxy and silently parked sub-agents (architect, requirements,
+// build) for 14–25 min during alibaba-coding-plan-cn streams (audit §12,
+// 2026-04-30 r5/r6/r7 bench evidence). Rule 8 — single source.
+import { streamText } from "@/llm/api"
+import type { TextHooks } from "@/llm/api"
+import { mergeDeep, pipe } from "remeda"
+import { ProviderTransform } from "@/provider/transform"
+import { EffectiveConfig } from "@/config/effective"
+import type { Config } from "@/config/config"
+import { Instance } from "@/project/instance"
+import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
+import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
+import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
+import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-narrative"
+import { VERIFICATION_DISCIPLINE } from "@/prompt/fragments/verification-discipline"
+import { Message } from "./message"
+import { SessionEvents } from "./events"
+import { sessionLifecycleOrderKey } from "./status"
+import { Plugin, type ChatParamsOutput } from "@/plugin"
+import { SystemPrompt } from "./system"
+import { Flag } from "@/flag/flag"
+import { CapabilityRules } from "@/capability/rules"
+import { Auth } from "@/auth"
+import { AgentTrace } from "@/trace"
+import { fingerprintPromptComposition, toolPayloadTexts } from "@/session/prompt-composition"
+import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage"
+import { RequestBudget } from "./request-budget"
+import { ContextBudget } from "./context-budget"
+import { StreamRequestIdentity } from "./stream-request"
+
+export namespace LLM {
+  const log = Log.create({ service: "llm" })
+  export const OUTPUT_TOKEN_MAX = ProviderTransform.OUTPUT_TOKEN_MAX
+
+  export type StreamInput = {
+    /** Real transcript user message when this stream belongs to a conversation turn. */
+    user?: Message.User
+    /** Real non-message occurrence identity for an internal, tool-free participant request. */
+    requestID?: string
+    sessionID: string
+    /** Reuse an already-resolved effective snapshot for one coherent internal attempt. */
+    config?: Config.Info
+    model: Provider.Model
+    agentID: string
+    agent: SessionAgentRuntime
+    system: string[]
+    /** Logical labels aligned with `system`; observability only. */
+    systemLabels?: string[]
+    abort: AbortSignal
+    messages: ModelMessage[]
+    small?: boolean
+    tools: Record<string, Tool>
+    retries?: number
+    stopWhen?: StopCondition<ToolSet> | Array<StopCondition<ToolSet>>
+    /**
+     * Optional provider-level tool selection passed through to streamText.
+     * Session completion never pins or requires a terminal tool; a selected
+     * tool is only an explicit caller preference for that provider turn.
+     */
+    toolChoice?: "auto" | "required" | "none" | { type: "tool"; toolName: string }
+    stream?: TextHooks
+    /** Persist the Session step boundary before the SDK starts its Provider request. */
+    prepareStep?: PrepareStepFunction<ToolSet>
+    runtimeSystemMode?: "complete"
+  }
+
+  export type StreamOutput = ReturnType<typeof streamText<ToolSet>>
+
+  export type StreamResult = ReturnType<typeof streamText<ToolSet>>
+
+  export async function applyRequestHooks(
+    input: {
+      sessionID: string
+      requestID: string
+      agentID: string
+      model: Provider.Model
+      provider: Provider.Info
+      message?: Message.User
+    },
+    baseParams: ChatParamsOutput,
+    triggers: {
+      message: typeof Plugin.trigger
+      physical: typeof Plugin.triggerPhysicalProvider
+    } = { message: Plugin.trigger, physical: Plugin.triggerPhysicalProvider },
+  ) {
+    const physicalInput = {
+      sessionID: input.sessionID,
+      requestID: input.requestID,
+      agent: input.agentID,
+      model: input.model,
+      provider: input.provider,
+      message: input.message,
+    }
+    let messageParams = baseParams
+    let messageHeaders = { headers: {} as Record<string, string> }
+    if (input.message) {
+      const messageInput = {
+        sessionID: input.sessionID,
+        agent: input.agentID,
+        model: input.model,
+        provider: input.provider,
+        message: input.message,
+      }
+      messageParams = await triggers.message("chat.params", messageInput, messageParams)
+      messageHeaders = await triggers.message("chat.headers", messageInput, messageHeaders)
+    }
+    const params = await triggers.physical("provider.chat.params", physicalInput, messageParams)
+    const headers = (await triggers.physical("provider.chat.headers", physicalInput, messageHeaders)).headers
+    return { params, headers }
+  }
+
+  export function telemetryConfig(input: {
+    enabled: boolean | undefined
+    username: string | undefined
+    sessionID: string
+  }) {
+    return {
+      isEnabled: input.enabled,
+      recordInputs: false,
+      recordOutputs: false,
+      metadata: {
+        userId: input.username ?? "unknown",
+        sessionId: input.sessionID,
+      },
+    }
+  }
+
+  export async function composeSystem(input: {
+    agentID: string
+    agent: SessionAgentRuntime
+    model: Provider.Model
+    system: string[]
+    user?: Message.User
+    sessionID?: string
+    runtimeSystemMode?: "complete"
+  }) {
+    const agent = input.agent
+    const completeSystemMode = input.runtimeSystemMode === "complete"
+    const providerPrompt = completeSystemMode
+      ? []
+      : agent.prompt
+        ? [[agent.prompt, agent.promptAppend].filter(Boolean).join("\n")]
+        : await SystemPrompt.provider(input.model, { sessionID: input.sessionID })
+    const composed = [
+      // use agent prompt otherwise provider prompt, unless caller supplied
+      // a complete system prompt for this turn
+      ...providerPrompt,
+      // any custom prompt passed into this call
+      ...input.system,
+      ...await (await import("@/chat/side-chat")).sideChatSystem(input.sessionID),
+    ]
+      .filter((x) => x)
+      .join("\n")
+    const executionPrompt =
+      !completeSystemMode && HelperAgentRegistry.isID(input.agentID)
+        ? composed
+        : [composed, VERIFICATION_DISCIPLINE].filter(Boolean).join("\n\n")
+    return [
+      !completeSystemMode && PrimaryAssistantRegistry.isID(input.agentID)
+        ? withObservableWorkNarrative(executionPrompt)
+        : executionPrompt,
+    ]
+  }
+
+  export async function stream(input: StreamInput): Promise<StreamResult> {
+    const requestID = input.user?.id ?? input.requestID
+    if (!requestID) throw new Error("LLM.stream requires a real user Message or request occurrence identity")
+    const streamRequest = StreamRequestIdentity.parse({
+      requestID,
+      agentID: input.agentID,
+      providerID: input.model.providerID,
+      modelID: input.model.id,
+      apiModelID: input.model.api.id,
+    })
+    const config = input.config ?? (await EffectiveConfig.effective({ sessionID: input.sessionID }))
+    const agent = input.agent
+    const l = log
+      .clone()
+      .tag("providerID", input.model.providerID)
+      .tag("modelID", input.model.id)
+      .tag("sessionID", input.sessionID)
+      .tag("small", (input.small ?? false).toString())
+      .tag("agent", input.agentID)
+    l.info("stream", {
+      modelID: input.model.id,
+      providerID: input.model.providerID,
+    })
+    const [language, cfg, provider, auth] = await Promise.all([
+      Provider.getLanguage(input.model, { config, requestContext: { sessionID: input.sessionID, streamRequest } }),
+      Promise.resolve(config),
+      Provider.getProvider(input.model.providerID, { config }),
+      Auth.get(input.model.providerID),
+    ])
+    const isOpenaiOauth = provider.id === "openai" && auth?.type === "oauth"
+
+    const system = await composeSystem({ ...input, agent, sessionID: input.sessionID })
+    system[0] = [system[0], SystemPrompt.requestLanguage()].filter(Boolean).join("\n\n")
+
+    const header = system[0]
+    await Plugin.trigger(
+      "experimental.chat.system.transform",
+      { sessionID: input.sessionID, model: input.model },
+      { system },
+    )
+    // rejoin to maintain 2-part structure for caching if header unchanged
+    if (system.length > 2 && system[0] === header) {
+      const rest = system.slice(1)
+      system.length = 0
+      system.push(header, rest.join("\n"))
+    }
+
+    const variant =
+      !input.small && input.model.variants && input.user?.variant ? input.model.variants[input.user.variant] : {}
+    const base = input.small
+      ? ProviderTransform.smallOptions(input.model)
+      : ProviderTransform.options({
+          model: input.model,
+          sessionID: input.sessionID,
+          providerOptions: provider.options,
+        })
+    const options: Record<string, any> = pipe(
+      base,
+      mergeDeep(input.model.options),
+      mergeDeep(agent.options),
+      mergeDeep(variant),
+    )
+    if (isOpenaiOauth) {
+      options.instructions = system.join("\n")
+    }
+
+    const maxOutputTokens = ProviderTransform.maxOutputTokens(input.model)
+    const baseParams = {
+      temperature: input.model.capabilities.temperature
+        ? (agent.temperature ?? ProviderTransform.temperature(input.model))
+        : undefined,
+      topP: agent.topP ?? ProviderTransform.topP(input.model),
+      topK: ProviderTransform.topK(input.model),
+      maxOutputTokens,
+      options,
+    }
+    const { params, headers } = await applyRequestHooks(
+      {
+        sessionID: input.sessionID,
+        requestID,
+        agentID: input.agentID,
+        model: input.model,
+        provider,
+        message: input.user,
+      },
+      baseParams,
+    )
+
+    const tools = await resolveTools({ ...input, agent })
+    const toolChoice = input.toolChoice
+    const providerOptions = ProviderTransform.providerOptions(
+      input.model,
+      ProviderTransform.optionsForToolRequest(input.model, params.options, {
+        toolChoice,
+        activeToolCount: Object.keys(tools).length,
+      }),
+    )
+    const requestHeaders = {
+      ...(input.model.providerID.startsWith("opencorvus")
+        ? {
+            "x-opencorvus-project": Instance.project.id,
+            "x-opencorvus-session": input.sessionID,
+            "x-opencorvus-request": requestID,
+            "x-opencorvus-client": Flag.OPENCORVUS_CLIENT,
+          }
+        : ProviderLLM.baseHeaders(input.model, input.sessionID)),
+      ...headers,
+    }
+    const systemText = system.join("\n")
+    const requestMessages = input.messages
+    const capacity = ContextBudget.capacity({
+      config,
+      model: input.model,
+      effectiveOutputTokens: params.maxOutputTokens,
+    })
+    const checkCapacity = (messages: ModelMessage[], activeTools = tools, stepSystem = system) => {
+      const estimate = RequestBudget.estimate({ system: stepSystem, messages, tools: activeTools })
+      if (capacity.status === "known" && estimate.totalTokensEst > capacity.tokens) {
+        throw new Message.ContextOverflowError({
+          message: `Final request exceeds declared prompt capacity: estimated ${estimate.totalTokensEst} tokens, capacity ${capacity.tokens}; system=${estimate.systemTokensEst}, tools=${estimate.toolSchemaTokensEst}, messages=${estimate.messagePayloadTokensEst}, media=${estimate.mediaTokensEst}.`,
+        })
+      }
+    }
+
+    if (AgentTrace.isEnabled()) {
+      const parentSessionID = sessionParentID(input.sessionID)
+      const taskID = taskIDForSession(input.sessionID)
+      if (taskID) {
+        // Composed here rather than in the caller: this is the one place that
+        // holds the exact system array, message array and Tool table that go
+        // out, so a fingerprint taken anywhere else could describe a request
+        // that was never sent. Divergence against the previous call is derived
+        // offline from consecutive trace events, which keeps this hot path
+        // stateless — a per-Session cache of the last fingerprint would be one
+        // more thing to bound and to clean up on Session disposal.
+        const promptComposition = fingerprintPromptComposition({
+          // `composeSystem` intentionally joins the request into the one physical
+          // system string the Provider receives. Keep the pre-join logical parts
+          // here as the diagnostic view, and fingerprint the final joined string
+          // separately so plugins/provider modes cannot create an invisible
+          // physical divergence.
+          system: input.runtimeSystemMode === "complete" ? input.system : system,
+          systemLabels: input.runtimeSystemMode === "complete" ? input.systemLabels : undefined,
+          physicalSystemText: systemText,
+          messages: requestMessages,
+          toolPayloads: toolPayloadTexts(tools),
+        })
+        AgentTrace.recordLLMRequest({
+          promptComposition,
+          sessionID: input.sessionID,
+          parentSessionID,
+          taskID,
+          agentName: input.agentID,
+          agentMode: "runtime",
+          model: { providerID: input.model.providerID, modelID: input.model.id },
+          small: input.small,
+          toolChoice,
+          requestMessageID: requestID,
+          tools: Object.keys(tools),
+        })
+      }
+    }
+
+    const result = streamText({
+      prepareStep: async (step) => {
+        const prepared = await input.prepareStep?.(step)
+        const activeTools = prepared?.activeTools
+          ? Object.fromEntries(prepared.activeTools.map((name) => [name, tools[name]!]))
+          : tools
+        const stepSystem =
+          prepared?.system === undefined
+            ? system
+            : typeof prepared.system === "string"
+              ? [prepared.system]
+              : (Array.isArray(prepared.system) ? prepared.system : [prepared.system]).map((message) => message.content)
+        checkCapacity(prepared?.messages ?? step.messages, activeTools, stepSystem)
+        return prepared
+      },
+      onError(event) {
+        void input.stream?.onError?.(event)
+        const error = Message.fromError(event.error, { providerID: input.model.providerID })
+        Bus.publishOwned(SessionEvents.Error, {
+          sessionID: input.sessionID,
+          orderKey: sessionLifecycleOrderKey(input.sessionID),
+          error,
+          streamRequest,
+        })
+        l.error("stream error", {
+          error,
+        })
+      },
+      // Tool-call repair (name-normalization + discriminated-union legal-value
+      // enumeration) is installed once at the `@/llm/api` streamText wrapper —
+      // single source for every caller (see llm/repair-hint.ts
+      // createToolCallRepair). Do not re-add a per-call repair here.
+      temperature: params.temperature,
+      topP: params.topP,
+      topK: params.topK,
+      providerOptions,
+      activeTools: Object.keys(tools),
+      tools,
+      toolChoice,
+      ...(isOpenaiOauth ? {} : { system: systemText }),
+      maxOutputTokens: params.maxOutputTokens,
+      abortSignal: input.abort,
+      // Disable the wrapper's 5 s default soft timeout — every production
+      // caller owns an LLM-activity boundary (the full Session processor or
+      // collectLLMText for text-only helpers) and composes its signal into
+      // `input.abort`. A second timeout here would race that authority.
+      timeoutMs: false,
+      usagePurpose: "session",
+      usageAttribution: { sessionID: input.sessionID, agentID: input.agentID },
+      headers: requestHeaders,
+      maxRetries: input.retries ?? 0,
+      stopWhen: input.stopWhen,
+      messages: requestMessages,
+      model: ProviderLLM.wrapModel(language, input.model, options),
+      experimental_telemetry: telemetryConfig({
+        enabled: cfg.experimental?.openTelemetry,
+        username: cfg.username,
+        sessionID: input.sessionID,
+      }),
+    })
+    return result
+  }
+
+  async function resolveTools(input: Pick<StreamInput, "tools" | "agent" | "user">) {
+    const disabled = CapabilityRules.disabled(Object.keys(input.tools), input.agent.permission)
+    for (const tool of Object.keys(input.tools)) {
+      if (input.user?.tools?.[tool] === false || disabled.has(tool)) {
+        delete input.tools[tool]
+      }
+    }
+    return input.tools
+  }
+}

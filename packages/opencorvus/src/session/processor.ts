@@ -51,6 +51,9 @@ import { persistMessageSources } from "./source-persistence"
 import { normalizeToolResult } from "./tool-result-normalization"
 import { canonicalJSONValue } from "@/util/canonical-digest"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
+import { taskIDForSession } from "@/engine/task-session-lineage"
+import { AgentTrace } from "@/trace"
+import { createLLMStreamObservation, llmStreamEventType } from "@/util/llm-stream-observation"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -232,24 +235,35 @@ export namespace SessionProcessor {
     const publishToolInputDraft = async (part: Message.ToolPart, signal?: AbortSignal) => {
       signal?.throwIfAborted()
       if (part.state.status !== "pending") return
-      await Bus.publish(Message.Event.PartUpdated, {
-        orderKey: timelineMessageOrderKey({ info: input.assistantMessage }),
-        part: {
-          ...part,
-          orderKey: timelinePartOrderKey({
-            id: part.id,
-            timeCreated: Math.max(input.assistantMessage.time.created, part.state.time.start),
-          }),
+      await Bus.publish(
+        Message.Event.PartUpdated,
+        {
+          orderKey: timelineMessageOrderKey({ info: input.assistantMessage }),
+          part: {
+            ...part,
+            orderKey: timelinePartOrderKey({
+              id: part.id,
+              timeCreated: Math.max(input.assistantMessage.time.created, part.state.time.start),
+            }),
+          },
         },
-      }, { signal })
+        { signal },
+      )
       signal?.throwIfAborted()
     }
     const retireToolInputDraft = async (part: Message.ToolPart | undefined, signal?: AbortSignal) => {
       signal?.throwIfAborted()
       if (part?.state.status !== "pending") return
-      await Bus.publish(Message.Event.PartRemoved, {
-        sessionID: part.sessionID, messageID: part.messageID, partID: part.id, partType: "tool",
-      }, { signal })
+      await Bus.publish(
+        Message.Event.PartRemoved,
+        {
+          sessionID: part.sessionID,
+          messageID: part.messageID,
+          partID: part.id,
+          partType: "tool",
+        },
+        { signal },
+      )
       signal?.throwIfAborted()
     }
 
@@ -280,9 +294,7 @@ export namespace SessionProcessor {
       if (!part || part.state.status !== "completed") return undefined
       if (part.tool !== "capability_search" && toolName !== "capability_search") return undefined
       if (part.tool !== "capability_search" || toolName !== "capability_search") {
-        throw new Error(
-          `Capability search call ${part.callID} changed Tool identity from ${part.tool} to ${toolName}.`,
-        )
+        throw new Error(`Capability search call ${part.callID} changed Tool identity from ${part.tool} to ${toolName}.`)
       }
       if (
         toolInput !== undefined &&
@@ -564,8 +576,7 @@ export namespace SessionProcessor {
             existing &&
             existing.state.status === "running" &&
             existing.tool === toolName &&
-            canonicalJSONValue(existing.state.input) ===
-              canonicalJSONValue(cloneToolInputForPersistence(toolInput))
+            canonicalJSONValue(existing.state.input) === canonicalJSONValue(cloneToolInputForPersistence(toolInput))
           ) {
             toolcalls[toolCallID] = existing
             return existing
@@ -681,7 +692,8 @@ export namespace SessionProcessor {
               toolInputFlushOperation = operation
               void operation.finally(() => {
                 if (toolInputFlushOperation === operation) toolInputFlushOperation = undefined
-                if (toolInputDirty && toolInputFlushError === undefined && !signal.aborted) scheduleToolInputFlush(signal)
+                if (toolInputDirty && toolInputFlushError === undefined && !signal.aborted)
+                  scheduleToolInputFlush(signal)
               })
             }, 200)
           }
@@ -881,6 +893,33 @@ export namespace SessionProcessor {
               activityPolicy,
               input.abort,
               async (run) => {
+                const observation = createLLMStreamObservation()
+                const streamRequest = LLM.streamRequestIdentity(streamInput)
+                const activity = { id: run.id, attempt: run.attempt, assistantMessageID: input.assistantMessage.id }
+                const recordObservation = (phase: "aborted" | "settled") => {
+                  try {
+                    const taskID = taskIDForSession(input.sessionID)
+                    if (!taskID) return
+                    AgentTrace.recordLLMStreamObservation({
+                      taskID,
+                      sessionID: input.sessionID,
+                      streamRequest,
+                      activity,
+                      phase,
+                      observation: observation.snapshot(),
+                    })
+                  } catch {
+                    log.warn("stream observation failed", { sessionID: input.sessionID, activityID: run.id, phase })
+                  }
+                }
+                const observeAbort = () => recordObservation("aborted")
+                run.signal.addEventListener("abort", observeAbort, { once: true })
+                await using _observationSettlement = {
+                  async [Symbol.asyncDispose]() {
+                    run.signal.removeEventListener("abort", observeAbort)
+                    recordObservation("settled")
+                  },
+                }
                 const preparedSteps: Array<{ snapshot: string | undefined }> = []
                 let preparation: Promise<unknown> | undefined
                 await using _preparationSettlement = {
@@ -894,6 +933,7 @@ export namespace SessionProcessor {
                 const stream = await LLM.stream({
                   ...streamInput,
                   abort: run.signal,
+                  activity,
                   tools: Object.fromEntries(
                     Object.entries(streamInput.tools).map(([name, definition]) => {
                       const execute = definition.execute
@@ -934,513 +974,553 @@ export namespace SessionProcessor {
                 })
 
                 // LLM.stream returns the canonical @/llm/api wrapped stream.
+                observation.start()
                 for await (const value of stream.fullStream) {
-                  run.bump("first-byte")
-                  await streamInput.stream?.onChunk?.({ chunk: value } as never)
+                  observation.received(value)
                   let semanticChunkAccepted = false
-                  run.signal.throwIfAborted()
-                  switch (value.type) {
-                    case "start":
-                      SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
-                      break
+                  let heartbeatEligible = false
+                  try {
+                    run.bump("first-byte")
+                    await streamInput.stream?.onChunk?.({ chunk: value } as never)
+                    observation.hookFinished()
+                    run.signal.throwIfAborted()
+                    switch (value.type) {
+                      case "start":
+                        observation.reject("control")
+                        SessionStatus.set(
+                          input.sessionID,
+                          { type: "streaming" },
+                          { promptGenerationOwner: input.abort },
+                        )
+                        break
 
-                    case "reasoning-start":
-                      if (value.id in reasoningMap) {
-                        continue
-                      }
-                      const reasoningPart = {
-                        id: allocateAttemptPartID(run.attempt),
-                        messageID: input.assistantMessage.id,
-                        sessionID: input.assistantMessage.sessionID,
-                        type: "reasoning" as const,
-                        text: "",
-                        time: {
-                          start: Date.now(),
-                        },
-                        metadata: value.providerMetadata,
-                      }
-                      reasoningMap[value.id] = reasoningPart
-                      await Session.updatePartWithSignal(run.signal, reasoningPart)
-                      semanticChunkAccepted = true
-                      break
-
-                    case "reasoning-delta":
-                      if (value.id in reasoningMap) {
-                        const part = reasoningMap[value.id]
-                        part.text += value.text
-                        if (value.providerMetadata) part.metadata = value.providerMetadata
-                        // Buffer reasoning deltas and flush periodically to avoid
-                        // flooding the SSE stream with per-token events.
-                        const bufKey = part.id
-                        const prev = reasoningDeltaBuf.get(bufKey) || ""
-                        reasoningDeltaBuf.set(bufKey, prev + value.text)
-                        scheduleReasoningFlush(run.signal)
-                        semanticChunkAccepted = true
-                      }
-                      break
-
-                    case "reasoning-end":
-                      if (value.id in reasoningMap) {
-                        // Flush any buffered reasoning delta before closing the part
-                        await settleReasoningFlush(true, run.signal)
-
-                        const part = reasoningMap[value.id]
-                        part.text = part.text.trimEnd()
-
-                        part.time = {
-                          ...part.time,
-                          end: Date.now(),
+                      case "reasoning-start":
+                        if (value.id in reasoningMap) {
+                          observation.reject("duplicate_start")
+                          continue
                         }
-                        if (value.providerMetadata) part.metadata = value.providerMetadata
-                        await Session.updatePartWithSignal(run.signal, part)
-                        delete reasoningMap[value.id]
-                        semanticChunkAccepted = true
-                      }
-                      break
-
-                    case "tool-input-start": {
-                      const toolCallID =
-                        typeof (value as any).toolCallId === "string"
-                          ? (value as any).toolCallId
-                          : typeof (value as any).id === "string"
-                            ? (value as any).id
-                            : ""
-                      if (!toolCallID) break
-                      const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
-                      if (mcpAppLifecycle) {
-                        await mcpAppLifecycle.start(toolCallID)
-                        mcpAppCalls.set(toolCallID, mcpAppLifecycle)
-                      }
-                      await withToolPartLock(toolCallID, async () => {
-                        const existing = await priorToolPart(toolCallID)
-                        const committed = preserveCompletedCapabilitySearch(existing, value.toolName)
-                        if (committed) return committed
-                        const start = existing ? toolStartTime(existing) : Date.now()
-                        const part = await Session.updatePartWithSignal(run.signal, {
-                          id: existing?.id ?? Identifier.ascending("part"),
+                        const reasoningPart = {
+                          id: allocateAttemptPartID(run.attempt),
                           messageID: input.assistantMessage.id,
                           sessionID: input.assistantMessage.sessionID,
-                          type: "tool",
-                          tool: value.toolName,
-                          callID: toolCallID,
-                          state: {
-                            status: "pending",
-                            input: {},
-                            raw: "",
-                            time: { start },
-                          },
-                        })
-                        trackToolCall(run.attempt, toolCallID)
-                        toolcalls[toolCallID] = part as Message.ToolPart
-                        await publishToolInputDraft(part as Message.ToolPart, run.signal)
-                        return part
-                      })
-                      semanticChunkAccepted = true
-                      break
-                    }
-
-                    case "tool-input-delta": {
-                      const toolCallID =
-                        typeof (value as any).toolCallId === "string"
-                          ? (value as any).toolCallId
-                          : typeof (value as any).id === "string"
-                            ? (value as any).id
-                            : ""
-                      const delta =
-                        typeof (value as any).inputTextDelta === "string"
-                          ? (value as any).inputTextDelta
-                          : typeof (value as any).delta === "string"
-                            ? (value as any).delta
-                            : ""
-                      if (!toolCallID || !delta) break
-                      const match = toolcalls[toolCallID]
-                      if (match && match.state.status === "pending") {
-                        ;(match.state as any).raw += delta
-                        scheduleToolInputFlush(run.signal)
-                        const lifecycle = mcpAppCalls.get(toolCallID)
-                        if (lifecycle) {
-                          const partial = await parsePartialJson((match.state as { raw: string }).raw)
-                          if (partial.value && typeof partial.value === "object" && !Array.isArray(partial.value)) {
-                            await lifecycle.partial(toolCallID, partial.value as Record<string, unknown>)
-                          }
-                        }
-                        semanticChunkAccepted = true
-                      }
-                      break
-                    }
-
-                    case "tool-input-end":
-                      break
-
-                    case "tool-call": {
-                      if (coordinationHandoff) {
-                        throw new Error(
-                          `Unexpected tool call ${value.toolCallId} started after coordination handoff ${coordinationHandoff.request_id}`,
-                        )
-                      }
-                      markToolExecutionStarted(run.attempt)
-                      // Pause the chunk-driven idle monitor while the SDK runs the
-                      // tool's `execute`. Long-running tools (build agent ~100-300s,
-                      // acceptance, architect) hold the LLM stream open without
-                      // emitting chunks; the monitor's 180s default would false-positive
-                      // trip otherwise. Resume on tool-result. Per rule 23 the
-                      // pause is scoped to known stream-pause semantics (tool-call
-                      // boundary), not a generic disable switch.
-                      run.pause(toolPauseOwner(value.toolCallId))
-                      const persistedToolInput = cloneToolInputForPersistence(value.input)
-                      const part = await withToolPartLock(value.toolCallId, async () => {
-                        const match = await priorToolPart(value.toolCallId)
-                        const committed = preserveCompletedCapabilitySearch(
-                          match,
-                          value.toolName,
-                          persistedToolInput,
-                        )
-                        if (committed) return committed
-                        if (match?.state.status === "pending") trackCreatedPart(run.attempt, match.id)
-                        trackToolCall(run.attempt, value.toolCallId)
-                        await retireToolInputDraft(match, run.signal)
-                        const part = await Session.updatePartWithSignal(run.signal, {
-                          ...(match ?? {
-                            id: allocateAttemptPartID(run.attempt),
-                            messageID: input.assistantMessage.id,
-                            sessionID: input.assistantMessage.sessionID,
-                            type: "tool" as const,
-                            callID: value.toolCallId,
-                            tool: value.toolName,
-                          }),
-                          tool: value.toolName,
-                          state: {
-                            status: "running",
-                            input: persistedToolInput,
-                            time: {
-                              start: match ? toolStartTime(match) : Date.now(),
-                            },
+                          type: "reasoning" as const,
+                          text: "",
+                          time: {
+                            start: Date.now(),
                           },
                           metadata: value.providerMetadata,
-                        })
-                        toolcalls[value.toolCallId] = part as Message.ToolPart
-                        return part
-                      })
-                      const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
-                      if (mcpAppLifecycle) {
-                        await mcpAppLifecycle.input(value.toolCallId, value.input as Record<string, unknown>)
-                        mcpAppCalls.set(value.toolCallId, mcpAppLifecycle)
-                      }
-
-                      const parts = await MessageStore.parts(input.assistantMessage.id)
-                      const lastThree = parts.slice(-DOOM_LOOP_THRESHOLD)
-
-                      const exactMatch =
-                        lastThree.length === DOOM_LOOP_THRESHOLD &&
-                        lastThree.every(
-                          (p) =>
-                            p.type === "tool" &&
-                            p.tool === value.toolName &&
-                            p.state.status !== "pending" &&
-                            JSON.stringify(p.state.input) === JSON.stringify(persistedToolInput),
-                        )
-
-                      if (exactMatch) {
-                        throw new Error(
-                          `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
-                        )
-                      }
-
-                      const repeatedRun = observeRepeatedToolCall(input.sessionID, value.toolName, persistedToolInput)
-                      if (repeatedRun > REPEATED_CALL_ACROSS_TURNS_THRESHOLD) {
-                        log.warn("repeated identical tool call across turns", {
-                          sessionID: input.sessionID,
-                          tool: value.toolName,
-                          consecutiveCalls: repeatedRun,
-                        })
-                        throw new Error(
-                          `${value.toolName} was called ${repeatedRun} times in a row with byte-identical input and no other Tool call in between. ` +
-                            `The result will not change; repeating it cannot make progress. ` +
-                            `Use the result you already have to take the next decision, or call a different Tool.`,
-                        )
-                      }
-                      semanticChunkAccepted = true
-                      break
-                    }
-                    case "tool-result": {
-                      markToolExecutionStarted(run.attempt)
-                      // Pair with the exact call-owned pause from tool-call. resume() is a
-                      // no-op if the monitor isn't paused (e.g. tool-result without
-                      // matching tool-call after a recovery), so this is safe to
-                      // run unconditionally before the match check.
-                      run.resume(toolPauseOwner(value.toolCallId))
-                      const output = normalizeToolResult(value.output)
-                      const metadata = output.metadata
-                      const control = await completeToolPart(
-                        {
-                          toolCallId: value.toolCallId,
-                          input: value.input,
-                          output: {
-                            output: output.output,
-                            title: output.title,
-                            metadata: output.metadata,
-                            ...(Array.isArray(output.attachments)
-                              ? { attachments: output.attachments as Message.FilePart[] }
-                              : {}),
-                            ...(output.display !== undefined ? { display: output.display } : {}),
-                            ...(output.sources !== undefined ? { sources: output.sources } : {}),
-                          },
-                        },
-                        (partID) => trackCreatedPart(run.attempt, partID),
-                      )
-                      const disposition = toolResultDisposition(control)
-                      if (disposition === "handoff") {
-                        if (!control || control.kind !== "handoff_drain") {
-                          throw new Error("Coordination handoff disposition has no handoff control")
                         }
-                        if (
-                          coordinationHandoff &&
-                          (coordinationHandoff.request_id !== control.request_id ||
-                            coordinationHandoff.dispatch_lineage_id !== control.dispatch_lineage_id)
-                        ) {
-                          throw new Error("Conflicting coordination handoff tool results in one assistant turn")
+                        reasoningMap[value.id] = reasoningPart
+                        await Session.updatePartWithSignal(run.signal, reasoningPart)
+                        semanticChunkAccepted = true
+                        break
+
+                      case "reasoning-delta":
+                        if (value.id in reasoningMap) {
+                          const part = reasoningMap[value.id]
+                          part.text += value.text
+                          if (value.providerMetadata) part.metadata = value.providerMetadata
+                          // Buffer reasoning deltas and flush periodically to avoid
+                          // flooding the SSE stream with per-token events.
+                          const bufKey = part.id
+                          const prev = reasoningDeltaBuf.get(bufKey) || ""
+                          reasoningDeltaBuf.set(bufKey, prev + value.text)
+                          scheduleReasoningFlush(run.signal)
+                          semanticChunkAccepted = true
+                        } else {
+                          observation.reject("stream_mismatch")
                         }
-                        coordinationHandoff = control
-                        input.assistantMessage.finish = "tool-calls"
-                      } else if (disposition === "park") {
-                        input.assistantMessage.finish = "tool-calls"
-                        parkAfterToolResult = true
-                      }
-                      semanticChunkAccepted = true
-                      break
-                    }
+                        break
 
-                    case "tool-error": {
-                      markToolExecutionStarted(run.attempt)
-                      // Pair with the exact call-owned pause from tool-call (errors close the
-                      // tool-call window just like results).
-                      run.resume(toolPauseOwner(value.toolCallId))
-                      let toolErrorAccepted = false
-                      await withToolPartLock(value.toolCallId, async () => {
-                        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
-                        if (match && (match.state.status === "running" || match.state.status === "pending")) {
-                          const resolvedInput =
-                            value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
-                          const classification =
-                            (value as { dynamic?: boolean }).dynamic === true ? "tool-input-invalid" : "tool-execution"
-                          const failure = toolFailureCauseFromUnknown({
-                            error: value.error,
-                            originSite: "session.processor.tool-error",
-                            classification,
-                            kind: classification,
-                            data: {
-                              toolCallId: value.toolCallId,
-                              toolName: value.toolName,
-                            },
-                          })
-                          await Session.updatePartWithSignal(run.signal, {
-                            ...match,
-                            state: {
-                              status: "error",
-                              input: resolvedInput,
-                              failure,
-                              time: completedToolTime(toolStartTime(match)),
-                            },
-                          })
+                      case "reasoning-end":
+                        if (value.id in reasoningMap) {
+                          // Flush any buffered reasoning delta before closing the part
+                          await settleReasoningFlush(true, run.signal)
 
-                          if (value.error instanceof PermissionAuthority.RejectedError) {
-                            blocked = shouldBreak
+                          const part = reasoningMap[value.id]
+                          part.text = part.text.trimEnd()
+
+                          part.time = {
+                            ...part.time,
+                            end: Date.now(),
                           }
-                          delete toolcalls[value.toolCallId]
-                          toolErrorAccepted = true
+                          if (value.providerMetadata) part.metadata = value.providerMetadata
+                          await Session.updatePartWithSignal(run.signal, part)
+                          delete reasoningMap[value.id]
+                          semanticChunkAccepted = true
+                        } else {
+                          observation.reject("stream_mismatch")
                         }
-                      })
-                      mcpAppCalls.delete(value.toolCallId)
-                      semanticChunkAccepted = toolErrorAccepted
-                      break
-                    }
-                    case "error":
-                      throw value.error
+                        break
 
-                    case "start-step": {
-                      const prepared = preparedSteps.shift()
-                      if (!prepared) throw new Error("Provider step started without its committed Session boundary")
-                      snapshot = prepared.snapshot
-                      semanticChunkAccepted = true
-                      break
-                    }
-
-                    case "finish-step":
-                      const usage = Session.getUsage({
-                        model: input.model,
-                        usage: value.usage,
-                        metadata: value.providerMetadata,
-                      })
-                      input.assistantMessage.finish = value.finishReason
-                      input.assistantMessage.cost += usage.cost
-                      input.assistantMessage.billing = usage.billing
-                      // Accumulate across steps so multi-step messages keep all
-                      // tokens (overwrite-only would silently drop earlier steps;
-                      // `cost +=` is already cumulative — match it).
-                      input.assistantMessage.tokens = {
-                        input: input.assistantMessage.tokens.input + usage.tokens.input,
-                        output: input.assistantMessage.tokens.output + usage.tokens.output,
-                        reasoning: input.assistantMessage.tokens.reasoning + usage.tokens.reasoning,
-                        total: (input.assistantMessage.tokens.total ?? 0) + (usage.tokens.total ?? 0),
-                        cache: {
-                          read: input.assistantMessage.tokens.cache.read + usage.tokens.cache.read,
-                          write: input.assistantMessage.tokens.cache.write + usage.tokens.cache.write,
-                        },
-                      }
-                      {
-                        await Session.updatePartWithSignal(run.signal, {
-                          id: allocateAttemptPartID(run.attempt),
-                          reason: value.finishReason,
-                          snapshot: await Snapshot.track(),
-                          messageID: input.assistantMessage.id,
-                          sessionID: input.assistantMessage.sessionID,
-                          type: "step-finish",
-                          tokens: usage.tokens,
-                          cost: usage.cost,
-                          billing: usage.billing,
+                      case "tool-input-start": {
+                        const toolCallID =
+                          typeof (value as any).toolCallId === "string"
+                            ? (value as any).toolCallId
+                            : typeof (value as any).id === "string"
+                              ? (value as any).id
+                              : ""
+                        if (!toolCallID) {
+                          observation.reject("missing_id")
+                          break
+                        }
+                        const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
+                        if (mcpAppLifecycle) {
+                          await mcpAppLifecycle.start(toolCallID)
+                          mcpAppCalls.set(toolCallID, mcpAppLifecycle)
+                        }
+                        await withToolPartLock(toolCallID, async () => {
+                          const existing = await priorToolPart(toolCallID)
+                          const committed = preserveCompletedCapabilitySearch(existing, value.toolName)
+                          if (committed) return committed
+                          const start = existing ? toolStartTime(existing) : Date.now()
+                          const part = await Session.updatePartWithSignal(run.signal, {
+                            id: existing?.id ?? Identifier.ascending("part"),
+                            messageID: input.assistantMessage.id,
+                            sessionID: input.assistantMessage.sessionID,
+                            type: "tool",
+                            tool: value.toolName,
+                            callID: toolCallID,
+                            state: {
+                              status: "pending",
+                              input: {},
+                              raw: "",
+                              time: { start },
+                            },
+                          })
+                          trackToolCall(run.attempt, toolCallID)
+                          toolcalls[toolCallID] = part as Message.ToolPart
+                          await publishToolInputDraft(part as Message.ToolPart, run.signal)
+                          return part
                         })
+                        semanticChunkAccepted = true
+                        break
                       }
-                      await Session.updateMessage(input.assistantMessage)
-                      if (snapshot) {
-                        const patch = await Snapshot.patch(snapshot)
-                        Snapshot.assertPatchEvidenceIntegrity(patch)
-                        if (patch.files.length) {
+
+                      case "tool-input-delta": {
+                        const toolCallID =
+                          typeof (value as any).toolCallId === "string"
+                            ? (value as any).toolCallId
+                            : typeof (value as any).id === "string"
+                              ? (value as any).id
+                              : ""
+                        const delta =
+                          typeof (value as any).inputTextDelta === "string"
+                            ? (value as any).inputTextDelta
+                            : typeof (value as any).delta === "string"
+                              ? (value as any).delta
+                              : ""
+                        if (!toolCallID || !delta) {
+                          observation.reject(!toolCallID ? "missing_id" : "empty_delta")
+                          break
+                        }
+                        const match = toolcalls[toolCallID]
+                        if (match && match.state.status === "pending") {
+                          ;(match.state as any).raw += delta
+                          scheduleToolInputFlush(run.signal)
+                          const lifecycle = mcpAppCalls.get(toolCallID)
+                          if (lifecycle) {
+                            const partial = await parsePartialJson((match.state as { raw: string }).raw)
+                            if (partial.value && typeof partial.value === "object" && !Array.isArray(partial.value)) {
+                              await lifecycle.partial(toolCallID, partial.value as Record<string, unknown>)
+                            }
+                          }
+                          semanticChunkAccepted = true
+                        } else {
+                          observation.reject(match ? "not_pending" : "unknown_tool")
+                        }
+                        break
+                      }
+
+                      case "tool-input-end":
+                        observation.reject("control")
+                        break
+
+                      case "tool-call": {
+                        if (coordinationHandoff) {
+                          throw new Error(
+                            `Unexpected tool call ${value.toolCallId} started after coordination handoff ${coordinationHandoff.request_id}`,
+                          )
+                        }
+                        markToolExecutionStarted(run.attempt)
+                        // Pause the chunk-driven idle monitor while the SDK runs the
+                        // tool's `execute`. Long-running tools (build agent ~100-300s,
+                        // acceptance, architect) hold the LLM stream open without
+                        // emitting chunks; the monitor's 180s default would false-positive
+                        // trip otherwise. Resume on tool-result. Per rule 23 the
+                        // pause is scoped to known stream-pause semantics (tool-call
+                        // boundary), not a generic disable switch.
+                        run.pause(toolPauseOwner(value.toolCallId))
+                        const persistedToolInput = cloneToolInputForPersistence(value.input)
+                        const part = await withToolPartLock(value.toolCallId, async () => {
+                          const match = await priorToolPart(value.toolCallId)
+                          const committed = preserveCompletedCapabilitySearch(match, value.toolName, persistedToolInput)
+                          if (committed) return committed
+                          if (match?.state.status === "pending") trackCreatedPart(run.attempt, match.id)
+                          trackToolCall(run.attempt, value.toolCallId)
+                          await retireToolInputDraft(match, run.signal)
+                          const part = await Session.updatePartWithSignal(run.signal, {
+                            ...(match ?? {
+                              id: allocateAttemptPartID(run.attempt),
+                              messageID: input.assistantMessage.id,
+                              sessionID: input.assistantMessage.sessionID,
+                              type: "tool" as const,
+                              callID: value.toolCallId,
+                              tool: value.toolName,
+                            }),
+                            tool: value.toolName,
+                            state: {
+                              status: "running",
+                              input: persistedToolInput,
+                              time: {
+                                start: match ? toolStartTime(match) : Date.now(),
+                              },
+                            },
+                            metadata: value.providerMetadata,
+                          })
+                          toolcalls[value.toolCallId] = part as Message.ToolPart
+                          return part
+                        })
+                        const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
+                        if (mcpAppLifecycle) {
+                          await mcpAppLifecycle.input(value.toolCallId, value.input as Record<string, unknown>)
+                          mcpAppCalls.set(value.toolCallId, mcpAppLifecycle)
+                        }
+
+                        const parts = await MessageStore.parts(input.assistantMessage.id)
+                        const lastThree = parts.slice(-DOOM_LOOP_THRESHOLD)
+
+                        const exactMatch =
+                          lastThree.length === DOOM_LOOP_THRESHOLD &&
+                          lastThree.every(
+                            (p) =>
+                              p.type === "tool" &&
+                              p.tool === value.toolName &&
+                              p.state.status !== "pending" &&
+                              JSON.stringify(p.state.input) === JSON.stringify(persistedToolInput),
+                          )
+
+                        if (exactMatch) {
+                          throw new Error(
+                            `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
+                          )
+                        }
+
+                        const repeatedRun = observeRepeatedToolCall(input.sessionID, value.toolName, persistedToolInput)
+                        if (repeatedRun > REPEATED_CALL_ACROSS_TURNS_THRESHOLD) {
+                          log.warn("repeated identical tool call across turns", {
+                            sessionID: input.sessionID,
+                            tool: value.toolName,
+                            consecutiveCalls: repeatedRun,
+                          })
+                          throw new Error(
+                            `${value.toolName} was called ${repeatedRun} times in a row with byte-identical input and no other Tool call in between. ` +
+                              `The result will not change; repeating it cannot make progress. ` +
+                              `Use the result you already have to take the next decision, or call a different Tool.`,
+                          )
+                        }
+                        semanticChunkAccepted = true
+                        break
+                      }
+                      case "tool-result": {
+                        markToolExecutionStarted(run.attempt)
+                        // Pair with the exact call-owned pause from tool-call. resume() is a
+                        // no-op if the monitor isn't paused (e.g. tool-result without
+                        // matching tool-call after a recovery), so this is safe to
+                        // run unconditionally before the match check.
+                        run.resume(toolPauseOwner(value.toolCallId))
+                        const output = normalizeToolResult(value.output)
+                        const metadata = output.metadata
+                        const control = await completeToolPart(
+                          {
+                            toolCallId: value.toolCallId,
+                            input: value.input,
+                            output: {
+                              output: output.output,
+                              title: output.title,
+                              metadata: output.metadata,
+                              ...(Array.isArray(output.attachments)
+                                ? { attachments: output.attachments as Message.FilePart[] }
+                                : {}),
+                              ...(output.display !== undefined ? { display: output.display } : {}),
+                              ...(output.sources !== undefined ? { sources: output.sources } : {}),
+                            },
+                          },
+                          (partID) => trackCreatedPart(run.attempt, partID),
+                        )
+                        const disposition = toolResultDisposition(control)
+                        if (disposition === "handoff") {
+                          if (!control || control.kind !== "handoff_drain") {
+                            throw new Error("Coordination handoff disposition has no handoff control")
+                          }
+                          if (
+                            coordinationHandoff &&
+                            (coordinationHandoff.request_id !== control.request_id ||
+                              coordinationHandoff.dispatch_lineage_id !== control.dispatch_lineage_id)
+                          ) {
+                            throw new Error("Conflicting coordination handoff tool results in one assistant turn")
+                          }
+                          coordinationHandoff = control
+                          input.assistantMessage.finish = "tool-calls"
+                        } else if (disposition === "park") {
+                          input.assistantMessage.finish = "tool-calls"
+                          parkAfterToolResult = true
+                        }
+                        semanticChunkAccepted = true
+                        break
+                      }
+
+                      case "tool-error": {
+                        markToolExecutionStarted(run.attempt)
+                        // Pair with the exact call-owned pause from tool-call (errors close the
+                        // tool-call window just like results).
+                        run.resume(toolPauseOwner(value.toolCallId))
+                        let toolErrorAccepted = false
+                        await withToolPartLock(value.toolCallId, async () => {
+                          const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
+                          if (match && (match.state.status === "running" || match.state.status === "pending")) {
+                            const resolvedInput =
+                              value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
+                            const classification =
+                              (value as { dynamic?: boolean }).dynamic === true
+                                ? "tool-input-invalid"
+                                : "tool-execution"
+                            const failure = toolFailureCauseFromUnknown({
+                              error: value.error,
+                              originSite: "session.processor.tool-error",
+                              classification,
+                              kind: classification,
+                              data: {
+                                toolCallId: value.toolCallId,
+                                toolName: value.toolName,
+                              },
+                            })
+                            await Session.updatePartWithSignal(run.signal, {
+                              ...match,
+                              state: {
+                                status: "error",
+                                input: resolvedInput,
+                                failure,
+                                time: completedToolTime(toolStartTime(match)),
+                              },
+                            })
+
+                            if (value.error instanceof PermissionAuthority.RejectedError) {
+                              blocked = shouldBreak
+                            }
+                            delete toolcalls[value.toolCallId]
+                            toolErrorAccepted = true
+                          }
+                        })
+                        mcpAppCalls.delete(value.toolCallId)
+                        semanticChunkAccepted = toolErrorAccepted
+                        break
+                      }
+                      case "error":
+                        throw value.error
+
+                      case "start-step": {
+                        const prepared = preparedSteps.shift()
+                        if (!prepared) throw new Error("Provider step started without its committed Session boundary")
+                        snapshot = prepared.snapshot
+                        semanticChunkAccepted = true
+                        break
+                      }
+
+                      case "finish-step":
+                        const usage = Session.getUsage({
+                          model: input.model,
+                          usage: value.usage,
+                          metadata: value.providerMetadata,
+                        })
+                        input.assistantMessage.finish = value.finishReason
+                        input.assistantMessage.cost += usage.cost
+                        input.assistantMessage.billing = usage.billing
+                        // Accumulate across steps so multi-step messages keep all
+                        // tokens (overwrite-only would silently drop earlier steps;
+                        // `cost +=` is already cumulative — match it).
+                        input.assistantMessage.tokens = {
+                          input: input.assistantMessage.tokens.input + usage.tokens.input,
+                          output: input.assistantMessage.tokens.output + usage.tokens.output,
+                          reasoning: input.assistantMessage.tokens.reasoning + usage.tokens.reasoning,
+                          total: (input.assistantMessage.tokens.total ?? 0) + (usage.tokens.total ?? 0),
+                          cache: {
+                            read: input.assistantMessage.tokens.cache.read + usage.tokens.cache.read,
+                            write: input.assistantMessage.tokens.cache.write + usage.tokens.cache.write,
+                          },
+                        }
+                        {
                           await Session.updatePartWithSignal(run.signal, {
                             id: allocateAttemptPartID(run.attempt),
+                            reason: value.finishReason,
+                            snapshot: await Snapshot.track(),
                             messageID: input.assistantMessage.id,
-                            sessionID: input.sessionID,
-                            type: "patch",
-                            hash: patch.hash,
-                            files: patch.files,
+                            sessionID: input.assistantMessage.sessionID,
+                            type: "step-finish",
+                            tokens: usage.tokens,
+                            cost: usage.cost,
+                            billing: usage.billing,
                           })
                         }
-                        snapshot = undefined
-                      }
-                      await SessionSummary.summarize({
-                        sessionID: input.sessionID,
-                        messageID: input.assistantMessage.parentID,
-                      })
-                      if (
-                        await CompactionOverflow.isOverflow({
-                          tokens: usage.tokens,
-                          model: input.model,
-                          sessionID: input.assistantMessage.sessionID,
-                        })
-                      ) {
-                        needsCompaction = true
-                      }
-                      semanticChunkAccepted = true
-                      break
-
-                    case "text-start":
-                      currentTextStreamID = value.id
-                      currentText = {
-                        id: allocateAttemptPartID(run.attempt),
-                        messageID: input.assistantMessage.id,
-                        sessionID: input.assistantMessage.sessionID,
-                        type: "text",
-                        text: "",
-                        time: {
-                          start: Date.now(),
-                        },
-                        metadata: value.providerMetadata,
-                      }
-                      await Session.updatePartWithSignal(run.signal, currentText)
-                      semanticChunkAccepted = true
-                      break
-
-                    case "text-delta":
-                      if (currentText && value.id === currentTextStreamID) {
-                        currentText.text += value.text
-                        if (value.providerMetadata) currentText.metadata = value.providerMetadata
-                        await Session.updatePartDeltaWithSignal(run.signal, {
-                          sessionID: currentText.sessionID,
-                          messageID: currentText.messageID,
-                          partID: currentText.id,
-                          partType: "text",
-                          field: "text",
-                          delta: value.text,
-                        })
-                        semanticChunkAccepted = true
-                      }
-                      break
-
-                    case "text-end":
-                      if (currentText && value.id === currentTextStreamID) {
-                        currentText.text = currentText.text.trimEnd()
-                        const textOutput = await Plugin.trigger(
-                          "experimental.text.complete",
-                          {
-                            sessionID: input.sessionID,
-                            messageID: input.assistantMessage.id,
-                            partID: currentText.id,
-                          },
-                          { text: currentText.text },
-                        )
-                        currentText.text = textOutput.text
-                        currentText.time = {
-                          start: Date.now(),
-                          end: Date.now(),
+                        await Session.updateMessage(input.assistantMessage)
+                        if (snapshot) {
+                          const patch = await Snapshot.patch(snapshot)
+                          Snapshot.assertPatchEvidenceIntegrity(patch)
+                          if (patch.files.length) {
+                            await Session.updatePartWithSignal(run.signal, {
+                              id: allocateAttemptPartID(run.attempt),
+                              messageID: input.assistantMessage.id,
+                              sessionID: input.sessionID,
+                              type: "patch",
+                              hash: patch.hash,
+                              files: patch.files,
+                            })
+                          }
+                          snapshot = undefined
                         }
-                        if (value.providerMetadata) currentText.metadata = value.providerMetadata
+                        await SessionSummary.summarize({
+                          sessionID: input.sessionID,
+                          messageID: input.assistantMessage.parentID,
+                        })
+                        if (
+                          await CompactionOverflow.isOverflow({
+                            tokens: usage.tokens,
+                            model: input.model,
+                            sessionID: input.assistantMessage.sessionID,
+                          })
+                        ) {
+                          needsCompaction = true
+                        }
+                        semanticChunkAccepted = true
+                        break
 
+                      case "text-start":
+                        currentTextStreamID = value.id
+                        currentText = {
+                          id: allocateAttemptPartID(run.attempt),
+                          messageID: input.assistantMessage.id,
+                          sessionID: input.assistantMessage.sessionID,
+                          type: "text",
+                          text: "",
+                          time: {
+                            start: Date.now(),
+                          },
+                          metadata: value.providerMetadata,
+                        }
                         await Session.updatePartWithSignal(run.signal, currentText)
                         semanticChunkAccepted = true
-                        currentText = undefined
-                        currentTextStreamID = undefined
+                        break
+
+                      case "text-delta":
+                        if (currentText && value.id === currentTextStreamID) {
+                          currentText.text += value.text
+                          if (value.providerMetadata) currentText.metadata = value.providerMetadata
+                          await Session.updatePartDeltaWithSignal(run.signal, {
+                            sessionID: currentText.sessionID,
+                            messageID: currentText.messageID,
+                            partID: currentText.id,
+                            partType: "text",
+                            field: "text",
+                            delta: value.text,
+                          })
+                          semanticChunkAccepted = true
+                        } else {
+                          observation.reject("stream_mismatch")
+                        }
+                        break
+
+                      case "text-end":
+                        if (currentText && value.id === currentTextStreamID) {
+                          currentText.text = currentText.text.trimEnd()
+                          const textOutput = await Plugin.trigger(
+                            "experimental.text.complete",
+                            {
+                              sessionID: input.sessionID,
+                              messageID: input.assistantMessage.id,
+                              partID: currentText.id,
+                            },
+                            { text: currentText.text },
+                          )
+                          currentText.text = textOutput.text
+                          currentText.time = {
+                            start: Date.now(),
+                            end: Date.now(),
+                          }
+                          if (value.providerMetadata) currentText.metadata = value.providerMetadata
+
+                          await Session.updatePartWithSignal(run.signal, currentText)
+                          semanticChunkAccepted = true
+                          currentText = undefined
+                          currentTextStreamID = undefined
+                        } else {
+                          observation.reject("stream_mismatch")
+                        }
+                        break
+
+                      case "source": {
+                        observation.reject("nonsemantic")
+                        const source =
+                          value.sourceType === "url"
+                            ? Message.SourceUrlPayload.parse({
+                                type: "source-url",
+                                sourceId: value.id,
+                                url: value.url,
+                                title: value.title,
+                                provider: input.assistantMessage.providerID,
+                                providerMetadata: value.providerMetadata,
+                              })
+                            : Message.SourceDocumentPayload.parse({
+                                type: "source-document",
+                                sourceId: value.id,
+                                mediaType: value.mediaType,
+                                title: value.title,
+                                filename: value.filename,
+                                provider: input.assistantMessage.providerID,
+                                providerMetadata: value.providerMetadata,
+                              })
+                        const persisted = await persistMessageSources({
+                          sessionID: input.assistantMessage.sessionID,
+                          messageID: input.assistantMessage.id,
+                          sources: [source],
+                        })
+                        for (const part of persisted) trackCreatedPart(run.attempt, part.id)
+                        break
                       }
-                      break
 
-                    case "source": {
-                      const source =
-                        value.sourceType === "url"
-                          ? Message.SourceUrlPayload.parse({
-                              type: "source-url",
-                              sourceId: value.id,
-                              url: value.url,
-                              title: value.title,
-                              provider: input.assistantMessage.providerID,
-                              providerMetadata: value.providerMetadata,
-                            })
-                          : Message.SourceDocumentPayload.parse({
-                              type: "source-document",
-                              sourceId: value.id,
-                              mediaType: value.mediaType,
-                              title: value.title,
-                              filename: value.filename,
-                              provider: input.assistantMessage.providerID,
-                              providerMetadata: value.providerMetadata,
-                            })
-                      const persisted = await persistMessageSources({
-                        sessionID: input.assistantMessage.sessionID,
-                        messageID: input.assistantMessage.id,
-                        sources: [source],
-                      })
-                      for (const part of persisted) trackCreatedPart(run.attempt, part.id)
-                      break
+                      case "finish":
+                        observation.reject("control")
+                        await streamInput.stream?.onFinish?.(value as never)
+                        break
+
+                      default:
+                        observation.reject("unsupported")
+                        log.info("unhandled", { type: llmStreamEventType(value) })
+                        continue
                     }
-
-                    case "finish":
-                      await streamInput.stream?.onFinish?.(value as never)
-                      break
-
-                    default:
-                      log.info("unhandled", {
-                        ...value,
-                      })
-                      continue
+                    // An async chunk hook or publication may settle only after
+                    // the activity owner has aborted it. Fence the late handler
+                    // before it can publish another heartbeat or advance the
+                    // physical stream after retry cleanup has started.
+                    run.signal.throwIfAborted()
+                    if (semanticChunkAccepted) {
+                      const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
+                      heartbeatEligible = Boolean(heartbeatKind)
+                      if (heartbeatKind) {
+                        run.bump(heartbeatKind)
+                        observation.heartbeat(heartbeatKind, value)
+                      } else {
+                        observation.reject("nonsemantic")
+                      }
+                    }
+                    if (needsCompaction) break
+                    if (parkAfterToolResult) break
+                  } catch (error) {
+                    observation.failed(run.signal.aborted ? "abort" : observation.phase === "hook" ? "hook" : "handler")
+                    throw error
+                  } finally {
+                    observation.decision(semanticChunkAccepted, heartbeatEligible, value)
+                    observation.chunkFinished()
                   }
-                  // An async chunk hook or publication may settle only after
-                  // the activity owner has aborted it. Fence the late handler
-                  // before it can publish another heartbeat or advance the
-                  // physical stream after retry cleanup has started.
-                  run.signal.throwIfAborted()
-                  if (semanticChunkAccepted) {
-                    const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
-                    if (heartbeatKind) run.bump(heartbeatKind)
-                  }
-                  if (needsCompaction) break
-                  if (parkAfterToolResult) break
                 }
                 await settleToolInputFlush()
               },
@@ -1634,7 +1714,8 @@ export namespace SessionProcessor {
             finishIncludesTool: input.assistantMessage.finish.includes("tool"),
             ownedContinuationDecision,
           }).retainAssistant
-          const completedOwnerBoundary = !retainAssistantForNextProviderStep && input.stopAfterAssistantCompletion === true
+          const completedOwnerBoundary =
+            !retainAssistantForNextProviderStep && input.stopAfterAssistantCompletion === true
           if (!retainAssistantForNextProviderStep) {
             await input.beforeAssistantCompletion?.(input.assistantMessage)
             input.assistantMessage.time.completed = Date.now()

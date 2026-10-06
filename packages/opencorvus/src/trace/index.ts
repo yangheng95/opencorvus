@@ -51,6 +51,9 @@ import { requireTask } from "@/engine/store"
 import { SessionObservability } from "@/util/session-observability"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
 import type { PromptCompositionFingerprint } from "@/session/prompt-composition"
+import type { StreamRequestIdentity } from "@/session/stream-request"
+import type { ProviderRequestContext } from "@/util/provider-response-observation"
+import type { createLLMStreamObservation } from "@/util/llm-stream-observation"
 
 const log = Log.create({ service: "agent-trace" })
 
@@ -481,6 +484,33 @@ export namespace AgentTrace {
     })
   }
 
+  /** Actual processor consumption facts; neither payloads nor physical settlement. */
+  export function recordLLMStreamObservation(input: {
+    taskID: string
+    sessionID: string
+    streamRequest: StreamRequestIdentity
+    activity: NonNullable<ProviderRequestContext["activity"]>
+    phase: "aborted" | "settled"
+    observation: ReturnType<ReturnType<typeof createLLMStreamObservation>["snapshot"]>
+  }) {
+    if (!ENABLED) return
+    const bucket = sessionBucket(input.sessionID)
+    append(bucket, {
+      ts: Date.now(),
+      kind: "llm_stream_observation",
+      domain: "session",
+      sessionID: input.sessionID,
+      taskID: input.taskID,
+      agentName: input.streamRequest.agentID,
+      payload: {
+        streamRequest: input.streamRequest,
+        activity: input.activity,
+        phase: input.phase,
+        observation: input.observation,
+      },
+    })
+  }
+
   /** Capture a direct helper LLM call that bypasses the session pipeline.
    *  Trace stores only its durable request identity and physical outcome; the
    *  prompt, schema, and result remain in their authoritative stores. */
@@ -606,11 +636,7 @@ export namespace AgentTrace {
     parentSessionID?: string
     taskID: string
     agentName: string
-    kind:
-      | "agent_turn"
-      | "agent_turn_failure"
-      | "orchestrator_wake"
-      | "orchestrator_wake_failure"
+    kind: "agent_turn" | "agent_turn_failure" | "orchestrator_wake" | "orchestrator_wake_failure"
     streamErrors?: Array<{ reason: string; name?: string }>
     finishReason?: string
     finalMessageID?: string

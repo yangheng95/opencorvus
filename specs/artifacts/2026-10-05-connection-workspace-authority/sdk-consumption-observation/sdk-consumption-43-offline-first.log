@@ -1,0 +1,12 @@
+ 6 | const read = (name: string) => JSON.parse(fs.readFileSync(path.join(root, name), "utf8").replace(/^\uFEFF/, ""))
+ 7 | const facts = read("actual-43-readonly-facts.json")
+ 8 | const tools = read("actual-43-readonly-tool-facts.json")
+ 9 | const selected = facts.selected
+10 | const archive = "runtime-evidence-43"
+11 | const auditName = fs.readdirSync(path.join(root, archive)).filter((name) => name.startsWith("provider-")).sort((a, b) => Number(a.match(/-(\d+)\.json$/)![1]) - Number(b.match(/-(\d+)\.json$/)![1])).at(-1)!
+                                                                                                                                                            ^
+TypeError: null is not an object (evaluating 'a.match(/-(\d+)\.json$/)[1]')
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\sdk-consumption-43-offline.ts:11:152)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\sdk-consumption-43-offline.ts:11:107
+
+Bun v1.3.14 (Windows x64)

@@ -131,3 +131,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Formal physical caller association41](../../artifacts/2026-10-05-connection-workspace-authority/stream-request-association-plan.md): immutable request-owned Provider context;33 positive contracts and real41 four Sol caller bindings/EOF/native closure qualify; semantic recovery and vendor limits remain open.
 
 - [Current artifact preview identity42](../../artifacts/2026-10-05-connection-workspace-authority/artifact-preview-identity-plan.md): current request/result/error/render owner and one browser-safe key; source/data checks pass; original42 semantic-idle failure retained, visuals/files unqualified.
+
+- [Real SDK consumption and semantic decisions43](../../artifacts/2026-10-05-connection-workspace-authority/sdk-consumption-observation-plan.md): safe consumption and exact activity/attempt observations qualify through real43; original Task fails on whitespace-only Tool deltas, formal delivery remains unmet.

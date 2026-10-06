@@ -25,6 +25,9 @@ import { MessageStore } from "@/session/message-store"
 import { LLM } from "@/session/llm"
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { ProtocolStore } from "@/protocol/store"
+import { EngineTaskTable } from "@/engine/engine.sql"
+import { AgentTrace } from "@/trace"
+import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -35,10 +38,12 @@ async function processorFixture(
   run: (input: {
     directory: string
     sessionID: string
+    taskID?: string
     controller: AbortController
     processor: ReturnType<typeof SessionProcessor.create>
     process: (tools: any, stream?: any) => ReturnType<ReturnType<typeof SessionProcessor.create>["process"]>
   }) => Promise<void>,
+  options: { bindTask?: boolean } = {},
 ) {
   await using project = await memoryProject()
   await Instance.provide({
@@ -68,6 +73,13 @@ async function processorFixture(
         await PrimaryAssistantRegistry.get("coding", { config: await Config.get() }),
       )
       const session = await Session.create({ kind: "assistant", title: "Producer boundary" })
+      const taskID = options.bindTask ? Identifier.ascending("task") : undefined
+      if (taskID) Database.immediateTransaction((db) => {
+        const now = Date.now()
+        db.insert(EngineTaskTable).values({ id: taskID, project_id: Instance.project.id, session_id: session.id,
+          source: "test", product_pillar: "code", title: "Processor observation", request: "Qualify processor observation", time_created: now }).run()
+        appendTaskOpenedInTransaction({ db, taskID, sessionID: session.id, now, source: "test.processor-observation" })
+      })
       const user = await Session.updateMessage({
         id: Identifier.ascending("message"),
         sessionID: session.id,
@@ -104,6 +116,7 @@ async function processorFixture(
         directory: project.path,
         sessionID: session.id,
         controller,
+        taskID,
         processor,
         process: (tools, stream) =>
           processor.process({
@@ -175,6 +188,101 @@ test("a producer-side committed operation yields unsafe retry when its consumer 
       backoff.mockRestore()
     }
   })
+}, 30_000)
+
+test("processor observation records accepted and rejected current event identities in the canonical Task trace", async () => {
+  await processorFixture(async ({ processor, process, taskID, sessionID }) => {
+    if (!taskID) throw new Error("Expected actual Task binding")
+    const recorded: Parameters<typeof AgentTrace.recordLLMStreamObservation>[0][] = []
+    const originalRecord = AgentTrace.recordLLMStreamObservation
+    const recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation((input) => {
+      recorded.push(structuredClone(input)); originalRecord(input)
+    })
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+      yield { type: "start" }
+      yield { type: "reasoning-start", id: "reasoning-one" }
+      yield { type: "reasoning-start", id: "reasoning-one" }
+      yield { type: "reasoning-end", id: "reasoning-one" }
+      yield { type: "text-start", id: "text-one" }
+      yield { type: "text-delta", id: "different-text", text: "ignored identity" }
+      yield { type: "text-delta", id: "text-one", text: "actual answer" }
+      yield { type: "text-delta", id: "text-one", text: " " }
+      yield { type: "text-end", id: "text-one" }
+      yield { type: "tool-input-start", id: "known-call", toolName: "echo" }
+      yield { type: "tool-input-delta", id: "known-call", delta: "{}" }
+      yield { type: "tool-input-delta", id: "known-call", delta: " " }
+      yield { type: "tool-input-delta", id: "unknown-call", delta: "{}" }
+      yield { type: "tool-input-delta", delta: "{}" }
+      yield { type: "tool-call", toolCallId: "known-call", toolName: "echo", input: {} }
+      yield { type: "tool-input-delta", id: "known-call", delta: "late" }
+      yield { type: "tool-result", toolCallId: "known-call", toolName: "echo", input: {}, output: { title: "Echo", output: "actual result", metadata: {} } }
+      yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
+    try {
+      await process({})
+      const settled = recorded.find((entry) => entry.phase === "settled")
+      expect(settled).toMatchObject({ taskID, sessionID, activity: { assistantMessageID: processor.message.id, attempt: 0 },
+        observation: { phase: "awaiting_event", received: 18, finished: 18,
+          types: { "tool-input-delta": 5, "text-delta": 3, "reasoning-start": 2 },
+          acceptedTypes: { "tool-input-delta": 2, "text-delta": 2, "reasoning-start": 1 },
+          heartbeatTypes: { "tool-input-delta": 1, "text-delta": 1, "text-start": 1, "text-end": 1 },
+          reasons: { missing_id: 1, unknown_tool: 1, not_pending: 1, stream_mismatch: 1, duplicate_start: 1, nonsemantic: 2 } } })
+      expect(await MessageStore.parts(processor.message.id)).toContainEqual(expect.objectContaining({ type: "text", text: "actual answer" }))
+      expect(AgentTrace.readTaskEvents(taskID)).toContainEqual(expect.objectContaining({ kind: "llm_stream_observation",
+        taskID, sessionID, payload: expect.objectContaining({ phase: "settled", observation: settled!.observation }) }))
+    } finally { stream.mockRestore(); recorder.mockRestore() }
+  }, { bindTask: true })
+}, 30_000)
+
+test("abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation", async () => {
+  await processorFixture(async ({ controller, processor, process, taskID }) => {
+    if (!taskID) throw new Error("Expected actual Task binding")
+    const hookEntered = Promise.withResolvers<void>()
+    const hookRelease = Promise.withResolvers<void>()
+    const abortRecorded = Promise.withResolvers<void>()
+    const recorded: Parameters<typeof AgentTrace.recordLLMStreamObservation>[0][] = []
+    const originalRecord = AgentTrace.recordLLMStreamObservation
+    const recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation((input) => {
+      recorded.push(structuredClone(input)); originalRecord(input)
+      if (input.phase === "aborted") abortRecorded.resolve()
+    })
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+      yield { type: "start" }
+    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
+    const running = process({}, { onChunk: async () => { hookEntered.resolve(); await hookRelease.promise } })
+    try {
+      await hookEntered.promise
+      controller.abort(new DOMException("Cancel the held caller hook", "AbortError"))
+      await abortRecorded.promise
+      expect(recorded.find((entry) => entry.phase === "aborted")).toMatchObject({ taskID,
+        observation: { phase: "hook", received: 1, finished: 0 } })
+      hookRelease.resolve()
+      expect(await running).toBe("stop")
+      expect(processor.message.error).toMatchObject({ name: "MessageAbortedError" })
+      expect(recorded.find((entry) => entry.phase === "settled")).toMatchObject({ taskID,
+        observation: { phase: "aborted", received: 1, finished: 1, failures: { abort: 1 } } })
+      expect(AgentTrace.readTaskEvents(taskID).filter((entry) => entry.kind === "llm_stream_observation").map((entry) => entry.payload.phase))
+        .toEqual(["aborted", "settled"])
+    } finally { hookRelease.resolve(); await running; stream.mockRestore(); recorder.mockRestore() }
+  }, { bindTask: true })
+}, 30_000)
+
+test("a throwing diagnostic trace recorder preserves the original successful processor output", async () => {
+  await processorFixture(async ({ process, processor }) => {
+    const recorder = spyOn(AgentTrace, "recordLLMStreamObservation").mockImplementation(() => { throw new Error("Owned diagnostic writer failed") })
+    const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+      yield { type: "start" }
+      yield { type: "text-start", id: "answer" }
+      yield { type: "text-delta", id: "answer", text: "Original successful output" }
+      yield { type: "text-end", id: "answer" }
+      yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
+    try {
+      expect(await process({})).toBe("continue")
+      expect(recorder.mock.calls.length).toBeGreaterThanOrEqual(1)
+      expect(await MessageStore.parts(processor.message.id)).toContainEqual(expect.objectContaining({ type: "text", text: "Original successful output" }))
+    } finally { stream.mockRestore(); recorder.mockRestore() }
+  }, { bindTask: true })
 }, 30_000)
 
 for (const boundary of ["complete", "cancel"] as const) {

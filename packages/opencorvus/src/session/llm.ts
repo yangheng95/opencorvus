@@ -36,6 +36,7 @@ import { sessionParentID, taskIDForSession } from "@/engine/task-session-lineage
 import { RequestBudget } from "./request-budget"
 import { ContextBudget } from "./context-budget"
 import { StreamRequestIdentity } from "./stream-request"
+import type { ProviderRequestContext } from "@/util/provider-response-observation"
 
 export namespace LLM {
   const log = Log.create({ service: "llm" })
@@ -46,6 +47,8 @@ export namespace LLM {
     user?: Message.User
     /** Real non-message occurrence identity for an internal, tool-free participant request. */
     requestID?: string
+    /** Real owning processor occurrence; absent for callers without this boundary. */
+    activity?: ProviderRequestContext["activity"]
     sessionID: string
     /** Reuse an already-resolved effective snapshot for one coherent internal attempt. */
     config?: Config.Info
@@ -156,7 +159,7 @@ export namespace LLM {
       ...providerPrompt,
       // any custom prompt passed into this call
       ...input.system,
-      ...await (await import("@/chat/side-chat")).sideChatSystem(input.sessionID),
+      ...(await (await import("@/chat/side-chat")).sideChatSystem(input.sessionID)),
     ]
       .filter((x) => x)
       .join("\n")
@@ -171,16 +174,21 @@ export namespace LLM {
     ]
   }
 
-  export async function stream(input: StreamInput): Promise<StreamResult> {
+  export function streamRequestIdentity(input: Pick<StreamInput, "user" | "requestID" | "agentID" | "model">) {
     const requestID = input.user?.id ?? input.requestID
     if (!requestID) throw new Error("LLM.stream requires a real user Message or request occurrence identity")
-    const streamRequest = StreamRequestIdentity.parse({
+    return StreamRequestIdentity.parse({
       requestID,
       agentID: input.agentID,
       providerID: input.model.providerID,
       modelID: input.model.id,
       apiModelID: input.model.api.id,
     })
+  }
+
+  export async function stream(input: StreamInput): Promise<StreamResult> {
+    const streamRequest = streamRequestIdentity(input)
+    const requestID = streamRequest.requestID
     const config = input.config ?? (await EffectiveConfig.effective({ sessionID: input.sessionID }))
     const agent = input.agent
     const l = log
@@ -195,7 +203,14 @@ export namespace LLM {
       providerID: input.model.providerID,
     })
     const [language, cfg, provider, auth] = await Promise.all([
-      Provider.getLanguage(input.model, { config, requestContext: { sessionID: input.sessionID, streamRequest } }),
+      Provider.getLanguage(input.model, {
+        config,
+        requestContext: {
+          sessionID: input.sessionID,
+          streamRequest,
+          ...(input.activity ? { activity: input.activity } : {}),
+        },
+      }),
       Promise.resolve(config),
       Provider.getProvider(input.model.providerID, { config }),
       Auth.get(input.model.providerID),

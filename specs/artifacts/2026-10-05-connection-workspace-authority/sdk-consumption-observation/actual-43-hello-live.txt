@@ -1,0 +1,19 @@
+Browser tab: 24, Title: "OpenCorvus", URL: "http://localhost:18009/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 150-152, 196-203
+~								96 container Description: Running · 3m 8s, ID: taskStatus
+~									156 text 3m 8s
++													195 text bash git diff --cached -- hello.txt notes.txt bash git commit -m "Deliver exact text resources for formal Task acceptance" bash git status --short; python -c "from pathlib import Path; import subprocess; pairs=[('hello.txt',b'Hello from a formal... 两个文件已按顺序制作并通过完整字节检查，提交后再次读取也符合要求：`hello.txt` 为 26 字节，`notes.txt` 为 520 字节、20 行，均无 BOM、无 CR。Git 提示未来检出可能转换换行，但当前工作文件和提交内容均已验证为指定 LF；接下来发布同一只读快照，并读取发布
+~									148 tab (selectable, settable, boolean) Description: Files, Value: 0, ID: tabs-cl-64-trigger-explorer
++								196 container
++									197 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
++									198 button Close tab
++							199 container Description: File, ID: centerWorkbenchFile
++								200 container Editor
++									201 container
++										202 text hello.txt
++										203 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
++										204 button (disabled) Reload from disk
++										205 button (disabled) Close workspace
++									206 text Loading diff…
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18009/ui/

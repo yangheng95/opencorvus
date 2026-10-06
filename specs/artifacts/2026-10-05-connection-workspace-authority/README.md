@@ -232,3 +232,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Formal physical caller association41](stream-request-association-plan.md): immutable request-owned Provider context;33 positive contracts and real41 four Sol caller bindings/EOF/native closure qualify; semantic recovery and vendor limits remain open.
 
 - [Current artifact preview identity42](artifact-preview-identity-plan.md): current request/result/error/render owner and one browser-safe key; source/data checks pass; original42 semantic-idle failure retained, visuals/files unqualified.
+
+- [Real SDK consumption and semantic decisions43](sdk-consumption-observation-plan.md): safe consumption and exact activity/attempt observations qualify through real43; original Task fails on whitespace-only Tool deltas, formal delivery remains unmet.

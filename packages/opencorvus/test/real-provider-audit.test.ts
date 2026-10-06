@@ -29,24 +29,35 @@ test("exact reader binding projects genuine caller, unknown caller and credentia
   const redactor = new CredentialRedactor()
   redactor.collect({ provider: { key: "identity-fixture-secret" } })
   const context = { sessionID: "session-owned", streamRequest: { requestID: "request-owned", agentID: "agent-owned",
-    providerID: "provider-owned", modelID: "catalog-owned", apiModelID: "authorized-model" } }
+    providerID: "provider-owned", modelID: "catalog-owned", apiModelID: "authorized-model" },
+    activity: { id: "activity-owned", attempt: 1, assistantMessageID: "assistant-owned" } }
   const originalContext = structuredClone(context)
   try {
-    using audit = new RealProviderAudit("authorized-model", 3, undefined, undefined, undefined, { redactor })
+    using audit = new RealProviderAudit("authorized-model", 5, undefined, undefined, undefined, { redactor })
     const request = () => fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
     const values = [await consumeObservedResponse(await request(), context)]
     context.streamRequest.agentID = "later caller edit"
+    context.activity.id = "later activity edit"
+    context.activity.attempt = 9
+    context.activity.assistantMessageID = "later assistant edit"
     values.push(await consumeObservedResponse(await request()))
     values.push(await consumeObservedResponse(await request(), { ...originalContext, sessionID: "identity-fixture-secret" }))
-    expect(values).toEqual(Array(3).fill("actual identity observation bytes"))
+    values.push(await consumeObservedResponse(await request(), { ...originalContext,
+      activity: { ...originalContext.activity, assistantMessageID: "identity-fixture-secret" } }))
+    const helperContext = { sessionID: originalContext.sessionID, streamRequest: { ...originalContext.streamRequest, agentID: "title" } }
+    values.push(await consumeObservedResponse(await request(), helperContext))
+    expect(values).toEqual(Array(5).fill("actual identity observation bytes"))
     expect(audit.requests.map((entry) => ({ state: entry.response_reader.state,
       identityState: entry.response_reader.identityState, terminal: entry.response_reader.terminal?.kind })))
       .toEqual([
         { state: "settled", identityState: "observed", terminal: "eof" },
         { state: "settled", identityState: "unknown", terminal: "eof" },
         { state: "settled", identityState: "redacted", terminal: "eof" },
+        { state: "settled", identityState: "redacted", terminal: "eof" },
+        { state: "settled", identityState: "observed", terminal: "eof" },
       ])
     expect(audit.requests[0]!.response_reader.requestContext).toEqual(originalContext)
+    expect(audit.requests[4]!.response_reader.requestContext).toEqual(helperContext)
   } finally { await server.stop(true) }
 })
 

@@ -56,7 +56,10 @@ async function withLocalProvider(run: (fixture: {
 
 test("concurrent same-model callers retain the actual Session and distinct agent identities", async () => {
   await withLocalProvider(async ({ config, model, audit, accepted }) => {
-    const callers = [context("worker-a", "request-a"), context("worker-b", "request-b")]
+    const callers = [
+      { ...context("worker-a", "request-a"), activity: { id: "activity-a", attempt: 0, assistantMessageID: "assistant-a" } },
+      { ...context("worker-b", "request-b"), activity: { id: "activity-b", attempt: 1, assistantMessageID: "assistant-b" } },
+    ]
     const languages = await Promise.all(callers.map((requestContext) => Provider.getLanguage(model, { config, requestContext })))
     const values = await Promise.all(languages.map((language, index) => streamText({ model: language,
       prompt: callers[index]!.streamRequest.requestID, maxRetries: 0 }).text))
@@ -70,12 +73,16 @@ test("concurrent same-model callers retain the actual Session and distinct agent
 
 test("delayed SDK use and successive physical responses retain the original copied caller", async () => {
   await withLocalProvider(async ({ config, model, audit, accepted }) => {
-    const original = context("delayed-worker", "original-request")
+    const original = { ...context("delayed-worker", "original-request"),
+      activity: { id: "activity-original", attempt: 0, assistantMessageID: "assistant-original" } }
     const expected = structuredClone(original)
     const pendingLanguage = Provider.getLanguage(model, { config, requestContext: original })
     original.sessionID = "mutated-session"
     original.streamRequest.agentID = "mutated-worker"
     original.streamRequest.requestID = "mutated-request"
+    original.activity.id = "mutated-activity"
+    original.activity.attempt = 9
+    original.activity.assistantMessageID = "mutated-assistant"
     const language = await pendingLanguage
     const other = await Provider.getLanguage(model, { config, requestContext: context("other-worker", "other-request") })
     expect(await streamText({ model: other, prompt: "other-first", maxRetries: 0 }).text).toBe("reply:other-first")
@@ -124,7 +131,8 @@ test("one real SDK multi-step stream binds both HTTP responses to its original c
           options: { apiKey: "owned-local-fixture", timeout: false }, models: { [modelID]: { tool_call: true } } },
       } })
       const model = await Provider.getModel(providerID, modelID, { config })
-      const caller = context("multi-step-worker", "multi-step-request")
+      const caller = { ...context("multi-step-worker", "multi-step-request"),
+        activity: { id: "activity-multi-step", attempt: 2, assistantMessageID: "assistant-multi-step" } }
       const language = await Provider.getLanguage(model, { config, requestContext: caller })
       using audit = new RealProviderAudit(modelID, 2)
       const result = streamText({ model: language, prompt: "Perform the actual lookup", maxRetries: 0,

@@ -1,0 +1,33 @@
+Retained tool output transcript (displayed excerpts), not a redirected original stdout log.
+Command: bun run script/run-tests.ts test/session/processor-producer-boundary.test.ts
+CWD: D:/myhexin-local/opencorvus/packages/opencorvus
+The first exec output was explicitly truncated by the tool (original_token_count=1709). Unavailable omitted bytes have not been reconstructed.
+
+[1/1] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [2631.31ms]
+error: expect(received).toMatchObject(expected)
+(fail) processor observation records accepted and rejected current event identities in the canonical Task trace [1812.65ms]
+error: Task tsk_g00VXIy1yV00MGa9Y135 has no execution-open lifecycle fact
+      at reduceTaskLifecycleRows (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-lifecycle.ts:69:38)
+      at projectTaskRowInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\store.ts:248:21)
+      at requireTask (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\store.ts:216:15)
+      at taskTraceDir (D:\myhexin-local\opencorvus\packages\opencorvus\src\trace\index.ts:128:18)
+      at readTaskEvents (D:\myhexin-local\opencorvus\packages\opencorvus\src\trace\index.ts:570:25)
+(fail) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [1782.13ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1817.27ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2203.84ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2434.88ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2230.45ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1834.19ms]
+
+ 6 pass
+ 2 fail
+ 26 expect() calls
+Ran 8 tests across 1 file. [18.63s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\processor-producer-boundary.test.ts
+[1/1] DONE test/session/processor-producer-boundary.test.ts exit=1 duration=18.81s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\processor-producer-boundary.test.ts

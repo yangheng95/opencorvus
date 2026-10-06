@@ -1039,7 +1039,9 @@ export namespace Provider {
           }
 
           const responseObserver = response.body ? takeProviderResponseObserver(response) : undefined
-          const observeChunk = responseObserver ? (chunk: Uint8Array) => responseObserver.onChunk(chunk.byteLength) : undefined
+          const observeChunk = responseObserver
+            ? (chunk: Uint8Array) => responseObserver.onChunk(chunk.byteLength)
+            : undefined
           const settleResponse = (settlement: ReadableStreamActivitySettlement) => {
             try {
               responseObserver?.onSettlement(settlement)
@@ -1167,6 +1169,7 @@ export namespace Provider {
       ? Object.freeze({
           sessionID: opts.requestContext.sessionID,
           streamRequest: Object.freeze({ ...opts.requestContext.streamRequest }),
+          ...(opts.requestContext.activity ? { activity: Object.freeze({ ...opts.requestContext.activity }) } : {}),
         })
       : undefined
     const s = await (opts?.state ?? stateFor(opts?.config))

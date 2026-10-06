@@ -1,0 +1,16 @@
+Browser tab: 24, Title: "OpenCorvus", URL: "http://localhost:18009/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 341
+~							36 container Description: Connection Diagnostics · Offline, ID: connBadge
+~								37 text Offline
+~								96 container Description: Running · 9m 1s, ID: taskStatus
+~									248 text 9m 1s
++													365 text artifact_read Artifacts (1) bash python -c "import json; p=r'C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\live-sol-publication-43\pro... artifact_read Artifacts (1) bash
+~										132 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~										133 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+~										137 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++		366 container
++			367 text OpenCorvus backend is unreachable — live data is unavailable.
++			368 button Set up, Help: Connection Diagnostics
++			369 button Reload, Help: Reload the overlay to re-establish the connection.
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18009/ui/

@@ -131,6 +131,7 @@ describe("LLM semantic activity", () => {
 
   test("recovers through the observed idle, network, idle transient sequence", async () => {
     const events: LLMActivityEvent[] = []
+    const runs: Array<{ id: string; attempt: number }> = []
     let attempts = 0
     const result = await withLLMActivity(
       { sessionID: "session-mixed-transient-budget", provider: "openai", model: "gpt-5.6-sol" },
@@ -143,6 +144,7 @@ describe("LLM semantic activity", () => {
       },
       new AbortController().signal,
       async (run) => {
+        runs.push({ id: run.id, attempt: run.attempt })
         attempts += 1
         run.bump("text-delta")
         if (run.attempt === 1) {
@@ -162,7 +164,9 @@ describe("LLM semantic activity", () => {
       { attempt: 2, cls: "network" },
       { attempt: 3, cls: "idle" },
     ])
-    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+    const started = events.find((event) => event.type === "started")!
+    expect(runs).toEqual([0, 1, 2, 3].map((attempt) => ({ id: started.id, attempt })))
+    expect(events.at(-1)).toMatchObject({ type: "terminal", id: started.id, outcome: "done", attempts: 4 })
   })
 
   test("settles transport-only idle after the first-byte retry budget", async () => {

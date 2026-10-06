@@ -1,0 +1,17 @@
+$ bun script/run-tests.ts test/session/processor-llm-activity-retry.test.ts
+[1/1] START test/session/processor-llm-activity-retry.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) SessionProcessor semantic LLM activity retry > retries a text start whose committed publication outlives its physical owner [3748.84ms]
+(pass) SessionProcessor semantic LLM activity retry > retries a reasoning start whose committed publication outlives its physical owner [3100.66ms]
+(pass) SessionProcessor semantic LLM activity retry > persists one recovered answer after the observed idle, network, idle sequence [2225.54ms]
+(pass) SessionProcessor semantic LLM activity retry > retries after Tool input chunks that do not mutate the pending draft [3368.47ms]
+(pass) SessionProcessor semantic LLM activity retry > recovers a parked stream after reasoning-end under the Session subscriber set [3389.21ms]
+(pass) SessionProcessor semantic LLM activity retry > an aborted reasoning stream settles its delayed delta publication and durable reasoning part [2976.60ms]
+
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [20.48s]
+[1/1] DONE test/session/processor-llm-activity-retry.test.ts exit=0 duration=20.69s

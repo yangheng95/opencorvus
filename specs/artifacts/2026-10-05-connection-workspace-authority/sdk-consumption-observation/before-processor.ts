@@ -1,0 +1,1675 @@
+﻿import { Message } from "./message"
+import { Log } from "@/util/log"
+import { NotFoundError } from "@/storage/db"
+import { MessageStore } from "./message-store"
+import { Identifier } from "@/id/id"
+import { Session } from "."
+import { Snapshot } from "@/snapshot"
+import { SessionSummary } from "./summary"
+import { Bus } from "@/bus"
+import { SessionStatus, sessionLifecycleOrderKey } from "./status"
+import { Plugin } from "@/plugin"
+import type { Provider } from "@/provider/provider"
+import { LLM } from "./llm"
+import { recordProviderActivityEvent } from "./provider-activity-facts"
+import { EffectiveConfig } from "@/config/effective"
+import { EngineConfig } from "@/engine/config"
+import { CompactionOverflow } from "./compaction-overflow"
+import { PermissionAuthority } from "@/permission/authority"
+import {
+  withLLMActivity,
+  chunkHeartbeatKind,
+  reasoningDeltaHasSemanticContent,
+  DefaultLLMActivityPolicy,
+  LLMActivityError,
+  type LLMActivityEvent,
+  type LLMActivityPolicy,
+} from "@/llm/activity"
+import {
+  ToolPersistenceConvergenceFailure,
+  failureOccurrenceAnchor,
+  sameFailureOccurrence,
+  toolFailureCauseFromMessageError,
+  toolFailureCauseFromUnknown,
+  type FailureOccurrenceAnchor,
+  type ProcessorObservationFailure,
+  type ToolFailureCause,
+} from "./tool-failure-cause"
+import { toolResultControl, toolResultDisposition, type ToolResultControl } from "./tool-result-control"
+import { parsePartialJson } from "ai"
+import { copyToolCoordinationBindings } from "@/tool/execution-mode"
+import {
+  registerMcpAppToolLifecycleController,
+  type McpAppToolLifecycleController,
+} from "@/interactive-artifact/mcp-app-lifecycle"
+import {
+  cloneToolInputForPersistence,
+  materializeToolResultInlineAttachments,
+} from "@/tool/result-attachment-materialization"
+import { Instance } from "@/project/instance"
+import { persistMessageSources } from "./source-persistence"
+import { normalizeToolResult } from "./tool-result-normalization"
+import { canonicalJSONValue } from "@/util/canonical-digest"
+import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
+
+export namespace SessionProcessor {
+  const DOOM_LOOP_THRESHOLD = 3
+
+  /**
+   * Consecutive byte-identical Tool calls tolerated across assistant messages.
+   *
+   * `DOOM_LOOP_THRESHOLD` only inspects parts of the *current* assistant
+   * message, so it never fires for a model that emits one Tool call per
+   * message — which is the common shape. Observed 2026-08-17 on Mission
+   * ses_-zUXWiACkzzlEtt8eqES: 40+ `panel read_task_artifact` calls, alternating
+   * two locators, each returning `complete: true, next_offset: null`, one call
+   * per message, every ~12s until the operator aborted. Every call succeeded,
+   * so nothing failed and nothing surfaced it.
+   *
+   * The bound is deliberately looser than the in-message one: re-reading the
+   * same Artifact once or twice while deciding is legitimate, spinning on it is
+   * not. Tripping it raises a Tool error the model reads, so the loop breaks
+   * with feedback rather than being silently killed.
+   */
+  const REPEATED_CALL_ACROSS_TURNS_THRESHOLD = 6
+
+  /**
+   * A run ends when this long passes without the same call repeating. The run
+   * has to survive assistant-message completion — in the observed loop every
+   * iteration was its own completed message — so elapsed time, not message
+   * boundaries, is what separates a live loop from the same Tool legitimately
+   * being called again much later in a long session.
+   */
+  const REPEATED_CALL_RUN_IDLE_MS = 120_000
+
+  /** Per-session run of consecutive identical calls. Process-local: a loop that
+   *  matters is a live one, and a restart already breaks it. */
+  const repeatedCallRuns = new Map<string, { signature: string; count: number; at: number }>()
+
+  function observeRepeatedToolCall(sessionID: string, toolName: string, input: unknown): number {
+    const signature = `${toolName} :: ${JSON.stringify(input) ?? ""}`
+    const now = Date.now()
+    const current = repeatedCallRuns.get(sessionID)
+    const continues = current?.signature === signature && now - current.at <= REPEATED_CALL_RUN_IDLE_MS
+    const next = { signature, count: continues ? current!.count + 1 : 1, at: now }
+    repeatedCallRuns.set(sessionID, next)
+    return next.count
+  }
+
+  function forgetRepeatedToolCalls(sessionID: string): void {
+    repeatedCallRuns.delete(sessionID)
+  }
+
+  /** The run counter is process-local and reachable only through a live stream,
+   *  so its bound is asserted directly rather than by driving a provider. */
+  export const RepeatedCallTestHooks = {
+    observeRepeatedToolCall,
+    forgetRepeatedToolCalls,
+    REPEATED_CALL_ACROSS_TURNS_THRESHOLD,
+    REPEATED_CALL_RUN_IDLE_MS,
+  }
+
+  function continuationRetention(input: {
+    continuationIsSafe: boolean
+    retainAssistantOnToolContinuation: boolean
+    finishIncludesTool: boolean
+    ownedContinuationDecision: boolean | undefined
+  }) {
+    const toolContinuation =
+      input.retainAssistantOnToolContinuation &&
+      input.finishIncludesTool &&
+      input.continuationIsSafe &&
+      input.ownedContinuationDecision !== false
+    const ownedContinuation = !toolContinuation && input.ownedContinuationDecision === true
+    return {
+      toolContinuation,
+      ownedContinuation,
+      retainAssistant: toolContinuation || ownedContinuation,
+    }
+  }
+
+  export const ContinuationTestHooks = { continuationRetention }
+
+  const log = Log.create({ service: "session.processor" })
+
+  export class ProcessorLostPartsError extends Error {
+    constructor(public readonly partIDs: string[]) {
+      super(`SessionProcessor lost open tool parts: ${partIDs.join(", ")}`)
+      this.name = "ProcessorLostPartsError"
+    }
+  }
+
+  export class ProcessorUnsafeRetryError extends Error {
+    constructor(
+      public readonly attempt: number,
+      public readonly partIDs: string[],
+      public override readonly cause: unknown,
+    ) {
+      const retryCause = cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause)
+      super(
+        `SessionProcessor cannot retry activity attempt ${attempt} inside the same assistant message after tool execution started. Created parts: ${partIDs.join(", ") || "(none)"}. Retry cause: ${retryCause}`,
+      )
+      this.name = "ProcessorUnsafeRetryError"
+    }
+  }
+
+  export class ProcessorConvergenceError extends Error {
+    constructor(public readonly evidence: ToolPersistenceConvergenceFailure) {
+      super(
+        `SessionProcessor could not persist the canonical failure on Tool parts: ${evidence.unconverged_part_ids.join(", ")}`,
+      )
+      this.name = "ProcessorConvergenceError"
+    }
+  }
+
+  type AssistantMessageSnapshot = {
+    cost: number
+    tokens: Message.Assistant["tokens"]
+    billing?: Message.Assistant["billing"]
+    finish?: Message.Assistant["finish"]
+    error?: Message.Assistant["error"]
+  }
+
+  type AttemptWriteScope = {
+    createdPartIDs: Set<string>
+    toolCallIDs: Set<string>
+    toolExecutionStarted: boolean
+    messageSnapshot: AssistantMessageSnapshot
+  }
+
+  export type Info = Awaited<ReturnType<typeof create>>
+  export type Result = Awaited<ReturnType<Info["process"]>>
+
+  export function create(input: {
+    assistantMessage: Message.Assistant
+    sessionID: string
+    model: Provider.Model
+    abort: AbortSignal
+    /** Final host classification performed after all streamed Parts settle but
+     * before the one immutable assistant completion write. */
+    beforeAssistantCompletion?: (message: Message.Assistant) => void | Promise<void>
+    /** A projected Task scheduler owns one assistant Message for the whole
+     * physical activation. An ordinary Tool-call Provider step therefore
+     * persists its Parts and usage but leaves that Message open for the next
+     * streamed step under the same activation. */
+    retainAssistantOnToolContinuation?: boolean
+    /** Allow the owning runtime to keep the same assistant Message open after
+     * a clean non-Tool Provider boundary. The callback runs only after all
+     * streamed Parts and Tool outcomes are durable and only while the Turn is
+     * otherwise safe to continue. */
+    retainAssistantForNextProviderStep?: (message: Message.Assistant) => boolean | Promise<boolean>
+    /** Stop the owning Session loop after this processor performs the immutable
+     * assistant completion write. Task-root activations use one deterministic
+     * assistant Message as their physical decision boundary, so starting a new
+     * loop iteration after that completion would reopen the same identity. */
+    stopAfterAssistantCompletion?: boolean
+  }) {
+    const toolcalls: Record<string, Message.ToolPart> = {}
+    const mcpAppToolLifecycles = new Map<string, McpAppToolLifecycleController>()
+    const mcpAppCalls = new Map<string, McpAppToolLifecycleController>()
+    const toolPartLocks = new Map<string, Promise<void>>()
+    const toolPauseOwner = (toolCallID: string) => `tool-call:${toolCallID}`
+
+    const withToolPartLock = async <T>(toolCallID: string, fn: () => Promise<T>): Promise<T> => {
+      const previous = toolPartLocks.get(toolCallID)
+      let release!: () => void
+      const current = new Promise<void>((resolve) => {
+        release = resolve
+      })
+      toolPartLocks.set(toolCallID, current)
+      try {
+        if (previous) await previous.catch(() => {})
+        return await fn()
+      } finally {
+        release()
+        if (toolPartLocks.get(toolCallID) === current) toolPartLocks.delete(toolCallID)
+      }
+    }
+
+    // A Provider input draft is live transport, not an admitted Tool request.
+    // Publish a complete snapshot so a new subscriber can render it without
+    // reconstructing an unpersisted Part from orphan incremental deltas.
+    const publishToolInputDraft = async (part: Message.ToolPart, signal?: AbortSignal) => {
+      signal?.throwIfAborted()
+      if (part.state.status !== "pending") return
+      await Bus.publish(Message.Event.PartUpdated, {
+        orderKey: timelineMessageOrderKey({ info: input.assistantMessage }),
+        part: {
+          ...part,
+          orderKey: timelinePartOrderKey({
+            id: part.id,
+            timeCreated: Math.max(input.assistantMessage.time.created, part.state.time.start),
+          }),
+        },
+      }, { signal })
+      signal?.throwIfAborted()
+    }
+    const retireToolInputDraft = async (part: Message.ToolPart | undefined, signal?: AbortSignal) => {
+      signal?.throwIfAborted()
+      if (part?.state.status !== "pending") return
+      await Bus.publish(Message.Event.PartRemoved, {
+        sessionID: part.sessionID, messageID: part.messageID, partID: part.id, partType: "tool",
+      }, { signal })
+      signal?.throwIfAborted()
+    }
+
+    // Resolve the part that already represents `toolCallID` on this assistant
+    // message. `toolcalls` only tracks IN-FLIGHT calls â€” the tool-result /
+    // tool-error cases delete the entry once a call finishes â€” so a
+    // re-delivered tool-call (a provider re-emit, or a retried stream
+    // replaying the same response with identical `call_*` ids) finds nothing
+    // there, and the handlers below would mint a SECOND part for the same
+    // callID. Two parts sharing one callID make `toModelMessages` emit a
+    // duplicate provider `tool_call_id`, which the provider rejects with
+    // HTTP 400 (`Duplicate value for 'tool_call_id'`). Falling back to the
+    // message's persisted parts keeps (messageID, callID) -> exactly one part
+    // however many times the call is delivered.
+    const persistedToolPart = async (toolCallID: string): Promise<Message.ToolPart | undefined> => {
+      const parts = await MessageStore.parts(input.assistantMessage.id)
+      return parts.find((p): p is Message.ToolPart => p.type === "tool" && p.callID === toolCallID)
+    }
+
+    const priorToolPart = async (toolCallID: string): Promise<Message.ToolPart | undefined> =>
+      toolcalls[toolCallID] ?? (await persistedToolPart(toolCallID))
+
+    const preserveCompletedCapabilitySearch = (
+      part: Message.ToolPart | undefined,
+      toolName: string,
+      toolInput?: unknown,
+    ): Message.ToolPart | undefined => {
+      if (!part || part.state.status !== "completed") return undefined
+      if (part.tool !== "capability_search" && toolName !== "capability_search") return undefined
+      if (part.tool !== "capability_search" || toolName !== "capability_search") {
+        throw new Error(
+          `Capability search call ${part.callID} changed Tool identity from ${part.tool} to ${toolName}.`,
+        )
+      }
+      if (
+        toolInput !== undefined &&
+        canonicalJSONValue(part.state.input) !== canonicalJSONValue(cloneToolInputForPersistence(toolInput))
+      ) {
+        throw new Error(`Capability search call ${part.callID} changed persisted input during replay.`)
+      }
+      return part
+    }
+
+    const confirmCapabilitySearchCompletion = (
+      part: Message.ToolPart,
+      value: {
+        input?: unknown
+        output: { output: string; title: string; metadata: Record<string, unknown> }
+      },
+    ): boolean => {
+      if (part.state.status !== "completed" || part.tool !== "capability_search") return false
+      const resolvedInput = value.input === undefined ? part.state.input : cloneToolInputForPersistence(value.input)
+      if (
+        canonicalJSONValue(part.state.input) !== canonicalJSONValue(resolvedInput) ||
+        part.state.output !== value.output.output ||
+        part.state.title !== value.output.title ||
+        canonicalJSONValue(part.state.metadata) !== canonicalJSONValue(value.output.metadata)
+      ) {
+        throw new Error(`Capability search call ${part.callID} replay result changed after its CAS completion.`)
+      }
+      return true
+    }
+
+    const openToolParts = async (): Promise<Message.ToolPart[]> => {
+      const parts = await MessageStore.parts(input.assistantMessage.id)
+      return parts.filter(
+        (part): part is Message.ToolPart =>
+          part.type === "tool" && (part.state.status === "pending" || part.state.status === "running"),
+      )
+    }
+
+    const toolStartTime = (part: Message.ToolPart): number => part.state.time.start
+    const completedToolTime = (start: number) => ({
+      start,
+      end: Math.max(Date.now(), start + 1),
+    })
+
+    const failToolPart = async (part: Message.ToolPart, failure: ToolFailureCause): Promise<void> => {
+      const start = toolStartTime(part)
+      await Session.updatePart({
+        ...part,
+        state: {
+          status: "error",
+          input: part.state.input,
+          failure,
+          time: completedToolTime(start),
+        },
+      })
+      delete toolcalls[part.callID]
+    }
+
+    const failOpenToolParts = async (failure: ToolFailureCause): Promise<void> => {
+      for (const part of await openToolParts()) {
+        await failToolPart(part, failure)
+      }
+    }
+
+    const convergeOpenToolParts = async (
+      failure: ToolFailureCause,
+      occurrence: FailureOccurrenceAnchor,
+    ): Promise<ProcessorConvergenceError | undefined> => {
+      let parts: Message.ToolPart[]
+      try {
+        parts = await openToolParts()
+      } catch (error) {
+        return new ProcessorConvergenceError(
+          ToolPersistenceConvergenceFailure.parse({
+            failure_occurrence: occurrence,
+            unconverged_part_ids: [],
+            write_errors: [],
+            inspection_error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+          }),
+        )
+      }
+      const writeErrors: Array<{ part_id: string; message: string }> = []
+      for (const part of parts) {
+        try {
+          await failToolPart(part, failure)
+        } catch (error) {
+          writeErrors.push({
+            part_id: part.id,
+            message: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+          })
+        }
+      }
+      let persisted: Message.Part[]
+      try {
+        persisted = await MessageStore.parts(input.assistantMessage.id)
+      } catch (error) {
+        return new ProcessorConvergenceError(
+          ToolPersistenceConvergenceFailure.parse({
+            failure_occurrence: occurrence,
+            unconverged_part_ids: [],
+            write_errors: writeErrors,
+            inspection_error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+          }),
+        )
+      }
+      const byID = new Map(persisted.map((part) => [part.id, part]))
+      const unconverged = parts.filter((part) => {
+        const stored = byID.get(part.id)
+        if (stored?.type !== "tool" || stored.state.status !== "error") return true
+        const storedOccurrence = stored.state.failure.data?.failure_occurrence as FailureOccurrenceAnchor | undefined
+        return !storedOccurrence || !sameFailureOccurrence(storedOccurrence, occurrence)
+      })
+      for (const part of parts) {
+        if (!unconverged.some((candidate) => candidate.id === part.id)) delete toolcalls[part.callID]
+      }
+      if (writeErrors.length === 0 && unconverged.length === 0) return
+      return new ProcessorConvergenceError(
+        ToolPersistenceConvergenceFailure.parse({
+          failure_occurrence: occurrence,
+          unconverged_part_ids: unconverged.map((part) => part.id),
+          write_errors: writeErrors,
+        }),
+      )
+    }
+
+    /**
+     * Remove one attempt-created Part during rollback, treating an
+     * already-absent Part as done. Convergence discard and retry cleanup can
+     * both roll back the same draft (luna9: the second removal's NotFoundError
+     * killed the retry itself, and the session died silently 15 minutes into a
+     * recoverable stall), and an absent Part is exactly the state rollback
+     * seeks. Any other failure still propagates.
+     */
+    const removeAttemptPart = async (input: { sessionID: string; messageID: string; partID: string }) => {
+      try {
+        await Session.removePart(input)
+      } catch (error) {
+        if (NotFoundError.isInstance(error)) {
+          log.warn("attempt part rollback found the part already removed", {
+            sessionID: input.sessionID,
+            messageID: input.messageID,
+            partID: input.partID,
+          })
+          return
+        }
+        throw error
+      }
+    }
+
+    const discardToolInputDraft = async (part: Message.ToolPart, reason: string): Promise<void> => {
+      if (part.state.status !== "pending") {
+        throw new Error(`Tool input draft ${part.id} is ${part.state.status}, not pending`)
+      }
+      const lifecycle = mcpAppCalls.get(part.callID)
+      if (lifecycle) {
+        await lifecycle.cancel(part.callID, part.state.input as Record<string, unknown>, reason)
+        mcpAppCalls.delete(part.callID)
+      }
+      await retireToolInputDraft(part)
+      delete toolcalls[part.callID]
+    }
+
+    const discardPendingToolInputDrafts = async (reason: string): Promise<void> => {
+      const drafts = Object.values(toolcalls).filter((part) => part.state.status === "pending")
+      for (const draft of drafts) await discardToolInputDraft(draft, reason)
+    }
+
+    const completeToolPart = async (
+      value: {
+        toolCallId: string
+        input?: unknown
+        output: {
+          output: string
+          title: string
+          metadata: Record<string, unknown>
+          attachments?: Message.FilePart[]
+          display?: unknown
+          sources?: unknown
+        }
+      },
+      onPartCreated: (partID: string) => void = () => {},
+    ): Promise<ToolResultControl | undefined> => {
+      const metadata = value.output.metadata
+      const control = toolResultControl(metadata)
+      const displayParts = Array.isArray(value.output.display) ? value.output.display : []
+      const sourcePayloads = Array.isArray(value.output.sources)
+        ? value.output.sources.map((source) => Message.SourcePayload.parse(source))
+        : []
+      const alreadyCommitted = await withToolPartLock(value.toolCallId, async () => {
+        const persisted = await persistedToolPart(value.toolCallId)
+        const match =
+          persisted?.tool === "capability_search" && persisted.state.status === "completed"
+            ? persisted
+            : (toolcalls[value.toolCallId] ?? persisted)
+        if (match && confirmCapabilitySearchCompletion(match, value)) {
+          delete toolcalls[value.toolCallId]
+          return true
+        }
+        if (!match || (match.state.status !== "running" && match.state.status !== "pending")) {
+          throw new Error(`Open ToolPart not found for Tool call ${value.toolCallId}`)
+        }
+        const resolvedInput = value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
+        await Session.updatePart({
+          ...match,
+          state: {
+            status: "completed",
+            input: resolvedInput,
+            output: value.output.output,
+            metadata,
+            title: value.output.title,
+            time: completedToolTime(toolStartTime(match)),
+            attachments: value.output.attachments,
+          },
+        })
+        delete toolcalls[value.toolCallId]
+        if (displayParts.length > 0) {
+          const existingPartIDs = new Set((await MessageStore.parts(input.assistantMessage.id)).map((part) => part.id))
+          for (const candidate of displayParts) {
+            const displayPart = Message.InteractiveArtifactPart.parse(candidate)
+            if (displayPart.sessionID !== input.assistantMessage.sessionID) {
+              throw new Error(`tool result display part ${displayPart.id} belongs to a different session`)
+            }
+            if (displayPart.messageID !== input.assistantMessage.id) {
+              throw new Error(`tool result display part ${displayPart.id} belongs to a different message`)
+            }
+            if (existingPartIDs.has(displayPart.id)) continue
+            await Session.updatePart(displayPart)
+            existingPartIDs.add(displayPart.id)
+            onPartCreated(displayPart.id)
+          }
+        }
+        if (sourcePayloads.length > 0) {
+          const persisted = await persistMessageSources({
+            sessionID: input.assistantMessage.sessionID,
+            messageID: input.assistantMessage.id,
+            sources: sourcePayloads,
+          })
+          for (const part of persisted) onPartCreated(part.id)
+        }
+        return false
+      })
+      mcpAppCalls.delete(value.toolCallId)
+      if (alreadyCommitted) return control
+      return control
+    }
+
+    let snapshot: string | undefined
+    let blocked = false
+    let needsCompaction = false
+    let failureOccurrence: FailureOccurrenceAnchor | undefined
+    let convergenceFailure: ToolPersistenceConvergenceFailure | undefined
+    const observationFailures: ProcessorObservationFailure[] = []
+    let parkAfterToolResult = false
+    let coordinationHandoff: Extract<ToolResultControl, { kind: "handoff_drain" }> | undefined
+    // Reasoning delta buffer: aggregate per-token deltas into batched SSE updates
+    const reasoningDeltaBuf = new Map<string, string>()
+    let reasoningFlushTimer: ReturnType<typeof setTimeout> | null = null
+    let reasoningFlushOperation: Promise<void> | undefined
+
+    const result = {
+      get message() {
+        return input.assistantMessage
+      },
+      partFromToolCall(toolCallID: string) {
+        return toolcalls[toolCallID]
+      },
+      registerMcpAppToolLifecycle(toolName: string, lifecycle: McpAppToolLifecycleController) {
+        return registerMcpAppToolLifecycleController(mcpAppToolLifecycles, toolName, lifecycle)
+      },
+      async ensureToolPart(toolCallID: string, toolName: string, toolInput: Record<string, unknown>) {
+        return withToolPartLock(toolCallID, async () => {
+          const existing = await priorToolPart(toolCallID)
+          const committed = preserveCompletedCapabilitySearch(existing, toolName, toolInput)
+          if (committed) {
+            toolcalls[toolCallID] = committed
+            return committed
+          }
+          if (
+            existing &&
+            existing.state.status === "running" &&
+            existing.tool === toolName &&
+            canonicalJSONValue(existing.state.input) ===
+              canonicalJSONValue(cloneToolInputForPersistence(toolInput))
+          ) {
+            toolcalls[toolCallID] = existing
+            return existing
+          }
+          const start = existing ? toolStartTime(existing) : Date.now()
+          await retireToolInputDraft(existing)
+          const part = await Session.updatePart({
+            ...(existing ?? {
+              id: Identifier.ascending("part"),
+              messageID: input.assistantMessage.id,
+              sessionID: input.assistantMessage.sessionID,
+              type: "tool" as const,
+              callID: toolCallID,
+              tool: toolName,
+            }),
+            tool: toolName,
+            callID: toolCallID,
+            state: {
+              status: "running",
+              input: toolInput,
+              time: { start },
+            },
+          })
+          toolcalls[toolCallID] = part as Message.ToolPart
+          return part as Message.ToolPart
+        })
+      },
+      async completeRecoveredToolPart(input: {
+        toolCallID: string
+        toolInput: unknown
+        output: {
+          output: string
+          title: string
+          metadata: Record<string, unknown>
+          attachments?: Message.FilePart[]
+          display?: unknown
+          sources?: unknown
+        }
+      }) {
+        return completeToolPart({
+          toolCallId: input.toolCallID,
+          input: input.toolInput,
+          output: input.output,
+        })
+      },
+      async failRecoveredToolPart(toolCallID: string, failure: ToolFailureCause) {
+        await withToolPartLock(toolCallID, async () => {
+          const match = toolcalls[toolCallID] ?? (await priorToolPart(toolCallID))
+          if (!match || (match.state.status !== "running" && match.state.status !== "pending")) return
+          await failToolPart(match, failure)
+        })
+      },
+      async process(streamInput: LLM.StreamInput) {
+        log.info("process")
+        needsCompaction = false
+        const shouldBreak =
+          (await EffectiveConfig.effective({ sessionID: input.assistantMessage.sessionID })).experimental
+            ?.continue_loop_on_deny !== true
+        const activity = (await EngineConfig.get()).activity
+        const idleMs = activity.session_llm_idle_ms
+        const canonicalActivityErrors = new Map<unknown, NonNullable<Message.Assistant["error"]>>()
+        // Activity owns retries (rule 8 â€” single source). The runner's
+        // classifier + per-class maxRetries + totalMs deadline replace the
+        // session/retry.ts SessionRetry namespace and the outer while-true
+        // loop that used to wrap this block. Retries are now invisible to
+        // the processor â€” withLLMActivity rethrows LLMActivityError only
+        // after exhausting its retry budget OR hitting a class the policy
+        // never granted retryability to (client_4xx, request_timeout,
+        // payload_too_large, context_overflow, host_fault, unknown).
+        // Aborts from the external signal raise LLMActivityAbortedError,
+        // also a single-attempt terminal.
+        const activityPolicy: LLMActivityPolicy = {
+          ...DefaultLLMActivityPolicy,
+          idleMs,
+          maxPauseMs: activity.session_tool_idle_ms,
+          classify(error, context) {
+            let canonical = canonicalActivityErrors.get(error)
+            if (!canonical) {
+              canonical = Message.fromError(error, { providerID: input.model.providerID })
+              canonicalActivityErrors.set(error, canonical)
+            }
+            if (Message.ContextOverflowError.isInstance(canonical)) return "context_overflow"
+            return DefaultLLMActivityPolicy.classify(error, context)
+          },
+        }
+        {
+          let currentText: Message.TextPart | undefined
+          let currentTextStreamID: string | undefined
+          let reasoningMap: Record<string, Message.ReasoningPart> = {}
+          let toolInputFlushTimer: ReturnType<typeof setTimeout> | undefined
+          let toolInputFlushOperation: Promise<void> | undefined
+          let toolInputFlushError: unknown
+          let toolInputDirty = false
+          const flushToolInputs = async (signal: AbortSignal) => {
+            signal.throwIfAborted()
+            for (const callID of Object.keys(toolcalls)) {
+              await withToolPartLock(callID, async () => {
+                const part = toolcalls[callID]
+                if (part?.state.status === "pending") await publishToolInputDraft(part, signal)
+              })
+            }
+          }
+          const scheduleToolInputFlush = (signal: AbortSignal) => {
+            toolInputDirty = true
+            if (toolInputFlushTimer || toolInputFlushOperation) return
+            toolInputFlushTimer = setTimeout(() => {
+              toolInputFlushTimer = undefined
+              toolInputDirty = false
+              const operation = flushToolInputs(signal).catch((error) => {
+                if (signal.aborted && error === signal.reason) return
+                toolInputFlushError = error
+              })
+              toolInputFlushOperation = operation
+              void operation.finally(() => {
+                if (toolInputFlushOperation === operation) toolInputFlushOperation = undefined
+                if (toolInputDirty && toolInputFlushError === undefined && !signal.aborted) scheduleToolInputFlush(signal)
+              })
+            }, 200)
+          }
+          const settleToolInputFlush = async () => {
+            if (toolInputFlushTimer) clearTimeout(toolInputFlushTimer)
+            toolInputFlushTimer = undefined
+            await toolInputFlushOperation
+            // An in-flight publication may have scheduled its trailing dirty
+            // snapshot while we were awaiting it. This attempt now owns closure.
+            if (toolInputFlushTimer) clearTimeout(toolInputFlushTimer)
+            toolInputFlushTimer = undefined
+            toolInputDirty = false
+            if (toolInputFlushError !== undefined) throw toolInputFlushError
+          }
+          const flushReasoningDeltas = async (signal?: AbortSignal) => {
+            signal?.throwIfAborted()
+            const buffered = [...reasoningDeltaBuf]
+            reasoningDeltaBuf.clear()
+            for (const [partID, delta] of buffered) {
+              signal?.throwIfAborted()
+              if (!reasoningDeltaHasSemanticContent(delta)) continue
+              const part = Object.values(reasoningMap).find((candidate) => candidate.id === partID)
+              if (!part) continue
+              const input = {
+                sessionID: part.sessionID,
+                messageID: part.messageID,
+                partID: part.id,
+                partType: "reasoning" as const,
+                field: "text",
+                delta,
+              }
+              if (signal) await Session.updatePartDeltaWithSignal(signal, input)
+              else await Session.updatePartDelta(input)
+            }
+            signal?.throwIfAborted()
+          }
+          const reportReasoningFlushFailure = (error: unknown) => {
+            log.warn("reasoning delta flush failed", {
+              sessionID: input.assistantMessage.sessionID,
+              messageID: input.assistantMessage.id,
+              error: error instanceof Error ? error.message : String(error),
+            })
+          }
+          const scheduleReasoningFlush = (signal: AbortSignal) => {
+            if (reasoningFlushTimer || reasoningFlushOperation) return
+            reasoningFlushTimer = setTimeout(() => {
+              reasoningFlushTimer = null
+              const operation = flushReasoningDeltas(signal).catch((error) => {
+                if (signal.aborted && error === signal.reason) return
+                reportReasoningFlushFailure(error)
+              })
+              reasoningFlushOperation = operation
+              void operation.finally(() => {
+                if (reasoningFlushOperation === operation) reasoningFlushOperation = undefined
+              })
+            }, 200)
+          }
+          const settleReasoningFlush = async (flush: boolean, signal?: AbortSignal) => {
+            if (reasoningFlushTimer) {
+              clearTimeout(reasoningFlushTimer)
+              reasoningFlushTimer = null
+            }
+            const operation = reasoningFlushOperation
+            if (operation) await operation
+            if (flush) await flushReasoningDeltas(signal)
+            else reasoningDeltaBuf.clear()
+          }
+          const closeOpenReasoningParts = async () => {
+            await settleReasoningFlush(true)
+            for (const [reasoningID, part] of Object.entries(reasoningMap)) {
+              part.text = part.text.trimEnd()
+              part.time = { ...part.time, end: Date.now() }
+              await Session.updatePart(part)
+              delete reasoningMap[reasoningID]
+            }
+          }
+          try {
+            const attemptScopes = new Map<number, AttemptWriteScope>()
+            const cloneTokens = (): Message.Assistant["tokens"] => ({
+              ...input.assistantMessage.tokens,
+              cache: { ...input.assistantMessage.tokens.cache },
+            })
+            const scopeForAttempt = (attempt: number): AttemptWriteScope => {
+              let scope = attemptScopes.get(attempt)
+              if (scope) return scope
+              scope = {
+                createdPartIDs: new Set(),
+                toolCallIDs: new Set(),
+                toolExecutionStarted: false,
+                messageSnapshot: {
+                  cost: input.assistantMessage.cost,
+                  tokens: cloneTokens(),
+                  billing: input.assistantMessage.billing,
+                  finish: input.assistantMessage.finish,
+                  error: input.assistantMessage.error,
+                },
+              }
+              attemptScopes.set(attempt, scope)
+              return scope
+            }
+            const trackCreatedPart = (attempt: number, partID: string) => {
+              scopeForAttempt(attempt).createdPartIDs.add(partID)
+            }
+            // Register a newly allocated identity before persistence can await a
+            // subscriber. Publication may reject after its row already committed.
+            const allocateAttemptPartID = (attempt: number) => {
+              const id = Identifier.ascending("part")
+              trackCreatedPart(attempt, id)
+              return id
+            }
+            const trackToolCall = (attempt: number, toolCallID: string) => {
+              scopeForAttempt(attempt).toolCallIDs.add(toolCallID)
+            }
+            const markToolExecutionStarted = (attempt: number) => {
+              scopeForAttempt(attempt).toolExecutionStarted = true
+            }
+            const restoreAssistantMessage = async (snapshot: AssistantMessageSnapshot) => {
+              input.assistantMessage.cost = snapshot.cost
+              input.assistantMessage.tokens = {
+                ...snapshot.tokens,
+                cache: { ...snapshot.tokens.cache },
+              }
+              input.assistantMessage.billing = snapshot.billing
+              input.assistantMessage.finish = snapshot.finish
+              input.assistantMessage.error = snapshot.error
+              await Session.updateMessage(input.assistantMessage)
+            }
+            const cleanupAttemptBeforeRetry = async (
+              event: Extract<LLMActivityEvent, { type: "retry" }>,
+              cause: unknown,
+            ) => {
+              const failedAttempt = event.attempt - 1
+              const scope = attemptScopes.get(failedAttempt)
+              if (!scope) return
+              await settleReasoningFlush(false)
+              await settleToolInputFlush()
+              await discardPendingToolInputDrafts("Provider activity retried before validated Tool input")
+              const createdPartIDs = [...scope.createdPartIDs]
+              if (scope.toolExecutionStarted) {
+                throw new ProcessorUnsafeRetryError(failedAttempt, createdPartIDs, cause)
+              }
+              if (Session.isTaskRootCausalMessage(input.assistantMessage.id)) {
+                // A causal assistant Message (activated, ingress-referenced, or
+                // already continued) forbids Part removal, so the failed
+                // attempt's Parts stay as durable occurrence history and the
+                // retried attempt appends after them. Rolling back here turned
+                // every transient provider error inside an orchestrator turn
+                // into Task death: the fence refused the removal from inside
+                // the retry cleanup, and that refusal replaced the retryable
+                // cause as the terminal Task error.
+                log.warn("retry keeps parts of causal assistant message", {
+                  sessionID: input.assistantMessage.sessionID,
+                  messageID: input.assistantMessage.id,
+                  attempt: failedAttempt,
+                  partIDs: createdPartIDs,
+                })
+                for (const partID of createdPartIDs) reasoningDeltaBuf.delete(partID)
+              } else {
+                const createdParts = new Map(
+                  (await MessageStore.parts(input.assistantMessage.id))
+                    .filter((part) => scope.createdPartIDs.has(part.id))
+                    .map((part) => [part.id, part]),
+                )
+                for (const partID of createdPartIDs.reverse()) {
+                  const part = createdParts.get(partID)
+                  if (part?.type === "tool" && part.state.status === "pending") {
+                    await discardToolInputDraft(part, "Provider activity retried before validated tool input")
+                    continue
+                  }
+                  await removeAttemptPart({
+                    sessionID: input.assistantMessage.sessionID,
+                    messageID: input.assistantMessage.id,
+                    partID,
+                  })
+                  reasoningDeltaBuf.delete(partID)
+                }
+              }
+              for (const toolCallID of scope.toolCallIDs) {
+                delete toolcalls[toolCallID]
+              }
+              if (currentText && scope.createdPartIDs.has(currentText.id)) {
+                currentText = undefined
+                currentTextStreamID = undefined
+              }
+              for (const [reasoningID, part] of Object.entries(reasoningMap)) {
+                if (scope.createdPartIDs.has(part.id)) delete reasoningMap[reasoningID]
+              }
+              await restoreAssistantMessage(scope.messageSnapshot)
+              attemptScopes.delete(failedAttempt)
+            }
+            await withLLMActivity(
+              {
+                sessionID: input.sessionID,
+                provider: input.model.providerID,
+                model: input.model.id,
+              },
+              activityPolicy,
+              input.abort,
+              async (run) => {
+                const preparedSteps: Array<{ snapshot: string | undefined }> = []
+                let preparation: Promise<unknown> | undefined
+                await using _preparationSettlement = {
+                  async [Symbol.asyncDispose]() {
+                    // The SDK producer can still be preparing after the abortable
+                    // consumer exits. Join it before attempt cleanup owns its Parts;
+                    // the stream/abort path already carries its failure outcome.
+                    if (preparation) await Promise.allSettled([preparation])
+                  },
+                }
+                const stream = await LLM.stream({
+                  ...streamInput,
+                  abort: run.signal,
+                  tools: Object.fromEntries(
+                    Object.entries(streamInput.tools).map(([name, definition]) => {
+                      const execute = definition.execute
+                      if (!execute) return [name, definition]
+                      return [
+                        name,
+                        copyToolCoordinationBindings(definition, {
+                          ...definition,
+                          execute: (...args: Parameters<typeof execute>) => {
+                            run.signal.throwIfAborted()
+                            // The SDK executes tools independently of fullStream consumption.
+                            markToolExecutionStarted(run.attempt)
+                            return execute(...args)
+                          },
+                        }),
+                      ]
+                    }),
+                  ),
+                  prepareStep: (step) => {
+                    const preparing = (async () => {
+                      run.signal.throwIfAborted()
+                      const stepSnapshot = await Snapshot.track()
+                      run.signal.throwIfAborted()
+                      await Session.updatePart({
+                        id: allocateAttemptPartID(run.attempt),
+                        messageID: input.assistantMessage.id,
+                        sessionID: input.sessionID,
+                        snapshot: stepSnapshot,
+                        type: "step-start",
+                      })
+                      preparedSteps.push({ snapshot: stepSnapshot })
+                      run.signal.throwIfAborted()
+                      return await streamInput.prepareStep?.(step)
+                    })()
+                    preparation = preparing
+                    return preparing
+                  },
+                })
+
+                // LLM.stream returns the canonical @/llm/api wrapped stream.
+                for await (const value of stream.fullStream) {
+                  run.bump("first-byte")
+                  await streamInput.stream?.onChunk?.({ chunk: value } as never)
+                  let semanticChunkAccepted = false
+                  run.signal.throwIfAborted()
+                  switch (value.type) {
+                    case "start":
+                      SessionStatus.set(input.sessionID, { type: "streaming" }, { promptGenerationOwner: input.abort })
+                      break
+
+                    case "reasoning-start":
+                      if (value.id in reasoningMap) {
+                        continue
+                      }
+                      const reasoningPart = {
+                        id: allocateAttemptPartID(run.attempt),
+                        messageID: input.assistantMessage.id,
+                        sessionID: input.assistantMessage.sessionID,
+                        type: "reasoning" as const,
+                        text: "",
+                        time: {
+                          start: Date.now(),
+                        },
+                        metadata: value.providerMetadata,
+                      }
+                      reasoningMap[value.id] = reasoningPart
+                      await Session.updatePartWithSignal(run.signal, reasoningPart)
+                      semanticChunkAccepted = true
+                      break
+
+                    case "reasoning-delta":
+                      if (value.id in reasoningMap) {
+                        const part = reasoningMap[value.id]
+                        part.text += value.text
+                        if (value.providerMetadata) part.metadata = value.providerMetadata
+                        // Buffer reasoning deltas and flush periodically to avoid
+                        // flooding the SSE stream with per-token events.
+                        const bufKey = part.id
+                        const prev = reasoningDeltaBuf.get(bufKey) || ""
+                        reasoningDeltaBuf.set(bufKey, prev + value.text)
+                        scheduleReasoningFlush(run.signal)
+                        semanticChunkAccepted = true
+                      }
+                      break
+
+                    case "reasoning-end":
+                      if (value.id in reasoningMap) {
+                        // Flush any buffered reasoning delta before closing the part
+                        await settleReasoningFlush(true, run.signal)
+
+                        const part = reasoningMap[value.id]
+                        part.text = part.text.trimEnd()
+
+                        part.time = {
+                          ...part.time,
+                          end: Date.now(),
+                        }
+                        if (value.providerMetadata) part.metadata = value.providerMetadata
+                        await Session.updatePartWithSignal(run.signal, part)
+                        delete reasoningMap[value.id]
+                        semanticChunkAccepted = true
+                      }
+                      break
+
+                    case "tool-input-start": {
+                      const toolCallID =
+                        typeof (value as any).toolCallId === "string"
+                          ? (value as any).toolCallId
+                          : typeof (value as any).id === "string"
+                            ? (value as any).id
+                            : ""
+                      if (!toolCallID) break
+                      const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
+                      if (mcpAppLifecycle) {
+                        await mcpAppLifecycle.start(toolCallID)
+                        mcpAppCalls.set(toolCallID, mcpAppLifecycle)
+                      }
+                      await withToolPartLock(toolCallID, async () => {
+                        const existing = await priorToolPart(toolCallID)
+                        const committed = preserveCompletedCapabilitySearch(existing, value.toolName)
+                        if (committed) return committed
+                        const start = existing ? toolStartTime(existing) : Date.now()
+                        const part = await Session.updatePartWithSignal(run.signal, {
+                          id: existing?.id ?? Identifier.ascending("part"),
+                          messageID: input.assistantMessage.id,
+                          sessionID: input.assistantMessage.sessionID,
+                          type: "tool",
+                          tool: value.toolName,
+                          callID: toolCallID,
+                          state: {
+                            status: "pending",
+                            input: {},
+                            raw: "",
+                            time: { start },
+                          },
+                        })
+                        trackToolCall(run.attempt, toolCallID)
+                        toolcalls[toolCallID] = part as Message.ToolPart
+                        await publishToolInputDraft(part as Message.ToolPart, run.signal)
+                        return part
+                      })
+                      semanticChunkAccepted = true
+                      break
+                    }
+
+                    case "tool-input-delta": {
+                      const toolCallID =
+                        typeof (value as any).toolCallId === "string"
+                          ? (value as any).toolCallId
+                          : typeof (value as any).id === "string"
+                            ? (value as any).id
+                            : ""
+                      const delta =
+                        typeof (value as any).inputTextDelta === "string"
+                          ? (value as any).inputTextDelta
+                          : typeof (value as any).delta === "string"
+                            ? (value as any).delta
+                            : ""
+                      if (!toolCallID || !delta) break
+                      const match = toolcalls[toolCallID]
+                      if (match && match.state.status === "pending") {
+                        ;(match.state as any).raw += delta
+                        scheduleToolInputFlush(run.signal)
+                        const lifecycle = mcpAppCalls.get(toolCallID)
+                        if (lifecycle) {
+                          const partial = await parsePartialJson((match.state as { raw: string }).raw)
+                          if (partial.value && typeof partial.value === "object" && !Array.isArray(partial.value)) {
+                            await lifecycle.partial(toolCallID, partial.value as Record<string, unknown>)
+                          }
+                        }
+                        semanticChunkAccepted = true
+                      }
+                      break
+                    }
+
+                    case "tool-input-end":
+                      break
+
+                    case "tool-call": {
+                      if (coordinationHandoff) {
+                        throw new Error(
+                          `Unexpected tool call ${value.toolCallId} started after coordination handoff ${coordinationHandoff.request_id}`,
+                        )
+                      }
+                      markToolExecutionStarted(run.attempt)
+                      // Pause the chunk-driven idle monitor while the SDK runs the
+                      // tool's `execute`. Long-running tools (build agent ~100-300s,
+                      // acceptance, architect) hold the LLM stream open without
+                      // emitting chunks; the monitor's 180s default would false-positive
+                      // trip otherwise. Resume on tool-result. Per rule 23 the
+                      // pause is scoped to known stream-pause semantics (tool-call
+                      // boundary), not a generic disable switch.
+                      run.pause(toolPauseOwner(value.toolCallId))
+                      const persistedToolInput = cloneToolInputForPersistence(value.input)
+                      const part = await withToolPartLock(value.toolCallId, async () => {
+                        const match = await priorToolPart(value.toolCallId)
+                        const committed = preserveCompletedCapabilitySearch(
+                          match,
+                          value.toolName,
+                          persistedToolInput,
+                        )
+                        if (committed) return committed
+                        if (match?.state.status === "pending") trackCreatedPart(run.attempt, match.id)
+                        trackToolCall(run.attempt, value.toolCallId)
+                        await retireToolInputDraft(match, run.signal)
+                        const part = await Session.updatePartWithSignal(run.signal, {
+                          ...(match ?? {
+                            id: allocateAttemptPartID(run.attempt),
+                            messageID: input.assistantMessage.id,
+                            sessionID: input.assistantMessage.sessionID,
+                            type: "tool" as const,
+                            callID: value.toolCallId,
+                            tool: value.toolName,
+                          }),
+                          tool: value.toolName,
+                          state: {
+                            status: "running",
+                            input: persistedToolInput,
+                            time: {
+                              start: match ? toolStartTime(match) : Date.now(),
+                            },
+                          },
+                          metadata: value.providerMetadata,
+                        })
+                        toolcalls[value.toolCallId] = part as Message.ToolPart
+                        return part
+                      })
+                      const mcpAppLifecycle = mcpAppToolLifecycles.get(value.toolName)
+                      if (mcpAppLifecycle) {
+                        await mcpAppLifecycle.input(value.toolCallId, value.input as Record<string, unknown>)
+                        mcpAppCalls.set(value.toolCallId, mcpAppLifecycle)
+                      }
+
+                      const parts = await MessageStore.parts(input.assistantMessage.id)
+                      const lastThree = parts.slice(-DOOM_LOOP_THRESHOLD)
+
+                      const exactMatch =
+                        lastThree.length === DOOM_LOOP_THRESHOLD &&
+                        lastThree.every(
+                          (p) =>
+                            p.type === "tool" &&
+                            p.tool === value.toolName &&
+                            p.state.status !== "pending" &&
+                            JSON.stringify(p.state.input) === JSON.stringify(persistedToolInput),
+                        )
+
+                      if (exactMatch) {
+                        throw new Error(
+                          `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
+                        )
+                      }
+
+                      const repeatedRun = observeRepeatedToolCall(input.sessionID, value.toolName, persistedToolInput)
+                      if (repeatedRun > REPEATED_CALL_ACROSS_TURNS_THRESHOLD) {
+                        log.warn("repeated identical tool call across turns", {
+                          sessionID: input.sessionID,
+                          tool: value.toolName,
+                          consecutiveCalls: repeatedRun,
+                        })
+                        throw new Error(
+                          `${value.toolName} was called ${repeatedRun} times in a row with byte-identical input and no other Tool call in between. ` +
+                            `The result will not change; repeating it cannot make progress. ` +
+                            `Use the result you already have to take the next decision, or call a different Tool.`,
+                        )
+                      }
+                      semanticChunkAccepted = true
+                      break
+                    }
+                    case "tool-result": {
+                      markToolExecutionStarted(run.attempt)
+                      // Pair with the exact call-owned pause from tool-call. resume() is a
+                      // no-op if the monitor isn't paused (e.g. tool-result without
+                      // matching tool-call after a recovery), so this is safe to
+                      // run unconditionally before the match check.
+                      run.resume(toolPauseOwner(value.toolCallId))
+                      const output = normalizeToolResult(value.output)
+                      const metadata = output.metadata
+                      const control = await completeToolPart(
+                        {
+                          toolCallId: value.toolCallId,
+                          input: value.input,
+                          output: {
+                            output: output.output,
+                            title: output.title,
+                            metadata: output.metadata,
+                            ...(Array.isArray(output.attachments)
+                              ? { attachments: output.attachments as Message.FilePart[] }
+                              : {}),
+                            ...(output.display !== undefined ? { display: output.display } : {}),
+                            ...(output.sources !== undefined ? { sources: output.sources } : {}),
+                          },
+                        },
+                        (partID) => trackCreatedPart(run.attempt, partID),
+                      )
+                      const disposition = toolResultDisposition(control)
+                      if (disposition === "handoff") {
+                        if (!control || control.kind !== "handoff_drain") {
+                          throw new Error("Coordination handoff disposition has no handoff control")
+                        }
+                        if (
+                          coordinationHandoff &&
+                          (coordinationHandoff.request_id !== control.request_id ||
+                            coordinationHandoff.dispatch_lineage_id !== control.dispatch_lineage_id)
+                        ) {
+                          throw new Error("Conflicting coordination handoff tool results in one assistant turn")
+                        }
+                        coordinationHandoff = control
+                        input.assistantMessage.finish = "tool-calls"
+                      } else if (disposition === "park") {
+                        input.assistantMessage.finish = "tool-calls"
+                        parkAfterToolResult = true
+                      }
+                      semanticChunkAccepted = true
+                      break
+                    }
+
+                    case "tool-error": {
+                      markToolExecutionStarted(run.attempt)
+                      // Pair with the exact call-owned pause from tool-call (errors close the
+                      // tool-call window just like results).
+                      run.resume(toolPauseOwner(value.toolCallId))
+                      let toolErrorAccepted = false
+                      await withToolPartLock(value.toolCallId, async () => {
+                        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
+                        if (match && (match.state.status === "running" || match.state.status === "pending")) {
+                          const resolvedInput =
+                            value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
+                          const classification =
+                            (value as { dynamic?: boolean }).dynamic === true ? "tool-input-invalid" : "tool-execution"
+                          const failure = toolFailureCauseFromUnknown({
+                            error: value.error,
+                            originSite: "session.processor.tool-error",
+                            classification,
+                            kind: classification,
+                            data: {
+                              toolCallId: value.toolCallId,
+                              toolName: value.toolName,
+                            },
+                          })
+                          await Session.updatePartWithSignal(run.signal, {
+                            ...match,
+                            state: {
+                              status: "error",
+                              input: resolvedInput,
+                              failure,
+                              time: completedToolTime(toolStartTime(match)),
+                            },
+                          })
+
+                          if (value.error instanceof PermissionAuthority.RejectedError) {
+                            blocked = shouldBreak
+                          }
+                          delete toolcalls[value.toolCallId]
+                          toolErrorAccepted = true
+                        }
+                      })
+                      mcpAppCalls.delete(value.toolCallId)
+                      semanticChunkAccepted = toolErrorAccepted
+                      break
+                    }
+                    case "error":
+                      throw value.error
+
+                    case "start-step": {
+                      const prepared = preparedSteps.shift()
+                      if (!prepared) throw new Error("Provider step started without its committed Session boundary")
+                      snapshot = prepared.snapshot
+                      semanticChunkAccepted = true
+                      break
+                    }
+
+                    case "finish-step":
+                      const usage = Session.getUsage({
+                        model: input.model,
+                        usage: value.usage,
+                        metadata: value.providerMetadata,
+                      })
+                      input.assistantMessage.finish = value.finishReason
+                      input.assistantMessage.cost += usage.cost
+                      input.assistantMessage.billing = usage.billing
+                      // Accumulate across steps so multi-step messages keep all
+                      // tokens (overwrite-only would silently drop earlier steps;
+                      // `cost +=` is already cumulative — match it).
+                      input.assistantMessage.tokens = {
+                        input: input.assistantMessage.tokens.input + usage.tokens.input,
+                        output: input.assistantMessage.tokens.output + usage.tokens.output,
+                        reasoning: input.assistantMessage.tokens.reasoning + usage.tokens.reasoning,
+                        total: (input.assistantMessage.tokens.total ?? 0) + (usage.tokens.total ?? 0),
+                        cache: {
+                          read: input.assistantMessage.tokens.cache.read + usage.tokens.cache.read,
+                          write: input.assistantMessage.tokens.cache.write + usage.tokens.cache.write,
+                        },
+                      }
+                      {
+                        await Session.updatePartWithSignal(run.signal, {
+                          id: allocateAttemptPartID(run.attempt),
+                          reason: value.finishReason,
+                          snapshot: await Snapshot.track(),
+                          messageID: input.assistantMessage.id,
+                          sessionID: input.assistantMessage.sessionID,
+                          type: "step-finish",
+                          tokens: usage.tokens,
+                          cost: usage.cost,
+                          billing: usage.billing,
+                        })
+                      }
+                      await Session.updateMessage(input.assistantMessage)
+                      if (snapshot) {
+                        const patch = await Snapshot.patch(snapshot)
+                        Snapshot.assertPatchEvidenceIntegrity(patch)
+                        if (patch.files.length) {
+                          await Session.updatePartWithSignal(run.signal, {
+                            id: allocateAttemptPartID(run.attempt),
+                            messageID: input.assistantMessage.id,
+                            sessionID: input.sessionID,
+                            type: "patch",
+                            hash: patch.hash,
+                            files: patch.files,
+                          })
+                        }
+                        snapshot = undefined
+                      }
+                      await SessionSummary.summarize({
+                        sessionID: input.sessionID,
+                        messageID: input.assistantMessage.parentID,
+                      })
+                      if (
+                        await CompactionOverflow.isOverflow({
+                          tokens: usage.tokens,
+                          model: input.model,
+                          sessionID: input.assistantMessage.sessionID,
+                        })
+                      ) {
+                        needsCompaction = true
+                      }
+                      semanticChunkAccepted = true
+                      break
+
+                    case "text-start":
+                      currentTextStreamID = value.id
+                      currentText = {
+                        id: allocateAttemptPartID(run.attempt),
+                        messageID: input.assistantMessage.id,
+                        sessionID: input.assistantMessage.sessionID,
+                        type: "text",
+                        text: "",
+                        time: {
+                          start: Date.now(),
+                        },
+                        metadata: value.providerMetadata,
+                      }
+                      await Session.updatePartWithSignal(run.signal, currentText)
+                      semanticChunkAccepted = true
+                      break
+
+                    case "text-delta":
+                      if (currentText && value.id === currentTextStreamID) {
+                        currentText.text += value.text
+                        if (value.providerMetadata) currentText.metadata = value.providerMetadata
+                        await Session.updatePartDeltaWithSignal(run.signal, {
+                          sessionID: currentText.sessionID,
+                          messageID: currentText.messageID,
+                          partID: currentText.id,
+                          partType: "text",
+                          field: "text",
+                          delta: value.text,
+                        })
+                        semanticChunkAccepted = true
+                      }
+                      break
+
+                    case "text-end":
+                      if (currentText && value.id === currentTextStreamID) {
+                        currentText.text = currentText.text.trimEnd()
+                        const textOutput = await Plugin.trigger(
+                          "experimental.text.complete",
+                          {
+                            sessionID: input.sessionID,
+                            messageID: input.assistantMessage.id,
+                            partID: currentText.id,
+                          },
+                          { text: currentText.text },
+                        )
+                        currentText.text = textOutput.text
+                        currentText.time = {
+                          start: Date.now(),
+                          end: Date.now(),
+                        }
+                        if (value.providerMetadata) currentText.metadata = value.providerMetadata
+
+                        await Session.updatePartWithSignal(run.signal, currentText)
+                        semanticChunkAccepted = true
+                        currentText = undefined
+                        currentTextStreamID = undefined
+                      }
+                      break
+
+                    case "source": {
+                      const source =
+                        value.sourceType === "url"
+                          ? Message.SourceUrlPayload.parse({
+                              type: "source-url",
+                              sourceId: value.id,
+                              url: value.url,
+                              title: value.title,
+                              provider: input.assistantMessage.providerID,
+                              providerMetadata: value.providerMetadata,
+                            })
+                          : Message.SourceDocumentPayload.parse({
+                              type: "source-document",
+                              sourceId: value.id,
+                              mediaType: value.mediaType,
+                              title: value.title,
+                              filename: value.filename,
+                              provider: input.assistantMessage.providerID,
+                              providerMetadata: value.providerMetadata,
+                            })
+                      const persisted = await persistMessageSources({
+                        sessionID: input.assistantMessage.sessionID,
+                        messageID: input.assistantMessage.id,
+                        sources: [source],
+                      })
+                      for (const part of persisted) trackCreatedPart(run.attempt, part.id)
+                      break
+                    }
+
+                    case "finish":
+                      await streamInput.stream?.onFinish?.(value as never)
+                      break
+
+                    default:
+                      log.info("unhandled", {
+                        ...value,
+                      })
+                      continue
+                  }
+                  // An async chunk hook or publication may settle only after
+                  // the activity owner has aborted it. Fence the late handler
+                  // before it can publish another heartbeat or advance the
+                  // physical stream after retry cleanup has started.
+                  run.signal.throwIfAborted()
+                  if (semanticChunkAccepted) {
+                    const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
+                    if (heartbeatKind) run.bump(heartbeatKind)
+                  }
+                  if (needsCompaction) break
+                  if (parkAfterToolResult) break
+                }
+                await settleToolInputFlush()
+              },
+              (event: LLMActivityEvent) => {
+                recordProviderActivityEvent(input.assistantMessage.id, event)
+                // Translate retry events directly into SessionStatus retry
+                // updates. The activity runner is the single source of
+                // truth for "I tried, hit a transient class, will retry
+                // after backoffMs"; the overlay's spinner reads exactly
+                // these SessionStatus retry events.
+                if (event.type === "retry") {
+                  const lastHeartbeat = event.lastHeartbeat
+                    ? `${event.lastHeartbeat.kind}@${new Date(event.lastHeartbeat.ts).toISOString()}`
+                    : "none"
+                  log.warn("activity retry", {
+                    activityID: event.id,
+                    attempt: event.attempt,
+                    cls: event.cls,
+                    backoffMs: event.backoffMs,
+                    lastHeartbeat,
+                  })
+                  SessionStatus.set(
+                    input.sessionID,
+                    {
+                      type: "retry",
+                      attempt: event.attempt,
+                      message: `${event.cls}: backoff ${event.backoffMs}ms; last heartbeat ${lastHeartbeat}`,
+                      next: event.ts + event.backoffMs,
+                    },
+                    { promptGenerationOwner: input.abort },
+                  )
+                  return
+                }
+                if (event.type === "terminal") {
+                  log.debug("activity terminal", {
+                    activityID: event.id,
+                    outcome: event.outcome,
+                    cls: event.cls,
+                  })
+                }
+              },
+              {
+                beforeRetry: async ({ event, error }) => cleanupAttemptBeforeRetry(event, error),
+                // The Session owns its own activity registry; the retry layer
+                // only reports the monitor it built.
+                publishActivityMonitor: (monitor) => SessionStatus.registerActivityMonitor(input.sessionID, monitor),
+              },
+            )
+          } catch (e: any) {
+            // withLLMActivity rethrows LLMActivityError only after exhausting
+            // its retry budget or hitting a non-retryable class (or as
+            // LLMActivityAbortedError on external_abort). The processor sees
+            // the underlying cause shape; map to Message.fromError / handle
+            // ContextOverflowError as a special-case compaction trigger;
+            // anything else terminates the processor turn with the error
+            // attached to the assistant message.
+            let original = e instanceof LLMActivityError ? (e.cause ?? e) : e
+            try {
+              await settleToolInputFlush()
+            } catch (flushError) {
+              original = new AggregateError([original, flushError], "Provider and Tool input transport failed")
+            }
+            await Promise.allSettled(
+              [...mcpAppCalls].map(([toolCallID, lifecycle]) =>
+                lifecycle.cancel(
+                  toolCallID,
+                  (toolcalls[toolCallID]?.state.input ?? {}) as Record<string, unknown>,
+                  input.abort.aborted ? "Session cancelled" : "Tool stream terminated",
+                ),
+              ),
+            )
+            mcpAppCalls.clear()
+            log.error("process", {
+              error: original,
+              stack: JSON.stringify((original as { stack?: unknown })?.stack),
+            })
+            const error =
+              canonicalActivityErrors.get(original) ??
+              Message.fromError(original, { providerID: input.model.providerID })
+            failureOccurrence = failureOccurrenceAnchor({
+              sessionID: input.sessionID,
+              assistantMessageID: input.assistantMessage.id,
+              error,
+            })
+            input.assistantMessage.error = error
+            input.assistantMessage.failureOccurrence = failureOccurrence
+            input.assistantMessage.finish = "error"
+            const convergenceError = await convergeOpenToolParts(
+              toolFailureCauseFromMessageError({
+                error,
+                occurrence: failureOccurrence,
+                originSite: "session.processor.catch",
+                classification: "llm-activity",
+                data: {
+                  sessionID: input.sessionID,
+                },
+              }),
+              failureOccurrence,
+            )
+            if (convergenceError) {
+              convergenceFailure = convergenceError.evidence
+              input.assistantMessage.convergenceFailure = convergenceFailure
+              SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
+            } else if (Message.ContextOverflowError.isInstance(error)) {
+              needsCompaction = true
+            } else {
+              SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
+            }
+          }
+          await closeOpenReasoningParts()
+          if (snapshot) {
+            try {
+              const patch = await Snapshot.patch(snapshot)
+              Snapshot.assertPatchEvidenceIntegrity(patch)
+              if (patch.files.length) {
+                await Session.updatePart({
+                  id: Identifier.ascending("part"),
+                  messageID: input.assistantMessage.id,
+                  sessionID: input.sessionID,
+                  type: "patch",
+                  hash: patch.hash,
+                  files: patch.files,
+                })
+              }
+            } catch (e) {
+              const patchError = Message.fromError(e, { providerID: input.model.providerID })
+              if (input.assistantMessage.error) {
+                log.error("snapshot patch observation failed after the primary assistant failure", {
+                  sessionID: input.sessionID,
+                  assistantMessageID: input.assistantMessage.id,
+                  primaryError: input.assistantMessage.error.name,
+                  patchError: patchError.name,
+                })
+                observationFailures.push({
+                  phase: "snapshot_patch",
+                  message: typeof patchError.data.message === "string" ? patchError.data.message : patchError.name,
+                })
+                input.assistantMessage.observationFailures = observationFailures
+              } else {
+                input.assistantMessage.error = patchError
+                failureOccurrence = failureOccurrenceAnchor({
+                  sessionID: input.sessionID,
+                  assistantMessageID: input.assistantMessage.id,
+                  error: patchError,
+                })
+                input.assistantMessage.failureOccurrence = failureOccurrence
+                input.assistantMessage.finish = "error"
+              }
+            }
+            snapshot = undefined
+          }
+          // `tool-input-start` / `tool-input-delta` are draft stream material.
+          // Only `tool-call` crosses validation and execution. A provider may
+          // abandon one draft call id and later complete another inside the
+          // same stream, so converge never-executed drafts before enforcing
+          // the strict running-tool invariant below.
+          if (!convergenceFailure) {
+            await discardPendingToolInputDrafts("Provider stream ended before validated tool input")
+            const lostParts = await openToolParts()
+            if (lostParts.length > 0) {
+              const error = new ProcessorLostPartsError(lostParts.map((part) => part.id))
+              await failOpenToolParts(
+                toolFailureCauseFromUnknown({
+                  error,
+                  originSite: "session.processor.lost-open-tool-parts",
+                  classification: "processor-contract",
+                  kind: "lost-open-tool-parts",
+                  data: {
+                    partIDs: lostParts.map((part) => part.id),
+                  },
+                }),
+              )
+              throw error
+            }
+          }
+          input.assistantMessage.finish ??= "stop"
+          const continuationIsSafe =
+            !failureOccurrence &&
+            !needsCompaction &&
+            !blocked &&
+            !parkAfterToolResult &&
+            !coordinationHandoff &&
+            !input.assistantMessage.error
+          const ownedContinuationDecision =
+            continuationIsSafe && input.retainAssistantForNextProviderStep !== undefined
+              ? await input.retainAssistantForNextProviderStep(input.assistantMessage)
+              : undefined
+          const retainAssistantForNextProviderStep = continuationRetention({
+            continuationIsSafe,
+            retainAssistantOnToolContinuation: input.retainAssistantOnToolContinuation === true,
+            finishIncludesTool: input.assistantMessage.finish.includes("tool"),
+            ownedContinuationDecision,
+          }).retainAssistant
+          const completedOwnerBoundary = !retainAssistantForNextProviderStep && input.stopAfterAssistantCompletion === true
+          if (!retainAssistantForNextProviderStep) {
+            await input.beforeAssistantCompletion?.(input.assistantMessage)
+            input.assistantMessage.time.completed = Date.now()
+            await Session.updateMessage(input.assistantMessage)
+          }
+          if (failureOccurrence && input.assistantMessage.error) {
+            await Bus.publish(Session.Event.Error, {
+              sessionID: input.assistantMessage.sessionID,
+              orderKey: sessionLifecycleOrderKey(input.assistantMessage.sessionID),
+              error: input.assistantMessage.error,
+              failureOccurrence,
+              ...(convergenceFailure ? { convergenceFailure } : {}),
+              ...(observationFailures.length > 0 ? { observationFailures } : {}),
+            })
+          }
+          // Only a real stop ends the run. Completing one assistant message does
+          // not: in the observed loop every iteration was its own completed
+          // message, so resetting here would make the bound unreachable.
+          const stopping =
+            completedOwnerBoundary ||
+            needsCompaction ||
+            blocked ||
+            parkAfterToolResult ||
+            coordinationHandoff ||
+            !!input.assistantMessage.error
+          if (stopping) forgetRepeatedToolCalls(input.sessionID)
+          if (needsCompaction) return "compact"
+          if (blocked) return "stop"
+          if (parkAfterToolResult) return "stop"
+          if (coordinationHandoff) return "stop"
+          if (input.assistantMessage.error) return "stop"
+          return "continue"
+        }
+      },
+    }
+    return result
+  }
+}

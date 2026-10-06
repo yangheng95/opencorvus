@@ -1,0 +1,860 @@
+{
+  "observedAtUtc": "2026-10-06T21:11:00.513Z",
+  "originalOutcome": {
+    "pid": 65720,
+    "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+    "error": {
+      "name": "Error",
+      "message": "TASK_ACTIVITY_INACTIVITY"
+    },
+    "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+    "credentialCleanup": "unverified-parent-owned"
+  },
+  "selected": {
+    "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+    "taskID": "tsk_g00VXIyjTP00YbYm5p2y",
+    "projectID": "prj_h3r8F1Xs3aGyDNanqQyV",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-43\\project",
+    "requestID": "017ff747-6134-40fe-92a5-fe0d1185dd1e",
+    "requestSentAt": "2026-10-06T20:55:30.9882312Z",
+    "acceptedObservedAt": "2026-10-06T20:55:35.7183310Z"
+  },
+  "qualification": {
+    "sourceAndFocusedContracts": "passed",
+    "realConsumerObservationAndExactAttemptAssociation": "passed",
+    "originalTask": "failed",
+    "actualSourceFileEditorVisuals": "observed",
+    "currentArtifactInspectorResourceAndSnapshotVisuals": "unqualified",
+    "independentHelloChecks": "passed_twice",
+    "independentNotesCacheCheck": "unmet",
+    "independentAcceptanceArtifact": "unmet",
+    "taskFormalCompletionAndDownload": "unmet"
+  },
+  "native": {
+    "wholeElapsedMs": 543767,
+    "fixedWholeMaximumMs": 900000,
+    "physical": {
+      "nativeSettlement": {
+        "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+        "outcome": "settled",
+        "host": {
+          "pid": 38724,
+          "processInstanceID": "win32:639269169103162286",
+          "occurrenceID": "c8e5fe42-85b8-499b-a5a9-9f79b4ccb9d3"
+        },
+        "target": {
+          "pid": 65720,
+          "processInstanceID": "win32:639269169110919507",
+          "occurrenceID": "50e028a7-b227-4e17-8037-2a4db204b081"
+        },
+        "observedAtUtc": "2026-10-06T21:04:37.915Z",
+        "terminal": {
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+      },
+      "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+      "chain": [
+        {
+          "state": "dead_or_reused",
+          "originalOccurrencePresent": false,
+          "expected": {
+            "pid": 65720,
+            "processInstanceID": "win32:639269169110919507",
+            "occurrenceID": "50e028a7-b227-4e17-8037-2a4db204b081"
+          }
+        },
+        {
+          "state": "dead_or_reused",
+          "originalOccurrencePresent": false,
+          "expected": {
+            "pid": 38724,
+            "processInstanceID": "win32:639269169103162286",
+            "occurrenceID": "c8e5fe42-85b8-499b-a5a9-9f79b4ccb9d3"
+          }
+        }
+      ],
+      "physicalCompletion": true,
+      "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+      "copiedPair": [
+        {
+          "outcome": "removed",
+          "presentAfter": false,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-43\\runtime\\data\\auth.json",
+          "copiedLength": 2082
+        },
+        {
+          "outcome": "removed",
+          "presentAfter": false,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-43\\runtime\\data\\models.json",
+          "copiedLength": 9155406
+        }
+      ],
+      "observedAtUtc": "2026-10-06T21:04:38.8583736Z",
+      "listeners": null,
+      "pairedCleanupComplete": true
+    },
+    "independent": {
+      "observedAtUtc": "2026-10-06T21:05:27.5964113Z",
+      "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+      "hostState": "dead_or_reused",
+      "targetState": "dead_or_reused",
+      "listeners": [],
+      "copiedAuthPresent": false,
+      "copiedModelsPresent": false,
+      "pageClosed": true,
+      "sourceMetadata": [
+        {
+          "name": "auth.json",
+          "length": 2147,
+          "lastWriteUtc": "2026-10-04T15:48:55.8607343Z"
+        },
+        {
+          "name": "models.json",
+          "length": 9155406,
+          "lastWriteUtc": "2026-10-04T15:48:10.1379969Z"
+        }
+      ]
+    }
+  },
+  "audit": {
+    "requests": 54,
+    "eof": 52,
+    "aborted": 2,
+    "originalFailureRequestCount": 53,
+    "exactAttemptResponses": [
+      {
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791320485058,
+          "boundAt": 1791320485061,
+          "chunkCount": 4618,
+          "byteCount": 4014166,
+          "firstByteReadAt": 1791320485062,
+          "lastByteReadAt": 1791320670742,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hGSjSMlhPcw3Iftwx6QY",
+            "streamRequest": {
+              "requestID": "msg_g0VXIztaM0010k5TdwYG",
+              "agentID": "verifier",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXJ0CH4007K45K1PIY",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VXJ0CCu00H3XYwp9Xx"
+            }
+          },
+          "terminal": {
+            "kind": "aborted",
+            "at": 1791320670917
+          }
+        }
+      },
+      {
+        "status": 200,
+        "reader": {
+          "boundary": "provider-source-reader",
+          "state": "settled",
+          "receivedAt": 1791320673451,
+          "boundAt": 1791320673455,
+          "chunkCount": 67,
+          "byteCount": 302972,
+          "firstByteReadAt": 1791320673458,
+          "lastByteReadAt": 1791320677286,
+          "identityState": "observed",
+          "requestContext": {
+            "sessionID": "ses_hGSjSMlhPcw3Iftwx6QY",
+            "streamRequest": {
+              "requestID": "msg_g0VXIztaM0010k5TdwYG",
+              "agentID": "verifier",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VXJ0CH4007K45K1PIY",
+              "attempt": 1,
+              "assistantMessageID": "msg_g0VXJ0CCu00H3XYwp9Xx"
+            }
+          },
+          "terminal": {
+            "kind": "aborted",
+            "at": 1791320677347
+          }
+        }
+      }
+    ]
+  },
+  "stalledConsumption": {
+    "ts": 1791320670910,
+    "kind": "llm_stream_observation",
+    "domain": "session",
+    "sessionID": "ses_hGSjSMlhPcw3Iftwx6QY",
+    "taskID": "tsk_g00VXIyjTP00YbYm5p2y",
+    "agentName": "verifier",
+    "payload": {
+      "streamRequest": {
+        "requestID": "msg_g0VXIztaM0010k5TdwYG",
+        "agentID": "verifier",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "activity": {
+        "id": "act_g0VXJ0CH4007K45K1PIY",
+        "attempt": 0,
+        "assistantMessageID": "msg_g0VXJ0CCu00H3XYwp9Xx"
+      },
+      "phase": "aborted",
+      "observation": {
+        "received": 14828,
+        "finished": 14828,
+        "handlerAccepted": 14827,
+        "heartbeatEligible": 381,
+        "heartbeats": 381,
+        "deltaUTF16Length": 15538,
+        "deltaNonWhitespaceLength": 1044,
+        "bookkeepingFailures": 0,
+        "startedAt": 1791320484153,
+        "lastReceivedAt": 1791320670743,
+        "lastHookFinishedAt": 1791320670743,
+        "lastDecisionAt": 1791320670743,
+        "lastHeartbeatAt": 1791320490904,
+        "lastFinishedAt": 1791320670743,
+        "lastFailureAt": null,
+        "types": {
+          "start": 1,
+          "start-step": 1,
+          "finish-step": 0,
+          "finish": 0,
+          "abort": 0,
+          "error": 0,
+          "raw": 0,
+          "text-start": 0,
+          "text-delta": 0,
+          "text-end": 0,
+          "reasoning-start": 0,
+          "reasoning-delta": 0,
+          "reasoning-end": 0,
+          "tool-input-start": 1,
+          "tool-input-delta": 14825,
+          "tool-input-end": 0,
+          "tool-call": 0,
+          "tool-result": 0,
+          "tool-error": 0,
+          "tool-output-denied": 0,
+          "source": 0,
+          "file": 0,
+          "unknown": 0
+        },
+        "reasons": {
+          "missing_id": 0,
+          "empty_delta": 0,
+          "unknown_tool": 0,
+          "not_pending": 0,
+          "stream_mismatch": 0,
+          "duplicate_start": 0,
+          "control": 1,
+          "unsupported": 0,
+          "nonsemantic": 14446,
+          "aborted": 0
+        },
+        "acceptedTypes": {
+          "start": 0,
+          "start-step": 1,
+          "finish-step": 0,
+          "finish": 0,
+          "abort": 0,
+          "error": 0,
+          "raw": 0,
+          "text-start": 0,
+          "text-delta": 0,
+          "text-end": 0,
+          "reasoning-start": 0,
+          "reasoning-delta": 0,
+          "reasoning-end": 0,
+          "tool-input-start": 1,
+          "tool-input-delta": 14825,
+          "tool-input-end": 0,
+          "tool-call": 0,
+          "tool-result": 0,
+          "tool-error": 0,
+          "tool-output-denied": 0,
+          "source": 0,
+          "file": 0,
+          "unknown": 0
+        },
+        "eligibleTypes": {
+          "start": 0,
+          "start-step": 1,
+          "finish-step": 0,
+          "finish": 0,
+          "abort": 0,
+          "error": 0,
+          "raw": 0,
+          "text-start": 0,
+          "text-delta": 0,
+          "text-end": 0,
+          "reasoning-start": 0,
+          "reasoning-delta": 0,
+          "reasoning-end": 0,
+          "tool-input-start": 1,
+          "tool-input-delta": 379,
+          "tool-input-end": 0,
+          "tool-call": 0,
+          "tool-result": 0,
+          "tool-error": 0,
+          "tool-output-denied": 0,
+          "source": 0,
+          "file": 0,
+          "unknown": 0
+        },
+        "heartbeatTypes": {
+          "start": 0,
+          "start-step": 1,
+          "finish-step": 0,
+          "finish": 0,
+          "abort": 0,
+          "error": 0,
+          "raw": 0,
+          "text-start": 0,
+          "text-delta": 0,
+          "text-end": 0,
+          "reasoning-start": 0,
+          "reasoning-delta": 0,
+          "reasoning-end": 0,
+          "tool-input-start": 1,
+          "tool-input-delta": 379,
+          "tool-input-end": 0,
+          "tool-call": 0,
+          "tool-result": 0,
+          "tool-error": 0,
+          "tool-output-denied": 0,
+          "source": 0,
+          "file": 0,
+          "unknown": 0
+        },
+        "heartbeatKinds": {
+          "first-byte": 0,
+          "text-delta": 0,
+          "reasoning-delta": 0,
+          "tool-input-start": 1,
+          "tool-input-delta": 379,
+          "tool-input-end": 0,
+          "tool-call": 0,
+          "tool-result": 0,
+          "tool-error": 0,
+          "step-start": 1,
+          "step-finish": 0,
+          "manual": 0
+        },
+        "failures": {
+          "hook": 0,
+          "handler": 0,
+          "abort": 0
+        },
+        "phase": "awaiting_event"
+      }
+    }
+  },
+  "retryConsumption": [
+    {
+      "ts": 1791320677335,
+      "kind": "llm_stream_observation",
+      "domain": "session",
+      "sessionID": "ses_hGSjSMlhPcw3Iftwx6QY",
+      "taskID": "tsk_g00VXIyjTP00YbYm5p2y",
+      "agentName": "verifier",
+      "payload": {
+        "streamRequest": {
+          "requestID": "msg_g0VXIztaM0010k5TdwYG",
+          "agentID": "verifier",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXJ0CH4007K45K1PIY",
+          "attempt": 1,
+          "assistantMessageID": "msg_g0VXJ0CCu00H3XYwp9Xx"
+        },
+        "phase": "aborted",
+        "observation": {
+          "received": 204,
+          "finished": 204,
+          "handlerAccepted": 203,
+          "heartbeatEligible": 203,
+          "heartbeats": 203,
+          "deltaUTF16Length": 579,
+          "deltaNonWhitespaceLength": 547,
+          "bookkeepingFailures": 0,
+          "startedAt": 1791320672198,
+          "lastReceivedAt": 1791320677287,
+          "lastHookFinishedAt": 1791320677287,
+          "lastDecisionAt": 1791320677287,
+          "lastHeartbeatAt": 1791320677287,
+          "lastFinishedAt": 1791320677287,
+          "lastFailureAt": null,
+          "types": {
+            "start": 1,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "reasons": {
+            "missing_id": 0,
+            "empty_delta": 0,
+            "unknown_tool": 0,
+            "not_pending": 0,
+            "stream_mismatch": 0,
+            "duplicate_start": 0,
+            "control": 1,
+            "unsupported": 0,
+            "nonsemantic": 0,
+            "aborted": 0
+          },
+          "acceptedTypes": {
+            "start": 0,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "eligibleTypes": {
+            "start": 0,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "heartbeatTypes": {
+            "start": 0,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "heartbeatKinds": {
+            "first-byte": 0,
+            "text-delta": 0,
+            "reasoning-delta": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "step-start": 1,
+            "step-finish": 0,
+            "manual": 0
+          },
+          "failures": {
+            "hook": 0,
+            "handler": 0,
+            "abort": 0
+          },
+          "phase": "awaiting_event"
+        }
+      }
+    },
+    {
+      "ts": 1791320677357,
+      "kind": "llm_stream_observation",
+      "domain": "session",
+      "sessionID": "ses_hGSjSMlhPcw3Iftwx6QY",
+      "taskID": "tsk_g00VXIyjTP00YbYm5p2y",
+      "agentName": "verifier",
+      "payload": {
+        "streamRequest": {
+          "requestID": "msg_g0VXIztaM0010k5TdwYG",
+          "agentID": "verifier",
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "apiModelID": "gpt-6.1-sol"
+        },
+        "activity": {
+          "id": "act_g0VXJ0CH4007K45K1PIY",
+          "attempt": 1,
+          "assistantMessageID": "msg_g0VXJ0CCu00H3XYwp9Xx"
+        },
+        "phase": "settled",
+        "observation": {
+          "received": 204,
+          "finished": 204,
+          "handlerAccepted": 203,
+          "heartbeatEligible": 203,
+          "heartbeats": 203,
+          "deltaUTF16Length": 579,
+          "deltaNonWhitespaceLength": 547,
+          "bookkeepingFailures": 0,
+          "startedAt": 1791320672198,
+          "lastReceivedAt": 1791320677287,
+          "lastHookFinishedAt": 1791320677287,
+          "lastDecisionAt": 1791320677287,
+          "lastHeartbeatAt": 1791320677287,
+          "lastFinishedAt": 1791320677287,
+          "lastFailureAt": null,
+          "types": {
+            "start": 1,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "reasons": {
+            "missing_id": 0,
+            "empty_delta": 0,
+            "unknown_tool": 0,
+            "not_pending": 0,
+            "stream_mismatch": 0,
+            "duplicate_start": 0,
+            "control": 1,
+            "unsupported": 0,
+            "nonsemantic": 0,
+            "aborted": 0
+          },
+          "acceptedTypes": {
+            "start": 0,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "eligibleTypes": {
+            "start": 0,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "heartbeatTypes": {
+            "start": 0,
+            "start-step": 1,
+            "finish-step": 0,
+            "finish": 0,
+            "abort": 0,
+            "error": 0,
+            "raw": 0,
+            "text-start": 0,
+            "text-delta": 0,
+            "text-end": 0,
+            "reasoning-start": 0,
+            "reasoning-delta": 0,
+            "reasoning-end": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "tool-output-denied": 0,
+            "source": 0,
+            "file": 0,
+            "unknown": 0
+          },
+          "heartbeatKinds": {
+            "first-byte": 0,
+            "text-delta": 0,
+            "reasoning-delta": 0,
+            "tool-input-start": 1,
+            "tool-input-delta": 201,
+            "tool-input-end": 0,
+            "tool-call": 0,
+            "tool-result": 0,
+            "tool-error": 0,
+            "step-start": 1,
+            "step-finish": 0,
+            "manual": 0
+          },
+          "failures": {
+            "hook": 0,
+            "handler": 0,
+            "abort": 0
+          },
+          "phase": "awaiting_event"
+        }
+      }
+    }
+  ],
+  "sourceFiles": [
+    {
+      "name": "hello.txt",
+      "bytes": 26,
+      "completeLiteralComparison": "passed",
+      "scope": "Root offline source file verification after native closure; cannot substitute for independent participant verification"
+    },
+    {
+      "name": "notes.txt",
+      "bytes": 520,
+      "completeLiteralComparison": "passed",
+      "scope": "Root offline source file verification after native closure; cannot substitute for independent participant verification"
+    }
+  ],
+  "independentMaterializations": [
+    {
+      "requestID": "prt_g0VXJ056o003Un5z5e55",
+      "messageID": "msg_g0VXJ03jR00GKFVQagSF",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_h3r8F1Xs3aGyDNanqQyV",
+            "task_id": "tsk_g00VXIyjTP00YbYm5p2y",
+            "snapshot_id": "fab79475-6c93-53a1-a960-fbfc8c7ea844",
+            "manifest_sha256": "756b6225b4a2f0bd3d6e2bae8caaedc5327e995237ea39c013365f0c50ccea93"
+          },
+          "tree": "resources",
+          "path": "hello.txt",
+          "media_type": "text/plain",
+          "bytes": 26,
+          "sha256": "91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e"
+        }
+      },
+      "readRef": "ar_tvL5P6x-lQP-9Un1",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-43\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXIyjTP00YbYm5p2y\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt",
+      "complete": true,
+      "bytes": 26
+    },
+    {
+      "requestID": "prt_g0VXJ08g300C5Z8WNE3H",
+      "messageID": "msg_g0VXJ086Q002PYliPNsc",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_h3r8F1Xs3aGyDNanqQyV",
+            "task_id": "tsk_g00VXIyjTP00YbYm5p2y",
+            "snapshot_id": "fab79475-6c93-53a1-a960-fbfc8c7ea844",
+            "manifest_sha256": "756b6225b4a2f0bd3d6e2bae8caaedc5327e995237ea39c013365f0c50ccea93"
+          },
+          "tree": "resources",
+          "path": "hello.txt",
+          "media_type": "text/plain",
+          "bytes": 26,
+          "sha256": "91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e"
+        }
+      },
+      "readRef": "ar_zByuvl7cGKZTLCc-",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-43\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXIyjTP00YbYm5p2y\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt",
+      "complete": true,
+      "bytes": 26
+    },
+    {
+      "requestID": "prt_g0VXJ0Bv000chBMqELk2",
+      "messageID": "msg_g0VXJ0B6t00KBtnZe8iK",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_h3r8F1Xs3aGyDNanqQyV",
+            "task_id": "tsk_g00VXIyjTP00YbYm5p2y",
+            "snapshot_id": "fab79475-6c93-53a1-a960-fbfc8c7ea844",
+            "manifest_sha256": "756b6225b4a2f0bd3d6e2bae8caaedc5327e995237ea39c013365f0c50ccea93"
+          },
+          "tree": "resources",
+          "path": "notes.txt",
+          "media_type": "text/plain",
+          "bytes": 520,
+          "sha256": "a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430"
+        }
+      },
+      "readRef": "ar_PaSM8qDVnvcKvvMj",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-43\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXIyjTP00YbYm5p2y\\artifacts\\materializations\\reads\\a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430-notes.txt",
+      "complete": true,
+      "bytes": 520
+    }
+  ],
+  "independentHelloChecks": [
+    {
+      "requestID": "prt_g0VXJ06VG00uJYyVxYOt",
+      "messageID": "msg_g0VXJ05bN0008Eo7CoJ5",
+      "output": {
+        "step": 1,
+        "read_ref": "ar_tvL5P6x-lQP-9Un1",
+        "bytes": 26,
+        "content": "b'Hello from a formal Task.\\n'",
+        "literal_match": true,
+        "utf8": true,
+        "bom": false,
+        "lf": 1,
+        "cr": 0,
+        "result": "PASS"
+      }
+    },
+    {
+      "requestID": "prt_g0VXJ09mz002yO3GnWhd",
+      "messageID": "msg_g0VXJ08yU00lTeD7Je9w",
+      "output": {
+        "step": 2,
+        "read_ref": "ar_zByuvl7cGKZTLCc-",
+        "bytes": 26,
+        "content": "b'Hello from a formal Task.\\n'",
+        "literal_match": true,
+        "utf8": true,
+        "bom": false,
+        "lf": 1,
+        "cr": 0,
+        "result": "PASS"
+      }
+    }
+  ],
+  "readonly": {
+    "sessions": 6,
+    "messages": 48,
+    "ordinaryParts": 131,
+    "events": 139,
+    "owners": 0,
+    "pending": 0,
+    "toolRequests": 47,
+    "toolProgress": 10,
+    "toolOutcomes": 47,
+    "toolResults": 47
+  },
+  "limits": [
+    "Whitespace SDK Tool deltas were accepted by the handler but did not renew semantic liveness. The precise Provider generation cause and JSON structural position remain unknown.",
+    "Original Task snapshots contain ordinary and admitted Tool facts; the pending transport draft for this assistant is not preserved there. No historical payload or physical request body is reconstructed.",
+    "Original semantic idle and later public shutdown retry cancellation are separate outcomes.",
+    "Restart, multi-project concurrency, Mission, non-Task consumption and helper matrices remain unqualified.",
+    "First processor fixture output was truncated by its original tool; retained transcript explicitly records that limitation."
+  ]
+}

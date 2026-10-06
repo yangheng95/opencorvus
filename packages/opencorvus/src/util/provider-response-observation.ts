@@ -4,6 +4,7 @@ import type { StreamRequestIdentity } from "../session/stream-request"
 export type ProviderRequestContext = Readonly<{
   sessionID: string
   streamRequest: Readonly<StreamRequestIdentity>
+  activity?: Readonly<{ id: string; attempt: number; assistantMessageID: string }>
 }>
 
 export interface ProviderResponseObserver {

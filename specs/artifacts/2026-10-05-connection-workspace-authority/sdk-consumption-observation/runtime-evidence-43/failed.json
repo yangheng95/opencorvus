@@ -1,0 +1,10 @@
+{
+  "pid": 65720,
+  "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+  "error": {
+    "name": "Error",
+    "message": "TASK_ACTIVITY_INACTIVITY"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

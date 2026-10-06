@@ -280,11 +280,11 @@ export class RealProviderAudit implements Disposable {
                 observed.lastByteReadAt = null
                 const identityRedactor = observation?.redactor ?? toolDeclarations?.redactor
                 if (!context) observed.identityState = "unknown"
-                else if ([context.sessionID, ...Object.values(context.streamRequest)]
+                else if ([context.sessionID, ...Object.values(context.streamRequest), ...Object.values(context.activity ?? {}).filter((value): value is string => typeof value === "string")]
                   .some((value) => identityRedactor?.containsCredential(value))) observed.identityState = "redacted"
                 else {
                   observed.identityState = "observed"
-                  observed.requestContext = { sessionID: context.sessionID, streamRequest: { ...context.streamRequest } }
+                  observed.requestContext = { sessionID: context.sessionID, streamRequest: { ...context.streamRequest }, ...(context.activity ? { activity: { ...context.activity } } : {}) }
                 }
               },
               onChunk: (byteLength) => {

@@ -1,0 +1,15 @@
+$ bun script/run-tests.ts test/llm-stream-observation.test.ts
+[1/1] START test/llm-stream-observation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) received SDK deltas and actual heartbeat decisions retain distinct scalar facts [1.15ms]
+(pass) whitespace, unsupported SDK events and fixed rejection reasons have explicit counts [0.38ms]
+(pass) hook and handler failures and abort remain visible after chunk completion [5.88ms]
+(pass) snapshot copies and throwing clocks preserve current producer-independent counts [0.41ms]
+
+ 4 pass
+ 0 fail
+ 9 expect() calls
+Ran 4 tests across 1 file. [1193.00ms]
+[1/1] DONE test/llm-stream-observation.test.ts exit=0 duration=1.44s

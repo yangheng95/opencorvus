@@ -1,0 +1,34 @@
+Retained tool output transcript (selected displayed failure excerpt plus final output), not a redirected original stdout log.
+Command: bun run script/run-tests.ts test/session/processor-producer-boundary.test.ts
+CWD: D:/myhexin-local/opencorvus/packages/opencorvus
+This file does not reproduce the entire large matcher diff; the tool conversation retains that displayed diff. No omitted stdout has been invented.
+
+[1/1] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [2736.79ms]
+error: expect(received).toMatchObject(expected)
+        "missing_id": 1,
+        "nonsemantic": 2,
+-       "not_pending": 1,
++       "not_pending": 0,
+        "stream_mismatch": 1,
+-       "unknown_tool": 1,
++       "unknown_tool": 2,
+(fail) processor observation records accepted and rejected current event identities in the canonical Task trace [2085.98ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [1917.25ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1765.47ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2335.82ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2250.64ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2318.85ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1938.34ms]
+
+ 7 pass
+ 1 fail
+ 27 expect() calls
+Ran 8 tests across 1 file. [19.17s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\processor-producer-boundary.test.ts
+[1/1] DONE test/session/processor-producer-boundary.test.ts exit=1 duration=19.40s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\processor-producer-boundary.test.ts

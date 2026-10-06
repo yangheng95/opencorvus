@@ -1,0 +1,15 @@
+{
+  "pid": 65720,
+  "occurrence": "sdk-consumption-43-53e64b0c-aa9c-4b6a-bd47-ac8b4c2e2135",
+  "owner": {
+    "pid": 65720,
+    "processInstanceID": "win32:639269169110919507",
+    "occurrenceID": "d7732c11-e972-4c63-97e7-5e7c6bda5090"
+  },
+  "parent": {
+    "pid": 49492,
+    "processInstanceID": "win32:639269169110533555",
+    "occurrenceID": "5578d36f-c559-4ee9-b123-a4a24b490c86"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
