@@ -1,0 +1,47 @@
+{
+  "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+  "boundary": "Independent exact native birth identities/port/pair; source metadata only",
+  "observedAtUtc": "2026-10-06T22:33:32.3104174Z",
+  "copiedPair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "chain": [
+    {
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "sourceMetadata": [
+    {
+      "name": "auth.json",
+      "length": 2147,
+      "lastWriteTimeUtc": "2026-10-04T15:48:55.8607343Z"
+    },
+    {
+      "name": "models.json",
+      "length": 9155406,
+      "lastWriteTimeUtc": "2026-10-04T15:48:10.1379969Z"
+    }
+  ],
+  "page": "Root IAB9 tab28 closed before sole shutdown",
+  "listeners": []
+}

@@ -1,0 +1,9 @@
+{
+  "title": "文件加载与完整正式交付验收50",
+  "request": "查询当前项目的真实 Task 列表和可取得报告，记录范围与限制。依次制作 hello.txt（UTF-8无BOM，内容为 Hello from a formal Task. 后接LF，共26字节）和 notes.txt（UTF-8无BOM，内容为 Notes from a formal Task. 后接LF，共20行、520字节）；完整检查两文件，并一起发布为本 Task 的正式资源及包含两文件的可浏览只读快照。由独立参与者对同一 hello 资源完整物化两次，每次重新打开实际缓存，核验全部26字节；随后完整物化 notes 并重开缓存核验全部520字节与20行。正式发布含实际读取凭证的独立验收记录，完成两文件和快照的正式交付后结束 Task。无需访问网站或启动服务；检查以实际工具结果为准，不能宣称用户已下载。",
+  "model": "openai/gpt-6.1-sol",
+  "source": "product-experience-initial-loading-formal-50",
+  "requestID": "acf4cc5e-43e3-4db9-a8f7-cb8488537cd9",
+  "requestSentAt": "2026-10-06T22:18:02.0101954Z",
+  "acceptedObservedAt": "2026-10-06T22:18:06.7065655Z"
+}

@@ -1,0 +1,14 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 116, 135-141
+~							88 container Description: Running · 32s, ID: taskStatus
+~								90 text 32s
++												135 text panel_query_task Tasks read_agent_message Task participant evidence panel_query_task Tasks artifact_search Artifact queries (1)
++								136 container
++									137 tab (selected, settable, boolean) Description: Files, Value: 1, ID: tabs-cl-64-trigger-explorer
++									138 button Close tab
++							139 container Description: Files, ID: centerWorkbenchExplorer
++								140 container Explorer
++									141 search text field (settable) Search files
++									142 text Loading…
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18013/ui/

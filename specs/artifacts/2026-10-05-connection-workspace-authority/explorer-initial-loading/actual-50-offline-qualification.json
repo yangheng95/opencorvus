@@ -1,0 +1,2799 @@
+{
+  "observedAtUtc": "2026-10-06T22:36:24.039Z",
+  "selected": {
+    "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+    "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+    "projectID": "prj_hPvQfn30WwjxI3dAvRek",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "requestID": "acf4cc5e-43e3-4db9-a8f7-cb8488537cd9",
+    "requestSentAt": "2026-10-06T22:18:02.0101954Z",
+    "acceptedObservedAt": "2026-10-06T22:18:06.7065655Z"
+  },
+  "completion": {
+    "pid": 67468,
+    "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+    "selected": {
+      "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+      "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+      "projectID": "prj_hPvQfn30WwjxI3dAvRek",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+      "requestID": "acf4cc5e-43e3-4db9-a8f7-cb8488537cd9",
+      "requestSentAt": "2026-10-06T22:18:02.0101954Z",
+      "acceptedObservedAt": "2026-10-06T22:18:06.7065655Z"
+    },
+    "pinned": {
+      "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+      "projectID": "prj_hPvQfn30WwjxI3dAvRek",
+      "rootSessionID": "ses_-zUSggUQgzzprQcl946c",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXJJVZu000Q0OFSKLS",
+      "openedAt": 1791325086081
+    },
+    "lifecycle": {
+      "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXJJVZu000Q0OFSKLS",
+      "openedAt": 1791325086081,
+      "status": "completed",
+      "terminalEventID": "pev_g0VXJLtCd00R3G8q0jLs",
+      "terminalAt": 1791325652147
+    },
+    "ownedPromptSessions": [],
+    "sessionIDs": [
+      "ses_-zUSggUQgzzprQcl946c",
+      "ses_-zUSggTYXzz7GI8kPMXy",
+      "ses_h2DgZxsNX9pyHQtshbUr",
+      "ses_hGzJHWeYBSh6xDoVwkSy",
+      "ses_hBkcd6U9aAxsXULs3wIs"
+    ],
+    "artifactIDs": [
+      {
+        "id": "art_g0VXJJVZQ00Xa86Yjewl",
+        "kind": "task_package_revision_binding"
+      },
+      {
+        "id": "art_g0VXJJVZh00YAPIJo5fq",
+        "kind": "task_execution_capsule_binding"
+      },
+      {
+        "id": "art_g0VXJJYoY002dHBwHIwh",
+        "kind": "dispatch_lineage"
+      },
+      {
+        "id": "art_hqcj4vkG9qBwn9VXxs8j",
+        "kind": "task_root_ingress_disposition"
+      },
+      {
+        "id": "art_hFO8sNYXRnWRzEow0kxj",
+        "kind": "expert_output"
+      },
+      {
+        "id": "art_g0VXJJqku0049V7VLg51",
+        "kind": "dispatch_settlement"
+      },
+      {
+        "id": "art_g0VXJK11O00l6VeUTtBO",
+        "kind": "dispatch_lineage"
+      },
+      {
+        "id": "art_hFjy70d3kPTtFcYP3cuR",
+        "kind": "task_root_ingress_disposition"
+      },
+      {
+        "id": "art_hLr5IDfCaRC7I05jeDpj",
+        "kind": "expert_output"
+      },
+      {
+        "id": "art_hiysXi5kyLJ7ciXBAtLV",
+        "kind": "build_host_observation"
+      },
+      {
+        "id": "art_g0VXJKTXo00XcAymJArS",
+        "kind": "dispatch_settlement"
+      },
+      {
+        "id": "art_g0VXJKdcF00iTJ6CONZ7",
+        "kind": "dispatch_lineage"
+      },
+      {
+        "id": "art_hpFCZpkzhXWHTtyj5k0d",
+        "kind": "task_root_ingress_disposition"
+      },
+      {
+        "id": "art_hq7NQo9Rpqj7WcoNHLQX",
+        "kind": "expert_output"
+      },
+      {
+        "id": "art_g0VXJLYp1003EhwqaWKv",
+        "kind": "dispatch_settlement"
+      },
+      {
+        "id": "art_g0VXJLsjo00FAuDd11Hf",
+        "kind": "task_completion_decision"
+      },
+      {
+        "id": "art_h4QvAuqquvMU9XJz8rXO",
+        "kind": "task_root_ingress_disposition"
+      }
+    ],
+    "observedAt": "2026-10-06T22:27:34.888Z",
+    "requests": 71,
+    "qualification": "Exact durable Task completed and its physical prompt owners unwound; Root separately qualifies declared resource, real UI/native download and whole service chain"
+  },
+  "qualification": {
+    "originalTask": "passed",
+    "actualProviderStreamingModelAndCallerAssociation": "passed",
+    "independentHelloCacheReopens": "passed_twice",
+    "independentNotesCacheReopen": "passed",
+    "independentAcceptancePublication": "passed",
+    "formalResourceSnapshotPreviewsAndNativeNotesDownload": "passed_scoped",
+    "initialExplorerPendingToList": "passed",
+    "old44Task": "failed_unchanged"
+  },
+  "native": {
+    "wholeElapsedMs": 886676,
+    "fixedWholeMaximumMs": 900000,
+    "closure": {
+      "copiedPair": [
+        {
+          "outcome": "removed",
+          "presentAfter": false,
+          "copiedLength": 2082,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\runtime\\data\\auth.json"
+        },
+        {
+          "outcome": "removed",
+          "presentAfter": false,
+          "copiedLength": 9155406,
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\runtime\\data\\models.json"
+        }
+      ],
+      "chain": [
+        {
+          "originalOccurrencePresent": false,
+          "expected": {
+            "pid": 67468,
+            "processInstanceID": "win32:639269218567932415",
+            "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "originalOccurrencePresent": false,
+          "expected": {
+            "pid": 69392,
+            "processInstanceID": "win32:639269218560109472",
+            "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "nativeSettlement": {
+        "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+        "outcome": "settled",
+        "host": {
+          "pid": 69392,
+          "processInstanceID": "win32:639269218560109472",
+          "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+        },
+        "target": {
+          "pid": 67468,
+          "processInstanceID": "win32:639269218567932415",
+          "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+        },
+        "observedAtUtc": "2026-10-06T22:32:50.97Z",
+        "terminal": {
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+      },
+      "pairedCleanupComplete": true,
+      "listeners": null,
+      "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+      "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+      "observedAtUtc": "2026-10-06T22:32:52.7573066Z",
+      "physicalCompletion": true
+    },
+    "independent": {
+      "occurrence": "initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905",
+      "boundary": "Independent exact native birth identities/port/pair; source metadata only",
+      "observedAtUtc": "2026-10-06T22:33:32.3104174Z",
+      "copiedPair": [
+        {
+          "present": false,
+          "name": "auth.json"
+        },
+        {
+          "present": false,
+          "name": "models.json"
+        }
+      ],
+      "chain": [
+        {
+          "expected": {
+            "pid": 69392,
+            "processInstanceID": "win32:639269218560109472",
+            "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "expected": {
+            "pid": 67468,
+            "processInstanceID": "win32:639269218567932415",
+            "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "sourceMetadata": [
+        {
+          "name": "auth.json",
+          "length": 2147,
+          "lastWriteTimeUtc": "2026-10-04T15:48:55.8607343Z"
+        },
+        {
+          "name": "models.json",
+          "length": 9155406,
+          "lastWriteTimeUtc": "2026-10-04T15:48:10.1379969Z"
+        }
+      ],
+      "page": "Root IAB9 tab28 closed before sole shutdown",
+      "listeners": []
+    }
+  },
+  "audit": {
+    "requests": 71,
+    "eof": 71,
+    "actualFormalActivityResponsesAssociated": 68
+  },
+  "independentMaterializations": [
+    {
+      "requestID": "prt_g0VXJKrUC007Ck3EJv1C",
+      "messageID": "msg_g0VXJKpmR00Hc0d4jLoO",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+            "task_id": "tsk_g00VXJJVS500QnIDtJVs",
+            "snapshot_id": "c925c764-6735-50a0-ae3d-271d25f43335",
+            "manifest_sha256": "2cab025b62082a937fe11d20322e26b666acc97b1338ac52e34e4207b433f7e7"
+          },
+          "tree": "resources",
+          "path": "hello.txt",
+          "media_type": "text/plain",
+          "bytes": 26,
+          "sha256": "91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e"
+        }
+      },
+      "readRef": "ar_-1qrGxMgtsdMrNo2",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt",
+      "complete": true,
+      "bytes": 26
+    },
+    {
+      "requestID": "prt_g0VXJKv1b00dAbLBDVE9",
+      "messageID": "msg_g0VXJKuDJ003IwaozZgc",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+            "task_id": "tsk_g00VXJJVS500QnIDtJVs",
+            "snapshot_id": "c925c764-6735-50a0-ae3d-271d25f43335",
+            "manifest_sha256": "2cab025b62082a937fe11d20322e26b666acc97b1338ac52e34e4207b433f7e7"
+          },
+          "tree": "resources",
+          "path": "hello.txt",
+          "media_type": "text/plain",
+          "bytes": 26,
+          "sha256": "91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e"
+        }
+      },
+      "readRef": "ar_oj7q_2aw6iVluk9C",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt",
+      "complete": true,
+      "bytes": 26
+    },
+    {
+      "requestID": "prt_g0VXJKyQs00fOKZRBbsb",
+      "messageID": "msg_g0VXJKxcn00QVViuxdus",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+            "task_id": "tsk_g00VXJJVS500QnIDtJVs",
+            "snapshot_id": "c925c764-6735-50a0-ae3d-271d25f43335",
+            "manifest_sha256": "2cab025b62082a937fe11d20322e26b666acc97b1338ac52e34e4207b433f7e7"
+          },
+          "tree": "resources",
+          "path": "notes.txt",
+          "media_type": "text/plain",
+          "bytes": 520,
+          "sha256": "a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430"
+        }
+      },
+      "readRef": "ar_FOmwz1-FWJuWDh6s",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430-notes.txt",
+      "complete": true,
+      "bytes": 520
+    }
+  ],
+  "independentChecks": [
+    {
+      "requestID": "prt_g0VXJKse400zMyMZHrrW",
+      "messageID": "msg_g0VXJKrjM006hzWrSy1M",
+      "input": {
+        "command": "python -c 'import json; p=r\"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt\"; f=open(p,\"rb\"); data=f.read(); eof=f.read()==b\"\"; f.close(); expected=b\"Hello from a formal Task.\\n\"; result={\"step\":2,\"path\":p,\"mode\":\"rb\",\"read_to_eof\":eof,\"bytes\":len(data),\"full_bytes_repr\":repr(data),\"full_bytes_hex\":data.hex(),\"content\":data.decode(\"utf-8\"),\"exact_match\":data==expected,\"bom\":data.startswith(b\"\\xef\\xbb\\xbf\"),\"cr_count\":data.count(b\"\\r\"),\"lf_count\":data.count(b\"\\n\"),\"line_count\":len(data.splitlines())}; print(json.dumps(result)); assert eof and data==expected and len(data)==26 and not result[\"bom\"] and result[\"cr_count\"]==0 and result[\"lf_count\"]==1'",
+        "timeout": 10000,
+        "workdir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+        "description": "第一次重开已物化 hello 缓存核验全部字节",
+        "background": false
+      },
+      "output": {
+        "step": 2,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt",
+        "mode": "rb",
+        "read_to_eof": true,
+        "bytes": 26,
+        "full_bytes_repr": "b'Hello from a formal Task.\\n'",
+        "full_bytes_hex": "48656c6c6f2066726f6d206120666f726d616c205461736b2e0a",
+        "content": "Hello from a formal Task.\n",
+        "exact_match": true,
+        "bom": false,
+        "cr_count": 0,
+        "lf_count": 1,
+        "line_count": 1
+      }
+    },
+    {
+      "requestID": "prt_g0VXJKwBY00lQDEdIXGZ",
+      "messageID": "msg_g0VXJKvIb00TdMnNSZXX",
+      "input": {
+        "command": "python -c 'import json; p=r\"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt\"; f=open(p,\"rb\"); data=f.read(); eof=f.read()==b\"\"; f.close(); expected=b\"Hello from a formal Task.\\n\"; result={\"step\":4,\"path\":p,\"mode\":\"rb\",\"read_to_eof\":eof,\"bytes\":len(data),\"full_bytes_repr\":repr(data),\"full_bytes_hex\":data.hex(),\"content\":data.decode(\"utf-8\"),\"exact_match\":data==expected,\"bom\":data.startswith(b\"\\xef\\xbb\\xbf\"),\"cr_count\":data.count(b\"\\r\"),\"lf_count\":data.count(b\"\\n\"),\"line_count\":len(data.splitlines())}; print(json.dumps(result)); assert eof and data==expected and len(data)==26 and not result[\"bom\"] and result[\"cr_count\"]==0 and result[\"lf_count\"]==1'",
+        "timeout": 10000,
+        "workdir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+        "description": "第二次独立重开 hello 缓存核验全部字节",
+        "background": false
+      },
+      "output": {
+        "step": 4,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e-hello.txt",
+        "mode": "rb",
+        "read_to_eof": true,
+        "bytes": 26,
+        "full_bytes_repr": "b'Hello from a formal Task.\\n'",
+        "full_bytes_hex": "48656c6c6f2066726f6d206120666f726d616c205461736b2e0a",
+        "content": "Hello from a formal Task.\n",
+        "exact_match": true,
+        "bom": false,
+        "cr_count": 0,
+        "lf_count": 1,
+        "line_count": 1
+      }
+    },
+    {
+      "requestID": "prt_g0VXJKzVa00ymqwO8m5Q",
+      "messageID": "msg_g0VXJKykX00g5Dja6rbP",
+      "input": {
+        "command": "python -c 'import json; p=r\"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430-notes.txt\"; f=open(p,\"rb\"); data=f.read(); eof=f.read()==b\"\"; f.close(); line=b\"Notes from a formal Task.\\n\"; expected=line*20; result={\"step\":6,\"path\":p,\"mode\":\"rb\",\"read_to_eof\":eof,\"bytes\":len(data),\"full_bytes_repr\":repr(data),\"full_bytes_hex\":data.hex(),\"content\":data.decode(\"utf-8\"),\"exact_match\":data==expected,\"bom\":data.startswith(b\"\\xef\\xbb\\xbf\"),\"cr_count\":data.count(b\"\\r\"),\"lf_count\":data.count(b\"\\n\"),\"line_count\":len(data.splitlines()),\"all_20_lines_exact\":data.splitlines(keepends=True)==[line]*20}; print(json.dumps(result)); assert eof and data==expected and len(data)==520 and not result[\"bom\"] and result[\"cr_count\"]==0 and result[\"lf_count\"]==20 and result[\"all_20_lines_exact\"]'",
+        "timeout": 10000,
+        "workdir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+        "description": "重开 notes 实际缓存核验全部字节及二十行",
+        "background": false
+      },
+      "output": {
+        "step": 6,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\.r\\tasks\\tsk_g00VXJJVS500QnIDtJVs\\artifacts\\materializations\\reads\\a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430-notes.txt",
+        "mode": "rb",
+        "read_to_eof": true,
+        "bytes": 520,
+        "full_bytes_repr": "b'Notes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\nNotes from a formal Task.\\n'",
+        "full_bytes_hex": "4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a4e6f7465732066726f6d206120666f726d616c205461736b2e0a",
+        "content": "Notes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\n",
+        "exact_match": true,
+        "bom": false,
+        "cr_count": 0,
+        "lf_count": 20,
+        "line_count": 20,
+        "all_20_lines_exact": true
+      }
+    }
+  ],
+  "acceptance": {
+    "requestID": "prt_g0VXJLCV300tpvPyCkkf",
+    "messageID": "msg_g0VXJLBFR00KKVe9bx5E",
+    "result": {
+      "locator": {
+        "source": "engine_artifact",
+        "artifact_id": "art_hq7NQo9Rpqj7WcoNHLQX",
+        "catalog_revision": 14,
+        "expected_sha256": "1406c8e9055dddb84d8c4fca58bf4a0e5af64158fe0e5e71665713c0fcc0197f"
+      },
+      "sha256": "1406c8e9055dddb84d8c4fca58bf4a0e5af64158fe0e5e71665713c0fcc0197f"
+    }
+  },
+  "snapshot": {
+    "schema_version": 2,
+    "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+    "task_id": "tsk_g00VXJJVS500QnIDtJVs",
+    "snapshot_id": "c925c764-6735-50a0-ae3d-271d25f43335",
+    "manifest_sha256": "2cab025b62082a937fe11d20322e26b666acc97b1338ac52e34e4207b433f7e7"
+  },
+  "sourceFiles": [
+    {
+      "name": "hello.txt",
+      "bytes": 26,
+      "completeLiteralComparison": "passed",
+      "scope": "Root offline actual source, separate from participant checks"
+    },
+    {
+      "name": "notes.txt",
+      "bytes": 520,
+      "completeLiteralComparison": "passed",
+      "scope": "Root offline actual source, separate from participant checks"
+    }
+  ],
+  "nativeDownload": {
+    "boundary": "Actual native browser download, new filename only, all original bytes checked; prior downloads untouched; not a claim the human downloaded it",
+    "completeLiteralByteComparison": "passed",
+    "observedAtUtc": "2026-10-06T22:31:28.5027543Z",
+    "bytes": 520,
+    "encoding": "UTF-8 no BOM, exact LF",
+    "action": "Root actual UI native click on formal resource Download: notes.txt",
+    "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+    "file": {
+      "FullName": "C:\\Users\\hengu\\Downloads\\notes (2).txt",
+      "Name": "notes (2).txt",
+      "Length": 520,
+      "CreationTimeUtc": "2026-10-06T22:30:59.0894465Z",
+      "LastWriteTimeUtc": "2026-10-06T22:30:59.0904464Z"
+    },
+    "lines": 20
+  },
+  "readonly": {
+    "sessions": 6,
+    "messages": 60,
+    "ordinaryParts": 181,
+    "events": 170,
+    "owners": 0,
+    "pending": 0,
+    "toolRequests": 65,
+    "toolProgress": 8,
+    "toolOutcomes": 65,
+    "toolResults": 65
+  },
+  "consumption": {
+    "logicalSettledSnapshots": 68,
+    "pendingStates": [
+      {
+        "activity": {
+          "id": "act_g0VXJJWdw00cGNC6foKQ",
+          "attempt": 0,
+          "assistantMessageID": "msg_hU0yk6GcTomnAlrXi37d"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJZ3B00ghXA8sPIR",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJYuW00G8uh0w9Ds"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJaWq00GxF2KkphL",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJaSE00y7qikAHti"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJbOU00JSSHTVxPP",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJbLC00A8T8Y7lox"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJcTZ00zeYbSkR7b",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJcPt0067OUjGkbo"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJdql00m9LPvESLB",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJdmr00mK7meHIXF"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJfDG00Pjcsc5yEX",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJf8m00Bcn2NV0Qc"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJhcD00EfmG53k4x",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJhXv008PsgftFo3"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJnXw00UercMrN2v",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJJnTU00KEZigVkrL"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJr0i00xoBMOQvJ3",
+          "attempt": 0,
+          "assistantMessageID": "msg_hhmNTljmRkkJDhkfNjZb"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJsNp00Hu8Gq7Nte",
+          "attempt": 0,
+          "assistantMessageID": "msg_hhmNTljmRkkJDhkfNjZb"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJu6e00sf3d9zwlo",
+          "attempt": 0,
+          "assistantMessageID": "msg_hhmNTljmRkkJDhkfNjZb"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJvnk00DhlWcr2iY",
+          "attempt": 0,
+          "assistantMessageID": "msg_hhmNTljmRkkJDhkfNjZb"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJJxjD00Drlcfe5VS",
+          "attempt": 0,
+          "assistantMessageID": "msg_hhmNTljmRkkJDhkfNjZb"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJK1Zy00tKcgDWgV0",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK1R000Jb3QQWm3x"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJK3PG000YLBSOLjQ",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK3LA006BvhbaOEu"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJK4lS00fSZHsV2fl",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK4hS00yGnH8ygkk"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJK5dN00WAmraVtfN",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK5Zp00DX957ss1n"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJK6aL00iwk24bJm3",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK6Wq00kDxTeriQy"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJK8Er00aHBfDtvvI",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK8BB00Qlm7HN1ZM"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKA4Z00fuQg71Qpu",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJK9zY00IXx4oI8dv"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKBLM00un4TJGG7F",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKBEk00c7hmqETa4"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKCLK00C2WxLlPrf",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKCGa00DnrHiyuj8"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKDJo00KMO5KWF0F",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKDF8002g8BrYGXd"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKFUN0012eMnDVu1",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKFQZ00NO39sQFjt"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKH3p00ziKuls393",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKGzn00kG7q0UkFD"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKIph00iyvXKR2g9",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKIm300eSdZvAUIH"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKKDW005Y3vz1iur",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKK91001qyboTits"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKLMs00UHee0XhqS",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKLI200MBP7OoY5c"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKMjK00L5bBSxxlS",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKMdu00xjQezCvRX"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKR1R00Ceb0ZEym4",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKQwL000zpCZjPo8"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKToq005bKQOj0Jc",
+          "attempt": 0,
+          "assistantMessageID": "msg_hzVvjtd609PFpYRHUG9o"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKVZb00Y8kT72LOY",
+          "attempt": 0,
+          "assistantMessageID": "msg_hzVvjtd609PFpYRHUG9o"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKX4K00o4Bsaqat2",
+          "attempt": 0,
+          "assistantMessageID": "msg_hzVvjtd609PFpYRHUG9o"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKXwf00s8lMfESnA",
+          "attempt": 0,
+          "assistantMessageID": "msg_hzVvjtd609PFpYRHUG9o"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKZWn0001YDHYuBh",
+          "attempt": 0,
+          "assistantMessageID": "msg_hzVvjtd609PFpYRHUG9o"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKdug00tFcomqIvY",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKdkJ00KjJ8a87nj"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKfVW00jyvgS6bck",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKfQa00j051ECzMN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKhoV00FSnbc9R7g",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKhjV00TFr7B9weR"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKj5800dieapICRb",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKizv00ZIzLaiXkW"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKkut00d9pZmqo8R",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKkpk00vQdQVHGgv"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKn9900KO8TGGb7q",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKn3q00RNNE35nHH"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKprE00Bdmzk8QM3",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKpmR00Hc0d4jLoO"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKroG00WQxIuSlr3",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKrjM006hzWrSy1M"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKuHJ009yqpFdTt1",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKuDJ003IwaozZgc"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKvMh00TPMstjJHr",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKvIb00TdMnNSZXX"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKxgu00WU6PxCrtK",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKxcn00QVViuxdus"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJKyoD00n080PeEcb",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJKykX00g5Dja6rbP"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJL15P00vVFcIuHGZ",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJL10e006W9mtx10Q"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJL2u4000CKrFFipn",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJL2p400SiWDq1YJV"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJL59q00atfj7LQkV",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJL54l00XLLMYEBaA"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJL6T100AOOsaaeD0",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJL6N7008WjEfwFrG"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJL7gS00bgyMmqyOT",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJL7bX003sQIcEaR0"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJL8tw00I1jcCcc7g",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJL8oZ00Kp2QUi3Zb"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLA5a00vJQq3lwjM",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJLA0i00BQgsfbKBW"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLBLE00POzaoMNJD",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJLBFR00KKVe9bx5E"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLVfA00Crde4TjKN",
+          "attempt": 0,
+          "assistantMessageID": "msg_g0VXJLVZi00f1Odx3be0"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLZ8R00FDrMBHk71",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLaO400z32VuWs3m",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLcb400u8ps4jaT6",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLdus00s71u71OFh",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLewu00rG0scKkC5",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLh9K00wvJd23U3g",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLjUJ001MI5FH1sO",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLknk00L5h8q0FN3",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLmK800HePt5of1D",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLncg00y6W7ES4bi",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      },
+      {
+        "activity": {
+          "id": "act_g0VXJLoh000WaBnGht1S",
+          "attempt": 0,
+          "assistantMessageID": "msg_hQlrIKZQuCysVBWo16ZN"
+        },
+        "phase": "settled",
+        "pending": {
+          "pendingCount": 0,
+          "totalUTF16Length": 0,
+          "observedUTF16Length": 0,
+          "trimmedUTF16Length": 0,
+          "nonWhitespaceUTF16Length": 0,
+          "trailingWhitespaceUTF16Length": 0,
+          "states": {
+            "complete_json": 0,
+            "syntax_error": 0,
+            "non_object": 0,
+            "empty": 0,
+            "unobserved_size_limit": 0
+          },
+          "rootFieldCount": 0,
+          "valueTypes": {
+            "null": 0,
+            "array": 0,
+            "object": 0,
+            "string": 0,
+            "number": 0,
+            "boolean": 0
+          },
+          "bookkeepingFailures": 0,
+          "sourceUTF16Budget": 262144
+        }
+      }
+    ]
+  },
+  "limits": [
+    "Successful50 does not repair or erase original44 generation idle, and concise request phrasing is not a proven causal explanation.",
+    "Initial pending/nonempty list, same-row focus and current-file body are actual Root visual observations; successful empty, failure/Retry, reactivation pending instant and search-no-match remain unqualified.",
+    "Formal resource preview top/bottom and snapshot child were viewed; the separately named middle screenshot returned to top, so it does not prove a middle-row visual range.",
+    "Producer full-conversation pointer clicks did not show the expected panel; pointer/keyboard hit-path diagnosis remains open51.",
+    "Restart/Mission/multi-project concurrency/helper matrices and earlier missing evidence remain unqualified."
+  ]
+}

@@ -1,0 +1,12 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 135, 142
+~							88 container Description: Running · 42s, ID: taskStatus
+~								90 text 42s
++												142 text panel_query_task Tasks artifact_search Artifact queries (1) glob C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\live-sol-publication-50\project 实际列表返回了 1 个任务，状态为进行中；详情可读取，未显示终态报告、目标或规划
++									143 container contextmenu-cl-414-trigger
++										144 button (collapsed) .opencorvus, ID: contextmenu-cl-416-trigger, Secondary Actions: Expand
++										145 button .gitattributes, ID: contextmenu-cl-420-trigger
++										146 button .gitignore, ID: contextmenu-cl-423-trigger
++										147 button README.md, ID: contextmenu-cl-426-trigger
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18013/ui/

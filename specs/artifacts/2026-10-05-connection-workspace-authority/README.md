@@ -240,3 +240,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Current Explorer row identity45](explorer-row-stability-plan.md): scoped stable render identities and current metadata/menu accessors; actual44 file refresh/focus/menu/current-file visuals passed, extended selection and formal delivery remain open.
 
 - [Explorer selection lifecycle46](explorer-selection-lifecycle-plan.md): authoritative-list selection reconciliation; real removal/type replacement/filter/hidden-descendant/menu/current-file visuals passed, extended gesture matrices remain open.
+
+- [Explorer initial loading48 and genuine50](explorer-initial-loading-plan.md): initial Loading→list visuals passed; genuine50 full checks/formal Task/resource/snapshot/native notes download passed, whole886676ms;44 generation cause and pointer candidate51 remain open.

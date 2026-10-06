@@ -1,0 +1,18 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 209-215, 253-257
+~								161 container Description: Running · 2m 40s, ID: taskStatus
+~									219 text 2m 40s
+~													252 text bash git status --short; git log -3 --oneline; git ls-files hello.txt notes.txt 正式观察记录已完整读取：前置查询返回一条近期活动任务，但未证明覆盖项目全部历史任务或跨 Task 报告。当前项目未有这两份交付文件；接下来按指定顺序创建，并检查实际文件的全部字节与换行格式。 apply_patch Success. Updated the following files: A hello.txt apply_patch Success. Updated the following files: A notes.txt
+~									137 tab (selected, settable, boolean) Description: Files, Value: 1, ID: tabs-cl-64-trigger-explorer
+~									207 tab (selectable, settable, boolean) Description: File, Value: 0, ID: tabs-cl-64-trigger-file
++							253 container Description: Files, ID: centerWorkbenchExplorer
++								254 container Explorer
++									255 search text field (settable) Search files
++									256 container contextmenu-cl-1663-trigger
++										257 button (collapsed) .opencorvus, ID: contextmenu-cl-1665-trigger, Secondary Actions: Expand
++										258 button .gitattributes, ID: contextmenu-cl-1669-trigger
++										259 button .gitignore, ID: contextmenu-cl-1672-trigger
++										260 button hello.txt, ID: contextmenu-cl-1675-trigger
++										261 button README.md, ID: contextmenu-cl-1678-trigger
+The focused UI element is 137 tab (selected, settable, boolean) Description: Files, Value: 1, ID: tabs-cl-64-trigger-explorer

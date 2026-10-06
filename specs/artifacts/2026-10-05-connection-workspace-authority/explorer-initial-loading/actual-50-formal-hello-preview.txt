@@ -1,0 +1,23 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 408-423
+~													481 button (expanded) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Collapse
++													526 text text/plain 26 bytes
++													527 container 91d5d1acf4e0de3211d4a9ac6f5f5753ec6cbe6fad377999e8cbe027de86e67e
++														528 text sha256: 91d5d1acf4e0
++													529 container hello.txt
++														530 container
++															531 text Code
++															532 heading hello.txt, Value: 3
++																533 text hello.txt
++															534 button Copy text
++															535 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-5678-trigger, Secondary Actions: Expand
++															536 button Open hello.txt in artifact workspace
++														537 text hello.txt
++														538 container
++															539 text entry area Description: hello.txt, Value: Hello from a formal Task.
+
+
++																540 text Hello from a formal Task.
++														541 text Plain text
+The focused UI element is 481 button (expanded) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Collapse

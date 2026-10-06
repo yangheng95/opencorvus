@@ -479,7 +479,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   const shouldVirtualize = createMemo(() => rows().length > VIRTUAL_EXPLORER_ROW_THRESHOLD)
   const explorerRowItemSize = () => scaledExplorerRowHeight()
-  const rootLoading = createMemo(() => !deferredQuery() && loadingPaths().has("") && !childrenByPath().has(""))
+  const rootLoading = createMemo(
+    () =>
+      active() &&
+      !!directory() &&
+      !deferredQuery() &&
+      !childrenByPath().has("") &&
+      (loadingPaths().has("") || !directoryErrors().has("")),
+  )
   const searchLoading = createMemo(() => {
     const query = deferredQuery()
     if (!query || !searchResults.loading) return false

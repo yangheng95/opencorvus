@@ -1,0 +1,8 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 252
+~								161 container Description: Running · 3m 36s, ID: taskStatus
+~									219 text 3m 36s
++													262 text 两文件已按顺序创建并通过全字节检查：hello 为 26 字节、1 个 LF；notes 为 520 字节、20 个 LF，均无 BOM、无 CR。提交时 Git 提示未来可能转换换行，但提交后重新打开的实际文件仍完全符合要求。现在将两文件放入同一个不可变快照，并完整读回发布内容。 artifact_snapshot Published Artifact snapshot (2 files) artifact_read Artifacts (3) artifact_publish {"artifact_type":"task-resource-qa/development-report","schema_version":1,"label":"hello 与 notes 正式资源制作及完整读回记录","sour...
++										263 button notes.txt, ID: contextmenu-cl-1818-trigger
+The focused UI element is 137 tab (selected, settable, boolean) Description: Files, Value: 1, ID: tabs-cl-64-trigger-explorer

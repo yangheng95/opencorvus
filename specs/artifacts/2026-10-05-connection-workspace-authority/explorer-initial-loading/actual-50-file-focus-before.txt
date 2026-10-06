@@ -1,0 +1,7 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 142
+~							88 container Description: Running · 1m 16s, ID: taskStatus
+~								90 text 1m 16s
++												148 text 实际列表返回了 1 个任务，状态为进行中；详情可读取，未显示终态报告、目标或规划工件。本 Task 的证据目录查询完整返回 4 个核心记录，没有文件快照或资源条目。我会读取这些记录，区分可取得的流程事实与尚未出现的交付、验收报告。 artifact_read Artifacts (4) artifact_publish Published task-resource-qa/project-observation 已完成只读项目观察，并正式发布观察记录。 ### 实际任务查询结果 通过 `panel_query_task`（省略 taskIDs）实际返回： | Task ID | 标题 | 状态 | |---|---|---| | `tsk_g00VXJJVS500QnIDtJVs` | 文件加载与完整正式交付验收50 | `active` | 随后对该 ID...
+The focused UI element is 147 button README.md, ID: contextmenu-cl-426-trigger

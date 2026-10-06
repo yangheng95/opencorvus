@@ -125,6 +125,11 @@ do not establish retirement. Anchor and active drag/drop lifetime use the same
 listing fact. Already-entered filesystem actions retain their captured targets
 and guarded operation owner.
 
+Before the first successful root directory listing, an active scoped Explorer
+shows pending loading, including the initial request scheduling interval. Empty
+state is derived from a successful empty list; a failed root list retains its
+error and Retry action. Cached successful rows stay visible during refresh.
+
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns
 grammar metadata and cached dynamic loading; Markdown fences use that same

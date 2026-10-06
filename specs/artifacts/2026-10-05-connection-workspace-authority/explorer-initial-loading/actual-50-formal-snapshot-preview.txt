@@ -1,0 +1,29 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 526-560
+~													489 button (collapsed) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Expand
+~													569 button (expanded) Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335 task_artifact_snapshot 2 resources, Help: Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335, Secondary Actions: Collapse
++													573 container Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335
++														574 container
++															575 text Snapshot
++															576 heading Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335, Value: 3
++																577 text Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335
++														578 text application/json 1087 bytes
++														579 container 2cab025b62082a937fe11d20322e26b666acc97b1338ac52e34e4207b433f7e7
++															580 text sha256: 2cab025b6208
++														581 search text field (settable) Search resources
++														582 text 2 resources
++														583 container
++															584 button hello.txt resources · text/plain 26 bytes
++																585 text hello.txt
++																586 text resources
++																587 text  · 
++																588 text text/plain
++																589 text 26 bytes
++															590 button notes.txt resources · text/plain 520 bytes
++																591 text notes.txt
++																592 text resources
++																593 text  · 
++																594 text text/plain
++																595 text 520 bytes
+The focused UI element is 569 button (expanded) Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335 task_artifact_snapshot 2 resources, Help: Task Artifact snapshot c925c764-6735-50a0-ae3d-271d25f43335, Secondary Actions: Collapse

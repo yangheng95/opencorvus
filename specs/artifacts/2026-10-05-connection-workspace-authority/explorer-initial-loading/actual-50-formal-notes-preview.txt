@@ -1,0 +1,61 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~													481 button (collapsed) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
+~													489 button (expanded) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Collapse
++													526 text text/plain 520 bytes
++													527 container a17b3ae497cef8c333381e2ecd9897f3ff8b9248f2b2e5ee97fc3d047b8bc430
++														528 text sha256: a17b3ae497ce
++													529 container notes.txt
++														530 container
++															531 text Code
++															532 heading notes.txt, Value: 3
++																533 text notes.txt
++															534 button Copy text
++															535 pop up button (collapsed) Description: Download, ID: dropdownmenu-cl-5701-trigger, Secondary Actions: Expand
++															536 button Open notes.txt in artifact workspace
++														537 text notes.txt
++														538 container
++															539 text entry area Description: notes.txt, Value: Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+
+
++																540 text Notes from a formal Task.
++																541 text Notes from a formal Task.
++																542 text Notes from a formal Task.
++																543 text Notes from a formal Task.
++																544 text Notes from a formal Task.
++																545 text Notes from a formal Task.
++																546 text Notes from a formal Task.
++																547 text Notes from a formal Task.
++																548 text Notes from a formal Task.
++																549 text Notes from a formal Task.
++																550 text Notes from a formal Task.
++																551 text Notes from a formal Task.
++																552 text Notes from a formal Task.
++																553 text Notes from a formal Task.
++																554 text Notes from a formal Task.
++																555 text Notes from a formal Task.
++																556 text Notes from a formal Task.
++																557 text Notes from a formal Task.
++																558 text Notes from a formal Task.
++																559 text Notes from a formal Task.
++														560 text Plain text
+The focused UI element is 489 button (expanded) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Collapse

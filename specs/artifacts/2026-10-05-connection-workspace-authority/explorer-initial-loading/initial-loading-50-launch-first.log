@@ -1,0 +1,13 @@
+Owned Sol Target PID 67468, Host PID 69392, occurrence initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905; native settlement remains required.
+
+copiedPair            : {@{outcome=removed; presentAfter=False; copiedLength=2082; path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\live-sol-publication-50\runtime\data\auth.json}, @{outcome=removed; presentAfter=False; copiedLength=9155406; path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\live-sol-publication-50\runtime\data\models.json}}
+chain                 : {@{originalOccurrencePresent=False; expected=; state=dead_or_reused}, @{originalOccurrencePresent=False; expected=; state=dead_or_reused}}
+nativeSettlement      : @{occurrence=initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905; outcome=settled; host=; target=; observedAtUtc=2026/10/6 22:32:50; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup}
+pairedCleanupComplete : True
+listeners             : 
+boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup
+occurrence            : initial-loading-50-2e583823-c8d1-40cb-999b-f8159f880905
+observedAtUtc         : 2026/10/6 22:32:52
+physicalCompletion    : True
+
+Exact Task checker completion and physical settlement qualified; download and visual acceptance remain Root-owned.

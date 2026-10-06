@@ -1,0 +1,53 @@
+Browser tab: 28, Title: "OpenCorvus", URL: "http://127.0.0.1:18013/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 356, 364
+~								161 container Description: Running · 6m 20s, ID: taskStatus
+~									264 text 6m 20s
++													364 text read .opencorvus/.r/tasks/tsk_g00VXJJVS500QnIDtJVs/sessions/ses_hBkcd6U9aAxsXULs3wIs @1+2000 (1 lines) 三次物化和三次缓存重开已按要求顺序完成，全部精确匹配原始参考。hello 两次返回同一路径，但分别执行了新的二进制打开和完整读取；notes 的全部 520 字节、20 行、无 BOM、无 CR 和 LF 均通过。现在正式发布绑定原快照、物化读取凭证及实际缓存检查结果的独立验收记录；任务结束仍由调度方处理。 artifact_select Selected Artifact source (正式制作记录、两正式资源集合及其原始发布者身份；已用制作方原始工具事实独立交叉核对。) artifact_select Selected Artifact source (实际项目任务查询、可取得报告的正式观察记录及范围限制；已核对观察者原始查询输入输出。)
+~										362 button Reload from disk
+~										363 button Close workspace
++									365 container
++										366 text entry area (settable) Description: Editor, Value: Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+Notes from a formal Task.
+
+
++											367 text Notes from a formal Task.
++											368 text Notes from a formal Task.
++											369 text Notes from a formal Task.
++											370 text Notes from a formal Task.
++											371 text Notes from a formal Task.
++											372 text Notes from a formal Task.
++											373 text Notes from a formal Task.
++											374 text Notes from a formal Task.
++											375 text Notes from a formal Task.
++											376 text Notes from a formal Task.
++											377 text Notes from a formal Task.
++											378 text Notes from a formal Task.
++											379 text Notes from a formal Task.
++											380 text Notes from a formal Task.
++											381 text Notes from a formal Task.
++											382 text Notes from a formal Task.
++											383 text Notes from a formal Task.
++											384 text Notes from a formal Task.
++											385 text Notes from a formal Task.
++											386 text Notes from a formal Task.
++									387 text Plain text
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18013/ui/

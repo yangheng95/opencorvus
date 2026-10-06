@@ -1,0 +1,17 @@
+18 | for(const request of audit.requests){
+19 |   assert.deepEqual({model:request.model,stream:request.streaming,status:request.status,terminal:request.response_reader.terminal.kind},{model:"gpt-6.1-sol",stream:true,status:200,terminal:"eof"})
+20 |   const context=request.response_reader.requestContext
+21 |   if(!context?.activity)continue
+22 |   const event=observations.find(event=>event.payload.phase==="settled"&&event.payload.activity.id===context.activity.id&&event.payload.activity.attempt===context.activity.attempt)
+23 |   assert(event)
+       ^
+AssertionError: undefined == true
+ generatedMessage: true,
+     actual: undefined,
+   expected: true,
+   operator: "==",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\initial-loading-50-offline.ts:23:3
+
+Bun v1.3.14 (Windows x64)
