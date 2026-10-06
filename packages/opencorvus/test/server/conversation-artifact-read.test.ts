@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterAll, afterEach, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { exactEngineArtifactLocator } from "../../src/artifact-catalog"
@@ -14,6 +14,25 @@ import { createToolExecutionSurface } from "../../src/tool/execution-surface"
 import type { TaskToolExecutionScope } from "../../src/tool/task-tool-execution-scope"
 import { persistEstablishedTask } from "../fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { configure as configureArtifactApi } from "../../../overlay/src/services/api"
+import { loadConversationArtifactContent } from "../../../overlay/src/services/conversation-artifact"
+import { setSettingsStore } from "../../../overlay/src/store/settings"
+
+let listener: ReturnType<typeof Server.listenPrepared> | undefined
+function artifactListener() {
+  if (!listener) {
+    listener = Server.listenPrepared({ hostname: "127.0.0.1", port: 0, randomPort: true })
+    console.log(JSON.stringify({ qualification: "owned artifact checker loopback listener", pid: process.pid, url: listener.url.toString() }))
+  }
+  return listener
+}
+afterAll(async () => {
+  if (listener) {
+    const url = listener.url.toString()
+    await listener.stop(true)
+    console.log(JSON.stringify({ qualification: "owned artifact listener canonical stop awaited", pid: process.pid, url }))
+  }
+})
 
 type TaskFixture = {
   taskID: string
@@ -81,7 +100,7 @@ async function createTask(directory: string, title: string): Promise<TaskFixture
             kind: "projected-scheduler",
             expertSquadID: "test-squad",
             packageRevision: {
-              scope: "project",
+              scope: "project" as const,
               projectID: Instance.project.id,
               namespace: "test",
               id: "test-squad",
@@ -126,7 +145,7 @@ async function readArtifact(
   maxBytes = 65_536,
   origin?: string,
 ): Promise<Response> {
-  const response = await Server.App().request(`/task/${taskID}/artifact-read`, {
+  const response = await fetch(new URL(`/task/${taskID}/artifact-read`, artifactListener().url), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -134,6 +153,7 @@ async function readArtifact(
       ...(origin ? { Origin: origin } : {}),
     },
     body: JSON.stringify({ locator, byte_offset: byteOffset, max_bytes: maxBytes }),
+    signal: AbortSignal.timeout(15_000),
   })
   if (response.status !== 200) {
     throw new Error(`Conversation Artifact read returned ${response.status}: ${await response.text()}`)
@@ -214,6 +234,77 @@ describe("Conversation Artifact byte route", () => {
       cursor += chunk.byteLength
     }
     expect(new TextDecoder("utf-8", { fatal: true }).decode(combined)).toBe(expectedText)
+  })
+
+  test.each([
+    { name: "boundary BOM", boundaryText: "\uFEFF", firstBytes: 65_535 },
+    { name: "three-byte character", boundaryText: "中", firstBytes: 65_535 },
+    { name: "four-byte character", boundaryText: "🙂", firstBytes: 65_534 },
+  ])("preserves large Unicode text and short route ranges at $name", async ({ name, boundaryText, firstBytes }) => {
+    await using project = await memoryProject()
+    const task = await createTask(project.path, `Large Unicode ${name}`)
+    // The first literal BOM is data. The next code point crosses the nominal
+    // 65536-byte end, so the production route retreats to firstBytes. In the
+    // BOM case the second real response itself begins with a literal BOM.
+    const prefix = "\uFEFF" + "a".repeat(firstBytes - 3)
+    const expectedText = prefix + boundaryText + "\uFEFF第二段🙂\n"
+    const expectedBytes = Buffer.from(expectedText, "utf8")
+    const publication = await publishResources(task.scope, [
+      { path: "unicode.txt", mediaType: "text/plain", bytes: expectedBytes },
+    ])
+    const resource = publication.artifacts[0]!
+    const locator = { source: "task_artifact_resource", ref: resource }
+    const manifestResponse = await readArtifact(project.path, task.taskID, {
+      source: "task_artifact_snapshot", snapshot: publication.snapshot,
+    })
+    expect(JSON.parse(await manifestResponse.text())).toEqual(publication.manifest)
+
+    const chunks: Uint8Array[] = []
+    const ranges: string[] = []
+    const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
+    let actualText = ""
+    let offset = 0
+    while (offset < expectedBytes.byteLength) {
+      const response = await readArtifact(project.path, task.taskID, locator, offset, 65_536)
+      const end = offset === 0 ? firstBytes : expectedBytes.byteLength
+      const expectedRange = `bytes ${offset}-${end - 1}/${expectedBytes.byteLength}`
+      expect({
+        status: response.status,
+        range: response.headers.get("content-range"),
+        mediaType: response.headers.get("content-type"),
+        disposition: response.headers.get("content-disposition"),
+        etag: response.headers.get("etag"),
+      }).toEqual({
+        status: 200, range: expectedRange, mediaType: "text/plain", disposition: "inline",
+        etag: `"sha256:${resource.sha256}"`,
+      })
+      const bytes = new Uint8Array(await response.arrayBuffer())
+      expect(bytes).toEqual(new Uint8Array(expectedBytes.subarray(offset, end)))
+      expect(new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes)).toBe(
+        expectedBytes.subarray(offset, end).toString("utf8"),
+      )
+      chunks.push(bytes)
+      ranges.push(expectedRange)
+      actualText += decoder.decode(bytes, { stream: true })
+      // Follow the actual short response, rather than jumping to the nominal
+      // budget. Every returned chunk is independently valid UTF-8.
+      offset += bytes.byteLength
+    }
+    actualText += decoder.decode()
+    expect(ranges).toEqual([
+      `bytes 0-${firstBytes - 1}/${expectedBytes.byteLength}`,
+      `bytes ${firstBytes}-${expectedBytes.byteLength - 1}/${expectedBytes.byteLength}`,
+    ])
+    expect(Buffer.concat(chunks)).toEqual(expectedBytes)
+    expect(actualText).toBe(expectedText)
+    expect(Buffer.from(actualText, "utf8")).toEqual(expectedBytes)
+    configureArtifactApi({ serverUrl: artifactListener().url.toString(), username: "dummy", password: "", directory: project.path })
+    setSettingsStore("directory", project.path)
+    const decoded = await loadConversationArtifactContent({ taskID: task.taskID, locator })
+    expect({ text: decoded.text, bytes: decoded.totalBytes, mediaType: decoded.mediaType, sha256: decoded.sha256 }).toEqual({
+      text: expectedText, bytes: expectedBytes.byteLength, mediaType: "text/plain", sha256: resource.sha256,
+    })
+    expect(Buffer.from(decoded.text!, "utf8")).toEqual(expectedBytes)
   })
 
   test("returns a binary resource as exact raw bytes with immutable metadata", async () => {

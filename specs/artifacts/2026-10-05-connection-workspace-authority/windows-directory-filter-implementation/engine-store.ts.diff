@@ -1,0 +1,28 @@
+===================================================================
+--- engine-store.ts.before
++++ packages/opencorvus/src/engine/store.ts
+@@ -1,5 +1,6 @@
+ import { ProjectTable } from "@/project/project.sql"
++import { sessionDirectoryFilterCondition } from "@/session/directory-filter"
+ import { BusPublicationOutboxTable } from "@/bus/bus.sql"
+ import { PermissionLedgerTable } from "@/permission/permission.sql"
+ import { isDeepStrictEqual } from "node:util"
+ import { SessionTable } from "@/session/session.sql"
+@@ -1297,15 +1298,14 @@
+   query?: string
+   status?: string
+   limit?: number
+ }) {
+-  const rows = Database.use((db) => {
++  const rows = Database.transaction((db) => {
+     const persisted = db.select({ task: EngineTaskTable, directory: SessionTable.directory })
+       .from(EngineTaskTable)
+       .leftJoin(SessionTable, eq(EngineTaskTable.session_id, SessionTable.id))
+-      .where(isNull(EngineTaskTable.time_archived))
++      .where(and(isNull(EngineTaskTable.time_archived), sessionDirectoryFilterCondition(db, input?.directory)))
+       .all()
+-      .filter((item) => !input?.directory || item.directory === input.directory)
+       .filter((item) => !taskDeletedInTransaction(db, item.task.id))
+       .map((item) => projectTaskRowInTransaction(db, item.task))
+     const query = input?.query?.toLocaleLowerCase()
+     return persisted

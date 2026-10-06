@@ -1,0 +1,22 @@
+packages\sdk\js\src\expert-squad-authoring.ts:873:      const directoryKey = segments.slice(0, index).join("/").toLowerCase()
+packages\sdk\js\src\expert-squad-authoring.ts:914:      const directoryKey = directory.toLowerCase()
+packages\opencorvus\test\algorithm-batch-one.test.ts:1148:        const directoryKey = await ProjectDirectoryAdmission.key(worktree.directory)
+packages\opencorvus\script\generate-expert-squad-payload.ts:26:function comparePath(a: string, b: string): number {
+packages\opencorvus\script\generate-builtin-skill-payload.ts:34:function comparePath(left: string, right: string): number {
+packages\opencorvus\src\bun\install-receipt.ts:131:  function samePath(left: string, right: string): boolean {
+packages\opencorvus\src\expert-squad\registry.ts:246:        const directoryKey = segments.slice(0, index).join("/").toLowerCase()
+packages\opencorvus\src\util\filesystem.ts:456:  function normalizeForCompare(p: string) {
+packages\opencorvus\src\project\worktree-deletion.ts:166:    const directoryKey = await ProjectDirectoryAdmission.key(input.directory)
+packages\opencorvus\src\project\project.ts:283:  function comparePath(value: string) {
+packages\opencorvus\src\project\project.ts:288:  export function samePath(a: string, b: string) {
+packages\opencorvus\src\project\isolated-check-workspace.ts:383:function normalizePathKey(value: string): string {
+packages\opencorvus\src\project\directory-admission.ts:213:    const directoryKey = directory === undefined ? undefined : keySync(directory)
+packages\opencorvus\src\project\directory-admission.ts:331:    const directoryKey = await key(input.directory)
+packages\opencorvus\src\project\directory-admission.ts:446:    const directoryKey = await key(directory)
+packages\opencorvus\src\project\directory-admission.ts:473:    const directoryKey = await key(directory)
+packages\opencorvus\src\project\deletion-cleanup.ts:88:function samePath(left: string, right: string): boolean {
+packages\opencorvus\src\system-terminal\profile.ts:50:  function normalizeForCompare(value: string): string {
+packages\opencorvus\src\skill\skill.ts:278:        const directoryKey = segments.slice(0, index).join("/").toLowerCase()
+packages\opencorvus\src\id\id.ts:287:  export function directoryKey(fullID: string): string {
+packages\opencorvus\src\session\deletion-cleanup.ts:146:function samePath(left: string, right: string): boolean {
+packages\opencorvus\src\session\prompt\state.ts:154:  function directoryKey(directory?: string) {

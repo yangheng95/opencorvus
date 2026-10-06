@@ -134,6 +134,12 @@ native committed receipt 才能解除原 owner 对继任进程的取消权。隔
 `OPENCORVUS_HOME`，避免改动生产数据。Interaction row 是 durable 可见事实，不替代
 Question/Permission 的进程内 waiter；reply 必须到达创建该 pending occurrence 的精确物理 owner。
 
+Instance context 的 `git` 是所属 Project 主工作树 `project.worktree` 的 Git 状态快照。
+构建、刷新和后续刷新判断均观察同一主工作树；注册执行子目录的 `directory` 和
+`worktree` 不替代这个事实来源。global/root 身份发现仍独立观察执行目录中新出现的
+本地 Git 仓库。刷新继续使用原有独占准备、初始化、服务租约及退出收敛路径，不通过
+跳过初始化、路由旁路或额外状态来处理主根与子目录的差异。
+
 ## 对话层 — ControlMessage + Panel Capability
 
 **代码**：`src/control/message.ts` · `src/panel/capability.ts`

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "types": [
+      "../../../../packages/overlay/node_modules/vite/client",
+      "../../../../packages/opencorvus/node_modules/@types/bun"
+    ]
+  },
+  "include": [
+    "../../../../packages/overlay/src/**/*.ts",
+    "../../../../packages/overlay/src/**/*.tsx",
+    "../../../../packages/overlay/src/**/*.js",
+    "../../../../packages/overlay/test/conversation-artifact-compound-authority.test.ts",
+    "../../../../packages/overlay/test/immutable-diff-evidence.test.ts"
+  ],
+  "extends": "../../../../packages/overlay/tsconfig.json"
+}

@@ -1,0 +1,2 @@
+$ bun run ./packages/opencorvus/script/check/module-topology.ts --index
+module-topology ok (index:fef52f201868) — 1133 modules, 5788 runtime edges, retained SCC sizes ; 4 clean imports passed

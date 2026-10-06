@@ -1,0 +1,156 @@
+===================================================================
+--- /dev/null
++++ packages/opencorvus/test/session-directory-filter.test.ts
+@@ -0,0 +1,152 @@
++import { afterEach, expect, test } from "bun:test"
++import fs from "node:fs/promises"
++import path from "node:path"
++import { Identifier } from "@/id/id"
++import { Instance } from "@/project/instance"
++import { Session } from "@/session"
++import { ensureMissionSession, listGlobalMissionSessions, listMissionSessions } from "@/mission/session"
++import { findTask, listGlobalTasks, listProjectTasks } from "@/engine/store"
++import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
++import { Filesystem } from "@/util/filesystem"
++import { Server } from "@/server/server"
++import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
++import { persistEstablishedTask } from "./fixture/engine-task"
++
++afterEach(async () => {
++  Server.resetProjectRoutesAppForTest()
++  await Instance.disposeAll()
++  await resetMemoryDatabase()
++})
++
++const packageRevision = {
++  scope: "built_in" as const, projectID: null, namespace: "builtin", id: "base",
++  version: "2026.08.06.1", packageDigest: "a".repeat(64),
++}
++
++async function records(directory: string, label: string, count: number) {
++  return Instance.provide({ directory, fn: async () => {
++    const mission = await ensureMissionSession({ missionID: `directory-${label}`, defaultCwd: directory,
++      productPillar: "code", heldExpertSquadIDs: ["base"] })
++    const roots: Session.Info[] = []
++    const tasks: string[] = []
++    for (let index = 0; index < count; index++) {
++      const now = Date.now(), taskID = Identifier.ascending("task")
++      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: `Directory ${label}-${index}` })
++      persistEstablishedTask({ taskID, rootSession: root, now, title: `Directory ${label}-${index}`,
++        request: "Owned directory filter contract", productPillar: "code", source: "api", priority: "normal",
++        metadata: { actor: "user" }, projectID: Instance.project.id, packageRevision,
++        executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID,
++          projectID: Instance.project.id, rootDirectory: Instance.directory,
++          packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }) })
++      roots.push(await Session.get(root.id))
++      tasks.push(taskID)
++    }
++    return { directory: Instance.directory, projectID: Instance.project.id, mission: await Session.get(mission.id), roots, tasks }
++  } })
++}
++
++async function collect<T>(input: AsyncIterable<T>): Promise<T[]> {
++  const result: T[] = []
++  for await (const item of input) result.push(item)
++  return result
++}
++
++function ids(items: readonly { id: string }[]) { return items.map((item) => item.id).sort() }
++async function get(route: string, directory?: string, extras: Record<string, string> = {}) {
++  const query = new URLSearchParams(extras)
++  if (directory !== undefined) query.set("directory", directory)
++  const response = await Server.App().request(`${route}?${query.toString()}`)
++  return { status: response.status, body: await response.json() as any }
++}
++
++test.skipIf(process.platform !== "win32")("Windows lexical filters preserve real Session/Mission/Task scope and pagination through stores and routes", async () => {
++  await using project = await memoryProject()
++  await using independent = await memoryProject()
++  const first = path.join(project.path, "filter-a"), sibling = path.join(project.path, "filter-b")
++  await fs.mkdir(first)
++  await fs.mkdir(sibling)
++  const a = await records(first, "a", 2)
++  const b = await records(sibling, "b", 2)
++  const c = await records(independent.path, "c", 1)
++  expect(a.projectID).toBe(b.projectID)
++  const aIDs = ids([a.mission, ...a.roots]), bIDs = ids([b.mission, ...b.roots])
++  const spellings = [a.directory, a.directory.replaceAll("\\", "/"), a.directory.toUpperCase(), `${a.directory}\\`]
++  for (const directory of spellings) {
++    await Instance.provide({ directory: a.directory, fn: async () => {
++      expect(ids([...Session.list({ directory })])).toEqual(aIDs)
++      expect(ids(await collect(listMissionSessions({ directory })))).toEqual([a.mission.id])
++    } })
++    expect(ids([...Session.listGlobal({ directory })])).toEqual(aIDs)
++    expect(ids(await collect(listGlobalMissionSessions({ directory })))).toEqual([a.mission.id])
++    expect(listGlobalTasks({ directory }).map((item) => item.task.id).sort()).toEqual([...a.tasks].sort())
++    const scoped = await get("/session", directory), global = await get("/session/global", directory)
++    const missions = await get("/mission", directory), tasks = await get("/global/tasks", directory)
++    expect({ scopedStatus: scoped.status, scoped: ids(scoped.body), globalStatus: global.status, global: ids(global.body),
++      missionStatus: missions.status, missions: missions.body.map((item: any) => item.sessionID),
++      taskStatus: tasks.status, tasks: tasks.body.tasks.map((item: any) => item.task.id).sort() }).toEqual({
++      scopedStatus: 200, scoped: aIDs, globalStatus: 200, global: aIDs,
++      missionStatus: 200, missions: [a.mission.id], taskStatus: 200, tasks: [...a.tasks].sort(),
++    })
++  }
++  expect(ids([...Session.listGlobal({ directory: b.directory })])).toEqual(bIDs)
++  expect(listGlobalTasks({ directory: b.directory }).map((item) => item.task.id).sort()).toEqual([...b.tasks].sort())
++  expect(ids(await collect(listGlobalMissionSessions({ directory: c.directory })))).toEqual([c.mission.id])
++  await Instance.provide({ directory: a.directory, fn: () => {
++    expect(ids([...Session.list()])).toEqual([...aIDs, ...bIDs].sort())
++    expect(listProjectTasks(a.projectID).map((task) => task.id).sort()).toEqual([...a.tasks, ...b.tasks].sort())
++  } })
++  expect(ids([...Session.listGlobal()])).toEqual([...aIDs, ...bIDs, c.mission.id, ...c.roots.map((root) => root.id)].sort())
++  expect(ids([...Session.listGlobal({ directory: "" })])).toEqual(ids([...Session.listGlobal()]))
++  const expectedPage = [a.mission, ...a.roots].sort((left, right) => right.time.updated - left.time.updated || right.id.localeCompare(left.id))
++  const page1 = [...Session.listGlobal({ directory: spellings[1], limit: 1 })]
++  expect(page1.map((item) => item.id)).toEqual([expectedPage[0].id])
++  const page2 = [...Session.listGlobal({ directory: spellings[2], limit: 2,
++    cursorUpdated: page1[0].time.updated, cursorSessionID: page1[0].id })]
++  expect(page2.map((item) => item.id)).toEqual(expectedPage.slice(1).map((item) => item.id))
++  const taskRows = a.tasks.map((id) => findTask(id)!).sort((left, right) => right.time_updated - left.time_updated || right.id.localeCompare(left.id))
++  expect(listGlobalTasks({ directory: spellings[1], limit: 1 }).map((item) => item.task.id)).toEqual([taskRows[0].id])
++  expect(listGlobalTasks({ directory: spellings[2], cursor: taskRows[0].time_updated, cursorTaskID: taskRows[0].id, limit: 1 }).map((item) => item.task.id)).toEqual([taskRows[1].id])
++  expect(listGlobalTasks({ directory: spellings[1], query: "a-0" }).map((item) => item.task.id)).toEqual([a.tasks[0]])
++  expect(listGlobalTasks({ directory: spellings[1], status: taskRows[0].lifecycle_status }).map((item) => item.task.id).sort()).toEqual([...a.tasks].sort())
++  expect(ids([...Session.listGlobal({ directory: path.join(project.path, "valid-unmatched") })])).toEqual([])
++}, 90_000)
++
++test("invalid cross-platform directory filters preserve the named error and actual global route response", async () => {
++  const directory = process.platform === "win32" ? "/unsupported-posix/path" : "C:\\unsupported\\path"
++  expect(() => [...Session.listGlobal({ directory })]).toThrow(Filesystem.InvalidDirectoryError)
++  expect(() => listGlobalTasks({ directory })).toThrow(Filesystem.InvalidDirectoryError)
++  const missionError = await collect(listGlobalMissionSessions({ directory })).catch((error: unknown) => error)
++  expect(missionError).toBeInstanceOf(Filesystem.InvalidDirectoryError)
++  const result = await get("/session/global", directory)
++  expect({ status: result.status, name: result.body.name, reason: result.body.data.reason }).toEqual({
++    status: 400, name: "InvalidDirectoryError", reason: process.platform === "win32" ? "posix-path-on-windows" : "windows-path-on-posix",
++  })
++})
++
++test.skipIf(process.platform !== "win32")("Mission directory filtering precedes compound pagination and retains exact sibling output", async () => {
++  await using project = await memoryProject()
++  const directory = path.join(project.path, "mission-a"), sibling = path.join(project.path, "mission-b")
++  await fs.mkdir(directory)
++  await fs.mkdir(sibling)
++  const saved: Session.Info[] = []
++  await Instance.provide({ directory, fn: async () => {
++    for (const missionID of ["directory-page-a1", "directory-page-a2", "directory-page-a3"]) {
++      const mission = await ensureMissionSession({ missionID, defaultCwd: directory, productPillar: "code", heldExpertSquadIDs: ["base"] })
++      saved.push(await Session.get(mission.id))
++    }
++  } })
++  const peer = await Instance.provide({ directory: sibling, fn: () => ensureMissionSession({
++    missionID: "directory-page-b", defaultCwd: sibling, productPillar: "code", heldExpertSquadIDs: ["base"],
++  }) })
++  const expected = saved.sort((left, right) => right.time.updated - left.time.updated || right.id.localeCompare(left.id))
++  const first = await collect(listGlobalMissionSessions({ directory: directory.replaceAll("\\", "/"), limit: 1 }))
++  expect(first.map((item) => item.id)).toEqual([expected[0].id])
++  const rest = await collect(listGlobalMissionSessions({ directory: directory.toUpperCase(), limit: 2,
++    cursorUpdated: first[0].time.updated, cursorSessionID: first[0].id }))
++  expect(rest.map((item) => item.id)).toEqual(expected.slice(1).map((item) => item.id))
++  expect(ids(await collect(listGlobalMissionSessions({ directory: sibling })))).toEqual([peer.id])
++  await Instance.provide({ directory, fn: async () => {
++    expect(ids(await collect(listMissionSessions()))).toEqual([...saved.map((item) => item.id), peer.id].sort())
++    expect(ids(await collect(listMissionSessions({ directory: `${directory}\\` })))).toEqual(ids(saved))
++  } })
++}, 90_000)

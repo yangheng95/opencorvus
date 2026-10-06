@@ -1,0 +1,56 @@
+===================================================================
+--- test.fixture-before
++++ packages/opencorvus/test/session-directory-filter.test.ts
+@@ -2,8 +2,9 @@
+ import fs from "node:fs/promises"
+ import path from "node:path"
+ import { Identifier } from "@/id/id"
+ import { Instance } from "@/project/instance"
++import { Project } from "@/project/project"
+ import { Session } from "@/session"
+ import { ensureMissionSession, listGlobalMissionSessions, listMissionSessions } from "@/mission/session"
+ import { findTask, listGlobalTasks, listProjectTasks } from "@/engine/store"
+ import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
+@@ -64,12 +65,25 @@
+   await using independent = await memoryProject()
+   const first = path.join(project.path, "filter-a"), sibling = path.join(project.path, "filter-b")
+   await fs.mkdir(first)
+   await fs.mkdir(sibling)
++  const owner = await Project.fromDirectory(project.path)
++  await Project.addSandbox(owner.project.id, first)
++  const registered = await Project.addSandbox(owner.project.id, sibling)
++  expect({ owner: registered.id, sandboxes: [...registered.sandboxes].sort(),
++    firstOwner: Project.findByRegisteredDirectory(first)?.project.id,
++    siblingOwner: Project.findByRegisteredDirectory(sibling)?.project.id }).toEqual({
++    owner: owner.project.id, sandboxes: [first, sibling].sort(), firstOwner: owner.project.id, siblingOwner: owner.project.id,
++  })
+   const a = await records(first, "a", 2)
+   const b = await records(sibling, "b", 2)
+   const c = await records(independent.path, "c", 1)
+   expect(a.projectID).toBe(b.projectID)
++  expect(a.projectID).toBe(owner.project.id)
++  expect({ directory: c.directory, sessionProject: c.mission.projectID,
++    rootProjects: c.roots.map((root) => root.projectID), registryProject: Project.findByRegisteredDirectory(c.directory)?.project.id }).toEqual({
++    directory: independent.path, sessionProject: c.projectID, rootProjects: [c.projectID], registryProject: c.projectID,
++  })
+   const aIDs = ids([a.mission, ...a.roots]), bIDs = ids([b.mission, ...b.roots])
+   const spellings = [a.directory, a.directory.replaceAll("\\", "/"), a.directory.toUpperCase(), `${a.directory}\\`]
+   for (const directory of spellings) {
+     await Instance.provide({ directory: a.directory, fn: async () => {
+@@ -127,8 +141,16 @@
+   await using project = await memoryProject()
+   const directory = path.join(project.path, "mission-a"), sibling = path.join(project.path, "mission-b")
+   await fs.mkdir(directory)
+   await fs.mkdir(sibling)
++  const owner = await Project.fromDirectory(project.path)
++  await Project.addSandbox(owner.project.id, directory)
++  const registered = await Project.addSandbox(owner.project.id, sibling)
++  expect({ owner: registered.id, sandboxes: [...registered.sandboxes].sort(),
++    firstOwner: Project.findByRegisteredDirectory(directory)?.project.id,
++    siblingOwner: Project.findByRegisteredDirectory(sibling)?.project.id }).toEqual({
++    owner: owner.project.id, sandboxes: [directory, sibling].sort(), firstOwner: owner.project.id, siblingOwner: owner.project.id,
++  })
+   const saved: Session.Info[] = []
+   await Instance.provide({ directory, fn: async () => {
+     for (const missionID of ["directory-page-a1", "directory-page-a2", "directory-page-a3"]) {
+       const mission = await ensureMissionSession({ missionID, defaultCwd: directory, productPillar: "code", heldExpertSquadIDs: ["base"] })

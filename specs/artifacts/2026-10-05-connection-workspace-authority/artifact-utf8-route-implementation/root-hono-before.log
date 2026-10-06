@@ -1,0 +1,16 @@
+[1/1] START test/server/conversation-artifact-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Conversation Artifact byte route > reads the exact Engine Artifact owned by each addressed Task [4479.47ms]
+(pass) Conversation Artifact byte route > reads a snapshot manifest and reconstructs its UTF-8 text resource from exact byte ranges [3591.47ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at boundary BOM [3521.40ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at three-byte character [3255.23ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at four-byte character [3215.72ms]
+(pass) Conversation Artifact byte route > returns a binary resource as exact raw bytes with immutable metadata [3098.07ms]
+
+ 6 pass
+ 0 fail
+ 59 expect() calls
+Ran 6 tests across 1 file. [23.99s]
+[1/1] DONE test/server/conversation-artifact-read.test.ts exit=0 duration=24.21s

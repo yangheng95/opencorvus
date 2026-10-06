@@ -1,0 +1,49 @@
+[1/1] START test/session-directory-filter.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+66 |   await fs.mkdir(first)
+67 |   await fs.mkdir(sibling)
+68 |   const a = await records(first, "a", 2)
+69 |   const b = await records(sibling, "b", 2)
+70 |   const c = await records(independent.path, "c", 1)
+71 |   expect(a.projectID).toBe(b.projectID)
+                           ^
+error: expect(received).toBe(expected)
+
+Expected: "prj_hGfrQoaHouK2RPg4NSht"
+Received: "prj_hZTOnzwWs84BDrMQCxUq"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts:71:23)
+(fail) Windows lexical filters preserve real Session/Mission/Task scope and pagination through stores and routes [4417.29ms]
+(pass) invalid cross-platform directory filters preserve the named error and actual global route response [167.21ms]
+144 |   const rest = await collect(listGlobalMissionSessions({ directory: directory.toUpperCase(), limit: 2,
+145 |     cursorUpdated: first[0].time.updated, cursorSessionID: first[0].id }))
+146 |   expect(rest.map((item) => item.id)).toEqual(expected.slice(1).map((item) => item.id))
+147 |   expect(ids(await collect(listGlobalMissionSessions({ directory: sibling })))).toEqual([peer.id])
+148 |   await Instance.provide({ directory, fn: async () => {
+149 |     expect(ids(await collect(listMissionSessions()))).toEqual([...saved.map((item) => item.id), peer.id].sort())
+                                                            ^
+error: expect(received).toEqual(expected)
+
+  [
+-   "ses_-zUSmInJVzzTU15ojB0I",
+    "ses_-zUSmInKMzzZf0G9YeoV",
+    "ses_-zUSmInKVzzX94KqQKZb",
+    "ses_-zUSmInKgzzF3fS2t997",
+  ]
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts:149:55)
+(fail) Mission directory filtering precedes compound pagination and retains exact sibling output [1052.59ms]
+
+ 1 pass
+ 2 fail
+ 9 expect() calls
+Ran 3 tests across 1 file. [8.05s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts
+[1/1] DONE test/session-directory-filter.test.ts exit=1 duration=8.27s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts

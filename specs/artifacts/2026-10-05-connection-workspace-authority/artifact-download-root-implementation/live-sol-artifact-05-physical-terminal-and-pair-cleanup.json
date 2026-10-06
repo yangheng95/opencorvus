@@ -1,0 +1,46 @@
+{
+  "occurrence": "live-sol-artifact-05-be345abb-629c-4c70-8043-4231af383fb7",
+  "chain": [
+    {
+      "expected": {
+        "ProcessId": 73288,
+        "ParentProcessId": 45912,
+        "CreationDate": "2026-10-06T07:59:14.666248+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\startup.json 17958 live-sol-artifact-05-be345abb-629c-4c70-8043-4231af383fb7 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\functional-selection.json"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 44072,
+        "ParentProcessId": 73288,
+        "CreationDate": "2026-10-06T07:59:14.678613+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\runtime\\data\\auth.json",
+      "copiedLength": 2082
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\runtime\\data\\models.json",
+      "copiedLength": 9155406
+    }
+  ],
+  "observedAtUtc": "2026-10-06T00:09:30.4830700Z",
+  "listeners": null,
+  "physicalCompletion": true,
+  "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write"
+}

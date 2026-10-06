@@ -1,0 +1,26 @@
+{
+  "observationKind": "Root actual tool transcript exit receipts; empty logs alone do not establish exits",
+  "allTouchedOverlay": {
+    "scope": "Current configured full Overlay source plus eleven selected pure touched/related service tests",
+    "command": "bunx tsc -p .tmp-product-iteration/directory-artifact-root-all-touched-overlay.tsconfig.json --noEmit",
+    "sessionID": 99747,
+    "exitCode": 0
+  },
+  "formal": {
+    "tasksTotal": 8,
+    "command": "bun run typecheck",
+    "sessionID": 2087,
+    "tasksSuccessful": 8,
+    "exitCode": 0
+  },
+  "build": {
+    "nativeAppLaunched": false,
+    "exitCode": 0,
+    "nativeRust": "5m16s",
+    "command": "bun run build:overlay",
+    "sessionID": 91501,
+    "frontendSeconds": 57.04
+  },
+  "goal": "active; no complete/pause/reset",
+  "outstanding": "Specific Task-button manual visual acceptance and held action races remain unmet"
+}

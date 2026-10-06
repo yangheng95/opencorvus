@@ -1,0 +1,57 @@
+[1/3] START test/project-instance-lock-liveness.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) admits every concurrent first admission while one of them holds a long caller function [528.75ms]
+(pass) runs a new initializer to completion while another serving lease stays busy [215.31ms]
+(pass) performs newly-required exclusive preparation from the queue without head-jumping [1088.27ms]
+(pass) runs one shared initializer exactly once across concurrent first admissions [199.10ms]
+(pass) commits two disjoint Project registrations captured before either enters the shared queue [236.53ms]
+(pass) admits one physical Project owner when two aliases capture before the shared queue [235.73ms]
+(pass) prepares a nested same-key provide with a new initializer while another lease serves [214.75ms]
+(pass) settles concurrent open, dispose, and serve on one Project without deadlock [361.42ms]
+(pass) completes a pending disposal under a continuous admission stream [878.84ms]
+
+ 9 pass
+ 0 fail
+ 22 expect() calls
+Ran 9 tests across 1 file. [5.23s]
+[1/3] DONE test/project-instance-lock-liveness.test.ts exit=0 duration=5.45s
+[2/3] START test/instance-background-work.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) instance background work > retains the source fault diagnostic after owner cancellation and joins physical cleanup [2143.88ms]
+(pass) instance background work > retains the same text fault diagnostic after owner cancellation and joins physical cleanup [3323.84ms]
+(pass) instance background work > retains the instance admission fault diagnostic after owner cancellation and joins physical cleanup [2066.85ms]
+(pass) instance background work > retains the database admission fault diagnostic after owner cancellation and joins physical cleanup [2301.55ms]
+(pass) instance background work > retains the mixed fault diagnostic after owner cancellation and joins physical cleanup [2240.16ms]
+(pass) instance background work > retains the cleanup fault diagnostic after owner cancellation and joins physical cleanup [1868.41ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1720.51ms]
+(pass) instance background work > settles exact external owner reason %s after complete unwind [1789.45ms]
+(pass) instance background work > settles exact external owner reason external primitive after complete unwind [1787.58ms]
+(pass) instance background work > global disposal cancels scheduled owners across projects before draining their leases [4553.57ms]
+(pass) instance background work > settles nested background registration from a abort listener after teardown closes admission [1766.07ms]
+(pass) instance background work > settles nested background registration from a draining owner after teardown closes admission [1647.50ms]
+(pass) instance background work > keeps an admitted background lease valid through its complete cancellation settlement [1702.52ms]
+(pass) instance background work > returns a settled completion when teardown races background admission [1888.85ms]
+(pass) instance background work > background work keeps a valid instance context for as long as it runs [1811.26ms]
+(pass) instance background work > instance disposal cancels in-flight background work instead of waiting for it [1598.59ms]
+(pass) instance background work > work scheduled and completed before disposal leaves nothing for disposal to cancel [1670.08ms]
+
+ 17 pass
+ 0 fail
+ 41 expect() calls
+Ran 17 tests across 1 file. [37.47s]
+[2/3] DONE test/instance-background-work.test.ts exit=0 duration=37.75s
+[3/3] START test/project-instance-capability-refresh.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a non-Git to Git refresh revalidates capability authority before admitting a peer lease [1626.72ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [2.71s]
+[3/3] DONE test/project-instance-capability-refresh.test.ts exit=0 duration=2.93s

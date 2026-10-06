@@ -1,0 +1,66 @@
+===================================================================
+--- session-index.ts.before
++++ packages/opencorvus/src/session/index.ts
+@@ -25,8 +25,9 @@
+   type SessionKind,
+ } from "./session.sql"
+ import { ProjectTable } from "../project/project.sql"
+ import { Project } from "../project/project"
++import { sessionDirectoryFilterCondition } from "./directory-filter"
+ import { Log } from "../util/log"
+ import { Message } from "./message"
+ import { MessageStore } from "./message-store"
+ import { SessionEvents } from "./events"
+@@ -1055,11 +1056,8 @@
+   }) {
+     const project = Instance.project
+     const conditions = [eq(SessionTable.project_id, project.id)]
+ 
+-    if (input?.directory) {
+-      conditions.push(eq(SessionTable.directory, input.directory))
+-    }
+     if (input?.roots) {
+       conditions.push(isNull(SessionTable.parent_id))
+     }
+     if (input?.start) {
+@@ -1070,13 +1068,13 @@
+     }
+ 
+     const limit = input?.limit ?? 100
+ 
+-    const rows = Database.use((db) =>
++    const rows = Database.transaction((db) =>
+       db
+         .select()
+         .from(SessionTable)
+-        .where(and(...conditions))
++        .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory, project.id)))
+         .orderBy(desc(SessionTable.time_updated))
+         .limit(limit)
+         .all().filter((row) => !deletedInTransaction(db, row.id)),
+     )
+@@ -1096,11 +1094,8 @@
+     archived?: boolean
+   }) {
+     const conditions: SQL[] = []
+ 
+-    if (input?.directory) {
+-      conditions.push(eq(SessionTable.directory, input.directory))
+-    }
+     if (input?.roots) {
+       conditions.push(isNull(SessionTable.parent_id))
+     }
+     if (input?.start) {
+@@ -1127,9 +1122,11 @@
+     }
+ 
+     const limit = input?.limit ?? 100
+ 
+-    const rows = Database.use((db) => {
++    const rows = Database.transaction((db) => {
++      const directoryCondition = sessionDirectoryFilterCondition(db, input?.directory)
++      if (directoryCondition) conditions.push(directoryCondition)
+       const query =
+         conditions.length > 0
+           ? db
+               .select()

@@ -593,6 +593,14 @@ Project GC（Garbage Collection，垃圾回收）可以编排项目生命周期�
 namespace；一个目录下的多个用户可见 Mission / task 通过现有 Mission/task 记录
 表达，不能通过制造多个 `project_id` 行表达。
 
+Session、Mission 和全局 Task 的可选目录查询复用
+`session/directory-filter.ts`。查询在同一数据库读事务中收集当前范围内实际存储的
+Session 目录，用 `Filesystem.resolve` 与 `Project.samePath` 的既有词法语义匹配，
+再以这些真实值构造 SQL（Structured Query Language，结构化查询语言）条件。
+匹配发生在游标分页之前；省略或空目录保留原有全范围语义，合法未匹配目录返回空结果。
+Project 内与全局范围仍由各领域查询决定，不以目录归一化改变所有权。该词法契约不合并
+符号链接或物理别名，也不提供另一套前端路径规则、规范化列或目录缓存。
+
 `Project.fromDirectory()` 与 exact-worktree convergence 是当前 namespace 入口。
 重复 worktree 行只能收敛或显式报错；当历史 JSON/text 中存在
 `/attachment/<projectID>/...` 这类嵌入式 namespace identity 时，不能盲改或复制

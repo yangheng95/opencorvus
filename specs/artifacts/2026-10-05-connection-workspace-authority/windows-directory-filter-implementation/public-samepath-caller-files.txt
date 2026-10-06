@@ -1,0 +1,16 @@
+packages\opencorvus\test\algorithm-batch-one.test.ts
+packages\opencorvus\src\worktree\index.ts
+packages\opencorvus\src\workspace\workspace.ts
+packages\opencorvus\src\orchestrator\protocol\message-bridge.ts
+packages\opencorvus\src\engine\host-recovery.ts
+packages\opencorvus\src\mission\session.ts
+packages\opencorvus\src\project\delete.ts
+packages\opencorvus\src\task-api\index.ts
+packages\opencorvus\src\project\implicit-project.ts
+packages\opencorvus\src\project\identity-convergence.ts
+packages\opencorvus\src\project\worktree-deletion.ts
+packages\opencorvus\src\session\index.ts
+packages\opencorvus\src\session\directory-filter.ts
+packages\opencorvus\test\project-directory-and-worktree-gc.test.ts
+packages\opencorvus\test\project-implicit-creation-journal.test.ts
+packages\opencorvus\test\workspace-lifecycle.test.ts

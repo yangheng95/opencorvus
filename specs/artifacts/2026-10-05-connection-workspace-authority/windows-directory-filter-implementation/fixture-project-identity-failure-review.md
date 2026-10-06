@@ -1,0 +1,41 @@
+# Real directory-filter fixture Project identity failure
+
+## Recall and actual result
+
+Root ran the mature isolated run-tests.ts checker against test/session-directory-filter.test.ts. Read its complete `.tmp-product-iteration/windows-directory-root-real-store-routes-01.log`, the actual memoryProject fixture, Project discovery/registration/admission, Instance identity projection, relevant mature registration callers/tests and current architecture. Only this review is written; no source/test/checker/runtime/Git/HTTP/credential/Provider/UI/index or delegation. Do not repair by shrinking expected scope or assuming the fixture was not Git initialized.
+
+Root's actual first run: **1 pass / 2 fail / 9 assertions**, checker exit 1. First case's `expect(a.projectID).toBe(b.projectID)` failed: A received `prj_hZTOnzwWs84BDrMQCxUq`; B expected `prj_hGfrQoaHouK2RPg4NSht`. It fails before the first case reaches its spelling/route assertions, so those remain unexercised. The invalid cross-platform store/route named-error case passed. Mission compound-pagination case reached its last no-filter assertion: actual A Project returned three A Mission Sessions, while expected also included peer `ses_-zUSmInJVzzTU15ojB0I`. Actual A IDs were `ses_-zUSmInKMzzZf0G9YeoV`, `ses_-zUSmInKVzzX94KqQKZb`, `ses_-zUSmInKgzzF3fS2t997`. These are Root's original outputs, not child-generated receipts.
+
+The two failures expose one incorrect fixture premise: filesystem/Git-parent containment does not imply common durable Project identity in this product. The Mission no-filter output is consistent with the original correct **all-in-current-Project** contract, not evidence that the new directory SQL predicate accidentally narrows absent-filter behavior.
+
+## Source-proven causal chain
+
+memoryProject (`test/fixture/memory.ts:18–30`) explicitly creates an owned directory, performs git init, configures its fixture author, makes an empty commit and returns physical realpath. That root really is a Git fixture. Its existing fixture --no-verify is not changed here and is not a production delivery-hook bypass claim.
+
+The new test then creates `filter-a`/`filter-b` (or mission-a/b) via fs.mkdir and calls Instance.provide for each child **before explicitly registering either child**. The children do not acquire local `.git` merely because the parent has one. Project.fromDirectory (`project.ts:570–625`) first looks for an **exact registered sandbox**. Without that registration it probes `path.join(directory,'.git')`; `hasLocalGit = local` controls the branch that runs rev-parse/common-dir/identify. The existing comment intentionally prevents discovering/auto-initializing a nested Project just from a parent repository. A bare child takes resolveNonGitDirectoryIdentity (`:428–451`): an exact worktree row if present, otherwise that directory's local identity; sandbox and worktree both remain the child directory.
+
+The generated default identity uses its own dotgit path (`:267–273`), not the parent's Git HEAD or parent path identity. Instance's getOrCreateCacheEntry (`instance.ts:166–176`) calls Project.fromDirectory for the requested child and keeps that returned genuine Project. Directory normalization/cache equivalence handles different spellings of **the same child**, not parent/child membership. Consequently the siblings become distinct durable Projects even though ordinary Git could search upward to the same parent repository. No missing Git installation, empty-commit failure or inferred alternate Project root is required to explain the observed IDs.
+
+Current registered directory matching (`project.ts:1052–1115`) is exact samePath over saved worktree/sandbox entries, not ancestry. Architecture 02-data:720–727 preserves Database Project identity and exact physical directory authority. Automatically making every descendant share a Project would change this public contract and affect Task/Mission/project isolation; it is not an appropriate test fix or directory filter repair.
+
+## Existing explicit admission supports the intended stronger fixture
+
+The current contract **does provide** a mature explicit same-Project multi-directory registration primitive: Project.addSandbox (`project.ts:1348–1408`). It resolves the actual directory, observes its physical occurrence, captures registration authority, acquires/settles existing DirectoryAdmission and uses addSandboxRow (`:1329–1345`) to check registry admission, owner existence and exclusive exact physical registration before updating the genuine sandboxes array. It emits the actual Project update. It requires a valid physical directory, not a fabricated Project row and not a new cache. Project.sandboxes (`:1317–1328`) validates actual directory existence.
+
+Subsequent Project.fromDirectory checks the exact registered sandbox **before** local-Git discovery, so a properly admitted plain directory can resolve to its existing owner Project. Current `test/project-directory-and-worktree-gc.test.ts:468–477` already builds a real fs.mkdir sandbox and calls Project.fromDirectory(parent) then Project.addSandbox(owner.id,sandbox); this is a mature precedent for the same kind of fixture. Existing frontend-design-path-authority uses addSandbox after creating a real worktree, and Worktree production registration also calls it (`worktree/index.ts:1781,2279,2384,2486`). Do not copy their unrelated executor/UI behavior.
+
+Project.registerExecutionDirectory (`project.ts:1414–1472`) is the stronger Task execution-repository contract: existing exact registration is verified, and a new unregistered execution directory must be a local Git repository with actual admission. The real Task creation caller (`task-api/index.ts:1890`) invokes it inside Worktree.withSandboxAdmission before entering the target Instance. That method is not a drop-in replacement for plain fs.mkdir children. This read/list fixture can use generic explicit addSandbox registration; it does not thereby claim a child Git worktree or full Task creation/execution acceptance. Its Task rows remain genuine established Task fixture records used for list/store/route contracts, as originally admitted by Root.
+
+## Minimum test-only correction plan
+
+Before the first `records()`/Instance call in **both** Windows test cases:
+
+1. Keep actual memoryProject Git fixture and real sibling fs.mkdir calls.
+2. Discover/register the actual parent via `const owner = await Project.fromDirectory(project.path)`.
+3. Await Project.addSandbox(owner.project.id, firstDirectory) and Project.addSandbox(owner.project.id, siblingDirectory), using its real existing physical admission. This must happen before either child creates a competing Project/Instance. Do not retrofit them after failed creation or force-delete competing identities.
+4. Assert the returned/current registry authority's exact owner ID and saved sandbox directory set, then retain the original expected A/B Project equality and stronger all-in-Project outputs. The independent C fixture remains a genuine separate Project.
+5. Keep directory-filter expectations for exact A IDs, B IDs, native/forward/case/trailing spellings, pagination, global lists and named errors unchanged. The Mission no-filter case should legitimately include all three A Missions plus the now-explicit same-owner B Mission.
+
+Add an affirmative independent-Project output using real C records/Project ID. Do not change the no-filter Project API to global, trim the expected peer away, bind the selected Project ID as a test-only override or insert sandboxes directly into SQLite. The bug under test remains lexical directory filtering; the corrected fixture must establish the original claimed same-Project/sibling boundary before its assertions.
+
+Root must admit the exact test-only registration fix and rerun the **same mature checker**, preserving this first failure. No production filter or Project discovery change is justified by this fixture failure. If actual addSandbox admission rejects a supplied directory, report its real typed result and ownership facts rather than bypassing it. Current source is sufficient for the proposed fixture, but this child has not executed that registration or claimed the corrected test passes.

@@ -1,0 +1,57 @@
+packages/opencorvus/test\algorithm-batch-one.test.ts:643:          if (replaced || !Project.samePath(observed, alias)) return
+packages/opencorvus/test\algorithm-batch-one.test.ts:824:          if (replaced || !Project.samePath(directory, worktree.directory)) return
+packages/opencorvus/test\algorithm-batch-one.test.ts:1236:          if (replaced || !Project.samePath(directory, worktree.directory)) return
+packages/opencorvus/src\bun\install-receipt.ts:131:  function samePath(left: string, right: string): boolean {
+packages/opencorvus/src\engine\host-recovery.ts:78:    if (input?.scopeProjectWorktree && !Project.samePath(project.worktree, input.scopeProjectWorktree)) continue
+packages/opencorvus/src\engine\host-recovery.ts:81:      if (!directories.some((candidate) => Project.samePath(candidate, directory))) directories.push(directory)
+packages/opencorvus/src\engine\host-recovery.ts:279:      if (input?.scopeProjectWorktree && !Project.samePath(project.worktree, input.scopeProjectWorktree)) continue
+packages/opencorvus/src\engine\host-recovery.ts:280:      if (!directories.some((directory) => Project.samePath(directory, project.worktree)))
+packages/opencorvus/src\engine\host-recovery.ts:294:        (!input?.scopeProjectWorktree || Project.samePath(candidate.directory, input.scopeProjectWorktree)) &&
+packages/opencorvus/src\engine\host-recovery.ts:295:        !directories.some((directory) => Project.samePath(directory, candidate.directory))
+packages/opencorvus/src\worktree\index.ts:1229:      if (!alias.symbolicLink || Project.samePath(alias.directory, targetDirectory)) continue
+packages/opencorvus/src\worktree\index.ts:1270:      if (!alias.symbolicLink || Project.samePath(alias.directory, targetDirectory)) continue
+packages/opencorvus/src\worktree\index.ts:1379:        Project.samePath(entry.path, plan.registration.directory),
+packages/opencorvus/src\worktree\index.ts:1417:                (matched) => !(sandbox?.sandboxes ?? []).some((entry) => Project.samePath(entry, matched.directory)),
+packages/opencorvus/src\workspace\workspace.ts:106:      Project.samePath(left.config.directory, right.config.directory)
+packages/opencorvus/src\workspace\workspace.ts:188:        !Project.samePath(worktree.directory, currentEntry.plan.info.directory)
+packages/opencorvus/src\workspace\workspace.ts:197:        (candidate) => Project.samePath(candidate.path, currentEntry.plan.info.directory),
+packages/opencorvus/src\workspace\workspace.ts:221:      if (!sandbox?.sandboxes.some((directory) => Project.samePath(directory, currentEntry.plan.info.directory))) {
+packages/opencorvus/src\mission\session.ts:114:  if (metadata.id !== missionID || !Project.samePath(metadata.cwd, session.directory)) {
+packages/opencorvus/src\mission\session.ts:652:      if (!Project.samePath(metadata.cwd, existing.directory)) {
+packages/opencorvus/src\orchestrator\protocol\message-bridge.ts:944:  if (Project.samePath(Instance.directory, hostDirectory)) {
+packages/opencorvus/src\orchestrator\protocol\message-bridge.ts:1277:      Project.samePath(envelope.directory, hostDirectory)
+packages/opencorvus/src\task-api\index.ts:1883:    if (Project.samePath(directory, Instance.directory)) {
+packages/opencorvus/src\project\delete.ts:248:    if (workspaceDirectories.some((workspace) => Project.samePath(workspace, directory))) continue
+packages/opencorvus/src\project\deletion-cleanup.ts:88:function samePath(left: string, right: string): boolean {
+packages/opencorvus/src\project\identity-convergence.ts:234:        [row.worktree, ...row.sandboxes].some((candidate) => Project.samePath(candidate, directory)),
+packages/opencorvus/src\project\project.ts:262:    return Identifier.deterministic("project", comparePath(path.resolve(seed)))
+packages/opencorvus/src\project\project.ts:283:  function comparePath(value: string) {
+packages/opencorvus/src\project\project.ts:288:  export function samePath(a: string, b: string) {
+packages/opencorvus/src\project\project.ts:289:    return comparePath(a) === comparePath(b)
+packages/opencorvus/src\project\project.ts:319:      return comparePath(await realpath(value))
+packages/opencorvus/src\project\project.ts:1153:      const key = comparePath(project.directory)
+packages/opencorvus/src\project\implicit-project.ts:188:    if (!Project.samePath(entry.quarantine, expectedQuarantine) || !Project.samePath(entry.staging, expectedStaging)) {
+packages/opencorvus/src\project\implicit-project.ts:191:    if (!Project.samePath(entry.destination, path.join(path.dirname(entry.destination), entry.name))) {
+packages/opencorvus/src\project\implicit-project.ts:223:      !Project.samePath(current.project.worktree, expectedProject.worktree) ||
+packages/opencorvus/src\project\implicit-project.ts:241:        !Project.samePath(actual.directory, expectedDirectory) ||
+packages/opencorvus/src\project\implicit-project.ts:286:        if (!Project.samePath(current.project.worktree, entry.source)) {
+packages/opencorvus/src\project\implicit-project.ts:371:          if (!sameJson(current, entry.database) || !Project.samePath(current.project.worktree, entry.source)) {
+packages/opencorvus/src\project\implicit-project.ts:449:        (destinationAdmission.owner.id !== entry.projectID || !Project.samePath(authority.worktree, entry.destination))
+packages/opencorvus/src\project\implicit-project.ts:474:      const relocated = !Project.samePath(authority.worktree, entry.source)
+packages/opencorvus/src\project\implicit-project.ts:582:      const relocated = Project.samePath(authority.worktree, entry.destination)
+packages/opencorvus/src\project\implicit-project.ts:746:    if (!Project.samePath(database.project.worktree, source)) {
+packages/opencorvus/src\project\implicit-project.ts:825:        if (!sameJson(current, database) || !Project.samePath(current.project.worktree, source)) {
+packages/opencorvus/src\project\worktree-deletion.ts:186:            (Project.samePath(entry.removal.registration.directory, input.directory) ||
+packages/opencorvus/src\project\worktree-deletion.ts:187:              entry.removal.matchedSandboxes.some((sandbox) => Project.samePath(sandbox.directory, input.directory))),
+packages/opencorvus/src\session\directory-filter.ts:20:    .filter((row) => Project.samePath(row.directory, resolved))
+packages/opencorvus/src\session\deletion-cleanup.ts:146:function samePath(left: string, right: string): boolean {
+packages/opencorvus/src\session\index.ts:225:        !Project.samePath(row.directory, expectedDirectory) ||
+packages/opencorvus/test\project-implicit-creation-journal.test.ts:945:        worktree: Project.samePath(discovered.project.worktree, root) ? "canonical" : discovered.project.worktree,
+packages/opencorvus/test\project-implicit-creation-journal.test.ts:946:        requestedDirectory: discovered.project.sandboxes.some((directory) => Project.samePath(directory, nested))
+packages/opencorvus/test\project-directory-and-worktree-gc.test.ts:1721:      if (!Project.samePath(input.directory, project.path)) return
+packages/opencorvus/test\project-directory-and-worktree-gc.test.ts:1779:        if (!Project.samePath(input.directory, project.path)) return
+packages/opencorvus/test\project-directory-and-worktree-gc.test.ts:3324:            if (!Project.samePath(directory, discovered.directory)) return
+packages/opencorvus/test\project-directory-and-worktree-gc.test.ts:3338:            if (!Project.samePath(directory, discovered.directory)) return
+packages/opencorvus/test\workspace-lifecycle.test.ts:188:            (entry) => Project.samePath(entry.path, created.config.directory) && entry.branch === created.branch,
+packages/opencorvus/test\workspace-lifecycle.test.ts:290:      Project.samePath(entry.path, first.config.directory),
+packages/opencorvus/test\workspace-lifecycle.test.ts:879:      if (Project.samePath(query.directory, second.directory)) frontierCount = query.frontierCount

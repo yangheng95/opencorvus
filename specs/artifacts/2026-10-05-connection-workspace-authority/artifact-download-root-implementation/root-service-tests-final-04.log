@@ -1,0 +1,22 @@
+bun test v1.3.14 (0d9b296a)
+
+test\artifact-export.test.ts:
+(pass) documents and edited code export their actual text and useful filenames [3.13ms]
+(pass) CSV preserves multiline cells, quotes, numbers and literal formula-like text [0.60ms]
+(pass) attachment exports retain their canonical bytes locator and name [0.13ms]
+(pass) notebooks export a standard notebook with actual cells and outputs [0.72ms]
+(pass) MCP exports actual completed result text and data [0.35ms]
+
+test\file-download-authority.test.ts:
+(pass) authored CSV returns its exact BOM and UTF-8 bytes across unrelated API renewal [3.62ms]
+(pass) API resource uses the supplied original authority and returns exact native Blob bytes [2.00ms]
+(pass) API retirement during the second native blob-body await retains its exact outcome [0.99ms]
+(pass) retired original local-fetch failure reports precise API control cause [0.69ms]
+(pass) current local blob HTTP failure retains its explicit error contract [0.44ms]
+(pass) caller cancellation returns the original precise abort reason [0.26ms]
+(pass) independent data resource keeps exact bytes through unrelated API rotation [0.49ms]
+
+ 12 pass
+ 0 fail
+ 22 expect() calls
+Ran 12 tests across 2 files. [351.00ms]

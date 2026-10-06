@@ -1,0 +1,31 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\conversation-artifact-compound-authority.test.ts:
+(pass) one artifact read retains entry directory, authority and exact complete data across chunks [3.67ms]
+(pass) retains entry authority when renewal occurs between accepted chunks [0.83ms]
+(pass) retains entry authority when ABA occurs between accepted chunks [0.21ms]
+(pass) an admitted late chunk preserves its original response in typed retirement [0.36ms]
+(pass) final %s attachment decision checks the original read authority [0.40ms]
+(pass) final %s attachment decision checks the original read authority [0.20ms]
+(pass) current artifact byte rejection retains actual status and decoded body [0.50ms]
+(pass) current attachment and empty text preserve their exact return contracts [0.52ms]
+(pass) exact Unicode bytes survive route boundary chunks [0.72ms]
+(pass) exact Unicode bytes survive split bytes chunks [0.44ms]
+(pass) exact Unicode bytes survive literal BOM chunks [0.37ms]
+(pass) invalid final UTF-8 bytes 195 yield native TypeError [0.47ms]
+(pass) invalid final UTF-8 bytes 240 yield native TypeError [0.26ms]
+(pass) supplied original authority validates entry and current completion [0.57ms]
+(pass) wrong actual range yields precise current continuity error [0.35ms]
+
+packages\overlay\test\immutable-diff-evidence.test.ts:
+(pass) both immutable sides and all chunks keep original logical directory [3.58ms]
+(pass) a retired logical read yields exact current authority error [0.59ms]
+(pass) binary refs, absent sides and empty existing objects retain explicit evidence [0.57ms]
+(pass) ambiguous shorthand selection returns typed observed-group error [0.36ms]
+(pass) immutable side preserves literal BOM and split Unicode at its actual byte boundary [1.36ms]
+(pass) immutable invalid UTF-8 side yields native TypeError [0.36ms]
+
+ 21 pass
+ 0 fail
+ 51 expect() calls
+Ran 21 tests across 2 files. [1.57s]

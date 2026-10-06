@@ -1,0 +1,47 @@
+{
+  "qualification": "Real exact manual clipboard/download object bytes retained by staged attributes; no source digest gate",
+  "facts": [
+    {
+      "name": "manual-05-code-original-clipboard.txt",
+      "fileBytes": 37,
+      "indexBytes": 37,
+      "exactPayloadBytesPreserved": true
+    },
+    {
+      "name": "manual-05-code-edited-clipboard.txt",
+      "fileBytes": 54,
+      "indexBytes": 54,
+      "exactPayloadBytesPreserved": true
+    },
+    {
+      "name": "manual-05-code-reopened-clipboard.txt",
+      "fileBytes": 37,
+      "indexBytes": 37,
+      "exactPayloadBytesPreserved": true
+    },
+    {
+      "name": "manual-05-table-clipboard.txt",
+      "fileBytes": 48,
+      "indexBytes": 48,
+      "exactPayloadBytesPreserved": true
+    },
+    {
+      "name": "manual-05-code-original-download.txt",
+      "fileBytes": 37,
+      "indexBytes": 37,
+      "exactPayloadBytesPreserved": true
+    },
+    {
+      "name": "manual-05-code-edited-download.txt",
+      "fileBytes": 54,
+      "indexBytes": 54,
+      "exactPayloadBytesPreserved": true
+    },
+    {
+      "name": "manual-05-table-download.csv",
+      "fileBytes": 51,
+      "indexBytes": 51,
+      "exactPayloadBytesPreserved": true
+    }
+  ]
+}

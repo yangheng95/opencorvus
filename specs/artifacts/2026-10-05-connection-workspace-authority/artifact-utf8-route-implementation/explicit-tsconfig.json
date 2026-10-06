@@ -1,0 +1,6 @@
+{
+  "extends": "../../../../packages/opencorvus/tsconfig.json",
+  "compilerOptions": { "types": ["../../../../packages/opencorvus/node_modules/@types/bun"] },
+  "include": ["../../../../packages/opencorvus/src/sql.d.ts", "../../../../packages/opencorvus/test/server/conversation-artifact-read.test.ts"],
+  "exclude": []
+}

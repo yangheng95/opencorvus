@@ -1,0 +1,75 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\overlay\test\conversation-artifact-compound-authority.test.ts:
+(pass) one artifact read retains entry directory, authority and exact complete data across chunks [2.58ms]
+(pass) retains entry authority when renewal occurs between accepted chunks [0.64ms]
+(pass) retains entry authority when ABA occurs between accepted chunks [0.25ms]
+(pass) an admitted late chunk preserves its original response in typed retirement [0.36ms]
+(pass) final %s attachment decision checks the original read authority [0.33ms]
+(pass) final %s attachment decision checks the original read authority [0.20ms]
+(pass) current artifact byte rejection retains actual status and decoded body [0.46ms]
+(pass) current attachment and empty text preserve their exact return contracts [0.57ms]
+(pass) exact Unicode bytes survive route boundary chunks [0.67ms]
+140 |         totalBytes,
+141 |         bytes: chunk.bytes,
+142 |         filename: chunk.filename,
+143 |       }
+144 |     }
+145 |     text.push(new TextDecoder("utf-8", { fatal: true }).decode(chunk.bytes))
+                                                              ^
+TypeError: Invalid byte sequence
+ code: "ERR_ENCODING_INVALID_ENCODED_DATA"
+
+      at loadConversationArtifactContent (D:\myhexin-local\opencorvus\packages\overlay\src\services\conversation-artifact.ts:145:57)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\conversation-artifact-compound-authority.test.ts:146:24)
+(fail) exact Unicode bytes survive split bytes chunks [0.53ms]
+144 |     }
+145 |     text.push(new TextDecoder("utf-8", { fatal: true }).decode(chunk.bytes))
+146 |     if (chunk.byteEnd === totalBytes) {
+147 |       const value = text.join("")
+148 |       if (new TextEncoder().encode(value).byteLength !== totalBytes) {
+149 |         throw new Error("Text Artifact bytes do not match their declared total")
+                        ^
+error: Text Artifact bytes do not match their declared total
+      at loadConversationArtifactContent (D:\myhexin-local\opencorvus\packages\overlay\src\services\conversation-artifact.ts:149:19)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\conversation-artifact-compound-authority.test.ts:146:24)
+(fail) exact Unicode bytes survive literal BOM chunks [0.44ms]
+(pass) invalid final UTF-8 bytes 195 yield native TypeError [0.34ms]
+(pass) invalid final UTF-8 bytes 240 yield native TypeError [0.15ms]
+161 |   const authority = setup()
+162 |   transport(async () => response("ok", 0, 2, "d".repeat(64)))
+163 |   expect(await loadConversationArtifactContent({ taskID: "tsk_artifact", locator, authority })).toMatchObject({ text: "ok", totalBytes: 2 })
+164 |   renewApiAuthority()
+165 |   const error = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator, authority }).catch((error: unknown) => error) as ApiAuthorityChangedError
+166 |   expect(error).toBeInstanceOf(ApiAuthorityChangedError)
+                      ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class ApiAuthorityChangedError extends Error]
+Received value: {
+  locator: {
+    source: "task_artifact_resource",
+    ref: {
+      path: "authority.txt",
+    },
+  },
+  mediaType: "text/plain",
+  sha256: "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  totalBytes: 2,
+  text: "ok",
+}
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\conversation-artifact-compound-authority.test.ts:166:17)
+(fail) supplied original authority validates entry and current completion [0.69ms]
+(pass) wrong actual range yields precise current continuity error [0.26ms]
+
+packages\overlay\test\immutable-diff-evidence.test.ts:
+(pass) both immutable sides and all chunks keep original logical directory [4.40ms]
+(pass) a retired logical read yields exact current authority error [0.59ms]
+(pass) binary refs, absent sides and empty existing objects retain explicit evidence [0.40ms]
+(pass) ambiguous shorthand selection returns typed observed-group error [0.24ms]
+
+ 16 pass
+ 3 fail
+ 40 expect() calls
+Ran 19 tests across 2 files. [1.77s]

@@ -1,0 +1,18 @@
+[1/1] START test/server/conversation-artifact-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"qualification":"owned artifact checker loopback listener","pid":45020,"url":"http://127.0.0.1:55007/"}
+(pass) Conversation Artifact byte route > reads the exact Engine Artifact owned by each addressed Task [4581.74ms]
+(pass) Conversation Artifact byte route > reads a snapshot manifest and reconstructs its UTF-8 text resource from exact byte ranges [3935.94ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at boundary BOM [3356.47ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at three-byte character [3464.18ms]
+(pass) Conversation Artifact byte route > preserves large Unicode text and short route ranges at four-byte character [3485.13ms]
+(pass) Conversation Artifact byte route > returns a binary resource as exact raw bytes with immutable metadata [3589.02ms]
+{"qualification":"owned artifact listener canonical stop awaited","pid":45020,"url":"http://127.0.0.1:55007/"}
+
+ 6 pass
+ 0 fail
+ 65 expect() calls
+Ran 6 tests across 1 file. [25.77s]
+[1/1] DONE test/server/conversation-artifact-read.test.ts exit=0 duration=26.05s

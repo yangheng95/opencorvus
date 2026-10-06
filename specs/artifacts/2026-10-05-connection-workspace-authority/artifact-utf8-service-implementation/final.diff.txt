@@ -1,0 +1,390 @@
+--- conversation-artifact-compound-authority.test.ts.before.txt
++++ conversation-artifact-compound-authority.test.ts.after.txt
+@@ -1,6 +1,12 @@
+ import { afterEach, expect, test } from "bun:test"
+ import { createHash } from "node:crypto"
+-import { ApiAuthorityChangedError, ApiError, captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
++import {
++  ApiAuthorityChangedError,
++  ApiError,
++  captureApiAuthority,
++  configure,
++  renewApiAuthority,
++} from "../src/services/api"
+ import { loadConversationArtifactContent } from "../src/services/conversation-artifact"
+ import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
+ import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
+@@ -19,14 +25,25 @@
+ function transport(request: (input: TransportRequest) => Promise<TransportResponse<Uint8Array>>) {
+   __setHostTransportForTest({ ...createTauriTransport("browser"), request } as HostTransport)
+ }
+-function response(text: string, start: number, total: number, digest: string, attachment = false): TransportResponse<Uint8Array> {
++function response(
++  text: string,
++  start: number,
++  total: number,
++  digest: string,
++  attachment = false,
++): TransportResponse<Uint8Array> {
+   const bytes = encoder.encode(text)
+-  return { ok: true, status: 206, headers: {
+-    "content-type": attachment ? "application/octet-stream" : "text/plain",
+-    "content-disposition": attachment ? "attachment; filename*=UTF-8''authority.bin" : "inline",
+-    etag: `"sha256:${digest}"`,
+-    "content-range": total === 0 ? "bytes */0" : `bytes ${start}-${start + bytes.byteLength - 1}/${total}`,
+-  }, body: bytes }
++  return {
++    ok: true,
++    status: 200,
++    headers: {
++      "content-type": attachment ? "application/octet-stream" : "text/plain",
++      "content-disposition": attachment ? "attachment; filename*=UTF-8''authority.bin" : "inline",
++      etag: `"sha256:${digest}"`,
++      "content-range": total === 0 ? "bytes */0" : `bytes ${start}-${start + bytes.byteLength - 1}/${total}`,
++    },
++    body: bytes,
++  }
+ }
+ afterEach(() => {
+   __setHostTransportForTest(undefined)
+@@ -46,8 +63,22 @@
+     const first = requests.length === 1
+     return response(first ? "first\n" : "second", first ? 0 : 6, 12, digest)
+   })
+-  expect(await loadConversationArtifactContent({ taskID: "tsk_artifact", locator })).toEqual({ locator, mediaType: "text/plain", sha256: digest, totalBytes: 12, text: value })
+-  expect(requests.map((request) => ({ authority: request.authority, query: request.query, body: request.body }))).toEqual([0, 6].map((offset) => ({ authority, query: { directory: "D:/artifact-a" }, body: { kind: "json", value: { locator, byte_offset: offset, max_bytes: 65536 } } })))
++  expect(await loadConversationArtifactContent({ taskID: "tsk_artifact", locator })).toEqual({
++    locator,
++    mediaType: "text/plain",
++    sha256: digest,
++    totalBytes: 12,
++    text: value,
++  })
++  expect(
++    requests.map((request) => ({ authority: request.authority, query: request.query, body: request.body })),
++  ).toEqual(
++    [0, 6].map((offset) => ({
++      authority,
++      query: { directory: "D:/artifact-a" },
++      body: { kind: "json", value: { locator, byte_offset: offset, max_bytes: 65536 } },
++    })),
++  )
+ })
+ 
+ test.each(["renewal", "ABA"])("retains entry authority when %s occurs between accepted chunks", async (rotation) => {
+@@ -58,18 +89,30 @@
+     const result = response("first\n", 0, 12, "a".repeat(64))
+     const bytes = result.body
+     // apiRequest has already checked this response when the reader consumes its body.
+-    Object.defineProperty(result, "body", { get() {
+-      if (rotation === "ABA") { configure({ serverUrl: "http://artifact-b.invalid" }); configure({ serverUrl: "http://artifact-a.invalid" }) }
+-      else renewApiAuthority()
+-      return bytes
+-    } })
++    Object.defineProperty(result, "body", {
++      get() {
++        if (rotation === "ABA") {
++          configure({ serverUrl: "http://artifact-b.invalid" })
++          configure({ serverUrl: "http://artifact-a.invalid" })
++        } else renewApiAuthority()
++        return bytes
++      },
++    })
+     return result
+   })
+-  const error: unknown = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch((error: unknown) => error)
++  const error: unknown = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch(
++    (error: unknown) => error,
++  )
+   expect(error).toBeInstanceOf(ApiAuthorityChangedError)
+   const retired = error as ApiAuthorityChangedError
+-  expect({ phase: retired.phase, expected: retired.expectedRevision, current: retired.currentRevision }).toEqual({ phase: "before_dispatch", expected: authority.revision, current: authority.revision + (rotation === "ABA" ? 2 : 1) })
+-  expect(requests.map((request) => ({ path: request.path, authority: request.authority, query: request.query }))).toEqual([{ path: "task/tsk_artifact/artifact-read", authority, query: { directory: "D:/artifact-a" } }])
++  expect({ phase: retired.phase, expected: retired.expectedRevision, current: retired.currentRevision }).toEqual({
++    phase: "before_dispatch",
++    expected: authority.revision,
++    current: authority.revision + (rotation === "ABA" ? 2 : 1),
++  })
++  expect(
++    requests.map((request) => ({ path: request.path, authority: request.authority, query: request.query })),
++  ).toEqual([{ path: "task/tsk_artifact/artifact-read", authority, query: { directory: "D:/artifact-a" } }])
+ })
+ 
+ test("an admitted late chunk preserves its original response in typed retirement", async () => {
+@@ -77,13 +120,17 @@
+   const entered = Promise.withResolvers<void>()
+   const held = Promise.withResolvers<TransportResponse<Uint8Array>>()
+   const requests: TransportRequest[] = []
+-  transport(async (request) => { requests.push(request); entered.resolve(); return held.promise })
++  transport(async (request) => {
++    requests.push(request)
++    entered.resolve()
++    return held.promise
++  })
+   const result = loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch((error: unknown) => error)
+   await entered.promise
+   renewApiAuthority()
+   const original = response("ok", 0, 2, "b".repeat(64))
+   held.resolve(original)
+-  const error = await result as ApiAuthorityChangedError
++  const error = (await result) as ApiAuthorityChangedError
+   expect(error).toBeInstanceOf(ApiAuthorityChangedError)
+   expect(error.outcome).toEqual({ phase: "response", response: original })
+   expect(requests.map((request) => request.authority)).toEqual([authority])
+@@ -94,19 +141,32 @@
+   transport(async () => {
+     const result = response("ok", 0, 2, "c".repeat(64), attachment)
+     const bytes = result.body
+-    Object.defineProperty(result, "body", { get() { renewApiAuthority(); return bytes } })
++    Object.defineProperty(result, "body", {
++      get() {
++        renewApiAuthority()
++        return bytes
++      },
++    })
+     return result
+   })
+-  const error = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch((error: unknown) => error) as ApiAuthorityChangedError
+-  expect(error).toBeInstanceOf(ApiAuthorityChangedError)
+-  expect({ phase: error.phase, expected: error.expectedRevision, current: error.currentRevision }).toEqual({ phase: "before_dispatch", expected: authority.revision, current: authority.revision + 1 })
++  const error = (await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch(
++    (error: unknown) => error,
++  )) as ApiAuthorityChangedError
++  expect(error).toBeInstanceOf(ApiAuthorityChangedError)
++  expect({ phase: error.phase, expected: error.expectedRevision, current: error.currentRevision }).toEqual({
++    phase: "before_dispatch",
++    expected: authority.revision,
++    current: authority.revision + 1,
++  })
+ })
+ 
+ test("current artifact byte rejection retains actual status and decoded body", async () => {
+   setup()
+   const body = encoder.encode("current rejected locator")
+   transport(async () => ({ ok: false, status: 422, headers: { "content-type": "text/plain" }, body }))
+-  const error = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch((error: unknown) => error) as ApiError
++  const error = (await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch(
++    (error: unknown) => error,
++  )) as ApiError
+   expect(error).toBeInstanceOf(ApiError)
+   expect(error.status).toBe(422)
+   expect(error.message).toContain("current rejected locator")
+@@ -115,16 +175,121 @@
+ test("current attachment and empty text preserve their exact return contracts", async () => {
+   const authority = setup()
+   const requests: TransportRequest[] = []
+-  transport(async (request) => { requests.push(request); return response("ok", 0, 2, "d".repeat(64), true) })
++  transport(async (request) => {
++    requests.push(request)
++    return response("ok", 0, 2, "d".repeat(64), true)
++  })
+   expect(await loadConversationArtifactContent({ taskID: "tsk_artifact", locator })).toEqual({
+-    locator, mediaType: "application/octet-stream", sha256: "d".repeat(64), totalBytes: 2,
+-    bytes: encoder.encode("ok"), filename: "authority.bin",
+-  })
+-  transport(async (request) => { requests.push(request); return response("", 0, 0, "e".repeat(64)) })
++    locator,
++    mediaType: "application/octet-stream",
++    sha256: "d".repeat(64),
++    totalBytes: 2,
++    bytes: encoder.encode("ok"),
++    filename: "authority.bin",
++  })
++  transport(async (request) => {
++    requests.push(request)
++    return response("", 0, 0, "e".repeat(64))
++  })
+   expect(await loadConversationArtifactContent({ taskID: "tsk_artifact", locator })).toEqual({
+-    locator, mediaType: "text/plain", sha256: "e".repeat(64), totalBytes: 0, text: "",
++    locator,
++    mediaType: "text/plain",
++    sha256: "e".repeat(64),
++    totalBytes: 0,
++    text: "",
+   })
+   expect(requests.map((request) => ({ authority: request.authority, query: request.query }))).toEqual([
+-    { authority, query: { directory: "D:/artifact-a" } }, { authority, query: { directory: "D:/artifact-a" } },
++    { authority, query: { directory: "D:/artifact-a" } },
++    { authority, query: { directory: "D:/artifact-a" } },
+   ])
+ })
++
++test.each(["route boundary", "split bytes", "literal BOM"])("exact Unicode bytes survive %s chunks", async (kind) => {
++  setup()
++  const value = kind === "literal BOM" ? "\uFEFF" + "a".repeat(65533) + "\uFEFFtail" : "a".repeat(65535) + "中😀tail"
++  const bytes = encoder.encode(value)
++  const boundary = kind === "route boundary" ? 65535 : 65536
++  const offsets: number[] = []
++  transport(async (request) => {
++    const body = request.body
++    if (body?.kind !== "json") throw new Error("Expected actual JSON range request")
++    const start = (body.value as { byte_offset: number }).byte_offset
++    offsets.push(start)
++    const end = start === 0 ? boundary : bytes.length
++    return {
++      ok: true,
++      status: 200,
++      headers: {
++        "content-type": "text/plain",
++        "content-disposition": "inline",
++        etag: `"sha256:${"f".repeat(64)}"`,
++        "content-range": `bytes ${start}-${end - 1}/${bytes.length}`,
++      },
++      body: bytes.slice(start, end),
++    }
++  })
++  const result = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator })
++  expect(result).toEqual({
++    locator,
++    mediaType: "text/plain",
++    sha256: "f".repeat(64),
++    totalBytes: bytes.length,
++    text: value,
++  })
++  expect(encoder.encode(result.text!)).toEqual(bytes)
++  expect(offsets).toEqual([0, boundary])
++})
++
++test.each([
++  [0xc3, 0x28],
++  [0xf0, 0x9f],
++])("invalid final UTF-8 bytes %j yield native TypeError", async (first, second) => {
++  setup()
++  const bytes = new Uint8Array([first, second])
++  transport(async () => ({
++    ok: true,
++    status: 200,
++    headers: {
++      "content-type": "text/plain",
++      "content-disposition": "inline",
++      etag: `"sha256:${"f".repeat(64)}"`,
++      "content-range": `bytes 0-${bytes.length - 1}/${bytes.length}`,
++    },
++    body: bytes,
++  }))
++  const error: unknown = await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch(
++    (error: unknown) => error,
++  )
++  expect(error).toBeInstanceOf(TypeError)
++})
++
++test("supplied original authority validates entry and current completion", async () => {
++  const authority = setup()
++  transport(async () => response("ok", 0, 2, "d".repeat(64)))
++  expect(await loadConversationArtifactContent({ taskID: "tsk_artifact", locator, authority })).toMatchObject({
++    text: "ok",
++    totalBytes: 2,
++  })
++  renewApiAuthority()
++  const error = (await loadConversationArtifactContent({ taskID: "tsk_artifact", locator, authority }).catch(
++    (error: unknown) => error,
++  )) as ApiAuthorityChangedError
++  expect(error).toBeInstanceOf(ApiAuthorityChangedError)
++  expect({ phase: error.phase, expected: error.expectedRevision, current: error.currentRevision }).toEqual({
++    phase: "before_dispatch",
++    expected: authority.revision,
++    current: authority.revision + 1,
++  })
++})
++
++test("wrong actual range yields precise current continuity error", async () => {
++  setup()
++  transport(async () => response("ok", 1, 3, "d".repeat(64)))
++  const error = (await loadConversationArtifactContent({ taskID: "tsk_artifact", locator }).catch(
++    (error: unknown) => error,
++  )) as Error
++  expect({ name: error.name, message: error.message }).toEqual({
++    name: "Error",
++    message: "Artifact read returned a discontinuous byte range",
++  })
++})
+--- conversation-artifact.ts.before.txt
++++ conversation-artifact.ts.after.txt
+@@ -107,17 +107,20 @@
+ }
+ 
+ export async function loadConversationArtifactContent(input: {
++  authority?: ApiAuthority
+   taskID: string
+   locator: ArtifactReadLocator
+   signal?: AbortSignal
+ }): Promise<ConversationArtifactContent> {
+-  const authority = captureApiAuthority()
++  const authority = input.authority ?? captureApiAuthority()
++  assertApiAuthorityCurrent(authority)
+   const directory = activeProjectDirectory()
+   let offset = 0
+   let mediaType = ""
+   let sha256 = ""
+   let totalBytes = -1
+   const text: string[] = []
++  const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
+   for (;;) {
+     input.signal?.throwIfAborted()
+     const chunk = await readChunk({ ...input, authority, directory, byteOffset: offset })
+@@ -142,8 +145,9 @@
+         filename: chunk.filename,
+       }
+     }
+-    text.push(new TextDecoder("utf-8", { fatal: true }).decode(chunk.bytes))
++    text.push(decoder.decode(chunk.bytes, { stream: true }))
+     if (chunk.byteEnd === totalBytes) {
++      text.push(decoder.decode())
+       const value = text.join("")
+       if (new TextEncoder().encode(value).byteLength !== totalBytes) {
+         throw new Error("Text Artifact bytes do not match their declared total")
+--- diff.ts.before.txt
++++ diff.ts.after.txt
+@@ -273,7 +273,7 @@
+   directory: string
+ }): Promise<string> {
+   if (input.object === null) return ""
+-  const decoder = new TextDecoder("utf-8", { fatal: true })
++  const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
+   const textChunks: string[] = []
+   let offset = 0
+   while (offset < input.object.bytes) {
+--- immutable-diff-evidence.test.ts.before.txt
++++ immutable-diff-evidence.test.ts.after.txt
+@@ -133,3 +133,41 @@
+   expect(result).toBeInstanceOf(DiffSelectionError)
+   expect(result.reason).toBe("ambiguous_group")
+ })
++
++test("immutable side preserves literal BOM and split Unicode at its actual byte boundary", async () => {
++  begin()
++  const value = "\uFEFF" + "a".repeat(256 * 1024 - 4) + "中😀\uFEFFtail"
++  const bytes = new TextEncoder().encode(value)
++  const offsets: number[] = []
++  __setHostTransportForTest({
++    ...createTauriTransport("browser"),
++    async request(request) {
++      const offset = Number(request.query?.offset),
++        length = Number(request.query?.length)
++      offsets.push(offset)
++      return { ok: true, status: 200, headers: {}, body: bytes.slice(offset, offset + length) } as any
++    },
++  })
++  const result = await resolveDiff(
++    { filePath: "file.txt", groupID: "artifact:art_evidence" },
++    groups(null, bytes.length),
++  )
++  expect(result).toMatchObject({ before: "", after: value })
++  expect(new TextEncoder().encode(result!.after!)).toEqual(bytes)
++  expect(offsets).toEqual([0, 256 * 1024])
++})
++
++test("immutable invalid UTF-8 side yields native TypeError", async () => {
++  begin()
++  __setHostTransportForTest({
++    ...createTauriTransport("browser"),
++    async request() {
++      return { ok: true, status: 200, headers: {}, body: new Uint8Array([0xf0, 0x9f]) } as any
++    },
++  })
++  const error: unknown = await resolveDiff(
++    { filePath: "file.txt", groupID: "artifact:art_evidence" },
++    groups(null, 2),
++  ).catch((error: unknown) => error)
++  expect(error).toBeInstanceOf(TypeError)
++})

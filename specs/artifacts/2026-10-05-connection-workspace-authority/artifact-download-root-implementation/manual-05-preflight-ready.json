@@ -1,0 +1,21 @@
+{
+  "pid": 73288,
+  "owner": {
+    "pid": 73288,
+    "processInstanceID": "win32:639268415546662482",
+    "occurrenceID": "cf329330-abff-4eda-be5c-8cca1c0f1caf"
+  },
+  "occurrence": "live-sol-artifact-05-be345abb-629c-4c70-8043-4231af383fb7",
+  "port": 17958,
+  "preflight": {
+    "sessionID": "ses_hhcdPN6GJGOkfAqUcG8H",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 12,
+  "budgetScope": "preflight-and-ui-cumulative-same-process",
+  "nextAction": "root-owned-real-ui",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

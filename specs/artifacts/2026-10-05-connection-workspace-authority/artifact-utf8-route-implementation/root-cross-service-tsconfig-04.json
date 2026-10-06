@@ -1,0 +1,16 @@
+{
+  "extends": "D:/myhexin-local/opencorvus/packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "D:/myhexin-local/opencorvus/packages/opencorvus/node_modules/@types/bun",
+      "D:/myhexin-local/opencorvus/packages/overlay/node_modules/vite/client"
+    ]
+  },
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/server/conversation-artifact-read.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/session-directory-filter.test.ts",
+    "D:/myhexin-local/opencorvus/packages/overlay/src/**/*.d.ts"
+  ],
+  "exclude": []
+}

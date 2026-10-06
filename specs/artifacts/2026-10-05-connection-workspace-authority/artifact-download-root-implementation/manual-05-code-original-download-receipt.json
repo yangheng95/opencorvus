@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-06T00:03:20.1420348Z",
+  "file": {
+    "FullName": "C:\\Users\\hengu\\Downloads\\unicode-download.txt",
+    "Length": 37,
+    "CreationTimeUtc": "2026-10-06T00:01:47.4113813Z",
+    "LastWriteTimeUtc": "2026-10-06T00:01:47.4123892Z"
+  },
+  "inputMessageID": "msg_1fceb521-c90f-498a-a70e-705bbd0f999a",
+  "actualToolID": "prt_g0VXDsmBP002Wug0yPQ6",
+  "tool": "publish_interactive_artifact",
+  "status": "completed",
+  "artifactMetadata": {
+    "artifactID": "art_g0VXDsmYr00w9HbCHnGk",
+    "renderer": "code@1",
+    "truncated": false
+  },
+  "downloadBytesHex": "EF-BB-BF-E4-BD-A0-E5-A5-BD-F0-9F-99-82-0A-E4-BF-9D-E7-95-99-EF-BB-BF-E4-B8-AD-E9-97-B4-0A-E7-BB-93-E6-9D-9F-0A",
+  "realInputBytesHex": "EF-BB-BF-E4-BD-A0-E5-A5-BD-F0-9F-99-82-0A-E4-BF-9D-E7-95-99-EF-BB-BF-E4-B8-AD-E9-97-B4-0A-E7-BB-93-E6-9D-9F-0A",
+  "clipboardBytesHex": "EF-BB-BF-E4-BD-A0-E5-A5-BD-F0-9F-99-82-0A-E4-BF-9D-E7-95-99-EF-BB-BF-E4-B8-AD-E9-97-B4-0A-E7-BB-93-E6-9D-9F-0A",
+  "downloadMatchesActualSource": true,
+  "clipboardMatchesActualSource": true,
+  "eventObserver": "CUA waitForEvent(download) timed out15s; exact fresh physical filename, creation time and full bytes provide actual download evidence; product download succeeded",
+  "unknown": "Browser event adapter missing observation cause, no source patch or UI assertion"
+}

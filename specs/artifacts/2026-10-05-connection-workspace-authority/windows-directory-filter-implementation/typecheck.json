@@ -1,0 +1,9 @@
+{
+  "extends": "../../../../packages/opencorvus/tsconfig.json",
+  "include": [
+    "../../../../packages/opencorvus/src/**/*.ts",
+    "../../../../packages/opencorvus/test/session-directory-filter.test.ts"
+  ],
+  "exclude": ["../../../../packages/opencorvus/src/skill/builtin/**/*"],
+  "files": ["../../../../node_modules/.bun/bun-types@1.3.14/node_modules/bun-types/index.d.ts"]
+}

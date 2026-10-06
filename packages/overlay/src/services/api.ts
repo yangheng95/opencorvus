@@ -362,7 +362,7 @@ interface BlobInFlightEntry {
 const blobInFlight = new Map<string, BlobInFlightEntry>()
 const blobInFlightWaiters: Array<() => void> = []
 
-function resourceAuthority(raw: string, authority?: ApiAuthority): ApiAuthority | undefined {
+export function captureResourceAuthority(raw: string, authority?: ApiAuthority): ApiAuthority | undefined {
   if (/^(?:data|blob|file|https?):/i.test(raw)) return undefined
   const captured = authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(captured)
@@ -456,7 +456,7 @@ function releaseInFlightSlot(): void {
  */
 export function peekResourceObjectUrl(raw: string): string | undefined {
   if (!raw) return undefined
-  const key = resourceCacheKey(raw, resourceAuthority(raw))
+  const key = resourceCacheKey(raw, captureResourceAuthority(raw))
   const cached = blobCache.get(key)
   if (cached) touchCache(key, cached)
   return cached?.url
@@ -483,7 +483,7 @@ export async function fetchResourceAsObjectUrl(
 ): Promise<string> {
   const signal = options.signal
   if (signal?.aborted) throw resourceAbortReason(signal)
-  const authority = resourceAuthority(raw, options.authority)
+  const authority = captureResourceAuthority(raw, options.authority)
   const key = resourceCacheKey(raw, authority)
   const cached = blobCache.get(key)
   if (cached) {

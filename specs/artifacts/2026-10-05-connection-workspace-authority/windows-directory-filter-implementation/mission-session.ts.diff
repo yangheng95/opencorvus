@@ -1,0 +1,57 @@
+===================================================================
+--- mission-session.ts.before
++++ packages/opencorvus/src/mission/session.ts
+@@ -4,8 +4,9 @@
+ import { Instance } from "@/project/instance"
+ import { ProjectRuntimePaths } from "@/project/runtime-paths"
+ import { Project } from "@/project/project"
+ import { Session } from "@/session"
++import { sessionDirectoryFilterCondition } from "@/session/directory-filter"
+ import { assertSessionDeletionAdmissionInTransaction } from "@/session/deletion-cleanup"
+ import { MessageTable, SessionTable } from "@/session/session.sql"
+ import { Filesystem } from "@/util/filesystem"
+ import { MISSION_CONTROL_DEFAULT_TITLE } from "@/session/first-message-title"
+@@ -364,11 +365,8 @@
+ 
+   if (projectID) {
+     conditions.push(eq(SessionTable.project_id, projectID))
+   }
+-  if (input?.directory) {
+-    conditions.push(eq(SessionTable.directory, input.directory))
+-  }
+   if (input?.search) {
+     const term = `%${input.search}%`
+     conditions.push(
+       or(
+@@ -429,13 +427,13 @@
+   archived?: boolean
+ }) {
+   const conditions = missionSessionConditions(input, Instance.project.id)
+   const limit = input?.limit ?? 100
+-  const rows = Database.use((db) =>
++  const rows = Database.transaction((db) =>
+     db
+       .select({ id: SessionTable.id })
+       .from(SessionTable)
+-      .where(and(...conditions))
++      .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory, Instance.project.id)))
+       .orderBy(desc(SessionTable.time_updated), desc(SessionTable.id))
+       .limit(limit)
+       .all(),
+   )
+@@ -457,13 +455,13 @@
+   archived?: boolean
+ }) {
+   const conditions = missionSessionConditions(input)
+   const limit = input?.limit ?? 100
+-  const rows = Database.use((db) =>
++  const rows = Database.transaction((db) =>
+     db
+       .select({ id: SessionTable.id })
+       .from(SessionTable)
+-      .where(and(...conditions))
++      .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory)))
+       .orderBy(desc(SessionTable.time_updated), desc(SessionTable.id))
+       .limit(limit)
+       .all(),
+   )

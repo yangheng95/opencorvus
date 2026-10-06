@@ -2502,3 +2502,11 @@ The current connection-workspace authority record also includes metadata selecti
 - [Compatible Quick-XML parent plan](artifacts/2026-10-05-dependency-remediation/quick-xml-compatible-parent-plan.md): exact released-source/parent compatibility and bounded lock/checker preparation; actual native/platform acceptance pending.
 
 - [Recorded comparison repair and actual Sol04](artifacts/2026-10-05-connection-workspace-authority/root-file-change-qualification.md): complete original six-op/normal Edit Review, manual unknown/Chinese repairs, positive local contracts and precise unqualified boundaries; next proposals remain pending.
+
+- [Next shared directory and artifact plan](artifacts/2026-10-05-connection-workspace-authority/next-directory-artifact-implementation-plan.md): complete Recall, sole existing primitives, bounded Sol ownership and positive/manual actual checker acceptance.
+
+- [Instance primary Git marker convergence](artifacts/2026-10-05-connection-workspace-authority/instance-git-marker-convergence-plan.md): complete Recall/source/runtime distinction and bounded shared repair; active/restart/causal owner matrix remains explicit.
+
+- [Real artifact actions qualification](artifacts/2026-10-05-connection-workspace-authority/artifact-download-manual-sol-plan.md): fresh ordinary Sol publication, manual editor/copy/download evidence and same reviewed paired runtime cleanup.
+
+- [Directory and artifact actual checkpoint](artifacts/2026-10-05-connection-workspace-authority/root-directory-artifact-qualification.md): shared Git/filter runtime repair, real TCP/logical UTF-8 reads, Sol05 manual exact exports and explicit unqualified Task-button/race matrix.

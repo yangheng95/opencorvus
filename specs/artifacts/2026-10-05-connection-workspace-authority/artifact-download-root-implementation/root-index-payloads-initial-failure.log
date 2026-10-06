@@ -1,0 +1,9 @@
+1 | const base='specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/';
+2 | const names=['manual-05-code-original-clipboard.txt','manual-05-code-edited-clipboard.txt','manual-05-code-reopened-clipboard.txt','manual-05-table-clipboard.txt','manual-05-code-original-download.txt','manual-05-code-edited-download.txt','manual-05-table-download.csv'];
+3 | const facts=[];
+4 | for(const name of names){const path=base+name;const file=Buffer.from(await Bun.file(path).arrayBuffer());const child=Bun.spawn(['git','show',':'+path],{stdout:'pipe',stderr:'pipe'});const index=Buffer.from(await new Response(child.stdout).arrayBuffer());const exitCode=await child.exited;if(exitCode!==0)throw new Error('Index read failed for '+name);if(!file.equals(index))throw new Error('Index bytes differ for '+name);facts.push({name,fileBytes:file.length,indexBytes:index.length,exactPayloadBytesPreserved:true});}
+
+error: Index bytes differ for manual-05-table-clipboard.txt
+      at D:\myhexin-local\opencorvus\[eval]:4:385
+
+Bun v1.3.14 (Windows x64)

@@ -1,0 +1,58 @@
+# samePath ownership and runtime-edge review
+
+## Recall and frozen evidence
+
+Root froze the directory implementation/test draft after the new SQL adapter imported Project.samePath. Requested read-only investigation of moving the **one existing lexical comparison implementation** into Filesystem, preserving current Project public API, and whether this removes the added runtime path. Read binding plan, full caller/definition searches, Filesystem/Project/import definitions, current 02-data/03-control ownership contracts and installed SQL declarations. No production modification, checker/runtime/HTTP/Provider/credential/Git/index or delegation. Root separately owns the actual index-snapshot runtime module checker.
+
+The only post-freeze test correction Root explicitly authorized removed one extra closing parenthesis in the new Mission pagination case. Preserved typecheck-frozen.log (TS1005/1128) and corrected same compilation (`typecheck-corrected.log`, exit 0). Backend tests have never been executed by this child. Current before/after/full file diffs, static-edges.json, caller searches and new-file snapshots are in this directory; source/test remains a draft pending real topology and functional qualification.
+
+## Exact current primitive and consumers
+
+Project's private comparePath (`project/project.ts:283–286`) does exactly `path.normalize(Filesystem.windowsPath(value)).replace(/[\\/]+$/, '')`, then lowercases on win32. Project.samePath (`:288–289`) compares those two keys. It is lexical: it does not call path.resolve, realpath/stat or physical occurrence admission. This matters for relative paths, roots/trailing separators, recognized mount syntax, extended namespace prefixes and case. Do not replace it with another approximately equivalent helper.
+
+Private comparePath has one additional direct key consumer, discoverFromLaunchDirectory's map key (`:1153`). Thus moving only samePath while leaving comparePath's old implementation would leave duplicate lexical key logic; the discover key must use the same moved primitive and the private implementation must be removed.
+
+Saved inventories:
+
+* `samepath-callers.txt`: 57 matched references/definitions across the bounded backend source/tests at draft time, including the new helper and homonymous functions. It is a search inventory, not a count of distinct runtime calls.
+* `project-internal-comparison-callers.txt`: all 21 private/unqualified samePath/comparePath source matches in Project itself, including definitions and discovery key.
+* `public-samepath-caller-files.txt`: full packages search identifies 16 files with Project.samePath references, covering backend host recovery; Task API/bridge; Workspace/worktree; Project registration/deletion/promotion/convergence; Session relocation/ownership and four related test owners, plus the draft helper. Keep these public callers on the same API rather than replacing their owner semantics.
+* `path-comparison-definitions.txt`: same-name/related-key definitions for semantic classification below.
+
+All existing external `Project.samePath` calls remain source-compatible. The exact Project internal calls preserve their current operation; no Task/Mission/Session equality outside this lexical primitive is changed.
+
+## Minimal genuine move candidate
+
+On admission, add `Filesystem.pathComparisonKey(value: string): string` containing the **moved exact private comparePath body**, using Filesystem's existing named normalize import and its own windowsPath. Add `Filesystem.samePath(a,b)` comparing these keys. There is one key implementation and one equality function, both in the existing filesystem primitive owner. Do not change absolute/relative/case/root/namespace behavior during this ownership move.
+
+Delete Project's private comparePath and old samePath function implementation. Keep the existing public API as `export const samePath = Filesystem.samePath` inside Project namespace. This is a direct reference to the sole current function, not an old-protocol decoder, fallback or second equality implementation. Replace discovery's private comparePath key use with Filesystem.pathComparisonKey. Project sameFilesystemLocation still checks that same public lexical comparator before its actual filesystem identity observation. Other Project callers remain unchanged.
+
+Change the draft session/directory-filter.ts to call Filesystem.samePath and remove its Project runtime import. Preserve Filesystem.resolve at the supplied filter boundary, same transaction/distinct saved values/bound IN predicate and existing scope/pagination contract. The likely new implementation scope is **Filesystem + Project + this draft helper**, with the existing consumers otherwise unchanged. Root must explicitly admit those two additional production files after the real module check; this read-only review does not modify them.
+
+Public alias constraints: retain boolean result and argument types, one function reference/implementation, synchronous no-filesystem side effects, and exact lexical key behavior for every existing caller. Do not keep the removed key implementation as a compatibility branch. Positive contracts should exercise both public accessors against fixed actual expected lexical results and the shared callable identity, including Windows/POSIX distinct behavior; function names/stringified source/hash are not acceptance. Root's tests should also preserve positive discovery/Workspace/relocation owner outcomes touched by this implementation move, without running broad unrelated suites.
+
+## Same-semantic-looking definitions that must not be collapsed blindly
+
+Filesystem.normalizeForCompare (`filesystem.ts:456`) belongs to contains: path.resolve, normalizeWindowsPath, normalize, root-preserving trailing separator trim and Windows casefold. It differs from Project comparePath's lexical/non-resolved/mount-aware key. contains determines ancestry and root/relative isolation; it cannot substitute for the moved exact equality key.
+
+Filesystem.normalizePath (`:341`) observes native realpath on Windows with its current exception behavior; ProjectDirectoryAdmission normalizeKey/key (`directory-admission.ts:119–156`) resolves actual physical/nearest-existing-parent location and owns physical occurrence authority. Project.sameFilesystemLocation observes device/inode. Worktree canonical (`worktree/index.ts:899–905`) resolves realpath and actual filesystem case sensitivity. None is this lexical filter comparator.
+
+Private samePath in bun/install-receipt.ts:131, project/deletion-cleanup.ts:88 and session/deletion-cleanup.ts:146 resolves absolute paths and lowercases on win32. isolated-check-workspace normalizePathKey (`:383`) does the same absolute-key operation; prompt/state directoryKey (`:154`) uses Filesystem.resolve. Instance cache key lowercases an already-resolved directory. These can look equivalent for common absolute paths but are not identical for relative/mount/root inputs; do not fold them into the moved lexical primitive as unrelated cleanup or alter their durable ownership decisions. Their duplication risk is recorded for separate analysis, not used to justify widening this slice.
+
+system-terminal/profile normalizeForCompare is case-only under its already established path semantics. SDK/registry/skill directoryKey matches describe package archive path segments, and payload generator comparePath functions sort output, not directory identity. Homonymous local variables are not alternate implementation evidence. The move candidate preserves all these different contracts.
+
+## Added edge and candidate limits
+
+The initial static suspicion was engine/store → session/directory-filter → project/project → util/git → shell/process-supervisor → engine/task-execution-capsule-binding → engine/store. Treating this as an eager initialization path was incorrect: util/git's ProcessSupervisor import is explicitly **type-only**. Its actual Process facade reaches the concrete supervisor only via the first physical spawn callback's await import (`util/process-facade.ts:49`), whose comment documents this mature deferred boundary. Binding does import listStartedIncompleteTaskIDs from store, but that edge does not turn an uninvoked spawn callback into module initialization. The directory helper merely calls Project.samePath and invokes no Git or process operation.
+
+static-edges.json intentionally traversed literal relative/@ imports including **type and dynamic** edges: 975 reachable modules. Some reported paths through session.sql → Message are also type-only. Preserve that initial search as a lead, not runtime SCC (strongly connected component) evidence. Root's actual --index snapshot checker result b19e703a1266 passed **1133 modules / 5788 runtime edges, no SCC and 4 clean imports**; its runtime graph examines module-top statements and correctly excludes the deferred physical-spawn callback. This is Root's actual result, not a child checker execution. The added import is now Root-qualified, so the ownership move candidate is **not required and will not be implemented** in this slice. No alias/key abstraction is added merely to eliminate an unproved cycle.
+
+Filesystem's actual imports are native fs/path/os/stream, zod/NamedError, Glob, debug-trace, rename-no-replace and Flag. Glob imports external glob/minimatch. debug-trace reads SessionObservability; that bridge explicitly avoids importing session/context and binds a reader from the owner. Flag reads environment options without Project import. Native rename imports node:path and uses Bun FFI dynamically within native operations. This inspected lower-level path does not directly import Project or engine/store; the lexical key move adds no such dependency and invokes none of those operations. It removes the helper→Project edge, but **does not alone prove the helper's remaining db/SessionTable edges are cycle-free**. They already exist in the consuming domains; Root must run the actual candidate graph, not promote this static observation to admission.
+
+Current architecture 02-data:720–727 says Database owns Project identity and Project.worktree physical location; 03-control retains exact Project/directory occurrence and recovery admission. A filesystem-owned lexical primitive is consistent with those contracts only if it performs no identity discovery/physical admission and preserves current values. This move neither normalizes stored rows nor changes Project IDs, cache generations, selected sources or physical aliases.
+
+## Delivery and remaining qualification
+
+Frozen draft catalogue cost is proportional to distinct saved directory strings, and matching variants create SQL bound values. SQLite variable headroom, global catalogue scale and real query plan remain unknown. No arbitrary truncation, batching fallback or new cache is included. Omitted/empty filter remains current all-in-scope; unmatched valid lexical path returns exact empty output; invalid cross-platform syntax retains Filesystem.InvalidDirectoryError. Current tests cover genuine owned Session/Mission/Task store and Server.App route IDs, sibling/scope, cursor/title/status/no-filter and named errors, plus Mission compound pagination. They are source preparation, not executed acceptance.
+
+Root has qualified the current runtime graph and chosen the original Project.samePath helper. The move analysis above remains an unimplemented scoped candidate, superseded as a requirement by that actual result. Final compilation and Root's isolated real DB/routes checker plus authorized Windows native/forward HTTP repeat remain necessary. Physical aliases and per-directory case-sensitive Windows behavior remain excluded. No functional success is claimed by this review.

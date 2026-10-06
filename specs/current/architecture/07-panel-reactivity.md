@@ -47,6 +47,16 @@ receive that original authority. Delta reuse requires the exact same key and
 current resource owner. Side Chat supplies its existing captured stream token to
 that shared parser. This retires a GET projection, not a child execution.
 
+Artifact downloads and copy actions retain one current operation owner, its
+AbortController, exact source material and component lifetime. API-bound sources
+also retain the original connection authority and existing selection epoch.
+Source replacement or disposal retires that owner; errors, copied feedback,
+timers and finally publish only for their original current operation. Authored
+text and independent absolute/data/blob/file resources keep their own material
+identity across unrelated API changes. Current export generation errors remain
+observable through the action error boundary. A native clipboard write already
+accepted is an actual side effect; subsequent retirement only retires feedback.
+
 `tree-writer.ts` is the only service that creates or mutates store-backed
 conversation cards. `cardTreeStore` is the renderer source. `messages.ts`
 retains message content and hydration indexes; it is not a second rendered

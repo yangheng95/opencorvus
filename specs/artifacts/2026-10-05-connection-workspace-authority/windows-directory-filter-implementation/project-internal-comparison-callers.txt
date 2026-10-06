@@ -1,0 +1,21 @@
+48:      if (project?.sandboxes.some((sandbox) => samePath(sandbox, directory))) {
+262:    return Identifier.deterministic("project", comparePath(path.resolve(seed)))
+283:  function comparePath(value: string) {
+288:  export function samePath(a: string, b: string) {
+289:    return comparePath(a) === comparePath(b)
+319:      return comparePath(await realpath(value))
+338:    if (samePath(a, b)) return true
+351:    return samePath(common, localCommon) || (await sameFilesystemLocation(common, localCommon))
+415:    if (samePath(row.worktree, worktree) || (await sameFilesystemLocation(row.worktree, worktree))) return cached
+657:        !samePath(admittedIdentity.sandbox, data.sandbox) ||
+658:        !samePath(admittedIdentity.worktree, data.worktree)
+669:        if (!row || !samePath(row.worktree, data.worktree)) {
+676:        if (proposedSandbox && !row.sandboxes.some((sandbox) => samePath(sandbox, proposedSandbox))) {
+710:          !samePath(admittedIdentity.sandbox, data.sandbox) ||
+711:          !samePath(admittedIdentity.worktree, data.worktree)
+721:          !samePath(row.worktree, data.worktree) &&
+1046:        if (!directories.some((candidate) => samePath(candidate, directory))) directories.push(directory)
+1056:      if (samePath(project.worktree, target)) {
+1060:      const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
+1102:      const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
+1153:      const key = comparePath(project.directory)

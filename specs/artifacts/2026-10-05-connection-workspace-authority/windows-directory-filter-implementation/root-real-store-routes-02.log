@@ -1,0 +1,33 @@
+[1/1] START test/session-directory-filter.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(fail) Windows lexical filters preserve real Session/Mission/Task scope and pagination through stores and routes [90578.73ms]
+  ^ this test timed out after 90000ms.
+(pass) invalid cross-platform directory filters preserve the named error and actual global route response [155.05ms]
+
+# Unhandled error between tests
+-------------------------------
+50 |   const result: T[] = []
+51 |   for await (const item of input) result.push(item)
+52 |   return result
+53 | }
+54 | 
+55 | function ids(items: readonly { id: string }[]) { return items.map((item) => item.id).sort() }
+                                                                   ^
+TypeError: items.map is not a function. (In 'items.map((item) => item.id)', 'items.map' is undefined)
+      at ids (D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts:55:63)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts:98:106)
+-------------------------------
+
+(pass) Mission directory filtering precedes compound pagination and retains exact sibling output [1980.01ms]
+
+ 2 pass
+ 1 fail
+ 1 error
+ 19 expect() calls
+Ran 3 tests across 1 file. [95.85s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts
+[1/1] DONE test/session-directory-filter.test.ts exit=1 duration=96.18s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session-directory-filter.test.ts

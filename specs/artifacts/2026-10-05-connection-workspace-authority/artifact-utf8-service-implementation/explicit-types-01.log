@@ -1,0 +1,7 @@
+packages/overlay/src/services/conversation-artifact.ts(114,27): error TS2339: Property 'authority' does not exist on type '{ taskID: string; locator: ArtifactReadLocator; signal?: AbortSignal; }'.
+packages/overlay/test/conversation-artifact-compound-authority.test.ts(248,32): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '[number, number, done: (err?: unknown) => void]' is not assignable to parameter of type 'ArrayLike<number> | ArrayBuffer'.
+      Type '[number, number, done: (err?: unknown) => void]' is not assignable to type 'ArrayBuffer'.
+packages/overlay/test/conversation-artifact-compound-authority.test.ts(269,83): error TS2353: Object literal may only specify known properties, and 'authority' does not exist in type '{ taskID: string; locator: ArtifactReadLocator; signal?: AbortSignal; }'.
+packages/overlay/test/conversation-artifact-compound-authority.test.ts(274,91): error TS2353: Object literal may only specify known properties, and 'authority' does not exist in type '{ taskID: string; locator: ArtifactReadLocator; signal?: AbortSignal; }'.

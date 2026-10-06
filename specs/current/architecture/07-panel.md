@@ -302,6 +302,13 @@ read the mounted editor state. MCP App actions read the current real Tool
 result; returned resources use the existing Host download protocol and App
 requests retain confirmation. Opening keeps the same mounted renderer and MCP
 authority. A source/data export does not replace a requested PDF or Word file.
+
+Conversation artifact text and each immutable diff side use one fatal streaming
+UTF-8 decoder for the complete logical read, including its final flush. Literal
+U+FEFF bytes are retained as content rather than removed as a decoding signature.
+Range, byte integrity and original connection/directory receipts remain the same
+reader contract. Direct Task resource download passes its original authority and
+cancellation signal through that reader before the current action accepts bytes.
 The pure `services/mcp-app-payload.ts` owns MCP App policy serialization and
 bounded download-byte decoding. The renderer and service contracts import that
 same implementation; DOM materialization remains in the browser renderer.

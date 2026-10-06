@@ -154,3 +154,16 @@ Final Root checkpoint (2026-10-06): canonical DVw/BX09 build and real-page/ordin
 See [Root qualification](root-file-change-qualification.md), [binding plan](file-change-implementation-plan.md), [tree projection owner](file-change-message-facts-implementation/report.md), [Meta freeze](file-evidence-meta-freeze-report.md) and [immutable reader result](conversation-artifact-authority-implementation-result.md). Root42/148 pure contracts, full configured source+8test types, two2052-key dictionaries and final canonical main-nwzougxf build pass. Real first six-op Sol input/settled/reopened Review shows initial-to-final/net1/1. Actual separate Edit succeeds but final reply hits unchanged12-request ceiling; aggregate stays changed-batch unknown. Original failure and repaired filter/prose/Chinese chip screenshots, public exact Parts, physical files, source metadata and shutdown/whole-chain/pair-cleanup are preserved. Real immutable HTTP/source-switch, strict53 baseline and broader runtime matrix remain unmet.
 
 Next bounded proposals: [Windows directory query](windows-directory-query-authority-review.md), [shared filter proposal](windows-directory-filter-implementation-proposal.md), [UTF-8 and download](artifact-utf8-download-implementation-proposal.md), [budget diagnosis](live-sol-review-04-request-budget-diagnosis.md), [audit origin proposal](provider-audit-origin-implementation-proposal.md). Source edits for these proposals have not started. Goal stays active.
+
+- [Next directory/artifact implementation plan](next-directory-artifact-implementation-plan.md): d493f7e2 is pushed with hooks; next explicit shared directory/UTF-8/real route ownership and acceptance, no Provider/credentials needed.
+
+- [Shared Instance Git marker convergence repair](instance-git-marker-convergence-plan.md): actual84s500/repeated bootstrap, independent horizontal reviews, same-owner fact comparison and unchanged-budget positive runtime acceptance; implementation/qualification follows Root.
+
+- [Real artifact actions qualification](artifact-download-manual-sol-plan.md): unchanged-budget fresh paired Sol occurrence, natural tool-published artifacts, manual copy/download/current editor material and exact physical cleanup; service checks remain separate evidence.
+
+- [Directory and artifact actual checkpoint](root-directory-artifact-qualification.md): Root's actual contracts, current Sol05 screenshots/files and exact cleanup; the real Task-download region and race matrix remain unmet.
+
+- [Directory implementation evidence](windows-directory-filter-implementation/README.md): source, initial fixture/refresh failures and current actual3/60 plus27/64 runtime checks.
+- [UTF-8 service implementation evidence](artifact-utf8-service-implementation/README.md): single logical decoder, original failures and controlled exact text/error contracts.
+- [Real artifact route evidence](artifact-utf8-route-implementation/README.md): original Hono qualification and Root's actual loopback/current loader6/65 extension.
+- [Manual action and download evidence](artifact-download-root-implementation/README.md): genuine Sol05 publication/screenshots/physical bytes/cleanup, source reviews and explicitly unmet Task-region/race qualification.

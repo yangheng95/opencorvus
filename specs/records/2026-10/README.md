@@ -43,3 +43,9 @@
 The connection authority record also indexes the continued actual Sol sequential Edit/Composer checkpoint and pending causal Review repair. The Skill record indexes preserved ordinary diagnostic failures and actual04/05 Skills-first unconnected qualification; original19.456s latency remains unresolved.
 
 The connection authority record now indexes recorded-comparison repair and actual Sol04 first-input/live/reopened/Chinese qualification, preserved follow-up budget failure and the next directory/BOM/download/audit proposals.
+
+The authority record also indexes the admitted next shared directory/UTF-8/artifact-checker slice after pushed d493f7e2.
+
+The authority record indexes the shared primary Git marker convergence repair after actual repeated bootstrap diagnostics.
+
+The same record indexes the real artifact actions plan, unchanged-budget Sol publication and separate manual/download qualification.

@@ -1,0 +1,2514 @@
+{
+  "scope": "static literal relative/@ imports including type and dynamic import",
+  "reachable": 975,
+  "hits": [
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "storage/attachment-store.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "engine/dispatch-lineage.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "project/project.ts",
+        "util/git.ts",
+        "shell/process-supervisor.ts",
+        "engine/task-execution-capsule-binding.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "plugin/index.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/directory-filter.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "storage/attachment-store.ts",
+        "engine/store.ts",
+        "session/directory-filter.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/task-tool-execution-scope.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/task-tool-execution-scope.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/directory-filter.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "plugin/index.ts",
+        "session/index.ts",
+        "session/directory-filter.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/truncation.ts",
+        "project/task-runtime-root.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "artifact-catalog/index.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "task-artifact/store.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/task-run-evidence-host.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/delegate-agent.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/browser-preview-capture.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/browser-preview-capture-interaction-state.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/mission-state.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/scheduler-message.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/analytics.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/read-agent-message.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/capability-search.ts",
+        "capability/reveal-owner.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "agent/model.ts",
+        "config/effective.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "agent/model.ts",
+        "config/effective.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "agent/model.ts",
+        "config/effective.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "agent/model.ts",
+        "config/effective.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "agent/model.ts",
+        "config/effective.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "goal-workload-analyst/relational-integrity.ts",
+        "agent/worker-turn-descriptor-facts.ts",
+        "agent/stage-tool-materializer.ts",
+        "build/merge-back-tool.ts",
+        "worktree/index.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "goal-workload-analyst/relational-integrity.ts",
+        "agent/worker-turn-descriptor-facts.ts",
+        "agent/stage-tool-materializer.ts",
+        "integrity/acceptance-tools.ts",
+        "integrity/fact-projection.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "goal-workload-analyst/relational-integrity.ts",
+        "agent/worker-turn-descriptor-facts.ts",
+        "agent/stage-tool-materializer.ts",
+        "visual-qa/output-tools.ts",
+        "visual-qa/annotated-screenshot.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "plugin/index.ts",
+        "session/index.ts",
+        "engine/task-root-fact-store.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/truncation.ts",
+        "project/task-runtime-root.ts",
+        "engine/task-directory.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/task-run-evidence-host.ts",
+        "engine/terminal-lifecycle-reference.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/task-run-evidence-host.ts",
+        "engine/durable-activity.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/task-run-evidence-host.ts",
+        "engine/git.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/expert-squad-package-host.ts",
+        "build/merge-back-publication-authority.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/metric-evaluation-host.ts",
+        "metrics/executor.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/task-tool-execution-scope.ts",
+        "session/runtime-contract.ts",
+        "llm/api.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/bash.ts",
+        "tool/external-directory.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/browser-preview.ts",
+        "browser-preview/persist.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/memory.ts",
+        "memory/project-memory-organizer.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/memory.ts",
+        "memory/project-memory-organizer.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/scheduler-message.ts",
+        "mission/session.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/directory-filter.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/scheduler-message.ts",
+        "mission/session.ts",
+        "session/directory-filter.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/scheduler-message.ts",
+        "protocol/scheduler-message.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/scheduler-message.ts",
+        "protocol/delivery.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/analytics.ts",
+        "engine/index.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/work-artifact.ts",
+        "work-artifact/presentation.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/work-artifact.ts",
+        "work-artifact/presentation.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/work-artifact.ts",
+        "work-artifact/validation-authority.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/task-creator.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "chat/session.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "chat/session.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "chat/handoff.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "session/wake.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "mission/caller-receipt.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "mission/execution-closure.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "mission/execution-closure.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "mission/execution-closure.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "mission/public-session-authority.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "engine/task-creation-contract.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/capability-search.ts",
+        "capability/reveal-owner.ts",
+        "capability/catalog-binding.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "agent/model.ts",
+        "config/effective.ts",
+        "session/context.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/compaction.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/processor.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/prompt/title.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/message-identity.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/summary.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/prompt/run.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/shell-exec.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "mission/execution-close-effects.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "mission/execution-close-effects.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "mission/execution-close-effects.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "interactive-artifact/mcp-app-lifecycle.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "tool/capability-runtime-catalog.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "tool/capability-runtime-catalog.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/dispatch-agents-recovery.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/dispatch-agents-recovery.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "engine/agent-coordination.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "skill/mounts.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "scheduler/automation-service.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "scheduler/automation-service.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "scheduler/event-service.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "mission/session.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "scheduler/event-service.ts",
+        "mission/session.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "engine/event-log.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "engine/interaction.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "engine/task-root-ingress-delivery.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "engine/task-root-ingress-delivery.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "protocol/session-mirror.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/delegate-agent.ts",
+        "session/prompt/index.ts",
+        "session/command-exec.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/delegate-agent.ts",
+        "session/prompt/index.ts",
+        "session/prompt/parts.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/scheduler-message.ts",
+        "mission/session.ts",
+        "session/first-message-title.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/analytics.ts",
+        "engine/index.ts",
+        "engine/persist.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/analytics.ts",
+        "engine/index.ts",
+        "engine/helpers.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/analytics.ts",
+        "engine/index.ts",
+        "engine/helpers.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "chat/identity.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "mission/retention.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "workbench/board.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "workbench/brief.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/interaction-request.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/rewind.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/checks.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/task-intent-open.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/state.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/task-project-read.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/pipeline.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "task-api/task-root-message.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/cancellation-scope.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/task-agent-lifecycle.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/task-agent-lifecycle.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "intent/bundle.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/cross-task-artifact-import.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "trace/index.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "session/processor.ts",
+        "session/source-persistence.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "agent/dispatch-stage-tool-factory.ts",
+        "visual-qa/agent.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "agent/dispatch-stage-tool-factory.ts",
+        "research/agent.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "agent/dispatch-stage-tool-factory.ts",
+        "research/agent.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "agent/runner.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "agent/runner.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "engine/execution-abort.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/agent-coordination-session-lifecycle.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/agent-coordination-session-lifecycle.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/analyze-intent-tool.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/architect-stage.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/build-tool.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/deep-research-stage.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/dispatch-agent-tool.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/dispatch-agents-tool.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/explore-tool.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/delegated-worker-tool.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/frontend-design-tool.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/frontend-research-stage.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/delivery-slice-contract-tools.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/interaction-tools.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/interaction-tools.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/read-context-tool.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/requirements-stage.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/task-lifecycle-tools.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/tool-execution-context.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/tool-execution-context.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/visual-qa-stage.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "orchestrator/loop.ts",
+        "orchestrator/agent.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "orchestrator/loop.ts",
+        "orchestrator/agent.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "tool/control-plane-tool-composition.ts",
+        "tool/request-orchestrator-decision.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "tool/control-plane-tool-composition.ts",
+        "tool/send-mailbox-message.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/plugin-tool-host.ts",
+        "tool/metric-evaluation-host.ts",
+        "metrics/executor.ts",
+        "acceptance/visual-feedback-verification.ts",
+        "visual-qa/persist.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/memory.ts",
+        "memory/project-memory-organizer.ts",
+        "session/llm.ts",
+        "chat/side-chat.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "storage/db.ts",
+        "engine/engine.sql.ts",
+        "engine/workflow-binding.ts",
+        "expert-squad/prompt-profile-resolver.ts",
+        "tool/global-tools.ts",
+        "tool/panel.ts",
+        "task-api/index.ts",
+        "engine/cancellation-scope.ts",
+        "session/status-publication.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "agent/dispatch-stage-tool-factory.ts",
+        "research/agent.ts",
+        "research/frontend-research-resources.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "tool/wait.ts",
+        "scheduler/delayed-wake-schedule.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "tool/wait.ts",
+        "scheduler/delayed-wake-schedule.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/architect-stage.ts",
+        "architect/agent.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/build-tool.ts",
+        "build/agent.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/build-tool.ts",
+        "build/agent.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/delegated-worker-tool.ts",
+        "delegated-worker/context.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/fact-check-tool.ts",
+        "fact-check/index.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/task-lifecycle-tools.ts",
+        "engine/completion-decision.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/task-lifecycle-tools.ts",
+        "engine/completion-decision.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "orchestrator/loop.ts",
+        "orchestrator/agent.ts",
+        "engine/describe.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "session/index.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "capability/rules.ts",
+        "config/config.ts",
+        "mcp/index.ts",
+        "project/independent-project-owner.ts",
+        "project/bootstrap.ts",
+        "orchestrator/loop.ts",
+        "orchestrator/agent.ts",
+        "orchestrator/task-session.ts",
+        "session/index.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/analyze-intent-tool.ts",
+        "intent-analysis/agent.ts",
+        "intent-analysis/input-projection.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/architect-stage.ts",
+        "architect/agent.ts",
+        "architect/input-projection.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/architect-stage.ts",
+        "architect/agent.ts",
+        "architect/selected-artifact-roles.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/frontend-design-tool.ts",
+        "frontend-design/agent.ts",
+        "frontend-design/input-projection.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/requirements-stage.ts",
+        "requirements/agent.ts",
+        "requirements/input-projection.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "orchestrator/tools.ts",
+        "orchestrator/workload-analysis-tool.ts",
+        "goal-workload-analyst/agent.ts",
+        "goal-workload-analyst/input-projection.ts",
+        "engine/store.ts"
+      ]
+    },
+    {
+      "target": "engine/store.ts",
+      "chain": [
+        "session/directory-filter.ts",
+        "session/session.sql.ts",
+        "session/message.ts",
+        "provider/provider.ts",
+        "project/instance.ts",
+        "permission/authority.ts",
+        "session/loop.ts",
+        "agent/dispatch-stage-tool-factory.ts",
+        "research/agent.ts",
+        "frontend-design/tools/index.ts",
+        "frontend-design/tools/webpage-compile.ts",
+        "frontend-design/tools/output-dir.ts",
+        "engine/store.ts"
+      ]
+    }
+  ]
+}

@@ -23,7 +23,7 @@ export async function memoryProject(identitySeed?: string) {
     await fs.writeFile(path.join(directory, ".opencorvus-test-project-identity"), identitySeed)
     await runGit(directory, ["add", ".opencorvus-test-project-identity"])
   }
-  await runGit(directory, ["commit", "--allow-empty", "--no-verify", "-m", "root"])
+  await runGit(directory, ["commit", "--allow-empty", "-m", "root"])
   const physicalDirectory = await fs.realpath(directory)
   return {
     path: physicalDirectory,

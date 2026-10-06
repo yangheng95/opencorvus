@@ -1,0 +1,32 @@
+{
+  "qualification": "input design arithmetic only; route checker not run",
+  "cases": [
+    {
+      "case": "boundary BOM",
+      "first_expected_bytes": 65535,
+      "boundary_code_point_bytes": 3,
+      "total_input_bytes": 65555,
+      "second_expected_bytes": 20,
+      "second_starts_bom": true,
+      "nominal_budget": 65536
+    },
+    {
+      "case": "three-byte character",
+      "first_expected_bytes": 65535,
+      "boundary_code_point_bytes": 3,
+      "total_input_bytes": 65555,
+      "second_expected_bytes": 20,
+      "second_starts_bom": false,
+      "nominal_budget": 65536
+    },
+    {
+      "case": "four-byte character",
+      "first_expected_bytes": 65534,
+      "boundary_code_point_bytes": 4,
+      "total_input_bytes": 65555,
+      "second_expected_bytes": 21,
+      "second_starts_bom": false,
+      "nominal_budget": 65536
+    }
+  ]
+}

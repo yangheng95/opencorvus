@@ -1,0 +1,372 @@
+{
+  "source": ".tmp-product-iteration/windows-directory-root-real-store-routes-04.log",
+  "requestID": "c4046096-d108-4efa-a867-c4ba68515c9b",
+  "observedRowCount": 8849,
+  "errors": [
+    {
+      "time": "2026-10-05T23:35:56.912Z",
+      "service": "server",
+      "requestID": "c4046096-d108-4efa-a867-c4ba68515c9b",
+      "method": "GET",
+      "path": "/session/global",
+      "statusCode": 500,
+      "error": {
+        "type": "Error",
+        "message": "Cannot enter an instance while global instance disposal is in progress",
+        "stack": "Error: Cannot enter an instance while global instance disposal is in progress\n    at assertNotDisposing (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:697:31)\n    at scheduleConvergence (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1965:5)\n    at run (node:async_hooks:62:22)\n    at run (node:async_hooks:62:22)\n    at run (node:async_hooks:62:22)\n    at run (node:async_hooks:62:22)\n    at run (node:async_hooks:62:22)\n    at enterBoundedProjectRuntime (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:130:9)\n    at processTicksAndRejections (native:7:39)"
+      },
+      "message": "request failed"
+    }
+  ],
+  "stageGroups": [
+    {
+      "name": "attachment-store.sweep, completed",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.253Z",
+      "last": "2026-10-05T23:35:56.475Z"
+    },
+    {
+      "name": "attachment-store.sweep, started",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.252Z",
+      "last": "2026-10-05T23:35:56.474Z"
+    },
+    {
+      "name": "build-observation.reconcile-cleanup, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.396Z",
+      "last": "2026-10-05T23:35:56.78Z"
+    },
+    {
+      "name": "build-observation.reconcile-cleanup, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.392Z",
+      "last": "2026-10-05T23:35:56.777Z"
+    },
+    {
+      "name": "channel-supervisor.sync, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.621Z",
+      "last": "2026-10-05T23:35:56.909Z"
+    },
+    {
+      "name": "channel-supervisor.sync, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.62Z",
+      "last": "2026-10-05T23:35:56.898Z"
+    },
+    {
+      "name": "config.validate, completed",
+      "count": 260,
+      "first": "2026-10-05T23:34:32.137Z",
+      "last": "2026-10-05T23:35:56.464Z"
+    },
+    {
+      "name": "config.validate, started",
+      "count": 260,
+      "first": "2026-10-05T23:34:32.07Z",
+      "last": "2026-10-05T23:35:56.443Z"
+    },
+    {
+      "name": "engine-interaction.reconcile-recovered-waiters, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.405Z",
+      "last": "2026-10-05T23:35:56.792Z"
+    },
+    {
+      "name": "engine-interaction.reconcile-recovered-waiters, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.404Z",
+      "last": "2026-10-05T23:35:56.79Z"
+    },
+    {
+      "name": "engine-task.reconcile-pending-cancellations, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.402Z",
+      "last": "2026-10-05T23:35:56.788Z"
+    },
+    {
+      "name": "engine-task.reconcile-pending-cancellations, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.396Z",
+      "last": "2026-10-05T23:35:56.78Z"
+    },
+    {
+      "name": "engine.git.ensure-project-metadata, completed",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.248Z",
+      "last": "2026-10-05T23:35:56.472Z"
+    },
+    {
+      "name": "engine.git.ensure-project-metadata, started",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.246Z",
+      "last": "2026-10-05T23:35:56.472Z"
+    },
+    {
+      "name": "expert-squad.discover, completed",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.251Z",
+      "last": "2026-10-05T23:35:56.474Z"
+    },
+    {
+      "name": "expert-squad.discover, started",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.248Z",
+      "last": "2026-10-05T23:35:56.473Z"
+    },
+    {
+      "name": "file-watcher.init, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.209Z",
+      "last": "2026-10-05T23:35:56.478Z"
+    },
+    {
+      "name": "file-watcher.init, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.185Z",
+      "last": "2026-10-05T23:35:56.477Z"
+    },
+    {
+      "name": "file.init, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.362Z",
+      "last": "2026-10-05T23:35:56.647Z"
+    },
+    {
+      "name": "file.init, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.209Z",
+      "last": "2026-10-05T23:35:56.478Z"
+    },
+    {
+      "name": "instance.init, completed",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.254Z",
+      "last": "2026-10-05T23:35:56.909Z"
+    },
+    {
+      "name": "instance.init, started",
+      "count": 263,
+      "first": "2026-10-05T23:34:29.253Z",
+      "last": "2026-10-05T23:35:56.475Z"
+    },
+    {
+      "name": "permission.reconcile-interrupted-attempts, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.407Z",
+      "last": "2026-10-05T23:35:56.794Z"
+    },
+    {
+      "name": "permission.reconcile-interrupted-attempts, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.406Z",
+      "last": "2026-10-05T23:35:56.793Z"
+    },
+    {
+      "name": "plugin.init, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.185Z",
+      "last": "2026-10-05T23:35:56.477Z"
+    },
+    {
+      "name": "plugin.init, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.181Z",
+      "last": "2026-10-05T23:35:56.475Z"
+    },
+    {
+      "name": "project.from-directory, completed",
+      "count": 3,
+      "first": "2026-10-05T23:34:29.244Z",
+      "last": "2026-10-05T23:34:31.649Z"
+    },
+    {
+      "name": "project.from-directory, started",
+      "count": 3,
+      "first": "2026-10-05T23:34:29.23Z",
+      "last": "2026-10-05T23:34:30.974Z"
+    },
+    {
+      "name": "task-artifact.recover-unreferenced, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.381Z",
+      "last": "2026-10-05T23:35:56.674Z"
+    },
+    {
+      "name": "task-artifact.recover-unreferenced, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.363Z",
+      "last": "2026-10-05T23:35:56.648Z"
+    },
+    {
+      "name": "task-control.reconcile, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.411Z",
+      "last": "2026-10-05T23:35:56.795Z"
+    },
+    {
+      "name": "task-control.reconcile, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.41Z",
+      "last": "2026-10-05T23:35:56.794Z"
+    },
+    {
+      "name": "terminal-profile.ensure-default, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.62Z",
+      "last": "2026-10-05T23:35:56.898Z"
+    },
+    {
+      "name": "terminal-profile.ensure-default, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.411Z",
+      "last": "2026-10-05T23:35:56.795Z"
+    },
+    {
+      "name": "vcs.init, completed",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.362Z",
+      "last": "2026-10-05T23:35:56.648Z"
+    },
+    {
+      "name": "vcs.init, started",
+      "count": 259,
+      "first": "2026-10-05T23:34:32.362Z",
+      "last": "2026-10-05T23:35:56.647Z"
+    }
+  ],
+  "firstStages": [
+    {
+      "time": "2026-10-05T23:34:29.23Z",
+      "stage": "project.from-directory",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": null
+    },
+    {
+      "time": "2026-10-05T23:34:29.244Z",
+      "stage": "project.from-directory",
+      "status": "completed",
+      "duration": 14,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": null
+    },
+    {
+      "time": "2026-10-05T23:34:29.246Z",
+      "stage": "engine.git.ensure-project-metadata",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:34:29.248Z",
+      "stage": "engine.git.ensure-project-metadata",
+      "status": "completed",
+      "duration": 2,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:34:29.248Z",
+      "stage": "expert-squad.discover",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:34:29.251Z",
+      "stage": "expert-squad.discover",
+      "status": "completed",
+      "duration": 3,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:34:29.252Z",
+      "stage": "attachment-store.sweep",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:34:29.253Z",
+      "stage": "attachment-store.sweep",
+      "status": "completed",
+      "duration": 1,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    }
+  ],
+  "lastStages": [
+    {
+      "time": "2026-10-05T23:35:56.794Z",
+      "stage": "permission.reconcile-interrupted-attempts",
+      "status": "completed",
+      "duration": 1,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.794Z",
+      "stage": "task-control.reconcile",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.795Z",
+      "stage": "task-control.reconcile",
+      "status": "completed",
+      "duration": 1,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.795Z",
+      "stage": "terminal-profile.ensure-default",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.898Z",
+      "stage": "terminal-profile.ensure-default",
+      "status": "completed",
+      "duration": 103,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.898Z",
+      "stage": "channel-supervisor.sync",
+      "status": "started",
+      "duration": null,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.909Z",
+      "stage": "channel-supervisor.sync",
+      "status": "completed",
+      "duration": 11,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    },
+    {
+      "time": "2026-10-05T23:35:56.909Z",
+      "stage": "instance.init",
+      "status": "completed",
+      "duration": 434,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-2X0iTQ\\test-35224-PFJLDh\\fixtures\\memory-f8sIfS\\filter-a",
+      "projectID": "prj_hRigFea76Z2xM3dKLubA"
+    }
+  ],
+  "boundary": "Actual original structured diagnostic rows copied and counted; post-deadline global-disposal error is a consequence candidate, not assumed waiting root cause"
+}

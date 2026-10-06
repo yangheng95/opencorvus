@@ -1007,8 +1007,9 @@ async function prepareInheritedCapabilityPreflight(key: string, entry: CacheEntr
 }
 
 function needsProjectRefresh(ctx: Context) {
-  const hasGit = Project.isGitRepo(ctx.directory)
-  return hasGit !== ctx.git || ((ctx.project.id === "global" || ctx.worktree === "/") && hasGit)
+  const projectHasGit = Project.isGitRepo(ctx.project.worktree)
+  return projectHasGit !== ctx.git ||
+    ((ctx.project.id === "global" || ctx.worktree === "/") && Project.isGitRepo(ctx.directory))
 }
 
 async function bootstrapContext(ctx: Context, entry: CacheEntry, inits: readonly InstanceInit[]) {
@@ -1379,12 +1380,10 @@ export const Instance: InstanceApi = {
           await leaseContext.provide(lease, () =>
             provideLeaseContext(lease, initial, () => prepareContext(key, entry, lease, input.init, undefined)),
           )
-          // Serve on the freshly prepared context instead of re-deriving the
-          // preparation predicate: a predicate that stays true (a sandbox
-          // directory whose git state can never match its project worktree)
-          // must cost one refresh per admission, not an admission that never
-          // returns. The checks and the serving flip below are synchronous,
-          // so no lifecycle turn can interleave before this handle registers.
+          // Revalidate the prepared context's exact lifecycle/cache/rollback
+          // owner before serving. These checks and the serving flip are
+          // synchronous, so another lifecycle turn cannot interleave before
+          // this handle registers.
           if (!lifecycleQuiet(entry) || cache.get(key) !== entry || entry.rollback) continue
           assertContextHealthy(entry)
           lease.serving = true

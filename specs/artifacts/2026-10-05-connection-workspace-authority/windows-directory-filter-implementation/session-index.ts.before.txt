@@ -1,0 +1,2626 @@
+import { Slug } from "@opencorvus-ai/util/slug"
+import { BusEvent } from "@/bus/bus-event"
+import { Bus } from "@/bus"
+import { Decimal } from "decimal.js"
+import { isDeepStrictEqual } from "node:util"
+import z from "zod"
+import { type LanguageModelUsage, type ProviderMetadata } from "ai"
+import { Config } from "../config/config"
+import { Flag } from "../flag/flag"
+import { Identifier } from "../id/id"
+import { Installation } from "../installation"
+
+import { Database, NotFoundError, eq, and, gt, gte, isNull, desc, like, inArray, or, sql } from "../storage/db"
+import type { SQL } from "../storage/db"
+import {
+  SessionTable,
+  MessageTable,
+  PartTable,
+  ProviderActivityRequestTable,
+  ToolPartRequestTable,
+  ToolPartProgressTable,
+  ToolPartOutcomeTable,
+  SESSION_KINDS,
+  type PartData,
+  type SessionKind,
+} from "./session.sql"
+import { ProjectTable } from "../project/project.sql"
+import { Project } from "../project/project"
+import { Log } from "../util/log"
+import { Message } from "./message"
+import { MessageStore } from "./message-store"
+import { SessionEvents } from "./events"
+import { Instance } from "../project/instance"
+import path from "path"
+import { fn } from "@/util/fn"
+import { Snapshot } from "@/snapshot"
+import { FileDiff as SnapshotFileDiff } from "@/snapshot/types"
+import { Filesystem } from "@/util/filesystem"
+import { ProjectRuntimePaths } from "@/project/runtime-paths"
+
+import type { Provider } from "@/provider/provider"
+import { CapabilityRules } from "@/capability/rules"
+import { iife } from "@/util/iife"
+import { NamedError } from "@opencorvus-ai/util/error"
+import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
+import { inlineBase64DataUrlMatch, inlineBase64DataUrlSnippet } from "@/util/inline-base64"
+import { withKeyedLock } from "@/util/lock"
+import { SessionControl } from "./control"
+import { CompactionHandoff } from "./compaction-handoff"
+import { SessionStatus as SessionStatusLifecycle } from "./status"
+import { SessionPromptState } from "./prompt/state"
+import { PermissionExecutionResultTable, PermissionLedgerTable } from "@/permission/permission.sql"
+import {
+  TaskPromptProfileImmutableError,
+  requireTaskPackageRevisionBinding,
+  requireTaskResolvedPackageRevision,
+} from "@/engine/task-package-revision-binding"
+import { ProjectMemory } from "@/memory/project-memory"
+// Part-write invariant violations are deterministic Host faults: they are
+// raised while the processor persists a streamed chunk, so the LLM activity
+// runner must not treat them as an unknown-but-transient provider condition
+// and retry an attempt whose tools have already executed.
+import { HostProcessingFaultError } from "@/llm/host-fault"
+import {
+  equivalentToolOutcome,
+  isToolRequestPartData,
+  reconcileToolRequestFact,
+  projectToolPartInTransaction,
+  projectPartInTransaction,
+  toolOutcomeData,
+  toolOutcomePartIdentity,
+  toolRequestData,
+} from "./tool-part-facts"
+import {
+  assertTaskRootAssistantActivationFenceInTransaction,
+} from "@/engine/task-root-fact-store"
+import { EngineTaskRootIngressTable, EngineTaskTable } from "@/engine/engine.sql"
+import { ProtocolEventTable } from "@/protocol/protocol.sql"
+import { normalizeToolResult } from "./tool-result-normalization"
+import { assertSessionDeletionAdmissionInTransaction } from "./deletion-cleanup"
+import { sideChatIdentity, SideChatSourceError } from "@/chat/side-chat-identity"
+import { EffectiveConfig } from "@/config/effective"
+
+export namespace Session {
+  const log = Log.create({ service: "session" })
+  const TREE_QUERY_PAGE_SIZE = 64
+
+  const parentTitlePrefix = "New session - "
+  const childTitlePrefix = "Child session - "
+
+  function createDefaultTitle(isChild = false) {
+    return (isChild ? childTitlePrefix : parentTitlePrefix) + new Date().toISOString()
+  }
+
+  export function isDefaultTitle(title: string) {
+    return new RegExp(
+      `^(${parentTitlePrefix}|${childTitlePrefix})\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$`,
+    ).test(title)
+  }
+
+  type SessionRow = typeof SessionTable.$inferSelect
+
+  export function deletedInTransaction(db: Database.TxOrDb, sessionID: string): boolean {
+    return Boolean(db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
+      eq(ProtocolEventTable.aggregate_type, "session"),
+      eq(ProtocolEventTable.aggregate_id, sessionID),
+      eq(ProtocolEventTable.type, "session.deleted"),
+    )).get())
+  }
+
+  export function fromRow(row: SessionRow): Info {
+    const summary =
+      row.summary_additions !== null || row.summary_deletions !== null || row.summary_files !== null
+        ? {
+            additions: row.summary_additions ?? 0,
+            deletions: row.summary_deletions ?? 0,
+            files: row.summary_files ?? 0,
+          }
+        : undefined
+    const share = row.share_url ? { url: row.share_url } : undefined
+    return {
+      id: row.id,
+      slug: row.slug,
+      projectID: row.project_id,
+      directory: row.directory,
+      parentID: row.parent_id ?? undefined,
+      title: row.title,
+      version: row.version,
+      kind: row.kind,
+      metadata: row.metadata ?? undefined,
+      summary,
+      share,
+      permission: row.permission ?? undefined,
+      time: {
+        created: row.time_created,
+        updated: row.time_updated,
+        archived: row.time_archived ?? undefined,
+        pinned: row.time_pinned ?? undefined,
+      },
+    }
+  }
+
+  function relocatedDirectory(value: string, source: string, destination: string): string {
+    if (!Filesystem.contains(source, value)) return value
+    return path.join(destination, path.relative(source, value))
+  }
+
+  function relocatedMetadata(metadata: Record<string, unknown> | null, source: string, destination: string) {
+    if (!metadata) return metadata
+    const mission = metadata.mission
+    if (!mission || typeof mission !== "object" || Array.isArray(mission)) return metadata
+    const cwd = (mission as Record<string, unknown>).cwd
+    if (typeof cwd !== "string" || !Filesystem.contains(source, cwd)) return metadata
+    return {
+      ...metadata,
+      mission: {
+        ...(mission as Record<string, unknown>),
+        cwd: relocatedDirectory(cwd, source, destination),
+      },
+    }
+  }
+
+  export function relocateProject(
+    input: {
+      projectID: string
+      sourceDirectory: string
+      destinationDirectory: string
+    },
+    db: Database.TxOrDb,
+  ) {
+    const rows = db.select().from(SessionTable).where(eq(SessionTable.project_id, input.projectID)).all()
+    const updatedAt = Date.now()
+    for (const row of rows) {
+      assertSessionDeletionAdmissionInTransaction(db, row.id)
+      db.update(SessionTable)
+        .set({
+          directory: relocatedDirectory(row.directory, input.sourceDirectory, input.destinationDirectory),
+          metadata: relocatedMetadata(row.metadata, input.sourceDirectory, input.destinationDirectory),
+          time_updated: updatedAt,
+        })
+        .where(eq(SessionTable.id, row.id))
+        .run()
+    }
+  }
+
+  export type ProjectRelocationSnapshot = Array<{
+    id: string
+    directory: string
+    metadata: Record<string, unknown> | null
+    timeUpdated: number
+  }>
+
+  /** Restore exactly the session fields changed by Project relocation. The
+   * current rows must still be the deterministic forward projection, so this
+   * rollback never overwrites a concurrent session mutation. */
+  export function restoreProjectRelocation(
+    input: {
+      projectID: string
+      sourceDirectory: string
+      destinationDirectory: string
+      snapshot: ProjectRelocationSnapshot
+    },
+    db: Database.TxOrDb,
+  ): void {
+    const current = db
+      .select({
+        id: SessionTable.id,
+        directory: SessionTable.directory,
+        metadata: SessionTable.metadata,
+      })
+      .from(SessionTable)
+      .where(eq(SessionTable.project_id, input.projectID))
+      .all()
+    if (current.length !== input.snapshot.length) {
+      throw new Error(`Project session rollback fence rejected ${input.projectID}: session set changed`)
+    }
+    const byID = new Map(current.map((row) => [row.id, row]))
+    for (const before of input.snapshot) {
+      const row = byID.get(before.id)
+      const expectedDirectory = relocatedDirectory(before.directory, input.sourceDirectory, input.destinationDirectory)
+      const expectedMetadata = relocatedMetadata(before.metadata, input.sourceDirectory, input.destinationDirectory)
+      if (
+        !row ||
+        !Project.samePath(row.directory, expectedDirectory) ||
+        !isDeepStrictEqual(row.metadata, expectedMetadata)
+      ) {
+        throw new Error(`Project session rollback fence rejected ${input.projectID}: session ${before.id} changed`)
+      }
+    }
+    for (const before of input.snapshot) {
+      assertSessionDeletionAdmissionInTransaction(db, before.id)
+      db.update(SessionTable)
+        .set({ directory: before.directory, metadata: before.metadata, time_updated: before.timeUpdated })
+        .where(and(eq(SessionTable.id, before.id), eq(SessionTable.project_id, input.projectID)))
+        .run()
+    }
+  }
+
+  export function toRow(info: Info) {
+    return {
+      id: info.id,
+      project_id: info.projectID,
+      parent_id: info.parentID,
+      slug: info.slug,
+      directory: info.directory,
+      title: info.title,
+      version: info.version,
+      kind: info.kind,
+      metadata: info.metadata ?? null,
+      share_url: info.share?.url,
+      summary_additions: info.summary?.additions,
+      summary_deletions: info.summary?.deletions,
+      summary_files: info.summary?.files,
+      permission: info.permission,
+      time_created: info.time.created,
+      time_updated: info.time.updated,
+      time_archived: info.time.archived,
+      time_pinned: info.time.pinned,
+    }
+  }
+
+  function getForkedTitle(title: string): string {
+    const match = title.match(/^(.+) \(fork #(\d+)\)$/)
+    if (match) {
+      const base = match[1]
+      const num = parseInt(match[2], 10)
+      return `${base} (fork #${num + 1})`
+    }
+    return `${title} (fork #1)`
+  }
+
+  export const Info = z
+    .object({
+      id: Identifier.schema("session"),
+      slug: z.string(),
+      projectID: z.string(),
+      directory: z.string(),
+      parentID: Identifier.schema("session").optional(),
+      summary: z
+        .object({
+          additions: z.number(),
+          deletions: z.number(),
+          files: z.number(),
+        })
+        .optional(),
+      share: z
+        .object({
+          url: z.string(),
+        })
+        .optional(),
+      title: z.string(),
+      version: z.string(),
+      /** Session's role/purpose, fixed at creation. Authoritative source of
+       *  "what is this session for"; UI channel routing reads this column
+       *  directly. See SessionKind in session.sql.ts. */
+      kind: z.enum(SESSION_KINDS),
+      /** Free-form per-session state. */
+      metadata: z.record(z.string(), z.any()).optional(),
+      time: z.object({
+        created: z.number(),
+        updated: z.number(),
+        archived: z.number().optional(),
+        pinned: z.number().optional(),
+      }),
+      permission: CapabilityRules.Ruleset.optional(),
+    })
+    .meta({
+      ref: "Session",
+    })
+  export type Info = z.output<typeof Info>
+
+  export const ProjectInfo = z
+    .object({
+      id: z.string(),
+      name: z.string().optional(),
+      worktree: z.string(),
+    })
+    .meta({
+      ref: "ProjectSummary",
+    })
+  export type ProjectInfo = z.output<typeof ProjectInfo>
+
+  export const GlobalInfo = Info.extend({
+    project: ProjectInfo.nullable(),
+  }).meta({
+    ref: "GlobalSession",
+  })
+  export type GlobalInfo = z.output<typeof GlobalInfo>
+
+  export const Event = {
+    Created: BusEvent.define(
+      "session.created",
+      z.object({
+        info: Info,
+      }),
+    ),
+    Updated: BusEvent.define(
+      "session.updated",
+      z.object({
+        info: Info,
+      }),
+    ),
+    Deleted: BusEvent.define(
+      "session.deleted",
+      z.object({
+        info: Info,
+      }),
+    ),
+    Diff: BusEvent.define(
+      "session.diff",
+      z.object({
+        sessionID: z.string(),
+        diff: SnapshotFileDiff.array(),
+      }),
+    ),
+    ConfigChanged: BusEvent.define(
+      "config.changed",
+      z.object({
+        sessionID: z.string(),
+      }),
+    ),
+    Error: SessionEvents.Error,
+  }
+
+  export const create = fn(
+    z.object({
+      kind: Info.shape.kind,
+      parentID: Identifier.schema("session").optional(),
+      title: z.string().optional(),
+      permission: Info.shape.permission,
+      metadata: Info.shape.metadata,
+    }),
+    async (input) => {
+      return createNext({
+        kind: input.kind,
+        parentID: input.parentID,
+        directory: Instance.directory,
+        title: input.title,
+        permission: input.permission,
+        metadata: input.metadata,
+      })
+    },
+  )
+
+  export const fork = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message").optional(),
+      purpose: z.enum(["fork", "side-chat"]).optional(),
+    }),
+    async (input) => {
+      const original = await getInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
+      if (!original) throw new Error("session not found")
+      const side = input.purpose === "side-chat"
+      if (side && (sideChatIdentity(original.metadata) || original.time.archived)) {
+        const reason = original.time.archived ? "archived" : "nested"
+        throw new SideChatSourceError({
+          sessionID: original.id,
+          reason,
+          message: `Cannot open a side chat from a ${reason} source.`,
+        })
+      }
+      const title = side ? `Side chat · ${original.title}` : getForkedTitle(original.title)
+      // A normal fork retains execution lineage; a side conversation is an
+      // independent assistant root with a reference to its source. Both use
+      // this single transcript-copy primitive. The target Session and its
+      // complete bounded transcript commit in ONE transaction: an interrupted
+      // fork leaves nothing visible — no child Session carrying a transcript
+      // prefix — so a retry simply runs a whole new fork.
+      const prepared = await prepareNext({
+        directory: side ? original.directory : Instance.directory,
+        parentID: side ? undefined : input.sessionID,
+        kind: side ? "assistant" : original.kind,
+        title,
+        ...(side
+          ? {
+              permission: original.permission,
+              metadata: { configOverlay: (await EffectiveConfig.overlay({ sessionID: original.id })) ?? {} },
+            }
+          : {}),
+      })
+      let msgs = await messages({ sessionID: input.sessionID })
+      if (side) {
+        // A live turn may contain unresolved Tool calls. Fork only through a
+        // completed assistant response, keeping whole real turns as context.
+        const lastComplete = msgs.findLastIndex(
+          (message) =>
+            message.info.role === "assistant" &&
+            !!message.info.time.completed &&
+            !!message.info.finish &&
+            message.info.finish !== "tool-calls" &&
+            message.info.finish !== "unknown",
+        )
+        msgs = msgs.slice(0, lastComplete + 1)
+      }
+      const idMap = new Map<string, string>()
+      const clones: { info: Message.Info; parts: Message.Part[] }[] = []
+
+      for (const msg of msgs) {
+        if (input.messageID && msg.info.id >= input.messageID) break
+        const newID = Identifier.ascending("message")
+        idMap.set(msg.info.id, newID)
+
+        const parentID = msg.info.role === "assistant" && msg.info.parentID ? idMap.get(msg.info.parentID) : undefined
+        const { orderKey: _clonedMessageOrderKey, ...messageInfo } = msg.info
+        const clonedInfo = {
+          ...messageInfo,
+          sessionID: prepared.id,
+          id: newID,
+          ...(parentID && { parentID }),
+          ...(msg.info.role === "assistant" && msg.info.acceptedInputMessageIDs
+            ? {
+                acceptedInputMessageIDs: msg.info.acceptedInputMessageIDs.map((id) => idMap.get(id) ?? id),
+              }
+            : {}),
+        } as Message.Info
+        const clonedParts = msg.parts.map((part) => {
+          const { orderKey: _clonedPartOrderKey, ...partInfo } = part
+          return {
+            ...partInfo,
+            id: Identifier.ascending("part"),
+            messageID: clonedInfo.id,
+            sessionID: prepared.id,
+          } as Message.Part
+        })
+        clones.push({ info: clonedInfo, parts: clonedParts })
+      }
+
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, original.id)
+        if (side)
+          prepared.metadata = {
+            ...prepared.metadata,
+            sideChat: { sourceSessionID: original.id, inheritedMessageIDs: clones.map((clone) => clone.info.id) },
+          }
+        const session = persistPreparedNextInTransaction(db, prepared)
+        for (const clone of clones) {
+          persistMessageWithCommitInTransaction(clone, () => undefined)
+        }
+        return session
+      })
+    },
+  )
+
+  export const touch = fn(Identifier.schema("session"), async (sessionID) => {
+    const now = Date.now()
+    Database.immediateTransaction((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, sessionID)
+      const row = db
+        .update(SessionTable)
+        .set({ time_updated: now })
+        .where(eq(SessionTable.id, sessionID))
+        .returning()
+        .get()
+      if (!row) throw new NotFoundError({ message: `Session not found: ${sessionID}` })
+      const info = fromRow(row)
+      Bus.publishOwnedInTransaction(Event.Updated, { info })
+    })
+  })
+
+  type PrepareNextInput = {
+    /** Required. The session's role/purpose — see SessionKind in session.sql.ts.
+     *  Authoritative for UI channel routing. There is NO default: every
+     *  caller must state what the session is for. */
+    kind: SessionKind
+    id?: string
+    title?: string
+    parentID?: string
+    directory: string
+    permission?: CapabilityRules.Ruleset
+    metadata?: Record<string, unknown>
+  }
+
+  function preparedNextInfo(input: PrepareNextInput): Info {
+    return {
+      id: Identifier.descending("session", input.id),
+      slug: Slug.create(),
+      version: Installation.VERSION,
+      projectID: Instance.project.id,
+      directory: input.directory,
+      parentID: input.parentID,
+      title: input.title ?? createDefaultTitle(!!input.parentID),
+      kind: input.kind,
+      metadata: input.metadata,
+      permission: input.permission,
+      time: {
+        created: Date.now(),
+        updated: Date.now(),
+      },
+    }
+  }
+
+  /** Prepare a root Session synchronously for an enclosing domain identity
+   * transaction. Child creation must use `prepareNext` so lineage admission
+   * is checked before persistence. */
+  export function prepareRootNext(input: Omit<PrepareNextInput, "parentID"> & { parentID?: never }): Info {
+    return preparedNextInfo(input)
+  }
+
+  export async function prepareNext(input: PrepareNextInput) {
+    if (input.parentID) {
+      const lineage = await lineageInProject({ sessionID: input.parentID, projectID: Instance.project.id })
+      const { SessionPromptState } = await import("./prompt/state")
+      SessionPromptState.assertSessionCreationAllowed(lineage.map((session) => session.id))
+    }
+    return preparedNextInfo(input)
+  }
+
+  /** Persist one exact prepared Session in the caller's active transaction.
+   * This is the sole physical insert/event authority; domain find-or-create
+   * operations may reserve a writer and call it without opening a second
+   * transaction around their identity read. */
+  export function persistPreparedNextInTransaction(db: Database.TxOrDb, result: Info): Info {
+    Project.assertDirectoryOwnerAdmissionOpen(db, result.projectID, result.directory)
+    assertSessionDeletionAdmissionInTransaction(db, result.id)
+    if (result.parentID) assertSessionDeletionAdmissionInTransaction(db, result.parentID)
+    db.insert(SessionTable).values(toRow(result)).run()
+    log.info("created", result)
+    Bus.publishOwnedInTransaction(Event.Created, { info: result })
+    Bus.publishOwnedInTransaction(Event.Updated, { info: result })
+    return result
+  }
+
+  /** Persist one exact prepared Session in its own transaction. */
+  export function persistPreparedNext(result: Info): Info {
+    return Database.immediateTransaction((db) => persistPreparedNextInTransaction(db, result))
+  }
+
+  export async function createNext(input: Parameters<typeof prepareNext>[0]) {
+    return persistPreparedNext(await prepareNext(input))
+  }
+
+  const SessionProjectInput = z.object({
+    sessionID: Identifier.schema("session"),
+    projectID: z.string().min(1),
+  })
+
+  async function lineageInProject({ sessionID, projectID }: z.output<typeof SessionProjectInput>): Promise<Info[]> {
+    const lineage: Info[] = []
+    let current = await getInProject({ sessionID, projectID })
+    for (let hops = 0; ; hops++) {
+      lineage.push(current)
+      if (!current.parentID) return lineage
+      if (hops >= 63) {
+        throw new Error(`Session parent chain for ${sessionID} exceeds 64 hops`)
+      }
+      current = await getInProject({ sessionID: current.parentID, projectID })
+    }
+  }
+
+  export const getInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
+    const row = Database.use((db) => {
+      const persisted = db
+        .select()
+        .from(SessionTable)
+        .where(and(eq(SessionTable.id, sessionID), eq(SessionTable.project_id, projectID)))
+        .get()
+      return persisted && !deletedInTransaction(db, sessionID) ? persisted : undefined
+    })
+    if (!row) throw new NotFoundError({ message: `Session not found: ${sessionID}` })
+    return fromRow(row)
+  })
+
+  export const assertLineageInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
+    return (await lineageInProject({ sessionID, projectID }))[0]
+  })
+
+  export const get = fn(Identifier.schema("session"), async (id) => {
+    const row = Database.use((db) => {
+      const persisted = db.select().from(SessionTable).where(eq(SessionTable.id, id)).get()
+      return persisted && !deletedInTransaction(db, id) ? persisted : undefined
+    })
+    if (!row) throw new NotFoundError({ message: `Session not found: ${id}` })
+    return fromRow(row)
+  })
+
+  export const setTitle = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      title: z.string(),
+    }),
+    async (input) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        const row = db
+          .update(SessionTable)
+          .set({ title: input.title, time_updated: Date.now() })
+          .where(eq(SessionTable.id, input.sessionID))
+          .returning()
+          .get()
+        if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+        const info = fromRow(row)
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
+        return info
+      })
+    },
+  )
+
+  /**
+   * A session config overlay (model / prompt / temperature) is owned by the
+   * ROOT session only (task root or standalone root) — R5.1 item 2. Child
+   * execution sessions run normally but never own a config overlay; they
+   * inherit the task-root overlay at resolution time (R5.1 item 5). The
+   * settings UI must target the root session, so both GET and PATCH of the
+   * session config reject a child session here (single guard, rule 8).
+   */
+  export const ChildSessionConfigError = NamedError.create(
+    "ChildSessionConfigError",
+    z.object({
+      sessionID: z.string(),
+      parentID: z.string(),
+      message: z.string(),
+    }),
+  )
+
+  export function assertConfigurableRoot(session: Info): void {
+    if (session.parentID) {
+      throw new ChildSessionConfigError({
+        sessionID: session.id,
+        parentID: session.parentID,
+        message:
+          `Session ${session.id} is a child session (parent ${session.parentID}); ` +
+          `it does not own a config overlay. Target its root session for model/prompt settings.`,
+      })
+    }
+  }
+
+  function assertNoStoredConfigOverlayNull(value: unknown, path = "configOverlay"): void {
+    if (value === null) {
+      throw new Error(
+        `Stored session overlay contains a null at ${path}; ` +
+          `configOverlay must be normalized before it is persisted.`,
+      )
+    }
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+        assertNoStoredConfigOverlayNull(child, `${path}.${key}`)
+      }
+    }
+  }
+
+  /**
+   * Merge `patch` into `session.metadata`, preserving keys not listed in patch.
+   * Atomic at row-level (single UPDATE under transaction). Caller-side merges
+   * race with concurrent writers; collapse all metadata writes for one session
+   * through the same code path to avoid lost updates.
+   */
+  const MetadataPatchInput = z.object({
+    sessionID: Identifier.schema("session"),
+    patch: z.record(z.string(), z.any()),
+  })
+
+  export function mergeMetadataInTransaction(db: Database.TxOrDb, input: z.output<typeof MetadataPatchInput>): Info {
+    Database.requireActiveTransaction("Session.mergeMetadataInTransaction")
+    assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+    const row = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
+    if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+    const current = (row.metadata ?? {}) as Record<string, unknown>
+    const next = { ...current, ...input.patch }
+    const updated = db
+      .update(SessionTable)
+      .set({ metadata: next })
+      .where(eq(SessionTable.id, input.sessionID))
+      .returning()
+      .get()!
+    const info = fromRow(updated)
+    Bus.publishOwnedInTransaction(Event.Updated, { info })
+    return info
+  }
+
+  export const mergeMetadata = fn(MetadataPatchInput, async (input) =>
+    Database.immediateTransaction((db) => mergeMetadataInTransaction(db, input)),
+  )
+
+  const MergeConfigOverlayInput = z.object({
+    sessionID: Identifier.schema("session"),
+    patch: z.lazy(() => Config.Overlay),
+  })
+
+  const configOverlayLocks = new Map<string, Promise<unknown>>()
+
+  type PreparedConfigOverlayMerge = { commitInTransaction(db: Database.TxOrDb): Info }
+
+  /**
+   * Validate an overlay merge and hand back its synchronous commit, so a
+   * caller can bind the overlay write into ITS OWN transaction — the
+   * task-message acceptance commits the overlay together with the Message,
+   * ingress, attachments and reopen epoch. The commit re-checks the stored
+   * overlay inside the transaction, so a prepared merge that lost a race
+   * fails the caller's whole transaction instead of committing a stale view.
+   */
+  export async function prepareConfigOverlayMergeInProject(input: {
+    sessionID: string
+    projectID: string
+    patch: z.output<typeof MergeConfigOverlayInput>["patch"]
+  }): Promise<PreparedConfigOverlayMerge> {
+        const initialRow = Database.use((db) =>
+          db
+            .select()
+            .from(SessionTable)
+            .where(and(eq(SessionTable.id, input.sessionID), eq(SessionTable.project_id, input.projectID)))
+            .get(),
+        )
+        if (!initialRow) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+        const initialSession = fromRow(initialRow)
+        assertConfigurableRoot(initialSession)
+        const stored = (initialRow.metadata as Record<string, unknown> | null | undefined)?.configOverlay ?? {}
+        assertNoStoredConfigOverlayNull(stored)
+        const current = Config.Overlay.parse(stored)
+        const owningProject = Project.get(input.projectID)
+        if (!owningProject) throw new NotFoundError({ message: `Project not found: ${input.projectID}` })
+        const capabilityProjectDirectory = owningProject.worktree
+        const baseConfig = await Instance.provide({ directory: capabilityProjectDirectory, fn: () => Config.get() })
+        const { nextOverlay, effective } = Config.previewOverlayUpdate(baseConfig, current, input.patch)
+        const currentProfileID = Config.mergeOverlay(baseConfig, current).prompt_profile.active
+        const nextProfileID = effective.prompt_profile.active
+        assertNoStoredConfigOverlayNull(nextOverlay)
+        const engineSql = await import("@/engine/engine.sql")
+        const initialTask = Database.use((db) =>
+          db
+            .select({ id: engineSql.EngineTaskTable.id })
+            .from(engineSql.EngineTaskTable)
+            .where(
+              and(
+                eq(engineSql.EngineTaskTable.session_id, input.sessionID),
+                eq(engineSql.EngineTaskTable.project_id, input.projectID),
+              ),
+            )
+            .get(),
+        )
+        const assertPinnedTaskProfile = (taskID: string, db?: Database.TxOrDb) => {
+          const pinnedPackageRevision = requireTaskPackageRevisionBinding(taskID, db)
+          if (nextProfileID === pinnedPackageRevision.id) return
+          throw new TaskPromptProfileImmutableError({
+            message: `Task ${taskID} is permanently bound to expert squad ${pinnedPackageRevision.id}`,
+            taskID,
+            pinnedPackageRevision,
+            requestedProfileID: nextProfileID,
+          })
+        }
+        if (initialTask) assertPinnedTaskProfile(initialTask.id)
+        if (input.patch.skill_mounts !== undefined || currentProfileID !== nextProfileID) {
+          const { PromptProfileResolver } = await import("@/expert-squad/prompt-profile-resolver")
+          await PromptProfileResolver.assertSkillMountConfig({
+            projectDirectory: capabilityProjectDirectory,
+            config: effective,
+            packageRevision: initialTask ? requireTaskResolvedPackageRevision(initialTask.id) : undefined,
+          })
+        }
+        return {
+          commitInTransaction(db: Database.TxOrDb): Info {
+          assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+          const row = db
+            .select()
+            .from(SessionTable)
+            .where(and(eq(SessionTable.id, input.sessionID), eq(SessionTable.project_id, input.projectID)))
+            .get()
+          if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+          assertConfigurableRoot(fromRow(row))
+          const transactionStored = (row.metadata as Record<string, unknown> | null | undefined)?.configOverlay ?? {}
+          assertNoStoredConfigOverlayNull(transactionStored)
+          if (JSON.stringify(Config.Overlay.parse(transactionStored)) !== JSON.stringify(current)) {
+            throw new Error(`Session config overlay changed while validating ${input.sessionID}.`)
+          }
+          const task = db
+            .select({ id: engineSql.EngineTaskTable.id })
+            .from(engineSql.EngineTaskTable)
+            .where(
+              and(
+                eq(engineSql.EngineTaskTable.session_id, input.sessionID),
+                eq(engineSql.EngineTaskTable.project_id, input.projectID),
+              ),
+            )
+            .get()
+          if (task) {
+            assertPinnedTaskProfile(task.id, db)
+          }
+          const committedOverlay = task
+            ? Config.Overlay.parse({
+                ...nextOverlay,
+                prompt_profile: { active: nextProfileID },
+              })
+            : nextOverlay
+          const metadata = {
+            ...((row.metadata ?? {}) as Record<string, unknown>),
+            configOverlay: committedOverlay,
+          }
+          const updated = db
+            .update(SessionTable)
+            .set({ metadata, time_updated: Date.now() })
+            .where(and(eq(SessionTable.id, input.sessionID), eq(SessionTable.project_id, input.projectID)))
+            .returning()
+            .get()!
+          const info = fromRow(updated)
+          Bus.publishOwnedInTransaction(Event.Updated, { info })
+          Bus.publishOwnedInTransaction(Event.ConfigChanged, { sessionID: input.sessionID })
+          return info
+          },
+        }
+  }
+
+  export const mergeConfigOverlayInProject = fn(
+    MergeConfigOverlayInput.extend({
+      projectID: z.string().min(1),
+    }),
+    async (input) => {
+      const lockKey = `${input.projectID}:${input.sessionID}`
+      return withKeyedLock(configOverlayLocks, lockKey, async () => {
+        const prepared = await prepareConfigOverlayMergeInProject(input)
+        return Database.immediateTransaction((db) => prepared.commitInTransaction(db))
+      })
+    },
+  )
+
+  export const mergeConfigOverlay = fn(MergeConfigOverlayInput, async (input) => {
+    return mergeConfigOverlayInProject({ ...input, projectID: Instance.project.id })
+  })
+
+  export const setArchived = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      time: z.number().nullable(),
+    }),
+    async (input) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        const row = db
+          .update(SessionTable)
+          .set({ time_archived: input.time, time_updated: Date.now() })
+          .where(eq(SessionTable.id, input.sessionID))
+          .returning()
+          .get()
+        if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+        const info = fromRow(row)
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
+        return info
+      })
+    },
+  )
+
+  export const setPinned = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      time: z.number().nullable(),
+    }),
+    async (input) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        const row = db
+          .update(SessionTable)
+          .set({
+            time_pinned: input.time,
+            time_updated: sql`${SessionTable.time_updated}`,
+          })
+          .where(eq(SessionTable.id, input.sessionID))
+          .returning()
+          .get()
+        if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+        const info = fromRow(row)
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
+        return info
+      })
+    },
+  )
+
+  export const setPermission = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      permission: CapabilityRules.Ruleset,
+    }),
+    async (input) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        const row = db
+          .update(SessionTable)
+          .set({ permission: input.permission, time_updated: Date.now() })
+          .where(eq(SessionTable.id, input.sessionID))
+          .returning()
+          .get()
+        if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+        const info = fromRow(row)
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
+        return info
+      })
+    },
+  )
+
+  export const setSummary = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      summary: Info.shape.summary,
+    }),
+    async (input) => {
+      return Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        const row = db
+          .update(SessionTable)
+          .set({
+            summary_additions: input.summary?.additions,
+            summary_deletions: input.summary?.deletions,
+            summary_files: input.summary?.files,
+            time_updated: Date.now(),
+          })
+          .where(eq(SessionTable.id, input.sessionID))
+          .returning()
+          .get()
+        if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+        const info = fromRow(row)
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
+        return info
+      })
+    },
+  )
+
+  export const diff = fn(Identifier.schema("session"), async (sessionID) => {
+    const target = ProjectRuntimePaths.sessionDiffPath(Instance.directory, Instance.project.id, sessionID)
+    try {
+      return await Filesystem.readJson<Snapshot.FileDiff[]>(target)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException)?.code === "ENOENT") return []
+      throw error
+    }
+  })
+
+  export const messages = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      limit: z.number().optional(),
+    }),
+    async (input) => {
+      const result = [] as Message.WithParts[]
+      for await (const msg of MessageStore.stream(input.sessionID)) {
+        if (input.limit && result.length >= input.limit) break
+        result.push(msg)
+      }
+      result.reverse()
+      return result
+    },
+  )
+
+  /**
+   * Observe one exact assistant-message fact for fact-check binding.
+   *
+   * Completion belongs to the addressed message rather than to a mutable
+   * Session lifecycle projection. `contentHash` is SHA-256 (Secure Hash
+   * Algorithm 256-bit) over the exact canonical text supplied to fact-check.
+   * The parent user message supplies the worker-turn descriptor reference
+   * that authored this response.
+   */
+  export const snapshotAssistantMessage = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+    }),
+    async (
+      input,
+    ): Promise<{
+      finished: boolean
+      messageID?: string
+      contentHash?: string
+      agentID?: string
+      workerTurnDescriptor?: { id: string; hash: string }
+      reason?:
+        | "message_missing"
+        | "message_not_assistant"
+        | "assistant_incomplete"
+        | "assistant_parent_missing"
+        | "worker_descriptor_reference_missing"
+    }> => {
+      const message = await MessageStore.get(input).catch((error) => {
+        if (NotFoundError.isInstance(error as Error)) return undefined
+        throw error
+      })
+      if (!message) return { finished: false, reason: "message_missing" }
+      const assistant = message.info
+      if (assistant.role !== "assistant") return { finished: false, reason: "message_not_assistant" }
+      if (assistant.time.completed === undefined) {
+        return { finished: false, reason: "assistant_incomplete" }
+      }
+      if (!assistant.parentID) return { finished: false, reason: "assistant_parent_missing" }
+      const source = await MessageStore.get({ sessionID: input.sessionID, messageID: assistant.parentID }).catch(
+        (error) => {
+          if (NotFoundError.isInstance(error as Error)) return undefined
+          throw error
+        },
+      )
+      if (!source) return { finished: false, reason: "assistant_parent_missing" }
+      if (source.info.role !== "user") return { finished: false, reason: "assistant_parent_missing" }
+      const descriptorValue = source.info.extra?.workerTurnDescriptor
+      if (!descriptorValue || typeof descriptorValue !== "object" || Array.isArray(descriptorValue)) {
+        return { finished: false, reason: "worker_descriptor_reference_missing" }
+      }
+      const descriptor = descriptorValue as { id?: unknown; hash?: unknown }
+      if (typeof descriptor.id !== "string" || typeof descriptor.hash !== "string") {
+        return { finished: false, reason: "worker_descriptor_reference_missing" }
+      }
+      const { canonicalAssistantMessageContent } = await import("./assistant-message-content")
+      const content = canonicalAssistantMessageContent(message.parts)
+      return {
+        finished: true,
+        messageID: assistant.id,
+        contentHash: content.hash,
+        agentID: assistant.agent,
+        workerTurnDescriptor: { id: descriptor.id, hash: descriptor.hash },
+      }
+    },
+  )
+
+  export function* list(input?: {
+    directory?: string
+    roots?: boolean
+    start?: number
+    search?: string
+    limit?: number
+  }) {
+    const project = Instance.project
+    const conditions = [eq(SessionTable.project_id, project.id)]
+
+    if (input?.directory) {
+      conditions.push(eq(SessionTable.directory, input.directory))
+    }
+    if (input?.roots) {
+      conditions.push(isNull(SessionTable.parent_id))
+    }
+    if (input?.start) {
+      conditions.push(gte(SessionTable.time_updated, input.start))
+    }
+    if (input?.search) {
+      conditions.push(like(SessionTable.title, `%${input.search}%`))
+    }
+
+    const limit = input?.limit ?? 100
+
+    const rows = Database.use((db) =>
+      db
+        .select()
+        .from(SessionTable)
+        .where(and(...conditions))
+        .orderBy(desc(SessionTable.time_updated))
+        .limit(limit)
+        .all().filter((row) => !deletedInTransaction(db, row.id)),
+    )
+    for (const row of rows) {
+      yield fromRow(row)
+    }
+  }
+
+  export function* listGlobal(input?: {
+    directory?: string
+    roots?: boolean
+    start?: number
+    cursorUpdated?: number
+    cursorSessionID?: string
+    search?: string
+    limit?: number
+    archived?: boolean
+  }) {
+    const conditions: SQL[] = []
+
+    if (input?.directory) {
+      conditions.push(eq(SessionTable.directory, input.directory))
+    }
+    if (input?.roots) {
+      conditions.push(isNull(SessionTable.parent_id))
+    }
+    if (input?.start) {
+      conditions.push(gte(SessionTable.time_updated, input.start))
+    }
+    if ((input?.cursorUpdated === undefined) !== (input?.cursorSessionID === undefined)) {
+      throw new Error("Session.listGlobal requires cursorUpdated and cursorSessionID together")
+    }
+    if (input?.cursorUpdated !== undefined && input.cursorSessionID) {
+      const cursorUpdated = input.cursorUpdated
+      const cursorSessionID = input.cursorSessionID
+      conditions.push(
+        or(
+          sql`${SessionTable.time_updated} < ${cursorUpdated}`,
+          sql`${SessionTable.time_updated} = ${cursorUpdated} AND ${SessionTable.id} < ${cursorSessionID}`,
+        )!,
+      )
+    }
+    if (input?.search) {
+      conditions.push(like(SessionTable.title, `%${input.search}%`))
+    }
+    if (!input?.archived) {
+      conditions.push(isNull(SessionTable.time_archived))
+    }
+
+    const limit = input?.limit ?? 100
+
+    const rows = Database.use((db) => {
+      const query =
+        conditions.length > 0
+          ? db
+              .select()
+              .from(SessionTable)
+              .where(and(...conditions))
+          : db.select().from(SessionTable)
+      return query.orderBy(desc(SessionTable.time_updated), desc(SessionTable.id)).limit(limit).all()
+        .filter((row) => !deletedInTransaction(db, row.id))
+    })
+
+    const ids = [...new Set(rows.map((row) => row.project_id))]
+    const projects = new Map<string, ProjectInfo>()
+
+    if (ids.length > 0) {
+      const items = Database.use((db) =>
+        db
+          .select({ id: ProjectTable.id, name: ProjectTable.name, worktree: ProjectTable.worktree })
+          .from(ProjectTable)
+          .where(inArray(ProjectTable.id, ids))
+          .all(),
+      )
+      for (const item of items) {
+        projects.set(item.id, {
+          id: item.id,
+          name: item.name ?? undefined,
+          worktree: item.worktree,
+        })
+      }
+    }
+
+    for (const row of rows) {
+      const project = projects.get(row.project_id) ?? null
+      yield { ...fromRow(row), project }
+    }
+  }
+
+  export const children = fn(Identifier.schema("session"), async (parentID) => {
+    const project = Instance.project
+    const rows = Database.use((db) =>
+      db
+        .select()
+        .from(SessionTable)
+        .where(and(eq(SessionTable.project_id, project.id), eq(SessionTable.parent_id, parentID)))
+        .all(),
+    )
+    return rows.filter((row) => !Database.use((db) => deletedInTransaction(db, row.id))).map(fromRow)
+  })
+
+  // Flat list of session IDs in the subtree rooted at `sessionID`, parent
+  // first then descendants. Lives here as the single source for "walk the
+  // session tree" — callers that need to cancel/abort/cleanup every session
+  // under a parent must use this instead of rolling their own recursion
+  // (rule 8 single source, rule 9 shared abstraction). Previously duplicated
+  // as private `sessionTree` helpers in engine/writer.ts and task-api/index.ts.
+  export const tree = fn(Identifier.schema("session"), async (sessionID) => {
+    return treeInProject({ sessionID, projectID: Instance.project.id })
+  })
+
+  export function treeInProjectInTransaction(
+    db: Database.TxOrDb,
+    input: {
+      sessionID: string
+      projectID: string
+      includeDeletedRoot?: boolean
+      observePage?: (page: { stage: "children" | "task_owner" | "delete"; inputCount: number; rowCount: number }) => void
+    },
+  ): string[] {
+    const root = db
+      .select({ id: SessionTable.id })
+      .from(SessionTable)
+      .where(and(eq(SessionTable.id, input.sessionID), eq(SessionTable.project_id, input.projectID)))
+      .get()
+    if (!root || (!input.includeDeletedRoot && deletedInTransaction(db, input.sessionID))) {
+      throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
+    }
+    const ids: string[] = [input.sessionID]
+    const queue: string[] = [input.sessionID]
+    const seen = new Set(ids)
+    while (queue.length > 0) {
+      const parentIDs = queue.splice(0, TREE_QUERY_PAGE_SIZE)
+      let cursor: { timeCreated: number; id: string } | undefined
+      while (true) {
+        const children = db
+          .select({ id: SessionTable.id, timeCreated: SessionTable.time_created })
+          .from(SessionTable)
+          .where(
+            and(
+              eq(SessionTable.project_id, input.projectID),
+              inArray(SessionTable.parent_id, parentIDs),
+              cursor
+                ? or(
+                    gt(SessionTable.time_created, cursor.timeCreated),
+                    and(eq(SessionTable.time_created, cursor.timeCreated), gt(SessionTable.id, cursor.id)),
+                  )
+                : undefined,
+            ),
+          )
+          .orderBy(SessionTable.time_created, SessionTable.id)
+          .limit(TREE_QUERY_PAGE_SIZE)
+          .all()
+        input.observePage?.({ stage: "children", inputCount: parentIDs.length, rowCount: children.length })
+        for (const child of children) {
+          const childID = child.id
+          if (seen.has(childID)) throw new Error(`Session tree cycle detected at ${childID}`)
+          seen.add(childID)
+          ids.push(childID)
+          queue.push(childID)
+        }
+        if (children.length < TREE_QUERY_PAGE_SIZE) break
+        const last = children.at(-1)!
+        cursor = { timeCreated: last.timeCreated, id: last.id }
+      }
+    }
+    return ids
+  }
+
+  export const treeInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
+    return Database.use((db) => treeInProjectInTransaction(db, { sessionID, projectID }))
+  })
+
+  export function deleteExactTreeInProject(
+    tx: Database.TxOrDb,
+    input: {
+      sessionID: string
+      projectID: string
+      expectedSessionIDs: string[]
+      observePage?: (page: { stage: "children" | "task_owner" | "delete"; inputCount: number; rowCount: number }) => void
+    },
+  ): number {
+    const currentSessionIDs = treeInProjectInTransaction(tx, input)
+    for (let offset = 0; offset < currentSessionIDs.length; offset += TREE_QUERY_PAGE_SIZE) {
+      const sessionIDs = currentSessionIDs.slice(offset, offset + TREE_QUERY_PAGE_SIZE)
+      const taskOwner = tx
+        .select({ id: EngineTaskTable.id })
+        .from(EngineTaskTable)
+        .where(inArray(EngineTaskTable.session_id, sessionIDs))
+        .limit(1)
+        .get()
+      input.observePage?.({ stage: "task_owner", inputCount: sessionIDs.length, rowCount: taskOwner ? 1 : 0 })
+      if (taskOwner) {
+        throw new Error(`Session tree ${input.sessionID} is immutable while owned by Task ${taskOwner.id}`)
+      }
+    }
+    const expectedSessionIDs = [...new Set(input.expectedSessionIDs)]
+    if (expectedSessionIDs.length !== input.expectedSessionIDs.length) {
+      throw new Error(`Session deletion settlement contains duplicate session identifiers for ${input.sessionID}`)
+    }
+    const expected = new Set(expectedSessionIDs)
+    if (
+      currentSessionIDs.length !== expectedSessionIDs.length ||
+      currentSessionIDs.some((sessionID) => !expected.has(sessionID))
+    ) {
+      throw new Error(
+        `Session tree ${input.sessionID} changed after settlement: expected ${expectedSessionIDs.join(", ")}; current ${currentSessionIDs.join(", ")}`,
+      )
+    }
+    let deletedCount = 0
+    for (let offset = 0; offset < currentSessionIDs.length; offset += TREE_QUERY_PAGE_SIZE) {
+      const sessionIDs = currentSessionIDs.slice(offset, offset + TREE_QUERY_PAGE_SIZE)
+      const deleted = tx
+        .delete(SessionTable)
+        .where(and(eq(SessionTable.project_id, input.projectID), inArray(SessionTable.id, sessionIDs)))
+        .returning({ id: SessionTable.id })
+        .all()
+      input.observePage?.({ stage: "delete", inputCount: sessionIDs.length, rowCount: deleted.length })
+      deletedCount += deleted.length
+    }
+    if (deletedCount !== currentSessionIDs.length) {
+      throw new Error(
+        `Session tree ${input.sessionID} deletion removed ${deletedCount} rows, expected ${currentSessionIDs.length}`,
+      )
+    }
+    Database.effect(async () => {
+      for (const sessionID of currentSessionIDs) {
+        try {
+          SessionStatusLifecycle.release(sessionID)
+        } finally {
+          await SessionPromptState.release(sessionID)
+        }
+      }
+    })
+    return deletedCount
+  }
+
+  export const childrenInProject = fn(
+    z.object({
+      parentID: Identifier.schema("session"),
+      projectID: z.string().min(1),
+    }),
+    async ({ parentID, projectID }) => {
+      const rows = Database.use((db) =>
+        db
+          .select()
+          .from(SessionTable)
+          .where(and(eq(SessionTable.project_id, projectID), eq(SessionTable.parent_id, parentID)))
+          .all(),
+      )
+      return rows.filter((row) => !Database.use((db) => deletedInTransaction(db, row.id))).map(fromRow)
+    },
+  )
+
+  function messageWithPersistedCreated(msg: Message.Info, timeCreated: number): Message.VisibleInfo {
+    const persisted = {
+      ...msg,
+      time: {
+        ...msg.time,
+        created: timeCreated,
+      },
+    } as Message.Info
+    const orderKey = timelineMessageOrderKey({ info: persisted })
+    if (typeof msg.orderKey === "string" && msg.orderKey.length > 0 && msg.orderKey !== orderKey) {
+      throw new Error(
+        `Session.updateMessage: message ${msg.id} orderKey drift between payload and persisted row: payload=${msg.orderKey}, persisted=${orderKey}, payloadCreated=${msg.time.created}, persistedCreated=${timeCreated}`,
+      )
+    }
+    return { ...persisted, orderKey } as Message.VisibleInfo
+  }
+
+  function jsonEquivalent(left: unknown, right: unknown) {
+    return isDeepStrictEqual(JSON.parse(JSON.stringify(left)), JSON.parse(JSON.stringify(right)))
+  }
+
+  function upsertMessageRow(
+    msg: Message.Info,
+    options: {
+      publishCreated: boolean
+      publishUpdated: boolean
+    },
+    commit?: (db: Database.TxOrDb) => void,
+  ): Message.VisibleInfo {
+    let persisted: Message.VisibleInfo | undefined
+    Database.immediateTransaction((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, msg.sessionID)
+      const existing = db
+        .select({ time_created: MessageTable.time_created, data: MessageTable.data })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, msg.id))
+        .get()
+      const latestSessionMessage = existing
+        ? undefined
+        : db
+            .select({ timeCreated: MessageTable.time_created })
+            .from(MessageTable)
+            .where(eq(MessageTable.session_id, msg.sessionID))
+            .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+            .limit(1)
+            .get()
+      const persistedCreated = existing?.time_created ?? Math.max(
+        msg.time.created,
+        latestSessionMessage ? latestSessionMessage.timeCreated + 1 : msg.time.created,
+      )
+      const persistedMessage = messageWithPersistedCreated(msg, persistedCreated)
+      let allowAcceptedActivitySettlement = false
+      if (existing) {
+        const prior = Message.Info.parse({
+          ...existing.data,
+          id: msg.id,
+          sessionID: msg.sessionID,
+        })
+        if (prior.role === "assistant" && prior.time.completed !== undefined) {
+          const { id: _id, sessionID: _sessionID, ...nextData } = persistedMessage
+          if (!jsonEquivalent(existing.data, nextData)) {
+            throw new Error(`Completed assistant Message ${msg.id} is immutable`)
+          }
+          persisted = messageWithPersistedCreated(prior, existing.time_created)
+          return
+        }
+        if (prior.role === "assistant" && persistedMessage.role === "assistant") {
+          allowAcceptedActivitySettlement =
+            prior.time.completed === undefined && persistedMessage.time.completed !== undefined
+          const effectBound = Boolean(prior.activationID) || Boolean(
+            db.select({ id: ProviderActivityRequestTable.id })
+              .from(ProviderActivityRequestTable)
+              .where(eq(ProviderActivityRequestTable.assistant_message_id, msg.id))
+              .get(),
+          ) || Boolean(
+            db.select({ id: ToolPartRequestTable.id })
+              .from(ToolPartRequestTable)
+              .where(eq(ToolPartRequestTable.message_id, msg.id))
+              .get(),
+          )
+          const priorIdentity = {
+            sessionID: prior.sessionID,
+            role: prior.role,
+            author: prior.author,
+            parentID: prior.parentID,
+            acceptedInputMessageIDs: Message.acceptedInputMessageIDs(prior),
+            activationID: prior.activationID,
+            agent: prior.agent,
+            modelID: prior.modelID,
+            providerID: prior.providerID,
+          }
+          const nextIdentity = {
+            sessionID: persistedMessage.sessionID,
+            role: persistedMessage.role,
+            author: persistedMessage.author,
+            parentID: persistedMessage.parentID,
+            acceptedInputMessageIDs: Message.acceptedInputMessageIDs(persistedMessage),
+            activationID: persistedMessage.activationID,
+            agent: persistedMessage.agent,
+            modelID: persistedMessage.modelID,
+            providerID: persistedMessage.providerID,
+          }
+          if (effectBound && !jsonEquivalent(priorIdentity, nextIdentity)) {
+            throw new Error(`Assistant Message ${msg.id} effect causal/model identity is immutable`)
+          }
+        }
+        const { id: _id, sessionID: _sessionID, ...nextData } = persistedMessage
+        if (!jsonEquivalent(existing.data, nextData) && prior.role === "user") {
+          assertTaskRootMessageMutable(db, msg.id)
+        }
+      }
+      if (persistedMessage.role === "assistant" && persistedMessage.activationID) {
+        assertTaskRootAssistantActivationFenceInTransaction(db, {
+          assistantMessageID: persistedMessage.id,
+          now: Date.now(),
+          candidate: {
+            sessionID: persistedMessage.sessionID,
+            parentID: persistedMessage.parentID,
+            activationID: persistedMessage.activationID,
+          },
+          allowAcceptedActivitySettlement,
+        })
+      }
+      persisted = persistedMessage
+      const time_created = persistedMessage.time.created
+      const { id, sessionID, ...data } = persistedMessage
+      db.insert(MessageTable)
+        .values({
+          id,
+          session_id: sessionID,
+          time_created,
+          data,
+        })
+        .onConflictDoUpdate({ target: MessageTable.id, set: { data } })
+        .run()
+      commit?.(db)
+      if (options.publishCreated && !existing) {
+        Bus.publishOwnedInTransaction(Message.Event.Created, { info: persistedMessage })
+      }
+      if (options.publishUpdated) {
+        Bus.publishOwnedInTransaction(Message.Event.Updated, { info: persistedMessage })
+      }
+    })
+    if (!persisted) throw new Error(`Session message ${msg.id} was not persisted`)
+    return persisted
+  }
+
+  export const updateMessage = fn(Message.Info, async (msg) => {
+    return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true })
+  })
+
+  /**
+   * Persist one assistant Turn, consume its accepted delivery batch, and
+   * commit one synchronous occurrence owner in the same transaction. The
+   * owner callback must perform no I/O; Catalog binding uses it only after its
+   * content-addressed blob has been fully published and verified.
+   */
+  export async function beginAssistantReplyWithCommit(
+    raw: z.input<typeof Message.Assistant>,
+    commit: (db: Database.TxOrDb) => void,
+  ) {
+    const msg = Message.Assistant.parse(raw)
+    const acceptedInputMessageIDs = msg.acceptedInputMessageIDs
+    if (!acceptedInputMessageIDs) {
+      throw new Error(`New assistant Message ${msg.id} is missing its accepted input Message identities`)
+    }
+    return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true }, (db) => {
+      for (const messageID of acceptedInputMessageIDs) {
+        const row = db
+          .select({ data: MessageTable.data, sessionID: MessageTable.session_id, timeCreated: MessageTable.time_created })
+          .from(MessageTable)
+          .where(eq(MessageTable.id, messageID))
+          .get()
+        if (!row || row.sessionID !== msg.sessionID) {
+          throw new Error(`Assistant Message ${msg.id} accepted missing Session input ${messageID}`)
+        }
+        const input = Message.Info.parse({ ...row.data, id: messageID, sessionID: row.sessionID })
+        if (input.role !== "user") {
+          throw new Error(`Assistant Message ${msg.id} accepted non-user Message ${messageID}`)
+        }
+        if (input.pendingDelivery !== true) continue
+        // This narrow queue-to-accepted transition changes no authored input
+        // data. The loop commits it before execution-status publication; the
+        // database's causal-fact trigger remains authoritative if an earlier
+        // owner has already frozen the Message.
+        const delivered = { ...input }
+        delete delivered.pendingDelivery
+        const persisted = messageWithPersistedCreated(delivered, row.timeCreated)
+        // Preserve the stored authored payload byte-for-field: schema parsing
+        // supplies validation and the visible event projection, but must not
+        // strip historical extension fields while consuming this one marker.
+        const { pendingDelivery: _pendingDelivery, ...data } = row.data as typeof row.data & {
+          pendingDelivery?: boolean
+        }
+        db.update(MessageTable).set({ data }).where(eq(MessageTable.id, messageID)).run()
+        Bus.publishOwnedInTransaction(Message.Event.Updated, { info: persisted })
+      }
+      commit(db)
+    })
+  }
+
+  /** Persist one assistant Turn and consume its accepted delivery batch atomically. */
+  export const beginAssistantReply = fn(Message.Assistant, async (msg) =>
+    beginAssistantReplyWithCommit(msg, () => undefined),
+  )
+
+  const PublishCompactionCheckpointInput = z.object({
+    info: Message.Assistant,
+    part: Message.CompactionPart,
+  })
+
+  export const publishCompactionCheckpoint = fn(PublishCompactionCheckpointInput, async (input) => {
+    if (input.info.time.completed === undefined || !CompactionHandoff.isValidSummaryMessage(input.info)) {
+      throw new Error(`Compaction checkpoint assistant ${input.info.id} must be a valid completed summary`)
+    }
+    if (input.part.sessionID !== input.info.sessionID || input.part.messageID !== input.info.id) {
+      throw new Error(`Compaction checkpoint ${input.info.id} marker does not belong to its summary assistant`)
+    }
+    let info: Message.VisibleInfo | undefined
+    let part: Message.CompactionPart | undefined
+    Database.immediateTransaction((db) => {
+      const parent = db
+        .select({ data: MessageTable.data })
+        .from(MessageTable)
+        .where(and(eq(MessageTable.id, input.info.parentID), eq(MessageTable.session_id, input.info.sessionID)))
+        .get()
+      if (!parent || parent.data.role !== "user") {
+        throw new Error(`Compaction checkpoint ${input.info.id} parent must be a user message`)
+      }
+      const existingCheckpoint = db
+        .select({ id: PartTable.id })
+        .from(PartTable)
+        .where(
+          and(
+            eq(PartTable.message_id, input.info.id),
+            sql`json_extract(${PartTable.data}, '$.type') = 'compaction'`,
+          ),
+        )
+        .get()
+      if (existingCheckpoint && existingCheckpoint.id !== input.part.id) {
+        throw new Error(`Compaction checkpoint assistant ${input.info.id} already owns checkpoint ${existingCheckpoint.id}`)
+      }
+      const continuationParts = db
+        .select()
+        .from(PartTable)
+        .where(eq(PartTable.message_id, input.info.id))
+        .orderBy(PartTable.time_created, PartTable.id)
+        .all()
+        .map((row) => projectPartInTransaction(db, row))
+      const continuation = Message.compactionContinuationTextParts(continuationParts)
+        .map((item) => item.text)
+        .join("\n\n")
+      if (!continuation.trim()) {
+        throw new Error(`Compaction checkpoint assistant ${input.info.id} must contain final-step visible text`)
+      }
+      info = upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
+      part = updatePartRow(input.part, { publish: true, completedCompactionCheckpoint: true }, db)
+        .outputPart as Message.CompactionPart
+    })
+    if (!info || !part) throw new Error(`Compaction checkpoint ${input.info.id} was not persisted`)
+    return { info, part }
+  })
+
+  /**
+   * Write a message row to the database without publishing a Bus event.
+   * Use this when the message needs to exist in the DB (e.g. as an FK target
+   * for parts) but the notification should be deferred until the message is
+   * fully assembled. Follow up with `updateMessage` to publish the event.
+   */
+  export const saveMessage = fn(Message.Info, async (msg) => {
+    return upsertMessageRow(msg, { publishCreated: false, publishUpdated: false })
+  })
+
+  /**
+   * Persist one logical message atomically.
+   *
+   * The message row itself must exist before parts can reference it, but
+   * publishing `message.updated` before the parts are durable creates an
+   * observable split-brain: listeners can see a header-only message and miss
+   * the authored text if the process dies mid-write. We therefore:
+   *   1. save the message row silently as the foreign-key target,
+   *   2. queue the first-write `message.created` event when applicable,
+   *   3. queue the visible `message.updated` event in the same transaction,
+   *   4. write every part in that same transaction,
+   *   5. write any message-owned control records in the same transaction,
+   *   6. merge any related session metadata facts in the same transaction,
+   *   7. optionally touch the owning session before commit.
+   *
+   * Because the bus effects drain only after the transaction commits, any
+   * observer that sees `message.created`, `message.updated`, or
+   * `message.part.updated` is guaranteed to read the fully durable message
+   * bundle from SQLite.
+   */
+  const PersistMessageInput = z.object({
+    info: Message.Info,
+    parts: z.array(Message.Part),
+    controls: z.array(SessionControl.CreateInput).optional(),
+    metadataPatches: z.array(MetadataPatchInput).optional(),
+    touchSessionID: Identifier.schema("session").optional(),
+  })
+  export type PersistMessageInput = z.infer<typeof PersistMessageInput>
+
+  function persistMessageBundleRows(
+    input: PersistMessageInput,
+    commit?: () => void,
+    beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
+  ) {
+    for (const control of input.controls ?? []) {
+      if (control.sessionID !== input.info.sessionID) {
+        throw new Error(
+          `Message-owned session control ${control.kind} targets ${control.sessionID}, not message session ${input.info.sessionID}`,
+        )
+      }
+    }
+    Database.immediateTransaction((db) => {
+      assertSessionDeletionAdmissionInTransaction(db, input.info.sessionID)
+      preflightBundle?.()
+      const existing = db
+        .select({ id: MessageTable.id, timeCreated: MessageTable.time_created })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.info.id))
+        .get()
+      let initialInfo = input.info
+      if (!existing && input.info.role === "assistant" && input.info.time.completed !== undefined) {
+        const { completed: _completed, ...initialTime } = input.info.time
+        const { finish: _finish, error: _error, ...initialAssistant } = input.info
+        initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
+      }
+      const initialPersisted = upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
+      beforeVisibilityEffects?.()
+      if (!existing) {
+        const createdInfo = messageWithPersistedCreated(input.info, initialPersisted.time.created)
+        Bus.publishOwnedInTransaction(Message.Event.Created, { info: createdInfo })
+      }
+      const writtenParts: Message.Part[] = []
+      for (const part of input.parts) {
+        const written = updatePartRow(part, { publish: false })
+        if (written.wrotePart) writtenParts.push(written.outputPart)
+      }
+      const finalPersisted = upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
+      const messageOrderKey = finalPersisted.orderKey
+      for (const part of writtenParts) {
+        Bus.publishOwnedInTransaction(Message.Event.PartUpdated, {
+          orderKey: messageOrderKey,
+          part: part as Message.VisiblePart,
+        })
+      }
+      ProjectMemory.captureMessageInTransaction(db, { info: finalPersisted, parts: input.parts })
+      for (const control of input.controls ?? []) SessionControl.createInTransaction(db, control)
+      for (const patch of input.metadataPatches ?? []) mergeMetadataInTransaction(db, patch)
+      if (input.touchSessionID) touch(input.touchSessionID)
+      commit?.()
+    })
+  }
+
+  async function hydratePersistedMessageBundle(input: PersistMessageInput) {
+    const row = Database.use((db) =>
+      db
+        .select({ time_created: MessageTable.time_created })
+        .from(MessageTable)
+        .where(and(eq(MessageTable.id, input.info.id), eq(MessageTable.session_id, input.info.sessionID)))
+        .get(),
+    )
+    if (!row) throw new NotFoundError({ message: `Message not found: ${input.info.id}` })
+    return {
+      info: messageWithPersistedCreated(input.info, row.time_created),
+      parts: await MessageStore.parts(input.info.id),
+    }
+  }
+
+  async function persistMessageBundle(
+    input: PersistMessageInput,
+    commit?: () => void,
+    beforeVisibilityEffects?: () => void,
+  ) {
+    const persisted = persistMessageWithCommitInTransaction(input, commit ?? (() => undefined), beforeVisibilityEffects)
+    return persisted.complete()
+  }
+
+  export const persistMessage = fn(PersistMessageInput, async (input) => persistMessageBundle(input))
+
+  export class MessageOccurrenceClaimConflictError extends Error {
+    override readonly name = "MessageOccurrenceClaimConflictError"
+
+    constructor(
+      readonly sessionID: string,
+      readonly messageID: string,
+      readonly existingSessionID: string,
+    ) {
+      super(`Message occurrence ${messageID} is already claimed by Session ${existingSessionID}`)
+    }
+  }
+
+  /** Return the Session that durably owns one globally unique Message occurrence. */
+  export function messageOccurrenceSessionID(messageID: string): string | undefined {
+    const id = Identifier.schema("message").parse(messageID)
+    return Database.use((db) =>
+      db.select({ sessionID: MessageTable.session_id }).from(MessageTable).where(eq(MessageTable.id, id)).get(),
+    )?.sessionID
+  }
+
+  function assertMessageOccurrenceUnclaimed(input: { sessionID: string; messageID: string }) {
+    const existing = Database.use((db) =>
+      db
+        .select({ id: MessageTable.id, sessionID: MessageTable.session_id })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.messageID))
+        .get(),
+    )
+    if (existing) {
+      throw new MessageOccurrenceClaimConflictError(input.sessionID, input.messageID, existing.sessionID)
+    }
+  }
+
+  /** Claim an input occurrence and publish its dependent execution Message in
+   * one cross-process writer transaction. A losing peer can therefore always
+   * join a complete durable execution graph; it never observes the claimed
+   * input without the assistant/Tool owner that owes the effect. */
+  export async function persistClaimedMessagePair(input: {
+    claim: PersistMessageInput
+    dependent: PersistMessageInput
+    commit?: () => void
+  }) {
+    const claim = PersistMessageInput.parse(input.claim)
+    const dependent = PersistMessageInput.parse(input.dependent)
+    if (claim.info.sessionID !== dependent.info.sessionID) {
+      throw new Error(`Claimed Message pair crosses Sessions ${claim.info.sessionID} and ${dependent.info.sessionID}`)
+    }
+    let claimed!: ReturnType<typeof persistMessageWithCommitInTransaction>
+    let persistedDependent!: ReturnType<typeof persistMessageWithCommitInTransaction>
+    Database.immediateTransaction(() => {
+      claimed = persistMessageWithCommitInTransaction(
+        claim,
+        () => undefined,
+        undefined,
+        () => {
+          assertMessageOccurrenceUnclaimed({ sessionID: claim.info.sessionID, messageID: claim.info.id })
+        },
+      )
+      persistedDependent = persistMessageWithCommitInTransaction(dependent, input.commit ?? (() => undefined))
+    })
+    return {
+      claim: await claimed.complete(),
+      dependent: await persistedDependent.complete(),
+    }
+  }
+
+  /**
+   * Persist a message bundle and one synchronous owner commit in the same
+   * SQLite transaction. The callback is for durable facts whose validity is
+   * defined by the exact message/Part set, such as a projected-worker Turn
+   * descriptor and its dispatch lineage. It must not perform asynchronous
+   * work or publish process-local runtime state. `beforeVisibilityEffects`
+   * may only register post-commit effects that must run before the Message
+   * publication effects registered by this bundle.
+   */
+  export async function persistMessageWithCommit(
+    input: PersistMessageInput,
+    commit: () => void,
+    beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
+  ) {
+    const parsed = PersistMessageInput.parse(input)
+    const persisted = persistMessageWithCommitInTransaction(parsed, commit, beforeVisibilityEffects, preflightBundle)
+    return persisted.complete()
+  }
+
+  export function persistMessageWithCommitInTransaction(
+    input: PersistMessageInput,
+    commit: () => void,
+    beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
+  ) {
+    const parsed = PersistMessageInput.parse(input)
+    persistMessageBundleRows(parsed, commit, beforeVisibilityEffects, preflightBundle)
+    return {
+      complete: () => hydratePersistedMessageBundle(parsed),
+    }
+  }
+
+  export const removeMessage = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+    }),
+    async (input) => {
+      // CASCADE delete handles parts automatically
+      Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        assertTaskRootMessageMutable(db, input.messageID)
+        const current = db
+          .select({ data: MessageTable.data, timeCreated: MessageTable.time_created })
+          .from(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
+          .get()
+        if (!current) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+        const info = messageWithPersistedCreated(
+          { ...current.data, id: input.messageID, sessionID: input.sessionID } as Message.Info,
+          current.timeCreated,
+        )
+        const removed = db
+          .delete(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
+          .returning({ id: MessageTable.id })
+          .get()
+        if (!removed) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+        Bus.publishOwnedInTransaction(Message.Event.Removed, {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+          info,
+        })
+      })
+      return input.messageID
+    },
+  )
+
+  export const removePart = fn(
+    z.object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+      partID: Identifier.schema("part"),
+    }),
+    async (input) => {
+      Database.immediateTransaction((db) => {
+        assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+        const message = db.select({ id: MessageTable.id }).from(MessageTable)
+          .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID))).get()
+        if (!message) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
+        assertTaskRootMessageMutable(db, input.messageID)
+        const removed = db
+          .delete(PartTable)
+          .where(
+            and(
+              eq(PartTable.id, input.partID),
+              eq(PartTable.message_id, input.messageID),
+            ),
+          )
+          .returning({ id: PartTable.id, data: PartTable.data })
+          .get()
+        const removedTool = removed
+          ? undefined
+          : db.delete(ToolPartRequestTable).where(and(
+              eq(ToolPartRequestTable.id, input.partID),
+              eq(ToolPartRequestTable.message_id, input.messageID),
+            )).returning({ id: ToolPartRequestTable.id }).get()
+        if (!removed && !removedTool) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
+        const partType = removed ? String((removed.data as { type?: unknown }).type || "") : "tool"
+        if (!partType) throw new HostProcessingFaultError(`Removed Part ${input.partID} is missing its persisted type`)
+        Bus.publishOwnedInTransaction(Message.Event.PartRemoved, {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+          partID: input.partID,
+          partType,
+        })
+      })
+      return input.partID
+    },
+  )
+
+  const UpdatePartInput = Message.Part
+
+  /** Detector for inline base64 image / pdf / audio / video data URLs inside
+   *  a part's serialized data. Single source for the write-boundary guard
+   *  (see attachment-store single-source contract):
+   *
+   *  - This is the inverse pattern of `AttachmentStore` refs
+   *    (`/attachment/<projectID>/<sha>.<ext>`). Every inline-base64 producer
+   *    that survived the migration must route through `AttachmentStore.write`
+   *    instead of stuffing data URLs into `part.state.attachments[].url`
+   *    (or `part.url`, for user file parts).
+   *
+   *  - rule 6.1 second branch: this is a data-integrity gate, not an
+   *    LLM-decision shortcut. The producer code path is the bug; this
+   *    guard surfaces the regression at the write boundary so it cannot
+   *    silently bloat the DB. */
+  export class InlineBase64InPartError extends Error {
+    constructor(
+      public readonly partID: string,
+      snippet: string,
+    ) {
+      super(
+        `Session.updatePart: refusing inline base64 data URL in part ${partID}. ` +
+          `Route the producer through AttachmentStore.write so part.data stores a ` +
+          `/attachment/<sha>.<ext> ref instead of MB of inline bytes. ` +
+          `(attachment-store single-source contract). ` +
+          `Offending snippet: ${snippet}`,
+      )
+      this.name = "InlineBase64InPartError"
+    }
+  }
+
+  function assertPartDataHasNoInlineBase64(partID: string, data: unknown): void {
+    // Cheap regex on the serialized string is O(N) over the part payload,
+    // dominated by the JSON.stringify cost the insert below would pay
+    // anyway. Triggers before the row touches SQLite — keeps the DB clean.
+    const serialized = JSON.stringify(data)
+    const match = inlineBase64DataUrlMatch(serialized)
+    if (match) {
+      const snippet = inlineBase64DataUrlSnippet(serialized, match)
+      throw new InlineBase64InPartError(partID, snippet)
+    }
+  }
+
+  export function assertPartHasNoInlineBase64(part: Message.Part): void {
+    const { id } = part
+    const data = { ...part } as Record<string, unknown>
+    delete data.id
+    delete data.messageID
+    delete data.sessionID
+    delete data.orderKey
+    assertPartDataHasNoInlineBase64(id, data)
+  }
+
+  const UpdatePartDataInput = z.object({
+    partID: z.string(),
+    data: z.custom<PartData>(),
+  })
+
+  export const updatePartData = fn(UpdatePartDataInput, async (input) => {
+    assertPartDataHasNoInlineBase64(input.partID, input.data)
+    const row = Database.immediateTransaction((db) => {
+      const toolRequest = db
+        .select({ id: ToolPartRequestTable.id })
+        .from(ToolPartRequestTable)
+        .where(eq(ToolPartRequestTable.id, input.partID))
+        .get()
+      if (toolRequest) {
+        throw new Error(`Tool request Part ${input.partID} is immutable; append its exact outcome fact instead`)
+      }
+      const existing = db.select().from(PartTable).where(eq(PartTable.id, input.partID)).get()
+      if (!existing) return undefined
+      const message = db
+        .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, existing.message_id))
+        .get()
+      if (!message) return undefined
+      assertSessionDeletionAdmissionInTransaction(db, message.sessionID)
+      if (jsonEquivalent(existing.data, input.data)) return { id: existing.id }
+      assertTaskRootMessageMutable(db, existing.message_id)
+      const current = existing.data as { type?: string }
+      const next = input.data as { type?: string }
+      if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === next.type)) {
+        throw new Error(`Non-streaming Part ${input.partID} is immutable`)
+      }
+      const parentData = message.data as { role?: string; time?: { completed?: number } } | undefined
+      if (parentData?.role === "assistant" && parentData.time?.completed !== undefined) {
+        throw new Error(`Part ${input.partID} is immutable after assistant completion`)
+      }
+      assertTaskRootAssistantActivationFenceInTransaction(db, {
+        assistantMessageID: existing.message_id,
+        now: Date.now(),
+      })
+      return db.update(PartTable).set({ data: input.data, time_updated: Date.now() })
+        .where(eq(PartTable.id, input.partID)).returning({ id: PartTable.id }).get()
+    })
+    if (!row) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
+  })
+
+  const AppendToolProgressInput = z
+    .object({
+      sessionID: Identifier.schema("session"),
+      messageID: Identifier.schema("message"),
+      partID: Identifier.schema("part"),
+      title: z.string().optional(),
+      metadata: z.record(z.string(), z.unknown()).optional(),
+    })
+    .refine((value) => value.title !== undefined || value.metadata !== undefined, {
+      message: "Tool progress requires a title or metadata payload",
+    })
+
+  async function appendToolProgressBundle(
+    input: z.infer<typeof AppendToolProgressInput>,
+    beforeWrite?: (db: Database.TxOrDb) => void,
+  ) {
+    let publishAfterCommit = Database.hasActiveTransaction()
+    let projected: Message.ToolPart | undefined
+    let orderKey = ""
+    const write = (db: Database.TxOrDb) => {
+      assertSessionDeletionAdmissionInTransaction(db, input.sessionID)
+      beforeWrite?.(db)
+      const request = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, input.partID)).get()
+      if (!request || request.message_id !== input.messageID) {
+        throw new NotFoundError({ message: `Tool request Part not found: ${input.partID}` })
+      }
+      const message = db
+        .select({ sessionID: MessageTable.session_id, timeCreated: MessageTable.time_created })
+        .from(MessageTable)
+        .where(eq(MessageTable.id, input.messageID))
+        .get()
+      if (!message || message.sessionID !== input.sessionID) {
+        throw new NotFoundError({ message: `Tool request Part not found: ${input.partID}` })
+      }
+      const projectRequest = () => {
+        const part = projectToolPartInTransaction(db, request)
+        if (!part) throw new HostProcessingFaultError(`Tool request Part ${input.partID} cannot be projected`)
+        return {
+          ...part,
+          orderKey: timelinePartOrderKey({ id: request.id, timeCreated: request.time_created }),
+        }
+      }
+      const outcome = db
+        .select({ id: ToolPartOutcomeTable.id })
+        .from(ToolPartOutcomeTable)
+        .where(eq(ToolPartOutcomeTable.request_part_id, input.partID))
+        .get()
+      if (outcome) {
+        projected = projectRequest()
+        return false
+      }
+      const latest = db
+        .select()
+        .from(ToolPartProgressTable)
+        .where(eq(ToolPartProgressTable.request_part_id, input.partID))
+        .orderBy(desc(ToolPartProgressTable.time_created), desc(ToolPartProgressTable.id))
+        .get()
+      if (latest && latest.title === input.title && isDeepStrictEqual(latest.metadata ?? undefined, input.metadata)) {
+        projected = projectRequest()
+        return false
+      }
+      db.insert(ToolPartProgressTable)
+        .values({
+          id: Identifier.ascending("part"),
+          request_part_id: input.partID,
+          title: input.title,
+          metadata: input.metadata,
+          time_created: Date.now(),
+        })
+        .run()
+      projected = projectRequest()
+      orderKey = timelineMessageOrderKey({ info: { id: input.messageID, time: { created: message.timeCreated } } })
+      if (publishAfterCommit) {
+        Bus.publishOwnedInTransaction(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
+      }
+      return true
+    }
+    const persisted = Database.immediateTransaction((db) => {
+      publishAfterCommit = true
+      return write(db)
+    })
+    if (!projected) throw new HostProcessingFaultError(`Tool request Part ${input.partID} cannot be projected`)
+    if (persisted && !publishAfterCommit) {
+      await Bus.publish(Message.Event.PartUpdated, { orderKey, part: projected as Message.VisiblePart })
+    }
+    return { part: projected, persisted }
+  }
+
+  /** Append a real, durable progress fact for one still-running Tool request. */
+  export const appendToolProgress = fn(AppendToolProgressInput, async (input) => {
+    return appendToolProgressBundle(input)
+  })
+
+  export async function appendToolProgressWithCommit(
+    input: z.infer<typeof AppendToolProgressInput>,
+    beforeWrite: (db: Database.TxOrDb) => void,
+  ) {
+    return appendToolProgressBundle(AppendToolProgressInput.parse(input), beforeWrite)
+  }
+
+  function updatePartRow(
+    part: Message.Part,
+    options: { publish: boolean; completedCompactionCheckpoint?: boolean },
+    transaction?: Database.TxOrDb,
+  ): { outputPart: Message.Part; wrotePart: boolean } {
+    assertPartHasNoInlineBase64(part)
+    const { id, messageID, sessionID, orderKey: providedOrderKey, ...data } = part
+    const assertProvidedPartOrderKey = (canonicalOrderKey: string) => {
+      const supplied = typeof providedOrderKey === "string" ? providedOrderKey.trim() : ""
+      if (supplied && supplied !== canonicalOrderKey) {
+        throw new HostProcessingFaultError(`Session.updatePart: part ${id} orderKey drift between input and persisted row`)
+      }
+    }
+    const requestedTime = Date.now()
+    let outputPart = part
+    let messageOrderKey = ""
+    const publishPartUpdated = () =>
+      Bus.publishOwnedInTransaction(Message.Event.PartUpdated, {
+        orderKey: messageOrderKey,
+        part: outputPart as Message.VisiblePart,
+      })
+    const publishAfterCommit = options.publish && Database.hasActiveTransaction()
+    let wrotePart = false
+    const write = (db: Database.TxOrDb) => {
+      assertSessionDeletionAdmissionInTransaction(db, sessionID)
+      const message = db
+        .select({ id: MessageTable.id, timeCreated: MessageTable.time_created, data: MessageTable.data })
+        .from(MessageTable)
+        .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
+        .get()
+      if (!message) throw new NotFoundError({ message: `Message not found: ${messageID}` })
+      const time = Math.max(requestedTime, message.timeCreated)
+      messageOrderKey = timelineMessageOrderKey({
+        info: {
+          id: messageID,
+          time: { created: message.timeCreated },
+        },
+      })
+      const existingPart = db
+        .select({
+          data: PartTable.data,
+          messageID: PartTable.message_id,
+          timeCreated: PartTable.time_created,
+        })
+        .from(PartTable)
+        .where(eq(PartTable.id, id))
+        .get()
+      const existingToolRequest = db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, id)).get()
+      if (existingPart && existingPart.messageID !== messageID) {
+        throw new NotFoundError({ message: `Part not found: ${id}` })
+      }
+      if (existingToolRequest && existingToolRequest.message_id !== messageID) {
+        throw new NotFoundError({ message: `Part not found: ${id}` })
+      }
+      if (part.type === "tool") {
+        // A pending provider input draft is stream transport, not evidence that
+        // an external operation may have started. Persist only the complete
+        // write-ahead request and its separate terminal outcome fact.
+        if (part.state.status === "pending") {
+          if (!existingToolRequest) return
+          const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingToolRequest.time_created })
+          assertProvidedPartOrderKey(canonicalOrderKey)
+          outputPart = { ...projectToolPartInTransaction(db, existingToolRequest)!, orderKey: canonicalOrderKey }
+          return
+        }
+        const request = toolRequestData(part)
+        const parent = message.data as { role?: string; time?: { completed?: number } }
+        if (!existingToolRequest && parent.role === "assistant" && parent.time?.completed !== undefined) {
+          throw new HostProcessingFaultError(`Tool request Part ${id} cannot be appended after assistant completion`)
+        }
+        if (existingPart) throw new HostProcessingFaultError(`Tool request Part identity ${id} is occupied by a non-Tool fact`)
+        if (!existingToolRequest) {
+          assertTaskRootAssistantActivationFenceInTransaction(db, {
+            assistantMessageID: messageID,
+            now: time,
+          })
+        }
+        if (existingToolRequest) {
+          const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+          if (reconciled.kind === "conflict") {
+            throw new HostProcessingFaultError(
+              `Tool request Part ${id} conflicts with its immutable request fact — ${reconciled.description}`,
+            )
+          }
+        } else {
+          db.insert(ToolPartRequestTable).values({
+            id,
+            message_id: messageID,
+            time_created: time,
+            data: request,
+          }).run()
+          wrotePart = true
+        }
+        let outcome = toolOutcomeData(part)
+        if (outcome?.outcome === "completed" && part.state.status === "completed") {
+          const permissionRequest = db.select({ requestID: PermissionLedgerTable.request_id })
+            .from(PermissionLedgerTable)
+            .where(and(
+              eq(PermissionLedgerTable.event_type, "requested"),
+              eq(PermissionLedgerTable.session_id, sessionID),
+              eq(PermissionLedgerTable.message_id, messageID),
+              eq(PermissionLedgerTable.tool_call_id, part.callID),
+            )).get()
+          const resultAttemptID = permissionRequest
+            ? Identifier.deterministic("permission", `attempt\0${permissionRequest.requestID}`)
+            : undefined
+          const resultReceipt = resultAttemptID
+            ? db.select().from(PermissionExecutionResultTable)
+              .where(eq(PermissionExecutionResultTable.attempt_id, resultAttemptID)).get()
+            : undefined
+          if (resultReceipt) {
+            // The receipt is the sole authority for a permission-bearing Tool
+            // output: the outcome fact below stores no `output`, and reads
+            // project it back from this receipt. The caller's `part.state.output`
+            // reached here through the Session normalization pipeline instead,
+            // so the two strings are independently derived and may legitimately
+            // differ. Recording the divergence keeps it diagnosable; raising it
+            // would destroy an external effect that already succeeded, for a
+            // value this write discards anyway.
+            const stored = resultReceipt.result as { kind?: string; value?: unknown }
+            const projected = (() => {
+              try {
+                if (stored?.kind === "undefined") return ""
+                if (stored?.kind === "json") return normalizeToolResult(stored.value).output
+              } catch {
+                // A receipt this write cannot project is still the authority;
+                // reads surface the real projection failure at their own site.
+              }
+              return undefined
+            })()
+            if (projected !== part.state.output) {
+              log.warn("tool outcome diverges from its Permission result", {
+                partID: id,
+                attemptID: resultReceipt.attempt_id,
+                tool: part.tool,
+                projectedLength: projected?.length,
+                persistedLength: part.state.output.length,
+              })
+            }
+            outcome = {
+              outcome: "completed",
+              resultAttemptID: resultReceipt.attempt_id,
+              title: outcome.title,
+              metadata: outcome.metadata,
+              time: outcome.time,
+              ...(outcome.attachments ? { attachments: outcome.attachments } : {}),
+            }
+          }
+        }
+        if (outcome) {
+          const outcomeID = toolOutcomePartIdentity(id)
+          const existingOutcome = db.select().from(ToolPartOutcomeTable)
+            .where(eq(ToolPartOutcomeTable.request_part_id, id)).get()
+          if (existingOutcome) {
+            if (existingOutcome.id !== outcomeID || !equivalentToolOutcome(existingOutcome.data, outcome)) {
+              throw new HostProcessingFaultError(`Tool outcome Part ${outcomeID} conflicts with its immutable receipt`)
+            }
+          } else {
+            db.insert(ToolPartOutcomeTable).values({
+              id: outcomeID,
+              request_part_id: id,
+              data: outcome,
+              time_created: time,
+            }).run()
+            wrotePart = true
+          }
+        }
+        const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingToolRequest?.time_created ?? time })
+        assertProvidedPartOrderKey(canonicalOrderKey)
+        outputPart = projectToolPartInTransaction(
+          db,
+          existingToolRequest ?? db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, id)).get()!,
+        )!
+        outputPart = { ...outputPart, orderKey: canonicalOrderKey }
+        if (wrotePart && publishAfterCommit) publishPartUpdated()
+        return
+      }
+      if (existingToolRequest) throw new HostProcessingFaultError(`Part identity ${id} is occupied by an immutable Tool request fact`)
+      const parentData = message.data as { role?: string }
+      if (parentData.role === "user") assertTaskRootMessageMutable(db, messageID)
+      const canonicalOrderKey = timelinePartOrderKey({ id, timeCreated: existingPart?.timeCreated ?? time })
+      assertProvidedPartOrderKey(canonicalOrderKey)
+      outputPart = {
+        ...part,
+        orderKey: canonicalOrderKey,
+      } as Message.Part
+      if (existingPart && JSON.stringify(existingPart.data) === JSON.stringify(data)) return
+      const parent = message.data as { role?: string; time?: { completed?: number } }
+      if (parent.role === "assistant" && parent.time?.completed !== undefined) {
+        const isCheckpointAppend =
+          options.completedCompactionCheckpoint === true &&
+          part.type === "compaction" &&
+          existingPart === undefined
+        if (!isCheckpointAppend) throw new HostProcessingFaultError(`Part ${id} is immutable after assistant completion`)
+      }
+      if (existingPart) {
+        const current = existingPart.data as { type?: string }
+        if (!(["text", "reasoning"].includes(current.type ?? "") && current.type === part.type)) {
+          throw new HostProcessingFaultError(`Non-streaming Part ${id} is immutable`)
+        }
+      }
+      assertTaskRootAssistantActivationFenceInTransaction(db, {
+        assistantMessageID: messageID,
+        now: time,
+      })
+      db.insert(PartTable)
+        .values({
+          id,
+          message_id: messageID,
+          time_created: time,
+          data: data as PartData,
+        })
+        .onConflictDoUpdate({ target: PartTable.id, set: { data: data as PartData } })
+        .run()
+      wrotePart = true
+      if (publishAfterCommit) publishPartUpdated()
+    }
+    if (transaction) write(transaction)
+    else Database.immediateTransaction(write)
+    return { outputPart, wrotePart }
+  }
+
+  /**
+   * Synchronous Part writer for a caller-owned transaction. Composite fact
+   * commits use this instead of invoking the async public wrapper from a
+   * SQLite transaction callback. Validation, monotonicity, and publication
+   * remain owned by the same updatePartRow implementation.
+   */
+  export function writePartInTransaction(
+    db: Database.TxOrDb,
+    part: Message.Part,
+    options: { publish: boolean } = { publish: true },
+  ): { outputPart: Message.Part; wrotePart: boolean } {
+    Database.requireActiveTransaction("Session.writePartInTransaction")
+    return updatePartRow(part, options, db)
+  }
+
+  /** Atomically publish one Part update and its parent Message update while a
+   * caller-owned durable fence is valid. `beforeWrite` validates the exact
+   * owner inside the writer transaction; `afterWrite` may consume that owner
+   * only after both Session facts have been accepted by their canonical
+   * writers. */
+  export function updateMessageAndPartWithCommit(
+    input: { info: Message.Info; part: Message.Part },
+    beforeWrite: (db: Database.TxOrDb) => void,
+    afterWrite?: (db: Database.TxOrDb) => void,
+  ): { info: Message.VisibleInfo; part: Message.Part } {
+    const info = Message.Info.parse(input.info)
+    const part = Message.Part.parse(input.part)
+    if (part.sessionID !== info.sessionID || part.messageID !== info.id) {
+      throw new Error(`Part ${part.id} does not belong to Message ${info.id}`)
+    }
+    let persistedInfo!: Message.VisibleInfo
+    let persistedPart!: Message.Part
+    Database.immediateTransaction((db) => {
+      beforeWrite(db)
+      persistedPart = writePartInTransaction(db, part, { publish: true }).outputPart
+      persistedInfo = upsertMessageRow(info, { publishCreated: true, publishUpdated: true })
+      afterWrite?.(db)
+    })
+    return { info: persistedInfo, part: persistedPart }
+  }
+
+  async function updatePartImpl(part: Message.Part, signal?: AbortSignal) {
+    signal?.throwIfAborted()
+    const publishAfterCommit = Database.hasActiveTransaction()
+    const { outputPart, wrotePart } = updatePartRow(part, { publish: true })
+    // SSE (Server-Sent Events) stream deltas depend on the part-created
+    // event already being visible to live subscribers. Outside an existing
+    // DB transaction, publish and await that event before callers emit
+    // message.part.delta. Inside a transaction, keep the post-commit effect
+    // boundary so observers never see uncommitted parts.
+    if (wrotePart && !publishAfterCommit) {
+      const messageOrderKey = timelineMessageOrderKey({
+        info: {
+          id: outputPart.messageID,
+          time: {
+            created: Database.use((db) => {
+              const row = db
+                .select({ timeCreated: MessageTable.time_created })
+                .from(MessageTable)
+                .where(
+                  and(eq(MessageTable.id, outputPart.messageID), eq(MessageTable.session_id, outputPart.sessionID)),
+                )
+                .get()
+              if (!row) throw new NotFoundError({ message: `Message not found: ${outputPart.messageID}` })
+              return row.timeCreated
+            }),
+          },
+        },
+      })
+      await Bus.publish(
+        Message.Event.PartUpdated,
+        {
+          orderKey: messageOrderKey,
+          part: outputPart as Message.VisiblePart,
+        },
+        { signal },
+      )
+    }
+    signal?.throwIfAborted()
+    return outputPart
+  }
+
+  export const updatePart = fn(UpdatePartInput, async (part) => updatePartImpl(part))
+
+  /** Persist and publish one streamed Part under its physical activity owner. */
+  export function updatePartWithSignal(signal: AbortSignal, part: Message.Part): Promise<Message.Part> {
+    return updatePartImpl(UpdatePartInput.parse(part), signal)
+  }
+
+  export const importSnapshot = fn(
+    z.object({
+      info: Info,
+      messages: z.array(
+        z.object({
+          info: Message.Info,
+          parts: z.array(Message.Part),
+        }),
+      ),
+    }),
+    async (input) => {
+      Database.immediateTransaction((db) => {
+        Project.assertDurableAdmissionOpen(db, input.info.projectID)
+        assertSessionDeletionAdmissionInTransaction(db, input.info.id)
+        if (input.info.parentID) assertSessionDeletionAdmissionInTransaction(db, input.info.parentID)
+        const sessionRow = toRow(input.info)
+        const { id: _sessionID, ...sessionSet } = sessionRow
+        db.insert(SessionTable)
+          .values(sessionRow)
+          .onConflictDoUpdate({ target: SessionTable.id, set: sessionSet })
+          .run()
+
+        for (const msg of input.messages) {
+          const { orderKey: _messageOrderKey, ...messageInfo } = {
+            ...msg.info,
+            sessionID: input.info.id,
+          } as Message.Info & { orderKey?: string }
+          const existing = db.select({ id: MessageTable.id }).from(MessageTable)
+            .where(eq(MessageTable.id, messageInfo.id)).get()
+          let initialInfo = messageInfo
+          if (!existing && messageInfo.role === "assistant" && messageInfo.time.completed !== undefined) {
+            const { completed: _completed, ...initialTime } = messageInfo.time
+            const { finish: _finish, error: _error, ...initialAssistant } = messageInfo
+            initialInfo = { ...initialAssistant, time: initialTime } as Message.Info
+          }
+          upsertMessageRow(initialInfo, { publishCreated: false, publishUpdated: false })
+          for (const part of msg.parts) {
+            const { orderKey: _partOrderKey, ...partInfo } = {
+              ...part,
+              messageID: messageInfo.id,
+              sessionID: input.info.id,
+            } as Message.Part & { orderKey?: string }
+            updatePartRow(partInfo as Message.Part, { publish: false })
+          }
+          upsertMessageRow(messageInfo, { publishCreated: false, publishUpdated: false })
+        }
+      })
+    },
+  )
+
+  // updatePartDelta is a pure Bus publish. Deltas are ephemeral by contract —
+  // the protocol bridge (task-message-protocol-bridge.ts:bridgeDelta) routes
+  // them through ProtocolStore.dispatchEphemeral with no sequence and no
+  // replay, and every streaming caller (session-hooks, engine/runtime,
+  // session/processor) already maintains an in-memory accumulator and
+  // persists the complete Part via updatePart at each natural boundary
+  // (tool-call, reasoning-end, execution standby). Writing deltas to PartTable
+  // would therefore produce state that is overwritten at the next boundary
+  // and never observed — pure write amplification. Under parallel Session
+  // execution this amplification used to starve the SQLite write lock and
+  // stall the main event loop, which read as "overlay freezing".
+  const UpdatePartDeltaInput = z.object({
+    sessionID: z.string(),
+    messageID: z.string(),
+    partID: z.string(),
+    partType: Message.DeltaPartType,
+    field: z.string(),
+    delta: z.string(),
+  })
+
+  async function updatePartDeltaImpl(input: z.output<typeof UpdatePartDeltaInput>, signal?: AbortSignal) {
+    signal?.throwIfAborted()
+    await Bus.publish(Message.Event.PartDelta, input, { signal })
+    signal?.throwIfAborted()
+  }
+
+  export const updatePartDelta = fn(UpdatePartDeltaInput, async (input) => updatePartDeltaImpl(input))
+
+  /** Publish one ephemeral streamed delta under its physical activity owner. */
+  export function updatePartDeltaWithSignal(
+    signal: AbortSignal,
+    input: z.output<typeof UpdatePartDeltaInput>,
+  ): Promise<void> {
+    return updatePartDeltaImpl(UpdatePartDeltaInput.parse(input), signal)
+  }
+
+  export const getUsage = fn(
+    z.object({
+      model: z.custom<Provider.Model>(),
+      usage: z.custom<LanguageModelUsage>(),
+      metadata: z.custom<ProviderMetadata>().optional(),
+    }),
+    (input) => {
+      const safe = (value: number | null | undefined) => {
+        if (!Number.isFinite(value) || Number(value) < 0) return 0
+        return Number(value)
+      }
+      const inputTokens = safe(input.usage.inputTokens)
+      const outputTokens = safe(input.usage.outputTokens)
+      const reasoningTokens = safe(input.usage.outputTokenDetails?.reasoningTokens ?? input.usage.reasoningTokens)
+      const textOutputTokens = safe(input.usage.outputTokenDetails?.textTokens ?? outputTokens - reasoningTokens)
+      const cacheReadInputTokens = safe(input.usage.inputTokenDetails?.cacheReadTokens ?? input.usage.cachedInputTokens)
+      const cacheWriteInputTokens = safe(
+        (input.usage.inputTokenDetails?.cacheWriteTokens ??
+          input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
+          (input.metadata?.["bedrock"] as any)?.["usage"]?.["cacheWriteInputTokens"] ??
+          (input.metadata?.["venice"] as any)?.["usage"]?.["cacheCreationInputTokens"] ??
+          0) as number,
+      )
+
+      // AI SDK 6 owns the provider-specific input convention and exposes the
+      // normalized non-cache count. Only fall back to subtraction for adapters
+      // that do not supply that detail.
+      const adjustedInputTokens = safe(
+        input.usage.inputTokenDetails?.noCacheTokens ?? inputTokens - cacheReadInputTokens - cacheWriteInputTokens,
+      )
+
+      const total = iife(() => {
+        // Anthropic doesn't provide total_tokens, also ai sdk will vastly undercount if we
+        // don't compute from components
+        if (
+          input.model.api.npm === "@ai-sdk/anthropic" ||
+          input.model.api.npm === "@ai-sdk/amazon-bedrock" ||
+          input.model.api.npm === "@ai-sdk/google-vertex/anthropic"
+        ) {
+          return adjustedInputTokens + textOutputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens
+        }
+        return safe(
+          input.usage.totalTokens ??
+            adjustedInputTokens + textOutputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens,
+        )
+      })
+
+      const tokens = {
+        total,
+        input: adjustedInputTokens,
+        output: textOutputTokens,
+        reasoning: reasoningTokens,
+        cache: {
+          write: cacheWriteInputTokens,
+          read: cacheReadInputTokens,
+        },
+      }
+
+      const costInfo =
+        input.model.cost?.experimentalOver200K && tokens.input + tokens.cache.read + tokens.cache.write > 200_000
+          ? input.model.cost.experimentalOver200K
+          : input.model.cost
+      return {
+        billing: {
+          status: input.model.cost.available === true ? ("priced" as const) : ("unpriced" as const),
+        },
+        cost: safe(
+          new Decimal(0)
+            .add(new Decimal(tokens.input).mul(costInfo?.input ?? 0).div(1_000_000))
+            .add(new Decimal(tokens.output).mul(costInfo.output).div(1_000_000))
+            .add(new Decimal(tokens.cache.read).mul(costInfo.cache.read).div(1_000_000))
+            .add(new Decimal(tokens.cache.write).mul(costInfo.cache.write).div(1_000_000))
+            // Reasoning is an output-token subset. It is separated from text for
+            // presentation, then charged once at the output rate.
+            .add(new Decimal(tokens.reasoning).mul(costInfo.output).div(1_000_000))
+            .toNumber(),
+        ),
+        tokens,
+      }
+    },
+  )
+
+  /**
+   * Whether this Message is already a causal fact — activated, accepted as
+   * task-root ingress, referenced by a protocol event, or continued by a
+   * successor turn. Its persisted Parts are then frozen: continuation appends
+   * new occurrences and never removes or rewrites what other facts cite.
+   */
+  export function isTaskRootCausalMessage(messageID: string): boolean {
+    return Database.use((db) => taskRootMessageIsImmutable(db, messageID))
+  }
+
+  export class BusyError extends Error {
+    constructor(public readonly sessionID: string) {
+      super(`Session ${sessionID} is busy`)
+    }
+  }
+}
+
+export { Message } from "./message"
+export { Todo } from "./todo"
+export { SessionStatus } from "./status"
+  function acceptedIngressMessage(db: Database.TxOrDb, messageID: string): boolean {
+    return Boolean(db.select({ id: EngineTaskRootIngressTable.id }).from(EngineTaskRootIngressTable)
+      .where(and(eq(EngineTaskRootIngressTable.source, "message"), eq(EngineTaskRootIngressTable.source_id, messageID))).get())
+  }
+
+  function protocolCausalMessage(db: Database.TxOrDb, messageID: string): boolean {
+    return Boolean(db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable)
+      .where(eq(sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID')`, messageID)).get())
+  }
+
+  function taskRootMessageIsImmutable(db: Database.TxOrDb, messageID: string): boolean {
+    if (acceptedIngressMessage(db, messageID) || protocolCausalMessage(db, messageID)) return true
+    const row = db.select({ data: MessageTable.data }).from(MessageTable).where(eq(MessageTable.id, messageID)).get()
+    const data = row?.data as { activationID?: unknown } | undefined
+    if (typeof data?.activationID === "string" && data.activationID) return true
+    return Boolean(db.select({ id: MessageTable.id }).from(MessageTable)
+      .where(sql`
+        json_extract(${MessageTable.data}, '$.role') = 'assistant'
+        AND (
+          json_extract(${MessageTable.data}, '$.parentID') = ${messageID}
+          OR EXISTS (
+            SELECT 1
+            FROM json_each(json_extract(${MessageTable.data}, '$.acceptedInputMessageIDs')) AS accepted
+            WHERE accepted.value = ${messageID}
+          )
+        )
+      `).get())
+  }
+
+  function assertTaskRootMessageMutable(db: Database.TxOrDb, messageID: string): void {
+    if (taskRootMessageIsImmutable(db, messageID)) {
+      throw new Error(`Task-root causal Message ${messageID} is immutable`)
+    }
+  }
