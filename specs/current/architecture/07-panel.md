@@ -24,6 +24,16 @@ model retain their existing Send availability requirement. Backend config and
 execution validation, draft preferences and explicit write-error contracts remain
 unchanged.
 
+Session conversation tail, older-history pages and event subscriptions use the
+same existing Project identity admission, independently of executable model
+bootstrap. Session lineage and tree filtering remain authoritative. The event
+handler captures its existing Question reader before entering streamGlobalSSE;
+the stream runs outside Instance context and reads explicit Session/Project
+identities, canonical message/protocol facts and the real Permission ledger.
+Snapshot/live ordering, durable terminal/error recovery and abort cleanup retain
+their existing owners. Session config and execution routes keep their runtime
+validation contract.
+
 ## File comparison evidence
 
 One current diff service and Tool reducer project recorded comparisons. FileChange

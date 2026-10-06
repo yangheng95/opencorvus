@@ -1,0 +1,48 @@
+[1/3] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.38ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.11ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.07ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.05ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.09ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1.53s]
+[1/3] DONE test/project-route-context.test.ts exit=0 duration=1.73s
+[2/3] START test/server/session-conversation-history.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4931.79ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [4214.53ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1909.37ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [13.61s]
+[2/3] DONE test/server/session-conversation-history.test.ts exit=0 duration=13.80s
+[3/3] START test/server/session-event-connection-snapshot.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [2316.33ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [2.13ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [1.91ms]
+(pass) Session stream projects a non-message Session diff through Bus and ProtocolStore [1814.52ms]
+(pass) Session stream receives durable lifecycle and error facts for a non-Task Session [1887.90ms]
+(pass) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2441.03ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [2042.76ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [3144.35ms]
+(pass) session.connected precedes a newer live Part update captured after snapshot read [1856.76ms]
+(pass) two project streams receive their own non-Task child Message and Part events [3621.43ms]
+
+ 10 pass
+ 0 fail
+ 31 expect() calls
+Ran 10 tests across 1 file. [21.56s]
+[3/3] DONE test/server/session-event-connection-snapshot.test.ts exit=0 duration=21.76s

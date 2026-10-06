@@ -1,0 +1,28 @@
+{
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "credentialStaging": "None; exact closed50 auth/models absent; no Task rearm",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "port": 18016,
+  "observedAtUtc": "2026-10-06T23:17:38.9915741Z",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/session-history-stream-53",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "sessionID": "ses_h0wiOTw2b6yPztYlG8J4"
+}

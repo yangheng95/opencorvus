@@ -1,0 +1,44 @@
+[1/1] START test/server/session-conversation-history.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+46 |     await Instance.disposeAll()
+47 |     const params = new URLSearchParams({ before: String(tail.history.oldestTimestamp), before_order_key: tail.history.oldestOrderKey,
+48 |       before_id: tail.history.oldestMessageID, limit: "2" })
+49 |     const pageResponse = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.sessionID}/conversation/history?${params}`, { headers }))
+50 |     const page = await pageResponse.json() as { transcript?: typeof tail.transcript; history?: { hasMore: boolean } }
+51 |     expect({ status: pageResponse.status, body: page }).toMatchObject({ status: 200,
+                                                             ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "body": {
+-     "history": {
+-       "hasMore": false,
++     "data": {
++       "modelID": "missing-history-model",
++       "providerID": "missing-history-provider",
++       "suggestions": [],
+      },
++     "name": "ProviderModelNotFoundError",
+    },
+-   "status": 200,
++   "status": 400,
+  }
+
+- Expected  - 3
++ Received  + 6
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-conversation-history.test.ts:51:57)
+(fail) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [5132.38ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3969.88ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [2894.34ms]
+
+ 2 pass
+ 1 fail
+ 10 expect() calls
+Ran 3 tests across 1 file. [14.76s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-conversation-history.test.ts
+[1/1] DONE test/server/session-conversation-history.test.ts exit=1 duration=15.03s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-conversation-history.test.ts

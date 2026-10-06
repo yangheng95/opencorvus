@@ -1,0 +1,13 @@
+[1/1] START test/server/session-conversation-history.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [5012.70ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [4160.33ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1844.82ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [13.82s]
+[1/1] DONE test/server/session-conversation-history.test.ts exit=0 duration=14.01s

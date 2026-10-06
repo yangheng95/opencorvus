@@ -1,0 +1,111 @@
+{
+  "nativeOccurrence": "session-history-stream-53-41e935b8-1c9d-416e-8479-d497e5d9e3e1",
+  "scope": "Actual backend checker and manual owned-page requests after exact native Target birth",
+  "requests": [
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "e264b2c6-3843-460f-ab19-175526afeaef",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/conversation",
+      "time": "2026-10-06T23:19:56.668Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "ce577d89-332c-4773-bd75-69d503abec08",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/conversation/history",
+      "time": "2026-10-06T23:19:56.696Z"
+    },
+    {
+      "method": "GET",
+      "status": 400,
+      "requestID": "68795e3f-a68b-45eb-844f-e9cba5345b18",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/config",
+      "time": "2026-10-06T23:19:56.970Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "6b8d78b8-7805-45c7-b17f-56b5c73ab7e3",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "time": "2026-10-06T23:19:57.024Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "e97eaeac-cc46-4fd5-8cfc-c1955d2c6ad7",
+      "path": "/coding/chat/session/ses_h0wiOTw2b6yPztYlG8J4",
+      "time": "2026-10-06T23:22:05.001Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "3884d941-d8f6-4ba9-a23e-2ebc43fc45ff",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/conversation",
+      "time": "2026-10-06T23:22:05.275Z"
+    },
+    {
+      "method": "GET",
+      "status": 400,
+      "requestID": "1c73120f-5da7-4b13-9d6c-f8e51130ecc1",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/config",
+      "time": "2026-10-06T23:22:05.305Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "9e6a0e12-5c88-41a3-924a-257f49c61154",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/events",
+      "time": "2026-10-06T23:22:05.335Z"
+    },
+    {
+      "method": "GET",
+      "status": 400,
+      "requestID": "0178d339-40c7-4fd6-8b11-b55172b9ee02",
+      "path": "/session/ses_h0wiOTw2b6yPztYlG8J4/config",
+      "time": "2026-10-06T23:22:05.362Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "9ae2de34-4029-4d50-ad10-02543e012a53",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "time": "2026-10-06T23:23:05.907Z"
+    },
+    {
+      "method": "GET",
+      "status": 400,
+      "requestID": "3101c7c9-2d5f-4a5d-bf3e-d879629231db",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "time": "2026-10-06T23:23:05.958Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "60cc2da0-ed74-41a7-907b-49aab5109e37",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "time": "2026-10-06T23:23:06.061Z"
+    },
+    {
+      "method": "GET",
+      "status": 400,
+      "requestID": "a4efabf0-bd81-44dd-a503-9470eafc9701",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "time": "2026-10-06T23:23:06.091Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "c4c8da54-a9fe-48a6-b99e-2a8a9021c89b",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation/session/ses_hGzJHWeYBSh6xDoVwkSy",
+      "time": "2026-10-06T23:24:33.128Z"
+    },
+    {
+      "method": "GET",
+      "status": 200,
+      "requestID": "3af76f3f-d53e-41e0-8027-eee490e86fef",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation/session/ses_hGzJHWeYBSh6xDoVwkSy",
+      "time": "2026-10-06T23:26:06.479Z"
+    }
+  ]
+}

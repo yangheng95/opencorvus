@@ -1,0 +1,34 @@
+{
+  "chain": [
+    {
+      "expected": {
+        "pid": 65852,
+        "processInstanceID": "win32:639269254954080503",
+        "occurrenceID": "1d8857a3-20fd-4cc7-aee9-3d74c2fd8d30"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 40396,
+        "processInstanceID": "win32:639269254963962443",
+        "occurrenceID": "3cd58c6b-e5a8-48cb-974f-781dc6359080"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "readers": "Own SDK backend subscription cancelled; generator settled; whole native Join recorded separately",
+  "listeners": [],
+  "page": "Root-owned IAB9 page31 closed before sole public shutdown",
+  "authorityPair": [
+    {
+      "present": false,
+      "file": "auth.json"
+    },
+    {
+      "present": false,
+      "file": "models.json"
+    }
+  ],
+  "observedAtUtc": "2026-10-06T23:28:28.6523038Z"
+}

@@ -2587,3 +2587,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Subagent progress activation51](artifacts/2026-10-05-connection-workspace-authority/subagent-progress-activation-plan.md): pointer outcome and hidden activation geometry reviewed; real keyboard/header comparison pending.
 
 - [History and Composer config isolation52](artifacts/2026-10-05-connection-workspace-authority/history-composer-config-isolation-plan.md): single passive-read owner;9 local service tests/43 assertions and real Task/Session history visuals passed; ordinary Session stream400 retained as shared audit53, all52 scopes closed.
+
+- [Session history/stream identity53](artifacts/2026-10-05-connection-workspace-authority/session-history-stream-identity-plan.md): two exact GET reads use current Project identity; cold baselines/final native tail/page/stream/UI qualified, all53 native scopes closed; broader restart/interaction matrices remain unknown.

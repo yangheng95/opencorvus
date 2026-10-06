@@ -50,6 +50,8 @@ const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
   /^GET \/coding\/(?:chat|work)\/sessions$/,
   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^GET \/session\/[^/]+\/conversation$/,
+  /^GET \/session\/[^/]+\/conversation\/history$/,
+  /^GET \/session\/[^/]+\/events$/,
 ]
 
 /** Selects the least-capable Project authority required by the exact route. */

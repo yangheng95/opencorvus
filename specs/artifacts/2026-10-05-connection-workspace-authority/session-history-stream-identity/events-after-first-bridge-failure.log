@@ -1,0 +1,50 @@
+[1/1] START test/server/session-event-connection-snapshot.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [2300.59ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [1.50ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [1.19ms]
+121 |         if (frameIndex >= 0) return queued.splice(frameIndex, 1)[0]
+122 |         const remaining = deadline - Date.now()
+123 |         const result = await Promise.race([
+124 |           reader.read(),
+125 |           new Promise<never>((_, reject) =>
+126 |             setTimeout(() => reject(new Error(`Timed out waiting for ${type}`)), remaining),
+                                              ^
+error: Timed out waiting for session.diff
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts:126:41)
+(fail) Session stream projects a non-message Session diff through Bus and ProtocolStore [6719.67ms]
+(pass) Session stream receives durable lifecycle and error facts for a non-Task Session [2440.94ms]
+(pass) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2328.16ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [1952.07ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [3189.78ms]
+121 |         if (frameIndex >= 0) return queued.splice(frameIndex, 1)[0]
+122 |         const remaining = deadline - Date.now()
+123 |         const result = await Promise.race([
+124 |           reader.read(),
+125 |           new Promise<never>((_, reject) =>
+126 |             setTimeout(() => reject(new Error(`Timed out waiting for ${type}`)), remaining),
+                                              ^
+error: Timed out waiting for message.part.updated
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts:126:41)
+(fail) session.connected precedes a newer live Part update captured after snapshot read [6991.77ms]
+121 |         if (frameIndex >= 0) return queued.splice(frameIndex, 1)[0]
+122 |         const remaining = deadline - Date.now()
+123 |         const result = await Promise.race([
+124 |           reader.read(),
+125 |           new Promise<never>((_, reject) =>
+126 |             setTimeout(() => reject(new Error(`Timed out waiting for ${type}`)), remaining),
+                                              ^
+error: Timed out waiting for message.updated
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts:126:41)
+(fail) two project streams receive their own non-Task child Message and Part events [8263.86ms]
+
+ 7 pass
+ 3 fail
+ 28 expect() calls
+Ran 10 tests across 1 file. [36.67s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts
+[1/1] DONE test/server/session-event-connection-snapshot.test.ts exit=1 duration=36.86s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts

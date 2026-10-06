@@ -2,6 +2,24 @@ import { describe, expect, test } from "bun:test"
 import { projectRouteContextKind } from "@/server/project-route-context"
 
 describe("Project route context authority", () => {
+  test("uses Project identity for persisted Session pages and event subscriptions", () => {
+    expect({
+      tail: projectRouteContextKind("/session/ses_1/conversation", "GET"),
+      history: projectRouteContextKind("/session/ses_1/conversation/history", "GET"),
+      events: projectRouteContextKind("/session/ses_1/events", "GET"),
+      config: projectRouteContextKind("/session/ses_1/config", "GET"),
+      configWrite: projectRouteContextKind("/session/ses_1/config", "PATCH"),
+      prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
+    }).toEqual({
+      tail: "identity",
+      history: "identity",
+      events: "identity",
+      config: "runtime",
+      configWrite: "runtime",
+      prompt: "runtime",
+    })
+  })
+
   test("classifies persisted deletions independently from live Project discovery", () => {
     expect(
       [

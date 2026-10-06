@@ -1,4 +1,6 @@
 import { afterEach, expect, test } from "bun:test"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { Bus } from "@/bus"
 import { createRightSidebarConversationSession, RIGHT_SIDEBAR_CONVERSATION_SOURCE } from "@/chat/session"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
@@ -10,9 +12,14 @@ import {
 } from "@/engine/model"
 import { Identifier } from "@/id/id"
 import { listConversationAgentSessionsForSessionTree } from "@/orchestrator/task-event"
-import { Instance } from "@/project/instance"
+import { Instance, runOutsideInstanceContext } from "@/project/instance"
+import { ConfigPaths } from "@/config/paths"
+import { Question } from "@/question"
+import { PermissionAuthority } from "@/permission/authority"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { ProtocolStore } from "@/protocol/store"
+import { ensureSessionProtocolBridge } from "@/protocol/session-mirror"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { Server } from "@/server/server"
 import { Message, Session, SessionStatus } from "@/session"
 import { publishSessionStatus } from "@/session/status-publication"
@@ -27,6 +34,114 @@ afterEach(async () => {
   Server.resetProjectRoutesAppForTest()
   await Instance.disposeAll()
   await resetMemoryDatabase()
+})
+
+test("cold Session stream reads durable history and interactions with an unavailable execution model", async () => {
+  await using project = await memoryProject()
+  let sessionID = ""
+  let inputID = ""
+  let questionID = ""
+  let questionResult: Promise<Question.Answer[]> | undefined
+  await Instance.provideProjectIdentity({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Cold history reader" })
+      sessionID = session.id
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        sessionID,
+        role: "user",
+        author: "user",
+        time: { created: Date.now() },
+        agent: "chat",
+        model: { providerID: "test", modelID: "test" },
+      })
+      inputID = input.id
+      await Session.updatePart({
+        id: Identifier.ascending("part"),
+        sessionID,
+        messageID: inputID,
+        type: "text",
+        text: "Persisted cold history.",
+      })
+      await publishSessionStatus(session, { type: "terminal", reason: "completed" }, { inputMessageID: inputID })
+      await Bus.publish(Session.Event.Error, {
+        sessionID,
+        orderKey: sessionLifecycleOrderKey(sessionID),
+        error: Message.fromError(new Error("Recorded history incident"), { providerID: "test" }),
+      })
+      const asked = new Promise<Question.Request>((resolve) => {
+        const stop = Bus.subscribe(Question.Event.Asked, (event) => {
+          if (event.properties.sessionID !== sessionID) return
+          stop()
+          resolve(event.properties)
+        })
+      })
+      questionResult = Question.ask({
+        sessionID,
+        expireOnDeadline: false,
+        questions: [
+          {
+            question: "Read this history?",
+            header: "History",
+            options: [{ value: "yes", label: "Yes", description: "Read the persisted history" }],
+          },
+        ],
+      })
+      questionID = (await asked).id
+      expect((await PermissionAuthority.list()).filter((item) => item.sessionID === sessionID)).toEqual([])
+    },
+  })
+  const configFile = ConfigPaths.projectFile(project.path)
+  await fs.mkdir(path.dirname(configFile), { recursive: true })
+  await fs.writeFile(
+    configFile,
+    JSON.stringify({ model: "cold-history-unavailable/model", small_model: "cold-history-unavailable/model" }),
+  )
+  const abort = new AbortController()
+  let events: ReturnType<typeof sessionEventReader> | undefined
+  try {
+    await runOutsideInstanceContext(async () => {
+      const response = await Server.App().request(`/session/${sessionID}/events`, {
+        headers: { "x-opencorvus-directory": project.path },
+        signal: abort.signal,
+      })
+      if (response.status !== 200)
+        console.log("cold Session stream original response", response.status, await response.clone().json())
+      expect(response.status).toBe(200)
+      events = sessionEventReader(response)
+      const connected = await events.next("session.connected")
+      const snapshot = SessionConnectedEvent.parse(connected).payload.conversationSnapshot
+      expect(snapshot?.transcript.map((entry) => entry.info.id)).toEqual([inputID])
+      expect(snapshot?.transcript[0]?.parts.map((part) => (part.type === "text" ? part.text : part.type))).toEqual([
+        "Persisted cold history.",
+      ])
+      expect((await events.next("agent.execution.lifecycle")).payload.status).toEqual({
+        type: "terminal",
+        reason: "completed",
+      })
+      expect((await events.next("session.error")).payload.summary).toBe("Error: Recorded history incident")
+      expect((await events.next("question.asked")).payload.id).toBe(questionID)
+      const config = await Server.App().request(`/session/${sessionID}/config`, {
+        headers: { "x-opencorvus-directory": project.path },
+      })
+      expect({ status: config.status, body: await config.json() }).toMatchObject({
+        status: 400,
+        body: {
+          name: "ProviderModelNotFoundError",
+          data: { providerID: "cold-history-unavailable", modelID: "model", suggestions: [] },
+        },
+      })
+    })
+  } finally {
+    abort.abort()
+    if (events) await events.cancel()
+    await Instance.provideProjectIdentity({
+      directory: project.path,
+      fn: () => Question.reply({ requestID: questionID, answers: [["yes"]] }),
+    })
+    expect(await questionResult).toEqual([["yes"]])
+  }
 })
 
 function sessionEventReader(response: Response) {
@@ -152,6 +267,7 @@ test("Session stream projects a non-message Session diff through Bus and Protoco
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      ensureSessionProtocolBridge()
       const work = await createRightSidebarConversationSession("work")
       const abort = new AbortController()
       const response = await Server.App().request(`/session/${work.id}/events`, {
@@ -745,6 +861,7 @@ test("session.connected precedes a newer live Part update captured after snapsho
   await Instance.provide({
     directory: project.path,
     fn: async () => {
+      ensureTaskMessageProtocolBridge()
       const work = await createRightSidebarConversationSession("work")
       const message = await Session.updateMessage({
         id: Identifier.ascending("message"),
@@ -846,6 +963,7 @@ test("two project streams receive their own non-Task child Message and Part even
     Instance.provide({
       directory: input.directory,
       fn: async () => {
+        ensureTaskMessageProtocolBridge()
         const child = await Session.create({
           kind: "orchestrator",
           parentID: input.rootID,

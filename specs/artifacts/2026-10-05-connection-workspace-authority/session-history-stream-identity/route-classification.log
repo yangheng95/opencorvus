@@ -1,0 +1,15 @@
+[1/1] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.61ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.28ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.13ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.09ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.14ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1.74s]
+[1/1] DONE test/project-route-context.test.ts exit=0 duration=1.96s
