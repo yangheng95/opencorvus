@@ -237,6 +237,15 @@ VCS、Task events 或 Session events 不可用。严格读取继续验证 manife
 类型、字节数与 SHA-256，禁止 fallback、伪造字节或自动修复。无法证明安全的回收不
 得创建第二条删除路径。
 
+完整 Artifact 读取审计由 Plugin 的同一 `auditArtifactReadLocatorsFromFacts` 供 Session
+持久 Tool 回执、Panel 和 Package ToolHost 使用，按实际 `delivery` 解释运输。`inline`
+验证文本字节窗口或完整二进制附件；`materialized_file` 验证完整资源范围、媒体类型、
+不可变 digest、资源字节数及非空只读缓存路径回执，不要求内联文本或受内联窗口大小限制。
+后者证明已验证资源的字节可用性，内容检查仍由真实消费者完成。语义来源必须引用同一
+physical Turn（物理轮次）内、当前动作之前持久化的完整读取；随后 inline 读取与合法物化
+读取可共同覆盖同一 locator，非法窗口仍使对应 locator 的审计失败。发布不得重建模型引用、
+隐藏失败回执或改走另一来源授权路径。
+
 Artifact Catalog 对 TaskArtifact 的可发现性同样由持久权威决定。`catalog` snapshot
 投影一个 immutable parent 和它的全部 resource entries；`engine_resource` snapshot
 只是 Engine receipt 的物理资源依赖，不单独投影 parent。只有被当前搜索

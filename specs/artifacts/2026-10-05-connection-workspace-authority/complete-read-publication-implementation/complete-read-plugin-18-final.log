@@ -1,0 +1,15 @@
+bun test v1.3.14 (0d9b296a)
+
+test\artifact-catalog.test.ts:
+(pass) completed Artifact read fact audit > accepts a complete materialized resource larger than its inline byte budget [7.21ms]
+(pass) completed Artifact read fact audit > accepts two complete materialized reads of the same locator [0.56ms]
+(pass) completed Artifact read fact audit > accepts materialized and inline complete reads of the same locator [0.62ms]
+(pass) completed Artifact read fact audit > classifies malformed materialized transport facts as invalid locators [1.21ms]
+(pass) completed Artifact read fact audit > accepts one complete binary attachment larger than the text page limit [0.34ms]
+(pass) completed Artifact read fact audit > keeps malformed binary transports and oversized text as evidence errors [3.23ms]
+
+ 6 pass
+ 24 filtered out
+ 0 fail
+ 33 expect() calls
+Ran 6 tests across 1 file. [122.00ms]

@@ -31,6 +31,7 @@ import {
   readExactArtifactsSettled,
   selectExactArtifactSources,
   type ArtifactReadLocator,
+  type ArtifactReadRequest,
   type EngineArtifactReadResult,
 } from "../src/artifact-catalog"
 import { ArtifactProducerSchema } from "../src/artifact-producer"
@@ -851,6 +852,65 @@ describe("exact Artifact assembler", () => {
 })
 
 describe("completed Artifact read fact audit", () => {
+  function materializedFact(bytes: number, maxBytes = 1, mediaType = "text/plain") {
+    const locator = { source: "task_artifact_resource" as const, ref: { ...resource, bytes, media_type: mediaType } }
+    return {
+      request: { locator, byte_offset: 0, max_bytes: maxBytes, delivery: "materialized_file" as const },
+      chunk: {
+        locator, media_type: locator.ref.media_type, byte_start: 0, byte_end: bytes,
+        next_offset: null, total_bytes: bytes, complete: true, sha256: locator.ref.sha256,
+        materialized_path: "/owned/task/artifacts/materializations/reads/resource.txt", attachment: false,
+      },
+    }
+  }
+
+  test("accepts a complete materialized resource larger than its inline byte budget", () => {
+    const fact = materializedFact(ArtifactSchemaLimits.maxReadBytes + 4096, 1, "image/png")
+    expect(auditArtifactReadLocatorsFromFacts([fact])).toEqual({
+      completeLocators: [fact.request.locator], invalidLocators: [],
+    })
+  })
+
+  test("accepts two complete materialized reads of the same locator", () => {
+    const fact = materializedFact(26)
+    expect(auditArtifactReadLocatorsFromFacts([fact, materializedFact(26)])).toEqual({
+      completeLocators: [fact.request.locator], invalidLocators: [],
+    })
+  })
+
+  test("accepts materialized and inline complete reads of the same locator", () => {
+    const text = "Hello from a formal Task.\n"
+    const fact = materializedFact(new TextEncoder().encode(text).byteLength)
+    const { materialized_path, ...chunk } = fact.chunk
+    const inline = {
+      request: { ...fact.request, delivery: "inline" as const, max_bytes: 26 },
+      chunk: { ...chunk, text },
+    }
+    expect(auditArtifactReadLocatorsFromFacts([fact, inline])).toEqual({
+      completeLocators: [fact.request.locator], invalidLocators: [],
+    })
+  })
+
+  test("classifies malformed materialized transport facts as invalid locators", () => {
+    const fact = materializedFact(26)
+    const malformed = [
+      { ...fact.chunk, materialized_path: undefined },
+      { ...fact.chunk, text: "Hello from a formal Task.\n" },
+      { ...fact.chunk, attachment: true },
+      { ...fact.chunk, complete: false, next_offset: 26 },
+      { ...fact.chunk, byte_start: 1 },
+      { ...fact.chunk, byte_end: 25, total_bytes: 25 },
+      { ...fact.chunk, next_offset: 26 },
+      { ...fact.chunk, sha256: "c".repeat(64) },
+      { ...fact.chunk, media_type: "application/octet-stream" },
+    ]
+    for (const chunk of malformed) {
+      expect(auditArtifactReadLocatorsFromFacts([{ request: fact.request, chunk }])).toEqual({
+        completeLocators: [], invalidLocators: [fact.request.locator],
+      })
+    }
+  })
+
   test("accepts one complete binary attachment larger than the text page limit", () => {
     const bytes = ArtifactSchemaLimits.defaultReadBytes + 4096
     const digest = "b".repeat(64)
@@ -866,6 +926,7 @@ describe("completed Artifact read fact audit", () => {
       locator,
       byte_offset: 0,
       max_bytes: ArtifactSchemaLimits.defaultReadBytes,
+      delivery: "inline" as const,
     }
     const chunk = {
       locator,
@@ -900,6 +961,7 @@ describe("completed Artifact read fact audit", () => {
       locator,
       byte_offset: 0,
       max_bytes: ArtifactSchemaLimits.defaultReadBytes,
+      delivery: "inline" as const,
     }
     const chunk = {
       locator,
@@ -925,7 +987,7 @@ describe("completed Artifact read fact audit", () => {
       expected_sha256: "d".repeat(64),
     }
     const validFact = {
-      request: { locator: validEngine, byte_offset: 0, max_bytes: 1 },
+      request: { locator: validEngine, byte_offset: 0, max_bytes: 1, delivery: "inline" as const },
       chunk: {
         locator: validEngine,
         media_type: "application/json",
@@ -1028,7 +1090,7 @@ describe("completed Artifact read fact audit", () => {
     }
     const earlyTerminalAudit = auditArtifactReadLocatorsFromFacts([
       {
-        request: { locator: earlyTerminal, byte_offset: 0, max_bytes: 5 },
+        request: { locator: earlyTerminal, byte_offset: 0, max_bytes: 5, delivery: "inline" as const },
         chunk: {
           locator: earlyTerminal,
           media_type: "application/json",
@@ -1043,7 +1105,7 @@ describe("completed Artifact read fact audit", () => {
         },
       },
       {
-        request: { locator: earlyTerminal, byte_offset: 5, max_bytes: 5 },
+        request: { locator: earlyTerminal, byte_offset: 5, max_bytes: 5, delivery: "inline" as const },
         chunk: {
           locator: earlyTerminal,
           media_type: "application/json",
@@ -1080,7 +1142,7 @@ function textReadHost(
   mutate?: (result: EngineArtifactReadResult) => EngineArtifactReadResult,
 ) {
   return {
-    async read(input: { byte_offset?: number; max_bytes?: number }) {
+    async read(input: ArtifactReadRequest) {
       calls.push(input)
       const byteStart = input.byte_offset ?? 0
       const byteEnd = Math.min(bytes.byteLength, byteStart + (input.max_bytes ?? bytes.byteLength))

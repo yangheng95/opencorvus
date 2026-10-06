@@ -1,0 +1,168 @@
+bun test test/artifact-catalog.test.ts -t "completed Artifact read fact audit"
+bun test v1.3.14 (0d9b296a)
+
+test\artifact-catalog.test.ts:
+863 |     }
+864 |   }
+865 | 
+866 |   test("accepts a complete materialized resource larger than its inline byte budget", () => {
+867 |     const fact = materializedFact(ArtifactSchemaLimits.maxReadBytes + 4096, 1, "image/png")
+868 |     expect(auditArtifactReadLocatorsFromFacts([fact])).toEqual({
+                                                             ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "completeLocators": [
++   "completeLocators": [],
++   "invalidLocators": [
+      {
+        "ref": {
+          "bytes": 69632,
+          "media_type": "image/png",
+          "path": "reference.png",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "snapshot": {
+            "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "project_id": "project",
+            "schema_version": 2,
+            "snapshot_id": "00000000-0000-4000-8000-000000000000",
+            "task_id": "task",
+          },
+          "tree": "assets",
+        },
+        "source": "task_artifact_resource",
+      },
+    ],
+-   "invalidLocators": [],
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\plugin\test\artifact-catalog.test.ts:868:56)
+(fail) completed Artifact read fact audit > accepts a complete materialized resource larger than its inline byte budget [5.62ms]
+870 |     })
+871 |   })
+872 | 
+873 |   test("accepts two complete materialized reads of the same locator", () => {
+874 |     const fact = materializedFact(26)
+875 |     expect(auditArtifactReadLocatorsFromFacts([fact, materializedFact(26)])).toEqual({
+                                                                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "completeLocators": [
++   "completeLocators": [],
++   "invalidLocators": [
+      {
+        "ref": {
+          "bytes": 26,
+          "media_type": "text/plain",
+          "path": "reference.png",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "snapshot": {
+            "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "project_id": "project",
+            "schema_version": 2,
+            "snapshot_id": "00000000-0000-4000-8000-000000000000",
+            "task_id": "task",
+          },
+          "tree": "assets",
+        },
+        "source": "task_artifact_resource",
+      },
+    ],
+-   "invalidLocators": [],
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\plugin\test\artifact-catalog.test.ts:875:78)
+(fail) completed Artifact read fact audit > accepts two complete materialized reads of the same locator [0.68ms]
+883 |     const { materialized_path, ...chunk } = fact.chunk
+884 |     const inline = {
+885 |       request: { ...fact.request, delivery: "inline" as const, max_bytes: 26 },
+886 |       chunk: { ...chunk, text },
+887 |     }
+888 |     expect(auditArtifactReadLocatorsFromFacts([fact, inline])).toEqual({
+                                                                     ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "completeLocators": [
++   "completeLocators": [],
++   "invalidLocators": [
+      {
+        "ref": {
+          "bytes": 26,
+          "media_type": "text/plain",
+          "path": "reference.png",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "snapshot": {
+            "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "project_id": "project",
+            "schema_version": 2,
+            "snapshot_id": "00000000-0000-4000-8000-000000000000",
+            "task_id": "task",
+          },
+          "tree": "assets",
+        },
+        "source": "task_artifact_resource",
+      },
+    ],
+-   "invalidLocators": [],
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\plugin\test\artifact-catalog.test.ts:888:64)
+(fail) completed Artifact read fact audit > accepts materialized and inline complete reads of the same locator [0.65ms]
+902 |       { ...fact.chunk, next_offset: 26 },
+903 |       { ...fact.chunk, sha256: "c".repeat(64) },
+904 |       { ...fact.chunk, media_type: "application/octet-stream" },
+905 |     ]
+906 |     for (const chunk of malformed) {
+907 |       expect(auditArtifactReadLocatorsFromFacts([{ request: fact.request, chunk }])).toEqual({
+                                                                                           ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "completeLocators": [],
+-   "invalidLocators": [
++   "completeLocators": [
+      {
+        "ref": {
+          "bytes": 26,
+          "media_type": "text/plain",
+          "path": "reference.png",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "snapshot": {
+            "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "project_id": "project",
+            "schema_version": 2,
+            "snapshot_id": "00000000-0000-4000-8000-000000000000",
+            "task_id": "task",
+          },
+          "tree": "assets",
+        },
+        "source": "task_artifact_resource",
+      },
+    ],
++   "invalidLocators": [],
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\plugin\test\artifact-catalog.test.ts:907:86)
+(fail) completed Artifact read fact audit > classifies malformed materialized transport facts as invalid locators [0.66ms]
+(pass) completed Artifact read fact audit > accepts one complete binary attachment larger than the text page limit [0.28ms]
+(pass) completed Artifact read fact audit > keeps malformed binary transports and oversized text as evidence errors [1.98ms]
+
+ 2 pass
+ 24 filtered out
+ 4 fail
+ 27 expect() calls
+Ran 6 tests across 1 file. [104.00ms]

@@ -89,3 +89,7 @@ Actual16 qualifies new raw creator content, genuine streamed Sol and source/loca
 The authority [resource materialization Recall](../../artifacts/2026-10-05-connection-workspace-authority/resource-materialization-implementation-plan.md) holds implementation until actual Windows serial/parallel publication and cleanup semantics are qualified.
 
 Resource17 now qualifies the shared native no-replace repair with backend5/55, four actual Sol materialized reads and two genuine26B formal downloads, complete owned closure and source types0. Original timed acceptance remains failed; next shared publication-audit and private-runner settlement work are bound in the same Recall.
+
+[Complete-read publication Recall18](../../artifacts/2026-10-05-connection-workspace-authority/complete-read-publication-implementation-plan.md) binds the shared transport audit and private fixed-total settlement repair after normally pushed2948733e. Test-only delegation precedes production admission.
+
+The unique delivery audit repair now has real backend9/38, pure+assembler13/59, fullsource+exact types0 and current docs/architecture checks. Post-fix genuine Provider/timed acceptance is held for the next qualified private runner; original failures stay.

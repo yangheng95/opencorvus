@@ -1,0 +1,26 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "../packages/opencorvus/node_modules/@types/bun"
+    ],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "../packages/opencorvus/src/**/*.ts"
+  ],
+  "files": [
+    "../packages/opencorvus/test/artifact-provider-reference-flow.test.ts",
+    "../packages/plugin/test/artifact-catalog.test.ts"
+  ],
+  "exclude": [
+    "../packages/opencorvus/src/skill/builtin/**/*",
+    "../packages/opencorvus/dist/**/*"
+  ]
+}

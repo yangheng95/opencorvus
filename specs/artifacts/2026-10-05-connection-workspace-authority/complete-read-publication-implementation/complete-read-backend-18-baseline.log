@@ -1,0 +1,336 @@
+$ bun script/run-tests.ts test/artifact-provider-reference-flow.test.ts
+[1/1] START test/artifact-provider-reference-flow.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+2166 |           })
+2167 |         }
+2168 |         if (existingToolRequest) {
+2169 |           const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+2170 |           if (reconciled.kind === "conflict") {
+2171 |             throw new HostProcessingFaultError(
+                             ^
+HostProcessingFaultError: Tool request Part prt_g0VXG84nz00BdmgtQIE0 conflicts with its immutable request fact — input: stored={} received={"reads":[{"artifact_transport_version":2,"artifact_locator_ref":"al_nh1plQ7JjHv-kTno","byte_offset":0,"max_bytes":6000,"delivery":"materialized_file"}]}
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2171:23)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) real resource materialized_file publication preserves same-Turn provenance [2968.51ms]
+2166 |           })
+2167 |         }
+2168 |         if (existingToolRequest) {
+2169 |           const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+2170 |           if (reconciled.kind === "conflict") {
+2171 |             throw new HostProcessingFaultError(
+                             ^
+HostProcessingFaultError: Tool request Part prt_g0VXG85OF004eHX2CB4J conflicts with its immutable request fact — input: stored={} received={"reads":[{"artifact_transport_version":2,"artifact_locator_ref":"al_ARDdPaPl_XbMopZG","byte_offset":0,"max_bytes":6000,"delivery":"materialized_file"}]}
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2171:23)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) real resource materialized_file publication rejects different Turn [2242.98ms]
+2166 |           })
+2167 |         }
+2168 |         if (existingToolRequest) {
+2169 |           const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+2170 |           if (reconciled.kind === "conflict") {
+2171 |             throw new HostProcessingFaultError(
+                         ^
+HostProcessingFaultError: Tool request Part prt_g0VXG85xd009aX96uRA9 conflicts with its immutable request fact — input: stored={} received={"reads":[{"artifact_transport_version":2,"artifact_locator_ref":"al_swVMmU-CrU2yRtB1","byte_offset":0,"max_bytes":6000,"delivery":"materialized_file"}]}
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2171:19)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) real resource materialized_file+materialized_file publication preserves same-Turn provenance [2182.75ms]
+2166 |           })
+2167 |         }
+2168 |         if (existingToolRequest) {
+2169 |           const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+2170 |           if (reconciled.kind === "conflict") {
+2171 |             throw new HostProcessingFaultError(
+                         ^
+HostProcessingFaultError: Tool request Part prt_g0VXG86Wt00DfK5Wws03 conflicts with its immutable request fact — input: stored={} received={"reads":[{"artifact_transport_version":2,"artifact_locator_ref":"al_9_RMivPvs_yWXbAI","byte_offset":0,"max_bytes":6000,"delivery":"materialized_file"}]}
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2171:19)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) real resource materialized_file+materialized_file publication rejects different Turn [2191.25ms]
+2166 |           })
+2167 |         }
+2168 |         if (existingToolRequest) {
+2169 |           const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+2170 |           if (reconciled.kind === "conflict") {
+2171 |             throw new HostProcessingFaultError(
+                             ^
+HostProcessingFaultError: Tool request Part prt_g0VXG877E0076j2Zncci conflicts with its immutable request fact — input: stored={} received={"reads":[{"artifact_transport_version":2,"artifact_locator_ref":"al_oUZ4HtST-dxEJsH-","byte_offset":0,"max_bytes":6000,"delivery":"materialized_file"}]}
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2171:23)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) real resource materialized_file+inline publication preserves same-Turn provenance [2267.73ms]
+2166 |           })
+2167 |         }
+2168 |         if (existingToolRequest) {
+2169 |           const reconciled = reconcileToolRequestFact(existingToolRequest.data, request)
+2170 |           if (reconciled.kind === "conflict") {
+2171 |             throw new HostProcessingFaultError(
+                         ^
+HostProcessingFaultError: Tool request Part prt_g0VXG87kQ00d7E9UY34v conflicts with its immutable request fact — input: stored={} received={"reads":[{"artifact_transport_version":2,"artifact_locator_ref":"al_RHFbTBUtp4kiL09b","byte_offset":0,"max_bytes":6000,"delivery":"materialized_file"}]}
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2171:19)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) real resource materialized_file+inline publication rejects different Turn [2407.48ms]
+(pass) provider Artifact references > projects the locator, read, selection, and publication provider inputs as typed references [2.56ms]
+(pass) provider Artifact references > resolves an earlier completed catalog fact inside the same retained assistant [1794.31ms]
+(pass) provider Artifact references > publishes paginated read references as canonical sources and retains independent selection facts [2164.37ms]
+
+ 3 pass
+ 6 fail
+ 24 expect() calls
+Ran 9 tests across 1 file. [19.42s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-provider-reference-flow.test.ts
+[1/1] DONE test/artifact-provider-reference-flow.test.ts exit=1 duration=19.62s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-provider-reference-flow.test.ts
+error: script "test" exited with code 1
+$ bun script/run-tests.ts test/artifact-provider-reference-flow.test.ts
+[1/1] START test/artifact-provider-reference-flow.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+559 |   const complete = completeArtifactReadsBeforePublicationInTransaction(db, input)
+560 |   if (
+561 |     !locator ||
+562 |     !complete.some((candidate) => artifactReadLocatorKey(candidate) === artifactReadLocatorKey(locator))
+563 |   ) {
+564 |     throw new ArtifactReferenceResolutionError(
+                    ^
+ArtifactReferenceResolutionError: Artifact read reference is not backed by complete persisted reads in Session ses_-zUSjrne7zzey01eEy3e: ar_z5meYaR4dF6V91b1
+ reference: "ar_z5meYaR4dF6V91b1",
+      code: "ARTIFACT_REFERENCE_UNRESOLVED"
+
+      at resolveArtifactReadReferenceBeforeSelectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\artifact-provenance-facts.ts:564:15)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1611:22)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-catalog.ts:616:23)
+      at processTicksAndRejections (unknown:7:39)
+(fail) real resource materialized_file publication preserves same-Turn provenance [2694.72ms]
+1336 |         created: timeCreated,
+1337 |       },
+1338 |     } as Message.Info
+1339 |     const orderKey = timelineMessageOrderKey({ info: persisted })
+1340 |     if (typeof msg.orderKey === "string" && msg.orderKey.length > 0 && msg.orderKey !== orderKey) {
+1341 |       throw new Error(
+                       ^
+error: Session.updateMessage: message msg_g0VXG8DAU00Jpo3yuSkf orderKey drift between payload and persisted row: payload=v1:0001791278064567:0000000000000030:0000000000000000:message:msg_g0VXG8D9B00pwFm6ZpF0, persisted=v1:0001791278064587:0000000000000030:0000000000000000:message:msg_g0VXG8DAU00Jpo3yuSkf, payloadCreated=1791278064587, persistedCreated=1791278064587
+      at messageWithPersistedCreated (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:1341:17)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2252:21
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at upsertMessageRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2227:52)
+(fail) real resource materialized_file publication rejects different Turn [2304.52ms]
+559 |   const complete = completeArtifactReadsBeforePublicationInTransaction(db, input)
+560 |   if (
+561 |     !locator ||
+562 |     !complete.some((candidate) => artifactReadLocatorKey(candidate) === artifactReadLocatorKey(locator))
+563 |   ) {
+564 |     throw new ArtifactReferenceResolutionError(
+                    ^
+ArtifactReferenceResolutionError: Artifact read reference is not backed by complete persisted reads in Session ses_-zUSjrmOwzzdVx4lPX1D: ar_htDEhRItbZnHOJvt
+ reference: "ar_htDEhRItbZnHOJvt",
+      code: "ARTIFACT_REFERENCE_UNRESOLVED"
+
+      at resolveArtifactReadReferenceBeforeSelectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\artifact-provenance-facts.ts:564:15)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1611:22)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-catalog.ts:616:23)
+      at processTicksAndRejections (unknown:7:39)
+(fail) real resource materialized_file+materialized_file publication preserves same-Turn provenance [2274.53ms]
+1336 |         created: timeCreated,
+1337 |       },
+1338 |     } as Message.Info
+1339 |     const orderKey = timelineMessageOrderKey({ info: persisted })
+1340 |     if (typeof msg.orderKey === "string" && msg.orderKey.length > 0 && msg.orderKey !== orderKey) {
+1341 |       throw new Error(
+                       ^
+error: Session.updateMessage: message msg_g0VXG8EN000Sx9jhIz7R orderKey drift between payload and persisted row: payload=v1:0001791278069159:0000000000000030:0000000000000000:message:msg_g0VXG8ELS00mhcXrGjgN, persisted=v1:0001791278069179:0000000000000030:0000000000000000:message:msg_g0VXG8EN000Sx9jhIz7R, payloadCreated=1791278069179, persistedCreated=1791278069179
+      at messageWithPersistedCreated (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:1341:17)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2252:21
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at upsertMessageRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2227:52)
+(fail) real resource materialized_file+materialized_file publication rejects different Turn [2341.87ms]
+559 |   const complete = completeArtifactReadsBeforePublicationInTransaction(db, input)
+560 |   if (
+561 |     !locator ||
+562 |     !complete.some((candidate) => artifactReadLocatorKey(candidate) === artifactReadLocatorKey(locator))
+563 |   ) {
+564 |     throw new ArtifactReferenceResolutionError(
+                    ^
+ArtifactReferenceResolutionError: Artifact read reference is not backed by complete persisted reads in Session ses_-zUSjrlA2zzGurA8qQQW: ar_RxARy25KGRzMPFQQ
+ reference: "ar_RxARy25KGRzMPFQQ",
+      code: "ARTIFACT_REFERENCE_UNRESOLVED"
+
+      at resolveArtifactReadReferenceBeforeSelectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\artifact-provenance-facts.ts:564:15)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1611:22)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-catalog.ts:616:23)
+      at processTicksAndRejections (unknown:7:39)
+(fail) real resource materialized_file+inline publication preserves same-Turn provenance [2384.63ms]
+1336 |         created: timeCreated,
+1337 |       },
+1338 |     } as Message.Info
+1339 |     const orderKey = timelineMessageOrderKey({ info: persisted })
+1340 |     if (typeof msg.orderKey === "string" && msg.orderKey.length > 0 && msg.orderKey !== orderKey) {
+1341 |       throw new Error(
+                       ^
+error: Session.updateMessage: message msg_g0VXG8FaJ00B6PDMqEsF orderKey drift between payload and persisted row: payload=v1:0001791278073786:0000000000000030:0000000000000000:message:msg_g0VXG8FYh00I3P9iIAzB, persisted=v1:0001791278073806:0000000000000030:0000000000000000:message:msg_g0VXG8FaJ00B6PDMqEsF, payloadCreated=1791278073806, persistedCreated=1791278073806
+      at messageWithPersistedCreated (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:1341:17)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2252:21
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at upsertMessageRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2227:52)
+(fail) real resource materialized_file+inline publication rejects different Turn [2289.79ms]
+(pass) provider Artifact references > projects the locator, read, selection, and publication provider inputs as typed references [2.47ms]
+(pass) provider Artifact references > resolves an earlier completed catalog fact inside the same retained assistant [1559.32ms]
+(pass) provider Artifact references > publishes paginated read references as canonical sources and retains independent selection facts [2203.42ms]
+
+ 3 pass
+ 6 fail
+ 32 expect() calls
+Ran 9 tests across 1 file. [19.21s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-provider-reference-flow.test.ts
+[1/1] DONE test/artifact-provider-reference-flow.test.ts exit=1 duration=19.39s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-provider-reference-flow.test.ts
+error: script "test" exited with code 1
+$ bun script/run-tests.ts test/artifact-provider-reference-flow.test.ts
+[1/1] START test/artifact-provider-reference-flow.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+559 |   const complete = completeArtifactReadsBeforePublicationInTransaction(db, input)
+560 |   if (
+561 |     !locator ||
+562 |     !complete.some((candidate) => artifactReadLocatorKey(candidate) === artifactReadLocatorKey(locator))
+563 |   ) {
+564 |     throw new ArtifactReferenceResolutionError(
+                    ^
+ArtifactReferenceResolutionError: Artifact read reference is not backed by complete persisted reads in Session ses_-zUSjrg3nzz2iu4GQ3Mt: ar_w19sor9ItwtnGHKt
+ reference: "ar_w19sor9ItwtnGHKt",
+      code: "ARTIFACT_REFERENCE_UNRESOLVED"
+
+      at resolveArtifactReadReferenceBeforeSelectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\artifact-provenance-facts.ts:564:15)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1611:22)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-catalog.ts:616:23)
+      at processTicksAndRejections (unknown:7:39)
+(fail) real resource materialized_file publication preserves same-Turn provenance [2918.10ms]
+(pass) real resource materialized_file publication rejects different Turn [2369.24ms]
+559 |   const complete = completeArtifactReadsBeforePublicationInTransaction(db, input)
+560 |   if (
+561 |     !locator ||
+562 |     !complete.some((candidate) => artifactReadLocatorKey(candidate) === artifactReadLocatorKey(locator))
+563 |   ) {
+564 |     throw new ArtifactReferenceResolutionError(
+                    ^
+ArtifactReferenceResolutionError: Artifact read reference is not backed by complete persisted reads in Session ses_-zUSjrejxzzW7qp6VVOH: ar_WfAHH1diLaZ3zzXx
+ reference: "ar_WfAHH1diLaZ3zzXx",
+      code: "ARTIFACT_REFERENCE_UNRESOLVED"
+
+      at resolveArtifactReadReferenceBeforeSelectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\artifact-provenance-facts.ts:564:15)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1611:22)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-catalog.ts:616:23)
+      at processTicksAndRejections (unknown:7:39)
+(fail) real resource materialized_file+materialized_file publication preserves same-Turn provenance [2305.23ms]
+(pass) real resource materialized_file+materialized_file publication rejects different Turn [2217.62ms]
+559 |   const complete = completeArtifactReadsBeforePublicationInTransaction(db, input)
+560 |   if (
+561 |     !locator ||
+562 |     !complete.some((candidate) => artifactReadLocatorKey(candidate) === artifactReadLocatorKey(locator))
+563 |   ) {
+564 |     throw new ArtifactReferenceResolutionError(
+                    ^
+ArtifactReferenceResolutionError: Artifact read reference is not backed by complete persisted reads in Session ses_-zUSjrdZOzzznRlU3000: ar_iTuBvCUHloEtanyE
+ reference: "ar_iTuBvCUHloEtanyE",
+      code: "ARTIFACT_REFERENCE_UNRESOLVED"
+
+      at resolveArtifactReadReferenceBeforeSelectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\agent\artifact-provenance-facts.ts:564:15)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at use (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1611:22)
+      at execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\artifact-catalog.ts:616:23)
+      at processTicksAndRejections (unknown:7:39)
+(fail) real resource materialized_file+inline publication preserves same-Turn provenance [2366.26ms]
+(pass) real resource materialized_file+inline publication rejects different Turn [2407.21ms]
+(pass) provider Artifact references > projects the locator, read, selection, and publication provider inputs as typed references [2.34ms]
+(pass) provider Artifact references > resolves an earlier completed catalog fact inside the same retained assistant [1681.01ms]
+(pass) provider Artifact references > publishes paginated read references as canonical sources and retains independent selection facts [2525.71ms]
+
+ 6 pass
+ 3 fail
+ 35 expect() calls
+Ran 9 tests across 1 file. [19.94s]
+[1/1] DONE test/artifact-provider-reference-flow.test.ts exit=1 duration=20.11s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-provider-reference-flow.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\artifact-provider-reference-flow.test.ts
+error: script "test" exited with code 1

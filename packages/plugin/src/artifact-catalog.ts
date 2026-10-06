@@ -1106,16 +1106,27 @@ export function auditArtifactReadLocatorsFromFacts(facts: readonly ArtifactReadW
     const invalid = windows.some(({ request, chunk }) => {
       const textBytes =
         chunk.attachment || chunk.text === undefined ? undefined : new TextEncoder().encode(chunk.text).byteLength
-      const transportDisagrees = chunk.attachment
-        ? locator.source !== "task_artifact_resource" ||
-          request.byte_offset !== 0 ||
-          chunk.byte_start !== 0 ||
-          chunk.text !== undefined ||
-          !chunk.complete ||
-          chunk.next_offset !== null ||
-          chunk.byte_end !== chunk.total_bytes ||
-          chunk.total_bytes !== locator.ref.bytes
-        : textBytes === undefined || textBytes !== chunk.byte_end - chunk.byte_start || textBytes > request.max_bytes
+      const transportDisagrees =
+        request.delivery === "materialized_file"
+          ? locator.source !== "task_artifact_resource" ||
+            !chunk.materialized_path ||
+            chunk.attachment ||
+            chunk.text !== undefined ||
+            chunk.byte_start !== 0 ||
+            !chunk.complete ||
+            chunk.next_offset !== null ||
+            chunk.byte_end !== chunk.total_bytes ||
+            chunk.total_bytes !== locator.ref.bytes
+          : chunk.attachment
+            ? locator.source !== "task_artifact_resource" ||
+              request.byte_offset !== 0 ||
+              chunk.byte_start !== 0 ||
+              chunk.text !== undefined ||
+              !chunk.complete ||
+              chunk.next_offset !== null ||
+              chunk.byte_end !== chunk.total_bytes ||
+              chunk.total_bytes !== locator.ref.bytes
+            : textBytes === undefined || textBytes !== chunk.byte_end - chunk.byte_start || textBytes > request.max_bytes
       return (
         artifactReadLocatorKey(chunk.locator) !== artifactReadLocatorKey(locator) ||
         chunk.media_type !== expectedMediaType ||

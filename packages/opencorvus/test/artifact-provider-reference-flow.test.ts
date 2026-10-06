@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import path from "node:path"
+import fs from "node:fs/promises"
+import { publishTaskArtifactProjectFiles } from "@/task-artifact/store"
 import { ExpertSquadRegistry } from "@/expert-squad/registry"
 import {
   EngineArtifactEnvelopeSchema,
@@ -34,6 +36,95 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+// Only the established projected-worker ownership boundary is isolated below.
+// Resource publication, ArtifactReadTool, durable facts, audit and publisher are real.
+for (const deliveries of [["materialized_file"], ["materialized_file", "materialized_file"],
+  ["materialized_file", "inline"]] as const) {
+  for (const differentTurn of [false, true]) {
+    test(`real resource ${deliveries.join("+")} publication ${differentTurn ? "rejects different Turn" : "preserves same-Turn provenance"}`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({ directory: project.path, fn: async () => {
+        const session = Session.prepareRootNext({ kind: "root", directory: project.path, title: "Complete resource reads" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        const loaded = await ExpertSquadRegistry.loadPackage(path.resolve(import.meta.dir, "../src/expert-squad/builtin/base"))
+        const packageRevision = { scope: "built_in" as const, projectID: null, namespace: "builtin", id: "base",
+          version: loaded.manifest.version, packageDigest: loaded.packageDigest }
+        persistTask({ taskID, rootSession: session, now, title: "Complete resource reads", request: "Read published bytes",
+          productPillar: "work", metadata: {}, projectID: Instance.project.id, packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({ mode: "native", taskID,
+            projectID: Instance.project.id, rootDirectory: project.path,
+            packageRevisionSHA256: packageRevision.packageDigest, timeCreated: now }) })
+        const scope: TaskToolScope.TaskToolExecutionScope = {
+          packageToolRef: null, kind: "task", projectID: Instance.project.id, projectDirectory: project.path, taskID,
+          taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(project.path, taskID), sessionID: session.id,
+          messageID: Identifier.ascending("message"), toolCallID: Identifier.ascending("tool"), toolPartID: Identifier.ascending("part"),
+          executionSurface: createToolExecutionSurface({ toolIDs: ["artifact_read", "artifact_publish"], permission: [] }),
+          owner: { kind: "projected-worker", expertSquadID: "base", packageRevision, agentID: "reference-worker",
+            projectionHash: "9".repeat(64), workerTurnDescriptorID: Identifier.ascending("artifact"), workerTurnDescriptorHash: "8".repeat(64) },
+        }
+        const text = "Hello from a formal Task.\n"
+        await fs.writeFile(path.join(project.path, "hello.txt"), text)
+        const publication = await publishTaskArtifactProjectFiles({ scope,
+          files: [{ path: "hello.txt", mediaType: "text/plain" }], source: { kind: "current_task_project" } })
+        const locator = { source: "task_artifact_resource" as const, ref: publication.artifacts[0]! }
+        const locatorRef = mintArtifactLocatorReference()
+        const user = await Session.updateMessage({ id: Identifier.ascending("message"), sessionID: session.id,
+          role: "user", author: "user", agent: "worker", time: { created: now },
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" } })
+        const search = await assistantMessage({ sessionID: session.id, parentID: user.id, created: now + 1, projectPath: project.path })
+        await completedToolPart({ sessionID: session.id, messageID: search.id, created: now + 1, tool: "artifact_search",
+          toolInput: {}, output: { entries: [{ locator, artifact_locator_ref: locatorRef }] } })
+        const readTool = await ArtifactReadTool.init()
+        const references: string[] = []
+        for (const [index, delivery] of deliveries.entries()) {
+          const message = await assistantMessage({ sessionID: session.id, parentID: user.id,
+            created: now + 3 + index * 3, projectPath: project.path })
+          const args = readTool.parameters.parse({ reads: [{ artifact_transport_version: 2,
+            artifact_locator_ref: locatorRef, byte_offset: 0, max_bytes: 6000, delivery }] })
+          const boundary = await actionBoundary({ sessionID: session.id, messageID: message.id,
+            created: now + 3 + index * 3, tool: "artifact_read", toolInput: args })
+          const result = await readTool.execute(args, { sessionID: session.id, messageID: message.id,
+            callID: boundary.callID, agent: "reference-worker", abort: new AbortController().signal,
+            messages: [], executionSurface: scope.executionSurface, metadata() {},
+            extra: { projectID: Instance.project.id, toolPartID: boundary.id } })
+          const output = JSON.parse(result.output)
+          const chunk = output.results[0].value
+          expect({ complete: chunk.complete, bytes: chunk.total_bytes, start: chunk.byte_start, end: chunk.byte_end })
+            .toEqual({ complete: true, bytes: 26, start: 0, end: 26 })
+          if (delivery === "materialized_file") expect(await fs.readFile(chunk.materialized_path, "utf8")).toBe(text)
+          else expect(chunk.text).toBe(text)
+          references.push(chunk.artifact_read_ref)
+          await Session.updatePart({ ...boundary, state: { status: "completed", input: args, output: result.output,
+            title: result.title, metadata: result.metadata, time: { start: now + 3 + index * 3, end: now + 4 + index * 3 } } })
+          await Session.updateMessage({ ...message, finish: "tool-calls", time: { ...message.time, completed: now + 5 + index * 3 } })
+        }
+        const parent = differentTurn ? await Session.updateMessage({ id: Identifier.ascending("message"),
+          sessionID: session.id, role: "user", author: "user", agent: "worker", time: { created: now + 20 },
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" } }) : user
+        const action = await assistantMessage({ sessionID: session.id, parentID: parent.id, created: now + 21, projectPath: project.path })
+        const publishTool = await ArtifactPublishTool.init()
+        const args = publishTool.parameters.parse({ artifact_type: "base/complete-resource-read", schema_version: 1,
+          label: "Verified resource", payload_json: '{"status":"complete"}', resource_set: null, source_read_refs: references })
+        const boundary = await actionBoundary({ sessionID: session.id, messageID: action.id, created: now + 21, tool: "artifact_publish", toolInput: args })
+        using owner = spyOn(TaskToolScope, "resolveCoreProjectedWorkerToolExecutionScope").mockResolvedValue({ ...scope,
+          messageID: action.id, toolPartID: boundary.id, toolCallID: boundary.callID })
+        const execution = () => publishTool.execute(args, { sessionID: session.id, messageID: action.id,
+          callID: boundary.callID, agent: "reference-worker", abort: new AbortController().signal, messages: [],
+          executionSurface: scope.executionSurface, metadata() {}, extra: { projectID: Instance.project.id, toolPartID: boundary.id } })
+        if (differentTurn) await expect(execution()).rejects.toBeInstanceOf(ArtifactReferenceResolutionError)
+        else {
+          const result = JSON.parse((await execution()).output)
+          const row = Database.use((db) => db.select({ payload: EngineArtifactTable.payload }).from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, result.locator.artifact_id)).get())
+          expect(EngineArtifactEnvelopeSchema.parse(row?.payload)).toMatchObject({ payload: { status: "complete" },
+            source_artifact_locators: [locator], observed_artifact_locators: [locator] })
+        }
+      } })
+    }, 60_000)
+  }
+}
+
 async function assistantMessage(input: { sessionID: string; parentID: string; created: number; projectPath: string }) {
   const message = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -55,6 +146,7 @@ async function assistantMessage(input: { sessionID: string; parentID: string; cr
     messageID: message.id,
     type: "step-start",
   })
+  if (message.role !== "assistant") throw new Error("Assistant fixture returned a different message variant")
   return message
 }
 
@@ -92,11 +184,12 @@ async function completedToolPart(input: {
       time: { ...message.info.time, completed: input.created + 2 },
     })
   }
+  if (part.type !== "tool") throw new Error("Completed Tool fixture returned a different Part variant")
   return part
 }
 
-async function actionBoundary(input: { sessionID: string; messageID: string; created: number; tool: string }) {
-  return Session.updatePart({
+async function actionBoundary(input: { sessionID: string; messageID: string; created: number; tool: string; toolInput?: unknown }) {
+  const part = await Session.updatePart({
     id: Identifier.ascending("part"),
     sessionID: input.sessionID,
     messageID: input.messageID,
@@ -105,10 +198,12 @@ async function actionBoundary(input: { sessionID: string; messageID: string; cre
     tool: input.tool,
     state: {
       status: "running",
-      input: {},
+      input: input.toolInput ?? {},
       time: { start: input.created },
     },
   })
+  if (part.type !== "tool") throw new Error("Tool boundary fixture returned a different Part variant")
+  return part
 }
 
 describe("provider Artifact references", () => {
@@ -339,6 +434,7 @@ describe("provider Artifact references", () => {
             sha256: "d".repeat(64),
           },
         })
+        if (locator.source !== "task_artifact_resource") throw new Error("Resource fixture returned a different locator variant")
         const locatorRef = mintArtifactLocatorReference()
         const readRef = mintArtifactReadReference()
         const finalReadRef = mintArtifactReadReference()

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Complete-read publication plan](complete-read-publication-implementation-plan.md) and [evidence](complete-read-publication-implementation/README.md): actual17 legal materialized receipt and inline contamination, shared audit and private fixed-bound settlement.
+
 - [Genuine Task creator content](creator-content-implementation-plan.md): raw creator text, existing Host system provenance and task-level attachment ownership; local backend and actual new-Task qualification proceed separately.
 - [Resource materialization repair](resource-materialization-implementation-plan.md): actual16 same-batch Windows readonly cache EPERM; shared current publication, concurrency and isolation investigation precedes implementation.
 

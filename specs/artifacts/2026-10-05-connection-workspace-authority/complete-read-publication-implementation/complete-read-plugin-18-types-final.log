@@ -1,0 +1,22 @@
+bun test v1.3.14 (0d9b296a)
+
+test\artifact-catalog.test.ts:
+(pass) exact Artifact assembler > assembles every contiguous text chunk and accepts the documented page-size default [5.21ms]
+(pass) exact Artifact assembler > assembles one exact binary resource attachment and verifies locator-owned bytes [1.71ms]
+(pass) exact Artifact assembler > hard-fails locator, media, range, digest, and content corruption [0.84ms]
+(pass) exact Artifact assembler > hard-fails locator drift after a valid first page and contradictory terminal markers [0.44ms]
+(pass) exact Artifact assembler > hard-fails missing terminal bytes and resource byte-count drift while accepting an empty Artifact [0.56ms]
+(pass) exact Artifact assembler > settles every exact read in caller order before semantic selection [0.74ms]
+(pass) exact Artifact assembler > reports all independent Engine envelope expectation mismatches [4.55ms]
+(pass) completed Artifact read fact audit > accepts a complete materialized resource larger than its inline byte budget [1.36ms]
+(pass) completed Artifact read fact audit > accepts two complete materialized reads of the same locator [0.33ms]
+(pass) completed Artifact read fact audit > accepts materialized and inline complete reads of the same locator [0.33ms]
+(pass) completed Artifact read fact audit > classifies malformed materialized transport facts as invalid locators [1.84ms]
+(pass) completed Artifact read fact audit > accepts one complete binary attachment larger than the text page limit [0.80ms]
+(pass) completed Artifact read fact audit > keeps malformed binary transports and oversized text as evidence errors [2.07ms]
+
+ 13 pass
+ 17 filtered out
+ 0 fail
+ 59 expect() calls
+Ran 13 tests across 1 file. [140.00ms]

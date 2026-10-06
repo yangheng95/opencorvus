@@ -1,0 +1,20 @@
+$ bun script/run-tests.ts test/artifact-provider-reference-flow.test.ts
+[1/1] START test/artifact-provider-reference-flow.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real resource materialized_file publication preserves same-Turn provenance [2985.61ms]
+(pass) real resource materialized_file publication rejects different Turn [2164.12ms]
+(pass) real resource materialized_file+materialized_file publication preserves same-Turn provenance [2343.34ms]
+(pass) real resource materialized_file+materialized_file publication rejects different Turn [2217.68ms]
+(pass) real resource materialized_file+inline publication preserves same-Turn provenance [2318.01ms]
+(pass) real resource materialized_file+inline publication rejects different Turn [2398.74ms]
+(pass) provider Artifact references > projects the locator, read, selection, and publication provider inputs as typed references [2.54ms]
+(pass) provider Artifact references > resolves an earlier completed catalog fact inside the same retained assistant [1563.47ms]
+(pass) provider Artifact references > publishes paginated read references as canonical sources and retains independent selection facts [2158.40ms]
+
+ 9 pass
+ 0 fail
+ 38 expect() calls
+Ran 9 tests across 1 file. [19.38s]
+[1/1] DONE test/artifact-provider-reference-flow.test.ts exit=0 duration=19.55s
