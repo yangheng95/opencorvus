@@ -1,0 +1,63 @@
+{
+  "observedAtUtc": "2026-10-06T00:31:41.9938594Z",
+  "evidencePrefix": "artifact-editing-ui-06",
+  "occurrence": "artifact-editing-ui-06-f5acbd37-739d-4712-876a-e85a855ab728",
+  "purpose": "Actual persisted history presentation only; Root must not send a new model task",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\project",
+  "port": 17959,
+  "listener": {
+    "ProcessId": 54280,
+    "ParentProcessId": 20420,
+    "CreationDate": "2026-10-06T08:30:53.998241+08:00",
+    "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17959 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\artifact-editing-ui-06\\startup.json --startup-occurrence artifact-editing-ui-06-f5acbd37-739d-4712-876a-e85a855ab728 --log-level INFO"
+  },
+  "owners": [
+    {
+      "ProcessId": 54280,
+      "ParentProcessId": 20420,
+      "CreationDate": "2026-10-06T08:30:53.998241+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe ./src/index.ts serve --hostname 127.0.0.1 --port 17959 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\artifact-editing-ui-06\\startup.json --startup-occurrence artifact-editing-ui-06-f5acbd37-739d-4712-876a-e85a855ab728 --log-level INFO"
+    },
+    {
+      "ProcessId": 20420,
+      "ParentProcessId": 19024,
+      "CreationDate": "2026-10-06T08:30:53.966631+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe run --cwd packages/opencorvus dev serve --hostname 127.0.0.1 --port 17959 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\artifact-editing-ui-06\\startup.json --startup-occurrence artifact-editing-ui-06-f5acbd37-739d-4712-876a-e85a855ab728 --log-level INFO"
+    },
+    {
+      "ProcessId": 75508,
+      "ParentProcessId": 19024,
+      "CreationDate": "2026-10-06T08:30:53.909036+08:00",
+      "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 19024,
+      "ParentProcessId": 67192,
+      "CreationDate": "2026-10-06T08:30:53.897902+08:00",
+      "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+      "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" run dev serve --hostname 127.0.0.1 --port 17959 --project-dir C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\project --startup-receipt C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\artifact-editing-ui-06\\startup.json --startup-occurrence artifact-editing-ui-06-f5acbd37-739d-4712-876a-e85a855ab728 --log-level INFO"
+    }
+  ],
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "artifact-editing-ui-06-f5acbd37-739d-4712-876a-e85a855ab728",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:17959",
+    "pid": 54280
+  },
+  "health": {
+    "healthy": true,
+    "version": "local",
+    "paths": {
+      "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\runtime\\data\\opencorvus.db",
+      "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-artifact-05\\runtime\\data",
+      "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\artifact-editing-ui-06\\home"
+    }
+  },
+  "credentialStaging": "None; previous copied pair removed"
+}

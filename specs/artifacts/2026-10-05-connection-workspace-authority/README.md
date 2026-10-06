@@ -167,3 +167,9 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [UTF-8 service implementation evidence](artifact-utf8-service-implementation/README.md): single logical decoder, original failures and controlled exact text/error contracts.
 - [Real artifact route evidence](artifact-utf8-route-implementation/README.md): original Hono qualification and Root's actual loopback/current loader6/65 extension.
 - [Manual action and download evidence](artifact-download-root-implementation/README.md): genuine Sol05 publication/screenshots/physical bytes/cleanup, source reviews and explicitly unmet Task-region/race qualification.
+
+- [Editable artifact and Environment implementation plan](artifact-editing-environment-implementation-plan.md): next UI-only admission after pushed9b5871ed; same real history/no new model task, preserved local contract and deliberate surface presentation.
+
+- [Root editable Code and Environment qualification](root-artifact-editing-qualification.md): final main-Dm3kl_dy actual48B/local guidance/fullscreen/history and explicit Popover keyboard/nested-layer acceptance; earlier failed frames and unknown clipboard/download observations remain retained.
+- [Editing and Environment evidence](artifact-editing-environment-implementation/README.md): initial/intermediate/final source, independent reviews, genuine manual screenshots and exact four-occurrence/17959 physical release.
+- [Formal Task delivery preparation](artifact-download-root-implementation/next-real-task-delivery-plan-review.md): natural single Task entry and model/budget/actual publication requirements; specific Task-button execution remains next.

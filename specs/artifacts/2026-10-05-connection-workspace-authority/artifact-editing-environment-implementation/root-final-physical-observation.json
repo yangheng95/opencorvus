@@ -1,0 +1,35 @@
+{
+  "observedAtUtc": "2026-10-06T01:20:18.0962678Z",
+  "owners": [
+    {
+      "originalProcessID": 54280,
+      "originalOccurrencePresent": false,
+      "pidCurrentlyReused": false
+    },
+    {
+      "originalProcessID": 20420,
+      "originalOccurrencePresent": false,
+      "pidCurrentlyReused": false
+    },
+    {
+      "originalProcessID": 75508,
+      "originalOccurrencePresent": false,
+      "pidCurrentlyReused": false
+    },
+    {
+      "originalProcessID": 19024,
+      "originalOccurrencePresent": false,
+      "pidCurrentlyReused": false
+    }
+  ],
+  "port": 17959,
+  "listeners": [],
+  "physicalState": "owned_presentation_released",
+  "authPresent": false,
+  "modelsPresent": false,
+  "ownedPagesClosed": [
+    "Root29",
+    "Meta241798724"
+  ],
+  "purpose": "Separate actual final OS observation, retaining original shutdown receipt."
+}

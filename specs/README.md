@@ -2510,3 +2510,7 @@ The current connection-workspace authority record also includes metadata selecti
 - [Real artifact actions qualification](artifacts/2026-10-05-connection-workspace-authority/artifact-download-manual-sol-plan.md): fresh ordinary Sol publication, manual editor/copy/download evidence and same reviewed paired runtime cleanup.
 
 - [Directory and artifact actual checkpoint](artifacts/2026-10-05-connection-workspace-authority/root-directory-artifact-qualification.md): shared Git/filter runtime repair, real TCP/logical UTF-8 reads, Sol05 manual exact exports and explicit unqualified Task-button/race matrix.
+
+- [Artifact editing and Environment plan](artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation-plan.md): actual Sol05 evidence, local-edit clarity, deliberate controlled panel policy and genuine history-only manual acceptance.
+
+- [Actual Code editing and Environment qualification](artifacts/2026-10-05-connection-workspace-authority/root-artifact-editing-qualification.md): final current Code bytes/layout/local guidance, canonical Popover keyboard/layer repair, preserved failed intermediate observations and complete owned physical settlement.

@@ -597,26 +597,27 @@ Interactive Artifact boundary. Panel surfaces may own layout, color, spacing,
 and context-specific weight, but they cannot define another typography scale
 or resize a shared primitive locally.
 
-The chat-header Environment Information control owns one controlled Kobalte
-HoverCard. A selected Task, Chat, or Mission presents it once when that exact
-selection first publishes visible Conversation Card Tree data; an empty selection
-waits for its first visible streamed card instead of opening from source identity
-alone. Pointer hover also presents it transiently and Kobalte owns the safe pointer
-region between the trigger and portaled content. Leaving both closes an unpinned surface.
-Clicking the Environment button pins the same visible surface; clicking again
-unpins and closes it. Explicit child-feature navigation, the canonical
+The chat-header Environment Information control owns one controlled non-modal Kobalte
+Popover and one open signal. Conversation selection, arriving cards and trigger focus leave
+presentation under operator control. Clicking the Environment button, Enter or Space opens
+the same visible surface; activating it again closes it. Escape and outside pointer or focus
+interaction follow the canonical accessible Popover dismissal and focus lifecycle.
+Explicit child-feature navigation, the canonical
 empty-home projection, and the complete Settings surface hiding the Conversation
-anchor also close it and clear the pin. Every existing or newly registered
+anchor also close it. Every existing or newly registered
 Settings section inherits that one surface-level lifecycle and never owns an
 Environment-specific dismissal path. A new Right Dock opening edge dismisses
-the currently visible Environment surface and clears its pin;
+the currently visible Environment surface;
 after the Dock is open, the operator may explicitly reopen Environment and both
-surfaces retain their responsive coexistence. Closing the Right Dock does not
-mutate Environment visibility.
-The hidden-anchor transition closes the existing controlled HoverCard before its
+surfaces retain their responsive coexistence. Outside interaction can dismiss Environment
+while changing another surface; the Right Dock has no independent Environment visibility owner.
+Escape on the topmost Environment surface clears its existing open owner and
+returns focus to the trigger without scrolling; nested menu dismissal retains its
+own layer precedence.
+The hidden-anchor transition closes the existing controlled Popover before its
 Portal can survive without usable anchor geometry. Environment sits directly
 after the editor launcher and the Right Dock button remains the trailing
-chat-header action. The HoverCard retains native `bottom-end` placement and uses
+chat-header action. The Popover retains native `bottom-end` placement and uses
 Kobalte's cross-axis shift with the shared trailing-control-width-plus-header-gap
 token, so its right edge occupies that trailing toolbar span instead of covering
 the wide readable Conversation lane. The Environment instance opts into Floating UI's animation-frame
@@ -627,9 +628,9 @@ reserves inline-end readable-content clearance at and above the existing
 900-pixel desktop boundary. The one `#chatScroll` viewport, its physical right
 edge, and its native scrollbar remain full width; only the inherited
 message/Composer/empty-home content insets transition through the shared slow
-motion token while the HoverCard reveals from its trailing edge. The canonical
+motion token while the Popover reveals from its trailing edge. The canonical
 reduced-motion preference makes both changes instant. Below that boundary the
-same portaled HoverCard reserves no content clearance and renders above the
+same portaled Popover reserves no content clearance and renders above the
 message panel through the canonical overlay layer. Environment and Right Dock
 continue to read the same board, worktree, Version Control System (VCS), and
 task-evidence sources without sharing visibility state.
@@ -1285,6 +1286,12 @@ URL, or HTML content. Sorting, filtering, pagination, code editing, slide and
 sheet navigation, graph/timeline/tree exploration, terminal transcript search,
 3D camera control, and other presentation-only interactions remain
 renderer-local.
+
+Editable Code presents this local lifetime beside the editor, asks the operator
+to copy or download before leaving, and derives a modified marker from its one
+current source against the published payload. It does not write a durable draft
+or mutate the original publication. Copy/download continue to export the current
+mounted source; recreating the renderer restores the published content.
 
 The nineteen model-publishable renderers have one canonical payload validator.
 The search-native Provider Tool projection factors their shared

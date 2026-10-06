@@ -54,3 +54,4 @@ Final evidence additions:
 - [Initial index byte-preservation failure](root-index-payloads-initial-failure.log)
 - [Exact seven current payload objects](root-index-payloads-final-02.json)
 - [Final declared docs checker](root-docs-final-02.log)
+- [Next real formal Task delivery review](next-real-task-delivery-plan-review.md): read-only natural Task preparation; not an actual Task download qualification.

@@ -1,0 +1,359 @@
+diff --git a/.gitattributes b/.gitattributes
+index 90b7ff2a..d911a8b2 100644
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -35,3 +35,7 @@ specs/artifacts/2026-08-25-benchmark-history/** -text
+ specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/manual-05-*-clipboard.txt -text
+ specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/manual-05-*-download.txt -text
+ specs/artifacts/2026-10-05-connection-workspace-authority/artifact-download-root-implementation/manual-05-table-download.csv -text
++specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-06-*-copy.txt -text
++specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-06-*-download.txt -text
++specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-06-code-edited-clipboard.txt -text
++specs/artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation/manual-popover-06-*.txt -text
+diff --git a/packages/overlay/src/components/TaskDirBar.tsx b/packages/overlay/src/components/TaskDirBar.tsx
+index e3f08191..cfaa4c3a 100644
+--- a/packages/overlay/src/components/TaskDirBar.tsx
++++ b/packages/overlay/src/components/TaskDirBar.tsx
+@@ -1,7 +1,7 @@
+ // TaskDirBar owns the project runtime controls hosted by the chat header.
+ // Solid components for project runtime controls hosted by the chat header.
+ 
+-import { HoverCard } from "./ui/HoverCard"
++import { Popover } from "./ui/Popover"
+ import {
+   createEffect,
+   createMemo,
+@@ -166,7 +166,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+     return layoutTokenPx("--ui-runtime-environment-anchor-shift")
+   })
+   const [panelOpen, setPanelOpen] = createSignal(false)
+-  const [panelPinned, setPanelPinned] = createSignal(false)
+   const [panelExpanded, setPanelExpanded] = createSignal(true)
+   let panelShell!: HTMLDivElement
+   const [localMenuOpen, setLocalMenuOpen] = createSignal(false)
+@@ -198,8 +197,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+   let gitOperationID = 0
+   let commitMessageStream: ReturnType<typeof streamVcsCommitMessage> | undefined
+   let commitMessageGenerationKey = ""
+-  let selectedConversationSourceIdentity = ""
+-  let presentedConversationSourceIdentity = ""
+   const [worktrees, setWorktrees] = createSignal<ProjectWorktreeInfo[]>([])
+   const [worktreeDirectory, setWorktreeDirectory] = createSignal("")
+   const [error, setError] = createSignal("")
+@@ -422,7 +419,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+   )
+ 
+   function closeRuntimePanel(): void {
+-    setPanelPinned(false)
+     setPanelOpen(false)
+   }
+ 
+@@ -435,16 +431,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+       openRuntimePanel()
+       return
+     }
+-    if (!panelPinned()) setPanelOpen(false)
+-  }
+-
+-  function toggleRuntimePanel(): void {
+-    if (panelPinned()) {
+-      closeRuntimePanel()
+-      return
+-    }
+-    setPanelPinned(true)
+-    openRuntimePanel()
++    closeRuntimePanel()
+   }
+ 
+   function openChanges(): void {
+@@ -1208,27 +1195,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+     return open
+   }, rightDockOpen())
+ 
+-  createEffect(() => {
+-    const source = boardStore.selectedSource
+-    const sourceIdentity = source ? `${source.kind}:${source.id}` : ""
+-    if (sourceIdentity !== selectedConversationSourceIdentity) {
+-      selectedConversationSourceIdentity = sourceIdentity
+-      presentedConversationSourceIdentity = ""
+-    }
+-    if (
+-      !props.anchorVisible ||
+-      !sourceIdentity ||
+-      cardTreeStore.order.length === 0 ||
+-      presentedConversationSourceIdentity === sourceIdentity
+-    ) {
+-      return
+-    }
+-    presentedConversationSourceIdentity = sourceIdentity
+-    setPanelExpanded(true)
+-    setPanelPinned(true)
+-    openRuntimePanel()
+-  })
+-
+   createEffect(() => {
+     const authority = captureApiAuthority()
+     const selectionEpoch = boardStore.selectEpoch
+@@ -1275,7 +1241,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+           await revealNativeSurfaces(owner)
+           return
+         }
+-        setPanelPinned(true)
+         setLocalMenuOpen(false)
+         setBranchMenuOpen(false)
+         await occludeNativeSurfaces(owner)
+@@ -1748,7 +1713,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+     <>
+       <deliveries.Preview />
+       <span class="project-runtime-trigger-anchor">
+-        <HoverCard.Root
++        <Popover.Root
+           open={runtimePanelOpen()}
+           onOpenChange={setRuntimePanelOpen}
+           placement="bottom-end"
+@@ -1757,7 +1722,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+           fitViewport
+           autoUpdateAnimationFrame
+         >
+-          <HoverCard.Trigger
++          <Popover.Trigger
+             as={Button}
+             type="button"
+             variant="ghost"
+@@ -1767,33 +1732,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
+             data-ui="project-runtime-status-dropdown"
+             data-vcs-tone={gitTone()}
+             data-expanded={runtimePanelOpen() ? "" : undefined}
+-            data-pinned={panelPinned() ? "" : undefined}
+             title={triggerTitle()}
+             aria-label={triggerTitle()}
+             aria-haspopup="dialog"
+             aria-controls="projectRuntimeStatusPanel"
+             aria-expanded={runtimePanelOpen()}
+-            aria-pressed={panelPinned()}
+-            onClick={(event) => {
+-              event.preventDefault()
+-              toggleRuntimePanel()
+-            }}
+           >
+             <Icon name="runtime-environment" size="medium" />
+-          </HoverCard.Trigger>
+-          <HoverCard.Portal>
+-            <HoverCard.Content
++          </Popover.Trigger>
++          <Popover.Portal>
++            <Popover.Content
+               class="project-runtime-status-panel"
+               id="projectRuntimeStatusPanel"
+               data-expanded={String(panelExpanded())}
+-              data-pinned={panelPinned() ? "" : undefined}
+               aria-label={triggerTitle()}
+-              onEscapeKeyDown={(event) => event.preventDefault()}
+             >
+               <PanelShell />
+-            </HoverCard.Content>
+-          </HoverCard.Portal>
+-        </HoverCard.Root>
++            </Popover.Content>
++          </Popover.Portal>
++        </Popover.Root>
+         {props.trailingAction}
+       </span>
+       <Dialog
+diff --git a/packages/overlay/src/components/interactive-artifact/CodeArtifact.tsx b/packages/overlay/src/components/interactive-artifact/CodeArtifact.tsx
+index bcf16bb4..f26f3dad 100644
+--- a/packages/overlay/src/components/interactive-artifact/CodeArtifact.tsx
++++ b/packages/overlay/src/components/interactive-artifact/CodeArtifact.tsx
+@@ -1,7 +1,8 @@
+-import { createSignal } from "solid-js"
++import { createMemo, createSignal, Show } from "solid-js"
+ import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+ import { CodeEditor } from "../ui/CodeEditor"
+ import { ArtifactFrame } from "./ArtifactFrame"
++import { t } from "../../utils/i18n"
+ import { CODE_EXTENSIONS } from "../../services/artifact-export"
+ 
+ type CodePayload = Extract<InteractiveArtifactPayload, { renderer: "code@1" }>
+@@ -13,11 +14,20 @@ export function artifactCodeFilename(language: ArtifactCodeLanguage, filename?:
+ 
+ export function CodeArtifact(props: { payload: CodePayload }) {
+   const [source, setSource] = createSignal(props.payload.source)
++  const modified = createMemo(() => source() !== props.payload.source)
+ 
+   return (
+     <ArtifactFrame payload={{ ...props.payload, source: source() }} title={props.payload.title} kind="Code">
+       <div class="msg-artifact-code__toolbar">
+-        <span>{props.payload.filename ?? props.payload.language}</span>
++        <div class="msg-artifact-code__details">
++          <span>{props.payload.filename ?? props.payload.language}</span>
++          <Show when={props.payload.editable}>
++            <p class="msg-artifact-code__note">{t("artifact.code.local_edits")}</p>
++          </Show>
++        </div>
++        <Show when={props.payload.editable && modified()}>
++          <span>{t("artifact.code.modified")}</span>
++        </Show>
+       </div>
+       <CodeEditor
+         class="msg-artifact-code"
+diff --git a/packages/overlay/src/components/ui/HoverCard.tsx b/packages/overlay/src/components/ui/HoverCard.tsx
+deleted file mode 100644
+index a9e704e4..00000000
+--- a/packages/overlay/src/components/ui/HoverCard.tsx
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import * as KobalteHoverCard from "@kobalte/core/hover-card"
+-import { splitProps, type ComponentProps, type JSX } from "solid-js"
+-
+-export type HoverCardContentProps = ComponentProps<typeof KobalteHoverCard.Content>
+-
+-function HoverCardContent(props: HoverCardContentProps): JSX.Element {
+-  const [local, rest] = splitProps(props, ["class"])
+-  return (
+-    <KobalteHoverCard.Content
+-      {...rest}
+-      class={local.class ? `oc-popover ${local.class}` : "oc-popover"}
+-    />
+-  )
+-}
+-
+-/** Canonical hover-preview surface with a pointer-safe trigger-to-content region. */
+-export const HoverCard = {
+-  Root: KobalteHoverCard.Root,
+-  Trigger: KobalteHoverCard.Trigger,
+-  Portal: KobalteHoverCard.Portal,
+-  Content: HoverCardContent,
+-}
+diff --git a/packages/overlay/src/i18n/en-US.json b/packages/overlay/src/i18n/en-US.json
+index 25197095..b7abdc31 100644
+--- a/packages/overlay/src/i18n/en-US.json
++++ b/packages/overlay/src/i18n/en-US.json
+@@ -1896,6 +1896,8 @@
+   "artifact.actions.download": "Download",
+   "artifact.actions.preview": "Preview",
+   "artifact.actions.resources": "Files ({{count}})",
++  "artifact.code.local_edits": "Edits stay in this view. Copy or download before leaving.",
++  "artifact.code.modified": "Modified in this view",
+   "artifact.scope_required": "Open the project that owns this interactive content.",
+   "artifact.renderer_unsupported": "This interactive renderer is not available.",
+   "artifact.workspace.open": "Open",
+diff --git a/packages/overlay/src/i18n/zh-CN.json b/packages/overlay/src/i18n/zh-CN.json
+index 98ebc395..caa5246c 100644
+--- a/packages/overlay/src/i18n/zh-CN.json
++++ b/packages/overlay/src/i18n/zh-CN.json
+@@ -1895,6 +1895,8 @@
+   "artifact.actions.download": "下载",
+   "artifact.actions.preview": "预览",
+   "artifact.actions.resources": "文件（{{count}}）",
++  "artifact.code.local_edits": "编辑只保留在当前视图，请在离开前复制或下载。",
++  "artifact.code.modified": "当前视图已修改",
+   "artifact.scope_required": "请打开此交互内容所属的项目。",
+   "artifact.renderer_unsupported": "当前无法使用此交互渲染器。",
+   "artifact.workspace.open": "打开",
+diff --git a/packages/overlay/src/styles/surfaces/conversation.css b/packages/overlay/src/styles/surfaces/conversation.css
+index 2285d833..ac4569de 100644
+--- a/packages/overlay/src/styles/surfaces/conversation.css
++++ b/packages/overlay/src/styles/surfaces/conversation.css
+@@ -2667,7 +2667,7 @@
+ /* The single portaled Environment panel narrows only the readable content
+    lane. The full-width transcript scrollport and its native scrollbar stay
+    anchored to the conversation viewport. Compact Workbenches retain the
+-   mature HoverCard overlay behavior. */
++   canonical Popover overlay behavior. */
+ @container chat-workbench (width >= 900px) {
+   /* breakpoint: --ui-breakpoint-lg */
+   body:has(.project-runtime-status-panel) #conversationBody {
+diff --git a/packages/overlay/src/styles/surfaces/messages.css b/packages/overlay/src/styles/surfaces/messages.css
+index 03946d8b..84a13e10 100644
+--- a/packages/overlay/src/styles/surfaces/messages.css
++++ b/packages/overlay/src/styles/surfaces/messages.css
+@@ -1496,6 +1496,18 @@
+   min-height: calc(180px * var(--ui-scale));
+ }
+ 
++.msg-artifact-code__details {
++  min-width: 0;
++  overflow-wrap: anywhere;
++}
++
++.msg-artifact-code__note {
++  margin: var(--ui-gap-xs) 0 0;
++  font-size: var(--ui-font-caption);
++  line-height: var(--ui-line-height-normal);
++  color: var(--text-soft);
++}
++
+ .msg-artifact-code__toolbar {
+   border-bottom: var(--oc-border-width) solid var(--border);
+ }
+diff --git a/specs/current/architecture/07-panel.md b/specs/current/architecture/07-panel.md
+index 02e25780..53bd8d37 100644
+--- a/specs/current/architecture/07-panel.md
++++ b/specs/current/architecture/07-panel.md
+@@ -597,26 +597,27 @@ Interactive Artifact boundary. Panel surfaces may own layout, color, spacing,
+ and context-specific weight, but they cannot define another typography scale
+ or resize a shared primitive locally.
+ 
+-The chat-header Environment Information control owns one controlled Kobalte
+-HoverCard. A selected Task, Chat, or Mission presents it once when that exact
+-selection first publishes visible Conversation Card Tree data; an empty selection
+-waits for its first visible streamed card instead of opening from source identity
+-alone. Pointer hover also presents it transiently and Kobalte owns the safe pointer
+-region between the trigger and portaled content. Leaving both closes an unpinned surface.
+-Clicking the Environment button pins the same visible surface; clicking again
+-unpins and closes it. Explicit child-feature navigation, the canonical
++The chat-header Environment Information control owns one controlled non-modal Kobalte
++Popover and one open signal. Conversation selection, arriving cards and trigger focus leave
++presentation under operator control. Clicking the Environment button, Enter or Space opens
++the same visible surface; activating it again closes it. Escape and outside pointer or focus
++interaction follow the canonical accessible Popover dismissal and focus lifecycle.
++Explicit child-feature navigation, the canonical
+ empty-home projection, and the complete Settings surface hiding the Conversation
+-anchor also close it and clear the pin. Every existing or newly registered
++anchor also close it. Every existing or newly registered
+ Settings section inherits that one surface-level lifecycle and never owns an
+ Environment-specific dismissal path. A new Right Dock opening edge dismisses
+-the currently visible Environment surface and clears its pin;
++the currently visible Environment surface;
+ after the Dock is open, the operator may explicitly reopen Environment and both
+-surfaces retain their responsive coexistence. Closing the Right Dock does not
+-mutate Environment visibility.
+-The hidden-anchor transition closes the existing controlled HoverCard before its
++surfaces retain their responsive coexistence. Outside interaction can dismiss Environment
++while changing another surface; the Right Dock has no independent Environment visibility owner.
++Escape on the topmost Environment surface clears its existing open owner and
++returns focus to the trigger without scrolling; nested menu dismissal retains its
++own layer precedence.
++The hidden-anchor transition closes the existing controlled Popover before its
+ Portal can survive without usable anchor geometry. Environment sits directly
+ after the editor launcher and the Right Dock button remains the trailing
+-chat-header action. The HoverCard retains native `bottom-end` placement and uses
++chat-header action. The Popover retains native `bottom-end` placement and uses
+ Kobalte's cross-axis shift with the shared trailing-control-width-plus-header-gap
+ token, so its right edge occupies that trailing toolbar span instead of covering
+ the wide readable Conversation lane. The Environment instance opts into Floating UI's animation-frame
+@@ -627,9 +628,9 @@ reserves inline-end readable-content clearance at and above the existing
+ 900-pixel desktop boundary. The one `#chatScroll` viewport, its physical right
+ edge, and its native scrollbar remain full width; only the inherited
+ message/Composer/empty-home content insets transition through the shared slow
+-motion token while the HoverCard reveals from its trailing edge. The canonical
++motion token while the Popover reveals from its trailing edge. The canonical
+ reduced-motion preference makes both changes instant. Below that boundary the
+-same portaled HoverCard reserves no content clearance and renders above the
++same portaled Popover reserves no content clearance and renders above the
+ message panel through the canonical overlay layer. Environment and Right Dock
+ continue to read the same board, worktree, Version Control System (VCS), and
+ task-evidence sources without sharing visibility state.
+@@ -1286,6 +1287,12 @@ sheet navigation, graph/timeline/tree exploration, terminal transcript search,
+ 3D camera control, and other presentation-only interactions remain
+ renderer-local.
+ 
++Editable Code presents this local lifetime beside the editor, asks the operator
++to copy or download before leaving, and derives a modified marker from its one
++current source against the published payload. It does not write a durable draft
++or mutate the original publication. Copy/download continue to export the current
++mounted source; recreating the renderer restores the published content.
++
+ The nineteen model-publishable renderers have one canonical payload validator.
+ The search-native Provider Tool projection factors their shared
+ `schemaVersion`, `title`, and `presentation` fields once and keeps only the

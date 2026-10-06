@@ -1,0 +1,79 @@
+--- packages/overlay/src/components/interactive-artifact/CodeArtifact.tsx.before
++++ packages/overlay/src/components/interactive-artifact/CodeArtifact.tsx
+@@ -1,7 +1,8 @@
+-import { createSignal } from "solid-js"
++import { createMemo, createSignal, Show } from "solid-js"
+ import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+ import { CodeEditor } from "../ui/CodeEditor"
+ import { ArtifactFrame } from "./ArtifactFrame"
++import { t } from "../../utils/i18n"
+ import { CODE_EXTENSIONS } from "../../services/artifact-export"
+ 
+ type CodePayload = Extract<InteractiveArtifactPayload, { renderer: "code@1" }>
+@@ -13,12 +14,19 @@
+ 
+ export function CodeArtifact(props: { payload: CodePayload }) {
+   const [source, setSource] = createSignal(props.payload.source)
++  const modified = createMemo(() => source() !== props.payload.source)
+ 
+   return (
+     <ArtifactFrame payload={{ ...props.payload, source: source() }} title={props.payload.title} kind="Code">
+       <div class="msg-artifact-code__toolbar">
+         <span>{props.payload.filename ?? props.payload.language}</span>
++        <Show when={props.payload.editable && modified()}>
++          <span>{t("artifact.code.modified")}</span>
++        </Show>
+       </div>
++      <Show when={props.payload.editable}>
++        <p class="msg-artifact-code__note">{t("artifact.code.local_edits")}</p>
++      </Show>
+       <CodeEditor
+         class="msg-artifact-code"
+         value={source()}
+--- packages/overlay/src/styles/surfaces/messages.css.before
++++ packages/overlay/src/styles/surfaces/messages.css
+@@ -1496,6 +1496,22 @@
+   min-height: calc(180px * var(--ui-scale));
+ }
+ 
++.msg-artifact-code__note {
++  margin: 0;
++  padding: var(--ui-gap-sm) var(--ui-gap-xl);
++  font-size: var(--ui-font-caption);
++  line-height: var(--ui-line-height-normal);
++  color: var(--text-soft);
++}
++
++.msg-artifact-code__note {
++  margin: 0;
++  padding: var(--ui-gap-sm) var(--ui-gap-xl);
++  font-size: var(--ui-font-caption);
++  line-height: var(--ui-line-height-normal);
++  color: var(--text-soft);
++}
++
+ .msg-artifact-code__toolbar {
+   border-bottom: var(--oc-border-width) solid var(--border);
+ }
+--- packages/overlay/src/i18n/en-US.json.before
++++ packages/overlay/src/i18n/en-US.json
+@@ -1896,6 +1896,8 @@
+   "artifact.actions.download": "Download",
+   "artifact.actions.preview": "Preview",
+   "artifact.actions.resources": "Files ({{count}})",
++  "artifact.code.local_edits": "Edits stay in this view. Copy or download before leaving.",
++  "artifact.code.modified": "Modified in this view",
+   "artifact.scope_required": "Open the project that owns this interactive content.",
+   "artifact.renderer_unsupported": "This interactive renderer is not available.",
+   "artifact.workspace.open": "Open",
+--- packages/overlay/src/i18n/zh-CN.json.before
++++ packages/overlay/src/i18n/zh-CN.json
+@@ -1895,6 +1895,8 @@
+   "artifact.actions.download": "下载",
+   "artifact.actions.preview": "预览",
+   "artifact.actions.resources": "文件（{{count}}）",
++  "artifact.code.local_edits": "编辑只保留在当前视图，请在离开前复制或下载。",
++  "artifact.code.modified": "当前视图已修改",
+   "artifact.scope_required": "请打开此交互内容所属的项目。",
+   "artifact.renderer_unsupported": "当前无法使用此交互渲染器。",
+   "artifact.workspace.open": "打开",

@@ -1,0 +1,30 @@
+$ErrorActionPreference='Stop'
+$taskEvidence='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority'
+$taskReceipt=Get-Content -Raw -LiteralPath (Join-Path $taskEvidence 'tool-detail-ui-01-owner.json')|ConvertFrom-Json
+$taskOwners=@($taskReceipt.listener,$taskReceipt.parent,$taskReceipt.launcher)
+foreach($taskOwner in $taskOwners){
+  $taskCurrent=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskOwner.ProcessId)"
+  if(!$taskCurrent -or ([DateTime]$taskCurrent.CreationDate).ToUniversalTime() -ne ([DateTime]$taskOwner.CreationDate).ToUniversalTime() -or $taskCurrent.CommandLine -ne $taskOwner.CommandLine){throw 'Exact presentation process occurrence changed; no shutdown sent'}
+}
+$taskListeners=@(Get-NetTCPConnection -State Listen -LocalPort 17952 -ErrorAction Stop)
+if($taskListeners.Count -ne 1 -or $taskListeners[0].OwningProcess -ne $taskReceipt.listener.ProcessId){throw 'Presentation listener ownership changed'}
+$taskResponse=Invoke-WebRequest -UseBasicParsing -Method Post -Uri 'http://127.0.0.1:17952/shutdown' -ContentType 'application/json' -Body '{}' -TimeoutSec 15
+[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');status=[int]$taskResponse.StatusCode;body=($taskResponse.Content|ConvertFrom-Json);owners=$taskOwners;boundary='Admission only; exact physical occurrences and listener are checked next';ownedTabClosed=$true}|ConvertTo-Json -Depth 8|Set-Content -LiteralPath (Join-Path $taskEvidence 'tool-detail-ui-shutdown-admission.json') -Encoding utf8
+$taskDeadline=[DateTime]::UtcNow.AddSeconds(45)
+do {
+  $taskAfter=@(foreach($taskOwner in $taskOwners){
+    $taskCurrent=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskOwner.ProcessId)"
+    $taskSame=!!$taskCurrent -and ([DateTime]$taskCurrent.CreationDate).ToUniversalTime() -eq ([DateTime]$taskOwner.CreationDate).ToUniversalTime() -and $taskCurrent.CommandLine -eq $taskOwner.CommandLine
+    [ordered]@{expected=$taskOwner;originalOccurrencePresent=$taskSame;samePIDReused=(!!$taskCurrent -and !$taskSame);current=($taskCurrent|Select-Object ProcessId,CreationDate,CommandLine)}
+  })
+  $taskListeners=@(Get-NetTCPConnection -State Listen -LocalPort 17952 -ErrorAction SilentlyContinue|Select-Object LocalAddress,LocalPort,OwningProcess)
+  if(!($taskAfter|Where-Object originalOccurrencePresent) -and !$taskListeners.Count){break}
+  Start-Sleep -Milliseconds 500
+}while([DateTime]::UtcNow -lt $taskDeadline)
+if(($taskAfter|Where-Object originalOccurrencePresent) -or $taskListeners.Count){throw 'Presentation physical settlement incomplete; retain evidence and investigate exact owner'}
+$taskData=Join-Path $taskReceipt.runtime 'data'
+$taskPair=@(foreach($taskName in @('auth.json','models.json')){[ordered]@{path=(Join-Path $taskData $taskName);present=(Test-Path -LiteralPath (Join-Path $taskData $taskName))}})
+if($taskPair|Where-Object present){throw 'Unexpected staged authority file; preserve it and investigate'}
+Copy-Item -LiteralPath (Join-Path $taskReceipt.runtime 'log/dev.log') -Destination (Join-Path $taskEvidence 'tool-detail-ui-runtime.log') -ErrorAction Stop
+[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');purpose=$taskReceipt.purpose;owners=$taskAfter;listeners=$taskListeners;physicalCompletion=$true;copiedAuthorityPresence=$taskPair;boundary='All three exact original owned process occurrences exited and loopback17952 released. No model task, credential staging, source-credential read/write, process kill or user process control.'}|ConvertTo-Json -Depth 8|Set-Content -LiteralPath (Join-Path $taskEvidence 'tool-detail-ui-physical-terminal.json') -Encoding utf8
+Write-Output 'Owned presentation service physically completed; prior copied authority remains absent.'
