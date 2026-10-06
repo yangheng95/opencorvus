@@ -1,0 +1,13 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": ["../packages/opencorvus/node_modules/@types/bun"],
+    "skipLibCheck": true
+  },
+  "include": [
+    "../packages/opencorvus/src/**/*.ts",
+    "../packages/opencorvus/test/task-durable-activity-scope.test.ts",
+    "../packages/opencorvus/test/engine-prompt-runtime-projection.test.ts"
+  ],
+  "exclude": []
+}

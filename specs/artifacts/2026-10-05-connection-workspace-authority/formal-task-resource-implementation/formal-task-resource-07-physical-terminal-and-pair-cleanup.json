@@ -1,0 +1,46 @@
+{
+  "boundary": "Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write",
+  "listeners": null,
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2082,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime\\data\\models.json"
+    }
+  ],
+  "physicalCompletion": true,
+  "occurrence": "formal-task-resource-07-19f53273-2e11-4ddc-ba55-6221362c1130",
+  "chain": [
+    {
+      "expected": {
+        "ProcessId": 76152,
+        "ParentProcessId": 71104,
+        "CreationDate": "2026-10-06T10:07:25.825713+08:00",
+        "ExecutablePath": "C:\\WINDOWS\\system32\\conhost.exe",
+        "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    },
+    {
+      "expected": {
+        "ProcessId": 71104,
+        "ParentProcessId": 70588,
+        "CreationDate": "2026-10-06T10:07:25.813903+08:00",
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CommandLine": "\"C:\\Users\\hengu\\.bun\\bin\\bun.exe\" D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts C:/Users/hengu/AppData/Local/opencorvus/data/auth.json C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\runtime C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\evidence C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\startup.json 17960 formal-task-resource-07-19f53273-2e11-4ddc-ba55-6221362c1130 C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\task-selection.json"
+      },
+      "originalOccurrencePresent": false,
+      "samePIDReused": false
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-06T02:13:50.9241478Z"
+}

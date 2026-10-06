@@ -2514,3 +2514,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Artifact editing and Environment plan](artifacts/2026-10-05-connection-workspace-authority/artifact-editing-environment-implementation-plan.md): actual Sol05 evidence, local-edit clarity, deliberate controlled panel policy and genuine history-only manual acceptance.
 
 - [Actual Code editing and Environment qualification](artifacts/2026-10-05-connection-workspace-authority/root-artifact-editing-qualification.md): final current Code bytes/layout/local guidance, canonical Popover keyboard/layer repair, preserved failed intermediate observations and complete owned physical settlement.
+
+- [Genuine formal Task resource plan](artifacts/2026-10-05-connection-workspace-authority/formal-task-resource-implementation-plan.md): exact Sol identities, complete Task scope/epoch and fixed bounds; actual07 hits cumulative12 and converges to failed, while formal download stays unqualified. Owned cleanup is complete and shared recovery/UI feedback audit continues.

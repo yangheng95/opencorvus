@@ -1,0 +1,33 @@
+[1/1] START test/task-durable-activity-scope.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+2154 |           return
+2155 |         }
+2156 |         const request = toolRequestData(part)
+2157 |         const parent = message.data as { role?: string; time?: { completed?: number } }
+2158 |         if (!existingToolRequest && parent.role === "assistant" && parent.time?.completed !== undefined) {
+2159 |           throw new HostProcessingFaultError(`Tool request Part ${id} cannot be appended after assistant completion`)
+                       ^
+HostProcessingFaultError: Tool request Part prt_g0VXENroW005FbY1swmT cannot be appended after assistant completion
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2159:17)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+(fail) retains completed worker facts in the exact Project and Task root scope with full same-millisecond revisions [4205.42ms]
+(pass) projects a genuine reopened Task epoch and its exact previous terminal occurrence [1814.56ms]
+
+ 1 pass
+ 1 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [7.24s]
+[1/1] DONE test/task-durable-activity-scope.test.ts exit=1 duration=7.40s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\task-durable-activity-scope.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\task-durable-activity-scope.test.ts

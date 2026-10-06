@@ -1,0 +1,54 @@
+[1/3] START test/task-durable-activity-scope.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "parentID"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  }
+]
+(fail) retains completed worker facts in the exact Project and Task root scope with full same-millisecond revisions [4394.57ms]
+(pass) projects a genuine reopened Task epoch and its exact previous terminal occurrence [1773.50ms]
+
+ 1 pass
+ 1 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [7.56s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\task-durable-activity-scope.test.ts
+[1/3] DONE test/task-durable-activity-scope.test.ts exit=1 duration=7.75s
+[2/3] START test/engine-prompt-runtime-projection.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) projects exact process-owned prompt Sessions through the Engine runtime owner [2293.19ms]
+
+ 1 pass
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [3.32s]
+[2/3] DONE test/engine-prompt-runtime-projection.test.ts exit=0 duration=3.48s
+[3/3] START test/mission-task-duplex-snapshot.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Mission Task duplex snapshot > completion reads its exact persisted occurrence after a later input begins [1924.43ms]
+(pass) Mission Task duplex snapshot > accepts one causal terminal reconciliation per Task and reports repeated-read trajectory mismatch [6.34ms]
+(pass) Mission Task duplex snapshot > reports persisted phase timing and per-agent Tool-name counts [1.84ms]
+(pass) Mission Task duplex snapshot > resolves Task-root usage requirements to their exact orchestrator child Sessions [1.06ms]
+(pass) Mission Task duplex snapshot > renews the bounded inactivity deadline from persisted running Tool progress [1725.99ms]
+(pass) Mission Task duplex snapshot > accepts one completion-owned canonical Artifact and exact scheduler usage owners [3.55ms]
+(pass) Mission Task duplex snapshot > accepts the final reply only after persisted assistant and exact execution settlement [1713.54ms]
+(pass) Mission Task duplex snapshot > projects terminal Task and delivery facts into one semantic acceptance frontier [1574.14ms]
+
+ 8 pass
+ 0 fail
+ 40 expect() calls
+Ran 8 tests across 1 file. [8.62s]
+[3/3] DONE test/mission-task-duplex-snapshot.test.ts exit=0 duration=8.79s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\task-durable-activity-scope.test.ts

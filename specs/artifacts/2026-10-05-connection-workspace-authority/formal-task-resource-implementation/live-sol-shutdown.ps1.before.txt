@@ -1,0 +1,116 @@
+param(
+  [Parameter(Mandatory=$true)][string]$RunRoot,
+  [Parameter(Mandatory=$true)][string]$EvidenceRoot,
+  [Parameter(Mandatory=$true)][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix,
+  [string]$KnownChainPath,
+  [switch]$PageClosed
+)
+$ErrorActionPreference='Stop'
+$taskRunRoot=[IO.Path]::GetFullPath($RunRoot)
+$taskEvidence=[IO.Path]::GetFullPath($EvidenceRoot)
+$taskOwner=Get-Content -Raw -LiteralPath (Join-Path $taskRunRoot 'launch-owner.json') | ConvertFrom-Json
+if([IO.Path]::GetFullPath($taskOwner.runRoot) -ne $taskRunRoot -or $taskOwner.evidencePrefix -ne $EvidencePrefix){throw 'Run/prefix does not match exact launch admission'}
+function Write-OwnedReceipt([string]$name,$value){
+  $target=Join-Path $taskEvidence "$EvidencePrefix-$name.json"
+  $stream=[IO.File]::Open($target,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
+  try{$bytes=[Text.UTF8Encoding]::new($false).GetBytes(($value|ConvertTo-Json -Depth 12));$stream.Write($bytes,0,$bytes.Length)}finally{$stream.Dispose()}
+}
+foreach($name in @('final-provider-audit','shutdown-admission','physical-terminal-and-pair-cleanup')){if(Test-Path -LiteralPath (Join-Path $taskEvidence "$EvidencePrefix-$name.json")){throw 'Evidence prefix already used; no action admitted'}}
+function Same-Occurrence($current,$expected){
+  return !!$current -and $current.ProcessId -eq $expected.ProcessId -and ([DateTime]$current.CreationDate).ToUniversalTime() -eq ([DateTime]$expected.CreationDate).ToUniversalTime() -and $current.CommandLine -eq $expected.CommandLine -and $current.ExecutablePath -eq $expected.ExecutablePath
+}
+$taskKnown=@{}
+foreach($entry in @($taskOwner.observedProcessChain)+@($taskOwner.owner)){
+  if(!$entry.ProcessId -or !$entry.CreationDate -or !$entry.CommandLine -or !$entry.ExecutablePath){throw 'Incomplete physical chain occurrence'}
+  $taskKnown[[string]$entry.ProcessId]=$entry
+}
+if($KnownChainPath){
+  $chain=Get-Content -Raw -LiteralPath $KnownChainPath|ConvertFrom-Json
+  if($chain.occurrence -ne $taskOwner.occurrence){throw 'Observed chain belongs to another startup occurrence'}
+  foreach($entry in @($chain.processes)){
+    if(!$entry.ProcessId -or !$entry.CreationDate -or !$entry.CommandLine -or !$entry.ExecutablePath){throw 'Incomplete supplied physical occurrence'}
+    if($taskKnown.ContainsKey([string]$entry.ProcessId) -and !(Same-Occurrence $entry $taskKnown[[string]$entry.ProcessId])){throw 'Conflicting same-PID chain occurrences; review exact lineage'}
+    $taskKnown[[string]$entry.ProcessId]=$entry
+  }
+}
+function Observe-OwnedChain {
+  $all=@(Get-CimInstance Win32_Process -ErrorAction Stop)
+  do{
+    $added=$false
+    foreach($candidate in $all){
+      $parent=$taskKnown[[string]$candidate.ParentProcessId]
+      if(!$parent){continue}
+      $actualParent=$all|Where-Object ProcessId -eq $parent.ProcessId|Select-Object -First 1
+      if(!(Same-Occurrence $actualParent $parent)){continue}
+      if(([DateTime]$candidate.CreationDate).ToUniversalTime() -lt ([DateTime]$parent.CreationDate).ToUniversalTime()){continue}
+      if(!$taskKnown.ContainsKey([string]$candidate.ProcessId)){
+        if(!$candidate.CommandLine -or !$candidate.ExecutablePath){throw 'Cannot establish full owned descendant occurrence'}
+        $taskKnown[[string]$candidate.ProcessId]=$candidate|Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+        $added=$true
+      }elseif(!(Same-Occurrence $candidate $taskKnown[[string]$candidate.ProcessId])){throw 'Descendant PID was reused under a live owned parent; preserve pair for exact-chain review'}
+    }
+  }while($added)
+  return @($taskKnown.Values|ForEach-Object{
+    $expected=$_;$current=$all|Where-Object ProcessId -eq $expected.ProcessId|Select-Object -First 1
+    [ordered]@{expected=$expected;originalOccurrencePresent=(Same-Occurrence $current $expected);samePIDReused=(!!$current -and !(Same-Occurrence $current $expected))}
+  })
+}
+function Owned-Listeners {
+  # Query the table once; failure to observe it is a blocker, not an empty receipt.
+  return @(Get-NetTCPConnection -ErrorAction Stop|Where-Object{$_.State -eq 'Listen' -and $_.LocalPort -eq $taskOwner.port}|Select-Object LocalAddress,LocalPort,OwningProcess)
+}
+$taskChain=Observe-OwnedChain
+$taskRoot=$taskChain|Where-Object{$_.expected.ProcessId -eq $taskOwner.owner.ProcessId}|Select-Object -First 1
+$taskListeners=Owned-Listeners
+$taskAuditFile=Get-ChildItem -LiteralPath $taskOwner.evidence -Filter 'provider-*.json' -ErrorAction Stop|Sort-Object LastWriteTimeUtc|Select-Object -Last 1
+if($taskAuditFile){Write-OwnedReceipt 'final-provider-audit' (Get-Content -Raw -LiteralPath $taskAuditFile.FullName|ConvertFrom-Json)}else{Write-OwnedReceipt 'final-provider-audit' @{available=$false;boundary='No model receipt observed, possibly pre-audit startup failure; not model acceptance'}}
+$admission=[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');occurrence=$taskOwner.occurrence;owner=$taskOwner.owner;pageClosed=[bool]$PageClosed;dispatch=$false;boundary='Shutdown admission is distinct from physical settlement and copied-pair cleanup'}
+if($taskRoot.originalOccurrencePresent){
+  if($taskListeners.Count -eq 0){$admission.reason='Original root still live without listener; public shutdown unavailable';Write-OwnedReceipt 'shutdown-admission' $admission;throw 'Live root has no owned public listener; retain pair for Root review'}
+  if($taskListeners.Count -ne 1 -or $taskListeners[0].OwningProcess -ne $taskOwner.owner.ProcessId){throw 'Listener does not match exact original root; no shutdown sent'}
+  $response=Invoke-WebRequest -UseBasicParsing -Method Post -Uri "http://127.0.0.1:$($taskOwner.port)/shutdown" -ContentType 'application/json' -Body '{}' -TimeoutSec 15
+  $admission.dispatch=$true;$admission.status=[int]$response.StatusCode;$admission.body=$response.Content|ConvertFrom-Json
+  Write-OwnedReceipt 'shutdown-admission' $admission
+}else{
+  if($taskListeners.Count){throw 'Original occurrence gone but port belongs to another listener; no shutdown or cleanup'}
+  $admission.reason='Original occurrence already exited; no listener; no shutdown dispatched'
+  Write-OwnedReceipt 'shutdown-admission' $admission
+}
+$deadline=[DateTime]::UtcNow.AddSeconds(45)
+do{
+  $taskChain=Observe-OwnedChain;$taskListeners=Owned-Listeners
+  if(!@($taskChain|Where-Object originalOccurrencePresent).Count -and !$taskListeners.Count){break}
+  Start-Sleep -Milliseconds 500
+}while([DateTime]::UtcNow -lt $deadline)
+if(@($taskChain|Where-Object originalOccurrencePresent).Count -or $taskListeners.Count){
+  Write-OwnedReceipt 'physical-terminal-and-pair-cleanup' @{physicalCompletion=$false;chain=$taskChain;listeners=$taskListeners;pairedCleanup='not attempted; physical owner still present'}
+  throw 'Whole observed chain/port settlement incomplete; retain copied pair'
+}
+$taskOwnedData=[IO.Path]::GetFullPath((Join-Path $taskOwner.runtime 'data'))
+$taskExpectedData=[IO.Path]::GetFullPath((Join-Path $taskRunRoot 'runtime/data'))
+if($taskOwnedData -ne $taskExpectedData){throw 'Pair cleanup escaped exact owned runtime/data'}
+foreach($ancestor in @($taskRunRoot,(Join-Path $taskRunRoot 'runtime'),$taskExpectedData)){
+  if(Test-Path -LiteralPath $ancestor){
+    $ancestorItem=Get-Item -LiteralPath $ancestor -ErrorAction Stop
+    if($ancestorItem.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Owned cleanup ancestor is a reparse point; preserve pair for review'}
+  }
+}
+$taskPair=@();$cleanupErrors=@()
+foreach($name in @('auth.json','models.json')){
+  $target=[IO.Path]::GetFullPath((Join-Path $taskOwnedData $name))
+  if([IO.Path]::GetDirectoryName($target) -ne $taskExpectedData){throw 'Unexpected copied-authority target'}
+  try{
+    if(Test-Path -LiteralPath $target){
+      $item=Get-Item -LiteralPath $target -ErrorAction Stop
+      if($item.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Copied authority member is a reparse point; manual review required'}
+      Remove-Item -LiteralPath $target -ErrorAction Stop
+      $taskPair += @{path=$target;outcome='removed';copiedLength=$item.Length;presentAfter=(Test-Path -LiteralPath $target)}
+    }else{$taskPair += @{path=$target;outcome='already_absent';presentAfter=$false}}
+  }catch{
+    $cleanupErrors += $_.Exception.Message
+    $taskPair += @{path=$target;outcome='error';errorType=$_.Exception.GetType().Name;presentAfter=(Test-Path -LiteralPath $target)}
+  }
+}
+Write-OwnedReceipt 'physical-terminal-and-pair-cleanup' @{observedAtUtc=[DateTime]::UtcNow.ToString('o');occurrence=$taskOwner.occurrence;physicalCompletion=$true;chain=$taskChain;listeners=$taskListeners;copiedPair=$taskPair;pairedCleanupComplete=($cleanupErrors.Count -eq 0);boundary='Whole observed exact chain gone and port released before independent paired-copy cleanup; no exit-code invention/kill/source-authority write'}
+if($cleanupErrors.Count){throw 'Paired cleanup incomplete; exact member error receipt retained'}
+Write-Output 'Owned observed process chain settled and copied authority pair cleanup recorded.'

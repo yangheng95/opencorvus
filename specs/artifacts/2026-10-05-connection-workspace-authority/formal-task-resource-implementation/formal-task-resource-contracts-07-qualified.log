@@ -1,0 +1,12 @@
+[1/1] START test/task-durable-activity-scope.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) retains completed worker facts in the exact Project and Task root scope with full same-millisecond revisions [4508.56ms]
+(pass) projects a genuine reopened Task epoch and its exact previous terminal occurrence [1750.59ms]
+
+ 2 pass
+ 0 fail
+ 14 expect() calls
+Ran 2 tests across 1 file. [7.49s]
+[1/1] DONE test/task-durable-activity-scope.test.ts exit=0 duration=7.66s

@@ -1,0 +1,33 @@
+[1/1] START test/task-durable-activity-scope.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1387 |           sessionID: msg.sessionID,
+1388 |         })
+1389 |         if (prior.role === "assistant" && prior.time.completed !== undefined) {
+1390 |           const { id: _id, sessionID: _sessionID, ...nextData } = persistedMessage
+1391 |           if (!jsonEquivalent(existing.data, nextData)) {
+1392 |             throw new Error(`Completed assistant Message ${msg.id} is immutable`)
+                             ^
+error: Completed assistant Message msg_g0VXEO5Ac001a7dKMntI is immutable
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:1392:23
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at upsertMessageRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2227:52)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2392:12
+(fail) retains completed worker facts in the exact Project and Task root scope with full same-millisecond revisions [4423.75ms]
+(pass) projects a genuine reopened Task epoch and its exact previous terminal occurrence [1767.59ms]
+
+ 1 pass
+ 1 fail
+ 8 expect() calls
+Ran 2 tests across 1 file. [7.49s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\task-durable-activity-scope.test.ts
+[1/1] DONE test/task-durable-activity-scope.test.ts exit=1 duration=7.69s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\task-durable-activity-scope.test.ts

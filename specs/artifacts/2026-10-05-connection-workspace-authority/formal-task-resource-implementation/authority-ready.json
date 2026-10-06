@@ -1,0 +1,140 @@
+{
+  "pid": 71104,
+  "owner": {
+    "pid": 71104,
+    "processInstanceID": "win32:639268492458139030",
+    "occurrenceID": "9d92383d-8848-4baa-b2fc-03c559a7ab05"
+  },
+  "model": "openai/gpt-6.1-sol",
+  "credential": "available",
+  "catalog": "projected",
+  "pairedModels": true,
+  "executionStarted": false,
+  "admission": {
+    "projectID": "prj_hNAMLbCMRJ5uCbLlHnnd",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-task-resource-07\\project",
+    "packageRevision": {
+      "scope": "built_in",
+      "projectID": null,
+      "namespace": "builtin",
+      "id": "base",
+      "version": "2026.09.30.1",
+      "packageDigest": "f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"
+    },
+    "processMode": "native",
+    "matrix": [
+      {
+        "kind": "projected-worker",
+        "agentID": "base-researcher",
+        "baseRole": "explore",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "base-planner",
+        "baseRole": "delegated-worker",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "base-developer",
+        "baseRole": "build",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "base-tester",
+        "baseRole": "delegated-worker",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "universal-build",
+        "baseRole": "build",
+        "capabilityOwner": "platform",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "host",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "compaction",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "title",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "summary",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "coding",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "chat",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "work",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "control",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "mission",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      }
+    ],
+    "providerAPIModel": "gpt-6.1-sol",
+    "boundary": "Available actual registry identities and intended configuration; no prediction of dispatch or request origin"
+  }
+}

@@ -98,7 +98,6 @@ test("projects exact process-owned prompt Sessions through the Engine runtime ow
       if (primaryFailure) throw primaryFailure
       if (cleanupFailures.length === 1) throw cleanupFailures[0]
       if (cleanupFailures.length > 1) throw new AggregateError(cleanupFailures, "Prompt owner cleanup failed")
-      expect(listOwnedPromptSessionsForTask(taskID)).toEqual([])
     },
   })
 })

@@ -1,0 +1,32 @@
+# Formal Task running UI context review
+
+## Recall and scope
+
+Viewed Root actual formal-task-07-running.png for tsk_g00VXEP9g1005gc0dysi on17960. Read only current composer/selection/CardParts/message-origin/tree projection, canonical transport origin definition, current07-panel and Root redacted task-observation-at-budget-07.json. No HTTP/browser/process/model/credential/source/Git/UI test/checker or delegation. Only this file written. Formal resource acceptance remains FAILED/unmet: Root actual cumulative12 budget blocks13th request; do not increase/reset budget or create a replacement Task. Snapshot reflects earlier running occurrence, not latest Root final public status.
+
+## Code / Mission / Base context
+
+Real snapshot task.product_pillar=code, source=api, title Formal text delivery. main.tsx543 selectTaskWithUILifecycle reads actual ledger Task row and sets ComposerIntent productPillar=row.productPillar, conversationTarget=mission556. resolvedActiveComposerIntent2037 also maps any non-chat active ledger item (including Task) to mission target. ChatComposer1386–1427 read-only badges project those actual values, and ComposerReferenceSelector229 shows activeExpertSquad.name; root Session snapshot prompt_profile.active=base. Therefore Code/Mission/Base is current source behavior and role-context presentation, not evidence Task executes as a Mission Session or wrong agent. Actual running cards show orchestrator and base-tester, matching snapshot agent facts.
+
+However public wording can confuse: Mission badge represents this composer target mapping, not real Task.kind/owner. Actual selected Task is neither standalone Work nor a Mission row. The existing labels lack explicit distinction between selected Task's immutable execution context and launcher target terminology. Root may consider a separately admitted clearer Task-context label, using exact current row identity rather than changing backend role/tool routes. This review does not infer a functional dispatch bug from badge text.
+
+## Two Handoff contexts: exact natural message evidence
+
+Redacted snapshot has two different actual user-role message identities in orchestrator Session ses_-zUSlapQIzz8AyW0u909:
+
+- msg_g0VXEPAcb00ztRdnHY00, author=user, agent=orchestrator, created1791252554297, text part prt_g0VXEPAcD00cJQQhuC68 begins # User Request and contains the exact original Formal Task request. Producer orchestrator/agent.ts1200 calls existing renderUserRequestSection; intent/request-prompt.ts21 writes Task request section.
+- msg_task-root-control_art_h8IBIMVoSqeUncKjiDsW_art_h8IBIMVoSqeUncKjiDsW, author=orchestrator, role=user, created1791252554298, separate part identifies Orchestrator Control Occurrence/Wake Provenance and explicitly says it is not a new user-authored message. Producer orchestrator/agent.ts1313/1362 builds canonical initial wake/control context.
+
+Assistant msg_hFjxDs6yfD3UwlVde4TE has parentID equal control message and acceptedInputMessageIDs containing BOTH actual inputs. Thus the two screenshot disclosures are consistent with two distinct accepted participant messages, not one duplicated message/result. No evidence of duplicated content creation or double model input is established by identical visual labels. Worker base-tester receives separate actual message msg_g0VXEPLN600dizL3IH08 in ses_hyGhdltHIigARSoAxzt3, authored orchestrator with actual workerTurnDescriptor; its own Handoff context is legitimate delegation.
+
+## Why original human request is not directly visible
+
+Canonical transport index581 classifies every role=user/non-main-channel input as delegated context except the two declared direct-human sources right-sidebar-conversation/mission.operator. It does not distinguish author=user initial Task request from author=orchestrator control prompt. conversationMessageDisplayStage592 assigns these user-role inputs to receiving channel. TreeWriter applies this same origin predicate in live/hydrated data and stores collapsedContextMessageIDs. CardParts338 creates one DelegatedContextDisclosure per actual messageID; partitionCardMessageRuns keeps actual boundary identities. Disclosure defaults collapsed, leaving original request behind first identical Handoff context. Snapshot confirms original request text actually exists in visibleParts; screenshot missing direct prose is not proof message lost or hidden from transport.
+
+This is a precise usability/semantic seam: human-authored initial Task request and orchestration wake are distinct provenance, but both receive same generic label/default collapse. Existing shared display contract deliberately collapses non-main provider-facing input, so current source conforms to that broad rule. Root must decide whether initial creator input deserves explicit direct-human treatment or a clearer disclosure label. Do not use title/keywords/body parsing; actual author/source/Task creation provenance and canonical source schema are the appropriate evidence. If changing predicate, audit ALL producers/live/history/Task/Mission/worker sources before implementing, as this is transport-wide semantics and cannot be fixed with a Task-only UI shadow message or copied request bubble.
+
+## Failure and qualification limits
+
+Budget exhaustion is a real checker-boundary error, not evidence of model laziness or generic product failure. Snapshot contains base-tester assistant msg_g0VXEPRjk00K0LSBUIa7 finish=error with UnknownError E2E_REQUEST_BUDGET_EXHAUSTED; root first assistant previously finish=stop is not a completed Task resource declaration. Root latest facts include root error, Not running UI versus durable last active and a published hello resource without completion declaration. Those terminal convergence discrepancies require Root's mandated shared Task/Mission/Session occurrence audit; this review neither resolves nor localizes them. No completed formal download is claimed.
+
+Root manual next evidence should expand both actual Handoff disclosures and capture original request versus wake text under same Task header, inspect actual badges/references, and preserve natural message identities. Current snapshot proves different accepted messages and preserved original content, but no browser action was performed by this child. A narrow disclosure/presentation improvement may be proposed only after Root admission; no host routing/gate, synthetic user bubble, parallel message or model-policy workaround is justified.
