@@ -2521,7 +2521,6 @@ function OverlayRoot() {
           conversationExperience={conversationSourceExperience()}
           composerIntent={composerIntent()}
           activeComposerIntent={resolvedActiveComposerIntent()}
-          activeWorkItemKind={workLedgerActiveItem({ taskID: activeTaskID(), sessionID: activeSessionID() })?.kind}
           onComposerIntentChange={(intent) =>
             runUserNavigation("composer.mode-change", () => handleComposerIntentChange(intent))
           }

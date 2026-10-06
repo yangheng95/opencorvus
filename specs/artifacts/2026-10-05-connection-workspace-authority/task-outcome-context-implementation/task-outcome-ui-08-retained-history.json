@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-06T02:45:39.9311147Z",
+  "beforeMessages": 12,
+  "afterMessages": 12,
+  "retainedMessageIDsEqual": true,
+  "owners": 0,
+  "unresolvedInbox": 0,
+  "taskOpenedEvents": [
+    {
+      "id": "pev_g0VXEP9np00253HGyiJV",
+      "type": "task.execution.opened",
+      "execution_epoch": 1,
+      "emitted_at": 1791252550665
+    }
+  ],
+  "boundary": "Real retained messages and original Task occurrence after history-only UI work; no new model input/task, no paired staging; not a universal HTTP request origin audit"
+}

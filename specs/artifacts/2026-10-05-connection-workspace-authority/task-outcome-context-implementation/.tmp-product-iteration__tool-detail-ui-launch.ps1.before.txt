@@ -1,0 +1,60 @@
+param(
+  [Parameter(Mandatory=$true)][string]$RunRoot,
+  [Parameter(Mandatory=$true)][string]$SourceOwnerReceipt,
+  [Parameter(Mandatory=$true)][ValidateRange(1,65535)][int]$Port,
+  [Parameter(Mandatory=$true)][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix
+)
+$ErrorActionPreference='Stop'
+$taskRunRoot=[IO.Path]::GetFullPath($RunRoot)
+$taskSourceOwner=Get-Content -Raw -LiteralPath $SourceOwnerReceipt|ConvertFrom-Json
+$taskRuntime=[IO.Path]::GetFullPath($taskSourceOwner.runtime)
+$taskProject=[IO.Path]::GetFullPath($taskSourceOwner.project)
+$taskOriginal=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskSourceOwner.owner.ProcessId)"
+if($taskOriginal -and ([DateTime]$taskOriginal.CreationDate).ToUniversalTime() -eq ([DateTime]$taskSourceOwner.owner.CreationDate).ToUniversalTime() -and $taskOriginal.CommandLine -eq $taskSourceOwner.owner.CommandLine){throw 'Original history runtime is still owned by its prior occurrence'}
+foreach($taskPath in @($taskRuntime,$taskProject)){if(!(Test-Path -LiteralPath $taskPath -PathType Container)){throw 'Genuine retained history input missing'}}
+$taskReceipt=Join-Path $taskRunRoot 'startup.json'
+$taskPort=$Port
+$taskOccurrence=$EvidencePrefix+'-'+[Guid]::NewGuid().ToString()
+if(Test-Path -LiteralPath $taskRunRoot){throw 'Preserve existing occurrence instead of overwrite'}
+if(@(Get-NetTCPConnection -ErrorAction Stop|Where-Object{$_.State -eq 'Listen' -and $_.LocalPort -eq $taskPort}).Count){throw 'Owned presentation port occupied'}
+foreach($taskName in @('auth.json','models.json')){if(Test-Path -LiteralPath (Join-Path $taskRuntime ('data/'+$taskName))){throw 'Presentation launch expects prior paired cleanup'}}
+if((Test-Path -LiteralPath 'C:/ProgramData/opencorvus/opencorvus.jsonc') -or (Test-Path -LiteralPath 'C:/ProgramData/opencorvus/opencorvus.json')){throw 'Managed inputs require separate review'}
+$taskProxy=Get-ItemProperty -LiteralPath 'HKCU:/Software/Microsoft/Windows/CurrentVersion/Internet Settings' -ErrorAction SilentlyContinue
+if(($taskProxy.ProxyServer -match '@') -or $taskProxy.AutoConfigURL){throw 'System proxy credential/PAC input requires review; values suppressed'}
+foreach($taskName in @('home','appdata','localappdata','temp','xdg-config','xdg-data','xdg-cache','xdg-state')){[IO.Directory]::CreateDirectory((Join-Path $taskRunRoot $taskName))|Out-Null}
+$taskOldLog=Join-Path $taskRuntime 'log/dev.log'
+if(Test-Path -LiteralPath $taskOldLog){[IO.File]::Copy($taskOldLog,(Join-Path $taskRunRoot 'prior-sol-dev-preserved.log'),$false)}
+$taskOriginal=@{}
+Get-ChildItem Env:|ForEach-Object{$taskOriginal[$_.Name]=$_.Value}
+$taskEnvironment=@{}
+foreach($taskName in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($taskOriginal.ContainsKey($taskName)){$taskEnvironment[$taskName]=$taskOriginal[$taskName]}}
+$taskOwnedHome=Join-Path $taskRunRoot 'home'
+$taskEnvironment.HOME=$taskOwnedHome
+$taskEnvironment.USERPROFILE=$taskOwnedHome
+$taskEnvironment.HOMEDRIVE='C:'
+$taskEnvironment.HOMEPATH=$taskOwnedHome.Substring(2).Replace('/','\')
+$taskEnvironment.APPDATA=Join-Path $taskRunRoot 'appdata'
+$taskEnvironment.LOCALAPPDATA=Join-Path $taskRunRoot 'localappdata'
+$taskEnvironment.TEMP=Join-Path $taskRunRoot 'temp'
+$taskEnvironment.TMP=$taskEnvironment.TEMP
+$taskEnvironment.TMPDIR=$taskEnvironment.TEMP
+$taskEnvironment.XDG_CONFIG_HOME=Join-Path $taskRunRoot 'xdg-config'
+$taskEnvironment.XDG_DATA_HOME=Join-Path $taskRunRoot 'xdg-data'
+$taskEnvironment.XDG_CACHE_HOME=Join-Path $taskRunRoot 'xdg-cache'
+$taskEnvironment.XDG_STATE_HOME=Join-Path $taskRunRoot 'xdg-state'
+$taskEnvironment.OPENCORVUS_HOME=$taskRuntime
+$taskEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1'
+$taskEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+try{
+  Get-ChildItem Env:|ForEach-Object{[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+  foreach($taskName in $taskEnvironment.Keys){[Environment]::SetEnvironmentVariable($taskName,$taskEnvironment[$taskName],'Process')}
+  $taskArguments=@('run','dev','serve','--hostname','127.0.0.1','--port',[string]$taskPort,'--project-dir',$taskProject,'--startup-receipt',$taskReceipt,'--startup-occurrence',$taskOccurrence,'--log-level','INFO')
+  if(@($taskArguments|Where-Object{$_ -match '[\s"]'}).Count){throw 'Launch argument quoting requires review'}
+  $taskProcess=Start-Process -FilePath 'C:/Users/hengu/.bun/bin/bun.exe' -ArgumentList $taskArguments -WorkingDirectory 'D:/myhexin-local/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $taskRunRoot 'stdout.log') -RedirectStandardError (Join-Path $taskRunRoot 'stderr.log') -PassThru
+  $taskLauncher=Get-CimInstance Win32_Process -Filter "ProcessId=$($taskProcess.Id)"|Select-Object ProcessId,ParentProcessId,CreationDate,ExecutablePath,CommandLine
+  [ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');runRoot=$taskRunRoot;runtime=$taskRuntime;project=$taskProject;receipt=$taskReceipt;port=$taskPort;occurrence=$taskOccurrence;evidencePrefix=$EvidencePrefix;sourceOwnerReceipt=[IO.Path]::GetFullPath($SourceOwnerReceipt);launcher=$taskLauncher;environmentNames=@($taskEnvironment.Keys|Sort-Object);credentialStaging='None; previous copied pair removed';purpose='Actual persisted history presentation only; Root must not send a new model task';physicalCleanup='Exact listener/ancestors/launcher and all observed descendant occurrences must settle'}|ConvertTo-Json -Depth 8|Set-Content -LiteralPath (Join-Path $taskRunRoot 'launch.json') -Encoding utf8
+  Write-Output "Owned presentation launcher $($taskProcess.Id) admitted; startup and exact chain still require verification."
+}finally{
+  Get-ChildItem Env:|ForEach-Object{[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+  foreach($taskName in $taskOriginal.Keys){[Environment]::SetEnvironmentVariable($taskName,$taskOriginal[$taskName],'Process')}
+}

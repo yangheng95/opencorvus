@@ -871,24 +871,19 @@ without changing activity time.
 
 Work Ledger and the selected Conversation header expose one binary activity
 projection for Task and Mission: `Running` while execution is active and
-`Not running` otherwise. A running row may use the shared spinner. Task rows
-and the selected Task title separately show the current execution's terminal
-outcome (`Completed`, `Failed`, or `Cancelled`) through one shared compact
-indicator. This derives only from the current validated Task lifecycle row;
-a reopened active execution does not carry its predecessor's result. Raw Task
+`Not running` otherwise. A running row may use the shared spinner; an inactive
+row has no success, failure, cancellation, or completion lamp. Raw Task
 `active` lifecycle alone does not imply running: the shared Task projection
 checks current streaming/retry occurrences across its owned Session tree. A
 parked scheduler is inactive unless a descendant is executing. Historical
 lifecycle events do not establish liveness after process restart. Task
 execution-lifecycle publications invalidate the existing global Work Ledger
 stream so pause, wake and settlement update mounted rows and Mission counts.
-Task lifecycle remains available for diagnostics, timestamp validation,
-recovery, explicit operator cancellation and the separate execution outcome.
-That outcome does not establish business deliverable acceptance; Mission
-acceptance remains an evidence judgment outside the activity projection.
-The active Composer context identifies an actual selected Task as `Task`,
-using the same current ledger kind. Its existing conversation-target routing,
-product pillar, profile, tools and natural participant messages are unchanged.
+Raw Task
+lifecycle remains in the transport only for diagnostics, timestamp validation,
+recovery, and explicit operator cancellation. The interface never converts
+`completed`, `failed`, or `cancelled` into a business status, and Mission
+acceptance remains an evidence judgment outside this activity projection.
 
 Work Ledger selection projects one complete visible ancestor path without
 creating expansion or Project-selection state. A Mission whose canonical child

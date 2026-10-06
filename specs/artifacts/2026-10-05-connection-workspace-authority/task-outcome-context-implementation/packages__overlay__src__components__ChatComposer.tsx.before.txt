@@ -112,7 +112,6 @@ import {
   DIRECTORY_REFERENCE_MIME,
 } from "@opencorvus-ai/transport-protocol"
 import type { ComposerIntent, ConversationTarget, ProductPillar } from "@opencorvus-ai/transport-protocol"
-import type { WorkLedgerKind } from "../services/work-ledger"
 
 // ── Types ──
 
@@ -200,8 +199,6 @@ export interface ChatComposerProps {
   conversationExperience?: ConversationExperience
   composerIntent: ComposerIntent
   activeComposerIntent?: ComposerIntent
-  /** Current owned work item kind for the read-only context label. */
-  activeWorkItemKind?: WorkLedgerKind
   onComposerIntentChange: (intent: ComposerIntent) => void
 }
 
@@ -1412,21 +1409,13 @@ export function ChatComposer(props: ChatComposerProps) {
             data-target={activeComposerIntent().conversationTarget}
           >
             <Icon
-              name={
-                props.activeWorkItemKind === "task"
-                  ? "file-document"
-                  : activeComposerIntent().conversationTarget === "mission"
-                    ? "mission"
-                    : "message"
-              }
+              name={activeComposerIntent().conversationTarget === "mission" ? "mission" : "message"}
               size="compact"
             />
             <span class="composer-context-flag-label">
-              {props.activeWorkItemKind === "task"
-                ? t("work_ledger.kind.task")
-                : activeComposerIntent().conversationTarget === "mission"
-                  ? t("chat.composer_target_mission")
-                  : t("chat.composer_target_chat")}
+              {activeComposerIntent().conversationTarget === "mission"
+                ? t("chat.composer_target_mission")
+                : t("chat.composer_target_chat")}
             </span>
           </Badge>
           <ComposerReferenceSelector

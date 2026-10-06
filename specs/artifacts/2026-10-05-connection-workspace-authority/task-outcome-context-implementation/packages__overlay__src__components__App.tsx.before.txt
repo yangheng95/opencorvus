@@ -15,7 +15,6 @@ import { SidebarVersionLabel } from "./SidebarVersionLabel"
 import { SidebarUpdateButton } from "./SidebarUpdateButton"
 import { SessionDialogHost } from "./SessionDialogHost"
 import { TaskStatusHeader } from "./TaskStatusHeader"
-import { TaskOutcomeBadge } from "./TaskOutcomeBadge"
 import { TitlebarBrand } from "./titlebar/TitlebarBrand"
 import { TitlebarMenubar } from "./titlebar/TitlebarMenubar"
 import { TitlebarNavigation } from "./titlebar/TitlebarNavigation"
@@ -464,15 +463,6 @@ export function App(props: AppProps) {
                                   onRename={props.onRenameConversationItem}
                                   onArchive={props.onArchiveConversationItem}
                                 />
-                                <Show
-                                  when={
-                                    props.conversationItem()?.kind === "task"
-                                      ? (props.conversationItem() as WorkLedgerTaskRow)
-                                      : undefined
-                                  }
-                                >
-                                  {(task) => <TaskOutcomeBadge status={task().lifecycleStatus} />}
-                                </Show>
                                 <div class="chat-header-status" id="solidTaskStatusMount">
                                   <TaskStatusHeader />
                                 </div>
