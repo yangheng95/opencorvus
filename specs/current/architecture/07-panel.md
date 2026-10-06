@@ -538,6 +538,15 @@ their exact identities, indexes and destinations as lightweight links.
 SelectControl uses the installed Select.Value owner for current-value identity
 and accessible trigger labeling. Its same null renderer supplies the root
 placeholder; domain surfaces keep their existing value/option renderers.
+SelectControl suppresses duplicate key-selection events through the installed
+SelectionManager so translated option refresh cannot become user navigation.
+Actual enabled Item activation dismisses the same library-owned popup even when
+the selected key is unchanged; selection and modifier behavior stay in the Item.
+Enabled Enter/Space activation consumes the browser default before focus can
+move into the Composer, while the installed Item still owns the selection.
+The Composer reference picker owns Escape as disclosure dismissal in both its
+search and Listbox. Its current directives remain selected until an explicit
+selection change; clearing the last selected reference remains available.
 
 Feedback is the shared inline loading/failure/notice primitive for settings,
 ledger lists and message submission. Optional diagnostics use the existing

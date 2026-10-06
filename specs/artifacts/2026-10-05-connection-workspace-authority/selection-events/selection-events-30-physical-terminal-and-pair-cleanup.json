@@ -1,0 +1,65 @@
+{
+  "nativeSettlement": {
+    "occurrence": "selection-events-30-563fe4fa-5c08-4ff2-83fe-44798c35a8be",
+    "outcome": "settled",
+    "host": {
+      "pid": 35264,
+      "processInstanceID": "win32:639268937621367756",
+      "occurrenceID": "f02acfd2-0261-44bf-b04e-a9d60a2828bb"
+    },
+    "target": {
+      "pid": 76144,
+      "processInstanceID": "win32:639268937629373731",
+      "occurrenceID": "bd812720-94cf-432f-a38e-9a38270846d1"
+    },
+    "observedAtUtc": "2026-10-06T14:42:29.895Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 76144,
+        "processInstanceID": "win32:639268937629373731",
+        "occurrenceID": "bd812720-94cf-432f-a38e-9a38270846d1"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 35264,
+        "processInstanceID": "win32:639268937621367756",
+        "occurrenceID": "f02acfd2-0261-44bf-b04e-a9d60a2828bb"
+      }
+    }
+  ],
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-30\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "copiedLength": 2082,
+      "outcome": "removed"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-publication-30\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "outcome": "removed"
+    }
+  ],
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "occurrence": "selection-events-30-563fe4fa-5c08-4ff2-83fe-44798c35a8be",
+  "observedAtUtc": "2026-10-06T14:42:31.4401896Z",
+  "pairedCleanupComplete": true
+}

@@ -1,0 +1,68 @@
+Browser tab: 10, Title: "OpenCorvus", URL: "http://localhost:17995/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:17995/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 container Settings navigation
+				5 button Back to OpenCorvus
+			6 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				7 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				9 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				10 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		11 container panelBody
+			12 container Description: Chat shortcuts, ID: workspaceNavigation
+				13 container Chat shortcuts
+					14 button Chats
+					15 button Mission Board
+					16 button Scheduled
+					17 button Expert Squads
+					18 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					19 button Settings
+				20 button About
+				21 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			22 container Description: Appearance, ID: configDialog
+				23 container tabs-cl-231
+					24 container configSidebar
+						25 button Back to app
+						26 search text field (settable) Search settings pages...
+						27 tab group
+							28 text Application
+							29 tab (selectable, settable, boolean) General, Value: 0, ID: config-tab-general
+							30 tab (selected, settable, boolean) Appearance, Value: 1, ID: config-tab-appearance
+							31 tab (selectable, settable, boolean) Network, Value: 0, ID: config-tab-network
+							32 tab (selectable, settable, boolean) Usage, Value: 0, ID: config-tab-usage
+							33 text Product
+							34 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+							35 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+							36 text Missions & Automation
+							37 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+							38 tab (selectable, settable, boolean) Scheduled tasks, Value: 0, ID: config-tab-scheduled
+							39 text Expert Squads
+							40 tab (selectable, settable, boolean) Squad Market, Value: 0, ID: config-tab-expert-squad-install
+							41 tab (selectable, settable, boolean) Installed Expert Squads, Value: 0, ID: config-tab-expert-squad
+							42 text Shared Resources
+							43 tab (selectable, settable, boolean) Providers, Value: 0, ID: config-tab-providers
+							44 tab (selectable, settable, boolean) Skill Library, Value: 0, ID: config-tab-skill
+							45 tab (selectable, settable, boolean) MCP Connections, Value: 0, ID: config-tab-mcp
+							46 tab (selectable, settable, boolean) Channel, Value: 0, ID: config-tab-channel
+							47 text Context
+							48 tab (selectable, settable, boolean) Memory & Context, Value: 0, ID: config-tab-memory
+							49 text Data
+							50 tab (selectable, settable, boolean) Archive, Value: 0, ID: config-tab-archive
+							51 tab (selectable, settable, boolean) Release notes, Value: 0, ID: config-tab-changelog
+							52 tab (selectable, settable, boolean) About, Value: 0, ID: config-tab-about
+					53 splitter Description: Settings, Value: 230, ID: configResizer
+					54 container configContent
+						55 heading Appearance, Value: 1
+							56 text Appearance
+						57 container Description: Appearance, ID: config-panel-appearance
+							58 container
+								59 text Theme Choose how OpenCorvus appears on this device.
+								60 pop up button (collapsed) Theme System, ID: select-cl-270-trigger, Secondary Actions: Expand
+									61 text System
+								62 text Language Choose the language used throughout the OpenCorvus interface.
+								63 pop up button (collapsed) Language English, ID: select-cl-276-trigger, Secondary Actions: Expand
+									64 text English
+
+The focused UI element is 60 pop up button (collapsed) Theme System, ID: select-cl-270-trigger, Secondary Actions: Expand

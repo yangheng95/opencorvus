@@ -2555,3 +2555,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [Shared Select value ownership27](artifacts/2026-10-05-connection-workspace-authority/select-value-ownership-plan.md): installed value registration restores actual control names/current values and manual keyboard behavior in Composer/Appearance; owned27 visual and service closure pass, null/stale variants remain unqualified.
 
 - [Truthful Mission and empty-delivery presentation28](artifacts/2026-10-05-connection-workspace-authority/mission-delivery-copy-plan.md): generic Mission and actual empty-resource copy pass English/Chinese manual UI and genuine Sol text Task in owned28; locale and reference Escape observations proceed separately.
+
+- [Correct selection and dismissal ownership29/30](artifacts/2026-10-05-connection-workspace-authority/selection-events-plan.md): actual locale retention, reference Escape/explicit cancellation and lossless keyboard selection qualified;29 first newline retained, fresh30 full owned closure passes.
