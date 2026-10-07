@@ -1,0 +1,32 @@
+Browser tab: 241798760, Title: "OpenCorvus", URL: "http://localhost:18036/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 76-83
+~										69 tab (selectable, settable, boolean) 概览, Value: 0, ID: tabs-cl-284-trigger-overview
+~										73 tab (selected, settable, boolean) Package 详情, Value: 1, ID: tabs-cl-284-trigger-package
+~									74 container Description: Package 详情, ID: tabs-cl-284-content-package
+~										75 text 来源
++										76 text 项目级包
++										77 text 声明哈希
++										78 text 3c96a1e841c6
++										79 text 投影成员
++										80 text mission, producer, verifier
++										81 heading README, Value: 3
++											82 text README
++										83 text 追加给调度器
++										84 heading Task Resource QA, Value: 1
++											85 text Task Resource QA
++										86 text This package delivers a small persistent text resource through a real Task after current Project observation and independent verification. The Project Observer has the dynamic identity mission and the explore runtime; it is not a native Mission. Published resources, real participant messages and verification evidence remain the current Task's canonical facts. A file on disk alone is not a declared downloadable delivery. Missing capabilities, query errors, incomplete publication and verification failures remain visible.
++										87 heading 选择指导, Value: 3
++											88 text 选择指导
++										89 text selector/task-resource-qa
++										90 text Deliver a small text resource after observing the current Project, with independent verification.
++										91 text Use query-produce-verify when the request needs current Project Task observation and a verified persistent text delivery.
++										92 heading Selection, Value: 1
++											93 text Selection
++										94 text Use query-produce-verify for current Project Task observation followed by a small text resource and independent verification. Its declared dependencies identify useful work boundaries; the scheduler owns dispatch and acceptance decisions from actual facts. Do not invent missing evidence or a successful outcome.
++										95 heading 调度器能力声明, Value: 3
++											96 text 调度器能力声明
++										97 text 2 个能力引用
++										98 text capability_refs
++										99 text capability:capability_set:platform:tool-registry:orchestrator-base, capability:capability_set:platform:tool-registry:scheduler-transport
+The focused UI element is 73 tab (selected, settable, boolean) Package 详情, Value: 1, ID: tabs-cl-284-trigger-package

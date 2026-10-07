@@ -1,0 +1,39 @@
+{
+  "occurrence": "expert-history-88-after-0a9f5908-b94b-4f02-8def-522708232080",
+  "outcome": "ready",
+  "host": {
+    "pid": 59488,
+    "processInstanceID": "win32:639269484207497360",
+    "occurrenceID": "7c084e30-aa63-4f0e-8996-ce5802b7fc06"
+  },
+  "parent": {
+    "pid": 27528,
+    "processInstanceID": "win32:639269484186593042",
+    "occurrenceID": "81f9cda1-15c3-4c27-b85d-8c1e66fc5e7c"
+  },
+  "target": {
+    "pid": 70520,
+    "processInstanceID": "win32:639269484216159506",
+    "occurrenceID": "68ba605c-acd9-4bd2-bb6a-ee8ebfca9b3a"
+  },
+  "targetBirthAtMs": 1791351621615,
+  "observedAtUtc": "2026-10-07T05:40:21.659Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18036",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-history-after-88\\startup.json",
+    "--startup-occurrence",
+    "expert-history-88-after-0a9f5908-b94b-4f02-8def-522708232080",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

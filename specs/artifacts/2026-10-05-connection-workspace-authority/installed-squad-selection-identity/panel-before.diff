@@ -1,0 +1,35 @@
+diff --git a/packages/overlay/src/components/settings/ExpertSquadPanel.tsx b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+index 65c7400b..0599e4fe 100644
+--- a/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
++++ b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+@@ -112,13 +112,6 @@ function projectionLeafRefs(entry: ProjectionEntry, capabilitySets: CapabilitySe
+   })
+ }
+ 
+-function projectionToolRefCount(entry: ProjectionEntry, capabilitySets: CapabilitySets): number {
+-  return projectionLeafRefs(entry, capabilitySets).filter((capability) => {
+-    const kind = capability.kind
+-    return kind === "tool" || kind === "mcp_tool"
+-  }).length
+-}
+-
+ type CapabilityOrigin = "built_in" | "default" | "package"
+ type McpCapabilityKind = "server" | "tool" | "prompt" | "resource"
+ 
+@@ -1956,13 +1949,10 @@ export default function ExpertSquadPanel() {
+ 
+                               <div class="expert-squad-section">
+                                 <div class="expert-squad-section-head">
+-                                  <h3>{t("expert_squad.capability_projection")}</h3>
++                                  <h3>{t("expert_squad.scheduler_capability_declarations")}</h3>
+                                   <span class="expert-squad-section-meta">
+-                                    {t("expert_squad.tool_count", {
+-                                      count: projectionToolRefCount(
+-                                        squad.capability_projection.scheduler,
+-                                        squad.capability_sets,
+-                                      ),
++                                    {t("expert_squad.capability_reference_count", {
++                                      count: squad.capability_projection.scheduler.capability_refs.length,
+                                     })}
+                                   </span>
+                                 </div>

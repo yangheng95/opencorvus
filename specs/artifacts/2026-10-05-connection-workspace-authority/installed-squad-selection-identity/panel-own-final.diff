@@ -1,0 +1,255 @@
+diff --git a/.tmp-product-iteration/installed-selection-87/panel-before.tsx b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+index 0599e4fe..60ae5831 100644
+--- a/.tmp-product-iteration/installed-selection-87/panel-before.tsx
++++ b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+@@ -1,3 +1,9 @@
++import {
++  squadSelectionKey,
++  squadInstallationKey,
++  parseSquadInstallationKey,
++  type SquadRefreshSelection,
++} from "../../services/expert-squad-selection"
+ import { ApiAuthorityChangedError } from "../../services/api"
+ import { formatErrorDetails } from "../../services/diagnostics"
+ import { Feedback } from "../ui/Feedback"
+@@ -358,8 +364,6 @@ export default function ExpertSquadPanel() {
+   const catalogWarnings = createMemo(() =>
+     catalogDiagnostics().flatMap((entry) => (entry.kind === "warning" ? [entry.warning] : [])),
+   )
+-  const squadSelectionKey = (squad: ExpertSquadSelectionIdentity) =>
+-    squad.source.kind === "built_in" ? `built_in:${squad.id}` : `${squad.source.installation_scope}:${squad.id}`
+   const scopedMarket = createMemo(() => (marketIdentity() === currentScopeIdentity() ? market() : []))
+   const recoveryUpdates = createMemo(() =>
+     scopedMarket().flatMap((item) =>
+@@ -377,7 +381,11 @@ export default function ExpertSquadPanel() {
+   const effectiveInstallationKey = (id: string) => {
+     const revision = scopedCatalog()?.active.package_revision
+     if (!revision || revision.id !== id) return ""
+-    return revision.scope === "built_in" ? `built_in:${id}` : `${revision.scope}:${id}`
++    return squadInstallationKey(
++      revision.scope === "built_in"
++        ? { installationScope: "built_in", id }
++        : { installationScope: revision.scope, namespace: revision.namespace, id },
++    )
+   }
+   const isEffectiveInstallation = (squad: ExpertSquadSelectionIdentity) =>
+     effectiveInstallationKey(squad.id) === squadSelectionKey(squad)
+@@ -397,11 +405,7 @@ export default function ExpertSquadPanel() {
+   })
+   const currentSquadIndex = createMemo(() => {
+     const list = filteredSquads()
+-    return (
+-      list.find((squad) => squadSelectionKey(squad) === selectedSquadID()) ??
+-      list.find((squad) => squad.id === selectedSquadID()) ??
+-      list[0]
+-    )
++    return list.find((squad) => squadSelectionKey(squad) === selectedSquadID()) ?? list[0]
+   })
+   const selectedDetailKey = createMemo(() => {
+     const squad = currentSquadIndex()
+@@ -484,7 +488,7 @@ export default function ExpertSquadPanel() {
+   })
+ 
+   async function refreshCatalog(
+-    nextSelectedID?: string,
++    selection?: SquadRefreshSelection,
+     scope = expertSquadCatalogScope(),
+     expectedScopeIdentity = catalogScopeIdentity(scope),
+   ): Promise<void> {
+@@ -501,6 +505,7 @@ export default function ExpertSquadPanel() {
+       setLoading(false)
+       return
+     }
++    const selectionAtEntry = selectedSquadID()
+     setLoading(true)
+     if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError(null)
+     const sequence = ++loadSequence
+@@ -528,54 +533,46 @@ export default function ExpertSquadPanel() {
+             if (currentScopeIdentity() === expectedScopeIdentity) setActionError(String(error))
+           })
+       }
+-      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
++      if (
++        sequence !== loadSequence ||
++        currentScopeIdentity() !== expectedScopeIdentity ||
++        selectedSquadID() !== selectionAtEntry
++      )
++        return
+       const [next, entries, status, diagnostics] = await Promise.all([
+         loadExpertSquadCatalog(scope),
+         searchExpertSquads({ directory: scope.directory, view: "installations", limit: 20 }),
+         loadExpertSquadInventoryStatus(scope.directory),
+         loadExpertSquadDiagnostics(scope.directory, { limit: 20 }),
+       ])
+-      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
++      if (
++        sequence !== loadSequence ||
++        currentScopeIdentity() !== expectedScopeIdentity ||
++        selectedSquadID() !== selectionAtEntry
++      )
++        return
+       const installations = [...entries.entries]
+-      const desired = nextSelectedID || selectedSquadID()
+-      const exactRequests: Array<{
+-        id: string
+-        installationScope?: "built_in" | ExpertSquadInstallationScope
+-        namespace?: string
+-      }> = [
+-        {
+-          id: next.active.effective,
+-          installationScope: next.active.package_revision.scope,
+-          namespace: next.active.package_revision.namespace,
+-        },
+-      ]
+-      if (desired) {
+-        const separator = desired.indexOf(":")
+-        exactRequests.push(
+-          separator > 0
+-            ? {
+-                id: desired.slice(separator + 1),
+-                installationScope: desired.slice(0, separator) as "built_in" | ExpertSquadInstallationScope,
+-              }
+-            : { id: desired },
+-        )
+-      }
++      const revision = next.active.package_revision
++      const activeKey = squadInstallationKey(
++        revision.scope === "built_in"
++          ? { installationScope: "built_in", id: revision.id }
++          : { installationScope: revision.scope, namespace: revision.namespace, id: revision.id },
++      )
++      const desired = selection?.kind === "effective" ? activeKey : (selection?.key ?? selectedSquadID())
++      const exactRequests = [parseSquadInstallationKey(activeKey)]
++      if (desired && desired !== activeKey) exactRequests.push(parseSquadInstallationKey(desired))
+       for (const request of exactRequests) {
+-        const present = installations.some((entry) => {
+-          if (entry.id !== request.id) return false
+-          if (!request.installationScope) return true
+-          if (request.installationScope === "built_in") return entry.source.kind === "built_in"
+-          return (
+-            entry.source.kind === "installed_package" &&
+-            entry.source.installation_scope === request.installationScope &&
+-            (!request.namespace || entry.source.namespace === request.namespace)
+-          )
+-        })
++        const present = installations.some((entry) => squadSelectionKey(entry) === squadInstallationKey(request))
+         if (present) continue
+         const exact = await inspectExpertSquad({ directory: scope.directory, ...request })
+         installations.unshift(exact)
+       }
+-      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
++      if (
++        sequence !== loadSequence ||
++        currentScopeIdentity() !== expectedScopeIdentity ||
++        selectedSquadID() !== selectionAtEntry
++      )
++        return
+       setCatalog(next)
+       setCatalogEntries(installations)
+       setCatalogNextCursor(entries.next_cursor)
+@@ -584,17 +581,18 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnosticsNextCursor(diagnostics.next_cursor)
+       setCatalogIdentity(expectedScopeIdentity)
+       setCatalogError(null)
+-      setSelectedSquadID((current) => {
+-        const requested = nextSelectedID || current
+-        const selected =
+-          installations.find((squad) => squadSelectionKey(squad) === requested) ??
+-          installations.find((squad) => squad.id === requested) ??
+-          installations.find((squad) => squad.id === next.active.effective) ??
+-          installations[0]
+-        return selected ? squadSelectionKey(selected) : ""
+-      })
++      const selected =
++        installations.find((squad) => squadSelectionKey(squad) === desired) ??
++        installations.find((squad) => squadSelectionKey(squad) === activeKey) ??
++        installations[0]
++      setSelectedSquadID(selected ? squadSelectionKey(selected) : "")
+     } catch (error) {
+-      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
++      if (
++        !(error instanceof ApiAuthorityChangedError) &&
++        sequence === loadSequence &&
++        currentScopeIdentity() === expectedScopeIdentity &&
++        selectedSquadID() === selectionAtEntry
++      ) {
+         setCatalogError({ error })
+       }
+       throw error
+@@ -825,7 +823,7 @@ export default function ExpertSquadPanel() {
+           isCurrentDirectory: () => currentScopeIdentity() === actionScopeIdentity,
+         })
+         if (currentScopeIdentity() !== actionScopeIdentity) return
+-        await refreshCatalog(squad.id, actionScope, actionScopeIdentity)
++        await refreshCatalog({ kind: "installation", key: squadSelectionKey(squad) }, actionScope, actionScopeIdentity)
+         showNotice(t("expert_squad.activated_project"), "active")
+       },
+       actionScopeIdentity,
+@@ -846,7 +844,7 @@ export default function ExpertSquadPanel() {
+       async () => {
+         await setSessionExpertSquadActive(sessionID, squad.id, directory)
+         if (currentScopeIdentity() !== actionScopeIdentity) return
+-        await refreshCatalog(squad.id, actionScope, actionScopeIdentity)
++        await refreshCatalog({ kind: "installation", key: squadSelectionKey(squad) }, actionScope, actionScopeIdentity)
+         showNotice(t("expert_squad.activated_session"), "active")
+       },
+       actionScopeIdentity,
+@@ -866,7 +864,7 @@ export default function ExpertSquadPanel() {
+       async () => {
+         await clearSessionExpertSquadOverride(sessionID, directory)
+         if (currentScopeIdentity() !== actionScopeIdentity) return
+-        await refreshCatalog(projectActiveID(), actionScope, actionScopeIdentity)
++        await refreshCatalog({ kind: "effective" }, actionScope, actionScopeIdentity)
+         showNotice(t("expert_squad.cleared_session_override"), "active")
+       },
+       actionScopeIdentity,
+@@ -891,9 +889,11 @@ export default function ExpertSquadPanel() {
+         )
+         if (currentScopeIdentity() !== captured.identity) return
+         await refreshMarket(item.id, captured.scope, captured.identity)
+-        void refreshCatalog(`${installedScope}:${result.receipt.after.id}`, captured.scope, captured.identity).catch(
+-          () => undefined,
+-        )
++        void refreshCatalog(
++          { kind: "installation", key: squadInstallationKey(result.receipt.after) },
++          captured.scope,
++          captured.identity,
++        ).catch(() => undefined)
+         showNotice(
+           t("expert_squad.updated", {
+             id: result.receipt.after.id,
+@@ -941,7 +941,11 @@ export default function ExpertSquadPanel() {
+         )
+         if (currentScopeIdentity() !== captured.identity) return
+         await Promise.all([
+-          refreshCatalog(`${installationScope}:${result.receipt.after.id}`, captured.scope, captured.identity),
++          refreshCatalog(
++            { kind: "installation", key: squadInstallationKey(result.receipt.after) },
++            captured.scope,
++            captured.identity,
++          ),
+           refreshMarket(result.receipt.after.id, captured.scope, captured.identity),
+         ])
+         showNotice(
+@@ -1088,7 +1092,7 @@ export default function ExpertSquadPanel() {
+     const current = configuration()
+     const scope = captureCatalogActionScope()
+     const selectedInstallation = currentSquad()
+-    const configurationInstallation = `${current?.installationScope ?? ""}:${current?.id ?? ""}`
++    const configurationInstallation = current ? squadInstallationKey(current) : ""
+     if (
+       !current ||
+       !scope ||
+@@ -1853,7 +1857,11 @@ export default function ExpertSquadPanel() {
+                                   onMutation={async () => {
+                                     const captured = captureCatalogActionScope()
+                                     if (!captured) return
+-                                    await refreshCatalog(squadSelectionKey(squad), captured.scope, captured.identity)
++                                    await refreshCatalog(
++                                      { kind: "installation", key: squadSelectionKey(squad) },
++                                      captured.scope,
++                                      captured.identity,
++                                    )
+                                   }}
+                                 />
+                               </TabPanel>

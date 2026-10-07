@@ -1,0 +1,29 @@
+{
+  "taskID": null,
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/installed-selection-before-87",
+  "purpose": "Real lawful installed page2 selection87 after current build; original closed owned21 installations; no Provider or Task execution",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+  "observedAtUtc": "2026-10-07T05:38:02.5577397Z",
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 56792,
+        "processInstanceID": "win32:639269472567259613",
+        "occurrenceID": "54c463de-692d-48ba-a251-b6f3bacd1514"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 33736,
+        "processInstanceID": "win32:639269472576017139",
+        "occurrenceID": "a318c7cb-843d-4393-9617-981526806f7c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "port": 18037,
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-after-91",
+  "producerSessionID": null,
+  "credentialStaging": "None; source87 closed native inventory retained; no Task requested"
+}

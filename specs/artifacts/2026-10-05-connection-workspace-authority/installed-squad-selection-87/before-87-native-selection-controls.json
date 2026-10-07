@@ -1,0 +1,37 @@
+{
+  "observedAtUtc": "2026-10-07T05:28:50.4939456Z",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+  "taskID": null,
+  "credentialStaging": "None; fresh installed inventory observation; no Task execution",
+  "reads": [
+    {
+      "path": "/expert-squad/search?view=installations&limit=20&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject /expert-squad/inspect?id=selection-squad-021&installationScope=project&namespace=selection-check&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject /expert-squad/inspect?id=selection-squad-021&installationScope=project&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "Vary": [
+          "Origin"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:28:49 GMT"
+        ],
+        "x-opencorvus-request-id": [
+          "71a50e60-12e0-4f4f-9d13-2fdb0cd56913"
+        ]
+      },
+      "method": "GET",
+      "body": {
+        "name": "ProjectDirectoryIntegrityError",
+        "data": {
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project \\expert-squad\\inspect?id=selection-squad-021",
+          "reason": "missing",
+          "message": "Project directory does not exist: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project \\expert-squad\\inspect?id=selection-squad-021"
+        }
+      },
+      "status": 400
+    }
+  ],
+  "occurrence": "installed-selection-87-before-79fab701-fcf8-4e04-beaa-d8ef302108c0",
+  "sessionID": null
+}

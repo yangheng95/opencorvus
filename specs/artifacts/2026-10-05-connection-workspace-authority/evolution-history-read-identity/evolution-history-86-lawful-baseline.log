@@ -1,0 +1,52 @@
+$ bun script/run-tests.ts test/server/evolution-history-read-identity.test.ts
+[1/1] START test/server/evolution-history-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold-evolution-empty {"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Jfn9BW%5Ctest-36516-AnM09g%5Cfixtures%5Cmemory-Y50S8J","status":400,"errorName":"ProviderModelNotFoundError"}
+347 |     body: {
+348 |       name: "ProviderModelNotFoundError",
+349 |       data: { providerID: "missing-evolution-provider", modelID: "missing-evolution-model" },
+350 |     },
+351 |   })
+352 |   expect(history.status).toBe(200)
+                               ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 400
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:352:26)
+(fail) cold empty history keeps real installed authority independent of missing execution model [3717.65ms]
+cold-evolution-graph [{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Jfn9BW%5Ctest-36516-AnM09g%5Cfixtures%5Cmemory-WPxW6J","status":400,"errorName":"ProviderModelNotFoundError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Jfn9BW%5Ctest-36516-AnM09g%5Cfixtures%5Cmemory-WPxW6J","status":400,"errorName":"ProviderModelNotFoundError"},{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&catalogRevisionUpper=105&beforeCatalogRevision=6&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Jfn9BW%5Ctest-36516-AnM09g%5Cfixtures%5Cmemory-WPxW6J","status":400,"errorName":"ProviderModelNotFoundError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Jfn9BW%5Ctest-36516-AnM09g%5Cfixtures%5Cmemory-WPxW6J","status":400,"errorName":"ProviderModelNotFoundError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Jfn9BW%5Ctest-36516-AnM09g%5Cfixtures%5Cmemory-KHnQaw","status":400,"errorName":"ProviderModelNotFoundError"}]
+396 |   const foreignDetail = await cold(foreign.path, "/expert-squad/evolution-history/detail", detailInput)
+397 |   console.log(
+398 |     "cold-evolution-graph",
+399 |     JSON.stringify([history, detail, futureList, futureDetail, foreignDetail].map(safeReceipt)),
+400 |   )
+401 |   expect([history.status, detail.status]).toEqual([200, 200])
+                                                ^
+error: expect(received).toEqual(expected)
+
+  [
+-   200,
+-   200,
++   400,
++   400,
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:401:43)
+(fail) cold list and exact POST detail read persisted graph and retain upper/project errors [11326.44ms]
+
+ 0 pass
+ 2 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [17.76s]
+[1/1] DONE test/server/evolution-history-read-identity.test.ts exit=1 duration=18.58s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+error: script "test" exited with code 1

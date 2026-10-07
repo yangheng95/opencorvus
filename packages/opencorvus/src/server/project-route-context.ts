@@ -8,6 +8,8 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /expert-squad/inspect",
   "GET /expert-squad/settings/detail",
   "GET /expert-squad/configuration",
+  "GET /expert-squad/evolution-history",
+  "POST /expert-squad/evolution-history/detail",
   "GET /mission-skill/catalog",
   "GET /experimental/project-memory",
   "POST /project/current/init-git",

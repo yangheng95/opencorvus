@@ -1,0 +1,22 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/scheduler-capability-display-implementation/en-US.before.json b/packages/overlay/src/i18n/en-US.json
+index 80ab8814..de88a9d5 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/scheduler-capability-display-implementation/en-US.before.json
++++ b/packages/overlay/src/i18n/en-US.json
+@@ -1263,7 +1263,7 @@
+   "expert_squad.scope_pending_body": "The selected task is still resolving its root session. Expert Squad catalog actions resume when the session scope is known.",
+   "expert_squad.scope_unavailable_title": "Expert Squad scope unavailable",
+   "expert_squad.scope_unavailable_body": "Connect to a project directory before loading or editing Expert Squad packages.",
+-  "expert_squad.tool_count": "{{count}} tools",
++  "expert_squad.capability_reference_count": "{{count}} capability references",
+   "expert_squad.built_in": "Built-in",
+   "expert_squad.package_project": "Project package",
+   "expert_squad.package_global": "User-global package",
+@@ -1291,7 +1291,7 @@
+   "expert_squad.projected_agents": "Projected agents",
+   "expert_squad.readme_title": "README",
+   "expert_squad.orchestrator_append": "Appended to Orchestrator",
+-  "expert_squad.capability_projection": "Scheduler Capability Projection",
++  "expert_squad.scheduler_capability_declarations": "Scheduler capability declarations",
+   "expert_squad.no_projected_agents": "This Expert Squad declares no Agents.",
+   "expert_squad.effective_access": "Effective access",
+   "expert_squad.declared_access": "Declared access",

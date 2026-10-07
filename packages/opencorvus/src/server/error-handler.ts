@@ -125,6 +125,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "MCPOAuthStateError") return 400
   if (err.name === "McpAppHostForbiddenError") return 403
   if (err.name === "ExpertSquadPackageError") return 400
+  if (err.name === "EvolutionHistoryAuthorityError") return 400
   if (err.name === "ExpertSquadPackageMutationConflictError") return 409
   return 500
 }

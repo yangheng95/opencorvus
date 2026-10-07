@@ -51,6 +51,26 @@ bootstrap; Session configuration, prompts and memory organization retain runtime
 Raw GET /config retains its separate configuration-data contract. Selected Expert readers
 read current installations; configuration reads keep declared secret-value redaction.
 They do not substitute current package bodies for a Task-fixed revision or change configuration writes.
+Evolution history GET and exact campaign-detail POST use the same Project identity
+admission. They retain canonical installed-package snapshot materialization and
+freeze the Artifact Catalog upper revision under the current Project's persisted
+Task/root Session graph. Detail keeps exact source locators and returns the named
+foreign-Project authority error with HTTP400 through the shared error mapper.
+These readers do not start or resume a Task or publish an evolution mutation.
+
+Installed-panel selection has one canonical physical key: built_in:id or
+installation scope:namespace:id, validated through the SDK's existing ID and
+namespace schemas. Row, detail, configuration, pagination, active-revision and
+receipt selection use the same key/parser. An absent-page inspection preserves
+all three installed identity fields. Refresh publication also requires the
+entry's existing selected key to remain current; a new user choice retires that
+read through the same selection owner. Explicit effective selection after clearing
+an override comes from the newly accepted active package revision.
+
+Package Details displays the count of canonical scheduler capability_refs as
+declared capability references and retains those encoded declarations. It does
+not count an incomplete frontend-expanded subset as executable tools. Runtime
+expansion and actual model request grants remain backend-owned.
 
 Shared HTTP errors carry the dispatched method, path, status, decoded response body
 and request ID. Details include that method; binary readers keep the actual path,
@@ -67,8 +87,8 @@ launch assignment. Full catalog failure, a new scope and global drafts retire th
 prior package fact through the existing loader owner.
 
 Installed catalog feedback retains the original thrown value in one nullable
-failure record. Inline wording derives from that value; Details use the shared
-HTTP formatter. Expert catalog/settings/market services preserve the original
+failure record. Its presence controls the concise recovery hint; Details use the
+shared HTTP formatter on the original thrown value. Expert catalog/settings/market services preserve the original
 rejection. Refresh and both pagination paths publish data, errors and loading
 completion only under their existing current sequence and scope; API authority
 retirement remains a control outcome.

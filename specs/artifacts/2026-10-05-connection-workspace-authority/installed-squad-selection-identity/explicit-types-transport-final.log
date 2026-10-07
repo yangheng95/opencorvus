@@ -1,0 +1,7 @@
+packages/overlay/test/expert-squad-selection.test.ts(88,28): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: ExpertSquadCatalogInspection): void', gave the following error.
+    Argument of type '{ id: string; source: { kind: string; installation_scope: string; namespace: string; }; }' is not assignable to parameter of type 'ExpertSquadCatalogInspection'.
+      Type '{ id: string; source: { kind: string; installation_scope: string; namespace: string; }; }' is missing the following properties from type 'ExpertSquadCatalogInspection': built_in, display_label, label, name, and 6 more.
+  Overload 2 of 2, '(expected: NoInfer<ExpertSquadCatalogInspection>): void', gave the following error.
+    Argument of type '{ id: string; source: { kind: string; installation_scope: string; namespace: string; }; }' is not assignable to parameter of type 'ExpertSquadCatalogInspection'.
+      Type '{ id: string; source: { kind: string; installation_scope: string; namespace: string; }; }' is missing the following properties from type 'ExpertSquadCatalogInspection': built_in, display_label, label, name, and 6 more.

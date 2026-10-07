@@ -1,0 +1,45 @@
+{
+  "capturedAt": "2026-10-07T05:41:23.510Z",
+  "ownedTabID": "241798760",
+  "origin": "http://localhost:18036/ui/",
+  "locale": "zh-CN",
+  "screenshot": "actual-88-package-details.png",
+  "accessibility": "actual-88-package-details.txt",
+  "inventory": {
+    "apps": [],
+    "browsers": [
+      {
+        "family": "chrome",
+        "id": "1",
+        "metadata": {
+          "extensionInstanceId": "a0819a59-0e2e-4112-8e53-cb088dac913d"
+        },
+        "name": "Chrome",
+        "profileName": "Heng",
+        "type": "extension",
+        "tabs": [
+          {
+            "id": "241798760",
+            "title": "OpenCorvus",
+            "url": "http://localhost:18036/ui/"
+          },
+          {
+            "id": "241798757",
+            "lastOpened": "2026-10-07T05:40:49.324Z",
+            "providerTabId": "[\"ae1faa1f-04db-4b36-a144-a781d10aa9ec\",\"241798757\"]",
+            "tabGroup": "🧪 Installed selection 91",
+            "title": "OpenCorvus",
+            "url": "http://localhost:18037/ui/"
+          },
+          {
+            "id": "241798598",
+            "lastOpened": "2026-10-07T01:41:20.747Z",
+            "providerTabId": "[\"ae1faa1f-04db-4b36-a144-a781d10aa9ec\",\"241798598\"]",
+            "title": "打开 ChatGPT 桌面版",
+            "url": "https://chatgpt.com/codex/open-app?source=login&app_brand=chatgpt"
+          }
+        ]
+      }
+    ]
+  }
+}

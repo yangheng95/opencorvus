@@ -1,0 +1,59 @@
+$ bun script/run-tests.ts test/server/evolution-history-read-identity.test.ts
+[1/1] START test/server/evolution-history-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold-evolution-empty {"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-kdSaes%5Ctest-66552-6oZ9GM%5Cfixtures%5Cmemory-ZViOyG","status":200,"errorName":null}
+(pass) cold empty history keeps real installed authority independent of missing execution model [3886.62ms]
+cold-evolution-graph [{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-kdSaes%5Ctest-66552-6oZ9GM%5Cfixtures%5Cmemory-GI2Kf4","status":200,"errorName":null},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-kdSaes%5Ctest-66552-6oZ9GM%5Cfixtures%5Cmemory-GI2Kf4","status":200,"errorName":null},{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&catalogRevisionUpper=105&beforeCatalogRevision=6&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-kdSaes%5Ctest-66552-6oZ9GM%5Cfixtures%5Cmemory-GI2Kf4","status":400,"errorName":"ExpertSquadPackageError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-kdSaes%5Ctest-66552-6oZ9GM%5Cfixtures%5Cmemory-GI2Kf4","status":400,"errorName":"ExpertSquadPackageError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-kdSaes%5Ctest-66552-6oZ9GM%5Cfixtures%5Cmemory-HSnFxv","status":400,"errorName":"EvolutionHistoryAuthorityError"}]
+409 |   if (!comparison) throw new Error("Exact persisted comparison must be readable")
+410 |   expect(comparison).toMatchObject({
+411 |     recommendation: "inconclusive",
+412 |     completeness: { expected_slots: 2, present_runs: 0 },
+413 |   })
+414 |   expect(exact.slots.map(({ case_id, arm, repetition, scorers }) => ({ case_id, arm, repetition, scorers }))).toEqual([
+                                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "arm": "baseline",
+      "case_id": "case-a",
+      "repetition": 0,
+-     "scorers": [
+-       {
+-         "scorer_id": "quality",
+-         "status": "missing",
+-       },
+-     ],
++     "scorers": undefined,
+    },
+    {
+      "arm": "candidate",
+      "case_id": "case-a",
+      "repetition": 0,
+-     "scorers": [
+-       {
+-         "scorer_id": "quality",
+-         "status": "missing",
+-       },
+-     ],
++     "scorers": undefined,
+    },
+  ]
+
+- Expected  - 12
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:414:111)
+(fail) cold list and exact POST detail read persisted graph and retain upper/project errors [13737.64ms]
+
+ 1 pass
+ 1 fail
+ 8 expect() calls
+Ran 2 tests across 1 file. [20.32s]
+[1/1] DONE test/server/evolution-history-read-identity.test.ts exit=1 duration=21.22s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+error: script "test" exited with code 1

@@ -1,0 +1,31 @@
+$ bun script/run-tests.ts test/server/evolution-history-read-identity.test.ts test/server/http-exception-response.test.ts
+[1/2] START test/server/evolution-history-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold-evolution-empty {"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-KQsSId%5Ctest-5264-wmnxnk%5Cfixtures%5Cmemory-tTPwb9","status":200,"errorName":null}
+(pass) cold empty history keeps real installed authority independent of missing execution model [3959.26ms]
+cold-evolution-graph [{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-KQsSId%5Ctest-5264-wmnxnk%5Cfixtures%5Cmemory-5qtmge","status":200,"errorName":null},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-KQsSId%5Ctest-5264-wmnxnk%5Cfixtures%5Cmemory-5qtmge","status":200,"errorName":null},{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&catalogRevisionUpper=105&beforeCatalogRevision=6&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-KQsSId%5Ctest-5264-wmnxnk%5Cfixtures%5Cmemory-5qtmge","status":400,"errorName":"ExpertSquadPackageError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-KQsSId%5Ctest-5264-wmnxnk%5Cfixtures%5Cmemory-5qtmge","status":400,"errorName":"ExpertSquadPackageError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-KQsSId%5Ctest-5264-wmnxnk%5Cfixtures%5Cmemory-RLvqwx","status":400,"errorName":"EvolutionHistoryAuthorityError"}]
+(pass) cold list and exact POST detail read persisted graph and retain upper/project errors [11085.25ms]
+
+ 2 pass
+ 0 fail
+ 12 expect() calls
+Ran 2 tests across 1 file. [17.82s]
+[1/2] DONE test/server/evolution-history-read-identity.test.ts exit=0 duration=18.64s
+[2/2] START test/server/http-exception-response.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) authored HTTP exception responses > projects the actual Basic Auth public response and challenge [6.62ms]
+(pass) authored HTTP exception responses > retains supplied entity and semantic headers with the canonical context identity [1.06ms]
+(pass) authored HTTP exception responses > projects the current message-authored 400 envelope [0.80ms]
+(pass) authored HTTP exception responses > projects the current message-authored 404 envelope [0.53ms]
+(pass) authored HTTP exception responses > projects the current message-authored 403 envelope [0.36ms]
+(pass) authored HTTP exception responses > projects the current message-authored 503 envelope [0.31ms]
+
+ 6 pass
+ 0 fail
+ 23 expect() calls
+Ran 6 tests across 1 file. [1177.00ms]
+[2/2] DONE test/server/http-exception-response.test.ts exit=0 duration=1.34s

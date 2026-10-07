@@ -1,0 +1,13 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/evolution-history-read-identity/classifier-before.ts b/packages/opencorvus/src/server/project-route-context.ts
+index 2141ebc3..60b8bca8 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/evolution-history-read-identity/classifier-before.ts
++++ b/packages/opencorvus/src/server/project-route-context.ts
+@@ -8,6 +8,8 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
+   "GET /expert-squad/inspect",
+   "GET /expert-squad/settings/detail",
+   "GET /expert-squad/configuration",
++  "GET /expert-squad/evolution-history",
++  "POST /expert-squad/evolution-history/detail",
+   "GET /mission-skill/catalog",
+   "GET /experimental/project-memory",
+   "POST /project/current/init-git",

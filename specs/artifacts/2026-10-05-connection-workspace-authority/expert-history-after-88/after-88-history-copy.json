@@ -1,0 +1,29 @@
+{
+  "purpose": "Real declared capability count84 and Evolution history86 UI after; original Task50 read only; no Provider or Task rearm",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-history-after-88",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "port": 18036,
+  "credentialStaging": "None; source50 untouched; no Task rearm",
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "observedAtUtc": "2026-10-07T05:36:57.6055803Z",
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      }
+    }
+  ],
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs"
+}

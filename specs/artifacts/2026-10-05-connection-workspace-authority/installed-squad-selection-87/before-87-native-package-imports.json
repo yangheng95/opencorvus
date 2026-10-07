@@ -1,0 +1,765 @@
+{
+  "credentialStaging": "None; no model execution",
+  "reads": [
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-001",
+          "version": "2026.10.07.1",
+          "packageDigest": "8468e1cbadc8c80c2681e02f66b63efa5b82f74ee01289c6f4b8ece28a44b749",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-001"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "9fbcfd68-08c6-468e-8722-7dbe127e4099"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:35 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-001",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-002",
+          "version": "2026.10.07.1",
+          "packageDigest": "fab435ae28e241b086a055e90d1c6675fd0c3568f4aab2c8d8f93a0b850b463f",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-002"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "b57675aa-1c47-4e5c-8e35-2c34bc0243ab"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:35 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-002",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-003",
+          "version": "2026.10.07.1",
+          "packageDigest": "bda9d9a488a14725c50fdaca8c08ab000cf9d138482e488a59bb09ca68122228",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-003"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "0141123e-fa77-4fdd-be74-7c431b11f544"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:35 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-003",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-004",
+          "version": "2026.10.07.1",
+          "packageDigest": "916bb4c6827668f14d4e261df796aabc44ca8032f1072711821dd37a7de99677",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-004"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "e761d9a1-3937-4aa5-bd89-729682b3fbe1"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-004",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-005",
+          "version": "2026.10.07.1",
+          "packageDigest": "f9576e34bd332d7e720cad6a23219c79ecd1011cdb417efb4f8b45cc87013a08",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-005"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "d7dd5f95-d9a2-4275-bd68-88a8fcb78079"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-005",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-006",
+          "version": "2026.10.07.1",
+          "packageDigest": "bfddf068916be42864c329859aabe83faf5a44c5045d674ad72542c0eb1c4a0b",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-006"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "25c037f2-2a5d-433b-8984-3ec766f27a89"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-006",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-007",
+          "version": "2026.10.07.1",
+          "packageDigest": "f8b007aa066ea7f58720a16bba9d96155ad428d8b13a781bcf6499b38743fdf5",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-007"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "8d8e6ae5-9825-446a-baf3-6c4594738e72"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-007",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-008",
+          "version": "2026.10.07.1",
+          "packageDigest": "1efd1506bce0d35d6567b12f108a9b2aa364132fb448dc7d1d04d815a742997d",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-008"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "6c4dada3-fe0b-41ae-a2b5-2afc284e96ce"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-008",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-009",
+          "version": "2026.10.07.1",
+          "packageDigest": "1b0b910ec5c094c0aa5dbc2f335ace01464079c3cd3ebd23ba4b12a1a91a3848",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-009"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "3f8165e4-5eef-49e9-9b80-060fa60f8c07"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-009",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-010",
+          "version": "2026.10.07.1",
+          "packageDigest": "c553348bc914f9258fed34c31aa2b0c3bffcfa30b248073b456b97c6ff8a4751",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-010"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "60676624-eb6f-40f8-95cf-7c0e581dc08a"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-010",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-011",
+          "version": "2026.10.07.1",
+          "packageDigest": "57a6790764883249870f551e573dfb4dae98c8d091490a5b2a1c72bfd9cc376e",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-011"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "f70cb1e3-ab22-4ac5-82c4-696cba72b7a6"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-011",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-012",
+          "version": "2026.10.07.1",
+          "packageDigest": "513b9b13764ed96ee23ec7b9ced04d9cc6a25cab2df0ab99c1f693aa93f3c78f",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-012"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "d8271299-6c0a-4a15-b62c-cae44ea73118"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:36 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-012",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-013",
+          "version": "2026.10.07.1",
+          "packageDigest": "926355259555e1d0a670e86fae78cda2eee5914e2f7d78c95f9f64bb0a056bf5",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-013"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "48aebf84-9739-421f-b3c0-62bc26c29a9d"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-013",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-014",
+          "version": "2026.10.07.1",
+          "packageDigest": "fd84e94b420f56c16ec44de1bc1030e814af2fb335711084812fe469d178e1ba",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-014"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "4c98bb66-7874-45f5-9c61-00288aa9dfd2"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-014",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-015",
+          "version": "2026.10.07.1",
+          "packageDigest": "31962fe2be73018edff8704bf27da780bc539cadd03db61047b9edb30e36efd4",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-015"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "f9d7c74b-2aa4-48eb-85a4-d61e0a806931"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-015",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-016",
+          "version": "2026.10.07.1",
+          "packageDigest": "f6b84d95664866a2da447058a492c3b92a99ad10f7235316c3f1af6031547710",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-016"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "8ae5ff57-eb86-4478-b4bf-7a2f818072c6"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-016",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-017",
+          "version": "2026.10.07.1",
+          "packageDigest": "42aa5080c7f7c7615dd9b8967f1cc2c8d650ca98aa700dbb8c49351e529a4d98",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-017"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "2f39e701-b76b-4344-a500-dc5b9a1d0f50"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-017",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-018",
+          "version": "2026.10.07.1",
+          "packageDigest": "ab057c51f0299000f8d71377107ea61db01e9dc03628a641d3342d4a365337b1",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-018"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "9f744373-1b5d-412c-a478-dd2f13dc9bc4"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-018",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-019",
+          "version": "2026.10.07.1",
+          "packageDigest": "fca69d98ca061ac6bc364c0a09d5935b420ff736b570c77bb4459915ed85302e",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-019"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "27cf35e3-892b-477a-8c79-c1157c2602a9"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-019",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-020",
+          "version": "2026.10.07.1",
+          "packageDigest": "85faa00dcc413f04cbe389555824bc9a228b01825ba8087d80f6ed5324910c8e",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-020"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "3bd0910f-c10d-4b91-acc6-5fa651c90b5c"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:37 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-020",
+        "installationScope": "project"
+      }
+    },
+    {
+      "method": "POST",
+      "status": 200,
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+          "namespace": "selection-check",
+          "id": "selection-squad-021",
+          "version": "2026.10.07.1",
+          "packageDigest": "8e5d225e91feb649d8bd4a93cd3c8b1f9acc059a0384fe040cbae312c48e8aa5",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project\\.opencorvus\\expert-squads\\selection-check\\selection-squad-021"
+        }
+      },
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cinstalled-selection-before-87%5Cproject",
+      "headers": {
+        "x-opencorvus-request-id": [
+          "da87deae-78b5-4f6f-98b1-adc7c8bc5f42"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 05:27:38 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\authoring\\selection-squad-021",
+        "installationScope": "project"
+      }
+    }
+  ],
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+  "observedAtUtc": "2026-10-07T05:27:38.1994215Z",
+  "occurrence": "installed-selection-87-before-79fab701-fcf8-4e04-beaa-d8ef302108c0",
+  "failure": null
+}

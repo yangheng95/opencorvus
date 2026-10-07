@@ -1,0 +1,38 @@
+$ bun script/run-tests.ts test/server/evolution-history-read-identity.test.ts
+[1/1] START test/server/evolution-history-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold-evolution-empty {"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-VUjO5c%5Ctest-75144-nAFJkE%5Cfixtures%5Cmemory-rCa3Ss","status":200,"errorName":null}
+(pass) cold empty history keeps real installed authority independent of missing execution model [4033.88ms]
+cold-evolution-graph [{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-VUjO5c%5Ctest-75144-nAFJkE%5Cfixtures%5Cmemory-FseHqu","status":200,"errorName":null},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-VUjO5c%5Ctest-75144-nAFJkE%5Cfixtures%5Cmemory-FseHqu","status":400,"errorName":null},{"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&catalogRevisionUpper=105&beforeCatalogRevision=6&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-VUjO5c%5Ctest-75144-nAFJkE%5Cfixtures%5Cmemory-FseHqu","status":400,"errorName":"ExpertSquadPackageError"},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-VUjO5c%5Ctest-75144-nAFJkE%5Cfixtures%5Cmemory-FseHqu","status":400,"errorName":null},{"method":"POST","path":"/expert-squad/evolution-history/detail?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-VUjO5c%5Ctest-75144-nAFJkE%5Cfixtures%5Cmemory-QB1cp1","status":400,"errorName":null}]
+379 |   const foreignDetail = await cold(foreign.path, "/expert-squad/evolution-history/detail", detailInput)
+380 |   console.log(
+381 |     "cold-evolution-graph",
+382 |     JSON.stringify([history, detail, futureList, futureDetail, foreignDetail].map(safeReceipt)),
+383 |   )
+384 |   expect([history.status, detail.status]).toEqual([200, 200])
+                                                ^
+error: expect(received).toEqual(expected)
+
+  [
+    200,
+-   200,
++   400,
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:384:43)
+(fail) cold list and exact POST detail read persisted graph and retain upper/project errors [10395.08ms]
+
+ 1 pass
+ 1 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [16.97s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+[1/1] DONE test/server/evolution-history-read-identity.test.ts exit=1 duration=17.73s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+error: script "test" exited with code 1

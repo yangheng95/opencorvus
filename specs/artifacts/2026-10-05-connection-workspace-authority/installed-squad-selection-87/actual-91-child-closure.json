@@ -1,0 +1,30 @@
+{
+  "scope": "actual-91-child",
+  "ownedTab": {
+    "browserId": "1",
+    "id": "241798757",
+    "providerTabId": "241798757",
+    "url": "http://localhost:18037/ui/",
+    "origin": "http://localhost:18037"
+  },
+  "closureOperation": {
+    "api": "tab91.close()",
+    "result": "resolved",
+    "timestamp": null,
+    "evidence": "Actual preceding CUA close call resolved; immediately following inventory was transitional, subsequent fresh getState contained only original login tab."
+  },
+  "freshInventory": {
+    "api": "cua.listTabs({browser:\"1\",emit:false})",
+    "tabs": [
+      {
+        "id": "241798598",
+        "lastOpened": "2026-10-07T01:41:20.747Z",
+        "providerTabId": "[\"ae1faa1f-04db-4b36-a144-a781d10aa9ec\",\"241798598\"]",
+        "title": "打开 ChatGPT 桌面版",
+        "url": "https://chatgpt.com/codex/open-app?source=login&app_brand=chatgpt",
+        "browserId": "1"
+      }
+    ]
+  },
+  "limitations": "No closed timestamp or native browser event inferred. This receipt qualifies child tab inventory only; Root owns service/process closure."
+}

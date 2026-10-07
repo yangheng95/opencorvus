@@ -1,0 +1,40 @@
+$ bun script/run-tests.ts test/server/evolution-history-read-identity.test.ts
+[1/1] START test/server/evolution-history-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold-evolution-empty {"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-req3TM%5Ctest-73964-Qg43tA%5Cfixtures%5Cmemory-7vLBmM","status":400,"errorName":"ProviderModelNotFoundError"}
+334 |     body: {
+335 |       name: "ProviderModelNotFoundError",
+336 |       data: { providerID: "missing-evolution-provider", modelID: "missing-evolution-model" },
+337 |     },
+338 |   })
+339 |   expect(history.status).toBe(200)
+                               ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 400
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:339:26)
+(fail) cold empty history keeps real installed authority independent of missing execution model [3517.61ms]
+118 |       const baseline = await ExpertSquadRegistry.loadPackage(packageRoot(directory))
+119 |       const candidateRoot = path.join(directory, "candidate", targetIdentity.namespace, targetIdentity.id)
+120 |       await writeExpertSquadPackage({ directory: candidateRoot, definition: definition("2026.10.07.2") })
+121 |       const candidate = await ExpertSquadRegistry.loadPackage(candidateRoot)
+122 |       const evolution = getLoadedBuiltInPackages().find((pkg) => pkg.id === "evolution-lab")
+123 |       if (!evolution) throw new Error("Builtin Evolution Lab declaration is required")
+                                      ^
+error: Builtin Evolution Lab declaration is required
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:123:33)
+(fail) cold list and exact POST detail read persisted graph and retain upper/project errors [2970.69ms]
+
+ 0 pass
+ 2 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [8.95s]
+[1/1] DONE test/server/evolution-history-read-identity.test.ts exit=1 duration=9.74s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+error: script "test" exited with code 1

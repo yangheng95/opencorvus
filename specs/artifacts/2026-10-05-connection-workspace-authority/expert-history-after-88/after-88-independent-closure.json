@@ -1,0 +1,27 @@
+{
+  "occurrence": "expert-history-88-after-0a9f5908-b94b-4f02-8def-522708232080",
+  "observedAtUtc": "2026-10-07T05:44:31.9776396Z",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 59488,
+        "processInstanceID": "win32:639269484207497360",
+        "occurrenceID": "7c084e30-aa63-4f0e-8996-ce5802b7fc06"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 70520,
+        "processInstanceID": "win32:639269484216159506",
+        "occurrenceID": "68ba605c-acd9-4bd2-bb6a-ee8ebfca9b3a"
+      }
+    }
+  ],
+  "listeners": []
+}

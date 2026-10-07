@@ -1,0 +1,12 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/evolution-history-read-identity/error-handler-90-before.ts b/packages/opencorvus/src/server/error-handler.ts
+index 0df2ad84..dd81a954 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/evolution-history-read-identity/error-handler-90-before.ts
++++ b/packages/opencorvus/src/server/error-handler.ts
+@@ -125,6 +125,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
+   if (err.name === "MCPOAuthStateError") return 400
+   if (err.name === "McpAppHostForbiddenError") return 403
+   if (err.name === "ExpertSquadPackageError") return 400
++  if (err.name === "EvolutionHistoryAuthorityError") return 400
+   if (err.name === "ExpertSquadPackageMutationConflictError") return 409
+   return 500
+ }

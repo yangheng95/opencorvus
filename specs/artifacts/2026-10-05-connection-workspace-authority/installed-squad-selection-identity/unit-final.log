@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+test\expert-squad-selection.test.ts:
+(pass) physical keys retain exact installed namespace across scopes and receipt/config inputs [2.86ms]
+(pass) abbreviated or malformed physical keys map to explicit errors [0.19ms]
+(pass) actual declaration source projects the one exact physical inspection input [0.22ms]
+
+ 3 pass
+ 0 fail
+ 10 expect() calls
+Ran 3 tests across 1 file. [184.00ms]

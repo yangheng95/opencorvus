@@ -1,0 +1,57 @@
+$ bun script/run-tests.ts test/server/evolution-history-read-identity.test.ts
+[1/1] START test/server/evolution-history-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold-evolution-empty {"method":"GET","path":"/expert-squad/evolution-history?namespace=cold-history&id=history-target&installationScope=project&limit=20&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-xpOl7C%5Ctest-41616-t0feMt%5Cfixtures%5Cmemory-9cRzUA","status":400,"errorName":"ProviderModelNotFoundError"}
+334 |     body: {
+335 |       name: "ProviderModelNotFoundError",
+336 |       data: { providerID: "missing-evolution-provider", modelID: "missing-evolution-model" },
+337 |     },
+338 |   })
+339 |   expect(history.status).toBe(200)
+                               ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 400
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:339:26)
+(fail) cold empty history keeps real installed authority independent of missing execution model [3916.39ms]
+90 |   }
+91 |   throw contractError(context, `unsupported ${typeof value}`)
+92 | }
+93 | 
+94 | function contractError(context: string, reason: string) {
+95 |   return new CanonicalDigestContractError({ context, reason })
+                  ^
+CanonicalDigestContractError: CanonicalDigestContractError: {"context":"task-creation-contract.resolved.metadata","reason":"undefined"}
+ data: {
+  context: "task-creation-contract.resolved.metadata",
+  reason: "undefined",
+},
+
+      at contractError (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:95:14)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:94:57
+      at map (unknown:1:11)
+      at canonicalJSON (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:91:61)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:95:43
+      at map (unknown:1:11)
+      at canonicalJSON (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:91:61)
+      at canonicalTaskCreationContract (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-creation-request.ts:20:32)
+      at assertCurrentTaskCreationContract (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-creation-request.ts:42:10)
+      at buildTaskCreationContractFact (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-creation-contract.ts:180:9)
+      at persistEstablishedTask (D:\myhexin-local\opencorvus\packages\opencorvus\test\fixture\engine-task.ts:78:9)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts:146:25
+      at processTicksAndRejections (unknown:7:39)
+(fail) cold list and exact POST detail read persisted graph and retain upper/project errors [6128.33ms]
+
+ 0 pass
+ 2 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [12.67s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+[1/1] DONE test/server/evolution-history-read-identity.test.ts exit=1 duration=13.41s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\evolution-history-read-identity.test.ts
+error: script "test" exited with code 1

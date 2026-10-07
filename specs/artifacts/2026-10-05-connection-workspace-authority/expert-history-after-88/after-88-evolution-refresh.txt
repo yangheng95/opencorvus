@@ -1,0 +1,90 @@
+Browser tab: 52, Title: "OpenCorvus", URL: "http://localhost:18036/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18036/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			20 container Settings navigation
+				21 button Back to OpenCorvus
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			22 container Description: Installed Expert Squads, ID: configDialog
+				23 container tabs-cl-336
+					24 container configSidebar
+						25 button Back to app
+						26 search text field (settable) Search settings pages...
+						27 tab group
+							28 text Application
+							29 tab (selectable, settable, boolean) General, Value: 0, ID: config-tab-general
+							30 tab (selectable, settable, boolean) Appearance, Value: 0, ID: config-tab-appearance
+							31 tab (selectable, settable, boolean) Network, Value: 0, ID: config-tab-network
+							32 tab (selectable, settable, boolean) Usage, Value: 0, ID: config-tab-usage
+							33 text Product
+							34 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+							35 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+							36 text Missions & Automation
+							37 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+							38 tab (selectable, settable, boolean) Scheduled tasks, Value: 0, ID: config-tab-scheduled
+							39 text Expert Squads
+							40 tab (selectable, settable, boolean) Squad Market, Value: 0, ID: config-tab-expert-squad-install
+							41 tab (selected, settable, boolean) Installed Expert Squads, Value: 1, ID: config-tab-expert-squad
+							42 text Shared Resources
+							43 tab (selectable, settable, boolean) Providers, Value: 0, ID: config-tab-providers
+							44 tab (selectable, settable, boolean) Skill Library, Value: 0, ID: config-tab-skill
+							45 tab (selectable, settable, boolean) MCP Connections, Value: 0, ID: config-tab-mcp
+							46 tab (selectable, settable, boolean) Channel, Value: 0, ID: config-tab-channel
+							47 text Context
+							48 tab (selectable, settable, boolean) Memory & Context, Value: 0, ID: config-tab-memory
+							49 text Data
+							50 tab (selectable, settable, boolean) Archive, Value: 0, ID: config-tab-archive
+							51 tab (selectable, settable, boolean) Release notes, Value: 0, ID: config-tab-changelog
+							52 tab (selectable, settable, boolean) About, Value: 0, ID: config-tab-about
+					53 splitter Description: Settings, Value: 230, ID: configResizer
+					54 container configContent
+						55 heading Installed Expert Squads, Value: 1
+							56 text Installed Expert Squads
+						57 container Description: Installed Expert Squads, ID: config-panel-expert-squad
+							58 container
+								59 button Back to list
+								60 heading Task Resource QA, Value: 2
+									61 text Task Resource QA
+								62 text task-resource-qa
+								63 text Project package v 2026.10.06.2
+								64 text Current Project observation, a small durable text resource, and independent verification through a real Task.
+								65 text Project active Session override
+								66 pop up button (collapsed) Package actions, ID: dropdownmenu-cl-387-trigger, Secondary Actions: Expand
+								67 button Inherit Project
+								68 container tabs-cl-391
+									69 tab group Installed Squad detail sections
+										70 tab (selectable, settable, boolean) Overview, Value: 0, ID: tabs-cl-391-trigger-overview
+										71 tab (selectable, settable, boolean) Agents & Capabilities, Value: 0, ID: tabs-cl-391-trigger-agents
+										72 tab (selectable, settable, boolean) Configuration, Value: 0, ID: tabs-cl-391-trigger-configuration
+										73 tab (selected, settable, boolean) Evolution History, Value: 1, ID: tabs-cl-391-trigger-evolution
+										74 tab (selectable, settable, boolean) Package Details, Value: 0, ID: tabs-cl-391-trigger-package
+									75 container Description: Evolution History, ID: tabs-cl-391-content-evolution
+										76 container
+											77 text Evolution History and Evidence Review every immutable campaign in its exact comparison context. History never changes the installed revision automatically.
+											78 button Refresh
+										79 text Installed Revision
+										80 text 2026.10.06.2
+										81 text Package Digest
+										82 text 5f643d74d679
+										83 text Artifact Catalog Revision
+										84 text 17
+										85 container
+											86 text No Evolution History Yet Campaigns and comparisons published by Evolution Lab for this exact installation target will remain visible here.
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18036/ui/
