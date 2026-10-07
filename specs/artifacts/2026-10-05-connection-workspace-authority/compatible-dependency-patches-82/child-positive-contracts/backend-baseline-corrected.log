@@ -1,0 +1,100 @@
+[1/2] START test/runtime-image-codec.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime image codec decodes and resizes png input [10.79ms]
+(pass) runtime image codec decodes and resizes avif input [8.28ms]
+(pass) runtime image codec preserves exact lossless pixels and small SVG output [2.82ms]
+
+ 3 pass
+ 0 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [1154.00ms]
+[1/2] DONE test/runtime-image-codec.test.ts exit=0 duration=1.92s
+[2/2] START test/dependency-patch-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) patched glob dependencies enumerate exact nested brace selections [12.05ms]
+(pass) the real Node proxy owner delivers exact streamed HTTP data and disposes its dispatcher [267.00ms]
+(pass) the installed search-engine Axios dependency preserves exact HTTP response data [108.34ms]
+(pass) AJV's installed URI implementation serializes valid authorities and rejects malformed ports [1.90ms]
+(pass) Astro's installed serializer round-trips shared content values and dates [8.06ms]
+114 |       error = caught
+115 |     }
+116 |     expect({
+117 |       outer: error instanceof serializer.SerovalDeserializationError,
+118 |       cause: error?.cause instanceof serializer.SerovalMalformedNodeError,
+119 |     }).toEqual({ outer: true, cause: true })
+             ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "cause": true,
++   "cause": false,
+    "outer": true,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-patch-contract.test.ts:119:8)
+(fail) Solid parent serializers preserve tiny typed views and report the bounded malformed node [23.68ms]
+145 |       column: 2,
+146 |       name: "owned",
+147 |     })
+148 |     const rows: unknown[] = []
+149 |     consumer.eachMapping((mapping: unknown) => rows.push(mapping))
+150 |     expect(rows).toEqual([
+                       ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "generatedColumn": 0,
+      "generatedLine": 4,
+-     "name": "owned",
++     "name": null,
+      "originalColumn": 2,
+      "originalLine": 4,
+      "source": "original.js",
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-patch-contract.test.ts:150:18)
+(fail) current source map parents preserve indexed coordinates and explicit invalid offsets [12.00ms]
+181 |     expect([
+182 |       proxyaddr(req("10.0.0.1"), ["10.0.0.0/8"]),
+183 |       proxyaddr(req("::ffff:10.0.0.1"), ["::ffff:10.0.0.0/104"]),
+184 |       proxyaddr(req("127.0.0.1"), ["::ffff:10.0.0.0/8"]),
+185 |       proxyaddr(req("::ffff:8.8.8.8"), ["::ffff:10.0.0.0/8"]),
+186 |     ]).toEqual(["9.9.9.9", "9.9.9.9", "127.0.0.1", "::ffff:8.8.8.8"])
+             ^
+error: expect(received).toEqual(expected)
+
+  [
+    "9.9.9.9",
+    "9.9.9.9",
+-   "127.0.0.1",
+-   "::ffff:8.8.8.8",
++   "9.9.9.9",
++   "9.9.9.9",
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-patch-contract.test.ts:186:8)
+(fail) both Express proxy owners return exact ordinary and mapped client identities [117.30ms]
+
+ 5 pass
+ 3 fail
+ 14 expect() calls
+Ran 8 tests across 1 file. [1.60s]
+[2/2] DONE test/dependency-patch-contract.test.ts exit=1 duration=1.74s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-patch-contract.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\dependency-patch-contract.test.ts

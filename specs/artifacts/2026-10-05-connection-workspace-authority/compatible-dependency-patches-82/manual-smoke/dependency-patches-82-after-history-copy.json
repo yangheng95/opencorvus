@@ -1,0 +1,29 @@
+{
+  "observedAtUtc": "2026-10-07T06:24:03.7831210Z",
+  "port": 18038,
+  "credentialStaging": "None; source87 closed native inventory retained; no Task requested",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/installed-selection-before-87",
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 56792,
+        "processInstanceID": "win32:639269472567259613",
+        "occurrenceID": "54c463de-692d-48ba-a251-b6f3bacd1514"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 33736,
+        "processInstanceID": "win32:639269472576017139",
+        "occurrenceID": "a318c7cb-843d-4393-9617-981526806f7c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "producerSessionID": null,
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dependency-patches-after-82",
+  "taskID": null,
+  "purpose": "Real no-Provider manual smoke of five dependency patches after closed87 copy",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project"
+}

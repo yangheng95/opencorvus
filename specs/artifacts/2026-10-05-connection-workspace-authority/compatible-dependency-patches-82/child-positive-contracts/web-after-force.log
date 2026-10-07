@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\toml-parser.test.ts:
+(pass) Astro's TOML parser reads data and reports an unfinished array at EOF [101.81ms]
+(pass) Astro TOML parser preserves dotted, quoted, array-table and bounded many-key data [8.55ms]
+
+ 2 pass
+ 0 fail
+ 5 expect() calls
+Ran 2 tests across 1 file. [200.00ms]

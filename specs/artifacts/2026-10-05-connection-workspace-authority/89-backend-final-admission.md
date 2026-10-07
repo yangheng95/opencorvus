@@ -1,0 +1,43 @@
+# 89 backend final admission review
+
+## Recall
+
+Root authorizes only this independent read-only note while Scope82 repairs the actual Bun dependency parent links. Selected-only shape is fixed: selection carries catalog_revision and nullable existing IndexEntry.pick(id/source). No source, SDK, tests, dependencies, checks, service, Provider, UI or credential operations were performed. No shared plan or index is edited. Implementation remains pending Root admission.
+
+## Once-only implementation file map
+
+1. packages/opencorvus/src/expert-squad/catalog.ts: extend existing ExpertSquadSettingsDetailSchema with selection, reusing Page.catalog_revision and IndexEntry.pick({id:true,source:true}); export only its existing inferred surface contract as required. No new source namespace formatter.
+2. packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts: settingsDetail returns the full existing Settings surface or undefined. It remains the sole accepted producer, with the original exact installed full-body reader. Add one local pure builtin-collision predicate beside assertKnownProfileID and use it for its current global/Project branches plus selected builtin eligibility. Existing discovery/cache/reconciliation order remains intact.
+3. packages/opencorvus/src/server/routes/expert-squad.ts: consume the full producer surface instead of assembling scope/selected itself; retain selected-not-found404. See the explicit coherence-error admission issue below.
+4. Existing direct backend tests: catalog-index.test.ts has exactly three settingsDetail callsites (122,151,174); squad-sdk-package.test.ts has two (311,372). Adapt Summary observations to surface.selected and add positive surface/winner outputs. Do not keep a compatibility return or helper. Their existing selected-package-loader spy is a local exact-input contract, not actual UI or SDK-delivery evidence.
+5. Focused real SDK/Manager/cold-route/writer test file requires Root's exact filename admission. Existing server/expert-selected-read-identity.test.ts and route-probe consumers use public schemas; review response assertions for added selection. Canonical OpenAPI/SDK generation is required after schema acceptance; never hand-edit generated types. The Overlay surface consumer and Panel accepted-envelope migration belong to Root's frontend scope.
+
+Production direct Resolver caller is only settings/detail. Overlay service loadExpertSquadSettings returns the endpoint surface already; its Panel consumer currently selects surface.selected. HTTP probes and generated SDK do not bypass this endpoint. Public request identity, namespace validation and Project route classification remain unchanged.
+
+## Pure builtin collision policy
+
+Proposed local predicate has only exact typed id inputs: profileID, readonly Pick<Registry.CatalogDeclaration,"id"> records, readonly Pick<Registry.DiscoveryIssue,"id"> issues. Return record/issue id equality. Do not call it unless canonical builtInPackages membership has established builtin identity. assertKnownProfileID global passes its original discovered.items and issues; Project passes installations and issues. Preserve their current Error construction and Project ConfigCandidateValidationError / Session BadRequestBody wrapping.
+
+Metadata passes accepted inventory.externalInstallations/issues. Although externalCatalogPackages filters colliding installations, it retains same-id collision issues. Thus builtin effectiveRows alone cannot grant eligibility; the predicate yields null on collision while the Summary remains actual builtin bytes. External IDs use only effectiveRows: valid Project may override broken global with the same ID, and a global issue must not null that valid winner. Malformed Project reservations and same-scope duplicates already retire external winners through Registry discovery; no second precedence implementation is needed.
+
+## Complete accepted-selection algorithm
+
+At settingsDetail logical entry capture Registry.catalogInventoryGeneration once. Await the existing catalogInventory for this Project. Find exact selected installation by the existing id/source (scope/namespace) in its installationRows; builtin lookup remains canonical builtin packages. Resolve the winner for selected.id from the same effectiveRows. For builtin only, apply shared collision policy to that same inventory. External absence caused by reservation/duplicate yields null; do not select a visible global row by fallback.
+
+For actual installed Summary, call the original loadInstalledCatalogPackage with the exact requested physical identity. Its loadCatalogPackage captures one package tree for README/selector/digest. Compare returned id/namespace/version and manifest against the selected declaration's existing fields; retain its existing body/integrity errors. CatalogDeclaration explicitly has no tree digest or bodies. Do not add hash acceptance, current-disk secondary read, or pretend revision validates arbitrary later filesystem mutation.
+
+After all awaited work, check generation equals the captured generation. Any mismatch or declaration mismatch fails this one read; no retry loop or alternate inventory. Build/parse the full surface and return synchronously after that check, with no subsequent await that could accept a later generation silently. The same inventory revision labels both selected relation and winner. Generation may change during discovery itself because current discovery can reconcile mutations: conservative one-shot failure is honest, rather than claiming that the original capture survived. Root must explicitly accept this error contract and can later naturally retry through existing UI action.
+
+Canonical invalidation protects Manager-driven changes. Unannounced direct filesystem edits remain an existing unknown freshness boundary; comparing manifest/id/version does not prove bytes equal the earlier declaration. A same-manifest body change is simply represented by the one actual captured full body, while current declaration relation is generation-qualified, not a fabricated immutable snapshot claim.
+
+## Existing error mapping gap requiring exact admission
+
+No current catalog-generation-specific typed error was found in Resolver/Registry/catalog. settings/detail currently does not call the existing packageRoute wrapper. Therefore an ordinary mismatch Error today maps to generic500, not automatically ExpertSquadPackageError400. Minimal reuse is producer throws a fixed clear Error on coherence failure; route calls its existing packageRoute around settingsDetail, which preserves auth read errors and wraps the original cause as ExpertSquadPackageError (existing named400 mapping). Keep undefined-result NotFoundError404 outside that wrapper. This is a small explicit public error-contract change requiring Root admission; do not import the server error into Resolver, create another NamedError/status map, or falsely describe existing behavior as400. If Root elects existing500 instead, tests must qualify that honest explicit failure rather than assert400 by assumption.
+
+## Required positive qualification and limits
+
+Real SDK/Manager fixture cases: inactive builtin; inactive valid Project; global-only winner; selected shadowed global with exact Project winner; malformed Project reservation suppressing valid global; same-scope duplicate; builtin collision from valid record and malformed exact-id issue; valid Project overriding broken same-id global. Assert complete selected surface, reused source identity and original public errors. Use existing real Project and ordinary root Session writers to observe persisted ID resolution; Task changed-ID retains typed TaskPromptProfileImmutableError and original permanent binding.
+
+Model validation must remain exact: Project candidate validation and Session HTTP PATCH validate effective model references before profile validation. Omitted/blank model is not a reference; explicitly missing named model remains its typed ModelNotFound failure. Direct Session merge fixture alone cannot claim HTTP model validation. Current valid active badges, future Project default writes and fixed Task409 remain separate contracts.
+
+Generation test should mutate through the canonical invalidation path while the real selected-loader operation is held by a controlled fixture boundary, then observe explicit coherence settlement and subsequent natural fresh accepted surface. Local spy may control scheduling, but actual package reads/writer/discovery remain production. This proves service/HTTP data contracts, not UI or real LLM authority. Cold route output, body loading, writer and generation tests have not run in this read-only phase. Source stays frozen awaiting Root.

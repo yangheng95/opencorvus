@@ -1,0 +1,39 @@
+{
+  "occurrence": "dependency-patches-82-after-09a6175f-8347-488f-8a89-3ca87cd6aa7d",
+  "outcome": "ready",
+  "host": {
+    "pid": 71324,
+    "processInstanceID": "win32:639269510454218641",
+    "occurrenceID": "f14f976a-545e-4ebb-81fc-e1d9e6c20b37"
+  },
+  "parent": {
+    "pid": 38204,
+    "processInstanceID": "win32:639269510400900396",
+    "occurrenceID": "c5ee30e6-97c0-43c7-b33a-5255b4bf7293"
+  },
+  "target": {
+    "pid": 65092,
+    "processInstanceID": "win32:639269510468673867",
+    "occurrenceID": "4571f128-66d0-4b0f-ae6f-af9c14e0e31b"
+  },
+  "targetBirthAtMs": 1791354246867,
+  "observedAtUtc": "2026-10-07T06:24:06.905Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18038",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dependency-patches-after-82\\startup.json",
+    "--startup-occurrence",
+    "dependency-patches-82-after-09a6175f-8347-488f-8a89-3ca87cd6aa7d",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

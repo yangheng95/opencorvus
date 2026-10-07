@@ -111,7 +111,7 @@
     "@opencorvus-ai/script": "workspace:*",
     "@opencorvus-ai/sdk": "workspace:*",
     "luxon": "catalog:",
-    "sharp": "0.35.5",
+    "sharp": "0.35.4",
     "typescript": "catalog:"
   },
   "repository": {
@@ -162,13 +162,11 @@
     "minimatch": "10.2.6",
     "nanoid": "5.1.16",
     "postcss": "8.5.23",
-    "proxy-addr": "2.0.8",
     "qs": "6.16.0",
-    "seroval": "1.6.3",
-    "sharp": "0.35.5",
-    "smol-toml": "1.9.0",
+    "seroval": "1.6.2",
+    "sharp": "0.35.4",
+    "smol-toml": "1.7.1",
     "socket.io-parser": "4.2.7",
-    "source-map-js": "1.2.2",
     "svgo": "4.1.0",
     "toml": "4.2.0",
     "undici": "6.28.1"

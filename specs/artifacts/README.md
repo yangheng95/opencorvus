@@ -163,7 +163,7 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Expert catalog error80](2026-10-05-connection-workspace-authority/expert-catalog-error-provenance-plan.md): one original-error owner and true HTTP Details; friendly hint/Retry manually qualified, scoped pagination code guarded, Scope80 CLOSED; other dialogs/races unqualified.
 - [Command deadline79](2026-10-05-connection-workspace-authority/test-runner-total-deadline-plan.md): sole process facade/byte collector and900s per-command policy, bounded physical/output closure with retained uncertainty; focused native/contracts/types and original81/145 pass, external async callbacks remain separate.
 - [Selected Expert readers83](2026-10-05-connection-workspace-authority/expert-selected-read-identity-plan.md): three precise identity readers; legal cold3/11 and native full-query inspection/detail200, real overview/Agents/README/no-fields state qualified, Scope83 CLOSED; history86 remains separate.
-- [Compatible dependency patches82](2026-10-05-connection-workspace-authority/compatible-dependency-patches-plan.md): five current published patch candidates analyzed; implementation held until current source/checking environment is frozen.
+- [Compatible dependency patches82](2026-10-05-connection-workspace-authority/compatible-dependency-patches-plan.md): five exact compatible patches installed and actual parent links repaired; original13 contracts/35 assertions and types pass; full-lock anonymous response five residual advisories; Windows/platform limits retained.
 - [Declared capability display](2026-10-05-connection-workspace-authority/scheduler-capability-display-plan.md): canonical declared-reference count and truthful title; real QA2 refs in English/Chinese pixels qualified, source/types/i18n/build pass, owned88 CLOSED.
 - [Installed selection identity](2026-10-05-connection-workspace-authority/installed-squad-selection-identity-plan.md): one full physical selection key/parser and exact transport; genuine Manager21 inventory/page2/detail/no-fields visuals pass, scopes87/91 CLOSED; full refresh/races remain unqualified.
 - [Evolution history reader86](2026-10-05-connection-workspace-authority/evolution-history-read-identity-plan.md): exact GET history/POST detail identity and named foreign400 mapping; cold data graph/HTTP/types pass, real empty-history Refresh88 qualified/CLOSED; populated native/LM remain unqualified.
@@ -177,3 +177,12 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 
 - [Root declaration/history84–88 manual plan](2026-10-05-connection-workspace-authority/root-expert-declaration-history-manual-review.md): actual count/history88 and page2 selection91 reviewed by source owners and Root; all owned pages/native scopes CLOSED, precise contract/visual/execution limits retained.
 - [Expert activation89](2026-10-05-connection-workspace-authority/expert-squad-activation-eligibility-plan.md): real inactive Research Studio and page2 package actions disabled; canonical winner/read owner design analyzed, implementation held.
+- [Activation backend admission89](
+2026-10-05-connection-workspace-authority/
+89-backend-final-admission.md): sole selected envelope, builtin collision predicate and one-shot generation settlement reviewed; implementation held.
+- [Activation frontend admission89](
+2026-10-05-connection-workspace-authority/
+89-frontend-final-admission.md): accepted winner/button/handler ownership and truthful Project/Session/fixed-Task semantics reviewed; implementation held.
+- [Residual selector parser92](
+2026-10-05-connection-workspace-authority/
+residual-selector-parser-investigation-92.md): actual two-parent parser6 chain, unsupported major override risks and narrow upstream-backport candidate investigated; no implementation or security closure.

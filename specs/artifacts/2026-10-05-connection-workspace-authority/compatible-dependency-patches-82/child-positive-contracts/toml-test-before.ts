@@ -27,30 +27,3 @@ test("Astro's TOML parser reads data and reports an unfinished array at EOF", ()
     isTomlError: true,
   })
 }, 10_000)
-
-test("Astro TOML parser preserves dotted, quoted, array-table and bounded many-key data", () => {
-  const { parse, TomlError } = astroRequire("smol-toml")
-  const data = parse(
-    'title="观察🙂"\n"a.b"="literal"\nowner.name="Ada"\nvalues=[1,2]\nenabled=true\n[[rows]]\nname="one"\n[[rows]]\nname="two"',
-  )
-  expect(data).toEqual({
-    title: "观察🙂",
-    "a.b": "literal",
-    owner: { name: "Ada" },
-    values: [1, 2],
-    enabled: true,
-    rows: [{ name: "one" }, { name: "two" }],
-  })
-  const expected = Object.fromEntries(Array.from({ length: 256 }, (_, index) => [`key${index}`, index]))
-  const document = Object.entries(expected)
-    .map(([key, value]) => `${key}=${value}`)
-    .join("\n")
-  expect(parse(document)).toEqual(expected)
-  let error
-  try {
-    parse("a=[1 #")
-  } catch (caught) {
-    error = caught
-  }
-  expect({ typed: error instanceof TomlError, line: error?.line }).toEqual({ typed: true, line: 1 })
-})

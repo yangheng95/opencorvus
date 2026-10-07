@@ -1,0 +1,23 @@
+{
+  "occurrence": "dependency-patches-82-after-09a6175f-8347-488f-8a89-3ca87cd6aa7d",
+  "outcome": "settled",
+  "host": {
+    "pid": 71324,
+    "processInstanceID": "win32:639269510454218641",
+    "occurrenceID": "f14f976a-545e-4ebb-81fc-e1d9e6c20b37"
+  },
+  "target": {
+    "pid": 65092,
+    "processInstanceID": "win32:639269510468673867",
+    "occurrenceID": "4571f128-66d0-4b0f-ae6f-af9c14e0e31b"
+  },
+  "observedAtUtc": "2026-10-07T06:25:12.433Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

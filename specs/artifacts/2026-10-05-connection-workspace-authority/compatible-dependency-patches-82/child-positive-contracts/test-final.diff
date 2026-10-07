@@ -1,0 +1,195 @@
+diff --git a/packages/opencorvus/test/dependency-patch-contract.test.ts b/packages/opencorvus/test/dependency-patch-contract.test.ts
+index 60758787..9f26c34d 100644
+--- a/packages/opencorvus/test/dependency-patch-contract.test.ts
++++ b/packages/opencorvus/test/dependency-patch-contract.test.ts
+@@ -84,3 +84,124 @@ test("Astro's installed serializer round-trips shared content values and dates",
+   expect(result).toEqual(input)
+   expect(result.repeated === result.date).toBe(true)
+ })
++
++test("Solid parent serializers preserve tiny typed views and report the bounded malformed node", () => {
++  for (const packageFile of ["../../overlay/package.json", "../../web/package.json"]) {
++    const parent = createRequire(new URL(packageFile, import.meta.url))
++    const serializer = createRequire(parent.resolve("solid-js"))("seroval")
++    const input = new Uint8Array([7, 19, 231])
++    const result = serializer.fromJSON(serializer.toJSON(input))
++    expect({
++      constructor: result.constructor.name,
++      bytes: [...result],
++      offset: result.byteOffset,
++      length: result.length,
++    }).toEqual({ constructor: "Uint8Array", bytes: [7, 19, 231], offset: 0, length: 3 })
++    const view = new DataView(new Uint8Array([1, 2, 3, 4]).buffer, 1, 2)
++    const restored = serializer.fromJSON(serializer.toJSON(view))
++    expect({
++      constructor: restored.constructor.name,
++      offset: restored.byteOffset,
++      length: restored.byteLength,
++      bytes: [restored.getUint8(0), restored.getUint8(1)],
++    }).toEqual({ constructor: "DataView", offset: 1, length: 2, bytes: [2, 3] })
++    const malformed = serializer.toJSON(input)
++    malformed.t.l = 1_000_001
++    let error
++    try {
++      serializer.fromJSON(malformed)
++    } catch (caught) {
++      error = caught
++    }
++    console.log("Seroval bounded error baseline", {
++      parent: packageFile,
++      outer: error?.constructor.name,
++      cause: error?.cause?.constructor.name,
++    })
++    expect({
++      outer: error instanceof serializer.SerovalDeserializationError,
++      cause: error?.cause instanceof serializer.SerovalMalformedNodeError,
++    }).toEqual({ outer: true, cause: true })
++  }
++})
++
++test("current source map parents preserve indexed coordinates and explicit invalid offsets", () => {
++  const overlay = createRequire(new URL("../../overlay/package.json", import.meta.url))
++  const web = createRequire(new URL("../../web/package.json", import.meta.url))
++  const astro = createRequire(web.resolve("astro/package.json"))
++  const parents = [
++    createRequire(createRequire(overlay.resolve("vite/package.json")).resolve("postcss")),
++    createRequire(astro.resolve("magicast")),
++  ]
++  for (const parent of parents) {
++    const { SourceMapGenerator, SourceMapConsumer } = parent("source-map-js")
++    const generator = new SourceMapGenerator({ file: "generated.js" })
++    generator.addMapping({
++      generated: { line: 2, column: 0 },
++      original: { line: 4, column: 2 },
++      source: "original.js",
++      name: "owned",
++    })
++    const map = { version: 3, sections: [{ offset: { line: 2, column: 0 }, map: generator.toJSON() }] }
++    const consumer = new SourceMapConsumer(map)
++    expect(consumer.originalPositionFor({ line: 4, column: 0 })).toEqual({
++      source: "original.js",
++      line: 4,
++      column: 2,
++      name: "owned",
++    })
++    const rows: unknown[] = []
++    consumer.eachMapping(
++      (mapping: {
++        source: string
++        generatedLine: number
++        generatedColumn: number
++        originalLine: number
++        originalColumn: number
++      }) =>
++        rows.push({
++          source: mapping.source,
++          generatedLine: mapping.generatedLine,
++          generatedColumn: mapping.generatedColumn,
++          originalLine: mapping.originalLine,
++          originalColumn: mapping.originalColumn,
++        }),
++    )
++    expect(rows).toEqual([
++      {
++        source: "original.js",
++        generatedLine: 4,
++        generatedColumn: 0,
++        originalLine: 4,
++        originalColumn: 2,
++      },
++    ])
++    for (const line of [-1, 0.5]) {
++      let error
++      try {
++        new SourceMapConsumer({ version: 3, sections: [{ offset: { line, column: 0 }, map: generator.toJSON() }] })
++      } catch (caught) {
++        error = caught
++      }
++      expect({ name: error?.name, message: error?.message }).toEqual({
++        name: "Error",
++        message: "Section offset line and column must be non-negative integers.",
++      })
++    }
++  }
++})
++
++test("both Express proxy owners return exact ordinary and mapped client identities", () => {
++  const search = createRequire(require.resolve("open-websearch/build/engines/bing/bing.js"))
++  const sdk = createRequire(require.resolve("@modelcontextprotocol/sdk/server/streamableHttp.js"))
++  for (const expressPath of [sdk.resolve("express"), search.resolve("express")]) {
++    const proxyaddr = createRequire(expressPath)("proxy-addr")
++    const req = (address: string) => ({ socket: { remoteAddress: address }, headers: { "x-forwarded-for": "9.9.9.9" } })
++    expect([
++      proxyaddr(req("10.0.0.1"), ["10.0.0.0/8"]),
++      proxyaddr(req("::ffff:10.0.0.1"), ["::ffff:10.0.0.0/104"]),
++      proxyaddr(req("127.0.0.1"), ["::ffff:10.0.0.0/8"]),
++      proxyaddr(req("::ffff:8.8.8.8"), ["::ffff:10.0.0.0/8"]),
++    ]).toEqual(["9.9.9.9", "9.9.9.9", "127.0.0.1", "::ffff:8.8.8.8"])
++  }
++})
+diff --git a/packages/opencorvus/test/runtime-image-codec.test.ts b/packages/opencorvus/test/runtime-image-codec.test.ts
+index c146d58f..db09990d 100644
+--- a/packages/opencorvus/test/runtime-image-codec.test.ts
++++ b/packages/opencorvus/test/runtime-image-codec.test.ts
+@@ -15,3 +15,26 @@ for (const format of ["png", "avif"] as const) {
+     expect(await sharp(output.data).metadata()).toMatchObject({ format: "png", width: 16, height: 12 })
+   })
+ }
++
++test("runtime image codec preserves exact lossless pixels and small SVG output", async () => {
++  const png = await sharp({ create: { width: 2, height: 2, channels: 3, background: { r: 40, g: 80, b: 120 } } })
++    .png()
++    .toBuffer()
++  const decoded = await sharp(png).raw().toBuffer({ resolveWithObject: true })
++  expect({
++    width: decoded.info.width,
++    height: decoded.info.height,
++    channels: decoded.info.channels,
++    bytes: [...decoded.data],
++  }).toEqual({ width: 2, height: 2, channels: 3, bytes: [40, 80, 120, 40, 80, 120, 40, 80, 120, 40, 80, 120] })
++  const svg = Buffer.from(
++    '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#285078"/></svg>',
++  )
++  const output = await sharp(svg).resize(4, 4).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
++  expect({
++    width: output.info.width,
++    height: output.info.height,
++    channels: output.info.channels,
++    firstPixel: [...output.data.subarray(0, 4)],
++  }).toEqual({ width: 4, height: 4, channels: 4, firstPixel: [40, 80, 120, 255] })
++})
+diff --git a/packages/web/test/toml-parser.test.ts b/packages/web/test/toml-parser.test.ts
+index 78f358a3..7226e0aa 100644
+--- a/packages/web/test/toml-parser.test.ts
++++ b/packages/web/test/toml-parser.test.ts
+@@ -27,3 +27,30 @@ test("Astro's TOML parser reads data and reports an unfinished array at EOF", ()
+     isTomlError: true,
+   })
+ }, 10_000)
++
++test("Astro TOML parser preserves dotted, quoted, array-table and bounded many-key data", () => {
++  const { parse, TomlError } = astroRequire("smol-toml")
++  const data = parse(
++    'title="观察🙂"\n"a.b"="literal"\nowner.name="Ada"\nvalues=[1,2]\nenabled=true\n[[rows]]\nname="one"\n[[rows]]\nname="two"',
++  )
++  expect(data).toEqual({
++    title: "观察🙂",
++    "a.b": "literal",
++    owner: { name: "Ada" },
++    values: [1, 2],
++    enabled: true,
++    rows: [{ name: "one" }, { name: "two" }],
++  })
++  const expected = Object.fromEntries(Array.from({ length: 256 }, (_, index) => [`key${index}`, index]))
++  const document = Object.entries(expected)
++    .map(([key, value]) => `${key}=${value}`)
++    .join("\n")
++  expect(parse(document)).toEqual(expected)
++  let error
++  try {
++    parse("a=[1 #")
++  } catch (caught) {
++    error = caught
++  }
++  expect({ typed: error instanceof TomlError, line: error?.line }).toEqual({ typed: true, line: 1 })
++})

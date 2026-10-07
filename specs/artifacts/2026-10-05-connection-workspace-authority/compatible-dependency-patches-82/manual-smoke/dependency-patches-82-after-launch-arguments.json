@@ -1,0 +1,26 @@
+{
+  "occurrence": "dependency-patches-82-after-09a6175f-8347-488f-8a89-3ca87cd6aa7d",
+  "port": 18038,
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dependency-patches-after-82\\evidence",
+    "dependency-patches-82-after-09a6175f-8347-488f-8a89-3ca87cd6aa7d",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18038",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\installed-selection-before-87\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dependency-patches-after-82\\startup.json",
+    "--startup-occurrence",
+    "dependency-patches-82-after-09a6175f-8347-488f-8a89-3ca87cd6aa7d",
+    "--log-level",
+    "INFO"
+  ]
+}

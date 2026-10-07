@@ -1,0 +1,508 @@
+$ bun run --cwd ../util build && bun run brand:assets && bun run market:data && bun run facts:data
+$ tsc -p tsconfig.build.json
+$ bun run ./script/generate-brand-assets.ts
+$ bun run ./script/generate-public-market.ts
+$ bun run ./script/generate-platform-facts.ts
+{"modelProviders":87,"models":2579,"chatChannels":13,"plannedChatChannels":14,"builtInTools":68}
+$ astro build && bun run ./script/copy-landing-downloads.ts && bun run ./script/package-website-runtime.ts
+[astro] `markdown.remarkPlugins`, `markdown.rehypePlugins`, and `markdown.remarkRehype` are deprecated. Pass them to `unified({...})` from `@astrojs/markdown-remark` directly instead.
+14:23:41 [@astrojs/node] Enabling sessions with filesystem storage
+14:23:41 [WARN] [toolbeam-docs-theme] A `<Head>` component override is already defined in your Starlight configuration.
+14:23:41 [WARN] [toolbeam-docs-theme] To use `toolbeam-docs-theme`, either remove this override or manually render the content from `toolbeam-docs-theme/overrides/Head.astro`.
+14:23:41 [WARN] [toolbeam-docs-theme] A `<Header>` component override is already defined in your Starlight configuration.
+14:23:41 [WARN] [toolbeam-docs-theme] To use `toolbeam-docs-theme`, either remove this override or manually render the content from `toolbeam-docs-theme/overrides/Header.astro`.
+14:23:41 [WARN] [toolbeam-docs-theme] A `<Footer>` component override is already defined in your Starlight configuration.
+14:23:41 [WARN] [toolbeam-docs-theme] To use `toolbeam-docs-theme`, either remove this override or manually render the content from `toolbeam-docs-theme/overrides/Footer.astro`.
+14:23:41 [vite] Re-optimizing dependencies because lockfile has changed
+14:23:42 [vite] [optimizer] bundling dependencies...
+14:23:43 [content] Syncing content
+14:23:44 [content] Synced content
+14:23:44 [types] Generated 2.27s
+14:23:44 [build] output: "static"
+14:23:44 [build] mode: "server"
+14:23:44 [build] directory: D:\myhexin-local\opencorvus\packages\web\dist\
+14:23:44 [build] adapter: @astrojs/node
+14:23:44 [build] Collecting build info...
+14:23:44 [build] ✓ Completed in 2.73s.
+14:23:44 [build] Building server entrypoints...
+14:23:50 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../../node_modules/.bun/@astrojs+starlight@0.41.7+b9edb019090eaa9e/node_modules/@astrojs/starlight/utils/translations.ts:27:32 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m27 │[0m [38;5;249me[0m[38;5;249mx[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mu[0m[38;5;249ms[0m[38;5;249me[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0mawait createTranslationSystem(config, await loadTranslations(), pluginTranslations)[38;5;249m;[0m
+ [38;5;240m   │[0m                                ─────────────────────────────────────────┬─────────────────────────────────────────  
+ [38;5;240m   │[0m                                                                         ╰─────────────────────────────────────────── 
+[38;5;246m────╯[0m
+
+14:23:50 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../../node_modules/.bun/@astrojs+starlight@0.41.7+b9edb019090eaa9e/node_modules/@astrojs/starlight/utils/translations.ts:27:70 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m27 │[0m [38;5;249me[0m[38;5;249mx[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mu[0m[38;5;249ms[0m[38;5;249me[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249ma[0m[38;5;249mw[0m[38;5;249ma[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249me[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mS[0m[38;5;249my[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249me[0m[38;5;249mm[0m[38;5;249m([0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mf[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249m,[0m[38;5;249m [0mawait loadTranslations()[38;5;249m,[0m[38;5;249m [0m[38;5;249mp[0m[38;5;249ml[0m[38;5;249mu[0m[38;5;249mg[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m)[0m[38;5;249m;[0m
+ [38;5;240m   │[0m                                                                      ────────────┬───────────  
+ [38;5;240m   │[0m                                                                                  ╰───────────── 
+[38;5;246m────╯[0m
+
+14:23:50 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/lib/changelog.ts:5:19 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m5 │[0m [38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mp[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249ms[0m[38;5;249ms[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0mawait createMarkdownProcessor()[38;5;249m;[0m
+ [38;5;240m  │[0m                   ───────────────┬───────────────  
+ [38;5;240m  │[0m                                  ╰───────────────── 
+[38;5;246m───╯[0m
+
+14:23:50 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/lib/changelog.ts:6:39 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m 6 │[0m ╭─▶ [38;5;249me[0m[38;5;249mx[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mr[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249me[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249md[0m[38;5;249mR[0m[38;5;249me[0m[38;5;249ml[0m[38;5;249me[0m[38;5;249ma[0m[38;5;249ms[0m[38;5;249me[0m[38;5;249mH[0m[38;5;249mi[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0mawait Promise.all(releaseHistory.map(async (entry) => ({
+ [38;5;240m   ┆[0m ┆   
+ [38;5;246m10 │[0m ├─▶ })))[38;5;249m;[0m
+ [38;5;240m   │[0m │           
+ [38;5;240m   │[0m ╰─────────── 
+[38;5;246m────╯[0m
+
+14:23:50 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../../node_modules/.bun/@astrojs+starlight@0.41.7+b9edb019090eaa9e/node_modules/@astrojs/starlight/utils/routing/index.ts:15:15 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m15 │[0m ╭─▶ [38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249md[0m[38;5;249mo[0m[38;5;249mc[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249m([0mawait getCollection("docs", ({ data }) => {
+ [38;5;240m   ┆[0m ┆   
+ [38;5;246m17 │[0m ├─▶ })[38;5;249m [0m[38;5;249m?[0m[38;5;249m?[0m[38;5;249m [0m[38;5;249m[[0m[38;5;249m][0m[38;5;249m)[0m[38;5;249m.[0m[38;5;249mm[0m[38;5;249ma[0m[38;5;249mp[0m[38;5;249m([0m[38;5;249mn[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mm[0m[38;5;249ma[0m[38;5;249ml[0m[38;5;249mi[0m[38;5;249mz[0m[38;5;249me[0m[38;5;249mC[0m[38;5;249mo[0m[38;5;249ml[0m[38;5;249ml[0m[38;5;249me[0m[38;5;249mc[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mE[0m[38;5;249mn[0m[38;5;249mt[0m[38;5;249mr[0m[38;5;249my[0m[38;5;249m)[0m[38;5;249m;[0m
+ [38;5;240m   │[0m │                                              
+ [38;5;240m   │[0m ╰────────────────────────────────────────────── 
+[38;5;246m────╯[0m
+
+14:23:50 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m \0virtual:astro-expressive-code/config:5:25 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m5 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249me[0m[38;5;249mc[0m[38;5;249mC[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mf[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mF[0m[38;5;249mi[0m[38;5;249ml[0m[38;5;249me[0m[38;5;249mO[0m[38;5;249mp[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249m([0mawait import('virtual:astro-expressive-code/ec-config')[38;5;249m)[0m[38;5;249m.[0m[38;5;249md[0m[38;5;249me[0m[38;5;249mf[0m[38;5;249ma[0m[38;5;249mu[0m[38;5;249ml[0m[38;5;249mt[0m
+ [38;5;240m  │[0m                            ───────────────────────────┬───────────────────────────  
+ [38;5;240m  │[0m                                                       ╰───────────────────────────── 
+[38;5;246m───╯[0m
+
+14:23:50 [vite] ✓ built in 6.54s
+14:23:53 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../../node_modules/.bun/@astrojs+starlight@0.41.7+b9edb019090eaa9e/node_modules/@astrojs/starlight/utils/translations.ts:27:32 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m27 │[0m [38;5;249me[0m[38;5;249mx[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mu[0m[38;5;249ms[0m[38;5;249me[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0mawait createTranslationSystem(config, await loadTranslations(), pluginTranslations)[38;5;249m;[0m
+ [38;5;240m   │[0m                                ─────────────────────────────────────────┬─────────────────────────────────────────  
+ [38;5;240m   │[0m                                                                         ╰─────────────────────────────────────────── 
+[38;5;246m────╯[0m
+
+14:23:53 [WARN] [vite] [33m[TOLERATED_TRANSFORM] [0mTop-level await is not available in the configured target environment.
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../../node_modules/.bun/@astrojs+starlight@0.41.7+b9edb019090eaa9e/node_modules/@astrojs/starlight/utils/translations.ts:27:70 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m27 │[0m [38;5;249me[0m[38;5;249mx[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mu[0m[38;5;249ms[0m[38;5;249me[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249ma[0m[38;5;249mw[0m[38;5;249ma[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mr[0m[38;5;249me[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249me[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mS[0m[38;5;249my[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249me[0m[38;5;249mm[0m[38;5;249m([0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mf[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249m,[0m[38;5;249m [0mawait loadTranslations()[38;5;249m,[0m[38;5;249m [0m[38;5;249mp[0m[38;5;249ml[0m[38;5;249mu[0m[38;5;249mg[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mT[0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249m)[0m[38;5;249m;[0m
+ [38;5;240m   │[0m                                                                      ────────────┬───────────  
+ [38;5;240m   │[0m                                                                                  ╰───────────── 
+[38;5;246m────╯[0m
+
+14:23:53 [vite] ✓ built in 2.55s
+14:23:53 [vite] ✓ built in 242ms
+
+ prerendering static routes 
+Entry docs → 404 was not found.
+14:23:55   ├─ /404.html (+39ms) 
+14:23:55   ├─ /architecture-explorer/index.html (+1ms) (file not created, response body was empty)
+14:23:55   ├─ /blog/automationbench/index.html (+5ms) 
+14:23:55   ├─ /blog/choosing-and-boundaries/index.html (+3ms) 
+14:23:55   ├─ /blog/deployment-and-integrations/index.html (+2ms) 
+14:23:55   ├─ /blog/import-preview-case/index.html (+2ms) 
+14:23:55   ├─ /blog/long-horizon/index.html (+2ms) 
+14:23:55   ├─ /blog/research/index.html (+4ms) 
+14:23:55   ├─ /blog/squad-composition/index.html (+3ms) 
+14:23:55   ├─ /blog/squad-evolution/index.html (+3ms) 
+14:23:55   ├─ /blog/index.html (+5ms) 
+14:23:55   ├─ /changelog/0.1.23/index.html (+3ms) 
+14:23:55   ├─ /changelog/0.1.22/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.21/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.1.20/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.19/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.18/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.17/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.16/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.15/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.14/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.13/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.12/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.1.11/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.10/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.9/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.8/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.7/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.1.6/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.1.5/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.4/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.1.3/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.1.2-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.1-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.1.0-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.64-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.63-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.62-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.61-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.60-beta/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.0.59-beta/index.html (+1ms) 
+14:23:55   ├─ /changelog/0.0.58-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.57-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.56-beta.1/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.56-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.55-beta/index.html (+3ms) 
+14:23:55   ├─ /changelog/0.0.54-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.53-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.52-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.51-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.50-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.49-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.48-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.47-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.46-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.45-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.44-beta.1/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.44-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.43-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.42-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.40-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.39-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.38-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.37-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.36-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.35-beta.4/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.35-beta.3/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.35-beta.2/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.35-beta.1/index.html (+2ms) 
+14:23:55   ├─ /changelog/0.0.35-beta/index.html (+2ms) 
+14:23:55   ├─ /changelog/index.html (+5ms) 
+14:23:55   ├─ /download/index.html (+1ms) (file not created, response body was empty)
+14:23:55   ├─ /examples/parcel-notes.zip (+111ms) 
+14:23:55   ├─ /mission/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /publish/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /trust/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /use-with-agents/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/architecture-explorer/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/blog/automationbench/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/blog/choosing-and-boundaries/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/deployment-and-integrations/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/import-preview-case/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/long-horizon/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/research/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/squad-composition/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/squad-evolution/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/blog/index.html (+4ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.23/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.22/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.21/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.20/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.19/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.18/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.17/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.16/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.15/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.14/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.13/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.12/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.11/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.10/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.9/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.8/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.7/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.6/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.5/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.4/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.3/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.2-beta/index.html (+1ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.1-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.1.0-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.64-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.63-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.62-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.61-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.60-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.59-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.58-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.57-beta/index.html (+1ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.56-beta.1/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.56-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.55-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.54-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.53-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.52-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.51-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.50-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.49-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.48-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.47-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.46-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.45-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.44-beta.1/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.44-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.43-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.42-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.40-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.39-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.38-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.37-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.36-beta/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.35-beta.4/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.35-beta.3/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.35-beta.2/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.35-beta.1/index.html (+3ms) 
+14:23:55   ├─ /zh-cn/changelog/0.0.35-beta/index.html (+2ms) 
+14:23:55   ├─ /zh-cn/changelog/index.html (+7ms) 
+14:23:55   ├─ /zh-cn/download/index.html (+1ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/mission/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/publish/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/trust/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/use-with-agents/index.html (+0ms) (file not created, response body was empty)
+14:23:55   ├─ /zh-cn/index.html (+14ms) 
+14:23:55   ├─ /index.html (+8ms) 
+14:23:55   ├─ /acp.md (+3ms) 
+14:23:55   ├─ /agents.md (+2ms) 
+14:23:55   ├─ /cases/tank-battle.md (+2ms) 
+14:23:55   ├─ /channels/dingtalk.md (+3ms) 
+14:23:55   ├─ /channels/discord.md (+2ms) 
+14:23:55   ├─ /channels/feishu.md (+2ms) 
+14:23:55   ├─ /channels/googlechat.md (+2ms) 
+14:23:55   ├─ /channels/line.md (+2ms) 
+14:23:55   ├─ /channels/matrix.md (+2ms) 
+14:23:55   ├─ /channels/mattermost.md (+2ms) 
+14:23:55   ├─ /channels/msteams.md (+2ms) 
+14:23:55   ├─ /channels/overview.md (+2ms) 
+14:23:55   ├─ /channels/qqbot.md (+2ms) 
+14:23:55   ├─ /channels/signal.md (+7ms) 
+14:23:55   ├─ /channels/slack.md (+2ms) 
+14:23:55   ├─ /channels/telegram.md (+2ms) 
+14:23:55   ├─ /channels/wecom.md (+2ms) 
+14:23:55   ├─ /channels/whatsapp.md (+2ms) 
+14:23:55   ├─ /cli.md (+2ms) 
+14:23:55   ├─ /commands.md (+2ms) 
+14:23:55   ├─ /concepts/agent-loop.md (+2ms) 
+14:23:55   ├─ /concepts/architecture.md (+1ms) 
+14:23:55   ├─ /concepts/delivery-slice-task.md (+2ms) 
+14:23:55   ├─ /concepts/enterprise-architecture.md (+2ms) 
+14:23:55   ├─ /concepts/long-horizon.md (+2ms) 
+14:23:55   ├─ /concepts/mission.md (+2ms) 
+14:23:55   ├─ /concepts/squad-composition.md (+2ms) 
+14:23:55   ├─ /config.md (+3ms) 
+14:23:55   ├─ /expert-squads/evolution.md (+2ms) 
+14:23:55   ├─ /expert-squads/publish.md (+2ms) 
+14:23:55   ├─ /expert-squads/trust.md (+2ms) 
+14:23:55   ├─ /formatters.md (+2ms) 
+14:23:55   ├─ /integrations/agent-hosts.md (+2ms) 
+14:23:55   ├─ /lsp.md (+2ms) 
+14:23:55   ├─ /mcp-servers.md (+2ms) 
+14:23:55   ├─ /models.md (+2ms) 
+14:23:55   ├─ /network.md (+2ms) 
+14:23:55   ├─ /operations/benchmark.md (+2ms) 
+14:23:55   ├─ /operations/github-action.md (+2ms) 
+14:23:55   ├─ /overlay/overview.md (+2ms) 
+14:23:55   ├─ /permissions.md (+2ms) 
+14:23:55   ├─ /plugins.md (+2ms) 
+14:23:55   ├─ /providers.md (+2ms) 
+14:23:55   ├─ /reference/api.md (+3ms) 
+14:23:55   ├─ /reference/cli.md (+3ms) 
+14:23:55   ├─ /reference/env.md (+2ms) 
+14:23:55   ├─ /reference/evaluator.md (+2ms) 
+14:23:55   ├─ /reference/mission-task.md (+2ms) 
+14:23:55   ├─ /reference/sdk.md (+2ms) 
+14:23:55   ├─ /rules.md (+2ms) 
+14:23:55   ├─ /sdk.md (+2ms) 
+14:23:55   ├─ /server.md (+2ms) 
+14:23:55   ├─ /skills.md (+2ms) 
+14:23:55   ├─ /start/install.md (+2ms) 
+14:23:55   ├─ /start/quickstart.md (+1ms) 
+14:23:55   ├─ /tools.md (+1ms) 
+14:23:55   ├─ /troubleshooting.md (+1ms) 
+14:23:55   ├─ /windows-wsl.md (+1ms) 
+14:23:55   ├─ /zh-cn/acp.md (+2ms) 
+14:23:55   ├─ /zh-cn/agents.md (+2ms) 
+14:23:55   ├─ /zh-cn/cases/tank-battle.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/dingtalk.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/discord.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/feishu.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/googlechat.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/line.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/matrix.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/mattermost.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/msteams.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/overview.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/qqbot.md (+2ms) 
+14:23:55   ├─ /zh-cn/channels/signal.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/slack.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/telegram.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/wecom.md (+1ms) 
+14:23:55   ├─ /zh-cn/channels/whatsapp.md (+1ms) 
+14:23:55   ├─ /zh-cn/cli.md (+1ms) 
+14:23:55   ├─ /zh-cn/commands.md (+1ms) 
+14:23:55   ├─ /zh-cn/concepts/agent-loop.md (+2ms) 
+14:23:55   ├─ /zh-cn/concepts/architecture.md (+1ms) 
+14:23:55   ├─ /zh-cn/concepts/delivery-slice-task.md (+2ms) 
+14:23:55   ├─ /zh-cn/concepts/enterprise-architecture.md (+2ms) 
+14:23:55   ├─ /zh-cn/concepts/long-horizon.md (+2ms) 
+14:23:55   ├─ /zh-cn/concepts/mission.md (+2ms) 
+14:23:55   ├─ /zh-cn/concepts/squad-composition.md (+1ms) 
+14:23:55   ├─ /zh-cn/config.md (+2ms) 
+14:23:55   ├─ /zh-cn/expert-squads/evolution.md (+4ms) 
+14:23:55   ├─ /zh-cn/expert-squads/publish.md (+2ms) 
+14:23:55   ├─ /zh-cn/expert-squads/trust.md (+2ms) 
+14:23:55   ├─ /zh-cn/formatters.md (+1ms) 
+14:23:55   ├─ /zh-cn/integrations/agent-hosts.md (+1ms) 
+14:23:55   ├─ /zh-cn/lsp.md (+1ms) 
+14:23:55   ├─ /zh-cn/mcp-servers.md (+1ms) 
+14:23:55   ├─ /zh-cn/models.md (+1ms) 
+14:23:55   ├─ /zh-cn/network.md (+1ms) 
+14:23:55   ├─ /zh-cn/operations/benchmark.md (+1ms) 
+14:23:55   ├─ /zh-cn/operations/github-action.md (+1ms) 
+14:23:55   ├─ /zh-cn/overlay/overview.md (+2ms) 
+14:23:55   ├─ /zh-cn/permissions.md (+1ms) 
+14:23:55   ├─ /zh-cn/plugins.md (+2ms) 
+14:23:55   ├─ /zh-cn/providers.md (+2ms) 
+14:23:55   ├─ /zh-cn/reference/api.md (+2ms) 
+14:23:55   ├─ /zh-cn/reference/cli.md (+2ms) 
+14:23:55   ├─ /zh-cn/reference/env.md (+2ms) 
+14:23:55   ├─ /zh-cn/reference/evaluator.md (+1ms) 
+14:23:55   ├─ /zh-cn/reference/mission-task.md (+1ms) 
+14:23:55   ├─ /zh-cn/reference/sdk.md (+1ms) 
+14:23:55   ├─ /zh-cn/rules.md (+1ms) 
+14:23:55   ├─ /zh-cn/sdk.md (+1ms) 
+14:23:55   ├─ /zh-cn/server.md (+1ms) 
+14:23:55   ├─ /zh-cn/skills.md (+1ms) 
+14:23:55   ├─ /zh-cn/start/install.md (+2ms) 
+14:23:55   ├─ /zh-cn/start/quickstart.md (+2ms) 
+14:23:55   ├─ /zh-cn/tools.md (+2ms) 
+14:23:55   ├─ /zh-cn/troubleshooting.md (+2ms) 
+14:23:55   ├─ /zh-cn/windows-wsl.md (+2ms) 
+14:23:55   ├─ /reference/sdk/api.md (+2ms) 
+14:23:55   ├─ /zh-cn/reference/sdk/api.md (+2ms) 
+14:23:55   ├─ /acp/index.html (+21ms) 
+14:23:55   ├─ /agents/index.html (+14ms) 
+14:23:55   ├─ /cases/tank-battle/index.html (+11ms) 
+14:23:55   ├─ /channels/dingtalk/index.html (+10ms) 
+14:23:55   ├─ /channels/discord/index.html (+12ms) 
+14:23:55   ├─ /channels/feishu/index.html (+11ms) 
+14:23:55   ├─ /channels/googlechat/index.html (+11ms) 
+14:23:55   ├─ /channels/line/index.html (+11ms) 
+14:23:55   ├─ /channels/matrix/index.html (+13ms) 
+14:23:55   ├─ /channels/mattermost/index.html (+10ms) 
+14:23:55   ├─ /channels/msteams/index.html (+9ms) 
+14:23:55   ├─ /channels/overview/index.html (+10ms) 
+14:23:55   ├─ /channels/qqbot/index.html (+9ms) 
+14:23:55   ├─ /channels/signal/index.html (+10ms) 
+14:23:55   ├─ /channels/slack/index.html (+10ms) 
+14:23:55   ├─ /channels/telegram/index.html (+10ms) 
+14:23:55   ├─ /channels/wecom/index.html (+11ms) 
+14:23:55   ├─ /channels/whatsapp/index.html (+10ms) 
+14:23:55   ├─ /cli/index.html (+10ms) 
+14:23:55   ├─ /commands/index.html (+15ms) 
+14:23:56   ├─ /concepts/agent-loop/index.html (+10ms) 
+14:23:56   ├─ /concepts/architecture/index.html (+10ms) 
+14:23:56   ├─ /concepts/delivery-slice-task/index.html (+13ms) 
+14:23:56   ├─ /concepts/enterprise-architecture/index.html (+13ms) 
+14:23:56   ├─ /concepts/long-horizon/index.html (+10ms) 
+14:23:56   ├─ /concepts/mission/index.html (+12ms) 
+14:23:56   ├─ /concepts/squad-composition/index.html (+18ms) 
+14:23:56   ├─ /config/index.html (+13ms) 
+14:23:56   ├─ /expert-squads/evolution/index.html (+10ms) 
+14:23:56   ├─ /expert-squads/publish/index.html (+15ms) 
+14:23:56   ├─ /expert-squads/trust/index.html (+15ms) 
+14:23:56   ├─ /formatters/index.html (+12ms) 
+14:23:56   ├─ /integrations/agent-hosts/index.html (+11ms) 
+14:23:56   ├─ /lsp/index.html (+10ms) 
+14:23:56   ├─ /mcp-servers/index.html (+11ms) 
+14:23:56   ├─ /models/index.html (+11ms) 
+14:23:56   ├─ /network/index.html (+10ms) 
+14:23:56   ├─ /operations/benchmark/index.html (+13ms) 
+14:23:56   ├─ /operations/github-action/index.html (+10ms) 
+14:23:56   ├─ /overlay/overview/index.html (+10ms) 
+14:23:56   ├─ /permissions/index.html (+10ms) 
+14:23:56   ├─ /plugins/index.html (+9ms) 
+14:23:56   ├─ /providers/index.html (+10ms) 
+14:23:56   ├─ /reference/api/index.html (+9ms) 
+14:23:56   ├─ /reference/cli/index.html (+10ms) 
+14:23:56   ├─ /reference/env/index.html (+17ms) 
+14:23:56   ├─ /reference/evaluator/index.html (+17ms) 
+14:23:56   ├─ /reference/mission-task/index.html (+13ms) 
+14:23:56   ├─ /reference/sdk/index.html (+14ms) 
+14:23:56   ├─ /rules/index.html (+9ms) 
+14:23:56   ├─ /sdk/index.html (+10ms) 
+14:23:56   ├─ /server/index.html (+9ms) 
+14:23:56   ├─ /skills/index.html (+10ms) 
+14:23:56   ├─ /start/install/index.html (+10ms) 
+14:23:56   ├─ /start/quickstart/index.html (+10ms) 
+14:23:56   ├─ /tools/index.html (+12ms) 
+14:23:56   ├─ /troubleshooting/index.html (+11ms) 
+14:23:56   ├─ /windows-wsl/index.html (+10ms) 
+14:23:56   ├─ /zh-cn/acp/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/agents/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/cases/tank-battle/index.html (+10ms) 
+14:23:56   ├─ /zh-cn/channels/dingtalk/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/channels/discord/index.html (+10ms) 
+14:23:56   ├─ /zh-cn/channels/feishu/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/channels/googlechat/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/channels/line/index.html (+9ms) 
+14:23:56   ├─ /zh-cn/channels/matrix/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/channels/mattermost/index.html (+10ms) 
+14:23:56   ├─ /zh-cn/channels/msteams/index.html (+9ms) 
+14:23:56   ├─ /zh-cn/channels/overview/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/channels/qqbot/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/channels/signal/index.html (+18ms) 
+14:23:56   ├─ /zh-cn/channels/slack/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/channels/telegram/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/channels/wecom/index.html (+20ms) 
+14:23:56   ├─ /zh-cn/channels/whatsapp/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/cli/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/commands/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/concepts/agent-loop/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/concepts/architecture/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/concepts/delivery-slice-task/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/concepts/enterprise-architecture/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/concepts/long-horizon/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/concepts/mission/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/concepts/squad-composition/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/config/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/expert-squads/evolution/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/expert-squads/publish/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/expert-squads/trust/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/formatters/index.html (+13ms) 
+14:23:56   ├─ /zh-cn/integrations/agent-hosts/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/lsp/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/mcp-servers/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/models/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/network/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/operations/benchmark/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/operations/github-action/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/overlay/overview/index.html (+18ms) 
+14:23:56   ├─ /zh-cn/permissions/index.html (+12ms) 
+14:23:56   ├─ /zh-cn/plugins/index.html (+14ms) 
+14:23:56   ├─ /zh-cn/providers/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/reference/api/index.html (+11ms) 
+14:23:56   ├─ /zh-cn/reference/cli/index.html (+10ms) 
+14:23:56   ├─ /zh-cn/reference/env/index.html (+9ms) 
+14:23:56   ├─ /zh-cn/reference/evaluator/index.html (+9ms) 
+14:23:56   ├─ /zh-cn/reference/mission-task/index.html (+10ms) 
+14:23:57   ├─ /zh-cn/reference/sdk/index.html (+10ms) 
+14:23:57   ├─ /zh-cn/rules/index.html (+10ms) 
+14:23:57   ├─ /zh-cn/sdk/index.html (+9ms) 
+14:23:57   ├─ /zh-cn/server/index.html (+10ms) 
+14:23:57   ├─ /zh-cn/skills/index.html (+9ms) 
+14:23:57   ├─ /zh-cn/start/install/index.html (+9ms) 
+14:23:57   ├─ /zh-cn/start/quickstart/index.html (+10ms) 
+14:23:57   ├─ /zh-cn/tools/index.html (+11ms) 
+14:23:57   ├─ /zh-cn/troubleshooting/index.html (+10ms) 
+14:23:57   ├─ /zh-cn/windows-wsl/index.html (+9ms) 
+14:23:57 ✓ Completed in 3.33s.
+
+14:23:57 [build] Rearranging server assets...
+14:23:57 [build] ✓ Completed in 13.54s.
+14:23:57 [starlight:pagefind] Building search index with Pagefind...
+14:24:00 [starlight:pagefind] Found 257 HTML files.
+14:24:00 [starlight:pagefind] Finished building search index in 2.67s.
+14:24:00 [@astrojs/sitemap] `sitemap-index.xml` created at `dist\client`
+14:24:00 [build] Server built in 19.18s
+14:24:00 [build] Complete!
+Copied 1 canonical landing installer
+Copied the canonical Expert Squad static distribution
+Bundled 180 modules in 380ms
+
+  opencorvus-web.mjs  3.36 MB  (entry point)
+
+[9.084s]  bundle  3672 modules
+[1384ms] compile  D:\myhexin-local\opencorvus\packages\web\dist\server\opencorvus-registry-control.exe
+Packaged website runtime: dist\server\opencorvus-web.mjs, dist\server\opencorvus-registry-control.exe

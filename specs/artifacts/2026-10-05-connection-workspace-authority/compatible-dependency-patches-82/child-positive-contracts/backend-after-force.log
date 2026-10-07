@@ -1,0 +1,41 @@
+[1/2] START test/runtime-image-codec.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) runtime image codec decodes and resizes png input [22.30ms]
+(pass) runtime image codec decodes and resizes avif input [42.91ms]
+(pass) runtime image codec preserves exact lossless pixels and small SVG output [19.90ms]
+
+ 3 pass
+ 0 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [4.81s]
+[1/2] DONE test/runtime-image-codec.test.ts exit=0 duration=7.78s
+[2/2] START test/dependency-patch-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) patched glob dependencies enumerate exact nested brace selections [13.73ms]
+(pass) the real Node proxy owner delivers exact streamed HTTP data and disposes its dispatcher [1872.25ms]
+(pass) the installed search-engine Axios dependency preserves exact HTTP response data [1176.63ms]
+(pass) AJV's installed URI implementation serializes valid authorities and rejects malformed ports [2.14ms]
+(pass) Astro's installed serializer round-trips shared content values and dates [158.82ms]
+Seroval bounded error baseline {
+  parent: "../../overlay/package.json",
+  outer: "SerovalDeserializationError",
+  cause: "SerovalMalformedNodeError",
+}
+Seroval bounded error baseline {
+  parent: "../../web/package.json",
+  outer: "SerovalDeserializationError",
+  cause: "SerovalMalformedNodeError",
+}
+(pass) Solid parent serializers preserve tiny typed views and report the bounded malformed node [125.98ms]
+(pass) current source map parents preserve indexed coordinates and explicit invalid offsets [349.88ms]
+(pass) both Express proxy owners return exact ordinary and mapped client identities [199.99ms]
+
+ 8 pass
+ 0 fail
+ 24 expect() calls
+Ran 8 tests across 1 file. [5.25s]
+[2/2] DONE test/dependency-patch-contract.test.ts exit=0 duration=5.44s

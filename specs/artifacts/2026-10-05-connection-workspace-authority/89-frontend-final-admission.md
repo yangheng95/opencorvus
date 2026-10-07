@@ -1,0 +1,43 @@
+# 89 frontend final admission review (read-only)
+
+## Recall and hold
+
+Read current `expert-squad-activation-eligibility-plan.md`, including Root's selected-only shape decision and Sol_meta collision refinement. Root requires one implementation-ready review while82 environment is repaired. All Source/SDK/tests/node_modules/checks remain held. No service/page/Provider/Git or delegation occurred. Existing84 label/count source and actual88 visual qualification stay separate.
+
+## Exact producer/consumer migration
+
+Backend proposed current Settings Detail envelope remains `scope, selected` plus `selection: { catalog_revision, effective_identity: IndexEntry.pick({id,source}) | null }`. Use the canonical source union selected by Root, not the earlier flat identity sketch. Resolver produces this fact from same-generation inventory; route forwards it; current SDK-generated `ExpertSquadSettingsDetailResponse` and service `loadExpertSquadSettings` carry it. Collision/null is not selectable, and shadowed global points to the true Project winner. No frontend precedence implementation or warnings parser.
+
+Panel sole selected signal at292 must store the full accepted `ExpertSquadSettingsSurface`, not `surface.selected`. Keep its identity/loading/error/sequence at293–295 and430–459 unchanged in ownership. Derive a guarded current surface, and derive `currentSquad` from `.selected`; all existing declaration, configuration, mutation and download consumers retain that summary. Winner comparison derives from `.selection.effective_identity` through current `squadSelectionKey`/`squadInstallationKey`. No second winner signal, cache or async operation. Null detail retires both body and action facts. Do not clear only the body while leaving an eligible stale winner.
+
+87 identity contract must remain intact: full built-in or scope+namespace+ID key; current selected lookup has no legacy find-by-ID fallback; selectedDetailKey includes current scope and full selection key; activation and mutation refresh carries `{kind:'installation',key:squadSelectionKey(squad)}`; parseSquadInstallationKey validates that full contract. Keys and parser are imported from `services/expert-squad-selection`, not reimplemented. Exact nullable winner is compared with selected physical key. No synthesized namespace/version/digest.
+
+## Badge and action conditions
+
+Use three meanings separately:
+
+- Current effective badge/filter: actual scoped catalog.active.package_revision physical key. This is appropriate for effective runtime identity, not future eligibility.
+- Project configured badge: catalog.active.project ID equals selected.id, and accepted selected winner key equals selected physical key. This describes current installation selected for unpinned/future Project work; it never asserts the sealed Task uses those bytes.
+- Ordinary Session override badge: catalog.active.session_override ID equals selected.id and actual scoped effective revision matches its physical identity. Sealed Task instead displays fixed assignment from actual catalog active name/revision, not current selected installation.
+
+Canonical eligible installation = accepted current selected envelope exists, winner nonnull, exact winner key equals selected key. CanActivateProject = eligible installation + writable current scope/directory + no current busy + project configured ID differs from selected.id. CanActivateSession = eligible installation + ordinary resolved session scope + no busy + override ID differs. Known fixed Task has no mutable Session switch/clear action. Pending/unavailable retains no write. Same-ID config writes are unnecessary: they cannot select another physical scope or upgrade pinned Task bytes.
+
+Critically fix **both** disabled attributes and handler entry guards. Current `activateProject:811+` checks only squad/directory/same Project ID; current `activateSession:832+` similarly checks only Session/ID. Both handlers must use the same canonical derived canActivate predicate as the buttons, with freshly captured scope/accepted surface. Otherwise programmatic/pointer race can bypass intended physical winner semantics, or an enabled button can remain blocked by a divergent legacy check. No new gate teaches an LLM; this is operator config integrity.
+
+For a genuinely inactive eligible package with different ID, those predicates pass and the current action calls `setProjectExpertSquadActive(selected.id,directory)` or `setSessionExpertSquadActive`. Project service278 delegates to current `updateConfig`; `config.ts:127` explicitly targets `config?directory=...`, and447 captures selection epoch/authority. Session service301 targets explicit session config via `patchSessionConfig:329+`. Thus no Task-root auto-routing converts Project default into a Task override. Keep original actual error/owner-retirement handling; do not claim save succeeded merely because button was enabled. Config GET/PATCH can still legitimately fail (missing model/current validation): leave real errors visible.
+
+After Project write, retain full-key refresh and truthful notice: “Project default updated” / “项目默认专家团已更新”. Do not say current Task switched when its effective assignment stays fixed. After ordinary Session write, existing actual Session acknowledgement and refresh qualify the changed override. Capture one authority across each compound write via existing service; if current scope retires, it must not update notices/new-owner state.
+
+## Fixed Task ownership and wording
+
+`expert-squad-scope.ts:18–30` already reads activeTaskID, taskSwitching and rootTaskSessionID. Extend its resolved Task session branch with actual taskID; ordinary Session has no taskID; unresolved Task stays pending. `board.ts:790+` only resolves the selected Task root from matching board/task inventory and explicitly forbids Project fallback on missing root. No new board store, endpoint or epoch. Scope identity/captured guard must include association consistently if it can change without session ID change; same-root reuse invariant remains qualification unknown. All consumers: Panel, MarketPanel, request-key/Composer helpers; MissionSkillPanel keeps Project-only settings scope. Do not send UI-only taskID as an unsupported public catalog query.
+
+Task-root switch and clear control should be replaced with “Task assignment is fixed at creation. Create a new Task to use another Expert Squad.” / “Task 专家团分配在创建时固定。使用其他专家团请创建新的 Task。” Show actual fixed name/version. Project action remains legal with “Set Project default for future work” / “设为后续工作的项目默认专家团”. For an ordinary Session, changing Project default changes future inherited work, while its explicit override stays; badge should show both original override and new default honestly. Same-ID upgraded installation is not a Task upgrade. Backend Session.updateConfig TaskPromptProfileImmutableError409 remains final race/integrity authority; Task normal/failed/completed/retry/restart does not release that binding.
+
+Shadowed installation explanation should derive exact backend winner: “This installation is shadowed by the Project installation. ID-based selection uses that installation.” / “此安装被项目级安装覆盖；按 ID 选择会使用项目级安装。” Only show this specific text when winner actually has that relation. Null eligibility must say current selection cannot be activated, with existing catalog issues/error detail visible; do not invent a shadow reason. Direct winner identity may be displayed from its source/id without naming an unread package title.
+
+## Qualification and unresolved boundaries
+
+No checks were run. Root's required real backend tests qualify selected winner, shadow, collision/null and existing config writer errors. Frontend scope pure-data tests may verify actual Task/ordinary/pending outputs without rendering components. Do not create UI tests or source-string assertions. Genuine after: inactive builtin Project write; inactive lawful installed Project write; ordinary Session override/clear; shadowed global explanation; known fixed Task assignment with future Project default action; screenshots personally inspected by implementing agent. Exact source and service integration must be typechecked after admission, then Root builds once and supplies owned service.
+
+Unknown: all config validation errors after writer acknowledgement, externally mutated package between read/click, same-root Task association reuse, source-generation interleaving and full multiproject visual matrix. Preserve backend errors/current authority rather than retry writes or infer success. No implementation is authorized by this document alone; await Root admission.

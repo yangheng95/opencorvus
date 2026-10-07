@@ -1,0 +1,118 @@
+{
+  "runtime": {
+    "node": "24.3.0",
+    "bun": "1.3.14",
+    "boringssl": "0c5fce43b7ed5eb6001487ee48ac65766f5ddcd1",
+    "openssl": "1.1.0",
+    "llhttp": "9.3.0",
+    "libarchive": "ded82291ab41d5e355831b96b0e1ff49e24d8939",
+    "mimalloc": "f15aecb94fc8096008bf87b90c53ed682026914a",
+    "picohttpparser": "066d2b1e9ab820703db0837a7255d92d30f0c9f5",
+    "uwebsockets": "0d9b296af33f2b851fcbf4df3e9ec89751734ba4",
+    "webkit": "5488984d20e0dbfe4be2c3ba8fb18eb81a5e0e8b",
+    "zig": "04e7f6ac1e009525bc00934f20199c68f04e0a24",
+    "zlib": "12731092979c6d07f42da27da673a9f6c7b13586",
+    "tinycc": "12882eee073cfe5c7621bcfadf679e1372d4537b",
+    "lolhtml": "77127cd2b8545998756e8d64e36ee2313c4bb312",
+    "ares": "3ac47ee46edd8ea40370222f91613fc16c434853",
+    "libdeflate": "c8c56a20f8f621e6a966b716b31f1dedab6a41e3",
+    "usockets": "0d9b296af33f2b851fcbf4df3e9ec89751734ba4",
+    "lshpack": "8905c024b6d052f083a3d11d0a169b3c2735c8a1",
+    "zstd": "f8745da6ff1ad1e7bab384bd1f9d742439278e99",
+    "v8": "13.6.233.10-node.18",
+    "uv": "1.51.1-dev",
+    "napi": "10",
+    "icu": "73.2",
+    "unicode": "15.0",
+    "modules": "137"
+  },
+  "rows": [
+    {
+      "owner": "root",
+      "name": "sharp",
+      "version": "0.35.5",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\sharp@0.35.5+0cfa9f940267aaa3\\node_modules\\sharp\\dist\\index.cjs",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\sharp@0.35.5+0cfa9f940267aaa3\\node_modules\\sharp\\package.json"
+    },
+    {
+      "owner": "Overlay Solid",
+      "name": "seroval",
+      "version": "1.6.3",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\seroval@1.6.3\\node_modules\\seroval\\dist\\index.cjs",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\seroval@1.6.3\\node_modules\\seroval\\package.json"
+    },
+    {
+      "owner": "Web Solid",
+      "name": "seroval",
+      "version": "1.6.3",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\seroval@1.6.3\\node_modules\\seroval\\dist\\index.cjs",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\seroval@1.6.3\\node_modules\\seroval\\package.json"
+    },
+    {
+      "owner": "Astro",
+      "name": "smol-toml",
+      "version": "1.9.0",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\smol-toml@1.9.0\\node_modules\\smol-toml\\dist\\index.cjs",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\smol-toml@1.9.0\\node_modules\\smol-toml\\package.json"
+    },
+    {
+      "owner": "SDK Express",
+      "name": "proxy-addr",
+      "version": "2.0.8",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\proxy-addr@2.0.8\\node_modules\\proxy-addr\\index.js",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\proxy-addr@2.0.8\\node_modules\\proxy-addr\\package.json"
+    },
+    {
+      "owner": "Search Express",
+      "name": "proxy-addr",
+      "version": "2.0.8",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\proxy-addr@2.0.8\\node_modules\\proxy-addr\\index.js",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\proxy-addr@2.0.8\\node_modules\\proxy-addr\\package.json"
+    },
+    {
+      "owner": "Vite PostCSS",
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\source-map-js@1.2.2\\node_modules\\source-map-js\\source-map.js",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\source-map-js@1.2.2\\node_modules\\source-map-js\\package.json"
+    },
+    {
+      "owner": "Astro Magicast",
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "entry": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\source-map-js@1.2.2\\node_modules\\source-map-js\\source-map.js",
+      "packagePath": "D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\source-map-js@1.2.2\\node_modules\\source-map-js\\package.json"
+    }
+  ],
+  "sharpVersions": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3",
+    "sharp": "0.35.5"
+  }
+}
