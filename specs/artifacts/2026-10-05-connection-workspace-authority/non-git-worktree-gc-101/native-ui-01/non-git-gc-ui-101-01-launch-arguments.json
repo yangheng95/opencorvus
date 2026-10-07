@@ -1,0 +1,26 @@
+{
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\non-git-gc-ui-101-01\\evidence",
+    "non-git-gc-ui-101-01-a9149443-2756-41b3-add4-b80aebebf0f1",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18049",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\non-git-gc-ui-101-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\non-git-gc-ui-101-01\\startup.json",
+    "--startup-occurrence",
+    "non-git-gc-ui-101-01-a9149443-2756-41b3-add4-b80aebebf0f1",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18049,
+  "occurrence": "non-git-gc-ui-101-01-a9149443-2756-41b3-add4-b80aebebf0f1",
+  "credentialStaging": "None"
+}

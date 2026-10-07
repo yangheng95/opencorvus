@@ -9,17 +9,18 @@ import { Scheduler } from "../scheduler"
 import { hostGit as runGit } from "../util/git"
 import { Worktree } from "./index"
 import { Ownership } from "../engine/ownership"
-import { Project } from "../project/project"
-import z from "zod"
 
 /**
  * Orphan worktree garbage collection.
  *
- * Implements the current control-plane lifecycle's orphaned-worktree sweep.
+ * Implements the previously-unimplemented Phase F of
+ * `specs/current/architecture/10-worktree-lifecycle.md` §9 — Claude-Code-aligned
+ * orphaned-worktree sweep (§2.1 / §6 of that doc, and the addendum
+ * `orphan worktree garbage collection contract`).
  *
  * A managed path under a Task Session or `.opencorvus/.r/project/worktrees/` is removed ONLY when
  * it is genuinely abandoned junk. "Older than N days" is necessary but NOT
- * sufficient for physical directories: current control-plane lifecycle contracts forbid
+ * sufficient for physical directories: §2.3 of the lifecycle doc forbids
  * deleting failed / aborted / cancelled / restart worktrees because that
  * in-transit state is the input to the next retry. So a physical worktree is
  * reclaimed only when ALL hold:
@@ -28,7 +29,8 @@ import z from "zod"
  *   2. directory mtime older than `retentionDays` (default 3).
  *   3. clean: `git status --porcelain` empty (no uncommitted, no untracked).
  *   4. no in-transit commits: nothing on HEAD that is not yet merged into
- *      the project's primary branch.
+ *      the project's primary branch (the no-remote analogue of Claude
+ *      Code's "no unpushed commits" gate).
  *
  * OR it is one of the non-physical residues proven by the 2026-06-27 audit:
  * a registry-only prunable entry whose branch has no in-transit commits, or
@@ -43,14 +45,6 @@ export namespace WorktreeGC {
   const log = Log.create({ service: "worktree.gc" })
   const GC_INTERVAL_MS = 6 * 60 * 60 * 1000
   export const DEFAULT_RETENTION_DAYS = 3
-  export const PreservationReason = z.enum([
-    "primary-directory-unavailable",
-    "managed-state-unavailable",
-    "registry-unavailable",
-    "durable-sandbox-owner",
-    "non-git-project",
-    "git-state-unavailable",
-  ])
 
   // Re-entrancy guard: a sweep shells out to many slow git commands; runs
   // are 6h apart and idempotent, so simply skip if a prior run is still in
@@ -66,7 +60,11 @@ export namespace WorktreeGC {
   export type Preservation = {
     projectID: string
     primaryDir: string
-    reason: z.infer<typeof PreservationReason>
+    reason:
+      | "primary-directory-unavailable"
+      | "managed-state-unavailable"
+      | "registry-unavailable"
+      | "durable-sandbox-owner"
     detail: string
   }
   export type Plan = { candidates: Candidate[]; preservations: Preservation[] }
@@ -257,29 +255,6 @@ export namespace WorktreeGC {
           primaryDir,
           error: detail,
         })
-        continue
-      }
-      let git: boolean
-      try {
-        git = Project.isGitRepo(primaryDir)
-      } catch (error) {
-        const detail = error instanceof Error ? error.message : String(error)
-        preservations.push({ projectID: project.id, primaryDir, reason: "git-state-unavailable", detail })
-        log.warn("physical Git state is unavailable; preserving the entire project", {
-          projectID: project.id,
-          primaryDir,
-          error: detail,
-        })
-        continue
-      }
-      if (!git) {
-        preservations.push({
-          projectID: project.id,
-          primaryDir,
-          reason: "non-git-project",
-          detail: "Available Project has no physical Git marker.",
-        })
-        log.info("non-Git project does not require worktree collection", { projectID: project.id, primaryDir })
         continue
       }
       const directories = new Map<string, string>()

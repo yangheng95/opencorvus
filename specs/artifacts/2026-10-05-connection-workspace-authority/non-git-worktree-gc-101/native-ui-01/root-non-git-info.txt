@@ -1,0 +1,13 @@
+Browser tab: 60, Title: "OpenCorvus", URL: "http://127.0.0.1:18049/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~					24 container
+~						25 button (expanded) Details, Secondary Actions: Collapse
++							26 text Details
++						27 text Structured fields {
+  "logDomain": "non-session",
+  "data": {
+    "projectID": "prj_hHU9E9d8Vi7fnnSwi7PI",
+    "primaryDir": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\non-git-gc-ui-101-01\\project"
+  }
+} Raw line {"level":"info","time":"2026-10-07T11:58:33.004Z","service":"worktree.gc","logDomain":"non-session","data":{"projectID":"prj_hHU9E9d8Vi7fnnSwi7PI","primaryDir":"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\non-git-gc-ui-101-01\\project"},"message":"non-Git project does not require worktree collection"}
+The focused UI element is 25 button (expanded) Details, Secondary Actions: Collapse

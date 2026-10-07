@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-10-07T12:00:39.1364072Z",
+  "states": [
+    {
+      "expected": {
+        "pid": 72212,
+        "processInstanceID": "win32:639269709981423741",
+        "occurrenceID": "995c5bea-76b1-447f-b078-3f3cb38381b3"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 60776,
+        "processInstanceID": "win32:639269710043233829",
+        "occurrenceID": "d22cc4c8-6e94-4cd0-9059-3313e8ea8f19"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "occurrence": "non-git-gc-ui-101-01-a9149443-2756-41b3-add4-b80aebebf0f1",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  }
+}

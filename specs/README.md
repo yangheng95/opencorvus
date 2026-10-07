@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Non-Git collection101 qualification](records/2026-10/2026-10-07-non-git-worktree-collection.md): real explicit preservation/API/info screenshot and exact native closure.
+
+- [Non-Git collection101 Recall](artifacts/2026-10-05-connection-workspace-authority/non-git-worktree-gc-plan-101.md): actual misleading preservation warning; real baseline preparation before shared collector/API repair.
+
 - [Immutable publication98 qualification](records/2026-10/2026-10-07-immutable-package-publication.md): real UI slow branch and sole-publisher repair qualified; current native scopes closed.
 
 - [Immutable publication98 repair Recall](artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-98/publication-repair-plan.md): genuine UI EPERM/verified-winner delay proved; sole-publisher repair admitted.

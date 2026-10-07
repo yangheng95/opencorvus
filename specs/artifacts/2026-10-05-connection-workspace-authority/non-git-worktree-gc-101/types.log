@@ -1,0 +1,5 @@
+packages/opencorvus/test/worktree-gc-non-git.test.ts(101,79): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { projectID: string; primaryDir: string; reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable" | "durable-sandbox-owner"; }): void', gave the following error.
+    Type '"non-git-project"' is not assignable to type '"primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable" | "durable-sandbox-owner"'.
+  Overload 2 of 2, '(expected: NoInfer<{ projectID: string; primaryDir: string; reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable" | "durable-sandbox-owner"; }>): void', gave the following error.
+    Type '"non-git-project"' is not assignable to type '"primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable" | "durable-sandbox-owner"'.

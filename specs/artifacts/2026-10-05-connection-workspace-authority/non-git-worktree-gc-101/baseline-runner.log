@@ -1,0 +1,40 @@
+[1/1] START test/worktree-gc-non-git.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+GC baseline evidence: D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\non-git-worktree-gc-101\baseline-b037b9b2-8bea-4655-b108-852c4ffd1f4a
+49 |     expect(response.status).toBe(200)
+50 |     expect(fileText).toBe(retained)
+51 |     expect(plan.preservations.map(({ projectID, primaryDir, reason }) => ({ projectID, primaryDir, reason }))).toContainEqual({ projectID: brokenProject.project.id, primaryDir: broken, reason: "registry-unavailable" })
+52 |     expect(plan.preservations.map(({ projectID, primaryDir, reason }) => ({ projectID, primaryDir, reason }))).toContainEqual({ projectID: missingProject.project.id, primaryDir: unavailable, reason: "primary-directory-unavailable" })
+53 |     expect(plan.candidates.map(({ projectID, primaryDir, directory, reason }) => ({ projectID, primaryDir, directory, reason }))).toContainEqual({ projectID: healthyProject.project.id, primaryDir: healthy.path, directory: zombie, reason: "old-zombie" })
+54 |     expect(publicBody.worktreeGCPreservations).toContainEqual({ projectID: plainProject.project.id, reason: "non-git-project", operation: "inspect-worktree-gc", code: "NON_GIT_PROJECT" })
+                                                    ^
+error: expect(received).toContainEqual(expected)
+
+Expected to contain: {
+  projectID: "prj_hy9wwbjaeckMKgN54kzx",
+  reason: "non-git-project",
+  operation: "inspect-worktree-gc",
+  code: "NON_GIT_PROJECT",
+}
+Received: [
+  {
+    projectID: "prj_hy9wwbjaeckMKgN54kzx",
+    reason: "registry-unavailable",
+    operation: "inspect-worktree-gc",
+    code: "REGISTRY_UNAVAILABLE",
+  }
+]
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\worktree-gc-non-git.test.ts:54:48)
+(fail) available non-Git and broken Git Projects preserve files while healthy residue remains observable [4240.05ms]
+
+ 0 pass
+ 1 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [6.84s]
+[1/1] DONE test/worktree-gc-non-git.test.ts exit=1 duration=7.64s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\worktree-gc-non-git.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\worktree-gc-non-git.test.ts

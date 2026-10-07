@@ -24,31 +24,30 @@ import { ImplicitProject } from "../../project/implicit-project"
 import { hasProjectOwnedPromptControllers, ownedPromptControllersError } from "../../engine/runtime"
 import { ProcessSupervisor } from "../../shell/process-supervisor"
 
-const OwnershipCandidate = z
-  .object({
-    taskID: z.string().optional(),
-    sessionID: z.string().optional(),
-    worktreeDir: z.string().optional(),
-    reason: z.enum(["owner-process-dead", "target-missing", "marker-invalid"]),
-  })
-  .strict()
+const OwnershipCandidate = z.object({
+  taskID: z.string().optional(),
+  sessionID: z.string().optional(),
+  worktreeDir: z.string().optional(),
+  reason: z.enum(["owner-process-dead", "target-missing", "marker-invalid"]),
+}).strict()
 
-const WorktreeGCCandidate = z
-  .object({
-    projectID: z.string(),
-    directory: z.string(),
-    reason: z.enum(["old-clean", "old-zombie", "registry-prunable"]),
-  })
-  .strict()
+const WorktreeGCCandidate = z.object({
+  projectID: z.string(),
+  directory: z.string(),
+  reason: z.enum(["old-clean", "old-zombie", "registry-prunable"]),
+}).strict()
 
-const WorktreeGCPreservation = z
-  .object({
-    projectID: z.string(),
-    reason: WorktreeGC.PreservationReason,
-    operation: z.literal("inspect-worktree-gc"),
-    code: z.string(),
-  })
-  .strict()
+const WorktreeGCPreservation = z.object({
+  projectID: z.string(),
+  reason: z.enum([
+    "primary-directory-unavailable",
+    "managed-state-unavailable",
+    "registry-unavailable",
+    "durable-sandbox-owner",
+  ]),
+  operation: z.literal("inspect-worktree-gc"),
+  code: z.string(),
+}).strict()
 
 const CleanupCandidates = z.object({
   worktreeOrphans: OwnershipCandidate.array(),

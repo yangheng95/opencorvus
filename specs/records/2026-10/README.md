@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [Non-Git Project worktree collection](2026-10-07-non-git-worktree-collection.md)
+
+- [Non-Git collection101 Recall](../../artifacts/2026-10-05-connection-workspace-authority/non-git-worktree-gc-plan-101.md)
+
 - [Immutable package publication qualification](2026-10-07-immutable-package-publication.md)
 
 - [Immutable publication98 repair Recall](../../artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-98/publication-repair-plan.md)

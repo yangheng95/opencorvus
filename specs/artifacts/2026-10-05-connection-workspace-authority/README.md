@@ -1,5 +1,9 @@
 # Connection workspace authority investigation
 
+- [Non-Git collection101 evidence](non-git-worktree-gc-101/README.md): original failure, accurate preservation/status and actual HTTP/UI acceptance; native scope closed.
+
+- [Non-Git worktree collection101](non-git-worktree-gc-plan-101.md): actual native warning and public preservation/schema impact; production held pending real baseline.
+
 - [Immutable publication98 repair](skills-load-timeout-98/publication-repair-plan.md) and [genuine UI trace03](skills-load-timeout-98/host-debug-03/README.md): actual delayed rename and verified competitor now proved; bounded publisher repair proceeds.
 
 - [Snapshot publication98 trace evidence](skills-load-timeout-98/publication-trace/README.md): original real19.3s concurrent package output preserved; diagnostic observation proceeds before selecting a repair.

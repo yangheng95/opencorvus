@@ -1,0 +1,91 @@
+{
+  "inputs": {
+    "plain": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\plain",
+    "broken": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\broken",
+    "unavailable": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\unavailable",
+    "zombie": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\memory-XHIhez\\.opencorvus\\.r\\project\\worktrees\\owned-old-zombie",
+    "retained": "Owned non-Git file remains readable.\n"
+  },
+  "projects": [
+    {
+      "id": "prj_hyjb7sqERNp7naB9HHOT",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\plain",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373734961,
+        "updated": 1791373734961
+      }
+    },
+    {
+      "id": "prj_hyaiNa60268juzYkKcJE",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\broken",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373735027,
+        "updated": 1791373735027
+      }
+    },
+    {
+      "id": "prj_hiYvc0Wzj5FaPI1DPNZF",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\unavailable",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373735085,
+        "updated": 1791373735085
+      }
+    },
+    {
+      "id": "prj_hFgf4eDs51QeMMAkfLSa",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\memory-XHIhez",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373737002,
+        "updated": 1791373737002
+      }
+    }
+  ],
+  "status": 200,
+  "publicBody": {
+    "worktreeOrphans": [],
+    "worktreeGCCandidates": [],
+    "worktreeGCPreservations": [
+      {
+        "projectID": "prj_hyjb7sqERNp7naB9HHOT",
+        "reason": "non-git-project",
+        "operation": "inspect-worktree-gc",
+        "code": "NON_GIT_PROJECT"
+      }
+    ]
+  },
+  "plan": {
+    "candidates": [
+      {
+        "projectID": "prj_hFgf4eDs51QeMMAkfLSa",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\memory-XHIhez",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\memory-XHIhez\\.opencorvus\\.r\\project\\worktrees\\owned-old-zombie",
+        "reason": "old-zombie"
+      }
+    ],
+    "preservations": [
+      {
+        "projectID": "prj_hyjb7sqERNp7naB9HHOT",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\plain",
+        "reason": "non-git-project",
+        "detail": "Available Project has no physical Git marker."
+      },
+      {
+        "projectID": "prj_hyaiNa60268juzYkKcJE",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\broken",
+        "reason": "registry-unavailable",
+        "detail": "WorktreeRemoveFailedError: fatal: not a git repository: C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-aqIOow/test-71708-oCv8hE/fixtures/gc-non-git-DYtEUo/broken/missing-owned-git-directory"
+      },
+      {
+        "projectID": "prj_hiYvc0Wzj5FaPI1DPNZF",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\unavailable",
+        "reason": "primary-directory-unavailable",
+        "detail": "Persisted Project root is unavailable: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\unavailable: ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-aqIOow\\test-71708-oCv8hE\\fixtures\\gc-non-git-DYtEUo\\unavailable'"
+      }
+    ]
+  },
+  "fileText": "Owned non-Git file remains readable.\n"
+}

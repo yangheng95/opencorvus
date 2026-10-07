@@ -1,0 +1,13 @@
+diff --git a/packages/sdk/js/src/gen/types.gen.ts b/packages/sdk/js/src/gen/types.gen.ts
+index f4963113..36405db2 100644
+--- a/packages/sdk/js/src/gen/types.gen.ts
++++ b/packages/sdk/js/src/gen/types.gen.ts
+@@ -26043,6 +26043,8 @@ export type ProjectCurrentCleanupCandidatesResponses = {
+         | "managed-state-unavailable"
+         | "registry-unavailable"
+         | "durable-sandbox-owner"
++        | "non-git-project"
++        | "git-state-unavailable"
+     }>
+     worktreeOrphans: Array<{
+       reason: "owner-process-dead" | "target-missing" | "marker-invalid"

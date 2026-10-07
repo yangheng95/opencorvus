@@ -1,0 +1,12 @@
+[1/1] START test/worktree-gc-non-git.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+GC baseline evidence: D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\non-git-worktree-gc-101\baseline-e29571ba-426e-414d-b2ae-e78d6958b623
+(pass) available non-Git and broken Git Projects preserve files while healthy residue remains observable [5718.80ms]
+
+ 1 pass
+ 0 fail
+ 10 expect() calls
+Ran 1 test across 1 file. [8.98s]
+[1/1] DONE test/worktree-gc-non-git.test.ts exit=0 duration=9.88s

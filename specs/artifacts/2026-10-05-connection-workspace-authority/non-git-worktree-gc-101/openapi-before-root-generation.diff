@@ -1,0 +1,15 @@
+diff --git a/packages/sdk/openapi.json b/packages/sdk/openapi.json
+index 82596c0d..3a84551d 100644
+--- a/packages/sdk/openapi.json
++++ b/packages/sdk/openapi.json
+@@ -92887,7 +92887,9 @@
+                               "primary-directory-unavailable",
+                               "managed-state-unavailable",
+                               "registry-unavailable",
+-                              "durable-sandbox-owner"
++                              "durable-sandbox-owner",
++                              "non-git-project",
++                              "git-state-unavailable"
+                             ],
+                             "type": "string"
+                           }

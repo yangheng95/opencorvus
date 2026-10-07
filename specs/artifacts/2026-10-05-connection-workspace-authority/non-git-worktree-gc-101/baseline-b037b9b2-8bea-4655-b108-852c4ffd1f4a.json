@@ -1,0 +1,91 @@
+{
+  "inputs": {
+    "plain": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\plain",
+    "broken": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\broken",
+    "unavailable": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\unavailable",
+    "zombie": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\memory-SthCBq\\.opencorvus\\.r\\project\\worktrees\\owned-old-zombie",
+    "retained": "Owned non-Git file remains readable.\n"
+  },
+  "projects": [
+    {
+      "id": "prj_hy9wwbjaeckMKgN54kzx",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\plain",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373501153,
+        "updated": 1791373501153
+      }
+    },
+    {
+      "id": "prj_htFVyIG4i5IFLvq2a35j",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\broken",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373501191,
+        "updated": 1791373501191
+      }
+    },
+    {
+      "id": "prj_hGInPyqQCWenX7iDlvkK",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\unavailable",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373501228,
+        "updated": 1791373501228
+      }
+    },
+    {
+      "id": "prj_hN6MTG7nKPX0723ksbJu",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\memory-SthCBq",
+      "sandboxes": [],
+      "time": {
+        "created": 1791373502966,
+        "updated": 1791373502966
+      }
+    }
+  ],
+  "status": 200,
+  "publicBody": {
+    "worktreeOrphans": [],
+    "worktreeGCCandidates": [],
+    "worktreeGCPreservations": [
+      {
+        "projectID": "prj_hy9wwbjaeckMKgN54kzx",
+        "reason": "registry-unavailable",
+        "operation": "inspect-worktree-gc",
+        "code": "REGISTRY_UNAVAILABLE"
+      }
+    ]
+  },
+  "plan": {
+    "candidates": [
+      {
+        "projectID": "prj_hN6MTG7nKPX0723ksbJu",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\memory-SthCBq",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\memory-SthCBq\\.opencorvus\\.r\\project\\worktrees\\owned-old-zombie",
+        "reason": "old-zombie"
+      }
+    ],
+    "preservations": [
+      {
+        "projectID": "prj_hy9wwbjaeckMKgN54kzx",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\plain",
+        "reason": "registry-unavailable",
+        "detail": "WorktreeRemoveFailedError: fatal: not a git repository (or any of the parent directories): .git"
+      },
+      {
+        "projectID": "prj_htFVyIG4i5IFLvq2a35j",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\broken",
+        "reason": "registry-unavailable",
+        "detail": "WorktreeRemoveFailedError: fatal: not a git repository: C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-zSPViG/test-72608-BRqayp/fixtures/gc-non-git-7oEAsO/broken/missing-owned-git-directory"
+      },
+      {
+        "projectID": "prj_hGInPyqQCWenX7iDlvkK",
+        "primaryDir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\unavailable",
+        "reason": "primary-directory-unavailable",
+        "detail": "Persisted Project root is unavailable: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\unavailable: ENOENT: no such file or directory, stat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-zSPViG\\test-72608-BRqayp\\fixtures\\gc-non-git-7oEAsO\\unavailable'"
+      }
+    ]
+  },
+  "fileText": "Owned non-Git file remains readable.\n"
+}

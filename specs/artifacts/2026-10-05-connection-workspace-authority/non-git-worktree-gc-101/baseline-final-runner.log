@@ -1,0 +1,40 @@
+[1/1] START test/worktree-gc-non-git.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+GC baseline evidence: D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\non-git-worktree-gc-101\baseline-04414547-3b64-453f-8d01-e98fb39861e2
+88 |       projectID: healthyProject.project.id,
+89 |       primaryDir: healthy.path,
+90 |       directory: zombie,
+91 |       reason: "old-zombie",
+92 |     })
+93 |     expect(publicBody.worktreeGCPreservations).toContainEqual({
+                                                    ^
+error: expect(received).toContainEqual(expected)
+
+Expected to contain: {
+  projectID: "prj_hdFgrxhDD6lSsChyJNA1",
+  reason: "non-git-project",
+  operation: "inspect-worktree-gc",
+  code: "NON_GIT_PROJECT",
+}
+Received: [
+  {
+    projectID: "prj_hdFgrxhDD6lSsChyJNA1",
+    reason: "registry-unavailable",
+    operation: "inspect-worktree-gc",
+    code: "REGISTRY_UNAVAILABLE",
+  }
+]
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\worktree-gc-non-git.test.ts:93:48)
+(fail) available non-Git and broken Git Projects preserve files while healthy residue remains observable [4762.08ms]
+
+ 0 pass
+ 1 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [7.48s]
+[1/1] DONE test/worktree-gc-non-git.test.ts exit=1 duration=8.37s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\worktree-gc-non-git.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\worktree-gc-non-git.test.ts
