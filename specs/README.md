@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Desktop Sources width103](records/2026-10/2026-10-07-source-dock-width.md): actual narrow dock and native expanded-source width repairs, genuine Work/Sol acceptance and original failures retained.
+
+- [Desktop dock width103 Recall](artifacts/2026-10-05-connection-workspace-authority/subagent-dock-width-plan-103.md): align current CSS and resizer width budgets after genuine narrow Sources failure.
+
 - [Optional Expert Squad workflow guidance](records/2026-10/2026-10-07-optional-workflow-guidance.md): remove mandatory graph execution while retaining actual dispatch identity, recovery and acceptance authority.
 
 - [Readable Sources and renderer102](records/2026-10/2026-10-07-readable-conversation-sources.md): actual chronological source identities, shared Markdown input repair and ongoing genuine visual acceptance.

@@ -457,8 +457,10 @@ running or empty-result information. Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position
 behind the shared native Disclosure, initially collapsed with the first real
 source's readable identity and an honest count for that chronological source run;
-operator
-expansion state and exact source links remain available. Activity uses
+operator expansion state and exact source links remain available. The Source
+Disclosure's native content box and expanded list are bounded by the actual
+source region, so long links ellipsize within that region without changing
+their full tooltip or activation target. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced
 motion retains static status. Valid JSON displays expandable values with
 multiline strings intact; full raw content and copy remain available.
@@ -878,6 +880,14 @@ for the transition but are `inert`, accessibility-hidden, removed from tab
 order where applicable, and non-interactive at zero width. The canonical
 reduced-motion preference makes these layout transitions instant. Persisted
 pane widths and the existing resizers remain the only width sources.
+
+The open Right Dock's CSS maximum uses the same existing Workbench panel
+minimum floor as its pointer/keyboard width clamp. When the available desktop
+Workspace cannot fit both the nominal conversation minimum and that panel
+minimum, the shrinkable center conversation takes the remaining width rather
+than compressing the open dock below its reading minimum. Responsive allocation
+does not rewrite the persisted pane preference or automatically collapse
+navigation. Closed dock width remains zero through its canonical open signal.
 
 Environment Information embeds one compact `TaskProgressBar` projection only
 when the canonical board contains Goals. Its header exposes the Goals shortcut,

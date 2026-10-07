@@ -965,6 +965,11 @@
   margin-block: var(--ui-gap-sm);
 }
 
+.msg-sources::details-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .msg-sources.oc-disclosure > .msg-sources__heading {
   display: inline-flex;
   align-items: center;
@@ -1006,6 +1011,7 @@
   flex-wrap: wrap;
   gap: var(--ui-gap-sm);
   min-width: 0;
+  max-width: 100%;
   padding-inline-start: var(--ui-gap-lg);
 }
 

@@ -1,0 +1,73 @@
+{
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 20916,
+        "processInstanceID": "win32:639269772814795730",
+        "occurrenceID": "2189b359-464d-4143-b89b-7558ea1bfea3"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 69576,
+        "processInstanceID": "win32:639269772826412779",
+        "occurrenceID": "0cf3b05e-4a07-4f3d-a55e-886926d69e2c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-before-103-02\\project",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/dock-width-before-103-02",
+  "terminal": {
+    "id": "pev_g0VXN5pW300kUEMDYIM1",
+    "kind": "event",
+    "type": "task.failed",
+    "aggregate_type": "task",
+    "aggregate_id": "tsk_g00VXN4oUA00rn0BZH4H",
+    "project_id": "prj_h0J2tt3Nzvyc9sYXnBgd",
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "state.task",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 76,
+    "deadline_ms": null,
+    "emitted_at": 1791380931955,
+    "payload": "{\"execution_epoch\":1,\"summary\":\"Orchestrator execution interrupted: Error: E2E_REQUEST_BUDGET_EXHAUSTED\",\"error\":\"Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED\",\"terminalReason\":\"interrupted\"}"
+  },
+  "sourceNativeSettlement": {
+    "occurrence": "dock-width-before-103-02-09b97e70-cdf6-4ba1-b5f4-a96a0f688b08",
+    "outcome": "settled",
+    "host": {
+      "pid": 20916,
+      "processInstanceID": "win32:639269772814795730",
+      "occurrenceID": "2189b359-464d-4143-b89b-7558ea1bfea3"
+    },
+    "target": {
+      "pid": 69576,
+      "processInstanceID": "win32:639269772826412779",
+      "occurrenceID": "0cf3b05e-4a07-4f3d-a55e-886926d69e2c"
+    },
+    "observedAtUtc": "2026-10-07T13:48:52.269Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-07T14:16:29.2045483Z",
+  "taskID": "tsk_g00VXN4oUA00rn0BZH4H",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-final-103-05",
+  "port": 18058,
+  "credentialStaging": "None; original failed epoch kept; no SQL edits or Task rearm",
+  "projectID": "prj_h0J2tt3Nzvyc9sYXnBgd",
+  "requestID": "f125d744-daae-4f54-b927-93cc71d59a1a"
+}

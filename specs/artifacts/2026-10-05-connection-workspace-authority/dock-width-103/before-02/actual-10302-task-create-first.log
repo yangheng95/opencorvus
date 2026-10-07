@@ -1,0 +1,11 @@
+Error: task create failed against http://127.0.0.1:18055 (HTTP 400)
+[
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "promptProfile"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  }
+]

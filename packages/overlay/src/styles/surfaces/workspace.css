@@ -531,7 +531,10 @@ body[data-resizing="true"] .pane-resizer::after {
   --right-dock-width: calc(380px * var(--ui-scale));
   flex: 0 0 var(--right-dock-width);
   width: var(--right-dock-width);
-  max-width: min(var(--ui-right-dock-max-width), calc(100% - var(--ui-chat-min-width) - var(--oc-border-width)));
+  max-width: min(
+    var(--ui-right-dock-max-width),
+    max(var(--ui-workbench-panel-min-width), calc(100% - var(--ui-chat-min-width) - var(--oc-border-width)))
+  );
   min-width: 0;
   min-height: 0;
   display: flex;

@@ -1,0 +1,13 @@
+Browser tab: 70, Title: "OpenCorvus", URL: "http://127.0.0.1:18060/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 195
+~								154 container Description: Running · 2m 52s, ID: taskStatus
+~									156 text 2m 52s
+~											188 text 1m 32s
++										237 text Work
++										238 text Task
++										239 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++										240 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-978-trigger, Secondary Actions: Expand
++										241 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++											242 text openai/gpt-6.1-sol
+The focused UI element is 212 button (expanded) Description: Sources: www.w3.org/WAI/fundamentals/accessibility-intro/ (1), Help: www.w3.org/WAI/fundamentals/accessibility-intro/ 1, Secondary Actions: Collapse

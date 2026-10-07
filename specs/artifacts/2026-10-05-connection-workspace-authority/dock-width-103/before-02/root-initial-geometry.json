@@ -1,0 +1,63 @@
+{
+  "panes": [
+    {
+      "flexBasis": "0%",
+      "id": "workspaceMain",
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "open": null,
+      "width": 546.2000122070312,
+      "x": 337
+    },
+    {
+      "flexBasis": "auto",
+      "id": "conversationWorkspace",
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "open": null,
+      "width": 500,
+      "x": 337.8000183105469
+    },
+    {
+      "flexBasis": "0px",
+      "id": "chatSection",
+      "maxWidth": "none",
+      "minWidth": "0px",
+      "open": null,
+      "width": 500,
+      "x": 337.8000183105469
+    },
+    {
+      "flexBasis": "380px",
+      "id": "rightDock",
+      "maxWidth": "min(960px, 100% - 501px)",
+      "minWidth": "0px",
+      "open": "true",
+      "width": 44.400001525878906,
+      "x": 838.7999877929688
+    },
+    {
+      "flexBasis": "1px",
+      "id": "rightDockResizer",
+      "maxWidth": "none",
+      "minWidth": "1px",
+      "open": "true",
+      "width": 1,
+      "x": 837.7999877929688
+    },
+    {
+      "flexBasis": "280px",
+      "id": "leftActivityShell",
+      "maxWidth": "280px",
+      "minWidth": "min(100%, 208px)",
+      "open": null,
+      "width": 280,
+      "x": 56
+    }
+  ],
+  "scale": "1.000",
+  "viewport": {
+    "height": 886,
+    "width": 883
+  }
+}

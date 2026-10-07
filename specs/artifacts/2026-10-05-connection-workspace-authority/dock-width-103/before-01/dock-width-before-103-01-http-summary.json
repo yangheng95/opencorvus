@@ -1,0 +1,13 @@
+{
+  "qualifier": "Only canonical timestamp rows are assigned to the new process window; ambiguous raw lines retained separately",
+  "afterTargetBirthUtc": "2026-10-07T13:39:17.9637739Z",
+  "requests": [],
+  "retainedNewLines": 3,
+  "unknownTimestampLines": [],
+  "target": {
+    "pid": 51508,
+    "processInstanceID": "win32:639269771579637739",
+    "occurrenceID": "c476c5bb-2dd6-4065-b3ab-3936a85e3962"
+  },
+  "unparsedSourceLines": 0
+}

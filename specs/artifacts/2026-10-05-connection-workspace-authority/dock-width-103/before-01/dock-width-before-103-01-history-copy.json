@@ -1,0 +1,29 @@
+{
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "port": 18054,
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-before-103-01",
+  "credentialStaging": "None; source50 untouched; no Task rearm",
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      }
+    }
+  ],
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "observedAtUtc": "2026-10-07T13:39:15.5229926Z",
+  "purpose": "Reproduce actual883 desktop dock cap while presenting genuine CLOSED50 Sources; no model/credential/Task rearm",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project"
+}

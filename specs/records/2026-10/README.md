@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [Desktop Sources width103](2026-10-07-source-dock-width.md)
+
+- [Desktop dock width103 Recall](../../artifacts/2026-10-05-connection-workspace-authority/subagent-dock-width-plan-103.md)
+
 - [Optional Expert Squad workflow guidance](2026-10-07-optional-workflow-guidance.md)
 
 - [Readable Sources and renderer102](2026-10-07-readable-conversation-sources.md)

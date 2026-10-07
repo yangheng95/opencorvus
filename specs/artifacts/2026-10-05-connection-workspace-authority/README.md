@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Desktop dock width103 Recall](subagent-dock-width-plan-103.md) and [evidence](dock-width-103/README.md): actual narrow desktop Sources failure and shared sizing correction.
+
 - [Sources and renderer102 evidence](subagent-rendering-flicker-102/README.md): actual before/first-after pixels, native closure, source preimages and current acceptance limits.
 - [Sources and Rendering102](subagent-rendering-flicker-plan-102.md): human Sources priority and shared source audit; real isolated history and streamed acceptance admissions.
 

@@ -1,0 +1,63 @@
+{
+  "observedAtUtc": "2026-10-07T14:20:43.0453617Z",
+  "physicalCompletion": true,
+  "listeners": null,
+  "occurrence": "dock-width-final-103-05-e67e92b4-f71f-4068-92aa-4ded9d1a9824",
+  "nativeSettlement": {
+    "occurrence": "dock-width-final-103-05-e67e92b4-f71f-4068-92aa-4ded9d1a9824",
+    "outcome": "settled",
+    "host": {
+      "pid": 17008,
+      "processInstanceID": "win32:639269794509459366",
+      "occurrenceID": "f5077f18-ae58-4ffe-aff4-7d2b16dbe95b"
+    },
+    "target": {
+      "pid": 13680,
+      "processInstanceID": "win32:639269794518467452",
+      "occurrenceID": "f11dbdca-4406-4ac7-9f79-fc3879ddece0"
+    },
+    "observedAtUtc": "2026-10-07T14:17:36.15Z",
+    "terminal": {
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 13680,
+        "processInstanceID": "win32:639269794518467452",
+        "occurrenceID": "f11dbdca-4406-4ac7-9f79-fc3879ddece0"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 17008,
+        "processInstanceID": "win32:639269794509459366",
+        "occurrenceID": "f5077f18-ae58-4ffe-aff4-7d2b16dbe95b"
+      }
+    }
+  ],
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-final-103-05\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-final-103-05\\runtime\\data\\models.json",
+      "outcome": "already_absent"
+    }
+  ],
+  "pairedCleanupComplete": true
+}

@@ -1,0 +1,65 @@
+{
+  "occurrence": "dock-width-final-103-07-c43a9b29-77a6-469a-b1cf-530a7e9ad3d6",
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "nativeSettlement": {
+    "occurrence": "dock-width-final-103-07-c43a9b29-77a6-469a-b1cf-530a7e9ad3d6",
+    "outcome": "settled",
+    "host": {
+      "pid": 67660,
+      "processInstanceID": "win32:639269803716607703",
+      "occurrenceID": "d0701372-ae41-4b44-b2cb-0d29d6fcd9c9"
+    },
+    "target": {
+      "pid": 12064,
+      "processInstanceID": "win32:639269803726967040",
+      "occurrenceID": "c5235258-6145-43fe-b38c-b1a84e9a7160"
+    },
+    "observedAtUtc": "2026-10-07T14:49:14.279Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "expected": {
+        "pid": 12064,
+        "processInstanceID": "win32:639269803726967040",
+        "occurrenceID": "c5235258-6145-43fe-b38c-b1a84e9a7160"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67660,
+        "processInstanceID": "win32:639269803716607703",
+        "occurrenceID": "d0701372-ae41-4b44-b2cb-0d29d6fcd9c9"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-final-103-07\\runtime\\data\\auth.json",
+      "copiedLength": 2194,
+      "outcome": "removed",
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\dock-width-final-103-07\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "observedAtUtc": "2026-10-07T14:49:16.2598026Z",
+  "listeners": null
+}

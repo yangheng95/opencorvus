@@ -1,0 +1,80 @@
+Browser tab: 70, Title: "OpenCorvus", URL: "http://127.0.0.1:18060/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 39-43, 46-49, 55-58, 82-117
++				82 container workspaceMain
++					83 container chatSection
++						84 container Description: Loading task, ID: taskSwitchProgress
++						85 container
++							86 text Sources width and native disclosure103 final
++							87 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-215-trigger, Secondary Actions: Expand
++							88 container Description: Running · 57s, ID: taskStatus
++								89 text Running
++								90 text 57s
++							91 button Side chat
++							92 container solidChatHeaderRuntimeActions
++								93 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++								94 checkbox Description: Close right dock, Value: 1
++						95 container
++							96 container Description: Conversation, ID: chatScroll
++								97 container
++									98 container
++										99 text User
++										100 container
++											101 text 请让 Base 的只读 researcher 读取 
++											102 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											103 text  ，用简短中文解释网页可访问性的含义并给出实际来源。无需修改项目、执行代码或扩展研究；保留真实网页工具产生的来源。
++									104 container
++										105 text orchestrator
++										106 text 16s
++										107 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										108 text 我会让 Base 的只读研究员仅阅读指定的 W3C 页面，用简短中文解释其含义，并保留网页工具返回的真实来源；不修改项目、不执行代码，也不扩展研究。
++										109 button (collapsed) Description: dispatch_agent · target=base-researcher, Secondary Actions: Expand
++											110 text dispatch_agent
++											111 text target=base-researcher
++											112 image
++									113 container Sub-agent progress
++										114 container
++											115 text base-researcher
++											116 button Open the full base-researcher conversation
++											117 container base-researcher activity
++												118 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												119 text artifact_search Artifact queries (1) read_agent_message Task participant evidence webfetch https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8) artifact_publish {"artifact_type":"base/research-report","schema_version":1,"label":"W3C 网页可访问性定义：只读研究证据","source_read_refs":[],"resou...
++							120 container chatHomeComposition
++								121 container chatForm
++									122 splitter Description: Drag to resize the message input, Value: 42
++									123 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									124 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									125 pop up button (collapsed) Description: Composer settings, Secondary Actions: Expand
++									126 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
++					127 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
++					128 container Description: Tools panel, ID: rightDock
++						129 container tabs-cl-64
++							130 tab group Open tools
++								131 container
++									132 tab (selected, settable, boolean) Description: Expert Squad agents, Value: 1, ID: tabs-cl-64-trigger-subagent
++									133 button Close tab
++							134 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
++							135 button Close panel
++							136 container Description: Expert Squad agents, ID: centerWorkbenchSubagent
++								137 container
++									138 button All agents (1)
++									139 pop up button (collapsed) Expert Squad agents base-researcher, ID: select-cl-553-trigger, Secondary Actions: Expand
++										140 text base-researcher
++									141 container
++										142 text base-researcher
++										143 text 37s
++										144 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										145 text 我会直接读取指定的 W3C 页面，依据其中的定义给出简短中文说明，并保留真实来源及关键原文；不会修改项目或搜索其他页面。
++										146 button (collapsed) Description: read_agent_message · Task participant evidence, Secondary Actions: Expand
++											147 text read_agent_message
++											148 text Task participant evidence
++											149 image
++										150 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8), Secondary Actions: Expand
++											151 text webfetch
++											152 text https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
++											153 image
++										154 container Sources
++											155 button (collapsed) Description: Sources: www.w3.org/WAI/fundamentals/accessibility-intro/ (1), Help: www.w3.org/WAI/fundamentals/accessibility-intro/ 1, Secondary Actions: Expand
++												156 text www.w3.org/WAI/fundamentals/accessibility-intro/
++												157 text 1
+The focused UI element is 116 button Open the full base-researcher conversation

@@ -1,0 +1,29 @@
+{
+  "observedAtUtc": "2026-10-07T14:57:13.4807511Z",
+  "listeners": [],
+  "occurrence": "dock-width-final-103-07-c43a9b29-77a6-469a-b1cf-530a7e9ad3d6",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67660,
+        "processInstanceID": "win32:639269803716607703",
+        "occurrenceID": "d0701372-ae41-4b44-b2cb-0d29d6fcd9c9"
+      },
+      "evidence": "Windows CIM current PID absent"
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 12064,
+        "processInstanceID": "win32:639269803726967040",
+        "occurrenceID": "c5235258-6145-43fe-b38c-b1a84e9a7160"
+      },
+      "evidence": "Windows CIM current PID absent"
+    }
+  ]
+}
