@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\expert-squad-scope-identity.test.ts:
+(pass) canonical selected Task association owns resolved scope and request identity while public query remains Session scoped [4.59ms]
+(pass) ordinary selected Session and Project retain their own canonical scope [0.18ms]
+
+ 2 pass
+ 0 fail
+ 9 expect() calls
+Ran 2 tests across 1 file. [347.00ms]

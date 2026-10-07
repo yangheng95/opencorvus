@@ -1,0 +1,63 @@
+{
+  "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\runtime\\data\\models.json",
+      "outcome": "already_absent"
+    }
+  ],
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+    "outcome": "settled",
+    "host": {
+      "pid": 74208,
+      "processInstanceID": "win32:639269526529336506",
+      "occurrenceID": "7f11406b-18b9-4c34-867b-cf62d8e644ab"
+    },
+    "target": {
+      "pid": 75020,
+      "processInstanceID": "win32:639269526537996971",
+      "occurrenceID": "e844a224-85c1-4098-9198-aaa881ca9e98"
+    },
+    "observedAtUtc": "2026-10-07T07:11:32.513Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-07T07:11:34.2789275Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "expected": {
+        "pid": 75020,
+        "processInstanceID": "win32:639269526537996971",
+        "occurrenceID": "e844a224-85c1-4098-9198-aaa881ca9e98"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 74208,
+        "processInstanceID": "win32:639269526529336506",
+        "occurrenceID": "7f11406b-18b9-4c34-867b-cf62d8e644ab"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "listeners": null
+}

@@ -1,5 +1,6 @@
 import { TASK_OWNER_REGISTRY_TOOL_IDS } from "@/agent/tool-pool-data"
 import path from "node:path"
+import { isDeepStrictEqual } from "node:util"
 import { createHash, randomUUID } from "node:crypto"
 import { jsonSchema, tool, type Tool as AITool } from "ai"
 import z from "zod"
@@ -49,6 +50,7 @@ import {
   ExpertSquadCatalogPageSchema,
   ExpertSquadDiagnosticPageSchema,
   ExpertSquadInventoryStatusSchema,
+  ExpertSquadSettingsDetailSchema,
   type ExpertSquadCatalogIndexEntry,
   type ExpertSquadCatalogInspection,
   type ExpertSquadCatalogPage,
@@ -2721,20 +2723,24 @@ export namespace PromptProfileResolver {
       .join("\n\n")
   }
 
+  function hasBuiltInProfileCollision(
+    profileID: string,
+    records: readonly Pick<ExpertSquadRegistry.CatalogDeclaration, "id">[],
+    issues: readonly Pick<ExpertSquadRegistry.DiscoveryIssue, "id">[],
+  ): boolean {
+    return records.some((entry) => entry.id === profileID) || issues.some((entry) => entry.id === profileID)
+  }
+
   export async function assertKnownProfileID(input: ProfileIDInput): Promise<void> {
     PromptProfileIDSchema.parse(input.profileID)
     if (Object.hasOwn(builtInPackages(), input.profileID)) {
       let collision = false
       if (input.scope === "global") {
         const discovered = await ExpertSquadRegistry.discoverGlobalAvailable()
-        collision =
-          discovered.items.some((entry) => entry.id === input.profileID) ||
-          discovered.issues.some((entry) => entry.id === input.profileID)
+        collision = hasBuiltInProfileCollision(input.profileID, discovered.items, discovered.issues)
       } else if (input.projectDirectory) {
         const discovered = await ExpertSquadRegistry.discoverAvailable(input.projectDirectory)
-        collision =
-          discovered.installations.some((entry) => entry.id === input.profileID) ||
-          discovered.issues.some((entry) => entry.id === input.profileID)
+        collision = hasBuiltInProfileCollision(input.profileID, discovered.installations, discovered.issues)
       }
       if (collision) {
         throw new Error(
@@ -3248,24 +3254,62 @@ export namespace PromptProfileResolver {
     id: string
     installationScope: "built_in" | "project" | "global"
     namespace?: string
-  }): Promise<ExpertSquadCatalogSummary | undefined> {
-    if (input.installationScope === "built_in") {
-      const pkg = builtInPackages()[input.id]
-      return pkg ? catalogSummaryFromPackage({ pkg, builtIn: true }) : undefined
-    }
-    if (!input.namespace) throw new Error("Installed expert squad settings detail requires namespace.")
-    const loaded = await ExpertSquadRegistry.loadInstalledCatalogPackage({
-      projectDirectory: input.projectDirectory,
-      installationScope: input.installationScope,
-      namespace: input.namespace,
-      id: input.id,
+  }): Promise<z.output<typeof ExpertSquadSettingsDetailSchema> | undefined> {
+    const generation = ExpertSquadRegistry.catalogInventoryGeneration()
+    const inventory = await catalogInventory(input.projectDirectory)
+    const declaration = inventory.installationRows.find((row) => {
+      if (row.index.id !== input.id) return false
+      const source = row.index.source
+      return input.installationScope === "built_in"
+        ? source.kind === "built_in"
+        : source.kind === "installed_package" &&
+            source.installation_scope === input.installationScope &&
+            source.namespace === input.namespace
     })
-    if (!loaded) return undefined
-    const pkg = {
-      ...loaded,
-      installationScope: input.installationScope,
+    let selected: ExpertSquadCatalogSummary | undefined
+    if (input.installationScope === "built_in") {
+      const pkg = inventory.builtInPackagesByID[input.id]
+      if (pkg) selected = catalogSummaryFromPackage({ pkg, builtIn: true })
+    } else {
+      if (!input.namespace) throw new Error("Installed expert squad settings detail requires namespace.")
+      const loaded = await ExpertSquadRegistry.loadInstalledCatalogPackage({
+        projectDirectory: input.projectDirectory,
+        installationScope: input.installationScope,
+        namespace: input.namespace,
+        id: input.id,
+      })
+      if (loaded) {
+        if (
+          !declaration ||
+          loaded.id !== declaration.pkg.id ||
+          loaded.namespace !== declaration.pkg.namespace ||
+          loaded.version !== declaration.pkg.version ||
+          !isDeepStrictEqual(loaded.manifest, declaration.pkg.manifest)
+        ) {
+          throw new Error("Expert squad settings declaration changed while loading selected package.")
+        }
+        selected = catalogSummaryFromPackage({
+          pkg: { ...loaded, installationScope: input.installationScope },
+          builtIn: false,
+        })
+      }
     }
-    return catalogSummaryFromPackage({ pkg, builtIn: false })
+    if (ExpertSquadRegistry.catalogInventoryGeneration() !== generation) {
+      throw new Error("Expert squad catalog generation changed while loading settings detail.")
+    }
+    if (!selected) return undefined
+    const winner = inventory.effectiveRows.find((row) => row.index.id === input.id)
+    const collision =
+      input.installationScope === "built_in" &&
+      hasBuiltInProfileCollision(input.id, inventory.externalInstallations, inventory.issues)
+    return ExpertSquadSettingsDetailSchema.parse({
+      scope: { kind: "project", directory: input.projectDirectory },
+      selected,
+      selection: {
+        catalog_revision: inventory.revision,
+        effective_identity: winner && !collision ? { id: winner.index.id, source: winner.index.source } : null,
+      },
+    })
   }
 
   export async function catalog(input: ExpertSquadCatalogInput): Promise<ExpertSquadCatalog> {

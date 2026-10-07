@@ -1,0 +1,18 @@
+[1/1] START test/server/expert-squad-selection-eligibility.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) inactive builtin, project and global winners support real Project and ordinary Session selection [4414.30ms]
+(pass) selected physical global package reports project winner and preserves reservations and duplicate errors [4713.16ms]
+(pass) built-in collision is unavailable while a valid Project winner overrides a broken global package [4455.52ms]
+Task future Project default and fixed catalog {"projectDefault":"research-studio","taskID":"tsk_g00VXLOQP000eNE6Db5J","status":200,"active":{"name":"Base","effective":"base","project":"research-studio","session_override":"base","package_revision":{"scope":"built_in","project_id":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","package_digest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"}},"binding":{"scope":"built_in","project_id":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","package_digest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"}}
+Task clear actual contract {"status":409,"body":{"name":"TaskPromptProfileImmutableError","data":{"message":"Task tsk_g00VXLOQP000eNE6Db5J is permanently bound to expert squad base","taskID":"tsk_g00VXLOQP000eNE6Db5J","pinnedPackageRevision":{"scope":"built_in","project_id":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","package_digest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"requestedProfileID":"research-studio"}}}
+blank model current config contract {"status":400,"body":{"data":{"message":"config: model: Model must be in the format \"provider/model\".; small_model: Model must be in the format \"provider/model\"."},"error":[{"message":"config: model: Model must be in the format \"provider/model\".; small_model: Model must be in the format \"provider/model\"."}],"success":false}}
+(pass) fixed Task changed-ID returns409 and retains actual package binding while missing model stays distinct [6093.46ms]
+(pass) held actual selected loader reports generation400 then accepts the next coherent detail [2713.79ms]
+
+ 5 pass
+ 0 fail
+ 49 expect() calls
+Ran 5 tests across 1 file. [24.89s]
+[1/1] DONE test/server/expert-squad-selection-eligibility.test.ts exit=0 duration=25.68s

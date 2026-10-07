@@ -1,0 +1,26 @@
+{
+  "occurrence": "expert-activation-89-task-4d1eb4e2-df53-4b2f-a582-6222555c01af",
+  "credentialStaging": "None",
+  "port": 18040,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-task-view-89\\evidence",
+    "expert-activation-89-task-4d1eb4e2-df53-4b2f-a582-6222555c01af",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18040",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-task-view-89\\startup.json",
+    "--startup-occurrence",
+    "expert-activation-89-task-4d1eb4e2-df53-4b2f-a582-6222555c01af",
+    "--log-level",
+    "INFO"
+  ]
+}

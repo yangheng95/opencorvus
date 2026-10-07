@@ -1,0 +1,30 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 62-65, 69-70, 73-77
+~									61 button 返回列表
++									62 heading Base, Value: 2
++										63 text Base
++									64 text base
++									65 text 内置 v 2026.09.30.1
+~									66 text Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
+~									67 text 项目默认
+~									68 pop up button (collapsed) 包操作, ID: dropdownmenu-cl-713-trigger, Secondary Actions: Expand
++									69 button 设为会话覆盖
++									70 button 继承项目
+~									71 container tabs-cl-718
+~										72 tab group 已安装 Squad 二级设置
++											73 tab (selected, settable, boolean) 概览, Value: 1, ID: tabs-cl-718-trigger-overview
++											74 tab (selectable, settable, boolean) Agent 与能力, Value: 0, ID: tabs-cl-718-trigger-agents
++											75 tab (selectable, settable, boolean) 配置, Value: 0, ID: tabs-cl-718-trigger-configuration
++											76 tab (selectable, settable, boolean) Package 详情, Value: 0, ID: tabs-cl-718-trigger-package
++										77 container tabs-cl-718-content-overview
++											78 definition list
++												79 container 项目选择
++													80 text 项目选择
++												81 text base
++												82 container 当前生效选择
++													83 text 当前生效选择
++												84 text research-studio
++											85 button (collapsed) 查看与激活相互独立, Secondary Actions: Expand
++												86 text 查看与激活相互独立
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18039/ui/

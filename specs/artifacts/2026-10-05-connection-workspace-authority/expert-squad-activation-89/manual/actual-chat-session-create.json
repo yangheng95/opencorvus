@@ -1,0 +1,45 @@
+{
+  "headers": {
+    "Access-Control-Expose-Headers": [
+      "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+    ],
+    "Date": [
+      "Wed, 07 Oct 2026 07:08:28 GMT"
+    ],
+    "x-opencorvus-request-id": [
+      "94829cad-2982-486a-81b8-d0a813d6c178"
+    ],
+    "Vary": [
+      "Origin"
+    ]
+  },
+  "path": "/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cexpert-activation-after-89%5Cproject",
+  "input": {},
+  "observedAtUTC": "2026-10-07T07:08:29.4690068Z",
+  "method": "POST",
+  "status": 201,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+  "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+  "body": {
+    "session": {
+      "id": "ses_-zUSeWxqgzzH2nWngpgO",
+      "slug": "quick-rocket",
+      "version": "local",
+      "projectID": "prj_hQJFjrOL7hCMiZMCmrWT",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+      "title": "Chat",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1791356909393,
+        "updated": 1791356909393
+      }
+    }
+  },
+  "purpose": "Existing canonical Chat creator; real ordinary conversation metadata; no messages/models"
+}

@@ -1,0 +1,30 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 61-64, 67-68, 70-76
+~								60 button 返回列表
++								61 heading Activation Shared Global, Value: 2
++									62 text Activation Shared Global
++								63 text activation-shared
++								64 text 用户全局包 v 2026.10.07.1
+~								65 text Owned current selection and declaration qualification package.
+~								66 pop up button (collapsed) 包操作, ID: dropdownmenu-cl-426-trigger, Secondary Actions: Expand
++								67 text 此安装被当前项目中的其他安装覆盖；按 ID 选择会使用当前有效安装。
++								68 button (disabled) 设为项目默认专家团
+~								69 container tabs-cl-430
++									70 tab group 已安装 Squad 二级设置
++										71 tab (selected, settable, boolean) 概览, Value: 1, ID: tabs-cl-430-trigger-overview
++										72 tab (selectable, settable, boolean) Agent 与能力, Value: 0, ID: tabs-cl-430-trigger-agents
++										73 tab (selectable, settable, boolean) 配置, Value: 0, ID: tabs-cl-430-trigger-configuration
++										74 tab (selectable, settable, boolean) 进化历史, Value: 0, ID: tabs-cl-430-trigger-evolution
++										75 tab (selectable, settable, boolean) Package 详情, Value: 0, ID: tabs-cl-430-trigger-package
++									76 container tabs-cl-430-content-overview
++										77 definition list
++											78 container 项目选择
++												79 text 项目选择
++											80 text base
++											81 container 当前生效选择
++												82 text 当前生效选择
++											83 text base
++										84 button (collapsed) 查看与激活相互独立, Secondary Actions: Expand
++											85 text 查看与激活相互独立
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18039/ui/

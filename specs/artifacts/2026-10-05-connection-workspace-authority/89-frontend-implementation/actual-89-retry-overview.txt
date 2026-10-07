@@ -1,0 +1,28 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 62-65
+~								61 heading Activation Project, Value: 2
++									62 text Activation Project
++								63 text activation-project
++								64 text 项目级包 v 2026.10.07.1
++								65 text Owned current selection and declaration qualification package.
+~								66 pop up button (collapsed) 包操作, ID: dropdownmenu-cl-543-trigger, Secondary Actions: Expand
++								67 button 设为项目默认专家团
++								68 container tabs-cl-547
++									69 tab group 已安装 Squad 二级设置
++										70 tab (selected, settable, boolean) 概览, Value: 1, ID: tabs-cl-547-trigger-overview
++										71 tab (selectable, settable, boolean) Agent 与能力, Value: 0, ID: tabs-cl-547-trigger-agents
++										72 tab (selectable, settable, boolean) 配置, Value: 0, ID: tabs-cl-547-trigger-configuration
++										73 tab (selectable, settable, boolean) 进化历史, Value: 0, ID: tabs-cl-547-trigger-evolution
++										74 tab (selectable, settable, boolean) Package 详情, Value: 0, ID: tabs-cl-547-trigger-package
++									75 container tabs-cl-547-content-overview
++										76 definition list
++											77 container 项目选择
++												78 text 项目选择
++											79 text base
++											80 container 当前生效选择
++												81 text 当前生效选择
++											82 text base
++										83 button (collapsed) 查看与激活相互独立, Secondary Actions: Expand
++											84 text 查看与激活相互独立
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18039/ui/

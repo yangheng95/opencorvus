@@ -1,0 +1,106 @@
+diff --git a/.tmp-product-iteration/expert-eligibility-89/test-before-followup.ts b/packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts
+index 5185ce5f..957854cf 100644
+--- a/.tmp-product-iteration/expert-eligibility-89/test-before-followup.ts
++++ b/packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts
+@@ -210,7 +210,7 @@ test("built-in collision is unavailable while a valid Project winner overrides a
+   )
+   const accepted = await request(project.path, "/config", "PATCH", { prompt_profile: { active: id } })
+   expect({ status: accepted.status, active: accepted.body.prompt_profile?.active }).toEqual({ status: 200, active: id })
+-  await malformedRoot(project.path, "base", "collision89", "project")
++  const malformedCollision = await malformedRoot(project.path, "base", "collision89", "project")
+   await cold()
+   expect((await detail(project.path, "base", "built_in")).selection.effective_identity).toBe(null)
+   const refused = await request(project.path, "/config", "PATCH", { prompt_profile: { active: "base" } })
+@@ -219,6 +219,32 @@ test("built-in collision is unavailable while a valid Project winner overrides a
+     success: false,
+     message: 'External expert squad package id "base" collides with a built-in expert squad id.',
+   })
++  await fs.rm(malformedCollision, { recursive: true, force: true })
++  // SDK-valid declaration with a built-in ID is identity-collision input, not a successful Manager installation.
++  const collisionRoot = path.join(
++    ExpertSquadPackageLocations.project(project.path).packagesRoot,
++    "valid-collision89",
++    "base",
++  )
++  await writeExpertSquadPackage({ directory: collisionRoot, definition: definition("base", "valid-collision89") })
++  await ExpertSquadRegistry.invalidateAvailable()
++  await cold()
++  const declarations = await ExpertSquadRegistry.discoverAvailable(project.path)
++  expect(
++    declarations.installations
++      .filter((entry) => entry.id === "base")
++      .map((entry) => ({ id: entry.id, namespace: entry.namespace, scope: entry.installationScope })),
++  ).toEqual([{ id: "base", namespace: "valid-collision89", scope: "project" }])
++  expect((await detail(project.path, "base", "built_in")).selection.effective_identity).toBe(null)
++  const validCollisionRefusal = await request(project.path, "/config", "PATCH", { prompt_profile: { active: "base" } })
++  expect(validCollisionRefusal).toEqual({
++    status: 400,
++    body: {
++      success: false,
++      data: { message: refused.body.data.message },
++      error: [{ message: refused.body.data.message }],
++    },
++  })
+ })
+ 
+ test("fixed Task changed-ID returns409 and retains actual package binding while missing model stays distinct", async () => {
+@@ -278,6 +304,50 @@ test("fixed Task changed-ID returns409 and retains actual package binding while
+     binding: requireTaskPackageRevisionBinding(fixture.taskID),
+     overlay: (await Session.get(fixture.root.id)).metadata?.configOverlay,
+   }).toEqual({ binding: fixture.binding, overlay: { prompt_profile: { active: "base" } } })
++  const future = await request(project.path, "/config", "PATCH", { prompt_profile: { active: "research-studio" } })
++  expect({ status: future.status, active: future.body.prompt_profile?.active }).toEqual({
++    status: 200,
++    active: "research-studio",
++  })
++  expect(JSON.parse(await fs.readFile(ConfigPaths.projectFile(project.path), "utf8")).prompt_profile.active).toBe(
++    "research-studio",
++  )
++  const taskCatalog = await request(project.path, `/expert-squad/catalog?sessionID=${fixture.root.id}`)
++  console.log(
++    "Task future Project default and fixed catalog",
++    JSON.stringify({
++      projectDefault: future.body.prompt_profile.active,
++      taskID: fixture.taskID,
++      status: taskCatalog.status,
++      active: taskCatalog.body.active,
++      binding: fixture.binding,
++    }),
++  )
++  expect({ status: taskCatalog.status, active: taskCatalog.body.active }).toMatchObject({
++    status: 200,
++    active: {
++      project: "research-studio",
++      effective: "base",
++      package_revision: fixture.binding,
++    },
++  })
++  expect({
++    binding: requireTaskPackageRevisionBinding(fixture.taskID),
++    overlay: (await Session.get(fixture.root.id)).metadata?.configOverlay,
++  }).toEqual({ binding: fixture.binding, overlay: { prompt_profile: { active: "base" } } })
++  const clear = await request(project.path, `/session/${fixture.root.id}/config`, "PATCH", { prompt_profile: null })
++  console.log("Task clear actual contract", JSON.stringify(clear))
++  expect(clear).toMatchObject({
++    status: 409,
++    body: {
++      name: "TaskPromptProfileImmutableError",
++      data: { taskID: fixture.taskID, requestedProfileID: "research-studio", pinnedPackageRevision: fixture.binding },
++    },
++  })
++  expect({
++    binding: requireTaskPackageRevisionBinding(fixture.taskID),
++    overlay: (await Session.get(fixture.root.id)).metadata?.configOverlay,
++  }).toEqual({ binding: fixture.binding, overlay: { prompt_profile: { active: "base" } } })
+   const file = ConfigPaths.projectFile(project.path)
+   await fs.mkdir(path.dirname(file), { recursive: true })
+   await fs.writeFile(
+@@ -295,7 +365,7 @@ test("fixed Task changed-ID returns409 and retains actual package binding while
+   await fs.writeFile(file, JSON.stringify({ model: "", small_model: "" }))
+   await cold()
+   const blank = await request(project.path, "/config", "PATCH", { prompt_profile: { active: "research-studio" } })
+-  console.log("blank model current config contract", blank)
++  console.log("blank model current config contract", JSON.stringify(blank))
+   const message =
+     'config: model: Model must be in the format "provider/model".; small_model: Model must be in the format "provider/model".'
+   expect(blank).toEqual({ status: 400, body: { success: false, data: { message }, error: [{ message }] } })

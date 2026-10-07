@@ -1,0 +1,12 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/89-frontend-implementation/en.recovery-before.json b/packages/overlay/src/i18n/en-US.json
+index d54004ec..d509df8a 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/89-frontend-implementation/en.recovery-before.json
++++ b/packages/overlay/src/i18n/en-US.json
+@@ -1275,6 +1275,7 @@
+   "expert_squad.task_assignment_fixed": "Task assignment: {{name}} v{{version}}. This assignment is fixed at creation. Create a new Task to use another Expert Squad.",
+   "expert_squad.installation_shadowed": "This installation is shadowed by another installation in this Project. ID-based selection uses the effective installation.",
+   "expert_squad.installation_not_selectable": "This installation is not currently available for ID-based selection. Review the catalog diagnostics.",
++  "expert_squad.selected_read_failed": "Could not load this Expert Squad's details. Retry to read the current installation.",
+   "expert_squad.activated_session": "Updated session Expert Squad override",
+   "expert_squad.cleared_session_override": "Session Expert Squad now inherits project",
+   "expert_squad.export": "Export ZIP",

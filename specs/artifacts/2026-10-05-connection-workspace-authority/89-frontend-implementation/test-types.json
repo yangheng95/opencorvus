@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "types": []
+  },
+  "extends": "../../../../packages/overlay/tsconfig.json",
+  "include": [
+    "../../../../packages/overlay/test/expert-squad-scope-identity.test.ts",
+    "../../../../packages/overlay/src/**/*.ts",
+    "../../../../packages/overlay/src/**/*.tsx",
+    "../../../../node_modules/.bun/bun-types@1.3.14/node_modules/bun-types/index.d.ts",
+    "../../../../packages/overlay/node_modules/vite/client.d.ts"
+  ]
+}

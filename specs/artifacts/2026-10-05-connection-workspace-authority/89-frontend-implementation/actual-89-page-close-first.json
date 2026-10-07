@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-07T07:09:55.233Z",
+  "ownedTabID": "241798765",
+  "inventory": {
+    "apps": [],
+    "browsers": [
+      {
+        "family": "chrome",
+        "id": "1",
+        "metadata": {
+          "extensionInstanceId": "a0819a59-0e2e-4112-8e53-cb088dac913d"
+        },
+        "name": "Chrome",
+        "profileName": "Heng",
+        "type": "extension",
+        "tabs": [
+          {
+            "id": "241798765",
+            "title": "OpenCorvus",
+            "url": "http://localhost:18039/ui/"
+          },
+          {
+            "id": "241798598",
+            "lastOpened": "2026-10-07T06:44:52.804Z",
+            "providerTabId": "[\"ae1faa1f-04db-4b36-a144-a781d10aa9ec\",\"241798598\"]",
+            "title": "打开 ChatGPT 桌面版",
+            "url": "https://chatgpt.com/codex/open-app?source=login&app_brand=chatgpt"
+          }
+        ]
+      }
+    ]
+  }
+}

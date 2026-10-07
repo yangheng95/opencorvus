@@ -1,0 +1,28 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~									61 button 返回列表
++									62 heading Base, Value: 2
++										63 text Base
++									64 text base
++									65 text 内置 v 2026.09.30.1
++									66 text Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++									67 text 项目默认
++									68 pop up button (collapsed) 包操作, ID: dropdownmenu-cl-724-trigger, Secondary Actions: Expand
++									69 button 设为会话覆盖
++									70 container tabs-cl-728
++										71 tab group 已安装 Squad 二级设置
++											72 tab (selected, settable, boolean) 概览, Value: 1, ID: tabs-cl-728-trigger-overview
++											73 tab (selectable, settable, boolean) Agent 与能力, Value: 0, ID: tabs-cl-728-trigger-agents
++											74 tab (selectable, settable, boolean) 配置, Value: 0, ID: tabs-cl-728-trigger-configuration
++											75 tab (selectable, settable, boolean) Package 详情, Value: 0, ID: tabs-cl-728-trigger-package
++										76 container tabs-cl-728-content-overview
++											77 definition list
++												78 container 项目选择
++													79 text 项目选择
++												80 text base
++												81 container 当前生效选择
++													82 text 当前生效选择
++												83 text base
++											84 button (collapsed) 查看与激活相互独立, Secondary Actions: Expand
++												85 text 查看与激活相互独立
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18039/ui/

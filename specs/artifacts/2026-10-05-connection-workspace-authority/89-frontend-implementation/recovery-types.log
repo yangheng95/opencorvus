@@ -1,0 +1,3 @@
+$ tsc --noEmit
+src/components/settings/ExpertSquadPanel.tsx(1541,26): error TS2322: Type '{ children: string; type: "button"; variant: "outline"; size: "sm"; disabled: boolean; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+  Property 'tone' is missing in type '{ children: string; type: "button"; variant: "outline"; size: "sm"; disabled: boolean; onClick: () => void; }' but required in type 'ButtonProps'.

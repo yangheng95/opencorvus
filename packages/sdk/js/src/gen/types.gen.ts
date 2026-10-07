@@ -2120,6 +2120,21 @@ export type ExpertSquadSettingsDetail = {
     kind: "project"
   }
   selected: ExpertSquadCatalogSummary
+  selection: {
+    catalog_revision: string
+    effective_identity: {
+      id: string
+      source:
+        | {
+            kind: "built_in"
+          }
+        | {
+            installation_scope: "project" | "global"
+            kind: "installed_package"
+            namespace: string
+          }
+    } | null
+  }
 }
 
 export type FeishuChannelConfig = {

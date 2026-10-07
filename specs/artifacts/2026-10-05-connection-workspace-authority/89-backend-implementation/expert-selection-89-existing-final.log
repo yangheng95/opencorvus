@@ -1,0 +1,53 @@
+[1/3] START test/expert-squad/catalog-index.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Expert Squad catalog index > uses a bounded declaration index plus exact Mission inspection [61.36ms]
+(pass) Expert Squad catalog index > loads one exact full detail for a selected index identity [10.50ms]
+(pass) Expert Squad catalog index > preserves the integrity review execution contract in selected catalog detail [9.35ms]
+(pass) Expert Squad catalog index > reads full package bodies only for the exact selected installed identity [47.19ms]
+(pass) Expert Squad catalog index > pages a hundred installed declarations through one bounded cursor contract [927.79ms]
+(pass) Expert Squad catalog index > returns one bounded Mission capability_search result for a hundred held Squads [8796.88ms]
+(pass) Expert Squad catalog index > keeps independent bounded cursor sequences stable for different queries [105.68ms]
+(pass) Expert Squad catalog index > pages one exact Squad workflow catalog without unbounded inspection output [94.98ms]
+(pass) Expert Squad catalog index > pages discovery diagnostics while inventory status stays count-only [134.11ms]
+(pass) Expert Squad catalog index > filters Market installation state before pagination and loads exact selected detail [4556.34ms]
+(pass) Expert Squad catalog index > ranks Market packages from package-owned Skill and prompt evidence [1784.24ms]
+(pass) Expert Squad catalog index > keeps Market scope ordering and revision deterministic across Resolver call order [364.44ms]
+(pass) Expert Squad catalog index > serves active, index, inspection, status, diagnostics, and selected detail route contracts [1633.39ms]
+(pass) Expert Squad catalog index > projects one project-over-global identity and keeps a damaged project reservation authoritative [49.38ms]
+
+ 14 pass
+ 0 fail
+ 76 expect() calls
+Ran 14 tests across 1 file. [21.34s]
+[1/3] DONE test/expert-squad/catalog-index.test.ts exit=0 duration=22.21s
+[2/3] START test/expert-squad/squad-sdk-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Generate Expert Squads expert squad > loads one self-contained package with exact authoring and import workflows [164.02ms]
+(pass) Generate Expert Squads expert squad > projects package-local methods and Host write tools only through the active Squad scheduler [2232.47ms]
+(pass) Generate Expert Squads expert squad > authors the visible positive contract with its package-owned typed publisher [2531.72ms]
+(pass) Generate Expert Squads expert squad > is available from a clean project catalog as an embedded system package [794.45ms]
+(pass) Generate Expert Squads expert squad > publishes a traceable generated Expert Squad into the current project catalog [1733.81ms]
+
+ 5 pass
+ 0 fail
+ 35 expect() calls
+Ran 5 tests across 1 file. [9.17s]
+[2/3] DONE test/expert-squad/squad-sdk-package.test.ts exit=0 duration=9.38s
+[3/3] START test/server/expert-selected-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+selected-reader-cold-receipts [{"route":"/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/configuration?id=selected-reader&installationScope=project","status":200,"errorName":null}]
+(pass) three exact selected readers return actual package and redacted configuration while runtime model remains unavailable [5925.78ms]
+(pass) exact current public errors preserve missing declaration identity [3985.52ms]
+(pass) same package ID reads each Project's actual declaration and configured values [6651.08ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [18.80s]
+[3/3] DONE test/server/expert-selected-read-identity.test.ts exit=0 duration=19.01s

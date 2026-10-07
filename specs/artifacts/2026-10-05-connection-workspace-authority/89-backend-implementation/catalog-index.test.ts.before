@@ -1,0 +1,844 @@
+import { describe, expect, spyOn, test } from "bun:test"
+import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
+import { memoryProject } from "../fixture/memory"
+import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
+import { ExpertSquadPackageLocations } from "../../src/expert-squad/locations"
+import path from "node:path"
+import { Filesystem } from "../../src/util/filesystem"
+import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
+import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
+import { Instance } from "../../src/project/instance"
+import { mkdir, realpath, rm, writeFile } from "node:fs/promises"
+import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
+import { Hono } from "hono"
+import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
+import { ensureMissionSession } from "../../src/mission/session"
+import { payloadPackageSources } from "../../generated/expert-squad-payload"
+import { Config } from "../../src/config/config"
+import { Session } from "../../src/session"
+import { Identifier } from "../../src/id/id"
+import { PrimaryAssistantRegistry } from "../../src/agent/primary-assistant-registry"
+import { sessionRuntimeFromNativeAgent } from "../../src/agent/session-agent-runtime"
+import { SessionProcessor } from "../../src/session/processor"
+import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
+import { capabilityRevealBaseDefinitions } from "../../src/capability/reveal-receipt"
+import { normalizedProviderToolDefinition } from "../../src/capability/reveal-owner"
+
+function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
+  const emptyResources = { capability_refs: [] as string[] }
+  return {
+    manifest: {
+      schema_version: 2,
+      namespace: "scale",
+      id,
+      label: `Scale ${id}`,
+      description: `Bounded catalog fixture ${id}.`,
+      version: "2026.08.10.1",
+      product_pillars: ["code"],
+      readme: "README.md",
+      selector: {
+        summary: `Select ${id} for bounded catalog verification.`,
+        selection_guidance: `Use ${id} only for bounded catalog verification.`,
+        instructions: "selector.md",
+      },
+      capability_sets: {},
+      capability_projection: {
+        scheduler: { ...emptyResources, base_role: "orchestrator" },
+        agents: {},
+        virtual_workflows: {},
+      },
+    },
+    files: { "README.md": `# ${id}\n`, "selector.md": `# ${id} selector\n` },
+  }
+}
+
+async function catalogProject() {
+  const testRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+  if (!testRoot) throw new Error("Catalog tests require the repository test preload")
+  const directory = await createManagedTemporaryDirectory(path.join(testRoot, "fixtures"), "catalog-")
+  return {
+    path: await realpath(directory),
+    async [Symbol.asyncDispose]() {
+      await ExpertSquadRegistry.invalidateAvailable()
+      await removeManagedDirectoryTree(directory)
+    },
+  }
+}
+
+describe("Expert Squad catalog index", () => {
+  test("uses a bounded declaration index plus exact Mission inspection", async () => {
+    await using project = await catalogProject()
+    const settings = await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
+    const recommendations = await PromptProfileResolver.recommendationCatalog({
+      projectDirectory: project.path,
+      productPillar: "code",
+    })
+    const emptyRecommendations = await PromptProfileResolver.recommendationCatalog({
+      projectDirectory: project.path,
+      productPillar: "code",
+      restrictToExpertSquadIDs: [],
+    })
+
+    expect(settings.entries.filter((squad) => squad.built_in).map((squad) => squad.id)).toEqual([
+      "advanced",
+      "base",
+      "research-studio",
+      "squad-sdk",
+    ])
+    expect(emptyRecommendations).toEqual([])
+    expect(settings.entries.find((squad) => squad.id === "base")).toMatchObject({
+      id: "base",
+      name: "Base",
+      display_label: "Base",
+      built_in: true,
+      product_pillars: ["code", "work"],
+      source: { kind: "built_in" },
+    })
+    expect(recommendations.find((squad) => squad.id === "base")).toMatchObject({
+      id: "base",
+      name: "Base",
+      source: { kind: "built_in" },
+    })
+    const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
+    expect(inspection).toMatchObject({
+      id: "base",
+      version: "2026.09.14.15",
+      selector: {
+        summary: expect.any(String),
+        selection_guidance: expect.any(String),
+      },
+      workflows: [
+        { id: "execution-verification", node_count: 2 },
+        { id: "planner-parallel-delivery", node_count: 4 },
+        { id: "source-planned-execution-verification", node_count: 3 },
+      ],
+      workflow_count: 3,
+      next_workflow_cursor: null,
+    })
+  })
+
+  test("loads one exact full detail for a selected index identity", async () => {
+    await using project = await catalogProject()
+    const detail = await PromptProfileResolver.settingsDetail({
+      projectDirectory: project.path,
+      id: "base",
+      installationScope: "built_in",
+    })
+
+    expect(detail?.id).toBe("base")
+    expect(detail?.name).toBe("Base")
+    expect(detail?.source).toEqual({ kind: "built_in" })
+    expect(detail?.readme.content).toContain("# Base")
+    expect(detail?.selector.instructions).toContain("# Selecting Base")
+    expect(detail?.capability_projection.scheduler.base_role).toBe("orchestrator")
+    expect(
+      Object.fromEntries(
+        Object.entries(detail?.capability_projection.agents ?? {}).map(([id, projection]) => [
+          id,
+          projection.base_role,
+        ]),
+      ),
+    ).toEqual({
+      "base-developer": "build",
+      "base-planner": "delegated-worker",
+      "base-researcher": "explore",
+      "base-tester": "delegated-worker",
+    })
+  })
+
+  test("preserves the integrity review execution contract in selected catalog detail", async () => {
+    await using project = await catalogProject()
+    const detail = await PromptProfileResolver.settingsDetail({
+      projectDirectory: project.path,
+      id: "advanced",
+      installationScope: "built_in",
+    })
+
+    expect(detail?.capability_projection.agents["system-integrity-reviewer"]).toMatchObject({
+      base_role: "integrity",
+      execution_contract: "platform_integrity_review",
+    })
+  })
+
+  test("reads full package bodies only for the exact selected installed identity", async () => {
+    await using project = await catalogProject()
+    const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
+    for (const id of ["selected-detail", "unselected-detail"]) {
+      await writeExpertSquadPackage({
+        directory: path.join(root, "scale", id),
+        definition: scalePackageDefinition(id),
+      })
+    }
+    const exactLoad = spyOn(ExpertSquadRegistry, "loadInstalledCatalogPackage")
+    try {
+      const detail = await PromptProfileResolver.settingsDetail({
+        projectDirectory: project.path,
+        id: "selected-detail",
+        installationScope: "project",
+        namespace: "scale",
+      })
+      expect(detail).toMatchObject({
+        id: "selected-detail",
+        source: { kind: "installed_package", installation_scope: "project", namespace: "scale" },
+      })
+      expect(exactLoad.mock.calls.map(([input]) => input)).toEqual([
+        {
+          projectDirectory: project.path,
+          id: "selected-detail",
+          installationScope: "project",
+          namespace: "scale",
+        },
+      ])
+    } finally {
+      exactLoad.mockRestore()
+    }
+  })
+
+  test("pages a hundred installed declarations through one bounded cursor contract", async () => {
+    await using project = await catalogProject()
+    const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
+    const expected = Array.from({ length: 100 }, (_, index) => `scale-${String(index).padStart(3, "0")}`)
+    await Promise.all(
+      expected.map((id) =>
+        writeExpertSquadPackage({
+          directory: path.join(root, "scale", id),
+          definition: scalePackageDefinition(id),
+        }),
+      ),
+    )
+    const readText = spyOn(Filesystem, "readText")
+    try {
+      const observed: string[] = []
+      let cursor: string | undefined
+      do {
+        const page = await PromptProfileResolver.searchCatalog({
+          projectDirectory: project.path,
+          view: "installations",
+          cursor,
+          limit: 20,
+        })
+        expect(page.entries.length).toBeLessThanOrEqual(20)
+        observed.push(
+          ...page.entries
+            .filter((entry) => entry.source.kind === "installed_package" && entry.source.namespace === "scale")
+            .map((entry) => entry.id),
+        )
+        cursor = page.next_cursor ?? undefined
+      } while (cursor)
+      expect(observed).toEqual(expected)
+      const fixtureManifestReads = readText.mock.calls
+        .map(([file]) => path.resolve(String(file)))
+        .filter((file) => file.startsWith(path.resolve(root)) && path.basename(file) === "expert-squad.jsonc")
+      expect(fixtureManifestReads).toHaveLength(100)
+    } finally {
+      readText.mockRestore()
+    }
+  })
+
+  test("returns one bounded Mission capability_search result for a hundred held Squads", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
+        const heldExpertSquadIDs = Array.from(
+          { length: 100 },
+          (_, index) => `mission-scale-${String(index).padStart(3, "0")}`,
+        )
+        await Promise.all(
+          heldExpertSquadIDs.map((id) =>
+            writeExpertSquadPackage({
+              directory: path.join(root, "scale", id),
+              definition: scalePackageDefinition(id),
+            }),
+          ),
+        )
+        // Direct fixture materialization bypasses Manager mutation receipts, so
+        // publish the same inventory-generation change that a formal install emits.
+        await ExpertSquadRegistry.invalidateAvailable()
+        const mission = await ensureMissionSession({
+          missionID: "hundred-held-capability-search",
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: heldExpertSquadIDs as [string, ...string[]],
+        })
+        const config = await Config.get()
+        const userMessageID = Identifier.ascending("message")
+        await Session.persistMessage({
+          info: {
+            id: userMessageID,
+            sessionID: mission.id,
+            role: "user",
+            author: "user",
+            agent: "mission",
+            model: { providerID: "test-provider", modelID: "test-model" },
+            time: { created: Date.now() },
+          },
+          parts: [
+            {
+              id: Identifier.ascending("part"),
+              sessionID: mission.id,
+              messageID: userMessageID,
+              type: "text",
+              text: "Find a held Expert Squad.",
+            },
+          ],
+        })
+        const model = {
+          id: "test-model",
+          providerID: "test-provider",
+          name: "Capability catalog test",
+          limit: { context: 1_000_000, input: 900_000, output: 4_096 },
+          cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
+          capabilities: {
+            toolcall: true,
+            attachment: false,
+            reasoning: false,
+            temperature: true,
+            input: { text: true, image: false, audio: false, video: false },
+            output: { text: true, image: false, audio: false, video: false },
+          },
+          api: { id: "test-model", npm: "@ai-sdk/openai-compatible" },
+          options: {},
+        } as any
+        const assistant = {
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          parentID: userMessageID,
+          role: "assistant" as const,
+          author: "mission",
+          agent: "mission",
+          providerID: model.providerID,
+          modelID: model.id,
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+          time: { created: Date.now() },
+        }
+        const processor = SessionProcessor.create({
+          assistantMessage: assistant,
+          sessionID: mission.id,
+          model,
+          abort: new AbortController().signal,
+        })
+        const { tools, occurrence } = await resolveTestCapabilityTools({
+          config,
+          model,
+          session: mission,
+          assistant,
+          processor,
+          agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config })),
+          agentID: "mission",
+          messages: await Session.messages({ sessionID: mission.id }),
+          activeLocalRefs: [],
+        })
+        expect(Object.keys(tools).sort()).toEqual([
+          "bash",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "mission_state",
+          "panel_block_mission",
+          "panel_cancel_task",
+          "panel_complete_mission",
+          "panel_create_task",
+          "panel_expert_squad_inspect",
+          "panel_extend_task_acceptance",
+          "panel_multica_catalog",
+          "panel_query_task",
+          "panel_query_task_artifacts",
+          "panel_read_task_artifact",
+          "panel_read_task_dispatch_evidence",
+          "panel_read_task_message",
+          "panel_respond_interaction",
+          "panel_resume_task",
+          "planner",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "schedule",
+          "scheduler_message",
+          "search_code",
+          "skill_market",
+          "todo",
+          "wait",
+          "webfetch",
+          "websearch",
+          "write",
+        ])
+        const base = capabilityRevealBaseDefinitions(
+          Object.entries(tools).map(([name, tool]) => normalizedProviderToolDefinition(name, tool)),
+        )
+        const search = tools.capability_search
+        if (!search?.execute) throw new Error("Mission capability_search is unavailable")
+        const result = await search.execute(
+          { queries: [""], kinds: ["expert_squad"], exact_refs: [], deactivate_refs: [], limit: 5 },
+          {
+            toolCallId: "call_hundred_held_capability_search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+          },
+        )
+        const output = JSON.parse(result.output) as {
+          catalog_revision: string
+          caller: string
+          visible_expert_squad_count: number
+          held_expert_squad_count: number
+          product_pillar: string
+          results: Array<Record<string, unknown>>
+        }
+        const mismatchedPillarResult = await search.execute(
+          {
+            queries: [""],
+            kinds: ["expert_squad"],
+            product_pillar: "work",
+            exact_refs: [],
+            deactivate_refs: [],
+            limit: 1,
+          },
+          {
+            toolCallId: "call_mismatched_pillar_capability_search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+          },
+        )
+        const mismatchedPillarOutput = JSON.parse(mismatchedPillarResult.output) as {
+          visible_expert_squad_count: number
+          held_expert_squad_count: number
+          product_pillar: string
+          requested_product_pillar: string
+          results: Array<Record<string, unknown>>
+        }
+        expect(result.metadata.catalog_revision).toMatch(/^[a-f0-9]{64}$/)
+        const {
+          catalog_revision: _catalogRevision,
+          catalog_snapshot_hash: _catalogSnapshotHash,
+          opencorvus_capability_reveal_v2: _receipt,
+          ...metadata
+        } = result.metadata
+        expect({
+          metadata,
+          caller: output.caller,
+          visibleCount: occurrence.payload.views.filter((entry) => entry.descriptor_ref.kind === "expert_squad").length,
+          outputVisibleCount: output.visible_expert_squad_count,
+          outputHeldCount: output.held_expert_squad_count,
+          outputProductPillar: output.product_pillar,
+          resultCount: output.results.length,
+          resultKeys: [...new Set(output.results.flatMap((entry) => Object.keys(entry)))].sort(),
+          outputBytes: Buffer.byteLength(result.output, "utf8") < 50_000,
+          mismatchedPillar: {
+            visibleCount: mismatchedPillarOutput.visible_expert_squad_count,
+            heldCount: mismatchedPillarOutput.held_expert_squad_count,
+            productPillar: mismatchedPillarOutput.product_pillar,
+            requestedProductPillar: mismatchedPillarOutput.requested_product_pillar,
+            resultCount: mismatchedPillarOutput.results.length,
+          },
+        }).toEqual({
+          metadata: {
+            caller: "mission",
+            result_count: 5,
+            reveal_revision: 1,
+            active_ref_count: 0,
+            active_payload_chars: expect.any(Number),
+            active_payload_tokens: expect.any(Number),
+            visible_expert_squad_count: 100,
+            held_expert_squad_count: 100,
+            product_pillar: "code",
+            truncated: false,
+          },
+          caller: "mission",
+          visibleCount: 100,
+          outputVisibleCount: 100,
+          outputHeldCount: 100,
+          outputProductPillar: "code",
+          resultCount: 5,
+          resultKeys: [
+            "aliases",
+            "availability",
+            "catalog_revision",
+            "description",
+            "discoverable_by",
+            "name",
+            "next_owner",
+            "product_pillars",
+            "ref",
+            "score",
+          ],
+          outputBytes: true,
+          mismatchedPillar: {
+            visibleCount: 100,
+            heldCount: 100,
+            productPillar: "code",
+            requestedProductPillar: "work",
+            resultCount: 1,
+          },
+        })
+        expect(metadata.active_payload_chars).toBeGreaterThan(0)
+        expect(metadata.active_payload_chars).toBe(base.payloadChars)
+        expect(metadata.active_payload_tokens).toBeGreaterThan(0)
+        expect(metadata.active_payload_tokens).toBe(base.payloadTokens)
+      },
+    })
+  })
+
+  test("keeps independent bounded cursor sequences stable for different queries", async () => {
+    await using project = await catalogProject()
+    const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
+    for (const id of ["alpha-one", "alpha-two", "beta-one", "beta-two"]) {
+      await writeExpertSquadPackage({
+        directory: path.join(root, "scale", id),
+        definition: scalePackageDefinition(id),
+      })
+    }
+    const alpha = await PromptProfileResolver.searchCatalog({
+      projectDirectory: project.path,
+      view: "installations",
+      query: "alpha",
+      limit: 1,
+    })
+    const beta = await PromptProfileResolver.searchCatalog({
+      projectDirectory: project.path,
+      view: "installations",
+      query: "beta",
+      limit: 1,
+    })
+    const alphaTail = await PromptProfileResolver.searchCatalog({
+      projectDirectory: project.path,
+      view: "installations",
+      query: "alpha",
+      cursor: alpha.next_cursor ?? undefined,
+      limit: 1,
+    })
+    const betaTail = await PromptProfileResolver.searchCatalog({
+      projectDirectory: project.path,
+      view: "installations",
+      query: "beta",
+      cursor: beta.next_cursor ?? undefined,
+      limit: 1,
+    })
+    expect([...alpha.entries, ...alphaTail.entries].map((entry) => entry.id)).toEqual(["alpha-one", "alpha-two"])
+    expect([...beta.entries, ...betaTail.entries].map((entry) => entry.id)).toEqual(["beta-one", "beta-two"])
+  })
+
+  test("pages one exact Squad workflow catalog without unbounded inspection output", async () => {
+    await using project = await catalogProject()
+    const id = "workflow-scale"
+    const definition = scalePackageDefinition(id)
+    const scheduler = definition.manifest.capability_projection.scheduler
+    definition.manifest.capability_projection.agents = {
+      "scale-worker": {
+        ...scheduler,
+        label: "Scale Worker",
+        base_role: "delegated-worker",
+      },
+    }
+    definition.manifest.capability_projection.virtual_workflows = Object.fromEntries(
+      Array.from({ length: 100 }, (_, index) => {
+        const workflowID = `workflow-${String(index).padStart(3, "0")}`
+        return [
+          workflowID,
+          {
+            label: `Workflow ${index}`,
+            description: `${workflowID} ${"x".repeat(1_800)}`,
+            nodes: {
+              "scale-worker": {
+                agent_id: "scale-worker",
+                description: `Produce ${workflowID}.`,
+                depends_on: [],
+              },
+            },
+          },
+        ]
+      }),
+    )
+    await writeExpertSquadPackage({
+      directory: path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id),
+      definition,
+    })
+    const beforeUpdate = await PromptProfileResolver.searchCatalog({
+      projectDirectory: project.path,
+      view: "installations",
+      query: id,
+    })
+
+    const observed: string[] = []
+    let workflowCursor: string | undefined
+    do {
+      const page = await PromptProfileResolver.catalogInspection({
+        projectDirectory: project.path,
+        id,
+        installationScope: "project",
+        namespace: "scale",
+        workflowCursor,
+      })
+      expect(page?.workflows.length).toBeLessThanOrEqual(20)
+      expect(JSON.stringify(page).length).toBeLessThan(50_000)
+      observed.push(...(page?.workflows.map((workflow) => workflow.id) ?? []))
+      workflowCursor = page?.next_workflow_cursor ?? undefined
+    } while (workflowCursor)
+    expect(observed).toEqual(Array.from({ length: 100 }, (_, index) => `workflow-${String(index).padStart(3, "0")}`))
+
+    const replacement = scalePackageDefinition(id)
+    replacement.manifest.version = "2026.08.10.2"
+    replacement.manifest.capability_projection.agents = definition.manifest.capability_projection.agents
+    replacement.manifest.capability_projection.virtual_workflows = {
+      "replacement-workflow": {
+        label: "Replacement Workflow",
+        description: "The exact updated declaration workflow.",
+        nodes: {
+          "scale-worker": {
+            agent_id: "scale-worker",
+            description: "Produce the updated workflow evidence.",
+            depends_on: [],
+          },
+        },
+      },
+    }
+    const packageRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id)
+    await rm(packageRoot, { recursive: true, force: true })
+    await writeExpertSquadPackage({ directory: packageRoot, definition: replacement })
+    await ExpertSquadRegistry.invalidateAvailable()
+    const afterUpdate = await PromptProfileResolver.searchCatalog({
+      projectDirectory: project.path,
+      view: "installations",
+      query: id,
+    })
+    const updatedInspection = await PromptProfileResolver.catalogInspection({
+      projectDirectory: project.path,
+      id,
+      installationScope: "project",
+      namespace: "scale",
+    })
+    expect({
+      revisionCount: new Set([beforeUpdate.catalog_revision, afterUpdate.catalog_revision]).size,
+      version: updatedInspection?.version,
+      workflowIDs: updatedInspection?.workflows.map((workflow) => workflow.id),
+    }).toEqual({ revisionCount: 2, version: "2026.08.10.2", workflowIDs: ["replacement-workflow"] })
+  })
+
+  test("pages discovery diagnostics while inventory status stays count-only", async () => {
+    await using project = await catalogProject()
+    const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
+    for (let index = 0; index < 45; index++) {
+      const packageRoot = path.join(root, "broken", `broken-${String(index).padStart(3, "0")}`)
+      await mkdir(packageRoot, { recursive: true })
+      await writeFile(path.join(packageRoot, "expert-squad.jsonc"), "{}\n", "utf8")
+    }
+    const status = await PromptProfileResolver.settingsInventory(project.path)
+    expect(status).toMatchObject({ issue_count: 45, warning_count: 0 })
+    const observed: string[] = []
+    let cursor: string | undefined
+    do {
+      const page = await PromptProfileResolver.catalogDiagnostics({
+        projectDirectory: project.path,
+        cursor,
+        limit: 20,
+      })
+      expect(page.entries.length).toBeLessThanOrEqual(20)
+      observed.push(...page.entries.map((entry) => entry.kind))
+      cursor = page.next_cursor ?? undefined
+    } while (cursor)
+    expect(observed).toEqual(Array.from({ length: 45 }, () => "issue"))
+  })
+
+  test("filters Market installation state before pagination and loads exact selected detail", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: () =>
+        ExpertSquadPackageManager.installPayloadPackage({
+          projectDirectory: project.path,
+          id: "evolution-lab",
+          installationScope: "project",
+        }),
+    })
+    const firstPage = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      limit: 5,
+    })
+    const secondPage = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      cursor: firstPage.nextCursor ?? undefined,
+      limit: 5,
+    })
+    expect({
+      totalCount: firstPage.totalCount,
+      firstCount: firstPage.entries.length,
+      secondCount: secondPage.entries.length,
+      uniqueCount: new Set([...firstPage.entries, ...secondPage.entries].map((entry) => entry.id)).size,
+    }).toEqual({
+      totalCount: payloadPackageSources.length,
+      firstCount: 5,
+      secondCount: 5,
+      uniqueCount: 10,
+    })
+    const installed = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      availability: "installed",
+      query: "evolution-lab",
+      limit: 1,
+    })
+    const detail = await ExpertSquadPackageManager.payloadMarketDetail({
+      projectDirectory: project.path,
+      id: "evolution-lab",
+    })
+    expect(installed).toMatchObject({
+      totalCount: 1,
+      nextCursor: null,
+      entries: [{ id: "evolution-lab", installationScopes: ["project"] }],
+    })
+    expect({
+      id: detail.id,
+      installations: detail.installations,
+    }).toEqual({
+      id: "evolution-lab",
+      installations: [
+        {
+          installationScope: "project",
+          installedVersion: detail.version,
+          installedPackageDigest: detail.packageDigest,
+          updateAvailable: false,
+        },
+      ],
+    })
+  })
+
+  test("ranks Market packages from package-owned Skill and prompt evidence", async () => {
+    await using project = await memoryProject()
+    const skillMatch = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      availability: "available",
+      query: "allocated loss adjustment expense",
+      limit: 3,
+    })
+    const promptMatch = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      availability: "available",
+      query: "apparent backtest success on changed scope",
+      limit: 3,
+    })
+    expect({
+      skillMatch: skillMatch.entries[0]?.id,
+      promptMatch: promptMatch.entries[0]?.id,
+    }).toEqual({
+      skillMatch: "actuarial-reserving",
+      promptMatch: "actuarial-reserving",
+    })
+  })
+
+  test("keeps Market scope ordering and revision deterministic across Resolver call order", async () => {
+    await using project = await catalogProject()
+    const id = "review-debug"
+    const globalRoot = path.join(ExpertSquadPackageLocations.global().packagesRoot, "scale", id)
+    const projectRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id)
+    try {
+      await writeExpertSquadPackage({ directory: globalRoot, definition: scalePackageDefinition(id) })
+      await writeExpertSquadPackage({ directory: projectRoot, definition: scalePackageDefinition(id) })
+      await ExpertSquadRegistry.invalidateAvailable()
+      const marketFirst = await ExpertSquadPackageManager.payloadMarketPage({
+        projectDirectory: project.path,
+        query: id,
+      })
+      await ExpertSquadRegistry.invalidateAvailable()
+      await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, query: id })
+      const resolverFirst = await ExpertSquadPackageManager.payloadMarketPage({
+        projectDirectory: project.path,
+        query: id,
+      })
+      const projection = (page: typeof marketFirst) => ({
+        revision: page.catalogRevision,
+        scopes: page.entries[0]?.installationScopes,
+      })
+      expect([projection(marketFirst), projection(resolverFirst)]).toEqual([
+        { revision: marketFirst.catalogRevision, scopes: ["project", "global"] },
+        { revision: marketFirst.catalogRevision, scopes: ["project", "global"] },
+      ])
+    } finally {
+      await rm(globalRoot, { recursive: true, force: true })
+      await ExpertSquadRegistry.invalidateAvailable()
+    }
+  })
+
+  test("serves active, index, inspection, status, diagnostics, and selected detail route contracts", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const app = new Hono().route("/expert-squad", ExpertSquadRoutes())
+        const request = async (path: string) => {
+          const response = await app.fetch(new Request(`http://opencorvus.test/expert-squad/${path}`))
+          expect(response.status, path).toBe(200)
+          return response.json() as Promise<Record<string, unknown>>
+        }
+        const active = await request("catalog")
+        const page = await request("search?view=installations&limit=2")
+        const directory = encodeURIComponent(project.path)
+        const inspection = await request(`inspect?directory=${directory}&id=base&installationScope=built_in`)
+        const status = await request("inventory-status")
+        const diagnostics = await request("diagnostics?limit=20")
+        const detail = await request(`settings/detail?directory=${directory}&id=base&installationScope=built_in`)
+        const market = await request("market?limit=5")
+        const marketDetail = await request("market/detail?id=deep-research")
+        expect(active).toMatchObject({ active: { effective: "base" }, default: "base" })
+        expect(page).toMatchObject({ entries: expect.any(Array) })
+        expect(inspection).toMatchObject({ id: "base", workflow_count: 3, next_workflow_cursor: null })
+        expect(status).toMatchObject({
+          effective_count: (page as { total_count: number }).total_count,
+          issue_count: 0,
+          warning_count: 0,
+        })
+        expect(diagnostics).toMatchObject({ entries: [], total_count: 0, next_cursor: null })
+        expect(detail).toMatchObject({ selected: { id: "base", source: { kind: "built_in" } } })
+        expect(market).toMatchObject({ entries: expect.any(Array), total_count: payloadPackageSources.length })
+        expect(marketDetail).toMatchObject({ id: "deep-research" })
+      },
+    })
+  })
+
+  test("projects one project-over-global identity and keeps a damaged project reservation authoritative", async () => {
+    await using project = await catalogProject()
+    const id = "override-scale-contract"
+    const globalRoot = path.join(ExpertSquadPackageLocations.global().packagesRoot, "scale", id)
+    const projectRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id)
+    try {
+      const beforeIDs = (
+        await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
+      ).entries.map((entry) => entry.id)
+      const globalDefinition = scalePackageDefinition(id)
+      globalDefinition.manifest.label = "Global Scale Contract"
+      const projectDefinition = scalePackageDefinition(id)
+      projectDefinition.manifest.label = "Project Scale Contract"
+      await writeExpertSquadPackage({ directory: globalRoot, definition: globalDefinition })
+      await writeExpertSquadPackage({ directory: projectRoot, definition: projectDefinition })
+      await ExpertSquadRegistry.invalidateAvailable()
+      const effective = await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
+      const installations = await PromptProfileResolver.searchCatalog({
+        projectDirectory: project.path,
+        view: "installations",
+        query: id,
+        limit: 20,
+      })
+      const status = await PromptProfileResolver.settingsInventory(project.path)
+      expect(effective.entries.find((entry) => entry.id === id)).toMatchObject({
+        display_label: "scale/Project Scale Contract",
+        source: { kind: "installed_package", installation_scope: "project", namespace: "scale" },
+      })
+      expect(installations.entries.filter((entry) => entry.id === id).map((entry) => entry.source)).toEqual([
+        { kind: "installed_package", installation_scope: "global", namespace: "scale" },
+        { kind: "installed_package", installation_scope: "project", namespace: "scale" },
+      ])
+      expect(status.warning_count).toBe(1)
+
+      await writeFile(path.join(projectRoot, "expert-squad.jsonc"), "{}\n", "utf8")
+      await ExpertSquadRegistry.invalidateAvailable()
+      const reserved = await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
+      expect(reserved.entries.map((entry) => entry.id)).toEqual(beforeIDs)
+      expect((await PromptProfileResolver.settingsInventory(project.path)).issue_count).toBe(1)
+    } finally {
+      await rm(globalRoot, { recursive: true, force: true })
+      await ExpertSquadRegistry.invalidateAvailable()
+    }
+  })
+})

@@ -1,0 +1,165 @@
+{
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+  "authority": "No credentials/models or model execution",
+  "listeners": {
+    "LocalAddress": "127.0.0.1",
+    "LocalPort": 18039,
+    "OwningProcess": 75020
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18039",
+    "pid": 75020
+  },
+  "observedAtUTC": "2026-10-07T06:53:17.0487094Z",
+  "reads": [
+    {
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cexpert-activation-after-89%5Cproject",
+      "method": "POST",
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+          "namespace": "activation-check",
+          "id": "activation-project",
+          "version": "2026.10.07.1",
+          "packageDigest": "a8e296ccb5c198c88fbd96adae790c76387929a3147bfc5ab36a4ca12fc044ea",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project\\.opencorvus\\expert-squads\\activation-check\\activation-project"
+        }
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\project-only",
+        "installationScope": "project"
+      },
+      "headers": {
+        "x-opencorvus-request-id": [
+          "7c032dce-a300-45fc-8d23-0d0f52fb0cd8"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 06:53:16 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 200
+    },
+    {
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cexpert-activation-after-89%5Cproject",
+      "method": "POST",
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "global",
+          "projectDirectory": null,
+          "namespace": "activation-check",
+          "id": "activation-global",
+          "version": "2026.10.07.1",
+          "packageDigest": "734a65196b7ae539e95efb739d0fe899c58833dea526dad8bf597766cd73ecd8",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\runtime\\config\\expert-squads\\activation-check\\activation-global"
+        }
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\global-only",
+        "installationScope": "global"
+      },
+      "headers": {
+        "x-opencorvus-request-id": [
+          "c24de511-10b5-48b6-9cdf-29c0ac316b37"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 06:53:16 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 200
+    },
+    {
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cexpert-activation-after-89%5Cproject",
+      "method": "POST",
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "global",
+          "projectDirectory": null,
+          "namespace": "activation-check",
+          "id": "activation-shared",
+          "version": "2026.10.07.1",
+          "packageDigest": "4e4b8a83ac67de71ca93ae1d25571a06291df14454d410050554970b529b5e8c",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\runtime\\config\\expert-squads\\activation-check\\activation-shared"
+        }
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\shared-global",
+        "installationScope": "global"
+      },
+      "headers": {
+        "x-opencorvus-request-id": [
+          "77f56a95-c199-4662-83bb-1b00170e5fb8"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 06:53:16 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 200
+    },
+    {
+      "path": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cexpert-activation-after-89%5Cproject",
+      "method": "POST",
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+          "namespace": "activation-check",
+          "id": "activation-shared",
+          "version": "2026.10.07.2",
+          "packageDigest": "1bf10405243ce2af8057c41709ef46129d3225e8469597e9c30e8f62fe35be1e",
+          "targetRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project\\.opencorvus\\expert-squads\\activation-check\\activation-shared"
+        }
+      },
+      "input": {
+        "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\shared-project",
+        "installationScope": "project"
+      },
+      "headers": {
+        "x-opencorvus-request-id": [
+          "0b6394c9-8cae-4d1b-80f7-3dc63136506a"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 06:53:16 GMT"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 200
+    }
+  ],
+  "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+  "failure": null
+}

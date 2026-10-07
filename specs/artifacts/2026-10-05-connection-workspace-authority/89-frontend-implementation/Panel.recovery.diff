@@ -1,0 +1,65 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/89-frontend-implementation/Panel.recovery-before.tsx b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+index 51107721..ec0fa01b 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/89-frontend-implementation/Panel.recovery-before.tsx
++++ b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+@@ -292,7 +292,7 @@ export default function ExpertSquadPanel() {
+   const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadSettingsSurface | null>(null)
+   const [selectedDetailIdentity, setSelectedDetailIdentity] = createSignal("")
+   const [selectedDetailLoading, setSelectedDetailLoading] = createSignal(false)
+-  const [selectedDetailError, setSelectedDetailError] = createSignal("")
++  const [selectedDetailError, setSelectedDetailError] = createSignal<{ error: unknown } | null>(null)
+   const [notice, setNotice] = createSignal("")
+   const [noticeTone, setNoticeTone] = createSignal("")
+   const [busy, setBusy] = createSignal<BusyAction | null>(null)
+@@ -451,14 +451,14 @@ export default function ExpertSquadPanel() {
+     return selectionIdentity
+   }, "")
+ 
+-  createEffect(() => {
++  function loadSelectedDetail(): void {
+     const squad = currentSquadIndex()
+     const scope = currentScope()
+     const identity = selectedDetailKey()
+     const sequence = ++detailLoadSequence
+     setSelectedDetail(null)
+     setSelectedDetailIdentity("")
+-    setSelectedDetailError("")
++    setSelectedDetailError(null)
+     if (!squad || (scope.kind !== "project" && scope.kind !== "session")) {
+       setSelectedDetailLoading(false)
+       return
+@@ -474,12 +474,13 @@ export default function ExpertSquadPanel() {
+       })
+       .catch((error) => {
+         if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
+-        setSelectedDetailError(error instanceof Error ? error.message : String(error))
++        if (!(error instanceof ApiAuthorityChangedError)) setSelectedDetailError({ error })
+       })
+       .finally(() => {
+         if (sequence === detailLoadSequence && selectedDetailKey() === identity) setSelectedDetailLoading(false)
+       })
+-  })
++  }
++  createEffect(loadSelectedDetail)
+ 
+   function setAgentExpanded(agentID: string, open: boolean): void {
+     setExpandedAgentIDs((current) => {
+@@ -1533,7 +1534,17 @@ export default function ExpertSquadPanel() {
+                     <div class="loading-hint">{t("expert_squad.loading")}</div>
+                   </Show>
+                   <Show when={selectedDetailError()}>
+-                    <Feedback tone="error">{selectedDetailError()}</Feedback>
++                    <Feedback
++                      tone="error"
++                      details={formatErrorDetails(selectedDetailError()?.error)}
++                      actions={
++                        <Button type="button" variant="outline" size="sm" tone="neutral" disabled={selectedDetailLoading()} onClick={loadSelectedDetail}>
++                          {t("common.retry")}
++                        </Button>
++                      }
++                    >
++                      {t("expert_squad.selected_read_failed")}
++                    </Feedback>
+                   </Show>
+                   <Show when={currentSquad()} keyed>
+                     {(squad) => (

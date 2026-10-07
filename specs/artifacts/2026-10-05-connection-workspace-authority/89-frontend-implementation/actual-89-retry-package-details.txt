@@ -1,0 +1,32 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-84
+~										70 tab (selectable, settable, boolean) 概览, Value: 0, ID: tabs-cl-547-trigger-overview
+~										74 tab (selected, settable, boolean) Package 详情, Value: 1, ID: tabs-cl-547-trigger-package
+~									75 container Description: Package 详情, ID: tabs-cl-547-content-package
+~										76 text 来源
++										77 text 项目级包
++										78 text 声明哈希
++										79 text 38391bc66a1b
++										80 text 投影成员
++										81 text -
++										82 heading README, Value: 3
++											83 text README
++										84 text 追加给调度器
++										85 heading Activation Project, Value: 1
++											86 text Activation Project
++										87 text Real SDK-authored project package 2026.10.07.1 for owned manual qualification.
++										88 heading 选择指导, Value: 3
++											89 text 选择指导
++										90 text selector/activation-project
++										91 text Inspect owned activation behavior.
++										92 text Use this package only in the owned qualification Project.
++										93 heading Owned activation, Value: 1
++											94 text Owned activation
++										95 text Inspect this current installation in the isolated Project.
++										96 heading 调度器能力声明, Value: 3
++											97 text 调度器能力声明
++										98 text 0 个能力引用
++										99 text capability_refs
++										100 text -
+The focused UI element is 74 tab (selected, settable, boolean) Package 详情, Value: 1, ID: tabs-cl-547-trigger-package

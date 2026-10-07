@@ -1,0 +1,29 @@
+{
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "observedAtUtc": "2026-10-07T06:55:18.7100235Z",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "credentialStaging": "None; source50 untouched; no Task rearm",
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-task-view-89",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "purpose": "Actual fixed Task50 UI assignment presentation; no Project config write or Task rearm",
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "port": 18040
+}

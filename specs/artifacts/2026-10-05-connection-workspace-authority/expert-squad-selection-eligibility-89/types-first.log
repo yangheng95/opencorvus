@@ -1,0 +1,62 @@
+packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts(127,92): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { catalog_revision: string; effective_identity: { source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null; }): void', gave the following error.
+    Type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; } | { readonly id: "research-studio"; readonly source: { readonly kind: "built_in"; }; }' is not assignable to type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null'.
+      Type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+        Types of property 'source' are incompatible.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+              Types of property 'kind' are incompatible.
+                Type 'string' is not assignable to type '"installed_package"'.
+  Overload 2 of 2, '(expected: NoInfer<{ catalog_revision: string; effective_identity: { source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null; }>): void', gave the following error.
+    Type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; } | { readonly id: "research-studio"; readonly source: { readonly kind: "built_in"; }; }' is not assignable to type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null'.
+      Type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+        Types of property 'source' are incompatible.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+              Types of property 'kind' are incompatible.
+                Type 'string' is not assignable to type '"installed_package"'.
+packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts(158,62): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null): void', gave the following error.
+    Argument of type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to parameter of type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+      Types of property 'source' are incompatible.
+        Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"installed_package"'.
+  Overload 2 of 2, '(expected: NoInfer<{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null>): void', gave the following error.
+    Argument of type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to parameter of type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+      Types of property 'source' are incompatible.
+        Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"installed_package"'.
+packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts(209,5): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null): void', gave the following error.
+    Argument of type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to parameter of type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+      Types of property 'source' are incompatible.
+        Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"installed_package"'.
+  Overload 2 of 2, '(expected: NoInfer<{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null>): void', gave the following error.
+    Argument of type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to parameter of type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+      Types of property 'source' are incompatible.
+        Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"installed_package"'.
+packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts(367,5): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { id: string; namespace: string | null; winner: { source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null; }): void', gave the following error.
+    Type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+      Types of property 'source' are incompatible.
+        Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"installed_package"'.
+  Overload 2 of 2, '(expected: NoInfer<{ id: string; namespace: string | null; winner: { source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; } | null; }>): void', gave the following error.
+    Type '{ id: string; source: { kind: string; installation_scope: "project" | "global"; namespace: string; }; }' is not assignable to type '{ source: { kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }; id: string; }'.
+      Types of property 'source' are incompatible.
+        Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "built_in"; } | { kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+          Type '{ kind: string; installation_scope: "project" | "global"; namespace: string; }' is not assignable to type '{ kind: "installed_package"; installation_scope: "project" | "global"; namespace: string; }'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"installed_package"'.

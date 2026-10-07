@@ -88,7 +88,6 @@ describe("Generate Expert Squads expert squad", () => {
 
   test(
     "projects package-local methods and Host write tools only through the active Squad scheduler",
-    { timeout: 90_000 },
     async () => {
       await using project = await memoryProject()
       await Instance.provide({
@@ -258,6 +257,7 @@ describe("Generate Expert Squads expert squad", () => {
         },
       })
     },
+    90_000,
   )
 
   test("authors the visible positive contract with its package-owned typed publisher", async () => {
@@ -306,7 +306,7 @@ describe("Generate Expert Squads expert squad", () => {
     })
   })
 
-  test("is available from a clean project catalog as an embedded system package", { timeout: 30_000 }, async () => {
+  test("is available from a clean project catalog as an embedded system package", async () => {
     await using project = await memoryProject()
     const generatedSquads = await PromptProfileResolver.settingsDetail({
       projectDirectory: project.path,
@@ -314,7 +314,7 @@ describe("Generate Expert Squads expert squad", () => {
       installationScope: "built_in",
     })
 
-    expect(generatedSquads).toMatchObject({
+    expect(generatedSquads?.selected).toMatchObject({
       id: "squad-sdk",
       name: "Generate Expert Squads",
       built_in: true,
@@ -322,11 +322,10 @@ describe("Generate Expert Squads expert squad", () => {
       system_role: "expert_squad_generator",
       source: { kind: "built_in" },
     })
-  })
+  }, 30_000)
 
   test(
     "publishes a traceable generated Expert Squad into the current project catalog",
-    { timeout: 30_000 },
     async () => {
       await using authoringProject = await memoryProject()
       const generatedID = "generated-project-contract"
@@ -336,7 +335,7 @@ describe("Generate Expert Squads expert squad", () => {
         directory: authoringProject.path,
         fn: () =>
           authorProjectExpertSquad(
-            {
+            ExpertSquadAuthorParameters.parse({
               schema_version: 2,
               namespace: "test",
               id: generatedID,
@@ -365,7 +364,7 @@ describe("Generate Expert Squads expert squad", () => {
                 },
               },
               virtual_workflows: {},
-            },
+            }),
             trace,
           ),
       })
@@ -376,6 +375,7 @@ describe("Generate Expert Squads expert squad", () => {
         installationScope: "project",
       })
       const metadata = await readExpertSquadInstallationMetadata(receipt.targetRoot)
+      if (!receipt.generation) throw new Error("Generated project contract requires its generation receipt")
 
       expect(receipt).toMatchObject({
         id: generatedID,
@@ -392,7 +392,7 @@ describe("Generate Expert Squads expert squad", () => {
         path.join(authoringProject.path, ".opencorvus", "expert-squads", "test", generatedID),
       )
       expect(metadata).toEqual({ schema_version: 1, generation: receipt.generation })
-      expect(generated).toMatchObject({
+      expect(generated?.selected).toMatchObject({
         id: generatedID,
         name: "Generated Project Contract",
         capability_projection: {
@@ -410,5 +410,6 @@ describe("Generate Expert Squads expert squad", () => {
         },
       })
     },
+    30_000,
   )
 })

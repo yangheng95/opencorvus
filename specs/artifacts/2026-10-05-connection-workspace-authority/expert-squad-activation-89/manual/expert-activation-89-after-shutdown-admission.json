@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-07T07:11:32.3564087Z",
+  "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+  "owner": {
+    "pid": 75020,
+    "processInstanceID": "win32:639269526537996971",
+    "occurrenceID": "e844a224-85c1-4098-9198-aaa881ca9e98"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXLTnkt0076WRBZXlH"
+  }
+}

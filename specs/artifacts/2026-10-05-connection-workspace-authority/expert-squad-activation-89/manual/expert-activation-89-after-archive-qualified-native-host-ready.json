@@ -1,0 +1,39 @@
+{
+  "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+  "outcome": "ready",
+  "host": {
+    "pid": 74208,
+    "processInstanceID": "win32:639269526529336506",
+    "occurrenceID": "7f11406b-18b9-4c34-867b-cf62d8e644ab"
+  },
+  "parent": {
+    "pid": 63500,
+    "processInstanceID": "win32:639269526503585763",
+    "occurrenceID": "814488ae-3518-4c0a-8fcb-bc9d8e2966d5"
+  },
+  "target": {
+    "pid": 75020,
+    "processInstanceID": "win32:639269526537996971",
+    "occurrenceID": "e844a224-85c1-4098-9198-aaa881ca9e98"
+  },
+  "targetBirthAtMs": 1791355853799,
+  "observedAtUtc": "2026-10-07T06:50:53.846Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18039",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\startup.json",
+    "--startup-occurrence",
+    "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

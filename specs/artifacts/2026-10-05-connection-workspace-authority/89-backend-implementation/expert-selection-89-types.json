@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "extends": "D:/myhexin-local/opencorvus/packages/opencorvus/tsconfig.json",
+  "files": [
+    "../packages/opencorvus/src/sql.d.ts"
+  ],
+  "exclude": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/skill/builtin/**/*"
+  ],
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/expert-squad/catalog-index.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/expert-squad/squad-sdk-package.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/server/expert-selected-read-identity.test.ts"
+  ]
+}

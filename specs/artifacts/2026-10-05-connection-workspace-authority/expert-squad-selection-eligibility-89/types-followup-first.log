@@ -1,0 +1,1 @@
+packages/opencorvus/test/server/expert-squad-selection-eligibility.test.ts(325,41): error TS2551: Property 'packageDigest' does not exist on type '{ scope: "built_in" | "project" | "global"; project_id: string | null; namespace: string; id: string; version: string; package_digest: string; }'. Did you mean 'package_digest'?

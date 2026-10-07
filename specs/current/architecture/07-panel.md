@@ -67,6 +67,35 @@ entry's existing selected key to remain current; a new user choice retires that
 read through the same selection owner. Explicit effective selection after clearing
 an override comes from the newly accepted active package revision.
 
+Selected Settings detail has one scope/selected/selection envelope. Its selection
+contains the accepted catalog revision and nullable canonical effective physical
+identity for the selected ID, using the existing index source union. The same
+inventory supplies the exact selected declaration and ID winner; the original
+package reader supplies current full bodies. Manifest identity/version equality
+and one final Registry generation check settle that read. A changed declaration
+or generation returns the existing package error with HTTP400 and original cause;
+an unknown exact identity retains404. This declaration relation does not prove
+immutable bytes across unannounced external filesystem changes.
+
+The Installed panel retains that complete envelope under its existing selection
+key/sequence owner. Activation buttons and handlers derive eligibility from the
+accepted winner matching the selected physical installation, independently of
+the currently active ID. Builtin collision issues make that selection unavailable;
+external precedence remains Registry-owned. ID-only configuration writes keep
+their original model, package and Task validation. Project default badges use the
+configured Project ID and current winner; Session override badges use the actual
+effective revision. A fixed Task shows its canonical assignment name/version and
+keeps Project default changes explicitly scoped to future work. Ordinary Session
+override/clear controls remain distinct from that fixed assignment.
+
+The canonical resolved Task scope carries its real Task association along with
+the root Session. One scope identity function owns Panel and request identities;
+pending Task scope remains pending, and public catalog queries still contain only
+their supported directory/Session fields. Selected detail failures retain one
+original-error record. Shared Feedback Details shows the dispatched HTTP facts,
+and explicit Retry calls the same one-shot loader with current selection/scope
+guards. No polling, automatic retry loop or second selection cache is introduced.
+
 Package Details displays the count of canonical scheduler capability_refs as
 declared capability references and retains those encoded declarations. It does
 not count an incomplete frontend-expanded subset as executable tools. Runtime

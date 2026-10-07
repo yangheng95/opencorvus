@@ -1,0 +1,40 @@
+{
+  "method": "POST",
+  "observedAtUTC": "2026-10-07T07:02:35.8535677Z",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+  "occurrence": "expert-activation-89-after-f2286461-7177-4f9c-9720-df6a9a12bd2e",
+  "status": 200,
+  "input": {
+    "kind": "assistant",
+    "title": "普通会话覆盖验收89"
+  },
+  "headers": {
+    "Vary": [
+      "Origin"
+    ],
+    "x-opencorvus-request-id": [
+      "f104b31c-06d0-4734-b088-e5fed40bdf67"
+    ],
+    "Access-Control-Expose-Headers": [
+      "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+    ],
+    "Date": [
+      "Wed, 07 Oct 2026 07:02:34 GMT"
+    ]
+  },
+  "path": "/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cexpert-activation-after-89%5Cproject",
+  "body": {
+    "id": "ses_-zUSeYRq8zzezXEheGmy",
+    "slug": "cosmic-sailor",
+    "version": "local",
+    "projectID": "prj_hQJFjrOL7hCMiZMCmrWT",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-after-89\\project",
+    "title": "普通会话覆盖验收89",
+    "kind": "assistant",
+    "time": {
+      "created": 1791356555779,
+      "updated": 1791356555779
+    }
+  },
+  "purpose": "Real empty ordinary assistant Session for manual override/clear; no message or model request"
+}

@@ -189,6 +189,12 @@ export const ExpertSquadSettingsDetailSchema = z
   .object({
     scope: z.object({ kind: z.literal("project"), directory: z.string() }).strict(),
     selected: ExpertSquadCatalogSummarySchema,
+    selection: z
+      .object({
+        catalog_revision: ExpertSquadCatalogPageSchema.shape.catalog_revision,
+        effective_identity: ExpertSquadCatalogIndexEntrySchema.pick({ id: true, source: true }).nullable(),
+      })
+      .strict(),
   })
   .strict()
   .meta({ ref: "ExpertSquadSettingsDetail" })

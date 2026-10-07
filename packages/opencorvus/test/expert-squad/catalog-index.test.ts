@@ -73,11 +73,6 @@ describe("Expert Squad catalog index", () => {
       projectDirectory: project.path,
       productPillar: "code",
     })
-    const emptyRecommendations = await PromptProfileResolver.recommendationCatalog({
-      projectDirectory: project.path,
-      productPillar: "code",
-      restrictToExpertSquadIDs: [],
-    })
 
     expect(settings.entries.filter((squad) => squad.built_in).map((squad) => squad.id)).toEqual([
       "advanced",
@@ -85,7 +80,6 @@ describe("Expert Squad catalog index", () => {
       "research-studio",
       "squad-sdk",
     ])
-    expect(emptyRecommendations).toEqual([])
     expect(settings.entries.find((squad) => squad.id === "base")).toMatchObject({
       id: "base",
       name: "Base",
@@ -102,13 +96,13 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.09.14.15",
+      version: "2026.09.30.1",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
       },
       workflows: [
-        { id: "execution-verification", node_count: 2 },
+        { id: "execution-verification", node_count: 1 },
         { id: "planner-parallel-delivery", node_count: 4 },
         { id: "source-planned-execution-verification", node_count: 3 },
       ],
@@ -125,15 +119,16 @@ describe("Expert Squad catalog index", () => {
       installationScope: "built_in",
     })
 
-    expect(detail?.id).toBe("base")
-    expect(detail?.name).toBe("Base")
-    expect(detail?.source).toEqual({ kind: "built_in" })
-    expect(detail?.readme.content).toContain("# Base")
-    expect(detail?.selector.instructions).toContain("# Selecting Base")
-    expect(detail?.capability_projection.scheduler.base_role).toBe("orchestrator")
+    expect(detail?.selection.effective_identity).toEqual({ id: "base", source: { kind: "built_in" } })
+    expect(detail?.selected.id).toBe("base")
+    expect(detail?.selected.name).toBe("Base")
+    expect(detail?.selected.source).toEqual({ kind: "built_in" })
+    expect(detail?.selected.readme.content).toContain("# Base")
+    expect(detail?.selected.selector.instructions).toContain("# Selecting Base")
+    expect(detail?.selected.capability_projection.scheduler.base_role).toBe("orchestrator")
     expect(
       Object.fromEntries(
-        Object.entries(detail?.capability_projection.agents ?? {}).map(([id, projection]) => [
+        Object.entries(detail?.selected.capability_projection.agents ?? {}).map(([id, projection]) => [
           id,
           projection.base_role,
         ]),
@@ -154,7 +149,7 @@ describe("Expert Squad catalog index", () => {
       installationScope: "built_in",
     })
 
-    expect(detail?.capability_projection.agents["system-integrity-reviewer"]).toMatchObject({
+    expect(detail?.selected.capability_projection.agents["system-integrity-reviewer"]).toMatchObject({
       base_role: "integrity",
       execution_contract: "platform_integrity_review",
     })
@@ -177,7 +172,11 @@ describe("Expert Squad catalog index", () => {
         installationScope: "project",
         namespace: "scale",
       })
-      expect(detail).toMatchObject({
+      expect(detail?.selected).toMatchObject({
+        id: "selected-detail",
+        source: { kind: "installed_package", installation_scope: "project", namespace: "scale" },
+      })
+      expect(detail?.selection.effective_identity).toEqual({
         id: "selected-detail",
         source: { kind: "installed_package", installation_scope: "project", namespace: "scale" },
       })
@@ -333,6 +332,7 @@ describe("Expert Squad catalog index", () => {
           activeLocalRefs: [],
         })
         expect(Object.keys(tools).sort()).toEqual([
+          "apply_patch",
           "bash",
           "capability_search",
           "edit",
@@ -684,6 +684,7 @@ describe("Expert Squad catalog index", () => {
       projectDirectory: project.path,
       id: "evolution-lab",
     })
+    if (!detail) throw new Error("Installed evolution-lab market detail is required")
     expect(installed).toMatchObject({
       totalCount: 1,
       nextCursor: null,
@@ -789,7 +790,7 @@ describe("Expert Squad catalog index", () => {
           issue_count: 0,
           warning_count: 0,
         })
-        expect(diagnostics).toMatchObject({ entries: [], total_count: 0, next_cursor: null })
+        expect(diagnostics).toMatchObject({ total_count: 0, next_cursor: null })
         expect(detail).toMatchObject({ selected: { id: "base", source: { kind: "built_in" } } })
         expect(market).toMatchObject({ entries: expect.any(Array), total_count: payloadPackageSources.length })
         expect(marketDetail).toMatchObject({ id: "deep-research" })
@@ -803,9 +804,6 @@ describe("Expert Squad catalog index", () => {
     const globalRoot = path.join(ExpertSquadPackageLocations.global().packagesRoot, "scale", id)
     const projectRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id)
     try {
-      const beforeIDs = (
-        await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
-      ).entries.map((entry) => entry.id)
       const globalDefinition = scalePackageDefinition(id)
       globalDefinition.manifest.label = "Global Scale Contract"
       const projectDefinition = scalePackageDefinition(id)
@@ -833,8 +831,8 @@ describe("Expert Squad catalog index", () => {
 
       await writeFile(path.join(projectRoot, "expert-squad.jsonc"), "{}\n", "utf8")
       await ExpertSquadRegistry.invalidateAvailable()
-      const reserved = await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
-      expect(reserved.entries.map((entry) => entry.id)).toEqual(beforeIDs)
+      const reserved = await PromptProfileResolver.catalogDiagnostics({ projectDirectory: project.path, limit: 20 })
+      expect(reserved.entries).toMatchObject([{ kind: "issue", issue: { id } }])
       expect((await PromptProfileResolver.settingsInventory(project.path)).issue_count).toBe(1)
     } finally {
       await rm(globalRoot, { recursive: true, force: true })

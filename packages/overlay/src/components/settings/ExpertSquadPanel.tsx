@@ -37,6 +37,7 @@ import {
   type ExpertSquadCatalog,
   type ExpertSquadConfiguration,
   type ExpertSquadDetail,
+  type ExpertSquadSettingsSurface,
   type ExpertSquadMarketItem,
   type ExpertSquadMarketIndexItem,
   type ExpertSquadInventoryStatus,
@@ -49,6 +50,7 @@ import {
   expertSquadCatalogDirectory,
   expertSquadCatalogRequestKey,
   expertSquadCatalogScope,
+  expertSquadCatalogScopeIdentity,
 } from "../../services/expert-squad-scope"
 import { Button } from "../ui/Button"
 import { Badge } from "../ui/Badge"
@@ -215,9 +217,7 @@ function projectionRows(entry: ProjectionEntry) {
 }
 
 function catalogScopeIdentity(scope = expertSquadCatalogScope()): string {
-  if (scope.kind === "project") return `project:${scope.directory}`
-  if (scope.kind === "session") return `session:${scope.directory}:${scope.sessionID}`
-  return scope.kind
+  return expertSquadCatalogScopeIdentity(scope)
 }
 
 type WritableCatalogScope = Extract<ReturnType<typeof expertSquadCatalogScope>, { kind: "project" | "session" }>
@@ -289,10 +289,10 @@ export default function ExpertSquadPanel() {
   const [inventoryStatus, setInventoryStatus] = createSignal<ExpertSquadInventoryStatus | null>(null)
   const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<ExpertSquadDiagnosticsPage["entries"]>([])
   const [catalogDiagnosticsNextCursor, setCatalogDiagnosticsNextCursor] = createSignal<string | null>(null)
-  const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadDetail | null>(null)
+  const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadSettingsSurface | null>(null)
   const [selectedDetailIdentity, setSelectedDetailIdentity] = createSignal("")
   const [selectedDetailLoading, setSelectedDetailLoading] = createSignal(false)
-  const [selectedDetailError, setSelectedDetailError] = createSignal("")
+  const [selectedDetailError, setSelectedDetailError] = createSignal<{ error: unknown } | null>(null)
   const [notice, setNotice] = createSignal("")
   const [noticeTone, setNoticeTone] = createSignal("")
   const [busy, setBusy] = createSignal<BusyAction | null>(null)
@@ -390,7 +390,7 @@ export default function ExpertSquadPanel() {
   const isEffectiveInstallation = (squad: ExpertSquadSelectionIdentity) =>
     effectiveInstallationKey(squad.id) === squadSelectionKey(squad)
   const isProjectActiveInstallation = (squad: ExpertSquadSelectionIdentity) =>
-    projectActiveID() === squad.id && isEffectiveInstallation(squad)
+    projectActiveID() === squad.id && isSelectableInstallation(squad)
   const isSessionOverrideInstallation = (squad: ExpertSquadSelectionIdentity) =>
     sessionOverrideID() === squad.id && isEffectiveInstallation(squad)
   const activeAgentProjection = createMemo(() => scopedCatalog()?.active_agent_projection ?? null)
@@ -411,7 +411,28 @@ export default function ExpertSquadPanel() {
     const squad = currentSquadIndex()
     return squad ? `${currentScopeIdentity()}\n${squadSelectionKey(squad)}` : ""
   })
-  const currentSquad = createMemo(() => (selectedDetailIdentity() === selectedDetailKey() ? selectedDetail() : null))
+  const currentSelectedSurface = createMemo(() => (selectedDetailIdentity() === selectedDetailKey() ? selectedDetail() : null))
+  const currentSquad = createMemo(() => currentSelectedSurface()?.selected ?? null)
+  const isSelectableInstallation = (squad: ExpertSquadSelectionIdentity) => {
+    const surface = currentSelectedSurface()
+    const winner = surface?.selection.effective_identity
+    return !!surface && squadSelectionKey(surface.selected) === squadSelectionKey(squad) && !!winner &&
+      squadSelectionKey(winner) === squadSelectionKey(squad)
+  }
+  const fixedTaskID = createMemo(() => {
+    const scope = currentScope()
+    return scope.kind === "session" ? scope.taskID ?? "" : ""
+  })
+  const canActivateProject = () => {
+    const squad = currentSquad()
+    return !!squad && !!scopedCatalog() && writableScopeAvailable() && !activeBusy() && isSelectableInstallation(squad) && projectActiveID() !== squad.id
+  }
+  const canActivateSession = () => {
+    const squad = currentSquad()
+    return !!squad && !!scopedCatalog() && !!currentScopeSessionID() && !fixedTaskID() && writableScopeAvailable() && !activeBusy() &&
+      isSelectableInstallation(squad) && sessionOverrideID() !== squad.id
+  }
+  const canClearSessionOverride = () => !!currentScopeSessionID() && !fixedTaskID() && writableScopeAvailable() && !activeBusy() && !!sessionOverrideID()
   createEffect<string>((previousSelectionIdentity) => {
     const squad = currentSquadIndex()
     const selectionIdentity = `${currentScopeIdentity()}\n${squad ? squadSelectionKey(squad) : ""}`
@@ -430,14 +451,14 @@ export default function ExpertSquadPanel() {
     return selectionIdentity
   }, "")
 
-  createEffect(() => {
+  function loadSelectedDetail(): void {
     const squad = currentSquadIndex()
     const scope = currentScope()
     const identity = selectedDetailKey()
     const sequence = ++detailLoadSequence
     setSelectedDetail(null)
     setSelectedDetailIdentity("")
-    setSelectedDetailError("")
+    setSelectedDetailError(null)
     if (!squad || (scope.kind !== "project" && scope.kind !== "session")) {
       setSelectedDetailLoading(false)
       return
@@ -448,17 +469,18 @@ export default function ExpertSquadPanel() {
     void loadExpertSquadSettings(scope.directory, squad.id, installationScope, namespace)
       .then((surface) => {
         if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
-        setSelectedDetail(surface.selected)
+        setSelectedDetail(surface)
         setSelectedDetailIdentity(identity)
       })
       .catch((error) => {
         if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
-        setSelectedDetailError(error instanceof Error ? error.message : String(error))
+        if (!(error instanceof ApiAuthorityChangedError)) setSelectedDetailError({ error })
       })
       .finally(() => {
         if (sequence === detailLoadSequence && selectedDetailKey() === identity) setSelectedDetailLoading(false)
       })
-  })
+  }
+  createEffect(loadSelectedDetail)
 
   function setAgentExpanded(agentID: string, open: boolean): void {
     setExpandedAgentIDs((current) => {
@@ -809,6 +831,7 @@ export default function ExpertSquadPanel() {
   }
 
   async function activateProject() {
+    if (!canActivateProject()) return
     const squad = currentSquad()
     const captured = captureCatalogActionScope()
     if (!captured) return
@@ -831,6 +854,7 @@ export default function ExpertSquadPanel() {
   }
 
   async function activateSession() {
+    if (!canActivateSession()) return
     const squad = currentSquad()
     const captured = captureCatalogActionScope()
     if (!captured) return
@@ -852,6 +876,7 @@ export default function ExpertSquadPanel() {
   }
 
   async function clearSessionOverride() {
+    if (!canClearSessionOverride()) return
     const captured = captureCatalogActionScope()
     if (!captured) return
     const actionScope = captured.scope
@@ -1509,7 +1534,17 @@ export default function ExpertSquadPanel() {
                     <div class="loading-hint">{t("expert_squad.loading")}</div>
                   </Show>
                   <Show when={selectedDetailError()}>
-                    <Feedback tone="error">{selectedDetailError()}</Feedback>
+                    <Feedback
+                      tone="error"
+                      details={formatErrorDetails(selectedDetailError()?.error)}
+                      actions={
+                        <Button type="button" variant="outline" size="sm" tone="neutral" disabled={selectedDetailLoading()} onClick={loadSelectedDetail}>
+                          {t("common.retry")}
+                        </Button>
+                      }
+                    >
+                      {t("expert_squad.selected_read_failed")}
+                    </Feedback>
                   </Show>
                   <Show when={currentSquad()} keyed>
                     {(squad) => (
@@ -1629,6 +1664,21 @@ export default function ExpertSquadPanel() {
                         </header>
 
                         <div class="expert-squad-selection-actions" data-ui="expert-squad-actions">
+                          <Show when={currentSelectedSurface() && !isSelectableInstallation(squad)}>
+                            <Feedback tone="warning">
+                              {t(currentSelectedSurface()?.selection.effective_identity
+                                ? "expert_squad.installation_shadowed"
+                                : "expert_squad.installation_not_selectable")}
+                            </Feedback>
+                          </Show>
+                          <Show when={fixedTaskID() && scopedCatalog()}>
+                            <Feedback tone="info">
+                              {t("expert_squad.task_assignment_fixed", {
+                                name: scopedCatalog()?.active.name ?? "",
+                                version: scopedCatalog()?.active.package_revision.version ?? "",
+                              })}
+                            </Feedback>
+                          </Show>
                           <Show when={!isProjectActiveInstallation(squad)}>
                             <Button
                               type="button"
@@ -1636,23 +1686,18 @@ export default function ExpertSquadPanel() {
                               size="md"
                               tone="neutral"
                               data-ui="expert-squad-activate-project"
-                              disabled={
-                                !writableScopeAvailable() ||
-                                !!activeBusy() ||
-                                !isEffectiveInstallation(squad) ||
-                                isProjectActiveInstallation(squad)
-                              }
+                              disabled={!canActivateProject()}
                               onClick={activateProject}
                             >
                               <Icon name={isProjectActiveInstallation(squad) ? "check" : "folder"} />
                               <span>
                                 {isProjectActiveInstallation(squad)
                                   ? t("expert_squad.project_active")
-                                  : t("expert_squad.activate_project")}
+                                  : t(fixedTaskID() ? "expert_squad.activate_project_future" : "expert_squad.activate_project")}
                               </span>
                             </Button>
                           </Show>
-                          <Show when={currentScopeSessionID()}>
+                          <Show when={currentScopeSessionID() && !fixedTaskID()}>
                             <Show when={!isSessionOverrideInstallation(squad)}>
                               <Button
                                 type="button"
@@ -1660,12 +1705,7 @@ export default function ExpertSquadPanel() {
                                 size="md"
                                 tone="neutral"
                                 data-ui="expert-squad-activate-session"
-                                disabled={
-                                  !writableScopeAvailable() ||
-                                  !!activeBusy() ||
-                                  !isEffectiveInstallation(squad) ||
-                                  isSessionOverrideInstallation(squad)
-                                }
+                                disabled={!canActivateSession()}
                                 onClick={activateSession}
                               >
                                 <Icon name={isSessionOverrideInstallation(squad) ? "check" : "message"} />
@@ -1683,7 +1723,7 @@ export default function ExpertSquadPanel() {
                                 size="md"
                                 tone="neutral"
                                 data-ui="expert-squad-clear-session-override"
-                                disabled={!writableScopeAvailable() || !!activeBusy() || !sessionOverrideID()}
+                                disabled={!canClearSessionOverride()}
                                 onClick={clearSessionOverride}
                               >
                                 <Icon name="rewind" />

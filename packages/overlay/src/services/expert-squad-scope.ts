@@ -6,7 +6,7 @@ import { captureApiAuthority } from "./api"
 
 export type ExpertSquadCatalogScopeState =
   | ({ kind: "project"; directory: string } & ExpertSquadCatalogScope)
-  | ({ kind: "session"; directory: string } & ExpertSquadCatalogScope)
+  | ({ kind: "session"; directory: string; taskID?: string } & ExpertSquadCatalogScope)
   | { kind: "pending"; taskID: string; directory: string }
   | { kind: "unavailable" }
 
@@ -23,7 +23,7 @@ export function expertSquadCatalogScope(): ExpertSquadCatalogScopeState {
   if (taskID) {
     if (boardStore.taskSwitching) return { kind: "pending", taskID, directory }
     const sessionID = rootTaskSessionID().trim()
-    return sessionID ? { kind: "session", sessionID, directory } : { kind: "pending", taskID, directory }
+    return sessionID ? { kind: "session", sessionID, directory, taskID } : { kind: "pending", taskID, directory }
   }
   const sessionID = activeSessionID().trim()
   if (sessionID) return { kind: "session", sessionID, directory }
@@ -38,9 +38,15 @@ export function expertSquadSettingsScope():
   return directory ? { kind: "project", directory } : { kind: "unavailable" }
 }
 
-export function expertSquadCatalogRequestKeyForScope(scope: ExpertSquadCatalogScope): string {
-  const catalogID = scope.kind === "session" ? `session:${scope.sessionID}` : "project"
-  return `expert-squad:catalog:${scope.directory}:${catalogID}:${expertSquadCatalogRefreshToken()}`
+export function expertSquadCatalogScopeIdentity(scope: ExpertSquadCatalogScopeState): string {
+  if (scope.kind === "project") return `project:${scope.directory}`
+  if (scope.kind === "session") return `session:${scope.directory}:${scope.sessionID}${scope.taskID ? `:task:${scope.taskID}` : ""}`
+  if (scope.kind === "pending") return `pending:${scope.directory}:${scope.taskID}`
+  return scope.kind
+}
+
+export function expertSquadCatalogRequestKeyForScope(scope: Extract<ExpertSquadCatalogScopeState, { kind: "project" | "session" }>): string {
+  return `expert-squad:catalog:${expertSquadCatalogScopeIdentity(scope)}:${expertSquadCatalogRefreshToken()}`
 }
 
 export function expertSquadCatalogRequestKey(): string {

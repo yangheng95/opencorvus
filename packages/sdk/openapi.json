@@ -7437,11 +7437,90 @@
           },
           "selected": {
             "$ref": "#/components/schemas/ExpertSquadCatalogSummary"
+          },
+          "selection": {
+            "additionalProperties": false,
+            "properties": {
+              "catalog_revision": {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              "effective_identity": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "maxLength": 160,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "source": {
+                        "oneOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "kind": {
+                                "const": "built_in",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "installation_scope": {
+                                "enum": [
+                                  "project",
+                                  "global"
+                                ],
+                                "type": "string"
+                              },
+                              "kind": {
+                                "const": "installed_package",
+                                "type": "string"
+                              },
+                              "namespace": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "installation_scope",
+                              "namespace"
+                            ],
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "source"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "catalog_revision",
+              "effective_identity"
+            ],
+            "type": "object"
           }
         },
         "required": [
           "scope",
-          "selected"
+          "selected",
+          "selection"
         ],
         "type": "object"
       },

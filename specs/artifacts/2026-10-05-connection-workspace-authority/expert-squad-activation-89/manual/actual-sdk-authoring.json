@@ -1,0 +1,33 @@
+{
+  "outputRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89",
+  "sources": [
+    {
+      "id": "activation-project",
+      "namespace": "activation-check",
+      "version": "2026.10.07.1",
+      "installationScope": "project",
+      "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\project-only"
+    },
+    {
+      "id": "activation-global",
+      "namespace": "activation-check",
+      "version": "2026.10.07.1",
+      "installationScope": "global",
+      "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\global-only"
+    },
+    {
+      "id": "activation-shared",
+      "namespace": "activation-check",
+      "version": "2026.10.07.1",
+      "installationScope": "global",
+      "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\shared-global"
+    },
+    {
+      "id": "activation-shared",
+      "namespace": "activation-check",
+      "version": "2026.10.07.2",
+      "installationScope": "project",
+      "sourceDirectory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-activation-authoring-89\\shared-project"
+    }
+  ]
+}

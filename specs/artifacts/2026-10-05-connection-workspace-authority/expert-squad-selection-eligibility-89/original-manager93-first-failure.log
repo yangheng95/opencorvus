@@ -1,0 +1,65 @@
+[1/1] START test/server/expert-squad-selection-eligibility.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) inactive builtin, project and global winners support real Project and ordinary Session selection [6841.80ms]
+(pass) selected physical global package reports project winner and preserves reservations and duplicate errors [6059.96ms]
+700 |     const identities = await ExpertSquadRegistry.discoverAvailableIdentities(input.projectDirectory, {
+701 |       view: "installations",
+702 |       reconcileEvolutionMutations: false,
+703 |     })
+704 |     const issue = identities.issues.find((issue) => issue.id === input.id)
+705 |     if (issue) throw new Error(issue.message)
+                               ^
+error: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "namespace"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "id"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  }
+]
+      at installationExistingPackage (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\manager.ts:705:26)
+      at processTicksAndRejections (unknown:7:39)
+(fail) built-in collision is unavailable while a valid Project winner overrides a broken global package [2139.36ms]
+293 |     body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-eligibility89", modelID: "model" } },
+294 |   })
+295 |   await fs.writeFile(file, JSON.stringify({ model: "", small_model: "" }))
+296 |   await cold()
+297 |   const blank = await request(project.path, "/config", "PATCH", { prompt_profile: { active: "research-studio" } })
+298 |   expect({ status: blank.status, active: blank.body.prompt_profile?.active }).toEqual({
+                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "active": "research-studio",
+-   "status": 200,
++   "active": undefined,
++   "status": 400,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-squad-selection-eligibility.test.ts:298:79)
+(fail) fixed Task changed-ID returns409 and retains actual package binding while missing model stays distinct [6599.81ms]
+(pass) held actual selected loader reports generation400 then accepts the next coherent detail [3207.47ms]
+
+ 3 pass
+ 2 fail
+ 33 expect() calls
+Ran 5 tests across 1 file. [29.14s]
+[1/1] DONE test/server/expert-squad-selection-eligibility.test.ts exit=1 duration=30.52s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-squad-selection-eligibility.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-squad-selection-eligibility.test.ts

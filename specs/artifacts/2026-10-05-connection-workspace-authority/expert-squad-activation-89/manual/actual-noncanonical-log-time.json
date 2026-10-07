@@ -1,0 +1,28 @@
+{
+  "qualifier": "Structured subject time overrides canonical log timestamp; exact event chronology unknown, not inferred from created/updated values",
+  "observedAtUTC": "2026-10-07T07:14:26.2325134Z",
+  "rows": [
+    {
+      "message": "created",
+      "line": 489,
+      "service": "session",
+      "subjectTime": {
+        "created": 1791356555779,
+        "updated": 1791356555779
+      },
+      "timeType": "System.Management.Automation.OrderedHashtable",
+      "level": "info"
+    },
+    {
+      "message": "created",
+      "line": 536,
+      "service": "session",
+      "subjectTime": {
+        "created": 1791356909393,
+        "updated": 1791356909393
+      },
+      "timeType": "System.Management.Automation.OrderedHashtable",
+      "level": "info"
+    }
+  ]
+}

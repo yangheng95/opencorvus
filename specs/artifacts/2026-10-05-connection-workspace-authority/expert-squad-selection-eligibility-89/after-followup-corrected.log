@@ -1,0 +1,39 @@
+[1/1] START test/server/expert-squad-selection-eligibility.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) inactive builtin, project and global winners support real Project and ordinary Session selection [5426.99ms]
+(pass) selected physical global package reports project winner and preserves reservations and duplicate errors [6497.59ms]
+(pass) built-in collision is unavailable while a valid Project winner overrides a broken global package [4879.31ms]
+Task clear actual contract {
+  status: 409,
+  body: {
+    name: "TaskPromptProfileImmutableError",
+    data: {
+      message: "Task tsk_g00VXLO5ZX00Iz35iS55 is permanently bound to expert squad base",
+      taskID: "tsk_g00VXLO5ZX00Iz35iS55",
+      pinnedPackageRevision: [Object ...],
+      requestedProfileID: "research-studio",
+    },
+  },
+}
+blank model current config contract {
+  status: 400,
+  body: {
+    data: {
+      message: "config: model: Model must be in the format \"provider/model\".; small_model: Model must be in the format \"provider/model\".",
+    },
+    error: [
+      [Object ...]
+    ],
+    success: false,
+  },
+}
+(pass) fixed Task changed-ID returns409 and retains actual package binding while missing model stays distinct [6363.27ms]
+(pass) held actual selected loader reports generation400 then accepts the next coherent detail [3126.57ms]
+
+ 5 pass
+ 0 fail
+ 49 expect() calls
+Ran 5 tests across 1 file. [29.27s]
+[1/1] DONE test/server/expert-squad-selection-eligibility.test.ts exit=0 duration=30.19s

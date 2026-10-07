@@ -1,0 +1,167 @@
+[1/3] START test/expert-squad/catalog-index.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+92 |       id: "base",
+93 |       name: "Base",
+94 |       source: { kind: "built_in" },
+95 |     })
+96 |     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
+97 |     expect(inspection).toMatchObject({
+                            ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "built_in": true,
++   "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
++   "display_label": "Base",
+    "id": "base",
++   "label": "Base",
++   "name": "Base",
+    "next_workflow_cursor": null,
++   "product_pillars": [
++     "code",
++     "work",
++   ],
+    "selector": {
+-     "selection_guidance": Any<String>,
+-     "summary": Any<String>,
++     "selection_guidance": "Use execution-verification for direct accountable Task-owner delivery and independent review. Use source-planned-execution-verification only for a bounded independent source-authority investigation that must precede delegated production. Use planner-parallel-delivery only for real independently useful research and implementation partitions.",
++     "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
+    },
+-   "version": "2026.09.14.15",
++   "source": {
++     "kind": "built_in",
++   },
++   "version": "2026.09.30.1",
+    "workflow_count": 3,
+    "workflows": [
+      {
++       "description": "The Task owner produces directly; the independent Tester compares the actual result with original authority.",
+        "id": "execution-verification",
+-       "node_count": 2,
++       "label": "Execution and Independent Verification",
++       "node_count": 1,
+      },
+      {
++       "description": "Publish one bounded Task plan, run the research and implementation partitions in the same dependency-ready frontier, then verify the settled result.",
+        "id": "planner-parallel-delivery",
++       "label": "Planner, Parallel Workers, and Verification",
+        "node_count": 4,
+      },
+      {
++       "description": "Classify traceable source authority and applicable constraints through a bounded minimal-anchor worklist, execute each irreversible mutation whose real prerequisites are resolved, then independently verify the classification and settled outcome.",
+        "id": "source-planned-execution-verification",
++       "label": "Source Planning, Execution, and Independent Verification",
+        "node_count": 3,
+      },
+    ],
+  }
+
+- Expected  - 4
++ Received  + 22
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\catalog-index.test.ts:97:24)
+(fail) Expert Squad catalog index > uses a bounded declaration index plus exact Mission inspection [71.37ms]
+(pass) Expert Squad catalog index > loads one exact full detail for a selected index identity [16.83ms]
+(pass) Expert Squad catalog index > preserves the integrity review execution contract in selected catalog detail [9.06ms]
+(pass) Expert Squad catalog index > reads full package bodies only for the exact selected installed identity [62.71ms]
+(pass) Expert Squad catalog index > pages a hundred installed declarations through one bounded cursor contract [755.17ms]
+329 |           agent: sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("mission", { config })),
+330 |           agentID: "mission",
+331 |           messages: await Session.messages({ sessionID: mission.id }),
+332 |           activeLocalRefs: [],
+333 |         })
+334 |         expect(Object.keys(tools).sort()).toEqual([
+                                                ^
+error: expect(received).toEqual(expected)
+
+  [
++   "apply_patch",
+    "bash",
+    "capability_search",
+    "edit",
+    "external_code_search",
+    "glob",
+    "memory",
+    "mission_state",
+    "panel_block_mission",
+    "panel_cancel_task",
+    "panel_complete_mission",
+    "panel_create_task",
+    "panel_expert_squad_inspect",
+    "panel_extend_task_acceptance",
+    "panel_multica_catalog",
+    "panel_query_task",
+    "panel_query_task_artifacts",
+    "panel_read_task_artifact",
+    "panel_read_task_dispatch_evidence",
+    "panel_read_task_message",
+    "panel_respond_interaction",
+    "panel_resume_task",
+    "planner",
+    "publish_interactive_artifact",
+    "question",
+    "read",
+    "schedule",
+    "scheduler_message",
+    "search_code",
+    "skill_market",
+    "todo",
+    "wait",
+    "webfetch",
+    "websearch",
+    "write",
+  ]
+
+- Expected  - 0
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\catalog-index.test.ts:334:43)
+(fail) Expert Squad catalog index > returns one bounded Mission capability_search result for a hundred held Squads [6691.64ms]
+(pass) Expert Squad catalog index > keeps independent bounded cursor sequences stable for different queries [85.97ms]
+(pass) Expert Squad catalog index > pages one exact Squad workflow catalog without unbounded inspection output [87.79ms]
+(pass) Expert Squad catalog index > pages discovery diagnostics while inventory status stays count-only [121.85ms]
+(pass) Expert Squad catalog index > filters Market installation state before pagination and loads exact selected detail [5260.62ms]
+(pass) Expert Squad catalog index > ranks Market packages from package-owned Skill and prompt evidence [1780.71ms]
+(pass) Expert Squad catalog index > keeps Market scope ordering and revision deterministic across Resolver call order [358.75ms]
+(pass) Expert Squad catalog index > serves active, index, inspection, status, diagnostics, and selected detail route contracts [1741.97ms]
+(pass) Expert Squad catalog index > projects one project-over-global identity and keeps a damaged project reservation authoritative [40.18ms]
+
+ 12 pass
+ 2 fail
+ 70 expect() calls
+Ran 14 tests across 1 file. [19.48s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\catalog-index.test.ts
+[1/3] DONE test/expert-squad/catalog-index.test.ts exit=1 duration=20.24s
+[2/3] START test/expert-squad/squad-sdk-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Generate Expert Squads expert squad > loads one self-contained package with exact authoring and import workflows [137.36ms]
+(pass) Generate Expert Squads expert squad > projects package-local methods and Host write tools only through the active Squad scheduler [2505.89ms]
+(pass) Generate Expert Squads expert squad > authors the visible positive contract with its package-owned typed publisher [2494.42ms]
+(pass) Generate Expert Squads expert squad > is available from a clean project catalog as an embedded system package [773.21ms]
+(pass) Generate Expert Squads expert squad > publishes a traceable generated Expert Squad into the current project catalog [1760.83ms]
+
+ 5 pass
+ 0 fail
+ 35 expect() calls
+Ran 5 tests across 1 file. [9.39s]
+[2/3] DONE test/expert-squad/squad-sdk-package.test.ts exit=0 duration=9.57s
+[3/3] START test/server/expert-selected-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+selected-reader-cold-receipts [{"route":"/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/configuration?id=selected-reader&installationScope=project","status":200,"errorName":null}]
+(pass) three exact selected readers return actual package and redacted configuration while runtime model remains unavailable [6213.75ms]
+(pass) exact current public errors preserve missing declaration identity [3869.51ms]
+(pass) same package ID reads each Project's actual declaration and configured values [7254.13ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [19.57s]
+[3/3] DONE test/server/expert-selected-read-identity.test.ts exit=0 duration=19.74s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\catalog-index.test.ts

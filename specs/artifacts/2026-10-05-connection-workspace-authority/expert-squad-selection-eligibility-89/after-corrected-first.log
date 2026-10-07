@@ -1,0 +1,64 @@
+[1/1] START test/server/expert-squad-selection-eligibility.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) inactive builtin, project and global winners support real Project and ordinary Session selection [5080.18ms]
+(pass) selected physical global package reports project winner and preserves reservations and duplicate errors [6050.01ms]
+(pass) built-in collision is unavailable while a valid Project winner overrides a broken global package [4095.16ms]
+blank model current config contract {
+  status: 400,
+  body: {
+    data: {
+      message: "config: model: Model must be in the format \"provider/model\".; small_model: Model must be in the format \"provider/model\".",
+    },
+    error: [
+      [Object ...]
+    ],
+    success: false,
+  },
+}
+301 |     name: blank.body.name,
+302 |     issues: blank.body.data?.issues?.map((issue: { path: string[]; message: string }) => ({
+303 |       path: issue.path,
+304 |       message: issue.message,
+305 |     })),
+306 |   }).toEqual({
+           ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "issues": [
+-     {
+-       "message": "Model must be in the format "provider/model".",
+-       "path": [
+-         "model",
+-       ],
+-     },
+-     {
+-       "message": "Model must be in the format "provider/model".",
+-       "path": [
+-         "small_model",
+-       ],
+-     },
+-   ],
+-   "name": "ConfigInvalidError",
++   "issues": undefined,
++   "name": undefined,
+    "status": 400,
+  }
+
+- Expected  - 15
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-squad-selection-eligibility.test.ts:306:6)
+(fail) fixed Task changed-ID returns409 and retains actual package binding while missing model stays distinct [5746.19ms]
+(pass) held actual selected loader reports generation400 then accepts the next coherent detail [2719.56ms]
+
+ 4 pass
+ 1 fail
+ 39 expect() calls
+Ran 5 tests across 1 file. [26.84s]
+[1/1] DONE test/server/expert-squad-selection-eligibility.test.ts exit=1 duration=27.76s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-squad-selection-eligibility.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-squad-selection-eligibility.test.ts

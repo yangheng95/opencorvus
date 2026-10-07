@@ -1,0 +1,86 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18039/ui/
+	1 container
+		9 container overlayAppHost
+			10 container titlebar
+				11 button (expanded) Description: 收起侧边栏, Secondary Actions: Collapse
+				12 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					13 (collapsed) Description: 文件, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					14 (collapsed) Description: 编辑, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					15 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					16 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			17 container panelBody
+				18 container Description: 对话快捷入口, ID: workspaceNavigation
+					19 container 对话快捷入口
+						20 button 对话
+						21 button Mission 看板
+						22 button 定时
+						23 button 专家团
+						24 pop up button (collapsed) Description: 更多, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						25 button 设置
+					26 button 关于
+					27 pop up button (collapsed) Description: OpenCorvus 菜单, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				28 container workspacePageStack
+					29 container leftActivityShell
+						30 container workspaceContextbar
+							31 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							32 button 搜索任务或运行命令
+							33 button (collapsed) Description: 收件箱, Secondary Actions: Expand
+						34 container sidebar
+							35 container workLedgerPanel
+								36 container 对话导航
+									37 button 新对话
+								38 container workLedgerProjectsScroll
+									39 text 项目
+									40 pop up button (collapsed) Description: 整理侧边栏, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									41 pop up button (collapsed) Description: 创建项目, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									42 container
+										43 button (expanded) Description: 收起 project, Secondary Actions: Collapse
+							44 container 连接诊断
+								45 container Description: 连接诊断 · 在线 · 端口 18039, ID: connBadge
+									46 text 在线
+					47 splitter Description: 调整左侧面板大小, Value: 280, ID: leftPaneResizer
+					48 container chatSection
+						49 container Description: 正在加载 Task, ID: taskSwitchProgress
+						50 container
+							51 container Description: 对话, ID: chatScroll
+							52 container chatHomeComposition
+								53 heading 在 project 中构建什么？, Value: 1
+									54 text 在 project 中构建什么？
+								55 container chatForm
+									56 splitter Description: 拖拽调整消息输入框大小, Value: 42
+									57 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea
+									58 pop up button (collapsed) Description: 添加支持的文件, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									59 pop up button (collapsed) 选择产品模式 Work, ID: select-cl-36-trigger, Secondary Actions: Expand
+										60 text Work
+									61 pop up button (collapsed) 选择对话目标 Chat, ID: select-cl-40-trigger, Secondary Actions: Expand
+										62 text Chat
+									63 pop up button (collapsed) Description: Skill 与专家团, Secondary Actions: Expand
+									64 pop up button (collapsed) Description: 授权模式，当前为 完全访问, Help: 授权模式：完全访问, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									65 pop up button (collapsed) Description: OpenCorvus 模型 继承配置，点击切换, Help: OpenCorvus 模型：继承配置, Secondary Actions: Expand
+										66 text 继承配置
+									67 button (disabled) Description: 发送, Help: 输入消息后即可发送。, ID: chatSend
+								68 container 建议的聊天起点
+									69 button 做网页
+									70 button 创建专家团
+									71 button 改 Bug
+									72 pop up button (collapsed) 更多, ID: dropdownmenu-cl-125-trigger, Secondary Actions: Expand
+		2 container 命令面板, ID: commandPaletteDialog
+			3 container
+				4 heading 命令面板, Value: 2, ID: dialog-cl-92-title
+					5 text 命令面板
+				6 container combobox-cl-552
+					7 combo box (collapsed, settable) Description: 搜索任务或运行命令, ID: commandPaletteInput, Secondary Actions: Expand
+					8 list Description: Suggestions, ID: commandPaletteListbox
+						73 Value: 新对话, ID: commandPaletteListbox-item-cl-567
+							74 text 推荐
+							75 text 新对话
+							76 text Ctrl+N
+						77 Value: 打开文件夹, ID: commandPaletteListbox-item-cl-569
+							78 text 打开文件夹
+							79 text Ctrl+O
+						80 Value: 设置, ID: commandPaletteListbox-item-cl-571
+							81 text 设置
+							82 text Ctrl+,
+
+The focused UI element is 32 button 搜索任务或运行命令

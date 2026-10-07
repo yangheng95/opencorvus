@@ -2613,13 +2613,10 @@ The current connection-workspace authority record also includes metadata selecti
 - [Session history/stream identity53](artifacts/2026-10-05-connection-workspace-authority/session-history-stream-identity-plan.md): two exact GET reads use current Project identity; cold baselines/final native tail/page/stream/UI qualified, all53 native scopes closed; broader restart/interaction matrices remain unknown.
 
 - [Root declaration/history84–88 manual plan](artifacts/2026-10-05-connection-workspace-authority/root-expert-declaration-history-manual-review.md): actual count/history88 and page2 selection91 reviewed by source owners and Root; all owned pages/native scopes CLOSED, precise contract/visual/execution limits retained.
-- [Expert activation89](artifacts/2026-10-05-connection-workspace-authority/expert-squad-activation-eligibility-plan.md): real inactive Research Studio and page2 package actions disabled; canonical winner/read owner design analyzed, implementation held.
-- [Activation backend admission89](
-artifacts/2026-10-05-connection-workspace-authority/
-89-backend-final-admission.md): sole selected envelope, builtin collision predicate and one-shot generation settlement reviewed; implementation held.
-- [Activation frontend admission89](
-artifacts/2026-10-05-connection-workspace-authority/
-89-frontend-final-admission.md): accepted winner/button/handler ownership and truthful Project/Session/fixed-Task semantics reviewed; implementation held.
-- [Residual selector parser92](
-artifacts/2026-10-05-connection-workspace-authority/
-residual-selector-parser-investigation-92.md): actual two-parent parser6 chain, unsupported major override risks and narrow upstream-backport candidate investigated; no implementation or security closure.
+- [Expert activation89](artifacts/2026-10-05-connection-workspace-authority/expert-squad-activation-eligibility-plan.md): one selected canonical winner and Task-aware action owner; actual Project/Chat/shadow/Details-Retry/fixed-assignment visuals and positive writers pass; scopes CLOSED, Provider/races unqualified.
+- [Activation backend admission89](artifacts/2026-10-05-connection-workspace-authority/89-backend-final-admission.md): sole selected envelope/current collision predicate/coherence400 implemented; existing22/122 and new5/49 backend contracts plus types qualified.
+- [Activation frontend admission89](artifacts/2026-10-05-connection-workspace-authority/89-frontend-final-admission.md): accepted envelope/winner/button-handler/currentTask scope and original-error Retry implemented; genuine Project/Chat/recovery/shadow/fixed-region screenshots personally reviewed, own page CLOSED.
+- [Residual selector parser92](artifacts/2026-10-05-connection-workspace-authority/residual-selector-parser-investigation-92.md): actual two-parent parser6 chain, unsupported major override risks and narrow upstream-backport candidate investigated; no implementation or security closure.
+- [Manager target scope93](artifacts/2026-10-05-connection-workspace-authority/manager-cross-scope-installation-investigation-93.md): real reverse-order Project import rejected by broken global same-ID issue; original dynamic facts limited; independent repair not yet admitted.
+- [Builtin runtime/mount collision94](artifacts/2026-10-05-connection-workspace-authority/builtin-collision-authority-investigation-94.md): two filtered-item dead checks audited across current/pinned/runtime/config scopes; fixed revisions remain distinct; repair held.
+- [Shared logger namespace95](artifacts/2026-10-05-connection-workspace-authority/logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.

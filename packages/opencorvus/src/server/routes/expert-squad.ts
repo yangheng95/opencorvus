@@ -616,19 +616,16 @@ export function ExpertSquadRoutes() {
       validator("query", ExpertSquadSettingsDetailQuerySchema),
       async (c) => {
         const query = c.req.valid("query")
-        const selected = await PromptProfileResolver.settingsDetail({
-          projectDirectory: Instance.project.worktree,
-          id: query.id,
-          installationScope: query.installationScope,
-          namespace: "namespace" in query ? query.namespace : undefined,
-        })
-        if (!selected) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
-        return c.json(
-          ExpertSquadSettingsDetailSchema.parse({
-            scope: { kind: "project", directory: Instance.project.worktree },
-            selected,
+        const detail = await packageRoute(() =>
+          PromptProfileResolver.settingsDetail({
+            projectDirectory: Instance.project.worktree,
+            id: query.id,
+            installationScope: query.installationScope,
+            namespace: "namespace" in query ? query.namespace : undefined,
           }),
         )
+        if (!detail) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
+        return c.json(detail)
       },
     )
     .get(

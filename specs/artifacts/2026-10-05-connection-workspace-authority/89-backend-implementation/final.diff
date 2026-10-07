@@ -1,0 +1,402 @@
+diff --git a/packages/opencorvus/src/expert-squad/catalog.ts b/packages/opencorvus/src/expert-squad/catalog.ts
+index 088d410f..3e78e67f 100644
+--- a/packages/opencorvus/src/expert-squad/catalog.ts
++++ b/packages/opencorvus/src/expert-squad/catalog.ts
+@@ -189,6 +189,12 @@ export const ExpertSquadSettingsDetailSchema = z
+   .object({
+     scope: z.object({ kind: z.literal("project"), directory: z.string() }).strict(),
+     selected: ExpertSquadCatalogSummarySchema,
++    selection: z
++      .object({
++        catalog_revision: ExpertSquadCatalogPageSchema.shape.catalog_revision,
++        effective_identity: ExpertSquadCatalogIndexEntrySchema.pick({ id: true, source: true }).nullable(),
++      })
++      .strict(),
+   })
+   .strict()
+   .meta({ ref: "ExpertSquadSettingsDetail" })
+diff --git a/packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts b/packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts
+index 48507f5f..4be0d255 100644
+--- a/packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts
++++ b/packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts
+@@ -1,5 +1,6 @@
+ import { TASK_OWNER_REGISTRY_TOOL_IDS } from "@/agent/tool-pool-data"
+ import path from "node:path"
++import { isDeepStrictEqual } from "node:util"
+ import { createHash, randomUUID } from "node:crypto"
+ import { jsonSchema, tool, type Tool as AITool } from "ai"
+ import z from "zod"
+@@ -49,6 +50,7 @@ import {
+   ExpertSquadCatalogPageSchema,
+   ExpertSquadDiagnosticPageSchema,
+   ExpertSquadInventoryStatusSchema,
++  ExpertSquadSettingsDetailSchema,
+   type ExpertSquadCatalogIndexEntry,
+   type ExpertSquadCatalogInspection,
+   type ExpertSquadCatalogPage,
+@@ -2721,20 +2723,24 @@ export namespace PromptProfileResolver {
+       .join("\n\n")
+   }
+ 
++  function hasBuiltInProfileCollision(
++    profileID: string,
++    records: readonly Pick<ExpertSquadRegistry.CatalogDeclaration, "id">[],
++    issues: readonly Pick<ExpertSquadRegistry.DiscoveryIssue, "id">[],
++  ): boolean {
++    return records.some((entry) => entry.id === profileID) || issues.some((entry) => entry.id === profileID)
++  }
++
+   export async function assertKnownProfileID(input: ProfileIDInput): Promise<void> {
+     PromptProfileIDSchema.parse(input.profileID)
+     if (Object.hasOwn(builtInPackages(), input.profileID)) {
+       let collision = false
+       if (input.scope === "global") {
+         const discovered = await ExpertSquadRegistry.discoverGlobalAvailable()
+-        collision =
+-          discovered.items.some((entry) => entry.id === input.profileID) ||
+-          discovered.issues.some((entry) => entry.id === input.profileID)
++        collision = hasBuiltInProfileCollision(input.profileID, discovered.items, discovered.issues)
+       } else if (input.projectDirectory) {
+         const discovered = await ExpertSquadRegistry.discoverAvailable(input.projectDirectory)
+-        collision =
+-          discovered.installations.some((entry) => entry.id === input.profileID) ||
+-          discovered.issues.some((entry) => entry.id === input.profileID)
++        collision = hasBuiltInProfileCollision(input.profileID, discovered.installations, discovered.issues)
+       }
+       if (collision) {
+         throw new Error(
+@@ -3248,24 +3254,62 @@ export namespace PromptProfileResolver {
+     id: string
+     installationScope: "built_in" | "project" | "global"
+     namespace?: string
+-  }): Promise<ExpertSquadCatalogSummary | undefined> {
++  }): Promise<z.output<typeof ExpertSquadSettingsDetailSchema> | undefined> {
++    const generation = ExpertSquadRegistry.catalogInventoryGeneration()
++    const inventory = await catalogInventory(input.projectDirectory)
++    const declaration = inventory.installationRows.find((row) => {
++      if (row.index.id !== input.id) return false
++      const source = row.index.source
++      return input.installationScope === "built_in"
++        ? source.kind === "built_in"
++        : source.kind === "installed_package" &&
++            source.installation_scope === input.installationScope &&
++            source.namespace === input.namespace
++    })
++    let selected: ExpertSquadCatalogSummary | undefined
+     if (input.installationScope === "built_in") {
+-      const pkg = builtInPackages()[input.id]
+-      return pkg ? catalogSummaryFromPackage({ pkg, builtIn: true }) : undefined
++      const pkg = inventory.builtInPackagesByID[input.id]
++      if (pkg) selected = catalogSummaryFromPackage({ pkg, builtIn: true })
++    } else {
++      if (!input.namespace) throw new Error("Installed expert squad settings detail requires namespace.")
++      const loaded = await ExpertSquadRegistry.loadInstalledCatalogPackage({
++        projectDirectory: input.projectDirectory,
++        installationScope: input.installationScope,
++        namespace: input.namespace,
++        id: input.id,
++      })
++      if (loaded) {
++        if (
++          !declaration ||
++          loaded.id !== declaration.pkg.id ||
++          loaded.namespace !== declaration.pkg.namespace ||
++          loaded.version !== declaration.pkg.version ||
++          !isDeepStrictEqual(loaded.manifest, declaration.pkg.manifest)
++        ) {
++          throw new Error("Expert squad settings declaration changed while loading selected package.")
++        }
++        selected = catalogSummaryFromPackage({
++          pkg: { ...loaded, installationScope: input.installationScope },
++          builtIn: false,
++        })
++      }
+     }
+-    if (!input.namespace) throw new Error("Installed expert squad settings detail requires namespace.")
+-    const loaded = await ExpertSquadRegistry.loadInstalledCatalogPackage({
+-      projectDirectory: input.projectDirectory,
+-      installationScope: input.installationScope,
+-      namespace: input.namespace,
+-      id: input.id,
++    if (ExpertSquadRegistry.catalogInventoryGeneration() !== generation) {
++      throw new Error("Expert squad catalog generation changed while loading settings detail.")
++    }
++    if (!selected) return undefined
++    const winner = inventory.effectiveRows.find((row) => row.index.id === input.id)
++    const collision =
++      input.installationScope === "built_in" &&
++      hasBuiltInProfileCollision(input.id, inventory.externalInstallations, inventory.issues)
++    return ExpertSquadSettingsDetailSchema.parse({
++      scope: { kind: "project", directory: input.projectDirectory },
++      selected,
++      selection: {
++        catalog_revision: inventory.revision,
++        effective_identity: winner && !collision ? { id: winner.index.id, source: winner.index.source } : null,
++      },
+     })
+-    if (!loaded) return undefined
+-    const pkg = {
+-      ...loaded,
+-      installationScope: input.installationScope,
+-    }
+-    return catalogSummaryFromPackage({ pkg, builtIn: false })
+   }
+ 
+   export async function catalog(input: ExpertSquadCatalogInput): Promise<ExpertSquadCatalog> {
+diff --git a/packages/opencorvus/src/server/routes/expert-squad.ts b/packages/opencorvus/src/server/routes/expert-squad.ts
+index 7f4fe3cc..245a2e5c 100644
+--- a/packages/opencorvus/src/server/routes/expert-squad.ts
++++ b/packages/opencorvus/src/server/routes/expert-squad.ts
+@@ -616,19 +616,16 @@ export function ExpertSquadRoutes() {
+       validator("query", ExpertSquadSettingsDetailQuerySchema),
+       async (c) => {
+         const query = c.req.valid("query")
+-        const selected = await PromptProfileResolver.settingsDetail({
+-          projectDirectory: Instance.project.worktree,
+-          id: query.id,
+-          installationScope: query.installationScope,
+-          namespace: "namespace" in query ? query.namespace : undefined,
+-        })
+-        if (!selected) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
+-        return c.json(
+-          ExpertSquadSettingsDetailSchema.parse({
+-            scope: { kind: "project", directory: Instance.project.worktree },
+-            selected,
++        const detail = await packageRoute(() =>
++          PromptProfileResolver.settingsDetail({
++            projectDirectory: Instance.project.worktree,
++            id: query.id,
++            installationScope: query.installationScope,
++            namespace: "namespace" in query ? query.namespace : undefined,
+           }),
+         )
++        if (!detail) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
++        return c.json(detail)
+       },
+     )
+     .get(
+diff --git a/packages/opencorvus/test/expert-squad/catalog-index.test.ts b/packages/opencorvus/test/expert-squad/catalog-index.test.ts
+index ff86fb1c..6849512f 100644
+--- a/packages/opencorvus/test/expert-squad/catalog-index.test.ts
++++ b/packages/opencorvus/test/expert-squad/catalog-index.test.ts
+@@ -73,11 +73,6 @@ describe("Expert Squad catalog index", () => {
+       projectDirectory: project.path,
+       productPillar: "code",
+     })
+-    const emptyRecommendations = await PromptProfileResolver.recommendationCatalog({
+-      projectDirectory: project.path,
+-      productPillar: "code",
+-      restrictToExpertSquadIDs: [],
+-    })
+ 
+     expect(settings.entries.filter((squad) => squad.built_in).map((squad) => squad.id)).toEqual([
+       "advanced",
+@@ -85,7 +80,6 @@ describe("Expert Squad catalog index", () => {
+       "research-studio",
+       "squad-sdk",
+     ])
+-    expect(emptyRecommendations).toEqual([])
+     expect(settings.entries.find((squad) => squad.id === "base")).toMatchObject({
+       id: "base",
+       name: "Base",
+@@ -102,13 +96,13 @@ describe("Expert Squad catalog index", () => {
+     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
+     expect(inspection).toMatchObject({
+       id: "base",
+-      version: "2026.09.14.15",
++      version: "2026.09.30.1",
+       selector: {
+         summary: expect.any(String),
+         selection_guidance: expect.any(String),
+       },
+       workflows: [
+-        { id: "execution-verification", node_count: 2 },
++        { id: "execution-verification", node_count: 1 },
+         { id: "planner-parallel-delivery", node_count: 4 },
+         { id: "source-planned-execution-verification", node_count: 3 },
+       ],
+@@ -125,15 +119,16 @@ describe("Expert Squad catalog index", () => {
+       installationScope: "built_in",
+     })
+ 
+-    expect(detail?.id).toBe("base")
+-    expect(detail?.name).toBe("Base")
+-    expect(detail?.source).toEqual({ kind: "built_in" })
+-    expect(detail?.readme.content).toContain("# Base")
+-    expect(detail?.selector.instructions).toContain("# Selecting Base")
+-    expect(detail?.capability_projection.scheduler.base_role).toBe("orchestrator")
++    expect(detail?.selection.effective_identity).toEqual({ id: "base", source: { kind: "built_in" } })
++    expect(detail?.selected.id).toBe("base")
++    expect(detail?.selected.name).toBe("Base")
++    expect(detail?.selected.source).toEqual({ kind: "built_in" })
++    expect(detail?.selected.readme.content).toContain("# Base")
++    expect(detail?.selected.selector.instructions).toContain("# Selecting Base")
++    expect(detail?.selected.capability_projection.scheduler.base_role).toBe("orchestrator")
+     expect(
+       Object.fromEntries(
+-        Object.entries(detail?.capability_projection.agents ?? {}).map(([id, projection]) => [
++        Object.entries(detail?.selected.capability_projection.agents ?? {}).map(([id, projection]) => [
+           id,
+           projection.base_role,
+         ]),
+@@ -154,7 +149,7 @@ describe("Expert Squad catalog index", () => {
+       installationScope: "built_in",
+     })
+ 
+-    expect(detail?.capability_projection.agents["system-integrity-reviewer"]).toMatchObject({
++    expect(detail?.selected.capability_projection.agents["system-integrity-reviewer"]).toMatchObject({
+       base_role: "integrity",
+       execution_contract: "platform_integrity_review",
+     })
+@@ -177,7 +172,11 @@ describe("Expert Squad catalog index", () => {
+         installationScope: "project",
+         namespace: "scale",
+       })
+-      expect(detail).toMatchObject({
++      expect(detail?.selected).toMatchObject({
++        id: "selected-detail",
++        source: { kind: "installed_package", installation_scope: "project", namespace: "scale" },
++      })
++      expect(detail?.selection.effective_identity).toEqual({
+         id: "selected-detail",
+         source: { kind: "installed_package", installation_scope: "project", namespace: "scale" },
+       })
+@@ -333,6 +332,7 @@ describe("Expert Squad catalog index", () => {
+           activeLocalRefs: [],
+         })
+         expect(Object.keys(tools).sort()).toEqual([
++          "apply_patch",
+           "bash",
+           "capability_search",
+           "edit",
+@@ -684,6 +684,7 @@ describe("Expert Squad catalog index", () => {
+       projectDirectory: project.path,
+       id: "evolution-lab",
+     })
++    if (!detail) throw new Error("Installed evolution-lab market detail is required")
+     expect(installed).toMatchObject({
+       totalCount: 1,
+       nextCursor: null,
+@@ -789,7 +790,7 @@ describe("Expert Squad catalog index", () => {
+           issue_count: 0,
+           warning_count: 0,
+         })
+-        expect(diagnostics).toMatchObject({ entries: [], total_count: 0, next_cursor: null })
++        expect(diagnostics).toMatchObject({ total_count: 0, next_cursor: null })
+         expect(detail).toMatchObject({ selected: { id: "base", source: { kind: "built_in" } } })
+         expect(market).toMatchObject({ entries: expect.any(Array), total_count: payloadPackageSources.length })
+         expect(marketDetail).toMatchObject({ id: "deep-research" })
+@@ -803,9 +804,6 @@ describe("Expert Squad catalog index", () => {
+     const globalRoot = path.join(ExpertSquadPackageLocations.global().packagesRoot, "scale", id)
+     const projectRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id)
+     try {
+-      const beforeIDs = (
+-        await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
+-      ).entries.map((entry) => entry.id)
+       const globalDefinition = scalePackageDefinition(id)
+       globalDefinition.manifest.label = "Global Scale Contract"
+       const projectDefinition = scalePackageDefinition(id)
+@@ -833,8 +831,8 @@ describe("Expert Squad catalog index", () => {
+ 
+       await writeFile(path.join(projectRoot, "expert-squad.jsonc"), "{}\n", "utf8")
+       await ExpertSquadRegistry.invalidateAvailable()
+-      const reserved = await PromptProfileResolver.searchCatalog({ projectDirectory: project.path, limit: 20 })
+-      expect(reserved.entries.map((entry) => entry.id)).toEqual(beforeIDs)
++      const reserved = await PromptProfileResolver.catalogDiagnostics({ projectDirectory: project.path, limit: 20 })
++      expect(reserved.entries).toMatchObject([{ kind: "issue", issue: { id } }])
+       expect((await PromptProfileResolver.settingsInventory(project.path)).issue_count).toBe(1)
+     } finally {
+       await rm(globalRoot, { recursive: true, force: true })
+diff --git a/packages/opencorvus/test/expert-squad/squad-sdk-package.test.ts b/packages/opencorvus/test/expert-squad/squad-sdk-package.test.ts
+index 7627f293..67c21855 100644
+--- a/packages/opencorvus/test/expert-squad/squad-sdk-package.test.ts
++++ b/packages/opencorvus/test/expert-squad/squad-sdk-package.test.ts
+@@ -88,7 +88,6 @@ describe("Generate Expert Squads expert squad", () => {
+ 
+   test(
+     "projects package-local methods and Host write tools only through the active Squad scheduler",
+-    { timeout: 90_000 },
+     async () => {
+       await using project = await memoryProject()
+       await Instance.provide({
+@@ -258,6 +257,7 @@ describe("Generate Expert Squads expert squad", () => {
+         },
+       })
+     },
++    90_000,
+   )
+ 
+   test("authors the visible positive contract with its package-owned typed publisher", async () => {
+@@ -306,7 +306,7 @@ describe("Generate Expert Squads expert squad", () => {
+     })
+   })
+ 
+-  test("is available from a clean project catalog as an embedded system package", { timeout: 30_000 }, async () => {
++  test("is available from a clean project catalog as an embedded system package", async () => {
+     await using project = await memoryProject()
+     const generatedSquads = await PromptProfileResolver.settingsDetail({
+       projectDirectory: project.path,
+@@ -314,7 +314,7 @@ describe("Generate Expert Squads expert squad", () => {
+       installationScope: "built_in",
+     })
+ 
+-    expect(generatedSquads).toMatchObject({
++    expect(generatedSquads?.selected).toMatchObject({
+       id: "squad-sdk",
+       name: "Generate Expert Squads",
+       built_in: true,
+@@ -322,11 +322,10 @@ describe("Generate Expert Squads expert squad", () => {
+       system_role: "expert_squad_generator",
+       source: { kind: "built_in" },
+     })
+-  })
++  }, 30_000)
+ 
+   test(
+     "publishes a traceable generated Expert Squad into the current project catalog",
+-    { timeout: 30_000 },
+     async () => {
+       await using authoringProject = await memoryProject()
+       const generatedID = "generated-project-contract"
+@@ -336,7 +335,7 @@ describe("Generate Expert Squads expert squad", () => {
+         directory: authoringProject.path,
+         fn: () =>
+           authorProjectExpertSquad(
+-            {
++            ExpertSquadAuthorParameters.parse({
+               schema_version: 2,
+               namespace: "test",
+               id: generatedID,
+@@ -365,7 +364,7 @@ describe("Generate Expert Squads expert squad", () => {
+                 },
+               },
+               virtual_workflows: {},
+-            },
++            }),
+             trace,
+           ),
+       })
+@@ -376,6 +375,7 @@ describe("Generate Expert Squads expert squad", () => {
+         installationScope: "project",
+       })
+       const metadata = await readExpertSquadInstallationMetadata(receipt.targetRoot)
++      if (!receipt.generation) throw new Error("Generated project contract requires its generation receipt")
+ 
+       expect(receipt).toMatchObject({
+         id: generatedID,
+@@ -392,7 +392,7 @@ describe("Generate Expert Squads expert squad", () => {
+         path.join(authoringProject.path, ".opencorvus", "expert-squads", "test", generatedID),
+       )
+       expect(metadata).toEqual({ schema_version: 1, generation: receipt.generation })
+-      expect(generated).toMatchObject({
++      expect(generated?.selected).toMatchObject({
+         id: generatedID,
+         name: "Generated Project Contract",
+         capability_projection: {
+@@ -410,5 +410,6 @@ describe("Generate Expert Squads expert squad", () => {
+         },
+       })
+     },
++    30_000,
+   )
+ })

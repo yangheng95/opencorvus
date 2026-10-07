@@ -1,0 +1,12 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/89-frontend-implementation/zh.recovery-before.json b/packages/overlay/src/i18n/zh-CN.json
+index 731bb256..90c75e23 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/89-frontend-implementation/zh.recovery-before.json
++++ b/packages/overlay/src/i18n/zh-CN.json
+@@ -1274,6 +1274,7 @@
+   "expert_squad.task_assignment_fixed": "Task 分配：{{name}} v{{version}}。该分配在创建时固定。使用其他专家团请创建新的 Task。",
+   "expert_squad.installation_shadowed": "此安装被当前项目中的其他安装覆盖；按 ID 选择会使用当前有效安装。",
+   "expert_squad.installation_not_selectable": "此安装当前不可按 ID 选择。请查看目录诊断。",
++  "expert_squad.selected_read_failed": "无法读取此专家团的详情。请重试以读取当前安装。",
+   "expert_squad.activated_session": "已更新会话专家团覆盖",
+   "expert_squad.cleared_session_override": "会话专家团已恢复继承项目",
+   "expert_squad.export": "导出 ZIP",

@@ -1,0 +1,21 @@
+Browser tab: 241798765, Title: "OpenCorvus", URL: "http://localhost:18039/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 61-64, 67-83
+~								60 toolbar 筛选已安装专家团
++									61 checkbox 全部, Value: 1
++									62 checkbox 使用中, Value: 0
++									63 checkbox 扩展包, Value: 0
++									64 checkbox 内置, Value: 0
+~								65 button Advanced
+~								66 button Base 当前生效
++									67 text Base
++									68 text 当前生效
++								69 button Research Studio
++								70 button Generate Expert Squads 系统生成器
++									71 text Generate Expert Squads
++									72 text 系统生成器
++								73 button Activation Global
++								74 button Activation Shared Global
++								75 button Activation Project
++								76 button Activation Shared Project
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18039/ui/
