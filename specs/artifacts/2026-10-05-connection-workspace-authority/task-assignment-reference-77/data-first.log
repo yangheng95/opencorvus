@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+test\composer-expert-squad-catalog.test.ts:
+(pass) Composer reference catalog source-qualified feedback > accepted package facts survive candidate errors and later search labels [0.95ms]
+(pass) Composer reference catalog source-qualified feedback > current full failure and global draft replace assignment with their complete current state [0.29ms]
+(pass) Composer reference catalog source-qualified feedback > global typed issues remain current after a successful bounded Squad search [0.48ms]
+(pass) Composer reference catalog source-qualified feedback > failed then successful search settles its own source while retaining full-load issues [0.11ms]
+(pass) Composer reference catalog source-qualified feedback > a complete healthy global replacement publishes actual available items and healthy feedback [0.11ms]
+(pass) Composer reference catalog source-qualified feedback > settled Project sources publish actual Mission issues and explicit request failures [0.10ms]
+(pass) Composer reference catalog source-qualified feedback > a result for an older request returns the current snapshot facts [0.07ms]
+(pass) Composer Expert Squad bounded catalog > keeps the exact active and selected Squads alongside each bounded search page [0.39ms]
+
+ 8 pass
+ 0 fail
+ 33 expect() calls
+Ran 8 tests across 1 file. [128.00ms]

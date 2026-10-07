@@ -1,0 +1,30 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\util\test\process-deadline-settlement.test.ts:
+(pass) deadline reports uncertain admission when the injected spawner cannot settle [127.65ms]
+(pass) an expired entry maps to the original typed deadline contract [0.20ms]
+
+packages\util\test\process.test.ts:
+(pass) structured process facade > settles a failed spawn before admitting the next occurrence [100.95ms]
+(pass) structured process facade > preserves argv and publishes one terminal receipt after streamed output closes [93.40ms]
+(pass) structured process facade > deadline terminalizes the owned process under the same occurrence [515.53ms]
+(pass) structured process facade > settles late combined output limits independently for concurrent process occurrences [1299.62ms]
+(pass) structured process facade > a Windows admission deadline settles its identity probe before the next owned occurrence [251.04ms]
+(pass) structured process facade > Windows controlled admissions settle concurrent physical occurrences before fresh work [885.07ms]
+(pass) structured process facade > normal child exit settles while its input producer remains pending [88.95ms]
+(pass) structured process facade > an aborted request settles through the typed abort contract [14.27ms]
+(pass) structured process facade > deadline covers delayed spawn admission and disposes a late handle [54.62ms]
+(pass) structured process facade > admission cleanup preserves the typed control failure before a disposal failure [58.54ms]
+(pass) structured process facade > occurrence validation settles its process and preserves cleanup failure ordering [3.21ms]
+(pass) structured process facade > publishes facade settlement only after the adapter's durable settlement [51.74ms]
+(pass) structured process facade > release observes an absolute deadline crossed while the event loop was blocked [50.17ms]
+(pass) structured process facade > flattens and de-duplicates adapter settlement failures in occurrence order [4.14ms]
+(pass) structured process facade > disposes an admitted process when its adapter omits required output streams [0.70ms]
+(pass) structured process facade > an asynchronous byte-source failure settles the physical occurrence before returning [11.36ms]
+(pass) structured process facade > retains stream backpressure until the byte source is consumed [33.30ms]
+(pass) structured process facade > settles an owned tree after the root exits first and disposal reclaims its descendant [301.15ms]
+
+ 20 pass
+ 0 fail
+ 69 expect() calls
+Ran 20 tests across 2 files. [5.77s]

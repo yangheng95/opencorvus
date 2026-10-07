@@ -1,0 +1,11 @@
+[1/1] START test/server/task-assignment-reference.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) public Task catalog retains actual immutable name/version while an ordinary Session sees current installed metadata [3610.53ms]
+
+ 1 pass
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [6.00s]
+[1/1] DONE test/server/task-assignment-reference.test.ts exit=0 duration=6.76s

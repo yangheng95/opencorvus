@@ -240,6 +240,7 @@ export const ExpertSquadSettingsDetailQuerySchema = z
 
 export const ExpertSquadCatalogActiveSchema = z
   .object({
+    name: z.string().min(1),
     effective: z.string(),
     project: z.string(),
     session_override: z.string().nullable(),

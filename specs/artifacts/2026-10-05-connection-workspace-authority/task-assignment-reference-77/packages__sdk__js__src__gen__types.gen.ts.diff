@@ -1,0 +1,12 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__sdk__js__src__gen__types.gen.ts.before.txt" b/packages/sdk/js/src/gen/types.gen.ts
+index 0addf945..f9c10d76 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__sdk__js__src__gen__types.gen.ts.before.txt"
++++ b/packages/sdk/js/src/gen/types.gen.ts
+@@ -8665,6 +8665,7 @@ export type ExpertSquadCatalogResponses = {
+   200: {
+     active: {
+       effective: string
++      name: string
+       package_revision: ExpertSquadPackageRevision
+       project: string
+       session_override: string | null

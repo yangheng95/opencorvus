@@ -1,0 +1,23 @@
+Browser tab: 48, Title: "OpenCorvus", URL: "http://localhost:18032/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~								60 button (expanded) Details, Secondary Actions: Collapse
++								63 text Failed to load Expert Squads for C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\live-sol-publication-50\project: HTTP GET 400 expert-squad/inventory-status?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject
+
+Request ID: 9a6d00f1-a338-4599-ac0c-68d1dccf5edc
+
+ApiError: API 400 expert-squad/inventory-status?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject: {"name":"ProviderModelNotFoundError","data":{"providerID":"openai","modelID":"gpt-6.1-sol","suggestions":[]}}
+    at Te (http://localhost:18032/ui/assets/main-DNZXOT43.js:67:134407)
+    at async DLe (http://localhost:18032/ui/assets/main-DNZXOT43.js:79:75147)
+    at async Promise.all (index 2)
+    at async Ke (http://localhost:18032/ui/assets/ExpertSquadPanel-CPfxjwuv.js:8:127)
+
+response body:
+{
+  "name": "ProviderModelNotFoundError",
+  "data": {
+    "providerID": "openai",
+    "modelID": "gpt-6.1-sol",
+    "suggestions": []
+  }
+}
+The focused UI element is 60 button (expanded) Details, Secondary Actions: Collapse

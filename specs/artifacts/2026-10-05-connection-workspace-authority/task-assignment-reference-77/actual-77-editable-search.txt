@@ -1,0 +1,19 @@
+Browser tab: 241798753, Title: "OpenCorvus", URL: "http://localhost:18032/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 148-207
+~			146 search text field (settable) Description: 搜索 Skill 或专家团名称, Value: base
+~			147 button 清除
++			148 list Description: 选择 Skill 与专家团, ID: composerReferenceListbox
++				149 text 专家团
++				150 ID: composerReferenceListbox-item-cl-478, Value: Base 专家团 · base Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++					151 text Base
++					152 text 专家团
++					153 text  · 
++					154 text base
++					155 text Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
++			156 text 来自专家团市场
++			157 button 安装更多专家团 Squad 市场 浏览 Squad 市场，只安装当前项目需要的专家团。
++				158 text 安装更多专家团
++				159 text Squad 市场
++				160 text 浏览 Squad 市场，只安装当前项目需要的专家团。
+The focused UI element is 146 search text field (settable) Description: 搜索 Skill 或专家团名称, Value: base

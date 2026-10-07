@@ -1,0 +1,12 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__opencorvus__src__expert-squad__prompt-profile-resolver.ts.before.txt" b/packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts
+index 9bde6bcd..48507f5f 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__opencorvus__src__expert-squad__prompt-profile-resolver.ts.before.txt"
++++ b/packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts
+@@ -3303,6 +3303,7 @@ export namespace PromptProfileResolver {
+     const packageRevision = resolvedPackageRevision(context)
+     return ExpertSquadCatalogSchema.parse({
+       active: {
++        name: ExpertSquadRegistry.displayName(activePackage.pkg.manifest),
+         effective: active,
+         project: input.projectActive,
+         session_override: input.sessionOverride,

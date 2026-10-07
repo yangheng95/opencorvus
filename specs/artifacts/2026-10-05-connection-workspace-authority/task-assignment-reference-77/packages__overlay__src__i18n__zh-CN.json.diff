@@ -1,0 +1,31 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__i18n__zh-CN.json.before.txt" b/packages/overlay/src/i18n/zh-CN.json
+index 27ed3793..7596294b 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__i18n__zh-CN.json.before.txt"
++++ b/packages/overlay/src/i18n/zh-CN.json
+@@ -235,9 +235,15 @@
+   "chat.mention.error_unknown_mission_skill": "Mission Skill {{name}} 在当前输入区作用域不可用。",
+   "chat.mention.error_unknown_squad": "专家团 {{name}} 在当前输入区作用域不可用。",
+   "chat.references.trigger": "Skill 与专家团",
+-  "chat.references.view": "查看启动引用",
++  "chat.references.view": "查看对话上下文",
+   "chat.references.title": "选择 Skill 与专家团",
+-  "chat.references.selected_title": "启动时选择",
++  "chat.references.context_title": "对话上下文",
++  "chat.references.task_assignment": "此 Task 分配的专家团 · 固定版本",
++  "chat.references.current_assignment": "当前生效的专家团",
++  "chat.references.task_request_title": "原始请求中的显式引用",
++  "chat.references.first_message_title": "首条消息中的显式引用",
++  "chat.references.task_request_hint": "Task 分配信息及其原始请求中的引用仅供查看。",
++  "chat.references.task_request_empty": "原始请求没有显式 Skill 或专家团引用。",
+   "chat.references.selection_hint": "多选结果会以可见引用写入输入内容。",
+   "chat.references.read_only_hint": "以下引用来自本次对话的首条消息，仅供查看。",
+   "chat.references.search_placeholder": "搜索 Skill 或专家团名称",
+@@ -249,7 +255,7 @@
+   "chat.references.generator": "生成器",
+   "chat.references.no_matches": "没有匹配的 Skill 或专家团",
+   "chat.references.catalog_unavailable": "部分引用未能加载，可查看详情或重试。",
+-  "chat.references.none_selected": "本次对话启动时未选择 Skill 或专家团。",
++  "chat.references.none_selected": "首条消息没有显式 Skill 或专家团引用。",
+   "chat.references.install_more": "安装更多专家团",
+   "chat.references.install_more_description": "浏览 Squad 市场，只安装当前项目需要的专家团。",
+   "chat.references.market_results": "来自专家团市场",

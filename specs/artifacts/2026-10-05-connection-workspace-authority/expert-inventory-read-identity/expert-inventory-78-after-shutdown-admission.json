@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-07T04:40:31.5515809Z",
+  "occurrence": "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+  "owner": {
+    "pid": 21788,
+    "processInstanceID": "win32:639269445508941746",
+    "occurrenceID": "de5c3bf1-27d0-444b-b6fa-abff8a5be0b1"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXKrmd500QIUVaqt8d"
+  }
+}

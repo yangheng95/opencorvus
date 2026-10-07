@@ -1,0 +1,23 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__sdk__openapi.json.before.txt" b/packages/sdk/openapi.json
+index 43b81a7d..0bc52159 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__sdk__openapi.json.before.txt"
++++ b/packages/sdk/openapi.json
+@@ -26629,6 +26629,10 @@
+                         "effective": {
+                           "type": "string"
+                         },
++                        "name": {
++                          "minLength": 1,
++                          "type": "string"
++                        },
+                         "package_revision": {
+                           "$ref": "#/components/schemas/ExpertSquadPackageRevision"
+                         },
+@@ -26647,6 +26651,7 @@
+                         }
+                       },
+                       "required": [
++                        "name",
+                         "effective",
+                         "project",
+                         "session_override",

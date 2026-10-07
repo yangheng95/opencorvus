@@ -1,0 +1,22 @@
+{
+  "extends": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/util/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/run-tests.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/run-with-inactivity.ts",
+    "D:/myhexin-local/opencorvus/packages/overlay/script/run-unit-tests.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/command-inactivity-settlement.test.ts",
+    "D:/myhexin-local/opencorvus/packages/util/test/process-deadline-settlement.test.ts",
+    "D:/myhexin-local/opencorvus/packages/util/test/process.test.ts"
+  ],
+  "exclude": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\builtin\\**\\*"
+  ],
+  "files": [
+    "../packages/opencorvus/src/sql.d.ts"
+  ]
+}

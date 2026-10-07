@@ -1,0 +1,4 @@
+packages/overlay/test/expert-catalog-error-provenance.test.ts(14,75): error TS2352: Conversion of type '{ status: number; ok: false; headers: { "x-opencorvus-request-id": string; }; body: { name: string; }; }' to type 'TransportResponse<T>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'body' are incompatible.
+    Type '{ name: string; }' is not comparable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to '{ name: string; }'.

@@ -1,0 +1,9 @@
+Browser tab: 50, Title: "OpenCorvus", URL: "http://localhost:18034/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 78-84
+~										70 tab (selectable, settable, boolean) Overview, Value: 0, ID: tabs-cl-441-trigger-overview
+~										72 tab (selected, settable, boolean) Configuration, Value: 1, ID: tabs-cl-441-trigger-configuration
+~									75 container Description: Configuration, ID: tabs-cl-441-content-configuration
+~										76 container
+~											77 text No configurable fields This package does not declare user-global configuration fields for its exact manifest ID.
+The focused UI element is 72 tab (selected, settable, boolean) Configuration, Value: 1, ID: tabs-cl-441-trigger-configuration

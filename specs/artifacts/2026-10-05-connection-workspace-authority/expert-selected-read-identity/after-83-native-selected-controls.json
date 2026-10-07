@@ -1,0 +1,294 @@
+{
+  "reads": [
+    {
+      "method": "GET",
+      "path": "/expert-squad/inventory-status?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject",
+      "status": 200,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:48:42 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "dc080201-bdb1-4403-97cb-c622465fc191"
+        ]
+      },
+      "body": {
+        "catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+        "effective_count": 5,
+        "installation_count": 5,
+        "issue_count": 0,
+        "warning_count": 0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/diagnostics?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject&limit=20",
+      "status": 200,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:48:42 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "872aa939-c1e0-4524-a1b1-c576439594c0"
+        ]
+      },
+      "body": {
+        "catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+        "entries": [],
+        "next_cursor": null,
+        "total_count": 0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/inspect?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject&id=task-resource-qa",
+      "status": 200,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:48:42 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "0dc5b00f-d613-49a3-bd6c-57874439c7ad"
+        ]
+      },
+      "body": {
+        "id": "task-resource-qa",
+        "name": "Task Resource QA",
+        "display_label": "qa/Task Resource QA",
+        "description": "Current Project observation, a small durable text resource, and independent verification through a real Task.",
+        "built_in": false,
+        "product_pillars": [
+          "code"
+        ],
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "qa"
+        },
+        "label": "Task Resource QA",
+        "version": "2026.10.06.2",
+        "selector": {
+          "summary": "Deliver a small text resource after observing the current Project, with independent verification.",
+          "selection_guidance": "Use query-produce-verify when the request needs current Project Task observation and a verified persistent text delivery."
+        },
+        "workflow_count": 1,
+        "workflows": [
+          {
+            "id": "query-produce-verify",
+            "label": "Observe, Produce, Verify",
+            "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+            "node_count": 3
+          }
+        ],
+        "next_workflow_cursor": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/settings/detail?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject&id=task-resource-qa&installationScope=project&namespace=qa",
+      "status": 200,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:48:42 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "3c0c9d16-58d4-4cc9-9b84-b23da2f2fef5"
+        ]
+      },
+      "body": {
+        "scope": {
+          "kind": "project",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project"
+        },
+        "selected": {
+          "id": "task-resource-qa",
+          "name": "Task Resource QA",
+          "label": "Task Resource QA",
+          "description": "Current Project observation, a small durable text resource, and independent verification through a real Task.",
+          "built_in": false,
+          "editable": false,
+          "declaration_hash": "3c96a1e841c6fd97f1acc11004f01cf099d1f1eeb5b7b17f7ccb3e62797f7fc3",
+          "product_pillars": [
+            "code"
+          ],
+          "capability_sets": {},
+          "capability_projection": {
+            "scheduler": {
+              "capability_refs": [
+                "capability:capability_set:platform:tool-registry:orchestrator-base",
+                "capability:capability_set:platform:tool-registry:scheduler-transport"
+              ],
+              "base_role": "orchestrator",
+              "prompt": "agents/orchestrator/system.md"
+            },
+            "agents": {
+              "mission": {
+                "capability_refs": [
+                  "capability:capability_set:platform:tool-registry:explore-base"
+                ],
+                "label": "Project Observer",
+                "description": "Read-only observer of current Project Tasks; a projected explorer, not a native Mission.",
+                "base_role": "explore",
+                "prompt": "agents/mission/system.md"
+              },
+              "producer": {
+                "capability_refs": [
+                  "capability:capability_set:platform:tool-registry:build-base"
+                ],
+                "label": "Text Producer",
+                "description": "Produces and publishes the requested verified text resource in this Task.",
+                "base_role": "build",
+                "prompt": "agents/producer/system.md"
+              },
+              "verifier": {
+                "capability_refs": [
+                  "capability:capability_set:platform:tool-registry:delegated-worker-base"
+                ],
+                "label": "Independent Verifier",
+                "description": "Independently compares original authority, settled producer facts and immutable published resource bytes.",
+                "base_role": "delegated-worker",
+                "prompt": "agents/verifier/system.md"
+              }
+            },
+            "virtual_workflows": {
+              "query-produce-verify": {
+                "label": "Observe, Produce, Verify",
+                "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+                "nodes": {
+                  "inspect": {
+                    "agent_id": "mission",
+                    "description": "Observe the current Project Task list and report the actual result or precise error.",
+                    "depends_on": []
+                  },
+                  "produce": {
+                    "agent_id": "producer",
+                    "description": "Create and publish the requested text resource after the observation is available.",
+                    "depends_on": [
+                      "inspect"
+                    ]
+                  },
+                  "verify": {
+                    "agent_id": "verifier",
+                    "description": "Independently verify original requirements against the settled producer result and immutable resource.",
+                    "depends_on": [
+                      "produce"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "version": "2026.10.06.2",
+          "package_digest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd",
+          "display_label": "qa/Task Resource QA",
+          "source": {
+            "kind": "installed_package",
+            "installation_scope": "project",
+            "package_digest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd",
+            "namespace": "qa",
+            "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\expert-squads\\qa\\task-resource-qa",
+            "manifest_path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\expert-squads\\qa\\task-resource-qa\\expert-squad.jsonc",
+            "readme_path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project\\.opencorvus\\expert-squads\\qa\\task-resource-qa\\README.md"
+          },
+          "readme": {
+            "path": "README.md",
+            "append_target": "orchestrator",
+            "content": "# Task Resource QA\n\nThis package delivers a small persistent text resource through a real Task after current Project observation and independent verification. The Project Observer has the dynamic identity mission and the explore runtime; it is not a native Mission. Published resources, real participant messages and verification evidence remain the current Task's canonical facts. A file on disk alone is not a declared downloadable delivery. Missing capabilities, query errors, incomplete publication and verification failures remain visible."
+          },
+          "selector": {
+            "ref": "selector/task-resource-qa",
+            "id": "task-resource-qa",
+            "label": "Task Resource QA",
+            "description": "Current Project observation, a small durable text resource, and independent verification through a real Task.",
+            "summary": "Deliver a small text resource after observing the current Project, with independent verification.",
+            "selection_guidance": "Use query-produce-verify when the request needs current Project Task observation and a verified persistent text delivery.",
+            "instructions_path": "selector.md",
+            "instructions": "# Selection\n\nUse query-produce-verify for current Project Task observation followed by a small text resource and independent verification. Its declared dependencies identify useful work boundaries; the scheduler owns dispatch and acceptance decisions from actual facts. Do not invent missing evidence or a successful outcome."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/expert-squad/configuration?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject&id=task-resource-qa&installationScope=project",
+      "status": 400,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:48:43 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "165dbc21-875b-4d74-857c-6865cda6a10c"
+        ]
+      },
+      "body": {
+        "name": "ExpertSquadPackageError",
+        "data": {
+          "message": "Expert squad task-resource-qa does not declare configuration"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject",
+      "status": 400,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:48:43 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "d89d0906-8898-43e0-a303-540c3b76d08c"
+        ]
+      },
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      }
+    }
+  ],
+  "occurrence": "expert-selected-83-after-a398c460-6249-4ee5-97d3-9cfa4362d4ba",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "observedAtUtc": "2026-10-07T04:48:43.5149644Z",
+  "sessionID": "ses_-zUSggUQgzzprQcl946c",
+  "credentialStaging": "None; no Task rearm",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project"
+}

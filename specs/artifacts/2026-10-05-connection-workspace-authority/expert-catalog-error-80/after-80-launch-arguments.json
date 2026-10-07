@@ -1,0 +1,26 @@
+{
+  "occurrence": "expert-catalog-80-after-b06e9c9a-f7c8-4dcb-a761-2fc0c3d75a4b",
+  "port": 18032,
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-catalog-error-after-80\\evidence",
+    "expert-catalog-80-after-b06e9c9a-f7c8-4dcb-a761-2fc0c3d75a4b",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18032",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-catalog-error-after-80\\startup.json",
+    "--startup-occurrence",
+    "expert-catalog-80-after-b06e9c9a-f7c8-4dcb-a761-2fc0c3d75a4b",
+    "--log-level",
+    "INFO"
+  ]
+}

@@ -1,0 +1,24 @@
+[1/1] START test/server/task-assignment-reference.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+822 |     const files = renderExpertSquadPackageFiles(input.definition);
+823 |     const parentDirectory = path.dirname(directory);
+824 |     await mkdir(parentDirectory, { recursive: true });
+825 |     try {
+826 |         await lstat(directory);
+827 |         throw Object.assign(new Error(`Expert squad package destination already exists: ${directory}`), {
+                                      ^
+error: Expert squad package destination already exists: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-wD150T\test-74204-hSjlU1\fixtures\memory-eojCHk\.opencorvus\expert-squads\assignment\pinned-name
+ code: "EEXIST"
+
+      at writeExpertSquadPackage (D:\myhexin-local\opencorvus\packages\sdk\js\dist\expert-squad-authoring.js:827:33)
+(fail) public Task catalog retains actual immutable name/version while an ordinary Session sees current installed metadata [2737.45ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [5.30s]
+[1/1] DONE test/server/task-assignment-reference.test.ts exit=1 duration=5.49s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\task-assignment-reference.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\task-assignment-reference.test.ts

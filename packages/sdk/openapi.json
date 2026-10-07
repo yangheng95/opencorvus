@@ -26629,6 +26629,10 @@
                         "effective": {
                           "type": "string"
                         },
+                        "name": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
                         "package_revision": {
                           "$ref": "#/components/schemas/ExpertSquadPackageRevision"
                         },
@@ -26647,6 +26651,7 @@
                         }
                       },
                       "required": [
+                        "name",
                         "effective",
                         "project",
                         "session_override",

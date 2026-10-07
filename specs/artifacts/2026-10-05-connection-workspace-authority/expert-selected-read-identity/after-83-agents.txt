@@ -1,0 +1,15 @@
+Browser tab: 50, Title: "OpenCorvus", URL: "http://localhost:18034/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										71 tab (selected, settable, boolean) Agents & Capabilities, Value: 1, ID: tabs-cl-441-trigger-agents
+~										72 tab (selectable, settable, boolean) Configuration, Value: 0, ID: tabs-cl-441-trigger-configuration
+~									75 container Description: Agents & Capabilities, ID: tabs-cl-441-content-agents
+~											77 button (collapsed) Project Observer Effective access, Secondary Actions: Expand
++												78 text Project Observer
++												79 text Effective access
++											80 button (collapsed) Text Producer Effective access, Secondary Actions: Expand
++												81 text Text Producer
++												82 text Effective access
++											83 button (collapsed) Independent Verifier Effective access, Secondary Actions: Expand
++												84 text Independent Verifier
++												85 text Effective access
+The focused UI element is 71 tab (selected, settable, boolean) Agents & Capabilities, Value: 1, ID: tabs-cl-441-trigger-agents

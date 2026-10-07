@@ -1,0 +1,169 @@
+{
+  "reads": [
+    {
+      "body": {
+        "catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+        "effective_count": 5,
+        "installation_count": 5,
+        "issue_count": 0,
+        "warning_count": 0
+      },
+      "path": "/expert-squad/inventory-status",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:37:14 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "46b72f77-0293-4f20-b7f9-34e604c1f1e6"
+        ]
+      },
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "body": {
+        "catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+        "entries": [],
+        "next_cursor": null,
+        "total_count": 0
+      },
+      "path": "/expert-squad/diagnostics?limit=20",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:37:14 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "d154cfa5-62ff-47b7-aa5c-767db3041be7"
+        ]
+      },
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      },
+      "path": "/expert-squad/inspect?id=task-resource-qa",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:37:15 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "b04f83fc-2ca3-4d7a-9fec-bea7c1ca10e2"
+        ]
+      },
+      "status": 400,
+      "method": "GET"
+    },
+    {
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      },
+      "path": "/expert-squad/settings/detail?id=task-resource-qa&installationScope=project&namespace=qa",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:37:15 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "0755d613-fbca-4632-8e6d-7059f9fe4f99"
+        ]
+      },
+      "status": 400,
+      "method": "GET"
+    },
+    {
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      },
+      "path": "/expert-squad/configuration?id=task-resource-qa&installationScope=project",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:37:15 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "9b36428b-86a6-4b5b-8156-503ee891e75c"
+        ]
+      },
+      "status": 400,
+      "method": "GET"
+    },
+    {
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      },
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 04:37:15 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "x-opencorvus-request-id": [
+          "08cf3737-a442-4ad6-b207-9b181ddd8c9b"
+        ]
+      },
+      "status": 400,
+      "method": "GET"
+    }
+  ],
+  "sessionID": "ses_-zUSggUQgzzprQcl946c",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "observedAtUtc": "2026-10-07T04:37:15.6819250Z",
+  "occurrence": "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "credentialStaging": "None; no Task rearm"
+}

@@ -1,5 +1,6 @@
 import {
   createProcessFacade,
+  PROCESS_SETTLEMENT_TIMEOUT_MS,
   type ProcessFacade,
   type ProcessSpawnedHandle,
   type ProcessSpawner,
@@ -49,6 +50,7 @@ function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskId
     const { ProcessSupervisor } = (await import("@/shell/process-supervisor")) as {
       ProcessSupervisor: typeof ProcessSupervisorContract
     }
+    request.controlSignal.throwIfAborted()
     const command = {
       executable: request.command.executable,
       args: [...request.command.args],
@@ -92,17 +94,17 @@ function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskId
       outputSettled,
       settled,
       async terminate(reason = "terminated") {
-        await handle.terminate()
+        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process facade termination")
         return { ...(await settled), reason }
       },
       async dispose() {
-        await handle.dispose()
+        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process facade disposal")
         return await settled
       },
       unref: () => handle.unref(),
     }
   }
-  return createProcessFacade(spawner)
+  return createProcessFacade(spawner, { settlementTimeoutMs: PROCESS_SETTLEMENT_TIMEOUT_MS })
 }
 
 export function supervisedHostProcessFacade(owner: string): ProcessFacade {

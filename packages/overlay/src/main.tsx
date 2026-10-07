@@ -2530,7 +2530,7 @@ function OverlayRoot() {
           onInstallMoreExpertSquads={() =>
             void runUserNavigation("expert-squad.open-market", () => openExpertSquadMarketForProject())
           }
-          activeExpertSquadID={composerExpertSquadCatalog().activeID}
+          activeExpertSquadPackage={composerExpertSquadCatalog().activePackage}
           conversationActive={Boolean(activeTaskID() || activeSessionID())}
           launchReferences={composerLaunchReferences()}
           conversationExperience={conversationSourceExperience()}

@@ -1,0 +1,64 @@
+{
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 40608,
+        "processInstanceID": "win32:639269452924971630",
+        "occurrenceID": "1fde4393-0da3-452b-a64c-fb85fc87fd0c"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 75256,
+        "processInstanceID": "win32:639269452917390348",
+        "occurrenceID": "772690bd-3efa-4efa-bb64-b55805464548"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": null,
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-selected-after-83\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-selected-after-83\\runtime\\data\\models.json",
+      "copiedLength": 2001983
+    }
+  ],
+  "occurrence": "expert-selected-83-after-a398c460-6249-4ee5-97d3-9cfa4362d4ba",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "expert-selected-83-after-a398c460-6249-4ee5-97d3-9cfa4362d4ba",
+    "outcome": "settled",
+    "host": {
+      "pid": 75256,
+      "processInstanceID": "win32:639269452917390348",
+      "occurrenceID": "772690bd-3efa-4efa-bb64-b55805464548"
+    },
+    "target": {
+      "pid": 40608,
+      "processInstanceID": "win32:639269452924971630",
+      "occurrenceID": "1fde4393-0da3-452b-a64c-fb85fc87fd0c"
+    },
+    "observedAtUtc": "2026-10-07T05:02:09.637Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-07T05:02:11.3837714Z"
+}

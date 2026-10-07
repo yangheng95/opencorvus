@@ -1,0 +1,15 @@
+Browser tab: 50, Title: "OpenCorvus", URL: "http://localhost:18034/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 36-39, 212-217
++										212 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+~											207 pop up button (expanded) Description: Task Resource QA, Secondary Actions: Collapse
++		213 container popover-cl-241-content
++			214 text Conversation context
++			215 text The Task assignment and references in its original request are read-only.
++			216 text Expert Squad assigned to this Task · fixed version
++			217 text Task Resource QA
++			218 container
++				219 text qa / task-resource-qa  ·  2026.10.06.2
++			220 text Explicit references in the original request
++			221 text The original request has no explicit skill or Expert Squad references.
+The focused UI element is 213 container popover-cl-241-content

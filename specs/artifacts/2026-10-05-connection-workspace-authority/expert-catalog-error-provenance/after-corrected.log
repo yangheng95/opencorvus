@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+test\expert-catalog-error-provenance.test.ts:
+(pass) catalog preserves original typed transport failure [4.13ms]
+(pass) settings preserves original typed transport failure [0.25ms]
+(pass) market preserves original typed transport failure [0.27ms]
+
+ 3 pass
+ 0 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [209.00ms]

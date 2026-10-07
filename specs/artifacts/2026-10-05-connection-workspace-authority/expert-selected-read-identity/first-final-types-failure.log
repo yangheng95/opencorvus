@@ -1,0 +1,6 @@
+packages/opencorvus/test/server/expert-selected-read-identity.test.ts(246,16): error TS2345: Argument of type '{ detailStatus: number; configStatus: number; directory: string; label: string; endpoint: string | boolean | undefined; }' is not assignable to parameter of type 'never'.
+packages/opencorvus/test/server/expert-selected-read-identity.test.ts(253,34): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: undefined): void', gave the following error.
+    Argument of type '{ detailStatus: number; configStatus: number; directory: string; label: string; endpoint: string; }' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 2, '(expected: undefined): void', gave the following error.
+    Argument of type '{ detailStatus: number; configStatus: number; directory: string; label: string; endpoint: string; }' is not assignable to parameter of type 'undefined'.

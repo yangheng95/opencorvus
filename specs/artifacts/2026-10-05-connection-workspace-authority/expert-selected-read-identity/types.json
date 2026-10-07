@@ -1,0 +1,16 @@
+{
+  "extends": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/server/expert-selected-read-identity.test.ts"
+  ],
+  "exclude": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\builtin\\**\\*"
+  ],
+  "files": [
+    "../packages/opencorvus/src/sql.d.ts"
+  ]
+}

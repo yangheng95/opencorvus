@@ -1,0 +1,151 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__test__composer-expert-squad-catalog.test.ts.before.txt" b/packages/overlay/test/composer-expert-squad-catalog.test.ts
+index 14ccd618..31c71407 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__test__composer-expert-squad-catalog.test.ts.before.txt"
++++ b/packages/overlay/test/composer-expert-squad-catalog.test.ts
+@@ -1,6 +1,7 @@
+ import { describe, expect, test } from "bun:test"
+ import {
+   composerReferenceCatalogError,
++  composerExpertSquadCatalogForRequest,
+   createComposerReferenceCatalogSnapshotFromSettled,
+   createGlobalComposerReferenceCatalogSnapshot,
+   emptyComposerExpertSquadCatalog,
+@@ -8,7 +9,7 @@ import {
+   mergeComposerExpertSquadOptions,
+   updateComposerExpertSquadSearch,
+ } from "../src/services/composer-expert-squad-catalog"
+-import type { ExpertSquadCatalogPage, ExpertSquadOption } from "../src/services/expert-squad"
++import type { ExpertSquadCatalog, ExpertSquadCatalogPage, ExpertSquadOption } from "../src/services/expert-squad"
+ import type { GlobalComposerReferencesResponse } from "../src/services/global-composer-references"
+ 
+ function option(id: string): ExpertSquadOption {
+@@ -56,7 +57,129 @@ function globalCatalog(withIssues: boolean): GlobalComposerReferencesResponse {
+   }
+ }
+ 
++function activeCatalog(name = "Original assigned squad", version = "2026.10.07.1"): ExpertSquadCatalog {
++  return {
++    active: {
++      name,
++      effective: "assigned",
++      project: "assigned",
++      session_override: null,
++      package_revision: {
++        scope: "project",
++        project_id: "owned-project",
++        namespace: "owned",
++        id: "assigned",
++        version,
++        package_digest: "a".repeat(64),
++      },
++    },
++    default: "base",
++    scope: { kind: "session", directory: "owned/project", sessionID: "owned-session" },
++    launch_catalog_revision: "b".repeat(64),
++    active_agent_projection: {
++      source_expert_squad_id: "assigned",
++      prompt_profile_active: "assigned",
++      scheduler_projection_hash: "scheduler",
++      projection_hash: "agents",
++      virtual_workflows: {},
++      agents: [],
++    },
++    active_skill_projection: {
++      active_squad_id: "assigned",
++      built_in: false,
++      projection_hash: "skills",
++      projected_tool_ids: [],
++      projected_agent_ids: [],
++      selector_skill_names: [],
++      production_skill_names: [],
++      projected_skill_names: [],
++      production_grants: [],
++    },
++  }
++}
++
++function assignmentSnapshot(requestKey: string, catalog: ExpertSquadCatalog) {
++  return createComposerReferenceCatalogSnapshotFromSettled(requestKey, emptyComposerExpertSquadCatalog(), {
++    catalog: { status: "fulfilled", value: catalog },
++    squads: { status: "rejected", reason: new Error("Candidate page unavailable") },
++    activeInspection: { status: "rejected", reason: new Error("Current installation inspection unavailable") },
++    missionSkills: { status: "fulfilled", value: { mission_skills: [], issues: [] } },
++    chatCapability: { status: "rejected", reason: new Error("Chat catalog unavailable") },
++  })
++}
++
+ describe("Composer reference catalog source-qualified feedback", () => {
++  test("accepted package facts survive candidate errors and later search labels", () => {
++    const catalog = activeCatalog()
++    const snapshot = assignmentSnapshot("task:one", catalog)
++    expect({
++      activeID: snapshot.activeID,
++      activePackage: snapshot.activePackage,
++      skills: snapshot.skills,
++      squads: snapshot.squads,
++    }).toEqual({
++      activeID: "assigned",
++      activePackage: { name: "Original assigned squad", revision: catalog.active.package_revision },
++      skills: [],
++      squads: [],
++    })
++    expect(snapshot.problems).toEqual([
++      { source: "squad-page", kind: "request-failed", message: "Candidate page unavailable" },
++      { source: "active-inspection", kind: "request-failed", message: "Current installation inspection unavailable" },
++      { source: "chat-skills", kind: "request-failed", message: "Chat catalog unavailable" },
++    ])
++    const renamed = { ...option("assigned"), name: "New installed name" }
++    const searched = updateComposerExpertSquadSearch(snapshot, "task:one", {
++      status: "fulfilled",
++      value: { ...page("assigned"), entries: [renamed] },
++    })
++    expect({
++      installedName: searched.squads[0]?.name,
++      activePackage: searched.activePackage,
++      problems: searched.problems,
++    }).toEqual({
++      installedName: "New installed name",
++      activePackage: snapshot.activePackage,
++      problems: snapshot.problems,
++    })
++    expect(composerExpertSquadCatalogForRequest(searched, "task:two")).toEqual(emptyComposerExpertSquadCatalog())
++  })
++
++  test("current full failure and global draft replace assignment with their complete current state", () => {
++    const original = assignmentSnapshot("task:one", activeCatalog())
++    const failed = createComposerReferenceCatalogSnapshotFromSettled("task:one", original, {
++      catalog: { status: "rejected", reason: new Error("Assigned package unavailable") },
++      squads: { status: "fulfilled", value: page() },
++      activeInspection: { status: "rejected", reason: new Error("Dependent inspection") },
++      missionSkills: { status: "fulfilled", value: { mission_skills: [], issues: [] } },
++      chatCapability: { status: "rejected", reason: new Error("Chat catalog unavailable") },
++    })
++    expect(failed).toEqual({
++      ...emptyComposerExpertSquadCatalog(),
++      requestKey: "task:one",
++      problems: [
++        { source: "expert-squads", kind: "request-failed", message: "Assigned package unavailable" },
++        { source: "chat-skills", kind: "request-failed", message: "Chat catalog unavailable" },
++      ],
++    })
++    const replacement = assignmentSnapshot("task:two", activeCatalog("Second assigned squad", "2026.10.07.2"))
++    expect(replacement.activePackage).toEqual({
++      name: "Second assigned squad",
++      revision: activeCatalog("Second assigned squad", "2026.10.07.2").active.package_revision,
++    })
++    const global = createGlobalComposerReferenceCatalogSnapshot("global:one", globalCatalog(false))
++    expect(global).toEqual({
++      requestKey: "global:one",
++      squads: page("base", "selected-reference").entries,
++      skills: [{ name: "read-source", description: "Read the selected source" }],
++      chatSkills: [{ name: "read-source", description: "Read the selected source" }],
++      missionSkills: [{ name: "review", description: "Review the result" }],
++      activeID: "",
++      activePackage: null,
++      problems: [],
++    })
++  })
++
+   test("global typed issues remain current after a successful bounded Squad search", () => {
+     const snapshot = createGlobalComposerReferenceCatalogSnapshot("global:one", globalCatalog(true))
+     const next = updateComposerExpertSquadSearch(

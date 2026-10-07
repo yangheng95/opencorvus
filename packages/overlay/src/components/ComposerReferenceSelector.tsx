@@ -1,6 +1,7 @@
 import { createEffect, createMemo, createSignal, For, onCleanup, Show } from "solid-js"
 import type { VisibleComposerReferences } from "@opencorvus-ai/transport-protocol"
 import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
+import type { ComposerExpertSquadPackage } from "../services/composer-expert-squad-catalog"
 import { setComposerMentionDirectiveSelected, type ComposerMentionKind } from "../services/composer-mention"
 import { fuzzySearch } from "../services/fuzzy-search"
 import { t } from "../utils/i18n"
@@ -46,7 +47,8 @@ export interface ComposerReferenceSelectorProps {
   // not installed yet is reachable from the same box they are already typing in.
   onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
   onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
-  activeExpertSquad?: ExpertSquadOption
+  activePackage?: ComposerExpertSquadPackage | null
+  referenceOrigin?: "task-request" | "first-message"
   launchReferences: VisibleComposerReferences
   readOnly: boolean
   disabled?: boolean
@@ -238,7 +240,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   }
 
   function triggerLabel(): string {
-    if (props.readOnly && props.activeExpertSquad) return props.activeExpertSquad.name
+    if (props.readOnly && props.activePackage) return props.activePackage.name
     return t(props.readOnly ? "chat.references.view" : "chat.references.trigger")
   }
 
@@ -319,7 +321,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
           title={triggerLabel()}
           aria-label={triggerLabel()}
         >
-          <Icon name={props.activeExpertSquad ? "expert-squad" : "expert-squad-catalog"} size="compact" />
+          <Icon name={props.activePackage ? "expert-squad" : "expert-squad-catalog"} size="compact" />
           <span class="composer-reference-trigger-label">{triggerLabel()}</span>
           <Show when={!props.readOnly && selectedCount() > 0}>
             <span class="composer-reference-trigger-count">{selectedCount()}</span>
@@ -328,18 +330,67 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
       </div>
       <Popover.Portal>
         <Popover.Content class="composer-reference-popover">
+          <Show when={props.readOnly}>
+            <ComposerReferenceFeedback error={props.catalogError} onRetry={props.onCatalogRetry} />
+          </Show>
           <div class="composer-reference-popover-heading">
             <span class="oc-section-heading">
-              {t(props.readOnly ? "chat.references.selected_title" : "chat.references.title")}
+              {t(props.readOnly ? "chat.references.context_title" : "chat.references.title")}
             </span>
-            <span>{t(props.readOnly ? "chat.references.read_only_hint" : "chat.references.selection_hint")}</span>
+            <span>
+              {t(
+                props.readOnly
+                  ? props.referenceOrigin === "task-request"
+                    ? "chat.references.task_request_hint"
+                    : "chat.references.read_only_hint"
+                  : "chat.references.selection_hint",
+              )}
+            </span>
           </div>
+          <Show when={props.readOnly && props.activePackage}>
+            {(assigned) => (
+              <div class="composer-reference-popover-heading">
+                <div>
+                  <span class="oc-section-heading">
+                    {t(
+                      props.referenceOrigin === "task-request"
+                        ? "chat.references.task_assignment"
+                        : "chat.references.current_assignment",
+                    )}
+                  </span>
+                  <div>{assigned().name}</div>
+                  <div>
+                    {assigned().revision.namespace}/{assigned().revision.id} · {assigned().revision.version}
+                  </div>
+                </div>
+              </div>
+            )}
+          </Show>
+          <Show when={props.readOnly}>
+            <div class="composer-reference-popover-heading">
+              <span class="oc-section-heading">
+                {t(
+                  props.referenceOrigin === "task-request"
+                    ? "chat.references.task_request_title"
+                    : "chat.references.first_message_title",
+                )}
+              </span>
+            </div>
+          </Show>
           <Show
             when={!props.readOnly}
             fallback={
               <Show
                 when={readOnlyOptions().length > 0}
-                fallback={<div class="composer-reference-empty">{t("chat.references.none_selected")}</div>}
+                fallback={
+                  <div class="composer-reference-empty">
+                    {t(
+                      props.referenceOrigin === "task-request"
+                        ? "chat.references.task_request_empty"
+                        : "chat.references.none_selected",
+                    )}
+                  </div>
+                }
               >
                 <div class="composer-reference-list" data-ui="composer-reference-read-only-list">
                   <For each={readOnlyOptions()}>{renderReadOnlyOption}</For>

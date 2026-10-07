@@ -1,0 +1,12 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__opencorvus__src__expert-squad__catalog.ts.before.txt" b/packages/opencorvus/src/expert-squad/catalog.ts
+index 20eecde9..088d410f 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__opencorvus__src__expert-squad__catalog.ts.before.txt"
++++ b/packages/opencorvus/src/expert-squad/catalog.ts
+@@ -240,6 +240,7 @@ export const ExpertSquadSettingsDetailQuerySchema = z
+ 
+ export const ExpertSquadCatalogActiveSchema = z
+   .object({
++    name: z.string().min(1),
+     effective: z.string(),
+     project: z.string(),
+     session_override: z.string().nullable(),

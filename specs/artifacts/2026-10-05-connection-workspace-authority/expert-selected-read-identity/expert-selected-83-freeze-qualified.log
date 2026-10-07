@@ -1,0 +1,15 @@
+$ bun script/run-tests.ts test/server/expert-selected-read-identity.test.ts
+[1/1] START test/server/expert-selected-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+selected-reader-cold-receipts [{"route":"/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/configuration?id=selected-reader&installationScope=project","status":200,"errorName":null}]
+(pass) three exact selected readers return actual package and redacted configuration while runtime model remains unavailable [5897.09ms]
+(pass) exact current public errors preserve missing declaration identity [4649.67ms]
+(pass) same package ID reads each Project's actual declaration and configured values [6960.47ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [19.94s]
+[1/1] DONE test/server/expert-selected-read-identity.test.ts exit=0 duration=20.70s

@@ -1,0 +1,121 @@
+diff --git a/packages/overlay/src/components/settings/ExpertSquadPanel.tsx b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+index 215981d9..65c7400b 100644
+--- a/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
++++ b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+@@ -1,3 +1,5 @@
++import { ApiAuthorityChangedError } from "../../services/api"
++import { formatErrorDetails } from "../../services/diagnostics"
+ import { Feedback } from "../ui/Feedback"
+ // ── ExpertSquadPanel ──
+ // Dynamic expert-squad catalog surface. Active selection remains config-owned
+@@ -301,7 +303,7 @@ export default function ExpertSquadPanel() {
+   const [marketIdentity, setMarketIdentity] = createSignal("")
+   const [marketLoading, setMarketLoading] = createSignal(false)
+   const [catalogFilter, setCatalogFilter] = createSignal<CatalogFilter>("all")
+-  const [catalogError, setCatalogError] = createSignal("")
++  const [catalogError, setCatalogError] = createSignal<{ error: unknown } | null>(null)
+   const [catalogIdentity, setCatalogIdentity] = createSignal("")
+   const [actionError, setActionError] = createSignal("")
+   const [configuration, setConfiguration] = createSignal<ExpertSquadConfiguration | null>(null)
+@@ -502,12 +504,12 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnostics([])
+       setCatalogDiagnosticsNextCursor(null)
+       setCatalogIdentity("")
+-      setCatalogError("")
++      setCatalogError(null)
+       setLoading(false)
+       return
+     }
+     setLoading(true)
+-    if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError("")
++    if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError(null)
+     const sequence = ++loadSequence
+     try {
+       const repair = await repairObsoleteBundledExpertSquads(scope.directory)
+@@ -588,7 +590,7 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnostics(diagnostics.entries)
+       setCatalogDiagnosticsNextCursor(diagnostics.next_cursor)
+       setCatalogIdentity(expectedScopeIdentity)
+-      setCatalogError("")
++      setCatalogError(null)
+       setSelectedSquadID((current) => {
+         const requested = nextSelectedID || current
+         const selected =
+@@ -599,8 +601,8 @@ export default function ExpertSquadPanel() {
+         return selected ? squadSelectionKey(selected) : ""
+       })
+     } catch (error) {
+-      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
+-        setCatalogError(error instanceof Error ? error.message : String(error))
++      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
++        setCatalogError({ error })
+       }
+       throw error
+     } finally {
+@@ -647,6 +649,8 @@ export default function ExpertSquadPanel() {
+     const scope = currentScope()
+     const cursor = catalogNextCursor()
+     if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
++    const sequence = loadSequence
++    const expectedScopeIdentity = currentScopeIdentity()
+     setLoading(true)
+     try {
+       const page = await searchExpertSquads({
+@@ -655,15 +659,16 @@ export default function ExpertSquadPanel() {
+         cursor,
+         limit: 20,
+       })
++      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
+       setCatalogEntries((current) => {
+         const identities = new Set(current.map(squadSelectionKey))
+         return [...current, ...page.entries.filter((entry) => !identities.has(squadSelectionKey(entry)))]
+       })
+       setCatalogNextCursor(page.next_cursor)
+     } catch (error) {
+-      setCatalogError(error instanceof Error ? error.message : String(error))
++      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
+     } finally {
+-      setLoading(false)
++      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setLoading(false)
+     }
+   }
+ 
+@@ -671,15 +676,18 @@ export default function ExpertSquadPanel() {
+     const scope = currentScope()
+     const cursor = catalogDiagnosticsNextCursor()
+     if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
++    const sequence = loadSequence
++    const expectedScopeIdentity = currentScopeIdentity()
+     setLoading(true)
+     try {
+       const page = await loadExpertSquadDiagnostics(scope.directory, { cursor, limit: 20 })
++      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
+       setCatalogDiagnostics((current) => [...current, ...page.entries])
+       setCatalogDiagnosticsNextCursor(page.next_cursor)
+     } catch (error) {
+-      setCatalogError(error instanceof Error ? error.message : String(error))
++      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
+     } finally {
+-      setLoading(false)
++      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setLoading(false)
+     }
+   }
+ 
+@@ -699,7 +707,7 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnostics([])
+       setCatalogDiagnosticsNextCursor(null)
+       setCatalogIdentity("")
+-      setCatalogError("")
++      setCatalogError(null)
+       setLoading(false)
+       setMarket([])
+       setMarketIdentity("")
+@@ -1292,7 +1300,7 @@ export default function ExpertSquadPanel() {
+               title={t("expert_squad.catalog_recovery_title")}
+               details={t("expert_squad.catalog_failed", {
+                 directory: catalogDirectoryLabel(),
+-                error: catalogError(),
++                error: formatErrorDetails(catalogError()?.error),
+               })}
+               actions={
+                 <Button

@@ -1,0 +1,5 @@
+{
+  "extends": "../../../../packages/opencorvus/tsconfig.json",
+  "include": ["../../../../packages/opencorvus/src/**/*.d.ts", "../../../../packages/opencorvus/test/server/task-assignment-reference.test.ts"],
+  "exclude": []
+}

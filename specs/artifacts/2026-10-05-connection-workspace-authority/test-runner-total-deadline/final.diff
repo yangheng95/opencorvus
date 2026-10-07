@@ -1,0 +1,1043 @@
+diff --git a/packages/opencorvus/script/run-tests.ts b/packages/opencorvus/script/run-tests.ts
+index 5c854229..c1ee8819 100644
+--- a/packages/opencorvus/script/run-tests.ts
++++ b/packages/opencorvus/script/run-tests.ts
+@@ -3,6 +3,7 @@ import {
+   bootstrapIsolatedTestRuntime,
+   isolatedTestChildEnvironment,
+   removeIsolatedTestRuntime,
++  testCommandDeadlineAt,
+ } from "@opencorvus-ai/util/test-runtime-environment"
+ import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
+ 
+@@ -12,6 +13,7 @@ if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProce
+ process.env.OPENCORVUS_TEST_RUNNER_ROOT = runnerRuntime.processRoot
+ process.env.OPENCORVUS_TEST_RUNNER_PID = String(process.pid)
+ 
++let settlementConfirmed = true
+ try {
+   const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
+   const cwd = path.resolve(import.meta.dir, "..")
+@@ -32,6 +34,7 @@ try {
+     const label = path.relative(cwd, file).split(path.sep).join("/")
+     const started = performance.now()
+     console.log(`[${index + 1}/${files.length}] START ${label}`)
++    settlementConfirmed = false
+     const result = await runHostCommandWithInactivity({
+       executable: process.execPath,
+       // Bun 1.3.14 still applies its expired-entry subprocess auto-killer when
+@@ -40,6 +43,7 @@ try {
+       args: ["test", "--timeout=60000", "--parallel=1", isolatedEntry],
+       cwd,
+       env: { ...childEnvironment, OPENCORVUS_TEST_FILES: JSON.stringify([file]) },
++      deadlineAt: testCommandDeadlineAt(),
+       inactivityTimeoutMs: 360_000,
+       onStdout: (chunk) => process.stdout.write(chunk),
+       onStderr: (chunk) => process.stderr.write(chunk),
+@@ -49,6 +53,7 @@ try {
+     console.log(
+       `[${index + 1}/${files.length}] DONE ${label} exit=${result.exitCode ?? "unknown"} duration=${duration}s`,
+     )
++    settlementConfirmed = result.settlementConfirmed
+     if (result.failure) throw new Error(`${file}: ${result.failure.message}`)
+     if (result.exitCode === undefined) throw new Error(`OpenCorvus test process exited without a result for ${file}`)
+     if (result.exitCode !== 0) {
+@@ -60,5 +65,9 @@ try {
+   if (failedFiles.length)
+     console.error(`OpenCorvus failed test files (${failedFiles.length}):\n${failedFiles.join("\n")}`)
+ } finally {
+-  await removeIsolatedTestRuntime(runnerRuntime)
++  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
++  else
++    console.error(
++      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
++    )
+ }
+diff --git a/packages/opencorvus/script/run-with-inactivity.ts b/packages/opencorvus/script/run-with-inactivity.ts
+index 06c869f0..cacddd28 100644
+--- a/packages/opencorvus/script/run-with-inactivity.ts
++++ b/packages/opencorvus/script/run-with-inactivity.ts
+@@ -2,6 +2,7 @@ import {
+   bootstrapIsolatedTestRuntime,
+   isolatedTestChildEnvironment,
+   removeIsolatedTestRuntime,
++  testCommandDeadlineAt,
+ } from "@opencorvus-ai/util/test-runtime-environment"
+ import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
+ 
+@@ -28,18 +29,22 @@ const testProcessSupervisor = prepareTestProcessSupervisor()
+ const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
+ if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
+ 
++let settlementConfirmed = true
+ try {
+   const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
++  settlementConfirmed = false
+   const result = await runHostCommandWithInactivity({
+     executable: command.executable,
+     args: command.args,
+     cwd: process.cwd(),
+     env: isolatedTestChildEnvironment(runnerRuntime),
++    deadlineAt: testCommandDeadlineAt(),
+     inactivityTimeoutMs: command.inactivityMs,
+     onStdout: (chunk) => process.stdout.write(chunk),
+     onStderr: (chunk) => process.stderr.write(chunk),
+   })
+ 
++  settlementConfirmed = result.settlementConfirmed
+   if (result.failure) {
+     process.stderr.write(`${result.failure.message}\n`)
+     process.exitCode = 1
+@@ -49,5 +54,9 @@ try {
+     process.exitCode = result.exitCode
+   }
+ } finally {
+-  await removeIsolatedTestRuntime(runnerRuntime)
++  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
++  else
++    console.error(
++      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
++    )
+ }
+diff --git a/packages/opencorvus/src/shell/command-inactivity.ts b/packages/opencorvus/src/shell/command-inactivity.ts
+index d4d68cd1..a6e2c7f1 100644
+--- a/packages/opencorvus/src/shell/command-inactivity.ts
++++ b/packages/opencorvus/src/shell/command-inactivity.ts
+@@ -1,4 +1,14 @@
+-import { ProcessSupervisor } from "./process-supervisor"
++import {
++  ProcessAbortedError,
++  ProcessExecutionError,
++  ProcessDeadlineExceededError,
++  ProcessInactivityTimeoutError,
++  ProcessOutputObserverError,
++  ProcessOutputLimitError,
++  type ProcessRunResult,
++} from "@opencorvus-ai/util/process"
++import { supervisedHostProcessFacade, supervisedTaskProcessFacade } from "@/util/process-facade"
++import type { ProcessSupervisor } from "./process-supervisor"
+ 
+ export type CommandInactivityResult = {
+   exitCode: number | undefined
+@@ -6,185 +16,108 @@ export type CommandInactivityResult = {
+   stderr: string
+   stdoutBytes: Uint8Array
+   stderrBytes: Uint8Array
+-  failure?: {
+-    kind: "inactivity" | "spawn" | "output" | "exit"
+-    message: string
+-  }
+-}
+-
+-function errorMessage(error: unknown): string {
+-  return error instanceof Error ? error.message : String(error)
++  /** True only when the facade returned a complete physical/output receipt. */
++  settlementConfirmed: boolean
++  failure?: { kind: "deadline" | "inactivity" | "spawn" | "output" | "exit"; message: string }
+ }
+-
+-/** Run one exact executable/argv command. The only deadline is reset by real
+- * stdout/stderr bytes; elapsed time from process start is never a deadline. */
+ type CommandInactivityInput = {
+   executable: string
+   args: string[]
+   cwd: string
+   env?: NodeJS.ProcessEnv
+   inactivityTimeoutMs: number
++  deadlineAt?: number
+   onStdout?: (chunk: Buffer) => void
+   onStderr?: (chunk: Buffer) => void
+ }
+-
+-type CommandInactivityRequest = CommandInactivityInput &
+-  ({ owner: "host" } | { owner: "task"; taskID: string })
+-
+ export function runHostCommandWithInactivity(input: CommandInactivityInput): Promise<CommandInactivityResult> {
+-  return runCommandWithInactivity({ ...input, owner: "host" })
++  return runCommand(input, supervisedHostProcessFacade("inactivity-command"))
+ }
+-
+ export function runTaskCommandWithInactivity(
+   identity: ProcessSupervisor.TaskProcessIdentity,
+   input: Omit<CommandInactivityInput, "cwd">,
+ ): Promise<CommandInactivityResult> {
+-  return runCommandWithInactivity({ ...input, owner: "task", taskID: identity.taskID, cwd: identity.cwd })
++  return runCommand({ ...input, cwd: identity.cwd }, supervisedTaskProcessFacade(identity, "inactivity-command"))
+ }
+-
+-async function runCommandWithInactivity(input: CommandInactivityRequest): Promise<CommandInactivityResult> {
+-  if (!Number.isSafeInteger(input.inactivityTimeoutMs) || input.inactivityTimeoutMs <= 0) {
++function failures(error: unknown): unknown[] {
++  if (error instanceof ProcessExecutionError) return failures(error.cause)
++  return error instanceof AggregateError ? error.errors.flatMap(failures) : [error]
++}
++async function runCommand(
++  input: CommandInactivityInput,
++  facade: ReturnType<typeof supervisedHostProcessFacade>,
++): Promise<CommandInactivityResult> {
++  if (!Number.isSafeInteger(input.inactivityTimeoutMs) || input.inactivityTimeoutMs <= 0)
+     throw new Error("Command inactivity timeout must be a positive safe integer")
+-  }
+-  let proc: ProcessSupervisor.Handle
+-  try {
+-    const options = {
+-      executable: input.executable,
+-      args: input.args,
+-      env: input.env,
+-      owner: "inactivity-command",
+-    }
+-    proc = input.owner === "task"
+-      ? await ProcessSupervisor.spawnTaskCommand({ taskID: input.taskID, cwd: input.cwd }, options)
+-      : await ProcessSupervisor.spawnHostCommand({ ...options, cwd: input.cwd })
+-  } catch (error) {
++  const project = (
++    result: ProcessRunResult | undefined,
++    settlementConfirmed: boolean,
++    failure?: CommandInactivityResult["failure"],
++  ): CommandInactivityResult => {
++    const stdoutBytes = result?.stdout ?? new Uint8Array()
++    const stderrBytes = result?.stderr ?? new Uint8Array()
+     return {
+-      exitCode: undefined,
+-      stdout: "",
+-      stderr: "",
+-      stdoutBytes: new Uint8Array(),
+-      stderrBytes: new Uint8Array(),
+-      failure: { kind: "spawn", message: `Command failed to start: ${errorMessage(error)}` },
++      exitCode: failure ? undefined : (result?.receipt.exitCode ?? undefined),
++      stdout: new TextDecoder().decode(stdoutBytes),
++      stderr: new TextDecoder().decode(stderrBytes),
++      stdoutBytes,
++      stderrBytes,
++      settlementConfirmed,
++      ...(failure ? { failure } : {}),
+     }
+   }
+-  const stdoutChunks: Buffer[] = []
+-  const stderrChunks: Buffer[] = []
+-  const outputFailures: Array<{ source: string; error: unknown }> = []
+-  let inactivityTimer: ReturnType<typeof setTimeout> | undefined
+-  let inactive = false
+-  let spawnError: unknown
+-  let cleanupError: unknown
+-  let settlementError: unknown
+-  let cleanupPromise: Promise<void> | undefined
+-  let finishProcess: ((code: number | undefined) => void) | undefined
+-
+-  const cleanup = () => {
+-    cleanupPromise ??= ProcessSupervisor.terminateAndWaitForExit(proc, `inactive command process ${proc.pid}`).then(() => undefined).catch((error) => {
+-      cleanupError = error
+-    })
+-    return cleanupPromise
+-  }
+-  const resetInactivity = () => {
+-    if (outputFailures.length > 0) return
+-    if (inactivityTimer) clearTimeout(inactivityTimer)
+-    inactivityTimer = setTimeout(() => {
+-      inactive = true
+-      void cleanup().finally(() => finishProcess?.(undefined))
+-    }, input.inactivityTimeoutMs)
+-  }
+-  const recordOutputFailure = (source: string, error: unknown) => {
+-    outputFailures.push({ source, error })
+-    if (inactivityTimer) clearTimeout(inactivityTimer)
+-    inactivityTimer = undefined
+-    void cleanup().finally(() => finishProcess?.(undefined))
+-  }
+-  const recordOutput = (source: "stdout" | "stderr", chunk: unknown) => {
+-    const bytes = Buffer.from(chunk as Uint8Array)
+-    if (bytes.byteLength === 0) return
+-    ;(source === "stdout" ? stdoutChunks : stderrChunks).push(bytes)
+-    try {
+-      ;(source === "stdout" ? input.onStdout : input.onStderr)?.(bytes)
+-    } catch (error) {
+-      recordOutputFailure(`${source} callback`, error)
+-      return
+-    }
+-    resetInactivity()
+-  }
+-
+-  proc.stdout?.on("data", (chunk) => recordOutput("stdout", chunk))
+-  proc.stderr?.on("data", (chunk) => recordOutput("stderr", chunk))
+-  proc.stdout?.once("error", (error) => {
+-    recordOutputFailure("stdout stream", error)
+-  })
+-  proc.stderr?.once("error", (error) => {
+-    recordOutputFailure("stderr stream", error)
+-  })
+-  resetInactivity()
+-
+-  const exitCode = await new Promise<number | undefined>((resolve) => {
+-    let settled = false
+-    const finish = (code: number | undefined) => {
+-      if (settled) return
+-      settled = true
+-      if (inactivityTimer) clearTimeout(inactivityTimer)
+-      resolve(code)
+-    }
+-    finishProcess = finish
+-    void proc.exited.then(
+-      (code) => finish(inactive || outputFailures.length > 0 ? undefined : code),
+-      (error) => {
+-        spawnError = error
+-        finish(undefined)
+-      },
++  try {
++    return project(
++      await facade.run({
++        command: { executable: input.executable, args: input.args },
++        cwd: input.cwd,
++        env: input.env,
++        deadlineAt: input.deadlineAt,
++        inactivityTimeoutMs: input.inactivityTimeoutMs,
++        inactivityTimeoutMessage: `Command produced no stdout/stderr activity for ${input.inactivityTimeoutMs}ms`,
++        nothrow: true,
++        onStdout: input.onStdout && ((chunk) => input.onStdout!(Buffer.from(chunk))),
++        onStderr: input.onStderr && ((chunk) => input.onStderr!(Buffer.from(chunk))),
++      }),
++      true,
+     )
+-  })
+-  if (cleanupPromise) await cleanupPromise
+-  else await proc.dispose().catch((error) => {
+-    cleanupError = error
+-  })
+-  await (proc.settled ?? proc.outputSettled ?? proc.exited.then(() => undefined)).catch((error) => {
+-    settlementError = error
+-  })
+-
+-  const stdoutBytes = Buffer.concat(stdoutChunks)
+-  const stderrBytes = Buffer.concat(stderrChunks)
+-  let failure: CommandInactivityResult["failure"]
+-  if (inactive) {
+-    failure = {
+-      kind: "inactivity",
+-      message: `Command produced no stdout/stderr activity for ${input.inactivityTimeoutMs}ms`,
+-    }
+-  } else if (spawnError) {
+-    failure = { kind: "spawn", message: `Command failed to start: ${errorMessage(spawnError)}` }
+-  } else if (outputFailures.length > 0) {
+-    failure = {
+-      kind: "output",
+-      message: outputFailures.map((failure) => `${failure.source}: ${errorMessage(failure.error)}`).join("; "),
+-    }
+-  } else if (exitCode === undefined) {
+-    failure = {
+-      kind: "exit",
+-      message: "Command exited without an exit code",
+-    }
+-  }
+-  if (cleanupError) {
+-    const cleanupMessage = `Process tree cleanup failed: ${errorMessage(cleanupError)}`
+-    failure = failure
+-      ? { ...failure, message: `${failure.message}; ${cleanupMessage}` }
+-      : { kind: "exit", message: cleanupMessage }
+-  }
+-  if (settlementError) {
+-    const settlementMessage = `Process supervisor settlement failed: ${errorMessage(settlementError)}`
+-    failure = failure
+-      ? { ...failure, message: `${failure.message}; ${settlementMessage}` }
+-      : { kind: "exit", message: settlementMessage }
+-  }
+-  return {
+-    exitCode,
+-    stdout: stdoutBytes.toString("utf8"),
+-    stderr: stderrBytes.toString("utf8"),
+-    stdoutBytes,
+-    stderrBytes,
+-    failure,
++  } catch (error) {
++    const errors = failures(error)
++    const primary = errors[0]
++    const controlled = errors.find(
++      (value) =>
++        value instanceof ProcessDeadlineExceededError ||
++        value instanceof ProcessInactivityTimeoutError ||
++        value instanceof ProcessOutputObserverError ||
++        value instanceof ProcessOutputLimitError ||
++        value instanceof ProcessAbortedError,
++    )
++    const result = controlled?.result
++    const observed = error instanceof ProcessExecutionError ? error : undefined
++    const kind =
++      primary instanceof ProcessDeadlineExceededError
++        ? "deadline"
++        : primary instanceof ProcessInactivityTimeoutError
++          ? "inactivity"
++          : primary instanceof ProcessOutputObserverError ||
++              primary instanceof ProcessOutputLimitError ||
++              observed?.stage === "output"
++            ? "output"
++            : result || observed
++              ? "exit"
++              : "spawn"
++    const projected = project(result, observed === undefined && result !== undefined && errors.length === 1, {
++      kind,
++      message: errors.map((value) => (value instanceof Error ? value.message : String(value))).join("; "),
++    })
++    if (observed)
++      return {
++        ...projected,
++        stdoutBytes: observed.stdout,
++        stderrBytes: observed.stderr,
++        stdout: new TextDecoder().decode(observed.stdout),
++        stderr: new TextDecoder().decode(observed.stderr),
++      }
++    return projected
+   }
+ }
+diff --git a/packages/opencorvus/src/shell/process-supervisor.ts b/packages/opencorvus/src/shell/process-supervisor.ts
+index 6ac9aa0d..7f0cad69 100644
+--- a/packages/opencorvus/src/shell/process-supervisor.ts
++++ b/packages/opencorvus/src/shell/process-supervisor.ts
+@@ -16,6 +16,7 @@ import {
+ import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
+ import { Lock } from "@/util/lock"
+ import { awaitWithAbort } from "@/util/abort"
++import { PROCESS_SETTLEMENT_TIMEOUT_MS } from "@opencorvus-ai/util/process"
+ import { cachedRuntimeProcessOccurrenceObserver, currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
+ import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
+ import type { RuntimeProcessOccurrenceInfo } from "@/runtime/process-occurrence"
+@@ -195,7 +196,7 @@ export namespace ProcessSupervisor {
+     transferOwnership?(successor: RuntimeProcessOccurrenceInfo): Promise<OwnershipRelease>
+   }
+ 
+-  export const TERMINATION_CLEANUP_TIMEOUT_MS = 5_000
++  export const TERMINATION_CLEANUP_TIMEOUT_MS = PROCESS_SETTLEMENT_TIMEOUT_MS
+   export const TERMINATION_EXIT_TIMEOUT_MS = 1_000
+ 
+   export function combineFailures(message: string, failures: readonly unknown[]): unknown {
+@@ -1122,6 +1123,7 @@ process.stdin.resume()
+   }
+ 
+   async function defaultSpawnCommand(opts: CommandSpawnOptions): Promise<Handle> {
++    opts.signal?.throwIfAborted()
+     if (process.platform === "win32") return await spawnWindowsCommand(opts)
+     if (opts.detached) {
+       await validateDetachedContext(opts.detached)
+@@ -1592,11 +1594,14 @@ process.stdin.resume()
+     detached?: DetachedCommandContext
+     request: (readyPath: string, requestID: string) => Record<string, unknown>
+   }): Promise<Handle> {
++    opts.signal?.throwIfAborted()
+     const helper = await resolveWindowsHelper()
++    opts.signal?.throwIfAborted()
+     if (!helper) {
+       throw new Error("Windows process supervisor helper is required for process-tree cleanup")
+     }
+     if (opts.detached) await validateDetachedContext(opts.detached)
++    opts.signal?.throwIfAborted()
+     const requestDir = opts.detached?.root ?? await Global.createTemporaryDirectory("supervisor-")
+     const requestPath = path.join(requestDir, "request.json")
+     const readyPath = path.join(requestDir, "ready.json")
+@@ -1619,6 +1624,7 @@ process.stdin.resume()
+       terminateChildrenOnRootExit = (request as Record<string, unknown>).terminate_children_on_root_exit === true
+       windowsRequestObserver?.(request)
+       await Filesystem.writeDurableAtomicIfAbsent(requestPath, JSON.stringify(request))
++      opts.signal?.throwIfAborted()
+     } catch (error) {
+       await rethrowWithCleanup(error, "Windows process supervisor request creation and cleanup failed", [
+         () => fs.rm(requestDir, { recursive: true, force: true }),
+@@ -1627,6 +1633,7 @@ process.stdin.resume()
+     let proc: ChildProcess
+     const diagnostic = opts.detached ? await fs.open(opts.detached.diagnosticPath, "a") : undefined
+     try {
++      opts.signal?.throwIfAborted()
+       proc = spawn(helper, ["--request", requestPath], {
+         stdio: diagnostic ? ["ignore", diagnostic.fd, diagnostic.fd] : [opts.stdin ?? "ignore", "pipe", "pipe"],
+         env: opts.env,
+diff --git a/packages/opencorvus/src/util/process-facade.ts b/packages/opencorvus/src/util/process-facade.ts
+index b58e2995..3cc20401 100644
+--- a/packages/opencorvus/src/util/process-facade.ts
++++ b/packages/opencorvus/src/util/process-facade.ts
+@@ -1,5 +1,6 @@
+ import {
+   createProcessFacade,
++  PROCESS_SETTLEMENT_TIMEOUT_MS,
+   type ProcessFacade,
+   type ProcessSpawnedHandle,
+   type ProcessSpawner,
+@@ -49,6 +50,7 @@ function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskId
+     const { ProcessSupervisor } = (await import("@/shell/process-supervisor")) as {
+       ProcessSupervisor: typeof ProcessSupervisorContract
+     }
++    request.controlSignal.throwIfAborted()
+     const command = {
+       executable: request.command.executable,
+       args: [...request.command.args],
+@@ -92,17 +94,17 @@ function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskId
+       outputSettled,
+       settled,
+       async terminate(reason = "terminated") {
+-        await handle.terminate()
++        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process facade termination")
+         return { ...(await settled), reason }
+       },
+       async dispose() {
+-        await handle.dispose()
++        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process facade disposal")
+         return await settled
+       },
+       unref: () => handle.unref(),
+     }
+   }
+-  return createProcessFacade(spawner)
++  return createProcessFacade(spawner, { settlementTimeoutMs: PROCESS_SETTLEMENT_TIMEOUT_MS })
+ }
+ 
+ export function supervisedHostProcessFacade(owner: string): ProcessFacade {
+diff --git a/packages/opencorvus/test/command-inactivity-settlement.test.ts b/packages/opencorvus/test/command-inactivity-settlement.test.ts
+index 81104f8c..83dde618 100644
+--- a/packages/opencorvus/test/command-inactivity-settlement.test.ts
++++ b/packages/opencorvus/test/command-inactivity-settlement.test.ts
+@@ -11,7 +11,11 @@ test("waits for supervisor settlement and returns output delivered after physica
+     pid: 991001,
+     stdin: null,
+     stdout,
+-    stderr: null,
++    stderr: (() => {
++      const stream = new PassThrough()
++      stream.end()
++      return stream
++    })(),
+     exited: Promise.resolve(0),
+     outputSettled: settled,
+     settled,
+@@ -30,18 +34,23 @@ test("waits for supervisor settlement and returns output delivered after physica
+       cwd: process.cwd(),
+       inactivityTimeoutMs: 1_000,
+     })
+-    expect(result).toMatchObject({ exitCode: 0, stdout: "tail-after-exit", failure: undefined })
++    expect(result).toMatchObject({ exitCode: 0, stdout: "tail-after-exit", settlementConfirmed: true })
+   } finally {
+     restore()
+   }
+ })
+ 
+ test("returns a typed exit failure when supervisor settlement fails", async () => {
++  const emptyOutput = () => {
++    const stream = new PassThrough()
++    stream.end()
++    return stream
++  }
+   const restore = ProcessSupervisor.setCommandFactoryForTest(async () => ({
+     pid: 991002,
+     stdin: null,
+-    stdout: null,
+-    stderr: null,
++    stdout: emptyOutput(),
++    stderr: emptyOutput(),
+     exited: Promise.resolve(0),
+     outputSettled: Promise.resolve(),
+     settled: Promise.reject(new Error("settlement proof unavailable")),
+@@ -56,10 +65,88 @@ test("returns a typed exit failure when supervisor settlement fails", async () =
+       cwd: process.cwd(),
+       inactivityTimeoutMs: 1_000,
+     })
+-    expect(result.failure).toEqual({
+-      kind: "exit",
+-      message: "Process supervisor settlement failed: settlement proof unavailable",
++    expect(result).toMatchObject({ settlementConfirmed: false, failure: { kind: "exit" } })
++    expect(result.failure?.message).toContain("settlement proof unavailable")
++  } finally {
++    restore()
++  }
++})
++
++test("deadline closes a real output-active native child tree while its parallel peer succeeds", async () => {
++  const [deadline, peer] = await Promise.all([
++    runHostCommandWithInactivity({
++      executable: process.execPath,
++      args: [
++        "-e",
++        `const {spawn}=require('node:child_process'); const child=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'}); process.stdout.write('child:'+child.pid+'\\n'); setInterval(()=>process.stdout.write('tick\\n'),30)`,
++      ],
++      cwd: process.cwd(),
++      inactivityTimeoutMs: 300,
++      deadlineAt: Date.now() + 1500,
++    }),
++    runHostCommandWithInactivity({
++      executable: process.execPath,
++      args: ["-e", "setTimeout(()=>process.stdout.write('parallel-result'),100)"],
++      cwd: process.cwd(),
++      inactivityTimeoutMs: 1000,
++      deadlineAt: Date.now() + 3000,
++    }),
++  ])
++  expect(deadline).toMatchObject({ settlementConfirmed: true, failure: { kind: "deadline" } })
++  expect(deadline.stdout).toMatch(/child:[1-9][0-9]*\n(?:tick\n)+/)
++  expect(peer).toMatchObject({ settlementConfirmed: true, exitCode: 0, stdout: "parallel-result" })
++}, 15_000)
++
++test("a failed byte observer returns actual retained bytes after native settlement", async () => {
++  const result = await runHostCommandWithInactivity({
++    executable: process.execPath,
++    args: ["-e", "process.stdout.write('observer-bytes'); setInterval(()=>{},1000)"],
++    cwd: process.cwd(),
++    inactivityTimeoutMs: 1000,
++    deadlineAt: Date.now() + 3000,
++    onStdout() {
++      throw new Error("controlled observer failure")
++    },
++  })
++  expect(result).toMatchObject({ settlementConfirmed: true, stdout: "observer-bytes", failure: { kind: "output" } })
++  expect([...result.stdoutBytes]).toEqual([...new TextEncoder().encode("observer-bytes")])
++}, 15_000)
++
++test("a failed byte source keeps its output stage, original error and actual bytes", async () => {
++  const stdout = new PassThrough()
++  const stderr = new PassThrough()
++  stderr.end()
++  const failure = new Error("controlled byte source failure")
++  const restore = ProcessSupervisor.setCommandFactoryForTest(async () => ({
++    pid: 991003,
++    stdin: null,
++    stdout,
++    stderr,
++    exited: Promise.resolve(0),
++    outputSettled: Promise.resolve(),
++    settled: Promise.resolve(),
++    async terminate() {},
++    async dispose() {},
++    unref() {},
++  }))
++  try {
++    setTimeout(() => {
++      stdout.write("observed-prefix")
++      setTimeout(() => stdout.destroy(failure), 10)
++    }, 10)
++    const result = await runHostCommandWithInactivity({
++      executable: process.execPath,
++      args: [],
++      cwd: process.cwd(),
++      inactivityTimeoutMs: 1000,
++      deadlineAt: Date.now() + 3000,
++    })
++    expect(result).toMatchObject({
++      stdout: "observed-prefix",
++      settlementConfirmed: false,
++      failure: { kind: "output", message: "controlled byte source failure" },
+     })
++    expect([...result.stdoutBytes]).toEqual([...new TextEncoder().encode("observed-prefix")])
+   } finally {
+     restore()
+   }
+diff --git a/packages/overlay/script/run-unit-tests.ts b/packages/overlay/script/run-unit-tests.ts
+index 51386622..573861cf 100644
+--- a/packages/overlay/script/run-unit-tests.ts
++++ b/packages/overlay/script/run-unit-tests.ts
+@@ -4,6 +4,7 @@ import {
+   bootstrapIsolatedTestRuntime,
+   isolatedTestChildEnvironment,
+   removeIsolatedTestRuntime,
++  testCommandDeadlineAt,
+ } from "@opencorvus-ai/util/test-runtime-environment"
+ import { prepareTestProcessSupervisor } from "../../opencorvus/script/prepare-test-process-supervisor"
+ 
+@@ -21,21 +22,25 @@ function unitTestFiles(requestedFiles: string[]): string[] {
+     .sort()
+ }
+ 
++let settlementConfirmed = true
+ try {
+   const { runHostCommandWithInactivity } = await import("../../opencorvus/src/shell/command-inactivity")
+   const files = unitTestFiles(process.argv.slice(2))
+   if (files.length === 0) throw new Error("Overlay unit test runner requires at least one test file")
+   const childEnvironment = isolatedTestChildEnvironment(runnerRuntime)
+   for (const file of files) {
++    settlementConfirmed = false
+     const result = await runHostCommandWithInactivity({
+       executable: process.execPath,
+       args: ["test", "--timeout=0", file],
+       cwd: OVERLAY_ROOT,
+       env: childEnvironment,
++      deadlineAt: testCommandDeadlineAt(),
+       inactivityTimeoutMs: UNIT_TEST_INACTIVITY_TIMEOUT_MILLISECONDS,
+       onStdout: (chunk) => process.stdout.write(chunk),
+       onStderr: (chunk) => process.stderr.write(chunk),
+     })
++    settlementConfirmed = result.settlementConfirmed
+     if (result.failure) throw new Error(`${file}: ${result.failure.message}`)
+     if (result.exitCode === undefined) throw new Error(`${file}: process exited without an exit code`)
+     if (result.exitCode !== 0) {
+@@ -44,5 +49,9 @@ try {
+     }
+   }
+ } finally {
+-  await removeIsolatedTestRuntime(runnerRuntime)
++  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
++  else
++    console.error(
++      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
++    )
+ }
+diff --git a/packages/util/src/process.ts b/packages/util/src/process.ts
+index 4a9e8e6d..e484499f 100644
+--- a/packages/util/src/process.ts
++++ b/packages/util/src/process.ts
+@@ -1,4 +1,5 @@
+ const DEFAULT_OUTPUT_LIMIT = Number.POSITIVE_INFINITY
++export const PROCESS_SETTLEMENT_TIMEOUT_MS = 5_000
+ const DEADLINE_CLOCK_INTERVAL_MS = 25
+ 
+ type DeadlineEntry = { deadlineAt: number; expire(): void }
+@@ -132,6 +133,8 @@ export interface ProcessHandle extends ProcessSpawnedHandle {
+ }
+ 
+ export interface ProcessRunRequest extends ProcessSpawnRequest {
++  onStdout?: (chunk: Uint8Array) => void
++  onStderr?: (chunk: Uint8Array) => void
+   input?: Uint8Array | string | AsyncIterable<Uint8Array>
+   nothrow?: boolean
+   inactivityTimeoutMs?: number
+@@ -173,6 +176,51 @@ export class ProcessDeadlineExceededError extends Error {
+     super(message)
+   }
+ }
++export class ProcessSettlementUncertainError extends Error {
++  override readonly name = "ProcessSettlementUncertainError"
++  constructor(message: string, options?: ErrorOptions) {
++    super(message, options)
++  }
++}
++export class ProcessOutputObserverError extends Error {
++  override readonly name = "ProcessOutputObserverError"
++  constructor(
++    readonly result: ProcessRunResult,
++    cause: unknown,
++  ) {
++    super(`Process output observer failed: ${asError(cause).message}`, { cause })
++  }
++}
++/** Execution failed before a complete physical/output receipt was available. */
++export class ProcessExecutionError extends Error {
++  override readonly name = "ProcessExecutionError"
++  constructor(
++    cause: unknown,
++    readonly stdout: Uint8Array,
++    readonly stderr: Uint8Array,
++    readonly stage: "output" | "execution" | "settlement" = "execution",
++  ) {
++    super(`Process execution failed: ${asError(cause).message}`, { cause })
++  }
++}
++
++export type ProcessFacadeOptions = Readonly<{ settlementTimeoutMs?: number }>
++async function awaitSettlement<T>(operation: Promise<T>, options: ProcessFacadeOptions): Promise<T> {
++  if (options.settlementTimeoutMs === undefined) return operation
++  let cancel = () => {}
++  try {
++    return await Promise.race([
++      operation,
++      new Promise<never>((_resolve, reject) => {
++        cancel = scheduleDeadline(Date.now() + options.settlementTimeoutMs!, () =>
++          reject(new ProcessSettlementUncertainError("Process settlement exceeded its finite cleanup budget")),
++        )
++      }),
++    ])
++  } finally {
++    cancel()
++  }
++}
+ export class ProcessInactivityTimeoutError extends Error {
+   override readonly name = "ProcessInactivityTimeoutError"
+   constructor(
+@@ -320,7 +368,11 @@ function createProcessControlLease(request: ProcessSpawnRequest): ProcessControl
+   }
+ }
+ 
+-function controlledHandle(raw: ProcessSpawnedHandle, controls: ProcessControlLease): ProcessHandle {
++function controlledHandle(
++  raw: ProcessSpawnedHandle,
++  controls: ProcessControlLease,
++  options: ProcessFacadeOptions,
++): ProcessHandle {
+   let requestedReason: Exclude<ProcessTerminalReason, "exited"> | undefined
+   let termination: Promise<ProcessTerminalReceipt> | undefined
+   let controlFailureReject!: (error: Error) => void
+@@ -335,24 +387,35 @@ function controlledHandle(raw: ProcessSpawnedHandle, controls: ProcessControlLea
+     }),
+     controlFailure,
+   ])
+-  const settled = Promise.allSettled([terminal, raw.outputSettled, raw.settled]).then((outcomes) => {
+-    const failures = uniqueFailures(
+-      outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : [])),
++  const settled = terminal
++    .then(
++      (receipt) =>
++        awaitSettlement(
++          Promise.allSettled([raw.outputSettled, raw.settled]).then((outcomes) => {
++            const failures = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
++            if (failures.length) throw combinedFailure(failures, "Process output and physical settlement failed")
++            return receipt
++          }),
++          options,
++        ),
++      async (primary) => {
++        try {
++          const outcomes = await awaitSettlement(Promise.allSettled([raw.outputSettled, raw.settled]), options)
++          const failures = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
++          if (failures.length) throw combinedFailure(failures, "Process output and physical settlement failed")
++        } catch (cleanup) {
++          throw combinedFailure([primary, cleanup], "Process terminal and physical settlement failed")
++        }
++        throw primary
++      },
+     )
+-    if (failures.length === 1) throw failures[0]
+-    if (failures.length > 1) throw new AggregateError(failures, "Process terminal and physical settlement failed")
+-    const terminalOutcome = outcomes[0]!
+-    if (terminalOutcome.status !== "fulfilled") {
+-      throw new Error("Process terminal receipt was unavailable after physical settlement")
+-    }
+-    return terminalOutcome.value
+-  })
++    .then((receipt) => receipt)
+   void settled.catch(() => undefined)
+   const joinControlOperation = async (
+     operation: Promise<ProcessTerminalReceipt>,
+     message: string,
+   ): Promise<ProcessTerminalReceipt> => {
+-    const observedOperation = operation.catch((error) => {
++    const observedOperation = awaitSettlement(operation, options).catch((error) => {
+       const failure = asError(error)
+       controlFailureReject(failure)
+       throw failure
+@@ -411,20 +474,23 @@ async function collectOutput(
+   source: ProcessByteSource,
+   onActivity: () => void,
+   retain: (chunk: Uint8Array) => Uint8Array | undefined,
++  observe?: (chunk: Uint8Array) => void,
++  chunks: Uint8Array[] = [],
+ ): Promise<Uint8Array> {
+-  const chunks: Uint8Array[] = []
+   for await (const value of source) {
+     const chunk = value instanceof Uint8Array ? value : new Uint8Array(value)
+     const kept = retain(chunk)
+     if (kept?.byteLength) chunks.push(kept)
++    observe?.(chunk.slice())
+     onActivity()
+   }
+   return concatBytes(chunks)
+ }
+-async function outputFailure(output: Promise<Uint8Array>): Promise<never> {
++async function outputFailure(output: Promise<Uint8Array>, onFailure: () => void): Promise<never> {
+   try {
+     await output
+   } catch (error) {
++    onFailure()
+     throw error
+   }
+   return await new Promise<never>(() => undefined)
+@@ -498,11 +564,26 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+   }
+   let stdout: Promise<Uint8Array> | undefined
+   let stderr: Promise<Uint8Array> | undefined
++  const stdoutChunks: Uint8Array[] = []
++  const stderrChunks: Uint8Array[] = []
+   let processSettled = false
+   let inputFailure: unknown
+   let inputWriter: { cancel(): void } | undefined
+   let primaryError: unknown
+   let hasPrimaryError = false
++  let byteSourceFailed = false
++  let observerError: unknown
++  let observerFailed = false
++  const observe = (callback: ((chunk: Uint8Array) => void) | undefined) => (chunk: Uint8Array) => {
++    if (observerFailed) return
++    try {
++      callback?.(chunk)
++    } catch (error) {
++      observerFailed = true
++      observerError = error
++      void handle.terminate().catch(() => undefined)
++    }
++  }
+   try {
+     await request.onSpawned?.(handle)
+     if (!handle.stdout || !handle.stderr)
+@@ -510,9 +591,12 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+     if (request.input !== undefined && !handle.stdin)
+       throw new Error(`Process input is unavailable: ${formatCommand(request.command)}`)
+     refreshInactivity()
+-    stdout = collectOutput(handle.stdout, refreshInactivity, retain)
+-    stderr = collectOutput(handle.stderr, refreshInactivity, retain)
+-    const observerFailure = Promise.race([outputFailure(stdout), outputFailure(stderr)])
++    stdout = collectOutput(handle.stdout, refreshInactivity, retain, observe(request.onStdout), stdoutChunks)
++    stderr = collectOutput(handle.stderr, refreshInactivity, retain, observe(request.onStderr), stderrChunks)
++    const sourceFailed = () => {
++      byteSourceFailed = true
++    }
++    const observerFailure = Promise.race([outputFailure(stdout, sourceFailed), outputFailure(stderr, sourceFailed)])
+     void observerFailure.catch(() => undefined)
+     inputWriter =
+       request.input === undefined
+@@ -537,12 +621,27 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+     }
+     const controlledError = reasonError(result, request)
+     if (controlledError) throw controlledError
++    if (observerFailed) throw new ProcessOutputObserverError(result, observerError)
+     if (receipt.exitCode === 0 || request.nothrow) return result
+     throw new ProcessRunFailedError(request.command, receipt, stdoutBytes, stderrBytes)
+   } catch (error) {
+     primaryError = error
+     hasPrimaryError = true
+-    throw error
++    if (
++      error instanceof ProcessAbortedError ||
++      error instanceof ProcessDeadlineExceededError ||
++      error instanceof ProcessInactivityTimeoutError ||
++      error instanceof ProcessOutputLimitError ||
++      error instanceof ProcessOutputObserverError ||
++      error instanceof ProcessRunFailedError
++    )
++      throw error
++    throw new ProcessExecutionError(
++      error,
++      concatBytes(stdoutChunks),
++      concatBytes(stderrChunks),
++      byteSourceFailed ? "output" : "execution",
++    )
+   } finally {
+     processSettled = true
+     inputWriter?.cancel()
+@@ -550,8 +649,14 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+     try {
+       await handle.dispose()
+     } catch (cleanupError) {
+-      if (hasPrimaryError) throw combinedFailure([primaryError, cleanupError], "Process execution and cleanup failed")
+-      throw cleanupError
++      throw new ProcessExecutionError(
++        hasPrimaryError
++          ? combinedFailure([primaryError, cleanupError], "Process execution and cleanup failed")
++          : cleanupError,
++        concatBytes(stdoutChunks),
++        concatBytes(stderrChunks),
++        byteSourceFailed ? "output" : "settlement",
++      )
+     }
+   }
+ }
+@@ -563,8 +668,16 @@ function admissionError(request: ProcessSpawnRequest): Error | undefined {
+     return new ProcessDeadlineExceededError(`Process deadline exceeded before spawn: ${formatCommand(request.command)}`)
+ }
+ 
+-async function failAfterHandleCleanup(handle: ProcessSpawnedHandle, primary: unknown, message: string): Promise<never> {
+-  const outcomes = await Promise.allSettled([handle.dispose(), handle.settled])
++async function failAfterHandleCleanup(
++  handle: ProcessSpawnedHandle,
++  primary: unknown,
++  message: string,
++  options: ProcessFacadeOptions,
++): Promise<never> {
++  const outcomes = await Promise.allSettled([
++    awaitSettlement(handle.dispose(), options),
++    awaitSettlement(handle.settled, options),
++  ])
+   const cleanupFailures = uniqueFailures(
+     outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : [])),
+   )
+@@ -577,6 +690,7 @@ async function failAfterHandleCleanup(handle: ProcessSpawnedHandle, primary: unk
+ async function spawnWithAdmissionControls(
+   spawner: ProcessSpawner,
+   request: ProcessSpawnRequest & { occurrenceID: string },
++  options: ProcessFacadeOptions,
+ ): Promise<{ raw: ProcessSpawnedHandle; controls: ProcessControlLease }> {
+   const immediate = admissionError(request)
+   if (immediate) throw immediate
+@@ -592,7 +706,7 @@ async function spawnWithAdmissionControls(
+       controls.release()
+       let lateHandle: ProcessSpawnedHandle
+       try {
+-        lateHandle = await pending
++        lateHandle = await awaitSettlement(pending, options)
+       } catch (cleanupError) {
+         const expectedControlSettlement =
+           cleanupError === primary ||
+@@ -603,33 +717,43 @@ async function spawnWithAdmissionControls(
+         }
+         throw primary
+       }
+-      return await failAfterHandleCleanup(lateHandle, primary, "Process admission control and cleanup failed")
++      return await failAfterHandleCleanup(lateHandle, primary, "Process admission control and cleanup failed", options)
+     }
+     controls.release()
+     throw error
+   }
+ }
+ 
+-export function createProcessFacade(spawner: ProcessSpawner): ProcessFacade {
++export function createProcessFacade(
++  spawner: ProcessSpawner,
++  options: ProcessFacadeOptions = { settlementTimeoutMs: PROCESS_SETTLEMENT_TIMEOUT_MS },
++): ProcessFacade {
++  options = { settlementTimeoutMs: options.settlementTimeoutMs ?? PROCESS_SETTLEMENT_TIMEOUT_MS }
++  if (
++    options.settlementTimeoutMs !== undefined &&
++    (!Number.isSafeInteger(options.settlementTimeoutMs) || options.settlementTimeoutMs <= 0)
++  )
++    throw new Error("Process settlement budget must be a positive safe integer")
+   const facade: ProcessFacade = {
+     async spawn(request) {
+       const occurrenceID = request.occurrenceID?.trim() || newOccurrenceID()
+       const boundRequest = { ...request, occurrenceID }
+-      const { raw, controls } = await spawnWithAdmissionControls(spawner, boundRequest)
++      const { raw, controls } = await spawnWithAdmissionControls(spawner, boundRequest, options)
+       if (raw.occurrenceID !== occurrenceID) {
+         controls.release()
+         return await failAfterHandleCleanup(
+           raw,
+           new Error("Process spawner returned a different occurrence identity"),
+           "Process occurrence validation and cleanup failed",
++          options,
+         )
+       }
+       const lateControl = admissionError(boundRequest)
+       if (lateControl) {
+         controls.release()
+-        return await failAfterHandleCleanup(raw, lateControl, "Process admission control and cleanup failed")
++        return await failAfterHandleCleanup(raw, lateControl, "Process admission control and cleanup failed", options)
+       }
+-      return controlledHandle(raw, controls)
++      return controlledHandle(raw, controls, options)
+     },
+     run(request) {
+       return runProcess(facade, request)
+diff --git a/packages/util/src/test-runtime-environment.ts b/packages/util/src/test-runtime-environment.ts
+index 75762001..b92e983f 100644
+--- a/packages/util/src/test-runtime-environment.ts
++++ b/packages/util/src/test-runtime-environment.ts
+@@ -9,6 +9,11 @@ const OWNER_PID = "OPENCORVUS_TEST_OWNER_PID"
+ const OS_TEMP_ROOT = "OPENCORVUS_TEST_OS_TEMP_ROOT"
+ const OWNER_NONCE = "OPENCORVUS_TEST_OWNER_NONCE"
+ const OWNER_MARKER = ".opencorvus-test-owner.json"
++/** One finite command budget; native supervisor preparation and the full suite are separate. */
++export const TEST_COMMAND_EXECUTION_TIMEOUT_MS = 900_000
++export function testCommandDeadlineAt(): number {
++  return Date.now() + TEST_COMMAND_EXECUTION_TIMEOUT_MS
++}
+ const USER_CONFIGURATION_ENVIRONMENT_KEYS = [
+   "OPENCORVUS_CONFIG",
+   "OPENCORVUS_CONFIG_DIR",
+diff --git a/packages/util/test/process.test.ts b/packages/util/test/process.test.ts
+index d5fc3fd9..c96ef21e 100644
+--- a/packages/util/test/process.test.ts
++++ b/packages/util/test/process.test.ts
+@@ -7,6 +7,7 @@ import {
+   createProcessFacade,
+   ProcessAbortedError,
+   ProcessDeadlineExceededError,
++  ProcessExecutionError,
+   ProcessOutputLimitError,
+   type ProcessByteSource,
+   type ProcessSpawnedHandle,
+@@ -583,7 +584,8 @@ describe("structured process facade", () => {
+         occurrenceID: receipt.occurrenceID,
+       })
+       .catch((cause) => cause)
+-    expect({ error, cleanupState }).toEqual({ error: outputFailure, cleanupState: "settled" })
++    if (!(error instanceof ProcessExecutionError)) throw new Error("Expected typed execution failure")
++    expect({ cause: error.cause, cleanupState }).toEqual({ cause: outputFailure, cleanupState: "settled" })
+   })
+ 
+   test("retains stream backpressure until the byte source is consumed", async () => {

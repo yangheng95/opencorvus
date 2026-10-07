@@ -16,6 +16,7 @@ import {
 import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
 import { Lock } from "@/util/lock"
 import { awaitWithAbort } from "@/util/abort"
+import { PROCESS_SETTLEMENT_TIMEOUT_MS } from "@opencorvus-ai/util/process"
 import { cachedRuntimeProcessOccurrenceObserver, currentRuntimeProcessOccurrence } from "@/runtime/process-occurrence"
 import type { RuntimeProcessOccurrenceObserver } from "@/runtime/process-occurrence"
 import type { RuntimeProcessOccurrenceInfo } from "@/runtime/process-occurrence"
@@ -195,7 +196,7 @@ export namespace ProcessSupervisor {
     transferOwnership?(successor: RuntimeProcessOccurrenceInfo): Promise<OwnershipRelease>
   }
 
-  export const TERMINATION_CLEANUP_TIMEOUT_MS = 5_000
+  export const TERMINATION_CLEANUP_TIMEOUT_MS = PROCESS_SETTLEMENT_TIMEOUT_MS
   export const TERMINATION_EXIT_TIMEOUT_MS = 1_000
 
   export function combineFailures(message: string, failures: readonly unknown[]): unknown {
@@ -1122,6 +1123,7 @@ process.stdin.resume()
   }
 
   async function defaultSpawnCommand(opts: CommandSpawnOptions): Promise<Handle> {
+    opts.signal?.throwIfAborted()
     if (process.platform === "win32") return await spawnWindowsCommand(opts)
     if (opts.detached) {
       await validateDetachedContext(opts.detached)
@@ -1592,11 +1594,14 @@ process.stdin.resume()
     detached?: DetachedCommandContext
     request: (readyPath: string, requestID: string) => Record<string, unknown>
   }): Promise<Handle> {
+    opts.signal?.throwIfAborted()
     const helper = await resolveWindowsHelper()
+    opts.signal?.throwIfAborted()
     if (!helper) {
       throw new Error("Windows process supervisor helper is required for process-tree cleanup")
     }
     if (opts.detached) await validateDetachedContext(opts.detached)
+    opts.signal?.throwIfAborted()
     const requestDir = opts.detached?.root ?? await Global.createTemporaryDirectory("supervisor-")
     const requestPath = path.join(requestDir, "request.json")
     const readyPath = path.join(requestDir, "ready.json")
@@ -1619,6 +1624,7 @@ process.stdin.resume()
       terminateChildrenOnRootExit = (request as Record<string, unknown>).terminate_children_on_root_exit === true
       windowsRequestObserver?.(request)
       await Filesystem.writeDurableAtomicIfAbsent(requestPath, JSON.stringify(request))
+      opts.signal?.throwIfAborted()
     } catch (error) {
       await rethrowWithCleanup(error, "Windows process supervisor request creation and cleanup failed", [
         () => fs.rm(requestDir, { recursive: true, force: true }),
@@ -1627,6 +1633,7 @@ process.stdin.resume()
     let proc: ChildProcess
     const diagnostic = opts.detached ? await fs.open(opts.detached.diagnosticPath, "a") : undefined
     try {
+      opts.signal?.throwIfAborted()
       proc = spawn(helper, ["--request", requestPath], {
         stdio: diagnostic ? ["ignore", diagnostic.fd, diagnostic.fd] : [opts.stdin ?? "ignore", "pipe", "pipe"],
         env: opts.env,

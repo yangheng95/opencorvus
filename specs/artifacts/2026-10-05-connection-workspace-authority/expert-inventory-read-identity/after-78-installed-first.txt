@@ -1,0 +1,25 @@
+Browser tab: 49, Title: "OpenCorvus", URL: "http://localhost:18033/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 64, 66-75
+~			22 container Description: Installed Expert Squads, ID: configDialog
+~							40 tab (selectable, settable, boolean) Squad Market, Value: 0, ID: config-tab-expert-squad-install
+~							41 tab (selected, settable, boolean) Installed Expert Squads, Value: 1, ID: config-tab-expert-squad
+~						55 heading Installed Expert Squads, Value: 1
+~							56 text Installed Expert Squads
+~						57 container Description: Installed Expert Squads, ID: config-panel-expert-squad
+~							58 container
+~								59 toolbar Filter installed Expert Squads
+~									60 checkbox All, Value: 1
+~									61 checkbox Active, Value: 0
+~									62 checkbox Packages, Value: 0
+~									63 checkbox Built-in, Value: 0
++								64 button Advanced
+~								65 button Base
++								66 button Research Studio
++								67 button Generate Expert Squads System generator
++									68 text Generate Expert Squads
++									69 text System generator
++								70 button Task Resource QA Effective active
++									71 text Task Resource QA
++									72 text Effective active
+The focused UI element is 41 tab (selected, settable, boolean) Installed Expert Squads, Value: 1, ID: config-tab-expert-squad

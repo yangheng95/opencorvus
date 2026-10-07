@@ -1,0 +1,336 @@
+diff --git a/packages/util/src/process.ts b/packages/util/src/process.ts
+index 4a9e8e6d..9b0f2932 100644
+--- a/packages/util/src/process.ts
++++ b/packages/util/src/process.ts
+@@ -1,4 +1,5 @@
+ const DEFAULT_OUTPUT_LIMIT = Number.POSITIVE_INFINITY
++export const PROCESS_SETTLEMENT_TIMEOUT_MS = 5_000
+ const DEADLINE_CLOCK_INTERVAL_MS = 25
+ 
+ type DeadlineEntry = { deadlineAt: number; expire(): void }
+@@ -132,6 +133,8 @@ export interface ProcessHandle extends ProcessSpawnedHandle {
+ }
+ 
+ export interface ProcessRunRequest extends ProcessSpawnRequest {
++  onStdout?: (chunk: Uint8Array) => void
++  onStderr?: (chunk: Uint8Array) => void
+   input?: Uint8Array | string | AsyncIterable<Uint8Array>
+   nothrow?: boolean
+   inactivityTimeoutMs?: number
+@@ -173,6 +176,51 @@ export class ProcessDeadlineExceededError extends Error {
+     super(message)
+   }
+ }
++export class ProcessSettlementUncertainError extends Error {
++  override readonly name = "ProcessSettlementUncertainError"
++  constructor(message: string, options?: ErrorOptions) {
++    super(message, options)
++  }
++}
++export class ProcessOutputObserverError extends Error {
++  override readonly name = "ProcessOutputObserverError"
++  constructor(
++    readonly result: ProcessRunResult,
++    cause: unknown,
++  ) {
++    super(`Process output observer failed: ${asError(cause).message}`, { cause })
++  }
++}
++/** Execution failed before a complete physical/output receipt was available. */
++export class ProcessExecutionError extends Error {
++  override readonly name = "ProcessExecutionError"
++  constructor(
++    cause: unknown,
++    readonly stdout: Uint8Array,
++    readonly stderr: Uint8Array,
++    readonly stage: "output" | "execution" | "settlement" = "execution",
++  ) {
++    super(`Process execution failed: ${asError(cause).message}`, { cause })
++  }
++}
++
++export type ProcessFacadeOptions = Readonly<{ settlementTimeoutMs?: number }>
++type ResolvedProcessFacadeOptions = Readonly<Required<ProcessFacadeOptions>>
++async function awaitSettlement<T>(operation: Promise<T>, options: ResolvedProcessFacadeOptions): Promise<T> {
++  let cancel = () => {}
++  try {
++    return await Promise.race([
++      operation,
++      new Promise<never>((_resolve, reject) => {
++        cancel = scheduleDeadline(Date.now() + options.settlementTimeoutMs, () =>
++          reject(new ProcessSettlementUncertainError("Process settlement exceeded its finite cleanup budget")),
++        )
++      }),
++    ])
++  } finally {
++    cancel()
++  }
++}
+ export class ProcessInactivityTimeoutError extends Error {
+   override readonly name = "ProcessInactivityTimeoutError"
+   constructor(
+@@ -320,7 +368,11 @@ function createProcessControlLease(request: ProcessSpawnRequest): ProcessControl
+   }
+ }
+ 
+-function controlledHandle(raw: ProcessSpawnedHandle, controls: ProcessControlLease): ProcessHandle {
++function controlledHandle(
++  raw: ProcessSpawnedHandle,
++  controls: ProcessControlLease,
++  options: ResolvedProcessFacadeOptions,
++): ProcessHandle {
+   let requestedReason: Exclude<ProcessTerminalReason, "exited"> | undefined
+   let termination: Promise<ProcessTerminalReceipt> | undefined
+   let controlFailureReject!: (error: Error) => void
+@@ -335,24 +387,35 @@ function controlledHandle(raw: ProcessSpawnedHandle, controls: ProcessControlLea
+     }),
+     controlFailure,
+   ])
+-  const settled = Promise.allSettled([terminal, raw.outputSettled, raw.settled]).then((outcomes) => {
+-    const failures = uniqueFailures(
+-      outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : [])),
++  const settled = terminal
++    .then(
++      (receipt) =>
++        awaitSettlement(
++          Promise.allSettled([raw.outputSettled, raw.settled]).then((outcomes) => {
++            const failures = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
++            if (failures.length) throw combinedFailure(failures, "Process output and physical settlement failed")
++            return receipt
++          }),
++          options,
++        ),
++      async (primary) => {
++        try {
++          const outcomes = await awaitSettlement(Promise.allSettled([raw.outputSettled, raw.settled]), options)
++          const failures = outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : []))
++          if (failures.length) throw combinedFailure(failures, "Process output and physical settlement failed")
++        } catch (cleanup) {
++          throw combinedFailure([primary, cleanup], "Process terminal and physical settlement failed")
++        }
++        throw primary
++      },
+     )
+-    if (failures.length === 1) throw failures[0]
+-    if (failures.length > 1) throw new AggregateError(failures, "Process terminal and physical settlement failed")
+-    const terminalOutcome = outcomes[0]!
+-    if (terminalOutcome.status !== "fulfilled") {
+-      throw new Error("Process terminal receipt was unavailable after physical settlement")
+-    }
+-    return terminalOutcome.value
+-  })
++    .then((receipt) => receipt)
+   void settled.catch(() => undefined)
+   const joinControlOperation = async (
+     operation: Promise<ProcessTerminalReceipt>,
+     message: string,
+   ): Promise<ProcessTerminalReceipt> => {
+-    const observedOperation = operation.catch((error) => {
++    const observedOperation = awaitSettlement(operation, options).catch((error) => {
+       const failure = asError(error)
+       controlFailureReject(failure)
+       throw failure
+@@ -411,20 +474,23 @@ async function collectOutput(
+   source: ProcessByteSource,
+   onActivity: () => void,
+   retain: (chunk: Uint8Array) => Uint8Array | undefined,
++  observe?: (chunk: Uint8Array) => void,
++  chunks: Uint8Array[] = [],
+ ): Promise<Uint8Array> {
+-  const chunks: Uint8Array[] = []
+   for await (const value of source) {
+     const chunk = value instanceof Uint8Array ? value : new Uint8Array(value)
+     const kept = retain(chunk)
+     if (kept?.byteLength) chunks.push(kept)
++    observe?.(chunk.slice())
+     onActivity()
+   }
+   return concatBytes(chunks)
+ }
+-async function outputFailure(output: Promise<Uint8Array>): Promise<never> {
++async function outputFailure(output: Promise<Uint8Array>, onFailure: () => void): Promise<never> {
+   try {
+     await output
+   } catch (error) {
++    onFailure()
+     throw error
+   }
+   return await new Promise<never>(() => undefined)
+@@ -498,11 +564,26 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+   }
+   let stdout: Promise<Uint8Array> | undefined
+   let stderr: Promise<Uint8Array> | undefined
++  const stdoutChunks: Uint8Array[] = []
++  const stderrChunks: Uint8Array[] = []
+   let processSettled = false
+   let inputFailure: unknown
+   let inputWriter: { cancel(): void } | undefined
+   let primaryError: unknown
+   let hasPrimaryError = false
++  let byteSourceFailed = false
++  let observerError: unknown
++  let observerFailed = false
++  const observe = (callback: ((chunk: Uint8Array) => void) | undefined) => (chunk: Uint8Array) => {
++    if (observerFailed) return
++    try {
++      callback?.(chunk)
++    } catch (error) {
++      observerFailed = true
++      observerError = error
++      void handle.terminate().catch(() => undefined)
++    }
++  }
+   try {
+     await request.onSpawned?.(handle)
+     if (!handle.stdout || !handle.stderr)
+@@ -510,9 +591,12 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+     if (request.input !== undefined && !handle.stdin)
+       throw new Error(`Process input is unavailable: ${formatCommand(request.command)}`)
+     refreshInactivity()
+-    stdout = collectOutput(handle.stdout, refreshInactivity, retain)
+-    stderr = collectOutput(handle.stderr, refreshInactivity, retain)
+-    const observerFailure = Promise.race([outputFailure(stdout), outputFailure(stderr)])
++    stdout = collectOutput(handle.stdout, refreshInactivity, retain, observe(request.onStdout), stdoutChunks)
++    stderr = collectOutput(handle.stderr, refreshInactivity, retain, observe(request.onStderr), stderrChunks)
++    const sourceFailed = () => {
++      byteSourceFailed = true
++    }
++    const observerFailure = Promise.race([outputFailure(stdout, sourceFailed), outputFailure(stderr, sourceFailed)])
+     void observerFailure.catch(() => undefined)
+     inputWriter =
+       request.input === undefined
+@@ -537,12 +621,27 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+     }
+     const controlledError = reasonError(result, request)
+     if (controlledError) throw controlledError
++    if (observerFailed) throw new ProcessOutputObserverError(result, observerError)
+     if (receipt.exitCode === 0 || request.nothrow) return result
+     throw new ProcessRunFailedError(request.command, receipt, stdoutBytes, stderrBytes)
+   } catch (error) {
+     primaryError = error
+     hasPrimaryError = true
+-    throw error
++    if (
++      error instanceof ProcessAbortedError ||
++      error instanceof ProcessDeadlineExceededError ||
++      error instanceof ProcessInactivityTimeoutError ||
++      error instanceof ProcessOutputLimitError ||
++      error instanceof ProcessOutputObserverError ||
++      error instanceof ProcessRunFailedError
++    )
++      throw error
++    throw new ProcessExecutionError(
++      error,
++      concatBytes(stdoutChunks),
++      concatBytes(stderrChunks),
++      byteSourceFailed ? "output" : "execution",
++    )
+   } finally {
+     processSettled = true
+     inputWriter?.cancel()
+@@ -550,8 +649,14 @@ async function runProcess(facade: ProcessFacade, request: ProcessRunRequest): Pr
+     try {
+       await handle.dispose()
+     } catch (cleanupError) {
+-      if (hasPrimaryError) throw combinedFailure([primaryError, cleanupError], "Process execution and cleanup failed")
+-      throw cleanupError
++      throw new ProcessExecutionError(
++        hasPrimaryError
++          ? combinedFailure([primaryError, cleanupError], "Process execution and cleanup failed")
++          : cleanupError,
++        concatBytes(stdoutChunks),
++        concatBytes(stderrChunks),
++        byteSourceFailed ? "output" : "settlement",
++      )
+     }
+   }
+ }
+@@ -563,8 +668,16 @@ function admissionError(request: ProcessSpawnRequest): Error | undefined {
+     return new ProcessDeadlineExceededError(`Process deadline exceeded before spawn: ${formatCommand(request.command)}`)
+ }
+ 
+-async function failAfterHandleCleanup(handle: ProcessSpawnedHandle, primary: unknown, message: string): Promise<never> {
+-  const outcomes = await Promise.allSettled([handle.dispose(), handle.settled])
++async function failAfterHandleCleanup(
++  handle: ProcessSpawnedHandle,
++  primary: unknown,
++  message: string,
++  options: ResolvedProcessFacadeOptions,
++): Promise<never> {
++  const outcomes = await Promise.allSettled([
++    awaitSettlement(handle.dispose(), options),
++    awaitSettlement(handle.settled, options),
++  ])
+   const cleanupFailures = uniqueFailures(
+     outcomes.flatMap((outcome) => (outcome.status === "rejected" ? [outcome.reason] : [])),
+   )
+@@ -577,6 +690,7 @@ async function failAfterHandleCleanup(handle: ProcessSpawnedHandle, primary: unk
+ async function spawnWithAdmissionControls(
+   spawner: ProcessSpawner,
+   request: ProcessSpawnRequest & { occurrenceID: string },
++  options: ResolvedProcessFacadeOptions,
+ ): Promise<{ raw: ProcessSpawnedHandle; controls: ProcessControlLease }> {
+   const immediate = admissionError(request)
+   if (immediate) throw immediate
+@@ -592,7 +706,7 @@ async function spawnWithAdmissionControls(
+       controls.release()
+       let lateHandle: ProcessSpawnedHandle
+       try {
+-        lateHandle = await pending
++        lateHandle = await awaitSettlement(pending, options)
+       } catch (cleanupError) {
+         const expectedControlSettlement =
+           cleanupError === primary ||
+@@ -603,33 +717,47 @@ async function spawnWithAdmissionControls(
+         }
+         throw primary
+       }
+-      return await failAfterHandleCleanup(lateHandle, primary, "Process admission control and cleanup failed")
++      return await failAfterHandleCleanup(lateHandle, primary, "Process admission control and cleanup failed", options)
+     }
+     controls.release()
+     throw error
+   }
+ }
+ 
+-export function createProcessFacade(spawner: ProcessSpawner): ProcessFacade {
++export function createProcessFacade(
++  spawner: ProcessSpawner,
++  options: ProcessFacadeOptions = { settlementTimeoutMs: PROCESS_SETTLEMENT_TIMEOUT_MS },
++): ProcessFacade {
++  const resolvedOptions: ResolvedProcessFacadeOptions = {
++    settlementTimeoutMs: options.settlementTimeoutMs ?? PROCESS_SETTLEMENT_TIMEOUT_MS,
++  }
++  if (!Number.isSafeInteger(resolvedOptions.settlementTimeoutMs) || resolvedOptions.settlementTimeoutMs <= 0)
++    throw new Error("Process settlement budget must be a positive safe integer")
+   const facade: ProcessFacade = {
+     async spawn(request) {
+       const occurrenceID = request.occurrenceID?.trim() || newOccurrenceID()
+       const boundRequest = { ...request, occurrenceID }
+-      const { raw, controls } = await spawnWithAdmissionControls(spawner, boundRequest)
++      const { raw, controls } = await spawnWithAdmissionControls(spawner, boundRequest, resolvedOptions)
+       if (raw.occurrenceID !== occurrenceID) {
+         controls.release()
+         return await failAfterHandleCleanup(
+           raw,
+           new Error("Process spawner returned a different occurrence identity"),
+           "Process occurrence validation and cleanup failed",
++          resolvedOptions,
+         )
+       }
+       const lateControl = admissionError(boundRequest)
+       if (lateControl) {
+         controls.release()
+-        return await failAfterHandleCleanup(raw, lateControl, "Process admission control and cleanup failed")
++        return await failAfterHandleCleanup(
++          raw,
++          lateControl,
++          "Process admission control and cleanup failed",
++          resolvedOptions,
++        )
+       }
+-      return controlledHandle(raw, controls)
++      return controlledHandle(raw, controls, resolvedOptions)
+     },
+     run(request) {
+       return runProcess(facade, request)

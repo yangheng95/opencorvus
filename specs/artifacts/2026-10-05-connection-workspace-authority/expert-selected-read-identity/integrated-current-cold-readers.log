@@ -1,0 +1,36 @@
+[1/3] START test/server/task-assignment-reference.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) public Task catalog retains actual immutable name/version while an ordinary Session sees current installed metadata [3718.80ms]
+
+ 1 pass
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [7.07s]
+[1/3] DONE test/server/task-assignment-reference.test.ts exit=0 duration=8.11s
+[2/3] START test/server/expert-inventory-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold inventory and diagnostics retain real project catalogue facts without an execution model [4130.28ms]
+
+ 1 pass
+ 0 fail
+ 10 expect() calls
+Ran 1 test across 1 file. [6.26s]
+[2/3] DONE test/server/expert-inventory-read-identity.test.ts exit=0 duration=6.44s
+[3/3] START test/server/expert-selected-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+selected-reader-cold-receipts [{"route":"/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/configuration?id=selected-reader&installationScope=project","status":200,"errorName":null}]
+(pass) three exact selected readers return actual package and redacted configuration while runtime model remains unavailable [5830.05ms]
+(pass) exact current public errors preserve missing declaration identity [4382.03ms]
+(pass) same package ID reads each Project's actual declaration and configured values [6441.82ms]
+
+ 3 pass
+ 0 fail
+ 11 expect() calls
+Ran 3 tests across 1 file. [18.78s]
+[3/3] DONE test/server/expert-selected-read-identity.test.ts exit=0 duration=18.95s

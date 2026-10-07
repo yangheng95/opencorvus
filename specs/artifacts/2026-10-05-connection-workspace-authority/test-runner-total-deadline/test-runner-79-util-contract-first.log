@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\util\test\process-deadline-settlement.test.ts:
+(pass) deadline reports uncertain admission when the injected spawner cannot settle [108.53ms]
+(pass) an expired entry maps to the original typed deadline contract [0.22ms]
+
+ 2 pass
+ 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [2.04s]

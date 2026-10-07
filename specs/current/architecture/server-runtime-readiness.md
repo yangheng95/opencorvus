@@ -14,6 +14,29 @@ runtime event coalescing can omit that final notification. Observation stops
 on the validated receipt, failure, or caller cancellation; each launch keeps
 its own directory and occurrence identity. Startup deadlines remain unchanged.
 
+## Command execution and settlement
+
+The shared Process facade owns exact command arguments, byte collection,
+execution deadlines and inactivity. The command-inactivity service is a result
+adapter over that facade; it has no separate execution timer or stream reader.
+Byte observers receive the same collected bytes, and their errors retain the
+original cause and partial output through typed process errors.
+
+The supervised Host/Task adapter joins native disposal, physical exit, output
+and settlement through ProcessSupervisor. One shared5000ms cleanup budget bounds
+uncertain admission and closure; an expired execution deadline does not reduce
+that cleanup phase to1ms. Native admission checks its existing control signal
+between preparation phases and before launching the next physical process.
+Complete settlement alone authorizes isolated test-runtime removal; uncertainty
+retains that owned runtime and reports the actual failure.
+
+Backend and Overlay checks use one900000ms execution deadline per selected file;
+the generic test command entry uses it per command. Output cannot extend it.
+Supervisor preparation and the complete multi-file suite are separate boundaries.
+Production metrics retains its caller-supplied inactivity policy. Non-cooperative
+external asynchronous spawn observers remain outside the checked runner contract;
+current runner commands do not supply such an observer.
+
 ## Public HTTP response boundary
 
 Thrown HTTP (Hypertext Transfer Protocol) failures enter the shared server error

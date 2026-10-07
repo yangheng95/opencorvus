@@ -1,0 +1,26 @@
+{
+  "occurrence": "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-inventory-after-78\\evidence",
+    "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18033",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-inventory-after-78\\startup.json",
+    "--startup-occurrence",
+    "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18033,
+  "credentialStaging": "None"
+}

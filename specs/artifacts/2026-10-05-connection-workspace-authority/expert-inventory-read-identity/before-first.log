@@ -1,0 +1,51 @@
+[1/1] START test/server/expert-inventory-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold inventory baseline 400 {
+  name: "ProviderModelNotFoundError",
+  data: {
+    providerID: "inventory-unavailable",
+    modelID: "model",
+    suggestions: [],
+  },
+}
+58 |   }})
+59 |   await runOutsideInstanceContext(async()=>{
+60 |    const get=(endpoint:string)=>Server.App().request(`/expert-squad/${endpoint}`,{headers:{"x-opencorvus-directory":owned.path}})
+61 |    const status=await get("inventory-status"); const statusBody=await status.json()
+62 |    if(status.status!==200) console.log("cold inventory baseline",status.status,statusBody)
+63 |    expect({status:status.status,body:statusBody}).toMatchObject({status:200,body:{issue_count:issueCount,warning_count:0}})
+                                                       ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "body": {
+-     "issue_count": 1,
+-     "warning_count": 0,
++     "data": {
++       "modelID": "model",
++       "providerID": "inventory-unavailable",
++       "suggestions": [],
++     },
++     "name": "ProviderModelNotFoundError",
+    },
+-   "status": 200,
++   "status": 400,
+  }
+
+- Expected  - 3
++ Received  + 7
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts:63:51)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts:59:9)
+(fail) cold inventory and diagnostics retain real project catalogue facts without an execution model [3204.86ms]
+
+ 0 pass
+ 1 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [5.96s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts
+[1/1] DONE test/server/expert-inventory-read-identity.test.ts exit=1 duration=6.15s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts

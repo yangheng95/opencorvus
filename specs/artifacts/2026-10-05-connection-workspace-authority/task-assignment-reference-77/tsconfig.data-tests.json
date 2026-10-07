@@ -1,0 +1,6 @@
+{
+  "extends": "../../../../packages/overlay/tsconfig.json",
+  "compilerOptions": { "types": [] },
+  "include": ["../../../../node_modules/.bun/bun-types@1.3.14/node_modules/bun-types/index.d.ts", "../../../../packages/overlay/node_modules/vite/client.d.ts", "../../../../packages/overlay/src/**/*.d.ts", "../../../../packages/overlay/test/composer-expert-squad-catalog.test.ts"],
+  "exclude": []
+}

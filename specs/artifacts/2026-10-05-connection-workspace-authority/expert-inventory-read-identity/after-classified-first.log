@@ -1,0 +1,76 @@
+[1/1] START test/server/expert-inventory-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+101 |         status: 200,
+102 |         body: { catalog_revision: statusBody.catalog_revision, total_count: issueCount, next_cursor: null },
+103 |       })
+104 |       expect(diagnosticsBody.entries.map((entry: { kind: string }) => entry.kind)).toEqual(issueCount ? ["issue"] : [])
+105 |       const config = await Server.App().request("/config", { headers: { "x-opencorvus-directory": owned.path } })
+106 |       expect({ status: config.status, body: await config.json() }).toMatchObject({
+                                                                         ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "body": {
+-     "data": {
+-       "modelID": "model",
+-       "providerID": "inventory-unavailable",
+-       "suggestions": [],
++     "$schema": "https://opencorvus.ai/config.json",
++     "agent": {},
++     "assistant": {
++       "max_executor_groups": 5,
++     },
++     "command": {},
++     "experimental": {
++       "auto_question": true,
+      },
+-     "name": "ProviderModelNotFoundError",
++     "mcp": {
++       "browser": {
++         "command": [
++           "C:\Users\hengu\.bun\bin\bun.exe",
++           "mcp",
++           "browser",
++         ],
++         "timeout": 30000,
++         "type": "local",
++       },
++       "computer": {
++         "command": [
++           "C:\Users\hengu\.bun\bin\bun.exe",
++           "D:\myhexin-local\opencorvus\packages\opencorvus\src\mcp\computer\stdio.ts",
++         ],
++         "timeout": 30000,
++         "type": "local",
++       },
++     },
++     "model": "inventory-unavailable/model",
++     "permission_mode": "full_access",
++     "plugin": [],
++     "prompt_profile": {
++       "active": "base",
++     },
++     "small_model": "inventory-unavailable/model",
++     "username": "hengu",
+    },
+-   "status": 400,
++   "status": 200,
+  }
+
+- Expected  - 6
++ Received  + 36
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts:106:68)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts:87:11)
+(fail) cold inventory and diagnostics retain real project catalogue facts without an execution model [3141.91ms]
+
+ 0 pass
+ 1 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [5.64s]
+[1/1] DONE test/server/expert-inventory-read-identity.test.ts exit=1 duration=6.48s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts

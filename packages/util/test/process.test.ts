@@ -7,6 +7,7 @@ import {
   createProcessFacade,
   ProcessAbortedError,
   ProcessDeadlineExceededError,
+  ProcessExecutionError,
   ProcessOutputLimitError,
   type ProcessByteSource,
   type ProcessSpawnedHandle,
@@ -583,7 +584,8 @@ describe("structured process facade", () => {
         occurrenceID: receipt.occurrenceID,
       })
       .catch((cause) => cause)
-    expect({ error, cleanupState }).toEqual({ error: outputFailure, cleanupState: "settled" })
+    if (!(error instanceof ProcessExecutionError)) throw new Error("Expected typed execution failure")
+    expect({ cause: error.cause, cleanupState }).toEqual({ cause: outputFailure, cleanupState: "settled" })
   })
 
   test("retains stream backpressure until the byte source is consumed", async () => {

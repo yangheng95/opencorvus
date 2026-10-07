@@ -1,0 +1,156 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__services__composer-expert-squad-catalog.ts.before.txt" b/packages/overlay/src/services/composer-expert-squad-catalog.ts
+index 89ce4021..863e6847 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__services__composer-expert-squad-catalog.ts.before.txt"
++++ b/packages/overlay/src/services/composer-expert-squad-catalog.ts
+@@ -7,6 +7,11 @@ import type {
+ import type { ChatCapabilitySettings, MissionSkillCatalogResponse } from "@opencorvus-ai/sdk"
+ import type { GlobalComposerReferencesResponse } from "./global-composer-references"
+ 
++export interface ComposerExpertSquadPackage {
++  readonly name: string
++  readonly revision: ExpertSquadCatalog["active"]["package_revision"]
++}
++
+ interface ComposerSkillOption {
+   name: string
+   description?: string
+@@ -33,6 +38,7 @@ export interface ComposerExpertSquadCatalogSnapshot {
+   chatSkills: ComposerSkillOption[]
+   missionSkills: ComposerSkillOption[]
+   activeID: string
++  activePackage: ComposerExpertSquadPackage | null
+   problems: readonly ComposerReferenceCatalogProblem[]
+ }
+ 
+@@ -43,6 +49,7 @@ const EMPTY_COMPOSER_EXPERT_SQUAD_CATALOG: ComposerExpertSquadCatalogSnapshot =
+   chatSkills: [],
+   missionSkills: [],
+   activeID: "",
++  activePackage: null,
+   problems: [],
+ }
+ 
+@@ -67,6 +74,19 @@ export function composerReferenceCatalogError(snapshot: ComposerExpertSquadCatal
+   return snapshot.problems.map((problem) => `${labels[problem.source]}: ${problem.message}`).join("; ")
+ }
+ 
++function activeCatalogFacts(catalog: ExpertSquadCatalog) {
++  const uniqueSkills = new Map<string, ComposerSkillOption>()
++  for (const grant of catalog.active_skill_projection.production_grants) {
++    if (uniqueSkills.has(grant.skill.name)) continue
++    uniqueSkills.set(grant.skill.name, { name: grant.skill.name, description: grant.skill.description })
++  }
++  return {
++    activeID: catalog.active.effective.trim(),
++    activePackage: { name: catalog.active.name, revision: { ...catalog.active.package_revision } },
++    skills: [...uniqueSkills.values()],
++  }
++}
++
+ export function createComposerExpertSquadCatalogSnapshot(
+   requestKey: string,
+   catalog: ExpertSquadCatalog,
+@@ -77,19 +97,13 @@ export function createComposerExpertSquadCatalogSnapshot(
+ ): ComposerExpertSquadCatalogSnapshot {
+   const key = requestKey.trim()
+   if (!key) throw new Error("composer expert-squad catalog requires a request key")
+-  const activeID = catalog.active.effective.trim()
+-  const uniqueSkills = new Map<string, ComposerSkillOption>()
+-  for (const grant of catalog.active_skill_projection.production_grants) {
+-    if (uniqueSkills.has(grant.skill.name)) continue
+-    uniqueSkills.set(grant.skill.name, {
+-      name: grant.skill.name,
+-      description: grant.skill.description,
+-    })
+-  }
++  const facts = activeCatalogFacts(catalog)
+   return {
+     requestKey: key,
+-    squads: mergeComposerExpertSquadOptions(squadPage.entries, activeInspection ? [activeInspection] : [], [activeID]),
+-    skills: [...uniqueSkills.values()],
++    squads: mergeComposerExpertSquadOptions(squadPage.entries, activeInspection ? [activeInspection] : [], [
++      facts.activeID,
++    ]),
++    ...facts,
+     chatSkills: chatCapability.skills.installed.map((skill) => ({
+       name: skill.name,
+       description: skill.description,
+@@ -98,7 +112,6 @@ export function createComposerExpertSquadCatalogSnapshot(
+       name: skill.name,
+       description: skill.description,
+     })),
+-    activeID,
+     problems: missionSkillCatalog.issues.map((issue) => ({
+       source: "mission-skills",
+       kind: "catalog-issue",
+@@ -125,34 +138,34 @@ export function createComposerReferenceCatalogSnapshotFromSettled(
+   let squads = current.squads
+   let skills = current.skills
+   let activeID = current.activeID
++  let activePackage: ComposerExpertSquadPackage | null = null
+   let missionSkills = current.missionSkills
+   let chatSkills = current.chatSkills
+ 
+   if (results.catalog.status === "fulfilled") {
+     try {
+       const catalog = results.catalog.value
+-      if (results.squads.status !== "fulfilled") throw results.squads.reason
+-      const projected = createComposerExpertSquadCatalogSnapshot(
+-        key,
+-        catalog,
+-        results.squads.value,
+-        { mission_skills: [], issues: [] },
+-        { skills: { assigned_refs: [], installed: [] } } as ChatCapabilitySettings,
+-        results.activeInspection.status === "fulfilled" ? results.activeInspection.value : undefined,
++      const facts = activeCatalogFacts(catalog)
++      activePackage = facts.activePackage
++      skills = facts.skills
++      activeID = facts.activeID
++      squads = mergeComposerExpertSquadOptions(
++        results.squads.status === "fulfilled" ? results.squads.value.entries : [],
++        results.activeInspection.status === "fulfilled" ? [results.activeInspection.value] : [],
++        [activeID],
+       )
+-      squads = projected.squads
+-      skills = projected.skills
+-      activeID = projected.activeID
+     } catch (error) {
+       squads = []
+       skills = []
+       activeID = ""
+-      if (results.squads.status === "fulfilled") problems.push(requestProblem("expert-squads", error))
++      activePackage = null
++      problems.push(requestProblem("expert-squads", error))
+     }
+   } else {
+     squads = []
+     skills = []
+     activeID = ""
++    activePackage = null
+     problems.push(requestProblem("expert-squads", results.catalog.reason))
+   }
+   if (results.squads.status === "rejected") problems.push(requestProblem("squad-page", results.squads.reason))
+@@ -196,6 +209,7 @@ export function createComposerReferenceCatalogSnapshotFromSettled(
+     chatSkills,
+     missionSkills,
+     activeID,
++    activePackage,
+     problems,
+   }
+ }
+@@ -254,6 +268,7 @@ export function createGlobalComposerReferenceCatalogSnapshot(
+       description: skill.description,
+     })),
+     activeID: "",
++    activePackage: null,
+     problems: [
+       ...catalog.skills.issues.map(
+         (issue): ComposerReferenceCatalogProblem => ({
+@@ -286,6 +301,7 @@ export function failedComposerReferenceCatalogSnapshot(
+     chatSkills: [],
+     missionSkills: [],
+     activeID: "",
++    activePackage: null,
+     problems: [requestProblem("load", error.trim() || "Composer reference catalog unavailable")],
+   }
+ }

@@ -1,0 +1,47 @@
+$ bun script/run-tests.ts test/server/expert-selected-read-identity.test.ts
+[1/1] START test/server/expert-selected-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+selected-reader-cold-receipts [{"route":"/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected","status":400,"errorName":null},{"route":"/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected","status":400,"errorName":null},{"route":"/expert-squad/configuration?id=selected-reader&installationScope=project","status":200,"errorName":null}]
+128 |     body: {
+129 |       name: "ProviderModelNotFoundError",
+130 |       data: { providerID: "missing-selected-provider", modelID: "missing-selected-model" },
+131 |     },
+132 |   })
+133 |   expect(readers.map(({ route, status }) => ({ route, status }))).toEqual(
+                                                                        ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "route": "/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected",
+-     "status": 200,
++     "status": 400,
+    },
+    {
+      "route": "/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected",
+-     "status": 200,
++     "status": 400,
+    },
+    {
+      "route": "/expert-squad/configuration?id=selected-reader&installationScope=project",
+      "status": 200,
+    },
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-selected-read-identity.test.ts:133:67)
+(fail) three exact selected readers return actual package and redacted configuration while runtime model remains unavailable [6198.96ms]
+
+ 0 pass
+ 1 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [9.29s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-selected-read-identity.test.ts
+[1/1] DONE test/server/expert-selected-read-identity.test.ts exit=1 duration=10.16s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-selected-read-identity.test.ts
+error: script "test" exited with code 1

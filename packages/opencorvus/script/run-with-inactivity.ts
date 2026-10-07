@@ -2,6 +2,7 @@ import {
   bootstrapIsolatedTestRuntime,
   isolatedTestChildEnvironment,
   removeIsolatedTestRuntime,
+  testCommandDeadlineAt,
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
@@ -28,18 +29,22 @@ const testProcessSupervisor = prepareTestProcessSupervisor()
 const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
 if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
 
+let settlementConfirmed = true
 try {
   const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
+  settlementConfirmed = false
   const result = await runHostCommandWithInactivity({
     executable: command.executable,
     args: command.args,
     cwd: process.cwd(),
     env: isolatedTestChildEnvironment(runnerRuntime),
+    deadlineAt: testCommandDeadlineAt(),
     inactivityTimeoutMs: command.inactivityMs,
     onStdout: (chunk) => process.stdout.write(chunk),
     onStderr: (chunk) => process.stderr.write(chunk),
   })
 
+  settlementConfirmed = result.settlementConfirmed
   if (result.failure) {
     process.stderr.write(`${result.failure.message}\n`)
     process.exitCode = 1
@@ -49,5 +54,9 @@ try {
     process.exitCode = result.exitCode
   }
 } finally {
-  await removeIsolatedTestRuntime(runnerRuntime)
+  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
+  else
+    console.error(
+      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
+    )
 }

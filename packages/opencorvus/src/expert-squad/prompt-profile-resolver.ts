@@ -3303,6 +3303,7 @@ export namespace PromptProfileResolver {
     const packageRevision = resolvedPackageRevision(context)
     return ExpertSquadCatalogSchema.parse({
       active: {
+        name: ExpertSquadRegistry.displayName(activePackage.pkg.manifest),
         effective: active,
         project: input.projectActive,
         session_override: input.sessionOverride,

@@ -1,0 +1,86 @@
+bun test v1.3.14 (0d9b296a)
+
+test\expert-catalog-error-provenance.test.ts:
+13 |  __setHostTransportForTest({kind:"browser",capabilities:HOST_CAPABILITIES.browser,
+14 |  async request<T>(request:TransportRequest) {records.push(request);return {status:400,ok:false,headers:{"x-request-id":"owned-error-80"},body:{name:"ProviderModelNotFoundError"}} as TransportResponse<T>},
+15 |  openStream(){throw new Error("local transport only")},async native(){throw new Error("local transport only")}})
+16 |  const error=await load().then(()=>undefined,error=>error)
+17 |  expect(error instanceof ApiError).toBe(true)
+18 |  expect({method:error.method,status:error.status,path:error.path,body:error.body,requestID:error.requestID}).toEqual({method:"GET",status:400,path:records[0]!.path,body:{name:"ProviderModelNotFoundError"},requestID:"owned-error-80"})
+                                                                                                                  ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "name": "ProviderModelNotFoundError",
+    },
+    "method": "GET",
+-   "path": "expert-squad/catalog",
+-   "requestID": "owned-error-80",
++   "path": "expert-squad/catalog?directory=D%3A%2Fowned%2Fcatalog",
++   "requestID": undefined,
+    "status": 400,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\expert-catalog-error-provenance.test.ts:18:110)
+(fail) catalog preserves original typed transport failure [3.89ms]
+13 |  __setHostTransportForTest({kind:"browser",capabilities:HOST_CAPABILITIES.browser,
+14 |  async request<T>(request:TransportRequest) {records.push(request);return {status:400,ok:false,headers:{"x-request-id":"owned-error-80"},body:{name:"ProviderModelNotFoundError"}} as TransportResponse<T>},
+15 |  openStream(){throw new Error("local transport only")},async native(){throw new Error("local transport only")}})
+16 |  const error=await load().then(()=>undefined,error=>error)
+17 |  expect(error instanceof ApiError).toBe(true)
+18 |  expect({method:error.method,status:error.status,path:error.path,body:error.body,requestID:error.requestID}).toEqual({method:"GET",status:400,path:records[0]!.path,body:{name:"ProviderModelNotFoundError"},requestID:"owned-error-80"})
+                                                                                                                  ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "name": "ProviderModelNotFoundError",
+    },
+    "method": "GET",
+-   "path": "expert-squad/settings/detail",
+-   "requestID": "owned-error-80",
++   "path": "expert-squad/settings/detail?directory=D%3A%2Fowned%2Fcatalog&id=base&installationScope=built_in",
++   "requestID": undefined,
+    "status": 400,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\expert-catalog-error-provenance.test.ts:18:110)
+(fail) settings preserves original typed transport failure [0.45ms]
+13 |  __setHostTransportForTest({kind:"browser",capabilities:HOST_CAPABILITIES.browser,
+14 |  async request<T>(request:TransportRequest) {records.push(request);return {status:400,ok:false,headers:{"x-request-id":"owned-error-80"},body:{name:"ProviderModelNotFoundError"}} as TransportResponse<T>},
+15 |  openStream(){throw new Error("local transport only")},async native(){throw new Error("local transport only")}})
+16 |  const error=await load().then(()=>undefined,error=>error)
+17 |  expect(error instanceof ApiError).toBe(true)
+18 |  expect({method:error.method,status:error.status,path:error.path,body:error.body,requestID:error.requestID}).toEqual({method:"GET",status:400,path:records[0]!.path,body:{name:"ProviderModelNotFoundError"},requestID:"owned-error-80"})
+                                                                                                                  ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "name": "ProviderModelNotFoundError",
+    },
+    "method": "GET",
+-   "path": "expert-squad/market",
+-   "requestID": "owned-error-80",
++   "path": "expert-squad/market?directory=D%3A%2Fowned%2Fcatalog&query=&availability=all&limit=20",
++   "requestID": undefined,
+    "status": 400,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\expert-catalog-error-provenance.test.ts:18:110)
+(fail) market preserves original typed transport failure [0.48ms]
+
+ 0 pass
+ 3 fail
+ 6 expect() calls
+Ran 3 tests across 1 file. [196.00ms]

@@ -8665,6 +8665,7 @@ export type ExpertSquadCatalogResponses = {
   200: {
     active: {
       effective: string
+      name: string
       package_revision: ExpertSquadPackageRevision
       project: string
       session_override: string | null

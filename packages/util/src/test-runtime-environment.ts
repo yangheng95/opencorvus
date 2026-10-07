@@ -9,6 +9,11 @@ const OWNER_PID = "OPENCORVUS_TEST_OWNER_PID"
 const OS_TEMP_ROOT = "OPENCORVUS_TEST_OS_TEMP_ROOT"
 const OWNER_NONCE = "OPENCORVUS_TEST_OWNER_NONCE"
 const OWNER_MARKER = ".opencorvus-test-owner.json"
+/** One finite command budget; native supervisor preparation and the full suite are separate. */
+export const TEST_COMMAND_EXECUTION_TIMEOUT_MS = 900_000
+export function testCommandDeadlineAt(): number {
+  return Date.now() + TEST_COMMAND_EXECUTION_TIMEOUT_MS
+}
 const USER_CONFIGURATION_ENVIRONMENT_KEYS = [
   "OPENCORVUS_CONFIG",
   "OPENCORVUS_CONFIG_DIR",

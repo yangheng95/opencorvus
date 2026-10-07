@@ -1,0 +1,44 @@
+[
+  {
+    "method": "GET",
+    "path": "/expert-squad/inventory-status",
+    "status": 200,
+    "requestID": "46b72f77-0293-4f20-b7f9-34e604c1f1e6",
+    "errorName": null
+  },
+  {
+    "method": "GET",
+    "path": "/expert-squad/diagnostics?limit=20",
+    "status": 200,
+    "requestID": "d154cfa5-62ff-47b7-aa5c-767db3041be7",
+    "errorName": null
+  },
+  {
+    "method": "GET",
+    "path": "/expert-squad/inspect?id=task-resource-qa",
+    "status": 400,
+    "requestID": "b04f83fc-2ca3-4d7a-9fec-bea7c1ca10e2",
+    "errorName": "ProviderModelNotFoundError"
+  },
+  {
+    "method": "GET",
+    "path": "/expert-squad/settings/detail?id=task-resource-qa&installationScope=project&namespace=qa",
+    "status": 400,
+    "requestID": "0755d613-fbca-4632-8e6d-7059f9fe4f99",
+    "errorName": "ProviderModelNotFoundError"
+  },
+  {
+    "method": "GET",
+    "path": "/expert-squad/configuration?id=task-resource-qa&installationScope=project",
+    "status": 400,
+    "requestID": "9b36428b-86a6-4b5b-8156-503ee891e75c",
+    "errorName": "ProviderModelNotFoundError"
+  },
+  {
+    "method": "GET",
+    "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+    "status": 400,
+    "requestID": "08cf3737-a442-4ad6-b207-9b181ddd8c9b",
+    "errorName": "ProviderModelNotFoundError"
+  }
+]

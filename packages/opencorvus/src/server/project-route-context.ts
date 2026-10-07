@@ -3,6 +3,11 @@ import { normalizedServerRoutePath } from "@opencorvus-ai/transport-protocol"
 const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /expert-squad/search",
   "GET /expert-squad/catalog",
+  "GET /expert-squad/inventory-status",
+  "GET /expert-squad/diagnostics",
+  "GET /expert-squad/inspect",
+  "GET /expert-squad/settings/detail",
+  "GET /expert-squad/configuration",
   "GET /mission-skill/catalog",
   "GET /experimental/project-memory",
   "POST /project/current/init-git",

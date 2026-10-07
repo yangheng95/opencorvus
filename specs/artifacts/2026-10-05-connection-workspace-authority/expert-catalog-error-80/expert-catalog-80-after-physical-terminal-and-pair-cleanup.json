@@ -1,0 +1,64 @@
+{
+  "nativeSettlement": {
+    "occurrence": "expert-catalog-80-after-b06e9c9a-f7c8-4dcb-a761-2fc0c3d75a4b",
+    "outcome": "settled",
+    "host": {
+      "pid": 43664,
+      "processInstanceID": "win32:639269428889268976",
+      "occurrenceID": "e81f093b-1137-4a9d-b7cb-c8894b6aeecd"
+    },
+    "target": {
+      "pid": 67884,
+      "processInstanceID": "win32:639269428897041616",
+      "occurrenceID": "b4a7ba92-e92d-4844-b2e6-29f59d850640"
+    },
+    "observedAtUtc": "2026-10-07T04:30:23.28Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-catalog-error-after-80\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-catalog-error-after-80\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "outcome": "removed"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-07T04:30:25.0374240Z",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 67884,
+        "processInstanceID": "win32:639269428897041616",
+        "occurrenceID": "b4a7ba92-e92d-4844-b2e6-29f59d850640"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 43664,
+        "processInstanceID": "win32:639269428889268976",
+        "occurrenceID": "e81f093b-1137-4a9d-b7cb-c8894b6aeecd"
+      }
+    }
+  ],
+  "listeners": null,
+  "occurrence": "expert-catalog-80-after-b06e9c9a-f7c8-4dcb-a761-2fc0c3d75a4b",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

@@ -41,17 +41,37 @@ reads the persisted immutable Git object through its existing process owner.
 Working files and current model availability do not substitute for that content;
 config and execution routes retain their runtime validation.
 
-Expert Squad search and active catalog, Mission Skill catalog and Project memory
+Expert Squad search, active catalog, inventory status and diagnostics,
+exact inspection/settings detail/configuration, Mission Skill catalog and Project memory
 GET use Project identity admission. Their inventory generations, Session lineage,
 Task-fixed package revision, skill cache invalidation and canonical memory envelope
 remain authoritative. First memory read keeps idempotent envelope materialization.
 These readers preserve actual configuration/package errors without execution-model
-bootstrap; model configuration, prompts and memory organization retain runtime admission.
+bootstrap; Session configuration, prompts and memory organization retain runtime admission.
+Raw GET /config retains its separate configuration-data contract. Selected Expert readers
+read current installations; configuration reads keep declared secret-value redaction.
+They do not substitute current package bodies for a Task-fixed revision or change configuration writes.
 
 Shared HTTP errors carry the dispatched method, path, status, decoded response body
 and request ID. Details include that method; binary readers keep the actual path,
 including POST Artifact reads. Caller-init mutation cannot alter the captured method.
 Ordinary non-HTTP errors retain their own facts.
+
+The active Expert Squad catalog carries its name and package revision from the
+same resolved package manifest and snapshot. One scope-keyed Composer projection
+retains those facts independently of candidate search/inspection failures. Task
+read-only references show the fixed assignment separately from literal references
+in the original Task request. Session/Mission references describe the current
+effective package and actual first-message references; they do not claim a fixed
+launch assignment. Full catalog failure, a new scope and global drafts retire the
+prior package fact through the existing loader owner.
+
+Installed catalog feedback retains the original thrown value in one nullable
+failure record. Inline wording derives from that value; Details use the shared
+HTTP formatter. Expert catalog/settings/market services preserve the original
+rejection. Refresh and both pagination paths publish data, errors and loading
+completion only under their existing current sequence and scope; API authority
+retirement remains a control outcome.
 
 Each subagent progress card exposes one visible header Open button with the
 same real Session callback used by article/header clicks. Pointer and keyboard

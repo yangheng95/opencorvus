@@ -1,0 +1,105 @@
+$ bun script/run-tests.ts test/server/expert-selected-read-identity.test.ts
+[1/1] START test/server/expert-selected-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+selected-reader-cold-receipts [{"route":"/expert-squad/inspect?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":"Selected reader"},{"route":"/expert-squad/settings/detail?id=selected-reader&installationScope=project&namespace=selected","status":200,"errorName":null},{"route":"/expert-squad/configuration?id=selected-reader&installationScope=project","status":200,"errorName":null}]
+141 |     label: "Selected reader",
+142 |     version: "2026.10.07.1",
+143 |     source: { kind: "installed_package", installation_scope: "project", namespace: "selected" },
+144 |   })
+145 |   const selected = ExpertSquadSettingsDetailSchema.parse(detail.body)
+146 |   expect(selected).toMatchObject({
+                         ^
+error: expect(received).toMatchObject(expected)
+
+@@ -2,17 +2,69 @@
+    "scope": {
+      "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-JfeRIm\test-50944-UzmzyD\fixtures\memory-WU3rbB",
+      "kind": "project",
+    },
+    "selected": {
++     "built_in": false,
++     "capability_projection": {
++       "agents": {},
++       "scheduler": {
++         "base_role": "orchestrator",
++         "capability_refs": [],
++       },
++       "virtual_workflows": {},
++     },
++     "capability_sets": {},
++     "configuration": {
++       "fields": [
++         {
++           "key": "endpoint",
++           "label": "Endpoint",
++           "required": true,
++           "type": "text",
++         },
++         {
++           "key": "access_key",
++           "label": "Access key",
++           "required": true,
++           "type": "secret",
++         },
++       ],
++     },
++     "declaration_hash": "d30e2ee1f214451f08399c327a93327a9ba34c29f635932334992982a3bf69e3",
++     "description": "Real SDK selected declaration fixture.",
++     "display_label": "selected/Selected reader",
++     "editable": false,
+      "id": "selected-reader",
++     "label": "Selected reader",
++     "name": "Selected reader",
++     "package_digest": "3795566549dc164c8f2653b26fac7f48e7c502b5154c6adef9db5599cd14cf28",
++     "product_pillars": [
++       "code",
++     ],
+      "readme": {
+-       "content": 
+- "# Selected reader
+- "
+- ,
++       "append_target": "orchestrator",
++       "content": "# Selected reader",
++       "path": "README.md",
++     },
++     "selector": {
++       "description": "Real SDK selected declaration fixture.",
++       "id": "selected-reader",
++       "instructions": "# Selected instructions",
++       "instructions_path": "selector.md",
++       "label": "Selected reader",
++       "ref": "selector/selected-reader",
++       "selection_guidance": "Read this selected declaration.",
++       "summary": "Inspect selected metadata.",
++     },
++     "source": {
++       "installation_scope": "project",
++       "kind": "installed_package",
++       "manifest_path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-JfeRIm\test-50944-UzmzyD\fixtures\memory-WU3rbB\.opencorvus\expert-squads\selected\selected-reader\expert-squad.jsonc",
++       "namespace": "selected",
++       "package_digest": "3795566549dc164c8f2653b26fac7f48e7c502b5154c6adef9db5599cd14cf28",
++       "readme_path": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-JfeRIm\test-50944-UzmzyD\fixtures\memory-WU3rbB\.opencorvus\expert-squads\selected\selected-reader\README.md",
++       "root": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-JfeRIm\test-50944-UzmzyD\fixtures\memory-WU3rbB\.opencorvus\expert-squads\selected\selected-reader",
+      },
+      "version": "2026.10.07.1",
+    },
+  }
+
+- Expected  - 4
++ Received  + 58
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-selected-read-identity.test.ts:146:20)
+(fail) three exact selected readers return actual package and redacted configuration while runtime model remains unavailable [6228.74ms]
+
+ 0 pass
+ 1 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [8.76s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-selected-read-identity.test.ts
+[1/1] DONE test/server/expert-selected-read-identity.test.ts exit=1 duration=9.52s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-selected-read-identity.test.ts
+error: script "test" exited with code 1

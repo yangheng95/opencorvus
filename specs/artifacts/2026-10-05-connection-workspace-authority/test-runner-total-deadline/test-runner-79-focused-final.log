@@ -1,0 +1,49 @@
+$ bun script/run-tests.ts test/command-inactivity-settlement.test.ts test/test-runner-selected-files.test.ts test/test-runner-failure.test.ts test/test-runner-runtime-isolation.test.ts
+[1/4] START test/command-inactivity-settlement.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) waits for supervisor settlement and returns output delivered after physical exit [29.46ms]
+(pass) returns a typed exit failure when supervisor settlement fails [4.49ms]
+(pass) deadline closes a real output-active native child tree while its parallel peer succeeds [1570.20ms]
+(pass) a failed byte observer returns actual retained bytes after native settlement [229.15ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [2.97s]
+[1/4] DONE test/command-inactivity-settlement.test.ts exit=0 duration=3.74s
+[2/4] START test/test-runner-selected-files.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the isolated runner completes selected files and reports their failed exit [3788.20ms]
+
+ 1 pass
+ 0 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [4.85s]
+[2/4] DONE test/test-runner-selected-files.test.ts exit=0 duration=5.00s
+[3/4] START test/test-runner-failure.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) test runner identifies the selected file and preserves exit 1 [2561.67ms]
+(pass) test runner identifies the selected file and preserves exit 7 [2387.47ms]
+
+ 2 pass
+ 0 fail
+ 8 expect() calls
+Ran 2 tests across 1 file. [6.02s]
+[3/4] DONE test/test-runner-failure.test.ts exit=0 duration=6.16s
+[4/4] START test/test-runner-runtime-isolation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) owns the package runner supervisor request under its isolated runtime [67.10ms]
+
+ 1 pass
+ 0 fail
+ 52 expect() calls
+Ran 1 test across 1 file. [1140.00ms]
+[4/4] DONE test/test-runner-runtime-isolation.test.ts exit=0 duration=1.28s

@@ -1,0 +1,43 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__components__ChatComposer.tsx.before.txt" b/packages/overlay/src/components/ChatComposer.tsx
+index 4612332a..a29743c7 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__components__ChatComposer.tsx.before.txt"
++++ b/packages/overlay/src/components/ChatComposer.tsx
+@@ -1,6 +1,7 @@
+ // ── ChatComposer Component ──
+ // Solid.js port of renderChatComposer / renderChatAttachments / chatForm submit
+ // and related attachment/keyboard logic
++import type { ComposerExpertSquadPackage } from "../services/composer-expert-squad-catalog"
+ 
+ import {
+   createSignal,
+@@ -196,7 +197,7 @@ export interface ChatComposerProps {
+   onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
+   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
+   onInstallMoreExpertSquads?: () => void
+-  activeExpertSquadID: string
++  activeExpertSquadPackage: ComposerExpertSquadPackage | null
+   conversationActive: boolean
+   launchReferences: VisibleComposerReferences
+   conversationExperience?: ConversationExperience
+@@ -622,7 +623,6 @@ export function ChatComposer(props: ChatComposerProps) {
+   )
+   const [textareaResizeHeight, setTextareaResizeHeight] = createSignal<number | null>(null)
+   const runControlState = createMemo(() => composerRunControlState(appStore.config))
+-  const activeExpertSquad = createMemo(() => props.expertSquads.find((squad) => squad.id === props.activeExpertSquadID))
+   const mentionCatalog = createMemo<ComposerMentionCatalog>(() => ({
+     categories: [
+       {
+@@ -1438,9 +1438,10 @@ export function ChatComposer(props: ChatComposerProps) {
+             skills={props.skills}
+             missionSkills={props.missionSkills}
+             expertSquads={props.expertSquads}
+-            activeExpertSquad={
+-              activeComposerIntent().conversationTarget === "mission" ? activeExpertSquad() : undefined
+-            }
++            activePackage={props.activeExpertSquadPackage}
++            referenceOrigin={props.activeWorkItemKind === "task" ? "task-request" : "first-message"}
++            catalogError={props.referenceCatalogError}
++            onCatalogRetry={props.onReferenceCatalogRetry}
+             launchReferences={props.launchReferences}
+             readOnly
+           />

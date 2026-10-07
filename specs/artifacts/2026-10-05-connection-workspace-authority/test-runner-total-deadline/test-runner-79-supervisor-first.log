@@ -1,0 +1,39 @@
+$ bun script/run-tests.ts test/process-authority-runtime.test.ts test/process-supervisor-control-plane.test.ts
+[1/2] START test/process-authority-runtime.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) explicit conversation and Task execution authority > routes Formatter, Browser, MCP, and Office through their exact process owners [17248.94ms]
+
+ 1 pass
+ 0 fail
+ 13 expect() calls
+Ran 1 test across 1 file. [19.64s]
+[1/2] DONE test/process-authority-runtime.test.ts exit=0 duration=20.57s
+[2/2] START test/process-supervisor-control-plane.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ProcessSupervisor control-plane authority > foreground shell reclaims its child tree and returns the root command exit [217.22ms]
+(pass) ProcessSupervisor control-plane authority > background shell retains its owned child tree until explicit disposal [378.36ms]
+(pass) ProcessSupervisor control-plane authority > Shell.run returns the foreground root exit after child cleanup [199.46ms]
+(pass) ProcessSupervisor control-plane authority > reclaims a descendant listener after the exact Windows owner process dies [1032.92ms]
+(pass) ProcessSupervisor control-plane authority > returns strict disposal only after physical exit and output settlement [38.60ms]
+(pass) ProcessSupervisor control-plane authority > retains the exact live owner until output settlement finishes [16.96ms]
+(pass) ProcessSupervisor control-plane authority > keeps physical ownership after an early output control failure [15.47ms]
+(pass) ProcessSupervisor control-plane authority > retains shutdown ownership when physical settlement proof is unavailable [6.54ms]
+(pass) ProcessSupervisor control-plane authority > reclaims the exact durable request when the dead helper's kill-on-close job proves settlement [5113.41ms]
+(pass) ProcessSupervisor control-plane authority > settles a Windows command that fails before target creation with explicit active-process-zero evidence [122.04ms]
+(pass) ProcessSupervisor control-plane authority > accepts proven process exit even when auxiliary disposal settlement is delayed [0.44ms]
+(pass) ProcessSupervisor control-plane authority > returns a fast command's real nonzero exit after the native readiness handshake [170.82ms]
+(pass) ProcessSupervisor control-plane authority > inherits the target environment without serializing it into the Windows request [194.86ms]
+(pass) ProcessSupervisor control-plane authority > executes a control-plane process while the Task Capsule runtime is configured [529.26ms]
+(pass) ProcessSupervisor control-plane authority > bounds a live Windows ripgrep stream without an unhandled output-settlement rejection [287.80ms]
+(pass) ProcessSupervisor control-plane authority > observes ripgrep stderr rejection before a bounded consumer exits [41.98ms]
+(pass) ProcessSupervisor control-plane authority > observes a deterministic Windows output-stream rejection at handle creation [1507.08ms]
+
+ 17 pass
+ 0 fail
+ 35 expect() calls
+Ran 17 tests across 1 file. [10.99s]
+[2/2] DONE test/process-supervisor-control-plane.test.ts exit=0 duration=11.15s

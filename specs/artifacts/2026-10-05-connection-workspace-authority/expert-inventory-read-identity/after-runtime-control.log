@@ -1,0 +1,43 @@
+[1/1] START test/server/expert-inventory-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "root",
+      "orchestrator",
+      "assistant",
+      "mission",
+      "delegated-worker",
+      "intent-analysis",
+      "requirements",
+      "frontend-design",
+      "architect",
+      "goal-workload-analyst",
+      "integrity",
+      "fact-check",
+      "build",
+      "explore",
+      "deep-research",
+      "frontend-research",
+      "visual-qa",
+      "system"
+    ],
+    "path": [
+      "kind"
+    ],
+    "message": "Invalid option: expected one of \"root\"|\"orchestrator\"|\"assistant\"|\"mission\"|\"delegated-worker\"|\"intent-analysis\"|\"requirements\"|\"frontend-design\"|\"architect\"|\"goal-workload-analyst\"|\"integrity\"|\"fact-check\"|\"build\"|\"explore\"|\"deep-research\"|\"frontend-research\"|\"visual-qa\"|\"system\""
+  }
+]
+(fail) cold inventory and diagnostics retain real project catalogue facts without an execution model [3063.54ms]
+
+ 0 pass
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [5.64s]
+[1/1] DONE test/server/expert-inventory-read-identity.test.ts exit=1 duration=6.42s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\expert-inventory-read-identity.test.ts

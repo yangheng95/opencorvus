@@ -1,0 +1,79 @@
+Browser tab: 48, Title: "OpenCorvus", URL: "http://localhost:18032/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18032/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			20 container Settings navigation
+				21 button Back to OpenCorvus
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			22 container Description: Squad Market, ID: configDialog
+				23 container tabs-cl-336
+					24 container configSidebar
+						25 button Back to app
+						26 search text field (settable) Search settings pages...
+						27 tab group
+							28 text Application
+							29 tab (selectable, settable, boolean) General, Value: 0, ID: config-tab-general
+							30 tab (selectable, settable, boolean) Appearance, Value: 0, ID: config-tab-appearance
+							31 tab (selectable, settable, boolean) Network, Value: 0, ID: config-tab-network
+							32 tab (selectable, settable, boolean) Usage, Value: 0, ID: config-tab-usage
+							33 text Product
+							34 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+							35 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+							36 text Missions & Automation
+							37 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+							38 tab (selectable, settable, boolean) Scheduled tasks, Value: 0, ID: config-tab-scheduled
+							39 text Expert Squads
+							40 tab (selected, settable, boolean) Squad Market, Value: 1, ID: config-tab-expert-squad-install
+							41 tab (selectable, settable, boolean) Installed Expert Squads, Value: 0, ID: config-tab-expert-squad
+							42 text Shared Resources
+							43 tab (selectable, settable, boolean) Providers, Value: 0, ID: config-tab-providers
+							44 tab (selectable, settable, boolean) Skill Library, Value: 0, ID: config-tab-skill
+							45 tab (selectable, settable, boolean) MCP Connections, Value: 0, ID: config-tab-mcp
+							46 tab (selectable, settable, boolean) Channel, Value: 0, ID: config-tab-channel
+							47 text Context
+							48 tab (selectable, settable, boolean) Memory & Context, Value: 0, ID: config-tab-memory
+							49 text Data
+							50 tab (selectable, settable, boolean) Archive, Value: 0, ID: config-tab-archive
+							51 tab (selectable, settable, boolean) Release notes, Value: 0, ID: config-tab-changelog
+							52 tab (selectable, settable, boolean) About, Value: 0, ID: config-tab-about
+					53 splitter Description: Settings, Value: 230, ID: configResizer
+					54 container configContent
+						55 heading Squad Market, Value: 1
+							56 text Squad Market
+						57 container Description: Squad Market, ID: config-panel-expert-squad-install
+							58 container expertSquadInstallBody
+								59 container
+									60 text Discover Expert Squads for your tasks, or install your own package.
+									61 text 118
+									62 text published Expert Squads
+									63 link Description: Open Squad Market, Value: opencorvus.com/market/
+									64 link Description: Contribute / listing guide, Value: opencorvus.com/publish/
+								65 container
+									66 heading Local installation, Value: 2
+										67 text Local installation
+									68 text Install an Expert Squad you are developing or have already downloaded. Installation writes only to the selected scope and never activates the Squad automatically.
+									69 text Installation scope Make the package available to every project or override only the current project.
+									70 pop up button (collapsed) Installation scope All projects, ID: select-cl-363-trigger, Secondary Actions: Expand
+										71 text All projects
+									72 text Install from folder Folder selection is available in the desktop app. Use a ZIP package in this browser host.
+									73 button (disabled) Choose folder
+									74 text Install from ZIP Choose an exported ZIP package or one downloaded from a trusted source.
+									75 button Choose ZIP
+
+The focused UI element is 26 search text field (settable) Search settings pages...

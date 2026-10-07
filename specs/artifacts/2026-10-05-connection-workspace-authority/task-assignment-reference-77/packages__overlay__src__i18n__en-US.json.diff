@@ -1,0 +1,31 @@
+diff --git "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__i18n__en-US.json.before.txt" b/packages/overlay/src/i18n/en-US.json
+index 3ab3cf1f..6955eb25 100644
+--- "a/specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-assignment-reference-77\\packages__overlay__src__i18n__en-US.json.before.txt"
++++ b/packages/overlay/src/i18n/en-US.json
+@@ -235,9 +235,15 @@
+   "chat.mention.error_unknown_mission_skill": "Mission Skill {{name}} is not available in the current composer scope.",
+   "chat.mention.error_unknown_squad": "Expert Squad {{name}} is not available in the current composer scope.",
+   "chat.references.trigger": "Skills & squads",
+-  "chat.references.view": "View launch references",
++  "chat.references.view": "View conversation context",
+   "chat.references.title": "Select skills and expert squads",
+-  "chat.references.selected_title": "Selected at launch",
++  "chat.references.context_title": "Conversation context",
++  "chat.references.task_assignment": "Expert Squad assigned to this Task · fixed version",
++  "chat.references.current_assignment": "Current effective Expert Squad",
++  "chat.references.task_request_title": "Explicit references in the original request",
++  "chat.references.first_message_title": "Explicit references in the first message",
++  "chat.references.task_request_hint": "The Task assignment and references in its original request are read-only.",
++  "chat.references.task_request_empty": "The original request has no explicit skill or Expert Squad references.",
+   "chat.references.selection_hint": "Selections are written into the prompt as visible references.",
+   "chat.references.read_only_hint": "These references come from the conversation's first message and are read-only.",
+   "chat.references.search_placeholder": "Search skill or squad names",
+@@ -249,7 +255,7 @@
+   "chat.references.generator": "Generator",
+   "chat.references.no_matches": "No matching skills or expert squads",
+   "chat.references.catalog_unavailable": "Some references could not be loaded. See details or retry.",
+-  "chat.references.none_selected": "No skills or expert squads were selected when this conversation started.",
++  "chat.references.none_selected": "The first message has no explicit skill or Expert Squad references.",
+   "chat.references.install_more": "Install more Expert Squads",
+   "chat.references.install_more_description": "Browse the Squad Market and install only what this project needs.",
+   "chat.references.market_results": "From the Squad Market",

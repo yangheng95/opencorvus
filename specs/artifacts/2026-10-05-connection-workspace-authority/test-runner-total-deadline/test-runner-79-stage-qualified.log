@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts test/command-inactivity-settlement.test.ts
+[1/1] START test/command-inactivity-settlement.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) waits for supervisor settlement and returns output delivered after physical exit [29.07ms]
+(pass) returns a typed exit failure when supervisor settlement fails [3.74ms]
+(pass) deadline closes a real output-active native child tree while its parallel peer succeeds [1574.55ms]
+(pass) a failed byte observer returns actual retained bytes after native settlement [236.38ms]
+(pass) a failed byte source keeps its output stage, original error and actual bytes [39.68ms]
+
+ 5 pass
+ 0 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [3.48s]
+[1/1] DONE test/command-inactivity-settlement.test.ts exit=0 duration=4.36s

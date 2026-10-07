@@ -1,0 +1,64 @@
+{
+  "occurrence": "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+    "outcome": "settled",
+    "host": {
+      "pid": 45416,
+      "processInstanceID": "win32:639269445500956487",
+      "occurrenceID": "9d8cfea3-78b9-432d-b7ad-175d5584b431"
+    },
+    "target": {
+      "pid": 21788,
+      "processInstanceID": "win32:639269445508941746",
+      "occurrenceID": "de5c3bf1-27d0-444b-b6fa-abff8a5be0b1"
+    },
+    "observedAtUtc": "2026-10-07T04:40:31.731Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-inventory-after-78\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\expert-inventory-after-78\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "copiedLength": 2001983
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "observedAtUtc": "2026-10-07T04:40:33.4559959Z",
+  "chain": [
+    {
+      "expected": {
+        "pid": 21788,
+        "processInstanceID": "win32:639269445508941746",
+        "occurrenceID": "de5c3bf1-27d0-444b-b6fa-abff8a5be0b1"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 45416,
+        "processInstanceID": "win32:639269445500956487",
+        "occurrenceID": "9d8cfea3-78b9-432d-b7ad-175d5584b431"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": null
+}

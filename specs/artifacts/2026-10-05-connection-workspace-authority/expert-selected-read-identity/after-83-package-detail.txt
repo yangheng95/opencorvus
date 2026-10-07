@@ -1,0 +1,30 @@
+Browser tab: 50, Title: "OpenCorvus", URL: "http://localhost:18034/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 60-63, 68-72
+~								59 button Back to list
++								60 heading Task Resource QA, Value: 2
++									61 text Task Resource QA
++								62 text task-resource-qa
++								63 text Project package v 2026.10.06.2
+~								64 text Current Project observation, a small durable text resource, and independent verification through a real Task.
+~								65 text Project active Session override
+~								66 pop up button (collapsed) Package actions, ID: dropdownmenu-cl-437-trigger, Secondary Actions: Expand
+~								67 button Inherit Project
++								68 container tabs-cl-441
++									69 tab group Installed Squad detail sections
++										70 tab (selected, settable, boolean) Overview, Value: 1, ID: tabs-cl-441-trigger-overview
++										71 tab (selectable, settable, boolean) Agents & Capabilities, Value: 0, ID: tabs-cl-441-trigger-agents
++										72 tab (selectable, settable, boolean) Configuration, Value: 0, ID: tabs-cl-441-trigger-configuration
++										73 tab (selectable, settable, boolean) Evolution History, Value: 0, ID: tabs-cl-441-trigger-evolution
++										74 tab (selectable, settable, boolean) Package Details, Value: 0, ID: tabs-cl-441-trigger-package
++									75 container tabs-cl-441-content-overview
++										76 definition list
++											77 container Project selection
++												78 text Project selection
++											79 text task-resource-qa
++											80 container Effective selection
++												81 text Effective selection
++											82 text task-resource-qa
++										83 button (collapsed) Selection and configuration are separate, Secondary Actions: Expand
++											84 text Selection and configuration are separate
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18034/ui/

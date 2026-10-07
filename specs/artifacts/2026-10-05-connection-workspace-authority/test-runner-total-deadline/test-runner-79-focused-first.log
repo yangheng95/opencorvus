@@ -1,0 +1,58 @@
+$ bun script/run-tests.ts test/command-inactivity-settlement.test.ts
+[1/1] START test/command-inactivity-settlement.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+28 |       executable: process.execPath,
+29 |       args: [],
+30 |       cwd: process.cwd(),
+31 |       inactivityTimeoutMs: 1_000,
+32 |     })
+33 |     expect(result).toMatchObject({ exitCode: 0, stdout: "tail-after-exit", failure: undefined })
+                        ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "exitCode": 0,
+-   "failure": undefined,
++   "settlementConfirmed": true,
++   "stderr": "",
++   "stderrBytes": Uint8Array [],
+    "stdout": "tail-after-exit",
++   "stdoutBytes": Uint8Array [
++     116,
++     97,
++     105,
++     108,
++     45,
++     97,
++     102,
++     116,
++     101,
++     114,
++     45,
++     101,
++     120,
++     105,
++     116,
++   ],
+  }
+
+- Expected  - 1
++ Received  + 20
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\command-inactivity-settlement.test.ts:33:20)
+(fail) waits for supervisor settlement and returns output delivered after physical exit [36.31ms]
+(pass) returns a typed exit failure when supervisor settlement fails [1.73ms]
+(pass) deadline closes a real output-active native child tree while its parallel peer succeeds [1569.02ms]
+(pass) a failed byte observer returns actual retained bytes after native settlement [179.28ms]
+
+ 3 pass
+ 1 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [3.05s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\command-inactivity-settlement.test.ts
+[1/1] DONE test/command-inactivity-settlement.test.ts exit=1 duration=3.83s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\command-inactivity-settlement.test.ts
+error: script "test" exited with code 1

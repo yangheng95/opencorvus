@@ -4,6 +4,7 @@ import {
   bootstrapIsolatedTestRuntime,
   isolatedTestChildEnvironment,
   removeIsolatedTestRuntime,
+  testCommandDeadlineAt,
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "../../opencorvus/script/prepare-test-process-supervisor"
 
@@ -21,21 +22,25 @@ function unitTestFiles(requestedFiles: string[]): string[] {
     .sort()
 }
 
+let settlementConfirmed = true
 try {
   const { runHostCommandWithInactivity } = await import("../../opencorvus/src/shell/command-inactivity")
   const files = unitTestFiles(process.argv.slice(2))
   if (files.length === 0) throw new Error("Overlay unit test runner requires at least one test file")
   const childEnvironment = isolatedTestChildEnvironment(runnerRuntime)
   for (const file of files) {
+    settlementConfirmed = false
     const result = await runHostCommandWithInactivity({
       executable: process.execPath,
       args: ["test", "--timeout=0", file],
       cwd: OVERLAY_ROOT,
       env: childEnvironment,
+      deadlineAt: testCommandDeadlineAt(),
       inactivityTimeoutMs: UNIT_TEST_INACTIVITY_TIMEOUT_MILLISECONDS,
       onStdout: (chunk) => process.stdout.write(chunk),
       onStderr: (chunk) => process.stderr.write(chunk),
     })
+    settlementConfirmed = result.settlementConfirmed
     if (result.failure) throw new Error(`${file}: ${result.failure.message}`)
     if (result.exitCode === undefined) throw new Error(`${file}: process exited without an exit code`)
     if (result.exitCode !== 0) {
@@ -44,5 +49,9 @@ try {
     }
   }
 } finally {
-  await removeIsolatedTestRuntime(runnerRuntime)
+  if (settlementConfirmed) await removeIsolatedTestRuntime(runnerRuntime)
+  else
+    console.error(
+      `Test runtime retained because physical/output settlement is unconfirmed: ${runnerRuntime.processRoot}`,
+    )
 }

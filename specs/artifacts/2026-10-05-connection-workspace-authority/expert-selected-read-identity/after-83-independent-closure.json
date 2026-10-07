@@ -1,0 +1,27 @@
+{
+  "occurrence": "expert-selected-83-after-a398c460-6249-4ee5-97d3-9cfa4362d4ba",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "observedAtUtc": "2026-10-07T05:02:12.1314107Z",
+  "states": [
+    {
+      "expected": {
+        "pid": 75256,
+        "processInstanceID": "win32:639269452917390348",
+        "occurrenceID": "772690bd-3efa-4efa-bb64-b55805464548"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 40608,
+        "processInstanceID": "win32:639269452924971630",
+        "occurrenceID": "1fde4393-0da3-452b-a64c-fb85fc87fd0c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": []
+}

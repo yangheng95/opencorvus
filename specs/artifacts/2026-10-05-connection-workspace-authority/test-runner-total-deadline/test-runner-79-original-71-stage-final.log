@@ -1,0 +1,169 @@
+$ bun script/run-tests.ts test/command-inactivity-settlement.test.ts test/mcp/oauth-issuer.test.ts test/mcp/auth-durable-revision.test.ts test/mcp/durable-oauth-finish.test.ts test/mcp/oauth-callback-durable-legitimacy.test.ts test/mcp/oauth-state-single-use.test.ts
+[1/6] START test/command-inactivity-settlement.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) waits for supervisor settlement and returns output delivered after physical exit [31.64ms]
+(pass) returns a typed exit failure when supervisor settlement fails [3.39ms]
+(pass) deadline closes a real output-active native child tree while its parallel peer succeeds [1575.61ms]
+(pass) a failed byte observer returns actual retained bytes after native settlement [213.24ms]
+
+ 4 pass
+ 0 fail
+ 8 expect() calls
+Ran 4 tests across 1 file. [3.16s]
+[1/6] DONE test/command-inactivity-settlement.test.ts exit=0 duration=4.03s
+[2/6] START test/mcp/oauth-issuer.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real SDK refresh persists and reads the exact authorization issuer [78.00ms]
+(pass) different issuer reaches the actual SDK authorization-required boundary [44.16ms]
+(pass) legacy unstamped credentials settle to typed reauthorization and exact retirement [67.54ms]
+(pass) pre-registered configuration exposes its missing issuer validation contract [1.47ms]
+(pass) legacy dynamic credentials establish a fresh real SDK authorization with the actual issuer [100.50ms]
+
+ 5 pass
+ 0 fail
+ 14 expect() calls
+Ran 5 tests across 1 file. [1411.00ms]
+[2/6] DONE test/mcp/oauth-issuer.test.ts exit=0 duration=1.57s
+[3/6] START test/mcp/auth-durable-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) MCP credential lease generation > one established lease stays valid across every write of its own flow [71.26ms]
+(pass) MCP credential lease generation > beginning a new lease refuses the previous holder and admits the new one, in one store write [45.90ms]
+(pass) MCP credential lease generation > a peer's revoke through the shared store is visible to a later reader [36.33ms]
+(pass) MCP credential lease generation > a lease held before removal never matches anything after recreation [52.30ms]
+(pass) MCP credential lease generation > the empty generation is never a lease: a write presenting it is refused outright [24.55ms]
+(pass) MCP credential lease generation > legacy token admission mints a fence that rejects its refresh writer after removal [39.10ms]
+(pass) MCP credential lease generation > a refresh that read the pending flow's old token cannot overwrite or invalidate its connected token [97.27ms]
+
+ 7 pass
+ 0 fail
+ 17 expect() calls
+Ran 7 tests across 1 file. [1403.00ms]
+[3/6] DONE test/mcp/auth-durable-revision.test.ts exit=0 duration=1.55s
+[4/6] START test/mcp/durable-oauth-finish.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) fixture phase wait preserves an actual operation rejection [6.40ms]
+(pass) fixture phase wait reports early actual HTTP settlement [5.04ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission without a pending authorization reports needs_auth [2031.79ms]
+(pass) MCP OAuth finish from durable facts > OAuth debug authorization refuses a replaced canonical MCP definition [1739.09ms]
+
+T  MCP OAuth Debug
+|
+•  Server: durable-finish-server
+|
+•  URL: http://127.0.0.1:52615/mcp
+|
+•  Auth status: ✗ not authenticated
+[?25l|
+o  HTTP response: 401 Unauthorized
+[?25h|
+•  WWW-Authenticate: Bearer resource_metadata="http://127.0.0.1:52615/.well-known/oauth-protected-resource"
+|
+!  Server returned 401 Unauthorized
+|
+•  Testing OAuth flow (without completing authorization)...
+|
+•  OAuth authorization is required
+|
+•  Client ID available: present
+|
+—  Debug complete
+
+(pass) MCP OAuth finish from durable facts > the real MCP debug SDK probe retires its incomplete authorization occurrence [1931.35ms]
+(pass) MCP OAuth finish from durable facts > the MCP debug probe preserves an existing interactive authorization owner [2143.82ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission uses a stored token while callback broker maintenance is unreachable [1868.77ms]
+(pass) MCP OAuth finish from durable facts > an in-flight production refresh commits across callback broker rotation [1993.34ms]
+(pass) MCP OAuth finish from durable facts > provider-controlled refresh errors project one fixed connection failure [1903.89ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission preserves a live startAuth occurrence and its original callback succeeds [2425.13ms]
+(pass) MCP OAuth finish from durable facts > a process with no in-memory flow finishes the callback from the durable lease, state and verifier [2468.96ms]
+(pass) MCP OAuth finish from durable facts > a peer broker finishes a durable flow and settles the initiating backend waiter [7513.08ms]
+(pass) MCP OAuth finish from durable facts > ambiguous token commit and transient terminal publication converge for listener and waiters [3615.39ms]
+(pass) MCP OAuth finish from durable facts > successful exchange with persistently failed terminal publication converges to one uncertain outcome [3706.36ms]
+(pass) MCP OAuth finish from durable facts > failed exchange with persistently failed terminal publication converges to one uncertain outcome [4044.41ms]
+(pass) MCP OAuth finish from durable facts > persistent pre-rename token-store failure publishes one non-replayable uncertain terminal [3211.86ms]
+(pass) MCP OAuth finish from durable facts > a peer SDK duplicate joins the finishing occurrence owned by another backend [2356.73ms]
+(pass) MCP OAuth finish from durable facts > Project deletion terminalizes its durable OAuth callback for local and peer waiters [2524.63ms]
+(pass) MCP OAuth finish from durable facts > a deleted-Project callback can revoke only the occurrence captured before a replacement lease [2023.50ms]
+(pass) MCP OAuth finish from durable facts > committed Project deletion reports credential residue and durable recovery retires it [3328.18ms]
+(pass) MCP OAuth finish from durable facts > a non-connected post-auth status is one fixed failed terminal for the finisher and waiter [2225.69ms]
+(pass) MCP OAuth finish from durable facts > an authorization-code rejection maps one remote exchange to the fixed failed terminal [2297.79ms]
+(pass) MCP OAuth finish from durable facts > provider rejection has one fixed listener, local-waiter and peer-waiter contract [2536.60ms]
+(pass) MCP OAuth finish from durable facts > missing code has one fixed listener, local-waiter and peer-waiter contract [2552.42ms]
+(pass) MCP OAuth finish from durable facts > a committed configuration replacement maps the authorize-time flow to a revoked terminal [1914.49ms]
+(pass) MCP OAuth finish from durable facts > a mid-exchange configuration replacement keeps the token request on the authorize-time endpoint [1971.73ms]
+(pass) MCP OAuth finish from durable facts > a finishing owner commits exact lease extensions while the token exchange is blocked [2230.64ms]
+(pass) MCP OAuth finish from durable facts > an admitted exchange keeps the authorize-time redirect binding across broker rotation [2002.83ms]
+(pass) MCP OAuth finish from durable facts > a new state without its own verifier is not rebuilt from the previous lease [1822.23ms]
+(pass) MCP OAuth finish from durable facts > listener duplicates and the SDK callback share the winner that spent first and completed last [2524.22ms]
+(pass) MCP OAuth finish from durable facts > provider-error and missing-code listeners join a peer process terminal winner [3152.60ms]
+(pass) MCP OAuth finish from durable facts > a callback that resolved the finishing owner keeps its result after the live operation retires [2591.92ms]
+(pass) MCP OAuth finish from durable facts > provider-error callback joins a code finish that wins after its pending-state read [2821.08ms]
+(pass) MCP OAuth finish from durable facts > missing-code callback joins a code finish that wins after its pending-state read [2534.42ms]
+(pass) MCP OAuth finish from durable facts > callback failure remains the cause when OAuth state cleanup also fails [2.02ms]
+
+ 35 pass
+ 0 fail
+ 51 expect() calls
+Ran 35 tests across 1 file. [86.03s]
+[4/6] DONE test/mcp/durable-oauth-finish.test.ts exit=0 duration=86.22s
+[5/6] START test/mcp/oauth-callback-durable-legitimacy.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the durable MCP OAuth callback broker > a peer waiter observes the exact durable terminal published by the finishing process [289.49ms]
+(pass) the durable MCP OAuth callback broker > an unreferenced broker does not keep a one-shot process alive [382.86ms]
+(pass) the durable MCP OAuth callback broker > a durable port-zero broker identity is a typed malformed-identity refusal [32.58ms]
+(pass) the durable MCP OAuth callback broker > two same-root backends share one callback identity and the peer takes over after owner exit [1369.81ms]
+(pass) the durable MCP OAuth callback broker > peer monitoring admits only one proof and takeover attempt at a time [3348.43ms]
+(pass) the durable MCP OAuth callback broker > a cancelled headers probe preserves the live broker identity [1141.92ms]
+(pass) the durable MCP OAuth callback broker > a cancelled body probe preserves the live broker identity [1150.91ms]
+(pass) the durable MCP OAuth callback broker > a peer monitor survives an unreachable owner stall and later takes over automatically [5030.08ms]
+(pass) the durable MCP OAuth callback broker > stop retires a broker startup that is still probing its persisted identity [61.46ms]
+(pass) the durable MCP OAuth callback broker > a verified peer identity handoff retires the previous local server handle [367.33ms]
+(pass) the durable MCP OAuth callback broker > independent data roots own distinct authenticated callback identities [402.46ms]
+(pass) the durable MCP OAuth callback broker > same-state callback waiters and cancellation remain isolated by data root [113.31ms]
+(pass) the durable MCP OAuth callback broker > callback identity rotation settles only callback-bound facts and preserves committed tokens [224.74ms]
+(pass) the durable MCP OAuth callback broker > authorization-code exchange uses its current callback client while an old token client coexists [128.06ms]
+(pass) the durable MCP OAuth callback broker > a superseded finishing provider cannot read the next occurrence client or verifier [152.91ms]
+(pass) the durable MCP OAuth callback broker > one refresh attempt never mixes client and token snapshots across a callback commit [128.84ms]
+(pass) the durable MCP OAuth callback broker > a reachable foreign listener rotates the broker and settles the obsolete callback generation [80.86ms]
+(pass) the durable MCP OAuth callback broker > terminal history survives a new lease and a replaced pending flow publishes its own terminal [91.42ms]
+(pass) the durable MCP OAuth callback broker > credential retirement terminalizes pending and finishing waiters before retaining terminal-only tombstones [190.99ms]
+(pass) the durable MCP OAuth callback broker > a pre-rename retirement retry rotates the terminal tombstone before stale-writer admission [132.41ms]
+(pass) the durable MCP OAuth callback broker > a killed finishing owner converges to a retained non-replayable uncertain terminal [660.73ms]
+(pass) the durable MCP OAuth callback broker > an ambiguous terminal write reconciles from the exact committed occurrence [51.00ms]
+(pass) the durable MCP OAuth callback broker > finishing admission and renewal converge to the exact owner across committed and uncommitted writes [140.80ms]
+(pass) the durable MCP OAuth callback broker > the live finishing occurrence is the exclusive writer of credential and flow facts [142.40ms]
+(pass) the durable MCP OAuth callback broker > an ambiguous generation-settlement write reconciles every obsolete callback fact [79.41ms]
+(pass) the durable MCP OAuth callback broker > broker startup retries generation settlement after identity publication [36.40ms]
+(pass) the durable MCP OAuth callback broker > broker startup accepts an exact identity committed by an ambiguous atomic rename [27.03ms]
+(pass) the durable MCP OAuth callback broker > terminal polling converts repeated durable read failures into one observed waiter error [227.44ms]
+(pass) the durable MCP OAuth callback broker > the first broker generation terminalizes legacy callback-bound facts [68.71ms]
+
+ 29 pass
+ 0 fail
+ 58 expect() calls
+Ran 29 tests across 1 file. [17.32s]
+[5/6] DONE test/mcp/oauth-callback-durable-legitimacy.test.ts exit=0 duration=17.48s
+[6/6] START test/mcp/oauth-state-single-use.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) an OAuth state is spendable exactly once > the first spender gets the state and every later one is refused [1867.11ms]
+(pass) an OAuth state is spendable exactly once > concurrent spenders of one state admit exactly one [1802.72ms]
+(pass) an OAuth state is spendable exactly once > a revoked lease answers 'not current' instead of escaping as an untyped failure [1617.76ms]
+(pass) an OAuth state is spendable exactly once > a state that does not match the stored flow is refused and leaves the flow intact [1629.78ms]
+(pass) an OAuth state is spendable exactly once > an old occurrence revocation observes the superseded terminal and preserves the newer lease [1694.29ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [9.73s]
+[6/6] DONE test/mcp/oauth-state-single-use.test.ts exit=0 duration=9.88s

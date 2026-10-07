@@ -1,0 +1,27 @@
+{
+  "occurrence": "expert-inventory-78-after-452c4b55-2d5e-4469-921b-3667ec0cfcb1",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "observedAtUtc": "2026-10-07T04:40:34.2322931Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 45416,
+        "processInstanceID": "win32:639269445500956487",
+        "occurrenceID": "9d8cfea3-78b9-432d-b7ad-175d5584b431"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 21788,
+        "processInstanceID": "win32:639269445508941746",
+        "occurrenceID": "de5c3bf1-27d0-444b-b6fa-abff8a5be0b1"
+      }
+    }
+  ],
+  "listeners": []
+}

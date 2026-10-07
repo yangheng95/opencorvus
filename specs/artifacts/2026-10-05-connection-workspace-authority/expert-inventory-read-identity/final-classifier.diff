@@ -1,0 +1,13 @@
+diff --git a/packages/opencorvus/src/server/project-route-context.ts b/packages/opencorvus/src/server/project-route-context.ts
+index 50a3cd05..8125edc3 100644
+--- a/packages/opencorvus/src/server/project-route-context.ts
++++ b/packages/opencorvus/src/server/project-route-context.ts
+@@ -3,6 +3,8 @@ import { normalizedServerRoutePath } from "@opencorvus-ai/transport-protocol"
+ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
+   "GET /expert-squad/search",
+   "GET /expert-squad/catalog",
++  "GET /expert-squad/inventory-status",
++  "GET /expert-squad/diagnostics",
+   "GET /mission-skill/catalog",
+   "GET /experimental/project-memory",
+   "POST /project/current/init-git",

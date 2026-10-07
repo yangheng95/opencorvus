@@ -1,0 +1,413 @@
+{
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "credentialStaging": "None; no Task rearm",
+  "reads": [
+    {
+      "body": {
+        "active": {
+          "name": "Task Resource QA",
+          "effective": "task-resource-qa",
+          "project": "task-resource-qa",
+          "session_override": "task-resource-qa",
+          "package_revision": {
+            "scope": "project",
+            "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+            "namespace": "qa",
+            "id": "task-resource-qa",
+            "version": "2026.10.06.2",
+            "package_digest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+          }
+        },
+        "default": "base",
+        "scope": {
+          "kind": "session",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+          "sessionID": "ses_-zUSggUQgzzprQcl946c"
+        },
+        "launch_catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+        "active_agent_projection": {
+          "source_expert_squad_id": "task-resource-qa",
+          "prompt_profile_active": "task-resource-qa",
+          "scheduler_projection_hash": "dc4defcd024ce01cf3db507b27acee2c7b8b3c0d415ba2c4d8379c9a249039a1",
+          "projection_hash": "6abe2d566004ac0695ab8114533694ef9b167350dad1707d094796b000dd4692",
+          "virtual_workflows": {
+            "query-produce-verify": {
+              "label": "Observe, Produce, Verify",
+              "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+              "nodes": {
+                "inspect": {
+                  "agent_id": "mission",
+                  "description": "Observe the current Project Task list and report the actual result or precise error.",
+                  "depends_on": []
+                },
+                "produce": {
+                  "agent_id": "producer",
+                  "description": "Create and publish the requested text resource after the observation is available.",
+                  "depends_on": [
+                    "inspect"
+                  ]
+                },
+                "verify": {
+                  "agent_id": "verifier",
+                  "description": "Independently verify original requirements against the settled producer result and immutable resource.",
+                  "depends_on": [
+                    "produce"
+                  ]
+                }
+              }
+            }
+          },
+          "agents": [
+            {
+              "agent_id": "mission",
+              "base_role": "explore",
+              "session_kind": "explore",
+              "dispatch_adapter_id": "explore",
+              "label": "Project Observer",
+              "description": "Read-only observer of current Project Tasks; a projected explorer, not a native Mission.",
+              "projection_hash": "5ddb03c66630a22f87749e31af91febcee28d157f0700df85fec6a62598c5927",
+              "capability_refs": [
+                "capability:tool:platform:tool-registry:artifact_publish",
+                "capability:tool:platform:tool-registry:artifact_read",
+                "capability:tool:platform:tool-registry:artifact_search",
+                "capability:tool:platform:tool-registry:artifact_select",
+                "capability:tool:platform:tool-registry:artifact_snapshot",
+                "capability:tool:platform:tool-registry:capability_search",
+                "capability:tool:platform:tool-registry:external_code_search",
+                "capability:tool:platform:tool-registry:glob",
+                "capability:tool:platform:tool-registry:memory",
+                "capability:tool:platform:tool-registry:panel_query_task",
+                "capability:tool:platform:tool-registry:publish_interactive_artifact",
+                "capability:tool:platform:tool-registry:read",
+                "capability:tool:platform:tool-registry:read_agent_message",
+                "capability:tool:platform:tool-registry:request_orchestrator_decision",
+                "capability:tool:platform:tool-registry:search_code",
+                "capability:tool:platform:tool-registry:send_mailbox_message",
+                "capability:tool:platform:tool-registry:webfetch",
+                "capability:tool:platform:tool-registry:websearch"
+              ]
+            },
+            {
+              "agent_id": "producer",
+              "base_role": "build",
+              "session_kind": "build",
+              "dispatch_adapter_id": "build",
+              "label": "Text Producer",
+              "description": "Produces and publishes the requested verified text resource in this Task.",
+              "projection_hash": "755364a48b38bc60654edacdb6faede6fb982a5c149f029227534391647083c6",
+              "capability_refs": [
+                "capability:tool:platform:tool-registry:apply_patch",
+                "capability:tool:platform:tool-registry:artifact_publish",
+                "capability:tool:platform:tool-registry:artifact_read",
+                "capability:tool:platform:tool-registry:artifact_search",
+                "capability:tool:platform:tool-registry:artifact_select",
+                "capability:tool:platform:tool-registry:artifact_snapshot",
+                "capability:tool:platform:tool-registry:bash",
+                "capability:tool:platform:tool-registry:browser_preview",
+                "capability:tool:platform:tool-registry:browser_preview_capture",
+                "capability:tool:platform:tool-registry:capability_search",
+                "capability:tool:platform:tool-registry:edit",
+                "capability:tool:platform:tool-registry:external_code_search",
+                "capability:tool:platform:tool-registry:glob",
+                "capability:tool:platform:tool-registry:memory",
+                "capability:tool:platform:tool-registry:mission_state",
+                "capability:tool:platform:tool-registry:planner",
+                "capability:tool:platform:tool-registry:publish_interactive_artifact",
+                "capability:tool:platform:tool-registry:question",
+                "capability:tool:platform:tool-registry:read",
+                "capability:tool:platform:tool-registry:read_agent_message",
+                "capability:tool:platform:tool-registry:request_orchestrator_decision",
+                "capability:tool:platform:tool-registry:schedule",
+                "capability:tool:platform:tool-registry:search_code",
+                "capability:tool:platform:tool-registry:send_mailbox_message",
+                "capability:tool:platform:tool-registry:skill",
+                "capability:tool:platform:tool-registry:todo",
+                "capability:tool:platform:tool-registry:webfetch",
+                "capability:tool:platform:tool-registry:websearch",
+                "capability:tool:platform:tool-registry:write"
+              ]
+            },
+            {
+              "agent_id": "verifier",
+              "base_role": "delegated-worker",
+              "session_kind": "delegated-worker",
+              "dispatch_adapter_id": "delegated_worker",
+              "label": "Independent Verifier",
+              "description": "Independently compares original authority, settled producer facts and immutable published resource bytes.",
+              "projection_hash": "f9825e2770ddac146258de926cae4ce8d5e42c6f701cfa7758242dd3c28af677",
+              "capability_refs": [
+                "capability:tool:platform:tool-registry:apply_patch",
+                "capability:tool:platform:tool-registry:artifact_publish",
+                "capability:tool:platform:tool-registry:artifact_read",
+                "capability:tool:platform:tool-registry:artifact_search",
+                "capability:tool:platform:tool-registry:artifact_select",
+                "capability:tool:platform:tool-registry:artifact_snapshot",
+                "capability:tool:platform:tool-registry:bash",
+                "capability:tool:platform:tool-registry:browser_preview",
+                "capability:tool:platform:tool-registry:capability_search",
+                "capability:tool:platform:tool-registry:edit",
+                "capability:tool:platform:tool-registry:external_code_search",
+                "capability:tool:platform:tool-registry:glob",
+                "capability:tool:platform:tool-registry:memory",
+                "capability:tool:platform:tool-registry:publish_interactive_artifact",
+                "capability:tool:platform:tool-registry:question",
+                "capability:tool:platform:tool-registry:read",
+                "capability:tool:platform:tool-registry:read_agent_message",
+                "capability:tool:platform:tool-registry:request_orchestrator_decision",
+                "capability:tool:platform:tool-registry:search_code",
+                "capability:tool:platform:tool-registry:send_mailbox_message",
+                "capability:tool:platform:tool-registry:skill",
+                "capability:tool:platform:tool-registry:todo",
+                "capability:tool:platform:tool-registry:webfetch",
+                "capability:tool:platform:tool-registry:websearch",
+                "capability:tool:platform:tool-registry:write"
+              ]
+            }
+          ]
+        },
+        "active_skill_projection": {
+          "active_squad_id": "task-resource-qa",
+          "built_in": false,
+          "projection_hash": "8c374e47f0e4de0472e1b8eccdb26d4028be8d6a25878c83752b68b380d9563c",
+          "projected_tool_ids": [
+            "apply_patch",
+            "artifact_publish",
+            "artifact_read",
+            "artifact_search",
+            "artifact_select",
+            "artifact_snapshot",
+            "bash",
+            "browser_preview",
+            "browser_preview_capture",
+            "cancel_subagent",
+            "capability_search",
+            "dispatch_agent",
+            "edit",
+            "evolve_expert_squad_from_feedback",
+            "external_code_search",
+            "glob",
+            "manage_task",
+            "memory",
+            "mission_state",
+            "no_action",
+            "panel_query_task",
+            "planner",
+            "publish_interactive_artifact",
+            "question",
+            "read",
+            "read_agent_message",
+            "read_context",
+            "read_task_message",
+            "request_orchestrator_decision",
+            "respond_agent_coordination",
+            "schedule",
+            "scheduler_message",
+            "search_code",
+            "send_mailbox_message",
+            "skill",
+            "todo",
+            "wait",
+            "webfetch",
+            "websearch",
+            "write"
+          ],
+          "projected_agent_ids": [
+            "mission",
+            "producer",
+            "verifier"
+          ],
+          "selector_skill_names": [
+            "advanced-expert-squad",
+            "base-expert-squad",
+            "research-studio-expert-squad",
+            "squad-sdk-expert-squad"
+          ],
+          "production_skill_names": [],
+          "projected_skill_names": [],
+          "production_grants": []
+        }
+      },
+      "status": 200,
+      "headers": {
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 04:19:08 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "52f4b887-fbfc-4c7b-8fc0-0be30b02315a"
+        ]
+      },
+      "method": "GET",
+      "path": "/expert-squad/catalog?sessionID=ses_-zUSggUQgzzprQcl946c"
+    },
+    {
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      },
+      "status": 400,
+      "headers": {
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 04:19:08 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "cb4ca105-d55b-4b0a-9ea2-e1d4a60f3962"
+        ]
+      },
+      "method": "GET",
+      "path": "/expert-squad/inventory-status"
+    },
+    {
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "openai",
+          "modelID": "gpt-6.1-sol",
+          "suggestions": []
+        }
+      },
+      "status": 400,
+      "headers": {
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 04:19:08 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "7942fec9-492f-46dd-a6a8-28d4eb54ddee"
+        ]
+      },
+      "method": "GET",
+      "path": "/expert-squad/diagnostics?limit=20"
+    },
+    {
+      "body": {
+        "prompt_profile": {
+          "active": "task-resource-qa"
+        },
+        "permission_mode": "full_access",
+        "$schema": "https://opencorvus.ai/config.json",
+        "model": "openai/gpt-6.1-sol",
+        "small_model": "openai/gpt-6.1-sol",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "terminal": {
+          "default_profile_id": "powershell",
+          "profiles": {
+            "powershell": {
+              "label": "Windows PowerShell",
+              "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "pwsh": {
+              "label": "PowerShell",
+              "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+              "args": [
+                "-NoLogo"
+              ],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "powershell"
+            },
+            "cmd": {
+              "label": "Command Prompt",
+              "command": "C:\\WINDOWS\\system32\\cmd.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "command-prompt"
+            },
+            "git-bash": {
+              "label": "Git Bash",
+              "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+              "args": [],
+              "env": {
+                "TERM": "xterm-256color",
+                "COLORTERM": "truecolor"
+              },
+              "icon": "bash"
+            }
+          }
+        },
+        "username": "",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        },
+        "assistant": {
+          "max_executor_groups": 5
+        }
+      },
+      "status": 200,
+      "headers": {
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 04:19:08 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "9b5a5a01-7386-4460-bb12-66798c0defb2"
+        ]
+      },
+      "method": "GET",
+      "path": "/config"
+    }
+  ],
+  "sessionID": "ses_-zUSggUQgzzprQcl946c",
+  "observedAtUtc": "2026-10-07T04:19:09.0414449Z",
+  "occurrence": "expert-catalog-80-after-b06e9c9a-f7c8-4dcb-a761-2fc0c3d75a4b",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project"
+}

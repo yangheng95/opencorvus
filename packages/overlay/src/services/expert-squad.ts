@@ -31,7 +31,7 @@ import type {
 } from "@opencorvus-ai/sdk"
 import { appStore } from "../store/app"
 import { apiJson, serverSettledRequest } from "./api"
-import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { patchSessionConfig, updateConfig, type SessionConfigResponse } from "./config"
 
 export type ExpertSquadCatalog = ExpertSquadCatalogResponse
@@ -157,10 +157,6 @@ export function expertSquadCatalogPath(scope: ExpertSquadCatalogScope): string {
   return `expert-squad/catalog?${params.toString()}`
 }
 
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
-}
-
 export async function loadExpertSquadCatalog(scope: ExpertSquadCatalogScope): Promise<ExpertSquadCatalog> {
   const authority = scope.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
@@ -174,9 +170,6 @@ export async function loadExpertSquadCatalog(scope: ExpertSquadCatalogScope): Pr
   pendingExpertSquadCatalogLoad = { key, promise, authority }
   try {
     return await promise
-  } catch (error) {
-    if (error instanceof ApiAuthorityChangedError) throw error
-    throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
   } finally {
     if (pendingExpertSquadCatalogLoad?.promise === promise) pendingExpertSquadCatalogLoad = null
   }
@@ -196,12 +189,7 @@ export async function loadExpertSquadSettings(
   params.set("installationScope", installationScope)
   if (namespace) params.set("namespace", namespace)
   const path = `expert-squad/settings/detail?${params.toString()}`
-  try {
-    return await apiJson<ExpertSquadSettingsSurface>(path, { authority })
-  } catch (error) {
-    if (error instanceof ApiAuthorityChangedError) throw error
-    throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
-  }
+  return await apiJson<ExpertSquadSettingsSurface>(path, { authority })
 }
 
 export async function inspectExpertSquad(input: {
@@ -406,12 +394,7 @@ export async function loadExpertSquadMarket(
   if (input.productPillar) params.set("productPillar", input.productPillar)
   if (input.cursor) params.set("cursor", input.cursor)
   const path = `expert-squad/market?${params.toString()}`
-  try {
-    return await apiJson<ExpertSquadMarketPage>(path, { authority: input.authority })
-  } catch (error) {
-    if (error instanceof ApiAuthorityChangedError) throw error
-    throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
-  }
+  return await apiJson<ExpertSquadMarketPage>(path, { authority: input.authority })
 }
 
 export async function loadExpertSquadMarketDetail(directory: string, id: string, authority = captureApiAuthority()): Promise<ExpertSquadMarketItem> {

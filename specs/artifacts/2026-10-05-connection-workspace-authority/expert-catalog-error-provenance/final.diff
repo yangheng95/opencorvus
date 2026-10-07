@@ -1,0 +1,199 @@
+diff --git a/packages/overlay/src/components/settings/ExpertSquadPanel.tsx b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+index 215981d9..aad4ec86 100644
+--- a/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
++++ b/packages/overlay/src/components/settings/ExpertSquadPanel.tsx
+@@ -1,3 +1,5 @@
++import { ApiAuthorityChangedError } from "../../services/api"
++import { formatErrorDetails } from "../../services/diagnostics"
+ import { Feedback } from "../ui/Feedback"
+ // ── ExpertSquadPanel ──
+ // Dynamic expert-squad catalog surface. Active selection remains config-owned
+@@ -301,7 +303,11 @@ export default function ExpertSquadPanel() {
+   const [marketIdentity, setMarketIdentity] = createSignal("")
+   const [marketLoading, setMarketLoading] = createSignal(false)
+   const [catalogFilter, setCatalogFilter] = createSignal<CatalogFilter>("all")
+-  const [catalogError, setCatalogError] = createSignal("")
++  const [catalogError, setCatalogError] = createSignal<{ error: unknown } | null>(null)
++  const catalogErrorMessage = createMemo(() => {
++    const failure = catalogError()
++    return failure ? failure.error instanceof Error ? failure.error.message : String(failure.error) : ""
++  })
+   const [catalogIdentity, setCatalogIdentity] = createSignal("")
+   const [actionError, setActionError] = createSignal("")
+   const [configuration, setConfiguration] = createSignal<ExpertSquadConfiguration | null>(null)
+@@ -502,12 +508,12 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnostics([])
+       setCatalogDiagnosticsNextCursor(null)
+       setCatalogIdentity("")
+-      setCatalogError("")
++      setCatalogError(null)
+       setLoading(false)
+       return
+     }
+     setLoading(true)
+-    if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError("")
++    if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError(null)
+     const sequence = ++loadSequence
+     try {
+       const repair = await repairObsoleteBundledExpertSquads(scope.directory)
+@@ -588,7 +594,7 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnostics(diagnostics.entries)
+       setCatalogDiagnosticsNextCursor(diagnostics.next_cursor)
+       setCatalogIdentity(expectedScopeIdentity)
+-      setCatalogError("")
++      setCatalogError(null)
+       setSelectedSquadID((current) => {
+         const requested = nextSelectedID || current
+         const selected =
+@@ -599,8 +605,8 @@ export default function ExpertSquadPanel() {
+         return selected ? squadSelectionKey(selected) : ""
+       })
+     } catch (error) {
+-      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
+-        setCatalogError(error instanceof Error ? error.message : String(error))
++      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
++        setCatalogError({ error })
+       }
+       throw error
+     } finally {
+@@ -647,6 +653,8 @@ export default function ExpertSquadPanel() {
+     const scope = currentScope()
+     const cursor = catalogNextCursor()
+     if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
++    const sequence = loadSequence
++    const expectedScopeIdentity = currentScopeIdentity()
+     setLoading(true)
+     try {
+       const page = await searchExpertSquads({
+@@ -655,15 +663,16 @@ export default function ExpertSquadPanel() {
+         cursor,
+         limit: 20,
+       })
++      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
+       setCatalogEntries((current) => {
+         const identities = new Set(current.map(squadSelectionKey))
+         return [...current, ...page.entries.filter((entry) => !identities.has(squadSelectionKey(entry)))]
+       })
+       setCatalogNextCursor(page.next_cursor)
+     } catch (error) {
+-      setCatalogError(error instanceof Error ? error.message : String(error))
++      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
+     } finally {
+-      setLoading(false)
++      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setLoading(false)
+     }
+   }
+ 
+@@ -671,15 +680,18 @@ export default function ExpertSquadPanel() {
+     const scope = currentScope()
+     const cursor = catalogDiagnosticsNextCursor()
+     if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
++    const sequence = loadSequence
++    const expectedScopeIdentity = currentScopeIdentity()
+     setLoading(true)
+     try {
+       const page = await loadExpertSquadDiagnostics(scope.directory, { cursor, limit: 20 })
++      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
+       setCatalogDiagnostics((current) => [...current, ...page.entries])
+       setCatalogDiagnosticsNextCursor(page.next_cursor)
+     } catch (error) {
+-      setCatalogError(error instanceof Error ? error.message : String(error))
++      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
+     } finally {
+-      setLoading(false)
++      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setLoading(false)
+     }
+   }
+ 
+@@ -699,7 +711,7 @@ export default function ExpertSquadPanel() {
+       setCatalogDiagnostics([])
+       setCatalogDiagnosticsNextCursor(null)
+       setCatalogIdentity("")
+-      setCatalogError("")
++      setCatalogError(null)
+       setLoading(false)
+       setMarket([])
+       setMarketIdentity("")
+@@ -1292,7 +1304,7 @@ export default function ExpertSquadPanel() {
+               title={t("expert_squad.catalog_recovery_title")}
+               details={t("expert_squad.catalog_failed", {
+                 directory: catalogDirectoryLabel(),
+-                error: catalogError(),
++                error: formatErrorDetails(catalogError()?.error),
+               })}
+               actions={
+                 <Button
+@@ -1307,7 +1319,10 @@ export default function ExpertSquadPanel() {
+                 </Button>
+               }
+             >
+-              {t("expert_squad.catalog_unavailable_hint")}
++              {t("expert_squad.catalog_failed", {
++                directory: catalogDirectoryLabel(),
++                error: catalogErrorMessage(),
++              })}
+             </Feedback>
+           </Show>
+           <For each={catalogIssues()}>
+diff --git a/packages/overlay/src/services/expert-squad.ts b/packages/overlay/src/services/expert-squad.ts
+index a23c094d..dd411433 100644
+--- a/packages/overlay/src/services/expert-squad.ts
++++ b/packages/overlay/src/services/expert-squad.ts
+@@ -31,7 +31,7 @@ import type {
+ } from "@opencorvus-ai/sdk"
+ import { appStore } from "../store/app"
+ import { apiJson, serverSettledRequest } from "./api"
+-import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
++import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+ import { patchSessionConfig, updateConfig, type SessionConfigResponse } from "./config"
+ 
+ export type ExpertSquadCatalog = ExpertSquadCatalogResponse
+@@ -157,10 +157,6 @@ export function expertSquadCatalogPath(scope: ExpertSquadCatalogScope): string {
+   return `expert-squad/catalog?${params.toString()}`
+ }
+ 
+-function errorMessage(error: unknown): string {
+-  return error instanceof Error ? error.message : String(error)
+-}
+-
+ export async function loadExpertSquadCatalog(scope: ExpertSquadCatalogScope): Promise<ExpertSquadCatalog> {
+   const authority = scope.authority ?? captureApiAuthority()
+   assertApiAuthorityCurrent(authority)
+@@ -174,9 +170,6 @@ export async function loadExpertSquadCatalog(scope: ExpertSquadCatalogScope): Pr
+   pendingExpertSquadCatalogLoad = { key, promise, authority }
+   try {
+     return await promise
+-  } catch (error) {
+-    if (error instanceof ApiAuthorityChangedError) throw error
+-    throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
+   } finally {
+     if (pendingExpertSquadCatalogLoad?.promise === promise) pendingExpertSquadCatalogLoad = null
+   }
+@@ -196,12 +189,7 @@ export async function loadExpertSquadSettings(
+   params.set("installationScope", installationScope)
+   if (namespace) params.set("namespace", namespace)
+   const path = `expert-squad/settings/detail?${params.toString()}`
+-  try {
+-    return await apiJson<ExpertSquadSettingsSurface>(path, { authority })
+-  } catch (error) {
+-    if (error instanceof ApiAuthorityChangedError) throw error
+-    throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
+-  }
++  return await apiJson<ExpertSquadSettingsSurface>(path, { authority })
+ }
+ 
+ export async function inspectExpertSquad(input: {
+@@ -406,12 +394,7 @@ export async function loadExpertSquadMarket(
+   if (input.productPillar) params.set("productPillar", input.productPillar)
+   if (input.cursor) params.set("cursor", input.cursor)
+   const path = `expert-squad/market?${params.toString()}`
+-  try {
+-    return await apiJson<ExpertSquadMarketPage>(path, { authority: input.authority })
+-  } catch (error) {
+-    if (error instanceof ApiAuthorityChangedError) throw error
+-    throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
+-  }
++  return await apiJson<ExpertSquadMarketPage>(path, { authority: input.authority })
+ }
+ 
+ export async function loadExpertSquadMarketDetail(directory: string, id: string, authority = captureApiAuthority()): Promise<ExpertSquadMarketItem> {

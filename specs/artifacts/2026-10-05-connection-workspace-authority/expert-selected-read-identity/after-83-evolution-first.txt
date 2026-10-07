@@ -1,0 +1,13 @@
+Browser tab: 50, Title: "OpenCorvus", URL: "http://localhost:18034/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-78, 80-100
+~										73 tab (selected, settable, boolean) Evolution History, Value: 1, ID: tabs-cl-441-trigger-evolution
+~										74 tab (selectable, settable, boolean) Package Details, Value: 0, ID: tabs-cl-441-trigger-package
+~									75 container Description: Evolution History, ID: tabs-cl-441-content-evolution
+~										76 container
++											77 text Evolution History and Evidence Review every immutable campaign in its exact comparison context. History never changes the installed revision automatically.
++											78 button Refresh
+~										79 container
++											80 text API 400 expert-squad/evolution-history?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject&namespace=qa&id=task-resource-qa&installationScope=project&limit=20: {"name":"ProviderModelNotFoundError","data":{"providerID":"openai","modelID":"gpt-6.1-sol","suggestions":[]}}
++											81 button Retry
+The focused UI element is 73 tab (selected, settable, boolean) Evolution History, Value: 1, ID: tabs-cl-441-trigger-evolution
