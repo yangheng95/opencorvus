@@ -1,0 +1,5 @@
+# Child actual after-page attempt
+
+Admitted URL http://127.0.0.1:18051/ui/, own background IAB page only. Real CUA createBrowserTab("iab", URL, {visible:false}) returned “Browser is not available: iab”. Subsequent enabled surface inventory returned apps:[] and browsers:[]. No tabID was created; no Root tab/service/input/file action or clipboard was operated. Therefore personal after-page screenshot, Sources expansion/Enter/Space/actor switching and file-open result were not qualified in this attempt. No visual pass is claimed from configured types/source. Root's independent real after UI remains separate evidence. User process/browser fallback was not attempted.
+
+Root supplied its actual BrowserID2. This child then called createBrowserTab('2',sameURL,{visible:false}); it also returned Browser is not available:2. Root browser availability is not equivalent to this child's empty enabled inventory. This second exact failure creates no tabID or personal screenshot and does not prove a product/browser URL failure.

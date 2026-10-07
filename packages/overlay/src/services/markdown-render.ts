@@ -7,6 +7,7 @@ export type MarkdownRenderRequest = {
   text: string
   streaming: boolean
   locale: string
+  localeSeq: number
   copyLabel: string
   copyIcon: string
 }
@@ -64,10 +65,16 @@ export function createMarkdownRenderer(receive: (reply: MarkdownRenderReply, req
     }
   })
   return {
-    render(text: string, streaming: boolean, revision: number) {
+    render(text: string, streaming: boolean, revision: number, localeSeq: number) {
       const request: MarkdownRenderRequest = {
-        owner, revision, text, streaming, locale: localeTag(),
-        copyLabel: t("markdown.copy_code"), copyIcon: iconHtml("copy", "compact"),
+        owner,
+        revision,
+        text,
+        streaming,
+        locale: localeTag(),
+        localeSeq,
+        copyLabel: t("markdown.copy_code"),
+        copyIcon: iconHtml("copy", "compact"),
       }
       // Finish accepted work while retaining only the newest queued update.
       // Continuous deltas cannot repeatedly cancel the same long document.

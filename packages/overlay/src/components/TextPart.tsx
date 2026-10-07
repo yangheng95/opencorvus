@@ -28,7 +28,9 @@ export function StreamingMarkdownPart(props: {
       <For each={frozenHtml()}>
         {(html) => (
           <div
-            class={isStandaloneSourceFileMarkup(html) ? "md-frozen-block md-frozen-block--source-file" : "md-frozen-block"}
+            class={
+              isStandaloneSourceFileMarkup(html) ? "md-frozen-block md-frozen-block--source-file" : "md-frozen-block"
+            }
             innerHTML={html}
           />
         )}
@@ -37,11 +39,15 @@ export function StreamingMarkdownPart(props: {
         <div class={props.activeTextClassName || "md-active-text"}>{activeText()}</div>
       </Show>
       {props.trailing}
-      <Show when={pending() && !activeText()}>
-        <div class="msg-markdown-state" role="status">{t("markdown.rendering")}</div>
+      <Show when={pending() && frozenHtml().length === 0 && !activeText()}>
+        <div class="msg-markdown-state" role="status">
+          {t("markdown.rendering")}
+        </div>
       </Show>
       <Show when={error()}>
-        <div class="msg-tool-error" role="alert">{t("markdown.render_failed", { message: error() })}</div>
+        <div class="msg-tool-error" role="alert">
+          {t("markdown.render_failed", { message: error() })}
+        </div>
       </Show>
     </div>
   )

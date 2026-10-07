@@ -1,0 +1,179 @@
+diff --git a/packages/overlay/src/components/TextPart.tsx b/packages/overlay/src/components/TextPart.tsx
+index df2ea3ba..e98cc530 100644
+--- a/packages/overlay/src/components/TextPart.tsx
++++ b/packages/overlay/src/components/TextPart.tsx
+@@ -28,7 +28,9 @@ export function StreamingMarkdownPart(props: {
+       <For each={frozenHtml()}>
+         {(html) => (
+           <div
+-            class={isStandaloneSourceFileMarkup(html) ? "md-frozen-block md-frozen-block--source-file" : "md-frozen-block"}
++            class={
++              isStandaloneSourceFileMarkup(html) ? "md-frozen-block md-frozen-block--source-file" : "md-frozen-block"
++            }
+             innerHTML={html}
+           />
+         )}
+@@ -37,11 +39,15 @@ export function StreamingMarkdownPart(props: {
+         <div class={props.activeTextClassName || "md-active-text"}>{activeText()}</div>
+       </Show>
+       {props.trailing}
+-      <Show when={pending() && !activeText()}>
+-        <div class="msg-markdown-state" role="status">{t("markdown.rendering")}</div>
++      <Show when={pending() && frozenHtml().length === 0 && !activeText()}>
++        <div class="msg-markdown-state" role="status">
++          {t("markdown.rendering")}
++        </div>
+       </Show>
+       <Show when={error()}>
+-        <div class="msg-tool-error" role="alert">{t("markdown.render_failed", { message: error() })}</div>
++        <div class="msg-tool-error" role="alert">
++          {t("markdown.render_failed", { message: error() })}
++        </div>
+       </Show>
+     </div>
+   )
+diff --git a/packages/overlay/src/components/text-part-model.ts b/packages/overlay/src/components/text-part-model.ts
+index fb4e6774..cfae2fa1 100644
+--- a/packages/overlay/src/components/text-part-model.ts
++++ b/packages/overlay/src/components/text-part-model.ts
+@@ -27,6 +27,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   let disposed = false
+   let latestText = ""
+   let latestLocale = ""
++  let latestLocaleSeq = -1
+   let latestStreaming = false
+ 
+   const mount = () => {
+@@ -48,7 +49,11 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   }
+   const renderer = createMarkdownRenderer((reply, request) => {
+     if (disposed) return
+-    const currentSource = request.locale === latestLocale && latestText.startsWith(request.text) && request.streaming === latestStreaming
++    const currentSource =
++      request.locale === latestLocale &&
++      request.localeSeq === latestLocaleSeq &&
++      latestText.startsWith(request.text) &&
++      request.streaming === latestStreaming
+     if (reply.revision !== -1 && !currentSource) return
+     if (reply.error) {
+       setError(reply.error)
+@@ -71,8 +76,17 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   createEffect(() => {
+     const text = props.text || ""
+     const streaming = props.streaming === true
+-    appStore.localeSeq
+-    latestLocale = localeTag()
++    const localeSeq = appStore.localeSeq
++    const locale = localeTag()
++    if (
++      text === latestText &&
++      streaming === latestStreaming &&
++      locale === latestLocale &&
++      localeSeq === latestLocaleSeq
++    )
++      return
++    latestLocale = locale
++    latestLocaleSeq = localeSeq
+     latestStreaming = streaming
+     const append = text.startsWith(latestText)
+     latestText = text
+@@ -95,7 +109,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+     requestFrame = requestAnimationFrame(() => {
+       requestFrame = 0
+       try {
+-        renderer.render(text, streaming, revision)
++        renderer.render(text, streaming, revision, localeSeq)
+       } catch (reason) {
+         setError(String(reason))
+         setPending(false)
+diff --git a/packages/overlay/src/services/markdown-render.ts b/packages/overlay/src/services/markdown-render.ts
+index a5b97728..decf6035 100644
+--- a/packages/overlay/src/services/markdown-render.ts
++++ b/packages/overlay/src/services/markdown-render.ts
+@@ -7,6 +7,7 @@ export type MarkdownRenderRequest = {
+   text: string
+   streaming: boolean
+   locale: string
++  localeSeq: number
+   copyLabel: string
+   copyIcon: string
+ }
+@@ -64,10 +65,16 @@ export function createMarkdownRenderer(receive: (reply: MarkdownRenderReply, req
+     }
+   })
+   return {
+-    render(text: string, streaming: boolean, revision: number) {
++    render(text: string, streaming: boolean, revision: number, localeSeq: number) {
+       const request: MarkdownRenderRequest = {
+-        owner, revision, text, streaming, locale: localeTag(),
+-        copyLabel: t("markdown.copy_code"), copyIcon: iconHtml("copy", "compact"),
++        owner,
++        revision,
++        text,
++        streaming,
++        locale: localeTag(),
++        localeSeq,
++        copyLabel: t("markdown.copy_code"),
++        copyIcon: iconHtml("copy", "compact"),
+       }
+       // Finish accepted work while retaining only the newest queued update.
+       // Continuous deltas cannot repeatedly cancel the same long document.
+diff --git a/packages/overlay/src/services/markdown-render.worker.ts b/packages/overlay/src/services/markdown-render.worker.ts
+index b8fb884e..9d53c8dc 100644
+--- a/packages/overlay/src/services/markdown-render.worker.ts
++++ b/packages/overlay/src/services/markdown-render.worker.ts
+@@ -27,7 +27,7 @@ async function drain() {
+         const tokens = lexMarkdown(request.text)
+         const visible = tokens.filter((token) => token.type !== "space")
+         const active = request.streaming ? visible.pop()?.raw || "" : ""
+-        const context = `${request.locale}\u0000${JSON.stringify(tokens.links)}`
++        const context = JSON.stringify([request.locale, request.copyLabel, request.copyIcon, tokens.links])
+         let start = 0
+         let html: string[] = []
+         let sliceStart = performance.now()
+@@ -42,7 +42,14 @@ async function drain() {
+           }
+           html.push(rendered)
+           if (html.length >= 16 || performance.now() - sliceStart >= 8) {
+-            scope.postMessage({ owner: request.owner, revision: request.revision, start, html, activeText: active, done: false })
++            scope.postMessage({
++              owner: request.owner,
++              revision: request.revision,
++              start,
++              html,
++              activeText: active,
++              done: false,
++            })
+             start += html.length
+             html = []
+             await yieldTask()
+@@ -50,12 +57,27 @@ async function drain() {
+           }
+         }
+         if (latest.get(request.owner) === request) {
+-          scope.postMessage({ owner: request.owner, revision: request.revision, start, html, activeText: active, done: true })
++          scope.postMessage({
++            owner: request.owner,
++            revision: request.revision,
++            start,
++            html,
++            activeText: active,
++            done: true,
++          })
+           latest.delete(request.owner)
+         }
+       } catch (error) {
+         if (latest.get(request.owner) === request) {
+-          scope.postMessage({ owner: request.owner, revision: request.revision, start: 0, html: [], activeText: "", done: true, error: String(error) })
++          scope.postMessage({
++            owner: request.owner,
++            revision: request.revision,
++            start: 0,
++            html: [],
++            activeText: "",
++            done: true,
++            error: String(error),
++          })
+           latest.delete(request.owner)
+         }
+       }

@@ -1,0 +1,102 @@
+Browser tab: 63, Title: "OpenCorvus", URL: "http://127.0.0.1:18052/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 223-228, 231-234
+~										221 text verifier
+~										222 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										223 container
++											224 text 我会先核对原始要求、观察者的项目查询和制作方的实际制作与发布操作，再严格按顺序对已发布资源执行三次物化和缓存重读，最后正式发布独立验收记录。不会修改产品文件、访问网站或启动服务。
++											225 button (collapsed) Description: artifact_search · Artifact queries (2), Secondary Actions: Expand
++												226 text artifact_search
++												227 text Artifact queries (2)
++												228 image
+~										229 container
+~											230 button (collapsed) Description: read · .opencorvus/.r/tasks/tsk_g00VXJJVS500QnIDtJVs/intent/request.md @1+2000 (10 lines), Secondary Actions: Expand
++												231 text read
++												232 text .opencorvus/.r/tasks/tsk_g00VXJJVS500QnIDtJVs/intent/request.md @1+2000 (10 lines)
++												233 image
++											234 container Sources
++												235 button (collapsed) Description: Sources: request.md (1), Help: request.md 1, Secondary Actions: Expand
++													236 text request.md
++													237 text 1
++											238 button (collapsed) Description: read_agent_message · Task participant evidence, Secondary Actions: Expand
++												239 text read_agent_message
++												240 text Task participant evidence
++												241 image
++										242 container
++											243 text 已核对实际工具记录：制作方先创建 hello、再创建 notes，完整字节检查及共同快照、资源发布均有成功回执；正式资源与快照身份一致。项目查询确实返回一条任务，并已记录历史任务覆盖及跨 Task 报告的范围限制。接下来严格执行“物化 hello—重开核验—再次物化同一 hello—再次重开核验—物化 notes—重开核验”。
++											244 button (collapsed) Secondary Actions: Expand, Description: read · .opencorvus/.r/tasks/tsk_g00VXJJVS500QnIDtJVs/sessions/ses_hBkcd6U9aAxsXULs3wIs @1+2000 (1 lines)
++												245 text read
++												246 text .opencorvus/.r/tasks/tsk_g00VXJJVS500QnIDtJVs/sessions/ses_hBkcd6U9aAxsXULs3wIs @1+2000 (1 lines)
++												247 image
++										248 container
++											249 text 三次物化和三次缓存重开已按要求顺序完成，全部精确匹配原始参考。hello 两次返回同一路径，但分别执行了新的二进制打开和完整读取；notes 的全部 520 字节、20 行、无 BOM、无 CR 和 LF 均通过。现在正式发布绑定原快照、物化读取凭证及实际缓存检查结果的独立验收记录；任务结束仍由调度方处理。
++											250 button (collapsed) Description: artifact_publish · Published task-resource-qa/independent-acceptance, Secondary Actions: Expand
++												251 text artifact_publish
++												252 text Published task-resource-qa/independent-acceptance
++												253 image
++										254 container
++											255 text 独立验收通过：两文件、共同只读快照和独立验收记录已正式交付。
++											256 text  未发现需要制作方修复的缺口；Task 生命周期结束仍须由调度方执行。
++											257 table
++												258 row
++													259 cell
++														260 text 原始义务
++													261 cell
++														262 text 独立核验结果
++												263 row
++													264 cell
++														265 text 实际查询项目 Task 和可取得报告，记录范围限制
++													266 cell
++														267 text 满足。已核对观察者实际查询输入输出，返回本 Task 一条活动任务；历史任务完整覆盖及跨 Task 报告范围未获证明，限制已明确记录。
++												268 row
++													269 cell
++														270 text 依次创建 hello、notes，完整检查
++													271 cell
++														272 text 满足。原始操作记录证明先创建 hello，再创建 notes；制作方实际完整字节检查符合 26 字节及 520 字节、20 行要求。
++												273 row
++													274 cell
++														275 text 两文件一起正式发布，并包含于可浏览只读快照
++													276 cell
++														277 text 满足。共同快照清单恰含两文件，正式资源与快照的项目、Task、快照及文件身份一致。
++												278 row
++													279 cell
++														280 text 同一 hello 两次完整物化，每次重开实际缓存
++													281 cell
++														282 text 满足。严格先物化、重开核验，再对同一 locator 物化、再次新打开核验。两次均完整读取 
++														283 text 26 字节
++														284 text ，精确匹配 
++														285 text b'Hello from a formal Task.\n'
++														286 text 。
++												287 row
++													288 cell
++														289 text 随后物化 notes、重开核验全部内容
++													290 cell
++														291 text 满足。完整读取 
++														292 text 520 字节、20 行
++														293 text ，精确匹配原始参考；UTF-8 无 BOM、无 CR、20 个 LF。
++												294 row
++													295 cell
++														296 text 正式发布含实际读取凭证的独立验收记录
++													297 cell
++														298 text 满足。发布成功，绑定三个物化 read refs、三次缓存重开实际输入输出、原始操作证据及同一资源集合。
++											299 text 正式证据
++											300 content list
++												301 container
++													302 AXListMarker • 
++													303 text 观察记录： art_hFO8sNYXRnWRzEow0kxj ，目录修订  5 。
++												304 container
++													305 AXListMarker • 
++													306 text 制作及资源记录： art_hLr5IDfCaRC7I05jeDpj ，目录修订  9 。
++												307 container
++													308 AXListMarker • 
++													309 text 共同不可变快照： c925c764-6735-50a0-ae3d-271d25f43335 。
++												310 container
++													311 AXListMarker • 
++													312 text 独立验收记录：
++													313 text art_hq7NQo9Rpqj7WcoNHLQX
++													314 text ，目录修订 14 。
++											315 text hello 两次返回同一路径，但分别执行了新的二进制打开和完整读取，没有用物化回执或工作区文件替代缓存内容检查。本次未修改产品文件、未访问网站、未启动服务，也未宣称用户已下载或 Task 已结束。
++										316 button Copy message
++										317 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++										318 text Oct 7, 06:22 AM
+The focused UI element is 218 pop up button (collapsed) Expert Squad agents verifier, ID: select-cl-364-trigger, Secondary Actions: Expand

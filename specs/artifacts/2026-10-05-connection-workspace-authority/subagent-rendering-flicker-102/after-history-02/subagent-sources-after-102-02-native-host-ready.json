@@ -1,0 +1,39 @@
+{
+  "occurrence": "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047",
+  "outcome": "ready",
+  "host": {
+    "pid": 47532,
+    "processInstanceID": "win32:639269736136025872",
+    "occurrenceID": "0d6758e2-5d2d-40a8-b30a-8776d1bdd6a1"
+  },
+  "parent": {
+    "pid": 37192,
+    "processInstanceID": "win32:639269736098828893",
+    "occurrenceID": "21749452-a085-4a90-9d45-4ed830cb5381"
+  },
+  "target": {
+    "pid": 77388,
+    "processInstanceID": "win32:639269736145195429",
+    "occurrenceID": "0512c3ae-e876-4e6c-8e14-500cf492ea6a"
+  },
+  "targetBirthAtMs": 1791376814519,
+  "observedAtUtc": "2026-10-07T12:40:14.552Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18051",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-sources-after-102-02\\startup.json",
+    "--startup-occurrence",
+    "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

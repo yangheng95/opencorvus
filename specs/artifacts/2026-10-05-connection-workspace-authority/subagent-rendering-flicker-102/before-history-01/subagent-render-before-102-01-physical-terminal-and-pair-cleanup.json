@@ -1,0 +1,64 @@
+{
+  "nativeSettlement": {
+    "occurrence": "subagent-render-before-102-01-b42232f2-09e4-4696-8e0d-535e767c0828",
+    "outcome": "settled",
+    "host": {
+      "pid": 73548,
+      "processInstanceID": "win32:639269726820740082",
+      "occurrenceID": "366c5896-bf5e-4ccb-b6d5-a1bbdd481026"
+    },
+    "target": {
+      "pid": 74112,
+      "processInstanceID": "win32:639269726831211675",
+      "occurrenceID": "9086359d-577c-4c01-b613-8096babd8e0c"
+    },
+    "observedAtUtc": "2026-10-07T12:34:24.371Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-07T12:34:26.5786696Z",
+  "listeners": null,
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-render-before-102-01\\runtime\\data\\auth.json"
+    },
+    {
+      "presentAfter": false,
+      "outcome": "removed",
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-render-before-102-01\\runtime\\data\\models.json"
+    }
+  ],
+  "occurrence": "subagent-render-before-102-01-b42232f2-09e4-4696-8e0d-535e767c0828",
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 74112,
+        "processInstanceID": "win32:639269726831211675",
+        "occurrenceID": "9086359d-577c-4c01-b613-8096babd8e0c"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 73548,
+        "processInstanceID": "win32:639269726820740082",
+        "occurrenceID": "366c5896-bf5e-4ccb-b6d5-a1bbdd481026"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "physicalCompletion": true
+}

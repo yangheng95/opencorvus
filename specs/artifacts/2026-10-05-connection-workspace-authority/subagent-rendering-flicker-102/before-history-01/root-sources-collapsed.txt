@@ -1,0 +1,20 @@
+Browser tab: 61, Title: "OpenCorvus", URL: "http://127.0.0.1:18050/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++										381 text 已完成两文件的制作、核验和正式资源发布：
++										382 content list
++											383 container
++												384 AXListMarker • 
++												385 text hello.txt ：精确内容为  Hello from a formal Task.  后接一个 LF，共  26 字节 。
++											386 container
++												387 AXListMarker • 
++												388 text notes.txt ： Notes from a formal Task.  后接 LF，重复  20 行，共 520 字节 。
++											389 container
++												390 AXListMarker • 
++												391 text 两文件均为  UTF-8 无 BOM、无 CR ，已重新打开实际文件并检查全部字节；发布后也完整读回了两个资源，内容符合要求。
++											392 container
++												393 AXListMarker • 
++												394 text 两文件已一起发布到同一个可浏览、只读的不可变快照，制作记录使用该快照返回的同一资源集合正式发布，保留资源身份一致性。
++										395 text 已完整读取前置项目观察记录并保留限制：查询返回一条近期活动任务，但不证明覆盖项目全部历史任务；报告观察范围限于当前 Task，不能视为全项目跨 Task 报告查询。
++										396 container
++											397 text 尚未完成独立验收 ：后续参与者仍须对同一 hello 资源物化两次、每次重开缓存核验，再物化并核验 notes，最后正式发布含实际读取凭证的独立验收记录。本次自检不替代这些义务，因此不宣称 Task 已验收结束，也不宣称用户已下载。
+The focused UI element is 289 button Open the full producer conversation

@@ -455,7 +455,9 @@ latest Tool's identity. Expanded Tools expose their persisted arguments through
 a compact payload control, output or structured evidence, and explicit pending,
 running or empty-result information. Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position
-behind the shared native Disclosure, initially collapsed with a count; operator
+behind the shared native Disclosure, initially collapsed with the first real
+source's readable identity and an honest count for that chronological source run;
+operator
 expansion state and exact source links remain available. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced
 motion retains static status. Valid JSON displays expandable values with
@@ -468,7 +470,12 @@ renderer. The existing Marked lexer/renderer retains reference links, lists,
 tables, fences and copy/file-link attributes. Parsing and highlighting occur
 off-thread; top-level HTML blocks mount over animation frames. Latest updates
 are coalesced by text owner, stale replies are discarded, disposal releases the
-owner, and stable blocks keep their DOM identity. Full document Markdown is
+owner, and stable blocks keep their DOM identity. Identical text, streaming mode,
+locale and current locale-resource generation reuse the accepted owner input.
+Initial rendering status appears only before accepted HTML or a live tail is
+visible; resource-generation changes retire incompatible replies. The worker's
+block cache includes its actual copy label/icon and reference-link inputs.
+Full document Markdown is
 not clipped at the trace-preview limit. Worker errors remain visible instead
 of starting a synchronous parser path. Transcript prewarming is removed.
 

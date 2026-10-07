@@ -1,0 +1,19 @@
+# Sources presentation and renderer102 evidence
+
+Read [Recall](../subagent-rendering-flicker-plan-102.md), [renderer investigation](../subagent-rendering-flicker-investigation-102.md), [Sources visual/data audit](../subagent-dock-visual-investigation-102.md) and [genuine reproduction plan](../subagent-rendering-flicker-reproduction-plan-102.md). Human explicitly prioritizes Sources after supplying two actual screenshots.
+
+`before-history-01` preserves human PNGs, guarded actual `/ui`200/current100 bundle, original50-copy receipt, Root's genuine producer Sources1/expanded screenshots and actual credentialless file-open400, original native shutdown/settlement and independent exactbirth/listener/pair closure. Only a visible progress Open button qualified dock navigation; offscreen AX attempts did not establish a production handler failure.
+
+`source-before` preserves exact original touched production/checker files; `source-first-iteration` retains the first proposed SourceParts/styles. `sources-after.diff` is child first iteration, not the final delivered Root-owned source. `markdown-after.diff` and raw types/i18n/docs/build logs preserve admitted Root source/checks. No checksum or snapshot fixture is a UI acceptance gate.
+
+`after-history-02` holds Root's actual first readable Sources previews and pointer/Space/Enter-expanded native disclosure screenshots, guarded new102 bundle and full closure. Child CUA inventory/creation failures are preserved in child-page-unavailable.md; it created no page and has no personal interactive acceptance. Root owns the final refinement and subsequent visual review. Separate actual Sources/message repetition and full original link/file actions are preserved; no ToolCallID inference or invented article title.
+
+Final source/visual/live occurrence and commit/push evidence will be added as actually completed. Historical files alone do not qualify webpage/document/multiple-source/live update or an authenticated file opener. Rendering source repair does not certify every remount/resource/scheduling/recovery path. The continuing goal is active.
+
+`after-history-03` qualifies Root final icon/name/count native Source widget at380px/442px dock, pointer/Space/Enter and real actor switch, exact current bundle and whole native closure. Root's final SourceParts styles replace the first child-only diff; full original preimage and first iteration remain separately identified.
+
+`live-sources-04` preserves genuine task request/CLI/actual package/model/grants preflight, paired credential metadata only, live/child-completed Sources screenshots, real expanded link→own65 official W3C page, actual Task/current13 streamed200EOF and full scope/pair closure. Read-only `verify-owned-source-facts.ts` and original passing output/facts qualify real2SourceParts/2completedwebfetch outcomes/13requests/completedTask; no UI assertions or source association inference. Actual original incomplete-HTML return remains in real transcript; arbitrary document/title/multiple-source paths are not fabricated.
+
+Root's actual terminal screenshot also preserves unexpected883×886/dark frame and roughly44px dock; natural left-sidebar close restores readability in a separate screenshot, not a width fix. Viewport/theme change cause is unknown and Root never set/reset it. Separate103 width investigation follows after102 commit/push. All own history/live pages and processes closed. Configured checks/current final build are archived; staged sourcegraph/normal Git delivery remain next.
+
+Staged sourcegraph1136/5802/four clean imports and current docs345/25 pass. Shared-index exact patch excludes concurrent unrelated workflow entries; Root preserves all other working changes. Full scoped inventory and staged numstat are retained; ordinary hook/commit/fetch/merge/outgoing review/push follows. Source/source-model records are original observations, not mutable-source digest acceptance.

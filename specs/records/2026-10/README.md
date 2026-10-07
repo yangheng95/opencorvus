@@ -1,5 +1,8 @@
 # 2026-10 Records
 
+- [Readable Sources and renderer102](2026-10-07-readable-conversation-sources.md)
+- [Sources and flicker102 Recall](../../artifacts/2026-10-05-connection-workspace-authority/subagent-rendering-flicker-plan-102.md)
+
 - [Non-Git Project worktree collection](2026-10-07-non-git-worktree-collection.md)
 
 - [Non-Git collection101 Recall](../../artifacts/2026-10-05-connection-workspace-authority/non-git-worktree-gc-plan-101.md)

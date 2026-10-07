@@ -1,0 +1,29 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18051",
+    "pid": 77388
+  },
+  "occurrence": "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047",
+  "target": {
+    "pid": 77388,
+    "processInstanceID": "win32:639269736145195429",
+    "occurrenceID": "0512c3ae-e876-4e6c-8e14-500cf492ea6a"
+  },
+  "frontend": "main-BhX4Hwg7.js",
+  "observedAtUtc": "2026-10-07T12:40:33.7934551Z",
+  "listeners": [
+    {
+      "LocalPort": 18051,
+      "OwningProcess": 77388
+    }
+  ],
+  "responseStatus": 200,
+  "host": {
+    "pid": 47532,
+    "processInstanceID": "win32:639269736136025872",
+    "occurrenceID": "0d6758e2-5d2d-40a8-b30a-8776d1bdd6a1"
+  }
+}

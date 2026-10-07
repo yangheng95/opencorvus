@@ -27,7 +27,7 @@ async function drain() {
         const tokens = lexMarkdown(request.text)
         const visible = tokens.filter((token) => token.type !== "space")
         const active = request.streaming ? visible.pop()?.raw || "" : ""
-        const context = `${request.locale}\u0000${JSON.stringify(tokens.links)}`
+        const context = JSON.stringify([request.locale, request.copyLabel, request.copyIcon, tokens.links])
         let start = 0
         let html: string[] = []
         let sliceStart = performance.now()
@@ -42,7 +42,14 @@ async function drain() {
           }
           html.push(rendered)
           if (html.length >= 16 || performance.now() - sliceStart >= 8) {
-            scope.postMessage({ owner: request.owner, revision: request.revision, start, html, activeText: active, done: false })
+            scope.postMessage({
+              owner: request.owner,
+              revision: request.revision,
+              start,
+              html,
+              activeText: active,
+              done: false,
+            })
             start += html.length
             html = []
             await yieldTask()
@@ -50,12 +57,27 @@ async function drain() {
           }
         }
         if (latest.get(request.owner) === request) {
-          scope.postMessage({ owner: request.owner, revision: request.revision, start, html, activeText: active, done: true })
+          scope.postMessage({
+            owner: request.owner,
+            revision: request.revision,
+            start,
+            html,
+            activeText: active,
+            done: true,
+          })
           latest.delete(request.owner)
         }
       } catch (error) {
         if (latest.get(request.owner) === request) {
-          scope.postMessage({ owner: request.owner, revision: request.revision, start: 0, html: [], activeText: "", done: true, error: String(error) })
+          scope.postMessage({
+            owner: request.owner,
+            revision: request.revision,
+            start: 0,
+            html: [],
+            activeText: "",
+            done: true,
+            error: String(error),
+          })
           latest.delete(request.owner)
         }
       }

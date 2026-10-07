@@ -1,0 +1,14 @@
+$ bun run script/check-css-token-usage.ts
+225 |   const details = unresolved
+226 |     .map(
+227 |       ({ token, file, line, entry }) => `${entry} -> ${path.relative(OVERLAY_ROOT, file)}:${line}: unresolved ${token}`,
+228 |     )
+229 |     .join("\n")
+230 |   throw new Error(`Overlay CSS contains custom properties missing from their document entry graph:\n${details}`)
+                  ^
+error: Overlay CSS contains custom properties missing from their document entry graph:
+index.html -> src\styles\surfaces\composer.css:232: unresolved --composer-mention-menu-available-height
+      at D:\myhexin-local\opencorvus\packages\overlay\script\check-css-token-usage.ts:230:13
+
+Bun v1.3.14 (Windows x64)
+error: script "check:css-tokens" exited with code 1

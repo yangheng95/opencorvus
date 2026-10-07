@@ -1,0 +1,26 @@
+{
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-sources-after-102-02\\evidence",
+    "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18051",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-sources-after-102-02\\startup.json",
+    "--startup-occurrence",
+    "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047",
+    "--log-level",
+    "INFO"
+  ],
+  "credentialStaging": "None",
+  "port": 18051,
+  "occurrence": "subagent-sources-after-102-02-663d7e63-e81b-403f-bcb3-b48a43ccb047"
+}

@@ -1,0 +1,125 @@
+Browser tab: 64, Title: "OpenCorvus", URL: "http://127.0.0.1:18053/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18053/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 container
+											37 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+											38 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand
+											39 button New chat for this project
+										40 container
+											41 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+											42 button 真实网页来源体验验收102
+											43 image Running
+											44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand
+										45 button (expanded) Description: Collapse Anonymous 2b8e0d, Secondary Actions: Collapse
+										46 container
+											47 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											48 button Reply with OK.
+											49 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									50 container Recents
+										51 text Recents
+										52 container
+											53 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+											54 button 真实网页来源体验验收102
+											55 image Running
+											56 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-211-trigger, Secondary Actions: Expand
+										57 container
+											58 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											59 button Reply with OK.
+											60 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-217-trigger, Secondary Actions: Expand
+							61 container Connection Diagnostics
+								62 container Description: Connection Diagnostics · Online · Port 18053, ID: connBadge
+									63 text Online
+					64 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					65 container chatSection
+						66 container Description: Loading task, ID: taskSwitchProgress
+						67 container
+							68 text 真实网页来源体验验收102
+							69 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-232-trigger, Secondary Actions: Expand
+							70 container Description: Running · 21s, ID: taskStatus
+								71 text Running
+								72 text 21s
+							73 button Side chat
+							74 container solidChatHeaderRuntimeActions
+								75 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								76 checkbox Description: Open right dock, Value: 0
+						77 container
+							78 container Description: Conversation, ID: chatScroll
+								79 container
+									80 container
+										81 text User
+										82 container
+											83 text 请委托一名只读研究者阅读 W3C 的 
+											84 link Description: https://www.w3.org/TR/css-scroll-anchoring-1/, Value: w3.org/TR/css-scroll-anchoring-1/
+											85 text  和 
+											86 link Description: https://www.w3.org/TR/css-overflow-3/, Value: w3.org/TR/css-overflow-3/
+											87 text ，用中文简要说明滚动容器与滚动锚定的关系、一个会抑制锚定的条件，并提供准确来源链接。只读取公开资料，不修改项目文件、不启动服务、不进行扩展搜索；如网页无法读取，记录实际错误和未完成项。研究者报告保留来源与实际证据，收到报告后给出简短结论。
+									88 container
+										89 text orchestrator
+										90 text 16s
+										91 button (collapsed) Description: Handoff context, Secondary Actions: Expand
+										92 text 我会委托一名只读研究者，仅阅读你指定的两份 W3C 规范，保留来源和实际读取证据；收到报告后给出简短中文结论。不会修改项目文件、启动服务或扩展搜索。
+										93 button (collapsed) Description: dispatch_agent · target=base-researcher, Secondary Actions: Expand
+											94 text dispatch_agent
+											95 text target=base-researcher
+											96 image
+									97 container Sub-agent progress
+										98 container
+											99 text base-researcher
+											100 button Open the full base-researcher conversation
+											101 container base-researcher activity
+												102 button (collapsed) Description: Handoff context, Secondary Actions: Expand
+												103 text Waiting for activity…
+							104 container chatHomeComposition
+								105 container chatForm
+									106 splitter Description: Drag to resize the message input, Value: 42
+									107 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									108 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									109 text Code
+									110 text Task
+									111 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									112 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									113 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										114 text openai/gpt-6.1-sol
+									115 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+		116 container 真实网页来源体验验收102 13s ago Started Oct 07, 2026, 09:00 PM project, ID: tooltip-cl-204-content
+			117 text 真实网页来源体验验收102
+			118 text 13s ago
+			119 text Started
+			120 text Oct 07, 2026, 09:00 PM
+			121 text project
+
+The focused UI element is 42 button 真实网页来源体验验收102

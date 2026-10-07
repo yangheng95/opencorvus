@@ -1,0 +1,22 @@
+{
+  "host": {
+    "pid": 73548,
+    "processInstanceID": "win32:639269726820740082",
+    "occurrenceID": "366c5896-bf5e-4ccb-b6d5-a1bbdd481026"
+  },
+  "target": {
+    "pid": 74112,
+    "processInstanceID": "win32:639269726831211675",
+    "occurrenceID": "9086359d-577c-4c01-b613-8096babd8e0c"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "subagent-render-before-102-01-b42232f2-09e4-4696-8e0d-535e767c0828",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18050",
+    "pid": 74112
+  },
+  "port": 18050,
+  "observedAtUtc": "2026-10-07T12:25:28.3247800Z",
+  "occurrence": "subagent-render-before-102-01-b42232f2-09e4-4696-8e0d-535e767c0828"
+}

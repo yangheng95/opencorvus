@@ -91,6 +91,7 @@ const TYPOGRAPHY_FAMILY_VALUES = new Map([
 // loaded by the document that consumes it.
 const HOST_RUNTIME_TOKEN_OWNERS = new Map<string, string[]>([
   ["--card-sticky-inline-size", ["src/components/Card.tsx"]],
+  ["--composer-mention-menu-available-height", ["src/components/ComposerMentionMenu.tsx"]],
   ["--composer-mention-listbox-available-height", ["src/components/ComposerMentionMenu.tsx"]],
   ["--dialog-drag-x", ["src/components/ui/Dialog.tsx"]],
   ["--dialog-drag-y", ["src/components/ui/Dialog.tsx"]],

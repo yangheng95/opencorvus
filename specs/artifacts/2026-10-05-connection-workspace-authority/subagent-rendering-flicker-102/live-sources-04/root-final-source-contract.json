@@ -1,0 +1,278 @@
+{
+  "observedAtUtc": "2026-10-07T13:13:25.377Z",
+  "readonly": true,
+  "boundary": "Actual completed owned Task/Session/Source/Tool/provider facts; no UI assertions or inferred Tool-to-Source relation",
+  "occurrence": "live-sources-102-04-844a8216-c12a-4781-b0cc-5a48d392dd56",
+  "facts": {
+    "task": {
+      "id": "tsk_g00VXMtkjY00uFBozEGD",
+      "project_id": "prj_hfhmCoX8Ufb7sP7L6cnn",
+      "session_id": "ses_-zUSd6F7HzzDQp6qZPMz",
+      "request_id": "b59013fc-0e47-4c01-8386-d7952679b6f1"
+    },
+    "session": {
+      "id": "ses_hC0FrYCKPxwmNEAOGRIp",
+      "project_id": "prj_hfhmCoX8Ufb7sP7L6cnn",
+      "kind": "explore",
+      "parent_id": "ses_-zUSd6E5szzpTMFTRDor"
+    },
+    "sources": [
+      {
+        "id": "prt_g0VXMtsB7001hkrVoKgA",
+        "messageID": "msg_g0VXMtqFw00LTf6S7az7",
+        "sessionID": "ses_hC0FrYCKPxwmNEAOGRIp",
+        "createdAt": 1791378082257,
+        "source": {
+          "type": "source-url",
+          "sourceId": "17ee6669cc202540388158fd95e05a2ecf539e56aacbdef1c616b20f7d140a90",
+          "url": "https://www.w3.org/TR/css-scroll-anchoring-1/",
+          "title": "https://www.w3.org/TR/css-scroll-anchoring-1/",
+          "provider": "opencorvus-webfetch"
+        }
+      },
+      {
+        "id": "prt_g0VXMttaF00si2dRLdj6",
+        "messageID": "msg_g0VXMtsEO007oycCnapD",
+        "sessionID": "ses_hC0FrYCKPxwmNEAOGRIp",
+        "createdAt": 1791378087659,
+        "source": {
+          "type": "source-url",
+          "sourceId": "1ad4d83b9fd77c8a6e6418adf689576038b3b9f53ce1431e8460ac5afd1e0cbd",
+          "url": "https://www.w3.org/TR/css-overflow-3/",
+          "title": "https://www.w3.org/TR/css-overflow-3/",
+          "provider": "opencorvus-webfetch"
+        }
+      }
+    ],
+    "tools": [
+      {
+        "id": "prt_g0VXMtrtD001fO3hqnMU",
+        "message_id": "msg_g0VXMtqFw00LTf6S7az7",
+        "session_id": "ses_hC0FrYCKPxwmNEAOGRIp",
+        "tool": "webfetch",
+        "url": "https://www.w3.org/TR/css-scroll-anchoring-1/",
+        "outcome_id": "prt_hp1pKRt5nMHZbTKkEBgJ",
+        "outcome": "completed",
+        "title": "https://www.w3.org/TR/css-scroll-anchoring-1/ (text/html; charset=utf-8)"
+      },
+      {
+        "id": "prt_g0VXMttJY00GWFVWXnsm",
+        "message_id": "msg_g0VXMtsEO007oycCnapD",
+        "session_id": "ses_hC0FrYCKPxwmNEAOGRIp",
+        "tool": "webfetch",
+        "url": "https://www.w3.org/TR/css-overflow-3/",
+        "outcome_id": "prt_hAIyqzU5bDAN3gQAmps5",
+        "outcome": "completed",
+        "title": "https://www.w3.org/TR/css-overflow-3/ (text/html; charset=utf-8)"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_havvGfkDyJs9foFOlXPm",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_hInVjecWcIdOilBCMJta"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_havvGfkDyJs9foFOlXPm",
+        "agentID": "chat",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_hInVjecWcIdOilBCMJta"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "tsk_g00VXMtkjY00uFBozEGD",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6F7HzzDQp6qZPMz"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_task-root-control_art_hMmvAUanNDQOvJlLppRe_art_hMmvAUanNDQOvJlLppRe",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6E5szzpTMFTRDor"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_g0VXMtqAq00inZbV7GSy",
+        "agentID": "base-researcher",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_hC0FrYCKPxwmNEAOGRIp"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_g0VXMtqAq00inZbV7GSy",
+        "agentID": "base-researcher",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_hC0FrYCKPxwmNEAOGRIp"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_g0VXMtqAq00inZbV7GSy",
+        "agentID": "base-researcher",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_hC0FrYCKPxwmNEAOGRIp"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_g0VXMtqAq00inZbV7GSy",
+        "agentID": "base-researcher",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_hC0FrYCKPxwmNEAOGRIp"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_task-root-control_art_h4fZzAGLG4GMKjwwHyUe_art_h4fZzAGLG4GMKjwwHyUe",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6E5szzpTMFTRDor"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_task-root-control_art_h4fZzAGLG4GMKjwwHyUe_art_h4fZzAGLG4GMKjwwHyUe",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6E5szzpTMFTRDor"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_task-root-control_art_h4fZzAGLG4GMKjwwHyUe_art_h4fZzAGLG4GMKjwwHyUe",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6E5szzpTMFTRDor"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_task-root-control_art_h4fZzAGLG4GMKjwwHyUe_art_h4fZzAGLG4GMKjwwHyUe",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6E5szzpTMFTRDor"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "readerState": "settled",
+      "terminal": "eof",
+      "participant": {
+        "requestID": "msg_task-root-control_art_h4fZzAGLG4GMKjwwHyUe_art_h4fZzAGLG4GMKjwwHyUe",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "apiModelID": "gpt-6.1-sol"
+      },
+      "sessionID": "ses_-zUSd6E5szzpTMFTRDor"
+    }
+  ],
+  "lifecycle": {
+    "taskID": "tsk_g00VXMtkjY00uFBozEGD",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXMtktW00asgg2g6nl",
+    "openedAt": 1791378053640,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXMuNH7000Qens4N6p",
+    "terminalAt": 1791378199549
+  },
+  "requestCap": 24,
+  "requestCount": 13
+}

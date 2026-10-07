@@ -1,0 +1,5 @@
+# Sources preview preparation
+
+Only SourceParts.tsx and messages.css changed; inspector needed no additional rule. Root source-before contains full preimages. One local derived preview uses first real source: URL-valued title equal to ownURL uses hostname/path/query; distinctactualtitle is retained; current file label receives actual range; document keeps actuallabel. Existing source-run chronology/count/disclosure key, all expanded SourceChips, tooltip and file/link action authority unchanged. No Tool association, dedupe, producer field, i18n or alternate renderer.
+
+Preview body identity with caption Sources/count uses current tokens and min-width0/ellipsis; full identity remains accessible aria-label/title and original expanded content. Exact diff sources-after.diff. Overlay configured types exit0. No UI test, build, browser or live service executed here. Real desktop visual qualification remains pending Root admitted fresh after page; child will personally inspect its independent page and close only that page. Source frozen until that admission.

@@ -3,7 +3,7 @@ import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
 import { t } from "../utils/i18n"
-import { Icon } from "./ui/Icon"
+import { Icon, type IconName } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
 import { Disclosure } from "./ui/Disclosure"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
@@ -39,19 +39,28 @@ function sourceDirectory(): string {
 function sourceLabel(source: ConversationSourcePart): string {
   if (source.type === "source-file") {
     const title = source.title?.trim() || ""
-    if (title && !/[\\/]/.test(title)) return title
     const filePath = source.filename?.trim() || source.path || title
     const filename = filePath.split(/[\\/]/).filter(Boolean).at(-1)
-    if (filename) return filename
+    const label = title && !/[\\/]/.test(title) ? title : filename
+    if (label) return source.range ? `${label}:${source.range.startLine}-${source.range.endLine}` : label
   }
-  if (source.title?.trim()) return source.title.trim()
   if (source.type === "source-url" && source.url) {
+    const title = source.title?.trim() || ""
     try {
-      return new URL(source.url).hostname.replace(/^www\./, "")
+      const url = new URL(source.url)
+      if (title) {
+        try {
+          if (new URL(title).href !== url.href) return title
+        } catch {
+          return title
+        }
+      }
+      return `${url.hostname}${url.pathname}${url.search}`
     } catch {
-      return source.url
+      return title || source.url
     }
   }
+  if (source.title?.trim()) return source.title.trim()
   return source.filename || source.mediaType || t("chat.source_document")
 }
 
@@ -62,6 +71,10 @@ function sourceDetail(source: ConversationSourcePart): string {
     return source.range ? `${path}:${source.range.startLine}-${source.range.endLine}` : path
   }
   return source.filename || source.mediaType || ""
+}
+
+function sourceIcon(source: ConversationSourcePart): IconName {
+  return source.type === "source-url" ? "web-search" : source.type === "source-file" ? "file-document" : "channel-link"
 }
 
 async function openSourceFile(source: ConversationSourcePart): Promise<void> {
@@ -100,12 +113,7 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
 function SourceChip(props: { source: ConversationSourcePart; index: number }) {
   const label = () => sourceLabel(props.source)
   const detail = () => sourceDetail(props.source)
-  const icon = () =>
-    props.source.type === "source-url"
-      ? "web-search"
-      : props.source.type === "source-file"
-        ? "file-document"
-        : "channel-link"
+  const icon = () => sourceIcon(props.source)
 
   return (
     <Tooltip.Root openDelay={180} closeDelay={80} placement="top-start" gutter={7} fitViewport>
@@ -152,6 +160,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number }) {
 }
 
 export function SourceParts(props: { sources: ConversationSourcePart[] }) {
+  const preview = () => (props.sources[0] ? sourceLabel(props.sources[0]) : "")
   const key = () => {
     const first = props.sources[0]
     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
@@ -165,8 +174,16 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
       open={expanded()}
       onOpenChange={(open) => setCardExpanded(key(), open)}
     >
-      <Disclosure.Trigger class="msg-sources__heading">
-        <span>{t("chat.sources")}</span>
+      <Disclosure.Trigger
+        class="msg-sources__heading"
+        aria-label={`${t("chat.sources")}: ${preview()} (${props.sources.length})`}
+        title={preview()}
+        indicatorPosition="end"
+      >
+        <Show when={props.sources[0]}>{(source) => <Icon name={sourceIcon(source())} size="compact" />}</Show>
+        <Show when={preview()} fallback={<span class="msg-sources__preview">{t("chat.sources")}</span>}>
+          <span class="msg-sources__preview">{preview()}</span>
+        </Show>
         <span class="msg-sources__count">{props.sources.length}</span>
       </Disclosure.Trigger>
       <Show when={expanded()}>

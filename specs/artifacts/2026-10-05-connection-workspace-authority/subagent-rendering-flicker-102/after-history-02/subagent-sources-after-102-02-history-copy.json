@@ -1,0 +1,29 @@
+{
+  "port": 18051,
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\subagent-sources-after-102-02",
+  "credentialStaging": "None; source50 untouched; no Task rearm",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "observedAtUtc": "2026-10-07T12:40:12.4024529Z",
+  "purpose": "Genuine completed50 producer Sources readable preview and stable Markdown after102; no rearm or Provider"
+}

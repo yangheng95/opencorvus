@@ -1,0 +1,90 @@
+diff --git a/packages/overlay/src/components/SourceParts.tsx b/packages/overlay/src/components/SourceParts.tsx
+index db107a81..9fb5f9a8 100644
+--- a/packages/overlay/src/components/SourceParts.tsx
++++ b/packages/overlay/src/components/SourceParts.tsx
+@@ -64,6 +64,29 @@ function sourceDetail(source: ConversationSourcePart): string {
+   return source.filename || source.mediaType || ""
+ }
+ 
++function sourcePreview(source: ConversationSourcePart): string {
++  if (source.type === "source-url" && source.url) {
++    const title = source.title?.trim() || ""
++    try {
++      const url = new URL(source.url)
++      if (title) {
++        try {
++          if (new URL(title).href !== url.href) return title
++        } catch {
++          return title
++        }
++      }
++      return `${url.hostname}${url.pathname}${url.search}`
++    } catch {
++      return title || source.url
++    }
++  }
++  const label = sourceLabel(source)
++  return source.type === "source-file" && source.range
++    ? `${label}:${source.range.startLine}-${source.range.endLine}`
++    : label
++}
++
+ async function openSourceFile(source: ConversationSourcePart): Promise<void> {
+   const authority = captureApiAuthority()
+   const epoch = boardStore.selectEpoch
+@@ -152,6 +175,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number }) {
+ }
+ 
+ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
++  const preview = () => (props.sources[0] ? sourcePreview(props.sources[0]) : "")
+   const key = () => {
+     const first = props.sources[0]
+     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
+@@ -165,8 +189,15 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
+       open={expanded()}
+       onOpenChange={(open) => setCardExpanded(key(), open)}
+     >
+-      <Disclosure.Trigger class="msg-sources__heading">
+-        <span>{t("chat.sources")}</span>
++      <Disclosure.Trigger
++        class="msg-sources__heading"
++        aria-label={`${t("chat.sources")}: ${preview()} (${props.sources.length})`}
++        title={preview()}
++      >
++        <span class="msg-sources__label">{t("chat.sources")}</span>
++        <Show when={preview()}>
++          <span class="msg-sources__preview">{preview()}</span>
++        </Show>
+         <span class="msg-sources__count">{props.sources.length}</span>
+       </Disclosure.Trigger>
+       <Show when={expanded()}>
+diff --git a/packages/overlay/src/styles/surfaces/messages.css b/packages/overlay/src/styles/surfaces/messages.css
+index 84a13e10..dcaffe6e 100644
+--- a/packages/overlay/src/styles/surfaces/messages.css
++++ b/packages/overlay/src/styles/surfaces/messages.css
+@@ -977,6 +977,25 @@
+   padding-inline: 0;
+ }
+ 
++.msg-sources__heading {
++  max-width: 100%;
++  min-width: 0;
++}
++
++.msg-sources__label,
++.msg-sources__count {
++  flex: none;
++}
++
++.msg-sources__preview {
++  min-width: 0;
++  overflow: hidden;
++  text-overflow: ellipsis;
++  white-space: nowrap;
++  color: var(--text);
++  font-size: var(--ui-font-body);
++}
++
+ .msg-sources__count {
+   color: var(--text-muted);
+   font-size: var(--ui-font-caption);

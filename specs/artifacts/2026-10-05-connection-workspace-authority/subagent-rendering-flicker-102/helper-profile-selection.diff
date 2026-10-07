@@ -1,0 +1,159 @@
+--- before/live-sol-launch.ps1
++++ current/live-sol-launch.ps1
+@@ -4,7 +4,7 @@
+   [Parameter(Mandatory=$true,ParameterSetName='Launch')][string]$EvidenceRoot,
+   [Parameter(Mandatory=$true,ParameterSetName='Launch')][ValidateRange(1,65535)][int]$Port,
+   [Parameter(Mandatory=$true,ParameterSetName='Launch')][ValidatePattern('^[a-z0-9-]+$')][string]$EvidencePrefix,
+-  [Parameter(Mandatory=$true,ParameterSetName='Launch')][string]$DefinitionPath,
++  [Parameter(Mandatory=$true,ParameterSetName='Launch')][string]$ProfileSelectionPath,
+   [Parameter(Mandatory=$true,ParameterSetName='Launch')][ValidateRange(1,100)][int]$RequestBudget,
+   [Parameter(Mandatory=$true,ParameterSetName='Functions')][switch]$FunctionsOnly
+ )
+@@ -126,10 +126,20 @@
+ $taskPort = $Port
+ $taskOccurrence = $EvidencePrefix + '-' + [Guid]::NewGuid().ToString()
+ $taskSelection = Join-Path $taskRunRoot 'task-selection.json'
+-$taskDefinitionPath = [IO.Path]::GetFullPath($DefinitionPath)
+-$taskDefinition = Get-Content -Raw -LiteralPath $taskDefinitionPath | ConvertFrom-Json
+-$taskProfile = [string]$taskDefinition.manifest.id
+-if($taskProfile -ne 'task-resource-qa' -or $taskDefinition.manifest.namespace -ne 'qa'){throw 'Reviewed QA package identity required'}
++if(![IO.Path]::IsPathRooted($ProfileSelectionPath)){throw 'Absolute profile selection path required'}
++$taskProfileSelectionPath = [IO.Path]::GetFullPath($ProfileSelectionPath)
++$taskProfileSelection = Get-Content -Raw -LiteralPath $taskProfileSelectionPath | ConvertFrom-Json
++$taskSelectionKeys = @($taskProfileSelection.PSObject.Properties.Name | Sort-Object)
++if($taskProfileSelection.kind -eq 'builtin'){
++  if(($taskSelectionKeys -join ',') -ne 'id,kind,namespace' -or $taskProfileSelection.id -ne 'base' -or $taskProfileSelection.namespace -ne 'builtin'){throw 'Exact builtin Base profile selection required'}
++  $taskProfile='base'
++}elseif($taskProfileSelection.kind -eq 'project'){
++  if(($taskSelectionKeys -join ',') -ne 'definitionPath,kind' -or ![IO.Path]::IsPathRooted($taskProfileSelection.definitionPath)){throw 'Exact project definition selection required'}
++  if([IO.Path]::GetFullPath($taskProfileSelection.definitionPath) -ne (Join-Path $PSScriptRoot 'creator-delivery-definition-16.json')){throw 'Actual reviewed QA16 definition required'}
++  $taskDefinition=Get-Content -Raw -LiteralPath $taskProfileSelection.definitionPath | ConvertFrom-Json
++  $taskProfile=[string]$taskDefinition.manifest.id
++  if($taskProfile -ne 'task-resource-qa' -or $taskDefinition.manifest.namespace -ne 'qa' -or $taskDefinition.manifest.version -ne '2026.10.06.2'){throw 'Reviewed QA package identity required'}
++}else{throw 'Unknown profile selection kind'}
+ $taskRequestBudget = $RequestBudget
+ if (Test-Path -LiteralPath $taskRunRoot) { throw 'Fresh owned occurrence already exists' }
+ $taskListeners = @(Get-NetTCPConnection -ErrorAction Stop | Where-Object { $_.State -eq 'Listen' -and $_.LocalPort -eq $taskPort })
+@@ -164,7 +174,7 @@
+ try {
+   Get-ChildItem Env: | ForEach-Object { [Environment]::SetEnvironmentVariable($_.Name,$null,'Process') }
+   foreach ($taskName in $taskEnvironment.Keys) { [Environment]::SetEnvironmentVariable($taskName,$taskEnvironment[$taskName],'Process') }
+-  $taskArguments = @($taskWrapper,$taskAuth,$taskRuntime,$taskProject,$taskEvidence,$taskReceipt,[string]$taskPort,$taskOccurrence,$taskSelection,$taskDefinitionPath,[string]$taskRequestBudget)
++  $taskArguments = @($taskWrapper,$taskAuth,$taskRuntime,$taskProject,$taskEvidence,$taskReceipt,[string]$taskPort,$taskOccurrence,$taskSelection,$taskProfileSelectionPath,[string]$taskRequestBudget)
+   if (@($taskArguments | Where-Object { $_ -match '[\s"]' }).Count) { throw 'Known launch arguments require explicit quoting review' }
+   $taskHostArguments=@($taskWrapper,'--owned-host',$taskEvidence,$taskOccurrence,$taskBun)+$taskArguments
+   $taskProcess = Start-Process -FilePath $taskBun -ArgumentList $taskHostArguments -WorkingDirectory 'D:/myhexin-local/opencorvus/packages/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $taskRunRoot 'stdout.log') -RedirectStandardError (Join-Path $taskRunRoot 'stderr.log') -PassThru
+@@ -178,7 +188,7 @@
+   }while([DateTime]::UtcNow -lt $taskHostReadyDeadline)
+   if(!$taskNativeReady -or $taskNativeReady.occurrence -ne $taskOccurrence -or $taskNativeReady.outcome -ne 'ready' -or $taskNativeReady.host.pid -ne $taskProcess.Id -or (Get-OwnedNativeState $taskNativeReady.host) -ne 'exact_live' -or (Get-OwnedNativeState $taskNativeReady.target) -ne 'exact_live'){throw 'Exact native Host/Target readiness required'}
+   $taskOwner = @{ProcessId=$taskNativeReady.target.pid;processInstanceID=$taskNativeReady.target.processInstanceID}
+-  $taskLaunchFact = [ordered]@{ observedAtUtc = [DateTime]::UtcNow.ToString('o'); runRoot = $taskRunRoot; runtime = $taskRuntime; project = $taskProject; evidence = $taskEvidence; evidencePrefix = $EvidencePrefix; receipt = $taskReceipt; occurrence = $taskOccurrence; port = $taskPort; owner = $taskOwner; observedProcessChain = @($taskOwner); taskSelectionPath = $taskSelection; taskSelectionRequired = $true; definitionPath = $taskDefinitionPath; handleAdmissionMilliseconds = 600000; environmentNames = @($taskEnvironment.Keys | Sort-Object); taskProcessMode = 'native'; promptProfile = $taskProfile; requestBudget = $taskRequestBudget; requestBudgetScope = 'One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset'; inactivityMilliseconds = 180000; taskMaximumMilliseconds = 900000; taskMaximumScope = 'Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration'; sourcePair = 'Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline'; cleanup = 'Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure'; uiAutomation = 'None' }
++  $taskLaunchFact = [ordered]@{ observedAtUtc = [DateTime]::UtcNow.ToString('o'); runRoot = $taskRunRoot; runtime = $taskRuntime; project = $taskProject; evidence = $taskEvidence; evidencePrefix = $EvidencePrefix; receipt = $taskReceipt; occurrence = $taskOccurrence; port = $taskPort; owner = $taskOwner; observedProcessChain = @($taskOwner); taskSelectionPath = $taskSelection; taskSelectionRequired = $true; profileSelectionPath = $taskProfileSelectionPath; profileSelection = $taskProfileSelection; handleAdmissionMilliseconds = 600000; environmentNames = @($taskEnvironment.Keys | Sort-Object); taskProcessMode = 'native'; promptProfile = $taskProfile; requestBudget = $taskRequestBudget; requestBudgetScope = 'One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset'; inactivityMilliseconds = 180000; taskMaximumMilliseconds = 900000; taskMaximumScope = 'Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration'; sourcePair = 'Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline'; cleanup = 'Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure'; uiAutomation = 'None' }
+   $taskLaunchFact.settlementEvidenceRoot = $taskSettlementEvidence
+   $taskLaunchFact.host=$taskNativeReady.host
+   $taskLaunchFact.nativeTarget=$taskNativeReady.target
+--- before/live-sol-cli-owned.ts
++++ current/live-sol-cli-owned.ts
+@@ -76,12 +76,12 @@
+ 
+ // Nonsecret arguments only: source auth, owned runtime, owned project, owned evidence,
+ // owned startup receipt, proposed port, unique startup occurrence. Environment is parent-owned.
+-const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence, taskSelectionPath, definitionPath, requestBudgetText] = process.argv.slice(2)
+-assert(authSource && runtime && project && evidenceRoot && receiptPath && portText && occurrence && taskSelectionPath && definitionPath && requestBudgetText,
+-  "Expected ten nonsecret owned/source arguments including the actual Task selection, QA definition and upfront request budget")
++const [authSource, runtime, project, evidenceRoot, receiptPath, portText, occurrence, taskSelectionPath, profileSelectionPath, requestBudgetText] = process.argv.slice(2)
++assert(authSource && runtime && project && evidenceRoot && receiptPath && portText && occurrence && taskSelectionPath && profileSelectionPath && requestBudgetText,
++  "Expected ten nonsecret owned/source arguments including the actual Task selection, profile selection and upfront request budget")
+ const maxRequests = Number(requestBudgetText)
+ assert(Number.isInteger(maxRequests) && maxRequests >= 1 && maxRequests <= 100, "Expected reviewed upfront cumulative request budget")
+-assert(path.isAbsolute(definitionPath))
++assert(path.isAbsolute(profileSelectionPath))
+ for (const value of [authSource, runtime, project, evidenceRoot, receiptPath]) assert(path.isAbsolute(value))
+ assert(path.isAbsolute(taskSelectionPath))
+ assert.equal(path.dirname(path.resolve(taskSelectionPath)), path.dirname(path.resolve(runtime)))
+@@ -139,18 +139,34 @@
+     initialFiles, status: "clean", metadataOwner: "ensureGitProjectMetadata", hooks: "normal Git invocation",
+     qualification: "Actual initial Git object/files; no mutable-source hash acceptance" })
+ 
+-  const { writeExpertSquadPackage } = await import(pathToFileURL(path.resolve(packageRoot, "../sdk/js/src/expert-squad-authoring.ts")).href)
+-  const { ExpertSquadPackageLocations } = await import(source("src/expert-squad/locations.ts"))
+   const { ExpertSquadRegistry } = await import(source("src/expert-squad/registry.ts"))
+-  const definition = JSON.parse(await fs.readFile(definitionPath, "utf8"))
+-  const profileID = definition.manifest.id
+-  const installed = await writeExpertSquadPackage({
+-    directory: path.join(ExpertSquadPackageLocations.project(project).packagesRoot, definition.manifest.namespace, profileID),
+-    definition,
+-  })
+-  await ExpertSquadRegistry.invalidateAvailable()
+-  await publish("qa-package-installed.json", { definitionPath, profileID, namespace: definition.manifest.namespace,
+-    version: definition.manifest.version, ...installed, boundary: "SDK canonical project installation before first Instance/Resolver" })
++  const rawSelection: unknown = JSON.parse(await fs.readFile(profileSelectionPath, "utf8"))
++  const { z } = await import("zod")
++  const profileSelection = z.discriminatedUnion("kind", [
++    z.object({ kind: z.literal("builtin"), id: z.literal("base"), namespace: z.literal("builtin") }).strict(),
++    z.object({ kind: z.literal("project"), definitionPath: z.string().refine(path.isAbsolute, "Absolute definition path required") }).strict(),
++  ]).parse(rawSelection)
++  let profileID = "base"
++  let profileNamespace = "builtin"
++  if (profileSelection.kind === "project") {
++    assert.equal(path.resolve(profileSelection.definitionPath), path.resolve(import.meta.dir, "creator-delivery-definition-16.json"), "Actual reviewed QA16 definition required")
++    const { writeExpertSquadPackage } = await import(pathToFileURL(path.resolve(packageRoot, "../sdk/js/src/expert-squad-authoring.ts")).href)
++    const { ExpertSquadPackageLocations } = await import(source("src/expert-squad/locations.ts"))
++    const definition = JSON.parse(await fs.readFile(profileSelection.definitionPath, "utf8"))
++    assert.equal(definition.manifest.id, "task-resource-qa")
++    assert.equal(definition.manifest.namespace, "qa")
++    assert.equal(definition.manifest.version, "2026.10.06.2")
++    profileID = definition.manifest.id
++    profileNamespace = definition.manifest.namespace
++    const installed = await writeExpertSquadPackage({
++      directory: path.join(ExpertSquadPackageLocations.project(project).packagesRoot, profileNamespace, profileID), definition,
++    })
++    await ExpertSquadRegistry.invalidateAvailable()
++    await publish("qa-package-installed.json", { profileSelectionPath, definitionPath: profileSelection.definitionPath,
++      profileID, namespace: profileNamespace, version: definition.manifest.version, ...installed,
++      boundary: "SDK canonical project installation before first Instance/Resolver" })
++  }
++  await publish("profile-selection-admitted.json", { profileSelectionPath, selection: profileSelection, profileID, namespace: profileNamespace })
+   const [{ Global }, { ConfigPaths }] = await Promise.all([
+     import(source("src/global/index.ts")), import(source("src/config/paths.ts")),
+   ])
+@@ -164,7 +180,7 @@
+   await fs.writeFile(projectConfigFile, JSON.stringify(projectConfig, null, 2) + "\n", { flag: "wx" })
+   await publish("owned-config-hierarchy.json", { global: { path: globalConfigFile, config: globalConfig },
+     project: { path: projectConfigFile, config: projectConfig }, inlineConfig: "absent",
+-    boundary: "Fresh canonical global Base and project-only QA configuration before first Instance; no environment profile switching" })
++    boundary: "Fresh canonical global Base and selected project profile configuration before first Instance; no environment profile switching" })
+   await fs.mkdir(path.join(runtime, "data"), { recursive: true })
+   for (const name of ["auth.json", "models.json"]) {
+     try {
+@@ -228,11 +244,11 @@
+     assert.equal(config.model, "openai/gpt-6.1-sol")
+     assert.equal(config.small_model, "openai/gpt-6.1-sol")
+     const revision = await PromptProfileResolver.resolveActivePackageRevision({ config, projectDirectory: project, scope: "project" })
+-    assert.equal(revision.scope, "project")
+-    assert.equal(revision.projectID, Instance.project.id)
++    assert.equal(revision.scope, profileSelection.kind === "builtin" ? "built_in" : "project")
++    assert.equal(revision.projectID, profileSelection.kind === "builtin" ? null : Instance.project.id)
+     const loadedPackage = await ExpertSquadRegistry.loadPackageRevisionSnapshot(revision.packageDigest)
+     assert.equal(loadedPackage.id, profileID)
+-    assert.equal(loadedPackage.namespace, definition.manifest.namespace)
++    assert.equal(loadedPackage.namespace, profileNamespace)
+     assert.equal(loadedPackage.version, revision.version)
+     assert.equal(loadedPackage.packageDigest, revision.packageDigest)
+     const preview = Config.mergeOverlay(config, { model: "openai/gpt-6.1-sol", prompt_profile: { active: profileID } })
+@@ -254,10 +270,14 @@
+       const { workerCapability } = await PromptProfileResolver.resolveWorkerTurnProjection({
+         config, projectDirectory: project, packageRevision: revision, agentID: entry.agentID,
+       })
+-      if (entry.agentID === "mission") {
++      if (profileSelection.kind === "project" && entry.agentID === "mission") {
+         assert.equal(workerCapability.identity.baseRole, "explore")
+         assert.equal(workerCapability.identity.sessionKind, "explore")
+         assert(workerCapability.builtInToolIDs.includes("panel_query_task"), "Actual explorer must receive its query grant")
++      }
++      if (profileSelection.kind === "builtin" && entry.agentID === "base-researcher") {
++        assert.equal(workerCapability.identity.baseRole, "explore")
++        assert(workerCapability.builtInToolIDs.includes("webfetch"), "Actual Base researcher must receive its webfetch grant")
+       }
+       workerGrants.push({ identity: workerCapability.identity, packageRevision: workerCapability.packageRevision,
+         builtInToolIDs: workerCapability.builtInToolIDs,

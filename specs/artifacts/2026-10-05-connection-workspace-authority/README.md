@@ -1,5 +1,8 @@
 # Connection workspace authority investigation
 
+- [Sources and renderer102 evidence](subagent-rendering-flicker-102/README.md): actual before/first-after pixels, native closure, source preimages and current acceptance limits.
+- [Sources and Rendering102](subagent-rendering-flicker-plan-102.md): human Sources priority and shared source audit; real isolated history and streamed acceptance admissions.
+
 - [Non-Git collection101 evidence](non-git-worktree-gc-101/README.md): original failure, accurate preservation/status and actual HTTP/UI acceptance; native scope closed.
 
 - [Non-Git worktree collection101](non-git-worktree-gc-plan-101.md): actual native warning and public preservation/schema impact; production held pending real baseline.

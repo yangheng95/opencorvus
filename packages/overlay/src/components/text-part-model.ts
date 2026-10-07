@@ -27,6 +27,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
   let disposed = false
   let latestText = ""
   let latestLocale = ""
+  let latestLocaleSeq = -1
   let latestStreaming = false
 
   const mount = () => {
@@ -48,7 +49,11 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
   }
   const renderer = createMarkdownRenderer((reply, request) => {
     if (disposed) return
-    const currentSource = request.locale === latestLocale && latestText.startsWith(request.text) && request.streaming === latestStreaming
+    const currentSource =
+      request.locale === latestLocale &&
+      request.localeSeq === latestLocaleSeq &&
+      latestText.startsWith(request.text) &&
+      request.streaming === latestStreaming
     if (reply.revision !== -1 && !currentSource) return
     if (reply.error) {
       setError(reply.error)
@@ -71,8 +76,17 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
   createEffect(() => {
     const text = props.text || ""
     const streaming = props.streaming === true
-    appStore.localeSeq
-    latestLocale = localeTag()
+    const localeSeq = appStore.localeSeq
+    const locale = localeTag()
+    if (
+      text === latestText &&
+      streaming === latestStreaming &&
+      locale === latestLocale &&
+      localeSeq === latestLocaleSeq
+    )
+      return
+    latestLocale = locale
+    latestLocaleSeq = localeSeq
     latestStreaming = streaming
     const append = text.startsWith(latestText)
     latestText = text
@@ -95,7 +109,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
     requestFrame = requestAnimationFrame(() => {
       requestFrame = 0
       try {
-        renderer.render(text, streaming, revision)
+        renderer.render(text, streaming, revision, localeSeq)
       } catch (reason) {
         setError(String(reason))
         setPending(false)
