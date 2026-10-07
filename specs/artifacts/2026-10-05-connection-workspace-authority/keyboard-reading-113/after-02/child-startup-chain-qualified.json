@@ -1,0 +1,49 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18072",
+    "pid": 77500
+  },
+  "nativeReady": {
+    "occurrence": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+    "outcome": "ready",
+    "host": {
+      "pid": 73496,
+      "processInstanceID": "win32:639270016290830521",
+      "occurrenceID": "df426e1b-8231-45c0-93d0-9ccb0d993bde"
+    },
+    "parent": {
+      "pid": 42060,
+      "processInstanceID": "win32:639270016270741215",
+      "occurrenceID": "ccd0c887-2fd3-4c02-85bb-565d8650c260"
+    },
+    "target": {
+      "pid": 77500,
+      "processInstanceID": "win32:639270016300501948",
+      "occurrenceID": "6f6b3626-a41b-4034-8bb5-03a65922f5c1"
+    },
+    "targetBirthAtMs": 1791404830050,
+    "observedAtUtc": "2026-10-07T20:27:10.085Z",
+    "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+    "args": [
+      "./src/index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "18072",
+      "--project-dir",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\multiple-sources-live-109-01\\project",
+      "--startup-receipt",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\keyboard-reading-after-113-02\\startup.json",
+      "--startup-occurrence",
+      "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+      "--log-level",
+      "INFO"
+    ],
+    "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+  },
+  "boundary": "Actual startup URL port and occurrenceID; corrected prior supplemental field assumption"
+}

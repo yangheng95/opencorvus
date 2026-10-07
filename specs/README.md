@@ -1,6 +1,6 @@
 # Specs Storage Index
 
-- [Keyboard reading113 Recall](artifacts/2026-10-05-connection-workspace-authority/keyboard-reading-plan-113.md): main accepted Home reaches top with followtrue; shared-owner timing unknown, plan only; Sources112 passed separately.
+- [Keyboard reading113](records/2026-10/2026-10-08-keyboard-reading.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/keyboard-reading-plan-113.md): actual early intent consumption repaired; main and child Home/End evidence, Sources regression and explicit limits.
 
 - [Main Sources reading112](records/2026-10/2026-10-08-sources-reading.md): actual opening pause repair qualified, original before retained; shared/live matrices unknown.
 

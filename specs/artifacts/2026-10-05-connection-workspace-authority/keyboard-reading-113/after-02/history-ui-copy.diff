@@ -1,0 +1,14 @@
+
+InputObject                                                             SideIndicator
+-----------                                                             -------------
+if($copyPort -ne 18072){throw 'Only admitted113 history port'}          =>
+$caseStage='after-02'                                                   =>
+$caseRunName='keyboard-reading-after-113-02'                            =>
+if($copyLabel -ne $caseRunName){throw 'Exact after113 label required'}  =>
+                                                                        =>
+if($copyPort -ne 18071){throw 'Only admitted113 history port'}          <=
+$caseStage='before-01'                                                  <=
+$caseRunName='keyboard-reading-before-113-01'                           <=
+if($copyLabel -ne $caseRunName){throw 'Exact before113 label required'} <=
+
+

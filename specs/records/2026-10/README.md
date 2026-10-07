@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources reading and keyboard ownership113](2026-10-08-keyboard-reading.md)
+
 - [Main Sources reading112](2026-10-08-sources-reading.md)
 
 - [Sources reading112 actual before](2026-10-08-sources-reading-before.md)

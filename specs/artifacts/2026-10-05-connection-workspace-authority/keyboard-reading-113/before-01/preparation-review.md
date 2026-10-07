@@ -1,0 +1,2 @@
+# Before113 selector preparation
+Sole current copy helper now accepts only keyboard-reading-before-113-01 /Oct08/18071 /keyboard-reading-113/before-01. Original CLOSED109 owner/whole native/pair/Task/Project/request/root/epoch/three Source guards unchanged. Complete before/final/diff retained; AST0. No copy/launch/SQL/Model/UI/credentials execution. Observer readiness asset must be derived from later real build; no current asset assumed. After113/18072 remains unadmitted.

@@ -1,0 +1,67 @@
+{
+  "focus": {
+    "label": "Conversation",
+    "tag": "DIV"
+  },
+  "scroll": [
+    {
+      "follow": "true",
+      "h": 635,
+      "top": 0,
+      "total": 1219
+    }
+  ],
+  "sources": [
+    {
+      "centerHit": {
+        "tag": "STRONG"
+      },
+      "label": "Sources: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C (1)",
+      "open": false,
+      "rect": {
+        "bottom": 517.0625,
+        "height": 24,
+        "left": 421.3999938964844,
+        "right": 958.3999938964844,
+        "top": 493.0625,
+        "width": 537,
+        "x": 421.3999938964844,
+        "y": 493.0625
+      }
+    },
+    {
+      "centerHit": {
+        "tag": "DIV"
+      },
+      "label": "Sources: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C (1)",
+      "open": false,
+      "rect": {
+        "bottom": 581.0625,
+        "height": 24,
+        "left": 421.3999938964844,
+        "right": 895.2625122070312,
+        "top": 557.0625,
+        "width": 473.8625183105469,
+        "x": 421.3999938964844,
+        "y": 557.0625
+      }
+    },
+    {
+      "centerHit": {
+        "tag": "TEXTAREA"
+      },
+      "label": "Sources: Accessibility | MDN (1)",
+      "open": false,
+      "rect": {
+        "bottom": 645.0625,
+        "height": 24,
+        "left": 421.3999938964844,
+        "right": 613.6374969482422,
+        "top": 621.0625,
+        "width": 192.2375030517578,
+        "x": 421.3999938964844,
+        "y": 621.0625
+      }
+    }
+  ]
+}

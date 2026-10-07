@@ -1,0 +1,23 @@
+{
+  "expectedRootConfirmed": "3de7ae3c8ac3f3d00df046f3c9a38a8fcb982477",
+  "head": "3de7ae3c8ac3f3d00df046f3c9a38a8fcb982477",
+  "boundary": "Root actual tool terminal values copied as reported; fresh readonly refs observed. Empty fetch logs do not independently establish command exit.",
+  "observedAt": "2026-10-07T19:47:53.3211611Z",
+  "outgoing": [],
+  "upstream": "3de7ae3c8ac3f3d00df046f3c9a38a8fcb982477",
+  "status": [],
+  "rootActualTerminalResults": {
+    "normalPush": {
+      "session": 48441,
+      "exit": 0
+    },
+    "build": {
+      "session": 43831,
+      "exit": 0
+    },
+    "types": {
+      "session": 13088,
+      "exit": 0
+    }
+  }
+}

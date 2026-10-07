@@ -1,0 +1,30 @@
+# Keyboard reading113 — Root actual review
+
+[Recall](../keyboard-reading-plan-113.md), [complete actual before trace](actual-home-branch-review.md), [clean final production diff](final-repair.diff).
+
+The original main Home reached top0 while following remained true. The bounded temporary observer recorded61 rows: an ordinary upward step inside the8px bottom tolerance cleared the intent at about42ms, then the next step outside that tolerance lacked ownership at about49ms. This episode did not reach the250ms expiry and recorded no content rebase. Temporary code was removed precisely before the final build. The final production change is one predicate in the shared controller; existing main navigation and Sources112 remain unchanged.
+
+Root personally operated and viewed clean native /ui on18072, asset main-BhF1-KFg.js, IAB89,1280×720. The exact CLOSED109 Task/Session/epoch/three Source tuples were retained without credentials, model, new Task, rearm, or database mutation. Original109's missing final answer is immutable historical data, not a new failure of reply111.
+
+| Actual action | Settled main position / follow | Evidence |
+| --- | --- | --- |
+| Initial history | 583.2 / true | [geometry](after-02/root-initial-geometry.json) |
+| Focused Conversation Home | 0 / false | [geometry](after-02/root-home-settled-geometry.json), [pixels](after-02/root-home-settled.png) |
+| Focused Conversation End | 583.2 / true | [geometry](after-02/root-end-settled-geometry.json) |
+| Focused Conversation ArrowUp | 520 / false | [geometry](after-02/root-arrow-up-settled-geometry.json), [pixels](after-02/root-arrow-up-settled.png) |
+| Existing bottom button | 583.2 / true | [geometry](after-02/root-bottom-settled-geometry.json) |
+| Focused Conversation PageUp | 12 / false | [geometry](after-02/root-page-up-settled-geometry.json), [pixels](after-02/root-page-up-settled.png) |
+
+All above main samples have client635/scrollHeight1219. Immediate smooth-motion samples are not settled acceptance. Two later natural ArrowDown actions moved12→75.2→138.4 while paused. Intro Source at y354.66 had a correct native center hit. Pointer opening settled top236.8/height1243/paused, headingy256.26 and native open/link visible in [pixels](after-02/root-source-open-settled.png). The locator may scroll the target into view; originaltop138.4 is not preserved. Separate settled Space and Enter retained native close/open behavior and paused reading. Source data, identity, caption/title/count and the original three separate Sources1 groups are unchanged. This is not a single-group Sources3 qualification.
+
+Two pointer attempts to open the full tester transcript did not show the dock; the latter had a correct pre-click center hit at x1102.72/y148.25. The current snapshots/console and [pre-hit geometry](after-02/root-subagent-open-before.json) are retained. Enter on the real Open button opened it. Pointer root cause is UNKNOWN; do not claim a pointer pass or diagnose from the last state alone. This is a separate remaining investigation.
+
+The actual tester transcript has client576/height1073/top496/followtrue, with main top722.4/height1358/followtrue after dock layout. Home on the visible final Copy message button produced childtop0/followfalse while main stayed true; [geometry](after-02/root-subagent-home-settled.json) and [pixels](after-02/root-subagent-home-settled.png). This is a real descendant-button native Home, not the main exact-host handler. End on the visible upper Handoff context button returned childtop496/followtrue while main remained true; [geometry](after-02/root-subagent-end-settled.json). This qualifies these actual child actions, not every key/descendant or a child Source widget. The child contains prose URLs, not actual Source parts.
+
+Side chat opened with an empty transcript and model attention alert: [snapshot](after-02/root-sidechat-empty-snapshot.txt), [pixels](after-02/root-sidechat-empty.png). No content was manufactured; SideChat scrolling/Sources remains unqualified. Nested textbox/Listbox ownership, echo/tiny near-bottom rearm, live append, history prepend, new source selection, restarted/multi-project/live occurrences, wheel/touch/native scrollbar remain unqualified by this manual case.
+
+Final overlay types and build/renderer-surface actually exited0; logs are [types](final-types.log), [build](final-build.log). No UI automated tests were added, modified or run. Six retrieved conversation tests were classified as non-UI data/transport/controller tests; their separately encountered negative-core candidates remain held for a later scoped repair.
+
+Root closed89, reset its viewport and observed tabs[]. One public shutdown then joined full native Job/output/request completion and pair cleanup with actualexit0. Host73496/win32:639270016290830521 and Target77500/win32:639270016300501948 belong to occurrence keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250. Independent archive and fresh process/port/pair observations are linked by the after evidence README; public HTTP acknowledgment alone is not closure.
+
+The strict copy initially stopped in a nullable private .NET identity reader before creating the after RunRoot; later CIM found original109 PIDs absent, and PID reuse remains unknown. [Original provenance](native-observer/original-copy-failure.md) records that the stdout log was empty. The private reader now invokes the existing production occurrence observer in an isolated diagnostic root. unknown_live blocks physical qualification. [First isolation-error provenance](native-observer/first-qualification-failure.md), [positive exact-live/different-birth/original-closed facts](native-observer/positive-qualification.json), and actual same-entry copy/readiness/settlement are retained. No parallel identity algorithm or fallback was added. A first readiness invocation used the wrong argument Prefix; PowerShell rejected it before readiness ran. The same helper was rerun with its declared ExpectedPrefix and returned actualUI/asset200. No runtime acceptance is attributed to the rejected invocation.

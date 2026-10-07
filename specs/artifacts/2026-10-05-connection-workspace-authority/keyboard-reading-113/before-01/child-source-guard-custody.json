@@ -1,0 +1,53 @@
+{
+  "originalProject": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\multiple-sources-live-109-01\\project",
+  "openedEventID": "pev_g0VXOBiIo0011ldKm2zc",
+  "epoch": 1,
+  "terminalEventID": "pev_g0VXOCI4t00SstNyW3CW",
+  "boundary": "Actual copy readonlyDB guard receipt projection; no separate before full HTTP captured",
+  "task": {
+    "id": "tsk_g00VXOBi8f00PNKt2D7j",
+    "project_id": "prj_hMdWV6nPVuwA7EIwInBU",
+    "session_id": "ses_-zUSboHhyzzBVOsP3WD2",
+    "request_id": "7e445053-ed48-4eb1-ad30-6307947b7c1b",
+    "product_pillar": "work"
+  },
+  "promptOwners": [],
+  "sources": [
+    {
+      "id": "prt_g0VXOBlKu00hErQv8VRZ",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+        "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXOBmX200nonYkuNRT",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "cb990aa86289aadf92cfcd259b42886f9bd56679313f62a15da8b62c2116c679",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+        "title": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXOBolw0041WeblRwI",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+        "title": "Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ]
+}

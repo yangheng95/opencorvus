@@ -1,0 +1,189 @@
+--- a/packages/overlay/src/utils/dom-utils.ts
++++ b/packages/overlay/src/utils/dom-utils.ts
+@@ -75,6 +75,8 @@
+   contentChanged: () => void
+   scrollToBottom: () => void
+   scrollToTop: () => void
++  /** Temporary113 metadata observer; remove after actual diagnosis. */
++  observeKeyboardAccepted: (event: KeyboardEvent) => void
+ }
+ 
+ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoScrollController {
+@@ -87,7 +89,33 @@
+   let touchStartY: number | null = null
+   let observedContentElements = new Set<Element>()
+ 
+-  const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
++  // Temporary113 observation only: no new event, timer, writer or follow owner.
++  let observationUntil = 0
++  let observationCount = 0
++  function observe(stage: string, fields: Record<string, string | number | boolean | null> = {}) {
++    try {
++      const now = performance.now()
++      if (disposed || now > observationUntil || observationCount >= 120) return
++      console.debug("[keyboard-reading-113]", JSON.stringify({
++        sequence: ++observationCount, stage, now, tracking: opts.isTracking(),
++        scrollTop: el.scrollTop, scrollHeight: el.scrollHeight, clientHeight: el.clientHeight,
++        expectedTop, programScrollTarget, upwardRemainingMs: Math.max(0, upwardInputIntentUntil - now),
++        rafPending, pointerScrollIntent, ...fields,
++      }))
++    } catch { /* Metadata observation must not alter the actual controller result. */ }
++  }
++  function observeKey(event: KeyboardEvent, stage: string) {
++    try { observe(stage, {
++      key: event.key, trusted: event.isTrusted, targetIsOwner: event.target === el,
++      targetTag: event.target instanceof Element ? event.target.tagName : "other",
++      defaultPrevented: event.defaultPrevented, alt: event.altKey, ctrl: event.ctrlKey,
++      meta: event.metaKey, shift: event.shiftKey, eventTime: event.timeStamp,
++    }) } catch { /* Event metadata must not escape into original handlers. */ }
++  }
++  const contentResizeObserver = new ResizeObserver(() => {
++    observe("resize-observer")
++    scheduleFollowScroll()
++  })
+ 
+   function onReadingIntent(event: Event) {
+     // Only the nearest transcript owns this operator intent.
+@@ -121,6 +149,13 @@
+     if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") {
+       rememberUpwardInputIntent()
+     }
++    try {
++      if (event.isTrusted && event.target === el && el.getAttribute("aria-label") === "Conversation" &&
++          (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") && observationCount < 120) {
++        observationUntil = performance.now() + 1000
++      }
++    } catch { /* No control-flow dependency on observation admission. */ }
++    observeKey(event, "keydown-after-original-intent")
+   }
+ 
+   function onPointerDown(event: PointerEvent) {
+@@ -160,15 +195,25 @@
+     const delta = nextTop - expectedTop
+     const bottomDistance = distanceFromBottom()
+     if (programScrollTarget !== null && Math.abs(nextTop - programScrollTarget) <= PROGRAM_TOLERANCE) {
++      observe("scroll-echo", { delta, bottomDistance })
+       programScrollTarget = null
+       expectedTop = nextTop
+-      if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
++      if (bottomDistance <= BOTTOM_TOLERANCE) {
++        observe("early-at-bottom-before")
++        opts.onAtBottom?.()
++        observe("early-at-bottom-after")
++      }
+       syncFollowLockAttribute()
+       return
+     }
+     if (Math.abs(delta) <= PROGRAM_TOLERANCE) {
++      observe("scroll-tiny", { delta, bottomDistance })
+       expectedTop = nextTop
+-      if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
++      if (bottomDistance <= BOTTOM_TOLERANCE) {
++        observe("early-at-bottom-before")
++        opts.onAtBottom?.()
++        observe("early-at-bottom-after")
++      }
+       syncFollowLockAttribute()
+       return
+     }
+@@ -177,24 +222,32 @@
+     const ownsUpwardMovement = pointerScrollIntent || performance.now() <= upwardInputIntentUntil
+     if (opts.isTracking() && movedUp && ownsUpwardMovement && bottomDistance > BOTTOM_TOLERANCE) {
+       upwardInputIntentUntil = 0
++      observe("scroll-input-release-before", { ownsUpwardMovement })
+       opts.onUserScrollUp()
++      observe("scroll-input-release-after")
+       syncFollowLockAttribute()
+       return
+     }
+     if (bottomDistance <= BOTTOM_TOLERANCE) {
+       upwardInputIntentUntil = 0
++      observe("scroll-at-bottom-before")
+       opts.onAtBottom?.()
+-    }
++      observe("scroll-at-bottom-after")
++    }
++    observe("scroll-retained", { delta, bottomDistance, ownsUpwardMovement })
+     syncFollowLockAttribute()
+   }
+ 
+   function pinToBottom() {
++    observe("pin-setter-before", { requestedTop: el.scrollHeight })
+     el.scrollTop = el.scrollHeight
+     programScrollTarget = el.scrollTop
+     expectedTop = el.scrollTop
++    observe("pin-setter-after")
+   }
+ 
+   function scheduleFollowScroll() {
++    observe("schedule-entry")
+     if (disposed) return
+     syncFollowLockAttribute()
+     if (!opts.isTracking()) return
+@@ -203,14 +256,17 @@
+     // but dispatch the resulting scroll event later. Rebase to that current
+     // layout position before the event arrives so content growth cannot be
+     // mistaken for operator upward scrolling and release follow mode.
++    observe("rebase-before")
+     expectedTop = el.scrollTop
+     programScrollTarget = null
++    observe("rebase-after")
+     // Every content mutation must rebase the expected position, including
+     // mutations coalesced behind an already queued correction frame.
+     if (rafPending) return
+     rafPending = true
+     requestAnimationFrame(() => {
+       rafPending = false
++      observe("follow-frame")
+       if (disposed) return
+       syncFollowLockAttribute()
+       if (!opts.isTracking()) return
+@@ -230,6 +286,7 @@
+       // Gated on `isTracking()` so a user who has
+       // scrolled away never gets yanked back.
+       requestAnimationFrame(() => {
++        observe("post-pin-frame")
+         if (disposed || !opts.isTracking()) return
+         if (distanceFromBottom() > BOTTOM_TOLERANCE) pinToBottom()
+       })
+@@ -259,6 +316,8 @@
+ 
+   return {
+     cleanup: () => {
++      observe("cleanup")
++      observationUntil = 0
+       disposed = true
+       el.removeEventListener("wheel", onWheel)
+       el.removeEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
+@@ -275,17 +334,21 @@
+       observedContentElements.clear()
+       delete el.dataset.followLock
+     },
++    observeKeyboardAccepted: (event) => observeKey(event, "main-keyboard-accepted"),
+     contentChanged: () => {
++      observe("content-changed")
+       syncObservedContentElements()
+       scheduleFollowScroll()
+     },
+     scrollToBottom: () => {
++      observe("explicit-bottom-before")
+       syncFollowLockAttribute()
+       el.scrollTop = el.scrollHeight
+       programScrollTarget = el.scrollTop
+       expectedTop = el.scrollTop
+     },
+     scrollToTop: () => {
++      observe("explicit-top-before")
+       syncFollowLockAttribute()
+       el.scrollTop = 0
+       programScrollTarget = el.scrollTop
+--- a/packages/overlay/src/components/Conversation.tsx
++++ b/packages/overlay/src/components/Conversation.tsx
+@@ -598,6 +598,7 @@
+       event.preventDefault()
+       if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") markHistoryIntent()
+       scroll()
++      scrollController?.observeKeyboardAccepted(event)
+     }
+     const onHistoryTouchStart = (event: TouchEvent) => {
+       touchStartY = event.touches[0]?.clientY ?? null

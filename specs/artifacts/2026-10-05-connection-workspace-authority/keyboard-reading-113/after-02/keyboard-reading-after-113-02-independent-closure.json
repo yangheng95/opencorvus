@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-10-07T20:32:13.6383614Z",
+  "listeners": [],
+  "occurrence": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 73496,
+        "processInstanceID": "win32:639270016290830521",
+        "occurrenceID": "df426e1b-8231-45c0-93d0-9ccb0d993bde"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 77500,
+        "processInstanceID": "win32:639270016300501948",
+        "occurrenceID": "6f6b3626-a41b-4034-8bb5-03a65922f5c1"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

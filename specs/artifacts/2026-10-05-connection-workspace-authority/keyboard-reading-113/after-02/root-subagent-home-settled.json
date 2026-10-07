@@ -1,0 +1,22 @@
+{
+  "active": {
+    "label": "Copy message",
+    "tag": "BUTTON"
+  },
+  "hosts": [
+    {
+      "cls": "chat-scroll session-content",
+      "follow": "true",
+      "h": 635,
+      "top": 722.4000244140625,
+      "total": 1358
+    },
+    {
+      "cls": "subagent-conversation-panel__scroll",
+      "follow": "false",
+      "h": 576,
+      "top": 0,
+      "total": 1073
+    }
+  ]
+}

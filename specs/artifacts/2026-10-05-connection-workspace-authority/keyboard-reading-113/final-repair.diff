@@ -1,0 +1,13 @@
+diff --git a/packages/overlay/src/utils/dom-utils.ts b/packages/overlay/src/utils/dom-utils.ts
+index e9cadcf7..30408efb 100644
+--- a/packages/overlay/src/utils/dom-utils.ts
++++ b/packages/overlay/src/utils/dom-utils.ts
+@@ -181,7 +181,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+       syncFollowLockAttribute()
+       return
+     }
+-    if (bottomDistance <= BOTTOM_TOLERANCE) {
++    if (bottomDistance <= BOTTOM_TOLERANCE && !(movedUp && ownsUpwardMovement)) {
+       upwardInputIntentUntil = 0
+       opts.onAtBottom?.()
+     }

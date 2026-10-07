@@ -1,0 +1,207 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+    - button "三个官方网页来源阅读验收109 Completed":
+      - generic: 三个官方网页来源阅读验收109
+      - generic "Completed":
+        - generic: Completed
+    - button "More actions":
+    - button "Collapse Anonymous b66296" [expanded]:
+      - generic: Anonymous b66296
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+      - button "三个官方网页来源阅读验收109 Completed":
+        - generic: 三个官方网页来源阅读验收109
+        - generic "Completed":
+          - generic: Completed
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18072":
+        - generic: Online
+  - separator "Resize left panel"
+  - complementary "Agent activity":
+    - list:
+      - 'button "orchestrator · Idle · ## Orchestrator Control Occurrence Continue the same unresolved durable ingress from the exact preceding assistant Turn. ## Wake Provenance 这是一条 wake 消息，不是用户发送的新消息。 This is a wake message, not a user-authored message. Current durable wake occurrence=art_hzvhx7MHo5nBD0d0yqHQ. This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization. On the initial Task wake, the creator''s original request is already in its real participant Message in this Turn. It has no task-root message identity. Read that Message directly."'
+      - button
+      - button
+  - generic "Loading task"
+  - generic: 三个官方网页来源阅读验收109
+  - status
+  - button "Project actions":
+  - generic "Completed":
+    - generic: Completed
+  - generic "Not running · 2m 15s":
+    - generic: 2m 15s
+  - button "Side chat" [active]:
+  - button "Environment information":
+  - button "Close right dock" [pressed]:
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: 只读访问以下三个指定的官方网页：
+      - list:
+        - link "https://www.w3.org/WAI/fundamentals/accessibility-intro/":
+          - /url: https://www.w3.org/WAI/fundamentals/accessibility-intro/
+        - link "https://www.w3.org/WAI/fundamentals/accessibility-principles/":
+          - /url: https://www.w3.org/WAI/fundamentals/accessibility-principles/
+        - link "https://developer.mozilla.org/en-US/docs/Web/Accessibility":
+          - /url: https://developer.mozilla.org/en-US/docs/Web/Accessibility
+        - text: 请根据实际读取内容，用中文分别写三条简短总结，并附上每条对应的实际来源。只需这三条，不进行其他搜索，不生成或修改本地文件。
+    - article:
+      - generic: orchestrator
+      - generic "Session ran for 35s (between first message and terminal status)": 35s
+      - button "Handoff context":
+        - generic: Handoff context
+      - button "webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)":
+        - generic: webfetch
+        - generic: https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
+      - group "Sources":
+        - 'generic "Sources: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C (1)"':
+          - generic: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C
+          - generic: "1"
+        - 'link "Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C"':
+          - /url: https://www.w3.org/WAI/fundamentals/accessibility-intro/
+          - generic: "1"
+          - generic: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C
+      - button "webfetch · https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)":
+        - generic: webfetch
+        - generic: https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)
+      - group "Sources":
+        - 'generic "Sources: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C (1)"':
+          - generic: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C
+          - generic: "1"
+      - button "webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)":
+        - generic: webfetch
+        - generic: https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)
+      - group "Sources":
+        - 'generic "Sources: Accessibility | MDN (1)"':
+          - generic: Accessibility | MDN
+          - generic: "1"
+      - button "dispatch_agent · target=base-tester":
+        - generic: dispatch_agent
+        - generic: target=base-tester
+    - region "Sub-agent progress":
+      - article:
+        - strong: base-tester
+        - button "Open the full base-tester conversation":
+          - text: Open
+        - log "base-tester activity":
+          - button "Handoff context":
+            - generic: Handoff context
+          - generic: read_agent_message
+          - generic: Task participant evidence
+          - generic: read_agent_message
+          - generic: Task participant evidence
+          - generic: read_agent_message
+          - generic: Task participant evidence
+          - generic: "**核对通过：三条候选总结均有对应网页正文支持，来源对应正确，无必要纠错。** 1. **W3C 无障碍入门**：正文明确说明感知、理解、导航与交互能力，列举老年人、暂时性残障和情境受限者的受益情况，并强调从项目初期纳入无障碍以及人工评估的必要性。候选表述准确。 来源：https://www.w3.org/WAI/fundamentals/access..."
+    - article:
+      - generic: orchestrator
+      - generic "Session ran for 13s (between first message and terminal status)": 13s
+      - button "Handoff context":
+        - generic: Handoff context
+      - button "manage_task · action=complete_task":
+        - generic: manage_task
+        - generic: action=complete_task
+  - status:
+    - strong: Model configuration unavailable
+    - generic: You can still read this conversation. Review the details or choose a model before sending a message.
+    - generic "Details":
+      - text: Details
+    - button "Retry"
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Longer research, office, production, and finished deliverables.":
+    - generic: Work
+  - generic: Task
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model Choose model. Click to change.":
+    - generic "Choose model"
+  - button "Send" [disabled]:
+    - generic: Send
+  - separator "Resize right panel"
+  - complementary "Tools panel":
+    - tablist "Open tools":
+      - tab "Expert Squad agents":
+        - generic: Expert Squad agents
+      - button "Close tab":
+      - tab "Side chat" [selected]:
+        - generic: Side chat
+      - button "Close tab":
+    - button "Add tool":
+    - button "Close panel":
+    - tabpanel "Side chat":
+      - region "Side chat":
+        - button "Choose a side chat Side chat":
+          - text: Side chat
+        - textbox
+        - combobox
+        - button "New side chat":
+        - paragraph: Ask about this conversation while the main task keeps working.
+        - alert:
+          - generic: Side chat needs attention
+          - generic "Details":
+            - text: Details
+          - button "Try again"
+          - button "Dismiss"
+        - strong: A little room to explore
+        - generic: Ask a question, or quote a passage from the main conversation.

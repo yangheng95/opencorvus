@@ -1,0 +1,368 @@
+[
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":1,\"stage\":\"keydown-after-original-intent\",\"now\":98027.5,\"tracking\":true,\"scrollTop\":583.2000122070312,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":583.2000122070312,\"programScrollTarget\":583.2000122070312,\"upwardRemainingMs\":249.90000009536743,\"rafPending\":false,\"pointerScrollIntent\":false,\"key\":\"Home\",\"trusted\":true,\"targetIsOwner\":true,\"targetTag\":\"DIV\",\"defaultPrevented\":false,\"alt\":false,\"ctrl\":false,\"meta\":false,\"shift\":false,\"eventTime\":98026.80000019073}",
+    "timestamp": "2026-10-07T20:05:04.515Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":2,\"stage\":\"main-keyboard-accepted\",\"now\":98028.40000009537,\"tracking\":true,\"scrollTop\":583.2000122070312,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":583.2000122070312,\"programScrollTarget\":583.2000122070312,\"upwardRemainingMs\":249,\"rafPending\":false,\"pointerScrollIntent\":false,\"key\":\"Home\",\"trusted\":true,\"targetIsOwner\":true,\"targetTag\":\"DIV\",\"defaultPrevented\":true,\"alt\":false,\"ctrl\":false,\"meta\":false,\"shift\":false,\"eventTime\":98026.80000019073}",
+    "timestamp": "2026-10-07T20:05:04.517Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":3,\"stage\":\"scroll-echo\",\"now\":98062.80000019073,\"tracking\":true,\"scrollTop\":581.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":583.2000122070312,\"programScrollTarget\":583.2000122070312,\"upwardRemainingMs\":214.59999990463257,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-1.60003662109375,\"bottomDistance\":2.4000244140625}",
+    "timestamp": "2026-10-07T20:05:04.551Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":4,\"stage\":\"early-at-bottom-before\",\"now\":98063.19999980927,\"tracking\":true,\"scrollTop\":581.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":581.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":214.2000002861023,\"rafPending\":false,\"pointerScrollIntent\":false}",
+    "timestamp": "2026-10-07T20:05:04.553Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":5,\"stage\":\"early-at-bottom-after\",\"now\":98063.19999980927,\"tracking\":true,\"scrollTop\":581.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":581.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":214.2000002861023,\"rafPending\":false,\"pointerScrollIntent\":false}",
+    "timestamp": "2026-10-07T20:05:04.553Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":6,\"stage\":\"scroll-at-bottom-before\",\"now\":98069.90000009537,\"tracking\":true,\"scrollTop\":577.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":577.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false}",
+    "timestamp": "2026-10-07T20:05:04.558Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":7,\"stage\":\"scroll-at-bottom-after\",\"now\":98069.90000009537,\"tracking\":true,\"scrollTop\":577.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":577.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false}",
+    "timestamp": "2026-10-07T20:05:04.559Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":8,\"stage\":\"scroll-retained\",\"now\":98070.19999980927,\"tracking\":true,\"scrollTop\":577.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":577.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":6.4000244140625,\"ownsUpwardMovement\":true}",
+    "timestamp": "2026-10-07T20:05:04.559Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":9,\"stage\":\"scroll-retained\",\"now\":98076.40000009537,\"tracking\":true,\"scrollTop\":573.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":573.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":10.4000244140625,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.564Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":10,\"stage\":\"scroll-retained\",\"now\":98084.40000009537,\"tracking\":true,\"scrollTop\":569.5999755859375,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":569.5999755859375,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":14.4000244140625,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.572Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":11,\"stage\":\"scroll-retained\",\"now\":98090.80000019073,\"tracking\":true,\"scrollTop\":562.4000244140625,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":562.4000244140625,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-7.199951171875,\"bottomDistance\":21.5999755859375,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.578Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":12,\"stage\":\"scroll-retained\",\"now\":98097.90000009537,\"tracking\":true,\"scrollTop\":554.4000244140625,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":554.4000244140625,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-8,\"bottomDistance\":29.5999755859375,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.586Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":13,\"stage\":\"scroll-retained\",\"now\":98108.09999990463,\"tracking\":true,\"scrollTop\":544,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":544,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-10.4000244140625,\"bottomDistance\":40,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.601Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":14,\"stage\":\"scroll-retained\",\"now\":98111.59999990463,\"tracking\":true,\"scrollTop\":530.4000244140625,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":530.4000244140625,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-13.5999755859375,\"bottomDistance\":53.5999755859375,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.601Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":15,\"stage\":\"scroll-retained\",\"now\":98122,\"tracking\":true,\"scrollTop\":512.7999877929688,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":512.7999877929688,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-17.60003662109375,\"bottomDistance\":71.20001220703125,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.612Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":16,\"stage\":\"scroll-retained\",\"now\":98132.59999990463,\"tracking\":true,\"scrollTop\":491.20001220703125,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":491.20001220703125,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-21.5999755859375,\"bottomDistance\":92.79998779296875,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.630Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":17,\"stage\":\"scroll-retained\",\"now\":98139.19999980927,\"tracking\":true,\"scrollTop\":428.79998779296875,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":428.79998779296875,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-62.4000244140625,\"bottomDistance\":155.20001220703125,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.631Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":18,\"stage\":\"scroll-retained\",\"now\":98157.69999980927,\"tracking\":true,\"scrollTop\":391.20001220703125,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":391.20001220703125,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-37.5999755859375,\"bottomDistance\":192.79998779296875,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.648Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":19,\"stage\":\"scroll-retained\",\"now\":98160,\"tracking\":true,\"scrollTop\":316.79998779296875,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":316.79998779296875,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-74.4000244140625,\"bottomDistance\":267.20001220703125,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.648Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":20,\"stage\":\"scroll-retained\",\"now\":98173.59999990463,\"tracking\":true,\"scrollTop\":286.3999938964844,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":286.3999938964844,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-30.399993896484375,\"bottomDistance\":297.6000061035156,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.663Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":21,\"stage\":\"scroll-retained\",\"now\":98180.30000019073,\"tracking\":true,\"scrollTop\":234.39999389648438,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":234.39999389648438,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-52,\"bottomDistance\":349.6000061035156,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.668Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":22,\"stage\":\"scroll-retained\",\"now\":98195.30000019073,\"tracking\":true,\"scrollTop\":215.1999969482422,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":215.1999969482422,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-19.199996948242188,\"bottomDistance\":368.8000030517578,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.683Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":23,\"stage\":\"scroll-retained\",\"now\":98201.40000009537,\"tracking\":true,\"scrollTop\":179.1999969482422,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":179.1999969482422,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-36,\"bottomDistance\":404.8000030517578,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.689Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":24,\"stage\":\"scroll-retained\",\"now\":98208.69999980927,\"tracking\":true,\"scrollTop\":164,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":164,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-15.199996948242188,\"bottomDistance\":420,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.697Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":25,\"stage\":\"scroll-retained\",\"now\":98215,\"tracking\":true,\"scrollTop\":150.39999389648438,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":150.39999389648438,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-13.600006103515625,\"bottomDistance\":433.6000061035156,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.703Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":26,\"stage\":\"scroll-retained\",\"now\":98221.90000009537,\"tracking\":true,\"scrollTop\":139.1999969482422,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":139.1999969482422,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-11.199996948242188,\"bottomDistance\":444.8000030517578,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.709Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":27,\"stage\":\"scroll-retained\",\"now\":98229.19999980927,\"tracking\":true,\"scrollTop\":128,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":128,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-11.199996948242188,\"bottomDistance\":456,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.717Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":28,\"stage\":\"scroll-retained\",\"now\":98235.80000019073,\"tracking\":true,\"scrollTop\":116.80000305175781,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":116.80000305175781,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-11.199996948242188,\"bottomDistance\":467.1999969482422,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.723Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":29,\"stage\":\"scroll-retained\",\"now\":98243,\"tracking\":true,\"scrollTop\":108,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":108,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-8.800003051757812,\"bottomDistance\":476,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.731Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":30,\"stage\":\"scroll-retained\",\"now\":98249.90000009537,\"tracking\":true,\"scrollTop\":99.19999694824219,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":99.19999694824219,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-8.800003051757812,\"bottomDistance\":484.8000030517578,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.737Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":31,\"stage\":\"scroll-retained\",\"now\":98256.69999980927,\"tracking\":true,\"scrollTop\":91.19999694824219,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":91.19999694824219,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-8,\"bottomDistance\":492.8000030517578,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.744Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":32,\"stage\":\"scroll-retained\",\"now\":98263.69999980927,\"tracking\":true,\"scrollTop\":84,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":84,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-7.1999969482421875,\"bottomDistance\":500,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.751Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":33,\"stage\":\"scroll-retained\",\"now\":98270.90000009537,\"tracking\":true,\"scrollTop\":76.80000305175781,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":76.80000305175781,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-7.1999969482421875,\"bottomDistance\":507.1999969482422,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.758Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":34,\"stage\":\"scroll-retained\",\"now\":98277.5,\"tracking\":true,\"scrollTop\":70.4000015258789,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":70.4000015258789,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-6.400001525878906,\"bottomDistance\":513.5999984741211,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.765Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":35,\"stage\":\"scroll-retained\",\"now\":98284.40000009537,\"tracking\":true,\"scrollTop\":64.80000305175781,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":64.80000305175781,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-5.599998474121094,\"bottomDistance\":519.1999969482422,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.772Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":36,\"stage\":\"scroll-retained\",\"now\":98291.69999980927,\"tracking\":true,\"scrollTop\":59.20000076293945,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":59.20000076293945,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-5.600002288818359,\"bottomDistance\":524.7999992370605,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.780Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":37,\"stage\":\"scroll-retained\",\"now\":98298.69999980927,\"tracking\":true,\"scrollTop\":53.599998474121094,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":53.599998474121094,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-5.600002288818359,\"bottomDistance\":530.4000015258789,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.786Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":38,\"stage\":\"scroll-retained\",\"now\":98305.59999990463,\"tracking\":true,\"scrollTop\":48.79999923706055,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":48.79999923706055,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4.799999237060547,\"bottomDistance\":535.2000007629395,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.794Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":39,\"stage\":\"scroll-retained\",\"now\":98312.30000019073,\"tracking\":true,\"scrollTop\":44.79999923706055,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":44.79999923706055,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":539.2000007629395,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.800Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":40,\"stage\":\"scroll-retained\",\"now\":98319,\"tracking\":true,\"scrollTop\":40.79999923706055,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":40.79999923706055,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":543.2000007629395,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.806Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":41,\"stage\":\"scroll-retained\",\"now\":98326.40000009537,\"tracking\":true,\"scrollTop\":36.79999923706055,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":36.79999923706055,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":547.2000007629395,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.814Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":42,\"stage\":\"scroll-retained\",\"now\":98333.30000019073,\"tracking\":true,\"scrollTop\":32.79999923706055,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":32.79999923706055,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-4,\"bottomDistance\":551.2000007629395,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.821Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":43,\"stage\":\"scroll-retained\",\"now\":98340.09999990463,\"tracking\":true,\"scrollTop\":29.600000381469727,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":29.600000381469727,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-3.1999988555908203,\"bottomDistance\":554.3999996185303,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.828Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":44,\"stage\":\"scroll-retained\",\"now\":98347,\"tracking\":true,\"scrollTop\":26.399999618530273,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":26.399999618530273,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-3.200000762939453,\"bottomDistance\":557.6000003814697,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.834Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":45,\"stage\":\"scroll-retained\",\"now\":98354,\"tracking\":true,\"scrollTop\":24,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":24,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-2.3999996185302734,\"bottomDistance\":560,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.841Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":46,\"stage\":\"scroll-retained\",\"now\":98360.90000009537,\"tracking\":true,\"scrollTop\":20.799999237060547,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":20.799999237060547,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-3.200000762939453,\"bottomDistance\":563.2000007629395,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.849Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":47,\"stage\":\"scroll-retained\",\"now\":98367.80000019073,\"tracking\":true,\"scrollTop\":18.399999618530273,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":18.399999618530273,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-2.3999996185302734,\"bottomDistance\":565.6000003814697,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.855Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":48,\"stage\":\"scroll-retained\",\"now\":98375,\"tracking\":true,\"scrollTop\":16,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":16,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-2.3999996185302734,\"bottomDistance\":568,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.862Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":49,\"stage\":\"scroll-tiny\",\"now\":98382,\"tracking\":true,\"scrollTop\":14.399999618530273,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":16,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-1.6000003814697266,\"bottomDistance\":569.6000003814697}",
+    "timestamp": "2026-10-07T20:05:04.869Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":50,\"stage\":\"scroll-retained\",\"now\":98388.90000009537,\"tracking\":true,\"scrollTop\":12,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":12,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-2.3999996185302734,\"bottomDistance\":572,\"ownsUpwardMovement\":false}",
+    "timestamp": "2026-10-07T20:05:04.876Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":51,\"stage\":\"scroll-tiny\",\"now\":98395.5,\"tracking\":true,\"scrollTop\":10.399999618530273,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":12,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-1.6000003814697266,\"bottomDistance\":573.6000003814697}",
+    "timestamp": "2026-10-07T20:05:04.883Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":52,\"stage\":\"scroll-tiny\",\"now\":98402.59999990463,\"tracking\":true,\"scrollTop\":8.800000190734863,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":10.399999618530273,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-1.5999994277954102,\"bottomDistance\":575.1999998092651}",
+    "timestamp": "2026-10-07T20:05:04.890Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":53,\"stage\":\"scroll-tiny\",\"now\":98409.40000009537,\"tracking\":true,\"scrollTop\":7.199999809265137,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":8.800000190734863,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-1.6000003814697266,\"bottomDistance\":576.8000001907349}",
+    "timestamp": "2026-10-07T20:05:04.896Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":54,\"stage\":\"scroll-tiny\",\"now\":98416.40000009537,\"tracking\":true,\"scrollTop\":6.400000095367432,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":7.199999809265137,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.7999997138977051,\"bottomDistance\":577.5999999046326}",
+    "timestamp": "2026-10-07T20:05:04.903Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":55,\"stage\":\"scroll-tiny\",\"now\":98423.19999980927,\"tracking\":true,\"scrollTop\":4.800000190734863,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":6.400000095367432,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-1.5999999046325684,\"bottomDistance\":579.1999998092651}",
+    "timestamp": "2026-10-07T20:05:04.910Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":56,\"stage\":\"scroll-tiny\",\"now\":98430.09999990463,\"tracking\":true,\"scrollTop\":4,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":4.800000190734863,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.8000001907348633,\"bottomDistance\":580}",
+    "timestamp": "2026-10-07T20:05:04.918Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":57,\"stage\":\"scroll-tiny\",\"now\":98437.30000019073,\"tracking\":true,\"scrollTop\":3.200000047683716,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":4,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.7999999523162842,\"bottomDistance\":580.7999999523163}",
+    "timestamp": "2026-10-07T20:05:04.925Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":58,\"stage\":\"scroll-tiny\",\"now\":98444.19999980927,\"tracking\":true,\"scrollTop\":2.4000000953674316,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":3.200000047683716,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.7999999523162842,\"bottomDistance\":581.5999999046326}",
+    "timestamp": "2026-10-07T20:05:04.931Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":59,\"stage\":\"scroll-tiny\",\"now\":98451.5,\"tracking\":true,\"scrollTop\":1.600000023841858,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":2.4000000953674316,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.8000000715255737,\"bottomDistance\":582.3999999761581}",
+    "timestamp": "2026-10-07T20:05:04.939Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":60,\"stage\":\"scroll-tiny\",\"now\":98458.19999980927,\"tracking\":true,\"scrollTop\":0.800000011920929,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":1.600000023841858,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.800000011920929,\"bottomDistance\":583.1999999880791}",
+    "timestamp": "2026-10-07T20:05:04.945Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  },
+  {
+    "level": "debug",
+    "message": "[keyboard-reading-113] {\"sequence\":61,\"stage\":\"scroll-tiny\",\"now\":98472,\"tracking\":true,\"scrollTop\":0,\"scrollHeight\":1219,\"clientHeight\":635,\"expectedTop\":0.800000011920929,\"programScrollTarget\":null,\"upwardRemainingMs\":0,\"rafPending\":false,\"pointerScrollIntent\":false,\"delta\":-0.800000011920929,\"bottomDistance\":584}",
+    "timestamp": "2026-10-07T20:05:04.959Z",
+    "url": "http://127.0.0.1:18071/ui/assets/main-GPLOvh7O.js"
+  }
+]

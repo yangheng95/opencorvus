@@ -1,6 +1,6 @@
 # Artifact entry points
 
-- [Keyboard reading113 investigation](2026-10-05-connection-workspace-authority/keyboard-reading-113/README.md): original audit and bounded shared-owner manual proposal; no source/runtime admission.
+- [Keyboard reading113 evidence](2026-10-05-connection-workspace-authority/keyboard-reading-113/README.md): original61-row trace, clean actual main/child keyboard review, Sources regression and exact closure.
 
 - [Sources reading112 final evidence](2026-10-05-connection-workspace-authority/sources-reading-112/README.md): actual main opening pause, unchanged three Source tuples and exact closure.
 

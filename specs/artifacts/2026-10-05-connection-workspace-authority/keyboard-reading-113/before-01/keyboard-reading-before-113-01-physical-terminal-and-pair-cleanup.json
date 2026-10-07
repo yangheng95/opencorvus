@@ -1,0 +1,64 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\keyboard-reading-before-113-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\keyboard-reading-before-113-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "keyboard-reading-before-113-01-2c7d3485-d42e-41ad-84d5-b8469f77721f",
+    "outcome": "settled",
+    "host": {
+      "pid": 74896,
+      "processInstanceID": "win32:639270001650384707",
+      "occurrenceID": "185d112c-5717-485a-bb70-672cefbfa726"
+    },
+    "target": {
+      "pid": 31376,
+      "processInstanceID": "win32:639270001662225912",
+      "occurrenceID": "134cc1c6-7c1e-498f-87cf-0fb4d4c3e910"
+    },
+    "observedAtUtc": "2026-10-07T20:08:59.398Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "keyboard-reading-before-113-01-2c7d3485-d42e-41ad-84d5-b8469f77721f",
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 31376,
+        "processInstanceID": "win32:639270001662225912",
+        "occurrenceID": "134cc1c6-7c1e-498f-87cf-0fb4d4c3e910"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 74896,
+        "processInstanceID": "win32:639270001650384707",
+        "occurrenceID": "185d112c-5717-485a-bb70-672cefbfa726"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "observedAtUtc": "2026-10-07T20:09:01.5583310Z"
+}

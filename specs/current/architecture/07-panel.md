@@ -694,11 +694,13 @@ controller's one native `ResizeObserver` over its current direct content boxes
 schedule the same bounded bottom pin; the observer covers descendant Markdown,
 code, media, and disclosure layout that settles after the data notification.
 Browser layout may change `scrollTop` before or after either notification, so
-movement alone never releases follow mode. Upward wheel, keyboard, and touch
-input release it immediately; an active native-scrollbar gesture releases it
-when the viewport actually moves upward. DOM replacement therefore cannot
-masquerade as manual upward scrolling regardless of event order. Reaching the
-bottom re-arms follow mode.
+movement alone never releases follow mode. Upward wheel, keyboard, touch, or
+an active native-scrollbar gesture owns subsequent upward movement. Once that
+movement leaves the existing bottom tolerance, the controller releases follow
+mode. Recognized upward movement inside the tolerance preserves its current
+input intent instead of consuming it as a return to the bottom. Programmatic
+echoes and content-layout rebasing keep their existing discrimination. An
+ordinary return to the bottom re-arms follow mode.
 
 Agent list/detail visibility is local presentation state; it does not own
 Session identity. Returning to the list or choosing another Session is an

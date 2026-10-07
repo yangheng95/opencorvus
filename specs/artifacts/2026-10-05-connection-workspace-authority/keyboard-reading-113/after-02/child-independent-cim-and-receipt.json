@@ -1,0 +1,98 @@
+{
+  "physical": {
+    "occurrence": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+    "pairedCleanupComplete": true,
+    "nativeSettlement": {
+      "occurrence": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+      "outcome": "settled",
+      "host": {
+        "pid": 73496,
+        "processInstanceID": "win32:639270016290830521",
+        "occurrenceID": "df426e1b-8231-45c0-93d0-9ccb0d993bde"
+      },
+      "target": {
+        "pid": 77500,
+        "processInstanceID": "win32:639270016300501948",
+        "occurrenceID": "6f6b3626-a41b-4034-8bb5-03a65922f5c1"
+      },
+      "observedAtUtc": "2026-10-07T20:31:16.589Z",
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+    },
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 77500,
+          "processInstanceID": "win32:639270016300501948",
+          "occurrenceID": "6f6b3626-a41b-4034-8bb5-03a65922f5c1"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 73496,
+          "processInstanceID": "win32:639270016290830521",
+          "occurrenceID": "df426e1b-8231-45c0-93d0-9ccb0d993bde"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "listeners": null,
+    "observedAtUtc": "2026-10-07T20:31:19.8450782Z",
+    "physicalCompletion": true,
+    "copiedPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\keyboard-reading-after-113-02\\runtime\\data\\auth.json",
+        "outcome": "already_absent",
+        "presentAfter": false
+      },
+      {
+        "copiedLength": 2001983,
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\keyboard-reading-after-113-02\\runtime\\data\\models.json",
+        "outcome": "removed",
+        "presentAfter": false
+      }
+    ]
+  },
+  "states": [
+    {
+      "actual": null,
+      "expected": {
+        "pid": 73496,
+        "processInstanceID": "win32:639270016290830521",
+        "occurrenceID": "df426e1b-8231-45c0-93d0-9ccb0d993bde"
+      }
+    },
+    {
+      "actual": null,
+      "expected": {
+        "pid": 77500,
+        "processInstanceID": "win32:639270016300501948",
+        "occurrenceID": "6f6b3626-a41b-4034-8bb5-03a65922f5c1"
+      }
+    }
+  ],
+  "listeners": [],
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "observedAt": "2026-10-07T20:31:54.3594917Z",
+  "occurrence": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "keyboard-reading-after-113-02-9b4575b1-cd41-4aad-920c-21399b809250",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18072",
+    "pid": 77500
+  }
+}

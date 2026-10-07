@@ -1,0 +1,2 @@
+# Clean after113 selector preparation
+Only4 existing selector lines changed to keyboard-reading-after-113-02 /Oct08/18072 /keyboard-reading-113/after-02. Original CLOSED109/native whole settlement/pair/Task/Project/root/request/epoch/three Source tuple guards remain identical. Preimage/final/diff and AST0 retained. No copy/launch/SQL/UI/model/credential action. Actual final readiness asset must derive Root clean build; observer asset is not reused. No source/indices/Git modification.

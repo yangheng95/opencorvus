@@ -1,6 +1,6 @@
 # Connection workspace authority investigation
 
-- [Keyboard reading113 Recall](keyboard-reading-plan-113.md) and [audit](keyboard-reading-113/README.md): main Home followtrue after112; timing cause unknown, production/helper held.
+- [Keyboard reading113 Recall](keyboard-reading-plan-113.md) and [evidence](keyboard-reading-113/README.md): actual early intent consumption repaired; clean main/child keyboard evidence and Sources regression; remaining matrices explicit.
 
 - [Sources reading112 final](sources-reading-112/README.md): actual main opening pause qualified; shared panels/live/Source3/113 Home unknown.
 
