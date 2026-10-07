@@ -2,9 +2,9 @@
 
 Builds an attributable customer dossier, parallel opportunity and positioning analyses, an audited sales strategy, and a practical sales playbook.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`sales-strategy-playbook` is the sole workflow. Every node runs exactly once after all declared predecessors reach terminal success. The two independent analysis branches are dispatched together and may run in parallel; the join waits for both terminal results.
+`sales-strategy-playbook` is optional collaboration guidance. Each dispatch has its own execution identity; schedule actual input dependencies and independent work from evidence. The two independent analysis branches are dispatched together and may run in parallel; the join waits for both terminal results.
 
 ## Artifact contract
 

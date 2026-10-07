@@ -3,7 +3,6 @@ import {
   createDispatchLineageOrigin,
   listDispatchLineage,
   resolveDispatchContinuationSourceID,
-  WorkflowNodeOccurrenceConflictError,
 } from "@/engine/dispatch-lineage"
 import { recordTestDispatchLineage } from "./fixture/dispatch-lineage"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
@@ -69,7 +68,7 @@ async function createBoundTask() {
     rootSession: root,
     now,
     title: "Workflow occurrence authority",
-    request: "Bind each workflow node exactly once",
+    request: "Execute independent responsibilities and preserve exact continuations",
     productPillar: "work",
     source: "test",
     priority: "normal",
@@ -92,7 +91,8 @@ function origin(input: {
   taskID: string
   rootSessionID: string
   dispatchID: string
-  nodeID: string
+  nodeID: string | null
+  binding?: SelectedWorkflowBinding
   workflowOccurrenceID?: string
   continuationOfDispatchID?: string
 }) {
@@ -106,7 +106,7 @@ function origin(input: {
     targetAgentID: projectedWorkerIdentity.agentID,
     projectedWorkerIdentity,
     workScope: { kind: "task" },
-    workflowBinding,
+    workflowBinding: input.binding ?? workflowBinding,
     workflowNodeID: input.nodeID,
     ...(input.workflowOccurrenceID ? { workflowOccurrenceID: input.workflowOccurrenceID } : {}),
     ...(input.continuationOfDispatchID ? { continuationOfDispatchID: input.continuationOfDispatchID } : {}),
@@ -118,7 +118,8 @@ async function commitInitialSession(input: {
   taskID: string
   rootSessionID: string
   dispatchID: string
-  nodeID: string
+  nodeID: string | null
+  binding?: SelectedWorkflowBinding
   title: string
 }) {
   const session = await Session.prepareNext({
@@ -135,6 +136,7 @@ async function commitInitialSession(input: {
         rootSessionID: input.rootSessionID,
         dispatchID: input.dispatchID,
         nodeID: input.nodeID,
+        binding: input.binding,
       }),
       childSessionID: session.id,
     })
@@ -145,9 +147,9 @@ async function commitInitialSession(input: {
 describe("workflow node occurrence authority", () => {
   test("projects the coordination redispatch source as the continuation source", () => {
     const sourceDispatchID = Identifier.ascending("artifact")
-    expect(
-      resolveDispatchContinuationSourceID({ coordinationSourceDispatchID: sourceDispatchID }),
-    ).toBe(sourceDispatchID)
+    expect(resolveDispatchContinuationSourceID({ coordinationSourceDispatchID: sourceDispatchID })).toBe(
+      sourceDispatchID,
+    )
   })
 
   test("binds one initial node and reuses its exact occurrence and Session for continuation", async () => {
@@ -193,7 +195,7 @@ describe("workflow node occurrence authority", () => {
     })
   }, 30_000)
 
-  test("returns one typed existing authority for a second initial while a sibling node binds independently", async () => {
+  test("records independent occurrences for repeated capabilities and optional reference nodes", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -215,38 +217,17 @@ describe("workflow node occurrence authority", () => {
           title: "Duplicate fundamentals worker",
           directory: Instance.directory,
         })
-        let conflict: WorkflowNodeOccurrenceConflictError | undefined
-        try {
-          Database.transaction(() => {
-            Session.persistPreparedNext(secondChild)
-            recordTestDispatchLineage({
-              origin: origin({
-                taskID,
-                rootSessionID: root.id,
-                dispatchID: secondDispatchID,
-                nodeID: "fundamentals",
-              }),
-              childSessionID: secondChild.id,
-            })
+        const second = Database.transaction(() => {
+          Session.persistPreparedNext(secondChild)
+          return recordTestDispatchLineage({
+            origin: origin({ taskID, rootSessionID: root.id, dispatchID: secondDispatchID, nodeID: "fundamentals" }),
+            childSessionID: secondChild.id,
           })
-        } catch (error) {
-          if (error instanceof WorkflowNodeOccurrenceConflictError) conflict = error
-          else throw error
-        }
-        expect(conflict).toMatchObject({
-          name: "WorkflowNodeOccurrenceConflictError",
-          code: "workflow_node_occurrence_conflict",
-          taskID,
-          workflowID: "occurrence-workflow",
-          workflowNodeID: "fundamentals",
-          existing: [
-            {
-              artifactID: first.artifactID,
-              dispatchID: firstDispatchID,
-              childSessionID: child.id,
-              workflowOccurrenceID: firstDispatchID,
-            },
-          ],
+        })
+        expect(second.payload).toMatchObject({
+          child_session_id: secondChild.id,
+          workflow_occurrence_id: secondDispatchID,
+          workflow_node_id: "fundamentals",
         })
 
         const siblingDispatchID = Identifier.ascending("artifact")
@@ -257,13 +238,49 @@ describe("workflow node occurrence authority", () => {
           nodeID: "valuation",
           title: "Valuation worker",
         })
+        const directDispatchID = Identifier.ascending("artifact")
+        const { lineage: direct } = await commitInitialSession({
+          taskID,
+          rootSessionID: root.id,
+          dispatchID: directDispatchID,
+          nodeID: null,
+          binding: { kind: "direct", package_revision: workflowBinding.package_revision },
+          title: "Independent direct expert",
+        })
+        expect(direct.payload).toMatchObject({
+          workflow_binding: { kind: "direct" },
+          workflow_occurrence_id: directDispatchID,
+        })
+        const alternateDispatchID = Identifier.ascending("artifact")
+        const { lineage: alternate } = await commitInitialSession({
+          taskID,
+          rootSessionID: root.id,
+          dispatchID: alternateDispatchID,
+          nodeID: "fundamentals",
+          binding: { ...workflowBinding, workflow_id: "alternate-investigation" },
+          title: "Alternative investigation reference",
+        })
+        expect(alternate.payload).toMatchObject({
+          workflow_binding: { kind: "virtual_workflow", workflow_id: "alternate-investigation" },
+          workflow_occurrence_id: alternateDispatchID,
+        })
+        expect(listDispatchLineage(taskID).map((entry) => entry.dispatchID)).toEqual([
+          firstDispatchID,
+          secondDispatchID,
+          siblingDispatchID,
+          directDispatchID,
+          alternateDispatchID,
+        ])
         expect({
           lineage: siblingLineage,
-          sessions: (await Session.children(root.id)).map((session) => ({ id: session.id, title: session.title })),
+          sessions: (await Session.children(root.id))
+            .filter((session) => [child.id, secondChild.id, sibling.id].includes(session.id))
+            .map((session) => ({ id: session.id, title: session.title })),
         }).toMatchObject({
           lineage: { dispatchID: siblingDispatchID, payload: { child_session_id: sibling.id } },
           sessions: [
             { id: child.id, title: "Fundamentals worker" },
+            { id: secondChild.id, title: "Duplicate fundamentals worker" },
             { id: sibling.id, title: "Valuation worker" },
           ],
         })

@@ -1917,13 +1917,23 @@ export type ExpertSquadCatalogIndexEntry = {
 }
 
 export type ExpertSquadCatalogInspection = {
+  agent_count: number
+  agents: Array<{
+    agent_id: string
+    base_role: string
+    capability_refs: Array<string>
+    description: string
+    label: string
+  }>
   built_in: boolean
   description?: string
   display_label: string
   id: string
   label: string
   name: string
+  next_agent_cursor: string | null
   next_workflow_cursor: string | null
+  package_digest: string
   product_pillars: Array<"code" | "work">
   selector: {
     selection_guidance: string
@@ -1974,17 +1984,21 @@ export type ExpertSquadCatalogSummary = {
       capability_refs: Array<string>
       prompt?: string
     }
-    virtual_workflows: {
+    virtual_workflows?: {
       [key: string]: {
         description: string
+        guidance?: string
         label: string
-        nodes: {
+        nodes?: {
           [key: string]: {
             agent_id: string
             depends_on: Array<string>
             description: string
+            repeat_until?: string
+            when?: string
           }
         }
+        strategy?: "adaptive" | "dag" | "loop" | "choice"
       }
     }
   }
@@ -8719,14 +8733,18 @@ export type ExpertSquadCatalogResponses = {
       virtual_workflows: {
         [key: string]: {
           description: string
+          guidance?: string
           label: string
-          nodes: {
+          nodes?: {
             [key: string]: {
               agent_id: string
               depends_on: Array<string>
               description: string
+              repeat_until?: string
+              when?: string
             }
           }
+          strategy?: "adaptive" | "dag" | "loop" | "choice"
         }
       }
     }
@@ -16538,6 +16556,7 @@ export type ExpertSquadInspectData = {
     installationScope?: "built_in" | "project" | "global"
     namespace?: string
     workflowCursor?: string
+    agentCursor?: string
   }
   url: "/expert-squad/inspect"
 }
@@ -16929,17 +16948,21 @@ export type ExpertSquadMulticaPreviewData = {
         source_server_name: string
         target: "opencorvus-browser"
       }>
-      virtual_workflows: {
+      virtual_workflows?: {
         [key: string]: {
           description: string
+          guidance?: string
           label: string
-          nodes: {
+          nodes?: {
             [key: string]: {
               depends_on: Array<string>
               description: string
+              repeat_until?: string
               source_agent_id: string
+              when?: string
             }
           }
+          strategy?: "adaptive" | "dag" | "loop" | "choice"
         }
       }
     }
@@ -17902,17 +17925,21 @@ export type ExpertSquadValidateFolderResponses = {
         capability_refs: Array<string>
         prompt?: string
       }
-      virtual_workflows: {
+      virtual_workflows?: {
         [key: string]: {
           description: string
+          guidance?: string
           label: string
-          nodes: {
+          nodes?: {
             [key: string]: {
               agent_id: string
               depends_on: Array<string>
               description: string
+              repeat_until?: string
+              when?: string
             }
           }
+          strategy?: "adaptive" | "dag" | "loop" | "choice"
         }
       }
     }
@@ -18830,7 +18857,11 @@ export type GatewayControlActionData = {
     | {
         action: "expert_squad_inspect"
         /**
-         * Exact held Expert Squad manifest ID returned by capability_search.
+         * Opaque next_agent_cursor from this exact candidate inspection.
+         */
+        agentCursor?: string
+        /**
+         * Exact installed Expert Squad manifest ID returned by capability_search; Mission must hold it.
          */
         id: string
         /**
@@ -19277,9 +19308,9 @@ export type GatewayControlActionData = {
          */
         productPillar?: "code" | "work"
         /**
-         * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
+         * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Preserve an explicit operator selection. Otherwise search installed candidates and inspect promising identities before choosing; use Dynamic only when none is very well matched. Mission stays within its held set. No creator omits this exact identity.
          */
-        promptProfile?: string
+        promptProfile: string
         /**
          * Full user request to execute in the new task.
          */
@@ -22159,7 +22190,10 @@ export type TaskGlobalCreateData = {
     model?: string
     priority?: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
-    promptProfile?: string
+    /**
+     * Exact manually selected or creator-selected Expert Squad identity. Automatic natural-language creators search and inspect installed candidates first, then choose Dynamic only when none is very well matched. Task creation freezes this identity; it never performs hidden semantic routing.
+     */
+    promptProfile: string
     request: string
     requestID?: string
     source?: string
@@ -31293,14 +31327,18 @@ export type SkillSetMountOverrideResponses = {
     virtual_workflows: {
       [key: string]: {
         description: string
+        guidance?: string
         label: string
-        nodes: {
+        nodes?: {
           [key: string]: {
             agent_id: string
             depends_on: Array<string>
             description: string
+            repeat_until?: string
+            when?: string
           }
         }
+        strategy?: "adaptive" | "dag" | "loop" | "choice"
       }
     }
   }
@@ -31438,14 +31476,18 @@ export type SkillMountsResponses = {
     virtual_workflows: {
       [key: string]: {
         description: string
+        guidance?: string
         label: string
-        nodes: {
+        nodes?: {
           [key: string]: {
             agent_id: string
             depends_on: Array<string>
             description: string
+            repeat_until?: string
+            when?: string
           }
         }
+        strategy?: "adaptive" | "dag" | "loop" | "choice"
       }
     }
   }
@@ -31731,7 +31773,10 @@ export type TaskCreateData = {
     priority?: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     project?: string
-    promptProfile?: string
+    /**
+     * Exact manually selected or creator-selected Expert Squad identity. Automatic natural-language creators search and inspect installed candidates first, then choose Dynamic only when none is very well matched. Task creation freezes this identity; it never performs hidden semantic routing.
+     */
+    promptProfile: string
     request: string
     requestID?: string
     source?: string

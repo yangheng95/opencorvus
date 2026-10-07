@@ -443,7 +443,7 @@ async function run(input: {
   return {
     outcome,
     artifacts: listRequirementSetArtifacts(input.task.taskID),
-    workflow: (await describeTask(input.task.taskID)).workflow_execution,
+    workflow: (await describeTask(input.task.taskID)).dispatch_execution,
   }
 }
 
@@ -482,7 +482,7 @@ describe("Requirements domain-incomplete settlement", () => {
     })
   }, 30_000)
 
-  test("missing and decisions-only coverage remain exact incomplete evidence with Architect closed", async () => {
+  test("missing and decisions-only coverage remain exact incomplete evidence with exact incomplete settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -509,13 +509,7 @@ describe("Requirements domain-incomplete settlement", () => {
                 },
               },
             ],
-            workflow: {
-              frontier_node_ids: [],
-              nodes: [
-                { node_id: "requirements", terminal_success: false },
-                { node_id: "architecture", terminal_success: false },
-              ],
-            },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
           },
           decisionsOnly: {
             outcome: { kind: "domain_incomplete", domain: "requirements" },
@@ -527,7 +521,7 @@ describe("Requirements domain-incomplete settlement", () => {
                 },
               },
             ],
-            workflow: { frontier_node_ids: [] },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
           },
         })
       },
@@ -559,13 +553,13 @@ describe("Requirements domain-incomplete settlement", () => {
               },
             },
           ],
-          workflow: { frontier_node_ids: [] },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
         })
       },
     })
   }, 30_000)
 
-  test("one exact finalized RequirementSet succeeds and opens only Architect", async () => {
+  test("one exact finalized RequirementSet succeeds and records successful Requirements settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -577,13 +571,7 @@ describe("Requirements domain-incomplete settlement", () => {
           artifacts: [
             { payload: { requirements: [{ id: "REQ-1" }], coverage_receipt: { status: "complete", issues: [] } } },
           ],
-          workflow: {
-            frontier_node_ids: ["architecture"],
-            nodes: [
-              { node_id: "requirements", terminal_success: true },
-              { node_id: "architecture", terminal_success: false },
-            ],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })
@@ -625,7 +613,7 @@ describe("Requirements domain-incomplete settlement", () => {
           artifacts: [
             { payload: { schema_version: 2, requirements: [{ acceptance: "x" }], decisions: [{ reason: "" }] } },
           ],
-          workflow: { frontier_node_ids: ["architecture"] },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })
@@ -676,7 +664,7 @@ describe("Requirements domain-incomplete settlement", () => {
               },
             },
           ],
-          workflow: { frontier_node_ids: ["architecture"] },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })
@@ -703,7 +691,7 @@ describe("Requirements domain-incomplete settlement", () => {
           artifacts: [
             { payload: { source_artifact_locators: [locator], coverage_receipt: { status: "complete", issues: [] } } },
           ],
-          workflow: { frontier_node_ids: ["architecture"] },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
 
         const sourceDrift = await fixture("Source drift")
@@ -722,12 +710,12 @@ describe("Requirements domain-incomplete settlement", () => {
           sourceDrift: {
             outcome: { kind: "domain_incomplete" },
             artifacts: [{ payload: { coverage_receipt: { issues: ["source_identity_mismatch"] } } }],
-            workflow: { frontier_node_ids: [] },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
           },
           evidenceDrift: {
             outcome: { kind: "domain_incomplete" },
             artifacts: [{ payload: { coverage_receipt: { issues: ["requirement_evidence_identity_mismatch"] } } }],
-            workflow: { frontier_node_ids: [] },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
           },
         })
       },
@@ -771,7 +759,7 @@ describe("Requirements domain-incomplete settlement", () => {
           expect(result).toMatchObject({
             outcome: { kind: "domain_incomplete" },
             artifacts: [{ payload: { coverage_receipt: { status: "incomplete", issues: [entry.issue] } } }],
-            workflow: { frontier_node_ids: [] },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
           })
         }
       },

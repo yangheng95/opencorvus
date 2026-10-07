@@ -70,13 +70,15 @@ function declarationCapabilityProjection(
         ]),
     ),
     virtual_workflows: Object.fromEntries(
-      Object.entries(manifest.capability_projection.virtual_workflows)
+      Object.entries(manifest.capability_projection.virtual_workflows ?? {})
         .sort(([left], [right]) => compareCanonicalStrings(left, right))
         .map(([workflowID, workflow]) => [
           workflowID,
           {
             label: workflow.label,
             description: workflow.description,
+            ...(workflow.strategy ? { strategy: workflow.strategy } : {}),
+            ...(workflow.guidance ? { guidance: workflow.guidance } : {}),
             nodes: Object.fromEntries(
               Object.entries(workflow.nodes)
                 .sort(([left], [right]) => compareCanonicalStrings(left, right))
@@ -222,9 +224,7 @@ export function catalogIndexFromPackage(input: {
     id: input.pkg.id,
     name: ExpertSquadRegistry.displayName(input.pkg.manifest).slice(0, 160),
     display_label: displayLabel(input.pkg.manifest.label, input.pkg.namespace).slice(0, 240),
-    ...(input.pkg.manifest.description?.length
-      ? { description: input.pkg.manifest.description.slice(0, 1_000) }
-      : {}),
+    ...(input.pkg.manifest.description?.length ? { description: input.pkg.manifest.description.slice(0, 1_000) } : {}),
     built_in: input.builtIn,
     product_pillars: input.pkg.manifest.product_pillars,
     ...(input.pkg.manifest.system_role ? { system_role: input.pkg.manifest.system_role } : {}),
@@ -238,15 +238,22 @@ export function catalogInspectionFromPackage(input: {
   workflows: ExpertSquadCatalogInspection["workflows"]
   workflowCount: number
   nextWorkflowCursor?: string | null
+  agents: ExpertSquadCatalogInspection["agents"]
+  agentCount: number
+  nextAgentCursor?: string | null
 }): ExpertSquadCatalogInspection {
   return ExpertSquadCatalogInspectionSchema.parse({
     ...catalogIndexFromPackage(input),
     label: input.pkg.manifest.label.slice(0, 160),
     version: input.pkg.version.slice(0, 80),
+    package_digest: input.pkg.packageDigest,
     selector: {
       summary: input.pkg.selector.summary.slice(0, 1_000),
       selection_guidance: input.pkg.selector.selection_guidance.slice(0, 2_000),
     },
+    agent_count: input.agentCount,
+    agents: input.agents,
+    next_agent_cursor: input.nextAgentCursor ?? null,
     workflow_count: input.workflowCount,
     workflows: input.workflows,
     next_workflow_cursor: input.nextWorkflowCursor ?? null,

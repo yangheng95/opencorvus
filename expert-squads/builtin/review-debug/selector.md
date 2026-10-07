@@ -27,7 +27,7 @@ release/audit report. Those testing and audit outcomes belong to independent aud
 Review & Debug never edits independent audit-owned artifacts as a substitute for
 repairing product behavior.
 
-Before dispatch, select exactly one binding manifest workflow: `review-only`, `debug-repair`, or `visual-debug-repair`. Every node and dependency in the selected workflow is mandatory.
+Before dispatch, select exactly one optional manifest workflow reference: `review-only`, `debug-repair`, or `visual-debug-repair`. Its nodes and edges are reference guidance; identity, capabilities and actual acceptance remain authoritative.
 
 The Task creator must set `promptProfile: "review-debug"` before Task creation. A Task cannot change Expert Squad after creation. The creation reason is:
 

@@ -26,17 +26,17 @@ For each member record exactly:
 
 Task-local names are prose addresses for this run. They never become manifest IDs, dispatch aliases, installed Agents, reusable configuration, or a second identity source.
 
-## 3. Describe the workflow
+## 3. Choose a useful scheduling strategy
 
 Represent the smallest dependency graph in one line when possible:
 
 `source-a || source-b -> synthesis -> delivery -> acceptance`
 
-Omit stages that do no real work. `||` means the members are ready in the same frontier; `->` means the downstream responsibility truly needs a predecessor result. A description guides the Orchestrator but does not create Host workflow state, node occurrence fences, retries, or completion authority.
+Omit stages that do no real work. `||` means the members are ready in the same frontier; `->` means the downstream responsibility truly needs a predecessor result. A description guides the Orchestrator but does not create Host workflow state, node occurrence fences, retries, or completion authority. Combine a Directed Acyclic Graph (DAG), parallel branches and joins, conditional choices and local evidence-driven loops as useful. Choose only the relevant alternative; repeat a responsibility only with a new useful action or evidence and a concrete stopping condition. Continue its exact lineage, or create a new independent dispatch for a new partition.
 
 ## 4. Dispatch immediately
 
-Write the current frontier's team and dependency description in the required `dispatch_agents.team` rows of the same streamed Orchestrator Tool call as the aligned `dispatches`. Do not spend another Agent or Tool call producing the description. Put the complete ready frontier in that call up to real Task capacity. Repeated use of one target creates independent sibling Sessions with separate context and lineage.
+Write the current frontier's team and dependency description in the required `dispatch_agents.team` rows of the same streamed Orchestrator Tool call as the aligned `dispatches`. Describe only what the next actual decision needs; no separate planning stage is required. Put the complete ready frontier in that call up to real Task capacity. Repeated use of one target creates independent sibling Sessions with separate context and lineage.
 
 Use `dynamic-generalist` for bounded investigation, planning, analysis, review, verification, and synthesis. Use `dynamic-builder` for repository mutation or concrete deliverables. Parallel writers require non-overlapping ownership and managed worktrees when isolation is needed. Shared-file or otherwise shared mutable work is serial.
 

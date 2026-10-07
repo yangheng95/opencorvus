@@ -1992,12 +1992,12 @@
           "prompt_profile": {
             "additionalProperties": false,
             "default": {
-              "active": "base"
+              "active": "dynamic"
             },
             "description": "Active package-backed expert-squad prompt profile selection.",
             "properties": {
               "active": {
-                "default": "base",
+                "default": "dynamic",
                 "maxLength": 64,
                 "minLength": 1,
                 "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
@@ -6403,6 +6403,50 @@
       "ExpertSquadCatalogInspection": {
         "additionalProperties": false,
         "properties": {
+          "agent_count": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "agents": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "agent_id": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "base_role": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "capability_refs": {
+                  "items": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "label": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "agent_id",
+                "label",
+                "description",
+                "base_role",
+                "capability_refs"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10,
+            "type": "array"
+          },
           "built_in": {
             "type": "boolean"
           },
@@ -6431,6 +6475,17 @@
             "minLength": 1,
             "type": "string"
           },
+          "next_agent_cursor": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "next_workflow_cursor": {
             "anyOf": [
               {
@@ -6441,6 +6496,10 @@
                 "type": "null"
               }
             ]
+          },
+          "package_digest": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
           },
           "product_pillars": {
             "items": {
@@ -6551,8 +6610,8 @@
                   "type": "string"
                 },
                 "node_count": {
-                  "exclusiveMinimum": 0,
                   "maximum": 9007199254740991,
+                  "minimum": 0,
                   "type": "integer"
                 }
               },
@@ -6577,7 +6636,11 @@
           "source",
           "label",
           "version",
+          "package_digest",
           "selector",
+          "agent_count",
+          "agents",
+          "next_agent_cursor",
           "workflow_count",
           "workflows",
           "next_workflow_cursor"
@@ -6710,6 +6773,10 @@
                       "minLength": 1,
                       "type": "string"
                     },
+                    "guidance": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
                     "label": {
                       "minLength": 1,
                       "type": "string"
@@ -6736,6 +6803,14 @@
                           "description": {
                             "minLength": 1,
                             "type": "string"
+                          },
+                          "repeat_until": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "when": {
+                            "minLength": 1,
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -6745,6 +6820,7 @@
                         ],
                         "type": "object"
                       },
+                      "default": {},
                       "propertyNames": {
                         "maxLength": 64,
                         "minLength": 1,
@@ -6752,15 +6828,24 @@
                         "type": "string"
                       },
                       "type": "object"
+                    },
+                    "strategy": {
+                      "enum": [
+                        "adaptive",
+                        "dag",
+                        "loop",
+                        "choice"
+                      ],
+                      "type": "string"
                     }
                   },
                   "required": [
                     "label",
-                    "description",
-                    "nodes"
+                    "description"
                   ],
                   "type": "object"
                 },
+                "default": {},
                 "propertyNames": {
                   "maxLength": 64,
                   "minLength": 1,
@@ -6772,8 +6857,7 @@
             },
             "required": [
               "scheduler",
-              "agents",
-              "virtual_workflows"
+              "agents"
             ],
             "type": "object"
           },
@@ -26864,6 +26948,10 @@
                                 "minLength": 1,
                                 "type": "string"
                               },
+                              "guidance": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
                               "label": {
                                 "minLength": 1,
                                 "type": "string"
@@ -26890,6 +26978,14 @@
                                     "description": {
                                       "minLength": 1,
                                       "type": "string"
+                                    },
+                                    "repeat_until": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "when": {
+                                      "minLength": 1,
+                                      "type": "string"
                                     }
                                   },
                                   "required": [
@@ -26899,6 +26995,7 @@
                                   ],
                                   "type": "object"
                                 },
+                                "default": {},
                                 "propertyNames": {
                                   "maxLength": 64,
                                   "minLength": 1,
@@ -26906,12 +27003,20 @@
                                   "type": "string"
                                 },
                                 "type": "object"
+                              },
+                              "strategy": {
+                                "enum": [
+                                  "adaptive",
+                                  "dag",
+                                  "loop",
+                                  "choice"
+                                ],
+                                "type": "string"
                               }
                             },
                             "required": [
                               "label",
-                              "description",
-                              "nodes"
+                              "description"
                             ],
                             "type": "object"
                           },
@@ -64245,6 +64350,14 @@
               "minLength": 1,
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "agentCursor",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -65522,6 +65635,10 @@
                               "minLength": 1,
                               "type": "string"
                             },
+                            "guidance": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
                             "label": {
                               "minLength": 1,
                               "type": "string"
@@ -65543,9 +65660,17 @@
                                     "minLength": 1,
                                     "type": "string"
                                   },
+                                  "repeat_until": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
                                   "source_agent_id": {
                                     "format": "uuid",
                                     "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                    "type": "string"
+                                  },
+                                  "when": {
+                                    "minLength": 1,
                                     "type": "string"
                                   }
                                 },
@@ -65556,6 +65681,7 @@
                                 ],
                                 "type": "object"
                               },
+                              "default": {},
                               "propertyNames": {
                                 "maxLength": 64,
                                 "minLength": 1,
@@ -65563,15 +65689,24 @@
                                 "type": "string"
                               },
                               "type": "object"
+                            },
+                            "strategy": {
+                              "enum": [
+                                "adaptive",
+                                "dag",
+                                "loop",
+                                "choice"
+                              ],
+                              "type": "string"
                             }
                           },
                           "required": [
                             "label",
-                            "description",
-                            "nodes"
+                            "description"
                           ],
                           "type": "object"
                         },
+                        "default": {},
                         "propertyNames": {
                           "maxLength": 64,
                           "minLength": 1,
@@ -65584,8 +65719,7 @@
                     "required": [
                       "mcp_replacements",
                       "mcp_omissions",
-                      "agents",
-                      "virtual_workflows"
+                      "agents"
                     ],
                     "type": "object"
                   },
@@ -68922,6 +69056,10 @@
                                 "minLength": 1,
                                 "type": "string"
                               },
+                              "guidance": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
                               "label": {
                                 "minLength": 1,
                                 "type": "string"
@@ -68948,6 +69086,14 @@
                                     "description": {
                                       "minLength": 1,
                                       "type": "string"
+                                    },
+                                    "repeat_until": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "when": {
+                                      "minLength": 1,
+                                      "type": "string"
                                     }
                                   },
                                   "required": [
@@ -68957,6 +69103,7 @@
                                   ],
                                   "type": "object"
                                 },
+                                "default": {},
                                 "propertyNames": {
                                   "maxLength": 64,
                                   "minLength": 1,
@@ -68964,15 +69111,24 @@
                                   "type": "string"
                                 },
                                 "type": "object"
+                              },
+                              "strategy": {
+                                "enum": [
+                                  "adaptive",
+                                  "dag",
+                                  "loop",
+                                  "choice"
+                                ],
+                                "type": "string"
                               }
                             },
                             "required": [
                               "label",
-                              "description",
-                              "nodes"
+                              "description"
                             ],
                             "type": "object"
                           },
+                          "default": {},
                           "propertyNames": {
                             "maxLength": 64,
                             "minLength": 1,
@@ -68984,8 +69140,7 @@
                       },
                       "required": [
                         "scheduler",
-                        "agents",
-                        "virtual_workflows"
+                        "agents"
                       ],
                       "type": "object"
                     },
@@ -71306,8 +71461,13 @@
                         "const": "expert_squad_inspect",
                         "type": "string"
                       },
+                      "agentCursor": {
+                        "description": "Opaque next_agent_cursor from this exact candidate inspection.",
+                        "minLength": 1,
+                        "type": "string"
+                      },
                       "id": {
-                        "description": "Exact held Expert Squad manifest ID returned by capability_search.",
+                        "description": "Exact installed Expert Squad manifest ID returned by capability_search; Mission must hold it.",
                         "maxLength": 64,
                         "minLength": 1,
                         "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
@@ -72546,7 +72706,7 @@
                         "type": "string"
                       },
                       "promptProfile": {
-                        "description": "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
+                        "description": "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Preserve an explicit operator selection. Otherwise search installed candidates and inspect promising identities before choosing; use Dynamic only when none is very well matched. Mission stays within its held set. No creator omits this exact identity.",
                         "maxLength": 64,
                         "minLength": 1,
                         "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
@@ -72577,7 +72737,8 @@
                     },
                     "required": [
                       "action",
-                      "request"
+                      "request",
+                      "promptProfile"
                     ],
                     "type": "object"
                   },
@@ -81856,6 +82017,7 @@
                     "type": "string"
                   },
                   "promptProfile": {
+                    "description": "Exact manually selected or creator-selected Expert Squad identity. Automatic natural-language creators search and inspect installed candidates first, then choose Dynamic only when none is very well matched. Task creation freezes this identity; it never performs hidden semantic routing.",
                     "minLength": 1,
                     "type": "string"
                   },
@@ -81875,7 +82037,8 @@
                 },
                 "required": [
                   "productPillar",
-                  "request"
+                  "request",
+                  "promptProfile"
                 ],
                 "type": "object"
               }
@@ -109235,6 +109398,10 @@
                             "minLength": 1,
                             "type": "string"
                           },
+                          "guidance": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
                           "label": {
                             "minLength": 1,
                             "type": "string"
@@ -109261,6 +109428,14 @@
                                 "description": {
                                   "minLength": 1,
                                   "type": "string"
+                                },
+                                "repeat_until": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "when": {
+                                  "minLength": 1,
+                                  "type": "string"
                                 }
                               },
                               "required": [
@@ -109270,6 +109445,7 @@
                               ],
                               "type": "object"
                             },
+                            "default": {},
                             "propertyNames": {
                               "maxLength": 64,
                               "minLength": 1,
@@ -109277,12 +109453,20 @@
                               "type": "string"
                             },
                             "type": "object"
+                          },
+                          "strategy": {
+                            "enum": [
+                              "adaptive",
+                              "dag",
+                              "loop",
+                              "choice"
+                            ],
+                            "type": "string"
                           }
                         },
                         "required": [
                           "label",
-                          "description",
-                          "nodes"
+                          "description"
                         ],
                         "type": "object"
                       },
@@ -109872,6 +110056,10 @@
                             "minLength": 1,
                             "type": "string"
                           },
+                          "guidance": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
                           "label": {
                             "minLength": 1,
                             "type": "string"
@@ -109898,6 +110086,14 @@
                                 "description": {
                                   "minLength": 1,
                                   "type": "string"
+                                },
+                                "repeat_until": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "when": {
+                                  "minLength": 1,
+                                  "type": "string"
                                 }
                               },
                               "required": [
@@ -109907,6 +110103,7 @@
                               ],
                               "type": "object"
                             },
+                            "default": {},
                             "propertyNames": {
                               "maxLength": 64,
                               "minLength": 1,
@@ -109914,12 +110111,20 @@
                               "type": "string"
                             },
                             "type": "object"
+                          },
+                          "strategy": {
+                            "enum": [
+                              "adaptive",
+                              "dag",
+                              "loop",
+                              "choice"
+                            ],
+                            "type": "string"
                           }
                         },
                         "required": [
                           "label",
-                          "description",
-                          "nodes"
+                          "description"
                         ],
                         "type": "object"
                       },
@@ -110996,6 +111201,7 @@
                     "type": "string"
                   },
                   "promptProfile": {
+                    "description": "Exact manually selected or creator-selected Expert Squad identity. Automatic natural-language creators search and inspect installed candidates first, then choose Dynamic only when none is very well matched. Task creation freezes this identity; it never performs hidden semantic routing.",
                     "minLength": 1,
                     "type": "string"
                   },
@@ -111015,7 +111221,8 @@
                 },
                 "required": [
                   "productPillar",
-                  "request"
+                  "request",
+                  "promptProfile"
                 ],
                 "type": "object"
               }
@@ -112498,7 +112705,6 @@
                                     ],
                                     "type": "object"
                                   },
-                                  "minItems": 1,
                                   "type": "array"
                                 },
                                 "package_revision": {
@@ -115891,7 +116097,6 @@
                                         ],
                                         "type": "object"
                                       },
-                                      "minItems": 1,
                                       "type": "array"
                                     },
                                     "package_revision": {
@@ -122902,7 +123107,6 @@
                                             ],
                                             "type": "object"
                                           },
-                                          "minItems": 1,
                                           "type": "array"
                                         },
                                         "package_revision": {
@@ -130622,7 +130826,6 @@
                                         ],
                                         "type": "object"
                                       },
-                                      "minItems": 1,
                                       "type": "array"
                                     },
                                     "package_revision": {

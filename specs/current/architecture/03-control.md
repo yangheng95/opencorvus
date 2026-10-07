@@ -295,7 +295,7 @@ Task 内的 worker 调度只有一个入口：`dispatch_agent dispatch.target=<a
 它不表达 admission、running 或 terminal 状态。typed adapter 不再创建 Build/Integrity 等内层 owner；
 `base_role` 只选择运行模板和 adapter ABI，不决定取消策略。每条 lineage 还记录
 `workflow_occurrence_id`；首次 dispatch 令它等于自身 `dispatch_id`，continuation
-沿用原值与原 `child_session_id`。面板可以在同一 Session 下列出多个 Turn，同时仍只投影一个逻辑 node occurrence。
+沿用原值与原 `child_session_id`。面板可以在同一 Session 下列出多个 Turn，同时仍只投影该真实派发的逻辑 occurrence；可选参考节点可被多个独立派发引用。
 
 Agent coordination 只追加四类不可变事实：request、scheduler response、action plan 和 terminal
 action outcome。request 没有可变 status，action 没有 progress row；当前 frontier 由单一 reducer
@@ -305,7 +305,7 @@ action outcome。request 没有可变 status，action 没有 progress row；当�
 
 worker 的 `redispatch` 请求也不直接执行 adapter。`respond_agent_coordination` 只追加可见的
 response 与 action；Orchestrator 随后必须显式调用带 `coordination_action_id` 且不带 `workflow_subject` 的
-`dispatch_agent`。action 冻结原 dispatch lineage、完整 workflow binding、node、logical occurrence
+`dispatch_agent`。action 冻结原 dispatch lineage、原派发的可选参考 snapshot、logical occurrence
 和 Slice subjects；Host 从该绑定派生 continuation，caller 不能另选 workflow 或制造第二 occurrence。
 action 绑定到不可变 child Session，进程重启后仍从同一持久 action 继续。只有 completed 或 failed
 terminal outcome；completed outcome 必须由 action-specific durable effect authority 证明，不能由 Tool

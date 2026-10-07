@@ -113,12 +113,28 @@ export const ExpertSquadCatalogIndexEntrySchema = z
 export const ExpertSquadCatalogInspectionSchema = ExpertSquadCatalogIndexEntrySchema.extend({
   label: z.string().min(1).max(160),
   version: z.string().min(1).max(80),
+  package_digest: z.string().regex(/^[a-f0-9]{64}$/),
   selector: z
     .object({
       summary: z.string().min(1).max(1_000),
       selection_guidance: z.string().min(1).max(2_000),
     })
     .strict(),
+  agent_count: z.number().int().nonnegative(),
+  agents: z
+    .array(
+      z
+        .object({
+          agent_id: z.string().min(1),
+          label: z.string().min(1),
+          description: z.string(),
+          base_role: z.string().min(1),
+          capability_refs: z.array(z.string().min(1)),
+        })
+        .strict(),
+    )
+    .max(10),
+  next_agent_cursor: z.string().min(1).nullable(),
   workflow_count: z.number().int().nonnegative(),
   workflows: z
     .array(
@@ -127,7 +143,7 @@ export const ExpertSquadCatalogInspectionSchema = ExpertSquadCatalogIndexEntrySc
           id: z.string().min(1).max(160),
           label: z.string().min(1).max(240),
           description: z.string().min(1).max(500),
-          node_count: z.number().int().positive(),
+          node_count: z.number().int().nonnegative(),
         })
         .strict(),
     )
@@ -214,6 +230,7 @@ export const ExpertSquadCatalogInspectionQuerySchema = z
     installationScope: z.enum(["built_in", "project", "global"]).optional(),
     namespace: z.string().min(1).max(160).optional(),
     workflowCursor: z.string().min(1).optional(),
+    agentCursor: z.string().min(1).optional(),
   })
   .strict()
   .superRefine((query, context) => {

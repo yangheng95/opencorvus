@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Coordinate a bounded public-service delivery review with `public-sector-service-delivery/shared/method`.
 
 Input contract: require the service name and version, jurisdiction and accountable authority, policy or statutory inputs supplied by the user, resident populations and channels in scope, observation period and evidence cutoff, data classification, named service owner, and the decision this review may inform. Record absent items as unknown; never infer an entitlement rule from service data.

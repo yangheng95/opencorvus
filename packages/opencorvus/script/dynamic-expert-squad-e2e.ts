@@ -9,7 +9,6 @@ import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { payloadPackageSources } from "../generated/expert-squad-payload"
 import {
   requireAuthoritativeCompletedWorkerFinalMessage,
   requireCrossSessionProviderExecutionOverlap,
@@ -65,16 +64,11 @@ let result: JsonObject = { status: "running", model, maxRequests, evidenceRoot: 
 type JsonObject = Record<string, any>
 type TranscriptMessage = { info: JsonObject & { id: string; sessionID: string; role: string }; parts: JsonObject[] }
 
-function requiredGeneratedDynamicPackage() {
-  const source = payloadPackageSources.find((entry) => entry.namespace === "builtin" && entry.id === "dynamic")
-  if (!source) throw new Error("Generated Expert Squad payload does not contain builtin/dynamic.")
-  const manifestText = source.files["expert-squad.jsonc"]
-  if (typeof manifestText !== "string") throw new Error("Generated builtin/dynamic payload has no manifest bytes.")
-  const manifest = Bun.JSONC.parse(manifestText) as JsonObject
-  if (manifest.id !== "dynamic" || manifest.schema_version !== 2 || typeof manifest.version !== "string") {
-    throw new Error("Generated Dynamic manifest violates the current package identity contract")
-  }
-  return manifest
+async function requiredEmbeddedDynamicPackage() {
+  const { getLoadedBuiltInPackages } = await import("../src/expert-squad/builtin")
+  const pkg = getLoadedBuiltInPackages().find((entry) => entry.id === "dynamic")
+  if (!pkg) throw new Error("Embedded default Dynamic capability package is unavailable.")
+  return { id: pkg.id, version: pkg.version, packageDigest: pkg.packageDigest }
 }
 
 async function command(args: string[], cwd: string) {
@@ -134,18 +128,9 @@ async function copyProviderAuthority() {
 
 try {
   const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim()
-  const patch = execFileSync(
-    "git",
-    [
-      "diff",
-      "HEAD",
-      "--",
-      "packages",
-      "expert-squads",
-      "script",
-    ],
-    { cwd: repositoryRoot },
-  )
+  const patch = execFileSync("git", ["diff", "HEAD", "--", "packages", "expert-squads", "script"], {
+    cwd: repositoryRoot,
+  })
   result = {
     ...result,
     sourceSHA: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(),
@@ -180,7 +165,7 @@ try {
   })
   process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 
-  const generatedManifest = requiredGeneratedDynamicPackage()
+  const embeddedPackage = await requiredEmbeddedDynamicPackage()
   await initializeProject()
   await copyProviderAuthority()
 
@@ -358,19 +343,7 @@ try {
   })
   process.stdout.write(`[dynamic-e2e] provider=${model} connected\n`)
 
-  const install = await requestJSON("/expert-squad/install-payload", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ id: "dynamic", installationScope: "project" }),
-  })
-  const installed = install.after as JsonObject
-  if (
-    installed.id !== "dynamic" ||
-    installed.version !== generatedManifest.version ||
-    typeof installed.packageDigest !== "string"
-  ) {
-    throw new Error(`Dynamic generated payload installation did not converge: ${JSON.stringify(install)}`)
-  }
+  const installed = embeddedPackage
 
   const requestText = [
     "Use Dynamic to solve this focused read-only case with exactly two independent dynamic-generalist members in the first frontier and no Builder.",
@@ -391,8 +364,8 @@ try {
       request: requestText,
       source: "dynamic-expert-squad-e2e",
       productPillar: "work",
-      model,
       promptProfile: "dynamic",
+      model,
     }),
   })
   const taskID = created.task_id

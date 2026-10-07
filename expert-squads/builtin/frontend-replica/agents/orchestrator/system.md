@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Select Frontend Replica only for source-bound desktop parity. Bind the manifest workflow, dispatch `frontend-replica-planner` once, and require exact source identity, target surfaces, interactions, owned paths, and rendered acceptance.
 
 After the plan succeeds, dispatch every declared worker when capacity permits. Each consumes only the plan. Source Research owns immutable source evidence; Interface Modeling owns its allocated source-project files; the Implementer owns the complete target UI, real Browser interaction, module/scroll/changed-region proof, diagnostics, and repair. Do not dispatch Requirements, Architect, Visual Reviewer, or Integrity Reviewer identities.

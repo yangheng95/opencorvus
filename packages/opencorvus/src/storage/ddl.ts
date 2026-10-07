@@ -29,8 +29,12 @@ function dispatchDecisionReceiptSQL(request: string, outcome: string): string {
       AND json_extract(lineage.payload, '$.tool_part_id') = ${request}.id
       AND json_extract(lineage.payload, '$.tool_call_id') = json_extract(${request}.data, '$.callID')
       AND json_extract(lineage.payload, '$.child_session_id') = json_extract(${value}, '$.session_id')
-      ${member ? `AND json_extract(lineage.payload, '$.collection_member_index') = json_extract(${member}, '$.member_index')
-        AND json_extract(lineage.payload, '$.target_agent_id') = json_extract(${member}, '$.target')` : ""}
+      ${
+        member
+          ? `AND json_extract(lineage.payload, '$.collection_member_index') = json_extract(${member}, '$.member_index')
+        AND json_extract(lineage.payload, '$.target_agent_id') = json_extract(${member}, '$.target')`
+          : ""
+      }
       AND (
         (json_extract(${value}, '$.kind') = 'accepted'
           AND (SELECT COUNT(*) FROM json_each(${value})) = 3
@@ -54,8 +58,10 @@ function dispatchDecisionReceiptSQL(request: string, outcome: string): string {
       AND json_extract(settled.payload,'$.dispatch_lineage_id')=json_extract(${memberOutcome},'$.recovery_authority.dispatch_lineage_id')
       AND NOT EXISTS (SELECT fullkey,type,atom FROM json_tree(${memberOutcome}) EXCEPT SELECT fullkey,type,atom FROM json_tree(json_extract(settled.payload,'$.outcome')))
       AND NOT EXISTS (SELECT fullkey,type,atom FROM json_tree(json_extract(settled.payload,'$.outcome')) EXCEPT SELECT fullkey,type,atom FROM json_tree(${memberOutcome})))`
-  const stringField = (value: string, field: string, maximum?: number) => `(json_type(${value}, '$.${field}')='text' AND length(json_extract(${value}, '$.${field}')) BETWEEN 1 AND ${maximum ?? 9007199254740991})`
-  const optionalString = (value: string, field: string, maximum: number) => `(json_type(${value}, '$.${field}') IS NULL OR ${stringField(value, field, maximum)})`
+  const stringField = (value: string, field: string, maximum?: number) =>
+    `(json_type(${value}, '$.${field}')='text' AND length(json_extract(${value}, '$.${field}')) BETWEEN 1 AND ${maximum ?? 9007199254740991})`
+  const optionalString = (value: string, field: string, maximum: number) =>
+    `(json_type(${value}, '$.${field}') IS NULL OR ${stringField(value, field, maximum)})`
   const uncommittedFailure = `(json_type(${memberOutcome})='object'
     AND json_extract(${memberOutcome},'$.kind')='infrastructure_failure'
     AND ${stringField(memberOutcome, "operation", 512)} AND ${stringField(memberOutcome, "message", 4096)}
@@ -112,7 +118,8 @@ function dispatchDecisionReceiptSQL(request: string, outcome: string): string {
 }
 
 export const ApplicationSchemaSQLTestHooks = Object.freeze({
-  dispatchDecisionReceipt: () => dispatchDecisionReceiptSQL("request", "outcome").replaceAll("NEW.task_id", "(SELECT task_id FROM input_task)"),
+  dispatchDecisionReceipt: () =>
+    dispatchDecisionReceiptSQL("request", "outcome").replaceAll("NEW.task_id", "(SELECT task_id FROM input_task)"),
 })
 
 // These predicates mirror the two persisted Evidence Locator unions. They are
@@ -1054,6 +1061,35 @@ CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(
   chunk_id UNINDEXED,
   project_id UNINDEXED
 );
+
+-- Completion output identity follows actual workers, independently of optional
+-- workflow references. This current payload shape is a schema-epoch boundary.
+CREATE TRIGGER IF NOT EXISTS engine_task_completion_decision_payload_insert
+BEFORE INSERT ON engine_artifact
+FOR EACH ROW
+WHEN NEW.kind = 'task_completion_decision'
+  AND (
+    json_type(NEW.payload) IS NOT 'object'
+    OR (SELECT count(*) FROM json_each(NEW.payload)) != 10
+    OR EXISTS (
+      SELECT 1 FROM json_each(NEW.payload)
+      WHERE key NOT IN (
+        'orchestrator_session_id','orchestrator_message_id','tool_call_id','tool_part_id',
+        'evidence_locators','deliverable_artifact_locators','worker_artifact_locators',
+        'accepted_delivery_slice_revision_ids','workflow_binding','time_recorded'
+      )
+    )
+    OR json_type(NEW.payload, '$.worker_artifact_locators') IS NOT 'array'
+    OR json_type(NEW.payload, '$.evidence_locators') IS NOT 'array'
+    OR json_type(NEW.payload, '$.deliverable_artifact_locators') IS NOT 'array'
+    OR json_type(NEW.payload, '$.accepted_delivery_slice_revision_ids') IS NOT 'array'
+    OR json_type(NEW.payload, '$.workflow_binding') IS NOT 'object'
+    OR json_type(NEW.payload, '$.time_recorded') IS NOT 'integer'
+    OR json_extract(NEW.payload, '$.time_recorded') != NEW.time_created
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'engine_artifact: task_completion_decision requires exact actual-worker output and completion identity');
+END;
 
 -- Dispatch lineage is immutable physical-execution authority. Adapter input
 -- and the exact delivery-owner disposition are required JSON (JavaScript

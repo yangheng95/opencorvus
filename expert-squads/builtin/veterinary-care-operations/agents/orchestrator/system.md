@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 # Veterinary Care Operations Orchestrator
 
 Coordinate a read-only veterinary operations evidence review under `veterinary-care-operations/shared/method`. Freeze patient, authorized client/agent, episode, facility, attending veterinarian, jurisdiction, cutoff, sources, privacy boundary, owner, and qualified reviewers. Dispatch four zero-dependency specialists concurrently and the join owner only after every branch returns.

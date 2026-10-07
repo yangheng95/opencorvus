@@ -41,11 +41,15 @@ const client = createOpenCorvusClient({
 
 ## Calls and Return Values
 
+Low-level `task.create` requires an exact creator-selected `promptProfile` and freezes that identity; it does not add hidden model selection. For automatic selection, submit the original request to a native Work, Chat or Control conversation or Mission. The creator searches and inspects installed candidates first, uses a very well matched Squad, and otherwise selects Dynamic to generate Task-local experts. Candidate inspection returns real Agents, expanded `capability_refs`, version and `package_digest`; page with `agentCursor` and pass the inspected digest as `expectedPackageDigest` to preserve that revision.
+
 By default, non-SSE methods return a fields object:
 
 ```typescript
 const result = await client.task.create({
   request: "Add unit tests for src/foo.ts",
+  productPillar: "code",
+  promptProfile: "base", // Explicitly selected identity.
 })
 
 if (result.error) throw result.error
@@ -62,6 +66,8 @@ const client = createOpenCorvusClient({
 
 const task = await client.task.create({
   request: "Add unit tests for src/foo.ts",
+  productPillar: "code",
+  promptProfile: "base", // Explicitly selected identity.
 })
 ```
 
@@ -163,7 +169,7 @@ Use [HTTP API reference](../api/) as the exhaustive operation list; each `operat
 
 The Node-only `@opencorvus-ai/sdk/expert-squad-authoring` export writes a new canonical package directory and validates static cooperation across independently installed squads.
 
-Use `virtual_workflows: {}` for simple direct dispatch. Every nonempty workflow identifies one complete Task-level collaboration variant and mandatory dependencies; every node runs once per Task. Delivery Slice subjects are typed dispatch/evidence references, not node scope. The SDK and Registry validate shape, exact projected-agent/dependency references, canonical ordering, and acyclic graphs without forcing one role topology.
+`virtual_workflows` may be omitted and provides optional scheduling references. Optional strategy values are `adaptive`, `dag`, `loop` and `choice`, with guidance and node when/repeat_until text. The SDK and Registry validate exact Agent/dependency references and canonical ordering; only an explicit DAG requires acyclicity. The model may reuse one capability, continue local loops or choose actual branches; the Host does not execute graphs. `ExpertSquadCollaborationStage.workflow_id` is also optional, while stages retain exact Squad and evidence input/output identities.
 
 Every projected Agent inherits the platform fact/Turn protocol selected by `base_role`. Package prompts may add domain rules, but they do not define a terminal-report/finalizer protocol or copy Host observations into an Agent-owned result. Domain tools record durable facts; normal stream end is a physical Turn observation; terminal delivery references the real final message or error/tool event. Dispatch lineage and execution attempts are immutable physical evidence. Task owns lifecycle; its completion decision cites current accepted Slice revisions, workflow/package identity, and typed EvidenceLocators.
 

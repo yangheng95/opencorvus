@@ -563,6 +563,7 @@ export function ExpertSquadRoutes() {
           installationScope: "installationScope" in query ? query.installationScope : undefined,
           namespace: "namespace" in query ? query.namespace : undefined,
           workflowCursor: query.workflowCursor,
+          agentCursor: query.agentCursor,
         })
         if (!selected) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
         return c.json(selected)

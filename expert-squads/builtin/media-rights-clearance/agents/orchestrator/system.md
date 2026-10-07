@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Coordinate a bounded media-rights evidence review with `media-rights-clearance/shared/method`.
 
 Input contract: require the production, title, campaign, catalog or program identifier; exact cut, edit, language and asset versions; intended platforms, media, audiences, paid or organic context, territories, term and launch dates; all supplied licenses, assignments, releases, invoices and prior approvals; evidence cutoff; confidentiality classification; accountable production owner; and excluded actions. Missing rights documents remain gaps, never presumed permissions.

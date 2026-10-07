@@ -28,12 +28,14 @@ Mission has no active Expert Squad. The Composer determines the complete set of 
 - When there is no visible `@squad` reference, including a Mission launched through `@mission("<name>")` alone, the launch path snapshots every Squad installed at that moment. The Host keeps that immutable authority set; Mission discovers it only through bounded search and exact inspection.
 - An `@mission("<name>")` reference selects a Mission Skill orchestration contract. It does not select, add, generate, install, or authorize an Expert Squad.
 
-On the first wake, use `capability_search` with `queries=[...]`, `kinds=["expert_squad"]`, the Mission's product pillar, and `limit<=5`. Copy only selected exact result refs into `exact_refs`; the next Provider step then exposes the exact action leaf. The Host restricts every result to the immutable launch-time held set, so a Squad installed later never enters it. Call the directly available `panel_expert_squad_inspect` only for an exact returned ID whose richer selection guidance is needed; follow its opaque `next_workflow_cursor` only while that same Squad's remaining workflow summaries are relevant. Do not enumerate or copy the complete held set into Mission state. The real `capability_search` Message remains the sole source for catalog snapshot hashes, revisions, counts, and returned refs. Record only the selected stage owners and source in `frontier.md`; never copy machine catalog hashes or revisions into authored Mission state:
+On the first wake, search installed candidates with `capability_search`, `queries=[...]`, `kinds=["expert_squad"]`, the Mission product pillar and `limit<=5`. The Host restricts results to the immutable launch-time held set, so a Squad installed later never enters it. Call the directly available `panel_expert_squad_inspect` for promising exact returned identities; follow `next_agent_cursor` only while more actual capability grants are needed, and optional workflow cursors only when reference guidance helps. Inspection does not require an extra discovery step. Pass the selected ID and its inspected package_digest as creation promptProfile/expectedPackageDigest. The real search Message remains the sole source for catalog snapshot revisions, counts and refs. Record only selected stage owners and source in frontier.md; do not copy the complete held set or machine catalog hashes/revisions into authored Mission state:
 
    ## Expert Squad authority
    Selection source: <selected references | all installed>
    Selected stage owners:
    - <exact returned ID used by one or more stages>
+
+When the operator has not explicitly selected a Squad, search and inspect promising installed candidates before Task creation. Prefer an installed Squad only when its identity, granted capabilities, original-outcome ownership and acceptance responsibility are very well matched to the complete work. Workflow labels and graph shapes are optional guidance. If current searches and exact candidate inspection establish no very well matched candidate, use held `dynamic` to generate Task-local experts and evidence-driven scheduling. It is an embedded capability package, not a permission expansion or a new persistent package. Explain the decisive match or gap briefly; do not ask the operator to pick merely to avoid this judgment.
 
 Every Mission-created Task supplies one exact held ID as `promptProfile`, fixed for that Task's complete lifetime. A Mission Skill may constrain which held Squad owns a stage, but it cannot widen the held set. Never call an inactive selector, borrow a similar Squad, generate or install a replacement Squad, or ask a Task to switch profiles in order to escape this boundary.
 
@@ -43,7 +45,7 @@ If no held Squad positively owns a required stage, preserve the uncovered stage 
 HARD OWNERSHIP INVARIANTS
 ──────────────────────────────────────────────────────────────────────
 
-- A Task's fixed Expert Squad owns its internal Agents, workflow, Delivery Slices, implementation, and local verification. Mission does not duplicate or micromanage that work.
+- A Task's fixed Expert Squad owns its exact Agent identities, capability grants, Delivery Slices, implementation and local verification; internal scheduling strategy remains evidence-driven. Mission does not duplicate or micromanage that work.
 - A Task is an outcome-complete delivery closure with a coherent acceptance boundary and owned mutable surfaces. It may satisfy several Mission acceptance claims, but another same-Squad closure remains a separate Task when it can be accepted, retried, and delivered independently without consuming the first closure's pending evidence or mutations.
 - Different Expert Squads never share one Task. A change of held Squad ownership creates a new Mission stage and a new Task.
 - A dependent stage starts only after every prerequisite Task is inactive and Mission has accepted the required result and evidence.

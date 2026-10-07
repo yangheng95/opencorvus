@@ -33,7 +33,7 @@ Manifest v2 为 scheduler 和每个 worker 提供唯一、canonical 排序的 `c
 
 `base_role` 只定义能力上限，不会自动授予全部基础工具。显式声明的 `build-base` 等平台集从当前注册表展开，因此待办成员已变为 `todo`，无需逐个修改专家团。直接授权待办时使用 `capability:tool:platform:tool-registry:todo`；精确 ref、Skill 的 `required_tools`、权限/工具开关和提示词示例都应与[当前工具契约](../tools/#合并后的操作接口)同步。已授权通用预置工具直接调用，只有所需专业或扩展能力尚未提供时才进行发现。更新 package revision 不会重写已有 Task 冻结的版本。
 
-同一个 manifest 必须显式声明 `virtual_workflows` record；无需 binding graph 的直接调度使用 `{}`。每个已声明 node 在一个 Task 中只执行一次：
+专家团以身份与能力为核心。`virtual_workflows` 是可选参考字段；无需参考时可以省略。同一能力或建议节点可承担多个独立职责，调度者根据实际输入选择依赖、并行、局部循环与条件分支：
 
 ```jsonc
 "capability_projection": {
@@ -67,7 +67,7 @@ Manifest v2 为 scheduler 和每个 worker 提供唯一、canonical 排序的 `c
 
 ## 开发外置专家团
 
-无需 binding graph 时使用 `virtual_workflows: {}` 直接调度。Requirements、Architect、Integrity、review 与 Delivery Slice 输入都是 package 根据领域责任图作出的设计选择。Registry 与 SDK 只校验 manifest 形态、精确 Agent/依赖引用、canonical 依赖顺序和无环性，不强制一种通用角色拓扑。
+无需参考图时省略 `virtual_workflows`，直接派发具体职责。Requirements、Architect、Integrity、review 与 Delivery Slice 输入都是 package 根据领域责任图作出的设计选择。Registry 与 SDK 只校验 manifest 形态、精确 Agent/依赖引用、canonical 依赖顺序；只有显式 `strategy: "dag"` 要求无环，不强制角色拓扑。
 
 使用现有 SDK 的 Node-only authoring surface 将定义物化为新的 source directory。SDK 的 runtime manifest v2 schema 是 authoring 与 Registry 共用的 portable 单一来源。Writer 完成全部校验后写入同父目录 staging，通过一次 rename 原子发布，并拒绝已存在的目标目录。
 
@@ -95,11 +95,9 @@ await client.expertSquad.importFolder(
 
 Package-local resource name 使用同一套语法。共享 Skill、tool 和 MCP（Model Context Protocol）server 使用 `<squad-id>/shared/<name>`；agent-local resource 使用 `<squad-id>/<agent-id>/<name>`，并且只能由该 agent 投影。Skill 是包含 `SKILL.md` 的目录；tool 位于 `tools/<name>.ts` 或对应 agent-local 路径；MCP server 位于 `mcp/<name>.jsonc` 或对应 agent-local 路径。声明时把这些名称编码为 typed `capability_refs`，owner 是 package manifest ID。MCP server ref 会挂载该 server 的全部 capability；也可以只授权精确的 `mcp_tool`、`mcp_prompt` 或 `mcp_resource` leaf，但同一 capability 不能同时通过两种方式声明。默认 MCP leaf 使用 `project` source 和 `default-mcp-registry` owner。
 
-Virtual workflow 声明精确的可执行协作变体，不要求覆盖每个投影 agent；但一个 workflow 被选中后，其中声明的每个 node 都是必需步骤。Scheduler 必须在首次 dispatch 前可见地指出与请求和证据匹配的精确 workflow，为每个 node 获得 terminal-success evidence，遵守全部 `depends_on`，并在无法满足时拒绝继续，而不是省略、跳步、替换或调整顺序。
+未手动选择专家团时，原生助手先通过 `capability_search` 检索已安装候选，并用直接可用的 `panel_expert_squad_inspect` 查看真实身份和能力。非常匹配完整结果就使用该团；确认没有非常匹配候选时才选择内嵌 Dynamic，按任务生成专家名称、职责和边界，映射到真实 `dynamic-generalist` 或 `dynamic-builder` 能力身份。手动选择优先；Task 创建后冻结精确包版本和权限，不在执行中换团或扩大能力。
 
-每个 node 在一个 Task 中只执行一次。首次 domain dispatch 前，Orchestrator 追加一次 immutable、visible workflow-selection decision，绑定 Task、workflow、精确 package revision/digest 与真实 scheduler message/tool identity。Dispatch lineage 绑定 node、Session、physical execution 与可选的精确 Slice revision subjects。Slice subject 不扩增 node，也不产生 scheduling ancestry。Graph 没有 dispatch scope、current-node pointer、step status、自动流转或 Host execution authority。
-
-条件分支必须声明为不同 workflow。
+工作流参考可声明 `strategy: "adaptive" | "dag" | "loop" | "choice"`、`guidance`，以及节点的 `when` 和 `repeat_until`。这些文字由调度模型结合实际证据使用，Host 不执行图或判断分支。`turn.workflow_subject` 可省略或用于记录精确参考出处；同一 Task 可以混用不同参考、直接派发和多个独立实例。续作保留原 Session 与 occurrence；新职责创建独立派发。验收依赖真实用户义务与能力证据合同。
 
 ### 组合独立专家团
 
@@ -111,9 +109,9 @@ Virtual workflow 声明精确的可执行协作变体，不要求覆盖每个投
 - **Expert Squad** 是在 Task 全生命周期固定的自包含 capability package；
 - **Agent** 是 active squad 内部角色，不是隐含的跨 squad 阶段。
 
-多个 squad 合作时使用用户显式调用的 coordination Skill。Mission 只创建最早 ready 的阶段 Task，并显式传入 `promptProfile`、精确 workflow、前置 Task ID 和 terminal accepted evidence。Task 全生命周期保持同一 squad，只创建本地 Delivery Slice，并把每个 selected workflow node 执行一次。该 Task terminal acceptance 后，Mission 才创建下一个固定 profile Task。
+多个 squad 合作时使用用户显式调用的 coordination Skill。Mission 只创建最早 ready 的阶段 Task，并显式传入选定的 `promptProfile`、前置 Task ID 和 terminal accepted evidence；workflow reference 可省略。Task 全生命周期保持同一 squad，只创建本地 Delivery Slice，由调度者安排实际职责。该 Task terminal acceptance 后，Mission 才创建下一个固定 profile Task。
 
-Dispatch lineage 与 execution attempt 是不可变 physical evidence identity，不是 business lifecycle。每次 Task 完成都追加一个 typed decision artifact，引用 accepted current Slice revisions、workflow selection、package revision 与精确 evidence。Goal 面板只从这些真实事实派生进度，不写 Goal status、retry、attempt、result 或 workspace state。
+Dispatch lineage 与 execution attempt 是不可变 physical evidence identity，不是 business lifecycle。每次 Task 完成都追加一个 typed decision artifact，引用 accepted current Slice revisions、可选 workflow reference、package revision 与精确 evidence。Goal 面板只从这些真实事实派生进度，不写 Goal status、retry、attempt、result 或 workspace state。
 
 Authoring SDK 可以用真实 manifest 静态校验组合契约：
 

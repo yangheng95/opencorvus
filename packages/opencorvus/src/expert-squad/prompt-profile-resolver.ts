@@ -796,7 +796,11 @@ export namespace PromptProfileResolver {
         input.packageRevision?.id === expertSquadID
           ? await ExpertSquadRegistry.loadPackageRevisionSnapshot(input.packageRevision.packageDigest)
           : undefined
-      if (builtIn && !pinned && hasBuiltInProfileCollision(expertSquadID, discovered.installations, discovered.issues)) {
+      if (
+        builtIn &&
+        !pinned &&
+        hasBuiltInProfileCollision(expertSquadID, discovered.installations, discovered.issues)
+      ) {
         throw new Error(
           `External expert squad package id ${JSON.stringify(expertSquadID)} collides with a built-in expert squad id.`,
         )
@@ -1064,6 +1068,9 @@ export namespace PromptProfileResolver {
       | ExpertSquadRegistry.CatalogPackage
       | ExpertSquadRegistry.LoadedPackage
     builtIn: boolean
+    agents: ExpertSquadCatalogInspection["agents"]
+    agentCount: number
+    nextAgentCursor?: string | null
     workflows: ExpertSquadCatalogInspection["workflows"]
     workflowCount: number
     nextWorkflowCursor?: string | null
@@ -1494,7 +1501,7 @@ export namespace PromptProfileResolver {
         packageMcpResources,
         productionSkills,
         globalMcpTimeout,
-        virtualWorkflows: active.pkg.manifest.capability_projection.virtual_workflows,
+        virtualWorkflows: active.pkg.manifest.capability_projection.virtual_workflows ?? {},
       }),
     )
     const identity = ProjectedSchedulerIdentitySchema.parse({
@@ -1511,7 +1518,7 @@ export namespace PromptProfileResolver {
       projectionHash,
       scheduler,
       grants,
-      virtualWorkflows: active.pkg.manifest.capability_projection.virtual_workflows,
+      virtualWorkflows: active.pkg.manifest.capability_projection.virtual_workflows ?? {},
       builtInToolIDs,
       defaultTools,
       packageTools,
@@ -2675,7 +2682,7 @@ export namespace PromptProfileResolver {
       "scheduler" in input.capability && Object.keys(input.capability.virtualWorkflows).length > 0
         ? [
             "<expert_squad_virtual_workflows>",
-            "These package-declared graphs are binding scheduler contracts, enforced by your visible decisions rather than a host hard gate. Before the first dispatch, identify the exact workflow selected by the request and current evidence. Every node declared by that selected workflow must obtain terminal-success evidence; do not omit a node, skip it, substitute an undeclared agent, or reorder it. A node may dispatch only after every depends_on predecessor has terminal-success evidence. Existing terminal-success evidence may satisfy a node on resume, but names, summaries, or partial artifacts cannot. If any required node or predecessor evidence cannot be satisfied, refuse subsequent dispatch and expose the blocker. These graphs do not automatically execute, persist workflow selection or step state, or create a host workflow engine.",
+            "These optional package workflow references describe possible collaboration, not obligations or a fixed execution plan. Identity and capability grants remain authoritative. Choose, combine, change, or ignore the references according to the original Task and real evidence. DAG dependencies, local evidence-driven loops, conditional alternatives and parallel joins may be useful; the Host never executes their conditions, requires all nodes, or locks later dispatches to a graph. Repeated capability use creates independent dispatches, while exact lineage continuations preserve ongoing responsibility.",
             "Every declared node executes once for the Task. Exact Delivery Slice revision identifiers may be passed through the selected adapter as contract and evidence subjects, but they never multiply node instances, own Sessions, or create another lifecycle.",
             "For every scheduler decision epoch, identify all dependency-ready Task nodes before the first dispatch. Dispatch independent frontier nodes in the same assistant response up to the remaining Task capacity. Terminal evidence belongs to the exact declared node occurrence and its cited Delivery Slice revision subjects.",
             JSON.stringify(input.capability.virtualWorkflows, null, 2),
@@ -3148,6 +3155,7 @@ export namespace PromptProfileResolver {
     id: string
     installationScope?: "built_in" | "project" | "global"
     namespace?: string
+    agentCursor?: string
     workflowCursor?: string
   }): Promise<ExpertSquadCatalogInspection | undefined> {
     if (input.installationScope && input.installationScope !== "built_in" && !input.namespace) {
@@ -3166,7 +3174,7 @@ export namespace PromptProfileResolver {
       )
     })
     if (!row) return undefined
-    const workflowCount = Object.keys(row.pkg.manifest.capability_projection.virtual_workflows).length
+    const workflowCount = Object.keys(row.pkg.manifest.capability_projection.virtual_workflows ?? {}).length
     const queryFingerprint = catalogQueryFingerprint({
       kind: "workflow_inspection",
       identity: catalogRowKey(row.index),
@@ -3177,7 +3185,7 @@ export namespace PromptProfileResolver {
     const workflowCacheKey = `${inventory.revision}:${catalogRowKey(row.index)}`
     let workflows = catalogWorkflowSummaries.get(workflowCacheKey)
     if (!workflows) {
-      workflows = Object.entries(row.pkg.manifest.capability_projection.virtual_workflows)
+      workflows = Object.entries(row.pkg.manifest.capability_projection.virtual_workflows ?? {})
         .sort(([left], [right]) => compareCanonicalStrings(left, right))
         .map(([id, workflow]) => ({
           id,
@@ -3189,12 +3197,47 @@ export namespace PromptProfileResolver {
       if (catalogWorkflowSummaries.size > 64)
         catalogWorkflowSummaries.delete(catalogWorkflowSummaries.keys().next().value!)
     }
+    const agentIDs = Object.keys(row.pkg.manifest.capability_projection.agents).sort(compareCanonicalStrings)
+    const agentFingerprint = catalogQueryFingerprint({ kind: "agent_inspection", identity: catalogRowKey(row.index) })
+    const agentOffset = input.agentCursor
+      ? decodeCatalogCursor(input.agentCursor, inventory.revision, agentFingerprint)
+      : 0
+    const nextAgentOffset = Math.min(agentOffset + 10, agentIDs.length)
+    const agents = agentIDs.slice(agentOffset, nextAgentOffset).map((agentID) => {
+      const projection = row.pkg.manifest.capability_projection.agents[agentID]
+      const capabilities = materializeExpertSquadCapabilities({
+        manifest: row.pkg.manifest,
+        projection,
+        runtime: { kind: "worker", baseRole: projection.base_role as RuntimeTemplateID },
+        context: `Expert Squad inspection ${row.index.id}/${agentID}`,
+      })
+      return {
+        agent_id: agentID,
+        label: projection.label,
+        description: projection.description ?? "",
+        base_role: projection.base_role,
+        capability_refs: capabilities.expandedRefs.map(CapabilityRefCodec.encode),
+      }
+    })
+    const selected = await settingsDetail({
+      projectDirectory: input.projectDirectory ?? Instance.directory,
+      id: row.index.id,
+      installationScope: row.index.source.kind === "built_in" ? "built_in" : row.index.source.installation_scope,
+      ...(row.index.source.kind === "installed_package" ? { namespace: row.index.source.namespace } : {}),
+    })
+    if (!selected) return undefined
     const nextOffset = Math.min(offset + 20, workflowCount)
     return catalogInspectionFromPackage({
-      pkg: row.pkg,
+      pkg: { ...row.pkg, packageDigest: selected.selected.package_digest },
       builtIn: row.builtIn,
       workflows: workflows.slice(offset, offset + 20),
       workflowCount,
+      agents,
+      agentCount: agentIDs.length,
+      nextAgentCursor:
+        nextAgentOffset < agentIDs.length
+          ? encodeCatalogCursor(inventory.revision, agentFingerprint, nextAgentOffset)
+          : null,
       nextWorkflowCursor:
         nextOffset < workflowCount ? encodeCatalogCursor(inventory.revision, queryFingerprint, nextOffset) : null,
     })

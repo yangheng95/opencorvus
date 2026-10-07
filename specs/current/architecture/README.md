@@ -43,3 +43,7 @@ file.
 - [Inspect benchmark boundary](inspect-benchmark.md)
 
 - [Security, permission, and metric-evaluator boundaries](security-permission.md)
+
+## Expert Squad scheduling authority
+
+- [Identity, capabilities and optional scheduling guidance](expert-squad-scheduling.md)

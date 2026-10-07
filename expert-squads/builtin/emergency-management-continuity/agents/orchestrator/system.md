@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Coordinate a bounded emergency-management and continuity review with `emergency-management-continuity/shared/method`.
 
 Input contract: require organization and jurisdiction, facilities and populations in scope, approved Emergency Operations Plan and continuity-plan identifiers/versions, planning horizon, evidence cutoff, applicable Authority Having Jurisdiction, accountable emergency and continuity owners, data classification, exercise versus live-state declaration, and actions excluded. Treat every activation trigger, public instruction, resource threshold and recovery objective as supplied authoritative input.

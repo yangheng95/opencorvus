@@ -21,6 +21,7 @@ const input = {
   title: "Cross-process global request",
   request: "Create exactly one Task after allocation-owner death",
   productPillar: "code" as const,
+  promptProfile: "base",
   source: "test",
   requestID,
 }
@@ -35,19 +36,19 @@ function inspect() {
     const taskIDs = new Set(tasks.map((task) => task.id))
     return {
       allocations: db
-      .select()
-      .from(GlobalCreationAllocationTable)
-      .where(eq(GlobalCreationAllocationTable.request_id, requestID))
-      .all()
-      .map((row) => ({
-        directory: row.directory,
-        fingerprint: row.request_fingerprint,
-        projectID: row.accepted_project_id,
-        materializedProjectID: row.materialized_project_id,
-        materializedProjectGeneration: row.materialized_project_generation,
-        targetID: row.accepted_target_id,
-        taskResolution: row.task_resolution,
-      })),
+        .select()
+        .from(GlobalCreationAllocationTable)
+        .where(eq(GlobalCreationAllocationTable.request_id, requestID))
+        .all()
+        .map((row) => ({
+          directory: row.directory,
+          fingerprint: row.request_fingerprint,
+          projectID: row.accepted_project_id,
+          materializedProjectID: row.materialized_project_id,
+          materializedProjectGeneration: row.materialized_project_generation,
+          targetID: row.accepted_target_id,
+          taskResolution: row.task_resolution,
+        })),
       tasks,
       contracts: db
         .select({ taskID: EngineTaskCreationContractTable.task_id, contract: EngineTaskCreationContractTable.contract })
@@ -84,12 +85,13 @@ async function run() {
   }
   if (mode === "inspect") return inspect()
   if (mode === "delete-materialized") {
-    const projectID = Database.use((db) =>
-      db
-        .select({ projectID: GlobalCreationAllocationTable.materialized_project_id })
-        .from(GlobalCreationAllocationTable)
-        .where(eq(GlobalCreationAllocationTable.request_id, requestID))
-        .get()?.projectID,
+    const projectID = Database.use(
+      (db) =>
+        db
+          .select({ projectID: GlobalCreationAllocationTable.materialized_project_id })
+          .from(GlobalCreationAllocationTable)
+          .where(eq(GlobalCreationAllocationTable.request_id, requestID))
+          .get()?.projectID,
     )
     if (!projectID) throw new Error(`Global Task request ${requestID} has no materialized Project`)
     let error: unknown

@@ -3544,6 +3544,7 @@ export class ExpertSquad extends HeyApiClient {
       installationScope?: "built_in" | "project" | "global"
       namespace?: string
       workflowCursor?: string
+      agentCursor?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -3557,6 +3558,7 @@ export class ExpertSquad extends HeyApiClient {
             { in: "query", key: "installationScope" },
             { in: "query", key: "namespace" },
             { in: "query", key: "workflowCursor" },
+            { in: "query", key: "agentCursor" },
           ],
         },
       ],
@@ -3741,17 +3743,21 @@ export class ExpertSquad extends HeyApiClient {
           source_server_name: string
           target: "opencorvus-browser"
         }>
-        virtual_workflows: {
+        virtual_workflows?: {
           [key: string]: {
             description: string
+            guidance?: string
             label: string
-            nodes: {
+            nodes?: {
               [key: string]: {
                 depends_on: Array<string>
                 description: string
+                repeat_until?: string
                 source_agent_id: string
+                when?: string
               }
             }
+            strategy?: "adaptive" | "dag" | "loop" | "choice"
           }
         }
       }
@@ -4630,7 +4636,11 @@ export class Control extends HeyApiClient {
         | {
             action: "expert_squad_inspect"
             /**
-             * Exact held Expert Squad manifest ID returned by capability_search.
+             * Opaque next_agent_cursor from this exact candidate inspection.
+             */
+            agentCursor?: string
+            /**
+             * Exact installed Expert Squad manifest ID returned by capability_search; Mission must hold it.
              */
             id: string
             /**
@@ -5077,9 +5087,9 @@ export class Control extends HeyApiClient {
              */
             productPillar?: "code" | "work"
             /**
-             * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
+             * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Preserve an explicit operator selection. Otherwise search installed candidates and inspect promising identities before choosing; use Dynamic only when none is very well matched. Mission stays within its held set. No creator omits this exact identity.
              */
-            promptProfile?: string
+            promptProfile: string
             /**
              * Full user request to execute in the new task.
              */
@@ -7377,7 +7387,7 @@ export class Global2 extends HeyApiClient {
       model?: string
       priority?: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      promptProfile?: string
+      promptProfile: string
       request: string
       requestID?: string
       source?: string
@@ -7860,7 +7870,7 @@ export class Task extends HeyApiClient {
       priority?: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       project?: string
-      promptProfile?: string
+      promptProfile: string
       request: string
       requestID?: string
       source?: string

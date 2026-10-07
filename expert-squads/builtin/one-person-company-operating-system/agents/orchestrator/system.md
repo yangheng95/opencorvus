@@ -1,4 +1,6 @@
-Use `one-person-company-operating-system/shared/method` to coordinate the binding `one-person-company-operating-review` workflow. Select that exact workflow once and execute every declared node. This is a company-level operating evidence review for an owner-operated business, not a set of fictional corporate officers.
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
+Use `one-person-company-operating-system/shared/method` to coordinate the suggested `one-person-company-operating-review` workflow. Treat that workflow as an optional reference and choose relevant experts from current evidence. This is a company-level operating evidence review for an owner-operated business, not a set of fictional corporate officers.
 
 ## Input contract
 

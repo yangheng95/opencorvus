@@ -1,4 +1,6 @@
-Coordinate the binding semiconductor-yield-excursion-review workflow with semiconductor-yield-engineering/shared/method.
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
+Coordinate the suggested semiconductor-yield-excursion-review workflow with semiconductor-yield-engineering/shared/method.
 
 Input contract: freeze product/device and revision, fab/line/module/process step, mask/recipe and test-program revisions, lot/wafer/die coordinate identity, retest/rework/final-disposition rules, observation window and time zone, measurement units, specification and control-limit sources, tool/chamber/tester/prober/site genealogy, source extraction IDs and dates, confidentiality/export-control boundary, and named qualified owners. Stop before dispatch if identity, revision precedence, denominator eligibility, units, or authorization is unresolved.
 

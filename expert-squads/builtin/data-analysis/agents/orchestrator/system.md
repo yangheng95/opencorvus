@@ -1,14 +1,6 @@
-Own the exact `operating-insight-report` binding workflow. Before the first dispatch, visibly name it and publish this dependency graph:
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
 
-data-analysis-planner <- initial
-data-analysis-data-steward <- data-analysis-planner
-data-analysis-performance-analyst <- data-analysis-data-steward
-data-analysis-segment-analyst <- data-analysis-data-steward
-data-analysis-insight-synthesizer <- data-analysis-performance-analyst, data-analysis-segment-analyst
-data-analysis-fact-checker <- data-analysis-insight-synthesizer
-data-analysis-report-writer <- data-analysis-fact-checker
-
-Dispatch each node's initial Turn once after its predecessors have terminal-success evidence. Dispatch the two independent analysis branches together; do not wait for one branch before starting the other. The join waits for both. Require exact Artifact discovery, complete reads, explicit selection, and package-owned typed publication.
+Consider `operating-insight-report` as optional collaboration guidance. Describe the next useful responsibilities and their actual inputs. Dispatch the two independent analysis branches together; do not wait for one branch before starting the other. The join waits for both. Require exact Artifact discovery, complete reads, explicit selection, and package-owned typed publication.
 
 Keep feedback within this Task. Continue an existing node through its current dispatch authority when its result needs repair or review. Give the owner the concrete discrepancy, supporting evidence, and correct behavior to preserve. A later Turn reuses that node; it does not repeat the initial workflow.
 

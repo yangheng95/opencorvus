@@ -177,13 +177,13 @@ import {
 } from "./tool-execution-context"
 import { createVisualQaStageDispatcher } from "./visual-qa-stage"
 import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
-import { ORCHESTRATOR_DECISION_TOOL_NAMES, orchestratorDecisionToolCompletionEffect, orchestratorDecisionToolResultCommits } from "./decision-tool-names"
-import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
 import {
-  currentTaskAcceptanceRepair,
-  dispatchConsumesAcceptanceCriterion,
-  openAcceptanceCriteria,
-} from "@/mission/acceptance-ledger"
+  ORCHESTRATOR_DECISION_TOOL_NAMES,
+  orchestratorDecisionToolCompletionEffect,
+  orchestratorDecisionToolResultCommits,
+} from "./decision-tool-names"
+import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
+import { currentTaskAcceptanceRepair, openAcceptanceCriteria } from "@/mission/acceptance-ledger"
 import type { MissionAcceptanceOpenCriterion } from "@/mission/acceptance-gap"
 import {
   acceptanceRepairEvidenceLocators,
@@ -256,9 +256,7 @@ export const OrchestratorToolsTestHooks = Object.freeze({
     if (!openLineage) throw new Error("Orchestrator Tools lineage hook is unavailable")
     return openLineage
   },
-  replaceAfterDispatchLineageClaim(
-    callback: typeof afterDispatchLineageClaimForTest,
-  ): Disposable {
+  replaceAfterDispatchLineageClaim(callback: typeof afterDispatchLineageClaimForTest): Disposable {
     const prior = afterDispatchLineageClaimForTest
     afterDispatchLineageClaimForTest = callback
     return {
@@ -301,14 +299,13 @@ function waitForDispatchClaimChange(signal: AbortSignal | undefined, millisecond
  * A lineage alone is not acceptance: only its exact durable worker Turn or a
  * final settlement may complete the parent Tool occurrence.
  */
-function readDispatchLineageReplay(input: {
-  taskID: string
-  lineage: ExistingDispatchLineage
-}): {
+function readDispatchLineageReplay(input: { taskID: string; lineage: ExistingDispatchLineage }):
+  | {
   descriptor?: WorkerTurnDescriptor.Info
   turn?: NonNullable<WorkerTurnDescriptor.Info["payload"]["dispatchTurn"]>
   outcome: z.infer<typeof DispatchOutcomeSchema>
-} | undefined {
+    }
+  | undefined {
   const settlement = findDispatchSettlementByDispatchID({
     taskID: input.taskID,
     dispatchID: input.lineage.dispatchID,
@@ -333,10 +330,7 @@ function readDispatchLineageReplay(input: {
   }
 }
 
-function commitAcceptedDispatchLineage(
-  lineage: DispatchLineageRow,
-  admission?: DispatchAdmissionOwner,
-): void {
+function commitAcceptedDispatchLineage(lineage: DispatchLineageRow, admission?: DispatchAdmissionOwner): void {
   const actionID = lineage.payload.coordination_action_id
   const expectedResult = actionID
     ? {
@@ -1113,7 +1107,8 @@ export function createOrchestratorTools(input: {
   })
 
   const toolFactories = {
-    scheduler_message: () => tool({
+    scheduler_message: () =>
+      tool({
       description:
         "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically. A reply contains kind, reply_to, subject and message only; omit target because the exact request supplies its destination.",
       inputSchema: z
@@ -1124,8 +1119,17 @@ export function createOrchestratorTools(input: {
               z.object({ kind: z.literal("mission") }).strict(),
               z.object({ kind: z.literal("task"), task_id: z.string().min(1) }).strict(),
             ])
-            .optional().describe("Required for request or notification. Omit for reply: reply_to determines the original sender."),
-          reply_to: z.string().startsWith("pev").optional().describe("Required only for reply: copy the exact received request event_id and omit target. Omit reply_to for request or notification."),
+              .optional()
+              .describe(
+                "Required for request or notification. Omit for reply: reply_to determines the original sender.",
+              ),
+            reply_to: z
+              .string()
+              .startsWith("pev")
+              .optional()
+              .describe(
+                "Required only for reply: copy the exact received request event_id and omit target. Omit reply_to for request or notification.",
+              ),
           subject: z.string().min(1).max(500),
           message: z.string().min(1),
         })
@@ -1163,7 +1167,8 @@ export function createOrchestratorTools(input: {
         })
       },
     }),
-    skill: () => tool({
+    skill: () =>
+      tool({
       description:
         "Search/load surface for production skills granted to the Task's immutable Orchestrator scheduler projection. The session loop replaces this placeholder with the exact turn-scoped scheduler SkillTool before the model can call it.",
       inputSchema: z
@@ -1182,7 +1187,8 @@ export function createOrchestratorTools(input: {
         throw new Error("Orchestrator production SkillTool was not rebound for this projected scheduler turn.")
       },
     }),
-    requirements: () => tool({
+    requirements: () =>
+      tool({
       description:
         "Requirements typed-adapter executor for one exact projected agent. It parses the user's task into REQ-N requirements plus " +
         "foundational technical decisions (runtime, framework, test strategy, " +
@@ -1208,7 +1214,8 @@ export function createOrchestratorTools(input: {
     // Frontend Design typed-adapter executor.
     // -----------------------------------------------------------------------
 
-    frontend_design: () => createFrontendDesignTool({
+    frontend_design: () =>
+      createFrontendDesignTool({
       inputSchema: FrontendDesignInputSchema,
       taskID,
       parentSessionID: input.agentSessionID,
@@ -1220,7 +1227,8 @@ export function createOrchestratorTools(input: {
     // Architect typed-adapter executor.
     // -----------------------------------------------------------------------
 
-    architect: () => tool({
+    architect: () =>
+      tool({
       description:
         "Architect typed-adapter executor for one exact projected agent. The consumer searches the same-Task Artifact catalog, completely reads the exact RequirementSet and evidence versions it uses, " +
         "then registers a ContractGraph and Goals with verified RequirementSet references, source/reference coverage, and cross-goal contracts. " +
@@ -1256,7 +1264,8 @@ export function createOrchestratorTools(input: {
     // which projected consumers use concern findings and the resulting brief.
     // -----------------------------------------------------------------------
 
-    workload_analysis: () => createWorkloadAnalysisTool({
+    workload_analysis: () =>
+      createWorkloadAnalysisTool({
       inputSchema: WorkloadAnalysisInputSchema,
       taskID,
       agentSessionID: input.agentSessionID,
@@ -1267,14 +1276,15 @@ export function createOrchestratorTools(input: {
     // Visual QA — frontend GUI product review evidence
     // -----------------------------------------------------------------------
 
-    visual_qa: () => tool({
+    visual_qa: () =>
+      tool({
       description:
         "Dedicated frontend visual GUI and functional product review agent. GUI means Graphical User Interface. " +
         "It can perform screenshot comparison, screen-by-screen desktop screenshots, explicitly requested non-desktop screenshots, " +
         "interaction-state checks, console/network review, and evidence-backed localization of visual or functional defects. " +
         "It consumes scheduler-provided task facts and references and reviews coarse-to-fine: component truth and visible functionality first, layout/composition second, micro-style polish last. " +
         "It reviews from a picky professional design QA perspective, lists production_blockers when the product cannot generate or ship, and does not use visual scores, one-shot whole-page screenshots, or judge verdicts as the verdict. " +
-        "Its blocking product findings are same-Task repair evidence only after every required workflow node and the initial package Build occurrence have terminal-success evidence; advisory-only findings remain residual-risk evidence and do not dispatch Build or fail the Task. The scheduler inspects immutable dispatch lineage and dispatches the exact package-owned Build or final-delivery owner only when no Phase-closure occurrence exists. A closure reads the existing canonical Build Artifact and does not publish a parallel copy. Moving HEAD, extra commits, and commit count mismatch require repository/runtime inspection and are not product failures by themselves. " +
+          "Its blocking product findings identify actual same-Task repair needs; advisory-only findings remain residual-risk evidence. The scheduler inspects real dispatch lineage and assigns a capable package-owned producer or continues its existing responsibility. Repair consumes existing canonical evidence and preserves independent verification. Moving HEAD, extra commits, and commit count mismatch require repository/runtime inspection and are not product failures by themselves. " +
         "It may use skills and task-scoped browser_preview evidence, but it is review-only and does not edit files or run shell repair commands. " +
         "It does NOT acquire new source evidence and is NOT the final acceptance authority. " +
         "The active expert-squad scheduler decides when to invoke this adapter and which projected consumers use its evidence.",
@@ -1300,7 +1310,8 @@ export function createOrchestratorTools(input: {
     // incremental IntegrityReview facts, and never rewrites requirements or goals.
     // -----------------------------------------------------------------------
 
-    integrity: () => createIntegrityTool({
+    integrity: () =>
+      createIntegrityTool({
       inputSchema: IntegrityInputSchema,
       requireExecutionContext: (executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
@@ -1334,7 +1345,8 @@ export function createOrchestratorTools(input: {
     //   retry after it finishes.
     // -----------------------------------------------------------------------
 
-    fact_check: () => createFactCheckTool({
+    fact_check: () =>
+      createFactCheckTool({
       inputSchema: FactCheckInputSchema,
       stageInputSchema: FactCheckStageInputSchema,
       taskID,
@@ -1350,7 +1362,8 @@ export function createOrchestratorTools(input: {
     // the active package and the Orchestrator's current evidence.
     // -----------------------------------------------------------------------
 
-    analyze_intent: () => createAnalyzeIntentTool({
+    analyze_intent: () =>
+      createAnalyzeIntentTool({
       inputSchema: AnalyzeIntentInputSchema,
       taskID,
       agentSessionID: input.agentSessionID,
@@ -1358,9 +1371,10 @@ export function createOrchestratorTools(input: {
       requireTask: () => requireTask(taskID),
     }).analyze_intent,
 
-    frontend_research: () => tool({
+    frontend_research: () =>
+      tool({
       description:
-        "OPTIONAL interface investigation publisher. Pass the complete authorized HTTP(S) source set for the single Task workflow occurrence; the active expert-squad projection decides how its dynamic worker acquires and partitions evidence through visible tools. Persist one structured brief Artifact built from small update_* result tools, not a giant terminal payload. Additional independent URLs, focus, viewport, interaction state, component, region, fidelity risk, or missing-detail questions do not authorize another occurrence of an already-dispatched frontend_research node. Consume existing frontend_research and frontend_design Artifacts through exact catalog locators. It does not own the frontend implementation template, route selection, implementation, or final acceptance; projected consumers use its Artifact only when their declared contracts require it.",
+          "OPTIONAL interface investigation publisher. Pass the authorized HTTP(S) source set for this bounded responsibility; the active expert-squad projection decides how its dynamic worker acquires and partitions evidence through visible tools. Persist one structured brief Artifact built from small update_* result tools, not a giant terminal payload. Partition independent investigations or continue the exact existing responsibility according to actual source needs and capability authority. Consume existing frontend_research and frontend_design Artifacts through exact catalog locators. It does not own the frontend implementation template, route selection, implementation, or final acceptance; projected consumers use its Artifact only when their declared contracts require it.",
       inputSchema: FrontendResearchInputSchema,
       execute: async ({ reason, source_urls, focus, goal_ids }, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
@@ -1377,7 +1391,8 @@ export function createOrchestratorTools(input: {
       },
     }),
 
-    deep_research: () => tool({
+    deep_research: () =>
+      tool({
       description:
         "OPTIONAL deep evidence agent. Use when the task depends on multi-source external facts, current documentation, competitor/industry/API research, source maps, or PRD/SPEC/report source material that should become a durable citation bundle. For supplied URLs that need functional/visual frontend analysis, `frontend_research` is a separate capability; for implementation-template/source evidence, `frontend_design` is a separate capability. The result is a compact research_brief Artifact plus bundle paths and may include subpage_research_tasks for independent follow-up deep research. It does not select routes or replace requirements, architecture, implementation, or acceptance evidence.",
       inputSchema: DeepResearchInputSchema,
@@ -1396,14 +1411,16 @@ export function createOrchestratorTools(input: {
       },
     }),
 
-    explore: () => createExploreTool({
+    explore: () =>
+      createExploreTool({
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
       requireCurrentTaskAndAgentSessionLineage,
     }).explore,
 
-    delegated_worker: () => createDelegatedWorkerTool({
+    delegated_worker: () =>
+      createDelegatedWorkerTool({
       taskID,
       agentSessionID: input.agentSessionID,
       signal: input.signal,
@@ -1414,7 +1431,8 @@ export function createOrchestratorTools(input: {
     // Delivery Slice contract tools — Orchestrator decides when to call each
     // -----------------------------------------------------------------------
 
-    complete_task: () => createTaskLifecycleTools({
+    complete_task: () =>
+      createTaskLifecycleTools({
       taskID,
       workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
       requireExecutionContext: (options, toolName) =>
@@ -1423,7 +1441,8 @@ export function createOrchestratorTools(input: {
           agentSessionID: input.agentSessionID,
         }),
     }).complete_task,
-    fail_task: () => createTaskLifecycleTools({
+    fail_task: () =>
+      createTaskLifecycleTools({
       taskID,
       workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
       requireExecutionContext: (options, toolName) =>
@@ -1432,7 +1451,8 @@ export function createOrchestratorTools(input: {
           agentSessionID: input.agentSessionID,
         }),
     }).fail_task,
-    cancel_task: () => createTaskLifecycleTools({
+    cancel_task: () =>
+      createTaskLifecycleTools({
       taskID,
       workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
       requireExecutionContext: (options, toolName) =>
@@ -1442,41 +1462,47 @@ export function createOrchestratorTools(input: {
         }),
     }).cancel_task,
 
-    read_task_message: () => createOrchestratorInteractionTools({
+    read_task_message: () =>
+      createOrchestratorInteractionTools({
       taskID,
       agentSessionID: input.agentSessionID,
       allowedRootMessages: authorizedTaskRootMessagesForWake(input),
     }).read_task_message,
-    question: () => createOrchestratorInteractionTools({
+    question: () =>
+      createOrchestratorInteractionTools({
       taskID,
       agentSessionID: input.agentSessionID,
       allowedRootMessages: authorizedTaskRootMessagesForWake(input),
     }).question,
 
-    add_goal: () => createDeliverySliceContractTools({
+    add_goal: () =>
+      createDeliverySliceContractTools({
       taskID,
       agentSessionID: input.agentSessionID,
     }).add_goal,
-    modify_goal: () => createDeliverySliceContractTools({
+    modify_goal: () =>
+      createDeliverySliceContractTools({
       taskID,
       agentSessionID: input.agentSessionID,
     }).modify_goal,
-    delete_goal: () => createDeliverySliceContractTools({
+    delete_goal: () =>
+      createDeliverySliceContractTools({
       taskID,
       agentSessionID: input.agentSessionID,
     }).delete_goal,
 
-    cancel_subagent: () => createSubagentCancellationTool({
+    cancel_subagent: () =>
+      createSubagentCancellationTool({
       taskID,
       assertDirectReplySessionLineage,
     }).cancel_subagent,
 
     read_context: () => createReadContextTool({ taskID }).read_context,
     read_agent_message: () => createReadAgentMessageTool({ taskID }).read_agent_message,
-    no_action: () =>
-      createNoActionTool({ taskID }).no_action,
+    no_action: () => createNoActionTool({ taskID }).no_action,
 
-    respond_agent_coordination: () => bindToolExecutionMode(
+    respond_agent_coordination: () =>
+      bindToolExecutionMode(
       tool({
         description:
           "Answer one pending worker/operator-to-orchestrator coordination request. This is the only orchestrator path for scheduler guidance that continues/cancels a worker, asks the user through a real interaction, fails the task through a terminal lifecycle event, or acknowledges an exact terminal occurrence during a host-authorized terminal conversation; it requires request_id and writes visible request/response/action artifacts before executing the bound side effect.",
@@ -1967,7 +1993,9 @@ export function createOrchestratorTools(input: {
                     durableExpiry.timeExpires !== error.timeExpires ||
                     durableExpiry.timeResolved !== error.timeResolved
                   ) {
-                    throw new Error(`A2A ask_user interaction ${resolvedInteraction.id} changed the expiry occurrence`)
+                      throw new Error(
+                        `A2A ask_user interaction ${resolvedInteraction.id} changed the expiry occurrence`,
+                      )
                   }
                   await completeAgentCoordinationAction({
                     taskID,
@@ -2149,7 +2177,8 @@ export function createOrchestratorTools(input: {
       "turn_control_exclusive",
     ),
 
-    build: () => createBuildTool({
+    build: () =>
+      createBuildTool({
       inputSchema: BuildInputSchema,
       taskID,
       parentSessionID: input.agentSessionID,
@@ -2157,8 +2186,8 @@ export function createOrchestratorTools(input: {
       buildAgentContextSections,
     }).build,
 
-
-    wait: () => bindToolExecutionMode(
+    wait: () =>
+      bindToolExecutionMode(
       tool({
         description:
           WaitToolDescription +
@@ -2277,7 +2306,14 @@ export function createOrchestratorTools(input: {
         directory: taskProjectDirectory,
         fn: run,
       }),
-    runInWorktree: async ({ taskID: worktreeTaskID, sessionID, existingSessionID, targetAgentID, dispatchID, run }) => {
+      runInWorktree: async ({
+        taskID: worktreeTaskID,
+        sessionID,
+        existingSessionID,
+        targetAgentID,
+        dispatchID,
+        run,
+      }) => {
       const { Worktree } = await import("@/worktree")
       const { Instance } = await import("@/project/instance")
       if (existingSessionID) {
@@ -2353,8 +2389,7 @@ export function createOrchestratorTools(input: {
         if (
           replayLineage.payload.target_agent_id !== targetAgentID ||
           !isDeepStrictEqual(replayLineage.payload.work_scope, workScope) ||
-          (adapterInput !== undefined &&
-            !isDeepStrictEqual(replayLineage.payload.adapter_input, adapterInput))
+            (adapterInput !== undefined && !isDeepStrictEqual(replayLineage.payload.adapter_input, adapterInput))
         ) {
           throw new Error(
             `dispatch_agent exact tool occurrence ${toolExecution.toolPartID}/${toolExecution.toolCallID} input drift`,
@@ -2494,22 +2529,48 @@ export function createOrchestratorTools(input: {
         const latestTurn = WorkerTurnDescriptor.latestForSession(sourceSessionID)?.payload.dispatchTurn
         if (latestTurn) {
           if (latestTurn.current_dispatch_id !== continuationDispatchID) {
-            throw new Error(`dispatch_agent continuation source ${continuationDispatchID} is stale for Session ${sourceSessionID}; exact current dispatch is ${latestTurn.current_dispatch_id}. Use that current dispatch identity explicitly for the successor Turn.`)
+              throw new Error(
+                `dispatch_agent continuation source ${continuationDispatchID} is stale for Session ${sourceSessionID}; exact current dispatch is ${latestTurn.current_dispatch_id}. Use that current dispatch identity explicitly for the successor Turn.`,
+              )
           }
           existingSessionID = sourceSessionID
         } else {
-          const settlement = findDispatchSettlementByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.dispatchID })
-          if (settlement?.payload.outcome.kind !== "infrastructure_failure" || settlement.payload.outcome.session_id) {
-            throw new Error(`Dispatch ${sourceLineage.dispatchID} has no accepted worker or settled preparation failure`)
+            const settlement = findDispatchSettlementByDispatchID({
+              taskID: ownershipTaskID,
+              dispatchID: sourceLineage.dispatchID,
+            })
+            if (
+              settlement?.payload.outcome.kind !== "infrastructure_failure" ||
+              settlement.payload.outcome.session_id
+            ) {
+              throw new Error(
+                `Dispatch ${sourceLineage.dispatchID} has no accepted worker or settled preparation failure`,
+              )
           }
-          const initial = findDispatchLineageByDispatchID({ taskID: ownershipTaskID, dispatchID: sourceLineage.payload.workflow_occurrence_id })
+            const initial = findDispatchLineageByDispatchID({
+              taskID: ownershipTaskID,
+              dispatchID: sourceLineage.payload.workflow_occurrence_id,
+            })
           if (!initial) throw new Error(`Dispatch ${sourceLineage.dispatchID} has no initial placement authority`)
-          const request = Database.use((db) => db.select().from(ToolPartRequestTable).where(eq(ToolPartRequestTable.id, initial.payload.tool_part_id)).get())
-          const outer = request?.data.input as { dispatch?: { turn?: { kind?: string; use_worktree?: boolean } }; dispatches?: Array<{ dispatch?: { turn?: { kind?: string; use_worktree?: boolean } } }> } | undefined
-          const original = initial.payload.tool_name === "dispatch_agents"
+            const request = Database.use((db) =>
+              db
+                .select()
+                .from(ToolPartRequestTable)
+                .where(eq(ToolPartRequestTable.id, initial.payload.tool_part_id))
+                .get(),
+            )
+            const outer = request?.data.input as
+              | {
+                  dispatch?: { turn?: { kind?: string; use_worktree?: boolean } }
+                  dispatches?: Array<{ dispatch?: { turn?: { kind?: string; use_worktree?: boolean } } }>
+                }
+              | undefined
+            const original =
+              initial.payload.tool_name === "dispatch_agents"
             ? outer?.dispatches?.[initial.payload.collection_member_index!]?.dispatch
             : outer?.dispatch
-          if (original?.turn?.kind !== "initial") throw new Error(`Dispatch ${initial.dispatchID} has no initial Tool placement input`)
+            if (original?.turn?.kind !== "initial")
+              throw new Error(`Dispatch ${initial.dispatchID} has no initial Tool placement input`)
           preparedSessionID = sourceSessionID
           preparedUseWorktree = original.turn.use_worktree ?? false
         }
@@ -2548,10 +2609,15 @@ export function createOrchestratorTools(input: {
           acceptanceRepair.ledger_revision_artifact_id !== activeAcceptanceRepair.artifactID ||
           acceptanceRepair.execution_epoch !== activeAcceptanceRepair.executionEpoch
         ) {
-          throw new Error(`dispatch_agent acceptance-repair authority does not match the current Task ledger revision.`)
+            throw new Error(
+              `dispatch_agent acceptance-repair authority does not match the current Task ledger revision.`,
+            )
         }
         const criteria = new Map(
-          openAcceptanceCriteria(activeAcceptanceRepair.revision.gap).map((criterion) => [criterion.criterion_id, criterion]),
+            openAcceptanceCriteria(activeAcceptanceRepair.revision.gap).map((criterion) => [
+              criterion.criterion_id,
+              criterion,
+            ]),
         )
         const selectedCriteria: MissionAcceptanceOpenCriterion[] = []
         for (const criterionID of acceptanceRepair.criterion_ids) {
@@ -2559,28 +2625,7 @@ export function createOrchestratorTools(input: {
           if (!criterion) {
             throw new Error(`Acceptance gap ${acceptanceRepair.gap_id} has no open criterion ${criterionID}.`)
           }
-          if (
-            !dispatchConsumesAcceptanceCriterion({
-              binding: exactWorkflowBinding,
-              responsibility: criterion.responsibility,
-              candidateWorkflowNodeID: exactWorkflowNodeID,
-              sourceDispatchLineageArtifactID,
-              targetAgentID,
-            })
-          ) {
-            throw new Error(
-              `Dispatch continuation ${sourceDispatchLineageArtifactID} does not own or verify acceptance criterion ${criterionID}.`,
-            )
-          }
           selectedCriteria.push(criterion)
-        }
-        if (!existingSessionID) {
-          const rootResponsibility = selectedCriteria.every((criterion) => ["task_initialization", "task_owner"].includes(criterion.responsibility.kind))
-          const selectedBinding = activeAcceptanceRepair.workflowBinding
-          if ((selectedBinding && !sameSelectedWorkflowBinding(exactWorkflowBinding, selectedBinding)) ||
-              (!rootResponsibility && (!selectedBinding || exactWorkflowBinding.kind !== "virtual_workflow"))) {
-            throw new Error("Initial acceptance repair must preserve its selected workflow or recover a validated Task initialization failure.")
-          }
         }
         canonicalAcceptanceRepair = {
           gap_id: acceptanceRepair.gap_id,
@@ -2619,7 +2664,10 @@ export function createOrchestratorTools(input: {
       })
       const task = await assertTaskRootSessionLineageForConfig(requireTask(ownershipTaskID))
       if (Object.hasOwn(exactAdapterInput, "attachment_refs")) {
-        requirePromptAttachments(task.attachments ?? undefined, z.array(z.string().min(1)).parse(exactAdapterInput.attachment_refs))
+          requirePromptAttachments(
+            task.attachments ?? undefined,
+            z.array(z.string().min(1)).parse(exactAdapterInput.attachment_refs),
+          )
       }
       const authority = await taskAuthorityAnchor({ task, existingSessionID })
       const selectedEvidence = [
@@ -2652,19 +2700,25 @@ export function createOrchestratorTools(input: {
           : {
               kind: "initial",
               current_dispatch_id: origin.dispatchID,
-              ...(preparedSessionID ? { preparation_recovery: { source_dispatch_id: sourceDispatchID, guidance: continuationGuidance } } : {}),
+                ...(preparedSessionID
+                  ? { preparation_recovery: { source_dispatch_id: sourceDispatchID, guidance: continuationGuidance } }
+                  : {}),
               workflow_binding: origin.workflowBinding,
               workflow_node_id: origin.workflowNodeID,
               workflow_occurrence_id: origin.workflowOccurrenceID,
               delivery_slice_revision_ids: origin.deliverySliceRevisionIDs ?? [],
               evidence_locators: exactEvidenceLocators,
               task_authority: authority,
-              ...(canonicalAcceptanceRepair ? { acceptance_repair: { ...canonicalAcceptanceRepair, checkpoint_required: false } } : {}),
+                ...(canonicalAcceptanceRepair
+                  ? { acceptance_repair: { ...canonicalAcceptanceRepair, checkpoint_required: false } }
+                  : {}),
             },
       )
       if (signal?.aborted) throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
       const claimedSessionID =
-        existingSessionID ?? preparedSessionID ?? Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
+          existingSessionID ??
+          preparedSessionID ??
+          Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
       let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
       let admission: ReturnType<typeof claimDispatchLineage>["admission"]
       let admissionHold: ReturnType<typeof holdDispatchAdmission> | undefined
@@ -2680,10 +2734,19 @@ export function createOrchestratorTools(input: {
         releaseDispatchAdmissionOnError(admission!)
       }
       const settlePreparationFailure = (outcome: z.infer<typeof DispatchOutcomeSchema>) => {
-        if (outcome.kind !== "infrastructure_failure" || outcome.session_id) throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
+          if (outcome.kind !== "infrastructure_failure" || outcome.session_id)
+            throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
         const settled = Database.immediateTransaction((db) => {
-          assertControlLeaseInTransaction(db, { target: "dispatch_admission", targetID: recordedLineage!.artifactID, leaseID: admission!.leaseID, ownerOccurrenceID: admission!.ownerOccurrenceID, now: Date.now() })
-          const infrastructureError = outcome.infrastructure_error ?? exactEngineArtifactLocator({
+            assertControlLeaseInTransaction(db, {
+              target: "dispatch_admission",
+              targetID: recordedLineage!.artifactID,
+              leaseID: admission!.leaseID,
+              ownerOccurrenceID: admission!.ownerOccurrenceID,
+              now: Date.now(),
+            })
+            const infrastructureError =
+              outcome.infrastructure_error ??
+              exactEngineArtifactLocator({
             taskID: ownershipTaskID,
             artifactID: recordTaskInfrastructureErrorInTransaction(db, {
               taskID: ownershipTaskID,
@@ -2694,8 +2757,13 @@ export function createOrchestratorTools(input: {
               context: { dispatchID: origin.dispatchID, dispatchLineageID: recordedLineage!.artifactID },
             }),
           })
-          const settled = settleDispatchOrReturnExisting({ taskID: ownershipTaskID, dispatchID: origin.dispatchID, outcome: { ...outcome, infrastructure_error: infrastructureError } })
-          if (!releaseDispatchAdmission(admission!)) throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
+            const settled = settleDispatchOrReturnExisting({
+              taskID: ownershipTaskID,
+              dispatchID: origin.dispatchID,
+              outcome: { ...outcome, infrastructure_error: infrastructureError },
+            })
+            if (!releaseDispatchAdmission(admission!))
+              throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
           return settled.payload.outcome
         })
         closeAdmissionHold()
@@ -2753,12 +2821,18 @@ export function createOrchestratorTools(input: {
               if (isExecutionCancellationError(error) || error instanceof ControlLeaseFenceLostError) throw error
               signal?.throwIfAborted()
               admissionHold.signal.throwIfAborted()
-              settlePreparationFailure(DispatchOutcome.infrastructureFailure({
+                settlePreparationFailure(
+                  DispatchOutcome.infrastructureFailure({
                 operation: "prepare-dispatch-admission",
                 message: error instanceof Error ? error.message : String(error),
                 errorName: error instanceof Error ? error.name : undefined,
-                recoveryAuthority: { occurrence_status: "occurrence_committed", dispatch_id: origin.dispatchID, dispatch_lineage_id: claim.lineage.artifactID },
-              }))
+                    recoveryAuthority: {
+                      occurrence_status: "occurrence_committed",
+                      dispatch_id: origin.dispatchID,
+                      dispatch_lineage_id: claim.lineage.artifactID,
+                    },
+                  }),
+                )
             } finally {
               releaseAdmission()
             }
@@ -2910,7 +2984,9 @@ export function createOrchestratorTools(input: {
                 const data = part.data
                 const text = (data as { text?: unknown }).text
                 return (
-                  data.type !== "text" || typeof text !== "string" || expected.get(part.id) !== controlTextSHA256(text)
+                    data.type !== "text" ||
+                    typeof text !== "string" ||
+                    expected.get(part.id) !== controlTextSHA256(text)
                 )
               })
             ) {

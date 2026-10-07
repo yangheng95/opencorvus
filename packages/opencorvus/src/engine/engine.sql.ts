@@ -612,15 +612,6 @@ export const EngineArtifactTable = sqliteTable(
       .where(
         sql`${table.kind} = 'dispatch_lineage' AND json_extract(${table.payload}, '$.tool_name') = 'dispatch_agents'`,
       ),
-    uniqueIndex("engine_dispatch_lineage_initial_workflow_node_idx")
-      .on(
-        table.task_id,
-        sql<string>`json_extract(${table.payload}, '$.workflow_binding.workflow_id')`,
-        sql<string>`json_extract(${table.payload}, '$.workflow_node_id')`,
-      )
-      .where(
-        sql`${table.kind} = 'dispatch_lineage' AND json_extract(${table.payload}, '$.workflow_binding.kind') = 'virtual_workflow' AND json_type(${table.payload}, '$.continuation_of_dispatch_id') IS NULL AND json_type(${table.payload}, '$.coordination_action_id') IS NULL`,
-      ),
     uniqueIndex("engine_dispatch_lineage_dispatch_id_idx")
       .on(table.task_id, sql<string>`json_extract(${table.payload}, '$.dispatch_id')`)
       .where(sql`${table.kind} = 'dispatch_lineage'`),

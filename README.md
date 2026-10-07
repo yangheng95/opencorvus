@@ -59,7 +59,9 @@ The task included an operator decision and has test-report and fidelity limits: 
 
 ## Quick Start
 
-[Download the desktop app](https://opencorvus.com/download/) → configure a reachable model → choose a project and squad → submit a goal and acceptance criteria.
+[Download the desktop app](https://opencorvus.com/download/) → configure a reachable model → choose a project and optionally a squad → submit a goal and acceptance criteria.
+
+Without an explicit Squad selection, the creator searches installed Squads first and checks promising candidates. A very well matched Squad is used directly; otherwise Dynamic composes Task-local experts from real capability envelopes. Manually selected Squads retain their identities and capabilities. Scheduling can combine DAGs, local refinement loops and conditional branches; package workflows are optional guidance. [SDK and scheduling contract](specs/current/architecture/expert-squad-scheduling.md).
 
 Or start from source:
 

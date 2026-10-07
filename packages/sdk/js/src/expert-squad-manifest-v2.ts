@@ -181,6 +181,8 @@ export const ExpertSquadVirtualWorkflowNodeSchema = z
     agent_id: ExpertSquadDynamicAgentIDSchema,
     description: NonBlankStringSchema,
     depends_on: canonicalIDList("depends_on"),
+    when: NonBlankStringSchema.optional(),
+    repeat_until: NonBlankStringSchema.optional(),
   })
   .strict()
 
@@ -188,9 +190,9 @@ export const ExpertSquadVirtualWorkflowSchema: z.ZodType<ExpertSquadVirtualWorkf
   .object({
     label: NonBlankStringSchema,
     description: NonBlankStringSchema,
-    nodes: z
-      .record(ExpertSquadIDSchema, ExpertSquadVirtualWorkflowNodeSchema)
-      .refine((nodes) => Object.keys(nodes).length > 0, { message: "virtual workflow requires at least one node" }),
+    strategy: z.enum(["adaptive", "dag", "loop", "choice"]).optional(),
+    guidance: NonBlankStringSchema.optional(),
+    nodes: z.record(ExpertSquadIDSchema, ExpertSquadVirtualWorkflowNodeSchema).default({}),
   })
   .strict()
 
@@ -203,7 +205,7 @@ export const ExpertSquadCapabilityProjectionSchema: z.ZodType<ExpertSquadCapabil
   .object({
     scheduler: ExpertSquadSchedulerProjectionSchema,
     agents: z.record(ExpertSquadDynamicAgentIDSchema, ExpertSquadAgentProjectionSchema),
-    virtual_workflows: ExpertSquadVirtualWorkflowsSchema,
+    virtual_workflows: ExpertSquadVirtualWorkflowsSchema.default({}),
   })
   .strict()
 
@@ -248,14 +250,26 @@ export const ExpertSquadManifestV2Schema: z.ZodType<ExpertSquadManifestV2> = z
     }
     for (const [artifactType, publisher] of Object.entries(manifest.artifact_publishers ?? {})) {
       if (!artifactType.startsWith(`${manifest.id}/`) || artifactType.length === manifest.id.length + 1) {
-        context.addIssue({ code: "custom", path: ["artifact_publishers", artifactType],
-          message: `artifact type must belong to ${manifest.id}/ with a nonempty local type` })
+        context.addIssue({
+          code: "custom",
+          path: ["artifact_publishers", artifactType],
+          message: `artifact type must belong to ${manifest.id}/ with a nonempty local type`,
+        })
       }
       if (publisher === null) continue
       const ref = decodedCapabilityRef(publisher)
-      if (!ref || ref.kind !== "tool" || ref.source !== "package" || ref.owner_ref !== manifest.id || !projectedRefs.has(publisher)) {
-        context.addIssue({ code: "custom", path: ["artifact_publishers", artifactType],
-          message: "artifact publisher must be an explicitly projected tool capability of this package" })
+      if (
+        !ref ||
+        ref.kind !== "tool" ||
+        ref.source !== "package" ||
+        ref.owner_ref !== manifest.id ||
+        !projectedRefs.has(publisher)
+      ) {
+        context.addIssue({
+          code: "custom",
+          path: ["artifact_publishers", artifactType],
+          message: "artifact publisher must be an explicitly projected tool capability of this package",
+        })
       }
     }
     for (const [projectionPath, projection] of projections) {
@@ -322,13 +336,15 @@ export type ExpertSquadVirtualWorkflowNode = z.output<typeof ExpertSquadVirtualW
 export interface ExpertSquadVirtualWorkflow {
   label: string
   description: string
+  strategy?: "adaptive" | "dag" | "loop" | "choice"
+  guidance?: string
   nodes: Record<string, ExpertSquadVirtualWorkflowNode>
 }
 export type ExpertSquadVirtualWorkflows = Record<string, ExpertSquadVirtualWorkflow>
 export interface ExpertSquadCapabilityProjection {
   scheduler: ExpertSquadSchedulerProjection
   agents: Record<string, ExpertSquadAgentProjection>
-  virtual_workflows: ExpertSquadVirtualWorkflows
+  virtual_workflows?: ExpertSquadVirtualWorkflows
 }
 export interface ExpertSquadManifestV2 {
   schema_version: typeof EXPERT_SQUAD_SCHEMA_VERSION

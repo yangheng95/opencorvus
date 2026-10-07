@@ -152,10 +152,10 @@ export function renderDispatchContinuationTurn(input: {
   const evidenceLocators = EvidenceLocatorListSchema.parse(input.evidenceLocators ?? turn.evidence_locators)
   const authority = turn.task_authority
   return [
-    turn.kind === "initial" ? "# Initial workflow node authority" : "# Incremental continuation",
+    turn.kind === "initial" ? "# Initial responsibility authority" : "# Incremental continuation",
     "",
     turn.kind === "initial"
-      ? "Execute this previously unstarted node of the Task workflow. Apply the original Task request and the current acceptance obligation below."
+      ? "Execute this independent responsibility within the fixed Task capability authority. Apply the original Task request and the current acceptance obligation below. Any workflow reference describes provenance rather than required execution order."
       : "Continue the existing physical worker Session and its original Task contract. Current guidance, immutable locators and any attributed report quotations are incremental inputs, not a new Task or replacement for the original request.",
     "",
     "## Dispatch lineage",

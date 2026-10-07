@@ -2,9 +2,9 @@
 
 Omnichannel Distribution prepares and validates channel-specific delivery bundles. It does not post to external platforms. Real posting requires a separately configured connector and a separately declared workflow.
 
-## Binding workflow
+## Optional collaboration guidance
 
-The only workflow is omnichannel-delivery-pack. Channel specification and rights/compliance analysis run in parallel. Channel adaptation and measurement planning then run in parallel. A synthesis node joins those branches before a single-predecessor readiness review and Build-owned delivery.
+omnichannel-delivery-pack is optional collaboration guidance. Channel specification and rights/compliance analysis run in parallel. Channel adaptation and measurement planning then run in parallel. A synthesis node joins those branches before a single-predecessor readiness review and Build-owned delivery.
 
 ## Artifact contract
 

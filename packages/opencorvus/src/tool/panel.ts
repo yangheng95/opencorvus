@@ -552,8 +552,12 @@ function requireMissionCurrentChildTerminals(input: {
     const reference = requireCurrentTerminalLifecycleReference(taskID)
     const status = resolveTerminalLifecycleReference(taskID, reference).terminalStatus
     if (status === "failed") failed += 1
-    if (input.operation === "complete_mission" ? status !== "completed" : status !== "completed" && status !== "failed") {
-      throw new Error(`panel.${input.operation} Task ${taskID} must cite its exact current ${input.operation === "complete_mission" ? "completed" : "completed or failed"} occurrence.`)
+    if (
+      input.operation === "complete_mission" ? status !== "completed" : status !== "completed" && status !== "failed"
+    ) {
+      throw new Error(
+        `panel.${input.operation} Task ${taskID} must cite its exact current ${input.operation === "complete_mission" ? "completed" : "completed or failed"} occurrence.`,
+      )
     }
     references.set(taskID, reference)
   }
@@ -1073,28 +1077,36 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
     }
     switch (params.action) {
       case "expert_squad_inspect": {
-        if (actor !== "mission") {
-          throw new Error(`panel.expert_squad_inspect is only permitted for Mission.`)
-        }
-        const missionSession = await Session.get(ctx.sessionID)
-        const heldExpertSquadIDs = missionVisibleExpertSquadIDs(missionSession)
-        if (!heldExpertSquadIDs.includes(params.id)) {
-          throw new Error(`Mission does not hold Expert Squad ${JSON.stringify(params.id)}.`)
+        let heldExpertSquadIDs: string[] | undefined
+        let productPillar: "code" | "work" | undefined
+        if (actor === "mission") {
+          const missionSession = await Session.get(ctx.sessionID)
+          heldExpertSquadIDs = missionVisibleExpertSquadIDs(missionSession)
+          productPillar = missionProductPillar(missionSession)
+          if (!heldExpertSquadIDs.includes(params.id))
+            throw new Error(`Mission does not hold Expert Squad ${JSON.stringify(params.id)}.`)
         }
         const projectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: ctx.sessionID })
-        const [candidate] = await PromptProfileResolver.recommendationCatalog({
-          projectDirectory,
-          productPillar: missionProductPillar(missionSession),
-          restrictToExpertSquadIDs: [params.id],
-        })
+        const candidate = productPillar
+          ? (
+              await PromptProfileResolver.recommendationCatalog({
+                projectDirectory,
+                productPillar,
+                restrictToExpertSquadIDs: [params.id],
+              })
+            )[0]
+          : (await PromptProfileResolver.catalogIndexSnapshot(projectDirectory)).entries.find(
+              (entry) => entry.id === params.id,
+            )
         const squad = candidate
           ? await PromptProfileResolver.catalogInspection({
               projectDirectory,
               id: candidate.id,
               workflowCursor: params.workflowCursor,
+              agentCursor: params.agentCursor,
             })
           : undefined
-        if (!squad) throw new Error(`Mission-held Expert Squad ${JSON.stringify(params.id)} is unavailable.`)
+        if (!squad) throw new Error(`Installed Expert Squad ${JSON.stringify(params.id)} is unavailable.`)
         return {
           title: "Expert Squad",
           output: JSON.stringify({ squad }),
@@ -1265,9 +1277,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (resolveTerminalLifecycleReference(taskID, currentReference).terminalStatus !== "failed") {
           throw new Error(`panel.read_task_dispatch_evidence requires a failed Task occurrence: ${taskID}`)
         }
-        const evidence = JSON.parse(
-          await readAgentMessages(taskID, { sources, inventory_before, evidence_reads }),
-        )
+        const evidence = JSON.parse(await readAgentMessages(taskID, { sources, inventory_before, evidence_reads }))
         const settledReference = requireCurrentTerminalLifecycleReference(taskID)
         if (!sameTerminalLifecycleReference(settledReference, reviewedReference)) {
           throw new Error(`panel.read_task_dispatch_evidence terminal occurrence changed while reading Task ${taskID}`)
@@ -1551,18 +1561,20 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }))
         return {
           title: "Mission blocked",
-          output: JSON.stringify(MissionBlockReceipt.parse({
-            kind: "mission_blocked",
-            mission_id: mission.missionID,
-            mission_session_id: mission.id,
-            summary: params.summary,
-            unresolved_criteria: params.unresolved_criteria,
-            task_reviews: taskReviews,
-            assistant_message_id: identity.messageID,
-            tool_call_id: identity.toolCallID,
-            tool_part_id: identity.toolPartID,
-            time_recorded: Date.now(),
-          })),
+          output: JSON.stringify(
+            MissionBlockReceipt.parse({
+              kind: "mission_blocked",
+              mission_id: mission.missionID,
+              mission_session_id: mission.id,
+              summary: params.summary,
+              unresolved_criteria: params.unresolved_criteria,
+              task_reviews: taskReviews,
+              assistant_message_id: identity.messageID,
+              tool_call_id: identity.toolCallID,
+              tool_part_id: identity.toolPartID,
+              time_recorded: Date.now(),
+            }),
+          ),
           metadata: { truncated: false },
         }
       }
@@ -1623,12 +1635,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const taskCreator = await resolvePanelTaskCreator(actor, ctx)
         const taskChannelBinding = resolveCreateTaskChannelBinding(params, ctx)
-        const inheritedPromptProfile = panelUIRequest
-          ? params.promptProfile
-          : actor === "mission"
-            ? params.promptProfile
-            : (params.promptProfile ??
-              (await EffectiveConfig.effective({ sessionID: ctx.sessionID })).prompt_profile?.active)
         const callerModel = panelUIRequest
           ? params.model
           : (params.model ?? (await resolveConfiguredModelRef({ sessionID: ctx.sessionID })))
@@ -1673,7 +1679,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
                     typeof callerModel === "string" ? callerModel : `${callerModel.providerID}/${callerModel.modelID}`,
                 }
               : {}),
-            promptProfile: inheritedPromptProfile,
+            promptProfile: params.promptProfile,
             expectedPackageDigest: params.expectedPackageDigest,
             checks: params.checks,
             source,
@@ -1988,7 +1994,8 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (extension && (!observation.active_execution_reference || !baseLedgerID))
           throw new Error("An acceptance extension requires the current active execution and exact ledger.")
         const reviewedTerminalLifecycleReference = extension
-          ? readTaskAcceptanceLedgerArtifact(params.taskID, baseLedgerID!).revision.gap.reviewed_terminal_lifecycle_reference
+          ? readTaskAcceptanceLedgerArtifact(params.taskID, baseLedgerID!).revision.gap
+              .reviewed_terminal_lifecycle_reference
           : reviewedTerminalLifecycleReferenceBeforePanelAction({
               sessionID: ctx.sessionID,
               assistantMessageID: ctx.messageID,
@@ -2038,9 +2045,12 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             })
           : await EngineService.resumeMissionTask(shared)
         return {
-          title: result.kind === "accepted"
-            ? "Task acceptance extension request"
-            : result.kind === "resumed" ? "Task resumed" : "Task cancellation authority required",
+          title:
+            result.kind === "accepted"
+              ? "Task acceptance extension request"
+              : result.kind === "resumed"
+                ? "Task resumed"
+                : "Task cancellation authority required",
           output: JSON.stringify(result),
           metadata: { truncated: false },
         }

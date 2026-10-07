@@ -334,6 +334,38 @@ function scopedMcpAvailability(status: MCP.Status | undefined): CapabilityAvaila
   return "unavailable"
 }
 
+function publishExpertSquads(input: {
+  publications: Map<string, PublicationDraft>
+  caller: CapabilityCaller
+  squads: Awaited<ReturnType<typeof PromptProfileResolver.catalogIndexSnapshot>>
+  visibleIDs: ReadonlySet<string>
+}) {
+  const squadDescriptors = input.squads.entries.map((squad) =>
+    descriptor({
+      ref: capabilityRef({
+        kind: "expert_squad",
+        source: squad.built_in ? "platform" : "project",
+        owner_ref: "expert-squad-registry",
+        local_ref: squad.id,
+      }),
+      name: squad.display_label,
+      description: squad.description ?? squad.name,
+      aliases: [squad.name, squad.id],
+      search_terms: squad.product_pillars,
+      product_pillars: squad.product_pillars,
+      behavior: { kind: "create_task", action_tool_ref: platformToolRef("panel_create_task"), profile_id: squad.id },
+    }),
+  )
+  addPublication(input.publications, {
+    ownerRef: "expert-squad-registry",
+    ownerRevision: input.squads.revision,
+    descriptors: squadDescriptors,
+    views: squadDescriptors
+      .filter((entry) => input.visibleIDs.has(entry.ref.local_ref))
+      .map((entry) => view({ descriptor: entry, caller: input.caller, availability: "installed_unbound" })),
+  })
+}
+
 type RuntimeInput = {
   config: Config.Info
   sessionID: string
@@ -414,9 +446,7 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     const projectedDiscoverableRefs = harnessGrantedRefs(projected, "discover")
     const projectedDiscoverableRefKeys = new Set(projectedDiscoverableRefs.map(CapabilityRefCodec.encode))
     const visibleToolIDs = new Set(input.executionToolIDs)
-    const scopedRefs = [
-      ...projectedRefs.filter((ref) => ref.kind.startsWith("mcp_")),
-    ]
+    const scopedRefs = [...projectedRefs.filter((ref) => ref.kind.startsWith("mcp_"))]
     const scopedCatalog =
       scopedRefs.length > 0
         ? await readOwner(`scoped-mcp:${identity.agentID}`, () => {
@@ -445,21 +475,23 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
             description: `${titleFromID(ref.local_ref)} is published by ${identity.expertSquadID}.`,
           }),
         ),
-      ...projectedRefs.filter((ref) => ref.kind === "skill").map((ref) => {
-        const skill = skillByRef.get(ref.local_ref)
-        return descriptor({
-          ref,
-          name: skill?.name ?? ref.local_ref,
-          description: skill?.description ?? `Projected Skill ${ref.local_ref}.`,
-          aliases: skill?.aliases ?? [],
-          search_terms: skill?.required_tools ?? [],
-          behavior: {
-            kind: "open_skill",
-            loader_tool_ref: platformToolRef("skill"),
+      ...projectedRefs
+        .filter((ref) => ref.kind === "skill")
+        .map((ref) => {
+          const skill = skillByRef.get(ref.local_ref)
+          return descriptor({
+            ref,
             name: skill?.name ?? ref.local_ref,
-          },
-        })
-      }),
+            description: skill?.description ?? `Projected Skill ${ref.local_ref}.`,
+            aliases: skill?.aliases ?? [],
+            search_terms: skill?.required_tools ?? [],
+            behavior: {
+              kind: "open_skill",
+              loader_tool_ref: platformToolRef("skill"),
+              name: skill?.name ?? ref.local_ref,
+            },
+          })
+        }),
       ...projectedRefs.filter((ref) => ref.kind.startsWith("mcp_")).map((ref) => descriptorForProjectedRef(ref)),
     ]
     const taskViews = taskDescriptors
@@ -500,7 +532,9 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
 
     if (isProjectedWorkerRuntimeContract(contract)) {
       const runtimeOwner = sessionRuntimeToolOwner(contract)
-      const stageToolIDs = (runtimeOwner ? runtimeToolOwnerIDs(runtimeOwner, "stage") : []).sort(compareCanonicalStrings)
+      const stageToolIDs = (runtimeOwner ? runtimeToolOwnerIDs(runtimeOwner, "stage") : []).sort(
+        compareCanonicalStrings,
+      )
       if (stageToolIDs.length > 0) {
         const ownerRef = `dispatch-stage:${contract.identity.dispatchAdapterID}`
         const stageDescriptors = stageToolIDs.map((toolID) =>
@@ -571,32 +605,28 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
       descriptors: missionSkillDescriptors,
       views: missionSkillDescriptors.map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
     })
-    const squadDescriptors = squads.entries.map((squad) =>
-      descriptor({
-        ref: capabilityRef({
-          kind: "expert_squad",
-          source: squad.built_in ? "platform" : "project",
-          owner_ref: "expert-squad-registry",
-          local_ref: squad.id,
-        }),
-        name: squad.display_label,
-        description: squad.description ?? squad.name,
-        aliases: [squad.name, squad.id],
-        search_terms: squad.product_pillars,
-        product_pillars: squad.product_pillars,
-        behavior: { kind: "create_task", action_tool_ref: platformToolRef("panel_create_task"), profile_id: squad.id },
-      }),
-    )
-    const visibleSquadIDs = new Set(visibleSquads.entries.map((entry) => entry.id))
-    addPublication(publications, {
-      ownerRef: "expert-squad-registry",
-      ownerRevision: squads.revision,
-      descriptors: squadDescriptors,
-      views: squadDescriptors
-        .filter((entry) => visibleSquadIDs.has(entry.ref.local_ref))
-        .map((entry) => view({ descriptor: entry, caller, availability: "installed_unbound" })),
+    publishExpertSquads({
+      publications,
+      caller,
+      squads,
+      visibleIDs: new Set(visibleSquads.entries.map((entry) => entry.id)),
     })
   } else if (caller === "conversation") {
+    if (input.executionToolIDs.includes("panel_create_task")) {
+      const projectDirectory = await readOwner("project-config", () =>
+        EffectiveConfig.capabilityProjectDirectory({ sessionID: input.sessionID }),
+      )
+      const squads = await readOwner("expert-squad-registry", () =>
+        PromptProfileResolver.catalogIndexSnapshot(projectDirectory),
+      )
+      publishExpertSquads({
+        publications,
+        caller,
+        squads,
+        visibleIDs: new Set(squads.entries.map((entry) => entry.id)),
+      })
+    }
+
     const projectedSkillNames = new Set(
       discoverableGrantRefs.filter((ref) => ref.kind === "skill").map((ref) => ref.local_ref),
     )
@@ -671,9 +701,7 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
       ...hostSessionCatalogs.flatMap((catalog) => {
         const ownerRef = HostSessionMcpRuntime.catalogOwnerRef(catalog.owner.owner_id)
         return Object.values(catalog.tool_bindings)
-          .filter(
-            (binding) => assignedServers.has(binding.server_id) && eligibleChildToolIDs.has(binding.runtime_name),
-          )
+          .filter((binding) => assignedServers.has(binding.server_id) && eligibleChildToolIDs.has(binding.runtime_name))
           .map((binding) =>
             capabilityRef({
               kind: "mcp_tool" as const,
@@ -740,8 +768,7 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     }
     const mcpConfigDescriptors = [...mcpServerDescriptors, ...mcpConfigToolDescriptors]
     const projectedMcpRefIDs = new Set(
-      directlyProjectedMcpToolDescriptors
-        .map((entry) => CapabilityRefCodec.encode(entry.ref)),
+      directlyProjectedMcpToolDescriptors.map((entry) => CapabilityRefCodec.encode(entry.ref)),
     )
     const hostCatalogByOwner = new Map(
       hostSessionCatalogs.map((entry) => [HostSessionMcpRuntime.catalogOwnerRef(entry.owner.owner_id), entry]),
@@ -818,8 +845,7 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
       ]
       const descriptors = [...toolDescriptors, ...metadataDescriptors]
       for (const binding of Object.values(hostCatalog.tool_bindings).filter(
-        (candidate) =>
-          assignedServers.has(candidate.server_id) && eligibleChildToolIDs.has(candidate.runtime_name),
+        (candidate) => assignedServers.has(candidate.server_id) && eligibleChildToolIDs.has(candidate.runtime_name),
       )) {
         mcpToolParentBindings.push({
           tool_ref: capabilityRef({
@@ -842,8 +868,8 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
         descriptors,
         views: [
           ...toolDescriptors
-          .filter((entry) => projectedMcpRefIDs.has(CapabilityRefCodec.encode(entry.ref)))
-          .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
+            .filter((entry) => projectedMcpRefIDs.has(CapabilityRefCodec.encode(entry.ref)))
+            .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
           ...metadataDescriptors.map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
         ],
       })
@@ -854,15 +880,15 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     addPublicationsByOwner(publications, {
       ownerRevision: harnessGrants?.owner_revision ?? "direct-mcp-projection",
       descriptors: foreignMcpToolDescriptors,
-      views: foreignMcpToolDescriptors
-        .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
+      views: foreignMcpToolDescriptors.map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
     })
   } else if (!contract && directlyProjectedMcpToolDescriptors.length > 0) {
     addPublicationsByOwner(publications, {
       ownerRevision: harnessGrants?.owner_revision ?? "direct-mcp-projection",
       descriptors: directlyProjectedMcpToolDescriptors,
-      views: directlyProjectedMcpToolDescriptors
-        .map((entry) => view({ descriptor: entry, caller, availability: "visible" })),
+      views: directlyProjectedMcpToolDescriptors.map((entry) =>
+        view({ descriptor: entry, caller, availability: "visible" }),
+      ),
     })
   }
 

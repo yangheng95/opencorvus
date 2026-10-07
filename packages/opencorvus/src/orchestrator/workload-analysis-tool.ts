@@ -29,7 +29,7 @@ export function createWorkloadAnalysisTool<TSchema extends z.ZodType<WorkloadAna
         "workload brief: countable work surface, why-it-is-not-smaller, underestimation traps, a " +
         "verification inventory, and a `decomposition_concern` when a Slice contract is too broad or " +
         "under-specified to provide an unambiguous delivery and acceptance subject. It is an independent sizing reviewer with no " +
-        "implementation bias — it never writes code and never creates / modifies / splits Slices. Workflow nodes still execute once per Task.\n\n" +
+        "implementation bias — it never writes code and never creates / modifies / splits Slices. Actual evidence needs determine independent work and useful continuations.\n\n" +
         "Missing selected specs, Delivery Slices, or Artifacts are visible input facts for the specialist, not Host admission gates. Empty ref lists never expand to Task-latest facts. The active expert-squad package decides when and how to use the resulting evidence.",
       inputSchema: input.inputSchema,
       execute: async ({ reason, goal_ids }, executionInput) => {

@@ -2,9 +2,9 @@
 
 Evolution Lab is the target-agnostic Expert Squad for explicit incumbent-challenger evolution campaigns. It owns campaign evidence, candidate preparation, evaluation, independent integrity review, and an experiment-scoped recommendation. It never becomes a runtime dependency of the target Squad.
 
-## Binding workflow
+## Optional collaboration guidance
 
-The package declares three stage-specific binding workflows: opportunity analysis, frozen development campaign plus candidate preparation, and two-arm evaluation plus recommendation. Mission is the only cross-Squad coordinator. It creates a new fixed-profile Task for each Evolution Lab stage and separate fixed-profile target Tasks for baseline and candidate runs, waits for terminal acceptance, and imports exact Artifacts into the next Task. Holdout and certification are new Campaign revisions created only after candidate digest fixation and never dispatch a Candidate Author. No Task changes profile and no package workflow engine is introduced.
+The package declares three stage-specific optional workflow references: opportunity analysis, frozen development campaign plus candidate preparation, and two-arm evaluation plus recommendation. Mission is the only cross-Squad coordinator. It creates a new fixed-profile Task for each Evolution Lab stage and separate fixed-profile target Tasks for baseline and candidate runs, waits for terminal acceptance, and imports exact Artifacts into the next Task. Holdout and certification are new Campaign revisions created only after candidate digest fixation and never dispatch a Candidate Author. No Task changes profile and no package workflow engine is introduced.
 
 ## Self-contained closure
 

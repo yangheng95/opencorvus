@@ -320,7 +320,7 @@ function artifactByID(taskID: string, artifactID: string) {
 
 describe("Research domain-incomplete settlement", () => {
   for (const mode of ["deep", "frontend"] as const) {
-    test(`${mode} production stage persists one partial Artifact and keeps its consumer closed`, async () => {
+    test(`${mode} production stage persists one partial Artifact and records its exact incomplete settlement`, async () => {
       await using project = await memoryProject()
       await Instance.provide({
         directory: project.path,
@@ -344,7 +344,7 @@ describe("Research domain-incomplete settlement", () => {
           recordDispatchSettlement({ taskID: task.taskID, dispatchID: task.dispatchID, outcome })
           const projection = await describeTask(task.taskID)
 
-          expect({ outcome, artifact, workflow: projection.workflow_execution }).toMatchObject({
+          expect({ outcome, artifact, workflow: projection.dispatch_execution }).toMatchObject({
             outcome: {
               kind: "domain_incomplete",
               domain: `${mode}_research`,
@@ -365,13 +365,7 @@ describe("Research domain-incomplete settlement", () => {
                 missing: ["summary", "evidence_index"],
               },
             },
-            workflow: {
-              nodes: [
-                { node_id: "research", terminal_success: false },
-                { node_id: "consumer", terminal_success: false, dispatches: [] },
-              ],
-              frontier_node_ids: [],
-            },
+            workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
           })
         },
       })
@@ -397,7 +391,7 @@ describe("Research domain-incomplete settlement", () => {
     })
   })
 
-  test("complete Deep Research persists its canonical Artifact and opens the consumer frontier", async () => {
+  test("complete Deep Research persists its canonical Artifact and records its successful settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -418,16 +412,10 @@ describe("Research domain-incomplete settlement", () => {
             .where(and(eq(EngineArtifactTable.task_id, task.taskID), eq(EngineArtifactTable.kind, "research_brief")))
             .all(),
         )
-        expect({ outcome, artifacts, workflow: projection.workflow_execution }).toMatchObject({
+        expect({ outcome, artifacts, workflow: projection.dispatch_execution }).toMatchObject({
           outcome: { kind: "terminal_success", session_id: task.child.id, final_message_id: task.final.id },
           artifacts: [{ kind: "research_brief", label: "ResearchBrief" }],
-          workflow: {
-            nodes: [
-              { node_id: "research", terminal_success: true },
-              { node_id: "consumer", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: ["consumer"],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })

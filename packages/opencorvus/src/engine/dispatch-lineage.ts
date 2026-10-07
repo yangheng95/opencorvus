@@ -18,7 +18,7 @@ import {
   type SelectedWorkflowBinding,
 } from "./workflow-binding"
 import { assertCurrentDeliverySliceRevisionIDs, projectTaskRowInTransaction } from "./store"
-import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
+import { assertTaskWorkflowPackageInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
 import type { DispatchOccurrenceAuthority } from "./dispatch-occurrence-authority"
 import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
@@ -54,139 +54,6 @@ export class TaskDispatchAdmissionClosedError extends Error {
     readonly dispatchID: string,
   ) {
     super(`Task ${taskID} completed at ${timeCompleted}; dispatch ${dispatchID} admission is closed`)
-  }
-}
-
-export type WorkflowNodeOccurrenceLineageReference = Readonly<{
-  artifactID: string
-  dispatchID: string
-  childSessionID: string
-  workflowOccurrenceID: string
-}>
-
-export class WorkflowNodeOccurrenceConflictError extends Error {
-  override readonly name = "WorkflowNodeOccurrenceConflictError"
-  readonly code = "workflow_node_occurrence_conflict"
-
-  constructor(
-    readonly taskID: string,
-    readonly workflowID: string,
-    readonly workflowNodeID: string,
-    readonly existing: readonly WorkflowNodeOccurrenceLineageReference[],
-  ) {
-    const authorities = existing.length
-      ? existing
-          .map(
-            (reference) =>
-              `${reference.artifactID}/${reference.dispatchID}/${reference.childSessionID}/${reference.workflowOccurrenceID}`,
-          )
-          .join(", ")
-      : "occurrence authority has no readable dispatch lineage"
-    super(
-      `Task ${taskID} workflow ${workflowID} node ${workflowNodeID} already has an initial logical occurrence: ${authorities}. Use one exact prior dispatch continuation authority; do not issue another initial dispatch.`,
-    )
-  }
-}
-
-function initialWorkflowNodeLineagesInTransaction(
-  db: Database.TxOrDb,
-  input: { taskID: string; workflowID: string; workflowNodeID: string },
-): DispatchLineageRow[] {
-  return db
-    .select()
-    .from(EngineArtifactTable)
-    .where(
-      and(
-        eq(EngineArtifactTable.task_id, input.taskID),
-        eq(EngineArtifactTable.kind, "dispatch_lineage"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.workflow_binding.kind') = 'virtual_workflow'`,
-        sql`json_extract(${EngineArtifactTable.payload}, '$.workflow_binding.workflow_id') = ${input.workflowID}`,
-        sql`json_extract(${EngineArtifactTable.payload}, '$.workflow_node_id') = ${input.workflowNodeID}`,
-        sql`json_type(${EngineArtifactTable.payload}, '$.continuation_of_dispatch_id') IS NULL`,
-        sql`json_type(${EngineArtifactTable.payload}, '$.coordination_action_id') IS NULL`,
-      ),
-    )
-    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
-    .all()
-    .map(dispatchLineageRow)
-}
-
-function workflowLineageReferences(lineages: readonly DispatchLineageRow[]): WorkflowNodeOccurrenceLineageReference[] {
-  return lineages.map((lineage) => ({
-    artifactID: lineage.artifactID,
-    dispatchID: lineage.dispatchID,
-    childSessionID: lineage.payload.child_session_id,
-    workflowOccurrenceID: lineage.payload.workflow_occurrence_id,
-  }))
-}
-
-/**
- * Admit one virtual-workflow node directly on its immutable lineage.
- *
- * This runs before the lineage insert while the caller holds SQLite's
- * immediate writer reservation. The matching partial unique index is the
- * current-schema cross-process fence; this read provides the typed winner and
- * validates continuations without a second writable occurrence table.
- */
-function assertWorkflowNodeLineageAdmissionInTransaction(input: {
-  db: Database.TxOrDb
-  taskID: string
-  workflowBinding: SelectedWorkflowBinding
-  workflowNodeID: string | null
-  dispatchID: string
-  workflowOccurrenceID: string
-  childSessionID: string
-  continuation: boolean
-}): void {
-  const binding = SelectedWorkflowBindingSchema.parse(input.workflowBinding)
-  if (binding.kind === "direct") {
-    if (input.workflowNodeID !== null) throw new Error("Direct workflow occurrence cannot name a workflow node")
-    return
-  }
-  const workflowNodeID = input.workflowNodeID
-  if (!workflowNodeID || !binding.nodes.some((node) => node.node_id === workflowNodeID)) {
-    throw new Error(`Workflow ${binding.workflow_id} does not declare node ${workflowNodeID}`)
-  }
-  assertTaskWorkflowBindingInTransaction({ db: input.db, taskID: input.taskID, workflowBinding: binding })
-  const initial = initialWorkflowNodeLineagesInTransaction(input.db, {
-    taskID: input.taskID,
-    workflowID: binding.workflow_id,
-    workflowNodeID,
-  })
-  if (initial.length > 1) {
-    throw new WorkflowNodeOccurrenceConflictError(
-      input.taskID,
-      binding.workflow_id,
-      workflowNodeID,
-      workflowLineageReferences(initial),
-    )
-  }
-  if (input.continuation) {
-    const authority = initial[0]
-    if (
-      !authority ||
-      authority.dispatchID !== input.workflowOccurrenceID ||
-      authority.payload.workflow_occurrence_id !== input.workflowOccurrenceID ||
-      authority.payload.child_session_id !== input.childSessionID
-    ) {
-      throw new Error(
-        `Task ${input.taskID} workflow ${binding.workflow_id} node ${workflowNodeID} continuation does not reuse its initial lineage occurrence and Session`,
-      )
-    }
-    return
-  }
-  if (input.workflowOccurrenceID !== input.dispatchID) {
-    throw new Error(
-      `Task ${input.taskID} workflow ${binding.workflow_id} node ${workflowNodeID} initial lineage must own its occurrence identity`,
-    )
-  }
-  if (initial.length > 0) {
-    throw new WorkflowNodeOccurrenceConflictError(
-      input.taskID,
-      binding.workflow_id,
-      workflowNodeID,
-      workflowLineageReferences(initial),
-    )
   }
 }
 
@@ -287,10 +154,7 @@ export interface DispatchLineageOrigin {
   adapterInput: Record<string, unknown>
 }
 
-function dispatchCreatorExecutionEpochInTransaction(
-  db: Database.TxOrDb,
-  origin: DispatchLineageOrigin,
-): number {
+function dispatchCreatorExecutionEpochInTransaction(db: Database.TxOrDb, origin: DispatchLineageOrigin): number {
   const creator = db
     .select({ executionEpoch: EngineTaskRootIngressTable.execution_epoch })
     .from(ToolPartRequestTable)
@@ -636,7 +500,7 @@ export function recordDispatchLineage(input: {
     if (completionClosure) {
       throw new TaskCompletionClosureConflictError(input.origin.taskID, completionClosure.owner_id)
     }
-    assertTaskWorkflowBindingInTransaction({
+    assertTaskWorkflowPackageInTransaction({
       db,
       taskID: input.origin.taskID,
       workflowBinding: input.origin.workflowBinding,
@@ -665,16 +529,7 @@ export function recordDispatchLineage(input: {
       childSessionID: input.childSessionID,
       targetAgentID: input.origin.targetAgentID,
     })
-    assertWorkflowNodeLineageAdmissionInTransaction({
-      db,
-      taskID: input.origin.taskID,
-      workflowBinding: input.origin.workflowBinding,
-      workflowNodeID: input.origin.workflowNodeID,
-      dispatchID: input.origin.dispatchID,
-      workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
-      childSessionID: input.childSessionID,
-      continuation: !!input.origin.continuationOfDispatchID || !!input.origin.coordinationActionID,
-    })
+
     insertEngineArtifact(db, {
       id: artifactID,
       taskID: input.origin.taskID,
@@ -839,11 +694,7 @@ function dispatchLineageMatchesClaim(input: {
  * Provider effect. A concurrent loser resolves the exact immutable winner and
  * never receives authority to create physical work.
  */
-export function claimDispatchLineage(input: {
-  origin: DispatchLineageOrigin
-  childSessionID: string
-  now?: number
-}): {
+export function claimDispatchLineage(input: { origin: DispatchLineageOrigin; childSessionID: string; now?: number }): {
   lineage: DispatchLineageRow
   createdNow: boolean
   admission?: DispatchAdmissionOwner
@@ -881,7 +732,9 @@ export function claimDispatchLineage(input: {
               toolCallID: input.origin.toolCallID,
             })
       if (!winner) throw error
-      if (!dispatchLineageMatchesClaim({ lineage: winner, origin: input.origin, childSessionID: input.childSessionID })) {
+      if (
+        !dispatchLineageMatchesClaim({ lineage: winner, origin: input.origin, childSessionID: input.childSessionID })
+      ) {
         throw new Error(
           `Dispatch tool occurrence ${input.origin.toolPartID}/${input.origin.toolCallID} claim input drift`,
           { cause: error },
@@ -995,12 +848,21 @@ export function commitDispatchLineageSession(
         `Dispatch ${lineage.dispatchID} cannot materialize workflow occurrence without its exact durable Turn descriptor`,
       )
     }
-    const preparationFailure = db.select({ id: EngineArtifactTable.id }).from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.task_id, lineage.taskID), eq(EngineArtifactTable.kind, "dispatch_settlement"),
-        sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${lineage.dispatchID}`,
-        sql`json_extract(${EngineArtifactTable.payload}, '$.outcome.kind') = 'infrastructure_failure'`,
-        sql`json_type(${EngineArtifactTable.payload}, '$.outcome.session_id') IS NULL`)).get()
-    if (preparationFailure) throw new Error(`Dispatch ${lineage.dispatchID} preparation already settled before worker acceptance`)
+    const preparationFailure = db
+      .select({ id: EngineArtifactTable.id })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, lineage.taskID),
+          eq(EngineArtifactTable.kind, "dispatch_settlement"),
+          sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${lineage.dispatchID}`,
+          sql`json_extract(${EngineArtifactTable.payload}, '$.outcome.kind') = 'infrastructure_failure'`,
+          sql`json_type(${EngineArtifactTable.payload}, '$.outcome.session_id') IS NULL`,
+        ),
+      )
+      .get()
+    if (preparationFailure)
+      throw new Error(`Dispatch ${lineage.dispatchID} preparation already settled before worker acceptance`)
     onAccepted?.(db)
     if (admission) {
       const released = releaseControlLeaseInTransaction(db, {

@@ -4,7 +4,7 @@
   "id": "dynamic",
   "name": "Dynamic",
   "label": "Dynamic",
-  "description": "Lightweight runtime-generated Agent teams and workflow descriptions that immediately execute through reusable Generalist and Builder capability envelopes.",
+  "description": "Automatically compose Task-local experts with explicit identities, capability envelopes and evidence-driven scheduling when no Expert Squad is selected.",
   "version": "2026.09.05.1",
   "product_pillars": [
     "code",
@@ -79,7 +79,6 @@
         "base_role": "build",
         "prompt": "agents/dynamic-builder/system.md"
       }
-    },
-    "virtual_workflows": {}
+    }
   }
 }

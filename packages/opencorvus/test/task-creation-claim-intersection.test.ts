@@ -46,18 +46,19 @@ describe("Task creation identity intersection", () => {
       fn: async () => {
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const requestID = Identifier.ascending("call")
-        const body = { request: "Retain one accepted route Task", productPillar: "code" }
-        const send = () => Server.App().request("/task", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            "x-opencorvus-request-id": requestID,
-            "x-opencorvus-directory": project.path,
-          },
-          body: JSON.stringify(body),
-        })
+        const body = { request: "Retain one accepted route Task", promptProfile: "base", productPillar: "code" }
+        const send = () =>
+          Server.App().request("/task", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "x-opencorvus-request-id": requestID,
+              "x-opencorvus-directory": project.path,
+            },
+            body: JSON.stringify(body),
+          })
         const accepted = await send()
-        const acceptedBody = await accepted.json() as { task_id: string }
+        const acceptedBody = (await accepted.json()) as { task_id: string }
         expect(accepted.status).toBe(202)
         const task = Database.use((db) =>
           db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, acceptedBody.task_id)).get(),
@@ -94,8 +95,17 @@ describe("Task creation identity intersection", () => {
       fn: async () => {
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const requestID = Identifier.ascending("call")
-        const channel = { platform: "slack", channel: Identifier.ascending("artifact"), thread: "root", payload: { v: 1 } }
-        const input = { request: "Bind one accepted Task to both identities", productPillar: "code" as const }
+        const channel = {
+          platform: "slack",
+          channel: Identifier.ascending("artifact"),
+          thread: "root",
+          payload: { v: 1 },
+        }
+        const input = {
+          request: "Bind one accepted Task to both identities",
+          promptProfile: "base",
+          productPillar: "code" as const,
+        }
         const requestWinner = await EngineService.createTask({ ...input, requestID }, { actor: "user" })
         expect(
           await EngineService.createTask({ ...input, requestID, channelBinding: channel }, { actor: "user" }),
@@ -104,9 +114,13 @@ describe("Task creation identity intersection", () => {
           requestWinner,
         )
 
-        const rootSessionID = Database.use((db) =>
-          db.select({ sessionID: EngineTaskTable.session_id }).from(EngineTaskTable)
-            .where(eq(EngineTaskTable.id, requestWinner)).get()?.sessionID,
+        const rootSessionID = Database.use(
+          (db) =>
+            db
+              .select({ sessionID: EngineTaskTable.session_id })
+              .from(EngineTaskTable)
+              .where(eq(EngineTaskTable.id, requestWinner))
+              .get()?.sessionID,
         )
         if (!rootSessionID) throw new Error("Accepted claim test Task has no root Session")
         Database.immediateTransaction(() => {
@@ -127,16 +141,16 @@ describe("Task creation identity intersection", () => {
         ).toBe(requestWinner)
         expect(
           Database.use((db) =>
-            db.select({ taskID: EngineChannelBindingTable.task_id }).from(EngineChannelBindingTable)
-              .where(eq(EngineChannelBindingTable.task_id, requestWinner)).get(),
+            db
+              .select({ taskID: EngineChannelBindingTable.task_id })
+              .from(EngineChannelBindingTable)
+              .where(eq(EngineChannelBindingTable.task_id, requestWinner))
+              .get(),
           ),
         ).toEqual({ taskID: requestWinner })
 
         await expect(
-          EngineService.createTask(
-            { ...input, channelBinding: { ...channel, payload: { v: 2 } } },
-            { actor: "user" },
-          ),
+          EngineService.createTask({ ...input, channelBinding: { ...channel, payload: { v: 2 } } }, { actor: "user" }),
         ).rejects.toBeInstanceOf(TaskCreationIdentityConflictError)
 
         const channelOnly = { platform: "slack", channel: Identifier.ascending("artifact"), thread: "root" }
@@ -171,16 +185,22 @@ describe("Task creation identity intersection", () => {
         const requestID = Identifier.ascending("call")
         const channel = { platform: "slack", channel: Identifier.ascending("artifact"), thread: "root" }
         const requestTaskID = await EngineService.createTask(
-          { request: "Request winner", productPillar: "code", requestID },
+          { request: "Request winner", promptProfile: "base", productPillar: "code", requestID },
           { actor: "user" },
         )
         const channelTaskID = await EngineService.createTask(
-          { request: "Channel winner", productPillar: "code", channelBinding: channel },
+          { request: "Channel winner", promptProfile: "base", productPillar: "code", channelBinding: channel },
           { actor: "user" },
         )
         try {
           await EngineService.createTask(
-            { request: "Request winner", productPillar: "code", requestID, channelBinding: channel },
+            {
+              request: "Request winner",
+              promptProfile: "base",
+              productPillar: "code",
+              requestID,
+              channelBinding: channel,
+            },
             { actor: "user" },
           )
           throw new Error("Expected composite Task identity conflict")
@@ -206,7 +226,7 @@ describe("Task creation identity intersection", () => {
       fn: async () => {
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         return EngineService.createTask(
-          { request: "Own the external thread", productPillar: "code", channelBinding: channel },
+          { request: "Own the external thread", promptProfile: "base", productPillar: "code", channelBinding: channel },
           { actor: "user" },
         )
       },
@@ -218,7 +238,12 @@ describe("Task creation identity intersection", () => {
         fn: async () => {
           using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
           return EngineService.createTask(
-            { request: "Attempt the occupied thread", productPillar: "code", channelBinding: channel },
+            {
+              request: "Attempt the occupied thread",
+              promptProfile: "base",
+              productPillar: "code",
+              channelBinding: channel,
+            },
             { actor: "user" },
           )
         },

@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Coordinate a bounded regulatory-readiness evidence review with `life-sciences-regulatory/shared/method`.
 
 Input contract: require product identifier/version/configuration, manufacturer/legal entity, intended use and users/use environment, exact claims baseline, target jurisdictions and markets, lifecycle stage, evidence cutoff, data classification, authorized product evidence, named regulatory strategy owner, and excluded actions. Treat classification, pathway, standards applicability, clinical sufficiency, conformity, and market access as qualified-owner decisions, never inputs to invent.

@@ -60,6 +60,7 @@ export const MISSION_PANEL_ACTION_IDS = Object.freeze([
 export const EXPLORE_PANEL_ACTION_IDS = Object.freeze(["query_task"] as const satisfies readonly PanelActionID[])
 
 export const RIGHT_SIDEBAR_PANEL_ACTION_IDS = Object.freeze([
+  "expert_squad_inspect",
   "query_task",
   "query_task_artifacts",
   "create_task",

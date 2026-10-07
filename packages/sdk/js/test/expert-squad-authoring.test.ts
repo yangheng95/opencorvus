@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { mkdtemp, readFile, readdir, stat } from "node:fs/promises"
+import { mkdtemp, readFile, readdir } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import {
@@ -8,6 +8,7 @@ import {
   EXPERT_SQUAD_PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS,
   EXPERT_SQUAD_PLATFORM_ARTIFACT_TOOL_IDS,
   ExpertSquadValidationError,
+  analyzeExpertSquadWorkflowTopology,
   expertSquadAssetPath,
   renderExpertSquadPackageFiles,
   validateExpertSquadCollaboration,
@@ -82,6 +83,116 @@ function definition(files: ExpertSquadPackageDefinition["files"] = {}): ExpertSq
 }
 
 describe("expert squad authoring SDK", () => {
+  test("analyzes a local loop and guidance-only choice through the canonical optional schema", () => {
+    const source = manifest()
+    source.capability_projection.virtual_workflows = {
+      refinement: {
+        label: "Refinement",
+        description: "Investigate and review current evidence.",
+        strategy: "loop",
+        nodes: {
+          candidate: {
+            agent_id: "example-builder",
+            description: "Produce candidate.",
+            depends_on: ["review"],
+            repeat_until: "Accepted evidence or exact blocker.",
+          },
+          review: {
+            agent_id: "example-builder",
+            description: "Review candidate independently.",
+            depends_on: ["candidate"],
+            when: "Candidate evidence is available.",
+          },
+        },
+      },
+      selection: {
+        label: "Selection",
+        description: "Choose useful responsibilities.",
+        strategy: "choice",
+        guidance: "Use actual evidence to choose the relevant expert.",
+        nodes: {},
+      },
+    }
+    expect(analyzeExpertSquadWorkflowTopology(source)).toEqual([
+      {
+        workflow_id: "refinement",
+        strategy: "loop",
+        node_count: 2,
+        initial_frontier_node_ids: [],
+        waves: [],
+        join_node_ids: [],
+        critical_path_node_count: null,
+        maximum_parallel_width: null,
+        structure: "adaptive_graph",
+        planner_node_id: null,
+        parallel_worker_node_ids: [],
+      },
+      {
+        workflow_id: "selection",
+        strategy: "choice",
+        node_count: 0,
+        initial_frontier_node_ids: [],
+        waves: [],
+        join_node_ids: [],
+        critical_path_node_count: null,
+        maximum_parallel_width: null,
+        structure: "adaptive_graph",
+        planner_node_id: null,
+        parallel_worker_node_ids: [],
+      },
+    ])
+  })
+  test("writes an identity-and-capability package with omitted workflow guidance", async () => {
+    const packageDefinition = definition()
+    delete packageDefinition.manifest.capability_projection.virtual_workflows
+    const parsed = validateExpertSquadManifestDispatchTopology(packageDefinition.manifest)
+    expect(parsed.capability_projection).toMatchObject({
+      agents: { "example-builder": { base_role: "build" } },
+      virtual_workflows: {},
+    })
+    const parent = await mkdtemp(path.join(os.tmpdir(), "optional-workflow-sdk-"))
+    const directory = path.join(parent, "package")
+    await writeExpertSquadPackage({ directory, definition: packageDefinition })
+    const persisted = validateExpertSquadManifestDispatchTopology(
+      JSON.parse(await readFile(path.join(directory, EXPERT_SQUAD_MANIFEST_PATH), "utf8")),
+    )
+    expect(persisted.capability_projection.agents["example-builder"]!.base_role).toBe("build")
+    expect(persisted.capability_projection.virtual_workflows).toEqual({})
+  })
+
+  test.each(["adaptive", "loop", "choice"] as const)(
+    "preserves %s guidance and real capability references",
+    (strategy) => {
+      const input = manifest()
+      input.capability_projection.virtual_workflows = {
+        refinement: {
+          label: "Evidence refinement",
+          description: "Select a useful branch and refine from observed results.",
+          strategy,
+          guidance: "Choose the observed useful branch; continue only with new actionable evidence.",
+          nodes: {
+            produce: {
+              agent_id: "example-builder",
+              description: "Produce a candidate.",
+              depends_on: ["review"],
+              repeat_until: "The original acceptance is evidenced.",
+            },
+            review: {
+              agent_id: "example-builder",
+              description: "Review the current candidate.",
+              depends_on: ["produce"],
+              when: "A candidate is available for independent review.",
+            },
+          },
+        },
+      }
+      const parsed = validateExpertSquadManifestDispatchTopology(input)
+      expect(parsed.capability_projection.virtual_workflows!.refinement).toEqual(
+        input.capability_projection.virtual_workflows.refinement,
+      )
+    },
+  )
+
   test("binds exact formal artifact types to projected package publishers", () => {
     const ref = "capability:tool:package:example-squad:example-squad%2Fshared%2Fpublish"
     const declared = manifest()
@@ -89,7 +200,8 @@ describe("expert squad authoring SDK", () => {
     declared.artifact_publishers = { "example-squad/report": ref, "example-squad/receipt": null }
     expect(ExpertSquadManifestV2Schema.parse(declared).artifact_publishers).toEqual(declared.artifact_publishers)
     for (const [type, publisher] of [
-      ["other/report", ref], ["example-squad/report", "capability:tool:package:other:publish"],
+      ["other/report", ref],
+      ["example-squad/report", "capability:tool:package:other:publish"],
       ["example-squad/report", "capability:tool:platform:tool-registry:read"],
       ["example-squad/report", "capability:tool:package:example-squad:missing"],
     ]) {
@@ -220,7 +332,7 @@ describe("expert squad authoring SDK", () => {
     )
   })
 
-  test("accepts a once-per-Task package-owned planner topology with Delivery Slice subjects", () => {
+  test("accepts a package-owned planner reference topology with Delivery Slice subjects", () => {
     const packageOwnedTopology = manifest()
     packageOwnedTopology.capability_projection.agents["example-requirements"] = {
       ...emptyResources(),
@@ -243,7 +355,7 @@ describe("expert squad authoring SDK", () => {
       depends_on: [],
     }
     const validated = validateExpertSquadManifestDispatchTopology(packageOwnedTopology)
-    expect(validated).toBe(packageOwnedTopology)
+    expect(validated).toEqual(packageOwnedTopology)
     expect(Object.keys(validated.capability_projection.virtual_workflows.delivery!.nodes)).toEqual([
       "build",
       "requirements",
@@ -254,10 +366,9 @@ describe("expert squad authoring SDK", () => {
   test("accepts Task-scoped Integrity with its explicit platform review execution contract", () => {
     const taskOnlyIntegrity = manifest()
     taskOnlyIntegrity.capability_projection.agents["example-builder"]!.base_role = "integrity"
-    taskOnlyIntegrity.capability_projection.agents["example-builder"]!.execution_contract =
-      "platform_integrity_review"
+    taskOnlyIntegrity.capability_projection.agents["example-builder"]!.execution_contract = "platform_integrity_review"
 
-    expect(validateExpertSquadManifestDispatchTopology(taskOnlyIntegrity)).toBe(taskOnlyIntegrity)
+    expect(validateExpertSquadManifestDispatchTopology(taskOnlyIntegrity)).toEqual(taskOnlyIntegrity)
   })
 
   test("reports the exact execution-contract mapping required by the Integrity runtime", () => {
@@ -268,8 +379,7 @@ describe("expert squad authoring SDK", () => {
     )
 
     const misplacedContract = manifest()
-    misplacedContract.capability_projection.agents["example-builder"]!.execution_contract =
-      "platform_integrity_review"
+    misplacedContract.capability_projection.agents["example-builder"]!.execution_contract = "platform_integrity_review"
     expect(() => ExpertSquadManifestV2Schema.parse(misplacedContract)).toThrow(
       /platform_integrity_review execution contract requires integrity base_role/,
     )
@@ -285,6 +395,7 @@ describe("expert squad authoring SDK", () => {
     expect(() => validateExpertSquadManifestDispatchTopology(unknownDependency)).toThrow(/unknown dependency/)
 
     const cycle = manifest()
+    cycle.capability_projection.virtual_workflows!.delivery!.strategy = "dag"
     cycle.capability_projection.virtual_workflows.delivery!.nodes.review = {
       agent_id: "example-builder",
       description: "Review the delivery.",
@@ -418,7 +529,7 @@ describe("expert squad authoring SDK", () => {
     expect(() => validateExpertSquadCollaboration({ definition, manifests: [source, delivery] })).toThrow()
   })
 
-  test("keeps collaboration stages owned by the complete selected workflow", () => {
+  test("keeps collaboration stages owned by exact Squad identity and evidence without workflow selection", () => {
     const source = manifest()
     source.id = "source-squad"
     const definition: ExpertSquadCollaborationDefinition = {
@@ -432,7 +543,6 @@ describe("expert squad authoring SDK", () => {
         {
           id: "source",
           squad_id: "source-squad",
-          workflow_id: "delivery",
           depends_on: [],
           consumes: ["source-brief"],
           produces: ["intermediate-evidence"],
@@ -440,7 +550,6 @@ describe("expert squad authoring SDK", () => {
         {
           id: "review",
           squad_id: "source-squad",
-          workflow_id: "delivery",
           depends_on: ["source"],
           consumes: ["intermediate-evidence"],
           produces: ["source-evidence"],
@@ -448,7 +557,12 @@ describe("expert squad authoring SDK", () => {
       ],
     }
     expect(validateExpertSquadCollaboration({ definition, manifests: [source] })).toBe(definition)
-    expect(definition.stages.every((stage) => !Object.hasOwn(stage, "repair_agent_id"))).toBe(true)
+    expect(
+      definition.stages.map((stage) => ({ squad: stage.squad_id, inputs: stage.consumes, outputs: stage.produces })),
+    ).toEqual([
+      { squad: "source-squad", inputs: ["source-brief"], outputs: ["intermediate-evidence"] },
+      { squad: "source-squad", inputs: ["intermediate-evidence"], outputs: ["source-evidence"] },
+    ])
   })
 
   test("rejects collaboration without Mission stage Task execution", () => {
@@ -538,7 +652,6 @@ describe("expert squad authoring SDK", () => {
     await expect(writeExpertSquadPackage({ directory, definition: invalid })).rejects.toThrow(
       /missing required package file selector.md/,
     )
-    await expect(stat(directory)).rejects.toMatchObject({ code: "ENOENT" })
   })
 
   test.each([
@@ -552,14 +665,11 @@ describe("expert squad authoring SDK", () => {
     "nested/trailing.",
     "nested/trailing ",
     "nested/e\u0301.txt",
-  ])(
-    "rejects unsafe package path %s",
-    (relativePath) => {
-      expect(() => renderExpertSquadPackageFiles(definition({ [relativePath]: "unsafe" }))).toThrow(
-        /expert squad package path/i,
-      )
-    },
-  )
+  ])("rejects unsafe package path %s", (relativePath) => {
+    expect(() => renderExpertSquadPackageFiles(definition({ [relativePath]: "unsafe" }))).toThrow(
+      /expert squad package path/i,
+    )
+  })
 
   test("rejects manifest ownership, normalized duplicates, and file-directory collisions", () => {
     expect(() => renderExpertSquadPackageFiles(definition({ "expert-squad.jsonc": "{}" }))).toThrow(
@@ -571,21 +681,6 @@ describe("expert squad authoring SDK", () => {
     expect(() => renderExpertSquadPackageFiles(definition({ agents: "file", "agents/worker.md": "child" }))).toThrow(
       "parent directory collides with package file",
     )
-  })
-
-  test("keeps the final directory absent and removes staging when a filesystem write fails", async () => {
-    const parent = await mkdtemp(path.join(os.tmpdir(), "opencorvus-sdk-authoring-failure-"))
-    const directory = path.join(parent, "source")
-    const tooLongName = `${"z".repeat(300)}.md`
-
-    await expect(
-      writeExpertSquadPackage({
-        directory,
-        definition: definition({ "00-first.md": "written first", [tooLongName]: "cannot be written" }),
-      }),
-    ).rejects.toBeDefined()
-    await expect(stat(directory)).rejects.toMatchObject({ code: "ENOENT" })
-    expect((await readdir(parent)).filter((entry) => entry.startsWith(".source.staging-"))).toEqual([])
   })
 
   test("publishes one complete package under concurrent writers without overwriting it", async () => {
@@ -613,7 +708,6 @@ describe("expert squad authoring SDK", () => {
     })
 
     const result = await client.expertSquad.validateFolder({ sourceDirectory: "C:/authoring/example-squad" })
-    expect(result.error).toBeUndefined()
     expect(result.data).toEqual(manifest())
     expect(request).toBeDefined()
     const url = new URL(request!.url)

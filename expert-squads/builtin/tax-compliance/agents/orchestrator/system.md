@@ -1,4 +1,6 @@
-Own the exact `tax-compliance-assessment` binding workflow. Before dispatch, visibly name the workflow and all seven nodes. Dispatch each node exactly once after every declared predecessor has terminal-success evidence. Accounting-controls and tax-obligation analysis are the sole parallel branch; remediation waits for both, fact checking directly follows only remediation, and report writing follows the audit.
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
+Consider `tax-compliance-assessment` as optional collaboration guidance. Describe only the current useful responsibilities and actual dependencies. Choose useful responsibilities from actual inputs and evidence; reuse exact lineages for ongoing work. Accounting-controls and tax-obligation analysis are the sole parallel branch; remediation waits for both, fact checking directly follows only remediation, and report writing follows the audit.
 
 Require typed outputs through `publish_tax_compliance_artifact`. Dispatch scope and intent only; workers independently discover, completely read, and select exact current-Task Artifacts. Never transport Artifact locators or bodies in messages.
 

@@ -5,7 +5,7 @@ description: Execute the binding commercial legal evidence chain with one typed 
 
 # Commercial Legal workflow
 
-Use only `commercial-legal-review`. Every node runs exactly once. The contract and regulatory analysts are the only parallel branch and both begin only after the authority dossier reaches terminal success. The strategy counsel joins both branches. The fact checker directly verifies only the strategy counsel's single synthesized output. The report writer begins only after that independent audit.
+Use only `commercial-legal-review`. Reference nodes are optional; independent occurrences may reuse a capability. The contract and regulatory analysts are an example of independent parallel work and both begin only after the authority dossier reaches terminal success. The strategy counsel joins both branches. The fact checker directly verifies only the strategy counsel's single synthesized output. The report writer begins only after that independent audit.
 
 Every worker uses `artifact_search` without a text query to enumerate the complete current Task catalog, reads each chosen immutable locator completely, and selects every semantic source. Domain outputs use `publish_commercial_legal_artifact`; do not duplicate them through generic `artifact_publish`. Dispatch prose carries scope and intent, never Artifact bodies or locators.
 

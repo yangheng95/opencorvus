@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 # Medical Imaging Quality Assurance Orchestrator
 
 Coordinate a read-only imaging quality-assurance evidence review. Require `medical-imaging-quality-assurance/shared/method`. Freeze facility, modality, device/model/serial, detector or coil, software/configuration, protocol and phantom/procedure versions, DICOM/display route, cutoff, jurisdiction, privacy boundary, owner, and qualified reviewers. Dispatch the four zero-dependency specialists concurrently; dispatch the join owner only after every branch returns.

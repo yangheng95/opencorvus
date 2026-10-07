@@ -1,9 +1,5 @@
 import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
-import {
-  SelectedWorkflowBindingSchema,
-  sameSelectedWorkflowBinding,
-  type SelectedWorkflowBinding,
-} from "./workflow-binding"
+import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
 import { Database, and, eq, inArray } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
 import z from "zod"
@@ -12,24 +8,13 @@ import { sameExpertSquadPackageRevisionBinding } from "./expert-squad-package-re
 
 const WorkflowBindingCarrierSchema = z.object({ workflow_binding: SelectedWorkflowBindingSchema }).passthrough()
 
-export class TaskWorkflowBindingConflictError extends Error {
-  readonly code = "task_workflow_binding_conflict"
-
-  constructor(
-    readonly taskID: string,
-    readonly artifactID: string,
-  ) {
-    super(`Task ${taskID} workflow artifact ${artifactID} already selected a different immutable workflow binding`)
-    this.name = "TaskWorkflowBindingConflictError"
-  }
-}
-
-export function readTaskWorkflowBindingInTransaction(
+/** Immutable reference snapshots on actual dispatch/completion facts, never a Task plan. */
+export function readTaskWorkflowReferencesInTransaction(
   db: Database.TxOrDb,
   taskID: string,
-): SelectedWorkflowBinding | undefined {
+): SelectedWorkflowBinding[] {
   const rows = db
-    .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+    .select({ payload: EngineArtifactTable.payload })
     .from(EngineArtifactTable)
     .where(
       and(
@@ -38,29 +23,24 @@ export function readTaskWorkflowBindingInTransaction(
       ),
     )
     .all()
-  const first = rows[0]
-  if (!first) return undefined
-  const binding = WorkflowBindingCarrierSchema.parse(first.payload).workflow_binding
-  for (const row of rows.slice(1)) {
-    const candidate = WorkflowBindingCarrierSchema.parse(row.payload).workflow_binding
-    if (!sameSelectedWorkflowBinding(binding, candidate)) {
-      throw new Error(`Task ${taskID} workflow artifact ${row.id} conflicts with immutable binding from ${first.id}`)
-    }
-  }
   const creationBinding = requireTaskPackageRevisionBinding(taskID, db)
-  if (!sameExpertSquadPackageRevisionBinding(creationBinding, binding.package_revision)) {
-    throw new Error(`Task ${taskID} workflow binding conflicts with immutable creation package revision binding`)
+  const references = new Map<string, SelectedWorkflowBinding>()
+  for (const row of rows) {
+    const binding = WorkflowBindingCarrierSchema.parse(row.payload).workflow_binding
+    if (!sameExpertSquadPackageRevisionBinding(creationBinding, binding.package_revision)) {
+      throw new Error(`Task ${taskID} dispatch reference conflicts with its immutable package revision`)
+    }
+    references.set(JSON.stringify(binding), binding)
   }
-  return binding
+  return [...references.values()]
 }
 
-export function readTaskWorkflowBinding(taskID: string): SelectedWorkflowBinding | undefined {
-  return Database.use((db) => readTaskWorkflowBindingInTransaction(db, taskID))
+export function readTaskWorkflowReferences(taskID: string): SelectedWorkflowBinding[] {
+  return Database.use((db) => readTaskWorkflowReferencesInTransaction(db, taskID))
 }
 
-/** Enforce one immutable Task workflow binding at the same transaction boundary
- * that writes either a dispatch lineage or the terminal completion decision. */
-export function assertTaskWorkflowBindingInTransaction(input: {
+/** Validate the actual package authority; a reference graph grants no execution authority. */
+export function assertTaskWorkflowPackageInTransaction(input: {
   db: Database.TxOrDb
   taskID: string
   workflowBinding: SelectedWorkflowBinding
@@ -101,21 +81,5 @@ export function assertTaskWorkflowBindingInTransaction(input: {
     throw new Error(
       `Task ${input.taskID} workflow package revision does not match immutable creation package revision binding`,
     )
-  }
-  const rows = input.db
-    .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
-    .from(EngineArtifactTable)
-    .where(
-      and(
-        eq(EngineArtifactTable.task_id, input.taskID),
-        inArray(EngineArtifactTable.kind, ["dispatch_lineage", "task_completion_decision"]),
-      ),
-    )
-    .all()
-  for (const row of rows) {
-    const existing = WorkflowBindingCarrierSchema.parse(row.payload).workflow_binding
-    if (!sameSelectedWorkflowBinding(existing, input.workflowBinding)) {
-      throw new TaskWorkflowBindingConflictError(input.taskID, row.id)
-    }
   }
 }

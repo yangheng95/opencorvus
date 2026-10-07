@@ -4,9 +4,9 @@ Equity Research reimplements the public research method demonstrated by FinRobot
 
 The package separates dated source collection, fundamental reasoning, valuation, thesis construction, independent fact checking, and report production. This preserves the useful Data → Concept → Thesis separation while making every handoff a durable OpenCorvus Artifact.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`equity-research-report` is the only workflow. The Orchestrator selects it visibly before dispatch and executes every node after its declared dependencies reach terminal success. Fundamentals and valuation are the sole parallel branches.
+`equity-research-report` is optional collaboration guidance. The Orchestrator selects actual responsibilities and input dependencies from evidence; a reference is optional. Fundamentals and valuation are the sole parallel branches.
 
 ## Artifact contract
 

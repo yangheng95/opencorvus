@@ -2,9 +2,9 @@
 
 Turns aggregate workforce and people-process evidence into parallel workforce and process analyses, an independently audited operating plan, and a canonical Human Resources delivery.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`people-operations-plan` is the sole workflow. Every node runs exactly once after all declared predecessors reach terminal success. The two independent analysis branches are dispatched together and may run in parallel; the join waits for both terminal results.
+`people-operations-plan` is optional collaboration guidance. Each dispatch has its own execution identity; schedule actual input dependencies and independent work from evidence. The two independent analysis branches are dispatched together and may run in parallel; the join waits for both terminal results.
 
 ## Artifact contract
 

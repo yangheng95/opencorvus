@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Bind `browser-evidence-acceptance` and dispatch the Planner first. After its terminal-success plan, dispatch the Evidence Observer and Acceptance Reviewer together when capacity permits. Both consume only the plan and independently exercise their allocated live-page states; neither waits for the other.
 
 Preserve user authority over credentials, protected actions, and state-changing interactions. Judge every criterion from the workers' personally observed current URLs, states, interactions, diagnostics, screenshots, and blockers. Never add UI automation or infer a pass from silence.

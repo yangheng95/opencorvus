@@ -85,7 +85,13 @@ import { Database, NotFoundError, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { taskRootIngressSourceKind, type TaskRootIngressSourceKind } from "@/engine/task-root-ingress-source"
-import { describeProcessRecoveryFact, describeTask, renderTaskDescription, renderTaskExecutionFact, type TaskDesc } from "@/engine/describe"
+import {
+  describeProcessRecoveryFact,
+  describeTask,
+  renderTaskDescription,
+  renderTaskExecutionFact,
+  type TaskDesc,
+} from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
@@ -606,9 +612,10 @@ export namespace Orchestrator {
         ? [{ type: "text", text: userText }]
         : []
       const partsWithIds = parts.map((p) => ({ ...p, id: Identifier.ascending("part") }))
-      const creatorPartsWithIds = [
-        { type: "text" as const, text: orchestratorUserText(task) },
-      ].map((part) => ({ ...part, id: Identifier.ascending("part") }))
+      const creatorPartsWithIds = [{ type: "text" as const, text: orchestratorUserText(task) }].map((part) => ({
+        ...part,
+        id: Identifier.ascending("part"),
+      }))
 
       log.info("orchestrator starting", {
         taskID,
@@ -1475,7 +1482,7 @@ export function renderInitialDispatchContractInstruction(input?: { frontier?: bo
   const callShape = input?.frontier
     ? "Call `dispatch_agents` once with `team` and `dispatches` describing the same complete current dependency-ready frontier in aligned order. Every team row is the visible Task-local name, target, responsibility, boundary, expected result, and settled predecessors for its exact target-discriminated dispatch; include all mutually independent ready members and no dependent or ownership-conflicting member."
     : "Call `dispatch_agent` with one target-discriminated `dispatch` object."
-  return `- ${callShape} For a first node occurrence, set \`turn.kind=initial\`, put the exact workflow subject in \`turn.workflow_subject\`, and put only the selected row's \`target_fields\` in \`turn.input\`; \`target\`, \`work_scope\`, and \`use_worktree\` remain dispatch-level fields. Supply every field required by that target schema. When \`instruction\` is listed, it carries the complete bounded work the worker must perform. When \`reason\` is listed, it separately explains why that work is needed now and never substitutes for \`instruction\`. Never copy fields from another target. For a successor Turn, set \`turn.kind=continuation\`, choose exactly one typed \`turn.authority\` (\`coordination_action\` or \`prior_dispatch\`), and provide only incremental \`turn.guidance\` plus exact \`turn.evidence_locators\`; never invent placeholder guidance or a lineage identity.`
+  return `- ${callShape} For a new independent responsibility, set \`turn.kind=initial\` and put only the selected row's \`target_fields\` in \`turn.input\`. Omit \`turn.workflow_subject\` for direct work, or supply an exact optional package reference; a reference does not limit independent reuse. \`target\`, \`work_scope\`, and \`use_worktree\` remain dispatch-level fields. Supply every field required by that target schema. When \`instruction\` is listed, it carries the complete bounded work the worker must perform. When \`reason\` is listed, it separately explains why that work is needed now and never substitutes for \`instruction\`. Never copy fields from another target. For a successor Turn, set \`turn.kind=continuation\`, choose exactly one typed \`turn.authority\` (\`coordination_action\` or \`prior_dispatch\`), and provide only incremental \`turn.guidance\` plus exact \`turn.evidence_locators\`; never invent placeholder guidance or a lineage identity.`
 }
 
 function requireCurrentAgentLifecycleFact(
@@ -1807,19 +1814,19 @@ async function buildSystemParts(
   // reads facts and routes one Build repair attempt without a Host retry gate.
   ctx.push("## Recovery Discipline")
   ctx.push(
-    "- One fixed-Squad Task owns one complete Phase. Inspect immutable dispatch lineage after a failed or interrupted mandatory node. A dependency-ready node with occurrence_not_committed uses its one initial dispatch; a node with occurrence_committed uses the accepted-Turn recovery identity rule below. Build never replaces another node's terminal-success evidence or Artifact. After all mandatory predecessors and the Build owner's initial occurrence succeed, route a downstream blocking product or final-deliverable finding to the exact package-owned Build or final-delivery owner.",
+    "- Inspect actual dispatch lineage and evidence after a failed or interrupted responsibility. Continue an accepted worker Turn through its exact authority; a new independent responsibility may use another initial dispatch of the same capability. Route repairable product or final-deliverable findings to a capable package-owned producer when its real inputs are available. A producer cannot replace another expert's independent judgment or Artifact.",
   )
   ctx.push(
     "- An Integrity concerns verdict whose findings are all advisory is acceptable improvement evidence. Preserve those findings as residual risk; do not dispatch Build or fail the current Task for them.",
   )
   ctx.push(
-    "- Inspect immutable dispatch lineage before phase closure. Dispatch the closure owner only when no closure occurrence exists; otherwise continue or judge that exact lineage. Require implementation, repair, and affected verification until the deliverable exists or the blocker is proven irreducible. If the initial canonical package Artifact exists, read and select it but do not publish a parallel copy; use the terminal Build result plus Host-observed diffs, commands, and checks as closure evidence.",
+    "- Inspect immutable dispatch lineage before repair. Continue the exact existing responsibility when it owns the needed change; allocate a new independent responsibility when its boundary warrants it. Require implementation, repair and affected verification until the deliverable exists or the blocker is proven irreducible. Read and select existing canonical package evidence, and publish any genuinely changed result through its owning contract.",
   )
   ctx.push(
     "- Resolve dismissed or unanswered questions through reversible evidence-backed assumptions when possible. Inspect extra commits and moving HEAD against task-owned paths and current behavior, preserve unrelated changes, and route real overlap to Build; commit count or provenance uncertainty alone is not failure evidence.",
   )
   ctx.push(
-    "- A local runtime, process, provider, projected-worker, repository, or Tool failure is infrastructure recovery evidence, not operator authority. Never turn it into a continue-or-stop Question and never fail the business Task merely because one repair attempt failed. After repair, use initial for a dependency-ready occurrence_not_committed node. For occurrence_committed, continue worker_turn.current_dispatch_id when present; recovery_authority.dispatch_id identifies the failed dispatch and is a continuation source only when no physical Turn has been accepted. Otherwise expose the concrete active infrastructure blocker through the named recovery and lifecycle surfaces.",
+    "- A local runtime, process, provider, projected-worker, repository, or Tool failure is infrastructure recovery evidence, not operator authority. Never turn it into a continue-or-stop Question and never fail the business Task merely because one repair attempt failed. Recover the exact admitted Tool/member occurrence. Continue worker_turn.current_dispatch_id when present; recovery_authority.dispatch_id identifies the failed dispatch and is a continuation source only when no physical Turn has been accepted. Otherwise expose the concrete active infrastructure blocker through the named recovery and lifecycle surfaces.",
   )
   ctx.push("")
 

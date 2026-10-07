@@ -28,7 +28,11 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Identifier } from "../../src/id/id"
 import { orchestratorControlOccurrenceIdentity } from "../../src/orchestrator/control-message-identity"
-import { applyTaskProjectionDelta, currentOrchestratorControlMessage, renderTaskProjectionContext } from "../../src/orchestrator/agent"
+import {
+  applyTaskProjectionDelta,
+  currentOrchestratorControlMessage,
+  renderTaskProjectionContext,
+} from "../../src/orchestrator/agent"
 import { createReadAgentMessageTool } from "../../src/tool/read-agent-message"
 import {
   createDispatchAgentTool,
@@ -206,13 +210,18 @@ describe("Light Expert Squad package", () => {
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
         expect(authoredRevealRefs(scheduler.promptOverlay)).toEqual(
           ["dispatch_agents", "read_agent_message", "manage_task"].map((local_ref) => ({
-            kind: "tool", source: "platform", owner_ref: "runtime-projection:orchestrator", local_ref,
+            kind: "tool",
+            source: "platform",
+            owner_ref: "runtime-projection:orchestrator",
+            local_ref,
           })),
         )
         expect(skillProjection.projectedAgentIDs).toEqual(Object.keys(agentRoles).sort())
-        expect(scheduler.promptOverlay).toContain('call `read_agent_message` and `manage_task` directly')
+        expect(scheduler.promptOverlay).toContain("call `read_agent_message` and `manage_task` directly")
         expect(scheduler.promptOverlay).toContain("submit the ordered list in one `read_agent_message` call")
-        expect(scheduler.promptOverlay).toContain('Preserve every user-required exact output line in the `complete_task` summary after verification')
+        expect(scheduler.promptOverlay).toContain(
+          "Preserve every user-required exact output line in the `complete_task` summary after verification",
+        )
 
         const workers = await Promise.all(
           Object.entries(agentRoles).map(async ([agentID, expectedBaseRole]) => {
@@ -228,7 +237,9 @@ describe("Light Expert Squad package", () => {
             ])
             if (agentID === "light-planner") {
               expect(worker.promptOverlay).toContain("When assigned a file or source, read it before deciding")
-              expect(worker.promptOverlay).toContain("Report the actual source locator, decisive observed values and comparison")
+              expect(worker.promptOverlay).toContain(
+                "Report the actual source locator, decisive observed values and comparison",
+              )
             }
             return {
               agentID: worker.identity.agentID,
@@ -273,7 +284,9 @@ describe("Light Expert Squad package", () => {
     })
   })
 
-  test.each([false, true])("settles four overlapping Light dispatches (injected fixture failure: %s)", async (failAfterStarted) => {
+  test.each([false, true])(
+    "settles four overlapping Light dispatches (injected fixture failure: %s)",
+    async (failAfterStarted) => {
     await using project = await memoryProject()
     const injectedFailure = new Error("injected Light fixture failure after worker admission")
     let processorFinishes = 0
@@ -399,8 +412,9 @@ describe("Light Expert Squad package", () => {
           collectionAdmissionLease = IngressTestHooks.replaceBeforeTerminalLifecycleDelivery((input) => {
             if (input.taskID === taskID) collectionAdmissionObservedFinishedCounts.push(processorFinishes)
           })
-          const creatorIngress = Database.use((db) => db.select().from(EngineTaskRootIngressTable)
-            .where(eq(EngineTaskRootIngressTable.task_id, taskID)).get())
+            const creatorIngress = Database.use((db) =>
+              db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.task_id, taskID)).get(),
+            )
           if (!creatorIngress) throw new Error("Light fixture has no Task creation ingress")
           const activation = acquireTaskRootIngressLease({
             ingressID: creatorIngress.id,
@@ -416,7 +430,10 @@ describe("Light Expert Squad package", () => {
             title: "Light dispatching Turn",
           })
           const control = currentOrchestratorControlMessage(
-            { taskCreation: { taskID } }, taskID, creatorIngress.id, creatorIngress.id,
+              { taskCreation: { taskID } },
+              taskID,
+              creatorIngress.id,
+              creatorIngress.id,
           )
           if (!control) throw new Error("Light fixture has no canonical creator control Message")
           const parentMessageID = control.messageID
@@ -432,7 +449,8 @@ describe("Light Expert Squad package", () => {
               agent: "orchestrator",
               model,
             },
-            parts: [{
+              parts: [
+                {
               id: control.partID,
               sessionID: orchestrator.id,
               messageID: parentMessageID,
@@ -440,7 +458,8 @@ describe("Light Expert Squad package", () => {
               text: control.text,
               kind: "control",
               source: "system",
-            }],
+                },
+              ],
           })
           await Session.persistMessage({
             info: {
@@ -473,7 +492,7 @@ describe("Light Expert Squad package", () => {
               toolID,
               toolID === "capability_search"
                 ? { description: capabilitySearch.description, inputSchema: capabilitySearch.parameters }
-                : rawSchedulerTools[toolID] as AITool,
+                  : (rawSchedulerTools[toolID] as AITool),
             ]),
           )
           const schedulerToolBudget = RequestBudget.estimateToolPayload(projectedSchedulerTools)
@@ -488,7 +507,8 @@ describe("Light Expert Squad package", () => {
           let processorStarts = 0
           const workerToolBudgets = new Map<string, ReturnType<typeof RequestBudget.estimateToolPayload>>()
           const workerPhases = new Map<string, string>()
-          const workerProgress = () => JSON.stringify([...workerPhases.entries()].sort(([a], [b]) => a.localeCompare(b)))
+            const workerProgress = () =>
+              JSON.stringify([...workerPhases.entries()].sort(([a], [b]) => a.localeCompare(b)))
           let resolveAllStarted!: () => void
           let resolveAllFinished!: () => void
           let rejectAllStarted!: (reason: unknown) => void
@@ -530,9 +550,27 @@ describe("Light Expert Squad package", () => {
                     }
                     const revealed = await resolveTestCapabilityTools(common)
                     workerPhases.set(assistant.sessionID, "initial-tools-ready")
-                    expect(Object.keys(revealed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "read_agent_message", "search_code", "webfetch", "websearch"])
+                      expect(Object.keys(revealed.tools).sort()).toEqual([
+                        "artifact_publish",
+                        "artifact_read",
+                        "artifact_search",
+                        "artifact_select",
+                        "artifact_snapshot",
+                        "capability_search",
+                        "external_code_search",
+                        "glob",
+                        "publish_interactive_artifact",
+                        "read",
+                        "read_agent_message",
+                        "search_code",
+                        "webfetch",
+                        "websearch",
+                      ])
                     const authoredWorker = await PromptProfileResolver.resolveWorkerCapability({
-                      projectDirectory: project.path, config, packageRevision, agentID: streamInput.agentID,
+                        projectDirectory: project.path,
+                        config,
+                        packageRevision,
+                        agentID: streamInput.agentID,
                     })
                     // Use the exact installed prompt bytes, then validate them through
                     // the real frozen Catalog/Harness and materialization owner.
@@ -540,38 +578,73 @@ describe("Light Expert Squad package", () => {
                       queries: ["light/shared/method"],
                       deactivate_refs: [],
                       limit: 5,
-                      exact_refs: authoredRevealRefs(authoredWorker.promptOverlay).filter((ref) => ref.kind === "skill"),
+                        exact_refs: authoredRevealRefs(authoredWorker.promptOverlay).filter(
+                          (ref) => ref.kind === "skill",
+                        ),
                     }
                     const revealID = `call_reveal_light_method_and_read_${assistant.id}`
                     const revealContext = { toolCallId: revealID, messages: [], abortSignal: input.abort }
-                    const opened = await revealed.tools.capability_search!.execute!(revealInput, revealContext) as
-                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                      const opened = (await revealed.tools.capability_search!.execute!(
+                        revealInput,
+                        revealContext,
+                      )) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(JSON.parse(opened.output)).toMatchObject({
                       reveal_revision: 1,
                       active_refs: revealInput.exact_refs,
                     })
-                    await processor.completeRecoveredToolPart({ toolCallID: revealID, toolInput: revealInput, output: opened })
+                      await processor.completeRecoveredToolPart({
+                        toolCallID: revealID,
+                        toolInput: revealInput,
+                        output: opened,
+                      })
                     workerPhases.set(assistant.sessionID, "skill-reveal-persisted")
-                    const replayed = await revealed.tools.capability_search!.execute!(revealInput, revealContext) as
-                      Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                      const replayed = (await revealed.tools.capability_search!.execute!(
+                        revealInput,
+                        revealContext,
+                      )) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(replayed.output).toBe(opened.output)
                     const skill = revealed.occurrence.payload.descriptors.find(
-                      (descriptor) => descriptor.ref.kind === "skill" && descriptor.ref.local_ref === "light/shared/method",
+                        (descriptor) =>
+                          descriptor.ref.kind === "skill" && descriptor.ref.local_ref === "light/shared/method",
                     )
                     if (!skill || skill.behavior.kind !== "open_skill") {
                       throw new Error("Light method has no exact Skill behavior")
                     }
                     expect(skill.behavior.name).toBe("light-advisory-method")
                     const reconstructed = await resolveTestCapabilityTools(common)
-                    expect(Object.keys(reconstructed.tools).sort()).toEqual(["artifact_publish", "artifact_read", "artifact_search", "artifact_select", "artifact_snapshot", "capability_search", "external_code_search", "glob", "publish_interactive_artifact", "read", "read_agent_message", "search_code", "skill", "webfetch", "websearch"])
-                    const loaded = await reconstructed.tools.skill!.execute!(
+                      expect(Object.keys(reconstructed.tools).sort()).toEqual([
+                        "artifact_publish",
+                        "artifact_read",
+                        "artifact_search",
+                        "artifact_select",
+                        "artifact_snapshot",
+                        "capability_search",
+                        "external_code_search",
+                        "glob",
+                        "publish_interactive_artifact",
+                        "read",
+                        "read_agent_message",
+                        "search_code",
+                        "skill",
+                        "webfetch",
+                        "websearch",
+                      ])
+                      const loaded = (await reconstructed.tools.skill!.execute!(
                       { name: skill.behavior.name },
-                      { toolCallId: `call_load_light_method_${assistant.id}`, messages: [], abortSignal: input.abort },
-                    ) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                        {
+                          toolCallId: `call_load_light_method_${assistant.id}`,
+                          messages: [],
+                          abortSignal: input.abort,
+                        },
+                      )) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(loaded.metadata.name).toBe("light-advisory-method")
                     expect(loaded.output).toContain('<skill_content name="light-advisory-method">')
-                    expect(loaded.output).toContain("For every Planner and Investigator partition, an explicitly assigned source is a verification obligation")
-                    expect(loaded.output).toContain("a paraphrase is not a substitute for an explicitly required line")
+                      expect(loaded.output).toContain(
+                        "For every Planner and Investigator partition, an explicitly assigned source is a verification obligation",
+                      )
+                      expect(loaded.output).toContain(
+                        "a paraphrase is not a substitute for an explicitly required line",
+                      )
                     await processor.completeRecoveredToolPart({
                       toolCallID: `call_load_light_method_${assistant.id}`,
                       toolInput: { name: skill.behavior.name },
@@ -584,11 +657,17 @@ describe("Light Expert Squad package", () => {
                     await Bun.write(filePath, evidence)
                     const readInput = { filePath }
                     const readID = `call_read_light_evidence_${assistant.id}`
-                    const contents = await readable.tools.read!.execute!(readInput, {
-                      toolCallId: readID, messages: [], abortSignal: input.abort,
-                    }) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
+                      const contents = (await readable.tools.read!.execute!(readInput, {
+                        toolCallId: readID,
+                        messages: [],
+                        abortSignal: input.abort,
+                      })) as Parameters<typeof processor.completeRecoveredToolPart>[0]["output"]
                     expect(contents.output).toContain(evidence)
-                    await processor.completeRecoveredToolPart({ toolCallID: readID, toolInput: readInput, output: contents })
+                      await processor.completeRecoveredToolPart({
+                        toolCallID: readID,
+                        toolInput: readInput,
+                        output: contents,
+                      })
                     workerPhases.set(assistant.sessionID, "evidence-read")
                   }
                   processorStarts++
@@ -762,12 +841,14 @@ describe("Light Expert Squad package", () => {
             } as never,
           )) as { output: string }
           const collectionMembers = JSON.parse(collectionResult.output).members
-          expect(collectionMembers).toMatchObject(targets.map((target, member_index) => ({
+            expect(collectionMembers).toMatchObject(
+              targets.map((target, member_index) => ({
             member_index,
             target,
             status: "completed",
             outcome: { kind: "accepted" },
-          })))
+              })),
+            )
           const receipts = collectionMembers.map(
             (member: { status: string; outcome?: { kind: string; session_id?: string } }) => member.outcome,
           ) as Array<{ kind: string; session_id?: string }>
@@ -825,7 +906,9 @@ describe("Light Expert Squad package", () => {
               count: targets.length,
             })),
           )
-          expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual(targets.map(() => "direct"))
+            expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual(
+              targets.map(() => "direct"),
+            )
           expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual(targets.map(() => null))
           expect(
             childSessionIDs
@@ -835,8 +918,9 @@ describe("Light Expert Squad package", () => {
           expect(requests.map((request) => request.dispatch.turn.use_worktree)).toEqual([false, false, false, false])
 
           const runningProjection = renderTaskProjectionContext(undefined, await describeTask(taskID))
-          expect(runningProjection.baseline.workflow_execution?.nodes.flatMap((node) => node.dispatches)
-            .map((dispatch) => dispatch.settlement)).toEqual(targets.map(() => null))
+            expect(
+              runningProjection.baseline.dispatch_execution?.dispatches.map((dispatch) => dispatch.settlement),
+            ).toEqual(targets.map(() => null))
 
           if (!releaseWorkers) throw new Error("Light worker release callback was not initialized")
           releaseWorkers()
@@ -879,7 +963,7 @@ describe("Light Expert Squad package", () => {
           expect(applyTaskProjectionDelta(JSON.parse(projected.parts[0]!), projected.parts[1]!)).toEqual(
             JSON.parse(JSON.stringify(settled)),
           )
-          const dispatches = settled.workflow_execution!.nodes.flatMap((node) => node.dispatches)
+            const dispatches = settled.dispatch_execution!.dispatches
           expect(dispatches.length).toBe(4)
           const reader = createReadAgentMessageTool({ taskID }).read_agent_message
           const finalIDs: string[] = []
@@ -898,7 +982,8 @@ describe("Light Expert Squad package", () => {
             validate?: (
               value: unknown,
             ) => Promise<
-              { success: true; value: { sources: Array<{ kind: "dispatch_result"; message_id: string }> } } | { success: false; error: Error }
+                | { success: true; value: { sources: Array<{ kind: "dispatch_result"; message_id: string }> } }
+                | { success: false; error: Error }
             >
           }
           const providerSchema = providerContract.jsonSchema
@@ -909,7 +994,11 @@ describe("Light Expert Squad package", () => {
           })
           expect(providerSchema.properties.inventory_before).toBeDefined()
           expect(providerSchema.properties.evidence_reads).toBeDefined()
-          expect(await providerContract.validate?.({ sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })) })).toEqual({
+            expect(
+              await providerContract.validate?.({
+                sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
+              }),
+            ).toEqual({
             success: true,
             value: { sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })) },
           })
@@ -922,9 +1011,17 @@ describe("Light Expert Squad package", () => {
           })
           expect(oversizedEvidence?.success).toBe(false)
           if (oversizedEvidence?.success === false) {
-            expect(oversizedEvidence.error.message).toContain("at most 30000 characters per call")
+              expect(JSON.parse(oversizedEvidence.error.message)).toMatchObject([
+                {
+                  code: "custom",
+                  path: ["evidence_reads"],
+                  params: { requested_total: 40_000, default_limit: 8_000, max_total: 30_000 },
+                },
+              ])
           }
-          const rejected = await providerContract.validate?.({ sources: [{ kind: "dispatch_result" as const, message_id: "msg_not_a_current_settlement" }] })
+            const rejected = await providerContract.validate?.({
+              sources: [{ kind: "dispatch_result" as const, message_id: "msg_not_a_current_settlement" }],
+            })
           expect(rejected?.success).toBe(false)
           if (rejected?.success === false) {
             expect(rejected.error.message).toContain("not a terminal dispatch settlement")
@@ -969,12 +1066,14 @@ describe("Light Expert Squad package", () => {
             (await reader.execute!(
               {
                 sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
-                evidence_reads: [{
+                  evidence_reads: [
+                    {
                   message_id: evidenceSelection.message_id,
                   part_id: evidenceSelection.part_id,
                   field: "output",
                   limit: 5,
-                }],
+                    },
+                  ],
               },
               { toolCallId: "read_collection_evidence", messages: [] },
             )) as string,
@@ -996,11 +1095,13 @@ describe("Light Expert Squad package", () => {
             (await reader.execute!(
               {
                 sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
-                evidence_reads: [{
+                  evidence_reads: [
+                    {
                   message_id: evidenceSelection.message_id,
                   part_id: evidenceSelection.part_id,
                   field: "input",
-                }],
+                    },
+                  ],
               },
               { toolCallId: "read_collection_evidence_input", messages: [] },
             )) as string,
@@ -1012,11 +1113,13 @@ describe("Light Expert Squad package", () => {
             reader.execute!(
               {
                 sources: finalIDs.map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
-                evidence_reads: [{
+                  evidence_reads: [
+                    {
                   message_id: "msg_not_a_causal_tool_message",
                   part_id: evidenceSelection.part_id,
                   field: "output",
-                }],
+                    },
+                  ],
               },
               { toolCallId: "read_invalid_collection_evidence", messages: [] },
             ),
@@ -1040,11 +1143,14 @@ describe("Light Expert Squad package", () => {
               workflowNodeID: sourceLineage.payload.workflow_node_id,
               adapterInput: sourceLineage.payload.adapter_input,
             })
-            const laterLineage = recordTestDispatchLineage({
+              const laterLineage = recordTestDispatchLineage(
+                {
               origin: laterOrigin,
               childSessionID: sourceLineage.payload.child_session_id,
               now: laterNow + index,
-            }, { completeCreatorAssistant: false })
+                },
+                { completeCreatorAssistant: false },
+              )
             recordDispatchSettlement({
               taskID,
               dispatchID: laterLineage.dispatchID,
@@ -1079,11 +1185,26 @@ describe("Light Expert Squad package", () => {
           const historicalContract = asSchema(historicalReader.inputSchema) as {
             validate?: (
               value: unknown,
-            ) => Promise<{ success: true; value: { sources: Array<{ kind: "dispatch_result"; message_id: string }> } } | { success: false; error: Error }>
+              ) => Promise<
+                | { success: true; value: { sources: Array<{ kind: "dispatch_result"; message_id: string }> } }
+                | { success: false; error: Error }
+              >
           }
-          expect(await historicalContract.validate?.({ sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({ kind: "dispatch_result" as const, message_id })) })).toEqual({
+            expect(
+              await historicalContract.validate?.({
+                sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({
+                  kind: "dispatch_result" as const,
+                  message_id,
+                })),
+              }),
+            ).toEqual({
             success: true,
-            value: { sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({ kind: "dispatch_result" as const, message_id })) },
+              value: {
+                sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({
+                  kind: "dispatch_result" as const,
+                  message_id,
+                })),
+              },
           })
           const historicalEvidenceSelection = output.causal_tool_message_inventory
             .filter((message: { session_id: string }) => message.session_id === dispatches[2]!.session_id)
@@ -1091,22 +1212,30 @@ describe("Light Expert Squad package", () => {
               message.tool_facts.map((part) => ({ message_id: message.message_id, ...part })),
             )
             .find((part: { tool_name: string }) => part.tool_name === "read")
-          if (!historicalEvidenceSelection) throw new Error("Historical worker occurrence has no causal read Tool Part")
+            if (!historicalEvidenceSelection)
+              throw new Error("Historical worker occurrence has no causal read Tool Part")
           const historicalEvidenceOutput = JSON.parse(
             (await historicalReader.execute!(
               {
-                sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({ kind: "dispatch_result" as const, message_id })),
-                inventory_before: [{
+                  sources: [finalIDs[0]!, finalIDs[2]!].map((message_id) => ({
+                    kind: "dispatch_result" as const,
+                    message_id,
+                  })),
+                  inventory_before: [
+                    {
                   source: { kind: "dispatch_result", message_id: finalIDs[2]! },
                   before_message_id: historicalEvidenceSelection.message_id,
                   before_part_id: historicalEvidenceSelection.part_id,
-                }],
-                evidence_reads: [{
+                    },
+                  ],
+                  evidence_reads: [
+                    {
                   message_id: historicalEvidenceSelection.message_id,
                   part_id: historicalEvidenceSelection.part_id,
                   field: "output",
                   limit: 5,
-                }],
+                    },
+                  ],
               },
               { toolCallId: "read_historical_collection_evidence", messages: [] },
             )) as string,
@@ -1163,5 +1292,7 @@ describe("Light Expert Squad package", () => {
       processorSpy?.mockRestore()
       providerSpy?.mockRestore()
     }
-  }, 60_000)
+    },
+    60_000,
+  )
 })

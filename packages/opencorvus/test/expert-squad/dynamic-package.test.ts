@@ -87,7 +87,7 @@ afterEach(async () => {
 })
 
 describe("Dynamic Expert Squad package", () => {
-  test("loads and installs the direct-dispatch package with two reusable capability envelopes", async () => {
+  test("resolves the embedded default with two reusable capability envelopes", async () => {
     const source = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
     expect(source.manifest).toMatchObject({
       namespace: "builtin",
@@ -103,27 +103,17 @@ describe("Dynamic Expert Squad package", () => {
       },
     })
     expect([...source.packageSkills.keys()]).toEqual([skillRef])
-    expect(
-      allCapabilityGrants(source.manifest).map((grant) => grant.packageSkillRefs),
-    ).toEqual([[skillRef], [skillRef], [skillRef]])
+    expect(allCapabilityGrants(source.manifest).map((grant) => grant.packageSkillRefs)).toEqual([
+      [skillRef],
+      [skillRef],
+      [skillRef],
+    ])
 
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const receipt = await ExpertSquadPackageManager.installPayloadPackage({
-          projectDirectory: project.path,
-          id: "dynamic",
-          installationScope: "project",
-        })
-        expect(receipt).toMatchObject({
-          operation: "installed",
-          after: { installationScope: "project", namespace: "builtin", id: "dynamic", version: "2026.09.05.1" },
-        })
-
-        const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
-          prompt_profile: { active: "dynamic" },
-        })
+        const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {})
         const revision = await PromptProfileResolver.resolveActivePackageRevision({
           projectDirectory: project.path,
           config,
@@ -148,10 +138,6 @@ describe("Dynamic Expert Squad package", () => {
 
         expect(scheduler.virtualWorkflows).toEqual({})
         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([skillRef])
-        expect(scheduler.promptOverlay).toContain("required `dispatch_agents.team` rows")
-        expect(scheduler.promptOverlay).toContain("same visible streamed assistant Tool call")
-        expect(scheduler.promptOverlay).toContain("`team` and `dispatches` are aligned arrays")
-        expect(scheduler.promptOverlay).toContain("Immediately call `dispatch_agents` once")
         expect(scheduler.builtInToolIDs).toEqual([
           "artifact_read",
           "artifact_search",
@@ -166,9 +152,7 @@ describe("Dynamic Expert Squad package", () => {
           "read_task_message",
           "skill",
         ])
-        expect(scheduler.promptOverlay).toContain(
-          "submit the ordered list in one `read_agent_message` call",
-        )
+        expect(scheduler.promptOverlay).toContain("Read the exact settled `final_message_id` values together")
         expect({
           generalist: {
             identity: generalist.identity,
@@ -188,25 +172,27 @@ describe("Dynamic Expert Squad package", () => {
             skillRefs: [skillRef],
           },
         })
-        expect([...generalist.builtInToolIDs].sort()).toEqual([
-          "artifact_search",
-          "artifact_read",
-          "artifact_select",
-          "artifact_snapshot",
-          "artifact_publish",
-          "publish_interactive_artifact",
-          "capability_search",
-          "read",
-          "read_agent_message",
-          "glob",
-          "search_code",
-          "webfetch",
-          "websearch",
-          "external_code_search",
-          "skill",
-          "request_orchestrator_decision",
-          "send_mailbox_message",
-        ].sort())
+        expect([...generalist.builtInToolIDs].sort()).toEqual(
+          [
+            "artifact_search",
+            "artifact_read",
+            "artifact_select",
+            "artifact_snapshot",
+            "artifact_publish",
+            "publish_interactive_artifact",
+            "capability_search",
+            "read",
+            "read_agent_message",
+            "glob",
+            "search_code",
+            "webfetch",
+            "websearch",
+            "external_code_search",
+            "skill",
+            "request_orchestrator_decision",
+            "send_mailbox_message",
+          ].sort(),
+        )
         expect(builder.builtInToolIDs).toEqual(
           expect.arrayContaining(["artifact_search", "artifact_publish", "bash", "edit", "write", "apply_patch"]),
         )
@@ -270,12 +256,6 @@ describe("Dynamic Expert Squad package", () => {
         directory: project.path,
         fn: async () => {
           ingressRunnerLease = IngressTestHooks.replaceTaskIngressRunner(ingressRunner)
-          await ExpertSquadPackageManager.importDirectory({
-            projectDirectory: project.path,
-            sourceDirectory: packageRoot,
-            replace: false,
-            installationScope: "project",
-          })
           const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
             prompt_profile: { active: "dynamic" },
           })
@@ -324,11 +304,7 @@ describe("Dynamic Expert Squad package", () => {
             }),
           })
           const creatorIngress = Database.use((db) =>
-            db
-              .select()
-              .from(EngineTaskRootIngressTable)
-              .where(eq(EngineTaskRootIngressTable.task_id, taskID))
-              .get(),
+            db.select().from(EngineTaskRootIngressTable).where(eq(EngineTaskRootIngressTable.task_id, taskID)).get(),
           )
           if (!creatorIngress) throw new Error("Dynamic fixture has no Task creation ingress")
           const activation = acquireTaskRootIngressLease({
@@ -402,7 +378,7 @@ describe("Dynamic Expert Squad package", () => {
                 work_scope: { kind: "task" },
                 turn: {
                   kind: "initial",
-                  workflow_subject: { kind: "direct" },
+
                   use_worktree: false,
                   input: {
                     goal_ids: [],
@@ -418,7 +394,7 @@ describe("Dynamic Expert Squad package", () => {
                 work_scope: { kind: "task" },
                 turn: {
                   kind: "initial",
-                  workflow_subject: { kind: "direct" },
+
                   use_worktree: false,
                   input: {
                     goal_ids: [],
@@ -512,8 +488,8 @@ describe("Dynamic Expert Squad package", () => {
               id === "delegated_worker"
                 ? async (args: unknown, context: unknown) => workerTool.execute!(args as never, context as never)
                 : async () => {
-                      throw new Error(`unexpected ${id} adapter execution`)
-                    },
+                    throw new Error(`unexpected ${id} adapter execution`)
+                  },
             ]),
           ) as Record<AgentDispatchAdapterID, DispatchAdapterExecutors[AgentDispatchAdapterID]>
           const dispatchTool = createDispatchAgentTool({
@@ -536,14 +512,18 @@ describe("Dynamic Expert Squad package", () => {
               if (!workflowBinding || workflowBinding.kind !== "direct" || workflowNodeID !== null) {
                 throw new Error("Dynamic dispatch must retain direct workflow authority")
               }
-              const execution = (toolOptions as {
-                opencorvus?: {
-                  toolPartID?: unknown
-                  toolCallID?: unknown
-                  visibleToolName?: unknown
-                  collectionMember?: { index?: unknown; count?: unknown }
-                }
-              } | undefined)?.opencorvus
+              const execution = (
+                toolOptions as
+                  | {
+                      opencorvus?: {
+                        toolPartID?: unknown
+                        toolCallID?: unknown
+                        visibleToolName?: unknown
+                        collectionMember?: { index?: unknown; count?: unknown }
+                      }
+                    }
+                  | undefined
+              )?.opencorvus
               const toolPartID = typeof execution?.toolPartID === "string" ? execution.toolPartID : ""
               const toolCallID = typeof execution?.toolCallID === "string" ? execution.toolCallID : ""
               if (!toolPartID || !toolCallID) {
@@ -610,16 +590,19 @@ describe("Dynamic Expert Squad package", () => {
           if (!dispatchTool.execute) throw new Error("dispatch_agent has no production executor")
           const frontierTool = createDispatchAgentsTool(dispatchTool)
           if (!frontierTool.execute) throw new Error("dispatch_agents has no production executor")
-          const frontierResult = (await frontierTool.execute(frontierInput as never, {
-            toolCallId: frontierPartID,
-            opencorvus: {
-              sessionID: orchestrator.id,
-              messageID: orchestratorMessageID,
-              toolCallID: frontierPartID,
-              toolPartID: frontierPartID,
-              visibleToolName: "dispatch_agents",
-            },
-          } as never)) as { output: string; title: string; metadata: { members: any[] } }
+          const frontierResult = (await frontierTool.execute(
+            frontierInput as never,
+            {
+              toolCallId: frontierPartID,
+              opencorvus: {
+                sessionID: orchestrator.id,
+                messageID: orchestratorMessageID,
+                toolCallID: frontierPartID,
+                toolPartID: frontierPartID,
+                visibleToolName: "dispatch_agents",
+              },
+            } as never,
+          )) as { output: string; title: string; metadata: { members: any[] } }
           await Session.updatePart({
             id: frontierPartID,
             sessionID: orchestrator.id,
@@ -682,23 +665,14 @@ describe("Dynamic Expert Squad package", () => {
             "dynamic-generalist",
             "dynamic-generalist",
           ])
-          expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual([
-            "direct",
-            "direct",
-          ])
+          expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual(["direct", "direct"])
           expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual([null, null])
           expect(lineages.map((lineage) => lineage.payload.orchestrator_message_id)).toEqual([
             orchestratorMessageID,
             orchestratorMessageID,
           ])
-          expect(lineages.map((lineage) => lineage.payload.tool_part_id)).toEqual([
-            frontierPartID,
-            frontierPartID,
-          ])
-          expect(lineages.map((lineage) => lineage.payload.tool_name)).toEqual([
-            "dispatch_agents",
-            "dispatch_agents",
-          ])
+          expect(lineages.map((lineage) => lineage.payload.tool_part_id)).toEqual([frontierPartID, frontierPartID])
+          expect(lineages.map((lineage) => lineage.payload.tool_name)).toEqual(["dispatch_agents", "dispatch_agents"])
           expect(lineages.map((lineage) => lineage.payload.collection_member_index).toSorted()).toEqual([0, 1])
           expect(lineages.map((lineage) => lineage.payload.collection_member_count).toSorted()).toEqual([2, 2])
           expect(
@@ -738,7 +712,12 @@ describe("Dynamic Expert Squad package", () => {
             })
           }
           const exactMessages = await readAgentMessage.execute(
-            { sources: finalMessages.map((message) => ({ kind: "dispatch_result" as const, message_id: message.messageID })) },
+            {
+              sources: finalMessages.map((message) => ({
+                kind: "dispatch_result" as const,
+                message_id: message.messageID,
+              })),
+            },
             {
               toolCallId: Identifier.ascending("call"),
               messages: [],

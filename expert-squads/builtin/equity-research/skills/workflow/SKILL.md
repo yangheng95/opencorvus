@@ -5,7 +5,7 @@ description: Execute the binding Equity Research evidence chain through exact Ta
 
 # Equity Research workflow
 
-Use only `equity-research-report`. Every declared node must produce terminal-success evidence before dependent work starts. `equity-fundamentals-analyst` and `equity-valuation-analyst` may run in parallel after the source dossier; no other dependency may be reordered.
+Use only `equity-research-report`. Actual evidence needed by a consumer must exist before it is used; reference nodes are optional. `equity-fundamentals-analyst` and `equity-valuation-analyst` may run in parallel after the source dossier; no other dependency may be reordered.
 
 Each worker searches the current Task catalog for predecessor type and immutable workflow/node provenance, completely reads every candidate it inspects, selects every exact supporting Artifact, and publishes one complete structured output. Dispatch prose carries intent and scope only, never copied predecessor content or private paths.
 

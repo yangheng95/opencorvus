@@ -3,10 +3,7 @@ import path from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 import z from "zod"
 import { CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
-import {
-  ExpertSquadManifestV2Schema,
-  type ExpertSquadManifestV2,
-} from "./expert-squad-manifest-v2.js"
+import { ExpertSquadManifestV2Schema, type ExpertSquadManifestV2 } from "./expert-squad-manifest-v2.js"
 import { isCanonicalProjectRelativePath } from "./project-path.js"
 import {
   PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS,
@@ -128,7 +125,7 @@ export interface WriteExpertSquadPackageResult {
 export interface ExpertSquadCollaborationStage {
   id: string
   squad_id: string
-  workflow_id: string
+  workflow_id?: string
   depends_on: readonly string[]
   consumes: readonly string[]
   produces: readonly string[]
@@ -255,7 +252,9 @@ function throwValidationDiagnostics(diagnostics: readonly ExpertSquadValidationD
 
 function projectionCapabilityLeaves(
   manifest: ExpertSquadManifestV2,
-  projection: ExpertSquadManifestV2["capability_projection"]["scheduler"] | ExpertSquadManifestV2["capability_projection"]["agents"][string],
+  projection:
+    | ExpertSquadManifestV2["capability_projection"]["scheduler"]
+    | ExpertSquadManifestV2["capability_projection"]["agents"][string],
 ): CapabilityRef[] {
   return projection.capability_refs.flatMap((encoded) => {
     const ref = CapabilityRefCodec.decode(encoded)
@@ -301,7 +300,7 @@ export function validateExpertSquadManifestDispatchTopology(input: unknown): Exp
   throwValidationDiagnostics(shape.diagnostics)
   const manifest = shape.manifest!
   const diagnostics: ExpertSquadValidationDiagnostic[] = []
-  for (const [workflowID, workflow] of Object.entries(manifest.capability_projection.virtual_workflows)) {
+  for (const [workflowID, workflow] of Object.entries(manifest.capability_projection.virtual_workflows ?? {})) {
     const workflowPath = `manifest.capability_projection.virtual_workflows.${workflowID}`
     for (const [nodeID, node] of Object.entries(workflow.nodes)) {
       const nodePath = `${workflowPath}.nodes.${nodeID}`
@@ -312,7 +311,7 @@ export function validateExpertSquadManifestDispatchTopology(input: unknown): Exp
         })
       }
       for (const dependencyID of node.depends_on) {
-        if (dependencyID === nodeID) {
+        if (workflow.strategy === "dag" && dependencyID === nodeID) {
           diagnostics.push({ path: `${nodePath}.depends_on`, message: "cannot depend on itself" })
         }
         if (!Object.hasOwn(workflow.nodes, dependencyID)) {
@@ -338,7 +337,7 @@ export function validateExpertSquadManifestDispatchTopology(input: unknown): Exp
       visited.add(nodeID)
     }
     for (const nodeID of Object.keys(workflow.nodes).sort()) visit(nodeID)
-    if (cycleNodes.size > 0) {
+    if (workflow.strategy === "dag" && cycleNodes.size > 0) {
       diagnostics.push({
         path: `${workflowPath}.nodes`,
         message: `contains a dependency cycle involving ${[...cycleNodes].sort().join(", ")}`,
@@ -346,7 +345,7 @@ export function validateExpertSquadManifestDispatchTopology(input: unknown): Exp
     }
   }
   throwValidationDiagnostics(diagnostics)
-  return input as ExpertSquadManifestV2
+  return manifest
 }
 
 /** A deterministic read-only view of one dependency depth in a virtual workflow. */
@@ -365,9 +364,10 @@ export interface ExpertSquadWorkflowTopologyAnalysis {
   readonly initial_frontier_node_ids: readonly string[]
   readonly waves: readonly ExpertSquadWorkflowTopologyWave[]
   readonly join_node_ids: readonly string[]
-  readonly critical_path_node_count: number
-  readonly maximum_parallel_width: number
-  readonly structure: "flat_planner_parallel_workers" | "parallel_workers_join" | "dependency_dag"
+  readonly critical_path_node_count: number | null
+  readonly maximum_parallel_width: number | null
+  readonly structure: "flat_planner_parallel_workers" | "parallel_workers_join" | "dependency_dag" | "adaptive_graph"
+  readonly strategy: "adaptive" | "dag" | "loop" | "choice"
   readonly planner_node_id: string | null
   readonly parallel_worker_node_ids: readonly string[]
 }
@@ -377,13 +377,42 @@ export interface ExpertSquadWorkflowTopologyAnalysis {
  * Runtime remains the sole owner of dispatch readiness; this report only helps
  * package authors see joins and accidental serialization before installation.
  */
-export function analyzeExpertSquadWorkflowTopology(
-  input: unknown,
-): readonly ExpertSquadWorkflowTopologyAnalysis[] {
+export function analyzeExpertSquadWorkflowTopology(input: unknown): readonly ExpertSquadWorkflowTopologyAnalysis[] {
   const manifest = validateExpertSquadManifestDispatchTopology(input)
-  return Object.entries(manifest.capability_projection.virtual_workflows)
+  return Object.entries(manifest.capability_projection.virtual_workflows ?? {})
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([workflowID, workflow]) => {
+      const visiting = new Set<string>()
+      const visited = new Set<string>()
+      let cyclic = false
+      const inspect = (id: string): void => {
+        if (visiting.has(id)) {
+          cyclic = true
+          return
+        }
+        if (visited.has(id)) return
+        visiting.add(id)
+        for (const predecessor of workflow.nodes[id]!.depends_on) inspect(predecessor)
+        visiting.delete(id)
+        visited.add(id)
+      }
+      for (const id of Object.keys(workflow.nodes)) inspect(id)
+      if (cyclic || Object.keys(workflow.nodes).length === 0)
+        return {
+          workflow_id: workflowID,
+          strategy: workflow.strategy ?? "adaptive",
+          node_count: Object.keys(workflow.nodes).length,
+          initial_frontier_node_ids: Object.keys(workflow.nodes)
+            .filter((id) => workflow.nodes[id]!.depends_on.length === 0)
+            .sort(),
+          waves: [],
+          join_node_ids: [],
+          critical_path_node_count: null,
+          maximum_parallel_width: null,
+          structure: "adaptive_graph" as const,
+          planner_node_id: null,
+          parallel_worker_node_ids: [],
+        }
       const depths = new Map<string, number>()
       const depthOf = (nodeID: string): number => {
         const known = depths.get(nodeID)
@@ -423,6 +452,7 @@ export function analyzeExpertSquadWorkflowTopology(
         initialFrontier.every((nodeID) => workflow.nodes[secondFrontier[0]!]!.depends_on.includes(nodeID))
       return {
         workflow_id: workflowID,
+        strategy: workflow.strategy ?? "adaptive",
         node_count: Object.keys(workflow.nodes).length,
         initial_frontier_node_ids: initialFrontier,
         waves,
@@ -441,69 +471,6 @@ export function analyzeExpertSquadWorkflowTopology(
         parallel_worker_node_ids: plannerNodeID ? secondFrontier : [],
       }
     })
-}
-
-/**
- * Repository-shipped Expert Squads follow a stronger product policy than the
- * public manifest ABI. Third-party packages may retain any valid acyclic
- * evidence graph. Shipped non-Advanced packages may not project the platform
- * Visual QA or Integrity review runtimes, and may not recreate the retired
- * Requirements -> Architect -> Implementer delivery chain. Advanced is the
- * explicit product exception because that package owns those specialist ABIs.
- */
-export function validateBuiltInExpertSquadTopologyPolicy(input: unknown): ExpertSquadManifestV2 {
-  const manifest = validateExpertSquadManifestDispatchTopology(input)
-  if (manifest.id === "advanced") return manifest
-
-  const diagnostics: ExpertSquadValidationDiagnostic[] = []
-  for (const [agentID, agent] of Object.entries(manifest.capability_projection.agents)) {
-    if (agent.base_role === "visual-qa" || agent.base_role === "integrity") {
-      diagnostics.push({
-        path: `manifest.capability_projection.agents.${agentID}.base_role`,
-        message: `shipped non-Advanced Expert Squads use Planner/worker ownership instead of ${agent.base_role} review runtime`,
-      })
-    }
-  }
-
-  for (const [workflowID, workflow] of Object.entries(manifest.capability_projection.virtual_workflows)) {
-    const requirementNodes = Object.entries(workflow.nodes)
-      .filter(([, node]) => manifest.capability_projection.agents[node.agent_id]?.base_role === "requirements")
-      .map(([nodeID]) => nodeID)
-    const architectNodes = Object.entries(workflow.nodes)
-      .filter(([, node]) => manifest.capability_projection.agents[node.agent_id]?.base_role === "architect")
-      .map(([nodeID]) => nodeID)
-    const buildNodes = Object.entries(workflow.nodes)
-      .filter(([, node]) => manifest.capability_projection.agents[node.agent_id]?.base_role === "build")
-      .map(([nodeID]) => nodeID)
-    const ancestors = (nodeID: string): Set<string> => {
-      const result = new Set<string>()
-      const visit = (current: string) => {
-        for (const dependency of workflow.nodes[current]?.depends_on ?? []) {
-          if (result.has(dependency)) continue
-          result.add(dependency)
-          visit(dependency)
-        }
-      }
-      visit(nodeID)
-      return result
-    }
-    const retiredChain = buildNodes.some((buildNodeID) => {
-      const buildAncestors = ancestors(buildNodeID)
-      return architectNodes.some((architectNodeID) => {
-        if (!buildAncestors.has(architectNodeID)) return false
-        const architectAncestors = ancestors(architectNodeID)
-        return requirementNodes.some((requirementNodeID) => architectAncestors.has(requirementNodeID))
-      })
-    })
-    if (retiredChain) {
-      diagnostics.push({
-        path: `manifest.capability_projection.virtual_workflows.${workflowID}.nodes`,
-        message: "shipped non-Advanced Expert Squads must replace Requirements -> Architect -> Implementer serialization with Planner and parallel workers",
-      })
-    }
-  }
-  throwValidationDiagnostics(diagnostics)
-  return manifest
 }
 
 function assertNonEmptyStrings(values: readonly string[], field: string): void {
@@ -754,15 +721,11 @@ export function validateExpertSquadSourceCapabilities(
 }
 
 /**
- * Validates a static cross-package authoring contract. Every node in a selected
- * manifest workflow remains mandatory at runtime; conditional paths belong in
- * separate workflows. Each workflow ID, label, and description must identify
- * one complete applicability variant and all mandatory inputs so callers do not
- * combine overlapping capability labels or select a graph whose required input
- * is absent. Every collaboration stage is one Mission-owned Task with a fixed
- * squad profile; every selected workflow node runs once for that Task and may
- * cite all applicable exact Delivery Slice revision IDs as subjects. This function does not create Tasks, select a
- * squad, dispatch an agent, persist stage state, or execute a workflow.
+ * Validates cross-package identity and evidence contracts. Each collaboration
+ * stage names a fixed Squad and its real inputs/outputs; workflow_id is optional
+ * reference provenance. Scheduling strategies and independent dispatch counts
+ * remain the runtime Orchestrator's judgment. This function does not create
+ * Tasks, select a Squad, dispatch an Agent, or execute a workflow.
  */
 export function validateExpertSquadCollaboration(
   input: ValidateExpertSquadCollaborationInput,
@@ -791,7 +754,8 @@ export function validateExpertSquadCollaboration(
   for (const stage of definition.stages) {
     assertCanonicalCollaborationID(stage.id, "Collaboration stage id")
     assertCanonicalCollaborationID(stage.squad_id, `Collaboration stage ${stage.id} squad_id`)
-    assertCanonicalCollaborationID(stage.workflow_id, `Collaboration stage ${stage.id} workflow_id`)
+    if (stage.workflow_id !== undefined)
+      assertCanonicalCollaborationID(stage.workflow_id, `Collaboration stage ${stage.id} workflow_id`)
     if (stageIDs.has(stage.id)) throw new Error(`Duplicate collaboration stage id: ${stage.id}`)
     stageIDs.add(stage.id)
 
@@ -804,8 +768,7 @@ export function validateExpertSquadCollaboration(
 
     const manifest = manifests.get(stage.squad_id)
     if (!manifest) throw new Error(`Collaboration stage ${stage.id} references unknown squad: ${stage.squad_id}`)
-    const workflow = manifest.capability_projection.virtual_workflows[stage.workflow_id]
-    if (!workflow) {
+    if (stage.workflow_id !== undefined && !manifest.capability_projection.virtual_workflows?.[stage.workflow_id]) {
       throw new Error(
         `Collaboration stage ${stage.id} references unknown workflow ${stage.workflow_id} in squad ${stage.squad_id}`,
       )
@@ -957,9 +920,7 @@ function requiredPackageText(
   return text
 }
 
-export function validateExpertSquadPackageDefinition(
-  input: unknown,
-): ExpertSquadPackageDefinition {
+export function validateExpertSquadPackageDefinition(input: unknown): ExpertSquadPackageDefinition {
   if (!input || typeof input !== "object" || Array.isArray(input)) {
     throw new ExpertSquadValidationError([{ path: "definition", message: "must be an object" }])
   }
@@ -1003,11 +964,7 @@ export function validateExpertSquadPackageDefinition(
       continue
     }
     packageDiagnostics.push(
-      ...collectRequiredPackageTextDiagnostic(
-        definition.files,
-        projection.prompt,
-        `Expert squad ${agentID} prompt`,
-      ),
+      ...collectRequiredPackageTextDiagnostic(definition.files, projection.prompt, `Expert squad ${agentID} prompt`),
     )
   }
   throwValidationDiagnostics(packageDiagnostics)

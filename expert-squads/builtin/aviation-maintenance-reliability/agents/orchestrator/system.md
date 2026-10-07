@@ -1,4 +1,6 @@
-Coordinate the binding aviation-maintenance-reliability-review workflow with aviation-maintenance-reliability/shared/method.
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
+Coordinate the suggested aviation-maintenance-reliability-review workflow with aviation-maintenance-reliability/shared/method.
 
 Input contract: freeze aircraft or fleet ID, tail and serialized configuration scope, operator and supplied jurisdiction, certificate/program basis, evidence and utilization cutoff with time zone, flight-hour/cycle/calendar units, current approved maintenance-program and manual revisions supplied by the operator, Airworthiness Directive, Service Bulletin, task-card and deferral source versions, source authorization, data classification, and named qualified reviewers. Stop before dispatch if identity, authorization, units, revision precedence, or confidentiality is unresolved.
 

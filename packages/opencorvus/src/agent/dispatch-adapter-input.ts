@@ -123,7 +123,7 @@ const FrontendResearchInputSchema = z
       )
       .min(1)
       .describe(
-        "Complete authorized frontend_research HTTP(S) source set for this single Task workflow occurrence. Use the plural field `source_urls`; do not send `url`, `source_url`, or URL fields to frontend_design. The active expert-squad worker acquires and partitions source-backed investigation evidence through visible tools. A different focus, viewport, interaction state, component, region, fidelity risk, missing-detail question, or additional independent URL does not authorize another occurrence of an already-dispatched workflow node.",
+        "Authorized frontend_research HTTP(S) source set for this bounded investigation responsibility. Use the plural field `source_urls`; do not send `url`, `source_url`, or URL fields to frontend_design. The active expert-squad worker acquires and partitions source-backed investigation evidence through visible tools. Choose a bounded source partition from actual evidence needs; continue the same responsibility or start independent investigations within granted capabilities.",
       ),
     focus: z
       .string()

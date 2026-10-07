@@ -5,6 +5,8 @@ import {
 } from "@/mission/execution-closure"
 import { SessionWake } from "@/session/wake"
 import { Config } from "@/config/config"
+import { Session } from "@/session"
+import { setMissionPendingPrompt } from "@/mission/session"
 
 export async function openMissionThroughRealWake(input: {
   missionID: string
@@ -13,6 +15,9 @@ export async function openMissionThroughRealWake(input: {
   requestID: string
 }) {
   const text = `Open Mission execution through ${input.requestID}`
+  if (input.source === "mission.dispatch") {
+    await setMissionPendingPrompt({ session: await Session.get(input.sessionID), pendingPrompt: { text } })
+  }
   const model = "mission-open-fixture/wake-model"
   await Config.updateProjectPatch({
     model,

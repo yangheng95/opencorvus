@@ -2,9 +2,9 @@
 
 Turns bounded operating data into reproducible performance and segment analysis, audited business insights, and an actionable operating report.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`operating-insight-report` is the sole workflow. Each node starts once after all declared predecessors reach terminal success; feedback continues existing nodes for further Turns. The two independent analysis branches are dispatched together and may run in parallel; the join waits for both terminal results.
+`operating-insight-report` is optional collaboration guidance. Each node starts once after all declared predecessors reach terminal success; feedback continues existing nodes for further Turns. The two independent analysis branches are dispatched together and may run in parallel; the join waits for both terminal results.
 
 The stage `data-analysis/audit` covers its exact insight brief. Review of a later report uses the existing fact-checker's target-bound Core FactCheckReview, with a complete updated dispatch input identifying the current writer Message. Material findings return to the existing report writer, and the changed result is checked again. Correct prior work and immutable historical evidence remain intact. Each delivery Turn follows write, verify, commit/merge and exact-commit publication; the no-write-after-merge rule applies within that Turn. Publication and an earlier clean audit do not themselves establish final business acceptance.
 

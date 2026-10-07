@@ -1,6 +1,11 @@
 import z from "zod"
 import { canonicalJSONValue } from "@/util/canonical-digest"
-import { MissionAcceptanceExtensionRequestSchema, readMissionAcceptanceExtensionRequest, readMissionAcceptanceExtensionOutcome, requireAcceptanceScopeExtension } from "@/mission/acceptance-extension"
+import {
+  MissionAcceptanceExtensionRequestSchema,
+  readMissionAcceptanceExtensionRequest,
+  readMissionAcceptanceExtensionOutcome,
+  requireAcceptanceScopeExtension,
+} from "@/mission/acceptance-extension"
 import { ActiveTaskExecutionReferenceSchema } from "@/engine/task-artifact-observation-schema"
 import { assertCurrentTaskArtifactObservation } from "@/engine/task-artifact-observation"
 import { createHash, randomUUID } from "node:crypto"
@@ -266,7 +271,11 @@ import {
   renderMissionAcceptanceRepairMessage,
   type MissionAcceptanceGap,
 } from "@/mission/acceptance-gap"
-import { appendTaskAcceptanceLedgerRevisionInTransaction, readLatestTaskAcceptanceLedger, MissionAcceptanceLedgerConflictError } from "@/mission/acceptance-ledger"
+import {
+  appendTaskAcceptanceLedgerRevisionInTransaction,
+  readLatestTaskAcceptanceLedger,
+  MissionAcceptanceLedgerConflictError,
+} from "@/mission/acceptance-ledger"
 import { MissionTaskResumeReceiptSchema, readMissionTaskResumeReceipt } from "@/mission/acceptance-resume-receipt"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { SessionWake } from "@/session/wake"
@@ -1005,7 +1014,8 @@ let operatorSteerAfterTargetHookForTest: OperatorSteerAfterTargetHook | undefine
 
 export const OperatorSteerTestHooks = {
   replaceAfterTargetPreflight(hook: OperatorSteerAfterTargetHook): Disposable {
-    if (operatorSteerAfterTargetHookForTest) throw new Error("Operator steer target-preflight hook is already installed")
+    if (operatorSteerAfterTargetHookForTest)
+      throw new Error("Operator steer target-preflight hook is already installed")
     operatorSteerAfterTargetHookForTest = hook
     return {
       [Symbol.dispose]() {
@@ -2008,7 +2018,7 @@ export namespace EngineService {
     const initialSessionConfigOverlay = Config.Overlay.parse({
       ...(input.model ? { model: input.model } : {}),
       prompt_profile: {
-        active: input.promptProfile ?? taskConfigSnapshot.prompt_profile.active,
+        active: input.promptProfile,
       },
     })
     const session = Session.prepareRootNext({

@@ -105,7 +105,7 @@ try {
         return body
       }
       const config = await request("/global/config", 200)
-      assert.deepEqual(config.prompt_profile, { active: "base" })
+      assert.deepEqual(config.prompt_profile, { active: "dynamic" })
       for (const prior of created) {
         const stored = await request(`/session/${prior.id}?directory=${encodeURIComponent(prior.directory)}`, 200)
         assert.equal(stored.id, prior.id)
@@ -126,7 +126,7 @@ try {
         assert.equal(typeof session.id, "string")
         assert.equal(typeof session.projectID, "string")
         assert.deepEqual(session.metadata.conversation, { experience, surface: "right-sidebar" })
-        assert.deepEqual(session.metadata.configOverlay.prompt_profile, { active: "base" })
+        assert.deepEqual(session.metadata.configOverlay.prompt_profile, { active: "dynamic" })
         const relative = path.relative(root, await fs.realpath(session.directory))
         assert.ok(relative && !relative.startsWith("..") && !path.isAbsolute(relative), "Project belongs to test runtime")
         created.push(session)

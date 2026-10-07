@@ -4,9 +4,9 @@ Deep Research reimplements the public research method demonstrated by Stanford O
 
 The package preserves STORM's useful separation of multi-perspective knowledge curation, outline generation, cited article generation, and article polish. OpenCorvus adds explicit owners, immutable evidence handoffs, and an independent citation review before publication.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`multi-perspective-report` is the sole workflow. All six nodes execute in declared order and publish `deep-research/research-charter`, `deep-research/source-dossier`, `deep-research/outline`, `deep-research/draft`, `deep-research/citation-review`, and `deep-research/report`.
+`multi-perspective-report` is optional collaboration guidance. All six nodes execute in declared order and publish `deep-research/research-charter`, `deep-research/source-dossier`, `deep-research/outline`, `deep-research/draft`, `deep-research/citation-review`, and `deep-research/report`.
 
 Workers use `artifact_search`, exact complete `artifact_read`, and `artifact_select`; dispatch messages carry scope only. `artifact_publish` receives strict JSON text and uses `resource_set: null` unless the worker first snapshots an exact file.
 

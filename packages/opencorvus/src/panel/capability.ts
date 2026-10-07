@@ -231,11 +231,18 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "expert_squad_inspect",
     description:
-      "Inspect selector guidance and workflow summaries for one exact Expert Squad candidate returned by held-filtered capability_search. This never enumerates the Mission held set or returns a full package declaration.",
+      "Inspect identity, actual capability grants, selector guidance and optional workflow summaries for one exact installed Expert Squad candidate. Mission inspection stays inside its held set. Follow the agent cursor only while more candidate capabilities are needed.",
     kind: "query",
-    surfaces: ["panel"],
+    surfaces: allProjectSurfaces,
     params: {
-      id: ExpertSquadIDSchema.describe("Exact held Expert Squad manifest ID returned by capability_search."),
+      id: ExpertSquadIDSchema.describe(
+        "Exact installed Expert Squad manifest ID returned by capability_search; Mission must hold it.",
+      ),
+      agentCursor: z
+        .string()
+        .min(1)
+        .optional()
+        .describe("Opaque next_agent_cursor from this exact candidate inspection."),
       workflowCursor: z
         .string()
         .min(1)
@@ -398,8 +405,8 @@ export const PanelCapabilityRegistry = list(
         })
         .optional()
         .describe("Model reference in provider/model format for the new task."),
-      promptProfile: ExpertSquadIDSchema.optional().describe(
-        "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
+      promptProfile: ExpertSquadIDSchema.describe(
+        "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Preserve an explicit operator selection. Otherwise search installed candidates and inspect promising identities before choosing; use Dynamic only when none is very well matched. Mission stays within its held set. No creator omits this exact identity.",
       ),
       expectedPackageDigest: z
         .string()
@@ -479,12 +486,15 @@ export const PanelCapabilityRegistry = list(
   }),
   item({
     action: "extend_task_acceptance",
-    description: "Request additional evidence-backed repair obligations on the current active Mission-owned Task, in the same execution epoch. Preserve every existing open criterion exactly; reopen contradicted accepted criteria or add open criteria. Acceptance is pending until the Task-root input lease applies it; query/read the request and outcome Artifacts for the actual result. This never revokes running worker grants or completes the Task.",
+    description:
+      "Request additional evidence-backed repair obligations on the current active Mission-owned Task, in the same execution epoch. Preserve every existing open criterion exactly; reopen contradicted accepted criteria or add open criteria. Acceptance is pending until the Task-root input lease applies it; query/read the request and outcome Artifacts for the actual result. This never revokes running worker grants or completes the Task.",
     kind: "mutation",
     surfaces: ["panel"],
     params: {
       taskID: z.string().min(1),
-      acceptance_gap: MissionAcceptanceGapInputSchema.describe("Full next ledger, retaining the original reviewed occurrence and all open grants; current_ledger_revision_artifact_id must name the active execution's exact current ledger. Use complete reads bound to the current active Task observation."),
+      acceptance_gap: MissionAcceptanceGapInputSchema.describe(
+        "Full next ledger, retaining the original reviewed occurrence and all open grants; current_ledger_revision_artifact_id must name the active execution's exact current ledger. Use complete reads bound to the current active Task observation.",
+      ),
     },
   }),
   item({

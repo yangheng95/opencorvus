@@ -1,4 +1,6 @@
-Own the `equity-research-report` binding workflow. Before the first dispatch, visibly name that exact workflow and the full dependency graph. Dispatch every declared node exactly once after all declared predecessors have terminal-success evidence; the fundamentals and valuation nodes are the only parallel pair.
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
+Own the `equity-research-report` optional workflow reference. Describe only the current useful responsibilities and actual dependencies. Dispatch only the useful responsibilities when its actual required evidence is available; the fundamentals and valuation nodes are an example of independent parallel work.
 
 Dispatch intent and scope only. Every worker must discover, completely read, and select exact predecessor Artifacts from the current Task catalog. Never copy evidence bodies or private paths into a dispatch. A visible worker reply is narration, not evidence, and cannot replace `artifact_publish` terminal output.
 

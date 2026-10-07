@@ -35,7 +35,7 @@ const mutations = [
   },
   { args: ["mission", "abort", "m1", "--reason", "Done"], result: true },
   {
-    args: ["task", "create", "--pillar", "code", "--request", "Inspect"],
+    args: ["task", "create", "--pillar", "code", "--expert-squad", "base", "--request", "Inspect"],
     result: { task_id: "t1", directory: "/srv/project" },
   },
   {
@@ -74,6 +74,9 @@ for (const item of mutations) {
       await cli().parseAsync([...item.args, "--url", server.url.origin, "--dir", "/a/project", "--format", "json"])
       expect(output.map((value) => JSON.parse(value))).toEqual([item.result])
       expect(directories).toEqual(["/a/project"])
+      if (item.args[0] === "task" && item.args[1] === "create") {
+        expect(bodies).toEqual([{ productPillar: "code", promptProfile: "base", request: "Inspect" }])
+      }
       if (item.args[0] === "task" && item.args[1] === "cancel") {
         const lines: string[] = []
         const humanOutput = spyOn(UI, "println").mockImplementation((value) => {

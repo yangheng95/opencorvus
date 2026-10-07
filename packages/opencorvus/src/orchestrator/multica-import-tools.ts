@@ -52,7 +52,7 @@ export function createMulticaImportTools(
         .object({
           squad_id: SquadIdentity,
           mapping: MulticaOpenCorvusMappingSchema.describe(
-            "Smallest-sufficient OpenCorvus mapping: an explicit runtime template for every source Agent, a possibly-empty Task-level virtual-workflow record whose nodes each execute once per Task, evidence-backed local MCP replacements, and exact reasoned MCP omissions.",
+            "Smallest-sufficient OpenCorvus mapping: an explicit runtime template for every source Agent, optional workflow references describing adaptive dependencies, loops or choices, evidence-backed local MCP replacements, and exact reasoned MCP omissions.",
           ),
         })
         .strict(),

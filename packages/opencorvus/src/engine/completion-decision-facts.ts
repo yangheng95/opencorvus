@@ -25,9 +25,8 @@ export const TaskCompletionDecisionPayloadSchema = z
     tool_part_id: z.string().min(1),
     evidence_locators: EvidenceLocatorListSchema,
     deliverable_artifact_locators: ArtifactReadLocatorListSchema.default([]),
-    /** Host-derived, never model-supplied: every `expert_output` Artifact published by an agent
-     *  owning a terminal node of the bound workflow. See `deriveTerminalWorkflowArtifactLocators`. */
-    terminal_workflow_artifact_locators: ArtifactReadLocatorListSchema.default([]),
+    /** Host-derived actual package worker outputs. */
+    worker_artifact_locators: ArtifactReadLocatorListSchema.default([]),
     accepted_delivery_slice_revision_ids: ExactDeliverySliceRevisionIDsSchema.default([]),
     workflow_binding: SelectedWorkflowBindingSchema,
     time_recorded: z.number().int().nonnegative(),
@@ -44,9 +43,7 @@ export type TaskCompletionDecisionArtifact = {
   timeCreated: number
 }
 
-function parseCompletionDecisionArtifact(
-  row: typeof EngineArtifactTable.$inferSelect,
-): TaskCompletionDecisionArtifact {
+function parseCompletionDecisionArtifact(row: typeof EngineArtifactTable.$inferSelect): TaskCompletionDecisionArtifact {
   const payload = TaskCompletionDecisionPayloadSchema.parse(row.payload)
   if (payload.time_recorded !== row.time_created) {
     throw new Error(

@@ -12,41 +12,19 @@ import {
   ProductPillarsSchema,
   ExpertSquadTextPackageDefinitionSchema,
   ExpertSquadVersionSchema,
-  ExpertSquadVirtualWorkflowNodeSchema,
+  ExpertSquadVirtualWorkflowsSchema,
 } from "@opencorvus-ai/sdk/expert-squad-authoring"
 import { tool as aiTool } from "ai"
 import z from "zod"
 import { Tool } from "./tool"
 import { taskExecutionID } from "./execution-files"
-import {
-  expertSquadGenerationAuthority,
-  type ExpertSquadGenerationTrace,
-} from "@/expert-squad/installation-metadata"
+import { expertSquadGenerationAuthority, type ExpertSquadGenerationTrace } from "@/expert-squad/installation-metadata"
 
-const AuthoringCapabilityRefs = ExpertSquadProjectionCapabilitiesSchema.shape.capability_refs.default([]).describe(
-  "Canonical encoded leaf or one-level capability-set refs granted to this projection. base_role is only a runtime upper bound and grants nothing; include the exact matching platform base CapabilitySet ref when its members are required. Package files referenced by a package capability must be supplied in extra_files.",
-)
-
-const AuthoringVirtualWorkflowNodeSchema = z
-  .object({
-    agent_id: ExpertSquadVirtualWorkflowNodeSchema.shape.agent_id,
-    description: ExpertSquadVirtualWorkflowNodeSchema.shape.description,
-    depends_on: z
-      .array(ExpertSquadIDSchema)
-      .default([])
-      .overwrite((values) => [...new Set(values)].sort()),
-  })
-  .strict()
-
-const AuthoringVirtualWorkflowSchema = z
-  .object({
-    label: z.string().trim().min(1),
-    description: z.string().trim().min(1),
-    nodes: z
-      .record(ExpertSquadIDSchema, AuthoringVirtualWorkflowNodeSchema)
-      .refine((nodes) => Object.keys(nodes).length > 0, { message: "virtual workflow requires at least one node" }),
-  })
-  .strict()
+const AuthoringCapabilityRefs = ExpertSquadProjectionCapabilitiesSchema.shape.capability_refs
+  .default([])
+  .describe(
+    "Canonical encoded leaf or one-level capability-set refs granted to this projection. base_role is only a runtime upper bound and grants nothing; include the exact matching platform base CapabilitySet ref when its members are required. Package files referenced by a package capability must be supplied in extra_files.",
+  )
 
 export const ExpertSquadAuthorDefinitionSchema = ExpertSquadTextPackageDefinitionSchema
 
@@ -82,7 +60,9 @@ export const ExpertSquadAuthorParameters = z
     version: ExpertSquadVersionSchema,
     product_pillars: ProductPillarsSchema.describe("Product pillars where this Expert Squad is valid."),
     configuration: ExpertSquadConfigurationSchema.optional(),
-    artifact_publishers: ExpertSquadArtifactPublishersSchema.optional().describe("Exact formal Artifact types mapped to this package's projected Tool CapabilityRef; null reserves a Host-owned type. Undeclared types retain the generic publication contract."),
+    artifact_publishers: ExpertSquadArtifactPublishersSchema.optional().describe(
+      "Exact formal Artifact types mapped to this package's projected Tool CapabilityRef; null reserves a Host-owned type. Undeclared types retain the generic publication contract.",
+    ),
     capability_sets: ExpertSquadCapabilitySetsSchema.default({}),
     expected_current_package_digest: z
       .string()
@@ -101,7 +81,9 @@ export const ExpertSquadAuthorParameters = z
     agents: z
       .record(ExpertSquadDynamicAgentIDSchema, AuthoringAgentInputSchema)
       .refine((agents) => Object.keys(agents).length > 0, { message: "at least one agent is required" }),
-    virtual_workflows: z.record(ExpertSquadIDSchema, AuthoringVirtualWorkflowSchema),
+    virtual_workflows: ExpertSquadVirtualWorkflowsSchema.default({}).describe(
+      "Optional collaboration suggestions; omit when identity and capabilities suffice. DAG, local loop, conditional choice and adaptive strategies guide the model and never create Host execution state.",
+    ),
     extra_files: z
       .record(z.string(), z.string())
       .default({})

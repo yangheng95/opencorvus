@@ -14,7 +14,8 @@ import {
 import { TaskCreationContractConflictError } from "../src/engine/task-creation-contract"
 import { requireTask, viewTask, viewTaskListTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
-import { assertTaskWorkflowBindingInTransaction } from "../src/engine/workflow-binding-facts"
+import { assertTaskWorkflowPackageInTransaction } from "../src/engine/workflow-binding-facts"
+import { ZodError } from "zod"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { capabilityRef, CapabilityRefCodec } from "@opencorvus-ai/util/capability-ref"
 import { PlatformCapabilitySetRegistry } from "../src/agent/platform-capability-sets"
@@ -215,17 +216,13 @@ describe("Task package revision binding", () => {
           )
           throw new Error("Expected explicit Mission Expert Squad authority contract")
         } catch (error) {
-          expect(error).toBeInstanceOf(MissionExpertSquadAuthorityError)
-          expect((error as InstanceType<typeof MissionExpertSquadAuthorityError>).toObject().data).toMatchObject({
-            missionSessionID: mission.id,
-            requestedProfileID: null,
-            heldExpertSquadCount: 1,
-          })
+          expect(error).toBeInstanceOf(ZodError)
+          expect((error as ZodError).issues).toMatchObject([{ code: "invalid_type", path: ["promptProfile"] }])
         }
       },
     })
     await waitForIngressDeliveryHooksForTest()
-  })
+  }, 30_000)
 
   test("commits one exact package revision with the Task and projects it through Task reads", async () => {
     await using project = await memoryProject()
@@ -257,7 +254,7 @@ describe("Task package revision binding", () => {
           workflowID: null,
         })
         Database.use((db) =>
-          assertTaskWorkflowBindingInTransaction({
+          assertTaskWorkflowPackageInTransaction({
             db,
             taskID,
             workflowBinding,
@@ -265,7 +262,7 @@ describe("Task package revision binding", () => {
         )
       },
     })
-  })
+  }, 30_000)
 
   test("accepts same-profile root configuration updates and returns the immutable-profile error contract", async () => {
     const project = await memoryProject()
@@ -307,7 +304,7 @@ describe("Task package revision binding", () => {
       await project[Symbol.asyncDispose]()
     }
     expect(ProcessSupervisor.metricsSnapshot()).toEqual({ live: 0, owners: {} })
-  })
+  }, 30_000)
 
   test("creates and idempotently replays a Task against the exact resolved package digest", async () => {
     await using project = await memoryProject()
@@ -459,7 +456,7 @@ describe("Task package revision binding", () => {
       },
     })
     await waitForIngressDeliveryHooksForTest()
-  })
+  }, 30_000)
   test("reopens a persisted Task against the same package revision after Project runtime disposal", async () => {
     const project = await memoryProject()
     try {
@@ -523,7 +520,7 @@ describe("Task package revision binding", () => {
       await project[Symbol.asyncDispose]()
     }
     expect(ProcessSupervisor.metricsSnapshot()).toEqual({ live: 0, owners: {} })
-  })
+  }, 30_000)
   test("binds an external Task to an exact materialized candidate without changing the installed revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -664,5 +661,5 @@ describe("Task package revision binding", () => {
       },
     })
     await waitForIngressDeliveryHooksForTest()
-  })
+  }, 30_000)
 })

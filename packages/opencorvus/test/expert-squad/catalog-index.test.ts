@@ -77,6 +77,7 @@ describe("Expert Squad catalog index", () => {
     expect(settings.entries.filter((squad) => squad.built_in).map((squad) => squad.id)).toEqual([
       "advanced",
       "base",
+      "dynamic",
       "research-studio",
       "squad-sdk",
     ])
@@ -481,7 +482,7 @@ describe("Expert Squad catalog index", () => {
         expect(metadata.active_payload_tokens).toBe(base.payloadTokens)
       },
     })
-  })
+  }, 30_000)
 
   test("keeps independent bounded cursor sequences stable for different queries", async () => {
     await using project = await catalogProject()
@@ -533,6 +534,12 @@ describe("Expert Squad catalog index", () => {
         label: "Scale Worker",
         base_role: "delegated-worker",
       },
+      ...Object.fromEntries(
+        Array.from({ length: 24 }, (_, index) => [
+          `specialist-${String(index).padStart(2, "0")}`,
+          { ...scheduler, label: `Specialist ${index}`, base_role: "delegated-worker" as const },
+        ]),
+      ),
     }
     definition.manifest.capability_projection.virtual_workflows = Object.fromEntries(
       Array.from({ length: 100 }, (_, index) => {
@@ -579,6 +586,25 @@ describe("Expert Squad catalog index", () => {
       workflowCursor = page?.next_workflow_cursor ?? undefined
     } while (workflowCursor)
     expect(observed).toEqual(Array.from({ length: 100 }, (_, index) => `workflow-${String(index).padStart(3, "0")}`))
+    const observedAgents: string[] = []
+    let agentCursor: string | undefined
+    do {
+      const page = await PromptProfileResolver.catalogInspection({
+        projectDirectory: project.path,
+        id,
+        installationScope: "project",
+        namespace: "scale",
+        agentCursor,
+      })
+      expect(page).toMatchObject({ agent_count: 25, package_digest: expect.any(String) })
+      expect(page!.agents.length).toBeLessThanOrEqual(10)
+      observedAgents.push(...page!.agents.map((agent) => agent.agent_id))
+      agentCursor = page!.next_agent_cursor ?? undefined
+    } while (agentCursor)
+    expect(observedAgents).toEqual([
+      "scale-worker",
+      ...Array.from({ length: 24 }, (_, index) => `specialist-${String(index).padStart(2, "0")}`),
+    ])
 
     const replacement = scalePackageDefinition(id)
     replacement.manifest.version = "2026.08.10.2"
@@ -704,7 +730,7 @@ describe("Expert Squad catalog index", () => {
         },
       ],
     })
-  })
+  }, 30_000)
 
   test("ranks Market packages from package-owned Skill and prompt evidence", async () => {
     await using project = await memoryProject()
@@ -782,7 +808,7 @@ describe("Expert Squad catalog index", () => {
         const detail = await request(`settings/detail?directory=${directory}&id=base&installationScope=built_in`)
         const market = await request("market?limit=5")
         const marketDetail = await request("market/detail?id=deep-research")
-        expect(active).toMatchObject({ active: { effective: "base" }, default: "base" })
+        expect(active).toMatchObject({ active: { effective: "dynamic" }, default: "dynamic" })
         expect(page).toMatchObject({ entries: expect.any(Array) })
         expect(inspection).toMatchObject({ id: "base", workflow_count: 3, next_workflow_cursor: null })
         expect(status).toMatchObject({

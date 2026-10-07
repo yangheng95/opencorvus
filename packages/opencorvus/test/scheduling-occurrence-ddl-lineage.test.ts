@@ -134,32 +134,6 @@ function insertToolBackedWaits(
 }
 
 describe("scheduling occurrence DDL lineage", () => {
-  test("uses the immutable dispatch lineage index as virtual workflow node admission", () => {
-    const db = currentDatabase()
-    try {
-      const plan = db
-        .query<{ detail: string }, []>(
-          `
-          EXPLAIN QUERY PLAN
-          SELECT id
-          FROM engine_artifact
-          WHERE task_id='tsk_lineage'
-            AND kind='dispatch_lineage'
-            AND json_extract(payload,'$.workflow_binding.kind')='virtual_workflow'
-            AND json_extract(payload,'$.workflow_binding.workflow_id')='workflow-a'
-            AND json_extract(payload,'$.workflow_node_id')='node-a'
-            AND json_type(payload,'$.continuation_of_dispatch_id') IS NULL
-            AND json_type(payload,'$.coordination_action_id') IS NULL
-        `,
-        )
-        .all()
-        .map((row) => row.detail)
-      expect(plan).toEqual([expect.stringContaining("engine_dispatch_lineage_initial_workflow_node_idx")])
-    } finally {
-      db.close(true)
-    }
-  })
-
   test("uses exact dispatch and Task-root disposition indexes for bounded recovery", () => {
     const db = currentDatabase()
     try {
@@ -574,11 +548,12 @@ describe("scheduling occurrence DDL lineage", () => {
         INSERT INTO automation_fire_frontier(definition_id,automation_revision_id,fire_id,available_at)
         VALUES ('atm_delay','atm_delay','cal_frontier',100);
       `)
-      expect(
-        db.query("SELECT definition_id,fire_id,available_at FROM automation_fire_frontier").all(),
-      ).toEqual([{ definition_id: "atm_delay", fire_id: "cal_frontier", available_at: 100 }])
-      expect(() => db.run("UPDATE automation_fire_frontier SET available_at=99 WHERE definition_id='atm_delay'"))
-        .toThrow("automation_fire_frontier: invalid current Fire authority")
+      expect(db.query("SELECT definition_id,fire_id,available_at FROM automation_fire_frontier").all()).toEqual([
+        { definition_id: "atm_delay", fire_id: "cal_frontier", available_at: 100 },
+      ])
+      expect(() =>
+        db.run("UPDATE automation_fire_frontier SET available_at=99 WHERE definition_id='atm_delay'"),
+      ).toThrow("automation_fire_frontier: invalid current Fire authority")
       db.run(`
         INSERT INTO automation_run(id,automation_revision_id,fire_id,started_at)
         VALUES ('atr_frontier','atm_delay','cal_frontier',100)
@@ -631,14 +606,19 @@ describe("scheduling occurrence DDL lineage", () => {
             detail.includes("automation_fire_scheduled_occurrence_idx"),
         ),
       ).toBe(true)
-      const duePlan = db.query<{ detail: string }, []>(`
+      const duePlan = db
+        .query<{ detail: string }, []>(
+          `
         EXPLAIN QUERY PLAN
         SELECT fire_id
         FROM automation_fire_frontier INDEXED BY automation_fire_frontier_due_idx
         WHERE available_at<=100
         ORDER BY available_at,definition_id,fire_id
         LIMIT 64
-      `).all().map((row) => row.detail)
+      `,
+        )
+        .all()
+        .map((row) => row.detail)
       expect(duePlan.some((detail) => detail.includes("automation_fire_frontier_due_idx"))).toBe(true)
       expect(duePlan.some((detail) => detail.includes("TEMP B-TREE"))).toBe(false)
     } finally {

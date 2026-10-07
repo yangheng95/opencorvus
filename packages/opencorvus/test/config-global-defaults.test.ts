@@ -31,7 +31,7 @@ describe.serial("effective global configuration defaults", () => {
       const configSnapshot = await Config.getGlobal()
       expect(configSnapshot).toEqual(expected)
       const result = await GlobalConversationService.preflight({ configSnapshot })
-      expect(result.initialOverlay).toEqual({ prompt_profile: { active: "base" } })
+      expect(result.initialOverlay).toEqual({ prompt_profile: { active: "dynamic" } })
     })
   }
 
@@ -42,7 +42,7 @@ describe.serial("effective global configuration defaults", () => {
     expect(await Config.getGlobal()).toEqual(Config.Info.parse({}))
     await writeFile(filename, JSON.stringify({ username: "next-user" }))
     expect((await Config.global()).username).toBe("next-user")
-    expect((await Config.global()).prompt_profile).toEqual({ active: "base" })
+    expect((await Config.global()).prompt_profile).toEqual({ active: "dynamic" })
   })
 
   test("first atomic write receives canonical defaults and publishes the requested setting", async () => {
@@ -54,6 +54,6 @@ describe.serial("effective global configuration defaults", () => {
     })
     expect(observed).toEqual({ effective: Config.Info.parse({}), writable: Config.Info.parse({}) })
     expect((await Config.getGlobal()).username).toBe("first-write")
-    expect((await Config.getGlobal()).prompt_profile).toEqual({ active: "base" })
+    expect((await Config.getGlobal()).prompt_profile).toEqual({ active: "dynamic" })
   })
 })

@@ -86,6 +86,11 @@ export const TaskCreateCommand = cmd({
         demandOption: true,
       })
       .option("request", { type: "string", describe: "what the Task must deliver", demandOption: true })
+      .option("expert-squad", {
+        type: "string",
+        describe: "exact manually or creator-selected Expert Squad manifest ID",
+        demandOption: true,
+      })
       .option("title", { type: "string", describe: "Task title (derived from the request when omitted)" })
       .option("model", { type: "string", describe: "model to use in the format provider/model" })
       .option("priority", {
@@ -104,6 +109,7 @@ export const TaskCreateCommand = cmd({
       "task create",
       server.client.task.create({
         productPillar: args.pillar,
+        promptProfile: args.expertSquad,
         request: args.request,
         title: args.title,
         model: args.model,

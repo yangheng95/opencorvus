@@ -61,6 +61,16 @@ opencorvus run "实现 src/foo.ts 的单元测试" [flags]
 | `--variant VALUE`       | provider 特定的 reasoning variant          |
 | `--thinking`            | 显示 thinking blocks                       |
 
+### `opencorvus task create`
+
+在运行中的服务上创建固定身份 Task，提供精确选定的专家团：
+
+```bash
+opencorvus task create --pillar code --expert-squad base --request "为 src/foo.ts 添加单元测试" --url http://127.0.0.1:7878
+```
+
+`--expert-squad` 为必填。自动选团通过原生会话或 Mission 提交原始请求，由真实模型先检索并核对已安装候选，有非常匹配专家团就使用，否则由 Dynamic 生成任务内专家。
+
 ### `opencorvus auth`
 
 Provider 凭据必须通过显式子命令管理。

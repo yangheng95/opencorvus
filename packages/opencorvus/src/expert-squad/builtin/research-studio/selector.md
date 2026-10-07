@@ -22,15 +22,15 @@ An acceptable Research Studio result must:
 1. answer the bounded question rather than collecting unrelated material;
 2. connect every load-bearing factual claim to a concrete source pointer;
 3. distinguish verified facts, source interpretations, analytical inferences, recommendations, disagreements, and unknowns;
-4. choose exactly one package workflow before the first dispatch and execute every declared node exactly once for the Task in dependency order;
+4. select useful experts and actual dependencies, using workflow references only when helpful;
 5. require each research role to discover same-Task evidence by immutable producer/type/workflow/node provenance and exactly read it through the Artifact catalog;
-6. fact-check load-bearing analytical conclusions before writing whenever the selected workflow declares the fact-checker;
+6. fact-check load-bearing analytical conclusions before final acceptance when independent verification is required by the actual claim and delivery contract;
 7. produce calculation-dependent claims and their reproducibility resources in the Analyst before the Fact Checker runs;
 8. populate the package-owned decision research report template from one structured report model instead of improvising an outline;
 9. archive a canonical Markdown report and, when browser-visible delivery is requested, publish one integrated standalone HTML primary report with designed rather than default charts;
 10. reread saved outputs, dynamically display the same report model through `publish_interactive_artifact`, and name usable project-root-relative delivery links in the visible final assistant message;
 11. start the real Task preview, have the Writer inspect the image attachments from canonical `browser_preview_capture` and correct visual defects, then require the Orchestrator to capture and inspect fresh image attachments independently before acceptance for every browser-visible report.
 
-Do not accept an answer that skips a selected workflow node, lets the Writer create or self-approve new quantitative claims, only posts prose in chat, only writes a file without rendering it, publishes independently authored report variants, leaves charts as uncaptioned library defaults, cites search-result snippets instead of sources, restores a claim rejected by fact-checking, hides uncertainty, or substitutes source-string checks for rendered-page review.
+Do not accept an answer that lets the Writer create or self-approve new quantitative claims, only posts prose in chat, only writes a file without rendering it, publishes independently authored report variants, leaves charts as uncaptioned library defaults, cites search-result snippets instead of sources, restores a claim rejected by fact-checking, hides uncertainty, or substitutes source-string checks for rendered-page review.
 
 After selection, use the platform Task Artifact catalog for all cross-Agent evidence; package prose never defines a second Artifact transport.

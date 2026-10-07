@@ -7,18 +7,12 @@ import {
   type MissionAcceptanceGap,
   type MissionAcceptanceOpenCriterion,
 } from "@/mission/acceptance-gap"
+import { createAcceptanceEpochCheckpoint, currentAcceptanceEpochCheckpoint } from "@/mission/acceptance-checkpoint"
 import {
-  createAcceptanceEpochCheckpoint,
-  currentAcceptanceEpochCheckpoint,
-} from "@/mission/acceptance-checkpoint"
-import {
-  affectedAcceptanceWorkflowNodes,
-  dispatchConsumesAcceptanceCriterion,
   readLatestTaskAcceptanceLedger,
   currentTaskAcceptanceRepair,
   MissionAcceptanceGapIntegrityError,
   validateTaskAcceptanceLedgerTransition,
-  workflowNodeConsumesAcceptanceCriterion,
   type TaskAcceptanceLedgerProjection,
 } from "@/mission/acceptance-ledger"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
@@ -36,11 +30,7 @@ import {
   renderDispatchContinuationTurn,
   DispatchTurnSchema,
 } from "@/orchestrator/dispatch-turn-projection"
-import {
-  applyTaskProjectionDelta,
-  renderTaskProjectionContext,
-  renderTaskProjectionDelta,
-} from "@/orchestrator/agent"
+import { applyTaskProjectionDelta, renderTaskProjectionContext, renderTaskProjectionDelta } from "@/orchestrator/agent"
 import type { TaskDesc } from "@/engine/describe"
 import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
@@ -124,17 +114,19 @@ function repairActionIdentity(sequence: number) {
   }
 }
 
-function openCriterion(input: {
-  observation?: typeof firstLocator[]
-  repair?: typeof firstLocator[]
-  resolution?: typeof firstLocator[]
-  invalidating?: typeof firstLocator[]
-  irreducibleBlocker?: typeof firstLocator[]
+function openCriterion(
+  input: {
+    observation?: (typeof firstLocator)[]
+    repair?: (typeof firstLocator)[]
+    resolution?: (typeof firstLocator)[]
+    invalidating?: (typeof firstLocator)[]
+    irreducibleBlocker?: (typeof firstLocator)[]
   actionSequence?: number
   disposition?: "failed" | "unresolved" | "stale_evidence"
   criterionID?: string
   responsibility?: MissionAcceptanceOpenCriterion["responsibility"]
-} = {}): MissionAcceptanceOpenCriterion {
+  } = {},
+): MissionAcceptanceOpenCriterion {
   return {
     criterion_id: input.criterionID ?? "receipt",
     state: "open",
@@ -218,15 +210,10 @@ describe("Mission acceptance baseline readiness", () => {
     const repeated = validateTaskAcceptanceLedgerTransition({
       taskID: "tsk_acceptance",
       previous: ledgerProjection([openCriterion()]),
-      workflowBinding,
+      workflowReferences: [workflowBinding],
       gap: gap([openCriterion({ observation: [firstLocator, secondLocator], actionSequence: 1 })], "gap-r2"),
     })
-    expect([...affectedAcceptanceWorkflowNodes(workflowBinding, repeated)].sort()).toEqual([
-      "builder",
-      "publisher",
-      "tester",
-    ])
-    expect(workflowNodeConsumesAcceptanceCriterion(workflowBinding, "builder", "tester")).toBe(true)
+    expect(repeated.criteria[0].observation_evidence_locators).toEqual([firstLocator, secondLocator])
 
     const accepted = {
       criterion_id: "receipt",
@@ -239,11 +226,15 @@ describe("Mission acceptance baseline readiness", () => {
       invalidating_evidence_locators: [],
       irreducible_blocker_evidence_locators: [],
     }
-    const sentinel = openCriterion({ criterionID: "publication", responsibility: { ...builderResponsibility, workflow_node_id: "publisher" }, observation: [thirdLocator] })
+    const sentinel = openCriterion({
+      criterionID: "publication",
+      responsibility: { ...builderResponsibility, workflow_node_id: "publisher" },
+      observation: [thirdLocator],
+    })
     const acceptedGap = validateTaskAcceptanceLedgerTransition({
       taskID: "tsk_acceptance",
       previous: ledgerProjection([openCriterion()]),
-      workflowBinding,
+      workflowReferences: [workflowBinding],
       gap: gap([accepted, sentinel], "gap-accepted"),
     })
     const stale = openCriterion({
@@ -256,14 +247,8 @@ describe("Mission acceptance baseline readiness", () => {
     const reopened = validateTaskAcceptanceLedgerTransition({
       taskID: "tsk_acceptance",
       previous: ledgerProjection(acceptedGap.criteria),
-      workflowBinding,
-      gap: gap(
-        [
-          stale,
-          sentinel,
-        ],
-        "gap-stale",
-      ),
+      workflowReferences: [workflowBinding],
+      gap: gap([stale, sentinel], "gap-stale"),
     })
     expect(reopened.criteria[0]).toMatchObject({ state: "open", disposition: "stale_evidence" })
     expect(reopened.criteria[1]).toEqual(sentinel)
@@ -271,7 +256,7 @@ describe("Mission acceptance baseline readiness", () => {
     const blocked = validateTaskAcceptanceLedgerTransition({
       taskID: "tsk_acceptance",
       previous: ledgerProjection([openCriterion()]),
-      workflowBinding,
+      workflowReferences: [workflowBinding],
       gap: gap([
         {
           criterion_id: "receipt",
@@ -287,37 +272,60 @@ describe("Mission acceptance baseline readiness", () => {
         sentinel,
       ]),
     })
-    expect(blocked.criteria[0]).toMatchObject({ state: "blocked", irreducible_blocker_evidence_locators: [secondLocator] })
+    expect(blocked.criteria[0]).toMatchObject({
+      state: "blocked",
+      irreducible_blocker_evidence_locators: [secondLocator],
+    })
   })
 
   test("retains an unchanged open obligation when another obligation makes evidenced progress", () => {
     const pending = openCriterion({ criterionID: "pending", observation: [thirdLocator] })
     const prior = ledgerProjection([openCriterion(), pending])
     const revised = validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_acceptance", previous: prior, workflowBinding,
+      taskID: "tsk_acceptance",
+      previous: prior,
+      workflowReferences: [workflowBinding],
       gap: gap([openCriterion({ repair: [secondLocator] }), pending], "gap-partial-progress"),
     })
     expect(revised.criteria).toEqual([openCriterion({ repair: [secondLocator] }), pending])
     const added = openCriterion({ criterionID: "new-obligation", observation: [fourthLocator] })
-    expect(validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_acceptance", previous: prior, workflowBinding,
+    expect(
+      validateTaskAcceptanceLedgerTransition({
+        taskID: "tsk_acceptance",
+        previous: prior,
+        workflowReferences: [workflowBinding],
       gap: gap([...prior.revision.gap.criteria, added], "gap-new-obligation"),
-    }).criteria).toEqual([...prior.revision.gap.criteria, added])
+      }).criteria,
+    ).toEqual([...prior.revision.gap.criteria, added])
   })
 
   test("returns exact integrity errors for unchanged revisions and unsupported changes to carried criteria", () => {
     const pending = openCriterion({ criterionID: "pending", observation: [thirdLocator] })
     const prior = ledgerProjection([openCriterion(), pending])
     for (const criteria of [prior.revision.gap.criteria, [...prior.revision.gap.criteria].reverse()]) {
-      expect(() => validateTaskAcceptanceLedgerTransition({
-        taskID: "tsk_acceptance", previous: prior, workflowBinding,
-        gap: { ...gap(criteria, "renamed-gap"), reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_another_terminal" } },
-      })).toThrow("Acceptance ledger revision requires at least one new or changed criterion.")
+      expect(() =>
+        validateTaskAcceptanceLedgerTransition({
+          taskID: "tsk_acceptance",
+          previous: prior,
+          workflowReferences: [workflowBinding],
+          gap: {
+            ...gap(criteria, "renamed-gap"),
+            reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_another_terminal" },
+          },
+        }),
+      ).toThrow("Acceptance ledger revision requires at least one new or changed criterion.")
     }
-    expect(() => validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_acceptance", previous: prior, workflowBinding,
-      gap: gap([openCriterion({ repair: [secondLocator] }), { ...pending, finding: "Reworded without new evidence." }]),
-    })).toThrow("Repeated criterion pending requires new evidence or a changed canonical repair action.")
+    expect(() =>
+      validateTaskAcceptanceLedgerTransition({
+        taskID: "tsk_acceptance",
+        previous: prior,
+        workflowReferences: [workflowBinding],
+        gap: gap([
+          openCriterion({ repair: [secondLocator] }),
+          { ...pending, finding: "Reworded without new evidence." },
+        ]),
+      }),
+    ).toThrow("Repeated criterion pending requires new evidence or a changed canonical repair action.")
   })
 
   test("binds a direct acceptance criterion to its exact immutable dispatch lineage", () => {
@@ -342,27 +350,11 @@ describe("Mission acceptance baseline readiness", () => {
     const directGap = validateTaskAcceptanceLedgerTransition({
       taskID: "tsk_acceptance",
       previous: undefined,
-      workflowBinding: directBinding,
+      workflowReferences: [directBinding],
       gap: gap([openCriterion({ responsibility })]),
       dispatchLineageByArtifactID: (artifactID) => (artifactID === lineage.artifactID ? lineage : undefined),
     })
-    expect({
-      admitted: directGap.criteria[0].responsibility,
-      exact: dispatchConsumesAcceptanceCriterion({
-        binding: directBinding,
-        responsibility,
-        candidateWorkflowNodeID: null,
-        sourceDispatchLineageArtifactID: lineage.artifactID,
-        targetAgentID: "builder",
-      }),
-      foreign: dispatchConsumesAcceptanceCriterion({
-        binding: directBinding,
-        responsibility,
-        candidateWorkflowNodeID: null,
-        sourceDispatchLineageArtifactID: "art_foreign_lineage",
-        targetAgentID: "builder",
-      }),
-    }).toEqual({ admitted: responsibility, exact: true, foreign: false })
+    expect(directGap.criteria[0].responsibility).toEqual(responsibility)
   })
 
   test("projects current acceptance obligations onto a previously unstarted downstream verifier", () => {
@@ -376,30 +368,42 @@ describe("Mission acceptance baseline readiness", () => {
       delivery_slice_revision_ids: [],
       evidence_locators: [secondLocator],
       task_authority: {
-        task_id: "tsk_acceptance", root_session_id: "ses_task_root", request_sha256: "c".repeat(64),
+        task_id: "tsk_acceptance",
+        root_session_id: "ses_task_root",
+        request_sha256: "c".repeat(64),
         initial_user_message_id: "msg_task_request",
         initial_control_text_parts: [{ part_id: "prt_task_request", text_sha256: "d".repeat(64) }],
       },
       acceptance_repair: {
-        gap_id: "gap-builder-r2", ledger_revision_artifact_id: "art_acceptance_ledger_r2",
-        execution_epoch: 3, criteria: [criterion], checkpoint_required: false,
+        gap_id: "gap-builder-r2",
+        ledger_revision_artifact_id: "art_acceptance_ledger_r2",
+        execution_epoch: 3,
+        criteria: [criterion],
+        checkpoint_required: false,
       },
     })
-    const collection = PersistedDispatchCollectionMemberInputSchema.parse({ dispatch: {
-      target: "tester", work_scope: { kind: "task" }, turn: {
-        kind: "initial", workflow_subject: { kind: "virtual_workflow", workflow_id: "repair", node_id: "tester" },
-        use_worktree: false, input: { instruction: "Verify the repaired outcome." },
-        acceptance_gap_id: "gap-builder-r2", criterion_ids: [criterion.criterion_id],
+    const collection = PersistedDispatchCollectionMemberInputSchema.parse({
+      dispatch: {
+        target: "tester",
+        work_scope: { kind: "task" },
+        turn: {
+          kind: "initial",
+          workflow_subject: { kind: "virtual_workflow", workflow_id: "repair", node_id: "tester" },
+          use_worktree: false,
+          input: { instruction: "Verify the repaired outcome." },
+          acceptance_gap_id: "gap-builder-r2",
+          criterion_ids: [criterion.criterion_id],
+        },
       },
-    } })
+    })
     expect({
-      kind: turn.kind, obligation: turn.acceptance_repair?.gap_id,
+      kind: turn.kind,
+      obligation: turn.acceptance_repair?.gap_id,
       collectionTurn: collection.dispatch.turn,
-      consumes: dispatchConsumesAcceptanceCriterion({ binding: workflowBinding, responsibility: criterion.responsibility,
-        candidateWorkflowNodeID: "tester", sourceDispatchLineageArtifactID: undefined, targetAgentID: "tester" }),
       prompt: renderDispatchContinuationTurn({ turn, guidance: "Verify the repaired outcome." }),
     }).toMatchObject({
-      kind: "initial", obligation: "gap-builder-r2", consumes: true,
+      kind: "initial",
+      obligation: "gap-builder-r2",
       collectionTurn: { kind: "initial", acceptance_gap_id: "gap-builder-r2", criterion_ids: [criterion.criterion_id] },
       prompt: expect.stringContaining("- gap_id: gap-builder-r2"),
     })
@@ -445,7 +449,10 @@ describe("Mission acceptance baseline readiness", () => {
     const delta = renderTaskProjectionDelta(before, after)
     expect({
       continuation,
-      repairEvidence: turn.kind === "continuation" && turn.acceptance_repair ? acceptanceRepairEvidenceLocators(turn.acceptance_repair) : [],
+      repairEvidence:
+        turn.kind === "continuation" && turn.acceptance_repair
+          ? acceptanceRepairEvidenceLocators(turn.acceptance_repair)
+          : [],
       baseline: JSON.parse(renderTaskProjectionContext(undefined, before).parts[0]!),
       applied: applyTaskProjectionDelta(before, delta),
     }).toEqual({
@@ -467,15 +474,28 @@ describe("Mission acceptance baseline readiness", () => {
       id: "tsk_acceptance",
       title: "Acceptance repair",
       status: "active",
-      execution_lifecycle: { taskID: "tsk_acceptance", epoch: 1, openedEventID: "pev_open", openedAt: 1, status: "active" },
+      execution_lifecycle: {
+        taskID: "tsk_acceptance",
+        epoch: 1,
+        openedEventID: "pev_open",
+        openedAt: 1,
+        status: "active",
+      },
       source: "mission",
       request: "Repair the failed criterion",
       goals: [],
       budget: { max_executor_groups: 4 },
     } satisfies TaskDesc
-    const current = { ...baseline, status: "failed", execution_lifecycle: {
-      ...baseline.execution_lifecycle, status: "failed", terminalEventID: "pev_failed", terminalAt: 2,
-    } } satisfies TaskDesc
+    const current = {
+      ...baseline,
+      status: "failed",
+      execution_lifecycle: {
+        ...baseline.execution_lifecycle,
+        status: "failed",
+        terminalEventID: "pev_failed",
+        terminalAt: 2,
+      },
+    } satisfies TaskDesc
     const first = renderTaskProjectionContext(undefined, baseline)
     const second = renderTaskProjectionContext(first.baseline, current)
     expect({
@@ -538,7 +558,11 @@ describe("Mission acceptance baseline readiness", () => {
           logical: [first.logicalCheckpointID, first.logicalCheckpointID],
           attempts: [1, 2],
           ids: [first.control.id, second.control.id, second.control.id],
-          current: { attempt: 2, control: { status: "consumed" }, successfulSummaryMessageID: "msg_acceptance_summary" },
+          current: {
+            attempt: 2,
+            control: { status: "consumed" },
+            successfulSummaryMessageID: "msg_acceptance_summary",
+          },
         })
       },
     })
@@ -548,19 +572,19 @@ describe("Mission acceptance baseline readiness", () => {
     const responsibility = { kind: "task_owner" as const }
     const original = gap([openCriterion({ responsibility })])
     const admitted = validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_owner", gap: original, previous: undefined, workflowBinding: undefined,
+      taskID: "tsk_owner",
+      gap: original,
+      previous: undefined,
+      workflowReferences: [],
     })
     expect(admitted.criteria[0]!.responsibility).toEqual(responsibility)
     const carried = validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_owner", gap: gap([openCriterion({ responsibility, actionSequence: 2 })]),
-      previous: ledgerProjection(original.criteria), workflowBinding,
+      taskID: "tsk_owner",
+      gap: gap([openCriterion({ responsibility, actionSequence: 2 })]),
+      previous: ledgerProjection(original.criteria),
+      workflowReferences: [workflowBinding],
     })
     expect(carried.criteria[0]!.responsibility).toEqual(responsibility)
-    expect([...affectedAcceptanceWorkflowNodes(workflowBinding, carried)]).toEqual(["planner", "builder", "tester", "publisher"])
-    expect(dispatchConsumesAcceptanceCriterion({
-      binding: workflowBinding, responsibility, candidateWorkflowNodeID: "tester",
-      sourceDispatchLineageArtifactID: undefined, targetAgentID: "tester",
-    })).toBe(true)
     expect(renderMissionAcceptanceRepairMessage(carried)).toContain("Task accountable owner")
   })
 
@@ -568,34 +592,58 @@ describe("Mission acceptance baseline readiness", () => {
     const responsibility = { kind: "task_initialization" as const, failure_reference: terminal }
     const initial = gap([openCriterion({ responsibility })])
     const checked = validateTaskAcceptanceLedgerTransition({
-      taskID: "tsk_initialization", gap: initial, previous: undefined, workflowBinding: undefined,
+      taskID: "tsk_initialization",
+      gap: initial,
+      previous: undefined,
+      workflowReferences: [],
       initializationFailureByEventID: () => ({ taskID: "tsk_initialization", executionEpoch: 1 }),
     })
     expect(checked.criteria[0]!.responsibility).toEqual(responsibility)
     const prior = ledgerProjection(initial.criteria)
-    const next = { ...gap([openCriterion({ responsibility, actionSequence: 2 })]), reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_later_failure" } }
-    const carried = validateTaskAcceptanceLedgerTransition({ taskID: "tsk_initialization", gap: next, previous: prior, workflowBinding,
+    const next = {
+      ...gap([openCriterion({ responsibility, actionSequence: 2 })]),
+      reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_later_failure" },
+    }
+    const carried = validateTaskAcceptanceLedgerTransition({
+      taskID: "tsk_initialization",
+      gap: next,
+      previous: prior,
+      workflowReferences: [workflowBinding],
       initializationFailureByEventID: () => ({ taskID: "tsk_initialization", executionEpoch: 1 }),
     })
     expect(carried.criteria[0]!.responsibility).toEqual(responsibility)
-    expect([...affectedAcceptanceWorkflowNodes(workflowBinding, checked)]).toEqual(["planner", "builder", "tester", "publisher"])
-    expect(dispatchConsumesAcceptanceCriterion({ binding: workflowBinding, responsibility, candidateWorkflowNodeID: "planner", sourceDispatchLineageArtifactID: undefined, targetAgentID: "planner" })).toBe(true)
-    expect(dispatchConsumesAcceptanceCriterion({ binding: { kind: "direct", package_revision: packageRevision }, responsibility, candidateWorkflowNodeID: null, sourceDispatchLineageArtifactID: undefined, targetAgentID: "builder" })).toBe(true)
   })
 
-  test.each(["unknown", "foreign", "stale"] as const)("initialization reference %s produces the precise integrity error", (scope) => {
-    const responsibility = { kind: "task_initialization" as const, failure_reference: scope === "stale" ? { terminalEventID: "pev_old" } : terminal }
+  test.each(["unknown", "foreign", "stale"] as const)(
+    "initialization reference %s produces the precise integrity error",
+    (scope) => {
+      const responsibility = {
+        kind: "task_initialization" as const,
+        failure_reference: scope === "stale" ? { terminalEventID: "pev_old" } : terminal,
+      }
     let error: unknown
     try {
-      validateTaskAcceptanceLedgerTransition({ taskID: "tsk_initialization", gap: gap([openCriterion({ responsibility })]), previous: undefined, workflowBinding: undefined,
-        initializationFailureByEventID: () => scope === "unknown" ? undefined : { taskID: scope === "foreign" ? "tsk_foreign" : "tsk_initialization", executionEpoch: 1 },
-      })
-    } catch (caught) { error = caught }
+        validateTaskAcceptanceLedgerTransition({
+          taskID: "tsk_initialization",
+          gap: gap([openCriterion({ responsibility })]),
+          previous: undefined,
+          workflowReferences: [],
+          initializationFailureByEventID: () =>
+            scope === "unknown"
+              ? undefined
+              : { taskID: scope === "foreign" ? "tsk_foreign" : "tsk_initialization", executionEpoch: 1 },
+        })
+      } catch (caught) {
+        error = caught
+      }
     expect(error).toBeInstanceOf(MissionAcceptanceGapIntegrityError)
     expect(error).toMatchObject({ code: "mission_acceptance_gap_integrity", taskID: "tsk_initialization" })
-  })
+    },
+  )
 
-  test.each(["workflow", "initialization", "completed", "dispatched"] as const)("%s terminal occurrence produces its exact Mission acceptance-resume contract", async (scope) => {
+  test.each(["workflow", "initialization", "completed", "dispatched"] as const)(
+    "%s terminal occurrence produces its exact Mission acceptance-resume contract",
+    async (scope) => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -655,20 +703,48 @@ describe("Mission acceptance baseline readiness", () => {
           },
           nodes: [{ node_id: "builder", agent_id: "base", depends_on: [] }],
         }
-        if (scope === "workflow") recordEngineArtifact({
+          if (scope === "workflow")
+            recordEngineArtifact({
           taskID,
           kind: "task_completion_decision",
           label: "accepted-terminal-binding",
-          payload: { workflow_binding: boundWorkflow },
+              payload: {
+                workflow_binding: boundWorkflow,
+                orchestrator_session_id: rootSession.id,
+                orchestrator_message_id: Identifier.ascending("message"),
+                tool_call_id: "call_accepted_terminal_reference",
+                tool_part_id: Identifier.ascending("part"),
+                evidence_locators: [],
+                deliverable_artifact_locators: [],
+                worker_artifact_locators: [],
+                accepted_delivery_slice_revision_ids: [],
+                time_recorded: now + 1,
+              },
           timeCreated: now + 1,
         })
         if (scope === "dispatched") {
           const dispatchID = Identifier.ascending("artifact")
-          const origin = createDispatchLineageOrigin({ taskID, dispatchID, orchestratorSessionID: rootSession.id,
-            orchestratorMessageID: Identifier.ascending("message"), toolPartID: Identifier.ascending("part"),
-            toolCallID: "call_initialization_existing_dispatch", targetAgentID: "base",
-            projectedWorkerIdentity: { agentID: "base", baseRole: "delegated-worker", sessionKind: "delegated-worker", dispatchAdapterID: "delegated_worker", runtimeTemplateABIVersion: 1, dispatchAdapterABIVersion: 1, projectionHash: "b".repeat(64) },
-            workScope: { kind: "task" }, workflowBinding: boundWorkflow, workflowNodeID: "builder", workflowOccurrenceID: dispatchID,
+            const origin = createDispatchLineageOrigin({
+              taskID,
+              dispatchID,
+              orchestratorSessionID: rootSession.id,
+              orchestratorMessageID: Identifier.ascending("message"),
+              toolPartID: Identifier.ascending("part"),
+              toolCallID: "call_initialization_existing_dispatch",
+              targetAgentID: "base",
+              projectedWorkerIdentity: {
+                agentID: "base",
+                baseRole: "delegated-worker",
+                sessionKind: "delegated-worker",
+                dispatchAdapterID: "delegated_worker",
+                runtimeTemplateABIVersion: 1,
+                dispatchAdapterABIVersion: 1,
+                projectionHash: "b".repeat(64),
+              },
+              workScope: { kind: "task" },
+              workflowBinding: boundWorkflow,
+              workflowNodeID: "builder",
+              workflowOccurrenceID: dispatchID,
             adapterInput: { instruction: "Produce the receipt" },
           })
           recordTestDispatchLineage({ origin, childSessionID: Identifier.ascending("session") })
@@ -691,7 +767,12 @@ describe("Mission acceptance baseline readiness", () => {
         }
         await terminalTask(
           requireTask(taskID),
-          { status: scope === "completed" ? "completed" : "failed", error: scope === "completed" ? null : "Initial receipt was incomplete", time_started: now, time_completed: now + 3 },
+            {
+              status: scope === "completed" ? "completed" : "failed",
+              error: scope === "completed" ? null : "Initial receipt was incomplete",
+              time_started: now,
+              time_completed: now + 3,
+            },
           "Initial delivery failed acceptance",
         )
         const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
@@ -702,10 +783,13 @@ describe("Mission acceptance baseline readiness", () => {
             {
               ...openCriterion({
                 observation: [evidenceLocator as typeof firstLocator],
-                responsibility: scope !== "workflow" ? {
+                  responsibility:
+                    scope !== "workflow"
+                      ? {
                   kind: "task_initialization" as const,
                   failure_reference: terminalReference,
-                } : {
+                        }
+                      : {
                   kind: "workflow_node" as const,
                   workflow_id: boundWorkflow.workflow_id,
                   workflow_node_id: "builder",
@@ -716,7 +800,8 @@ describe("Mission acceptance baseline readiness", () => {
           ],
         }
         using _ingressRunner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
-        const resume = () => EngineService.resumeMissionTask({
+          const resume = () =>
+            EngineService.resumeMissionTask({
           taskID,
           importer: {
             missionID: mission.missionID,
@@ -731,14 +816,26 @@ describe("Mission acceptance baseline readiness", () => {
           toolPartID: "prt_acceptance_resume",
         })
         if (scope === "completed" || scope === "dispatched") {
-          await expect(resume()).rejects.toMatchObject({ name: "MissionAcceptanceGapIntegrityError", code: "mission_acceptance_gap_integrity", taskID })
-          expect(taskLifecycleProjection(taskID)).toMatchObject({ status: scope === "completed" ? "completed" : "failed", epoch: 1, terminalEventID: terminalReference.terminalEventID })
+            await expect(resume()).rejects.toMatchObject({
+              name: "MissionAcceptanceGapIntegrityError",
+              code: "mission_acceptance_gap_integrity",
+              taskID,
+            })
+            expect(taskLifecycleProjection(taskID)).toMatchObject({
+              status: scope === "completed" ? "completed" : "failed",
+              epoch: 1,
+              terminalEventID: terminalReference.terminalEventID,
+            })
           return
         }
         const result = await resume()
         const ledger = readLatestTaskAcceptanceLedger(taskID)
         const activeRepair = currentTaskAcceptanceRepair(taskID)
-        expect(activeRepair).toMatchObject({ executionEpoch: 2, artifactID: ledger!.artifactID, revision: { gap: acceptanceGap } })
+          expect(activeRepair).toMatchObject({
+            executionEpoch: 2,
+            artifactID: ledger!.artifactID,
+            revision: { gap: acceptanceGap },
+          })
         const messages = await Session.messages({ sessionID: rootSession.id })
         const repairMessage = messages.find((message) => message.info.id === result.message_id)
         expect({
@@ -754,5 +851,7 @@ describe("Mission acceptance baseline readiness", () => {
         })
       },
     })
-  }, 30_000)
+    },
+    30_000,
+  )
 })

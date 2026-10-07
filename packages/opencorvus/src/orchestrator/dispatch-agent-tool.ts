@@ -37,8 +37,6 @@ import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
 import { taskCancellationAuthorityExecutionError } from "@/engine/cancellation-projection"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
-import { WorkflowNodeOccurrenceConflictError } from "@/engine/dispatch-lineage"
-import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-facts"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 import { Log } from "@/util/log"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
@@ -430,7 +428,7 @@ export function createDispatchAgentTool(input: {
   // once per projected agent. The canonical Zod parser below remains the only
   // execution authority.
   const workflowSubjectSchema = DispatchWorkflowSubjectSchema.describe(
-    "Exact Task workflow subject for this first logical node occurrence. After any virtual workflow node has committed, every later initial dispatch must name another node from that same selected virtual workflow; direct is valid only before the Task has selected a virtual workflow.",
+    "Optional reference to a package workflow node for this dispatch. Omit for direct dispatch. References do not constrain ordering, branching, repeated independent instances, or later dispatches.",
   )
   const useWorktreeSchema = z
     .boolean()
@@ -447,7 +445,12 @@ export function createDispatchAgentTool(input: {
     z
       .object({
         kind: z.literal("prior_dispatch"),
-        continuation_dispatch_id: z.string().min(1).describe("Exact dispatch_id of this worker Session’s latest accepted physical Turn, never the containing dispatch_lineage Artifact ID. On infrastructure failure use worker_turn.current_dispatch_id when supplied, not the failed recovery_authority.dispatch_id. After an accepted continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source."),
+        continuation_dispatch_id: z
+          .string()
+          .min(1)
+          .describe(
+            "Exact dispatch_id of this worker Session’s latest accepted physical Turn, never the containing dispatch_lineage Artifact ID. On infrastructure failure use worker_turn.current_dispatch_id when supplied, not the failed recovery_authority.dispatch_id. After an accepted continuation, use its current dispatch ID; the original logical workflow occurrence ID is not the current Turn. If no worker Turn was accepted, use the exact settled preparation-failure dispatch ID to recover the reserved worker. Stale accepted-Turn source identities are rejected; the Host never substitutes a newer source.",
+          ),
       })
       .strict(),
   ])
@@ -481,7 +484,9 @@ export function createDispatchAgentTool(input: {
         .string()
         .trim()
         .min(1)
-        .describe("New instruction for this successor Turn. To change structured selections, also supply the complete turn.input; prose alone does not change the inherited input."),
+        .describe(
+          "New instruction for this successor Turn. To change structured selections, also supply the complete turn.input; prose alone does not change the inherited input.",
+        ),
       evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
         "Exact new durable evidence identities selected for this successor Turn. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
       ),
@@ -519,7 +524,7 @@ export function createDispatchAgentTool(input: {
           "Projected expert-squad dispatch target identifier to dispatch through the single scheduler agent-dispatch tool. " +
             `For target ${JSON.stringify(agentID)}, provide only these adapter-specific fields: ${acceptedAdapterFields.join(", ")}; omit fields owned by every other target. ` +
             DispatchAdapterContractRegistry.modelGuidance(dispatchAdapterID) +
-            "Put those adapter-specific fields in turn.input. Initial Turns require it. Continuations may supply a complete replacement input for the successor Turn; omitting it inherits the prior Turn input. Every projected workflow node has one logical occurrence per Task. A continuation names one exact lineage authority, reopens its existing Session for another Turn, and reuses that occurrence. Delivery Slice revision identifiers select current contract subjects and never create additional logical occurrences.",
+            "Put those adapter-specific fields in turn.input. Initial Turns require it. Continuations may supply a complete replacement input for the successor Turn; omitting it inherits the prior Turn input. Each initial Tool invocation owns an independent occurrence, including repeated use of the same capability. A continuation names one exact lineage authority, reopens its existing Session for another Turn, and reuses that occurrence. Delivery Slice revision identifiers select current contract subjects and never create additional logical occurrences.",
         ),
       work_scope: ProjectedAgentWorkScopeSchema,
     } as const
@@ -527,7 +532,7 @@ export function createDispatchAgentTool(input: {
       z
         .object({
           kind: z.literal("initial"),
-          workflow_subject: workflowSubjectSchema,
+          workflow_subject: workflowSubjectSchema.optional(),
           use_worktree: useWorktreeSchema,
           ...acceptanceRepairShape,
           input: publicAdapterInputSchema.describe(
@@ -536,9 +541,11 @@ export function createDispatchAgentTool(input: {
         })
         .strict(),
       continuationTurnSchema.extend({
-        input: publicAdapterInputSchema.optional().describe(
-          "Complete adapter input for this successor Turn. Omit to inherit the prior Turn input. When supplied, replaces that input without merging; empty selections remain empty. Earlier Turn facts stay immutable.",
-        ),
+        input: publicAdapterInputSchema
+          .optional()
+          .describe(
+            "Complete adapter input for this successor Turn. Omit to inherit the prior Turn input. When supplied, replaces that input without merging; empty selections remain empty. Earlier Turn facts stay immutable.",
+          ),
       }),
     ])
     variants.push(
@@ -579,10 +586,10 @@ export function createDispatchAgentTool(input: {
 
   const dispatchTool = tool({
     description:
-      "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
-      "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
+      "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with target-specific turn.input for an independent responsibility; workflow_subject is optional reference metadata. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
+      "Choose Task decomposition, ordering, parallel branches and local repair loops from actual evidence. Package workflows are suggestions; capability identity, granted authority and actual inputs govern dispatch. " +
       "Every initial Turn must declare turn.use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
-      "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
+      "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence. Reconcile these facts against each proposed responsibility's actual input requirements. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
       "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore." +
       acceptanceRepairGuidance,
     inputSchema: providerInputSchema,
@@ -595,7 +602,7 @@ export function createDispatchAgentTool(input: {
           turn:
             | {
                 kind: "initial"
-                workflow_subject: unknown
+                workflow_subject?: unknown
                 use_worktree: boolean
                 acceptance_gap_id?: string
                 criterion_ids?: string[]
@@ -655,7 +662,7 @@ export function createDispatchAgentTool(input: {
           ? undefined
           : dispatchWorkflowBinding({
               projection: workflowProjection,
-              subject: DispatchWorkflowSubjectSchema.parse(workflowSubject),
+              subject: DispatchWorkflowSubjectSchema.parse(workflowSubject ?? { kind: "direct" }),
               targetAgentID: target,
             })
       const deliverySliceRevisionIDs = DispatchAdapterContractRegistry.deliverySliceRevisionIDs(
@@ -791,7 +798,8 @@ export function createDispatchAgentTool(input: {
             outcome,
           )
           if (parsed.kind !== "accepted") {
-            if (parsed.kind === "infrastructure_failure" && !parsed.session_id) return dispatch.settlePreparationFailure(parsed)
+            if (parsed.kind === "infrastructure_failure" && !parsed.session_id)
+              return dispatch.settlePreparationFailure(parsed)
             return settleDispatchOrReturnExisting({
               taskID: input.taskID,
               dispatchID: dispatch.dispatchID,
@@ -1016,87 +1024,59 @@ export function createDispatchAgentTool(input: {
         })
       } catch (error) {
         try {
-        if (error instanceof ControlLeaseFenceLostError) throw error
-        if (error instanceof TaskWorkflowBindingConflictError) {
-          return DispatchOutcome.infrastructureFailure({
-            operation: "workflow_binding_initial_claim",
-            message: error.message,
-            errorName: error.name,
-            recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
-            failureIssues: [
-              {
-                code: error.code,
-                path: ["dispatch", "turn", "workflow_subject"],
+          if (error instanceof ControlLeaseFenceLostError) throw error
+          if (error instanceof WorkerTurnSettlementError) {
+            if (!dispatchID) throw error
+            return workerTurnSettlementFailureOutcome({ taskID: input.taskID, dispatchID, error })
+          }
+          if (isExecutionCancellationError(error)) {
+            if (childSessionID && error.sessionID !== childSessionID) {
+              throw new ExecutionCancellationError({
+                source: error.source,
                 message: error.message,
-              },
-            ],
-          })
-        }
-        if (error instanceof WorkflowNodeOccurrenceConflictError) {
-          return DispatchOutcome.infrastructureFailure({
-            operation: "workflow_node_initial_claim",
-            message: error.message,
-            errorName: error.name,
-            recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
-            failureIssues: [
-              {
-                code: error.code,
-                path: ["dispatch", "turn", "workflow_subject", "node_id"],
-                message: error.message,
-              },
-            ],
-          })
-        }
-        if (error instanceof WorkerTurnSettlementError) {
+                sessionID: childSessionID,
+                origin: { ...error.origin, targetSessionID: childSessionID },
+                cause: error,
+              })
+            }
+            throw error
+          }
+          if (input.signal?.aborted) {
+            if (childSessionID) {
+              const origin = isExecutionCancellationError(input.signal.reason)
+                ? { ...input.signal.reason.origin, targetSessionID: childSessionID }
+                : createExecutionCancellationOrigin({
+                    actor: "orchestrator",
+                    source: "dispatch.preparation",
+                    surface: "orchestrator",
+                    ...(dispatchID ? { requestID: dispatchID } : {}),
+                    reason: error instanceof Error ? error.message : String(error),
+                    targetSessionID: childSessionID,
+                    taskID: input.taskID,
+                  })
+              throw new ExecutionCancellationError({
+                source: "session_prompt",
+                message: error instanceof Error ? error.message : String(error),
+                sessionID: childSessionID,
+                origin,
+                cause: error,
+              })
+            }
+            throw error
+          }
           if (!dispatchID) throw error
-          return workerTurnSettlementFailureOutcome({ taskID: input.taskID, dispatchID, error })
-        }
-        if (isExecutionCancellationError(error)) {
-          if (childSessionID && error.sessionID !== childSessionID) {
-            throw new ExecutionCancellationError({
-              source: error.source,
-              message: error.message,
-              sessionID: childSessionID,
-              origin: { ...error.origin, targetSessionID: childSessionID },
-              cause: error,
-            })
-          }
-          throw error
-        }
-        if (input.signal?.aborted) {
-          if (childSessionID) {
-            const origin = isExecutionCancellationError(input.signal.reason)
-              ? { ...input.signal.reason.origin, targetSessionID: childSessionID }
-              : createExecutionCancellationOrigin({
-                  actor: "orchestrator",
-                  source: "dispatch.preparation",
-                  surface: "orchestrator",
-                  ...(dispatchID ? { requestID: dispatchID } : {}),
-                  reason: error instanceof Error ? error.message : String(error),
-                  targetSessionID: childSessionID,
-                  taskID: input.taskID,
-                })
-            throw new ExecutionCancellationError({
-              source: "session_prompt",
-              message: error instanceof Error ? error.message : String(error),
-              sessionID: childSessionID,
-              origin,
-              cause: error,
-            })
-          }
-          throw error
-        }
-        if (!dispatchID) throw error
-        const acceptedTurn = childSessionID && WorkerTurnDescriptor.latestForSession(childSessionID)
-        const currentTurnAccepted = acceptedTurn && acceptedTurn.payload.dispatchTurn?.current_dispatch_id === dispatchID
-        const failure = DispatchOutcome.infrastructureFailure({
-          operation: `${projectedAgent.identity.dispatchAdapterID}_adapter`,
-          message: error instanceof Error ? error.message : String(error),
-          sessionID: currentTurnAccepted ? childSessionID : undefined,
-          recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
-        })
-        if (!currentTurnAccepted && openedDispatch && !openedDispatch.replayOutcome) return openedDispatch.settlePreparationFailure(failure)
-        return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID, outcome: failure }).payload.outcome
+          const acceptedTurn = childSessionID && WorkerTurnDescriptor.latestForSession(childSessionID)
+          const currentTurnAccepted =
+            acceptedTurn && acceptedTurn.payload.dispatchTurn?.current_dispatch_id === dispatchID
+          const failure = DispatchOutcome.infrastructureFailure({
+            operation: `${projectedAgent.identity.dispatchAdapterID}_adapter`,
+            message: error instanceof Error ? error.message : String(error),
+            sessionID: currentTurnAccepted ? childSessionID : undefined,
+            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
+          })
+          if (!currentTurnAccepted && openedDispatch && !openedDispatch.replayOutcome)
+            return openedDispatch.settlePreparationFailure(failure)
+          return settleDispatchOrReturnExisting({ taskID: input.taskID, dispatchID, outcome: failure }).payload.outcome
         } finally {
           openedDispatch?.releaseAdmission()
         }

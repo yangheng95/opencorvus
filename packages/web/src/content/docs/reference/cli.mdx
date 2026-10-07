@@ -61,6 +61,16 @@ opencorvus run "Add unit tests for src/foo.ts" [flags]
 | `--variant VALUE`       | Provider-specific reasoning variant                   |
 | `--thinking`            | Show thinking blocks                                  |
 
+### `opencorvus task create`
+
+Create a fixed-identity Task on a running server with an exact selected Squad:
+
+```bash
+opencorvus task create --pillar code --expert-squad base --request "Add unit tests for src/foo.ts" --url http://127.0.0.1:7878
+```
+
+`--expert-squad` is required. For automatic selection, submit the original request through a native conversation or Mission, where installed candidates are searched and inspected before choosing a very well matched Squad or Dynamic.
+
 ### `opencorvus auth`
 
 Provider credentials are managed with explicit subcommands.

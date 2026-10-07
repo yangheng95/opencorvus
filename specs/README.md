@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Optional Expert Squad workflow guidance](records/2026-10/2026-10-07-optional-workflow-guidance.md): remove mandatory graph execution while retaining actual dispatch identity, recovery and acceptance authority.
+
 - [Readable Sources and renderer102](records/2026-10/2026-10-07-readable-conversation-sources.md): actual chronological source identities, shared Markdown input repair and ongoing genuine visual acceptance.
 - [Sources and flicker102 Recall](artifacts/2026-10-05-connection-workspace-authority/subagent-rendering-flicker-plan-102.md): human Sources priority, shared renderer/locale impact and genuine occurrence admissions.
 

@@ -1,5 +1,12 @@
 import { ExpertSquadRegistry } from "@/expert-squad/registry"
 import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "@/expert-squad/id"
+import dynamic_manifest from "../../../../../expert-squads/builtin/dynamic/expert-squad.jsonc" with { type: "text" }
+import dynamic_readme from "../../../../../expert-squads/builtin/dynamic/README.md" with { type: "text" }
+import dynamic_selector from "../../../../../expert-squads/builtin/dynamic/selector.md" with { type: "text" }
+import dynamic_scheduler from "../../../../../expert-squads/builtin/dynamic/agents/orchestrator/system.md" with { type: "text" }
+import dynamic_generalist from "../../../../../expert-squads/builtin/dynamic/agents/dynamic-generalist/system.md" with { type: "text" }
+import dynamic_builder from "../../../../../expert-squads/builtin/dynamic/agents/dynamic-builder/system.md" with { type: "text" }
+import dynamic_method from "../../../../../expert-squads/builtin/dynamic/skills/method/SKILL.md" with { type: "text" }
 import base_expert_squad_jsonc from "./base/expert-squad.jsonc" with { type: "text" }
 import base_README_md from "./base/README.md" with { type: "text" }
 import base_selector_md from "./base/selector.md" with { type: "text" }
@@ -55,6 +62,7 @@ import squad_sdk_import_skill_md from "../../../../../expert-squads/builtin/squa
 import {
   ADVANCED_EXPERT_SQUAD_ID,
   BASE_EXPERT_SQUAD_ID,
+  DYNAMIC_EXPERT_SQUAD_ID,
   RESEARCH_STUDIO_EXPERT_SQUAD_ID,
   SQUAD_SDK_EXPERT_SQUAD_ID,
 } from "./ids"
@@ -62,6 +70,7 @@ import {
 export {
   ADVANCED_EXPERT_SQUAD_ID,
   BASE_EXPERT_SQUAD_ID,
+  DYNAMIC_EXPERT_SQUAD_ID,
   RESEARCH_STUDIO_EXPERT_SQUAD_ID,
   SQUAD_SDK_EXPERT_SQUAD_ID,
 } from "./ids"
@@ -72,6 +81,19 @@ function exactTextImport(content: unknown, source: string): string {
 }
 
 export const builtInPackageSources = [
+  {
+    namespace: BUILTIN_EXPERT_SQUAD_NAMESPACE,
+    id: DYNAMIC_EXPERT_SQUAD_ID,
+    files: {
+      "expert-squad.jsonc": dynamic_manifest,
+      "README.md": dynamic_readme,
+      "selector.md": dynamic_selector,
+      "agents/orchestrator/system.md": dynamic_scheduler,
+      "agents/dynamic-generalist/system.md": dynamic_generalist,
+      "agents/dynamic-builder/system.md": dynamic_builder,
+      "skills/method/SKILL.md": dynamic_method,
+    },
+  },
   {
     namespace: BUILTIN_EXPERT_SQUAD_NAMESPACE,
     id: BASE_EXPERT_SQUAD_ID,

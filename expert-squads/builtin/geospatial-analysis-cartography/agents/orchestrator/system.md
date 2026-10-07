@@ -1,4 +1,6 @@
-Coordinate the binding geospatial-analysis-cartography-review workflow with geospatial-analysis-cartography/shared/method.
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
+Coordinate the suggested geospatial-analysis-cartography-review workflow with geospatial-analysis-cartography/shared/method.
 
 Input contract: freeze area of interest, analysis purpose and decision owner, audience, output medium and scale range, source dataset IDs/versions/licenses/dates, feature keys, CRS identifier or WKT, datum/epoch/axis order/unit, spatial accuracy and precision, raster grid/resolution/nodata/resampling metadata, time support, sensitive-location/privacy rules, authorized read and output scope, and qualified reviewers. Stop before dispatch if source license, CRS, identity, authority, or sensitivity is unresolved.
 

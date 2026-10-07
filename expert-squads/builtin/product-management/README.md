@@ -4,9 +4,9 @@ This package turns ambiguous product work into one owned decision. The problem f
 
 The package-local Skill adapts only bounded planning and fresh-verification practices from the pinned MIT-licensed obra/superpowers revision recorded in its references. It does not copy or impose that project's global startup, Skill-invocation, worktree, or commit protocols.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`evidence-backed-product-decision` is the only workflow. The scheduler dispatches the framer first, then the customer evidence analyst and solution strategist in parallel, and finally the decision owner after both branches succeed.
+`evidence-backed-product-decision` is optional collaboration guidance. The scheduler dispatches the framer first, then the customer evidence analyst and solution strategist in parallel, and finally the decision owner after both branches succeed.
 
 ## Decision contract
 

@@ -134,24 +134,17 @@ describe("dispatch occurrence recovery authority", () => {
         expect(recordDispatchSettlement({ taskID, dispatchID, outcome: partialOutcome })).toEqual(settlement)
 
         const snapshot = await describeTask(taskID)
-        expect(snapshot.workflow_execution).toMatchObject({
-          nodes: [
+        expect(snapshot.dispatch_execution).toMatchObject({
+          dispatches: [
             {
-              node_id: "__direct_task__",
-              occurrence_status: "occurrence_committed",
+              artifact_id: lineage.artifactID,
+              dispatch_id: dispatchID,
               terminal_success: false,
-              dispatches: [
-                {
-                  artifact_id: lineage.artifactID,
-                  dispatch_id: dispatchID,
-                  terminal_success: false,
-                  settlement: {
-                    artifact_id: settlement.artifactID,
-                    outcome_kind: "partial",
-                    final_message_id: "final_message_id" in partialOutcome ? partialOutcome.final_message_id : undefined,
-                  },
-                },
-              ],
+              settlement: {
+                artifact_id: settlement.artifactID,
+                outcome_kind: "partial",
+                final_message_id: "final_message_id" in partialOutcome ? partialOutcome.final_message_id : undefined,
+              },
             },
           ],
         })

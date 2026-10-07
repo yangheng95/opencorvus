@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Optional Expert Squad workflow guidance](2026-10-07-optional-workflow-guidance.md)
+
 - [Readable Sources and renderer102](2026-10-07-readable-conversation-sources.md)
 - [Sources and flicker102 Recall](../../artifacts/2026-10-05-connection-workspace-authority/subagent-rendering-flicker-plan-102.md)
 

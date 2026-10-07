@@ -300,17 +300,15 @@ export async function resolveTaskCreator(rawCreator: z.input<typeof TaskCreator>
 
 export function assertTaskCreatorExpertSquadAuthority(input: {
   creator: z.infer<typeof ResolvedTaskCreator>
-  promptProfile?: string
+  promptProfile: string
 }): void {
   if (input.creator.actor !== "mission") return
   const held = input.creator.heldExpertSquadIDs
-  if (input.promptProfile && held.includes(input.promptProfile)) return
+  if (held.includes(input.promptProfile)) return
   throw new MissionExpertSquadAuthorityError({
-    message: input.promptProfile
-      ? `Mission may create a Task only with a held Expert Squad; received ${JSON.stringify(input.promptProfile)}.`
-      : "Mission Task creation requires one explicit held Expert Squad promptProfile.",
+    message: `Mission may create a Task only with a held Expert Squad; received ${JSON.stringify(input.promptProfile)}.`,
     missionSessionID: input.creator.sessionID,
-    requestedProfileID: input.promptProfile ?? null,
+    requestedProfileID: input.promptProfile,
     heldExpertSquadCount: held.length,
     heldExpertSquadSnapshotHash: createHash("sha256").update(JSON.stringify(held)).digest("hex"),
   })

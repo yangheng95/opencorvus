@@ -37,6 +37,7 @@ const base = {
   title: "Canonical global request",
   request: "Create one Task for one immutable global request",
   productPillar: "code" as const,
+  promptProfile: "base",
   source: "test",
 }
 

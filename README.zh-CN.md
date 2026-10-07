@@ -59,7 +59,9 @@ OpenCorvus 是面向长程复杂任务的开源 Agent Harness：把模型、工�
 
 ## 快速开始
 
-[下载桌面端](https://opencorvus.com/zh-cn/download/) → 配置可访问的模型 → 选择项目与专家团 → 提交目标和验收要求。
+[下载桌面端](https://opencorvus.com/zh-cn/download/) → 配置可访问的模型 → 选择项目（专家团可选）→ 提交目标和验收要求。
+
+未手动选择专家团时，先搜索并核对已安装候选；有非常匹配的专家团就直接使用，否则由 Dynamic 自动组合专家，明确名称、职责和真实能力来源。手动选择时保持该团身份与能力。调度可组合有向无环图、局部循环和条件分支，预设工作流仅作参考。[SDK 与调度契约](specs/current/architecture/expert-squad-scheduling.md)。
 
 也可以从源码开始：
 

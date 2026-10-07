@@ -18,10 +18,7 @@ import {
 } from "@/engine/task-root-ingress-delivery"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { selectedWorkflowBinding } from "@/engine/workflow-binding"
-import {
-  assertTaskWorkflowBindingInTransaction,
-  TaskWorkflowBindingConflictError,
-} from "@/engine/workflow-binding-facts"
+import { assertTaskWorkflowPackageInTransaction } from "@/engine/workflow-binding-facts"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
@@ -77,14 +74,17 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test.each([false, true])("fresh worker commits input and reaches provider processing with acceptance obligation=%s", async (withRepair) => {
+test.each([false, true])(
+  "fresh worker commits input and reaches provider processing with acceptance obligation=%s",
+  async (withRepair) => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       using _ingressRunner = IngressTestHooks.replaceTaskIngressRunner({
         runner: async ({ taskID, wakeID, predecessorID }) => {
-          if (!wakeID || !predecessorID) throw new Error("Lifecycle delivery requires its exact Task ingress identity")
+            if (!wakeID || !predecessorID)
+              throw new Error("Lifecycle delivery requires its exact Task ingress identity")
           const task = requireTask(taskID)
           if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
           const orchestrator = await Session.create({
@@ -207,22 +207,67 @@ test.each([false, true])("fresh worker commits input and reaches provider proces
       }
       let turn = DispatchTurnSchema.parse(baseTurn)
       if (withRepair) {
-        const evidenceID = recordEngineArtifact({ taskID, kind: "expert_output", label: "reviewed source",
-          payload: { result: "requires verification" }, timeCreated: now })
+          const evidenceID = recordEngineArtifact({
+            taskID,
+            kind: "expert_output",
+            label: "reviewed source",
+            payload: { result: "requires verification" },
+            timeCreated: now,
+          })
         const criterion = {
-          criterion_id: "verify-charter", state: "open", disposition: "unresolved", finding: "Verify the charter.",
-          responsibility: { kind: "workflow_node", workflow_id: "planner-parallel-delivery", workflow_node_id: "base-planner" },
+            criterion_id: "verify-charter",
+            state: "open",
+            disposition: "unresolved",
+            finding: "Verify the charter.",
+            responsibility: {
+              kind: "workflow_node",
+              workflow_id: "planner-parallel-delivery",
+              workflow_node_id: "base-planner",
+            },
           observation_evidence_locators: [exactEngineArtifactLocator({ taskID, artifactID: evidenceID })],
-          repair_evidence_locators: [], resolution_evidence_locators: [], invalidating_evidence_locators: [], irreducible_blocker_evidence_locators: [],
-          repair_action: { operation: "verify", target: "charter", expected_evidence_kind: "verified-charter", parameters: {}, identity_sha256: "a".repeat(64) },
+            repair_evidence_locators: [],
+            resolution_evidence_locators: [],
+            invalidating_evidence_locators: [],
+            irreducible_blocker_evidence_locators: [],
+            repair_action: {
+              operation: "verify",
+              target: "charter",
+              expected_evidence_kind: "verified-charter",
+              parameters: {},
+              identity_sha256: "a".repeat(64),
+            },
+          }
+          const gap = {
+            gap_id: "gap-first-worker",
+            reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_reviewed" },
+            criteria: [criterion],
         }
-        const gap = { gap_id: "gap-first-worker", reviewed_terminal_lifecycle_reference: { terminalEventID: "pev_reviewed" }, criteria: [criterion] }
-        const ledgerID = recordEngineArtifact({ taskID, kind: "task_acceptance_ledger", label: "current acceptance obligation",
-          payload: { protocol: "task-acceptance-ledger-v2", revision: 1, task_id: taskID, execution_epoch: 1,
-            previous_revision_artifact_id: null, gap, time_recorded: now }, timeCreated: now })
-        turn = DispatchTurnSchema.parse({ ...baseTurn, evidence_locators: criterion.observation_evidence_locators,
-          acceptance_repair: { gap_id: gap.gap_id, ledger_revision_artifact_id: ledgerID, execution_epoch: 1,
-            criteria: [criterion], checkpoint_required: false } })
+          const ledgerID = recordEngineArtifact({
+            taskID,
+            kind: "task_acceptance_ledger",
+            label: "current acceptance obligation",
+            payload: {
+              protocol: "task-acceptance-ledger-v2",
+              revision: 1,
+              task_id: taskID,
+              execution_epoch: 1,
+              previous_revision_artifact_id: null,
+              gap,
+              time_recorded: now,
+            },
+            timeCreated: now,
+          })
+          turn = DispatchTurnSchema.parse({
+            ...baseTurn,
+            evidence_locators: criterion.observation_evidence_locators,
+            acceptance_repair: {
+              gap_id: gap.gap_id,
+              ledger_revision_artifact_id: ledgerID,
+              execution_epoch: 1,
+              criteria: [criterion],
+              checkpoint_required: false,
+            },
+          })
       }
       const origin = createDispatchLineageOrigin({
         dispatchID,
@@ -258,7 +303,10 @@ test.each([false, true])("fresh worker commits input and reaches provider proces
           async process() {
             if (withRepair) {
               const source = await MessageStore.get({ sessionID: assistant.sessionID, messageID: assistant.parentID })
-              const text = source.parts.filter((part) => part.type === "text").map((part) => part.text).join("\n")
+                const text = source.parts
+                  .filter((part) => part.type === "text")
+                  .map((part) => part.text)
+                  .join("\n")
               expect(text).toContain(taskRequest)
               expect(text).toContain("gap-first-worker")
             }
@@ -343,7 +391,16 @@ test.each([false, true])("fresh worker commits input and reaches provider proces
               messages: [
                 {
                   info: { id: descriptor?.payload.messageAuthority.user_message_id, role: "user" },
-                  parts: [{ type: "text" }, ...(withRepair ? [{ type: "text", text: expect.stringContaining("gap-first-worker") }] : [])],
+                    parts: expect.arrayContaining([
+                      expect.objectContaining({
+                        type: "text",
+                        text: expect.stringContaining("Publish the bounded research charter"),
+                      }),
+                      expect.objectContaining({ type: "text", text: expect.stringContaining("# Dispatch evidence") }),
+                      ...(withRepair
+                        ? [expect.objectContaining({ type: "text", text: expect.stringContaining("gap-first-worker") })]
+                        : []),
+                    ]),
                 },
               ],
               descriptor: {
@@ -364,7 +421,9 @@ test.each([false, true])("fresh worker commits input and reaches provider proces
 
         expect(result).toEqual({ sessionID: committedSessionID, finalMessageID: canonicalFinalMessageID })
         expect(processorStarts).toBe(2)
-        expect(await MessageStore.get({ sessionID: committedSessionID!, messageID: result.finalMessageID })).toMatchObject({
+          expect(
+            await MessageStore.get({ sessionID: committedSessionID!, messageID: result.finalMessageID }),
+          ).toMatchObject({
           info: { id: canonicalFinalMessageID, parentID: expect.any(String), finish: "stop" },
           parts: [{ type: "text", text: "canonical charter complete" }],
         })
@@ -400,76 +459,6 @@ test.each([false, true])("fresh worker commits input and reaches provider proces
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("already_delivered")
-        const directBinding = selectedWorkflowBinding({
-          projection: {
-            packageRevision,
-            virtualWorkflows: scheduler.virtualWorkflows,
-          },
-          workflowID: null,
-        })
-        try {
-          Database.use((db) => assertTaskWorkflowBindingInTransaction({ db, taskID, workflowBinding: directBinding }))
-          throw new Error("Expected immutable workflow binding conflict")
-        } catch (error) {
-          expect(error).toBeInstanceOf(TaskWorkflowBindingConflictError)
-          expect(error).toMatchObject({
-            code: "task_workflow_binding_conflict",
-            taskID,
-            artifactID: lineageArtifactID,
-          })
-        }
-        const executors = Object.fromEntries(
-          DispatchAdapterContractRegistry.ids.map((id) => [
-            id,
-            async () => {
-              throw new Error(`unexpected ${id} provider execution`)
-            },
-          ]),
-        ) as Record<AgentDispatchAdapterID, DispatchAdapterExecutors[AgentDispatchAdapterID]>
-        const dispatchTool = createDispatchAgentTool({
-          taskID,
-          projectedAgents: skillProjection.projectedAgents,
-          executors,
-          openLineage({ workflowBinding: requestedBinding }) {
-            return Database.use((db) =>
-              assertTaskWorkflowBindingInTransaction({ db, taskID, workflowBinding: requestedBinding! }),
-            ) as never
-          },
-          runInWorktree: async ({ run }) => await run(),
-          runDetached: async (run) => await run(),
-          runDetachedRecovery: async (run) => await run(),
-        })
-        const conflictOutcome = await (dispatchTool.execute as any)(
-          {
-            dispatch: {
-              target: projection.workerCapability.identity.agentID,
-              work_scope: { kind: "task" },
-              turn: {
-                kind: "initial",
-                workflow_subject: { kind: "direct" },
-                use_worktree: false,
-                input: {
-                  goal_ids: [],
-                  instruction: "attempt an invalid direct dispatch after virtual workflow selection",
-                  reason: "verify immutable binding is exposed by the public dispatch contract",
-                },
-              },
-            },
-          },
-          {},
-        )
-        expect(conflictOutcome).toMatchObject({
-          kind: "infrastructure_failure",
-          operation: "workflow_binding_initial_claim",
-          error_name: "TaskWorkflowBindingConflictError",
-          recovery_authority: { occurrence_status: "occurrence_not_committed" },
-          failure_issues: [
-            {
-              code: "task_workflow_binding_conflict",
-              path: ["dispatch", "turn", "workflow_subject"],
-            },
-          ],
-        })
       } finally {
         runtimeDisposeSpy.mockRestore()
         processorSpy.mockRestore()
@@ -480,4 +469,6 @@ test.each([false, true])("fresh worker commits input and reaches provider proces
   // The accepted lifecycle delivery owns an independent project lease. Join
   // it only after the setup/contract assertion lease has been released.
   await waitForIngressDeliveryHooksForTest()
-}, 60_000)
+  },
+  60_000,
+)

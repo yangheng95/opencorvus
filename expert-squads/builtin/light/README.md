@@ -2,7 +2,7 @@
 
 Light is a read-only Expert Squad for consultation, investigation, planning, comparison, and clarifying questions. Its package roster contains exactly two dynamic Agent identities: `light-planner` and `light-investigator`.
 
-The package intentionally declares no binding virtual workflow. The Orchestrator can dispatch the same role identity into multiple independent sibling Sessions, so parallelism follows the number of bounded advisory or evidence partitions rather than a fixed `planner-1` / `investigator-1` roster. Every Session receives its own context, lineage, scope, and result.
+The package intentionally declares no optional virtual workflow reference. The Orchestrator can dispatch the same role identity into multiple independent sibling Sessions, so parallelism follows the number of bounded advisory or evidence partitions rather than a fixed `planner-1` / `investigator-1` roster. Every Session receives its own context, lineage, scope, and result.
 
 Both workers use the `delegated-worker` runtime with base-tool inheritance disabled and the same exact read-only capability projection. `light-planner` owns advice, option analysis, decision frames, plans, and question sets; `light-investigator` owns repository and external evidence investigation. Only the two worker roles activate the package Skill capability `light/shared/method` and load it using the returned loader name `light-advisory-method`. The scheduler coordinates consultation without loading that Skill.
 

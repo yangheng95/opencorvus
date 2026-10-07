@@ -15,7 +15,7 @@ This is a bounded OpenCorvus adaptation of K-Dense AI's individually MIT-license
 2. Treat unpublished content as confidential. Do not upload manuscript text, supplements, review drafts, or non-public results to an external search, citation, plagiarism, image, or model service without explicit authorization and venue permission.
 3. Separate manuscript evidence, public literature evidence, calculations, reviewer inference, and unresolved unknowns. Never claim to have run experiments, reproduced results, opened inaccessible supplements, or verified a source that was not inspected.
 
-## Binding review workflow
+## Suggested review responsibilities
 
 1. Freeze the review charter and section/claim inventory before critique.
 2. Map the relevant literature with reproducible queries, databases, dates, inclusion rules, and exact source identifiers in `assets/literature-search-protocol.md`. Do not equate search rank with importance.

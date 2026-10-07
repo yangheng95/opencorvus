@@ -5,7 +5,7 @@ description: Execute the binding tax compliance evidence chain with parallel acc
 
 # Tax Compliance workflow
 
-Use only `tax-compliance-assessment`. Every node runs exactly once. Accounting controls and tax obligations are the only parallel branch and both begin after the evidence dossier. The remediation analyst joins both branches. The fact checker directly verifies only the remediation analyst's single synthesized compliance plan. The report writer follows the audit.
+Use only `tax-compliance-assessment`. Reference nodes are optional; independent occurrences may reuse a capability. Accounting controls and tax obligations are an example of independent parallel work and both begin after the evidence dossier. The remediation analyst joins both branches. The fact checker directly verifies only the remediation analyst's single synthesized compliance plan. The report writer follows the audit.
 
 Every worker enumerates the complete current Task Artifact catalog, completely reads exact chosen locators, and selects every semantic source. Domain outputs use `publish_tax_compliance_artifact`; do not duplicate them through generic `artifact_publish`. Dispatches carry intent and scope only.
 

@@ -269,24 +269,24 @@ describe("abandoned dispatch recovery", () => {
           using _remoteOwner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime(remoteOwnerID)
           return recordTestDispatchLineage({
             origin: createDispatchLineageOrigin({
-            dispatchID,
-            taskID,
-            orchestratorSessionID: task.session_id!,
-            orchestratorMessageID: Identifier.ascending("message"),
-            toolPartID: Identifier.ascending("part"),
-            toolCallID: Identifier.ascending("call"),
-            targetAgentID: worker.identity.agentID,
-            projectedWorkerIdentity: worker.identity,
-            workScope: { kind: "task" },
-            workflowBinding: selectedWorkflowBinding({
-              projection: {
-                packageRevision: scheduler.packageRevision,
-                virtualWorkflows: scheduler.virtualWorkflows,
-              },
-              workflowID: null,
-            }),
-            workflowNodeID: null,
-            adapterInput: {},
+              dispatchID,
+              taskID,
+              orchestratorSessionID: task.session_id!,
+              orchestratorMessageID: Identifier.ascending("message"),
+              toolPartID: Identifier.ascending("part"),
+              toolCallID: Identifier.ascending("call"),
+              targetAgentID: worker.identity.agentID,
+              projectedWorkerIdentity: worker.identity,
+              workScope: { kind: "task" },
+              workflowBinding: selectedWorkflowBinding({
+                projection: {
+                  packageRevision: scheduler.packageRevision,
+                  virtualWorkflows: scheduler.virtualWorkflows,
+                },
+                workflowID: null,
+              }),
+              workflowNodeID: null,
+              adapterInput: {},
             }),
             childSessionID: child.id,
           })
@@ -369,9 +369,7 @@ describe("abandoned dispatch recovery", () => {
               .run(),
           ),
         ).toThrow("worker_turn_descriptor: Task Project or dispatch lineage authority mismatch")
-        Database.use((db) =>
-          db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, sameProjectOtherTaskID)).run(),
-        )
+        Database.use((db) => db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, sameProjectOtherTaskID)).run())
         const afterDescriptor = TaskControlTestHooks.currentProjectFrontierSlice(
           restartTaskControlProjectFrontier(beforeDescriptor.checkpoint),
         )
@@ -386,9 +384,7 @@ describe("abandoned dispatch recovery", () => {
         expect(preflightMysqlTransferSnapshot(transferSnapshot).schemaFingerprint).toBe(
           transferSnapshot.schemaFingerprint,
         )
-        const descriptorTable = transferSnapshot.tables.find(
-          (table) => table.name === "worker_turn_descriptor",
-        )
+        const descriptorTable = transferSnapshot.tables.find((table) => table.name === "worker_turn_descriptor")
         const artifactTable = transferSnapshot.tables.find((table) => table.name === "engine_artifact")
         const descriptorSnapshot = descriptorTable?.rows.find((row) => row.id === descriptor.id)
         if (!descriptorTable || !artifactTable || !descriptorSnapshot) {
@@ -415,9 +411,7 @@ describe("abandoned dispatch recovery", () => {
         expectInvalidTransferDescriptor(wrongSession)
 
         const missingLineage = structuredClone(transferSnapshot)
-        const missingLineageArtifacts = missingLineage.tables.find(
-          (table) => table.name === "engine_artifact",
-        )!
+        const missingLineageArtifacts = missingLineage.tables.find((table) => table.name === "engine_artifact")!
         missingLineageArtifacts.rows = missingLineageArtifacts.rows.filter((row) => row.id !== lineage.artifactID)
         expectInvalidTransferDescriptor(missingLineage)
 
@@ -550,10 +544,7 @@ describe("abandoned dispatch recovery", () => {
                 .select({ payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
                 .where(
-                  and(
-                    eq(EngineArtifactTable.task_id, taskID),
-                    eq(EngineArtifactTable.kind, "dispatch_settlement"),
-                  ),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_settlement")),
                 )
                 .all()
                 .filter((row) => (row.payload as { dispatch_id?: string }).dispatch_id === dispatchID).length,
@@ -850,9 +841,8 @@ describe("abandoned dispatch recovery", () => {
         await reconcileTaskControlPlane(taskID)
         const frontierRecoveryDeadline = Date.now() + 10_000
         while (
-          Database.use((db) =>
-            unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
-          ) > 0 &&
+          Database.use((db) => unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length) >
+            0 &&
           Date.now() < frontierRecoveryDeadline
         ) {
           await Bun.sleep(25)
@@ -946,8 +936,11 @@ describe("abandoned dispatch recovery", () => {
         })
         expect(
           Database.use((db) =>
-            db.select({ id: WorkerTurnDescriptorTable.id }).from(WorkerTurnDescriptorTable)
-              .where(eq(WorkerTurnDescriptorTable.id, retainedDescriptor.id)).get(),
+            db
+              .select({ id: WorkerTurnDescriptorTable.id })
+              .from(WorkerTurnDescriptorTable)
+              .where(eq(WorkerTurnDescriptorTable.id, retainedDescriptor.id))
+              .get(),
           ),
         ).toBeUndefined()
       },
@@ -1101,7 +1094,7 @@ describe("abandoned dispatch recovery", () => {
               outcome: DispatchOutcome.infrastructureFailure({
                 operation: "reserve-dispatch-occurrence",
                 message: "injected occurrence conflict before lineage",
-                errorName: "WorkflowNodeOccurrenceConflictError",
+                errorName: "WorkerDispatchInputError",
                 recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
               }),
             },
@@ -1133,11 +1126,14 @@ describe("abandoned dispatch recovery", () => {
           inputMessageID: string
         }>
         for (const memberIndex of [0, 2, 3]) {
-          const child = memberIndex === 2 ? { id: Identifier.ascending("session") } : await Session.create({
-            kind: worker.identity.sessionKind,
-            parentID: orchestrator.id,
-            title: `Collection member ${memberIndex}`,
-          })
+          const child =
+            memberIndex === 2
+              ? { id: Identifier.ascending("session") }
+              : await Session.create({
+                  kind: worker.identity.sessionKind,
+                  parentID: orchestrator.id,
+                  title: `Collection member ${memberIndex}`,
+                })
           const origin = createDispatchLineageOrigin({
             taskID,
             orchestratorSessionID: orchestrator.id,
@@ -1183,15 +1179,22 @@ describe("abandoned dispatch recovery", () => {
           ),
         ).toEqual({ kind: "pending" })
         const preparationFactID = recordTaskInfrastructureError({
-          taskID, component: "dispatch-agent", operation: "prepare-dispatch-admission",
+          taskID,
+          component: "dispatch-agent",
+          operation: "prepare-dispatch-admission",
           reason: "injected failure after lineage and before descriptor",
           context: { dispatchID: failedAfterLineage.dispatchID },
         })
         recordDispatchSettlement({
-          taskID, dispatchID: failedAfterLineage.dispatchID,
+          taskID,
+          dispatchID: failedAfterLineage.dispatchID,
           outcome: DispatchOutcome.infrastructureFailure({
-            operation: "prepare-dispatch-admission", message: "injected failure after lineage and before descriptor",
-            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID, dispatchID: failedAfterLineage.dispatchID }),
+            operation: "prepare-dispatch-admission",
+            message: "injected failure after lineage and before descriptor",
+            recoveryAuthority: resolveDispatchOccurrenceAuthority({
+              taskID,
+              dispatchID: failedAfterLineage.dispatchID,
+            }),
             infrastructureError: exactEngineArtifactLocator({ taskID, artifactID: preparationFactID }),
           }),
         })
@@ -1294,8 +1297,9 @@ describe("abandoned dispatch recovery", () => {
           retryRequired: false,
         })
         expect(
-          members.map((member) =>
-            findDispatchSettlementByDispatchID({ taskID, dispatchID: member.dispatchID })?.payload.outcome.kind,
+          members.map(
+            (member) =>
+              findDispatchSettlementByDispatchID({ taskID, dispatchID: member.dispatchID })?.payload.outcome.kind,
           ),
         ).toEqual(["partial", "infrastructure_failure", "infrastructure_failure"])
         expect(
@@ -1534,14 +1538,15 @@ describe("abandoned dispatch recovery", () => {
           await deliveryRelease
         })
         recordTestProcessIdentity(remoteOwnerID, "dead")
-        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime(
-          "runtime:test-old-epoch-recovery",
-        )
+        using _owner = TaskControlTestHooks.replaceTerminalIngressDeliveryRuntime("runtime:test-old-epoch-recovery")
         using _runner = TaskControlTestHooks.replaceTaskIngressRunner({ runner: async () => ({}) })
         const recovery = reconcileTaskControlPlane(taskID)
-        await Promise.race([deliveryBlocked, recovery.then(() => {
-          throw new Error("Recovery completed before reaching its expected delivery barrier")
-        })])
+        await Promise.race([
+          deliveryBlocked,
+          recovery.then(() => {
+            throw new Error("Recovery completed before reaching its expected delivery barrier")
+          }),
+        ])
         const settlement = findDispatchSettlementByDispatchID({ taskID, dispatchID })
         if (!settlement) throw new Error("Expected settlement before the delivery barrier")
         await ProtocolStore.appendEvent({
@@ -1714,19 +1719,23 @@ describe("abandoned dispatch recovery", () => {
           projectDue: false,
           indexed: [true, true, true, true, true, true, true, true, true],
         })
-        Database.immediateTransaction((db) =>
-          db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).run(),
-        )
+        Database.immediateTransaction((db) => db.delete(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).run())
         expect(
           Database.use((db) =>
-            db.select({ id: EngineArtifactTable.id }).from(EngineArtifactTable)
-              .where(eq(EngineArtifactTable.id, lineage.artifactID)).get(),
+            db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, lineage.artifactID))
+              .get(),
           ),
         ).toBeUndefined()
         expect(
-          Database.immediateTransaction((db) =>
-            db.delete(EngineControlActivationLeaseTable)
-              .where(eq(EngineControlActivationLeaseTable.id, creatorActivationID)).run().changes,
+          Database.immediateTransaction(
+            (db) =>
+              db
+                .delete(EngineControlActivationLeaseTable)
+                .where(eq(EngineControlActivationLeaseTable.id, creatorActivationID))
+                .run().changes,
           ),
         ).toBe(1)
       },
@@ -1870,9 +1879,7 @@ describe("abandoned dispatch recovery", () => {
             workflowBinding: lineage.payload.workflow_binding,
           })
         }
-        const firstPage = Database.use((db) =>
-          unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 32 }),
-        )
+        const firstPage = Database.use((db) => unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 32 }))
         let projectFrontier = TaskControlTestHooks.currentProjectFrontierSlice()
         while (projectFrontier.next) {
           projectFrontier = TaskControlTestHooks.currentProjectFrontierSlice(projectFrontier.next)
@@ -1881,16 +1888,13 @@ describe("abandoned dispatch recovery", () => {
         let coalescedRequests: number[] = []
         const sourcePasses: number[] = []
         let lateDescriptorProjectDiscovery = false
-        let lateDescriptorPageEvidence:
-          | { scannedPageSizes: number[]; lateDescriptorRecovered: boolean }
-          | undefined
+        let lateDescriptorPageEvidence: { scannedPageSizes: number[]; lateDescriptorRecovered: boolean } | undefined
         recordTestProcessIdentity("runtime:test-late-descriptor-owner", "dead")
         recordTestProcessIdentity("runtime:test-paged-delivery-failure", "dead")
         recordTestProcessIdentity("runtime:test-paged-dead-owner:32", "dead")
         await using liveProcess = childProcessIdentity(liveOwnerID)
         const productionDriver = new TaskControlDriver({
-          scan: (requestedTaskID, context) =>
-            TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
+          scan: (requestedTaskID, context) => TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
           initialBackoffMilliseconds: 10_000,
         })
         const productionLiveness = joinProcessLiveness(currentRuntimeOccurrenceID())
@@ -1933,9 +1937,8 @@ describe("abandoned dispatch recovery", () => {
                   (lineage) => lineage.dispatchID === lateDescriptorDispatchID,
                 ),
               }
-              lateDescriptorProjectDiscovery = TaskControlTestHooks.currentProjectFrontierSlice(
-                projectCheckpoint,
-              ).taskIDs.includes(taskID)
+              lateDescriptorProjectDiscovery =
+                TaskControlTestHooks.currentProjectFrontierSlice(projectCheckpoint).taskIDs.includes(taskID)
               coalescedRequests.push(await productionDriver.request(taskID))
             }
           },
@@ -1959,17 +1962,15 @@ describe("abandoned dispatch recovery", () => {
         expect(sourcePasses).toContain(1)
         const continuationDeadline = Date.now() + 2_000
         while (
-          Database.use((db) =>
-            unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
+          Database.use(
+            (db) => unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
           ) !== 31 &&
           Date.now() < continuationDeadline
         ) {
           await Bun.sleep(25)
         }
         expect(
-          Database.use((db) =>
-            unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
-          ),
+          Database.use((db) => unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length),
         ).toBe(31)
         const armedWake = productionDriver.snapshot().find((entry) => entry.taskID === taskID)?.wakeAt
         expect(armedWake).toBeDefined()
@@ -1980,8 +1981,8 @@ describe("abandoned dispatch recovery", () => {
         let unresolved = 31
         while (unresolved > 0 && Date.now() < recoveryDeadline) {
           await Bun.sleep(25)
-          unresolved = Database.use((db) =>
-            unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
+          unresolved = Database.use(
+            (db) => unresolvedDispatchRecoveryPageInTransaction(db, { taskID, limit: 64 }).lineages.length,
           )
         }
         expect(unresolved).toBe(0)
@@ -2003,16 +2004,11 @@ describe("abandoned dispatch recovery", () => {
                 .select({ payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
                 .where(
-                  and(
-                    eq(EngineArtifactTable.task_id, taskID),
-                    eq(EngineArtifactTable.kind, "dispatch_settlement"),
-                  ),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_settlement")),
                 )
                 .all()
-                .filter(
-                  (row) =>
-                    (row.payload as { dispatch_id?: string }).dispatch_id === failedFirstPageDispatchID,
-                ).length,
+                .filter((row) => (row.payload as { dispatch_id?: string }).dispatch_id === failedFirstPageDispatchID)
+                .length,
           ),
           failedRecoveryIngressCount: Database.use(
             (db) =>
@@ -2069,24 +2065,24 @@ describe("abandoned dispatch recovery", () => {
           const dispatchID = Identifier.ascending("artifact")
           const lineage = recordTestDispatchLineage({
             origin: createDispatchLineageOrigin({
-                dispatchID,
-                taskID: deletedTaskID,
-                orchestratorSessionID: deletedTask.session_id!,
-                orchestratorMessageID: Identifier.ascending("message"),
-                toolPartID: Identifier.ascending("part"),
-                toolCallID: Identifier.ascending("call"),
-                targetAgentID: worker.identity.agentID,
-                projectedWorkerIdentity: worker.identity,
-                workScope: { kind: "task" },
-                workflowBinding: selectedWorkflowBinding({
-                  projection: {
-                    packageRevision: scheduler.packageRevision,
-                    virtualWorkflows: scheduler.virtualWorkflows,
-                  },
-                  workflowID: null,
-                }),
-                workflowNodeID: null,
-                adapterInput: { deletedTaskIndex: index },
+              dispatchID,
+              taskID: deletedTaskID,
+              orchestratorSessionID: deletedTask.session_id!,
+              orchestratorMessageID: Identifier.ascending("message"),
+              toolPartID: Identifier.ascending("part"),
+              toolCallID: Identifier.ascending("call"),
+              targetAgentID: worker.identity.agentID,
+              projectedWorkerIdentity: worker.identity,
+              workScope: { kind: "task" },
+              workflowBinding: selectedWorkflowBinding({
+                projection: {
+                  packageRevision: scheduler.packageRevision,
+                  virtualWorkflows: scheduler.virtualWorkflows,
+                },
+                workflowID: null,
+              }),
+              workflowNodeID: null,
+              adapterInput: { deletedTaskIndex: index },
             }),
             childSessionID: child.id,
           })
@@ -2100,8 +2096,7 @@ describe("abandoned dispatch recovery", () => {
           })
         }
         const deletionDriver = new TaskControlDriver({
-          scan: (requestedTaskID, context) =>
-            TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
+          scan: (requestedTaskID, context) => TaskControlTestHooks.scanTaskControlPlane(requestedTaskID, context),
           retireSettledEntries: true,
         })
         using _deletionDriver = { [Symbol.dispose]: () => deletionDriver.dispose() }
@@ -2242,7 +2237,10 @@ describe("abandoned dispatch recovery", () => {
         })
         const activation = Database.use((db) =>
           db
-            .select({ id: EngineControlActivationLeaseTable.id, ingressID: EngineControlActivationLeaseTable.target_id })
+            .select({
+              id: EngineControlActivationLeaseTable.id,
+              ingressID: EngineControlActivationLeaseTable.target_id,
+            })
             .from(EngineControlActivationLeaseTable)
             .innerJoin(
               EngineTaskRootIngressTable,
@@ -2407,8 +2405,8 @@ describe("abandoned dispatch recovery", () => {
         await reconcileTaskControlPlane(taskID)
         const afterSettlement = {
           settled: findDispatchSettlementByDispatchID({ taskID, dispatchID })?.payload.outcome.kind,
-          siblingSettled: findDispatchSettlementByDispatchID({ taskID, dispatchID: siblingDispatchID })?.payload
-            .outcome.kind,
+          siblingSettled: findDispatchSettlementByDispatchID({ taskID, dispatchID: siblingDispatchID })?.payload.outcome
+            .kind,
           ingresses: ingressCount(),
           dispositions: Database.use((db) =>
             db
@@ -2566,18 +2564,14 @@ describe("abandoned dispatch recovery", () => {
             ...settlementPayload,
             outcome: {
               ...settlementPayload.outcome,
-              failure_issues: [
-                { code: "bad", path: [Number.MAX_SAFE_INTEGER + 1], message: "unsafe positive path" },
-              ],
+              failure_issues: [{ code: "bad", path: [Number.MAX_SAFE_INTEGER + 1], message: "unsafe positive path" }],
             },
           },
           {
             ...settlementPayload,
             outcome: {
               ...settlementPayload.outcome,
-              failure_issues: [
-                { code: "bad", path: [-Number.MAX_SAFE_INTEGER - 1], message: "unsafe negative path" },
-              ],
+              failure_issues: [{ code: "bad", path: [-Number.MAX_SAFE_INTEGER - 1], message: "unsafe negative path" }],
             },
           },
           {
@@ -2689,9 +2683,9 @@ describe("abandoned dispatch recovery", () => {
             "engine_artifact: dispatch settlement requires exact final outcome and lineage authority",
           )
         }
-        expect(
-          DispatchOutcome.parse({ ...settlementPayload.outcome, message: "😀".repeat(3_000) }).kind,
-        ).toBe("infrastructure_failure")
+        expect(DispatchOutcome.parse({ ...settlementPayload.outcome, message: "😀".repeat(3_000) }).kind).toBe(
+          "infrastructure_failure",
+        )
         expect(
           DispatchOutcome.parse({
             ...settlementPayload.outcome,
@@ -2716,9 +2710,9 @@ describe("abandoned dispatch recovery", () => {
             ],
           }),
         ).toThrow()
-        expect(() =>
-          DispatchOutcome.parse({ ...settlementPayload.outcome, message: "😀".repeat(4_097) }),
-        ).toThrow("at most 4096 code points")
+        expect(() => DispatchOutcome.parse({ ...settlementPayload.outcome, message: "😀".repeat(4_097) })).toThrow(
+          "at most 4096 code points",
+        )
         expect(() =>
           DispatchOutcome.parse({
             kind: "domain_blocked",

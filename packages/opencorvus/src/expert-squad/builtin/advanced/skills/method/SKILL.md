@@ -5,7 +5,7 @@ description: Execute Advanced software delivery through requirements-to-architec
 
 # Advanced delivery method
 
-Select exactly one binding workflow before domain dispatch. Preserve RequirementSet and ContractGraph traceability through architecture, implementation, tests, interface evidence, and independent review. Every declared workflow node runs once, and every dependency is mandatory.
+Workflow reference selection is optional; choose actual work from identity, capability and evidence. Preserve RequirementSet and ContractGraph traceability through architecture, implementation, tests, interface evidence, and independent review. Every declared workflow node runs once, and every dependency is mandatory.
 
 Parallel work is permitted only across a real ready frontier: branches have complete shared input, disjoint mutable ownership, independently reviewable outputs, and no dependency on facts another branch has not produced. Their typed Artifacts are the only handoff into downstream joins. Shared files, generated authorities, integration checks, final review, and delivery converge serially.
 

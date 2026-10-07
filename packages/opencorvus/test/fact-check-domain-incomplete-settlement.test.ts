@@ -340,7 +340,7 @@ async function executeAdapter(input: {
     executionContext(fixture.taskID, dispatchID),
   )
   recordDispatchSettlement({ taskID: fixture.taskID, dispatchID, outcome: outcome as never })
-  return { outcome, lineage, workflow: (await describeTask(fixture.taskID)).workflow_execution }
+  return { outcome, lineage, workflow: (await describeTask(fixture.taskID)).dispatch_execution }
 }
 
 function artifacts(taskID: string) {
@@ -355,7 +355,7 @@ function artifacts(taskID: string) {
 }
 
 describe("Fact Check domain-incomplete settlement", () => {
-  test("a natural Turn without review persists exact incomplete evidence and keeps Writer closed", async () => {
+  test("a natural Turn without review persists exact incomplete evidence and records its incomplete settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -390,19 +390,13 @@ describe("Fact Check domain-incomplete settlement", () => {
               },
             },
           ],
-          workflow: {
-            nodes: [
-              { node_id: "research-studio-fact-checker", terminal_success: false },
-              { node_id: "research-studio-writer", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: [],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
         })
       },
     })
   }, 30_000)
 
-  test("one valid review persists the canonical Artifact and opens Writer", async () => {
+  test("one valid review persists the canonical Artifact and records its successful settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -421,19 +415,13 @@ describe("Fact Check domain-incomplete settlement", () => {
             final_message_id: fixture.workerFinal.id,
           },
           rows: [{ kind: "fact_check_review", payload: { review: { overall_verdict: "clean" } } }],
-          workflow: {
-            nodes: [
-              { node_id: "research-studio-fact-checker", terminal_success: true },
-              { node_id: "research-studio-writer", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: ["research-studio-writer"],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })
   }, 30_000)
 
-  test("a review for a different target persists exact mismatch evidence and keeps Writer closed", async () => {
+  test("a review for a different target persists exact mismatch evidence and records its incomplete settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -470,13 +458,7 @@ describe("Fact Check domain-incomplete settlement", () => {
               },
             },
           ],
-          workflow: {
-            nodes: [
-              { node_id: "research-studio-fact-checker", terminal_success: false },
-              { node_id: "research-studio-writer", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: [],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
         })
       },
     })

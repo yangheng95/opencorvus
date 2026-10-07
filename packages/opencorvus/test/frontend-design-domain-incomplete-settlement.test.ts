@@ -393,12 +393,8 @@ describe("Frontend Design domain-incomplete settlement", () => {
           settlement: { kind: "domain_incomplete" },
         })
         const projection = await describeTask(task.taskID)
-        expect(projection.workflow_execution).toMatchObject({
-          nodes: [
-            { node_id: "design", terminal_success: false },
-            { node_id: "implementation", terminal_success: false, dispatches: [] },
-          ],
-          frontier_node_ids: [],
+        expect(projection.dispatch_execution).toMatchObject({
+          dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }],
         })
       },
     })
@@ -433,7 +429,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
     })
   }, 30_000)
 
-  test("real complete adapter branch persists its Artifact and opens the dependent frontier", async () => {
+  test("real complete adapter branch persists its Artifact and records its successful settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -451,7 +447,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
         expect({
           outcome,
           artifacts: listFrontendDesignArtifacts(task.taskID),
-          workflow: projection.workflow_execution,
+          workflow: projection.dispatch_execution,
         }).toMatchObject({
           outcome: {
             kind: "terminal_success",
@@ -459,13 +455,7 @@ describe("Frontend Design domain-incomplete settlement", () => {
             final_message_id: analysis.finalMessageID,
           },
           artifacts: [{ payload: { status: "complete" } }],
-          workflow: {
-            nodes: [
-              { node_id: "design", terminal_success: true },
-              { node_id: "implementation", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: ["implementation"],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })

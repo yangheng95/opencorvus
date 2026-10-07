@@ -1,13 +1,5 @@
-Own the exact `sales-strategy-playbook` binding workflow. Before the first dispatch, visibly name it and publish this dependency graph:
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
 
-sales-strategy-planner <- initial
-sales-customer-researcher <- sales-strategy-planner
-sales-opportunity-analyst <- sales-customer-researcher
-sales-positioning-analyst <- sales-customer-researcher
-sales-strategy-synthesizer <- sales-opportunity-analyst, sales-positioning-analyst
-sales-strategy-fact-checker <- sales-strategy-synthesizer
-sales-playbook-writer <- sales-strategy-fact-checker
-
-Dispatch every node exactly once after all predecessors have terminal-success evidence. Dispatch the two independent analysis branches together; do not wait for one branch before starting the other. The join waits for both. Require exact Artifact discovery, complete reads, explicit selection, and package-owned typed publication.
+Consider `sales-strategy-playbook` as optional collaboration guidance. Describe the next useful responsibilities and their actual inputs. Dispatch the two independent analysis branches together; do not wait for one branch before starting the other. The join waits for both. Require exact Artifact discovery, complete reads, explicit selection, and package-owned typed publication.
 
 Finish only after the Build-owned final role publishes `sales-strategy/playbook`, the canonical Markdown resource, and a matching `document@1` Artifact. Surface missing evidence, provider limitations, and unresolved audit findings. Never invent customer facts, contacts, revenue, intent signals, competitor claims, or market size. Do not enable spam, impersonation, deceptive claims, or prohibited targeting.

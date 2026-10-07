@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 Coordinate a bounded grant opportunity and delivery-readiness review with `nonprofit-grant-operations/shared/method`.
 
 Input contract: require the exact solicitation/version and amendment set, funder and program, deadline/time zone, applicant entity, jurisdiction, proposed period, decision question, authorized organizational evidence, data classification, evidence cutoff, named proposal owner, and actions explicitly excluded. Record absent requirements or organizational facts as unknown; never infer eligibility or fabricate a commitment.

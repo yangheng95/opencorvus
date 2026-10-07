@@ -29,7 +29,7 @@ import { findDispatchLineageByArtifactID } from "./dispatch-lineage"
 import { parseDispatchLineagePayload } from "./dispatch-lineage-facts"
 import { findDispatchSettlementByDispatchID } from "./dispatch-settlement"
 import { type SelectedWorkflowBinding } from "./workflow-binding"
-import { readTaskWorkflowBinding } from "./workflow-binding-facts"
+import { readTaskWorkflowReferences } from "./workflow-binding-facts"
 import { taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { findTaskCompletionDecisionForTerminalTime } from "./completion-decision-read"
 import { parseProcessRecoveryFactContext, type ProcessRecoveryFactContext } from "./process-recovery-fact"
@@ -318,22 +318,10 @@ export interface TaskWorkflowDispatchDesc {
   terminal_success: boolean
 }
 
-export interface TaskWorkflowNodeDesc {
-  node_id: string
-  agent_id: string
-  depends_on: string[]
-  dispatches: TaskWorkflowDispatchDesc[]
-  terminal_success: boolean
-  terminal_success_predecessor_ids: string[]
-  occurrence_status: "occurrence_not_committed" | "occurrence_committed"
-}
-
-export interface TaskWorkflowExecutionDesc {
-  binding: SelectedWorkflowBinding
-  nodes: TaskWorkflowNodeDesc[]
-  /** Dependency-ready, still-undispatched nodes are visible scheduling facts.
-   * This projection does not admit, queue, or execute them. */
-  frontier_node_ids: string[]
+export interface TaskDispatchExecutionDesc {
+  /** Optional provenance snapshots, never an execution plan or readiness projection. */
+  references: SelectedWorkflowBinding[]
+  dispatches: (TaskWorkflowDispatchDesc & { reference: SelectedWorkflowBinding; reference_node_id: string | null })[]
 }
 
 export interface TaskScheduledWaitDesc {
@@ -359,10 +347,10 @@ export interface TaskDesc {
   error?: string
   clarifications?: string
   goals: GoalDesc[]
-  /** Immutable workflow binding and dispatch/Session observations reconstructed
+  /** Actual immutable dispatch/Session observations and optional references reconstructed
    * for every natural Orchestrator wake. This is evidence, not persisted step
    * state or a Host scheduling gate. */
-  workflow_execution?: TaskWorkflowExecutionDesc
+  dispatch_execution?: TaskDispatchExecutionDesc
   /** Complete current-process prompt-controller inventory for this Task.
    * Includes the root Orchestrator and subject-scoped workers. */
   current_process_prompt_owners?: CurrentProcessPromptOwnerDesc[]
@@ -619,106 +607,40 @@ function listAgentMessageRefs(task: TaskRow): AgentMessageRefDesc[] {
   })
 }
 
-function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc | undefined {
-  const binding = readTaskWorkflowBinding(task.id)
-  const currentCompletionDecision =
-    deriveTaskStatus(task) === "completed" && task.time_completed !== null
-      ? findTaskCompletionDecisionForTerminalTime({ taskID: task.id, timeCompleted: task.time_completed })
-      : undefined
+function describeTaskDispatchExecution(task: TaskRow): TaskDispatchExecutionDesc | undefined {
+  const references = readTaskWorkflowReferences(task.id)
   const rows = Database.use((db) =>
     db
-      .select({
-        id: EngineArtifactTable.id,
-        kind: EngineArtifactTable.kind,
-        payload: EngineArtifactTable.payload,
-      })
+      .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
       .where(and(eq(EngineArtifactTable.task_id, task.id), eq(EngineArtifactTable.kind, "dispatch_lineage")))
       .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
       .all(),
   )
-  if (!binding) return undefined
-
-  const dispatches = rows
-    .filter((row) => row.kind === "dispatch_lineage")
-    .map((row) => ({ artifactID: row.id, payload: parseDispatchLineagePayload(row.payload, row.id) }))
+  if (rows.length === 0) return undefined
   const executionByInputMessageID = new Map(
     taskExecutionProjectionForTask(task.id).occurrences.map((occurrence) => [occurrence.inputMessageID, occurrence]),
   )
-  const executionForDispatch = (dispatch: { payload: { child_session_id: string; dispatch_id: string } }) => {
+  const dispatches = rows.map((row) => {
+    const payload = parseDispatchLineagePayload(row.payload, row.id)
     const descriptor = WorkerTurnDescriptor.findForDispatch({
-      sessionID: dispatch.payload.child_session_id,
-      dispatchID: dispatch.payload.dispatch_id,
+      sessionID: payload.child_session_id,
+      dispatchID: payload.dispatch_id,
     })
-    return descriptor ? executionByInputMessageID.get(descriptor.payload.messageAuthority.user_message_id) : undefined
-  }
-  if (binding.kind === "direct") {
-    const directDispatches = dispatches.map((dispatch): TaskWorkflowDispatchDesc => {
-      const execution = executionForDispatch(dispatch)
-      const status = execution?.latest
-      const settlement = findDispatchSettlementByDispatchID({
-        taskID: task.id,
-        dispatchID: dispatch.payload.dispatch_id,
-      })
-      return {
-        artifact_id: dispatch.artifactID,
-        dispatch_id: dispatch.payload.dispatch_id,
-        workflow_occurrence_id: dispatch.payload.workflow_occurrence_id,
-        session_id: dispatch.payload.child_session_id,
-        target_agent_id: dispatch.payload.target_agent_id,
-        delivery_slice_revision_ids: dispatch.payload.delivery_slice_revision_ids,
-        session_status: status
-          ? {
-              type: status.status.type,
-              ...(status.status.reason ? { reason: status.status.reason } : {}),
-              ...(status.status.error ? { error: status.status.error } : {}),
-              ...(status.status.summary ? { summary: status.status.summary } : {}),
-              emitted_at: status.emittedAt,
-            }
-          : null,
-        settlement: settlement
-          ? {
-              artifact_id: settlement.artifactID,
-              outcome_kind: settlement.payload.outcome.kind,
-              final_message_id: "final_message_id" in settlement.payload.outcome
-                ? settlement.payload.outcome.final_message_id ?? null
-                : null,
-            }
-          : null,
-        terminal_success: settlement?.payload.outcome.kind === "terminal_success",
-      }
-    })
-    return {
-      binding,
-      nodes: [
-        {
-          node_id: "__direct_task__",
-          agent_id: "direct-task",
-          depends_on: [],
-          dispatches: directDispatches,
-          terminal_success: directDispatches.some((dispatch) => dispatch.terminal_success),
-          terminal_success_predecessor_ids: [],
-          occurrence_status: directDispatches.length > 0 ? "occurrence_committed" : "occurrence_not_committed",
-        },
-      ],
-      frontier_node_ids: [],
-    }
-  }
-
-  const dispatchesByNodeID = new Map<string, TaskWorkflowDispatchDesc[]>()
-  for (const dispatch of dispatches) {
-    if (!dispatch.payload.workflow_node_id) continue
-    const execution = executionForDispatch(dispatch)
+    const execution = descriptor
+      ? executionByInputMessageID.get(descriptor.payload.messageAuthority.user_message_id)
+      : undefined
     const status = execution?.latest
-    const settlement = findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: dispatch.payload.dispatch_id })
-    const nodeDispatches = dispatchesByNodeID.get(dispatch.payload.workflow_node_id) ?? []
-    nodeDispatches.push({
-      artifact_id: dispatch.artifactID,
-      dispatch_id: dispatch.payload.dispatch_id,
-      workflow_occurrence_id: dispatch.payload.workflow_occurrence_id,
-      session_id: dispatch.payload.child_session_id,
-      target_agent_id: dispatch.payload.target_agent_id,
-      delivery_slice_revision_ids: dispatch.payload.delivery_slice_revision_ids,
+    const settlement = findDispatchSettlementByDispatchID({ taskID: task.id, dispatchID: payload.dispatch_id })
+    return {
+      artifact_id: row.id,
+      dispatch_id: payload.dispatch_id,
+      workflow_occurrence_id: payload.workflow_occurrence_id,
+      session_id: payload.child_session_id,
+      target_agent_id: payload.target_agent_id,
+      delivery_slice_revision_ids: payload.delivery_slice_revision_ids,
+      reference: payload.workflow_binding,
+      reference_node_id: payload.workflow_node_id,
       session_status: status
         ? {
             type: status.status.type,
@@ -732,44 +654,16 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
         ? {
             artifact_id: settlement.artifactID,
             outcome_kind: settlement.payload.outcome.kind,
-            final_message_id: "final_message_id" in settlement.payload.outcome
-              ? settlement.payload.outcome.final_message_id ?? null
-              : null,
+            final_message_id:
+              "final_message_id" in settlement.payload.outcome
+                ? (settlement.payload.outcome.final_message_id ?? null)
+                : null,
           }
         : null,
       terminal_success: settlement?.payload.outcome.kind === "terminal_success",
-    })
-    dispatchesByNodeID.set(dispatch.payload.workflow_node_id, nodeDispatches)
-  }
-
-  const terminalSuccessNodeIDs = new Set(
-    binding.nodes
-      .filter((node) => dispatchesByNodeID.get(node.node_id)?.some((dispatch) => dispatch.terminal_success))
-      .map((node) => node.node_id),
-  )
-  const nodes = binding.nodes.map((node): TaskWorkflowNodeDesc => {
-    const nodeDispatches = dispatchesByNodeID.get(node.node_id) ?? []
-    return {
-      node_id: node.node_id,
-      agent_id: node.agent_id,
-      depends_on: node.depends_on,
-      dispatches: nodeDispatches,
-      terminal_success: terminalSuccessNodeIDs.has(node.node_id),
-      terminal_success_predecessor_ids: node.depends_on.filter((nodeID) => terminalSuccessNodeIDs.has(nodeID)),
-      occurrence_status: nodeDispatches.length > 0 ? "occurrence_committed" : "occurrence_not_committed",
     }
   })
-  return {
-    binding,
-    nodes,
-    frontier_node_ids: nodes
-      .filter(
-        (node) =>
-          node.dispatches.length === 0 &&
-          node.depends_on.every((predecessorID) => terminalSuccessNodeIDs.has(predecessorID)),
-      )
-      .map((node) => node.node_id),
-  }
+  return { references, dispatches }
 }
 
 // ---------------------------------------------------------------------------
@@ -827,7 +721,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   const goalContexts = resolveCurrentGoalMembershipContext(task.id).goals
   const currentProcessPromptOwners = currentProcessPromptOwnersForTask(task.id)
   const goals = goalContexts.map((context) => describeGoal(context.goal, context))
-  const workflowExecution = describeTaskWorkflowExecution(task)
+  const workflowExecution = describeTaskDispatchExecution(task)
 
   const maxExecutorGroups = await effectiveMaxAgentParallelism(task)
 
@@ -920,28 +814,27 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   const allPendingAgentCoordination = listPendingAgentCoordinationRequests(task.id, undefined, {
     limit: AGENT_COORDINATION_PROMPT_CAP,
   })
-  const pendingAgentCoordination: AgentCoordinationRequestDesc[] = allPendingAgentCoordination
-    .map((row) => ({
-      request_id: row.payload.request_id,
-      time_created: row.timeCreated,
-      session_id: row.payload.session_id,
-      agent: row.payload.agent,
-      origin: row.payload.origin,
-      message_id: row.payload.message_id,
-      operator_steer_id: row.payload.operator_steer_id,
-      operator_message: row.payload.operator_message,
-      delivery_slice_subject: row.payload.delivery_slice_subject,
-      blocking: row.payload.blocking,
-      severity: row.payload.severity,
-      summary: row.payload.summary,
-      details: row.payload.details,
-      requested_decision: row.payload.requested_decision,
-      evidence_locators: row.payload.evidence_locators ?? [],
-      last_failed_response_id: row.payload.last_failed_response_id,
-      last_failed_action_id: row.payload.last_failed_action_id,
-      last_action_error: row.payload.last_action_error,
-      last_action_failed_at: row.payload.last_action_failed_at,
-    }))
+  const pendingAgentCoordination: AgentCoordinationRequestDesc[] = allPendingAgentCoordination.map((row) => ({
+    request_id: row.payload.request_id,
+    time_created: row.timeCreated,
+    session_id: row.payload.session_id,
+    agent: row.payload.agent,
+    origin: row.payload.origin,
+    message_id: row.payload.message_id,
+    operator_steer_id: row.payload.operator_steer_id,
+    operator_message: row.payload.operator_message,
+    delivery_slice_subject: row.payload.delivery_slice_subject,
+    blocking: row.payload.blocking,
+    severity: row.payload.severity,
+    summary: row.payload.summary,
+    details: row.payload.details,
+    requested_decision: row.payload.requested_decision,
+    evidence_locators: row.payload.evidence_locators ?? [],
+    last_failed_response_id: row.payload.last_failed_response_id,
+    last_failed_action_id: row.payload.last_failed_action_id,
+    last_action_error: row.payload.last_action_error,
+    last_action_failed_at: row.payload.last_action_failed_at,
+  }))
   const recentMailboxMessages = listRecentTaskMailboxMessages(task.id)
   const openToolCallsWithoutCurrentOwner = listOpenToolCallsWithoutCurrentOwner(task)
   const completedToolCallRefs = listCompletedToolCallRefs(task)
@@ -959,7 +852,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
     error: lifecycle.terminalError,
     clarifications: clarificationTranscriptSection(task.id) || undefined,
     goals,
-    ...(workflowExecution ? { workflow_execution: workflowExecution } : {}),
+    ...(workflowExecution ? { dispatch_execution: workflowExecution } : {}),
     current_process_prompt_owners: currentProcessPromptOwners.length > 0 ? currentProcessPromptOwners : undefined,
     budget: {
       max_executor_groups: maxExecutorGroups,
@@ -974,8 +867,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
     task_scheduled_waits: taskScheduledWaits.length > 0 ? taskScheduledWaits : undefined,
     recent_agent_failures: recentAgentFailures.length > 0 ? recentAgentFailures : undefined,
     pending_agent_coordination: pendingAgentCoordination.length > 0 ? pendingAgentCoordination : undefined,
-    pending_agent_coordination_total:
-      pendingAgentCoordinationTotal > 0 ? pendingAgentCoordinationTotal : undefined,
+    pending_agent_coordination_total: pendingAgentCoordinationTotal > 0 ? pendingAgentCoordinationTotal : undefined,
     pending_agent_coordination_truncated:
       pendingAgentCoordinationTotal > pendingAgentCoordination.length ? true : undefined,
     recent_mailbox_messages: recentMailboxMessages.length > 0 ? recentMailboxMessages : undefined,
@@ -1010,34 +902,24 @@ export function renderGoal(g: GoalDesc): string[] {
   return lines
 }
 
-function renderTaskWorkflowExecution(execution: TaskWorkflowExecutionDesc | undefined): string[] {
+function renderTaskDispatchExecution(execution: TaskDispatchExecutionDesc | undefined): string[] {
   if (!execution) return []
-  const lines = ["## Immutable Task workflow execution evidence"]
-  lines.push(`- binding=${JSON.stringify(execution.binding)}`)
-  for (const node of execution.nodes) {
+  const lines = ["## Actual dispatch execution evidence"]
+  for (const dispatch of execution.dispatches) {
+    const status = dispatch.session_status
+      ? `${dispatch.session_status.type}${dispatch.session_status.reason ? `/${dispatch.session_status.reason}` : ""}`
+      : "unreported"
     lines.push(
-      `- node=${node.node_id}; agent=${node.agent_id}; depends_on=${node.depends_on.join(",") || "(none)"}; ` +
-        `occurrence_status=${node.occurrence_status}; terminal_success=${node.terminal_success}; ` +
-        `terminal_success_predecessors=${node.terminal_success_predecessor_ids.join(",") || "(none)"}`,
+      `- dispatch_artifact=${dispatch.artifact_id}; dispatch=${dispatch.dispatch_id}; occurrence=${dispatch.workflow_occurrence_id}; session=${dispatch.session_id}; ` +
+        `target=${dispatch.target_agent_id}; session_status=${status}; settlement=${dispatch.settlement?.outcome_kind ?? "unsettled"}; terminal_success=${dispatch.terminal_success}; ` +
+        `final_message_id=${dispatch.settlement?.final_message_id ?? "(unavailable)"}; delivery_slice_subjects=${dispatch.delivery_slice_revision_ids.join(",") || "(none)"}`,
     )
-    for (const dispatch of node.dispatches) {
-      const status = dispatch.session_status
-        ? `${dispatch.session_status.type}${dispatch.session_status.reason ? `/${dispatch.session_status.reason}` : ""}`
-        : "unreported"
-      lines.push(
-        `  - dispatch_artifact=${dispatch.artifact_id}; dispatch=${dispatch.dispatch_id}; session=${dispatch.session_id}; ` +
-          `target=${dispatch.target_agent_id}; session_status=${status}; settlement=${dispatch.settlement?.outcome_kind ?? "unsettled"}; terminal_success=${dispatch.terminal_success}; ` +
-          `final_message_id=${dispatch.settlement?.final_message_id ?? "(unavailable)"}; ` +
-          `delivery_slice_subjects=${dispatch.delivery_slice_revision_ids.join(",") || "(none)"}`,
-      )
+    if (dispatch.reference.kind === "virtual_workflow") {
+      lines.push(`  optional_reference=${dispatch.reference.workflow_id}/${dispatch.reference_node_id}`)
     }
   }
-  lines.push(`- dependency_ready_undispatched_frontier=${execution.frontier_node_ids.join(",") || "(none)"}`)
   lines.push(
-    "A frontier node has occurrence_status=occurrence_not_committed and its next dispatch uses turn.kind=initial. A physical created-only Session is audit evidence, not continuation authority. A node with occurrence_status=occurrence_committed may be continued only through an exact dispatch ID listed above.",
-  )
-  lines.push(
-    "This is a natural-wake projection of immutable dispatch lineage and real Session observations. It is evidence for Orchestrator judgment, not persisted workflow step state, a queue, an admission rule, or a Host scheduling gate.",
+    "These real Tool/Session/dispatch observations establish execution and exact continuation authority. Package workflow references do not define readiness, require a node, restrict future dispatches, or create Host workflow state. Choose actual dependencies, branches and useful local continuations from current evidence.",
   )
   return lines
 }
@@ -1177,7 +1059,8 @@ function renderOrphanedCompletedToolCallRefs(input: {
 
 /** Render canonical Task identity alongside the current ingress, independently of worker lifecycle facts. */
 export function renderTaskExecutionFact(lifecycle: TaskLifecycleProjection): string {
-  return `CURRENT TASK LIFECYCLE FACT: task_id=${lifecycle.taskID}; execution_epoch=${lifecycle.epoch}; ` +
+  return (
+    `CURRENT TASK LIFECYCLE FACT: task_id=${lifecycle.taskID}; execution_epoch=${lifecycle.epoch}; ` +
     `task_status=${lifecycle.status}; opened_event_id=${lifecycle.openedEventID}; ` +
     `terminal_event_id=${JSON.stringify(lifecycle.terminalEventID ?? null)}. ` +
     "This is the current Task occurrence, distinct from every worker Session lifecycle and every historical Task occurrence." +
@@ -1189,6 +1072,7 @@ export function renderTaskExecutionFact(lifecycle: TaskLifecycleProjection): str
             "but when no independent work or wait remains, deliver the answer and make the current epoch's lifecycle decision in this Turn."
           : "")
       : "")
+  )
 }
 
 /** Render a TaskDesc as markdown for the Orchestrator system context. */
@@ -1214,11 +1098,9 @@ export function renderTaskDescription(desc: TaskDesc): string {
     "The Task Artifact Catalog is the only durable evidence inventory. Use artifact_search to enumerate it, pass artifact_locator_ref to artifact_read until complete, and pass artifact_read_ref to artifact_select for each semantic source of a typed output. Complete but unselected reads remain observations; zero selections are valid. This Task description does not copy Artifact IDs, payload summaries, paths, or domain inventories.",
   )
   if (desc.error) lines.push(`Error: ${desc.error}`)
-  lines.push(
-    `Runtime facts: agent_parallelism=${desc.budget.max_executor_groups}.`,
-  )
+  lines.push(`Runtime facts: agent_parallelism=${desc.budget.max_executor_groups}.`)
 
-  const workflowExecutionLines = renderTaskWorkflowExecution(desc.workflow_execution)
+  const workflowExecutionLines = renderTaskDispatchExecution(desc.dispatch_execution)
   if (workflowExecutionLines.length > 0) {
     lines.push("")
     lines.push(...workflowExecutionLines)
@@ -1260,7 +1142,7 @@ export function renderTaskDescription(desc: TaskDesc): string {
       `These are Host/runtime/tooling facts. They do not retroactively change any expert report, Session terminal fact, ` +
         `Delivery Slice review, or Task business conclusion. Continue from existing facts. Resolve command-side infrastructure directly, then inspect immutable dispatch lineage. ` +
         `A created-only Session has occurrence_not_committed and does not block the dependency-ready node's one initial dispatch; an occurrence_committed failure must continue through its exact listed dispatch ID. Build cannot replace ` +
-        `another mandatory node's terminal-success evidence. Keep the fixed Squad and Phase; do not create a correction Task.`,
+        `another responsibility's actual acceptance evidence. Keep the fixed Squad and Phase; do not create a correction Task.`,
     )
   }
 

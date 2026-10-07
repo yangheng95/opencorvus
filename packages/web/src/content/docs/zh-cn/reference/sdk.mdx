@@ -41,11 +41,15 @@ const client = createOpenCorvusClient({
 
 ## 调用与返回值
 
+低层 `task.create` 必须提供创建者选定的精确 `promptProfile`，创建后冻结该包身份，不执行隐藏的模型选团。需要自动选团时，通过原生 Work、Chat、Control 会话或 Mission 提交原始请求：先检索并检查已安装候选，非常匹配就使用，否则由 Dynamic 生成任务内专家。候选详情返回真实 Agent、展开后的 `capability_refs`、包版本与 `package_digest`；通过 `agentCursor` 分页，把检查到的 digest 作为 `expectedPackageDigest` 保持选定版本。
+
 普通非 SSE 方法默认返回 fields 对象：
 
 ```typescript
 const result = await client.task.create({
   request: "为 src/foo.ts 添加单元测试",
+  productPillar: "code",
+  promptProfile: "base", // 显式选定的专家团身份。
 })
 
 if (result.error) throw result.error
@@ -62,6 +66,8 @@ const client = createOpenCorvusClient({
 
 const task = await client.task.create({
   request: "为 src/foo.ts 添加单元测试",
+  productPillar: "code",
+  promptProfile: "base", // 显式选定的专家团身份。
 })
 ```
 
@@ -163,7 +169,7 @@ SDK 跟随 OpenAPI `operationId` 命名。点号分段变成 namespace，snake_c
 
 Node-only `@opencorvus-ai/sdk/expert-squad-authoring` export 负责写入新的 canonical package directory，并对多个独立安装 squad 的静态合作关系进行校验。
 
-简单 direct dispatch 使用 `virtual_workflows: {}`。每个非空 workflow 表达一个完整 Task-level collaboration variant 与 mandatory dependencies；每个 node 在 Task 中只执行一次。Delivery Slice subject 是 typed dispatch/evidence ref，不是 node scope。SDK 与 Registry 校验数据形态、精确 Agent/依赖引用、canonical 排序与无环图，不强制某一种角色拓扑。
+`virtual_workflows` 可以省略，只提供调度参考。可选 strategy 为 `adaptive`、`dag`、`loop` 或 `choice`，支持 guidance、节点 when 与 repeat_until。SDK 与 Registry 校验精确 Agent/依赖引用和 canonical 排序，仅显式 DAG 要求无环。模型可重复使用同一能力、执行局部循环或选择实际分支；Host 不执行图。`ExpertSquadCollaborationStage.workflow_id` 同样可省略，阶段仍绑定真实专家团与证据输入输出。
 
 每个投影 Agent 都继承 `base_role` 选择的平台 fact/Turn 协议。Package prompt 可以增加领域规则，但不能定义 terminal-report/finalizer 协议或复制 Host observation。正常 stream end 是 physical Turn observation；terminal delivery 引用真实 final message 或 error/tool event。Dispatch lineage 与 execution attempt 是 immutable physical evidence。Task 独占 lifecycle；completion decision 引用 current accepted Slice revisions、workflow/package identity 与 typed EvidenceLocators。
 

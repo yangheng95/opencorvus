@@ -527,7 +527,7 @@ payload；已冻结的 Task-root causal fact 仍由数据库不可变约束拒�
 
 `gateway` 不再是 SessionKind；当前 gateway 是 control-plane HTTP surface / route（见 [03-control.md](03-control.md)），不通过独立 session kind 或旧 gateway 包承载。
 
-Session 通过 immutable dispatch lineage 关联 Task workflow node 和 logical
+Session 通过 immutable dispatch lineage 关联真实 Task 派发及其可选参考来源和 logical
 `workflow_occurrence_id`；lineage 可以列出
 一个或多个 `delivery_slice_revision_id` 作为证据主题，但这些引用不表示 Session 归
 Goal 所有。Overlay 从真实 live/terminal Session、node evidence、Artifact Catalog、

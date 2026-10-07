@@ -12,13 +12,10 @@ import { assertTaskAssistantProducerToolPart } from "./producer-turn"
 import { assertTaskEvidenceLocators } from "./evidence-locator"
 import { Identifier } from "@/id/id"
 import { deriveTaskStatus } from "./task-status"
-import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
+import { assertTaskWorkflowPackageInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
 import type { TaskRow } from "./store"
-import {
-  TaskCompletionDecisionPayloadSchema,
-  type TaskCompletionDecisionPayload,
-} from "./completion-decision-facts"
+import { TaskCompletionDecisionPayloadSchema, type TaskCompletionDecisionPayload } from "./completion-decision-facts"
 
 export type PreparedTaskCompletionDecision = {
   artifactID: string
@@ -26,30 +23,12 @@ export type PreparedTaskCompletionDecision = {
   payload: TaskCompletionDecisionPayload
 }
 
-/**
- * The complete set of terminal-workflow worker Artifacts for this Task.
- *
- * This is a *derivable* fact: the bound workflow names its terminal nodes, and the artifact catalog
- * already records which projected worker of which package revision published each `expert_output`.
- * Nothing about it depends on the Orchestrator's judgement, so it is sealed by the Host rather than
- * transcribed by the model.
- *
- * It used to be a completion gate instead — `complete_task` was rejected whenever the model's two
- * locator lists omitted one of these — and that shape was wrong twice over. The rejection named a
- * count and no identity, so the model could not tell which Artifact it had missed and retried
- * blind; one AutomationBench trial burned seven `manage_task` calls against it. And the retry it
- * was demanding could only ever restate what the Host had already computed to raise the error.
- */
-function deriveTerminalWorkflowArtifactLocators(input: {
+/** Actual package-owned worker outputs, independent of any reference graph. */
+function deriveWorkerArtifactLocators(input: {
   taskID: string
   payload: TaskCompletionDecisionPayload
 }): EngineArtifactLocator[] {
   const binding = input.payload.workflow_binding
-  if (binding.kind !== "virtual_workflow") return []
-  const dependencyNodeIDs = new Set(binding.nodes.flatMap((node) => node.depends_on))
-  const terminalAgents = new Set(
-    binding.nodes.filter((node) => !dependencyNodeIDs.has(node.node_id)).map((node) => node.agent_id),
-  )
   return Database.use((db) =>
     db
       .select({
@@ -73,8 +52,7 @@ function deriveTerminalWorkflowArtifactLocators(input: {
           producer.data.package_revision.namespace !== binding.package_revision.namespace ||
           producer.data.package_revision.id !== binding.package_revision.id ||
           producer.data.package_revision.version !== binding.package_revision.version ||
-          producer.data.package_revision.package_digest !== binding.package_revision.package_digest ||
-          !terminalAgents.has(producer.data.agent_id)
+          producer.data.package_revision.package_digest !== binding.package_revision.package_digest
         ) {
           return []
         }
@@ -92,14 +70,14 @@ function deriveTerminalWorkflowArtifactLocators(input: {
 
 export async function prepareTaskCompletionDecision(input: {
   taskID: string
-  /** The Host owns `terminal_workflow_artifact_locators`; a caller cannot supply or override it. */
-  payload: Omit<TaskCompletionDecisionPayload, "terminal_workflow_artifact_locators">
+  /** The Host owns `worker_artifact_locators`; a caller cannot supply or override it. */
+  payload: Omit<TaskCompletionDecisionPayload, "worker_artifact_locators">
   visibleToolName: string
 }): Promise<PreparedTaskCompletionDecision> {
   const payload = TaskCompletionDecisionPayloadSchema.parse(input.payload)
-  const terminalWorkflowArtifactLocators = (await assertTaskEvidenceLocators({
+  const workerArtifactLocators = (await assertTaskEvidenceLocators({
     taskID: input.taskID,
-    evidenceLocators: deriveTerminalWorkflowArtifactLocators({ taskID: input.taskID, payload }),
+    evidenceLocators: deriveWorkerArtifactLocators({ taskID: input.taskID, payload }),
   })) as ArtifactReadLocator[]
   const evidenceLocators = await assertTaskEvidenceLocators({
     taskID: input.taskID,
@@ -130,7 +108,7 @@ export async function prepareTaskCompletionDecision(input: {
       ...payload,
       evidence_locators: evidenceLocators,
       deliverable_artifact_locators: deliverableArtifactLocators,
-      terminal_workflow_artifact_locators: terminalWorkflowArtifactLocators,
+      worker_artifact_locators: workerArtifactLocators,
       accepted_delivery_slice_revision_ids: acceptedDeliverySliceRevisionIDs,
     }),
   }
@@ -151,7 +129,7 @@ export function insertPreparedTaskCompletionDecision(
       `Task completion decision ${prepared.artifactID} does not match the winning completed Task transition`,
     )
   }
-  assertTaskWorkflowBindingInTransaction({
+  assertTaskWorkflowPackageInTransaction({
     db,
     taskID: prepared.taskID,
     workflowBinding: prepared.payload.workflow_binding,

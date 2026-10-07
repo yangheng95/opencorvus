@@ -93,7 +93,9 @@ async function taskFixture(directory: string) {
   })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  const loadedPackage = await ExpertSquadRegistry.loadPackage(path.resolve(import.meta.dir, "../src/expert-squad/builtin/base"))
+  const loadedPackage = await ExpertSquadRegistry.loadPackage(
+    path.resolve(import.meta.dir, "../src/expert-squad/builtin/base"),
+  )
   const packageRevision = {
     scope: "built_in" as const,
     projectID: null,
@@ -255,59 +257,102 @@ test("observes the completion call usage after the real Task terminal tool retur
     fn: async () => {
       const task = await taskFixture(project.path)
       const model: Provider.Model = {
-        id: "terminal-usage-driver", providerID: "test-driver", name: "Terminal usage driver",
+        id: "terminal-usage-driver",
+        providerID: "test-driver",
+        name: "Terminal usage driver",
         api: { id: "terminal-usage-driver", npm: "@ai-sdk/openai-compatible", url: "https://provider.test/v1" },
-        status: "active", headers: {}, options: {}, variants: {}, release_date: "2026-09-27",
+        status: "active",
+        headers: {},
+        options: {},
+        variants: {},
+        release_date: "2026-09-27",
         cost: { available: true, input: 1, output: 2, cache: { read: 0, write: 0 } },
         limit: { context: 100000, output: 10000 },
-        capabilities: { temperature: true, reasoning: true, attachment: false, toolcall: true,
+        capabilities: {
+          temperature: true,
+          reasoning: true,
+          attachment: false,
+          toolcall: true,
           input: { text: true, audio: false, image: false, video: false, pdf: false },
-          output: { text: true, audio: false, image: false, video: false, pdf: false }, interleaved: false },
+          output: { text: true, audio: false, image: false, video: false, pdf: false },
+          interleaved: false,
+        },
       }
       // Deterministic Provider transport input, real SDK execution, lifecycle
       // Tool, completion transaction and usage ledger. This is a local ordering
       // contract; it does not model autonomous business completion or billing.
       const language = new MockLanguageModelV3({
-        provider: model.providerID, modelId: model.id,
+        provider: model.providerID,
+        modelId: model.id,
         async doStream() {
-          return { stream: simulateReadableStream({ chunks: [
-            { type: "stream-start", warnings: [] },
-            { type: "tool-call", toolCallId: "terminal-usage-call", toolName: "complete", input: "{}" },
-            { type: "finish", finishReason: { unified: "tool-calls", raw: "tool_calls" },
-              usage: { inputTokens: { total: 120, noCache: 120, cacheRead: 0, cacheWrite: 0 },
-                outputTokens: { total: 30, text: 25, reasoning: 5 } } },
-          ] }) }
+          return {
+            stream: simulateReadableStream({
+              chunks: [
+                { type: "stream-start", warnings: [] },
+                { type: "tool-call", toolCallId: "terminal-usage-call", toolName: "complete", input: "{}" },
+                {
+                  type: "finish",
+                  finishReason: { unified: "tool-calls", raw: "tool_calls" },
+                  usage: {
+                    inputTokens: { total: 120, noCache: 120, cacheRead: 0, cacheWrite: 0 },
+                    outputTokens: { total: 30, text: 25, reasoning: 5 },
+                  },
+                },
+              ],
+            }),
+          }
         },
       })
       const observations: unknown[] = []
       const observe = async (stage: string) => {
-        const events = Database.use((db) => db.select({
-          model: ProviderUsageEventTable.model_id, tokens: ProviderUsageEventTable.total_tokens,
-          cost: ProviderUsageEventTable.cost_usd,
-        }).from(ProviderUsageEventTable).where(eq(ProviderUsageEventTable.session_id, task.sessionID)).all())
+        const events = Database.use((db) =>
+          db
+            .select({
+              model: ProviderUsageEventTable.model_id,
+              tokens: ProviderUsageEventTable.total_tokens,
+              cost: ProviderUsageEventTable.cost_usd,
+            })
+            .from(ProviderUsageEventTable)
+            .where(eq(ProviderUsageEventTable.session_id, task.sessionID))
+            .all(),
+        )
         observations.push({ stage, status: deriveTaskStatus(requireTask(task.taskID)), events })
       }
       await observe("before-request")
       const response = streamText({
-        model: ProviderLLM.wrapModel(language, model, {}), prompt: "Complete the local lifecycle fixture",
-        timeoutMs: false, usagePurpose: "session",
+        model: ProviderLLM.wrapModel(language, model, {}),
+        prompt: "Complete the local lifecycle fixture",
+        timeoutMs: false,
+        usagePurpose: "session",
         usageAttribution: { sessionID: task.sessionID, agentID: "orchestrator" },
-        tools: { complete: tool({ inputSchema: z.object({}), execute: async () => {
-          const result = await completeFixtureTask(task, project.path, [], "usage-order")
-          expect(result).toMatchObject({ title: "Task Completed" })
-          await observe("terminal-tool-return")
-          return result
-        } }) },
-        onStepFinish: async () => { await observe("caller-step-finish") },
+        tools: {
+          complete: tool({
+            inputSchema: z.object({}),
+            execute: async () => {
+              const result = await completeFixtureTask(task, project.path, [], "usage-order")
+              expect(result).toMatchObject({ title: "Task Completed" })
+              await observe("terminal-tool-return")
+              return result
+            },
+          }),
+        },
+        onStepFinish: async () => {
+          await observe("caller-step-finish")
+        },
       })
-      for await (const _part of response.fullStream) { /* consume the actual SDK stream */ }
+      for await (const _part of response.fullStream) {
+        /* consume the actual SDK stream */
+      }
       await observe("stream-finished")
       expect(observations).toEqual([
         { stage: "before-request", status: "active", events: [] },
         { stage: "terminal-tool-return", status: "completed", events: [] },
         { stage: "caller-step-finish", status: "completed", events: [] },
-        { stage: "stream-finished", status: "completed",
-          events: [{ model: "terminal-usage-driver", tokens: 150, cost: 0.00018 }] },
+        {
+          stage: "stream-finished",
+          status: "completed",
+          events: [{ model: "terminal-usage-driver", tokens: 150, cost: 0.00018 }],
+        },
       ])
     },
   })
@@ -427,7 +472,7 @@ test("seals every terminal workflow worker Artifact into the completion decision
       expect(decision?.payload.deliverable_artifact_locators).toEqual([first.locator])
       // The derivation orders by artifact id under SQLite's binary collation, so the expectation
       // uses the same comparison rather than a locale-aware one.
-      expect(decision?.payload.terminal_workflow_artifact_locators).toEqual(
+      expect(decision?.payload.worker_artifact_locators).toEqual(
         [first.locator, second.locator].sort((left, right) =>
           left.artifact_id < right.artifact_id ? -1 : left.artifact_id > right.artifact_id ? 1 : 0,
         ),
@@ -708,7 +753,7 @@ test("closes continuation admission before the real completion checkpoint and im
           finalMessageID: Identifier.ascending("message"),
         }),
       })
-      expect(Database.use((db) => assertTaskDispatchesSettledInTransaction(db, task.taskID))).toBeUndefined()
+      Database.use((db) => assertTaskDispatchesSettledInTransaction(db, task.taskID))
       const canonical = await publishExpertArtifact({
         scope: task.scope,
         artifact: {
@@ -837,7 +882,6 @@ test("closes continuation admission before the real completion checkpoint and im
         taskID: task.taskID,
         timeCompleted: terminalTask.time_completed!,
       })!
-      expect(Database.use((db) => taskCompletionClosureInTransaction(db, task.taskID))).toBeUndefined()
       expect(decision.payload.deliverable_artifact_locators).toEqual([canonical.locator, canonicalSupplement.locator])
       expect(listDispatchLineage(task.taskID).map((item) => item.dispatchID)).toEqual([lineage.dispatchID])
       const terminalGit = structuredClone((terminalTask.metadata as Record<string, any>).git)

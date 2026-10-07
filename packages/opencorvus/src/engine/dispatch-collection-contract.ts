@@ -9,14 +9,22 @@ export const MAX_DISPATCH_COLLECTION_SIZE = 8
 
 const DispatchCollectionTeamMemberSchema = z
   .object({
-    name: z.string().min(1).max(96).describe("Task-local member name owned by this team row; its array index identifies the aligned dispatch wrapper."),
+    name: z
+      .string()
+      .min(1)
+      .max(96)
+      .describe(
+        "Task-local member name owned by this team row; its array index identifies the aligned dispatch wrapper.",
+      ),
     target: z.string().min(1).describe("Exact projected Agent target used by the aligned dispatch item."),
     responsibility: z.string().min(1).describe("One non-overlapping responsibility."),
     boundary: z.string().min(1).describe("Explicit owned facts, files, or effects and prohibited overlap."),
     expected_result: z.string().min(1).describe("Visible result and evidence duty expected from this member."),
     depends_on: z
       .array(z.string().min(1))
-      .describe("Settled predecessor member names. Members in this same ready frontier cannot appear here."),
+      .describe(
+        "Optional predecessor names describing intended coordination; the scheduler decides real readiness from evidence. The Host does not execute this dependency description.",
+      ),
   })
   .strict()
 
@@ -63,7 +71,7 @@ export const PersistedDispatchCollectionMemberInputSchema = z
           z
             .object({
               kind: z.literal("initial"),
-              workflow_subject: DispatchWorkflowSubjectSchema,
+              workflow_subject: DispatchWorkflowSubjectSchema.optional(),
               use_worktree: z.boolean(),
               input: z.record(z.string(), z.unknown()),
               ...acceptanceRepairSelectionShape,
@@ -99,7 +107,11 @@ export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
     .superRefine((input, context) => {
       const dispatches = input.dispatches as z.output<typeof PersistedDispatchCollectionMemberInputSchema>[]
       if (input.team.length !== input.dispatches.length) {
-        context.addIssue({ code: "custom", path: ["team"], message: "team and dispatches must describe the same frontier size" })
+        context.addIssue({
+          code: "custom",
+          path: ["team"],
+          message: "team and dispatches must describe the same frontier size",
+        })
         return
       }
       const names = new Set<string>()
@@ -116,15 +128,6 @@ export function createDispatchAgentsInputSchema(childInputSchema: z.ZodType) {
           })
         }
       })
-      input.team.forEach((member, index) => {
-        if (member.depends_on.some((dependency) => names.has(dependency))) {
-          context.addIssue({
-            code: "custom",
-            path: ["team", index, "depends_on"],
-            message: "a dependency-ready frontier cannot depend on another member in the same frontier",
-          })
-        }
-      })
     })
 }
 
@@ -135,20 +138,24 @@ export const PersistedDispatchAgentsInputSchema = createDispatchAgentsInputSchem
 export type PersistedDispatchAgentsInput = z.output<typeof PersistedDispatchAgentsInputSchema>
 
 export const DispatchCollectionMemberResultSchema = z.discriminatedUnion("status", [
-  z.object({
-    member_index: z.number().int().min(0),
-    name: z.string().min(1),
-    target: z.string().min(1),
-    status: z.literal("completed"),
-    outcome: DispatchOutcomeSchema,
-  }).strict(),
-  z.object({
-    member_index: z.number().int().min(0),
-    name: z.string().min(1),
-    target: z.string().min(1),
-    status: z.literal("failed"),
-    failure: ToolFailureCause,
-  }).strict(),
+  z
+    .object({
+      member_index: z.number().int().min(0),
+      name: z.string().min(1),
+      target: z.string().min(1),
+      status: z.literal("completed"),
+      outcome: DispatchOutcomeSchema,
+    })
+    .strict(),
+  z
+    .object({
+      member_index: z.number().int().min(0),
+      name: z.string().min(1),
+      target: z.string().min(1),
+      status: z.literal("failed"),
+      failure: ToolFailureCause,
+    })
+    .strict(),
 ])
 
 export type DispatchCollectionMemberResult = z.infer<typeof DispatchCollectionMemberResultSchema>

@@ -5,7 +5,9 @@ export const ProjectedAgentWorkScopeSchema = z
     kind: z.literal("task"),
   })
   .strict()
-  .describe("Exact projected-agent execution ownership scope. Every projected workflow node executes once per Task.")
+  .describe(
+    "Exact projected-agent execution ownership scope. Independent dispatches bind exact Task and capability identity; workflow references impose no dispatch count.",
+  )
 
 export type ProjectedAgentWorkScope = z.output<typeof ProjectedAgentWorkScopeSchema>
 

@@ -41,7 +41,7 @@ export function buildWorkloadUserPrompt(input: WorkloadPromptInput): string {
     "# Delegation\n\nThe active package scheduler is asking this projected workload-analysis consumer to deeply read the " +
       "available Task evidence and persisted delivery contract, then produce one workload brief per Delivery Slice revision. You do not write code, " +
       "create Slices, modify Slices, dispatch workers, or act as a gate. Fight underestimation, and flag Slices whose declared scope is " +
-      "too broad or under-specified to remain an unambiguous delivery and acceptance subject. Workflow nodes execute once per Task regardless of Slice count.",
+      "too broad or under-specified to remain an unambiguous delivery and acceptance subject. Delivery Slice count does not determine dispatch count or execution order.",
   )
   sections.push(
     renderUserRequestSection({ heading: "# Original request", request: input.taskRequest, taskID: input.taskID }),

@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 # Satellite Mission Operations Orchestrator
 
 Coordinate a read-only mission-operations evidence review. Freeze spacecraft identity, mission phase, authorized source set, Operations Database and flight-procedure versions, configuration baseline, time-system mapping, data cutoff, owner, and qualified reviewers before dispatch. Require `satellite-mission-operations/shared/method`. Dispatch the three zero-dependency specialists concurrently; dispatch the join owner only after all three artifacts return.

@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import {
   analyzeExpertSquadWorkflowTopology,
-  validateBuiltInExpertSquadTopologyPolicy,
+  validateExpertSquadManifestDispatchTopology,
   type ExpertSquadManifestV2,
 } from "../src/expert-squad-authoring"
 
@@ -57,6 +57,7 @@ test("workflow topology analysis reports parallel roots, a join, and determinist
   expect(analyzeExpertSquadWorkflowTopology(manifest)).toEqual([
     {
       workflow_id: "delivery",
+      strategy: "adaptive",
       node_count: 3,
       initial_frontier_node_ids: ["build", "research"],
       waves: [
@@ -112,7 +113,7 @@ test("workflow topology analysis identifies a Planner-first parallel-worker fron
     },
   }
 
-  expect(validateBuiltInExpertSquadTopologyPolicy(manifest)).toBe(manifest)
+  expect(validateExpertSquadManifestDispatchTopology(manifest)).toEqual(manifest)
   expect(analyzeExpertSquadWorkflowTopology(manifest)[0]).toMatchObject({
     structure: "flat_planner_parallel_workers",
     planner_node_id: "planner",

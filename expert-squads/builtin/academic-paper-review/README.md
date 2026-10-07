@@ -2,9 +2,9 @@
 
 Review an authorized manuscript through an explicit evidence chain rather than one undifferentiated critique. The package separates literature coverage, novelty, logic, methods and statistical validity, factual consistency, citation and hallucination risk, and presentation quality before an integration editor produces the review register.
 
-## Binding workflow
+## Optional collaboration guidance
 
-`academic-paper-review` is the only workflow. Charter planning, reproducible literature mapping, and presentation inspection are three independent roots. Logic, methods/facts, and citation/hallucination review start from the frozen charter; novelty review depends on the completed literature landscape. The integration editor joins novelty and every integrity branch without erasing disagreements.
+`academic-paper-review` is optional collaboration guidance. Charter planning, reproducible literature mapping, and presentation inspection are three independent roots. Logic, methods/facts, and citation/hallucination review start from the frozen charter; novelty review depends on the completed literature landscape. The integration editor joins novelty and every integrity branch without erasing disagreements.
 
 ## Skill and assets
 

@@ -114,7 +114,7 @@
     "virtual_workflows": {
       "marketing-growth-campaign": {
         "label": "Marketing Growth Campaign",
-        "description": "Binding Marketing & Growth Strategy workflow. Every node runs exactly once; independent branches start concurrently and joins wait for every predecessor.",
+        "description": "Binding Marketing & Growth Strategy workflow. Use relevant independent responsibilities in parallel and join their actual required evidence; references do not fix order or dispatch count.",
         "nodes": {
           "marketing-growth-planner": {
             "agent_id": "marketing-growth-planner",

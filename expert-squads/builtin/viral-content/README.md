@@ -2,9 +2,9 @@
 
 Viral Content produces evidence-backed, text-led campaign copy. Viral means a falsifiable distribution hypothesis, never a promise of reach, engagement, or revenue.
 
-## Binding workflow
+## Optional collaboration guidance
 
-The only workflow is evidence-backed-content-campaign. Audience and trend research run in parallel after the campaign brief, then concept selection, copy production, independent review, and Build-owned delivery run in order.
+evidence-backed-content-campaign is optional collaboration guidance. Audience and trend research run in parallel after the campaign brief, then concept selection, copy production, independent review, and Build-owned delivery run in order.
 
 ## Artifact contract
 

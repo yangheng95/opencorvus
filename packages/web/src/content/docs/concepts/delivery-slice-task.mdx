@@ -7,7 +7,7 @@ OpenCorvus keeps business lifecycle, delivery scope, and physical execution sepa
 
 ```text
 Task
- ├─ workflow selection (immutable package/workflow decision)
+ ├─ dispatch execution (actual work and optional reference provenance)
  ├─ DeliverySlice[]
  │   └─ DeliverySliceRevision[]
  ├─ dispatch lineage / execution attempts / Sessions
@@ -18,7 +18,7 @@ Task
 
 ## Task owns business lifecycle
 
-Task is the only business-lifecycle container. The Orchestrator completes a Task by appending one decision that cites the selected workflow, exact package revision/digest, accepted current Delivery Slice revisions, reviewer artifacts, and real execution/message evidence. Reopening preserves prior decisions.
+Task is the only business-lifecycle container. The Orchestrator completes a Task by appending one decision that cites optional workflow provenance, exact package revision/digest, accepted current Delivery Slice revisions, reviewer artifacts, and real execution/message evidence. Reopening preserves prior decisions.
 
 ## Goal is a versioned Delivery Slice
 
@@ -28,7 +28,7 @@ A Slice does not own status, dependencies, attempts, results, retry count, works
 
 ## Workflow and execution
 
-Every selected workflow node executes once per Task. Optional Slice revision references are typed subjects for worker input, evidence, and review; they never multiply workflow nodes.
+Several independent responsibilities may reuse one capability or reference node. Continuations preserve the original Session and occurrence; new independent work gets its own dispatch. Optional Slice revisions identify input, evidence and review subjects; they do not determine order or instance count.
 
 Physical execution belongs to immutable dispatch lineage, an execution attempt, and a real Session. Terminal delivery points to the real final assistant message or terminal error/tool event. It is not a Goal result or business verdict.
 
@@ -37,7 +37,7 @@ Physical execution belongs to immutable dispatch lineage, an execution attempt, 
 Reviewer artifacts bind their judgment and evidence to exact Slice revisions. The Goal panel derives, on read:
 
 - current contract revision;
-- applicable Task workflow-node coverage;
+- actual user-obligation and evidence coverage;
 - live and terminal Sessions;
 - exact-revision Artifact coverage;
 - accepted, rejected, or inconclusive review facts;

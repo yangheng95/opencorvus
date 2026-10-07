@@ -5,10 +5,7 @@ import path from "node:path"
 import z from "zod"
 import { RUNTIME_TEMPLATE_IDS } from "../agent/runtime-template-id"
 import { ExpertSquadPackageManager } from "./manager"
-import {
-  expertSquadGenerationAuthority,
-  type ExpertSquadGenerationTrace,
-} from "./installation-metadata"
+import { expertSquadGenerationAuthority, type ExpertSquadGenerationTrace } from "./installation-metadata"
 import { ExpertSquadRegistry } from "./registry"
 import { ExpertSquadIDSchema } from "./id"
 import { ExpertSquadVersionSchema, expertSquadVersionForTimestamp } from "./version"
@@ -326,6 +323,8 @@ const MulticaOpenCorvusWorkflowNodeSchema = z
     source_agent_id: UUID,
     description: z.string().trim().min(1),
     depends_on: MulticaWorkflowDependencyListSchema,
+    when: z.string().trim().min(1).optional(),
+    repeat_until: z.string().trim().min(1).optional(),
   })
   .strict()
 
@@ -333,9 +332,9 @@ const MulticaOpenCorvusWorkflowSchema = z
   .object({
     label: z.string().trim().min(1),
     description: z.string().trim().min(1),
-    nodes: z
-      .record(ExpertSquadIDSchema, MulticaOpenCorvusWorkflowNodeSchema)
-      .refine((nodes) => Object.keys(nodes).length > 0, "virtual workflow requires at least one node"),
+    strategy: z.enum(["adaptive", "dag", "loop", "choice"]).optional(),
+    guidance: z.string().trim().min(1).optional(),
+    nodes: z.record(ExpertSquadIDSchema, MulticaOpenCorvusWorkflowNodeSchema).default({}),
   })
   .strict()
 
@@ -344,7 +343,7 @@ export const MulticaOpenCorvusMappingSchema = z
     mcp_replacements: MulticaOpenCorvusMcpReplacementListSchema,
     mcp_omissions: MulticaOpenCorvusMcpOmissionListSchema,
     agents: z.record(UUID, MulticaOpenCorvusAgentMappingSchema),
-    virtual_workflows: z.record(ExpertSquadIDSchema, MulticaOpenCorvusWorkflowSchema),
+    virtual_workflows: z.record(ExpertSquadIDSchema, MulticaOpenCorvusWorkflowSchema).default({}),
   })
   .strict()
 
@@ -512,7 +511,8 @@ function validateMapping(snapshot: MulticaSnapshot, mapping: MulticaOpenCorvusMa
         throw new Error(`${context} references unknown Multica agent ${node.source_agent_id}.`)
       }
       for (const dependencyID of node.depends_on) {
-        if (dependencyID === nodeID) throw new Error(`${context}.depends_on cannot reference itself.`)
+        if (workflow.strategy === "dag" && dependencyID === nodeID)
+          throw new Error(`${context}.depends_on cannot reference itself.`)
         if (!nodeIDs.has(dependencyID)) {
           throw new Error(`${context}.depends_on references unknown node ${dependencyID}.`)
         }
@@ -521,7 +521,11 @@ function validateMapping(snapshot: MulticaSnapshot, mapping: MulticaOpenCorvusMa
     const visiting = new Set<string>()
     const visited = new Set<string>()
     const visit = (nodeID: string): void => {
-      if (visiting.has(nodeID)) throw new Error(`OpenCorvus mapping virtual_workflows.${workflowID} contains a cycle.`)
+      if (visiting.has(nodeID)) {
+        if (workflow.strategy === "dag")
+          throw new Error(`OpenCorvus mapping virtual_workflows.${workflowID} contains a cycle.`)
+        return
+      }
       if (visited.has(nodeID)) return
       visiting.add(nodeID)
       for (const dependencyID of workflow.nodes[nodeID]!.depends_on) visit(dependencyID)
@@ -867,15 +871,13 @@ async function analyzePortableMcp(
         blockers.push(`${context} has unsupported fields: ${unknownFields.join(", ")}.`)
         continue
       }
-      const localDeclaration =
-        server.command !== undefined || server.type === "stdio" || server.type === "local"
+      const localDeclaration = server.command !== undefined || server.type === "stdio" || server.type === "local"
       if (localDeclaration) {
         const commandIsValid = typeof server.command === "string" && server.command.trim().length > 0
         const argsAreValid =
           server.args === undefined ||
           (Array.isArray(server.args) && server.args.every((argument) => typeof argument === "string"))
-        const localTypeIsValid =
-          server.type === undefined || server.type === "stdio" || server.type === "local"
+        const localTypeIsValid = server.type === undefined || server.type === "stdio" || server.type === "local"
         const hasRemoteOrSecretMaterial =
           server.url !== undefined ||
           server.env !== undefined ||
@@ -996,17 +998,14 @@ async function analyzePortableMcp(
   }
   return {
     blockers: [...new Set(blockers)].sort(),
-    repairCandidates: repairCandidates.sort(
-      (left, right) =>
-        compareMcpReplacementIdentity(left.agentID, left.sourceName, right.agentID, right.sourceName),
+    repairCandidates: repairCandidates.sort((left, right) =>
+      compareMcpReplacementIdentity(left.agentID, left.sourceName, right.agentID, right.sourceName),
     ),
-    replacements: replacements.sort(
-      (left, right) =>
-        compareMcpReplacementIdentity(left.agentID, left.sourceName, right.agentID, right.sourceName),
+    replacements: replacements.sort((left, right) =>
+      compareMcpReplacementIdentity(left.agentID, left.sourceName, right.agentID, right.sourceName),
     ),
-    omissions: omissions.sort(
-      (left, right) =>
-        compareMcpReplacementIdentity(left.agentID, left.sourceName, right.agentID, right.sourceName),
+    omissions: omissions.sort((left, right) =>
+      compareMcpReplacementIdentity(left.agentID, left.sourceName, right.agentID, right.sourceName),
     ),
     servers: servers.sort(
       (left, right) => left.agentID.localeCompare(right.agentID) || left.sourceName.localeCompare(right.sourceName),
@@ -1092,7 +1091,9 @@ async function previewForSnapshot(
     if (!agent.name.trim()) blockers.push(`Agent ${agent.id} has an empty name.`)
     if (!agent.instructions.trim()) blockers.push(`Agent ${agent.id} has empty instructions.`)
     if (agent.archived_at) {
-      nonPortable.push(`Agent ${agent.id} source is archived at ${agent.archived_at}; its imported instructions remain a snapshot.`)
+      nonPortable.push(
+        `Agent ${agent.id} source is archived at ${agent.archived_at}; its imported instructions remain a snapshot.`,
+      )
     }
     const disabledSkills = agent.skills.filter((skill) => !skill.enabled)
     if (disabledSkills.length) {
@@ -1222,9 +1223,7 @@ function packageFiles(
     ),
     markdownSection("Squad instructions", snapshot.squad.instructions),
     markdownSection("Roster", roster),
-    ...(approvedMcpReplacements
-      ? [markdownSection("Approved MCP replacements", approvedMcpReplacements)]
-      : []),
+    ...(approvedMcpReplacements ? [markdownSection("Approved MCP replacements", approvedMcpReplacements)] : []),
     ...(approvedMcpOmissions ? [markdownSection("Explicit MCP omissions", approvedMcpOmissions)] : []),
     markdownSection(
       "Portability boundary",
@@ -1341,6 +1340,8 @@ function packageFiles(
           {
             label: workflow.label,
             description: workflow.description,
+            ...(workflow.strategy ? { strategy: workflow.strategy } : {}),
+            ...(workflow.guidance ? { guidance: workflow.guidance } : {}),
             nodes: Object.fromEntries(
               Object.entries(workflow.nodes).map(([nodeID, node]) => [
                 nodeID,
@@ -1348,6 +1349,8 @@ function packageFiles(
                   agent_id: targetAgentID(node.source_agent_id),
                   description: node.description,
                   depends_on: [...node.depends_on],
+                  ...(node.when ? { when: node.when } : {}),
+                  ...(node.repeat_until ? { repeat_until: node.repeat_until } : {}),
                 },
               ]),
             ),

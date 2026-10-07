@@ -5,7 +5,7 @@ description: Turn a product brief into an original evidence-backed desktop inter
 
 # Frontend Innovate method
 
-Use the package's binding frontend innovation workflow. Establish the product intent, user tasks, information architecture, source and competitor evidence, design direction, and implementation contract before building. Source material informs the design but does not authorize copying another product or replacing product requirements.
+Use the package's suggested frontend innovation workflow. Establish the product intent, user tasks, information architecture, source and competitor evidence, design direction, and implementation contract before building. Source material informs the design but does not authorize copying another product or replacing product requirements.
 
 Parallel investigation is allowed only for disjoint source, competitor, and workload evidence. The Experience Designer owns one coherent direction and the Implementer owns the product mutation. Fact, visual, and integrity review operate on the exact delivered revision and canonical handoffs; they do not create a second design or implementation authority.
 

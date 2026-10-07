@@ -114,7 +114,7 @@
     "virtual_workflows": {
       "commercial-legal-review": {
         "label": "Commercial Legal Review",
-        "description": "Use when the Task provides a bounded commercial matter, client position, governing jurisdictions, as-of date, and identifiable documents or clauses; every node is mandatory.",
+        "description": "Use when the Task provides a bounded commercial matter, client position, governing jurisdictions, as-of date, and identifiable documents or clauses; use relevant responsibilities when actual evidence requires them.",
         "nodes": {
           "commercial-legal-matter-planner": {
             "agent_id": "commercial-legal-matter-planner",

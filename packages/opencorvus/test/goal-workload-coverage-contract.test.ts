@@ -876,20 +876,19 @@ describe("Goal Workload coverage contract", () => {
   }, 240_000)
 
   for (const candidate of [
-    { label: "incomplete", submitted: 1, expectedKind: "domain_incomplete", expectedFrontier: [] },
+    { label: "incomplete", submitted: 1, expectedKind: "domain_incomplete" },
     {
       label: "complete",
       submitted: 2,
       expectedKind: "terminal_success",
-      expectedFrontier: [integrityNodeID],
     },
   ] as const) {
-    test(`production dispatch and adapter chain projects the ${candidate.label} Workload frontier`, async () => {
+    test(`production dispatch and adapter chain projects the ${candidate.label} Workload settlement`, async () => {
       await using project = await memoryProject()
       await Instance.provide({
         directory: project.path,
         fn: async () => {
-          const task = await createTaskFixture(`Production ${candidate.label} Workload frontier`)
+          const task = await createTaskFixture(`Production ${candidate.label} Workload settlement`)
           const goalIDs = [Identifier.ascending("goal"), Identifier.ascending("goal")].sort()
           persistGoalGraph({ taskID: task.taskID, goalIDs, now: task.now + 1 })
           const result = await executeProductionWorkloadDispatch({
@@ -901,7 +900,7 @@ describe("Goal Workload coverage contract", () => {
           expect({
             outcome: result.outcome,
             receipt: workload.payload.coverage_receipt,
-            workflow: result.projection.workflow_execution,
+            workflow: result.projection.dispatch_execution,
           }).toMatchObject({
             outcome: {
               kind: candidate.expectedKind,
@@ -920,17 +919,7 @@ describe("Goal Workload coverage contract", () => {
               status: candidate.label,
               missing_selected_revision_ids: candidate.label === "incomplete" ? [goalIDs[1]!] : [],
             },
-            workflow: {
-              nodes: [
-                { node_id: integrityNodeID, terminal_success: false, dispatches: [] },
-                {
-                  node_id: workloadNodeID,
-                  terminal_success: candidate.expectedKind === "terminal_success",
-                  dispatches: [{ settlement: { outcome_kind: candidate.expectedKind } }],
-                },
-              ],
-              frontier_node_ids: candidate.expectedFrontier,
-            },
+            workflow: { dispatches: [{ settlement: { outcome_kind: candidate.expectedKind } }] },
           })
         },
       })

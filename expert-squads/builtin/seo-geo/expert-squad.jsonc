@@ -114,7 +114,7 @@
     "virtual_workflows": {
       "search-generative-discovery-plan": {
         "label": "Search and Generative Discovery Plan",
-        "description": "Binding SEO & Generative Engine Optimization workflow. Every node runs exactly once; independent branches start concurrently and joins wait for every predecessor.",
+        "description": "Binding SEO & Generative Engine Optimization workflow. Use relevant independent responsibilities in parallel and join their actual required evidence; references do not fix order or dispatch count.",
         "nodes": {
           "seo-geo-planner": {
             "agent_id": "seo-geo-planner",

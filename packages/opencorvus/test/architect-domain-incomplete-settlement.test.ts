@@ -355,7 +355,7 @@ describe("Architect domain-incomplete settlement", () => {
     })
   }, 30_000)
 
-  test("preflight conflict preserves its exact Candidate and closes the successor frontier", async () => {
+  test("preflight conflict preserves its exact Candidate and records its actual incomplete settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -366,7 +366,7 @@ describe("Architect domain-incomplete settlement", () => {
           result: emptyArchitectResult({ sessionID: fixture.child.id, finalMessageID: fixture.final.id }),
         })
         const candidate = listGoalGraphProjectionArtifacts(fixture.taskID).at(-1)
-        expect({ outcome, candidate: candidate?.payload, workflow: projection.workflow_execution }).toMatchObject({
+        expect({ outcome, candidate: candidate?.payload, workflow: projection.dispatch_execution }).toMatchObject({
           outcome: {
             kind: "domain_incomplete",
             domain: "architect_projection",
@@ -383,19 +383,13 @@ describe("Architect domain-incomplete settlement", () => {
             projection: null,
             conflicts: [{ code: "requirement_set_not_read" }],
           },
-          workflow: {
-            nodes: [
-              { node_id: "architecture", terminal_success: false },
-              { node_id: "implementation", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: [],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
         })
       },
     })
   }, 30_000)
 
-  test("stale selected tip records the observed current tip and closes the successor frontier", async () => {
+  test("stale selected tip records the observed current tip and records its actual incomplete settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -430,7 +424,7 @@ describe("Architect domain-incomplete settlement", () => {
         expect({
           outcome: settled.outcome,
           candidate: candidate?.payload,
-          workflow: settled.projection.workflow_execution,
+          workflow: settled.projection.dispatch_execution,
         }).toMatchObject({
           outcome: {
             kind: "domain_incomplete",
@@ -441,19 +435,13 @@ describe("Architect domain-incomplete settlement", () => {
             conflicts: [{ code: "stale_prior_projection" }],
             observed_current_projection_artifact_locator: tipB?.goalGraphProjectionArtifactLocator,
           },
-          workflow: {
-            nodes: [
-              { node_id: "architecture", terminal_success: false },
-              { node_id: "implementation", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: [],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "domain_incomplete" } }] },
         })
       },
     })
   }, 30_000)
 
-  test("accepted projection remains terminal success and opens the successor frontier", async () => {
+  test("accepted projection remains terminal success and records its actual successful settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -472,17 +460,11 @@ describe("Architect domain-incomplete settlement", () => {
         expect({
           outcome,
           candidates: listGoalGraphProjectionArtifacts(fixture.taskID),
-          workflow: projection.workflow_execution,
+          workflow: projection.dispatch_execution,
         }).toMatchObject({
           outcome: { kind: "terminal_success" },
           candidates: [{ payload: { projection: { goal_revision_ids: [] }, conflicts: [] } }],
-          workflow: {
-            nodes: [
-              { node_id: "architecture", terminal_success: true },
-              { node_id: "implementation", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: ["implementation"],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })
@@ -510,7 +492,7 @@ describe("Architect domain-incomplete settlement", () => {
           },
         ]
         const { outcome, projection } = await dispatchArchitect({ fixture, result: invalidResult })
-        expect({ outcome, workflow: projection.workflow_execution }).toMatchObject({
+        expect({ outcome, workflow: projection.dispatch_execution }).toMatchObject({
           outcome: {
             kind: "partial",
             session_id: fixture.child.id,
@@ -523,13 +505,7 @@ describe("Architect domain-incomplete settlement", () => {
               catalog_revision: expect.any(Number),
             },
           },
-          workflow: {
-            nodes: [
-              { node_id: "architecture", terminal_success: false },
-              { node_id: "implementation", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: [],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "partial" } }] },
         })
       },
     })

@@ -19,9 +19,9 @@ HTTP 服务器（`packages/opencorvus/src/server/server.ts`）把路由切成两
 
 ## 专家团投影
 
-`prompt_profile.active` 选择唯一专家团 package。`PromptProfileResolver` 把该 package 投影为一个 scheduler capability 与多个精确动态 worker capability。Base 是默认内置专家团，Advanced 是可独立选择的完整软件交付团队，Research Studio 是可独立选择的五 Agent 研究交付团队。选择另一个 package 会完整替换当前 package；Agent、prompt、skill、tool、mount、MCP resource 和 workflow 契约都不会继承或组合。
+`prompt_profile.active` 选择唯一专家团 package。`PromptProfileResolver` 把该 package 投影为一个 scheduler capability 与多个精确动态 worker capability。Dynamic 是内嵌自动生成能力；未手动选团时先搜索并核对已安装候选，没有非常匹配候选才使用 Dynamic。Base 是可选内置专家团，Advanced 是可独立选择的完整软件交付团队，Research Studio 是可独立选择的五 Agent 研究交付团队。选择另一个 package 会完整替换当前 package；Agent、prompt、skill、tool、mount、MCP resource 和 workflow 契约都不会继承或组合。
 
-内置 Advanced manifest 声明 `planned-delivery`、`researched-planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery`、`greenfield-interface-visual-delivery` 和 `reference-interface-delivery` 六张不可变 scheduler contract 图。researched planned-delivery 图先解决一个关键外部证据缺口，再形成 Requirements 与架构，并保留能力匹配的实施、独立测试和系统审查。标准 greenfield 图在没有参考 URL 时承载完整的原创界面规划、实现 Agent 自有的真实页面检查、测试以及独立接口/系统审查。只有当请求或仓库契约明确要求独立 Visual Reviewer 判断时才选择 visual greenfield 图；存在 UI 工作本身不会触发它。只有 reference 图以 `interface-investigator` 开始，要求 operator 已提供一个 source URL，并始终保留渲染参考复核。它们不是 active/default workflow state 或执行引擎：Orchestrator 必须可见地选择与请求匹配的精确图。选中后每个声明 node 与依赖都是必需步骤；缺少前序证据时必须拒绝继续，不能省略、跳步、替换或调整顺序。
+Advanced 提供规划交付、研究、原创界面与参考界面的可选协作示例。专家身份、权限与相关证据合同是约束；参考图不要求全节点执行、固定顺序或每节点一次。调度者按实际输入组织 DAG（Directed Acyclic Graph，有向无环图）、局部循环、条件选择及其组合，并保留原请求要求的独立复核与参考对齐证据。
 
 每个投影 worker 通过 `base_role` runtime-template 种子选择 code-owned typed adapter。`requirements`、`architect`、`build`、`integrity` 等 adapter ID 是宿主 ABI（Application Binary Interface，应用二进制接口）模块名，不是可运行 Agent 身份或固定团队顺序。
 
@@ -83,7 +83,7 @@ LLM 发出 tool call → tool 执行 → tool result 写回 → 下一轮模型�
 
 ## Delivery Slice 与物理执行
 
-用户界面的 Goal 是 versioned Delivery Slice contract。Selected workflow 的每个 node 在一个 Task 中只执行一次；dispatch lineage 可以引用精确 Slice revisions 作为 subjects。Session/worktree 是 physical execution evidence，Task 独占 business lifecycle，Goal 面板从真实 workflow、Session、Artifact、review 与 Task decision 派生进度。
+用户界面的 Goal 是 versioned Delivery Slice contract。同一能力可承担多个独立职责；精确续作保留原 Session 和 occurrence；dispatch lineage 可以引用精确 Slice revisions 作为 subjects。Session/worktree 是 physical execution evidence，Task 独占 business lifecycle，Goal 面板从真实 workflow、Session、Artifact、review 与 Task decision 派生进度。
 
 ## 数据流
 

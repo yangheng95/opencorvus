@@ -189,7 +189,12 @@ export const CreateTaskInput = z
     // User-facing priority metadata. It affects Work Ledger presentation; it
     // does not grant Host scheduling authority over Task execution.
     priority: z.enum(["critical", "high", "normal", "low"]).optional(),
-    promptProfile: z.string().min(1).optional(),
+    promptProfile: z
+      .string()
+      .min(1)
+      .describe(
+        "Exact manually selected or creator-selected Expert Squad identity. Automatic natural-language creators search and inspect installed candidates first, then choose Dynamic only when none is very well matched. Task creation freezes this identity; it never performs hidden semantic routing.",
+      ),
     expectedPackageDigest: z
       .string()
       .regex(/^[a-f0-9]{64}$/)

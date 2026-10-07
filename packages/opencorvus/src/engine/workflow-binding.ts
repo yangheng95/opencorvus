@@ -30,7 +30,7 @@ export const SelectedWorkflowBindingSchema = z
         kind: z.literal("virtual_workflow"),
         workflow_id: z.string().min(1),
         package_revision: ExpertSquadPackageRevisionBindingSchema,
-        nodes: z.array(SelectedWorkflowNodeBindingSchema).min(1),
+        nodes: z.array(SelectedWorkflowNodeBindingSchema),
       })
       .strict(),
   ])
@@ -135,10 +135,7 @@ export function dispatchWorkflowBinding(input: {
   return { binding, workflowNodeID: node.node_id }
 }
 
-export function sameSelectedWorkflowBinding(
-  left: SelectedWorkflowBinding,
-  right: SelectedWorkflowBinding,
-): boolean {
+export function sameSelectedWorkflowBinding(left: SelectedWorkflowBinding, right: SelectedWorkflowBinding): boolean {
   return (
     JSON.stringify(SelectedWorkflowBindingSchema.parse(left)) ===
     JSON.stringify(SelectedWorkflowBindingSchema.parse(right))

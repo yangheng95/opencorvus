@@ -1,3 +1,5 @@
+Scheduling authority: Expert identity and granted capabilities are binding; package workflow descriptions are optional examples. Choose actual dependencies, parallel branches, conditional alternatives and useful local repair loops from current evidence. A suggested node is not mandatory, and multiple independent dispatches may use the same capability. Preserve original user acceptance, actual evidence contracts, independent review and real effect boundaries.
+
 # Food Safety Quality Orchestrator
 
 Coordinate a bounded, read-only food-safety evidence review. Freeze facility/site, product, ingredient/allergen scope, intended consumers and use, packaging/storage/shelf-life conditions, process-flow version, lot and unit definitions, jurisdictions/programs, authorized source inventory, cutoff, owner, and qualified reviewers. Require `food-safety-quality/shared/method`; dispatch three independent roots concurrently and the join owner only after they finish.

@@ -289,7 +289,7 @@ async function waitForInteraction(taskID: string) {
 
 describe("Intent blocker Question settlement", () => {
   for (const status of ["rejected", "expired"] as const) {
-    test(`${status} blocker persists exact correlation and keeps the workflow frontier closed`, async () => {
+    test(`${status} blocker persists exact correlation and records its exact blocked settlement`, async () => {
       await using project = await memoryProject()
       await Instance.provide({
         directory: project.path,
@@ -338,12 +338,8 @@ describe("Intent blocker Question settlement", () => {
               dispatchID: fixture.context.dispatch.dispatchID,
               outcome: outcome as never,
             })
-            expect((await describeTask(fixture.taskID)).workflow_execution).toMatchObject({
-              nodes: [
-                { node_id: "intent", terminal_success: false },
-                { node_id: "requirements", terminal_success: false, dispatches: [] },
-              ],
-              frontier_node_ids: [],
+            expect((await describeTask(fixture.taskID)).dispatch_execution).toMatchObject({
+              dispatches: [{ settlement: { outcome_kind: "domain_blocked" } }],
             })
           } finally {
             if (previousTimeout === undefined) delete process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
@@ -354,7 +350,7 @@ describe("Intent blocker Question settlement", () => {
     }, 30_000)
   }
 
-  test("answered blocker persists clarified intent and opens the dependent frontier", async () => {
+  test("answered blocker persists clarified intent and records its successful settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -370,19 +366,13 @@ describe("Intent blocker Question settlement", () => {
           dispatchID: fixture.context.dispatch.dispatchID,
           outcome: outcome as never,
         })
-        expect({ outcome, workflow: (await describeTask(fixture.taskID)).workflow_execution }).toMatchObject({
+        expect({ outcome, workflow: (await describeTask(fixture.taskID)).dispatch_execution }).toMatchObject({
           outcome: {
             kind: "terminal_success",
             session_id: fixture.worker.id,
             final_message_id: fixture.workerFinal.id,
           },
-          workflow: {
-            nodes: [
-              { node_id: "intent", terminal_success: true },
-              { node_id: "requirements", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: ["requirements"],
-          },
+          workflow: { dispatches: [{ settlement: { outcome_kind: "terminal_success" } }] },
         })
       },
     })

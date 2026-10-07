@@ -1,7 +1,8 @@
 import z from "zod"
 import { ExpertSquadIDSchema } from "@/expert-squad/id"
+import { DYNAMIC_EXPERT_SQUAD_ID } from "@/expert-squad/builtin/ids"
 
-export const DEFAULT_PROMPT_PROFILE_ID = "base"
+export const DEFAULT_PROMPT_PROFILE_ID = DYNAMIC_EXPERT_SQUAD_ID
 export const PromptProfileIDSchema = ExpertSquadIDSchema
 
 export const PromptProfileConfigSchema = z
