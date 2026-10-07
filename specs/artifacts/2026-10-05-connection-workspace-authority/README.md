@@ -1,8 +1,14 @@
 # Connection workspace authority investigation
 
+- [Multiple actual Sources109 Recall](multiple-sources-plan-109.md): fresh three-official-URL genuine Sol/native/manual acceptance plan; execution pending.
+
+- [Awaited owner lifetime107 Recall](async-lifetime-plan-107.md) and [evidence](async-lifetime-107/README.md): precise callback lease lifetime repair, original baselines retained; 18/50 current contracts and types0; broader lifecycle qualification unknown.
+
+- [Subagent pointer activation108 Recall](subagent-open-plan-108.md) and [evidence](subagent-open-108/README.md): Root-reviewed stable pointer/keyboard route, actual clipped/transition hits and exact18065 closure; no production repair.
+
 - [Empty completed delivery106 Recall](empty-delivery-plan-106.md), [evidence](empty-delivery-106/README.md) and [record](../../records/2026-10/2026-10-08-empty-completed-delivery.md): current-fact presentation eligibility, Root-owned real before/after pixels and exact native closure.
 
-- [Whole HTTP body ownership105 Recall](webfetch-body-plan-105.md) and [evidence](webfetch-body-105/README.md): shared deadline/request/body ownership with qualified local outputs; genuine live10501 acceptance pending.
+- [Whole HTTP body ownership105 Recall](webfetch-body-plan-105.md) and [evidence](webfetch-body-105/README.md): local ownership contracts, genuine Task/10Sol EOF, Root manual Sources and native/pair closure qualified; normally pushed with106 in79f7b4b4.
 
 - [Actual source titles104 evidence](source-title-104/README.md): real fetched title, exact persisted source, genuine current CLI/Sol and personally reviewed Sources pixels.
 

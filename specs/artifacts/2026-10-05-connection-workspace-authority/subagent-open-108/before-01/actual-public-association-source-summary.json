@@ -1,0 +1,58 @@
+{
+  "turnArtifacts": [
+    {
+      "task": {
+        "id": "tsk_g00VXNwoXR00OSwM2ms5",
+        "title": "Sources 正文与标题真实验收105",
+        "status": "completed"
+      },
+      "messageID": "msg_hKwOG7hE5hmEZA2T1hkX",
+      "catalogComplete": true,
+      "resourceCount": 0,
+      "entriesCount": 0,
+      "providerErrorsCount": 0
+    }
+  ],
+  "tester": [
+    {
+      "sessionID": "ses_hmqHLce1uaUsMhUdlzW8",
+      "agentID": "base-tester",
+      "parentSessionID": "ses_-zUSc3AKMzz41GG9lh2F",
+      "status": null,
+      "messageIDs": [
+        "msg_g0VXNwvJk00V9DBYD28F",
+        "msg_g0VXNwvNr002Z6JbxRPn",
+        "msg_g0VXNwwb500zVpAoBgnO",
+        "msg_g0VXNwyLZ00VewPHaxOT"
+      ]
+    }
+  ],
+  "nativeHost": {
+    "pid": 29884,
+    "processInstanceID": "win32:639269913990240311",
+    "occurrenceID": "0aaf02e1-85c7-4d79-bbc6-8804dfeabf6a"
+  },
+  "projectID": "prj_hJSu4axrHQbLnt6VA8lj",
+  "sources": [
+    {
+      "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+      "partID": "prt_g0VXNwr4L00fjgPBWSM7",
+      "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+      "messageID": "msg_hkX3NV0YN9SVbAp3x3tS",
+      "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+      "sessionID": "ses_-zUSc3AKMzz41GG9lh2F"
+    }
+  ],
+  "port": 18065,
+  "observedAtUtc": "2026-10-07T17:37:34.0721822Z",
+  "nativeTarget": {
+    "pid": 63204,
+    "processInstanceID": "win32:639269914000403431",
+    "occurrenceID": "7df04efc-cd65-47b5-8cb1-7a2d952d2fed"
+  },
+  "testerHistoryStatus": 200,
+  "boundary": "Actual public canonical Task view/Message Source and exact selected tester history; no UI acceptance/model request",
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\webfetch-body-live-105-01\\project",
+  "taskID": "tsk_g00VXNwoXR00OSwM2ms5",
+  "occurrence": "subagent-open-before-108-01-0097cf4a-ec21-4f14-ba00-c3e5b7793d0d"
+}

@@ -1,0 +1,69 @@
+[1/1] START ../../.tmp-product-iteration/async-reference-owner-107.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"case":"conversation-write","projectA":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-JK2HsR","projectB":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-Jk6Ypu","order":["first-entered","second-observed:","first-completed"],"results":[{"status":"fulfilled","value":"first-committed"},{"status":"fulfilled","value":""}],"state":"first-committed","observation":"","owner":"original global conversation reference key","timingQualification":"one real event-loop turn after second operation submission; no production hook/spawner override"}
+{"case":"conversation-write","joined":["fulfilled","fulfilled"]}
+54 |     const observation = await fs.readFile(path.join(projectB.path, "owned-reference-observation.txt"), "utf8")
+55 |     const facts = { case: entry.name, projectA: projectA.path, projectB: projectB.path, order, results, state, observation, owner: entry.name.startsWith("skill") ? "original durable catalog owner retained" : "original global conversation reference key", timingQualification: "one real event-loop turn after second operation submission; no production hook/spawner override" }
+56 |     await fs.writeFile(path.join(evidence, `${entry.name}-${crypto.randomUUID()}.json`), JSON.stringify(facts, null, 2), { flag: "wx" })
+57 |     console.log(JSON.stringify(facts))
+58 |     expect(state).toBe("first-committed")
+59 |     expect(order).toEqual(["first-entered", "first-completed", "second-observed:first-committed"])
+                       ^
+error: expect(received).toEqual(expected)
+
+  [
+    "first-entered",
++   "second-observed:",
+    "first-completed",
+-   "second-observed:first-committed",
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\async-reference-owner-107.test.ts:59:19)
+(fail) conversation-write real callback returns before the next global owner observes the committed resource [2051.10ms]
+{"case":"conversation-read","projectA":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-0u81Mh","projectB":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-fVr6Jr","order":["first-entered","second-observed:","first-completed"],"results":[{"status":"fulfilled","value":"first-committed"},{"status":"fulfilled","value":""}],"state":"first-committed","observation":"","owner":"original global conversation reference key","timingQualification":"one real event-loop turn after second operation submission; no production hook/spawner override"}
+{"case":"conversation-read","joined":["fulfilled","fulfilled"]}
+54 |     const observation = await fs.readFile(path.join(projectB.path, "owned-reference-observation.txt"), "utf8")
+55 |     const facts = { case: entry.name, projectA: projectA.path, projectB: projectB.path, order, results, state, observation, owner: entry.name.startsWith("skill") ? "original durable catalog owner retained" : "original global conversation reference key", timingQualification: "one real event-loop turn after second operation submission; no production hook/spawner override" }
+56 |     await fs.writeFile(path.join(evidence, `${entry.name}-${crypto.randomUUID()}.json`), JSON.stringify(facts, null, 2), { flag: "wx" })
+57 |     console.log(JSON.stringify(facts))
+58 |     expect(state).toBe("first-committed")
+59 |     expect(order).toEqual(["first-entered", "first-completed", "second-observed:first-committed"])
+                       ^
+error: expect(received).toEqual(expected)
+
+  [
+    "first-entered",
++   "second-observed:",
+    "first-completed",
+-   "second-observed:first-committed",
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\async-reference-owner-107.test.ts:59:19)
+(fail) conversation-read real callback returns before the next global owner observes the committed resource [1784.67ms]
+{"case":"skill-write","projectA":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-1TQHbD","projectB":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-xAfIL6","order":["first-entered","first-completed","second-observed:first-committed"],"results":[{"status":"fulfilled","value":"first-committed"},{"status":"fulfilled","value":"first-committed"}],"state":"first-committed","observation":"first-committed","owner":"original durable catalog owner retained","timingQualification":"one real event-loop turn after second operation submission; no production hook/spawner override"}
+{"case":"skill-write","joined":["fulfilled","fulfilled"]}
+(pass) skill-write real callback returns before the next global owner observes the committed resource [1983.55ms]
+{"case":"skill-read","projectA":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-cU07tc","projectB":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-lcC9aS","order":["first-entered","first-completed","second-observed:first-committed"],"results":[{"status":"fulfilled","value":"first-committed"},{"status":"fulfilled","value":"first-committed"}],"state":"first-committed","observation":"first-committed","owner":"original durable catalog owner retained","timingQualification":"one real event-loop turn after second operation submission; no production hook/spawner override"}
+{"case":"skill-read","joined":["fulfilled","fulfilled"]}
+(pass) skill-read real callback returns before the next global owner observes the committed resource [1636.83ms]
+{"owner":"conversation","results":{"accepted":"same inherited mutation"},"rejected":{"name":"Error","message":"Cannot mutate native conversation capability references while holding a reference read."}}
+(pass) conversation nested owner and real read-to-write rejection retain their current contracts [0.62ms]
+{"owner":"skill","results":{"accepted":"same inherited mutation"},"rejected":{"name":"Error","message":"Cannot mutate the Skill catalog while holding a catalog reference read."}}
+(pass) skill nested owner and real read-to-write rejection retain their current contracts [11.49ms]
+
+ 4 pass
+ 2 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [8.99s]
+[1/1] DONE ../../.tmp-product-iteration/async-reference-owner-107.test.ts exit=1 duration=9.91s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\.tmp-product-iteration\async-reference-owner-107.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\.tmp-product-iteration\async-reference-owner-107.test.ts

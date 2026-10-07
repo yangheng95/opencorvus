@@ -1,6 +1,9 @@
 # Artifact entry points
 
-- [HTTP response body ownership105 evidence](2026-10-05-connection-workspace-authority/webfetch-body-105/README.md): qualified local contracts; genuine live10501 pending.
+- [Subagent pointer qualification108](2026-10-05-connection-workspace-authority/subagent-open-108/README.md): actual stable pointer/keyboard and exact CLOSED105 scope custody, no source fix.
+- [Awaited owner lifetime107 evidence](2026-10-05-connection-workspace-authority/async-lifetime-107/README.md): original reference/native baseline and joins; 18/50 current contracts and types0; broader lifecycle qualification unknown.
+
+- [HTTP response body ownership105 evidence](2026-10-05-connection-workspace-authority/webfetch-body-105/README.md): qualified local contracts, genuine Task/10Sol EOF, Root manual Sources and native/pair closure; normally pushed with106 in79f7b4b4.
 
 - [Empty completed delivery106 evidence](2026-10-05-connection-workspace-authority/empty-delivery-106/README.md): current104 source custody, actual before/after public payloads/pixels and whole native closure.
 

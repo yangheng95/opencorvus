@@ -1,0 +1,57 @@
+[1/1] START ../../.tmp-product-iteration/task-checkpoint-owner-107.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"role":"mandatory","a":{"taskID":"tsk_g00VXNzLZi00aFpLTOEK","projectID":"prj_hRi2fH5ngSuTWYEOWmQC","cwd":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-Y7I4rH","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VXNzLZi00aFpLTOEK","project_id":"prj_hRi2fH5ngSuTWYEOWmQC","package_revision_sha256":"834da69ab256631ed712ab3960901fb89e2e94e41fa42835e53f52775d37b962","mode":"native","logical_workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-Y7I4rH","workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-Y7I4rH","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1791394163234}},"b":{"taskID":"tsk_g00VXNzLdi000TjN8CmW","projectID":"prj_hZlVsCNaSLQAduuSWWz6","cwd":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-l1gwxS","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VXNzLdi000TjN8CmW","project_id":"prj_hZlVsCNaSLQAduuSWWz6","package_revision_sha256":"834da69ab256631ed712ab3960901fb89e2e94e41fa42835e53f52775d37b962","mode":"native","logical_workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-l1gwxS","workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-l1gwxS","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1791394163482}},"receipts":["checkpoint-entered","same-task-admitted","other-task-admitted","same-task-settled","other-task-settled","checkpoint-completed"],"checkpointResult":"checkpoint-completed","sameResult":{"taskID":"tsk_g00VXNzLZi00aFpLTOEK","pid":73584,"stdout":"{\"marker\":\"same-task\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-j4HYKZ\\\\test-73356-LN4dY1\\\\fixtures\\\\memory-Y7I4rH\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[73584]}}}},"otherResult":{"taskID":"tsk_g00VXNzLdi000TjN8CmW","pid":76828,"stdout":"{\"marker\":\"other-task\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-j4HYKZ\\\\test-73356-LN4dY1\\\\fixtures\\\\memory-l1gwxS\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[76828]}}}},"state":"completed","boundary":"real native Task binding and lease callbacks; data fixture Task creation without model execution epoch"}
+{"role":"mandatory","joined":["fulfilled","fulfilled","fulfilled"]}
+79 |     await fs.writeFile(path.join(evidence,`checkpoint-${role}-${crypto.randomUUID()}.json`),JSON.stringify(facts,null,2),{flag:"wx"})
+80 |     console.log(JSON.stringify(facts))
+81 |     expect({checkpointResult,state}).toEqual({checkpointResult:"checkpoint-completed",state:"completed"})
+82 |     expect({exitCode:otherResult.exitCode,output:JSON.parse(otherResult.stdout)}).toEqual({exitCode:0,output:{marker:"other-task",cwd:projectB.path}})
+83 |     expect({exitCode:sameResult.exitCode,output:JSON.parse(sameResult.stdout)}).toEqual({exitCode:0,output:{marker:"same-task",cwd:projectA.path}})
+84 |     expect(receipts.filter(value=>value==="checkpoint-completed"||value==="same-task-admitted")).toEqual(["checkpoint-completed","same-task-admitted"])
+                                                                                                      ^
+error: expect(received).toEqual(expected)
+
+  [
+-   "checkpoint-completed",
+    "same-task-admitted",
++   "checkpoint-completed",
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\task-checkpoint-owner-107.test.ts:84:98)
+(fail) native mandatory checkpoint callback holds sameTask admission and preserves otherTask output [5446.44ms]
+{"role":"auxiliary","a":{"taskID":"tsk_g00VXNzMma00FbCttL5y","projectID":"prj_hMZULsH9bBFH0zH2J3cQ","cwd":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-Ryacz3","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VXNzMma00FbCttL5y","project_id":"prj_hMZULsH9bBFH0zH2J3cQ","package_revision_sha256":"834da69ab256631ed712ab3960901fb89e2e94e41fa42835e53f52775d37b962","mode":"native","logical_workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-Ryacz3","workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-Ryacz3","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1791394167876}},"b":{"taskID":"tsk_g00VXNzMvA00CrEOAbTH","projectID":"prj_hcgx8B0sk2FIyMMej72q","cwd":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-NUFf3d","binding":{"protocol":"task-native-process-binding-v2","task_id":"tsk_g00VXNzMvA00CrEOAbTH","project_id":"prj_hcgx8B0sk2FIyMMej72q","package_revision_sha256":"834da69ab256631ed712ab3960901fb89e2e94e41fa42835e53f52775d37b962","mode":"native","logical_workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-NUFf3d","workspace_root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-j4HYKZ\\test-73356-LN4dY1\\fixtures\\memory-NUFf3d","initial_tree_sha256":"671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d","time_created":1791394168408}},"receipts":["checkpoint-entered","same-task-admitted","other-task-admitted","same-task-settled","other-task-settled","checkpoint-completed"],"checkpointResult":"checkpoint-completed","sameResult":{"taskID":"tsk_g00VXNzMma00FbCttL5y","pid":32852,"stdout":"{\"marker\":\"same-task\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-j4HYKZ\\\\test-73356-LN4dY1\\\\fixtures\\\\memory-Ryacz3\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[32852]}}}},"otherResult":{"taskID":"tsk_g00VXNzMvA00CrEOAbTH","pid":72264,"stdout":"{\"marker\":\"other-task\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-j4HYKZ\\\\test-73356-LN4dY1\\\\fixtures\\\\memory-NUFf3d\"}\n","stderr":"","exitCode":0,"metric":{"live":1,"owners":{"unclassified":{"count":1,"pids":[72264]}}}},"state":"completed","boundary":"real native Task binding and lease callbacks; data fixture Task creation without model execution epoch"}
+{"role":"auxiliary","joined":["fulfilled","fulfilled","fulfilled"]}
+79 |     await fs.writeFile(path.join(evidence,`checkpoint-${role}-${crypto.randomUUID()}.json`),JSON.stringify(facts,null,2),{flag:"wx"})
+80 |     console.log(JSON.stringify(facts))
+81 |     expect({checkpointResult,state}).toEqual({checkpointResult:"checkpoint-completed",state:"completed"})
+82 |     expect({exitCode:otherResult.exitCode,output:JSON.parse(otherResult.stdout)}).toEqual({exitCode:0,output:{marker:"other-task",cwd:projectB.path}})
+83 |     expect({exitCode:sameResult.exitCode,output:JSON.parse(sameResult.stdout)}).toEqual({exitCode:0,output:{marker:"same-task",cwd:projectA.path}})
+84 |     expect(receipts.filter(value=>value==="checkpoint-completed"||value==="same-task-admitted")).toEqual(["checkpoint-completed","same-task-admitted"])
+                                                                                                      ^
+error: expect(received).toEqual(expected)
+
+  [
+-   "checkpoint-completed",
+    "same-task-admitted",
++   "checkpoint-completed",
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\task-checkpoint-owner-107.test.ts:84:98)
+(fail) native auxiliary checkpoint callback holds sameTask admission and preserves otherTask output [4491.40ms]
+
+ 0 pass
+ 2 fail
+ 8 expect() calls
+Ran 2 tests across 1 file. [12.38s]
+[1/1] DONE ../../.tmp-product-iteration/task-checkpoint-owner-107.test.ts exit=1 duration=13.39s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\.tmp-product-iteration\task-checkpoint-owner-107.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\.tmp-product-iteration\task-checkpoint-owner-107.test.ts

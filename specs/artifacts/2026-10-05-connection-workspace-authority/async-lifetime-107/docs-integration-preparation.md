@@ -1,0 +1,5 @@
+# 107 documentation preparation
+
+Owned integration:05-config reference callback Promise lease lifetime and preserved inherited/read-to-write/Skill durable owner; task-control-plane sameTask mandatory/auxiliary awaited checkpoint lifetime, Task-specific isolation, separate Git tree owner and unchanged epoch/cancel/retry policy;107 record/evidence README and exactly107 entry lines in four existing indices. Prior105 HTTP paragraph expands Hypertext Transfer Protocol (HTTP), Server-Sent Events (SSE), end-of-file (EOF) in capability-search-runtime only.
+
+First local Python edit attempt used Windows default cp1252 read_text and failed UnicodeDecodeError on the first source read, before any mutation. Corrected exact same docs preparation uses explicit UTF-8; no source/test/toolchain policy changed. Current bun run docs:check exits0; full raw log docs-check-current.log. After107 source/checker/types remains PENDING until Root supplies final facts. No runtime/Provider/UI/checker tests executed by this child.

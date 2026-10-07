@@ -1,9 +1,15 @@
 # Specs Storage Index
 
+- [Multiple actual Sources109 Recall](artifacts/2026-10-05-connection-workspace-authority/multiple-sources-plan-109.md): fresh three-official-URL genuine Sol/native/manual acceptance plan; execution pending.
+
+- [Awaited owner lifetime107](records/2026-10/2026-10-08-awaited-owner-lifetime.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/async-lifetime-plan-107.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/async-lifetime-107/README.md): original reference/native failures retained; 18/50 current contracts and types0; broader lifecycle qualification unknown.
+
+- [Subagent pointer activation108](records/2026-10/2026-10-08-subagent-pointer-qualification.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/subagent-open-plan-108.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-open-108/README.md): stable real pointer/keyboard qualification, clipped/transition hit limits and exact closure; no source fix.
+
 - [Empty completed delivery106](records/2026-10/2026-10-08-empty-completed-delivery.md): one presentation predicate, Root-reviewed actual104 history pixels and exact native closure; preserved branch matrices remain unqualified.
 - [Empty completed delivery106 Recall](artifacts/2026-10-05-connection-workspace-authority/empty-delivery-plan-106.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/empty-delivery-106/README.md): source custody, before/after public facts and retained original failures.
 
-- [Whole HTTP body ownership105](records/2026-10/2026-10-08-http-response-body-ownership.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/webfetch-body-plan-105.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/webfetch-body-105/README.md): qualified shared local HTTP ownership; genuine live10501 acceptance pending.
+- [Whole HTTP body ownership105](records/2026-10/2026-10-08-http-response-body-ownership.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/webfetch-body-plan-105.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/webfetch-body-105/README.md): local ownership contracts, genuine Task/10Sol EOF, Root manual Sources and native/pair closure qualified; normally pushed with106 in79f7b4b4.
 
 - [Actual source titles104](records/2026-10/2026-10-07-actual-source-titles.md): real HTML titles, positive HTTP/source contracts and genuine Sol/CLI/manual Sources acceptance.
 

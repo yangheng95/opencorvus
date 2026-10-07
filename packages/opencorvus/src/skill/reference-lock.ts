@@ -25,7 +25,7 @@ export function withSkillCatalogMutation<T>(run: () => Promise<T>): Promise<T> {
   }
   return withCatalogOwner(async () => {
     using _lock = await Lock.write(SKILL_CATALOG_REFERENCE_LOCK)
-    return skillCatalogMutationContext.provide(true, run)
+    return await skillCatalogMutationContext.provide(true, run)
   })
 }
 
@@ -33,7 +33,7 @@ export function withSkillCatalogReferenceRead<T>(run: () => Promise<T>): Promise
   if (skillCatalogMutationContext.tryUse() || skillCatalogReadContext.tryUse()) return run()
   return withCatalogOwner(async () => {
     using _lock = await Lock.read(SKILL_CATALOG_REFERENCE_LOCK)
-    return skillCatalogReadContext.provide(true, run)
+    return await skillCatalogReadContext.provide(true, run)
   })
 }
 

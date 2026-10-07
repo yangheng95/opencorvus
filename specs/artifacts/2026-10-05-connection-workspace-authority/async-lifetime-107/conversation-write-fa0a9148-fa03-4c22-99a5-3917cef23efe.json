@@ -1,0 +1,24 @@
+{
+  "case": "conversation-write",
+  "projectA": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-65436-NgSRPJ\\fixtures\\memory-lzLfZi",
+  "projectB": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-65436-NgSRPJ\\fixtures\\memory-cTfv0S",
+  "order": [
+    "first-entered",
+    "first-completed",
+    "second-observed:first-committed"
+  ],
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": "first-committed"
+    },
+    {
+      "status": "fulfilled",
+      "value": "first-committed"
+    }
+  ],
+  "state": "first-committed",
+  "observation": "first-committed",
+  "owner": "original global conversation reference key",
+  "timingQualification": "one real event-loop turn after second operation submission; no production hook/spawner override"
+}

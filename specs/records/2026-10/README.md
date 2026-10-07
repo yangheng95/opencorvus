@@ -1,8 +1,11 @@
 # 2026-10 Records
 
+- [Subagent pointer qualification108](2026-10-08-subagent-pointer-qualification.md)
+- [Awaited owner lifetime107](2026-10-08-awaited-owner-lifetime.md): original reference/native failures retained; 18/50 current contracts and types0; broader lifecycle qualification unknown.
+
 - [Empty completed delivery106](2026-10-08-empty-completed-delivery.md)
 
-- [Whole HTTP response body ownership105](2026-10-08-http-response-body-ownership.md) and [Recall](../../artifacts/2026-10-05-connection-workspace-authority/webfetch-body-plan-105.md): genuine live acceptance pending.
+- [Whole HTTP response body ownership105](2026-10-08-http-response-body-ownership.md) and [Recall](../../artifacts/2026-10-05-connection-workspace-authority/webfetch-body-plan-105.md): genuine Task/10Sol EOF, Root Sources pixels and exact closure qualified; normally pushed with106 in79f7b4b4.
 
 - [Actual source titles104](2026-10-07-actual-source-titles.md)
 

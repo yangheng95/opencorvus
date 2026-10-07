@@ -14,7 +14,7 @@ export function withConversationCapabilityReferenceMutation<T>(run: () => Promis
   }
   return (async () => {
     using _lock = await Lock.write(CONVERSATION_CAPABILITY_REFERENCE_LOCK)
-    return conversationCapabilityTransactionContext.provide(true, run)
+    return await conversationCapabilityTransactionContext.provide(true, run)
   })()
 }
 
@@ -24,7 +24,7 @@ export function withConversationCapabilityReferenceRead<T>(run: () => Promise<T>
   }
   return (async () => {
     using _lock = await Lock.read(CONVERSATION_CAPABILITY_REFERENCE_LOCK)
-    return conversationCapabilityReferenceReadContext.provide(true, run)
+    return await conversationCapabilityReferenceReadContext.provide(true, run)
   })()
 }
 

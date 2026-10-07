@@ -1,0 +1,24 @@
+{
+  "case": "skill-read",
+  "projectA": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-cU07tc",
+  "projectB": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-8ooK5i\\test-41616-zeVWd4\\fixtures\\memory-lcC9aS",
+  "order": [
+    "first-entered",
+    "first-completed",
+    "second-observed:first-committed"
+  ],
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": "first-committed"
+    },
+    {
+      "status": "fulfilled",
+      "value": "first-committed"
+    }
+  ],
+  "state": "first-committed",
+  "observation": "first-committed",
+  "owner": "original durable catalog owner retained",
+  "timingQualification": "one real event-loop turn after second operation submission; no production hook/spawner override"
+}

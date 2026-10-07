@@ -678,7 +678,7 @@ export namespace ProcessSupervisor {
       await disposeTaskExecutionCapsule(taskID)
       using mandatoryLease = await mandatoryReservation.acquired
       using auxiliaryLease = await auxiliaryReservation.acquired
-      return run()
+      return await run()
     } catch (error) {
       mandatoryReservation.cancel()
       auxiliaryReservation.cancel()

@@ -1,0 +1,57 @@
+diff --git a/packages/opencorvus/src/conversation/capability-transaction.ts b/packages/opencorvus/src/conversation/capability-transaction.ts
+index 47793a4d..9a0c1246 100644
+--- a/packages/opencorvus/src/conversation/capability-transaction.ts
++++ b/packages/opencorvus/src/conversation/capability-transaction.ts
+@@ -14,7 +14,7 @@ export function withConversationCapabilityReferenceMutation<T>(run: () => Promis
+   }
+   return (async () => {
+     using _lock = await Lock.write(CONVERSATION_CAPABILITY_REFERENCE_LOCK)
+-    return conversationCapabilityTransactionContext.provide(true, run)
++    return await conversationCapabilityTransactionContext.provide(true, run)
+   })()
+ }
+ 
+@@ -24,7 +24,7 @@ export function withConversationCapabilityReferenceRead<T>(run: () => Promise<T>
+   }
+   return (async () => {
+     using _lock = await Lock.read(CONVERSATION_CAPABILITY_REFERENCE_LOCK)
+-    return conversationCapabilityReferenceReadContext.provide(true, run)
++    return await conversationCapabilityReferenceReadContext.provide(true, run)
+   })()
+ }
+ 
+diff --git a/packages/opencorvus/src/shell/process-supervisor.ts b/packages/opencorvus/src/shell/process-supervisor.ts
+index 7f0cad69..f6d3ed4e 100644
+--- a/packages/opencorvus/src/shell/process-supervisor.ts
++++ b/packages/opencorvus/src/shell/process-supervisor.ts
+@@ -678,7 +678,7 @@ export namespace ProcessSupervisor {
+       await disposeTaskExecutionCapsule(taskID)
+       using mandatoryLease = await mandatoryReservation.acquired
+       using auxiliaryLease = await auxiliaryReservation.acquired
+-      return run()
++      return await run()
+     } catch (error) {
+       mandatoryReservation.cancel()
+       auxiliaryReservation.cancel()
+diff --git a/packages/opencorvus/src/skill/reference-lock.ts b/packages/opencorvus/src/skill/reference-lock.ts
+index 54073047..1c4f1089 100644
+--- a/packages/opencorvus/src/skill/reference-lock.ts
++++ b/packages/opencorvus/src/skill/reference-lock.ts
+@@ -25,7 +25,7 @@ export function withSkillCatalogMutation<T>(run: () => Promise<T>): Promise<T> {
+   }
+   return withCatalogOwner(async () => {
+     using _lock = await Lock.write(SKILL_CATALOG_REFERENCE_LOCK)
+-    return skillCatalogMutationContext.provide(true, run)
++    return await skillCatalogMutationContext.provide(true, run)
+   })
+ }
+ 
+@@ -33,7 +33,7 @@ export function withSkillCatalogReferenceRead<T>(run: () => Promise<T>): Promise
+   if (skillCatalogMutationContext.tryUse() || skillCatalogReadContext.tryUse()) return run()
+   return withCatalogOwner(async () => {
+     using _lock = await Lock.read(SKILL_CATALOG_REFERENCE_LOCK)
+-    return skillCatalogReadContext.provide(true, run)
++    return await skillCatalogReadContext.provide(true, run)
+   })
+ }
+ 

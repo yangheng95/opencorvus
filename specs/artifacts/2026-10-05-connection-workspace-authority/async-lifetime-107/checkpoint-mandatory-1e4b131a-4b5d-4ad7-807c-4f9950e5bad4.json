@@ -1,0 +1,82 @@
+{
+  "role": "mandatory",
+  "a": {
+    "taskID": "tsk_g00VXO035W00oEof8Iw5",
+    "projectID": "prj_hRjJLT9TW6ZH9uFiHOtT",
+    "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-59584-uM6Qfr\\fixtures\\memory-PQFD4l",
+    "binding": {
+      "protocol": "task-native-process-binding-v2",
+      "task_id": "tsk_g00VXO035W00oEof8Iw5",
+      "project_id": "prj_hRjJLT9TW6ZH9uFiHOtT",
+      "package_revision_sha256": "834da69ab256631ed712ab3960901fb89e2e94e41fa42835e53f52775d37b962",
+      "mode": "native",
+      "logical_workspace_root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-59584-uM6Qfr\\fixtures\\memory-PQFD4l",
+      "workspace_root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-59584-uM6Qfr\\fixtures\\memory-PQFD4l",
+      "initial_tree_sha256": "671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d",
+      "time_created": 1791394330498
+    }
+  },
+  "b": {
+    "taskID": "tsk_g00VXO034000zxBXR40R",
+    "projectID": "prj_hks3DnGhb1UZjp8ZM3Yn",
+    "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-59584-uM6Qfr\\fixtures\\memory-w8qywg",
+    "binding": {
+      "protocol": "task-native-process-binding-v2",
+      "task_id": "tsk_g00VXO034000zxBXR40R",
+      "project_id": "prj_hks3DnGhb1UZjp8ZM3Yn",
+      "package_revision_sha256": "834da69ab256631ed712ab3960901fb89e2e94e41fa42835e53f52775d37b962",
+      "mode": "native",
+      "logical_workspace_root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-59584-uM6Qfr\\fixtures\\memory-w8qywg",
+      "workspace_root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-7AxwL7\\test-59584-uM6Qfr\\fixtures\\memory-w8qywg",
+      "initial_tree_sha256": "671e808b77e184b1546cf7d84c309e6f761fac5d2f90775f23527962c583684d",
+      "time_created": 1791394330404
+    }
+  },
+  "receipts": [
+    "checkpoint-entered",
+    "other-task-admitted",
+    "other-task-settled",
+    "checkpoint-completed",
+    "same-task-admitted",
+    "same-task-settled"
+  ],
+  "checkpointResult": "checkpoint-completed",
+  "sameResult": {
+    "taskID": "tsk_g00VXO035W00oEof8Iw5",
+    "pid": 72676,
+    "stdout": "{\"marker\":\"same-task\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-7AxwL7\\\\test-59584-uM6Qfr\\\\fixtures\\\\memory-PQFD4l\"}\n",
+    "stderr": "",
+    "exitCode": 0,
+    "metric": {
+      "live": 1,
+      "owners": {
+        "unclassified": {
+          "count": 1,
+          "pids": [
+            72676
+          ]
+        }
+      }
+    }
+  },
+  "otherResult": {
+    "taskID": "tsk_g00VXO034000zxBXR40R",
+    "pid": 33724,
+    "stdout": "{\"marker\":\"other-task\",\"cwd\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-7AxwL7\\\\test-59584-uM6Qfr\\\\fixtures\\\\memory-w8qywg\"}\n",
+    "stderr": "",
+    "exitCode": 0,
+    "metric": {
+      "live": 1,
+      "owners": {
+        "unclassified": {
+          "count": 1,
+          "pids": [
+            33724
+          ]
+        }
+      }
+    }
+  },
+  "state": "completed",
+  "boundary": "real native Task binding and lease callbacks; data fixture Task creation without model execution epoch"
+}

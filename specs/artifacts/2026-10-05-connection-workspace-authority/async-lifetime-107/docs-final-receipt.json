@@ -1,0 +1,14 @@
+{
+  "command": "bun run docs:check",
+  "cwd": "D:/myhexin-local/opencorvus",
+  "exitCode": 0,
+  "rawLog": "docs-check-final.log",
+  "snapshots": {
+    "05-config-current.md": "specs/current/architecture/05-config.md",
+    "task-control-plane-current.md": "specs/current/architecture/task-control-plane.md",
+    "capability-search-runtime-current.md": "specs/current/architecture/capability-search-runtime.md",
+    "monthly-record-current.md": "specs/records/2026-10/2026-10-08-awaited-owner-lifetime.md",
+    "evidence-readme-current.md": "specs\\artifacts\\2026-10-05-connection-workspace-authority\\async-lifetime-107\\README.md"
+  },
+  "boundary": "Documentation and actual delivered test/type facts only;107 push/109 acceptance not claimed"
+}

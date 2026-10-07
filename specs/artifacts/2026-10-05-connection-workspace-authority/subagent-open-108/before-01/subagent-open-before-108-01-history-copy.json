@@ -1,0 +1,48 @@
+{
+  "observedAtUtc": "2026-10-07T17:36:24.1881915Z",
+  "sourceFacts": {
+    "readonly": true,
+    "task": {
+      "id": "tsk_g00VXNwoXR00OSwM2ms5",
+      "project_id": "prj_hJSu4axrHQbLnt6VA8lj",
+      "session_id": "ses_-zUSc3BKRzzYNaqCtx1m",
+      "request_id": "a55ff63a-4307-45f8-9636-aaae02809172",
+      "product_pillar": "work"
+    },
+    "session": {
+      "id": "ses_-zUSc3BKRzzYNaqCtx1m",
+      "project_id": "prj_hJSu4axrHQbLnt6VA8lj",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\webfetch-body-live-105-01\\project"
+    },
+    "epoch": 1,
+    "openedEventID": "pev_g0VXNwogJ00yGd0XcPzR",
+    "terminalEventID": "pev_g0VXNx5Ez00XHwnJwo8c",
+    "promptOwners": []
+  },
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 63880,
+        "processInstanceID": "win32:639269902508386432",
+        "occurrenceID": "3b4cf936-9de4-4100-a0f3-269b30642fa2"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 60396,
+        "processInstanceID": "win32:639269902517643062",
+        "occurrenceID": "db6fb0e7-9102-4bd0-8bcd-716a10bf89f3"
+      }
+    }
+  ],
+  "taskID": "tsk_g00VXNwoXR00OSwM2ms5",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/webfetch-body-live-105-01",
+  "credentialStaging": "None; source105 untouched; no Task rearm",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-open-before-108-01",
+  "purpose": "Actual CLOSED105 pointer versus keyboard subagent Open preimage",
+  "port": 18065,
+  "rootSessionID": "ses_-zUSc3BKRzzYNaqCtx1m",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\webfetch-body-live-105-01\\project"
+}
