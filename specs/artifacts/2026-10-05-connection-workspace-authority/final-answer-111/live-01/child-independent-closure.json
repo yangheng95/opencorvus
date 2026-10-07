@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-10-07T18:49:43.1418678Z",
+  "boundary": "Independent read-only CIM/Get-NetTCPConnection and copied-pair metadata; no process control",
+  "processes": [
+    {
+      "birth": null,
+      "present": false,
+      "pid": 73276
+    },
+    {
+      "birth": null,
+      "present": false,
+      "pid": 71748
+    }
+  ],
+  "listeners": [],
+  "copiedPair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ]
+}

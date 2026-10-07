@@ -1,0 +1,25 @@
+[
+  {
+    "id": "prt_g0VXNwwLn00tGCaqvqoM",
+    "differences": []
+  },
+  {
+    "id": "prt_g0VXNwxoj003knShzTP2",
+    "differences": [
+      {
+        "field": "activity.state.metadata.opencorvus_conversation_tool_state",
+        "actualType": "undefined",
+        "expectedType": "object",
+        "actualLength": null,
+        "expectedLength": null
+      },
+      {
+        "field": "activity.state.output",
+        "actualType": "string",
+        "expectedType": "string",
+        "actualLength": 360,
+        "expectedLength": 0
+      }
+    ]
+  }
+]

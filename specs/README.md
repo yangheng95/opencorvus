@@ -1,6 +1,13 @@
 # Specs Storage Index
+- [Sources reading112 Recall](artifacts/2026-10-05-connection-workspace-authority/sources-reading-plan-112.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/sources-reading-112/README.md): shared scroll-owner candidate; genuine before reproduction pending, repair held.
 
-- [Multiple actual Sources109 Recall](artifacts/2026-10-05-connection-workspace-authority/multiple-sources-plan-109.md): fresh three-official-URL genuine Sol/native/manual acceptance plan; execution pending.
+- [Natural Task answer111](records/2026-10/2026-10-08-natural-task-answer.md): genuine three-summary manual wide/narrow acceptance and exact closure; same-entry reply/source checkers0, first custody failure retained.
+
+- [Natural conversational delivery111 Recall](artifacts/2026-10-05-connection-workspace-authority/final-answer-plan-111.md) and [actual before evidence](artifacts/2026-10-05-connection-workspace-authority/final-answer-111/README.md): genuine109 worker summaries versus missing orchestrator answer; three-source contract proposal only, production/test/runtime HELD.
+
+- [History Tool activity110](records/2026-10/2026-10-08-subagent-history-tool-activity.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-history-tools-110/README.md): restored canonical Tools, Root pixels and exact closure; limits retained.
+
+- [Multiple actual Sources109](records/2026-10/2026-10-08-multiple-actual-sources.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/multiple-sources-plan-109.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/multiple-sources-109/README.md): real3 Sources/15EOF and native closure; missing final prose/Sources3/narrow-title limits retained.
 
 - [Awaited owner lifetime107](records/2026-10/2026-10-08-awaited-owner-lifetime.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/async-lifetime-plan-107.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/async-lifetime-107/README.md): original reference/native failures retained; 18/50 current contracts and types0; broader lifecycle qualification unknown.
 

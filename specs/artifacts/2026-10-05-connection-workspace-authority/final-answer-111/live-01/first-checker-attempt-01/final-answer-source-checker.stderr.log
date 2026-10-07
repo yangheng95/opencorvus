@@ -1,0 +1,17 @@
+12 | assert.ok(path.isAbsolute(manifestFile!))
+13 | assert.match(evidenceCase!, /^[a-z0-9-]+$/)
+14 | assert.match(prefix!, /^[a-z0-9-]+$/)
+15 | const run = path.resolve(runArg!)
+16 | const evidence = path.resolve(evidenceArg!)
+17 | const read = (file: string) => JSON.parse(fs.readFileSync(file, "utf8"))
+                                                  ^
+ENOENT: no such file or directory, open 'D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\final-answer-111\live-01\task-complete.json'
+    path: "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\final-answer-111\\live-01\\task-complete.json",
+ syscall: "open",
+   errno: -2,
+    code: "ENOENT"
+
+      at read (D:\myhexin-local\opencorvus\.tmp-product-iteration\verify-current-source-facts.ts:17:46)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\verify-current-source-facts.ts:31:18
+
+Bun v1.3.14 (Windows x64)

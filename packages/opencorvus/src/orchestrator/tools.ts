@@ -3019,6 +3019,7 @@ export function createOrchestratorTools(input: {
           (action) => `${action}(${MANAGE_TASK_ACTION_FIELDS[action].join(", ")})`,
         ).join("; ")}. Do not copy non-null fields from another action. ` +
         "Task completion is decided only through complete_task from current Task-level acceptance evidence. " +
+        "Successful complete_task parks the current Turn. Deliver any requested conversational answer naturally before this terminal call; its summary and worker evidence do not generate or replace that reply. " +
         "This replaces separate visible Task-lifecycle and Delivery Slice contract tools such as complete_task, fail_task, cancel_task, add_goal, modify_goal, and delete_goal.",
       inputSchema: ManageTaskInputSchema,
       execute: async (toolInput, options) => {

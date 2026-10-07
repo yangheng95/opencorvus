@@ -1,0 +1,8 @@
+# Multiple actual Sources109 evidence
+
+- [Recall](../multiple-sources-plan-109.md), [record](../../../records/2026-10/2026-10-08-multiple-actual-sources.md).
+- [Root manual review](live-01/root-manual-review.md) and [fresh Root physical closure](live-01/root-independent-final-closure.json): personally reviewed pixels, exact interaction limits and native custody.
+- [Current readonly facts](live-01/child-current-source-facts.json), [raw checker result](live-01/child-current-source-verification.log), [current checker](live-01/verify-current-source-facts.ts), [requested-only manifest](live-01/expected-source-manifest.json): real3 completed Sources/full persisted tuples, completed epoch1,15 Sol streaming200/EOF; not full natural-language delivery.
+- [Final native observer](live-01/multiple-sources-live-109-01-chain-final.json), [fresh independent closure](live-01/child-independent-closure.json), [original physical/pair receipt](live-01/multiple-sources-live-109-01-physical-terminal-and-pair-cleanup.json), [copy provenance](live-01/child-archive-copy-receipt.json).
+- Root real1280/883 expansion/keyboard/pointer and three external page screenshots in live-01. Only3 separate Sources1; Sources3 remains UNMET. First2 long-title narrow pixels not visible in bottom-position screenshots. Main orchestrator natural final body missing, independent111 audit: full delivery not passed.
+- Original prepared path/redirect/provenance/optional-outcome source errors and preimages remain; neither new fallback nor fabricated actual source/title was introduced. Full Git/lifecycle/retry/restart/cross-platform unknown.

@@ -1,0 +1,13 @@
+packages/opencorvus/test/session/message-store-conversation-activity.test.ts(121,9): error TS2322: Type '() => void' is not assignable to type '() => undefined'.
+  Type 'void' is not assignable to type 'undefined'.
+packages/opencorvus/test/session/message-store-conversation-activity.test.ts(248,21): error TS2345: Argument of type '{ running: { id: string; sessionID: string; messageID: string; type: "file"; mime: string; url: string; orderKey?: string | undefined; filename?: string | undefined; presentation?: "attachment-index" | undefined; source?: { ...; } | ... 2 more ... | undefined; } | ... 13 more ... | { ...; }; terminal: { id: string; ...' is not assignable to parameter of type 'never'.
+packages/opencorvus/test/session/message-store-conversation-activity.test.ts(288,62): error TS2339: Property 'id' does not exist on type 'never'.
+packages/opencorvus/test/session/message-store-conversation-activity.test.ts(290,63): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: ConversationAgentActivityItem[] | undefined): void', gave the following error.
+    Argument of type 'unknown[] | undefined' is not assignable to parameter of type 'ConversationAgentActivityItem[] | undefined'.
+      Type 'unknown[]' is not assignable to type 'ConversationAgentActivityItem[]'.
+        Type 'unknown' is not assignable to type 'ConversationAgentActivityItem'.
+  Overload 2 of 2, '(expected: NoInfer<ConversationAgentActivityItem[] | undefined>): void', gave the following error.
+    Argument of type 'unknown[] | undefined' is not assignable to parameter of type 'ConversationAgentActivityItem[] | undefined'.
+      Type 'unknown[]' is not assignable to type 'ConversationAgentActivityItem[]'.
+        Type 'unknown' is not assignable to type 'ConversationAgentActivityItem'.

@@ -1,0 +1,79 @@
+[1/1] START test/session/message-store-conversation-activity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) hydrates bounded activity for parallel Sessions and repeated execution occurrences [3938.82ms]
+{"targets":[{"sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mW00XBgPD2IdF","inputMessageID":"msg_g0VXO89mQ00eWhDi4ge5","value":"first-step"},{"sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89md00eic5ATpZY","inputMessageID":"msg_g0VXO89mQ00eWhDi4ge5","value":"second-step"},{"sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mm00bwhTAAH7Z","inputMessageID":"msg_g0VXO89mi005WSet9dly","value":"reused-input"},{"sessionID":"ses_-zUSbrqDgzzSoJxz76MC","messageID":"msg_g0VXO89my00KxwM6GUFr","inputMessageID":"msg_g0VXO89mt00jeDJrWpm5","value":"parallel-input"}],"writes":[{"running":{"id":"prt_g0VXO89n50080dM1thsu","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mW00XBgPD2IdF","type":"tool","callID":"owned-first-step","tool":"read_agent_message","state":{"status":"running","input":{"value":"first-step"},"title":"Reading first-step","time":{"start":1791396262887}},"orderKey":"v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu"},"completed":{"id":"prt_g0VXO89n50080dM1thsu","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mW00XBgPD2IdF","type":"tool","callID":"owned-first-step","tool":"read_agent_message","state":{"status":"completed","input":{"value":"first-step"},"output":"Actual first-step","title":"Read first-step","metadata":{"accepted":"first-step"},"time":{"start":1791396262887,"end":1791396262888}},"orderKey":"v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu"}},{"running":{"id":"prt_g0VXO89nG004u1e5d6jI","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89md00eic5ATpZY","type":"tool","callID":"owned-second-step","tool":"read_agent_message","state":{"status":"running","input":{"value":"second-step"},"title":"Reading second-step","time":{"start":1791396262898}},"orderKey":"v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI"},"completed":{"id":"prt_g0VXO89nG004u1e5d6jI","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89md00eic5ATpZY","type":"tool","callID":"owned-second-step","tool":"read_agent_message","state":{"status":"completed","input":{"value":"second-step"},"output":"Actual second-step","title":"Read second-step","metadata":{"accepted":"second-step"},"time":{"start":1791396262898,"end":1791396262899}},"orderKey":"v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI"}},{"running":{"id":"prt_g0VXO89nK00KT8I7QmsV","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mm00bwhTAAH7Z","type":"tool","callID":"owned-reused-input","tool":"read_agent_message","state":{"status":"running","input":{"value":"reused-input"},"title":"Reading reused-input","time":{"start":1791396262902}},"orderKey":"v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV"},"completed":{"id":"prt_g0VXO89nK00KT8I7QmsV","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mm00bwhTAAH7Z","type":"tool","callID":"owned-reused-input","tool":"read_agent_message","state":{"status":"completed","input":{"value":"reused-input"},"output":"Actual reused-input","title":"Read reused-input","metadata":{"accepted":"reused-input"},"time":{"start":1791396262902,"end":1791396262903}},"orderKey":"v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV"}},{"running":{"id":"prt_g0VXO89nO00DCCpXJAHs","sessionID":"ses_-zUSbrqDgzzSoJxz76MC","messageID":"msg_g0VXO89my00KxwM6GUFr","type":"tool","callID":"owned-parallel-input","tool":"read_agent_message","state":{"status":"running","input":{"value":"parallel-input"},"title":"Reading parallel-input","time":{"start":1791396262906}},"orderKey":"v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs"},"completed":{"id":"prt_g0VXO89nO00DCCpXJAHs","sessionID":"ses_-zUSbrqDgzzSoJxz76MC","messageID":"msg_g0VXO89my00KxwM6GUFr","type":"tool","callID":"owned-parallel-input","tool":"read_agent_message","state":{"status":"completed","input":{"value":"parallel-input"},"output":"Actual parallel-input","title":"Read parallel-input","metadata":{"accepted":"parallel-input"},"time":{"start":1791396262906,"end":1791396262907}},"orderKey":"v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs"}}],"full":[[{"id":"prt_g0VXO89n50080dM1thsu","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mW00XBgPD2IdF","type":"tool","callID":"owned-first-step","tool":"read_agent_message","state":{"status":"completed","input":{"value":"first-step"},"output":"Actual first-step","title":"Read first-step","metadata":{"accepted":"first-step"},"time":{"start":1791396262887,"end":1791396262888}},"orderKey":"v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu"}],[{"id":"prt_g0VXO89nG004u1e5d6jI","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89md00eic5ATpZY","type":"tool","callID":"owned-second-step","tool":"read_agent_message","state":{"status":"completed","input":{"value":"second-step"},"output":"Actual second-step","title":"Read second-step","metadata":{"accepted":"second-step"},"time":{"start":1791396262898,"end":1791396262899}},"orderKey":"v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI"}],[{"id":"prt_g0VXO89nK00KT8I7QmsV","sessionID":"ses_-zUSbrqDmzzxYGGn1Xmh","messageID":"msg_g0VXO89mm00bwhTAAH7Z","type":"tool","callID":"owned-reused-input","tool":"read_agent_message","state":{"status":"completed","input":{"value":"reused-input"},"output":"Actual reused-input","title":"Read reused-input","metadata":{"accepted":"reused-input"},"time":{"start":1791396262902,"end":1791396262903}},"orderKey":"v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV"}],[{"id":"prt_g0VXO89nO00DCCpXJAHs","sessionID":"ses_-zUSbrqDgzzSoJxz76MC","messageID":"msg_g0VXO89my00KxwM6GUFr","type":"tool","callID":"owned-parallel-input","tool":"read_agent_message","state":{"status":"completed","input":{"value":"parallel-input"},"output":"Actual parallel-input","title":"Read parallel-input","metadata":{"accepted":"parallel-input"},"time":{"start":1791396262906,"end":1791396262907}},"orderKey":"v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs"}]],"compact":[["msg_g0VXO89mQ00eWhDi4ge5",[]],["msg_g0VXO89mi005WSet9dly",[]],["msg_g0VXO89mt00jeDJrWpm5",[]]],"expected":[["msg_g0VXO89mQ00eWhDi4ge5",[{"id":"prt_g0VXO89n50080dM1thsu","messageID":"msg_g0VXO89mW00XBgPD2IdF","orderKey":"v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu","type":"tool","tool":"read_agent_message","callID":"owned-first-step","state":{"status":"completed","input":{"value":"first-step"},"output":"Actual first-step","title":"Read first-step","metadata":{"accepted":"first-step"},"time":{"start":1791396262887,"end":1791396262888}}},{"id":"prt_g0VXO89nG004u1e5d6jI","messageID":"msg_g0VXO89md00eic5ATpZY","orderKey":"v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI","type":"tool","tool":"read_agent_message","callID":"owned-second-step","state":{"status":"completed","input":{"value":"second-step"},"output":"Actual second-step","title":"Read second-step","metadata":{"accepted":"second-step"},"time":{"start":1791396262898,"end":1791396262899}}}]],["msg_g0VXO89mi005WSet9dly",[{"id":"prt_g0VXO89nK00KT8I7QmsV","messageID":"msg_g0VXO89mm00bwhTAAH7Z","orderKey":"v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV","type":"tool","tool":"read_agent_message","callID":"owned-reused-input","state":{"status":"completed","input":{"value":"reused-input"},"output":"Actual reused-input","title":"Read reused-input","metadata":{"accepted":"reused-input"},"time":{"start":1791396262902,"end":1791396262903}}}]],["msg_g0VXO89mt00jeDJrWpm5",[{"id":"prt_g0VXO89nO00DCCpXJAHs","messageID":"msg_g0VXO89my00KxwM6GUFr","orderKey":"v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs","type":"tool","tool":"read_agent_message","callID":"owned-parallel-input","state":{"status":"completed","input":{"value":"parallel-input"},"output":"Actual parallel-input","title":"Read parallel-input","metadata":{"accepted":"parallel-input"},"time":{"start":1791396262906,"end":1791396262907}}}]]]}
+171 |     const facts = { targets, writes, full, compact: [...compact], expected: [...expected] }
+172 |     const evidence = path.resolve(import.meta.dir, "../../../../specs/artifacts/2026-10-05-connection-workspace-authority/subagent-history-tools-110/baseline")
+173 |     await fs.writeFile(path.join(evidence, `tools-${crypto.randomUUID()}.json`), JSON.stringify(facts, null, 2), { flag: "wx" })
+174 |     console.log(JSON.stringify(facts))
+175 |     expect(full.map(parts => parts.filter(part => part.type === "tool").map(part => ({ id: part.id, type: part.type, orderKey: part.orderKey })))).toEqual(writes.map(({ completed }) => [{ id: completed.id, type: "tool", orderKey: expect.any(String) }]))
+176 |     for (const execution of executions) expect(compact.get(execution.inputMessageID)).toEqual(expected.get(execution.inputMessageID))
+                                                                                            ^
+error: expect(received).toEqual(expected)
+
+- [
+-   {
+-     "callID": "owned-first-step",
+-     "id": "prt_g0VXO89n50080dM1thsu",
+-     "messageID": "msg_g0VXO89mW00XBgPD2IdF",
+-     "orderKey": "v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu",
+-     "state": {
+-       "input": {
+-         "value": "first-step",
+-       },
+-       "metadata": {
+-         "accepted": "first-step",
+-       },
+-       "output": "Actual first-step",
+-       "status": "completed",
+-       "time": {
+-         "end": 1791396262888,
+-         "start": 1791396262887,
+-       },
+-       "title": "Read first-step",
+-     },
+-     "tool": "read_agent_message",
+-     "type": "tool",
+-   },
+-   {
+-     "callID": "owned-second-step",
+-     "id": "prt_g0VXO89nG004u1e5d6jI",
+-     "messageID": "msg_g0VXO89md00eic5ATpZY",
+-     "orderKey": "v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI",
+-     "state": {
+-       "input": {
+-         "value": "second-step",
+-       },
+-       "metadata": {
+-         "accepted": "second-step",
+-       },
+-       "output": "Actual second-step",
+-       "status": "completed",
+-       "time": {
+-         "end": 1791396262899,
+-         "start": 1791396262898,
+-       },
+-       "title": "Read second-step",
+-     },
+-     "tool": "read_agent_message",
+-     "type": "tool",
+-   },
+- ]
++ []
+
+- Expected  - 48
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\message-store-conversation-activity.test.ts:176:87)
+(fail) compact activity retains canonical completed Tools across assistant steps, reused inputs and parallel Sessions [1996.24ms]
+
+ 1 pass
+ 1 fail
+ 9 expect() calls
+Ran 2 tests across 1 file. [7.54s]
+[1/1] DONE test/session/message-store-conversation-activity.test.ts exit=1 duration=8.54s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\message-store-conversation-activity.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\message-store-conversation-activity.test.ts

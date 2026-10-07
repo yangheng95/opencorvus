@@ -1,0 +1,39 @@
+{
+  "occurrence": "subagent-history-after-110-01-4f2a68df-8507-4d36-bea3-69e104601c74",
+  "outcome": "ready",
+  "host": {
+    "pid": 59352,
+    "processInstanceID": "win32:639269937312049939",
+    "occurrenceID": "cbd2151c-d7c3-403f-90b2-d4052db164c8"
+  },
+  "parent": {
+    "pid": 35320,
+    "processInstanceID": "win32:639269937275969134",
+    "occurrenceID": "69987909-01a6-41a0-8cb6-d7a8aadb3c2d"
+  },
+  "target": {
+    "pid": 12064,
+    "processInstanceID": "win32:639269937323769621",
+    "occurrenceID": "d4b6b963-114a-4378-928c-1d53dc638680"
+  },
+  "targetBirthAtMs": 1791396932376,
+  "observedAtUtc": "2026-10-07T18:15:32.413Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18067",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\webfetch-body-live-105-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-history-after-110-01\\startup.json",
+    "--startup-occurrence",
+    "subagent-history-after-110-01-4f2a68df-8507-4d36-bea3-69e104601c74",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

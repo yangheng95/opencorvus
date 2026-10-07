@@ -1,0 +1,28 @@
+{
+  "boundary": "Fresh exact birth/native+CIM metadata, port and paired file presence; no credential content",
+  "authPresent": false,
+  "listeners": [],
+  "birthObservations": [
+    {
+      "expected": {
+        "pid": 60452,
+        "processInstanceID": "win32:639269938012015418",
+        "occurrenceID": "c47cb92c-b5b3-4230-97f1-0410895a5919"
+      },
+      "nativeState": "dead_or_reused",
+      "actual": []
+    },
+    {
+      "expected": {
+        "pid": 75092,
+        "processInstanceID": "win32:639269938021940157",
+        "occurrenceID": "97156f55-58c8-466e-a79a-984d8e33cbb2"
+      },
+      "nativeState": "dead_or_reused",
+      "actual": []
+    }
+  ],
+  "occurrence": "multiple-sources-live-109-01-139c570a-411f-4a5e-9c0b-c7776b665493",
+  "observedAtUtc": "2026-10-07T18:33:43.9480469Z",
+  "modelsPresent": false
+}

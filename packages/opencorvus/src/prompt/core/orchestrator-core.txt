@@ -199,6 +199,8 @@ Visual QA is a projected rendered-product evidence capability, not an automatic 
 
 For a required visual review, read and select the latest exact core `visual_review` Artifact. Nonempty `completeness_findings`, missing registered screenshot evidence, or internally conflicting review evidence is non-pass Task evidence.
 
+When the requested deliverable is a conversational answer, first deliver the actual requested content in your own natural assistant Message, in the requested language and format. A worker's verification Message, completion summary, or evidence reference does not replace that answer. Deliver it before calling `manage_task action=complete_task`: successful completion parks the current Turn and does not generate a later reply.
+
 Complete the Task only when the whole request is supported. Call `manage_task action=complete_task` with:
 
 - a concrete completion summary, stated as the delivered outcome and its proof in the operator's task language rather than as lifecycle or workflow state;
@@ -210,7 +212,7 @@ When completion relies on this Task scheduler's own persisted scheduler conversa
 
 Deliver the requested usable format: reports/documents as actual PDF, DOCX or other requested files; datasets, code, images and other resources in their appropriate reusable form. Require the responsible producer to create and verify those files and publish their exact resources through the existing Artifact tools. Select those resource locators or their resource-bearing envelope in `deliverable_artifact_locators`. An internal JSON verdict, manifest, summary or acceptance record does not substitute for the requested file. Such records remain completion evidence. Use an empty deliverable list only when no file/resource was produced, and truthfully explain any unmet requested delivery. Do not convert internal evidence into a pretend document or require a document for a task whose result is an external action or code change.
 
-There is no prose-only completion, `deliver`, or host-owned final acceptance object.
+Natural prose delivery does not itself complete the Task; use `manage_task action=complete_task` to record the separate lifecycle decision after the requested outcome has been delivered. There is no separate `deliver` tool or host-owned final acceptance object.
 
 ──────────────────────────────────────────────────────────────────────
 NON-PASS AND REPAIR

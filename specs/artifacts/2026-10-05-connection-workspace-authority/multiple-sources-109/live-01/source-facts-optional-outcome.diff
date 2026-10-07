@@ -1,0 +1,48 @@
+--- optional-outcome-risk-before.ts
++++ verify-current-source-facts.ts
+@@ -77,8 +77,16 @@
+   const webfetch = tools.map(row => ({ row, request: JSON.parse(String(row.data)), outcome: row.outcome_data ? JSON.parse(String(row.outcome_data)) : null })).filter(row => row.request.tool === "webfetch").map(row => {
+     const envelope = row.outcome?.resultAttemptID ? db.query("SELECT result FROM permission_execution_result WHERE attempt_id=?").get(row.outcome.resultAttemptID) as { result: string } | null : null
+     const result = envelope ? JSON.parse(envelope.result).value : row.outcome
+-    return { partID: row.row.id, messageID: row.row.message_id, sessionID: row.row.session_id, input: row.request.input, outcome: row.outcome.outcome, sources: result.sources }
++    return {
++      partID: row.row.id, messageID: row.row.message_id, sessionID: row.row.session_id,
++      input: row.request.input, outcomeReceived: row.outcome !== null, outcome: row.outcome?.outcome,
++      rawOutcome: row.outcome, resultAttemptID: row.outcome?.resultAttemptID,
++      resultEnvelopeReceived: envelope !== null, receivedSources: result?.sources,
++    }
+   })
++  const completedSourceReads = webfetch.filter(row => row.outcome === "completed" && Array.isArray(row.receivedSources) && row.receivedSources.length > 0)
++  const failedOrIncompleteAttempts = webfetch.filter(row => row.outcome !== "completed" || !Array.isArray(row.receivedSources) || row.receivedSources.length === 0)
++
+   const provider = audit.requests.map((row: { model: string; streaming: boolean; status: number; response_reader: { state: string; terminal: { kind: string } } }) => ({ model: row.model, streaming: row.streaming, status: row.status, state: row.response_reader.state, terminal: row.response_reader.terminal.kind }))
+   const events = lifecycle.map(row => ({ id: row.id, seq: row.seq, type: row.type, epoch: JSON.parse(String(row.payload)).execution_epoch }))
+   const partChronology = parts.map(row => ({ partID: row.id, messageID: row.message_id, sessionID: row.session_id, timeCreated: row.time_created, type: JSON.parse(String(row.data)).type }))
+@@ -92,7 +100,7 @@
+     else sourceRuns.push({ messageID: row.messageID, sessionID: row.sessionID, partIDs: [row.partID] })
+     previousWasSource = true
+   }
+-  const facts = { access: "closed exact DB readonly BEGIN/ROLLBACK; no application imports/bootstrap", occurrence, taskID, projectID, requestID, requestSource: request.source, requestedURLs, partChronology, sourceRuns, sourceRunBoundary: "Actual persisted Part adjacency only; Tool/renderer visibility may further partition; Root manual counter qualification required", task, sessions, events, promptOwners: owners, webfetch, sources, provider: { sourceFile: auditFile, requests: provider } }
++  const facts = { access: "closed exact DB readonly BEGIN/ROLLBACK; no application imports/bootstrap", occurrence, taskID, projectID, requestID, requestSource: request.source, requestedURLs, partChronology, sourceRuns, sourceRunBoundary: "Actual persisted Part adjacency only; Tool/renderer visibility may further partition; Root manual counter qualification required", task, sessions, events, promptOwners: owners, webfetch, failedOrIncompleteAttempts, sources, provider: { sourceFile: auditFile, requests: provider } }
+   fs.writeFileSync(path.join(evidence, "child-current-source-facts.json"), JSON.stringify(facts, null, 2), { flag: "wx" })
+   assert.equal(owner.occurrence, occurrence)
+   assert.equal(path.resolve(owner.runRoot), path.resolve(run))
+@@ -111,13 +119,13 @@
+   assert.ok(webfetch.length >= requestedURLs.length)
+   for (const requestedURL of requestedURLs) {
+     assert.ok(request.request.includes(requestedURL))
+-    assert.ok(webfetch.some(tool => tool.input.url === requestedURL))
++    assert.ok(completedSourceReads.some(tool => tool.input?.url === requestedURL))
+   }
+   for (const tool of webfetch) {
+-    assert.ok(requestedURLs.includes(tool.input.url))
+-    assert.equal(tool.outcome, "completed")
+-    assert.ok(tool.sources.length >= 1)
+-    for (const source of tool.sources) {
++    assert.ok(requestedURLs.includes(tool.input?.url))
++    if (tool.receivedSources === undefined) continue
++    assert.ok(Array.isArray(tool.receivedSources))
++    for (const source of tool.receivedSources) {
+       assert.equal(source.type, "source-url")
+       for (const field of ["sourceId", "url", "provider"]) {
+         assert.equal(typeof source[field], "string")

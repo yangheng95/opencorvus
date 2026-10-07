@@ -1,0 +1,11 @@
+{
+  "title": "三个官方网页来源阅读验收109",
+  "request": "只读访问以下三个指定的官方网页：\n1. https://www.w3.org/WAI/fundamentals/accessibility-intro/\n2. https://www.w3.org/WAI/fundamentals/accessibility-principles/\n3. https://developer.mozilla.org/en-US/docs/Web/Accessibility\n请根据实际读取内容，用中文分别写三条简短总结，并附上每条对应的实际来源。只需这三条，不进行其他搜索，不生成或修改本地文件。",
+  "productPillar": "work",
+  "promptProfile": "base",
+  "model": "openai/gpt-6.1-sol",
+  "source": "product-experience-multiple-sources-109",
+  "requestID": "7e445053-ed48-4eb1-ad30-6307947b7c1b",
+  "requestSentAt": "2026-10-07T18:18:24.0036266Z",
+  "acceptedObservedAt": "2026-10-07T18:18:30.6775587Z"
+}

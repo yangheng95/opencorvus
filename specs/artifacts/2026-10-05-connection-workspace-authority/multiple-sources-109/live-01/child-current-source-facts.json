@@ -1,0 +1,592 @@
+{
+  "access": "closed exact DB readonly BEGIN/ROLLBACK; no application imports/bootstrap",
+  "occurrence": "multiple-sources-live-109-01-139c570a-411f-4a5e-9c0b-c7776b665493",
+  "taskID": "tsk_g00VXOBi8f00PNKt2D7j",
+  "projectID": "prj_hMdWV6nPVuwA7EIwInBU",
+  "requestID": "7e445053-ed48-4eb1-ad30-6307947b7c1b",
+  "requestSource": "product-experience-multiple-sources-109",
+  "requestedURLs": [
+    "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+    "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+    "https://developer.mozilla.org/en-US/docs/Web/Accessibility"
+  ],
+  "partChronology": [
+    {
+      "partID": "prt_g0VXOBjLP00DAWmKaUCZ",
+      "messageID": "msg_g0VXOBjLu00cpr2OhR23",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397114574,
+      "type": "text"
+    },
+    {
+      "partID": "prt_task-root-control_art_hzvhx7MHo5nBD0d0yqHQ_art_hzvhx7MHo5nBD0d0yqHQ",
+      "messageID": "msg_task-root-control_art_hzvhx7MHo5nBD0d0yqHQ_art_hzvhx7MHo5nBD0d0yqHQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397114580,
+      "type": "text"
+    },
+    {
+      "partID": "prt_g0VXOBjbi00duk77AQg9",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397115550,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOBlKu00hErQv8VRZ",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397122197,
+      "type": "source-url"
+    },
+    {
+      "partID": "prt_g0VXOBlL400wcGnGzbVr",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397122210,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOBlTC00fc8R9QTYN",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397122710,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOBmX200nonYkuNRT",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397126792,
+      "type": "source-url"
+    },
+    {
+      "partID": "prt_g0VXOBmX900cey4Y6BMF",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397126808,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOBmhF00TdJ3TaCjz",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397127425,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOBolw0041WeblRwI",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397135404,
+      "type": "source-url"
+    },
+    {
+      "partID": "prt_g0VXOBom100KiNh0EJTg",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397135419,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOBotb00yL46UWPxQ",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397135880,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOBpsf00xZVku6rH1",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397139666,
+      "type": "reasoning"
+    },
+    {
+      "partID": "prt_g0VXOBsT700KzSSMM9Sd",
+      "messageID": "msg_g0VXOBsT7003lM41N9jt",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397149632,
+      "type": "text"
+    },
+    {
+      "partID": "prt_g0VXOBsT7019i4233MiZ",
+      "messageID": "msg_g0VXOBsT7003lM41N9jt",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397149634,
+      "type": "text"
+    },
+    {
+      "partID": "prt_g0VXOBsWH00JxgKCshN9",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397149812,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOBsiE004wE4h8XYy",
+      "messageID": "msg_g0VXOBsYI007ljBMxfHI",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397150551,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOBtUt00Zua4vNBMS",
+      "messageID": "msg_g0VXOBsYI007ljBMxfHI",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397153567,
+      "type": "text"
+    },
+    {
+      "partID": "prt_g0VXOBunL007rrH8k02l",
+      "messageID": "msg_g0VXOBsYI007ljBMxfHI",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397158557,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOBuw500TRsYYweNf",
+      "messageID": "msg_g0VXOBuqC00f3S5h81sg",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397159097,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOByS800Q94vLutq4",
+      "messageID": "msg_g0VXOBuqC00f3S5h81sg",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397172618,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOByaL006ezzY25H5",
+      "messageID": "msg_g0VXOByUd00MIWBITeOm",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397173126,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOC0C100qSalmTcA1",
+      "messageID": "msg_g0VXOByUd00MIWBITeOm",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397179307,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOC0Ms004J7PLC8QR",
+      "messageID": "msg_g0VXOC0Fd00Sz067xnds",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397179978,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOC15A00s46lnxDPL",
+      "messageID": "msg_g0VXOC0Fd00Sz067xnds",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397182724,
+      "type": "reasoning"
+    },
+    {
+      "partID": "prt_g0VXOC48k00wfT0uHESH",
+      "messageID": "msg_g0VXOC0Fd00Sz067xnds",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397194481,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOC4Gf00kjYneXXkI",
+      "messageID": "msg_g0VXOC4Bd006WV3XIq0j",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397194969,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOC6iG00JWhrIeOoE",
+      "messageID": "msg_g0VXOC4Bd006WV3XIq0j",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397204370,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOC6rz005820huI3p",
+      "messageID": "msg_g0VXOC6ku00bUPbuDXWr",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397204971,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOC8KR00CVnxPRRon",
+      "messageID": "msg_g0VXOC6ku00bUPbuDXWr",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397210579,
+      "type": "text"
+    },
+    {
+      "partID": "prt_g0VXOCEPe00eCvDScLof",
+      "messageID": "msg_g0VXOC6ku00bUPbuDXWr",
+      "sessionID": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "timeCreated": 1791397233969,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_task-root-control_art_h5li1EICYe0P0dT9Zsyo_art_h5li1EICYe0P0dT9Zsyo",
+      "messageID": "msg_task-root-control_art_h5li1EICYe0P0dT9Zsyo_art_h5li1EICYe0P0dT9Zsyo",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397234741,
+      "type": "text"
+    },
+    {
+      "partID": "prt_g0VXOCEto00SPwImDmhi",
+      "messageID": "msg_hHlCYIu0QceLym4DXKNB",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397235836,
+      "type": "step-start"
+    },
+    {
+      "partID": "prt_g0VXOCFnq00A4jCXtrxs",
+      "messageID": "msg_hHlCYIu0QceLym4DXKNB",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397239311,
+      "type": "step-finish"
+    },
+    {
+      "partID": "prt_g0VXOCFxH00n4PKJ0tXg",
+      "messageID": "msg_hHlCYIu0QceLym4DXKNB",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "timeCreated": 1791397239895,
+      "type": "step-start"
+    }
+  ],
+  "sourceRuns": [
+    {
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "partIDs": [
+        "prt_g0VXOBlKu00hErQv8VRZ"
+      ]
+    },
+    {
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "partIDs": [
+        "prt_g0VXOBmX200nonYkuNRT"
+      ]
+    },
+    {
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "partIDs": [
+        "prt_g0VXOBolw0041WeblRwI"
+      ]
+    }
+  ],
+  "sourceRunBoundary": "Actual persisted Part adjacency only; Tool/renderer visibility may further partition; Root manual counter qualification required",
+  "task": {
+    "id": "tsk_g00VXOBi8f00PNKt2D7j",
+    "project_id": "prj_hMdWV6nPVuwA7EIwInBU",
+    "session_id": "ses_-zUSboHhyzzBVOsP3WD2",
+    "request_id": "7e445053-ed48-4eb1-ad30-6307947b7c1b",
+    "request": "只读访问以下三个指定的官方网页：\n1. https://www.w3.org/WAI/fundamentals/accessibility-intro/\n2. https://www.w3.org/WAI/fundamentals/accessibility-principles/\n3. https://developer.mozilla.org/en-US/docs/Web/Accessibility\n请根据实际读取内容，用中文分别写三条简短总结，并附上每条对应的实际来源。只需这三条，不进行其他搜索，不生成或修改本地文件。",
+    "product_pillar": "work"
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUSboHhyzzBVOsP3WD2",
+      "parent_id": null,
+      "project_id": "prj_hMdWV6nPVuwA7EIwInBU",
+      "kind": "root"
+    },
+    {
+      "id": "ses_-zUSboGhbzzsCHVLip93",
+      "parent_id": "ses_-zUSboHhyzzBVOsP3WD2",
+      "project_id": "prj_hMdWV6nPVuwA7EIwInBU",
+      "kind": "orchestrator"
+    },
+    {
+      "id": "ses_hDlsCqSKgxJ5ttj1uTZw",
+      "parent_id": "ses_-zUSboGhbzzsCHVLip93",
+      "project_id": "prj_hMdWV6nPVuwA7EIwInBU",
+      "kind": "delegated-worker"
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VXOBiIo0011ldKm2zc",
+      "seq": 3,
+      "type": "task.execution.opened",
+      "epoch": 1
+    },
+    {
+      "id": "pev_g0VXOCI4t00SstNyW3CW",
+      "seq": 36,
+      "type": "task.completed",
+      "epoch": 1
+    }
+  ],
+  "promptOwners": [],
+  "webfetch": [
+    {
+      "partID": "prt_g0VXOBkhk00SiSizhqZK",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "input": {
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+        "format": "markdown",
+        "timeout": 60
+      },
+      "outcomeReceived": true,
+      "outcome": "completed",
+      "rawOutcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_h5cCp02bTzwAIfsnCja6",
+        "title": "https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 20866,
+          "shownBytes": 20866,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791397122185
+        }
+      },
+      "resultAttemptID": "per_h5cCp02bTzwAIfsnCja6",
+      "resultEnvelopeReceived": true,
+      "receivedSources": [
+        {
+          "type": "source-url",
+          "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+          "provider": "opencorvus-webfetch",
+          "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXOBmIK003g5sKb1KS",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "input": {
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+        "format": "markdown",
+        "timeout": 60
+      },
+      "outcomeReceived": true,
+      "outcome": "completed",
+      "rawOutcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hlFsaCOvsrtaz6ba0Q5q",
+        "title": "https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)",
+        "metadata": {
+          "originalBytes": 43685,
+          "shownBytes": 43685,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791397126784
+        }
+      },
+      "resultAttemptID": "per_hlFsaCOvsrtaz6ba0Q5q",
+      "resultEnvelopeReceived": true,
+      "receivedSources": [
+        {
+          "type": "source-url",
+          "sourceId": "cb990aa86289aadf92cfcd259b42886f9bd56679313f62a15da8b62c2116c679",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+          "provider": "opencorvus-webfetch",
+          "title": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXOBoEp00Ooyx6Ebyr",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "input": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+        "format": "markdown",
+        "timeout": 60
+      },
+      "outcomeReceived": true,
+      "outcome": "completed",
+      "rawOutcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_heiMld8hFUE1DtrpCEEJ",
+        "title": "https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)",
+        "metadata": {
+          "originalBytes": 32426,
+          "shownBytes": 32426,
+          "webfetchOutputClipped": false,
+          "webfetchEmbeddedAttachmentCount": 0,
+          "truncated": false
+        },
+        "time": {
+          "end": 1791397135396
+        }
+      },
+      "resultAttemptID": "per_heiMld8hFUE1DtrpCEEJ",
+      "resultEnvelopeReceived": true,
+      "receivedSources": [
+        {
+          "type": "source-url",
+          "sourceId": "5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+          "provider": "opencorvus-webfetch",
+          "title": "Accessibility | MDN"
+        }
+      ]
+    }
+  ],
+  "failedOrIncompleteAttempts": [],
+  "sources": [
+    {
+      "id": "prt_g0VXOBlKu00hErQv8VRZ",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+        "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXOBmX200nonYkuNRT",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "cb990aa86289aadf92cfcd259b42886f9bd56679313f62a15da8b62c2116c679",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+        "title": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXOBolw0041WeblRwI",
+      "messageID": "msg_htogYVRw3gpTxI8hwmGQ",
+      "sessionID": "ses_-zUSboGhbzzsCHVLip93",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+        "title": "Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "provider": {
+    "sourceFile": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\multiple-sources-109\\live-01\\multiple-sources-live-109-01-final-provider-audit.json",
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      }
+    ]
+  }
+}

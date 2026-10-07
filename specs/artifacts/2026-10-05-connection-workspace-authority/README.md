@@ -1,6 +1,13 @@
 # Connection workspace authority investigation
+- [Sources reading112 Recall](sources-reading-plan-112.md) and [evidence](sources-reading-112/README.md): all current scroll owners audited; actual before pending/repair held.
 
-- [Multiple actual Sources109 Recall](multiple-sources-plan-109.md): fresh three-official-URL genuine Sol/native/manual acceptance plan; execution pending.
+- [Natural Task answer111 record](../../records/2026-10/2026-10-08-natural-task-answer.md) and [evidence](final-answer-111/README.md): manual three-summary before-terminal success, exact native closure; same-entry reply checker0; separate112 Sources-reading limits retained.
+
+- [Natural conversational delivery111 Recall](final-answer-plan-111.md) and [actual before evidence](final-answer-111/README.md): exact109 participant content and terminal park; minimal common instruction/schema/visible-tool proposal, no production or test release.
+
+- [History Tool activity110](../../records/2026-10/2026-10-08-subagent-history-tool-activity.md), [Recall](subagent-history-tools-plan-110.md) and [evidence](subagent-history-tools-110/README.md): restored canonical Tools, Root pixels and exact closure; limits retained.
+
+- [Multiple actual Sources109 Recall](multiple-sources-plan-109.md) and [evidence](multiple-sources-109/README.md): real3 Sources1/external pages,15EOF/current readonly tuples and exact closure; missing prose/Sources3/narrow-first2 pixels remain.
 
 - [Awaited owner lifetime107 Recall](async-lifetime-plan-107.md) and [evidence](async-lifetime-107/README.md): precise callback lease lifetime repair, original baselines retained; 18/50 current contracts and types0; broader lifecycle qualification unknown.
 

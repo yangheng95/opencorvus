@@ -272,7 +272,7 @@ function projectConversationActivityRows(
   return Database.use((db) => rows.map((row) => {
     const data = typeof row.data === "string" ? JSON.parse(row.data) : row.data
     const part = type === VISIBLE_PART_TYPE.tool
-      ? projectToolPartInTransaction(db, { ...row, data } as typeof ToolPartRequestTable.$inferSelect)
+      ? loadedPart(db, { kind: "tool", row: { ...row, data } as typeof ToolPartRequestTable.$inferSelect })
       : persistedPart(db, { ...row, data } as typeof PartTable.$inferSelect, row.sessionID)
     return {
       executionID: row.executionID,

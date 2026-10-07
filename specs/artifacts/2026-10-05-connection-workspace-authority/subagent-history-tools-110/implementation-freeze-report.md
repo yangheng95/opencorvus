@@ -1,0 +1,19 @@
+# Canonical history Tools110 freeze
+
+## Recall and exact implementation
+
+RootreadactualbeforepublicTask/compactmap/fullToolhistory, admission andrealbaseline. Production MessageStore remains the samecurrentreader; compactToolbranch nowuses loadedPart(db,{kind:tool,row:actualparsedToolRequestSelect}). This existingfullreader projects canonicalrequest/progress/outcome, attaches originaltimelineorderKey and throws originalToolprojectionintegrityerror. NonToolpersistedPart, bounded24limit/typepaging/rewind/cursor, actualmap precedence andtransport unchanged. No backendSDK/schema/diagnostic/fallback/timelineowner.
+
+Baseline originalnewcase writesrealSession.updatePart pending→running→completed forfourTools across twoassistantmessages sameinput, reusedSessionsecondinput andparallelSession. Fullcanonicalreader identities/orderKeys valid; compact[] failsdesiredfullDTO atfirstscope. Raw/facts/toolwritepreimagecaptured beforeassertion. Extendedmixedbaseline addsactualcurrenterrorCause/runningstate andstillfailscompact; bothoriginalsretained. ThesebackenddatafixturesareNOTProvider/UIacceptance.
+
+## Final retained positive contract
+
+Originalfourcompletedinputs preserved in completedmode. Mixedmode uses SAMEproducer implementation and originalfourcompletedtargets plus twoadditionalactualerror/runningTools; completedtargets were notweakened/replaced. AllfullToolIDs/type/toolname/callID/messageID/orderKey/state/title/output comparedexactlyagainstcompactactualDTOs within theirinputscopes. CurrentErrorCauseclassification propertool-execution, pending/runningwritten by canonicalprimitive; no olderrorstringfixture. FullorderKeycheckedrealstring thenexplicitTSguard; nocasttohidetypedshape. Additionalnoinputprecommit readsreturns eachcurrentSession'sactualorderedfullknownTools. Existingtextlatest24/chunk65/reusedinput/parallel/removalevent/cursor case remains originalbehavior, withunsubscribe typedvoidfix only.
+
+Retainedtesthas NOspecfs/path/UUIDwrite dependency; onlycanonicalrunnerstdout capturesfullactualfixturefacts. Baselineartifact-writing version preserved separately. No mocks/rawSQL/source-string/UItests/corruptrowfixture. Exactfileafter3pass29expectations,exit0. Tool-specific24overflow/corruption/rewindmatrices notnewlyqualified; originaltextboundedcasepassed andproductionlimit/cursorunchanged.
+
+## Types, preimages and failures
+
+Configuredbackendtypes actualexit0; explicitfullproductionsrc+exactchangedtesttypes actualexit0. Originaltypes-first failure includesoldunsubscribeundefined plusnewexpectedunknown/writesnarrowing; fixedactualMessage.Part/ConversationAgentActivityItem typingandvoidcallback. SubsequentorderKeyoptionaltypefailure fixedpositiveactualstringguard; rawretained. Firstformatterinvocationwrongcwd made noedit; correctformatter then producedunrelatedstoreformatting, savedthatfullsnapshot/diff andremovedchurnusingexactsoleownedpreimageplusapprovedbranch. FinalproductiondiffONEline. Noothersourcechangeslost orGitrestoreused. Baselineoriginalfailuresremaintruthful, notafterqualification.
+
+Source/testfreeze reported afteractualallchecks. Rootowns actualclosed105/historycopiedafterUI/nativeclosure/109realSol, importgraph/docs/Git. No model/credential/service/UI/processoperation tookplacehere beyondcanonicalisolatedbackendfixtures. Beforefullparts andretainedimmutableSource/historyunchanged are expectedsourcecontract; actualUIpayload/gridproof mustcomeRoot'sfreshafterread, not thistestcount.

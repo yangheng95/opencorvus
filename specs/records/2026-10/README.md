@@ -1,4 +1,10 @@
 # 2026-10 Records
+- [Sources reading112 proposal](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-plan-112.md): source-owner audit and CLOSED109-history before plan only; actual reproduction pending, repair held.
+
+- [Natural Task answer111](2026-10-08-natural-task-answer.md): actual wide/narrow natural answer before terminal and exact closure; checker custody failure preserved.
+
+- [Canonical subagent history Tool activity110](2026-10-08-subagent-history-tool-activity.md)
+- [Multiple actual Sources109](2026-10-08-multiple-actual-sources.md): real source tuples/15EOF and closure; full delivery and remaining visual matrix unmet.
 
 - [Subagent pointer qualification108](2026-10-08-subagent-pointer-qualification.md)
 - [Awaited owner lifetime107](2026-10-08-awaited-owner-lifetime.md): original reference/native failures retained; 18/50 current contracts and types0; broader lifecycle qualification unknown.

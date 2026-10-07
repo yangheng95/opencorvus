@@ -1,0 +1,2 @@
+# Checker preparation111
+New file; no pre-existing checker overwritten. Root admitted runtime spawnSync of original six-argument Source checker exactly once, full stdout/stderr/exit retained; only after exit0 read its actual facts. Reply checker writes full canonical text/tool/decision facts before positive assertions. No Task or Provider execution during preparation. Actual Chinese semantics remain Root manual qualification. Original Source guards and Source facts are not copied. Root must run only this entry once on CLOSED actual111 to preserve create-once facts.

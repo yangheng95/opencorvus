@@ -1,0 +1,1 @@
+{"extends":"../packages/opencorvus/tsconfig.json","include":["../packages/opencorvus/src/**/*.ts","../packages/opencorvus/test/session/message-store-conversation-activity.test.ts"],"exclude":["../packages/opencorvus/dist/**/*","../packages/opencorvus/src/skill/builtin/**/*"]}

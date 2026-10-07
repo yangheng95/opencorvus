@@ -1,0 +1,36 @@
+{
+  "port": 18070,
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "listeners": null,
+  "native": [
+    {
+      "expected": {
+        "pid": 73276,
+        "processInstanceID": "win32:639269952796019288",
+        "occurrenceID": "039fe9d2-dbec-4900-af19-699325f507fb"
+      },
+      "actual": null,
+      "observedEntityCount": 0
+    },
+    {
+      "expected": {
+        "pid": 71748,
+        "processInstanceID": "win32:639269952805061629",
+        "occurrenceID": "07b22423-5e27-4ac2-8588-a45c097aa877"
+      },
+      "actual": null,
+      "observedEntityCount": 0
+    }
+  ],
+  "occurrence": "final-answer-live-111-01-c484f1e4-aebe-4f02-8117-94efd6abcca0",
+  "observedAtUtc": "2026-10-07T18:50:22.3028215Z"
+}

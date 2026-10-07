@@ -1,0 +1,65 @@
+{
+  "observedAtUtc": "2026-10-07T18:46:52.2983502Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 71748,
+        "processInstanceID": "win32:639269952805061629",
+        "occurrenceID": "07b22423-5e27-4ac2-8588-a45c097aa877"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 73276,
+        "processInstanceID": "win32:639269952796019288",
+        "occurrenceID": "039fe9d2-dbec-4900-af19-699325f507fb"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "final-answer-live-111-01-c484f1e4-aebe-4f02-8117-94efd6abcca0",
+    "outcome": "settled",
+    "host": {
+      "pid": 73276,
+      "processInstanceID": "win32:639269952796019288",
+      "occurrenceID": "039fe9d2-dbec-4900-af19-699325f507fb"
+    },
+    "target": {
+      "pid": 71748,
+      "processInstanceID": "win32:639269952805061629",
+      "occurrenceID": "07b22423-5e27-4ac2-8588-a45c097aa877"
+    },
+    "observedAtUtc": "2026-10-07T18:46:50.29Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "copiedLength": 2194,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\final-answer-live-111-01\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\final-answer-live-111-01\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ],
+  "occurrence": "final-answer-live-111-01-c484f1e4-aebe-4f02-8117-94efd6abcca0",
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true
+}

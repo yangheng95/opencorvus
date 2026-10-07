@@ -1,0 +1,3138 @@
+/**
+ * Orchestrator tools — AI SDK tool() definitions wrapping existing services.
+ *
+ * Created per-task via createOrchestratorTools({ taskID }).
+ * The taskID is captured in the closure — no global registry needed.
+ */
+import type { AgentDispatchAuthorityCommit } from "@/agent/runner"
+import { parseAcceptanceSpecs } from "@/acceptance/types"
+import { isDeepStrictEqual } from "node:util"
+import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
+import {
+  ProjectedWorkerBindingSchema,
+  materializeProjectedWorkerBinding,
+  sameProjectedWorkerBinding,
+  type ProjectedWorkerBinding,
+} from "@/agent/projected-worker-binding"
+import {
+  assertProjectedWorkerContinuationCompatible,
+  sameProjectedWorkerIdentity,
+} from "@/agent/projected-worker-identity"
+import { requirePromptAttachments } from "@/agent/prompt-projection"
+import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { Bus } from "@/bus"
+import { Config } from "@/config/config"
+import { createPublishInteractiveArtifactAiTool } from "@/tool/publish-interactive-artifact"
+import {
+  createArtifactReadAiTool,
+  createArtifactSearchAiTool,
+  createArtifactSelectAiTool,
+  createArtifactSnapshotAiTool,
+} from "@/tool/artifact-catalog"
+import type { DecisionEntry } from "@/decision-log"
+import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
+import { AGENT_COORDINATION_ACTIVE_DECISIONS, AGENT_COORDINATION_DECISIONS } from "@/engine/agent-coordination-decision"
+import { DecisionLogTable } from "@/decision-log/schema"
+import {
+  bindAgentCoordinationRedispatchSuccessorInTransaction,
+  agentCoordinationQuestionID,
+  agentCoordinationQuestionAskedOccurrenceID,
+  assertActiveAgentCoordinationActionInTransaction,
+  completeAgentCoordinationAction,
+  createAgentCoordinationResponse,
+  failAgentCoordinationAction,
+  findAgentCoordinationAction,
+  findAgentCoordinationRequest,
+  findAgentCoordinationResponse,
+  resolveAgentCoordinationSessionLineage,
+  AgentCoordinationRedispatchBindingSchema,
+  type AgentCoordinationRedispatchBinding,
+  type AgentCoordinationDecision,
+  type AgentCoordinationRequestRow,
+  type AgentCoordinationSessionLineageSource,
+} from "@/engine/agent-coordination"
+import {
+  claimDispatchLineage,
+  commitDispatchLineageSession,
+  createDispatchLineageOrigin,
+  holdDispatchAdmission,
+  releaseDispatchAdmission,
+  releaseDispatchAdmissionOnError,
+  resolveDispatchContinuationSourceID,
+  findDispatchLineageByArtifactID,
+  findDispatchLineageByDispatchID,
+  findDispatchLineageBySession,
+  findDispatchLineageByToolExecution,
+  findDispatchLineageByCollectionMember,
+  listDispatchLineage,
+  recordDispatchLineage,
+  type DispatchAdmissionOwner,
+} from "@/engine/dispatch-lineage"
+import type { DispatchLineageRow } from "@/engine/dispatch-lineage-facts"
+import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
+import { assertControlLeaseInTransaction, ControlLeaseFenceLostError } from "@/engine/control-lease"
+import { recordTaskInfrastructureErrorInTransaction } from "@/engine/persist"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import { isExecutionCancellationError } from "@/session/prompt/cancellation"
+import { abortChildExecutionForSession } from "@/engine/execution-abort"
+import { clarificationTranscriptSection } from "@/engine/helpers"
+import { Event as EngineEvent } from "@/engine/model"
+import { EngineProtocol } from "@/engine/protocol"
+import { findGoal, findInteractionByExternal, listGoals, requireTask, type TaskRow } from "@/engine/store"
+import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
+import { requireCurrentTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
+import { sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference-schema"
+import type { DesignResourceManifest } from "@/frontend-design/design-resource-manifest"
+import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { Identifier } from "@/id/id"
+import { publishFailedAgentCoordinationTurnStatus } from "@/orchestrator/agent-coordination-session-lifecycle"
+import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
+import { Instance } from "@/project/instance"
+import { owningMissionSchedulerEndpoint, taskSchedulerEndpoint } from "@/protocol/delivery"
+import type { sendSchedulerMessage as sendSchedulerMessageContract } from "@/protocol/scheduler-message"
+import {
+  runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
+} from "@/project/independent-project-owner"
+import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
+import { Session } from "@/session"
+import type { TaskRootMessageKind } from "@/protocol/task-root-message-schema"
+import {
+  isProjectedWorkerRuntimeContract,
+  SessionRuntimeContractStore,
+  type ProjectedWorkerRuntimeContract,
+} from "@/session/runtime-contract"
+import { validateSessionRuntimeContractForContinuation } from "@/session/runtime-contract-validation"
+import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
+import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
+import { bindToolDecisionDeclaration, bindToolExecutionMode } from "@/tool/execution-mode"
+import { and, Database, eq, NotFoundError } from "@/storage/db"
+import { MessageTable, PartTable, ToolPartRequestTable } from "@/session/session.sql"
+import { timelineOrderKey } from "@/timeline/order"
+import { executeWait } from "@/tool/wait"
+import { WaitToolDescription, WaitToolParameters } from "@/tool/wait-contract"
+import { Log } from "@/util/log"
+import { tool, type Tool as AITool } from "ai"
+import fs from "node:fs/promises"
+import z from "zod"
+import { ArtifactReadLocatorSchema, type EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import { AgentCoordinationActionSupersededError } from "@/engine/agent-coordination-errors"
+
+import { Question } from "@/question"
+import { isHttpWebpageUrl } from "@/util/web-url"
+import { createAnalyzeIntentTool } from "./analyze-intent-tool"
+import { createArchitectStageDispatcher } from "./architect-stage"
+import { createBuildTool } from "./build-tool"
+import { createDeepResearchStageDispatcher } from "./deep-research-stage"
+import {
+  createDispatchAdapterExecutionContext,
+  dispatchAdapterContinuationPrompt,
+  requireDispatchAdapterExecutionContext,
+  type DispatchAdapterExecutionContext,
+} from "./dispatch-adapter-execution-context"
+import {
+  bindDispatchAdapterExecutors,
+  createDispatchAgentTool,
+  DispatchAgentToolTestHooks,
+  type DispatchAgentExecute,
+  type OpenDispatchAgentLineage,
+} from "./dispatch-agent-tool"
+import { createDispatchAgentsTool } from "./dispatch-agents-tool"
+
+import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
+import { createExploreTool } from "./explore-tool"
+import { createDelegatedWorkerTool } from "./delegated-worker-tool"
+import { createFactCheckTool } from "./fact-check-tool"
+import { createFrontendDesignTool } from "./frontend-design-tool"
+import { createFrontendResearchStageDispatcher } from "./frontend-research-stage"
+import { createMulticaImportTools } from "./multica-import-tools"
+import { createNoActionTool } from "./no-action-tool"
+import { createExpertSquadAuthorAiTool } from "@/tool/expert-squad-author"
+import { createExpertSquadFeedbackRevisionAiTool } from "@/tool/expert-squad-feedback-revision-tool"
+import {
+  AddGoalInputSchema,
+  createDeliverySliceContractTools,
+  DeleteGoalInputSchema,
+  ModifyGoalInputSchema,
+} from "./delivery-slice-contract-tools"
+import { createIntegrityReviewStage } from "./integrity-review-stage"
+import { createIntegrityReviewRunner, createIntegrityTool } from "./integrity-tool"
+import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "./interaction-tools"
+import { type TerminalConversationAuthority } from "./terminal-conversation-authority"
+import { createReadContextTool } from "./read-context-tool"
+import { createReadAgentMessageTool } from "@/tool/read-agent-message"
+import { createRequirementsStageDispatcher } from "./requirements-stage"
+import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
+import { createSubagentCancellationTool } from "./subagent-cancellation-tool"
+import { CancelTaskInputSchema, CompleteTaskInputSchema, FailTaskInputSchema } from "./task-lifecycle-input"
+import { createTaskLifecycleTools, failTaskLifecycle } from "./task-lifecycle-tools"
+import {
+  assertTaskRootSessionLineageForConfig,
+  optionsWithVisibleOrchestratorToolName,
+  requireOrchestratorToolExecutionContext,
+  requireTaskOrchestratorToolExecutionContext,
+  type TaskWithRootSession,
+} from "./tool-execution-context"
+import { createVisualQaStageDispatcher } from "./visual-qa-stage"
+import { createWorkloadAnalysisTool } from "./workload-analysis-tool"
+import {
+  ORCHESTRATOR_DECISION_TOOL_NAMES,
+  orchestratorDecisionToolCompletionEffect,
+  orchestratorDecisionToolResultCommits,
+} from "./decision-tool-names"
+import { sameSelectedWorkflowBinding, workflowProjectionFromProjectedAgents } from "@/engine/workflow-binding"
+import { currentTaskAcceptanceRepair, openAcceptanceCriteria } from "@/mission/acceptance-ledger"
+import type { MissionAcceptanceOpenCriterion } from "@/mission/acceptance-gap"
+import {
+  acceptanceRepairEvidenceLocators,
+  DispatchTurnSchema,
+  controlTextSHA256,
+  taskRequestSHA256,
+  type AcceptanceRepairDispatch,
+  type TaskAuthorityAnchor,
+} from "./dispatch-turn-projection"
+
+const orchestratorToolLineageHooks = new WeakMap<object, OpenDispatchAgentLineage>()
+const replayDispatchSignal = new AbortController().signal
+
+type AgentCoordinationEffectAdmissionHook = (input: {
+  taskID: string
+  requestID: string
+  responseID: string
+  actionID: string
+  decision: AgentCoordinationDecision
+}) => void | Promise<void>
+let agentCoordinationEffectAdmissionHookForTest: AgentCoordinationEffectAdmissionHook | undefined
+let afterAgentCoordinationFailSettlementForTest: AgentCoordinationEffectAdmissionHook | undefined
+
+export namespace AgentCoordinationToolTestHooks {
+  export function replaceEffectAdmission(hook: AgentCoordinationEffectAdmissionHook): Disposable {
+    if (agentCoordinationEffectAdmissionHookForTest) {
+      throw new Error("Agent coordination effect-admission test hook is already installed")
+    }
+    agentCoordinationEffectAdmissionHookForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (agentCoordinationEffectAdmissionHookForTest === hook) {
+          agentCoordinationEffectAdmissionHookForTest = undefined
+        }
+      },
+    }
+  }
+
+  export function replaceAfterFailSettlement(hook: AgentCoordinationEffectAdmissionHook): Disposable {
+    if (afterAgentCoordinationFailSettlementForTest) {
+      throw new Error("Agent coordination fail-settlement test hook is already installed")
+    }
+    afterAgentCoordinationFailSettlementForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (afterAgentCoordinationFailSettlementForTest === hook) {
+          afterAgentCoordinationFailSettlementForTest = undefined
+        }
+      },
+    }
+  }
+}
+
+async function runAgentCoordinationEffectAdmissionHook(input: Parameters<AgentCoordinationEffectAdmissionHook>[0]) {
+  await agentCoordinationEffectAdmissionHookForTest?.(input)
+}
+let afterDispatchLineageClaimForTest:
+  | ((input: {
+      lineage: ReturnType<typeof claimDispatchLineage>["lineage"]
+      turn: z.infer<typeof DispatchTurnSchema>
+      projectedAgent: PromptProfileResolver.ResolvedProjectedAgent
+      workScope: Parameters<OpenDispatchAgentLineage>[0]["workScope"]
+    }) => void | Promise<void>)
+  | undefined
+let toolFactoryObserverForTest: ((toolID: string) => void) | undefined
+
+export const OrchestratorToolsTestHooks = Object.freeze({
+  openDispatchLineage(surface: object): OpenDispatchAgentLineage {
+    const openLineage = orchestratorToolLineageHooks.get(surface)
+    if (!openLineage) throw new Error("Orchestrator Tools lineage hook is unavailable")
+    return openLineage
+  },
+  replaceAfterDispatchLineageClaim(callback: typeof afterDispatchLineageClaimForTest): Disposable {
+    const prior = afterDispatchLineageClaimForTest
+    afterDispatchLineageClaimForTest = callback
+    return {
+      [Symbol.dispose]() {
+        afterDispatchLineageClaimForTest = prior
+      },
+    }
+  },
+  replaceToolFactoryObserver(callback: typeof toolFactoryObserverForTest): Disposable {
+    const prior = toolFactoryObserverForTest
+    toolFactoryObserverForTest = callback
+    return {
+      [Symbol.dispose]() {
+        toolFactoryObserverForTest = prior
+      },
+    }
+  },
+})
+
+type ExistingDispatchLineage = NonNullable<ReturnType<typeof findDispatchLineageByArtifactID>>
+
+function waitForDispatchClaimChange(signal: AbortSignal | undefined, milliseconds: number): Promise<void> {
+  signal?.throwIfAborted()
+  return new Promise((resolve, reject) => {
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const aborted = () => {
+      if (timer) clearTimeout(timer)
+      reject(signal?.reason ?? new DOMException("Dispatch claim wait aborted", "AbortError"))
+    }
+    timer = setTimeout(() => {
+      signal?.removeEventListener("abort", aborted)
+      resolve()
+    }, milliseconds)
+    signal?.addEventListener("abort", aborted, { once: true })
+  })
+}
+
+/**
+ * Resolve one immutable write-ahead dispatch claim into a truthful replay.
+ * A lineage alone is not acceptance: only its exact durable worker Turn or a
+ * final settlement may complete the parent Tool occurrence.
+ */
+function readDispatchLineageReplay(input: { taskID: string; lineage: ExistingDispatchLineage }):
+  | {
+  descriptor?: WorkerTurnDescriptor.Info
+  turn?: NonNullable<WorkerTurnDescriptor.Info["payload"]["dispatchTurn"]>
+  outcome: z.infer<typeof DispatchOutcomeSchema>
+    }
+  | undefined {
+  const settlement = findDispatchSettlementByDispatchID({
+    taskID: input.taskID,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (settlement) return { outcome: settlement.payload.outcome }
+  const descriptor = WorkerTurnDescriptor.findForDispatch({
+    sessionID: input.lineage.payload.child_session_id,
+    dispatchID: input.lineage.dispatchID,
+  })
+  if (!descriptor) return undefined
+  const turn = descriptor.payload.dispatchTurn
+  if (!turn) {
+    throw new Error(`Dispatch ${input.lineage.dispatchID} durable Turn descriptor has no dispatch authority`)
+  }
+  return {
+    descriptor,
+    turn,
+    outcome: DispatchOutcome.accepted({
+      sessionID: input.lineage.payload.child_session_id,
+      dispatchLineageID: input.lineage.artifactID,
+    }),
+  }
+}
+
+function commitAcceptedDispatchLineage(lineage: DispatchLineageRow, admission?: DispatchAdmissionOwner): void {
+  const actionID = lineage.payload.coordination_action_id
+  const expectedResult = actionID
+    ? {
+        dispatch_lineage_id: lineage.artifactID,
+        dispatch_id: lineage.dispatchID,
+        dispatch_agent_id: lineage.payload.target_agent_id,
+        dispatch_session_id: lineage.payload.child_session_id,
+        work_scope: lineage.payload.work_scope,
+        dispatch_bound: true,
+        awaiting_explicit_dispatch: false,
+      }
+    : undefined
+  let bound: ReturnType<typeof bindAgentCoordinationRedispatchSuccessorInTransaction> | undefined
+  commitDispatchLineageSession(
+    lineage,
+    admission,
+    actionID && expectedResult
+      ? (db) => {
+          bound = bindAgentCoordinationRedispatchSuccessorInTransaction(db, {
+            taskID: lineage.taskID,
+            actionID,
+            dispatchID: lineage.dispatchID,
+            childSessionID: lineage.payload.child_session_id,
+            targetAgentID: lineage.payload.target_agent_id,
+            bindSuccessor: () => expectedResult,
+            summary: `Completed explicit redispatch with immutable lineage for session ${lineage.payload.child_session_id}`,
+          })
+        }
+      : undefined,
+  )
+  if (!actionID || !expectedResult) return
+  if (!bound) throw new Error(`dispatch_agent coordination action ${actionID} was not settled`)
+  const { redispatch_binding: _binding, ...settledResult } = bound.action.payload.result ?? {}
+  if (!isDeepStrictEqual(settledResult, expectedResult)) {
+    throw new Error(
+      `dispatch_agent coordination action ${actionID} bound another redispatch successor: ` +
+        `expected=${JSON.stringify(expectedResult)} actual=${JSON.stringify(settledResult)}`,
+    )
+  }
+}
+
+const log = Log.create({ service: "task-tools" })
+
+const RequirementsInputSchema = DispatchAdapterContractRegistry.inputSchema("requirements")
+const ArchitectInputSchema = DispatchAdapterContractRegistry.inputSchema("architect")
+const WorkloadAnalysisInputSchema = DispatchAdapterContractRegistry.inputSchema("workload_analysis")
+const AnalyzeIntentInputSchema = DispatchAdapterContractRegistry.inputSchema("analyze_intent")
+const FrontendDesignInputSchema = DispatchAdapterContractRegistry.inputSchema("frontend_design")
+const FrontendResearchInputSchema = DispatchAdapterContractRegistry.inputSchema("frontend_research")
+const DeepResearchInputSchema = DispatchAdapterContractRegistry.inputSchema("deep_research")
+const VisualQaInputSchema = DispatchAdapterContractRegistry.inputSchema("visual_qa")
+const FactCheckInputSchema = DispatchAdapterContractRegistry.inputSchema("fact_check")
+const IntegrityInputSchema = DispatchAdapterContractRegistry.inputSchema("integrity")
+const BuildInputSchema = DispatchAdapterContractRegistry.inputSchema("build")
+
+type ArchitectToolInput = z.infer<typeof ArchitectInputSchema>
+
+function architectDispatchReason(input: ArchitectToolInput): string {
+  return [
+    input.reason,
+    "Independently search and completely read the Task Artifacts you need, bind your own exact input selection, and record architecture facts with their evidence.",
+  ].join("\n")
+}
+
+async function taskAuthorityAnchor(input: {
+  task: TaskWithRootSession
+  existingSessionID?: string
+}): Promise<TaskAuthorityAnchor> {
+  const base = {
+    task_id: input.task.id,
+    root_session_id: input.task.session_id,
+    request_sha256: taskRequestSHA256(input.task.request),
+  }
+  if (!input.existingSessionID) {
+    return {
+      ...base,
+      initial_control_text_parts: [],
+    }
+  }
+  const descriptor = WorkerTurnDescriptor.latestForSession(input.existingSessionID)
+  const authority = descriptor?.payload.dispatchTurn?.task_authority
+  if (!descriptor || !authority) {
+    throw new Error(`Continuation Session ${input.existingSessionID} has no persisted Task authority descriptor`)
+  }
+  if (
+    authority.task_id !== base.task_id ||
+    authority.root_session_id !== base.root_session_id ||
+    authority.request_sha256 !== base.request_sha256
+  ) {
+    throw new Error(`Continuation Session ${input.existingSessionID} Task authority does not match the durable Task`)
+  }
+  if (!authority.initial_user_message_id || authority.initial_control_text_parts.length === 0) {
+    throw new Error(`Continuation Session ${input.existingSessionID} has incomplete initial control-text authority`)
+  }
+  const messages = await Session.messages({ sessionID: input.existingSessionID })
+  const initial = messages.find((message) => message.info.id === authority.initial_user_message_id)
+  if (!initial) {
+    throw new Error(`Continuation Session ${input.existingSessionID} is missing its authoritative initial user message`)
+  }
+  const actualTextParts = initial.parts.filter((part) => part.type === "text")
+  const expectedPartIDs = new Set(authority.initial_control_text_parts.map((part) => part.part_id))
+  if (
+    actualTextParts.length !== authority.initial_control_text_parts.length ||
+    actualTextParts.some((part) => !expectedPartIDs.has(part.id))
+  ) {
+    throw new Error(
+      `Continuation Session ${input.existingSessionID} initial control-text Part set does not match persisted authority`,
+    )
+  }
+  for (const control of authority.initial_control_text_parts) {
+    const part = initial.parts.find((candidate) => candidate.id === control.part_id)
+    if (!part || part.type !== "text" || controlTextSHA256(part.text) !== control.text_sha256) {
+      throw new Error(
+        `Continuation Session ${input.existingSessionID} control-text authority ${control.part_id} does not match persisted content`,
+      )
+    }
+  }
+  return authority
+}
+
+function buildAgentContextSections(
+  entries: Array<{
+    title: string
+    body: string | undefined
+  }>,
+): string[] {
+  return entries.flatMap((entry) => {
+    const body = entry.body?.trim()
+    return body ? [`## ${entry.title}\n\n${body}`] : []
+  })
+}
+
+function projectedCoordinationActor(binding: ProjectedWorkerBinding): string {
+  return `Projected agent "${binding.identity.agentID}" via the "${binding.identity.dispatchAdapterID}" typed adapter`
+}
+
+const FactCheckStageInputSchema = z
+  .object({
+    target_session_id: z.string().min(1),
+    target_agent: z.string().min(1),
+    reason: z.string().min(10),
+    target_message_id: z.string().min(1),
+    target_message_content_hash: z.string().min(1),
+  })
+  .strict()
+
+type FactCheckStageInput = z.infer<typeof FactCheckStageInputSchema>
+
+async function resolveFactCheckTargetScope(input: {
+  taskID: string
+  targetSessionID: string
+  targetMessageID: string
+  assertedTargetAgent?: string
+}): Promise<{ targetAgent: string; targetMessageID: string; targetMessageContentHash: string } | { error: string }> {
+  const owningTaskID = taskIDForSession(input.targetSessionID)
+  if (owningTaskID !== input.taskID) {
+    return {
+      error:
+        owningTaskID === undefined
+          ? `target_session_id ${input.targetSessionID} is not owned by any task.`
+          : `target_session_id ${input.targetSessionID} belongs to task ${owningTaskID}, not current task ${input.taskID}.`,
+    }
+  }
+  const session = await Session.get(input.targetSessionID)
+  const snapshot = await Session.snapshotAssistantMessage({
+    sessionID: input.targetSessionID,
+    messageID: input.targetMessageID,
+  })
+  if (!snapshot.finished) {
+    return {
+      error:
+        `target_message_id ${input.targetMessageID} is not a completed assistant message in ` +
+        `${input.targetSessionID} (reason=${snapshot.reason ?? "unknown"}).`,
+    }
+  }
+  if (!snapshot.messageID || !snapshot.contentHash || !snapshot.agentID) {
+    return {
+      error: "target session has no completed assistant message with an exact agent identity.",
+    }
+  }
+  const descriptorRef = snapshot.workerTurnDescriptor
+  if (!descriptorRef) {
+    return { error: `target_session_id ${input.targetSessionID} has no message-bound worker descriptor reference.` }
+  }
+  const descriptor = WorkerTurnDescriptor.get({ id: descriptorRef.id, sessionID: input.targetSessionID })
+  if (!descriptor) {
+    return {
+      error: `target_session_id ${input.targetSessionID} has no message-bound projected worker descriptor ${descriptorRef.id}.`,
+    }
+  }
+  if (descriptor.hash !== descriptorRef.hash) {
+    return {
+      error:
+        `target message descriptor hash mismatch for ${input.targetSessionID}: message ${descriptorRef.hash}, ` +
+        `descriptor ${descriptor.hash}.`,
+    }
+  }
+  const targetAgent = snapshot.agentID
+  if (descriptor.payload.identity.agentID !== targetAgent) {
+    return {
+      error:
+        `target assistant identity mismatch for ${input.targetSessionID}: message agent ${targetAgent}, ` +
+        `descriptor agent ${descriptor.payload.identity.agentID}.`,
+    }
+  }
+  if (descriptor.payload.identity.sessionKind !== session.kind) {
+    return {
+      error:
+        `target session template mismatch for ${input.targetSessionID}: session kind ${session.kind}, ` +
+        `descriptor session kind ${descriptor.payload.identity.sessionKind}.`,
+    }
+  }
+  // Fact-check binds immutable terminal output through durable descriptor evidence;
+  // process-local runtime contracts belong to live continuation and disappear on restart.
+  const asserted = input.assertedTargetAgent?.trim()
+  if (asserted && asserted !== targetAgent) {
+    return {
+      error:
+        `target_agent mismatch for ${input.targetSessionID}: caller asserted ${asserted}, ` +
+        `but the terminal assistant identity is ${targetAgent}.`,
+    }
+  }
+  return {
+    targetAgent,
+    targetMessageID: snapshot.messageID,
+    targetMessageContentHash: snapshot.contentHash,
+  }
+}
+
+type IntegrityToolInput = z.infer<typeof IntegrityInputSchema>
+
+const ManageTaskActionInputSchemas = {
+  complete_task: CompleteTaskInputSchema,
+  fail_task: FailTaskInputSchema,
+  cancel_task: CancelTaskInputSchema,
+  add_goal: AddGoalInputSchema,
+  modify_goal: ModifyGoalInputSchema,
+  delete_goal: DeleteGoalInputSchema,
+} satisfies Record<string, z.ZodObject<any>>
+
+const MANAGE_TASK_ACTION_NAMES = Object.keys(ManageTaskActionInputSchemas) as [
+  keyof typeof ManageTaskActionInputSchemas,
+  ...(keyof typeof ManageTaskActionInputSchemas)[],
+]
+
+const MANAGE_TASK_ACTION_FIELDS = Object.fromEntries(
+  MANAGE_TASK_ACTION_NAMES.map((action) => [
+    action,
+    Object.keys(ManageTaskActionInputSchemas[action].shape).sort((left, right) => left.localeCompare(right)),
+  ]),
+) as Record<keyof typeof ManageTaskActionInputSchemas, string[]>
+
+const ManageTaskInputSchema = z.discriminatedUnion(
+  "action",
+  MANAGE_TASK_ACTION_NAMES.map((action) =>
+    ManageTaskActionInputSchemas[action].safeExtend({
+      action: z
+        .literal(action)
+        .describe(
+          `Task lifecycle or Delivery Slice contract action to execute through the single scheduler task-management tool. ` +
+            `When action=${action}, provide exactly these non-action fields: ${MANAGE_TASK_ACTION_FIELDS[action].join(", ") || "(none)"}.`,
+        ),
+    }),
+  ) as any,
+)
+
+function assertDirectReplySessionKind(input: { taskID: string; sessionID: string }): {
+  kind: string
+  baseRole: string
+  runtimeContract: ProjectedWorkerRuntimeContract
+} {
+  const kind = sessionRole(input.sessionID)
+  if (!kind) {
+    throw new Error(`Session ${input.sessionID} has no task agent kind`)
+  }
+  const installed = SessionRuntimeContractStore.get(input.sessionID)
+  if (!installed || installed.identity.identityKind !== "projected-worker") {
+    throw new Error(`Session ${input.sessionID} has no projected worker runtime identity for agent control`)
+  }
+  const runtimeContract = validateSessionRuntimeContractForContinuation({
+    sessionID: input.sessionID,
+    expectedSessionKind: kind,
+    expectedTaskID: input.taskID,
+    expectedAgentID: installed.identity.agentID,
+    expectedWorkerTurnDescriptor: {
+      id: installed.identity.workerTurnDescriptorID,
+      hash: installed.identity.workerTurnDescriptorHash,
+    },
+    requireWorkerTurnDescriptor: true,
+    requireRuntimeContract: true,
+  })
+  if (!runtimeContract || !isProjectedWorkerRuntimeContract(runtimeContract)) {
+    throw new Error(`Session ${input.sessionID} projected worker runtime identity disappeared during agent control`)
+  }
+  RuntimeTemplateRegistry.get(runtimeContract.identity.baseRole)
+  return { kind, baseRole: runtimeContract.identity.baseRole, runtimeContract }
+}
+
+function assertDirectReplySessionLineage(input: { taskID: string; sessionID: string }): {
+  kind: string
+  baseRole: string
+  runtimeContract: ProjectedWorkerRuntimeContract
+  lineageSource: AgentCoordinationSessionLineageSource
+} {
+  const lineage = resolveAgentCoordinationSessionLineage(input)
+  const { kind, baseRole, runtimeContract } = assertDirectReplySessionKind(input)
+  return { kind, baseRole, runtimeContract, lineageSource: lineage.source }
+}
+
+async function assertAgentCoordinationRequestSessionLineage(input: {
+  taskID: string
+  sessionID: string
+}): Promise<{ task: TaskWithRootSession; session: Session.Info }> {
+  const task = await assertTaskRootSessionLineageForConfig(requireTask(input.taskID))
+  const session = await Session.assertLineageInProject({
+    sessionID: input.sessionID,
+    projectID: task.project_id,
+  })
+  return { task, session }
+}
+
+function requireAgentCoordinationRequestForResponse(input: {
+  taskID: string
+  requestID: string
+}): AgentCoordinationRequestRow {
+  const request = findAgentCoordinationRequest({
+    taskID: input.taskID,
+    requestID: input.requestID,
+  })
+  if (!request) {
+    throw new Error(`agent coordination request ${input.requestID} does not belong to task ${input.taskID}`)
+  }
+  return request
+}
+
+function persistedRedispatchBindingForRespondedRequest(input: {
+  taskID: string
+  request: AgentCoordinationRequestRow
+}): AgentCoordinationRedispatchBinding | undefined {
+  const response = input.request.payload.response_id
+    ? findAgentCoordinationResponse({
+        taskID: input.taskID,
+        responseID: input.request.payload.response_id,
+      })
+    : undefined
+  const responseAction = response
+    ? findAgentCoordinationAction({
+        taskID: input.taskID,
+        actionID: response.payload.action_id,
+      })
+    : undefined
+  const action = responseAction?.payload.action === "redispatch_worker" ? responseAction : undefined
+  if (!action) return undefined
+  const binding = redispatchBindingFromActionResult({
+    actionID: action.payload.action_id,
+    result: action.payload.result ?? {},
+  })
+  if (!sameProjectedWorkerBinding(binding, input.request.payload.worker_binding)) {
+    throw new Error(
+      `agent coordination redispatch action ${action.payload.action_id} binding does not match the frozen request worker binding`,
+    )
+  }
+  return binding
+}
+
+function redispatchBindingFromActionResult(input: {
+  actionID: string
+  result: Record<string, unknown>
+}): AgentCoordinationRedispatchBinding {
+  const rawBinding = input.result.redispatch_binding
+  const parsed = AgentCoordinationRedispatchBindingSchema.safeParse(rawBinding)
+  if (!parsed.success) {
+    throw new Error(`agent coordination redispatch action ${input.actionID} has malformed redispatch_binding`)
+  }
+  return parsed.data
+}
+
+function requireAgentCoordinationRedispatchBindingForRequest(input: {
+  taskID: string
+  request: AgentCoordinationRequestRow
+}): AgentCoordinationRedispatchBinding {
+  if (input.request.payload.status !== "responded") {
+    throw new Error(
+      `agent coordination request ${input.request.payload.request_id} has no persisted redispatch decision`,
+    )
+  }
+  const persisted = persistedRedispatchBindingForRespondedRequest(input)
+  if (!persisted) {
+    throw new Error(
+      `responded agent coordination request ${input.request.payload.request_id} has no persisted redispatch binding`,
+    )
+  }
+  return persisted
+}
+
+function requireAgentCoordinationWorkerWorkScope(input: {
+  request: AgentCoordinationRequestRow
+  binding: ProjectedWorkerBinding
+}) {
+  const descriptor = WorkerTurnDescriptor.get({
+    id: input.binding.workerTurnDescriptorID,
+    sessionID: input.request.payload.session_id,
+  })
+  if (!descriptor || descriptor.hash !== input.binding.workerTurnDescriptorHash) {
+    throw new Error(
+      `agent coordination redispatch worker descriptor ${input.binding.workerTurnDescriptorID} does not match the frozen request binding`,
+    )
+  }
+  if (
+    !sameProjectedWorkerIdentity(descriptor.payload.identity, input.binding.identity) ||
+    descriptor.payload.expertSquadID !== input.binding.expertSquadID
+  ) {
+    throw new Error(
+      `agent coordination redispatch worker descriptor ${input.binding.workerTurnDescriptorID} identity does not match the frozen request binding`,
+    )
+  }
+  return descriptor.payload.lifecycle.workScope
+}
+
+function requireInstalledAgentCoordinationWorkerBinding(input: {
+  sessionID: string
+  binding: ProjectedWorkerBinding
+}): { binding: ProjectedWorkerBinding; runtimeContract: ProjectedWorkerRuntimeContract } {
+  const runtimeContract = SessionRuntimeContractStore.get(input.sessionID)
+  if (!runtimeContract || !isProjectedWorkerRuntimeContract(runtimeContract)) {
+    throw new Error(`agent coordination session ${input.sessionID} has no projected worker runtime binding`)
+  }
+  const installed = materializeProjectedWorkerBinding({
+    identity: runtimeContract.identity,
+    expertSquadID: runtimeContract.identity.expertSquadID,
+    workerTurnDescriptorID: runtimeContract.identity.workerTurnDescriptorID,
+    workerTurnDescriptorHash: runtimeContract.identity.workerTurnDescriptorHash,
+  })
+  if (!sameProjectedWorkerBinding(input.binding, installed)) {
+    throw new Error(
+      `agent coordination session ${input.sessionID} installed worker binding does not match the frozen request worker binding`,
+    )
+  }
+  return { binding: installed, runtimeContract }
+}
+
+function replayedAgentCoordinationActionResult(input: {
+  taskID: string
+  response: Awaited<ReturnType<typeof createAgentCoordinationResponse>>
+  askUser?: {
+    sessionID: string
+    questions: Question.Info[]
+    tool: { messageID: string; callID: string }
+  }
+}): string | undefined {
+  if (input.response.createdNow !== false) return undefined
+  const action = findAgentCoordinationAction({
+    taskID: input.taskID,
+    actionID: input.response.payload.action_id,
+  })
+  if (!action) {
+    throw new Error(
+      `agent coordination replay response ${input.response.payload.response_id} points to missing action ${input.response.payload.action_id}`,
+    )
+  }
+  const request = findAgentCoordinationRequest({
+    taskID: input.taskID,
+    requestID: input.response.payload.request_id,
+  })
+  if (!request) {
+    throw new Error(
+      `agent coordination replay response ${input.response.payload.response_id} points to missing request ${input.response.payload.request_id}`,
+    )
+  }
+  const actor = projectedCoordinationActor(request.payload.worker_binding)
+  if (action.payload.status === "completed") {
+    if (action.payload.action === "ask_user") {
+      if (!input.askUser) return undefined
+      const result = z
+        .object({
+          question_id: z.string().min(1),
+          interaction_id: Identifier.schema("interaction"),
+          interaction_status: z.enum(["answered", "rejected", "expired"]),
+        })
+        .strict()
+        .parse(action.payload.result)
+      const expectedQuestionID = agentCoordinationQuestionID(action.payload.action_id)
+      if (result.question_id !== expectedQuestionID) {
+        throw new Error(
+          `Completed A2A ask_user action ${action.payload.action_id} points to question ${result.question_id}, expected ${expectedQuestionID}`,
+        )
+      }
+      const interaction = findInteractionByExternal(expectedQuestionID)
+      if (!interaction || interaction.id !== result.interaction_id) {
+        throw new Error(
+          `Completed A2A ask_user action ${action.payload.action_id} points to missing interaction ${result.interaction_id}`,
+        )
+      }
+      requireAgentCoordinationQuestionInteraction({
+        action,
+        actionID: action.payload.action_id,
+        taskID: input.taskID,
+        sessionID: input.askUser.sessionID,
+        questions: input.askUser.questions,
+        tool: input.askUser.tool,
+        interaction,
+      })
+      if (interaction.status !== result.interaction_status) {
+        throw new Error(
+          `Completed A2A ask_user action ${action.payload.action_id} settled as ${result.interaction_status}, but interaction ${interaction.id} is ${interaction.status}`,
+        )
+      }
+      return renderAgentCoordinationAskUserTerminal({
+        requestID: request.payload.request_id,
+        responseID: input.response.payload.response_id,
+        actionID: action.payload.action_id,
+        questionID: expectedQuestionID,
+        interaction,
+        questions: input.askUser.questions,
+        replayed: true,
+      })
+    }
+    return (
+      `${actor} replayed coordination response ${input.response.payload.response_id}; ` +
+      `action=${action.payload.action_id} already completed as ${action.payload.action}.`
+    )
+  }
+  if (action.payload.status === "failed") {
+    return (
+      `${actor} replayed coordination response ${input.response.payload.response_id}; ` +
+      `action=${action.payload.action_id} already failed and the request remains pending for a new response.`
+    )
+  }
+  return undefined
+}
+
+function requireAgentCoordinationQuestionInteraction(input: {
+  action: NonNullable<ReturnType<typeof findAgentCoordinationAction>>
+  actionID: string
+  taskID: string
+  sessionID: string
+  questions: Question.Info[]
+  tool: { messageID: string; callID: string }
+  interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>
+}) {
+  const questionID = agentCoordinationQuestionID(input.actionID)
+  if (input.interaction.external_id !== questionID) {
+    throw new Error(
+      `A2A ask_user interaction ${input.interaction.id} has question ${input.interaction.external_id}, expected ${questionID}`,
+    )
+  }
+  if (input.interaction.task_id !== input.taskID) {
+    throw new Error(
+      `A2A ask_user interaction ${input.interaction.id} belongs to task ${input.interaction.task_id}, not ${input.taskID}`,
+    )
+  }
+  if (input.interaction.session_id !== input.sessionID) {
+    throw new Error(
+      `A2A ask_user interaction ${input.interaction.id} belongs to session ${input.interaction.session_id}, not ${input.sessionID}`,
+    )
+  }
+  if (input.interaction.request_type !== "question") {
+    throw new Error(
+      `A2A ask_user interaction ${input.interaction.id} has type ${input.interaction.request_type}, expected question`,
+    )
+  }
+  const payload = z
+    .object({
+      questions: z.array(Question.Info),
+      tool: z.object({ messageID: z.string(), callID: z.string() }),
+      expiry: Question.Expiry.optional(),
+    })
+    .parse(input.interaction.payload)
+  if (JSON.stringify(payload.questions) !== JSON.stringify(input.questions)) {
+    throw new Error(`A2A ask_user interaction ${input.interaction.id} changed the question payload`)
+  }
+  if (payload.tool.messageID !== input.tool.messageID || payload.tool.callID !== input.tool.callID) {
+    throw new Error(`A2A ask_user interaction ${input.interaction.id} changed the persisted Tool binding`)
+  }
+  return { interaction: input.interaction, payload, questionID }
+}
+
+function answersFromInteraction(
+  interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>,
+): Question.Answer[] {
+  return z.array(Question.Answer).parse(interaction.response?.answers)
+}
+
+function expiryFromInteraction(interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>) {
+  const response = z
+    .object({
+      origin: z.literal("deadline"),
+      time_expires: z.number().int().positive(),
+    })
+    .parse(interaction.response)
+  const requestExpiry = z.object({ expiry: Question.Expiry }).parse(interaction.payload).expiry
+  if (requestExpiry.timeExpires !== response.time_expires) {
+    throw new Error(`A2A ask_user interaction ${interaction.id} resolved against a different deadline`)
+  }
+  const timeResolved = z.number().int().positive().parse(interaction.time_resolved)
+  return { timeExpires: response.time_expires, timeResolved, timeoutMs: requestExpiry.timeoutMs }
+}
+
+function operatorRejectionFromInteraction(interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>) {
+  return z.object({ origin: z.literal("operator") }).parse(interaction.response)
+}
+
+function renderAgentCoordinationAskUserTerminal(input: {
+  requestID: string
+  responseID: string
+  actionID: string
+  questionID: string
+  interaction: NonNullable<ReturnType<typeof findInteractionByExternal>>
+  questions: Question.Info[]
+  replayed?: boolean
+}): string {
+  const prefix =
+    `Responded to coordination request ${input.requestID} with ask_user. ` +
+    `response=${input.responseID}; action=${input.actionID}; ` +
+    `interaction=${input.interaction.id}; question=${input.questionID}`
+  const replay = input.replayed ? " recovered from the completed durable action" : ""
+  if (input.interaction.status === "answered") {
+    const answers = answersFromInteraction(input.interaction)
+    const renderedAnswers = input.questions
+      .map((question, index) => `"${question.question}" -> ${(answers[index] ?? []).join(", ") || "(no answer)"}`)
+      .join("\n")
+    return `${prefix}${replay}.\nUser answered:\n${renderedAnswers}`
+  }
+  if (input.interaction.status === "expired") {
+    expiryFromInteraction(input.interaction)
+    return (
+      `${prefix}${replay}; automatic deadline elapsed without an operator decision. ` +
+      "Choose a concrete same-Task repair action or an explicitly named wait from the available evidence."
+    )
+  }
+  if (input.interaction.status === "rejected") {
+    operatorRejectionFromInteraction(input.interaction)
+    return `${prefix}${replay}; user rejected the question.`
+  }
+  throw new Error(
+    `Completed A2A ask_user interaction ${input.interaction.id} is ${input.interaction.status}, expected a terminal status`,
+  )
+}
+
+async function waitForQuestionInteraction(input: { questionID: string; taskID: string; resolved?: boolean }) {
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    const interaction = findInteractionByExternal(input.questionID)
+    if (interaction) {
+      if (interaction.task_id !== input.taskID) {
+        throw new Error(
+          `A2A ask_user question ${input.questionID} projected to task ${interaction.task_id}, not ${input.taskID}`,
+        )
+      }
+      if (input.resolved !== true || interaction.status !== "pending") return interaction
+    }
+    await Bun.sleep(25)
+  }
+  throw new Error(
+    input.resolved === true
+      ? `A2A ask_user question ${input.questionID} interaction did not resolve`
+      : `A2A ask_user question ${input.questionID} did not project to an engine interaction`,
+  )
+}
+
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+// ---------------------------------------------------------------------------
+// Tool factory
+// ---------------------------------------------------------------------------
+
+/**
+ * The part of a stage dispatch that is the same for every stage.
+ *
+ * Five call sites each unpacked the very same nine fields out of the typed
+ * `DispatchAdapterExecutionContext` they already held — including two closures
+ * over `execution.dispatch` written out identically each time. Adding a stage
+ * meant copying them again, and changing one meant finding all five.
+ */
+function stageDispatchBinding(execution: DispatchAdapterExecutionContext) {
+  return {
+    agentID: execution.agentID,
+    packageRevision: execution.projectedAgent.packageRevision,
+    workScope: execution.workScope,
+    newSessionID: execution.newSessionID,
+    existingSessionID: execution.existingSessionID,
+    continuationPrompt: dispatchAdapterContinuationPrompt(execution),
+    dispatchTurn: execution.dispatch.turn,
+    signal: execution.signal,
+    onSessionCreated: async (sessionID: string) => {
+      execution.dispatch.observeSession(sessionID)
+    },
+    onDispatchAuthorityCommit: ((sessionID, descriptor) =>
+      execution.dispatch.commitSession(sessionID, descriptor)) as AgentDispatchAuthorityCommit,
+  }
+}
+
+export function createOrchestratorTools(input: {
+  taskID: string
+  agentSessionID: string
+  sendSchedulerMessage: typeof sendSchedulerMessageContract
+  signal?: AbortSignal
+  dispatchAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
+  rootMessage?: {
+    messageID: string
+    kind: TaskRootMessageKind
+  }
+  missionAcceptanceRepair?: {
+    mode?: "resume" | "extension"
+    messageID: string
+  }
+  terminalConversationAuthority?: TerminalConversationAuthority
+  /** Materialize one exact public scheduler leaf without constructing the rest of the surface. */
+  exactToolID?: string
+}) {
+  if (!Array.isArray(input.dispatchAgents)) {
+    throw new Error("createOrchestratorTools requires the exact turn-owned dynamic-agent projection.")
+  }
+  const { taskID } = input
+  const activeAcceptanceRepair = currentTaskAcceptanceRepair(taskID)
+  const taskProjectDirectory = taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.project.id })
+
+  async function requireCurrentTaskRootSessionLineage(): Promise<TaskWithRootSession> {
+    const task = requireTask(taskID)
+    return assertTaskRootSessionLineageForConfig(task)
+  }
+
+  async function requireCurrentTaskAndAgentSessionLineage(): Promise<TaskWithRootSession> {
+    const task = await requireCurrentTaskRootSessionLineage()
+    await Session.assertLineageInProject({
+      sessionID: input.agentSessionID,
+      projectID: task.project_id,
+    })
+    return task
+  }
+
+  const runIntegrityReviewOnce = createIntegrityReviewStage({
+    taskID,
+    parentSessionID: input.agentSessionID,
+    signal: input.signal,
+  })
+
+  const runIntegrityReview = createIntegrityReviewRunner({
+    taskID,
+    requireTask: () => requireTask(taskID),
+    runReviewOnce: runIntegrityReviewOnce,
+  })
+
+  // Agents that need to ask the user a question do so directly via
+  // `Question.ask`. Workflow steps never pause for input here.
+
+  const dispatchArchitectStage = createArchitectStageDispatcher({
+    taskID,
+    parentSessionID: input.agentSessionID,
+    signal: input.signal,
+  })
+
+  const dispatchVisualQaStage = createVisualQaStageDispatcher({
+    taskID,
+    parentSessionID: input.agentSessionID,
+    signal: input.signal,
+  })
+
+  const dispatchRequirementsStage = createRequirementsStageDispatcher({
+    taskID,
+    parentSessionID: input.agentSessionID,
+    signal: input.signal,
+  })
+  const dispatchDeepResearchStage = createDeepResearchStageDispatcher({
+    taskID,
+    parentSessionID: input.agentSessionID,
+    signal: input.signal,
+  })
+  const dispatchFrontendResearchStage = createFrontendResearchStageDispatcher({
+    taskID,
+    parentSessionID: input.agentSessionID,
+    signal: input.signal,
+  })
+
+  const toolFactories = {
+    scheduler_message: () =>
+      tool({
+      description:
+        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically. A reply contains kind, reply_to, subject and message only; omit target because the exact request supplies its destination.",
+      inputSchema: z
+        .object({
+          kind: z.enum(["request", "reply", "notification"]),
+          target: z
+            .discriminatedUnion("kind", [
+              z.object({ kind: z.literal("mission") }).strict(),
+              z.object({ kind: z.literal("task"), task_id: z.string().min(1) }).strict(),
+            ])
+              .optional()
+              .describe(
+                "Required for request or notification. Omit for reply: reply_to determines the original sender.",
+              ),
+            reply_to: z
+              .string()
+              .startsWith("pev")
+              .optional()
+              .describe(
+                "Required only for reply: copy the exact received request event_id and omit target. Omit reply_to for request or notification.",
+              ),
+          subject: z.string().min(1).max(500),
+          message: z.string().min(1),
+        })
+        .strict()
+        .superRefine((value, context) => {
+          if (value.kind === "reply") {
+            if (!value.reply_to) context.addIssue({ code: "custom", message: "reply requires reply_to" })
+            if (value.target) context.addIssue({ code: "custom", message: "reply target is derived from reply_to" })
+          } else {
+            if (!value.target) context.addIssue({ code: "custom", message: `${value.kind} requires target` })
+            if (value.reply_to) context.addIssue({ code: "custom", message: "only reply may set reply_to" })
+          }
+        }),
+      execute: async (messageInput, options) => {
+        const execution = await requireTaskOrchestratorToolExecutionContext(options, "scheduler_message", {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        })
+        const source = taskSchedulerEndpoint(taskID)
+        const target =
+          messageInput.target?.kind === "mission"
+            ? owningMissionSchedulerEndpoint(taskID)
+            : messageInput.target?.kind === "task"
+              ? taskSchedulerEndpoint(messageInput.target.task_id)
+              : undefined
+        return input.sendSchedulerMessage({
+          invocationID: `scheduler-message:${execution.orchestratorSessionID}:${execution.orchestratorMessageID}:${execution.toolCallID}`,
+          kind: messageInput.kind,
+          source,
+          target,
+          replyTo: messageInput.reply_to,
+          subject: messageInput.subject,
+          sourceMessageID: execution.orchestratorMessageID,
+          sourcePartID: execution.toolPartID,
+        })
+      },
+    }),
+    skill: () =>
+      tool({
+      description:
+        "Search/load surface for production skills granted to the Task's immutable Orchestrator scheduler projection. The session loop replaces this placeholder with the exact turn-scoped scheduler SkillTool before the model can call it.",
+      inputSchema: z
+        .object({
+          query: z
+            .string()
+            .optional()
+            .describe("Fuzzy search terms for mounted Orchestrator expert-squad skill titles and SKILL.md content."),
+          name: z
+            .string()
+            .optional()
+            .describe("Exact mounted Orchestrator expert-squad skill name to load after search identifies it."),
+        })
+        .strict(),
+      execute: async (_input): Promise<string> => {
+        throw new Error("Orchestrator production SkillTool was not rebound for this projected scheduler turn.")
+      },
+    }),
+    requirements: () =>
+      tool({
+      description:
+        "Requirements typed-adapter executor for one exact projected agent. It parses the user's task into REQ-N requirements plus " +
+        "foundational technical decisions (runtime, framework, test strategy, " +
+        "package_manager, communication_protocol). Delivery Slice decomposition, acceptance_specs, " +
+        "requirement-derived Slice acceptance coverage, source/reference coverage, and cross-Slice contracts are outside " +
+        "this adapter output. A successful run persists its exact spec facts for projected consumers. " +
+        "The active expert-squad scheduler decides whether and when to invoke or reinvoke this adapter; " +
+        "the adapter does not choose a successor, infer team membership, or define a workflow order.",
+      inputSchema: RequirementsInputSchema,
+      execute: async ({ reason }, executionInput) => {
+        const execution = requireDispatchAdapterExecutionContext(executionInput)
+        const task = requireTask(taskID)
+        const dispatch = await dispatchRequirementsStage({
+          task,
+          reason,
+          ...stageDispatchBinding(execution),
+        })
+        return dispatch
+      },
+    }),
+
+    // -----------------------------------------------------------------------
+    // Frontend Design typed-adapter executor.
+    // -----------------------------------------------------------------------
+
+    frontend_design: () =>
+      createFrontendDesignTool({
+      inputSchema: FrontendDesignInputSchema,
+      taskID,
+      parentSessionID: input.agentSessionID,
+      signal: input.signal,
+      requireCurrentTaskAndAgentSessionLineage,
+    }).frontend_design,
+
+    // -----------------------------------------------------------------------
+    // Architect typed-adapter executor.
+    // -----------------------------------------------------------------------
+
+    architect: () =>
+      tool({
+      description:
+        "Architect typed-adapter executor for one exact projected agent. The consumer searches the same-Task Artifact catalog, completely reads the exact RequirementSet and evidence versions it uses, " +
+        "then registers a ContractGraph and Goals with verified RequirementSet references, source/reference coverage, and cross-goal contracts. " +
+        "No scheduler-selected Artifact locator or semantic body crosses the dispatch boundary. Missing optional evidence remains visible specialist input rather than a Host admission failure. " +
+        "The single Task-scoped Architect occurrence keeps missing and contradictory facts visible to the specialist. " +
+        "The adapter does not choose its predecessor, implementation consumer, reviewer, or next dispatch; those decisions belong to the active expert-squad scheduler.",
+      inputSchema: ArchitectInputSchema,
+      execute: async (input, executionInput) => {
+        const execution = requireDispatchAdapterExecutionContext(executionInput)
+        const task = requireTask(taskID)
+        const dispatch = await dispatchArchitectStage({
+          task,
+          reason: architectDispatchReason(input),
+          ...stageDispatchBinding(execution),
+        })
+        return dispatch
+      },
+    }),
+
+    // -----------------------------------------------------------------------
+    // Goal Workload Analyst typed-adapter executor.
+    //
+    // It receives exact Delivery Slice revision refs as evidence subjects,
+    // discovers and selects its own Artifact
+    // sources through the Task catalog, and produces a
+    // compact per-Slice brief: countable work
+    // surface + why_not_smaller + underestimation_traps + verification_inventory
+    // + a decomposition_concern when a Slice is too broad or under-specified
+    // as a delivery contract. It only references existing surfaces/contracts by
+    // id and never changes the graph. The brief is
+    // persisted as one immutable `goal_workload` artifact bound to the exact
+    // consumer-selected source Artifact refs. The active package decides
+    // which projected consumers use concern findings and the resulting brief.
+    // -----------------------------------------------------------------------
+
+    workload_analysis: () =>
+      createWorkloadAnalysisTool({
+      inputSchema: WorkloadAnalysisInputSchema,
+      taskID,
+      agentSessionID: input.agentSessionID,
+      signal: input.signal,
+    }).workload_analysis,
+
+    // -----------------------------------------------------------------------
+    // Visual QA — frontend GUI product review evidence
+    // -----------------------------------------------------------------------
+
+    visual_qa: () =>
+      tool({
+      description:
+        "Dedicated frontend visual GUI and functional product review agent. GUI means Graphical User Interface. " +
+        "It can perform screenshot comparison, screen-by-screen desktop screenshots, explicitly requested non-desktop screenshots, " +
+        "interaction-state checks, console/network review, and evidence-backed localization of visual or functional defects. " +
+        "It consumes scheduler-provided task facts and references and reviews coarse-to-fine: component truth and visible functionality first, layout/composition second, micro-style polish last. " +
+        "It reviews from a picky professional design QA perspective, lists production_blockers when the product cannot generate or ship, and does not use visual scores, one-shot whole-page screenshots, or judge verdicts as the verdict. " +
+          "Its blocking product findings identify actual same-Task repair needs; advisory-only findings remain residual-risk evidence. The scheduler inspects real dispatch lineage and assigns a capable package-owned producer or continues its existing responsibility. Repair consumes existing canonical evidence and preserves independent verification. Moving HEAD, extra commits, and commit count mismatch require repository/runtime inspection and are not product failures by themselves. " +
+        "It may use skills and task-scoped browser_preview evidence, but it is review-only and does not edit files or run shell repair commands. " +
+        "It does NOT acquire new source evidence and is NOT the final acceptance authority. " +
+        "The active expert-squad scheduler decides when to invoke this adapter and which projected consumers use its evidence.",
+      inputSchema: VisualQaInputSchema,
+      execute: async ({ reason, focus, app_url, preview_command, goal_ids }, executionInput) => {
+        const execution = requireDispatchAdapterExecutionContext(executionInput)
+        const task = requireTask(taskID)
+        const dispatch = await dispatchVisualQaStage({
+          task,
+          reason,
+          focus,
+          appUrl: app_url,
+          previewCommand: preview_command,
+          ...stageDispatchBinding(execution),
+          goalIDs: goal_ids,
+        })
+        return dispatch
+      },
+    }),
+
+    // -----------------------------------------------------------------------
+    // Integrity review adapter. It reads persisted task evidence, records
+    // incremental IntegrityReview facts, and never rewrites requirements or goals.
+    // -----------------------------------------------------------------------
+
+    integrity: () =>
+      createIntegrityTool({
+      inputSchema: IntegrityInputSchema,
+      requireExecutionContext: (executionInput) => {
+        const execution = requireDispatchAdapterExecutionContext(executionInput)
+        return {
+          ...requireOrchestratorToolExecutionContext(execution.toolOptions, "integrity"),
+          agentID: execution.agentID,
+          packageRevision: execution.projectedAgent.packageRevision,
+          workScope: execution.workScope,
+          dispatch: execution.dispatch,
+          newSessionID: execution.newSessionID,
+          existingSessionID: execution.existingSessionID,
+          continuationPrompt: dispatchAdapterContinuationPrompt(execution),
+          dispatchTurn: execution.dispatch.turn,
+          signal: execution.signal,
+        }
+      },
+      runReview: runIntegrityReview,
+    }),
+
+    // -----------------------------------------------------------------------
+    // Fact-check — verifies factual claims registered by a worker agent's
+    // visible final message or domain artifact. Specs: fact-check agent contract §4.3.
+    //
+    // Trigger rule (rule 13 — you, the orchestrator LLM, decide):
+    //   You MAY call fact_check after the current task evidence is otherwise
+    //   ready for completion when
+    //   the upstream worker registered fact_check_items.length > 0
+    //   OR the worker's narrative makes load-bearing factual claims about
+    //   external systems.  The tool dedupes automatically across repeats;
+    //   if the target session is still streaming, the tool will reject —
+    //   retry after it finishes.
+    // -----------------------------------------------------------------------
+
+    fact_check: () =>
+      createFactCheckTool({
+      inputSchema: FactCheckInputSchema,
+      stageInputSchema: FactCheckStageInputSchema,
+      taskID,
+      orchestratorSessionID: input.agentSessionID,
+      signal: input.signal,
+      requireTask: () => requireTask(taskID),
+      resolveTargetScope: resolveFactCheckTargetScope,
+    }),
+
+    // -----------------------------------------------------------------------
+    // Analyze intent adapter — request disambiguation when the active package
+    // projects a worker for this capability. Scheduling order remains owned by
+    // the active package and the Orchestrator's current evidence.
+    // -----------------------------------------------------------------------
+
+    analyze_intent: () =>
+      createAnalyzeIntentTool({
+      inputSchema: AnalyzeIntentInputSchema,
+      taskID,
+      agentSessionID: input.agentSessionID,
+      signal: input.signal,
+      requireTask: () => requireTask(taskID),
+    }).analyze_intent,
+
+    frontend_research: () =>
+      tool({
+      description:
+          "OPTIONAL interface investigation publisher. Pass the authorized HTTP(S) source set for this bounded responsibility; the active expert-squad projection decides how its dynamic worker acquires and partitions evidence through visible tools. Persist one structured brief Artifact built from small update_* result tools, not a giant terminal payload. Partition independent investigations or continue the exact existing responsibility according to actual source needs and capability authority. Consume existing frontend_research and frontend_design Artifacts through exact catalog locators. It does not own the frontend implementation template, route selection, implementation, or final acceptance; projected consumers use its Artifact only when their declared contracts require it.",
+      inputSchema: FrontendResearchInputSchema,
+      execute: async ({ reason, source_urls, focus, goal_ids }, executionInput) => {
+        const execution = requireDispatchAdapterExecutionContext(executionInput)
+        const task = requireTask(taskID)
+        const dispatch = await dispatchFrontendResearchStage({
+          task,
+          reason,
+          sourceUrls: source_urls,
+          focus,
+          deliverySliceRevisionIDs: goal_ids,
+          ...stageDispatchBinding(execution),
+        })
+        return dispatch
+      },
+    }),
+
+    deep_research: () =>
+      tool({
+      description:
+        "OPTIONAL deep evidence agent. Use when the task depends on multi-source external facts, current documentation, competitor/industry/API research, source maps, or PRD/SPEC/report source material that should become a durable citation bundle. For supplied URLs that need functional/visual frontend analysis, `frontend_research` is a separate capability; for implementation-template/source evidence, `frontend_design` is a separate capability. The result is a compact research_brief Artifact plus bundle paths and may include subpage_research_tasks for independent follow-up deep research. It does not select routes or replace requirements, architecture, implementation, or acceptance evidence.",
+      inputSchema: DeepResearchInputSchema,
+      execute: async ({ reason, target_deliverable, source_urls, focus }, executionInput) => {
+        const execution = requireDispatchAdapterExecutionContext(executionInput)
+        const task = requireTask(taskID)
+        const dispatch = await dispatchDeepResearchStage({
+          task,
+          reason,
+          targetDeliverable: target_deliverable,
+          sourceUrls: source_urls,
+          focus,
+          ...stageDispatchBinding(execution),
+        })
+        return dispatch
+      },
+    }),
+
+    explore: () =>
+      createExploreTool({
+      taskID,
+      agentSessionID: input.agentSessionID,
+      signal: input.signal,
+      requireCurrentTaskAndAgentSessionLineage,
+    }).explore,
+
+    delegated_worker: () =>
+      createDelegatedWorkerTool({
+      taskID,
+      agentSessionID: input.agentSessionID,
+      signal: input.signal,
+      requireCurrentTaskAndAgentSessionLineage,
+    }).delegated_worker,
+
+    // -----------------------------------------------------------------------
+    // Delivery Slice contract tools — Orchestrator decides when to call each
+    // -----------------------------------------------------------------------
+
+    complete_task: () =>
+      createTaskLifecycleTools({
+      taskID,
+      workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
+      requireExecutionContext: (options, toolName) =>
+        requireTaskOrchestratorToolExecutionContext(options, toolName, {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        }),
+    }).complete_task,
+    fail_task: () =>
+      createTaskLifecycleTools({
+      taskID,
+      workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
+      requireExecutionContext: (options, toolName) =>
+        requireTaskOrchestratorToolExecutionContext(options, toolName, {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        }),
+    }).fail_task,
+    cancel_task: () =>
+      createTaskLifecycleTools({
+      taskID,
+      workflowProjection: workflowProjectionFromProjectedAgents(input.dispatchAgents),
+      requireExecutionContext: (options, toolName) =>
+        requireTaskOrchestratorToolExecutionContext(options, toolName, {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        }),
+    }).cancel_task,
+
+    read_task_message: () =>
+      createOrchestratorInteractionTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+      allowedRootMessages: authorizedTaskRootMessagesForWake(input),
+    }).read_task_message,
+    question: () =>
+      createOrchestratorInteractionTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+      allowedRootMessages: authorizedTaskRootMessagesForWake(input),
+    }).question,
+
+    add_goal: () =>
+      createDeliverySliceContractTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+    }).add_goal,
+    modify_goal: () =>
+      createDeliverySliceContractTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+    }).modify_goal,
+    delete_goal: () =>
+      createDeliverySliceContractTools({
+      taskID,
+      agentSessionID: input.agentSessionID,
+    }).delete_goal,
+
+    cancel_subagent: () =>
+      createSubagentCancellationTool({
+      taskID,
+      assertDirectReplySessionLineage,
+    }).cancel_subagent,
+
+    read_context: () => createReadContextTool({ taskID }).read_context,
+    read_agent_message: () => createReadAgentMessageTool({ taskID }).read_agent_message,
+    no_action: () => createNoActionTool({ taskID }).no_action,
+
+    respond_agent_coordination: () =>
+      bindToolExecutionMode(
+      tool({
+        description:
+          "Answer one pending worker/operator-to-orchestrator coordination request. This is the only orchestrator path for scheduler guidance that continues/cancels a worker, asks the user through a real interaction, fails the task through a terminal lifecycle event, or acknowledges an exact terminal occurrence during a host-authorized terminal conversation; it requires request_id and writes visible request/response/action artifacts before executing the bound side effect.",
+        inputSchema: z
+          .object({
+            request_id: z.string().min(1).describe("Pending agent_coordination_request artifact id."),
+            decision: (input.terminalConversationAuthority
+              ? z.enum(AGENT_COORDINATION_DECISIONS)
+              : z.enum(AGENT_COORDINATION_ACTIVE_DECISIONS)
+            ).describe(
+              input.terminalConversationAuthority
+                ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
+                : "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
+            ) as z.ZodType<AgentCoordinationDecision>,
+            message: z
+              .string()
+              .optional()
+              .describe(
+                "Visible incremental guidance for redispatch, question text for ask_user when questions is omitted, or failure detail for fail_task.",
+              ),
+            questions: z
+              .array(
+                z.object({
+                  question: z.string().min(1).describe("The complete question text to show the user."),
+                  header: z.string().min(1).describe("Short label used as a chip/title."),
+                  options: z
+                    .array(
+                      z.object({
+                        value: z.string().min(1).describe("Stable machine-facing value returned when selected."),
+                        label: z.string().min(1).describe("Display text."),
+                        description: z.string().min(1).describe("Explanation of this choice."),
+                      }),
+                    )
+                    .default([]),
+                  multiple: z.boolean().optional(),
+                  custom: z.boolean().optional(),
+                }),
+              )
+              .min(1)
+              .max(4)
+              .optional()
+              .describe(
+                "Concrete user questions for decision=ask_user. Omit to ask one free-text question from message or reason.",
+              ),
+            reason: z.string().min(1).describe("Why this is the correct scheduling decision."),
+          })
+          .strict(),
+        execute: async ({ request_id, decision, message, questions, reason }, options) => {
+          const toolExecution = await requireTaskOrchestratorToolExecutionContext(
+            options,
+            "respond_agent_coordination",
+            {
+              taskID,
+              agentSessionID: input.agentSessionID,
+            },
+          )
+          const responseAudit = {
+            orchestratorSessionID: toolExecution.orchestratorSessionID,
+            orchestratorMessageID: toolExecution.orchestratorMessageID,
+            orchestratorToolCallID: toolExecution.toolCallID,
+            orchestratorToolPartID: toolExecution.toolPartID,
+          }
+          const request = requireAgentCoordinationRequestForResponse({ taskID, requestID: request_id })
+          await assertAgentCoordinationRequestSessionLineage({
+            taskID,
+            sessionID: request.payload.session_id,
+          })
+          const guidance = message?.trim()
+          if (decision === "acknowledge_terminal") {
+            const authority = input.terminalConversationAuthority
+            if (
+              !authority ||
+              authority.ingressKind !== "coordination_request" ||
+              authority.coordinationRequestID !== request.payload.request_id
+            ) {
+              throw new Error(
+                `Agent coordination request ${request.payload.request_id} has no matching terminal conversation authority`,
+              )
+            }
+            const currentReference = requireCurrentTerminalLifecycleReference(taskID)
+            if (!sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)) {
+              throw new Error(
+                `Agent coordination request ${request.payload.request_id} terminal occurrence changed before acknowledgement`,
+              )
+            }
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
+            if (replayResult) return replayResult
+            await completeAgentCoordinationAction({
+              taskID,
+              actionID: response.payload.action_id,
+              result: {
+                terminal_lifecycle_reference: currentReference,
+                terminal_ingress_id: authority.ingressID,
+              },
+              summary: `acknowledged terminal event ${currentReference.terminalEventID}`,
+            })
+            return (
+              `Acknowledged coordination request ${request.payload.request_id} against terminal event ` +
+              `${currentReference.terminalEventID}; response=${response.payload.response_id}; ` +
+              `action=${response.payload.action_id}.`
+            )
+          }
+          if (request.payload.status === "responded") {
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
+            if (replayResult) {
+              if (decision !== "fail_task") return replayResult
+            }
+          }
+
+          if (decision === "redispatch") {
+            const workScope = requireAgentCoordinationWorkerWorkScope({
+              request,
+              binding: request.payload.worker_binding,
+            })
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
+            if (replayResult) return replayResult
+            const action = findAgentCoordinationAction({ taskID, actionID: response.payload.action_id })
+            if (!action || action.payload.status !== "pending") {
+              throw new Error(
+                `agent coordination redispatch action ${response.payload.action_id} is ${action?.payload.status ?? "missing"}`,
+              )
+            }
+            const binding = redispatchBindingFromActionResult({
+              actionID: action.payload.action_id,
+              result: action.payload.result ?? {},
+            })
+            return (
+              `Responded to coordination request ${request.payload.request_id} with a pending redispatch action. ` +
+              `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
+              `call dispatch_agent with dispatch.target=${binding.identity.agentID}, dispatch.turn.kind=continuation, and dispatch.turn.authority.coordination_action_id=${response.payload.action_id} explicitly.`
+            )
+          }
+          if (decision === "cancel_worker") {
+            const { session } = await assertAgentCoordinationRequestSessionLineage({
+              taskID,
+              sessionID: request.payload.session_id,
+            })
+            const kind = session.kind
+            if (request.payload.worker_binding.identity.sessionKind !== kind) {
+              throw new Error(
+                `agent coordination cancellation session kind mismatch: session=${kind}, binding=${request.payload.worker_binding.identity.sessionKind}`,
+              )
+            }
+            requireAgentCoordinationWorkerWorkScope({
+              request,
+              binding: request.payload.worker_binding,
+            })
+            const installedRuntimeContract = SessionRuntimeContractStore.get(request.payload.session_id)
+            const runtimeContract = installedRuntimeContract
+              ? requireInstalledAgentCoordinationWorkerBinding({
+                  sessionID: request.payload.session_id,
+                  binding: request.payload.worker_binding,
+                }).runtimeContract
+              : undefined
+            using _cancelWorkerRuntimeOwnership = runtimeContract
+              ? SessionRuntimeContractStore.claimOperation(
+                  request.payload.session_id,
+                  runtimeContract,
+                  "agent coordination worker cancellation",
+                )
+              : undefined
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
+            if (replayResult) return replayResult
+            const action = findAgentCoordinationAction({
+              taskID,
+              actionID: response.payload.action_id,
+            })
+            if (!action) {
+              throw new Error(`agent coordination response ${response.payload.response_id} has no action row`)
+            }
+            if (action.payload.status !== "pending") {
+              throw new Error(`agent coordination action ${response.payload.action_id} is ${action.payload.status}`)
+            }
+            await runAgentCoordinationEffectAdmissionHook({
+              taskID,
+              requestID: request.payload.request_id,
+              responseID: response.payload.response_id,
+              actionID: action.payload.action_id,
+              decision,
+            })
+            let cancellation: Awaited<ReturnType<typeof cancelDispatchedSession>> | undefined
+            try {
+              cancellation = await cancelDispatchedSession({
+                taskID,
+                sessionID: request.payload.session_id,
+                reason,
+                reasonPrefix: "respond_agent_coordination",
+                requestID: response.payload.action_id,
+                coordinationAction: {
+                  actionID: action.payload.action_id,
+                  executionEpoch: action.payload.execution_epoch,
+                },
+              })
+            } catch (error) {
+              if (AgentCoordinationActionSupersededError.isInstance(error as Error)) throw error
+              await failAgentCoordinationAction({
+                taskID,
+                actionID: response.payload.action_id,
+                error,
+                result: { session_id: request.payload.session_id },
+                summary: "cancel_worker failed",
+              })
+              throw error
+            }
+            await completeAgentCoordinationAction({
+              taskID,
+              actionID: response.payload.action_id,
+              result: {
+                session_id: request.payload.session_id,
+                physical_cancelled: cancellation.cancelled,
+                prompt_cancelled: cancellation.promptCancelled,
+                summary: cancellation.summary,
+              },
+              summary: "cancel_worker completed",
+            })
+            return (
+              `Responded to coordination request ${request.payload.request_id} with cancel_worker. ` +
+              `response=${response.payload.response_id}; action=${response.payload.action_id}; session=${request.payload.session_id}; kind=${kind}.` +
+              cancellation.summary
+            )
+          }
+
+          if (decision === "ask_user") {
+            const questionItems = questions?.length
+              ? questions.map((question) => ({
+                  question: question.question,
+                  header: question.header,
+                  options: question.options ?? [],
+                  multiple: question.multiple,
+                  custom: question.custom,
+                }))
+              : [
+                  {
+                    question:
+                      guidance && guidance.length > 0
+                        ? guidance
+                        : `${reason.trim()}\n\nWorker request: ${request.payload.summary}\n${request.payload.details}`,
+                    header: "A2A question",
+                    options: [],
+                    custom: true,
+                  },
+                ]
+            const questionToolBinding = {
+              messageID: toolExecution.orchestratorMessageID,
+              callID: toolExecution.toolCallID,
+            }
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({
+              taskID,
+              response,
+              askUser: {
+                sessionID: input.agentSessionID,
+                questions: questionItems,
+                tool: questionToolBinding,
+              },
+            })
+            if (replayResult) return replayResult
+            const action = findAgentCoordinationAction({
+              taskID,
+              actionID: response.payload.action_id,
+            })
+            if (!action) {
+              throw new Error(`agent coordination response ${response.payload.response_id} has no action row`)
+            }
+            if (action.payload.status !== "pending") {
+              throw new Error(`agent coordination action ${response.payload.action_id} is ${action.payload.status}`)
+            }
+            await runAgentCoordinationEffectAdmissionHook({
+              taskID,
+              requestID: request.payload.request_id,
+              responseID: response.payload.response_id,
+              actionID: action.payload.action_id,
+              decision,
+            })
+            const questionID = agentCoordinationQuestionID(response.payload.action_id)
+            let interaction = findInteractionByExternal(questionID)
+            let interactionContract = interaction
+              ? requireAgentCoordinationQuestionInteraction({
+                  action,
+                  actionID: response.payload.action_id,
+                  taskID,
+                  sessionID: input.agentSessionID,
+                  questions: questionItems,
+                  tool: questionToolBinding,
+                  interaction,
+                })
+              : undefined
+            if (interaction && interaction.status !== "pending") {
+              if (interaction.status === "answered") {
+                const answers = answersFromInteraction(interaction)
+                await completeAgentCoordinationAction({
+                  taskID,
+                  actionID: response.payload.action_id,
+                  result: {
+                    question_id: questionID,
+                    interaction_id: interaction.id,
+                    interaction_status: interaction.status,
+                  },
+                  summary: "ask_user interaction recovered answered",
+                })
+                return renderAgentCoordinationAskUserTerminal({
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  questionID,
+                  interaction,
+                  questions: questionItems,
+                })
+              }
+              if (interaction.status === "expired") {
+                expiryFromInteraction(interaction)
+                await completeAgentCoordinationAction({
+                  taskID,
+                  actionID: response.payload.action_id,
+                  result: {
+                    question_id: questionID,
+                    interaction_id: interaction.id,
+                    interaction_status: "expired",
+                  },
+                  summary: "ask_user interaction recovered expired",
+                })
+                return renderAgentCoordinationAskUserTerminal({
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  questionID,
+                  interaction,
+                  questions: questionItems,
+                })
+              }
+              operatorRejectionFromInteraction(interaction)
+              await completeAgentCoordinationAction({
+                taskID,
+                actionID: response.payload.action_id,
+                result: {
+                  question_id: questionID,
+                  interaction_id: interaction.id,
+                  interaction_status: interaction.status,
+                },
+                summary: "ask_user interaction recovered rejected",
+              })
+              return renderAgentCoordinationAskUserTerminal({
+                requestID: request.payload.request_id,
+                responseID: response.payload.response_id,
+                actionID: response.payload.action_id,
+                questionID,
+                interaction,
+                questions: questionItems,
+              })
+            }
+            let questionPromise: Promise<Question.Answer[]> | undefined
+            let setupCompleted = false
+            try {
+              questionPromise = Question.ask({
+                sessionID: input.agentSessionID,
+                requestID: questionID,
+                questions: questionItems,
+                tool: questionToolBinding,
+                acceptanceEffects: (db) =>
+                  assertActiveAgentCoordinationActionInTransaction(db, {
+                    taskID,
+                    actionID: action.payload.action_id,
+                    executionEpoch: action.payload.execution_epoch,
+                    action: "ask_user",
+                  }),
+                acceptanceOccurrenceID: agentCoordinationQuestionAskedOccurrenceID(action.payload.action_id),
+                ...(interactionContract
+                  ? {
+                      expiry: interactionContract.payload.expiry ?? null,
+                      timeCreated: interactionContract.interaction.time_created,
+                    }
+                  : { expireOnDeadline: (await Config.get()).experimental?.auto_question === true }),
+              })
+              // A rejected owner admission is observed immediately while the
+              // original Promise remains the exact error returned by the
+              // setup/recovery path below. This prevents a stale action from
+              // becoming an unhandled rejection while no Interaction can be
+              // projected from its rejected outbox transaction.
+              void questionPromise.catch(() => undefined)
+              interaction = interaction ?? (await waitForQuestionInteraction({ questionID, taskID }))
+              interactionContract = requireAgentCoordinationQuestionInteraction({
+                action,
+                actionID: response.payload.action_id,
+                taskID,
+                sessionID: input.agentSessionID,
+                questions: questionItems,
+                tool: questionToolBinding,
+                interaction,
+              })
+              setupCompleted = true
+              try {
+                const answers = await questionPromise
+                const resolvedInteraction = await waitForQuestionInteraction({ questionID, taskID, resolved: true })
+                requireAgentCoordinationQuestionInteraction({
+                  action,
+                  actionID: response.payload.action_id,
+                  taskID,
+                  sessionID: input.agentSessionID,
+                  questions: questionItems,
+                  tool: questionToolBinding,
+                  interaction: resolvedInteraction,
+                })
+                if (resolvedInteraction.status !== "answered") {
+                  throw new Error(
+                    `A2A ask_user interaction ${resolvedInteraction.id} resolved as ${resolvedInteraction.status}, expected answered`,
+                  )
+                }
+                const durableAnswers = answersFromInteraction(resolvedInteraction)
+                if (JSON.stringify(durableAnswers) !== JSON.stringify(answers)) {
+                  throw new Error(`A2A ask_user interaction ${resolvedInteraction.id} changed the answered payload`)
+                }
+                await completeAgentCoordinationAction({
+                  taskID,
+                  actionID: response.payload.action_id,
+                  result: {
+                    question_id: questionID,
+                    interaction_id: interaction!.id,
+                    interaction_status: resolvedInteraction.status,
+                  },
+                  summary: "ask_user interaction answered",
+                })
+                return renderAgentCoordinationAskUserTerminal({
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  questionID,
+                  interaction: resolvedInteraction,
+                  questions: questionItems,
+                })
+              } catch (error) {
+                if (error instanceof Question.ExpiredError) {
+                  const resolvedInteraction = await waitForQuestionInteraction({ questionID, taskID, resolved: true })
+                  requireAgentCoordinationQuestionInteraction({
+                    action,
+                    actionID: response.payload.action_id,
+                    taskID,
+                    sessionID: input.agentSessionID,
+                    questions: questionItems,
+                    tool: questionToolBinding,
+                    interaction: resolvedInteraction,
+                  })
+                  if (resolvedInteraction.status !== "expired") {
+                    throw new Error(
+                      `A2A ask_user interaction ${resolvedInteraction.id} resolved as ${resolvedInteraction.status}, expected expired`,
+                    )
+                  }
+                  const durableExpiry = expiryFromInteraction(resolvedInteraction)
+                  if (
+                    durableExpiry.timeExpires !== error.timeExpires ||
+                    durableExpiry.timeResolved !== error.timeResolved
+                  ) {
+                      throw new Error(
+                        `A2A ask_user interaction ${resolvedInteraction.id} changed the expiry occurrence`,
+                      )
+                  }
+                  await completeAgentCoordinationAction({
+                    taskID,
+                    actionID: response.payload.action_id,
+                    result: {
+                      question_id: questionID,
+                      interaction_id: interaction!.id,
+                      interaction_status: resolvedInteraction.status,
+                    },
+                    summary: "ask_user interaction expired at its automatic deadline",
+                  })
+                  return renderAgentCoordinationAskUserTerminal({
+                    requestID: request.payload.request_id,
+                    responseID: response.payload.response_id,
+                    actionID: response.payload.action_id,
+                    questionID,
+                    interaction: resolvedInteraction,
+                    questions: questionItems,
+                  })
+                }
+                if (error instanceof Question.RejectedError) {
+                  const resolvedInteraction = await waitForQuestionInteraction({ questionID, taskID, resolved: true })
+                  requireAgentCoordinationQuestionInteraction({
+                    action,
+                    actionID: response.payload.action_id,
+                    taskID,
+                    sessionID: input.agentSessionID,
+                    questions: questionItems,
+                    tool: questionToolBinding,
+                    interaction: resolvedInteraction,
+                  })
+                  if (resolvedInteraction.status !== "rejected") {
+                    throw new Error(
+                      `A2A ask_user interaction ${resolvedInteraction.id} resolved as ${resolvedInteraction.status}, expected rejected`,
+                    )
+                  }
+                  operatorRejectionFromInteraction(resolvedInteraction)
+                  const durableTimeResolved = z.number().int().positive().parse(resolvedInteraction.time_resolved)
+                  if (error.timeResolved !== durableTimeResolved) {
+                    throw new Error(
+                      `A2A ask_user interaction ${resolvedInteraction.id} changed the rejection occurrence`,
+                    )
+                  }
+                  await completeAgentCoordinationAction({
+                    taskID,
+                    actionID: response.payload.action_id,
+                    result: {
+                      question_id: questionID,
+                      interaction_id: interaction!.id,
+                      interaction_status: resolvedInteraction.status,
+                    },
+                    summary: "ask_user interaction rejected",
+                  })
+                  return renderAgentCoordinationAskUserTerminal({
+                    requestID: request.payload.request_id,
+                    responseID: response.payload.response_id,
+                    actionID: response.payload.action_id,
+                    questionID,
+                    interaction: resolvedInteraction,
+                    questions: questionItems,
+                  })
+                }
+                await failAgentCoordinationAction({
+                  taskID,
+                  actionID: response.payload.action_id,
+                  error,
+                  result: { question_id: questionID, ...(interaction ? { interaction_id: interaction.id } : {}) },
+                  summary: "ask_user interaction failed",
+                })
+                throw error
+              }
+            } catch (error) {
+              if (setupCompleted) throw error
+              if (AgentCoordinationActionSupersededError.isInstance(error as Error)) throw error
+              await Question.abandon({ requestID: questionID, error }).catch((abandoned) => {
+                if (NotFoundError.isInstance(abandoned as Error)) return
+                throw abandoned
+              })
+              if (questionPromise) {
+                await questionPromise.catch((abandoned) => {
+                  if (abandoned === error) return
+                  throw abandoned
+                })
+              }
+              await failAgentCoordinationAction({
+                taskID,
+                actionID: response.payload.action_id,
+                error,
+                result: { question_id: questionID },
+                summary: "ask_user setup failed",
+              })
+              throw error
+            }
+          }
+
+          if (decision === "fail_task") {
+            const response = await createAgentCoordinationResponse({
+              taskID,
+              requestID: request.payload.request_id,
+              ...responseAudit,
+              decision,
+              reason,
+              ...(guidance ? { message: guidance } : {}),
+            })
+            const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
+            if (!replayResult) {
+              await runAgentCoordinationEffectAdmissionHook({
+                taskID,
+                requestID: request.payload.request_id,
+                responseID: response.payload.response_id,
+                actionID: response.payload.action_id,
+                decision,
+              })
+            }
+            const errorText = guidance && guidance.length > 0 ? guidance : reason
+            const errorMessage = `A2A request ${request.payload.request_id}: ${errorText}`
+            try {
+              const requestDescriptor = WorkerTurnDescriptor.get({
+                id: request.payload.worker_binding.workerTurnDescriptorID,
+                sessionID: request.payload.session_id,
+              })
+              if (
+                !requestDescriptor ||
+                requestDescriptor.hash !== request.payload.worker_binding.workerTurnDescriptorHash
+              ) {
+                throw new Error(
+                  `A2A request ${request.payload.request_id} has no exact Worker Turn descriptor authority`,
+                )
+              }
+              if (!replayResult) {
+                await failTaskLifecycle({
+                  taskID,
+                  error: errorMessage,
+                  coordinationAction: {
+                    actionID: response.payload.action_id,
+                    executionEpoch: request.payload.execution_epoch,
+                  },
+                })
+                await afterAgentCoordinationFailSettlementForTest?.({
+                  taskID,
+                  requestID: request.payload.request_id,
+                  responseID: response.payload.response_id,
+                  actionID: response.payload.action_id,
+                  decision,
+                })
+              }
+              await publishFailedAgentCoordinationTurnStatus({
+                taskID,
+                sessionID: request.payload.session_id,
+                inputMessageID: requestDescriptor.payload.messageAuthority.user_message_id,
+                status: { type: "terminal", reason: "error", error: errorMessage },
+              })
+              const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
+              return {
+                title: replayResult ? "Task Failure Replayed" : "Task Failed",
+                output:
+                  `Responded to coordination request ${request.payload.request_id} with fail_task. ` +
+                  `response=${response.payload.response_id}; action=${response.payload.action_id}; ` +
+                  `task=${taskID} failed at ${terminalReference.terminalEventID}.` +
+                  `${replayResult ? " Repaired the exact worker Turn projection from the committed outcome." : ""}`,
+                metadata: withImmediateParkToolResultControl({}),
+              }
+            } catch (error) {
+              if (AgentCoordinationActionSupersededError.isInstance(error as Error)) throw error
+              const committed = findAgentCoordinationAction({ taskID, actionID: response.payload.action_id })
+              if (committed?.payload.status === "completed") throw error
+              await failAgentCoordinationAction({
+                taskID,
+                actionID: response.payload.action_id,
+                error,
+                result: { task_id: taskID },
+                summary: "fail_task failed",
+              })
+              throw error
+            }
+          }
+        },
+      }),
+      "turn_control_exclusive",
+    ),
+
+    build: () =>
+      createBuildTool({
+      inputSchema: BuildInputSchema,
+      taskID,
+      parentSessionID: input.agentSessionID,
+      signal: input.signal,
+      buildAgentContextSections,
+    }).build,
+
+    wait: () =>
+      bindToolExecutionMode(
+      tool({
+        description:
+          WaitToolDescription +
+          " In orchestrator context, wait is NOT a substitute for `question` (operator input required), `manage_task` action=fail_task (exact evidence proves force majeure beyond same-Task repair), or a real scheduler decision from the current task snapshot. Never use wait to poll child-agent completion, peer Delivery Slice reviews, or terminal evidence. After wait returns, decide from the refreshed task snapshot before the next dispatch.",
+        inputSchema: WaitToolParameters,
+        execute: async ({ duration_ms, reason }, executionInput) => {
+          const execution = requireOrchestratorToolExecutionContext(executionInput, "wait")
+          const result = await executeWait({
+            duration_ms,
+            reason,
+            signal: input.signal,
+            sessionID: input.agentSessionID,
+            taskID: input.taskID,
+            logPhase: "orchestrator",
+            occurrence: {
+              sessionID: execution.orchestratorSessionID,
+              messageID: execution.orchestratorMessageID,
+              toolPartID: execution.toolPartID,
+              toolCallID: execution.toolCallID,
+            },
+          })
+          return {
+            title: result.aborted ? "Wait Not Scheduled" : "Wait Scheduled",
+            output: `${result.output} This is a scheduled park decision; do not poll with another wait.`,
+            metadata: result.aborted
+              ? {
+                  requestedMs: result.requestedMs,
+                  aborted: result.aborted,
+                  jobID: result.jobID,
+                  nextRun: result.nextRun,
+                  mode: result.mode,
+                  nonblocking: true,
+                }
+              : withImmediateParkToolResultControl({
+                  requestedMs: result.requestedMs,
+                  aborted: result.aborted,
+                  jobID: result.jobID,
+                  nextRun: result.nextRun,
+                  mode: result.mode,
+                  nonblocking: true,
+                }),
+          }
+        },
+      }),
+      "turn_control_exclusive",
+    ),
+  }
+
+  type InternalOrchestratorTools = {
+    [ToolID in keyof typeof toolFactories]: ReturnType<(typeof toolFactories)[ToolID]>
+  }
+  const materializedInternalTools = new Map<keyof typeof toolFactories, unknown>()
+  const tools = new Proxy({} as InternalOrchestratorTools, {
+    get(_target, property) {
+      if (typeof property !== "string" || !Object.hasOwn(toolFactories, property)) return undefined
+      const toolID = property as keyof typeof toolFactories
+      if (!materializedInternalTools.has(toolID)) {
+        toolFactoryObserverForTest?.(toolID)
+        materializedInternalTools.set(toolID, toolFactories[toolID]())
+      }
+      return materializedInternalTools.get(toolID)
+    },
+    has(_target, property) {
+      return typeof property === "string" && Object.hasOwn(toolFactories, property)
+    },
+    ownKeys() {
+      return Object.keys(toolFactories)
+    },
+    getOwnPropertyDescriptor(_target, property) {
+      if (typeof property !== "string" || !Object.hasOwn(toolFactories, property)) return undefined
+      return { configurable: true, enumerable: true }
+    },
+  })
+
+  const dispatchAdapterExecutor = (
+    adapterID: AgentDispatchAdapterID,
+    definition: { execute?: (...args: any[]) => unknown },
+  ): DispatchAgentExecute => {
+    const execute = definition.execute
+    if (typeof execute !== "function") {
+      throw new Error(`Dispatch adapter ${adapterID} has no internal executor`)
+    }
+    return async (args, context) => DispatchOutcomeSchema.parse(await execute(args, context))
+  }
+  let dispatchAgentToolCache: ReturnType<typeof createDispatchAgentTool> | undefined
+  const materializeDispatchAgentTool = () => {
+    if (dispatchAgentToolCache) return dispatchAgentToolCache
+    const dispatchAdapterExecutors = bindDispatchAdapterExecutors({
+      delegated_worker: dispatchAdapterExecutor("delegated_worker", tools.delegated_worker),
+      requirements: dispatchAdapterExecutor("requirements", tools.requirements),
+      architect: dispatchAdapterExecutor("architect", tools.architect),
+      frontend_design: dispatchAdapterExecutor("frontend_design", tools.frontend_design),
+      frontend_research: dispatchAdapterExecutor("frontend_research", tools.frontend_research),
+      deep_research: dispatchAdapterExecutor("deep_research", tools.deep_research),
+      visual_qa: dispatchAdapterExecutor("visual_qa", tools.visual_qa),
+      workload_analysis: dispatchAdapterExecutor("workload_analysis", tools.workload_analysis),
+      analyze_intent: dispatchAdapterExecutor("analyze_intent", tools.analyze_intent),
+      fact_check: dispatchAdapterExecutor("fact_check", tools.fact_check),
+      build: dispatchAdapterExecutor("build", tools.build),
+      explore: dispatchAdapterExecutor("explore", tools.explore),
+      integrity: dispatchAdapterExecutor("integrity", tools.integrity),
+    })
+    dispatchAgentToolCache = createDispatchAgentTool({
+    taskID,
+    projectedAgents: input.dispatchAgents,
+    executors: dispatchAdapterExecutors,
+    signal: input.signal,
+    ...(activeAcceptanceRepair ? { acceptanceRepair: activeAcceptanceRepair } : {}),
+    runDetached: (run) =>
+      runWithInitializedIndependentProject({
+        directory: taskProjectDirectory,
+        fn: run,
+      }),
+    runDetachedRecovery: (run) =>
+      runWithIndependentProjectIdentity({
+        directory: taskProjectDirectory,
+        fn: run,
+      }),
+      runInWorktree: async ({
+        taskID: worktreeTaskID,
+        sessionID,
+        existingSessionID,
+        targetAgentID,
+        dispatchID,
+        run,
+      }) => {
+      const { Worktree } = await import("@/worktree")
+      const { Instance } = await import("@/project/instance")
+      if (existingSessionID) {
+        const session = await Session.get(existingSessionID)
+        log.info("dispatch_agent reused isolated worktree", {
+          taskID: worktreeTaskID,
+          targetAgentID,
+          dispatchID,
+          sessionID: existingSessionID,
+          directory: session.directory,
+        })
+        return await Instance.provide({ directory: session.directory, fn: run })
+      }
+      const workspace = await Worktree.create({
+        name: `dispatch-${dispatchID.slice(-12)}`,
+        taskID: worktreeTaskID,
+        sessionID,
+      })
+      log.info("dispatch_agent created isolated worktree", {
+        taskID: worktreeTaskID,
+        targetAgentID,
+        dispatchID,
+        directory: workspace.directory,
+        branch: workspace.branch,
+      })
+      return await Instance.provide({ directory: workspace.directory, fn: run })
+    },
+    openLineage: (async ({
+      taskID: ownershipTaskID,
+      targetAgentID,
+      projectedAgent,
+      workScope,
+      deliverySliceRevisionIDs,
+      workflowBinding,
+      workflowNodeID,
+      coordinationActionID,
+      continuationDispatchID,
+      signal,
+      toolOptions,
+      adapterInput,
+      continuationGuidance,
+      evidenceLocators,
+      acceptanceRepair,
+    }) => {
+      const toolExecution = await requireTaskOrchestratorToolExecutionContext(toolOptions, "dispatch_agent", {
+        taskID: ownershipTaskID,
+        agentSessionID: input.agentSessionID,
+      })
+      const collectionMember = toolExecution.collectionMember
+      if (toolExecution.visibleToolName === "dispatch_agents" && !collectionMember) {
+        throw new Error("dispatch_agent collection execution is missing its exact member index and count")
+      }
+      if (toolExecution.visibleToolName === "dispatch_agent" && collectionMember) {
+        throw new Error("direct dispatch_agent execution cannot carry collection member identity")
+      }
+      if (toolExecution.visibleToolName !== "dispatch_agent" && toolExecution.visibleToolName !== "dispatch_agents") {
+        throw new Error(`dispatch_agent cannot execute under visible Tool ${toolExecution.visibleToolName}`)
+      }
+      const replayLineage = collectionMember
+        ? findDispatchLineageByCollectionMember({
+            taskID: ownershipTaskID,
+            toolPartID: toolExecution.toolPartID,
+            toolCallID: toolExecution.toolCallID,
+            memberIndex: collectionMember.index,
+            memberCount: collectionMember.count,
+          })
+        : findDispatchLineageByToolExecution({
+            taskID: ownershipTaskID,
+            toolPartID: toolExecution.toolPartID,
+            toolCallID: toolExecution.toolCallID,
+          })
+      if (replayLineage) {
+        if (
+          replayLineage.payload.target_agent_id !== targetAgentID ||
+          !isDeepStrictEqual(replayLineage.payload.work_scope, workScope) ||
+            (adapterInput !== undefined && !isDeepStrictEqual(replayLineage.payload.adapter_input, adapterInput))
+        ) {
+          throw new Error(
+            `dispatch_agent exact tool occurrence ${toolExecution.toolPartID}/${toolExecution.toolCallID} input drift`,
+          )
+        }
+        const replay = readDispatchLineageReplay({
+          taskID: ownershipTaskID,
+          lineage: replayLineage,
+        })
+        if (replay) {
+          if (replay.descriptor) commitAcceptedDispatchLineage(replayLineage)
+          return {
+          dispatchID: replayLineage.dispatchID,
+          deliverySliceRevisionIDs: [...replayLineage.payload.delivery_slice_revision_ids],
+          ...(replay.descriptor ? { existingSessionID: replayLineage.payload.child_session_id } : {}),
+          ...(replay.turn ? { turn: replay.turn } : {}),
+          adapterInput: Object.freeze({ ...replayLineage.payload.adapter_input }),
+          signal: replayDispatchSignal,
+          replayOutcome: replay.outcome,
+          observeSession(sessionID: string) {
+            if (sessionID !== replayLineage.payload.child_session_id) {
+              throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
+            }
+          },
+          commitSession(sessionID: string) {
+            if (sessionID !== replayLineage.payload.child_session_id) {
+              throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
+            }
+            return { artifactID: replayLineage.artifactID }
+          },
+            releaseAdmission() {},
+          }
+        }
+      }
+      if (signal?.aborted) {
+        throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
+      }
+      let coordinationBinding: ReturnType<typeof requireAgentCoordinationRedispatchBindingForRequest> | undefined
+      let coordinationSourceSessionID: string | undefined
+      let sourceDispatchLineageArtifactID: string | undefined
+      let exactWorkflowBinding = workflowBinding
+      let exactWorkflowNodeID = workflowNodeID
+      let exactWorkflowOccurrenceID: string | undefined
+      let exactDeliverySliceRevisionIDs = deliverySliceRevisionIDs
+      let existingSessionID: string | undefined
+      let preparedSessionID: string | undefined
+      let preparedUseWorktree: boolean | undefined
+      let exactAdapterInput = { ...adapterInput }
+      if (coordinationActionID) {
+        const action = findAgentCoordinationAction({ taskID: ownershipTaskID, actionID: coordinationActionID })
+        if (!action) throw new Error(`dispatch_agent coordination action ${coordinationActionID} does not exist`)
+        if (action.payload.action !== "redispatch_worker" || action.payload.status !== "pending") {
+          throw new Error(
+            `dispatch_agent coordination action ${coordinationActionID} is ${action.payload.action}/${action.payload.status}, not pending redispatch_worker`,
+          )
+        }
+        const request = findAgentCoordinationRequest({
+          taskID: ownershipTaskID,
+          requestID: action.payload.request_id,
+        })
+        if (!request) throw new Error(`dispatch_agent coordination action ${coordinationActionID} has no request`)
+        coordinationSourceSessionID = request.payload.session_id
+        coordinationBinding = requireAgentCoordinationRedispatchBindingForRequest({
+          taskID: ownershipTaskID,
+          request,
+        })
+        const expectedScope = requireAgentCoordinationWorkerWorkScope({ request, binding: coordinationBinding })
+        assertProjectedWorkerContinuationCompatible({
+          previous: coordinationBinding.identity,
+          current: projectedAgent.identity,
+          subject: `dispatch_agent coordination action ${coordinationActionID}`,
+        })
+        if (expectedScope.kind !== workScope.kind) {
+          throw new Error(`dispatch_agent coordination action ${coordinationActionID} work scope does not match`)
+        }
+        const sourceLineage = findDispatchLineageByArtifactID({
+          taskID: ownershipTaskID,
+          artifactID: coordinationBinding.sourceDispatchLineageID,
+        })
+        if (
+          !sourceLineage ||
+          sourceLineage.dispatchID !== coordinationBinding.sourceDispatchID ||
+          sourceLineage.payload.child_session_id !== request.payload.session_id ||
+          sourceLineage.payload.workflow_node_id !== coordinationBinding.workflowNodeID ||
+          sourceLineage.payload.workflow_occurrence_id !== coordinationBinding.workflowOccurrenceID ||
+          !sameSelectedWorkflowBinding(sourceLineage.payload.workflow_binding, coordinationBinding.workflowBinding) ||
+          JSON.stringify(sourceLineage.payload.delivery_slice_revision_ids) !==
+            JSON.stringify(coordinationBinding.deliverySliceRevisionIDs)
+        ) {
+          throw new Error(
+            `dispatch_agent coordination action ${coordinationActionID} source workflow occurrence does not match its immutable lineage binding`,
+          )
+        }
+        exactWorkflowBinding = coordinationBinding.workflowBinding
+        exactWorkflowNodeID = coordinationBinding.workflowNodeID
+        exactWorkflowOccurrenceID = coordinationBinding.workflowOccurrenceID
+        exactDeliverySliceRevisionIDs = coordinationBinding.deliverySliceRevisionIDs
+        exactAdapterInput = { ...sourceLineage.payload.adapter_input }
+        existingSessionID = coordinationSourceSessionID
+        sourceDispatchLineageArtifactID = sourceLineage.artifactID
+      } else if (continuationDispatchID) {
+        const sourceLineage = findDispatchLineageByDispatchID({
+          taskID: ownershipTaskID,
+          dispatchID: continuationDispatchID,
+        })
+        if (!sourceLineage) {
+          // Name the exact continuable dispatches. Without them the caller can
+          // only guess at an opaque identity it has already mistranscribed
+          // once, and every retry repeats the same failure.
+          const continuable = listDispatchLineage(ownershipTaskID)
+            .filter((row) => row.payload.target_agent_id === targetAgentID)
+            .filter((row) => {
+              const latest = WorkerTurnDescriptor.latestForSession(row.payload.child_session_id)?.payload.dispatchTurn
+              return !latest || latest.current_dispatch_id === row.dispatchID
+            })
+            .map((row) => row.dispatchID)
+          throw new Error(
+            `dispatch_agent continuation source ${continuationDispatchID} does not name a dispatch_id in Task ${ownershipTaskID}; a dispatch_lineage Artifact ID is a different identity. ` +
+              (continuable.length
+                ? `Exact continuable dispatch identities for ${targetAgentID}: ${continuable.join(", ")}.`
+                : `Task ${ownershipTaskID} has no prior dispatch of ${targetAgentID} to continue; dispatch an initial Turn instead.`),
+          )
+        }
+        assertProjectedWorkerContinuationCompatible({
+          previous: sourceLineage.payload.projected_worker_identity,
+          current: projectedAgent.identity,
+          subject: `dispatch_agent continuation source ${continuationDispatchID}`,
+        })
+        if (JSON.stringify(sourceLineage.payload.work_scope) !== JSON.stringify(workScope)) {
+          throw new Error(`dispatch_agent continuation source ${continuationDispatchID} work scope does not match`)
+        }
+        exactWorkflowBinding = sourceLineage.payload.workflow_binding
+        exactWorkflowNodeID = sourceLineage.payload.workflow_node_id
+        exactWorkflowOccurrenceID = sourceLineage.payload.workflow_occurrence_id
+        exactDeliverySliceRevisionIDs = sourceLineage.payload.delivery_slice_revision_ids
+        const sourceSessionID = sourceLineage.payload.child_session_id
+        const latestTurn = WorkerTurnDescriptor.latestForSession(sourceSessionID)?.payload.dispatchTurn
+        if (latestTurn) {
+          if (latestTurn.current_dispatch_id !== continuationDispatchID) {
+              throw new Error(
+                `dispatch_agent continuation source ${continuationDispatchID} is stale for Session ${sourceSessionID}; exact current dispatch is ${latestTurn.current_dispatch_id}. Use that current dispatch identity explicitly for the successor Turn.`,
+              )
+          }
+          existingSessionID = sourceSessionID
+        } else {
+            const settlement = findDispatchSettlementByDispatchID({
+              taskID: ownershipTaskID,
+              dispatchID: sourceLineage.dispatchID,
+            })
+            if (
+              settlement?.payload.outcome.kind !== "infrastructure_failure" ||
+              settlement.payload.outcome.session_id
+            ) {
+              throw new Error(
+                `Dispatch ${sourceLineage.dispatchID} has no accepted worker or settled preparation failure`,
+              )
+          }
+            const initial = findDispatchLineageByDispatchID({
+              taskID: ownershipTaskID,
+              dispatchID: sourceLineage.payload.workflow_occurrence_id,
+            })
+          if (!initial) throw new Error(`Dispatch ${sourceLineage.dispatchID} has no initial placement authority`)
+            const request = Database.use((db) =>
+              db
+                .select()
+                .from(ToolPartRequestTable)
+                .where(eq(ToolPartRequestTable.id, initial.payload.tool_part_id))
+                .get(),
+            )
+            const outer = request?.data.input as
+              | {
+                  dispatch?: { turn?: { kind?: string; use_worktree?: boolean } }
+                  dispatches?: Array<{ dispatch?: { turn?: { kind?: string; use_worktree?: boolean } } }>
+                }
+              | undefined
+            const original =
+              initial.payload.tool_name === "dispatch_agents"
+            ? outer?.dispatches?.[initial.payload.collection_member_index!]?.dispatch
+            : outer?.dispatch
+            if (original?.turn?.kind !== "initial")
+              throw new Error(`Dispatch ${initial.dispatchID} has no initial Tool placement input`)
+          preparedSessionID = sourceSessionID
+          preparedUseWorktree = original.turn.use_worktree ?? false
+        }
+        exactAdapterInput = { ...sourceLineage.payload.adapter_input }
+        sourceDispatchLineageArtifactID = sourceLineage.artifactID
+      } else if (!exactWorkflowBinding || exactWorkflowNodeID === undefined) {
+        throw new Error(`dispatch_agent ${targetAgentID} initial dispatch has no workflow binding`)
+      }
+      // Resolve the successor's complete explicit input only after proving
+      // the predecessor authority. Historical input stays immutable; the new
+      // lineage is the sole input authority for execution and recovery.
+      if (adapterInput !== undefined) {
+        exactAdapterInput = DispatchAdapterContractRegistry.modelFacingInputSchema(
+          projectedAgent.identity.dispatchAdapterID,
+        ).parse(adapterInput)
+        exactDeliverySliceRevisionIDs = DispatchAdapterContractRegistry.deliverySliceRevisionIDs(
+          projectedAgent.identity.dispatchAdapterID,
+          exactAdapterInput,
+        )
+      }
+      const sourceDispatchID = resolveDispatchContinuationSourceID({
+        continuationDispatchID,
+        coordinationSourceDispatchID: coordinationBinding?.sourceDispatchID,
+      })
+      let canonicalAcceptanceRepair: AcceptanceRepairDispatch | undefined
+      let acceptanceEvidenceLocators: EvidenceLocator[] = []
+      if (activeAcceptanceRepair) {
+        if (!acceptanceRepair || (existingSessionID && !sourceDispatchLineageArtifactID)) {
+          throw new Error(
+            `Acceptance gap ${activeAcceptanceRepair.revision.gap.gap_id} requires the current acceptance obligation and exact dispatch authority.`,
+          )
+        }
+        if (!exactWorkflowBinding) throw new Error("Acceptance repair dispatch requires an exact workflow subject.")
+        if (
+          acceptanceRepair.gap_id !== activeAcceptanceRepair.revision.gap.gap_id ||
+          acceptanceRepair.ledger_revision_artifact_id !== activeAcceptanceRepair.artifactID ||
+          acceptanceRepair.execution_epoch !== activeAcceptanceRepair.executionEpoch
+        ) {
+            throw new Error(
+              `dispatch_agent acceptance-repair authority does not match the current Task ledger revision.`,
+            )
+        }
+        const criteria = new Map(
+            openAcceptanceCriteria(activeAcceptanceRepair.revision.gap).map((criterion) => [
+              criterion.criterion_id,
+              criterion,
+            ]),
+        )
+        const selectedCriteria: MissionAcceptanceOpenCriterion[] = []
+        for (const criterionID of acceptanceRepair.criterion_ids) {
+          const criterion = criteria.get(criterionID)
+          if (!criterion) {
+            throw new Error(`Acceptance gap ${acceptanceRepair.gap_id} has no open criterion ${criterionID}.`)
+          }
+          selectedCriteria.push(criterion)
+        }
+        canonicalAcceptanceRepair = {
+          gap_id: acceptanceRepair.gap_id,
+          ledger_revision_artifact_id: acceptanceRepair.ledger_revision_artifact_id,
+          execution_epoch: acceptanceRepair.execution_epoch,
+          criteria: selectedCriteria,
+          checkpoint_required: true,
+        }
+        acceptanceEvidenceLocators = acceptanceRepairEvidenceLocators(canonicalAcceptanceRepair)
+      } else if (acceptanceRepair) {
+        throw new Error(`dispatch_agent supplied acceptance-repair authority without an active Task acceptance gap.`)
+      }
+      const origin = createDispatchLineageOrigin({
+        taskID: ownershipTaskID,
+        orchestratorSessionID: toolExecution.orchestratorSessionID,
+        orchestratorMessageID: toolExecution.orchestratorMessageID,
+        toolCallID: toolExecution.toolCallID,
+        toolPartID: toolExecution.toolPartID,
+        toolName: toolExecution.visibleToolName as "dispatch_agent" | "dispatch_agents",
+        ...(collectionMember
+          ? {
+              collectionMemberIndex: collectionMember.index,
+              collectionMemberCount: collectionMember.count,
+            }
+          : {}),
+        targetAgentID,
+        projectedWorkerIdentity: projectedAgent.identity,
+        workScope,
+        deliverySliceRevisionIDs: exactDeliverySliceRevisionIDs,
+        workflowBinding: exactWorkflowBinding,
+        workflowNodeID: exactWorkflowNodeID,
+        ...(exactWorkflowOccurrenceID ? { workflowOccurrenceID: exactWorkflowOccurrenceID } : {}),
+        ...(coordinationActionID ? { coordinationActionID } : {}),
+        ...(sourceDispatchID ? { continuationOfDispatchID: sourceDispatchID } : {}),
+        adapterInput: exactAdapterInput,
+      })
+      const task = await assertTaskRootSessionLineageForConfig(requireTask(ownershipTaskID))
+      if (Object.hasOwn(exactAdapterInput, "attachment_refs")) {
+          requirePromptAttachments(
+            task.attachments ?? undefined,
+            z.array(z.string().min(1)).parse(exactAdapterInput.attachment_refs),
+          )
+      }
+      const authority = await taskAuthorityAnchor({ task, existingSessionID })
+      const selectedEvidence = [
+        ...new Map(
+          [...acceptanceEvidenceLocators, ...(evidenceLocators ?? [])].map((locator) => [
+            JSON.stringify(locator),
+            locator,
+          ]),
+        ).values(),
+      ]
+      const exactEvidenceLocators = await assertTaskEvidenceLocators({
+        taskID: ownershipTaskID,
+        evidenceLocators: selectedEvidence,
+      })
+      const turn = DispatchTurnSchema.parse(
+        existingSessionID
+          ? {
+              kind: "continuation",
+              current_dispatch_id: origin.dispatchID,
+              source_dispatch_id: sourceDispatchID,
+              child_session_id: existingSessionID,
+              workflow_binding: origin.workflowBinding,
+              workflow_node_id: origin.workflowNodeID,
+              workflow_occurrence_id: origin.workflowOccurrenceID,
+              delivery_slice_revision_ids: origin.deliverySliceRevisionIDs ?? [],
+              evidence_locators: exactEvidenceLocators,
+              task_authority: authority,
+              ...(canonicalAcceptanceRepair ? { acceptance_repair: canonicalAcceptanceRepair } : {}),
+            }
+          : {
+              kind: "initial",
+              current_dispatch_id: origin.dispatchID,
+                ...(preparedSessionID
+                  ? { preparation_recovery: { source_dispatch_id: sourceDispatchID, guidance: continuationGuidance } }
+                  : {}),
+              workflow_binding: origin.workflowBinding,
+              workflow_node_id: origin.workflowNodeID,
+              workflow_occurrence_id: origin.workflowOccurrenceID,
+              delivery_slice_revision_ids: origin.deliverySliceRevisionIDs ?? [],
+              evidence_locators: exactEvidenceLocators,
+              task_authority: authority,
+                ...(canonicalAcceptanceRepair
+                  ? { acceptance_repair: { ...canonicalAcceptanceRepair, checkpoint_required: false } }
+                  : {}),
+            },
+      )
+      if (signal?.aborted) throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
+      const claimedSessionID =
+          existingSessionID ??
+          preparedSessionID ??
+          Identifier.deterministic("session", `dispatch-worker-session\0${origin.dispatchID}`)
+      let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
+      let admission: ReturnType<typeof claimDispatchLineage>["admission"]
+      let admissionHold: ReturnType<typeof holdDispatchAdmission> | undefined
+      let admissionClosed = false
+      const closeAdmissionHold = () => {
+        if (admissionClosed) return
+        admissionClosed = true
+        admissionHold?.[Symbol.dispose]()
+      }
+      const releaseAdmission = () => {
+        if (admissionClosed) return
+        closeAdmissionHold()
+        releaseDispatchAdmissionOnError(admission!)
+      }
+      const settlePreparationFailure = (outcome: z.infer<typeof DispatchOutcomeSchema>) => {
+          if (outcome.kind !== "infrastructure_failure" || outcome.session_id)
+            throw new Error("Preparation settlement requires an infrastructure failure before worker acceptance")
+        const settled = Database.immediateTransaction((db) => {
+            assertControlLeaseInTransaction(db, {
+              target: "dispatch_admission",
+              targetID: recordedLineage!.artifactID,
+              leaseID: admission!.leaseID,
+              ownerOccurrenceID: admission!.ownerOccurrenceID,
+              now: Date.now(),
+            })
+            const infrastructureError =
+              outcome.infrastructure_error ??
+              exactEngineArtifactLocator({
+            taskID: ownershipTaskID,
+            artifactID: recordTaskInfrastructureErrorInTransaction(db, {
+              taskID: ownershipTaskID,
+              component: "dispatch-agent",
+              operation: outcome.operation,
+              reason: outcome.message,
+              errorName: outcome.error_name,
+              context: { dispatchID: origin.dispatchID, dispatchLineageID: recordedLineage!.artifactID },
+            }),
+          })
+            const settled = settleDispatchOrReturnExisting({
+              taskID: ownershipTaskID,
+              dispatchID: origin.dispatchID,
+              outcome: { ...outcome, infrastructure_error: infrastructureError },
+            })
+            if (!releaseDispatchAdmission(admission!))
+              throw new Error(`Preparation settlement failed to consume admission ${admission!.leaseID}`)
+          return settled.payload.outcome
+        })
+        closeAdmissionHold()
+        return settled
+      }
+      let waitMilliseconds = 10
+      for (;;) {
+        signal?.throwIfAborted()
+        const claim = claimDispatchLineage({ origin, childSessionID: claimedSessionID })
+        recordedLineage = claim.lineage
+        if (claim.admission) {
+          admission = claim.admission
+          admissionHold = holdDispatchAdmission(admission)
+          try {
+            await afterDispatchLineageClaimForTest?.({
+              lineage: claim.lineage,
+              turn,
+              projectedAgent,
+              workScope,
+            })
+            const committedDuringPreparation = readDispatchLineageReplay({
+              taskID: ownershipTaskID,
+              lineage: claim.lineage,
+            })
+            if (committedDuringPreparation) {
+              if (committedDuringPreparation.descriptor) {
+                commitAcceptedDispatchLineage(claim.lineage, admission)
+              } else if (!releaseDispatchAdmission(admission)) {
+                throw new Error(`Dispatch terminal replay could not consume admission ${admission.leaseID}`)
+              }
+              admissionHold[Symbol.dispose]()
+              return {
+                dispatchID: claim.lineage.dispatchID,
+                deliverySliceRevisionIDs: [...claim.lineage.payload.delivery_slice_revision_ids],
+                ...(committedDuringPreparation.descriptor
+                  ? { existingSessionID: claim.lineage.payload.child_session_id }
+                  : {}),
+                ...(committedDuringPreparation.turn ? { turn: committedDuringPreparation.turn } : {}),
+                adapterInput: Object.freeze({ ...claim.lineage.payload.adapter_input }),
+                signal: replayDispatchSignal,
+                replayOutcome: committedDuringPreparation.outcome,
+                observeSession(sessionID: string) {
+                  if (sessionID !== claim.lineage.payload.child_session_id) {
+                    throw new Error(`dispatch_agent replay Session identity drift for ${claim.lineage.dispatchID}`)
+                  }
+                },
+                commitSession() {
+                  return { artifactID: claim.lineage.artifactID }
+                },
+                releaseAdmission() {},
+              }
+            }
+          } catch (error) {
+            try {
+              if (isExecutionCancellationError(error) || error instanceof ControlLeaseFenceLostError) throw error
+              signal?.throwIfAborted()
+              admissionHold.signal.throwIfAborted()
+                settlePreparationFailure(
+                  DispatchOutcome.infrastructureFailure({
+                operation: "prepare-dispatch-admission",
+                message: error instanceof Error ? error.message : String(error),
+                errorName: error instanceof Error ? error.name : undefined,
+                    recoveryAuthority: {
+                      occurrence_status: "occurrence_committed",
+                      dispatch_id: origin.dispatchID,
+                      dispatch_lineage_id: claim.lineage.artifactID,
+                    },
+                  }),
+                )
+            } finally {
+              releaseAdmission()
+            }
+            throw error
+          }
+          break
+        }
+        const replay = readDispatchLineageReplay({ taskID: ownershipTaskID, lineage: claim.lineage })
+        if (replay) {
+          const winner = claim.lineage
+          if (replay.descriptor) commitAcceptedDispatchLineage(winner)
+          return {
+            dispatchID: winner.dispatchID,
+            deliverySliceRevisionIDs: [...winner.payload.delivery_slice_revision_ids],
+            ...(replay.descriptor ? { existingSessionID: winner.payload.child_session_id } : {}),
+            ...(replay.turn ? { turn: replay.turn } : {}),
+            adapterInput: Object.freeze({ ...winner.payload.adapter_input }),
+            signal: replayDispatchSignal,
+            replayOutcome: replay.outcome,
+            observeSession(sessionID: string) {
+              if (sessionID !== winner.payload.child_session_id) {
+                throw new Error(`dispatch_agent replay Session identity drift for ${winner.dispatchID}`)
+              }
+            },
+            commitSession(sessionID: string) {
+              if (sessionID !== winner.payload.child_session_id) {
+                throw new Error(`dispatch_agent replay Session identity drift for ${winner.dispatchID}`)
+              }
+              return { artifactID: winner.artifactID }
+            },
+            releaseAdmission() {},
+          }
+        }
+        await waitForDispatchClaimChange(signal, waitMilliseconds)
+        waitMilliseconds = Math.min(waitMilliseconds * 2, 250)
+      }
+      if (!admission || !admissionHold || !recordedLineage) {
+        throw new Error(`dispatch_agent ${targetAgentID} failed to acquire its exact admission owner`)
+      }
+      const observeSession = (sessionID: string) => {
+        if (recordedLineage && recordedLineage.payload.child_session_id !== sessionID) {
+          throw new Error(
+            `dispatch_agent ${targetAgentID} already recorded session ${recordedLineage.payload.child_session_id}, not ${sessionID}`,
+          )
+        }
+      }
+      return {
+        dispatchID: origin.dispatchID,
+        deliverySliceRevisionIDs: [...(origin.deliverySliceRevisionIDs ?? [])],
+        existingSessionID,
+        ...(existingSessionID ? {} : { newSessionID: claimedSessionID }),
+        ...(preparedUseWorktree !== undefined ? { preparedUseWorktree } : {}),
+        turn,
+        adapterInput: Object.freeze({ ...exactAdapterInput }),
+        signal: admissionHold.signal,
+        ...(existingSessionID ? { continuationGuidance } : {}),
+        observeSession,
+        settlePreparationFailure,
+        commitSession(sessionID: string, descriptor: WorkerTurnDescriptor.Info) {
+          observeSession(sessionID)
+          const persistedDescriptor = WorkerTurnDescriptor.get({ id: descriptor.id, sessionID })
+          if (!persistedDescriptor) {
+            throw new Error(
+              `dispatch_agent ${targetAgentID} cannot commit Session ${sessionID} without its exact durable Turn descriptor`,
+            )
+          }
+          if (
+            persistedDescriptor.id !== descriptor.id ||
+            persistedDescriptor.sessionID !== descriptor.sessionID ||
+            persistedDescriptor.hash !== descriptor.hash
+          ) {
+            throw new Error(
+              `dispatch_agent ${targetAgentID} Session ${sessionID} durable Turn descriptor identity does not match ${descriptor.id}`,
+            )
+          }
+          const descriptorTurn = descriptor.payload.dispatchTurn
+          if (!descriptorTurn) {
+            throw new Error(`dispatch_agent ${targetAgentID} Session ${sessionID} descriptor has no dispatch Turn`)
+          }
+          const descriptorMatchesDispatch = (() => {
+            if (descriptorTurn.kind !== turn.kind) return false
+            if (turn.kind === "continuation") {
+              return isDeepStrictEqual(descriptorTurn, turn)
+            }
+            if (descriptorTurn.kind !== "initial") return false
+            const {
+              initial_user_message_id: _messageID,
+              initial_control_text_parts: _parts,
+              ...descriptorBase
+            } = descriptorTurn.task_authority
+            const {
+              initial_user_message_id: _baseMessageID,
+              initial_control_text_parts: _baseParts,
+              ...turnBase
+            } = turn.task_authority
+            return (
+              turn.task_authority.initial_user_message_id === undefined &&
+              turn.task_authority.initial_control_text_parts.length === 0 &&
+              descriptorTurn.task_authority.initial_user_message_id !== undefined &&
+              descriptorTurn.task_authority.initial_control_text_parts.length > 0 &&
+              isDeepStrictEqual(
+                { ...descriptorTurn, task_authority: descriptorBase },
+                { ...turn, task_authority: turnBase },
+              )
+            )
+          })()
+          if (!descriptorMatchesDispatch) {
+            throw new Error(
+              `dispatch_agent ${targetAgentID} Session ${sessionID} descriptor does not match dispatch ${origin.dispatchID}`,
+            )
+          }
+          const currentMessageAuthority = descriptor.payload.messageAuthority
+          if (
+            descriptorTurn.kind === "initial" &&
+            (currentMessageAuthority.user_message_id !== descriptorTurn.task_authority.initial_user_message_id ||
+              !isDeepStrictEqual(
+                currentMessageAuthority.control_text_parts,
+                descriptorTurn.task_authority.initial_control_text_parts,
+              ))
+          ) {
+            throw new Error(
+              `dispatch_agent ${targetAgentID} Session ${sessionID} initial and current message authority differ`,
+            )
+          }
+          {
+            const messageID = currentMessageAuthority.user_message_id
+            const message = Database.use((db) =>
+              db
+                .select({ id: MessageTable.id })
+                .from(MessageTable)
+                .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
+                .get(),
+            )
+            const textParts = Database.use((db) =>
+              db
+                .select({ id: PartTable.id, data: PartTable.data })
+                .from(PartTable)
+                .where(eq(PartTable.message_id, messageID))
+                .all()
+                .filter((part) => part.data.type === "text"),
+            )
+            const expected = new Map(
+              currentMessageAuthority.control_text_parts.map((part) => [part.part_id, part.text_sha256]),
+            )
+            if (
+              !message ||
+              textParts.length !== expected.size ||
+              textParts.some((part) => {
+                const data = part.data
+                const text = (data as { text?: unknown }).text
+                return (
+                    data.type !== "text" ||
+                    typeof text !== "string" ||
+                    expected.get(part.id) !== controlTextSHA256(text)
+                )
+              })
+            ) {
+              throw new Error(
+                `dispatch_agent ${targetAgentID} Session ${sessionID} initial message bundle does not match its descriptor`,
+              )
+            }
+          }
+          const lineage = recordedLineage
+          if (!lineage) throw new Error(`dispatch_agent ${targetAgentID} has no preclaimed lineage`)
+          commitAcceptedDispatchLineage(lineage, admission)
+          closeAdmissionHold()
+          return { artifactID: lineage.artifactID }
+        },
+        releaseAdmission,
+      }
+    }) satisfies OpenDispatchAgentLineage,
+    })
+    return dispatchAgentToolCache
+  }
+
+  let manageTaskToolCache: ReturnType<typeof bindToolExecutionMode> | undefined
+  const materializeManageTaskTool = () => {
+    if (manageTaskToolCache) return manageTaskToolCache
+    manageTaskToolCache = bindToolExecutionMode(
+      tool({
+      description:
+        "Single scheduler task-management tool. Use action to select Task lifecycle or Delivery Slice contract behavior, then provide action-specific fields. Slice mutations never create, retry, cancel, or complete workers, worktrees, workflow nodes, or lifecycle. " +
+        `Exact action fields: ${MANAGE_TASK_ACTION_NAMES.map(
+          (action) => `${action}(${MANAGE_TASK_ACTION_FIELDS[action].join(", ")})`,
+        ).join("; ")}. Do not copy non-null fields from another action. ` +
+        "Task completion is decided only through complete_task from current Task-level acceptance evidence. " +
+        "This replaces separate visible Task-lifecycle and Delivery Slice contract tools such as complete_task, fail_task, cancel_task, add_goal, modify_goal, and delete_goal.",
+      inputSchema: ManageTaskInputSchema,
+      execute: async (toolInput, options) => {
+        const { action, ...actionInput } = ManageTaskInputSchema.parse(toolInput)
+        const actionTool = (
+          tools as Record<string, { execute?: (args: unknown, options: unknown) => Promise<unknown> }>
+        )[action]
+        if (typeof actionTool?.execute !== "function") {
+          throw new Error(`manage_task action ${action} is not backed by an internal scheduler tool`)
+        }
+        const result = await actionTool.execute(
+          actionInput,
+          optionsWithVisibleOrchestratorToolName(options, "manage_task"),
+        )
+        return result
+      },
+      }),
+      "turn_control_exclusive",
+    )
+    return manageTaskToolCache
+  }
+
+  const hiddenToolIDs = new Set<string>([...DispatchAdapterContractRegistry.ids, ...MANAGE_TASK_ACTION_NAMES])
+  const materializePublicTool = (toolID: string): unknown => {
+    if (Object.hasOwn(toolFactories, toolID) && !hiddenToolIDs.has(toolID)) {
+      return tools[toolID as keyof typeof tools]
+    }
+    if (toolID === "dispatch_agent") return materializeDispatchAgentTool()
+    if (toolID === "dispatch_agents") return createDispatchAgentsTool(materializeDispatchAgentTool())
+    if (toolID === "manage_task") return materializeManageTaskTool()
+    if (toolID === "expert_squad_author") {
+      return createExpertSquadAuthorAiTool({ taskID: input.taskID, sessionID: input.agentSessionID })
+    }
+    if (toolID === "evolve_expert_squad_from_feedback") {
+      return createExpertSquadFeedbackRevisionAiTool({ taskID: input.taskID, sessionID: input.agentSessionID })
+    }
+    if (toolID === "artifact_search") return createArtifactSearchAiTool(input.taskID)
+    if (toolID === "artifact_read") return createArtifactReadAiTool(input.taskID)
+    if (toolID === "artifact_select") return createArtifactSelectAiTool(input.taskID)
+    if (toolID === "artifact_snapshot") return createArtifactSnapshotAiTool(input.taskID)
+    if (toolID === "publish_interactive_artifact") return createPublishInteractiveArtifactAiTool()
+    if (toolID === "multica_catalog" || toolID === "multica_preview" || toolID === "multica_import") {
+      return createMulticaImportTools({ taskID: input.taskID, sessionID: input.agentSessionID })[toolID]
+    }
+    return undefined
+  }
+
+  const publicTools: Record<string, unknown> = input.exactToolID
+    ? { [input.exactToolID]: materializePublicTool(input.exactToolID) }
+    : {
+        ...tools,
+        ...createMulticaImportTools({ taskID: input.taskID, sessionID: input.agentSessionID }),
+        expert_squad_author: materializePublicTool("expert_squad_author"),
+        evolve_expert_squad_from_feedback: materializePublicTool("evolve_expert_squad_from_feedback"),
+        artifact_search: materializePublicTool("artifact_search"),
+        artifact_read: materializePublicTool("artifact_read"),
+        artifact_select: materializePublicTool("artifact_select"),
+        artifact_snapshot: materializePublicTool("artifact_snapshot"),
+        publish_interactive_artifact: materializePublicTool("publish_interactive_artifact"),
+        dispatch_agent: materializePublicTool("dispatch_agent"),
+        dispatch_agents: materializePublicTool("dispatch_agents"),
+        manage_task: materializePublicTool("manage_task"),
+      }
+  if (input.exactToolID && publicTools[input.exactToolID] === undefined) {
+    throw new Error(`Orchestrator public Tool ${JSON.stringify(input.exactToolID)} is unavailable.`)
+  }
+  for (const decisionToolName of ORCHESTRATOR_DECISION_TOOL_NAMES) {
+    const decisionTool = publicTools[decisionToolName]
+    if (!decisionTool) {
+      if (input.exactToolID) continue
+      throw new Error(`Orchestrator decision Tool ${decisionToolName} is absent from the public Tool surface`)
+    }
+    // The reduction accepts a `dispatch_agent` fan-out or exactly one other
+    // decision per assistant turn; a mixed set is an absorbing integrity
+    // conflict. Declaring the contract here lets the turn coordinator refuse
+    // the combination while it is still only a call.
+    bindToolDecisionDeclaration(decisionTool as object, {
+      command: decisionToolName,
+      completionCommits: (args, result) => orchestratorDecisionToolResultCommits(decisionToolName, args, result),
+      commits: (args) => {
+        try {
+          return (
+            orchestratorDecisionToolCompletionEffect({ tool: decisionToolName, stateInput: args }) !==
+            "requires_followup_decision"
+          )
+        } catch {
+          return false
+        }
+      },
+    })
+  }
+  for (const hidden of hiddenToolIDs) {
+    delete publicTools[hidden]
+  }
+
+  // A terminal conversation (a cancelled Task, or a coordination request that
+  // reached a Task after it settled) gets a projected Tool table, not a
+  // wrapped one: the read-only surface plus the one decision Tool its ingress
+  // kind authorizes. An absent Tool cannot be called, so there is no refusal
+  // path for the model to loop on — and no re-wrap, so WeakMap-bound
+  // coordination state never needs copying. Everywhere else the Task's status
+  // is a projection, never a per-call gate: a stray lifecycle call lands on
+  // the engine's own existing_terminal invariant and returns a model-visible
+  // rejection with the actual status.
+  const surface = { tools: publicTools }
+  if (dispatchAgentToolCache) {
+    orchestratorToolLineageHooks.set(surface, DispatchAgentToolTestHooks.openLineage(dispatchAgentToolCache))
+  }
+  return surface
+}
+
+export function createExactOrchestratorTool(
+  input: Omit<Parameters<typeof createOrchestratorTools>[0], "exactToolID"> & { toolID: string },
+): AITool {
+  const { toolID, ...surfaceInput } = input
+  return createOrchestratorTools({ ...surfaceInput, exactToolID: toolID }).tools[toolID] as AITool
+}

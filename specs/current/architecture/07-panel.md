@@ -523,6 +523,14 @@ lifecycle projections. Meaningful summaries report actual download availability
 without inferring a required document. Task completion
 and review retain the exact request and occurrence contracts.
 
+When a Task requests a conversational answer, the Orchestrator emits that
+requested content in its natural assistant Message before the terminal
+`manage_task action=complete_task` call. Successful completion parks the current
+Turn. The completion summary remains the acceptance decision, and selected
+worker Messages remain evidence; the panel renders each real participant's
+content through its existing projection. File resources and external-action
+deliveries retain their existing contracts.
+
 Project metadata is scoped by its exact directory and latest request. The panel
 refreshes on opening/scope changes and exposes loading, error and disconnected
 states. Repository file counts and branch/unborn/detached identity come from

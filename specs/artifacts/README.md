@@ -1,4 +1,10 @@
 # Artifact entry points
+- [Sources reading112 evidence](2026-10-05-connection-workspace-authority/sources-reading-112/README.md): exact closed109-history before proposal; no source/UI qualification yet.
+
+- [Natural Task answer111 evidence](2026-10-05-connection-workspace-authority/final-answer-111/README.md): actual Chinese answer before terminal,15EOF and exact closure; first checker failure retained.
+
+- [History Tool activity110 evidence](2026-10-05-connection-workspace-authority/subagent-history-tools-110/README.md): actual compact/full identity, Root manual pixels, retained failures and exact native closure.
+- [Multiple actual Sources109 evidence](2026-10-05-connection-workspace-authority/multiple-sources-109/README.md): real three source tuples,15EOF, manual interactions and complete closure; partial visual/delivery qualification.
 
 - [Subagent pointer qualification108](2026-10-05-connection-workspace-authority/subagent-open-108/README.md): actual stable pointer/keyboard and exact CLOSED105 scope custody, no source fix.
 - [Awaited owner lifetime107 evidence](2026-10-05-connection-workspace-authority/async-lifetime-107/README.md): original reference/native baseline and joins; 18/50 current contracts and types0; broader lifecycle qualification unknown.

@@ -1,0 +1,61 @@
+diff --git a/packages/opencorvus/src/orchestrator/task-lifecycle-input.ts b/packages/opencorvus/src/orchestrator/task-lifecycle-input.ts
+index 202d0c55..ecf034ea 100644
+--- a/packages/opencorvus/src/orchestrator/task-lifecycle-input.ts
++++ b/packages/opencorvus/src/orchestrator/task-lifecycle-input.ts
+@@ -24,7 +24,7 @@ export const CompleteTaskInputSchema = z
+       .string()
+       .min(1)
+       .describe(
+-        "Orchestrator-owned acceptance decision for the original requested work. Connect required effects and preservation obligations to the exact evidence and explain resolution of material contradictory findings. An unresolved required effect calls for repair or an evidenced blocker, not successful completion with a disclaimer. Include IntegrityReview or VisualReview evidence when relevant.",
++        "Orchestrator-owned acceptance decision for the original requested work. Connect required effects and preservation obligations to the exact evidence and explain resolution of material contradictory findings. An unresolved required effect calls for repair or an evidenced blocker, not successful completion with a disclaimer. Include IntegrityReview or VisualReview evidence when relevant. This is the acceptance decision, not the requested conversational answer. When conversational content is requested, deliver that actual content in your natural assistant Message before the terminal call.",
+       ),
+     evidence_locators: EvidenceLocatorInputListSchema.default([]).describe(
+       "Exact typed durable evidence locators used for this completion decision. For every worker final Message relied on for synthesis or acceptance, include a session_message locator pairing the exact producing session_id and message_id returned by read_agent_message. A terminal lifecycle Artifact does not replace that participant Message. Name each Artifact by its exact revision or snapshot path only; the Host reads the digest, byte count, and media type itself, so never restate a content digest here. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",
+diff --git a/packages/opencorvus/src/orchestrator/task-lifecycle-tools.ts b/packages/opencorvus/src/orchestrator/task-lifecycle-tools.ts
+index 84ddf6a0..a9ffb61b 100644
+--- a/packages/opencorvus/src/orchestrator/task-lifecycle-tools.ts
++++ b/packages/opencorvus/src/orchestrator/task-lifecycle-tools.ts
+@@ -101,7 +101,8 @@ export function createTaskLifecycleTools(input: {
+         "IntegrityReview, VisualReview, Host build observations, tests, and persisted task-root conversation messages are evidence inputs; none of them is a host-side completion lock. " +
+         "When visual review was requested, cite the exact durable locators produced by the responsible review path: the latest core visual_review locator and its completeness_findings for a commissioned VisualReview, or the browser-preview capture locators when the selected expert-squad workflow assigns independent image review to its scheduler. Generic prose and unattached screenshot claims are not durable visual evidence. " +
+         "Current Delivery Slice revisions, independent activity/evidence/review associations, and explicit Completion Decision acceptance are separate facts; none owns or gates Task lifecycle. " +
+-        "Call this only when you, the Orchestrator, have decided the task is complete from the current durable task snapshot.",
++        "Call this only when you, the Orchestrator, have decided the task is complete from the current durable task snapshot. " +
++        "Successful completion parks the current Turn. Deliver any requested conversational answer in your natural assistant Message before this call; the acceptance summary and worker evidence do not replace that answer.",
+       inputSchema: CompleteTaskInputSchema,
+       execute: async (
+         {
+diff --git a/packages/opencorvus/src/orchestrator/tools.ts b/packages/opencorvus/src/orchestrator/tools.ts
+index 97eb53c3..930b1bc7 100644
+--- a/packages/opencorvus/src/orchestrator/tools.ts
++++ b/packages/opencorvus/src/orchestrator/tools.ts
+@@ -3019,6 +3019,7 @@ export function createOrchestratorTools(input: {
+           (action) => `${action}(${MANAGE_TASK_ACTION_FIELDS[action].join(", ")})`,
+         ).join("; ")}. Do not copy non-null fields from another action. ` +
+         "Task completion is decided only through complete_task from current Task-level acceptance evidence. " +
++        "Successful complete_task parks the current Turn. Deliver any requested conversational answer naturally before this terminal call; its summary and worker evidence do not generate or replace that reply. " +
+         "This replaces separate visible Task-lifecycle and Delivery Slice contract tools such as complete_task, fail_task, cancel_task, add_goal, modify_goal, and delete_goal.",
+       inputSchema: ManageTaskInputSchema,
+       execute: async (toolInput, options) => {
+diff --git a/packages/opencorvus/src/prompt/core/orchestrator-core.txt b/packages/opencorvus/src/prompt/core/orchestrator-core.txt
+index 02f1984b..309422e2 100644
+--- a/packages/opencorvus/src/prompt/core/orchestrator-core.txt
++++ b/packages/opencorvus/src/prompt/core/orchestrator-core.txt
+@@ -199,6 +199,8 @@ Visual QA is a projected rendered-product evidence capability, not an automatic
+ 
+ For a required visual review, read and select the latest exact core `visual_review` Artifact. Nonempty `completeness_findings`, missing registered screenshot evidence, or internally conflicting review evidence is non-pass Task evidence.
+ 
++When the requested deliverable is a conversational answer, first deliver the actual requested content in your own natural assistant Message, in the requested language and format. A worker's verification Message, completion summary, or evidence reference does not replace that answer. Deliver it before calling `manage_task action=complete_task`: successful completion parks the current Turn and does not generate a later reply.
++
+ Complete the Task only when the whole request is supported. Call `manage_task action=complete_task` with:
+ 
+ - a concrete completion summary, stated as the delivered outcome and its proof in the operator's task language rather than as lifecycle or workflow state;
+@@ -210,7 +212,7 @@ When completion relies on this Task scheduler's own persisted scheduler conversa
+ 
+ Deliver the requested usable format: reports/documents as actual PDF, DOCX or other requested files; datasets, code, images and other resources in their appropriate reusable form. Require the responsible producer to create and verify those files and publish their exact resources through the existing Artifact tools. Select those resource locators or their resource-bearing envelope in `deliverable_artifact_locators`. An internal JSON verdict, manifest, summary or acceptance record does not substitute for the requested file. Such records remain completion evidence. Use an empty deliverable list only when no file/resource was produced, and truthfully explain any unmet requested delivery. Do not convert internal evidence into a pretend document or require a document for a task whose result is an external action or code change.
+ 
+-There is no prose-only completion, `deliver`, or host-owned final acceptance object.
++Natural prose delivery does not itself complete the Task; use `manage_task action=complete_task` to record the separate lifecycle decision after the requested outcome has been delivered. There is no separate `deliver` tool or host-owned final acceptance object.
+ 
+ ──────────────────────────────────────────────────────────────────────
+ NON-PASS AND REPAIR

@@ -1,0 +1,17 @@
+--- before/history-ui-copy.ps1
++++ current/history-ui-copy.ps1
+@@ -2,10 +2,10 @@
+ $ErrorActionPreference='Stop'
+ $copyRun=[IO.Path]::GetFullPath($CaseRun);$copyEvidence=[IO.Path]::GetFullPath($CaseEvidence);$copyLabel=$CaseLabel;$copyPort=$CasePort;$copyPurpose=$CasePurpose
+ $sourceRun='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/webfetch-body-live-105-01'
+-if($copyPort -ne 18065){throw 'Only admitted108 history port'}
+-$caseStage='before-01'
+-$caseRunName='subagent-open-before-108-01'
+-if($copyRun -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/'+$caseRunName) -or $copyEvidence -ne [IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/subagent-open-108/'+$caseStage)){throw 'Exact fresh108 run/evidence required'}
++if($copyPort -ne 18067){throw 'Only admitted110 history port'}
++$caseStage='after-01'
++$caseRunName='subagent-history-after-110-01'
++if($copyRun -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/'+$caseRunName) -or $copyEvidence -ne [IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/subagent-history-tools-110/'+$caseStage)){throw 'Exact fresh110 run/evidence required'}
+ if(Test-Path -LiteralPath $copyRun){throw 'Preserve existing copy occurrence'}
+ if(@(Get-NetTCPConnection -State Listen -ErrorAction Stop|Where-Object LocalPort -eq $copyPort).Count){throw 'Fresh port occupied'}
+ . (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly

@@ -1,0 +1,439 @@
+{
+  "targets": [
+    {
+      "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+      "messageID": "msg_g0VXO89mW00XBgPD2IdF",
+      "inputMessageID": "msg_g0VXO89mQ00eWhDi4ge5",
+      "value": "first-step"
+    },
+    {
+      "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+      "messageID": "msg_g0VXO89md00eic5ATpZY",
+      "inputMessageID": "msg_g0VXO89mQ00eWhDi4ge5",
+      "value": "second-step"
+    },
+    {
+      "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+      "messageID": "msg_g0VXO89mm00bwhTAAH7Z",
+      "inputMessageID": "msg_g0VXO89mi005WSet9dly",
+      "value": "reused-input"
+    },
+    {
+      "sessionID": "ses_-zUSbrqDgzzSoJxz76MC",
+      "messageID": "msg_g0VXO89my00KxwM6GUFr",
+      "inputMessageID": "msg_g0VXO89mt00jeDJrWpm5",
+      "value": "parallel-input"
+    }
+  ],
+  "writes": [
+    {
+      "running": {
+        "id": "prt_g0VXO89n50080dM1thsu",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89mW00XBgPD2IdF",
+        "type": "tool",
+        "callID": "owned-first-step",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "running",
+          "input": {
+            "value": "first-step"
+          },
+          "title": "Reading first-step",
+          "time": {
+            "start": 1791396262887
+          }
+        },
+        "orderKey": "v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu"
+      },
+      "completed": {
+        "id": "prt_g0VXO89n50080dM1thsu",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89mW00XBgPD2IdF",
+        "type": "tool",
+        "callID": "owned-first-step",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "first-step"
+          },
+          "output": "Actual first-step",
+          "title": "Read first-step",
+          "metadata": {
+            "accepted": "first-step"
+          },
+          "time": {
+            "start": 1791396262887,
+            "end": 1791396262888
+          }
+        },
+        "orderKey": "v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu"
+      }
+    },
+    {
+      "running": {
+        "id": "prt_g0VXO89nG004u1e5d6jI",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89md00eic5ATpZY",
+        "type": "tool",
+        "callID": "owned-second-step",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "running",
+          "input": {
+            "value": "second-step"
+          },
+          "title": "Reading second-step",
+          "time": {
+            "start": 1791396262898
+          }
+        },
+        "orderKey": "v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI"
+      },
+      "completed": {
+        "id": "prt_g0VXO89nG004u1e5d6jI",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89md00eic5ATpZY",
+        "type": "tool",
+        "callID": "owned-second-step",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "second-step"
+          },
+          "output": "Actual second-step",
+          "title": "Read second-step",
+          "metadata": {
+            "accepted": "second-step"
+          },
+          "time": {
+            "start": 1791396262898,
+            "end": 1791396262899
+          }
+        },
+        "orderKey": "v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI"
+      }
+    },
+    {
+      "running": {
+        "id": "prt_g0VXO89nK00KT8I7QmsV",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89mm00bwhTAAH7Z",
+        "type": "tool",
+        "callID": "owned-reused-input",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "running",
+          "input": {
+            "value": "reused-input"
+          },
+          "title": "Reading reused-input",
+          "time": {
+            "start": 1791396262902
+          }
+        },
+        "orderKey": "v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV"
+      },
+      "completed": {
+        "id": "prt_g0VXO89nK00KT8I7QmsV",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89mm00bwhTAAH7Z",
+        "type": "tool",
+        "callID": "owned-reused-input",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "reused-input"
+          },
+          "output": "Actual reused-input",
+          "title": "Read reused-input",
+          "metadata": {
+            "accepted": "reused-input"
+          },
+          "time": {
+            "start": 1791396262902,
+            "end": 1791396262903
+          }
+        },
+        "orderKey": "v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV"
+      }
+    },
+    {
+      "running": {
+        "id": "prt_g0VXO89nO00DCCpXJAHs",
+        "sessionID": "ses_-zUSbrqDgzzSoJxz76MC",
+        "messageID": "msg_g0VXO89my00KxwM6GUFr",
+        "type": "tool",
+        "callID": "owned-parallel-input",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "running",
+          "input": {
+            "value": "parallel-input"
+          },
+          "title": "Reading parallel-input",
+          "time": {
+            "start": 1791396262906
+          }
+        },
+        "orderKey": "v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs"
+      },
+      "completed": {
+        "id": "prt_g0VXO89nO00DCCpXJAHs",
+        "sessionID": "ses_-zUSbrqDgzzSoJxz76MC",
+        "messageID": "msg_g0VXO89my00KxwM6GUFr",
+        "type": "tool",
+        "callID": "owned-parallel-input",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "parallel-input"
+          },
+          "output": "Actual parallel-input",
+          "title": "Read parallel-input",
+          "metadata": {
+            "accepted": "parallel-input"
+          },
+          "time": {
+            "start": 1791396262906,
+            "end": 1791396262907
+          }
+        },
+        "orderKey": "v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs"
+      }
+    }
+  ],
+  "full": [
+    [
+      {
+        "id": "prt_g0VXO89n50080dM1thsu",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89mW00XBgPD2IdF",
+        "type": "tool",
+        "callID": "owned-first-step",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "first-step"
+          },
+          "output": "Actual first-step",
+          "title": "Read first-step",
+          "metadata": {
+            "accepted": "first-step"
+          },
+          "time": {
+            "start": 1791396262887,
+            "end": 1791396262888
+          }
+        },
+        "orderKey": "v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu"
+      }
+    ],
+    [
+      {
+        "id": "prt_g0VXO89nG004u1e5d6jI",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89md00eic5ATpZY",
+        "type": "tool",
+        "callID": "owned-second-step",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "second-step"
+          },
+          "output": "Actual second-step",
+          "title": "Read second-step",
+          "metadata": {
+            "accepted": "second-step"
+          },
+          "time": {
+            "start": 1791396262898,
+            "end": 1791396262899
+          }
+        },
+        "orderKey": "v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI"
+      }
+    ],
+    [
+      {
+        "id": "prt_g0VXO89nK00KT8I7QmsV",
+        "sessionID": "ses_-zUSbrqDmzzxYGGn1Xmh",
+        "messageID": "msg_g0VXO89mm00bwhTAAH7Z",
+        "type": "tool",
+        "callID": "owned-reused-input",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "reused-input"
+          },
+          "output": "Actual reused-input",
+          "title": "Read reused-input",
+          "metadata": {
+            "accepted": "reused-input"
+          },
+          "time": {
+            "start": 1791396262902,
+            "end": 1791396262903
+          }
+        },
+        "orderKey": "v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV"
+      }
+    ],
+    [
+      {
+        "id": "prt_g0VXO89nO00DCCpXJAHs",
+        "sessionID": "ses_-zUSbrqDgzzSoJxz76MC",
+        "messageID": "msg_g0VXO89my00KxwM6GUFr",
+        "type": "tool",
+        "callID": "owned-parallel-input",
+        "tool": "read_agent_message",
+        "state": {
+          "status": "completed",
+          "input": {
+            "value": "parallel-input"
+          },
+          "output": "Actual parallel-input",
+          "title": "Read parallel-input",
+          "metadata": {
+            "accepted": "parallel-input"
+          },
+          "time": {
+            "start": 1791396262906,
+            "end": 1791396262907
+          }
+        },
+        "orderKey": "v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs"
+      }
+    ]
+  ],
+  "compact": [
+    [
+      "msg_g0VXO89mQ00eWhDi4ge5",
+      []
+    ],
+    [
+      "msg_g0VXO89mi005WSet9dly",
+      []
+    ],
+    [
+      "msg_g0VXO89mt00jeDJrWpm5",
+      []
+    ]
+  ],
+  "expected": [
+    [
+      "msg_g0VXO89mQ00eWhDi4ge5",
+      [
+        {
+          "id": "prt_g0VXO89n50080dM1thsu",
+          "messageID": "msg_g0VXO89mW00XBgPD2IdF",
+          "orderKey": "v1:0001791396262892:0000000000000031:0000000000000000:part:prt_g0VXO89n50080dM1thsu",
+          "type": "tool",
+          "tool": "read_agent_message",
+          "callID": "owned-first-step",
+          "state": {
+            "status": "completed",
+            "input": {
+              "value": "first-step"
+            },
+            "output": "Actual first-step",
+            "title": "Read first-step",
+            "metadata": {
+              "accepted": "first-step"
+            },
+            "time": {
+              "start": 1791396262887,
+              "end": 1791396262888
+            }
+          }
+        },
+        {
+          "id": "prt_g0VXO89nG004u1e5d6jI",
+          "messageID": "msg_g0VXO89md00eic5ATpZY",
+          "orderKey": "v1:0001791396262899:0000000000000031:0000000000000000:part:prt_g0VXO89nG004u1e5d6jI",
+          "type": "tool",
+          "tool": "read_agent_message",
+          "callID": "owned-second-step",
+          "state": {
+            "status": "completed",
+            "input": {
+              "value": "second-step"
+            },
+            "output": "Actual second-step",
+            "title": "Read second-step",
+            "metadata": {
+              "accepted": "second-step"
+            },
+            "time": {
+              "start": 1791396262898,
+              "end": 1791396262899
+            }
+          }
+        }
+      ]
+    ],
+    [
+      "msg_g0VXO89mi005WSet9dly",
+      [
+        {
+          "id": "prt_g0VXO89nK00KT8I7QmsV",
+          "messageID": "msg_g0VXO89mm00bwhTAAH7Z",
+          "orderKey": "v1:0001791396262903:0000000000000031:0000000000000000:part:prt_g0VXO89nK00KT8I7QmsV",
+          "type": "tool",
+          "tool": "read_agent_message",
+          "callID": "owned-reused-input",
+          "state": {
+            "status": "completed",
+            "input": {
+              "value": "reused-input"
+            },
+            "output": "Actual reused-input",
+            "title": "Read reused-input",
+            "metadata": {
+              "accepted": "reused-input"
+            },
+            "time": {
+              "start": 1791396262902,
+              "end": 1791396262903
+            }
+          }
+        }
+      ]
+    ],
+    [
+      "msg_g0VXO89mt00jeDJrWpm5",
+      [
+        {
+          "id": "prt_g0VXO89nO00DCCpXJAHs",
+          "messageID": "msg_g0VXO89my00KxwM6GUFr",
+          "orderKey": "v1:0001791396262906:0000000000000031:0000000000000000:part:prt_g0VXO89nO00DCCpXJAHs",
+          "type": "tool",
+          "tool": "read_agent_message",
+          "callID": "owned-parallel-input",
+          "state": {
+            "status": "completed",
+            "input": {
+              "value": "parallel-input"
+            },
+            "output": "Actual parallel-input",
+            "title": "Read parallel-input",
+            "metadata": {
+              "accepted": "parallel-input"
+            },
+            "time": {
+              "start": 1791396262906,
+              "end": 1791396262907
+            }
+          }
+        }
+      ]
+    ]
+  ]
+}

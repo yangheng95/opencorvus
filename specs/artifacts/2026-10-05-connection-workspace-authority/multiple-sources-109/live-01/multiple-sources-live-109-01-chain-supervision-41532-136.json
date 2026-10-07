@@ -1,0 +1,28 @@
+{
+  "occurrence": "multiple-sources-live-109-01-139c570a-411f-4a5e-9c0b-c7776b665493",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18066,
+      "OwningProcess": 75092
+    }
+  ],
+  "nativeSettlement": null,
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "presence": [
+    {
+      "processInstanceID": "win32:639269938021940157",
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processID": 75092
+    },
+    {
+      "processInstanceID": "win32:639269938012015418",
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processID": 60452
+    }
+  ],
+  "phase": "supervision-41532-136",
+  "observedAtUtc": "2026-10-07T18:29:57.5677683Z"
+}

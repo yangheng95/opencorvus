@@ -101,7 +101,8 @@ export function createTaskLifecycleTools(input: {
         "IntegrityReview, VisualReview, Host build observations, tests, and persisted task-root conversation messages are evidence inputs; none of them is a host-side completion lock. " +
         "When visual review was requested, cite the exact durable locators produced by the responsible review path: the latest core visual_review locator and its completeness_findings for a commissioned VisualReview, or the browser-preview capture locators when the selected expert-squad workflow assigns independent image review to its scheduler. Generic prose and unattached screenshot claims are not durable visual evidence. " +
         "Current Delivery Slice revisions, independent activity/evidence/review associations, and explicit Completion Decision acceptance are separate facts; none owns or gates Task lifecycle. " +
-        "Call this only when you, the Orchestrator, have decided the task is complete from the current durable task snapshot.",
+        "Call this only when you, the Orchestrator, have decided the task is complete from the current durable task snapshot. " +
+        "Successful completion parks the current Turn. Deliver any requested conversational answer in your natural assistant Message before this call; the acceptance summary and worker evidence do not replace that answer.",
       inputSchema: CompleteTaskInputSchema,
       execute: async (
         {
