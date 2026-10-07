@@ -1,0 +1,2 @@
+$ bun run ./packages/opencorvus/script/check-builtin-expert-squad-topology.ts
+{"manifests":122,"workflows":135,"flat_planner_parallel_workers":11,"parallel_workers_join":93,"dependency_dag":31}

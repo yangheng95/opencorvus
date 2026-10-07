@@ -1,0 +1,39 @@
+[1/1] START test/read-agent-message-worker-final-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+90 |   }
+91 |   throw contractError(context, `unsupported ${typeof value}`)
+92 | }
+93 | 
+94 | function contractError(context: string, reason: string) {
+95 |   return new CanonicalDigestContractError({ context, reason })
+                  ^
+CanonicalDigestContractError: CanonicalDigestContractError: {"context":"task-creation-contract.resolved.metadata","reason":"undefined"}
+ data: {
+  context: "task-creation-contract.resolved.metadata",
+  reason: "undefined",
+},
+
+      at contractError (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:95:14)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:94:57
+      at map (unknown:1:11)
+      at canonicalJSON (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:91:61)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:95:43
+      at map (unknown:1:11)
+      at canonicalJSON (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\canonical-digest.ts:91:61)
+      at canonicalTaskCreationContract (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-creation-request.ts:20:32)
+      at assertCurrentTaskCreationContract (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-creation-request.ts:42:10)
+      at buildTaskCreationContractFact (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-creation-contract.ts:180:9)
+      at persistEstablishedTask (D:\myhexin-local\opencorvus\packages\opencorvus\test\fixture\engine-task.ts:78:9)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts:32:144
+      at processTicksAndRejections (unknown:7:39)
+(fail) reads a physically coordinated worker final and its canonical Tool facts [3179.42ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [5.53s]
+[1/1] DONE test/read-agent-message-worker-final-authority.test.ts exit=1 duration=6.44s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts

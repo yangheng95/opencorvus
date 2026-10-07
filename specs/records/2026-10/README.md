@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Shared delegated final authority116](2026-10-08-delegated-final-authority.md)
+
 - [Genuine delegated Sources115 and failed-history reading](2026-10-08-sources-delegated.md)
 
 - [Expanded Sources readability114](2026-10-08-sources-expanded.md)

@@ -1,0 +1,52 @@
+[1/1] START test/read-agent-message-worker-final-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+301 |             taskID,
+302 |             projectID: worker.projectID,
+303 |             inputID: input.id,
+304 |             finalID: final.id,
+305 |             textID: text.id,
+306 |             toolID: part.id,
+                          ^
+ReferenceError: part is not defined
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts:306:21)
+(fail) reads a physically coordinated worker final and its actual evidence [3368.58ms]
+301 |             taskID,
+302 |             projectID: worker.projectID,
+303 |             inputID: input.id,
+304 |             finalID: final.id,
+305 |             textID: text.id,
+306 |             toolID: part.id,
+                          ^
+ReferenceError: part is not defined
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts:306:21)
+(fail) reads a physically completed worker final and its actual evidence [2484.48ms]
+301 |             taskID,
+302 |             projectID: worker.projectID,
+303 |             inputID: input.id,
+304 |             finalID: final.id,
+305 |             textID: text.id,
+306 |             toolID: part.id,
+                          ^
+ReferenceError: part is not defined
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts:306:21)
+(fail) reads a physically error worker final and its actual evidence [2913.13ms]
+301 |             taskID,
+302 |             projectID: worker.projectID,
+303 |             inputID: input.id,
+304 |             finalID: final.id,
+305 |             textID: text.id,
+306 |             toolID: part.id,
+                          ^
+ReferenceError: part is not defined
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts:306:21)
+(fail) reads a physically aborted worker final and its actual evidence [2850.57ms]
+
+ 0 pass
+ 4 fail
+Ran 4 tests across 1 file. [13.73s]
+[1/1] DONE test/read-agent-message-worker-final-authority.test.ts exit=1 duration=14.61s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts

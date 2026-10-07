@@ -1,0 +1,14 @@
+[1/1] START test/expert-squad/light-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Light Expert Squad package > loads exactly the Planner and Investigator advisory roles with one shared package Skill [139.17ms]
+(pass) Light Expert Squad package > installs the released payload and projects the exact read-only advisory and Skill surfaces [2827.42ms]
+(pass) Light Expert Squad package > settles four overlapping Light dispatches (injected fixture failure: %s) [12644.07ms]
+(pass) Light Expert Squad package > settles four overlapping Light dispatches (injected fixture failure: %s) [11715.18ms]
+
+ 4 pass
+ 0 fail
+ 193 expect() calls
+Ran 4 tests across 1 file. [30.25s]
+[1/1] DONE test/expert-squad/light-package.test.ts exit=0 duration=31.26s

@@ -1,0 +1,10 @@
+{
+  "exclude": [],
+  "include": [
+    "../packages/opencorvus/src/**/*",
+    "../packages/opencorvus/test/read-agent-message-worker-final-authority.test.ts",
+    "../packages/opencorvus/test/expert-squad/dynamic-package.test.ts",
+    "../packages/opencorvus/test/expert-squad/light-package.test.ts"
+  ],
+  "extends": "../packages/opencorvus/tsconfig.json"
+}

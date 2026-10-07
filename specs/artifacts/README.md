@@ -1,6 +1,6 @@
 # Artifact entry points
 
-- [Shared delegated final authority116](2026-10-05-connection-workspace-authority/delegated-final-authority-116/README.md): actual115 coordinated-final error and shared occurrence plan; production held.
+- [Shared delegated final authority116](2026-10-05-connection-workspace-authority/delegated-final-authority-116/README.md): retained115 rejection, physical-final repair and actual18-stream Sources/answer/native closure; next output-format issue explicit.
 
 - [Genuine delegated Sources115](2026-10-05-connection-workspace-authority/sources-delegated-115/README.md): genuine failed32 audit and actual immutable-history child Sources380/280px qualification; complete live delivery pending.
 

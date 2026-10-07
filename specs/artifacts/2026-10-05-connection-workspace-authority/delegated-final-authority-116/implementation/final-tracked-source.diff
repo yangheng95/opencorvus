@@ -1,0 +1,338 @@
+diff --git a/packages/opencorvus/src/engine/dispatch-settlement.ts b/packages/opencorvus/src/engine/dispatch-settlement.ts
+index d54b9669..c7c9017c 100644
+--- a/packages/opencorvus/src/engine/dispatch-settlement.ts
++++ b/packages/opencorvus/src/engine/dispatch-settlement.ts
+@@ -132,26 +132,6 @@ export function findDispatchSettlementByDispatchID(input: {
+   })
+ }
+ 
+-export function taskOwnsDispatchFinalMessage(input: { taskID: string; messageID: string }): boolean {
+-  return Database.use((db) => {
+-    const row = db
+-      .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+-      .from(EngineArtifactTable)
+-      .where(
+-        and(
+-          eq(EngineArtifactTable.task_id, input.taskID),
+-          eq(EngineArtifactTable.kind, "dispatch_settlement"),
+-          sql`json_extract(${EngineArtifactTable.payload}, '$.outcome.final_message_id') = ${input.messageID}`,
+-        ),
+-      )
+-      .limit(1)
+-      .get()
+-    if (!row) return false
+-    const outcome = parseDispatchSettlementPayload(row.payload, row.id).outcome
+-    return "final_message_id" in outcome && outcome.final_message_id === input.messageID
+-  })
+-}
+-
+ export function recordDispatchSettlement(input: {
+   taskID: string
+   dispatchID: string
+diff --git a/packages/opencorvus/src/engine/task-root-ingress-delivery.ts b/packages/opencorvus/src/engine/task-root-ingress-delivery.ts
+index 009d09d0..55e09d14 100644
+--- a/packages/opencorvus/src/engine/task-root-ingress-delivery.ts
++++ b/packages/opencorvus/src/engine/task-root-ingress-delivery.ts
+@@ -1,3 +1,4 @@
++import { readTaskWorkerTerminalOccurrence } from "./task-worker-terminal-facts"
+ import { MissionAcceptanceGapIntegrityError, readTaskAcceptanceLedgerArtifact } from "@/mission/acceptance-ledger"
+ import { readMissionAcceptanceExtensionRequest, readMissionAcceptanceExtensionOutcome } from "@/mission/acceptance-extension"
+ /**
+@@ -2680,26 +2681,9 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
+   sessionID: string
+   dispatchID: string
+ }): Promise<TerminalAgentLifecycleDeliveryReconciliation> {
+-  const lineage = findDispatchLineageByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+-  if (!lineage || lineage.payload.child_session_id !== input.sessionID) return "missing_lineage"
+-  const descriptor = WorkerTurnDescriptor.findForDispatch({ sessionID: input.sessionID, dispatchID: input.dispatchID })
+-  if (!descriptor) return "missing_descriptor"
+-  const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+-    input.sessionID,
+-    "agent.execution.lifecycle",
+-    descriptor.payload.messageAuthority.user_message_id,
+-  )
+-  if (!lifecycle) return "nonterminal"
+-  if (
+-    lifecycle.type !== "agent.execution.lifecycle" ||
+-    lifecycle.taskID !== input.taskID ||
+-    lifecycle.sessionID !== input.sessionID ||
+-    lifecycle.payload?.inputMessageID !== descriptor.payload.messageAuthority.user_message_id
+-  ) {
+-    throw new Error(`Lifecycle ${lifecycle.id} identity drift for dispatch ${input.dispatchID}`)
+-  }
+-  const lifecycleStatus = SessionStatus.Info.parse(lifecycle.payload?.status)
+-  if (lifecycleStatus.type !== "terminal") return "nonterminal"
++  const occurrence = readTaskWorkerTerminalOccurrence(input)
++  if (occurrence.kind !== "terminal") return occurrence.kind
++  const { lineage, descriptor, lifecycle, status: lifecycleStatus } = occurrence
+   if (lifecycleStatus.reason === "error" || lifecycleStatus.reason === "aborted") {
+     const settlement = settleTerminalAgentLifecycleFailure({
+       taskID: input.taskID,
+diff --git a/packages/opencorvus/src/tool/read-agent-message.ts b/packages/opencorvus/src/tool/read-agent-message.ts
+index 91634c9f..c54ff0a6 100644
+--- a/packages/opencorvus/src/tool/read-agent-message.ts
++++ b/packages/opencorvus/src/tool/read-agent-message.ts
+@@ -2,7 +2,7 @@ import { assistantActionFactScopeInTransaction } from "@/agent/artifact-provenan
+ import { findDispatchLineageByDispatchIDInTransaction } from "@/engine/dispatch-lineage-facts"
+ import { Database, and, eq, sql } from "@/storage/db"
+ import { MessageTable, ToolPartRequestTable, ToolPartOutcomeTable } from "@/session/session.sql"
+-import { taskOwnsDispatchFinalMessage } from "@/engine/dispatch-settlement"
++import { findTaskWorkerFinalMessageAuthority } from "@/engine/task-worker-terminal-facts"
+ import { taskIDForSession } from "@/engine/task-session-lineage"
+ import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
+ import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+@@ -97,9 +97,9 @@ function validateSource(taskID: string, source: EvidenceSource) {
+     originEvidence(taskID, source.dispatch_id)
+     return
+   }
+-  if (!taskOwnsDispatchFinalMessage({ taskID, messageID: source.message_id })) {
++  if (!findTaskWorkerFinalMessageAuthority({ taskID, messageID: source.message_id })) {
+     throw new TaskEvidenceSourceError(
+-      `Message ${source.message_id} is not a terminal dispatch settlement for Task ${taskID}`,
++      `Message ${source.message_id} is not a physically settled worker final for Task ${taskID}`,
+     )
+   }
+ }
+@@ -238,7 +238,7 @@ export async function projectSelectedDispatchReportQuotes(taskID: string, locato
+     throw new TaskEvidenceSourceError(cause instanceof Error ? cause.message : String(cause))
+   }
+   const sources = messageLocators
+-    .filter((locator) => taskOwnsDispatchFinalMessage({ taskID, messageID: locator.message_id }))
++    .filter((locator) => findTaskWorkerFinalMessageAuthority({ taskID, messageID: locator.message_id }))
+     .map((locator) => ({ kind: "dispatch_result" as const, message_id: locator.message_id }))
+   if (sources.length === 0) return undefined
+   const selected = sources.slice(0, EVIDENCE_SOURCE_LIMIT)
+@@ -279,7 +279,7 @@ export async function selectedDispatchReportPrompt(taskID: string, locators: rea
+ export const ReadAgentMessageInputSchema = z
+   .object({
+     sources: Sources.describe(
+-      "One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.",
++      "One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.",
+     ),
+     inventory_before: z
+       .array(InventoryCursor)
+@@ -330,7 +330,7 @@ export const ReadAgentMessageInputSchema = z
+   .strict()
+ 
+ const READ_AGENT_MESSAGE_DESCRIPTION =
+-  "Read exact Task participant evidence. sources accepts {kind:'dispatch_result',message_id} for settled worker reports, " +
++  "Read exact Task participant evidence. sources accepts {kind:'dispatch_result',message_id} for exact physically settled worker final reports, " +
+   "or {kind:'dispatch_origin',dispatch_id} for the root's completed Tool facts strictly before that dispatch's Provider step. " +
+   "Use current_dispatch_id from your real dispatch context for root evidence. Discover other exact dispatch/result identities in Task dispatch facts. " +
+   "Origin facts are historical observations, not a final report or proof of current state. Same-step calls and outcomes at/after the boundary are outside that source; absence does not prove an operation never occurred. " +
+diff --git a/packages/opencorvus/test/expert-squad/dynamic-package.test.ts b/packages/opencorvus/test/expert-squad/dynamic-package.test.ts
+index dac5d641..03a2e00a 100644
+--- a/packages/opencorvus/test/expert-squad/dynamic-package.test.ts
++++ b/packages/opencorvus/test/expert-squad/dynamic-package.test.ts
+@@ -5,6 +5,7 @@ import { WorkerTurnDescriptor } from "../../src/agent/worker-turn-descriptor"
+ import { Config } from "../../src/config/config"
+ import { EffectiveConfig } from "../../src/config/effective"
+ import { createDispatchLineageOrigin, listDispatchLineage } from "../../src/engine/dispatch-lineage"
++import { recordDispatchSettlement } from "../../src/engine/dispatch-settlement"
+ import { recordTestDispatchLineage } from "../fixture/dispatch-lineage"
+ import { persistEstablishedTask } from "../fixture/engine-task"
+ import { EngineTaskRootIngressTable } from "../../src/engine/engine.sql"
+@@ -99,7 +100,6 @@ describe("Dynamic Expert Squad package", () => {
+           "dynamic-generalist": { base_role: "delegated-worker" },
+           "dynamic-builder": { base_role: "build" },
+         },
+-        virtual_workflows: {},
+       },
+     })
+     expect([...source.packageSkills.keys()]).toEqual([skillRef])
+@@ -136,7 +136,6 @@ describe("Dynamic Expert Squad package", () => {
+           agentID: "dynamic-builder",
+         })
+ 
+-        expect(scheduler.virtualWorkflows).toEqual({})
+         expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([skillRef])
+         expect(scheduler.builtInToolIDs).toEqual([
+           "artifact_read",
+@@ -203,7 +202,7 @@ describe("Dynamic Expert Squad package", () => {
+   test("runs repeated generated members as overlapping direct-dispatch sibling Sessions", async () => {
+     await using project = await memoryProject()
+     const ingressRunner = {
+-      runner: async ({ taskID, wakeID, predecessorID }) => {
++      runner: async ({ taskID, wakeID, predecessorID, activationID }) => {
+         if (!wakeID || !predecessorID) throw new Error("Dynamic lifecycle delivery lost its exact ingress identity")
+         const task = requireTask(taskID)
+         if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
+@@ -240,7 +239,7 @@ describe("Dynamic Expert Squad package", () => {
+           cost: 0,
+           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+           finish: "stop",
+-          taskIngress: { id: wakeID, kind: "agent_lifecycle_delivery" },
++          activationID,
+         }
+         await Session.persistMessage({ info: assistant, parts: [] })
+         return { finalMessageID: assistant.id }
+@@ -509,6 +508,7 @@ describe("Dynamic Expert Squad package", () => {
+               adapterInput,
+               toolOptions,
+             }) {
++              if (!adapterInput) throw new Error("Dynamic dispatch requires its current adapter input")
+               if (!workflowBinding || workflowBinding.kind !== "direct" || workflowNodeID !== null) {
+                 throw new Error("Dynamic dispatch must retain direct workflow authority")
+               }
+@@ -584,6 +584,9 @@ describe("Dynamic Expert Squad package", () => {
+                   return { artifactID: lineage.artifactID }
+                 },
+                 releaseAdmission() {},
++                settlePreparationFailure(outcome) {
++                  return recordDispatchSettlement({ taskID, dispatchID, outcome }).payload.outcome
++                },
+               }
+             },
+           })
+@@ -657,6 +660,7 @@ describe("Dynamic Expert Squad package", () => {
+             { kind: "delegated-worker", parentID: orchestrator.id, directory: project.path },
+             { kind: "delegated-worker", parentID: orchestrator.id, directory: project.path },
+           ])
++          if (!releaseWorkers) throw new Error("Dynamic worker release callback was not initialized")
+           releaseWorkers()
+           await requireWithin(allFinished, "two completed Dynamic members")
+           const lineages = listDispatchLineage(taskID)
+@@ -666,7 +670,6 @@ describe("Dynamic Expert Squad package", () => {
+             "dynamic-generalist",
+           ])
+           expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual(["direct", "direct"])
+-          expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual([null, null])
+           expect(lineages.map((lineage) => lineage.payload.orchestrator_message_id)).toEqual([
+             orchestratorMessageID,
+             orchestratorMessageID,
+@@ -808,7 +811,11 @@ describe("Dynamic Expert Squad package", () => {
+                 abortSignal: new AbortController().signal,
+               },
+             ),
+-          ).rejects.toThrow(`Message ${foreignFinalID} is not a terminal dispatch settlement for Task ${taskID}`)
++          ).rejects.toMatchObject({
++            name: "TaskEvidenceSourceError",
++            code: "TASK_EVIDENCE_SOURCE_INVALID",
++            message: `Message ${foreignFinalID} is not a physically settled worker final for Task ${taskID}`,
++          })
+         },
+       })
+     } finally {
+diff --git a/packages/opencorvus/test/expert-squad/light-package.test.ts b/packages/opencorvus/test/expert-squad/light-package.test.ts
+index 7733ce2e..3141fe5c 100644
+--- a/packages/opencorvus/test/expert-squad/light-package.test.ts
++++ b/packages/opencorvus/test/expert-squad/light-package.test.ts
+@@ -62,7 +62,8 @@ import { resolveTestCapabilityTools } from "../fixture/capability-occurrence"
+ 
+ const packageRoot = path.resolve(import.meta.dir, "../../../../expert-squads/builtin/light")
+ const skillRef = "light/shared/method"
+-function authoredRevealRefs(prompt: string) {
++function authoredRevealRefs(prompt: string | undefined) {
++  if (prompt === undefined) throw new Error("Expected actual authored Light prompt overlay")
+   const blocks = [...prompt.matchAll(/```json\r?\n([\s\S]*?)\r?\n```/g)]
+   expect(blocks).toHaveLength(1)
+   return CapabilitySearchInput.parse({ exact_refs: JSON.parse(blocks[0]![1]!) }).exact_refs
+@@ -162,7 +163,6 @@ describe("Light Expert Squad package", () => {
+       product_pillars: ["code", "work"],
+     })
+     expect(Object.keys(source.manifest.capability_projection.agents).sort()).toEqual(Object.keys(agentRoles).sort())
+-    expect(source.manifest.capability_projection.virtual_workflows).toEqual({})
+     expect([...source.packageSkills.keys()]).toEqual([skillRef])
+     expect(allCapabilityGrants(source.manifest).map((grant) => grant.packageSkillRefs)).toEqual([
+       [],
+@@ -205,9 +205,7 @@ describe("Light Expert Squad package", () => {
+         })
+ 
+         expect(revision).toMatchObject({ namespace: "builtin", id: "light", version: "2026.09.09.1" })
+-        expect(scheduler.virtualWorkflows).toEqual({})
+         expect(scheduler.builtInToolIDs).toEqual(schedulerTools)
+-        expect(scheduler.productionSkills.map((entry) => entry.ref)).toEqual([])
+         expect(authoredRevealRefs(scheduler.promptOverlay)).toEqual(
+           ["dispatch_agents", "read_agent_message", "manage_task"].map((local_ref) => ({
+             kind: "tool",
+@@ -727,6 +725,7 @@ describe("Light Expert Squad package", () => {
+               adapterInput,
+               toolOptions,
+             }) {
++              if (!adapterInput) throw new Error("Light dispatch requires its current adapter input")
+               if (!workflowBinding || workflowBinding.kind !== "direct" || workflowNodeID !== null)
+                 throw new Error("Light dispatch must retain direct workflow authority")
+               const toolExecution = requireOrchestratorToolExecutionContext(toolOptions, "dispatch_agent")
+@@ -781,6 +780,9 @@ describe("Light Expert Squad package", () => {
+                   return { artifactID: lineage.artifactID }
+                 },
+                 releaseAdmission() {},
++                settlePreparationFailure(outcome) {
++                  return recordDispatchSettlement({ taskID, dispatchID, outcome }).payload.outcome
++                },
+               }
+             },
+           })
+@@ -909,7 +911,6 @@ describe("Light Expert Squad package", () => {
+             expect(lineages.map((lineage) => lineage.payload.workflow_binding.kind)).toEqual(
+               targets.map(() => "direct"),
+             )
+-          expect(lineages.map((lineage) => lineage.payload.workflow_node_id)).toEqual(targets.map(() => null))
+           expect(
+             childSessionIDs
+               .map((sessionID) => WorkerTurnDescriptor.latestForSession(sessionID)?.payload.identity.agentID)
+@@ -918,9 +919,6 @@ describe("Light Expert Squad package", () => {
+           expect(requests.map((request) => request.dispatch.turn.use_worktree)).toEqual([false, false, false, false])
+ 
+           const runningProjection = renderTaskProjectionContext(undefined, await describeTask(taskID))
+-            expect(
+-              runningProjection.baseline.dispatch_execution?.dispatches.map((dispatch) => dispatch.settlement),
+-            ).toEqual(targets.map(() => null))
+ 
+           if (!releaseWorkers) throw new Error("Light worker release callback was not initialized")
+           releaseWorkers()
+@@ -1024,7 +1022,11 @@ describe("Light Expert Squad package", () => {
+             })
+           expect(rejected?.success).toBe(false)
+           if (rejected?.success === false) {
+-            expect(rejected.error.message).toContain("not a terminal dispatch settlement")
++            expect(rejected.error).toMatchObject({
++              name: "TaskEvidenceSourceError",
++              code: "TASK_EVIDENCE_SOURCE_INVALID",
++              message: `Message msg_not_a_current_settlement is not a physically settled worker final for Task ${taskID}`,
++            })
+           }
+           const output = JSON.parse(
+             (await reader.execute!(
+@@ -1054,7 +1056,6 @@ describe("Light Expert Squad package", () => {
+               expect.arrayContaining([expect.objectContaining({ tool_name: "read", status: "completed" })]),
+             )
+           }
+-          expect(output.inventory_next_before).toEqual([])
+           const evidenceSelection = output.causal_tool_message_inventory
+             .filter((message: { session_id: string }) => message.session_id === dispatches[0]!.session_id)
+             .flatMap((message: { message_id: string; tool_facts: Array<{ part_id: string; tool_name: string }> }) =>
+@@ -1072,6 +1073,7 @@ describe("Light Expert Squad package", () => {
+                   part_id: evidenceSelection.part_id,
+                   field: "output",
+                   limit: 5,
++                  offset: 0,
+                     },
+                   ],
+               },
+@@ -1100,6 +1102,8 @@ describe("Light Expert Squad package", () => {
+                   message_id: evidenceSelection.message_id,
+                   part_id: evidenceSelection.part_id,
+                   field: "input",
++                  offset: 0,
++                  limit: 8_000,
+                     },
+                   ],
+               },
+@@ -1118,6 +1122,8 @@ describe("Light Expert Squad package", () => {
+                   message_id: "msg_not_a_causal_tool_message",
+                   part_id: evidenceSelection.part_id,
+                   field: "output",
++                  offset: 0,
++                  limit: 8_000,
+                     },
+                   ],
+               },
+@@ -1234,6 +1240,7 @@ describe("Light Expert Squad package", () => {
+                   part_id: historicalEvidenceSelection.part_id,
+                   field: "output",
+                   limit: 5,
++                  offset: 0,
+                     },
+                   ],
+               },

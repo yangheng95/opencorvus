@@ -1,0 +1,56 @@
+[1/1] START test/read-agent-message-worker-final-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"case":"coordinated-final-116","taskID":"tsk_g00VXP46pP00lI7U0tva","projectID":"prj_h14Elf2KvvEt26mdwpR0","inputID":"msg_g0VXP46yr00P0zoyQoji","finalID":"msg_g0VXP46zr00LvIpfNG25","textID":"prt_g0VXP470100caH8Cvntc","toolID":"prt_g0VXP470500Mcw76pB02","descriptor":{"id":"wtd_g0VXP46zo00eQFFRzXWP","sessionID":"ses_-zUSavt1Gzz595977AA0","hash":"242f95ae54d5a23b3a71e9e52275ff290b7bcc869928c314ac578eaae136336d","payload":{"identity":{"agentID":"base-researcher","baseRole":"explore","sessionKind":"explore","dispatchAdapterID":"explore","runtimeTemplateABIVersion":1,"dispatchAdapterABIVersion":1,"projectionHash":"00c72227353748be9989dfd8f3f1b6c66277dba16e27bc22fc5a3e957f5158df"},"expertSquadID":"base","packageRevision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"9b8cdf9400705141655b113422e4e21502f42d66b859296d714d52b9b8832e4d"},"model":{"selection":"explicit","providerID":"fixture","modelID":"metadata-only"},"prompt":{"systemMode":"complete","systemSha256":"a44979bf035f08b2fafe86e06c42563b9539133dfd72eff08edc7ae7b3c90b68"},"tools":{"enabled":["artifact_publish","artifact_read","artifact_search","artifact_select","artifact_snapshot","capability_search","glob","memory","panel_query_task","publish_interactive_artifact","read","read_agent_message","request_orchestrator_decision","search_code","send_mailbox_message","external_code_search","webfetch","websearch"],"coordinationHandoff":"request_orchestrator_decision","stageOwned":[],"stageMaterializers":{}},"output":{"format":"text","resultMode":"reply"},"lifecycle":{"taskID":"tsk_g00VXP46pP00lI7U0tva","workScope":{"kind":"task"}},"messageAuthority":{"user_message_id":"msg_g0VXP46yr00P0zoyQoji","control_text_parts":[{"part_id":"prt_g0VXP46z300ZW4Sv9ZjB","text_sha256":"e9c4b895d81a8fa0d5264ac685e9958487f3c67967e66a40a191c274984668a0"}]},"dispatchTurn":{"current_dispatch_id":"art_g0VXP46zF00k3lr18IgI","workflow_binding":{"kind":"direct","package_revision":{"scope":"built_in","project_id":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","package_digest":"9b8cdf9400705141655b113422e4e21502f42d66b859296d714d52b9b8832e4d"}},"workflow_node_id":null,"workflow_occurrence_id":"art_g0VXP46zF00k3lr18IgI","delivery_slice_revision_ids":[],"evidence_locators":[],"task_authority":{"task_id":"tsk_g00VXP46pP00lI7U0tva","root_session_id":"ses_-zUSavtAazznhrfPcRB2","request_sha256":"e9c4b895d81a8fa0d5264ac685e9958487f3c67967e66a40a191c274984668a0","initial_control_text_parts":[]},"kind":"initial"}},"time":{"created":1791410075163,"updated":1791410075163}},"lineage":{"artifactID":"art_g0VXP46zL00dnGWhhmiV","taskID":"tsk_g00VXP46pP00lI7U0tva","dispatchID":"art_g0VXP46zF00k3lr18IgI","payload":{"dispatch_id":"art_g0VXP46zF00k3lr18IgI","task_id":"tsk_g00VXP46pP00lI7U0tva","execution_epoch":1,"orchestrator_session_id":"ses_-zUSavtAazznhrfPcRB2","orchestrator_message_id":"msg_g0VXP46zG00kFYCiS4Mu","tool_part_id":"prt_g0VXP46zG00DwLeLwGrq","tool_call_id":"call_dispatch_baseline","tool_name":"dispatch_agent","child_session_id":"ses_-zUSavt1Gzz595977AA0","target_agent_id":"base-researcher","projected_worker_identity":{"agentID":"base-researcher","baseRole":"explore","sessionKind":"explore","dispatchAdapterID":"explore","runtimeTemplateABIVersion":1,"dispatchAdapterABIVersion":1,"projectionHash":"00c72227353748be9989dfd8f3f1b6c66277dba16e27bc22fc5a3e957f5158df"},"work_scope":{"kind":"task"},"delivery_slice_revision_ids":[],"workflow_binding":{"kind":"direct","package_revision":{"scope":"built_in","project_id":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","package_digest":"9b8cdf9400705141655b113422e4e21502f42d66b859296d714d52b9b8832e4d"}},"workflow_node_id":null,"workflow_occurrence_id":"art_g0VXP46zF00k3lr18IgI","delivery_owner":{"kind":"runtime_process","process_occurrence_id":"test-runtime:23620"},"adapter_input":{"question":"Read the assigned public sources independently."},"time_created":1791410075139},"timeCreated":1791410075139},"status":{"type":"terminal","reason":"coordinated","final_message_id":"msg_g0VXP46zr00LvIpfNG25"},"event":{"id":"pev_g0VXP470r00JHpQ30j28","kind":"event","type":"agent.execution.lifecycle","aggregate":"task","aggregateID":"tsk_g00VXP46pP00lI7U0tva","taskID":"tsk_g00VXP46pP00lI7U0tva","sessionID":"ses_-zUSavt1Gzz595977AA0","source":"session.bridge","sequence":8,"orderKey":"v1:0001791410075109:0000000000000050:0000000000000000:session:msg_g0VXP46yr00P0zoyQoji","summary":"agent.execution.lifecycle","payload":{"inputMessageID":"msg_g0VXP46yr00P0zoyQoji","status":{"type":"terminal","reason":"coordinated","final_message_id":"msg_g0VXP46zr00LvIpfNG25"},"sessionID":"ses_-zUSavt1Gzz595977AA0","channel":"explore","agentID":"base-researcher","orderKey":"v1:0001791410075109:0000000000000050:0000000000000000:session:msg_g0VXP46yr00P0zoyQoji","resolvedRole":"base-researcher","parentSessionID":"ses_-zUSavtAazznhrfPcRB2"},"time":{"emitted":1791410075232,"created":1791410075232,"updated":1791410075232}},"settlement":{"artifactID":"art_g0VXP471200sswBrUsx4","payload":{"task_id":"tsk_g00VXP46pP00lI7U0tva","dispatch_lineage_id":"art_g0VXP46zL00dnGWhhmiV","dispatch_id":"art_g0VXP46zF00k3lr18IgI","session_id":"ses_-zUSavt1Gzz595977AA0","outcome":{"kind":"coordination","session_id":"ses_-zUSavt1Gzz595977AA0","coordination_request":{"source":"coordination_request","request_id":"art_g0VXP470B00P9XGwtHL8"},"dispatch_lineage_id":"art_g0VXP46zL00dnGWhhmiV"},"time_created":1791410075242}},"full":{"info":{"orderKey":"v1:0001791410075171:0000000000000030:0000000000000000:message:msg_g0VXP46zr00LvIpfNG25","author":"base-researcher","role":"assistant","time":{"created":1791410075171,"completed":1791410075219},"parentID":"msg_g0VXP46yr00P0zoyQoji","modelID":"metadata-only","providerID":"fixture","agent":"base-researcher","path":{"cwd":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xA1Pgk\\test-23620-Kur2Vv\\fixtures\\memory-FNqJrB","root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-xA1Pgk\\test-23620-Kur2Vv\\fixtures\\memory-FNqJrB"},"cost":0,"tokens":{"total":0,"input":0,"output":0,"reasoning":0,"cache":{"read":0,"write":0}},"finish":"tool-calls","id":"msg_g0VXP46zr00LvIpfNG25","sessionID":"ses_-zUSavt1Gzz595977AA0"},"parts":[{"id":"prt_g0VXP470100caH8Cvntc","sessionID":"ses_-zUSavt1Gzz595977AA0","messageID":"msg_g0VXP46zr00LvIpfNG25","orderKey":"v1:0001791410075181:0000000000000031:0000000000000000:part:prt_g0VXP470100caH8Cvntc","type":"text","text":"The sources are readable; confirm the assigned research boundary before continuing."},{"id":"prt_g0VXP470500Mcw76pB02","sessionID":"ses_-zUSavt1Gzz595977AA0","messageID":"msg_g0VXP46zr00LvIpfNG25","type":"tool","callID":"call_coordinate_baseline","tool":"request_orchestrator_decision","state":{"status":"completed","input":{"summary":"Confirm the assigned boundary","details":"The sources are readable; confirm the assigned research boundary before continuing.","blocking":true,"requested_decision":"Confirm the exact research boundary","severity":"blocked"},"output":"{\"requestID\":\"art_g0VXP470B00P9XGwtHL8\",\"summary\":\"Confirm the assigned boundary\"}","title":"Coordination recorded","metadata":{"opencorvusToolResultControl":{"kind":"handoff_drain","request_id":"art_g0VXP470B00P9XGwtHL8","dispatch_lineage_id":"art_g0VXP46zL00dnGWhhmiV"}},"time":{"start":1791410075185,"end":1791410075215}},"orderKey":"v1:0001791410075186:0000000000000031:0000000000000000:part:prt_g0VXP470500Mcw76pB02"}]},"read":{"kind":"error","name":"TaskEvidenceSourceError","message":"Message msg_g0VXP46zr00LvIpfNG25 is not a terminal dispatch settlement for Task tsk_g00VXP46pP00lI7U0tva","typed":true},"quotes":{"kind":"read"}}
+94 |     const quotes = await capture(() => projectSelectedDispatchReportQuotes(taskID, [{ source: "session_message", session_id: worker.id, message_id: final.id }]))
+95 |     console.log(JSON.stringify({ case: "coordinated-final-116", taskID, projectID: worker.projectID, inputID: input.id,
+96 |       finalID: final.id, textID: text.id, toolID: part.id, descriptor, lineage, status, event, settlement, full, read, quotes }))
+97 |     expect(status).toMatchObject({ type: "terminal", reason: "coordinated", final_message_id: final.id })
+98 |     expect(full.parts.map((item) => item.id)).toEqual([text.id, part.id])
+99 |     expect(read).toMatchObject({ kind: "read", value: { messages: [{ message_id: final.id, session_id: worker.id,
+                      ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "kind": "read",
+-   "value": {
+-     "messages": [
+-       {
+-         "author": "base-researcher",
+-         "message_id": "msg_g0VXP46zr00LvIpfNG25",
+-         "session_id": "ses_-zUSavt1Gzz595977AA0",
+-         "text": [
+-           "The sources are readable; confirm the assigned research boundary before continuing.",
+-         ],
+-         "tool_facts": [
+-           {
+-             "call_id": "call_coordinate_baseline",
+-             "part_id": "prt_g0VXP470500Mcw76pB02",
+-             "status": "completed",
+-             "tool_name": "request_orchestrator_decision",
+-           },
+-         ],
+-       },
+-     ],
+-   },
++   "kind": "error",
++   "message": "Message msg_g0VXP46zr00LvIpfNG25 is not a terminal dispatch settlement for Task tsk_g00VXP46pP00lI7U0tva",
++   "name": "TaskEvidenceSourceError",
++   "typed": true,
+  }
+
+- Expected  - 21
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts:99:18)
+(fail) reads a physically coordinated worker final and its canonical Tool facts [3377.47ms]
+
+ 0 pass
+ 1 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [5.66s]
+[1/1] DONE test/read-agent-message-worker-final-authority.test.ts exit=1 duration=6.61s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts

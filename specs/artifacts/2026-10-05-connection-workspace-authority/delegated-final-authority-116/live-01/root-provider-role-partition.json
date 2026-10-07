@@ -1,0 +1,82 @@
+[
+  {
+    "agent": "base-researcher",
+    "requests": 5,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": [
+      true
+    ],
+    "httpStatuses": [
+      200
+    ],
+    "terminals": [
+      "eof"
+    ]
+  },
+  {
+    "agent": "base-tester",
+    "requests": 5,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": [
+      true
+    ],
+    "httpStatuses": [
+      200
+    ],
+    "terminals": [
+      "eof"
+    ]
+  },
+  {
+    "agent": "chat",
+    "requests": 1,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": [
+      true
+    ],
+    "httpStatuses": [
+      200
+    ],
+    "terminals": [
+      "eof"
+    ]
+  },
+  {
+    "agent": "memory",
+    "requests": 2,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": [
+      true
+    ],
+    "httpStatuses": [
+      200
+    ],
+    "terminals": [
+      "eof"
+    ]
+  },
+  {
+    "agent": "orchestrator",
+    "requests": 5,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": [
+      true
+    ],
+    "httpStatuses": [
+      200
+    ],
+    "terminals": [
+      "eof"
+    ]
+  }
+]

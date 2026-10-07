@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-07T22:47:04.933Z",
+  "focus": {
+    "label": "Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+    "tag": "A"
+  },
+  "hosts": [
+    {
+      "class": "chat-scroll session-content",
+      "follow": "true",
+      "height": 802,
+      "top": 1416.800048828125,
+      "total": 2218,
+      "width": 249
+    },
+    {
+      "class": "subagent-conversation-panel__scroll",
+      "follow": "false",
+      "height": 711,
+      "top": 0,
+      "total": 3458,
+      "width": 280
+    }
+  ],
+  "input": "Tab.pressKey(null,Home), exact existing active anchor; no locator focus step",
+  "viewport": {
+    "height": 886,
+    "width": 883
+  }
+}

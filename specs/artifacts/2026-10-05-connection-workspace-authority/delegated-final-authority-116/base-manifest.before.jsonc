@@ -1,0 +1,193 @@
+{
+  "schema_version": 2,
+  "namespace": "builtin",
+  "id": "base",
+  "name": "Base",
+  "label": "Base",
+  "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
+  "version": "2026.09.30.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use Base for one complete Task executed by one capable owner and independently verified against the actual outcome.",
+    "selection_guidance": "Use execution-verification for direct accountable Task-owner delivery and independent review. Use source-planned-execution-verification only for a bounded independent source-authority investigation that must precede delegated production. Use planner-parallel-delivery only for real independently useful research and implementation partitions.",
+    "instructions": "selector.md"
+  },
+  "capability_sets": {
+    "shared-capabilities-1": {
+      "description": "Shared capabilities used by 2 projections.",
+      "member_refs": [
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fcheck",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fclick",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fdiagnostics_get",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fhover",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fnavigate",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fobserve",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fpress_key",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscreenshot",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fscroll",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fselect_option",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_create",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fsession_destroy",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Ftype",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Funcheck",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fviewport_set",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_load",
+        "capability:mcp_tool:project:default-mcp-registry:default%2Fmcp%2Fbrowser%2Ftool%2Fwait_for_selector",
+        "capability:skill:package:base:base%2Fshared%2Fmethod"
+      ]
+    }
+  },
+  "capability_projection": {
+    "scheduler": {
+      "capability_refs": [
+        "capability:capability_set:package:base:shared-capabilities-1",
+        "capability:capability_set:platform:tool-registry:orchestrator-base",
+        "capability:capability_set:platform:tool-registry:scheduler-transport",
+        "capability:tool:platform:tool-registry:apply_patch",
+        "capability:tool:platform:tool-registry:bash",
+        "capability:tool:platform:tool-registry:browser_preview",
+        "capability:tool:platform:tool-registry:browser_preview_capture",
+        "capability:tool:platform:tool-registry:dispatch_agent",
+        "capability:tool:platform:tool-registry:edit",
+        "capability:tool:platform:tool-registry:external_code_search",
+        "capability:tool:platform:tool-registry:glob",
+        "capability:tool:platform:tool-registry:manage_task",
+        "capability:tool:platform:tool-registry:read",
+        "capability:tool:platform:tool-registry:search_code",
+        "capability:tool:platform:tool-registry:todo",
+        "capability:tool:platform:tool-registry:webfetch",
+        "capability:tool:platform:tool-registry:websearch",
+        "capability:tool:platform:tool-registry:write"
+      ],
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md"
+    },
+    "agents": {
+      "base-researcher": {
+        "capability_refs": [
+          "capability:capability_set:platform:tool-registry:explore-base",
+          "capability:skill:package:base:base%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:external_code_search",
+          "capability:tool:platform:tool-registry:webfetch",
+          "capability:tool:platform:tool-registry:websearch"
+        ],
+        "label": "Base Researcher",
+        "description": "Performs read-oriented repository and relevant external research and publishes the canonical Base research report.",
+        "base_role": "explore",
+        "prompt": "agents/base-researcher/system.md"
+      },
+      "base-planner": {
+        "capability_refs": [
+          "capability:skill:package:base:base%2Fshared%2Fmethod",
+          "capability:tool:platform:tool-registry:bash",
+          "capability:tool:platform:tool-registry:capability_search",
+          "capability:tool:platform:tool-registry:external_code_search",
+          "capability:tool:platform:tool-registry:glob",
+          "capability:tool:platform:tool-registry:read",
+          "capability:tool:platform:tool-registry:search_code",
+          "capability:tool:platform:tool-registry:skill",
+          "capability:tool:platform:tool-registry:webfetch",
+          "capability:tool:platform:tool-registry:websearch"
+        ],
+        "label": "Base Planner",
+        "description": "Classifies and resolves only traceable pre-mutation execution authority and applicable source constraints, while leaving destination outcome semantics and contract-required execution dependencies to Developer, or allocates a justified parallel research and implementation partition.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/base-planner/system.md"
+      },
+      "base-developer": {
+        "capability_refs": [
+          "capability:capability_set:package:base:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:build-base"
+        ],
+        "label": "Base Developer",
+        "description": "Owns destination discovery, actual repository or external-state delivery, complete mutation-receipt handoff, and self-checks.",
+        "base_role": "build",
+        "prompt": "agents/base-developer/system.md"
+      },
+      "base-tester": {
+        "capability_refs": [
+          "capability:capability_set:package:base:shared-capabilities-1",
+          "capability:capability_set:platform:tool-registry:delegated-worker-base"
+        ],
+        "label": "Base Tester",
+        "description": "Independently maps original requirements and source rules to the settled result, including raw Host-recorded mutation receipts when no correct same-record read exists.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/base-tester/system.md"
+      }
+    },
+    "virtual_workflows": {
+      "execution-verification": {
+        "label": "Execution and Independent Verification",
+        "description": "The Task owner produces directly; the independent Tester compares the actual result with original authority.",
+        "nodes": {
+          "base-tester": {
+            "agent_id": "base-tester",
+            "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+            "depends_on": []
+          }
+        }
+      },
+      "source-planned-execution-verification": {
+        "label": "Source Planning, Execution, and Independent Verification",
+        "description": "Classify traceable source authority and applicable constraints through a bounded minimal-anchor worklist, execute each irreversible mutation whose real prerequisites are resolved, then independently verify the classification and settled outcome.",
+        "nodes": {
+          "base-planner": {
+            "agent_id": "base-planner",
+            "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics and destination execution dependencies; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
+            "depends_on": []
+          },
+          "base-developer": {
+            "agent_id": "base-developer",
+            "description": "Reconciles per-operation source classes with original authority, owns destination discovery for operations whose real prerequisites are resolved, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
+            "depends_on": [
+              "base-planner"
+            ]
+          },
+          "base-tester": {
+            "agent_id": "base-tester",
+            "description": "Independently checks source classifications and coordinates against original authority, then maps applicable rules and outcome semantics to the raw mutation receipt and any correct same-record destination read.",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        }
+      },
+      "planner-parallel-delivery": {
+        "label": "Planner, Parallel Workers, and Verification",
+        "description": "Publish one bounded Task plan, run the research and implementation partitions in the same dependency-ready frontier, then verify the settled result.",
+        "nodes": {
+          "base-planner": {
+            "agent_id": "base-planner",
+            "description": "Publishes the complete Task-element inventory, stable acceptance criteria, shared inputs, owned paths, and acceptance allocation.",
+            "depends_on": []
+          },
+          "base-researcher": {
+            "agent_id": "base-researcher",
+            "description": "Executes the plan's evidence and repository research partition.",
+            "depends_on": [
+              "base-planner"
+            ]
+          },
+          "base-developer": {
+            "agent_id": "base-developer",
+            "description": "Executes the plan's implementation partition and its implementation-owned checks.",
+            "depends_on": [
+              "base-planner"
+            ]
+          },
+          "base-tester": {
+            "agent_id": "base-tester",
+            "description": "Executes every planned acceptance criterion against the settled result and records criterion-by-criterion evidence.",
+            "depends_on": [
+              "base-developer"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

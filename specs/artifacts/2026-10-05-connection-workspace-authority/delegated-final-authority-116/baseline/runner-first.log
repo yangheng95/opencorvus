@@ -1,0 +1,19 @@
+[1/1] START test/read-agent-message-worker-final-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+error: Cannot find module 'D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts' from 'D:\myhexin-local\opencorvus\packages\opencorvus\test\isolated-test-entry.test.ts'
+-------------------------------
+
+
+ 0 pass
+ 1 fail
+ 1 error
+Ran 1 test across 1 file. [1418.00ms]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts
+[1/1] DONE test/read-agent-message-worker-final-authority.test.ts exit=1 duration=2.36s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts

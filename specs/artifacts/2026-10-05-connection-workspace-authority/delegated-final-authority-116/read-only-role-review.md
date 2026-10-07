@@ -1,0 +1,25 @@
+# Base Researcher proposed role correction116
+
+## Recall / exact source ownership
+
+Root admits evidence proposal only, not application. Original115 live32 failed remains failed; researcher Source380/280 static UI is separate. Read116 Recall and115 actual shared audit, full current Researcher, Base Method, Orchestrator, Tester and Planner prompts, real manifest projections/workflows, resolver composition and ArtifactPublishTool request/execution. Only researcher-role-proposed.patch and this review authored. No production/test/helper/registry/SDK/index/runtime/model/UI/Git action or further delegation.
+
+Proposed target is exactly packages/opencorvus/src/expert-squad/builtin/base/agents/base-researcher/system.md. Real projection declaration is packages/opencorvus/src/expert-squad/builtin/base/expert-squad.jsonc70–81, role base_role explore with direct webfetch/websearch/external_code_search grants. Actual Base roles live under this singular expert-squad directory. PromptProfileResolver.renderRuntimeSystem2710–2728 concatenates actual identity/base/installed boundary/catalog/readme/workflow/role overlay/user append; builtin/index.ts imports the real packaged files. This proposal changes no tool, grant, schema, platformrole or other role.
+
+## Source cause and scope matrix
+
+Original Researcher prompt requires Task catalog, exact implementation-plan and one report for every request, then restricts visible final to evidence-boundary narration.115 actual plan/report detour contributed nine Responses across Researcher/root repair, not all32; generic report publication with null selected_plan_identity succeeded. The shared reader's coordinated physical-final authority error is a separate116 production issue; changing this role cannot repair or hide it.
+
+Direct assigned readonly question: original request/current assignment/source coordinates define scope; actual findings and evidence in visible final, no invented plan or Artifact obligation. Planned parallel research: completely read exact implementation-plan, keep actual plan identity and assigned independent partition; no dependency on future Developer/Tester reports. Real downstream plan/report contract: complete relevant plan and one required research-report publication with actual complete read refs. User explicitly requests durable report: one publication plus visible findings. Capability mismatch: preserve read-only/NoShell boundaries and report actual evidence-based blocker, never expand authority. Original115 Task package/revision/history and failure remain unchanged; any later behavior qualification must be fresh, same natural requirement/original32 bounds.
+
+Base Method's last paragraph already requires durable Artifacts only for requested/real downstream needs. Orchestrator ordinary delivery explicitly avoids extra plan/report solely to start; Planner plan applies only selected planned responsibility; Tester publication already has user/downstream condition and actual visible verdict. Proposed role aligns with those existing semantics. It does not prescribe a tool route, workflow gate, forced dependency, model choice or new acceptance requirement.
+
+## Public publishing boundary / descriptor conflict to review
+
+Current tool/artifact-catalog.ts80–96 and600–646 generic ArtifactPublishTool derive actual Task/Session/agent, accept namespaced non-formal output, and validate source_read_refs/resource_set. Actual formal publishers keep their typed validation. No Base research-report formal schema requires a plan. This patch keeps the original complete Artifact read reference selection paragraph verbatim and one-publication boundary; source coordinates in visible findings do not replace a selected complete-read ref when publishing.
+
+Manifest expert-squad.jsonc79 still says Researcher “performs ... research and publishes the canonical Base research report.” It describes a capability rather than a schema obligation, but it can reinforce blanket publication expectation in rendered inventory. Its literal wording is less conditional than Base Method/proposed role. Root should review whether that semantic ambiguity requires a separately admitted description edit; this proposal intentionally includes no manifest change and cannot claim all duplicate guidance removed. Planner selected workflow168–173 intentionally references the plan and stays correct for that actual planned partition.
+
+## Proposed patch / qualification limits
+
+The plain-English single-file patch makes plan/report requirements conditional on actual assigned/downstream authority, preserves capabilities/read-only/provenance, and gives actual findings/evidence to the visible final rather than narration only. No prompt mirror/source-string negative tests are proposed. Later exact resolver composition/typed Artifact data tests can qualify loaded identity/grants/contracts; only a genuine fresh streamed run can qualify actual Researcher Sources and final requested delivery. Root must also qualify coordinated-final reader116 separately even if future prompt flow does not coordinate. No implementation or behavior pass is claimed here.

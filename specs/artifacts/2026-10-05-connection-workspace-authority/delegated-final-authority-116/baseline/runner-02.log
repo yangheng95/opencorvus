@@ -1,0 +1,26 @@
+[1/1] START test/read-agent-message-worker-final-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1111 |   function defaultMcpServersForRefs(config: ConfigLike, refs: readonly string[]): Record<string, Config.Mcp> {
+1112 |     const result: Record<string, Config.Mcp> = {}
+1113 |     for (const ref of refs) {
+1114 |       const { serverName } = defaultMcpTypedPartsFromRef(ref)
+1115 |       const server = config.mcp?.[serverName]
+1116 |       if (!server) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
+                                    ^
+error: Active expert squad projects missing default MCP server default/mcp/browser.
+      at defaultMcpServersForRefs (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:1116:30)
+      at resolveSchedulerCapabilityForContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:2434:17)
+      at resolvePackageCapabilitySet (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:2992:79)
+      at resolveWorkerTurnProjection (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:3017:29)
+      at processTicksAndRejections (unknown:7:39)
+(fail) reads a physically coordinated worker final and its canonical Tool facts [2531.37ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [4.66s]
+[1/1] DONE test/read-agent-message-worker-final-authority.test.ts exit=1 duration=5.55s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\read-agent-message-worker-final-authority.test.ts

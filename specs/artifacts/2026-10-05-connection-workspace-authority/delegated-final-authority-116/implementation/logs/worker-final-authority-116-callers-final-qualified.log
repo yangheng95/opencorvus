@@ -1,0 +1,26 @@
+[1/2] START test/expert-squad/dynamic-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Dynamic Expert Squad package > resolves the embedded default with two reusable capability envelopes [2443.80ms]
+(pass) Dynamic Expert Squad package > runs repeated generated members as overlapping direct-dispatch sibling Sessions [7054.30ms]
+
+ 2 pass
+ 0 fail
+ 28 expect() calls
+Ran 2 tests across 1 file. [12.27s]
+[1/2] DONE test/expert-squad/dynamic-package.test.ts exit=0 duration=13.27s
+[2/2] START test/expert-squad/light-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Light Expert Squad package > loads exactly the Planner and Investigator advisory roles with one shared package Skill [168.86ms]
+(pass) Light Expert Squad package > installs the released payload and projects the exact read-only advisory and Skill surfaces [3191.77ms]
+(pass) Light Expert Squad package > settles four overlapping Light dispatches (injected fixture failure: %s) [13361.93ms]
+(pass) Light Expert Squad package > settles four overlapping Light dispatches (injected fixture failure: %s) [11329.14ms]
+
+ 4 pass
+ 0 fail
+ 189 expect() calls
+Ran 4 tests across 1 file. [30.61s]
+[2/2] DONE test/expert-squad/light-package.test.ts exit=0 duration=30.98s

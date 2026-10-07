@@ -1,0 +1,48 @@
+[1/3] START test/expert-squad/dynamic-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Dynamic Expert Squad package > resolves the embedded default with two reusable capability envelopes [2516.93ms]
+(pass) Dynamic Expert Squad package > runs repeated generated members as overlapping direct-dispatch sibling Sessions [6552.52ms]
+
+ 2 pass
+ 0 fail
+ 30 expect() calls
+Ran 2 tests across 1 file. [12.09s]
+[1/3] DONE test/expert-squad/dynamic-package.test.ts exit=0 duration=13.02s
+[2/3] START test/expert-squad/light-package.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Light Expert Squad package > loads exactly the Planner and Investigator advisory roles with one shared package Skill [244.54ms]
+(pass) Light Expert Squad package > installs the released payload and projects the exact read-only advisory and Skill surfaces [2892.97ms]
+(pass) Light Expert Squad package > settles four overlapping Light dispatches (injected fixture failure: %s) [11320.80ms]
+(pass) Light Expert Squad package > settles four overlapping Light dispatches (injected fixture failure: %s) [9793.61ms]
+
+ 4 pass
+ 0 fail
+ 195 expect() calls
+Ran 4 tests across 1 file. [26.77s]
+[2/3] DONE test/expert-squad/light-package.test.ts exit=0 duration=26.99s
+[3/3] START test/task-root-ingress-reducer.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task-root fact reducer > keeps prose-only Turns on the same unresolved ingress [1.09ms]
+(pass) Task-root fact reducer > resolves one assistant-owned decision set [0.25ms]
+(pass) Task-root fact reducer > resolves parallel dispatch receipts from one completed assistant Turn as one atomic decision set [1.14ms]
+(pass) Task-root fact reducer > resolves one canonical dispatch collection receipt [0.16ms]
+(pass) Task-root fact reducer > conflict wins over an apparent decision receipt [0.08ms]
+(pass) Task-root fact reducer > blocks decision receipts owned by different assistant Turns [0.08ms]
+(pass) Task-root fact reducer > does not consume an activation at an intermediate tool-call boundary [0.20ms]
+(pass) Task-root fact reducer > requires reconciliation for an unreceipted irreversible request [0.15ms]
+(pass) Task-root fact reducer > derives budget and lifecycle fences without blocker rows [0.28ms]
+(pass) Task-root fact reducer > exhausts repeated decision gaps inside one completed activation without double-counting its Turn [6.44ms]
+(pass) Task-root fact reducer > admits a same-epoch conversation accepted after the terminal boundary [0.15ms]
+(pass) Task-root fact reducer > lets lifecycle fences and the absolute deadline preempt an unresolved wait [0.12ms]
+
+ 12 pass
+ 0 fail
+ 17 expect() calls
+Ran 12 tests across 1 file. [1235.00ms]
+[3/3] DONE test/task-root-ingress-reducer.test.ts exit=0 duration=1.41s
