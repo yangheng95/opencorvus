@@ -1,0 +1,23 @@
+{
+  "occurrence": "skills-ui-trace-98-03-858132db-ea33-47fb-b0e4-b5f514a9fb51",
+  "outcome": "settled",
+  "host": {
+    "pid": 73920,
+    "processInstanceID": "win32:639269687000703509",
+    "occurrenceID": "78b99b1e-801b-4623-ab94-b94ad864ad2a"
+  },
+  "target": {
+    "pid": 67268,
+    "processInstanceID": "win32:639269687009212128",
+    "occurrenceID": "51d2f88e-0ef4-47f7-9460-3f2bf806e395"
+  },
+  "observedAtUtc": "2026-10-07T11:20:28.868Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

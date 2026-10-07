@@ -1,5 +1,11 @@
 # 2026-10 Records
 
+- [Immutable package publication qualification](2026-10-07-immutable-package-publication.md)
+
+- [Immutable publication98 repair Recall](../../artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-98/publication-repair-plan.md)
+
+- [Snapshot publication98 trace Recall](../../artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-98/snapshot-publication-trace-plan.md)
+
 - [Log search100 and reader/latency qualification checkpoint](2026-10-07-log-search-and-reader-latency-qualification.md)
 
 - [Log search100 Recall](../../artifacts/2026-10-05-connection-workspace-authority/log-viewer-search-plan-100.md)

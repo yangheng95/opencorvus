@@ -1,0 +1,17 @@
+# Diagnostics-only implementation freeze
+
+## Scope and behavior
+
+Only registry.ts, skill/read-diagnostics.ts and the one new snapshot-publication-diagnostics.test.ts were changed. Full source preimages are preserved. Seven fixed phases observe actual source capture, publication, existing verification, staging writes, atomic publication, competing verification and final verification. readInstalledPackageRevision has its exact original capture observed once; packageDigest verification is not mislabeled source capture; embedded prepared-byte entrance has no fabricated source-capture phase. Metadata is actual digest/count/staging basename, not private paths/bodies. Final catch projects validated native code/errno/syscall and one publication-decision with current parent/http/occurrence. It invokes original competing verification once and preserves noncompeting short circuit, retry/flags, errors and cleanup.
+
+## Actual frozen checker evidence
+
+The first after run uses the original frozen checker before added contracts: 1pass7assert, exit0. checker-adc4e338-6cdc-4aaf-9545-1ce5d7275a31.log/json records occurrence4da43f81-b396-449c-bed3-e8e4d1021fc7, actual digest3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677. Atomic publication70464:10/.snapshot-OFO7WZ fulfilled143ms. Same-target70464:9/.snapshot-4fuD1V rejected19369ms; final actual EPERM/errno-1/syscallrename. One competing verification returnedtrue; publication-decision accepted-competing/verificationAttemptedtrue/verifiedtrue. Four public package outputs remained correct. This confirms the slow rename-then-valid-winner path in this owned native backend fixture, not the historical host02/100 branch. No repair or policy change is claimed.
+
+## Focused checks and preserved failures
+
+Original baseline fails missing new phase after real outputs; both raws retained. New source first originalchecker passes. Added observer contracts preserve DEBUG-disabled/enabled original Promise, same rejection object and exact fixture request parent attribution. Real missing source raises original Error “expert squad package root: expected directory”, and source-capture reports rejected/error. First fixture expected ENOENT/scandir incorrectly; raw retained and expected current actual boundary error corrected. A later fixture selected an old retained log phase instead of its own request; raw preserved and scoped to exact requestID. Tool path/formatter invocation failures were not production failures and were corrected.
+
+Final newchecker3pass15assert exit0, full raw contract-qualified.log; final checker-0b815a69-fe84-40c2-b791-2d3dd9eec18e output. Existing Skill diagnostics4pass29assert and candidate-reader measurement2pass8assert run unchanged and pass in related-checks-and-preserved-fixture-failure.log. That multi-file invocation overallfailed at the earlier new fixture; do not call that whole invocation green. Qualified cases total9/52 across the actual separate successful checks. Candidate reader keeps97 current contracts, no I/O policy fix.
+
+Explicit types includes all production src and all3 exact tests, finalexit0; configuration and raw retained. Configured source types recorded separately. Source topology/import index and genuine HTTP/UI/native closure remain Root-owned. No Provider/UI tests, live service or sourcegraph checks were run here; fixture native file semantics do not qualify Task/Mission execution or historical UI root cause. Production frozen; Root may run actual native trace with unchanged policies.

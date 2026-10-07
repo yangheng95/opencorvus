@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+- [Immutable publication98 qualification](records/2026-10/2026-10-07-immutable-package-publication.md): real UI slow branch and sole-publisher repair qualified; current native scopes closed.
+
+- [Immutable publication98 repair Recall](artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-98/publication-repair-plan.md): genuine UI EPERM/verified-winner delay proved; sole-publisher repair admitted.
+
+- [Snapshot publication98 trace](artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-98/snapshot-publication-trace-plan.md): real concurrent package baseline reproduces19.3s; diagnostics admitted and policy repair held.
+
 - [Log search100 and reader/latency checkpoint](records/2026-10/2026-10-07-log-search-and-reader-latency-qualification.md): real search/pixels/Copy closed,97/98/99 remain active.
 
 - [Log search100 Recall](artifacts/2026-10-05-connection-workspace-authority/log-viewer-search-plan-100.md): one loaded-record query/list/Copy projection, source frozen; real manual acceptance pending.

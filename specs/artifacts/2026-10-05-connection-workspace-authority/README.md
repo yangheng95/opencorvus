@@ -1,5 +1,9 @@
 # Connection workspace authority investigation
 
+- [Immutable publication98 repair](skills-load-timeout-98/publication-repair-plan.md) and [genuine UI trace03](skills-load-timeout-98/host-debug-03/README.md): actual delayed rename and verified competitor now proved; bounded publisher repair proceeds.
+
+- [Snapshot publication98 trace evidence](skills-load-timeout-98/publication-trace/README.md): original real19.3s concurrent package output preserved; diagnostic observation proceeds before selecting a repair.
+
 - [Search100 final evidence](log-viewer-search-100/README.md): current matcher/list/Copy,9/29 data checks, real six screenshots and native closure.
 - [Reader97 real before measurement](candidate-reader-provenance-97/README.md): lawful installed README actualEBUSY→candidate400→unlock200; policy still held.
 - [Skills98 complete observed scopes](skills-load-timeout-98/README.md): fast ordinary baseline and actual19.345s UI package phase, both closed; cause still under investigation.

@@ -1,0 +1,72 @@
+diff --git a/packages/opencorvus/src/expert-squad/registry.ts b/packages/opencorvus/src/expert-squad/registry.ts
+index 1b9df9f2..b9aaf3f4 100644
+--- a/packages/opencorvus/src/expert-squad/registry.ts
++++ b/packages/opencorvus/src/expert-squad/registry.ts
+@@ -4,6 +4,7 @@ import { PackageToolBundle } from "@/expert-squad/package-tool-bundle"
+ import { McpConfigSchema } from "@/config/mcp-schema"
+ import { Filesystem } from "@/util/filesystem"
+ import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
++import { Flag } from "@/flag/flag"
+ import { parseFrontmatter } from "@/util/frontmatter"
+ import { Global } from "@/global"
+ import type { Skill } from "@/skill"
+@@ -740,28 +741,38 @@ export namespace ExpertSquadRegistry {
+             },
+             publicationMetadata,
+           )
+-          try {
+-            await SkillReadDiagnostics.phase(
+-              "projection.package-atomic-publication",
+-              () => Filesystem.renameAfterTransientContention(staging, target),
+-              publicationMetadata,
+-            )
+-          } catch (error) {
+-            const code = (error as NodeJS.ErrnoException).code
+-            const competingPublication =
+-              code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
+-            if (!competingPublication) {
+-              SkillReadDiagnostics.publicationDecision(publicationMetadata, error, false)
+-              throw error
++          for (let attempt = 1; attempt <= Flag.OPENCORVUS_FILESYSTEM_RENAME_ATTEMPTS; attempt += 1) {
++            try {
++              await SkillReadDiagnostics.phase(
++                "projection.package-atomic-publication",
++                () => Filesystem.renameNoReplace(staging, target),
++                publicationMetadata,
++              )
++              break
++            } catch (error) {
++              const code = (error as NodeJS.ErrnoException).code
++              const competingPublication =
++                code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
++              if (!competingPublication) {
++                SkillReadDiagnostics.publicationDecision(publicationMetadata, error, false)
++                throw error
++              }
++              const verified = await SkillReadDiagnostics.phase(
++                "projection.package-competing-verify",
++                () => publishedSnapshotMatches(target, snapshot.digest),
++                publicationMetadata,
++              )
++              SkillReadDiagnostics.publicationDecision(publicationMetadata, error, true, verified)
++              if (verified) {
++                await rm(staging, { recursive: true, force: true })
++                break
++              }
++              const retryable = code === "EPERM" || code === "EACCES" || code === "EBUSY"
++              if (!retryable || attempt === Flag.OPENCORVUS_FILESYSTEM_RENAME_ATTEMPTS) throw error
++              await new Promise<void>((resolve) =>
++                setTimeout(resolve, Flag.OPENCORVUS_FILESYSTEM_RENAME_DELAY_MS * attempt),
++              )
+             }
+-            const verified = await SkillReadDiagnostics.phase(
+-              "projection.package-competing-verify",
+-              () => publishedSnapshotMatches(target, snapshot.digest),
+-              publicationMetadata,
+-            )
+-            SkillReadDiagnostics.publicationDecision(publicationMetadata, error, true, verified)
+-            if (!verified) throw error
+-            await rm(staging, { recursive: true, force: true })
+           }
+           if (
+             (await SkillReadDiagnostics.phase(

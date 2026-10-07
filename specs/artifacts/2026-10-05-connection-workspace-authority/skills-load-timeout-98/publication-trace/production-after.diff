@@ -1,0 +1,203 @@
+diff --git a/packages/opencorvus/src/expert-squad/registry.ts b/packages/opencorvus/src/expert-squad/registry.ts
+index 66d80492..1b9df9f2 100644
+--- a/packages/opencorvus/src/expert-squad/registry.ts
++++ b/packages/opencorvus/src/expert-squad/registry.ts
+@@ -3,6 +3,7 @@ import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } f
+ import { PackageToolBundle } from "@/expert-squad/package-tool-bundle"
+ import { McpConfigSchema } from "@/config/mcp-schema"
+ import { Filesystem } from "@/util/filesystem"
++import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
+ import { parseFrontmatter } from "@/util/frontmatter"
+ import { Global } from "@/global"
+ import type { Skill } from "@/skill"
+@@ -708,46 +709,90 @@ export namespace ExpertSquadRegistry {
+   async function materializeCapturedPackageSnapshot(
+     snapshot: PackageTreeSnapshot,
+   ): Promise<Readonly<{ root: string; digest: string }>> {
+-    const snapshotsRoot = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI)
+-    const target = path.join(snapshotsRoot, snapshot.digest)
+-    await mkdir(snapshotsRoot, { recursive: true })
+-    if (await publishedSnapshotMatches(target, snapshot.digest)) {
+-      return Object.freeze({ root: target, digest: snapshot.digest })
+-    }
++    return SkillReadDiagnostics.phase(
++      "projection.package-publication",
++      async () => {
++        const metadata = { digest: snapshot.digest, fileCount: snapshot.files.length }
++        const snapshotsRoot = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI)
++        const target = path.join(snapshotsRoot, snapshot.digest)
++        await mkdir(snapshotsRoot, { recursive: true })
++        if (
++          await SkillReadDiagnostics.phase(
++            "projection.package-existing-verify",
++            () => publishedSnapshotMatches(target, snapshot.digest),
++            metadata,
++          )
++        ) {
++          return Object.freeze({ root: target, digest: snapshot.digest })
++        }
+ 
+-    const staging = await mkdtemp(path.join(snapshotsRoot, ".snapshot-"))
+-    try {
+-      for (const file of snapshot.files) {
+-        const destination = path.join(staging, ...file.relativePath.split("/"))
+-        await mkdir(path.dirname(destination), { recursive: true })
+-        await writeFile(destination, file.bytes, { flag: "wx" })
+-      }
+-      try {
+-        await Filesystem.renameAfterTransientContention(staging, target)
+-      } catch (error) {
+-        const code = (error as NodeJS.ErrnoException).code
+-        const competingPublication =
+-          code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
+-        if (!competingPublication || !(await publishedSnapshotMatches(target, snapshot.digest))) throw error
+-        await rm(staging, { recursive: true, force: true })
+-      }
+-      if ((await packageDigest(target)) !== snapshot.digest) {
+-        throw new Error(`expert squad immutable package snapshot digest mismatch: ${target}`)
+-      }
+-      return Object.freeze({ root: target, digest: snapshot.digest })
+-    } catch (error) {
+-      await rm(staging, { recursive: true, force: true })
+-      throw error
+-    }
++        const staging = await mkdtemp(path.join(snapshotsRoot, ".snapshot-"))
++        const publicationMetadata = { ...metadata, stagingBasename: path.basename(staging) }
++        try {
++          await SkillReadDiagnostics.phase(
++            "projection.package-staging-write",
++            async () => {
++              for (const file of snapshot.files) {
++                const destination = path.join(staging, ...file.relativePath.split("/"))
++                await mkdir(path.dirname(destination), { recursive: true })
++                await writeFile(destination, file.bytes, { flag: "wx" })
++              }
++            },
++            publicationMetadata,
++          )
++          try {
++            await SkillReadDiagnostics.phase(
++              "projection.package-atomic-publication",
++              () => Filesystem.renameAfterTransientContention(staging, target),
++              publicationMetadata,
++            )
++          } catch (error) {
++            const code = (error as NodeJS.ErrnoException).code
++            const competingPublication =
++              code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
++            if (!competingPublication) {
++              SkillReadDiagnostics.publicationDecision(publicationMetadata, error, false)
++              throw error
++            }
++            const verified = await SkillReadDiagnostics.phase(
++              "projection.package-competing-verify",
++              () => publishedSnapshotMatches(target, snapshot.digest),
++              publicationMetadata,
++            )
++            SkillReadDiagnostics.publicationDecision(publicationMetadata, error, true, verified)
++            if (!verified) throw error
++            await rm(staging, { recursive: true, force: true })
++          }
++          if (
++            (await SkillReadDiagnostics.phase(
++              "projection.package-final-verify",
++              () => packageDigest(target),
++              publicationMetadata,
++            )) !== snapshot.digest
++          ) {
++            throw new Error(`expert squad immutable package snapshot digest mismatch: ${target}`)
++          }
++          return Object.freeze({ root: target, digest: snapshot.digest })
++        } catch (error) {
++          await rm(staging, { recursive: true, force: true })
++          throw error
++        }
++      },
++      { digest: snapshot.digest, fileCount: snapshot.files.length },
++    )
+   }
+ 
+   async function materializePackageSnapshot(sourceRoot: string): Promise<Readonly<{ root: string; digest: string }>> {
+-    return materializeCapturedPackageSnapshot(await capturePackageTree(sourceRoot))
++    return materializeCapturedPackageSnapshot(
++      await SkillReadDiagnostics.phase("projection.package-source-capture", () => capturePackageTree(sourceRoot)),
++    )
+   }
+ 
+   /** Provisioning inspects installed bytes, not executable capability declarations. */
+   export async function readInstalledPackageRevision(root: string, options: { preserveSnapshot?: boolean } = {}) {
+-    const snapshot = await capturePackageTree(root)
++    const snapshot = await SkillReadDiagnostics.phase("projection.package-source-capture", () =>
++      capturePackageTree(root),
++    )
+     const manifestFile = snapshot.files.find((file) => file.relativePath === MANIFEST)
+     if (!manifestFile) throw new Error(`Installed Expert Squad is missing ${MANIFEST}: ${root}`)
+     const raw = parseJsoncText(manifestFile.bytes.toString("utf8"), path.join(root, MANIFEST))
+diff --git a/packages/opencorvus/src/skill/read-diagnostics.ts b/packages/opencorvus/src/skill/read-diagnostics.ts
+index a72bdef9..e4b150a9 100644
+--- a/packages/opencorvus/src/skill/read-diagnostics.ts
++++ b/packages/opencorvus/src/skill/read-diagnostics.ts
+@@ -42,6 +42,13 @@ type Phase =
+   | "config.verify"
+   | "config.dependencies"
+   | "projection.package"
++  | "projection.package-source-capture"
++  | "projection.package-publication"
++  | "projection.package-existing-verify"
++  | "projection.package-staging-write"
++  | "projection.package-atomic-publication"
++  | "projection.package-competing-verify"
++  | "projection.package-final-verify"
+   | "projection.skills"
+   | "projection.capabilities"
+   | "projection.selectors"
+@@ -108,9 +115,47 @@ function span(phase: Phase, fields: Record<string, unknown> = {}) {
+ 
+ /** Observation only: every helper returns the operation's original value or promise. */
+ export namespace SkillReadDiagnostics {
+-  export function phase<T>(name: Phase, operation: () => T): T {
++  export type SnapshotMetadata = Readonly<{ digest?: string; fileCount?: number; stagingBasename?: string }>
++
++  export function publicationDecision(
++    metadata: SnapshotMetadata,
++    error: unknown,
++    competing: boolean,
++    verified?: boolean,
++  ) {
++    if (!log.enabled("DEBUG")) return
++    const parent = context.tryUse()
++    const value = error && typeof error === "object" ? error : {}
++    const native = {
++      code:
++        "code" in value && typeof value.code === "string" && /^[A-Z0-9_]+$/.test(value.code) ? value.code : undefined,
++      errno:
++        "errno" in value && typeof value.errno === "number" && Number.isFinite(value.errno) ? value.errno : undefined,
++      syscall:
++        "syscall" in value && typeof value.syscall === "string" && /^[a-zA-Z0-9_]+$/.test(value.syscall)
++          ? value.syscall
++          : undefined,
++    }
++    log.debug("publication-decision", {
++      ...metadata,
++      ...native,
++      parentSpanID: parent?.id ?? null,
++      processOccurrenceID: currentRuntimeProcessOccurrence().occurrenceID,
++      http: { requestID: parent?.request?.id ?? null, requestSettled: parent?.request?.settled ?? false },
++      origin: parent?.request ? "http" : "startup-or-unattributed",
++      publicationDecision: !competing
++        ? "rejected-noncompeting"
++        : verified
++          ? "accepted-competing"
++          : "rejected-competing",
++      verificationAttempted: competing,
++      verified,
++    })
++  }
++
++  export function phase<T>(name: Phase, operation: () => T, metadata?: SnapshotMetadata): T {
+     if (!log.enabled("DEBUG")) return operation()
+-    const owner = span(name)
++    const owner = span(name, metadata)
+     try {
+       return observe(context.provide(owner.trace, operation), owner.finish)
+     } catch (error) {

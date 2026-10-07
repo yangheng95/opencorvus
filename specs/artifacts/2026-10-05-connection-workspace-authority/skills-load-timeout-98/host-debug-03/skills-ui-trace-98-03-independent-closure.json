@@ -1,0 +1,27 @@
+{
+  "states": [
+    {
+      "expected": {
+        "pid": 73920,
+        "processInstanceID": "win32:639269687000703509",
+        "occurrenceID": "78b99b1e-801b-4623-ab94-b94ad864ad2a"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67268,
+        "processInstanceID": "win32:639269687009212128",
+        "occurrenceID": "51d2f88e-0ef4-47f7-9460-3f2bf806e395"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "skills-ui-trace-98-03-858132db-ea33-47fb-b0e4-b5f514a9fb51",
+  "observedAtUtc": "2026-10-07T11:20:40.0009764Z",
+  "listeners": [],
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  }
+}

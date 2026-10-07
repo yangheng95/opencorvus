@@ -1,0 +1,144 @@
+Browser tab: 59, Title: "OpenCorvus", URL: "http://127.0.0.1:18048/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18048/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+										37 container
+											38 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											39 button Chat
+											40 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									41 container Recents
+										42 text Recents
+										43 container
+											44 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											45 button Chat
+											46 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand
+							47 container Connection Diagnostics
+								48 container Description: Connection Diagnostics · Online · Port 18048, ID: connBadge
+									49 text Online
+					50 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					51 container chatSection
+						52 container Description: Loading task, ID: taskSwitchProgress
+						53 container
+							54 container Description: Conversation, ID: chatScroll
+							55 container chatHomeComposition
+								56 heading What should we build in project?, Value: 1
+									57 text What should we build in project?
+								58 container chatForm
+									59 splitter Description: Drag to resize the message input, Value: 42
+									60 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									61 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									62 pop up button (collapsed) Select product mode Work, ID: select-cl-36-trigger, Secondary Actions: Expand
+										63 text Work
+									64 pop up button (collapsed) Select conversation target Chat, ID: select-cl-40-trigger, Secondary Actions: Expand
+										65 text Chat
+									66 pop up button (expanded) Description: Skills & squads, Secondary Actions: Collapse
+									67 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									68 pop up button (collapsed) Description: OpenCorvus model Inherit configuration. Click to change., Help: OpenCorvus model: Inherit configuration, Secondary Actions: Expand
+										69 text Inherit configuration
+									70 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+								71 container Suggested chat starters
+									72 button Build a webpage
+									73 button Create an expert squad
+									74 button Fix a bug
+									75 pop up button (collapsed) More, ID: dropdownmenu-cl-125-trigger, Secondary Actions: Expand
+		76 container popover-cl-44-content
+			77 text Select skills and expert squads
+			78 text Selections are written into the prompt as visible references.
+			79 search text field (settable) Search skill or squad names
+			80 container
+				81 list Description: Select skills and expert squads, ID: composerReferenceListbox
+					82 text SKILLS
+					83 ID: composerReferenceListbox-item-cl-198, Value: browser-use Skill Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.
+						84 text browser-use
+						85 text Skill
+						86 text Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.
+					87 ID: composerReferenceListbox-item-cl-200, Value: computer-use Skill Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.
+						88 text computer-use
+						89 text Skill
+						90 text Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.
+					91 ID: composerReferenceListbox-item-cl-202, Value: design-taste-frontend Skill Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.
+						92 text design-taste-frontend
+						93 text Skill
+						94 text Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.
+					95 ID: composerReferenceListbox-item-cl-204, Value: grill-me Skill Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+						96 text grill-me
+						97 text Skill
+						98 text Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+					99 ID: composerReferenceListbox-item-cl-206, Value: research-report Skill Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.
+						100 text research-report
+						101 text Skill
+						102 text Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.
+					103 ID: composerReferenceListbox-item-cl-208, Value: work-artifacts Skill Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.
+						104 text work-artifacts
+						105 text Skill
+						106 text Create, inspect, validate, review, and deliver enabled structured Work Artifacts through the single OpenCorvus Work Artifact Harness. Use for presentation and other document, PDF, spreadsheet, data, image, archive, OCR, or media requests only when the mounted profile registry exposes that format. The current P0 profile creates new PPTX presentations with adapter-input isolation; it does not claim an operating-system network sandbox, edit existing presentations, or provide DOCX, XLSX, PDF, OCR, archive, image, data, or media production yet.
+					107 ID: composerReferenceListbox-item-cl-210, Value: general Mission Skill Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
+						108 text general
+						109 text Mission Skill
+						110 text Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.
+					111 text EXPERT SQUADS
+					112 ID: composerReferenceListbox-item-cl-212, Value: Advanced Expert Squad · advanced Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.
+						113 text Advanced
+						114 text Expert Squad
+						115 text  · 
+						116 text advanced
+						117 text Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.
+					118 ID: composerReferenceListbox-item-cl-214, Value: Base Expert Squad · base Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
+						119 text Base
+						120 text Expert Squad
+						121 text  · 
+						122 text base
+						123 text Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.
+					124 ID: composerReferenceListbox-item-cl-216, Value: Research Studio Expert Squad · research-studio A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.
+						125 text Research Studio
+						126 text Expert Squad
+						127 text  · 
+						128 text research-studio
+						129 text A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.
+					130 ID: composerReferenceListbox-item-cl-218, Value: Generate Expert Squads Generator Expert Squad · squad-sdk Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.
+						131 text Generate Expert Squads
+						132 text Generator
+						133 text Expert Squad
+						134 text  · 
+						135 text squad-sdk
+						136 text Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.
+				137 button Install more Expert Squads Squad Market Browse the Squad Market and install only what this project needs.
+					138 text Install more Expert Squads
+					139 text Squad Market
+					140 text Browse the Squad Market and install only what this project needs.
+
+The focused UI element is 79 search text field (settable) Search skill or squad names

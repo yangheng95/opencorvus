@@ -3,6 +3,8 @@ import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } f
 import { PackageToolBundle } from "@/expert-squad/package-tool-bundle"
 import { McpConfigSchema } from "@/config/mcp-schema"
 import { Filesystem } from "@/util/filesystem"
+import { SkillReadDiagnostics } from "@/skill/read-diagnostics"
+import { Flag } from "@/flag/flag"
 import { parseFrontmatter } from "@/util/frontmatter"
 import { Global } from "@/global"
 import type { Skill } from "@/skill"
@@ -708,46 +710,100 @@ export namespace ExpertSquadRegistry {
   async function materializeCapturedPackageSnapshot(
     snapshot: PackageTreeSnapshot,
   ): Promise<Readonly<{ root: string; digest: string }>> {
-    const snapshotsRoot = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI)
-    const target = path.join(snapshotsRoot, snapshot.digest)
-    await mkdir(snapshotsRoot, { recursive: true })
-    if (await publishedSnapshotMatches(target, snapshot.digest)) {
-      return Object.freeze({ root: target, digest: snapshot.digest })
-    }
+    return SkillReadDiagnostics.phase(
+      "projection.package-publication",
+      async () => {
+        const metadata = { digest: snapshot.digest, fileCount: snapshot.files.length }
+        const snapshotsRoot = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI)
+        const target = path.join(snapshotsRoot, snapshot.digest)
+        await mkdir(snapshotsRoot, { recursive: true })
+        if (
+          await SkillReadDiagnostics.phase(
+            "projection.package-existing-verify",
+            () => publishedSnapshotMatches(target, snapshot.digest),
+            metadata,
+          )
+        ) {
+          return Object.freeze({ root: target, digest: snapshot.digest })
+        }
 
-    const staging = await mkdtemp(path.join(snapshotsRoot, ".snapshot-"))
-    try {
-      for (const file of snapshot.files) {
-        const destination = path.join(staging, ...file.relativePath.split("/"))
-        await mkdir(path.dirname(destination), { recursive: true })
-        await writeFile(destination, file.bytes, { flag: "wx" })
-      }
-      try {
-        await Filesystem.renameAfterTransientContention(staging, target)
-      } catch (error) {
-        const code = (error as NodeJS.ErrnoException).code
-        const competingPublication =
-          code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
-        if (!competingPublication || !(await publishedSnapshotMatches(target, snapshot.digest))) throw error
-        await rm(staging, { recursive: true, force: true })
-      }
-      if ((await packageDigest(target)) !== snapshot.digest) {
-        throw new Error(`expert squad immutable package snapshot digest mismatch: ${target}`)
-      }
-      return Object.freeze({ root: target, digest: snapshot.digest })
-    } catch (error) {
-      await rm(staging, { recursive: true, force: true })
-      throw error
-    }
+        const staging = await mkdtemp(path.join(snapshotsRoot, ".snapshot-"))
+        const publicationMetadata = { ...metadata, stagingBasename: path.basename(staging) }
+        try {
+          await SkillReadDiagnostics.phase(
+            "projection.package-staging-write",
+            async () => {
+              for (const file of snapshot.files) {
+                const destination = path.join(staging, ...file.relativePath.split("/"))
+                await mkdir(path.dirname(destination), { recursive: true })
+                await writeFile(destination, file.bytes, { flag: "wx" })
+              }
+            },
+            publicationMetadata,
+          )
+          for (let attempt = 1; attempt <= Flag.OPENCORVUS_FILESYSTEM_RENAME_ATTEMPTS; attempt += 1) {
+            try {
+              await SkillReadDiagnostics.phase(
+                "projection.package-atomic-publication",
+                () => Filesystem.renameNoReplace(staging, target),
+                publicationMetadata,
+              )
+              break
+            } catch (error) {
+              const code = (error as NodeJS.ErrnoException).code
+              const competingPublication =
+                code === "EEXIST" || code === "ENOTEMPTY" || code === "EPERM" || code === "EACCES" || code === "EBUSY"
+              if (!competingPublication) {
+                SkillReadDiagnostics.publicationDecision(publicationMetadata, error, false)
+                throw error
+              }
+              const verified = await SkillReadDiagnostics.phase(
+                "projection.package-competing-verify",
+                () => publishedSnapshotMatches(target, snapshot.digest),
+                publicationMetadata,
+              )
+              SkillReadDiagnostics.publicationDecision(publicationMetadata, error, true, verified)
+              if (verified) {
+                await rm(staging, { recursive: true, force: true })
+                break
+              }
+              const retryable = code === "EPERM" || code === "EACCES" || code === "EBUSY"
+              if (!retryable || attempt === Flag.OPENCORVUS_FILESYSTEM_RENAME_ATTEMPTS) throw error
+              await new Promise<void>((resolve) =>
+                setTimeout(resolve, Flag.OPENCORVUS_FILESYSTEM_RENAME_DELAY_MS * attempt),
+              )
+            }
+          }
+          if (
+            (await SkillReadDiagnostics.phase(
+              "projection.package-final-verify",
+              () => packageDigest(target),
+              publicationMetadata,
+            )) !== snapshot.digest
+          ) {
+            throw new Error(`expert squad immutable package snapshot digest mismatch: ${target}`)
+          }
+          return Object.freeze({ root: target, digest: snapshot.digest })
+        } catch (error) {
+          await rm(staging, { recursive: true, force: true })
+          throw error
+        }
+      },
+      { digest: snapshot.digest, fileCount: snapshot.files.length },
+    )
   }
 
   async function materializePackageSnapshot(sourceRoot: string): Promise<Readonly<{ root: string; digest: string }>> {
-    return materializeCapturedPackageSnapshot(await capturePackageTree(sourceRoot))
+    return materializeCapturedPackageSnapshot(
+      await SkillReadDiagnostics.phase("projection.package-source-capture", () => capturePackageTree(sourceRoot)),
+    )
   }
 
   /** Provisioning inspects installed bytes, not executable capability declarations. */
   export async function readInstalledPackageRevision(root: string, options: { preserveSnapshot?: boolean } = {}) {
-    const snapshot = await capturePackageTree(root)
+    const snapshot = await SkillReadDiagnostics.phase("projection.package-source-capture", () =>
+      capturePackageTree(root),
+    )
     const manifestFile = snapshot.files.find((file) => file.relativePath === MANIFEST)
     if (!manifestFile) throw new Error(`Installed Expert Squad is missing ${MANIFEST}: ${root}`)
     const raw = parseJsoncText(manifestFile.bytes.toString("utf8"), path.join(root, MANIFEST))

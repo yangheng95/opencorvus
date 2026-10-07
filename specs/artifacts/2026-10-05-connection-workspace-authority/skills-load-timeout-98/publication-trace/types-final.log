@@ -1,0 +1,13 @@
+packages/opencorvus/test/expert-squad/snapshot-publication-diagnostics.test.ts(55,133): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { id: string; namespace: string; version: string; readme: string; scheduler: any; }[]): void', gave the following error.
+    Argument of type '{ id: string; namespace: string; version: string; readme: ExpertSquadPackageFile; scheduler: any; }[]' is not assignable to parameter of type '{ id: string; namespace: string; version: string; readme: string; scheduler: any; }[]'.
+      Type '{ id: string; namespace: string; version: string; readme: ExpertSquadPackageFile; scheduler: any; }' is not assignable to type '{ id: string; namespace: string; version: string; readme: string; scheduler: any; }'.
+        Types of property 'readme' are incompatible.
+          Type 'ExpertSquadPackageFile' is not assignable to type 'string'.
+            Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'string'.
+  Overload 2 of 2, '(expected: NoInfer<{ id: string; namespace: string; version: string; readme: string; scheduler: any; }[]>): void', gave the following error.
+    Argument of type '{ id: string; namespace: string; version: string; readme: ExpertSquadPackageFile; scheduler: any; }[]' is not assignable to parameter of type '{ id: string; namespace: string; version: string; readme: string; scheduler: any; }[]'.
+      Type '{ id: string; namespace: string; version: string; readme: ExpertSquadPackageFile; scheduler: any; }' is not assignable to type '{ id: string; namespace: string; version: string; readme: string; scheduler: any; }'.
+        Types of property 'readme' are incompatible.
+          Type 'ExpertSquadPackageFile' is not assignable to type 'string'.
+            Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'string'.

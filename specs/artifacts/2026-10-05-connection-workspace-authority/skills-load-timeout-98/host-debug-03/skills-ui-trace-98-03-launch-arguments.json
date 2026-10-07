@@ -1,0 +1,26 @@
+{
+  "port": 18047,
+  "occurrence": "skills-ui-trace-98-03-858132db-ea33-47fb-b0e4-b5f514a9fb51",
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\evidence",
+    "skills-ui-trace-98-03-858132db-ea33-47fb-b0e4-b5f514a9fb51",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18047",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\startup.json",
+    "--startup-occurrence",
+    "skills-ui-trace-98-03-858132db-ea33-47fb-b0e4-b5f514a9fb51",
+    "--log-level",
+    "DEBUG"
+  ]
+}

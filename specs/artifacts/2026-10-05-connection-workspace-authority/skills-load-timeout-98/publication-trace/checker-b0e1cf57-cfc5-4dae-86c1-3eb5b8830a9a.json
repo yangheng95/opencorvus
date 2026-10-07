@@ -1,0 +1,864 @@
+{
+  "outputs": [
+    {
+      "id": "publication",
+      "namespace": "trace",
+      "version": "2026.10.07.1",
+      "readme": "# Publication trace\nReal immutable output.\n",
+      "scheduler": {
+        "capability_refs": [],
+        "base_role": "orchestrator"
+      },
+      "packageDigest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677"
+    },
+    {
+      "id": "publication",
+      "namespace": "trace",
+      "version": "2026.10.07.1",
+      "readme": "# Publication trace\nReal immutable output.\n",
+      "scheduler": {
+        "capability_refs": [],
+        "base_role": "orchestrator"
+      },
+      "packageDigest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677"
+    },
+    {
+      "id": "publication",
+      "namespace": "trace",
+      "version": "2026.10.07.1",
+      "readme": "# Publication trace\nReal immutable output.\n",
+      "scheduler": {
+        "capability_refs": [],
+        "base_role": "orchestrator"
+      },
+      "packageDigest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677"
+    },
+    {
+      "id": "publication",
+      "namespace": "trace",
+      "version": "2026.10.07.1",
+      "readme": "# Publication trace\nReal immutable output.\n",
+      "scheduler": {
+        "capability_refs": [],
+        "base_role": "orchestrator"
+      },
+      "packageDigest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677"
+    }
+  ],
+  "diagnostics": [
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.918Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-source-capture",
+        "spanID": "47108:1",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.921Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-source-capture",
+        "spanID": "47108:2",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.926Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 9,
+        "phase": "projection.package-source-capture",
+        "spanID": "47108:1",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.926Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-publication",
+        "spanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.927Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 7,
+        "phase": "projection.package-source-capture",
+        "spanID": "47108:2",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.927Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-publication",
+        "spanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.928Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:5",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.928Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:6",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.928Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 0,
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:5",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.928Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 0,
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:6",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.929Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-staging-write",
+        "spanID": "47108:7",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.929Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-staging-write",
+        "spanID": "47108:8",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-Km7IBe"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.932Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 3,
+        "phase": "projection.package-staging-write",
+        "spanID": "47108:7",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.932Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-atomic-publication",
+        "spanID": "47108:9",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.933Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 4,
+        "phase": "projection.package-staging-write",
+        "spanID": "47108:8",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-Km7IBe",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.933Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-atomic-publication",
+        "spanID": "47108:10",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-Km7IBe"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.935Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 2,
+        "phase": "projection.package-atomic-publication",
+        "spanID": "47108:10",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-Km7IBe",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.935Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-final-verify",
+        "spanID": "47108:11",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-Km7IBe"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.940Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 5,
+        "phase": "projection.package-final-verify",
+        "spanID": "47108:11",
+        "parentSpanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-Km7IBe",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:16:41.940Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 13,
+        "phase": "projection.package-publication",
+        "spanID": "47108:4",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.128Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 19196,
+        "phase": "projection.package-atomic-publication",
+        "spanID": "47108:9",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz",
+        "outcome": "rejected",
+        "errorType": "error"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.128Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-competing-verify",
+        "spanID": "47108:12",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.132Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 4,
+        "phase": "projection.package-competing-verify",
+        "spanID": "47108:12",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.132Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz",
+        "code": "EPERM",
+        "errno": -1,
+        "syscall": "rename",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "publicationDecision": "accepted-competing",
+        "verificationAttempted": true,
+        "verified": true
+      },
+      "message": "publication-decision"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.134Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-final-verify",
+        "spanID": "47108:13",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.136Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 2,
+        "phase": "projection.package-final-verify",
+        "spanID": "47108:13",
+        "parentSpanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "stagingBasename": ".snapshot-G5xazz",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.136Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 19210,
+        "phase": "projection.package-publication",
+        "spanID": "47108:3",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.150Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-source-capture",
+        "spanID": "47108:14",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.153Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 3,
+        "phase": "projection.package-source-capture",
+        "spanID": "47108:14",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.153Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-publication",
+        "spanID": "47108:15",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.154Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:16",
+        "parentSpanID": "47108:15",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.156Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 3,
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:16",
+        "parentSpanID": "47108:15",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.156Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 3,
+        "phase": "projection.package-publication",
+        "spanID": "47108:15",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.171Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-publication",
+        "spanID": "47108:17",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.172Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "started",
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:18",
+        "parentSpanID": "47108:17",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.177Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 5,
+        "phase": "projection.package-existing-verify",
+        "spanID": "47108:18",
+        "parentSpanID": "47108:17",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    },
+    {
+      "level": "debug",
+      "time": "2026-10-07T11:17:01.177Z",
+      "service": "skill-read-diagnostics",
+      "logDomain": "non-session",
+      "data": {
+        "status": "completed",
+        "duration": 6,
+        "phase": "projection.package-publication",
+        "spanID": "47108:17",
+        "processOccurrenceID": "20ffd76c-d3aa-4f42-9ba3-64bc62dd178b",
+        "http": {
+          "requestID": null,
+          "requestSettled": false
+        },
+        "origin": "startup-or-unattributed",
+        "digest": "3000c58d57760619b39a2dc82fc60de497de70efcc586dcbb83238ee71087677",
+        "fileCount": 3,
+        "outcome": "fulfilled"
+      },
+      "message": "phase"
+    }
+  ],
+  "native": {
+    "platform": "win32",
+    "node": "24.3.0"
+  },
+  "settled": [
+    "fulfilled",
+    "fulfilled"
+  ]
+}

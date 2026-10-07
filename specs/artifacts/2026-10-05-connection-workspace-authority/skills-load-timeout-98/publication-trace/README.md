@@ -1,0 +1,11 @@
+# Snapshot publication98 observation evidence
+
+- [Repair freeze](repair-freeze-report.md), [real before native03](../host-debug-03/README.md) and [after native04](../host-debug-04/README.md) now qualify the exact delayed-winner branch and its sole-publisher replacement. Original preparation/unknown statements below remain their historical boundary. [Shared audit](shared-publication-audit.md), [97 feasibility](../../candidate-reader-provenance-97/repair-impact-audit.md) and [non-Git warning investigation](non-git-gc-warning-investigation.md) preserve adjacent work without claiming it fixed.
+
+Read the [Recall and admitted observation scope](../snapshot-publication-trace-plan.md) and [prepared checker report](preparation-report.md). Root has read the frozen checker and both original executions. Production diagnostics are now admitted, but no publication policy repair is admitted yet.
+
+The real SDK writes identical valid package bytes into two fresh owned source directories. The checker joins two concurrent `Registry.loadPackage` operations, then loads a warm source and the same real files through the embedded snapshot entrance. All four explicit package identity, version, README and scheduler outputs pass. The first and replay executions naturally take 19.351 and 19.312 seconds, then fail at the desired diagnostic phases which the unchanged production source does not yet emit. These are genuine native package outputs and a reproducible slow boundary; they are not HTTP, browser, model or rename-error acceptance.
+
+Original logs, full parsed outputs, source preimages and local type preparation failures remain here. Final configured full-source plus exact new checker type qualification exits0. Immutable digest fields identify the actual package publication; no recomputed digest is used as a substitute for functional output acceptance. The upcoming trace must record the real final atomic rename error and original competing-target verification result before Root selects a repair.
+
+Root owns genuine native HTTP/UI qualification, documentation indexes and Git delivery. All earlier98 and100 browser/service occurrences are closed. Reader97 operational-error policy and LogViewer99 scroll cause remain separate active investigations.

@@ -1,0 +1,19 @@
+Browser tab: 59, Title: "OpenCorvus", URL: "http://127.0.0.1:18048/ui/".
+0 AXWebArea OpenCorvus, URL: 127.0.0.1:18048/ui/
+	1 container
+		2 container Logs, ID: logDialog
+			3 container
+				4 heading Logs, Value: 2, ID: dialog-cl-97-title
+					5 text Logs
+				6 pop up button (collapsed) Log level DEBUG, ID: logLevelFilter-trigger, Secondary Actions: Expand
+					7 text DEBUG
+				8 button Refresh, ID: btnLogRefresh
+				9 button Description: Copy path, ID: btnLogOpenFile
+				10 button (disabled) Copy, ID: btnLogCopy
+				11 button Clear, ID: btnLogClear
+				12 button Close, ID: btnCloseLog
+				13 search text field (settable) Description: Search loaded logs, Value: 739270f5-9b3b-4346-8535-263bf5c87dfa
+				14 button Clear search
+				15 text No loaded logs match this search.
+
+The focused UI element is 13 search text field (settable) Description: Search loaded logs, Value: 739270f5-9b3b-4346-8535-263bf5c87dfa

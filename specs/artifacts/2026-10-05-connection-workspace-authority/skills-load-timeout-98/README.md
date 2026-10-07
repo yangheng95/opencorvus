@@ -1,5 +1,11 @@
 # Skills timeout98 evidence
 
+- [Repair04 real UI acceptance](host-debug-04/README.md): Skills267ms/catalog336ms, actual loaded menu and selected Base reference; both before03/after04 exact native scopes closed. [Freeze/checks](publication-trace/repair-freeze-report.md) qualify11cases60 expectations and real2ms competing EEXIST convergence. Source repair is qualified within these explicit Windows/runtime boundaries; Git delivery remains pending at this record update.
+
+- [Genuine UI trace03](host-debug-03/README.md) confirms mount19502ms with atomic EPERM19256ms and verified winner. Own IAB58/native scope closed. [Repair Recall](publication-repair-plan.md) admits one package-owned atomic no-replace/verify-before-retry policy; original unknown-phase statements below remain historical evidence.
+
+- [Snapshot publication observation](publication-trace/README.md): two fresh real concurrent-source baselines naturally take19.351/19.312s with correct package outputs. Original failures and source preimages are retained; native rename cause is not yet observed.
+
 Read [Recall and exact scopes](../skills-load-timeout-plan-98.md), [original investigation](../skills-load-timeout-investigation-98.md), [ordinary analysis](ordinary-debug-01/analysis.md), [real UI projection investigation](host-debug-02/package-projection-investigation.md) and [next trace proposal](snapshot-publication-trace-plan.md). No latency fix is implemented or claimed.
 
 Original95 actual UI skills timeout around15.5s precedes exact backend200/19439ms; warm235ms. Original INFO run lacks Skill phases. Current ordinary canonical checker uses empty{} and injected existing helper/DEBUG, no auth/models or authored Skill fixtures. It passes10 accepted matrices/7 Skills/41 grants, first384ms/warm101ms and real cancel181ms beside backend382ms.858 raw/phase rows coherently represent429 balanced spans. Seven serial HTTP-unattributed initializers occur after later Project/current, not startup; join-pending is not observed. Both finite occurrences and source/helper/parent exact births independently closed,18043 free. This fast baseline does not match every95 input or repair its issue.

@@ -1,0 +1,152 @@
+{
+  "qualifier": "Actual canonical Chat creation and public diagnostic input; no model prompt or copied authority",
+  "target": {
+    "pid": 67268,
+    "processInstanceID": "win32:639269687009212128",
+    "occurrenceID": "51d2f88e-0ef4-47f7-9460-3f2bf806e395"
+  },
+  "observedAtUtc": "2026-10-07T11:18:33.8585506Z",
+  "requests": [
+    {
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\project"
+      },
+      "headers": {
+        "Content-Length": [
+          "217"
+        ],
+        "x-opencorvus-request-id": [
+          "b7cf270a-e5c9-41e8-a7e1-f5919c05e88c"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 11:18:33 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ]
+      },
+      "rawBody": "{\"id\":\"prj_hZnE7gu4usghvxKWNG7u\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\skills-ui-trace-98-03\\\\project\",\"sandboxes\":[],\"time\":{\"created\":1791371913106,\"updated\":1791371913106}}",
+      "method": "GET",
+      "body": {
+        "id": "prj_hZnE7gu4usghvxKWNG7u",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\project",
+        "sandboxes": [],
+        "time": {
+          "created": 1791371913106,
+          "updated": 1791371913106
+        }
+      },
+      "status": 200,
+      "url": "http://127.0.0.1:18047/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cskills-ui-trace-98-03%5Cproject",
+      "input": null
+    },
+    {
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\project"
+      },
+      "headers": {
+        "Content-Length": [
+          "402"
+        ],
+        "x-opencorvus-request-id": [
+          "0457ebfc-e45f-4cf0-a386-76b33b879336"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 11:18:33 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ]
+      },
+      "rawBody": "{\"session\":{\"id\":\"ses_-zUSdW0VzzzzkQ87RlgO\",\"slug\":\"shiny-star\",\"version\":\"local\",\"projectID\":\"prj_hZnE7gu4usghvxKWNG7u\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\skills-ui-trace-98-03\\\\project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791371913808,\"updated\":1791371913808}}}",
+      "method": "POST",
+      "body": {
+        "session": {
+          "id": "ses_-zUSdW0VzzzzkQ87RlgO",
+          "slug": "shiny-star",
+          "version": "local",
+          "projectID": "prj_hZnE7gu4usghvxKWNG7u",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\project",
+          "title": "Chat",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1791371913808,
+            "updated": 1791371913808
+          }
+        }
+      },
+      "status": 201,
+      "url": "http://127.0.0.1:18047/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cskills-ui-trace-98-03%5Cproject",
+      "input": {}
+    },
+    {
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-trace-98-03\\project"
+      },
+      "headers": {
+        "Content-Length": [
+          "4"
+        ],
+        "x-opencorvus-request-id": [
+          "bebc9fd5-16bf-41fe-9d1a-42c98cf3aeec"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 11:18:33 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ]
+      },
+      "rawBody": "true",
+      "method": "POST",
+      "body": true,
+      "status": 200,
+      "url": "http://127.0.0.1:18047/log?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cskills-ui-trace-98-03%5Cproject",
+      "input": {
+        "entries": [
+          {
+            "level": "warn",
+            "extra": {
+              "logDomain": "subject-lifecycle",
+              "level": "info",
+              "time": {
+                "created": 1791371913808,
+                "updated": 1791371913808
+              },
+              "service": "subject-lifecycle",
+              "sessionID": "ses_-zUSdW0VzzzzkQ87RlgO",
+              "observed": "actual Chat lifecycle"
+            },
+            "message": "Logger subject chronology95",
+            "service": "logger-envelope95-observation"
+          }
+        ]
+      }
+    }
+  ],
+  "occurrence": "skills-ui-trace-98-03-858132db-ea33-47fb-b0e4-b5f514a9fb51"
+}

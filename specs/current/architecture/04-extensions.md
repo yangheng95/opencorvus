@@ -290,6 +290,11 @@ Base 的原始请求、真实修订、权限与适用来源定义交付义务。
   Orchestrator wake、fresh worker 与 existing Session 只解析该精确 revision；existing Session 的
   `WorkerTurnDescriptor.packageRevision` 与新 Turn 不一致时返回明确 stale-identity error，不能把同一
   Session 漂移到新 package bytes；
+- Registry 的唯一不可变包发布器使用现有原子 rename-no-replace。竞争错误发生后立即验证精确
+  target 的完整内容；合法已发布 revision 收敛到同一 target，仅清理本次 staging。只有 target
+  确实缺失且实际错误属于瞬时文件争用时，才按现有文件重命名 attempts/delay 配置有界重试。
+  损坏或不可读 target 保持真实错误，不能仅凭目录名接受；最终内容验证与 pinned revision 不变。
+  通用重命名重试仍服务 Git index 与 Project 恢复，不能用它延迟接受已完成的包发布；
 - `capability_projection.scheduler` 是固定 host Orchestrator 的唯一 package 配置面；它不是 worker identity；
 - `capability_projection.agents.<agentID>` 的 key 是唯一动态 worker identity，也是 `dispatch_agent.dispatch.target` 的精确 literal。`base_role` 只选择 core prompt、model、tool、session、adapter 和 runtime template seed，不能反向推导或替代 `agentID`；
 - 每个 worker 的 canonical resource root 是 `agents/<agentID>/`。Prompt 与 typed Skill/Tool/MCP `capability_refs` 必须由同一个 projection 显式声明；未知 kind/source/owner、orphan directory 和未投影资源直接失败；

@@ -42,6 +42,13 @@ type Phase =
   | "config.verify"
   | "config.dependencies"
   | "projection.package"
+  | "projection.package-source-capture"
+  | "projection.package-publication"
+  | "projection.package-existing-verify"
+  | "projection.package-staging-write"
+  | "projection.package-atomic-publication"
+  | "projection.package-competing-verify"
+  | "projection.package-final-verify"
   | "projection.skills"
   | "projection.capabilities"
   | "projection.selectors"
@@ -108,9 +115,47 @@ function span(phase: Phase, fields: Record<string, unknown> = {}) {
 
 /** Observation only: every helper returns the operation's original value or promise. */
 export namespace SkillReadDiagnostics {
-  export function phase<T>(name: Phase, operation: () => T): T {
+  export type SnapshotMetadata = Readonly<{ digest?: string; fileCount?: number; stagingBasename?: string }>
+
+  export function publicationDecision(
+    metadata: SnapshotMetadata,
+    error: unknown,
+    competing: boolean,
+    verified?: boolean,
+  ) {
+    if (!log.enabled("DEBUG")) return
+    const parent = context.tryUse()
+    const value = error && typeof error === "object" ? error : {}
+    const native = {
+      code:
+        "code" in value && typeof value.code === "string" && /^[A-Z0-9_]+$/.test(value.code) ? value.code : undefined,
+      errno:
+        "errno" in value && typeof value.errno === "number" && Number.isFinite(value.errno) ? value.errno : undefined,
+      syscall:
+        "syscall" in value && typeof value.syscall === "string" && /^[a-zA-Z0-9_]+$/.test(value.syscall)
+          ? value.syscall
+          : undefined,
+    }
+    log.debug("publication-decision", {
+      ...metadata,
+      ...native,
+      parentSpanID: parent?.id ?? null,
+      processOccurrenceID: currentRuntimeProcessOccurrence().occurrenceID,
+      http: { requestID: parent?.request?.id ?? null, requestSettled: parent?.request?.settled ?? false },
+      origin: parent?.request ? "http" : "startup-or-unattributed",
+      publicationDecision: !competing
+        ? "rejected-noncompeting"
+        : verified
+          ? "accepted-competing"
+          : "rejected-competing",
+      verificationAttempted: competing,
+      verified,
+    })
+  }
+
+  export function phase<T>(name: Phase, operation: () => T, metadata?: SnapshotMetadata): T {
     if (!log.enabled("DEBUG")) return operation()
-    const owner = span(name)
+    const owner = span(name, metadata)
     try {
       return observe(context.provide(owner.trace, operation), owner.finish)
     } catch (error) {

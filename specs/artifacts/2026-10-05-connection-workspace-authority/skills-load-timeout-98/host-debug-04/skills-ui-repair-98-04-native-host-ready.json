@@ -1,0 +1,39 @@
+{
+  "occurrence": "skills-ui-repair-98-04-469af2eb-7106-47f1-985f-7e3a72af6698",
+  "outcome": "ready",
+  "host": {
+    "pid": 62524,
+    "processInstanceID": "win32:639269692693234008",
+    "occurrenceID": "0878632b-a9ba-4c40-b5fd-82d9f4a0de5e"
+  },
+  "parent": {
+    "pid": 27360,
+    "processInstanceID": "win32:639269692670338676",
+    "occurrenceID": "e9c66402-1f83-4211-a5c2-80cb22423fce"
+  },
+  "target": {
+    "pid": 29888,
+    "processInstanceID": "win32:639269692701186177",
+    "occurrenceID": "15da4026-9330-4426-ba84-6b9fbff148ef"
+  },
+  "targetBirthAtMs": 1791372470118,
+  "observedAtUtc": "2026-10-07T11:27:50.150Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18048",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-repair-98-04\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-repair-98-04\\startup.json",
+    "--startup-occurrence",
+    "skills-ui-repair-98-04-469af2eb-7106-47f1-985f-7e3a72af6698",
+    "--log-level",
+    "DEBUG"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

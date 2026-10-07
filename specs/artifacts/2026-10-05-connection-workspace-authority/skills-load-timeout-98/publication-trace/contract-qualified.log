@@ -1,0 +1,14 @@
+[1/1] START test/expert-squad/snapshot-publication-diagnostics.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Publication evidence: D:\myhexin-local\opencorvus\specs\artifacts\2026-10-05-connection-workspace-authority\skills-load-timeout-98\publication-trace\checker-0b815a69-fe84-40c2-b791-2d3dd9eec18e
+(pass) real source and embedded publication retain package outputs and truthful diagnostic phases [19453.91ms]
+(pass) snapshot observation returns the original promise and rejection object [32.27ms]
+(pass) actual missing source capture reports its original package boundary error [24.10ms]
+
+ 3 pass
+ 0 fail
+ 15 expect() calls
+Ran 3 tests across 1 file. [20.79s]
+[1/1] DONE test/expert-squad/snapshot-publication-diagnostics.test.ts exit=0 duration=21.58s
