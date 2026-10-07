@@ -1,0 +1,26 @@
+{
+  "observedAtUtc": "2026-10-07T17:16:17.2060896Z",
+  "occurrence": "empty-delivery-after-106-02-684a8275-879b-4da2-ad9a-4289534981b2",
+  "birthObservations": [
+    {
+      "expected": {
+        "pid": 68376,
+        "processInstanceID": "win32:639269890855189752",
+        "occurrenceID": "12ee7593-b7ed-43cf-8f44-88c1ad23827a"
+      },
+      "actual": null
+    },
+    {
+      "expected": {
+        "pid": 67552,
+        "processInstanceID": "win32:639269890864371988",
+        "occurrenceID": "442fd31b-7b24-4ea0-bb59-34f83416a517"
+      },
+      "actual": null
+    }
+  ],
+  "listeners": [],
+  "authPresent": false,
+  "modelsPresent": false,
+  "boundary": "Root fresh independent CIM/birth/listener/pair observation after existing whole native settlement, not PID-only closure"
+}

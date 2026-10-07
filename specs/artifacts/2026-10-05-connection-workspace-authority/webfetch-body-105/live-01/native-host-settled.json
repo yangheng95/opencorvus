@@ -1,0 +1,23 @@
+{
+  "occurrence": "webfetch-body-live-105-01-09742288-8a5e-433d-a354-289073ea4bab",
+  "outcome": "settled",
+  "host": {
+    "pid": 63880,
+    "processInstanceID": "win32:639269902508386432",
+    "occurrenceID": "3b4cf936-9de4-4100-a0f3-269b30642fa2"
+  },
+  "target": {
+    "pid": 60396,
+    "processInstanceID": "win32:639269902517643062",
+    "occurrenceID": "db6fb0e7-9102-4bd0-8bcd-716a10bf89f3"
+  },
+  "observedAtUtc": "2026-10-07T17:24:50.077Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

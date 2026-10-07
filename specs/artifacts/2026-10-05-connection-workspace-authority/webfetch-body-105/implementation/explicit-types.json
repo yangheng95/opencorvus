@@ -1,0 +1,14 @@
+{
+  "include": [
+    "../../packages/opencorvus/src/**/*.ts",
+    "../../packages/opencorvus/test/util/http-response-body.test.ts",
+    "../../packages/opencorvus/test/tool/webfetch-body.test.ts"
+  ],
+  "extends": "../../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "../../packages/opencorvus/node_modules/@types/bun"
+    ]
+  },
+  "exclude": []
+}

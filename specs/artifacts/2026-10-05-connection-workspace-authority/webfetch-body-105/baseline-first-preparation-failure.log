@@ -1,0 +1,66 @@
+[1/1] START ../../.tmp-product-iteration/webfetch-body-105-baseline.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+708 |           !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence) ||
+709 |           admittedIdentity.id !== data.id ||
+710 |           !samePath(admittedIdentity.sandbox, data.sandbox) ||
+711 |           !samePath(admittedIdentity.worktree, data.worktree)
+712 |         ) {
+713 |           throw new DirectoryOccurrenceChangedError({
+                      ^
+ProjectDirectoryOccurrenceChangedError: ProjectDirectoryOccurrenceChangedError: Project directory occurrence or Git identity changed while discovery waited for admission: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-IVvvcr\test-74540-OgI5Y8\fixtures\memory-2gRjb0
+ data: {
+  directory: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-IVvvcr\\test-74540-OgI5Y8\\fixtures\\memory-2gRjb0",
+  message: "Project directory occurrence or Git identity changed while discovery waited for admission: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-IVvvcr\\test-74540-OgI5Y8\\fixtures\\memory-2gRjb0",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:713:17)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\directory-admission.ts:242:26)
+      at async withProcessLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\process-lock.ts:86:26)
+      at async withKeyedLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\lock.ts:49:18)
+(fail) declared webfetch deadline remains active through actual delayed HTTP body [2530.03ms]
+708 |           !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence) ||
+709 |           admittedIdentity.id !== data.id ||
+710 |           !samePath(admittedIdentity.sandbox, data.sandbox) ||
+711 |           !samePath(admittedIdentity.worktree, data.worktree)
+712 |         ) {
+713 |           throw new DirectoryOccurrenceChangedError({
+                      ^
+ProjectDirectoryOccurrenceChangedError: ProjectDirectoryOccurrenceChangedError: Project directory occurrence or Git identity changed while discovery waited for admission: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-IVvvcr\test-74540-OgI5Y8\fixtures\memory-7aP2oi
+ data: {
+  directory: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-IVvvcr\\test-74540-OgI5Y8\\fixtures\\memory-7aP2oi",
+  message: "Project directory occurrence or Git identity changed while discovery waited for admission: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-IVvvcr\\test-74540-OgI5Y8\\fixtures\\memory-7aP2oi",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:713:17)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\directory-admission.ts:242:26)
+      at async withProcessLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\process-lock.ts:86:26)
+      at async withKeyedLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\lock.ts:49:18)
+(fail) actual parent abort terminates a finite delayed HTTP body [2431.59ms]
+708 |           !ProjectDirectoryAdmission.sameOccurrence(discoveredOccurrence, admittedOccurrence) ||
+709 |           admittedIdentity.id !== data.id ||
+710 |           !samePath(admittedIdentity.sandbox, data.sandbox) ||
+711 |           !samePath(admittedIdentity.worktree, data.worktree)
+712 |         ) {
+713 |           throw new DirectoryOccurrenceChangedError({
+                      ^
+ProjectDirectoryOccurrenceChangedError: ProjectDirectoryOccurrenceChangedError: Project directory occurrence or Git identity changed while discovery waited for admission: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-IVvvcr\test-74540-OgI5Y8\fixtures\memory-fC8lEn
+ data: {
+  directory: "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-IVvvcr\\test-74540-OgI5Y8\\fixtures\\memory-fC8lEn",
+  message: "Project directory occurrence or Git identity changed while discovery waited for admission: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-IVvvcr\\test-74540-OgI5Y8\\fixtures\\memory-fC8lEn",
+},
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\project.ts:713:17)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\directory-admission.ts:242:26)
+      at async withProcessLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\process-lock.ts:86:26)
+      at async withKeyedLock (D:\myhexin-local\opencorvus\packages\opencorvus\src\util\lock.ts:49:18)
+(fail) unknown-length finite six-MiB response returns current exact oversize error [2595.43ms]
+
+ 0 pass
+ 3 fail
+Ran 3 tests across 1 file. [9.04s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\.tmp-product-iteration\webfetch-body-105-baseline.test.ts
+[1/1] DONE ../../.tmp-product-iteration/webfetch-body-105-baseline.test.ts exit=1 duration=9.85s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\.tmp-product-iteration\webfetch-body-105-baseline.test.ts

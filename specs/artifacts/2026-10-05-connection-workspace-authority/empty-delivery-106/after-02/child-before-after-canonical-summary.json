@@ -1,0 +1,34 @@
+{
+  "exactCanonicalTurnArtifactsEqual": true,
+  "after": [
+    {
+      "messageID": "msg_hfvMcdGIGxPiJ0QyX0Mq",
+      "userMessageID": "msg_task-root-control_art_hXbw2gVNlMbGUpu9I1m1_art_hXbw2gVNlMbGUpu9I1m1",
+      "task": {
+        "id": "tsk_g00VXNWt2u00YplT6eUw",
+        "title": "真实网页来源标题与无障碍介绍",
+        "status": "completed"
+      },
+      "declaredOutputs": [],
+      "entries": [],
+      "catalogComplete": true,
+      "providerErrors": []
+    }
+  ],
+  "before": [
+    {
+      "messageID": "msg_hfvMcdGIGxPiJ0QyX0Mq",
+      "userMessageID": "msg_task-root-control_art_hXbw2gVNlMbGUpu9I1m1_art_hXbw2gVNlMbGUpu9I1m1",
+      "task": {
+        "id": "tsk_g00VXNWt2u00YplT6eUw",
+        "title": "真实网页来源标题与无障碍介绍",
+        "status": "completed"
+      },
+      "declaredOutputs": [],
+      "entries": [],
+      "catalogComplete": true,
+      "providerErrors": []
+    }
+  ],
+  "qualifier": "Two actual public canonical turnArtifacts responses; no DOM/UI or source assertion"
+}

@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [HTTP response body ownership105 evidence](2026-10-05-connection-workspace-authority/webfetch-body-105/README.md): qualified local contracts; genuine live10501 pending.
+
+- [Empty completed delivery106 evidence](2026-10-05-connection-workspace-authority/empty-delivery-106/README.md): current104 source custody, actual before/after public payloads/pixels and whole native closure.
+
 - [Connection workspace authority](2026-10-05-connection-workspace-authority/README.md): actual before visual evidence, source contracts, root integration and scoped qualification.
 - [Skill mount latency qualification](2026-10-05-skill-mount-cold-start-latency/README.md): actual HTTP phase measurements and shared DEBUG logger repair; original slow-request cause remains open.
 

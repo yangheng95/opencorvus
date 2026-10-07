@@ -1,5 +1,9 @@
 # Connection workspace authority investigation
 
+- [Empty completed delivery106 Recall](empty-delivery-plan-106.md), [evidence](empty-delivery-106/README.md) and [record](../../records/2026-10/2026-10-08-empty-completed-delivery.md): current-fact presentation eligibility, Root-owned real before/after pixels and exact native closure.
+
+- [Whole HTTP body ownership105 Recall](webfetch-body-plan-105.md) and [evidence](webfetch-body-105/README.md): shared deadline/request/body ownership with qualified local outputs; genuine live10501 acceptance pending.
+
 - [Actual source titles104 evidence](source-title-104/README.md): real fetched title, exact persisted source, genuine current CLI/Sol and personally reviewed Sources pixels.
 
 - [Actual fetched source titles104 Recall](source-titles-plan-104.md): actual HTML title, current private CLI contract and genuine native Sources acceptance.

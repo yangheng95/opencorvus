@@ -1,0 +1,12 @@
+[1/1] START ../../.tmp-product-iteration/webfetch-body-105-baseline-reader-abort.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+webfetch105 reader actual {"firstBytes":5,"readStatus":"rejected","cancelStatus":"rejected","readError":{"name":"AbortError","message":"Owned reader probe abort"},"cancelError":{"name":"AbortError","message":"Owned reader probe abort"},"exactSameError":true,"readEqualsParent":true,"cancelEqualsParent":true,"joinedSockets":1,"liveSockets":0,"events":[{"type":"headers_first_chunk","at":1791389343782},{"type":"first_read","at":1791389343784},{"type":"parent_abort","at":1791389343858},{"type":"socket_close","at":1791389343859},{"type":"cleanup_started","at":1791389343859},{"type":"cleanup_completed","at":1791389343860}]}
+(pass) real finite HTTP body reader records original read and cancel abort error identities [109.27ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [1415.00ms]
+[1/1] DONE ../../.tmp-product-iteration/webfetch-body-105-baseline-reader-abort.test.ts exit=0 duration=2.21s

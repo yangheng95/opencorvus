@@ -1,0 +1,48 @@
+{
+  "rootSessionID": "ses_-zUScT6pKzz4cd7Ilv6N",
+  "observedAtUtc": "2026-10-07T16:58:04.5548756Z",
+  "sourceFacts": {
+    "readonly": true,
+    "task": {
+      "id": "tsk_g00VXNWt2u00YplT6eUw",
+      "project_id": "prj_hyuRk1rfJuHe8i5OMv2M",
+      "session_id": "ses_-zUScT6pKzz4cd7Ilv6N",
+      "request_id": "e367b615-131e-40f6-931d-aad72339e06d",
+      "product_pillar": "work"
+    },
+    "session": {
+      "id": "ses_-zUScT6pKzz4cd7Ilv6N",
+      "project_id": "prj_hyuRk1rfJuHe8i5OMv2M",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\source-title-104-01\\project"
+    },
+    "epoch": 1,
+    "openedEventID": "pev_g0VXNWtBH00RGlpyW8dv",
+    "terminalEventID": "pev_g0VXNXGdX003bxOJfS58",
+    "promptOwners": []
+  },
+  "purpose": "Actual current completed text/Source and empty-delivery presentation after admitted Show guard",
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 34404,
+        "processInstanceID": "win32:639269841395241324",
+        "occurrenceID": "d769cea3-f262-4d49-91ff-f1ac61fe6c02"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 75184,
+        "processInstanceID": "win32:639269841404479063",
+        "occurrenceID": "968c8b85-1b82-4dee-9721-dcfb4bd53741"
+      }
+    }
+  ],
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/source-title-104-01",
+  "taskID": "tsk_g00VXNWt2u00YplT6eUw",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\source-title-104-01\\project",
+  "credentialStaging": "None; source104 untouched; no Task rearm",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\empty-delivery-after-106-02",
+  "port": 18063
+}

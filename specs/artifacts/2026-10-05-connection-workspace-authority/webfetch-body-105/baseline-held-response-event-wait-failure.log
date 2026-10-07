@@ -1,0 +1,31 @@
+[1/1] START ../../.tmp-product-iteration/webfetch-body-105-baseline.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+webfetch105 module observation {"mode":"deadline","cwd":"D:\\myhexin-local\\opencorvus\\packages\\opencorvus","importURL":"file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/webfetch-body-105-baseline.test.ts","sameInstance":true,"sameProject":true,"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mWzd6a\\test-73348-ivJ9JZ\\fixtures\\memory-UY5j6d","beforeNewObservation":{"directoryKey":"c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-mwzd6a\\test-73348-ivj9jz\\fixtures\\memory-uy5j6d","device":"382532482","inode":"11258999071829979","birthtimeNs":"1791389702691363400"}}
+webfetch105 registration observation {"mode":"deadline","actualHookArguments":{"projectID":"prj_hOvuf8bQooo8kLUtM190","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mWzd6a\\test-73348-ivJ9JZ\\fixtures\\memory-UY5j6d"},"originalProbe":{"directoryKey":"c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-mwzd6a\\test-73348-ivj9jz\\fixtures\\memory-uy5j6d","device":"382532482","inode":"11258999071829979","birthtimeNs":"1791389702691363400"},"hookTimeNewObservation":{"directoryKey":"c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-mwzd6a\\test-73348-ivj9jz\\fixtures\\memory-uy5j6d","device":"382532482","inode":"11258999071829979","birthtimeNs":"1791389702691363400"},"sameNewObservedOccurrence":true,"git":{"top":{"exitCode":0,"stdout":"C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-mWzd6a/test-73348-ivJ9JZ/fixtures/memory-UY5j6d\n","stderr":""},"common":{"exitCode":0,"stdout":".git\n","stderr":""}},"boundary":"Existing beforeDiscoveryCommit hook AFTER initial discovery; new observations are not guard locals or admitted facts"}
+webfetch105 actual {"mode":"deadline","projectID":"prj_hOvuf8bQooo8kLUtM190","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mWzd6a\\test-73348-ivJ9JZ\\fixtures\\memory-UY5j6d","sessionID":"ses_-zUScJLznzzrLzBBZzFJ","executionAuthority":{"kind":"conversation","sessionID":"ses_-zUScJLznzzrLzBBZzFJ","projectID":"prj_hOvuf8bQooo8kLUtM190","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mWzd6a\\test-73348-ivJ9JZ\\fixtures\\memory-UY5j6d"},"url":"http://127.0.0.1:58007/deadline","requestedTimeoutMs":50,"finiteServerEOFMs":250,"parentSafetyMs":1500,"responseLimit":5242880,"authoredMaximum":10,"sentBytes":10,"socketCount":1,"liveSocketCount":0,"joinedSocketCount":1,"events":[{"type":"tool_started","at":1791389705862,"phase":"tool"},{"type":"request","at":1791389705888},{"type":"headers","at":1791389705889},{"type":"body_chunk","at":1791389705889,"bytes":5},{"type":"body_eof","at":1791389706154,"bytes":10},{"type":"response_finish","at":1791389706155,"bytes":10},{"type":"response_close","at":1791389706155,"bytes":10,"phase":"tool"},{"type":"tool_settled","at":1791389706156,"phase":"tool"},{"type":"cleanup_started","at":1791389706156,"phase":"cleanup"},{"type":"socket_close","at":1791389706156,"phase":"cleanup"},{"type":"cleanup_completed","at":1791389706156,"phase":"cleanup"}],"result":{"kind":"value","outputBytes":10,"output":"firstfinal"}}
+108 | 
+109 | test("declared webfetch deadline remains active through actual delayed HTTP body", async () => {
+110 |   const facts = await measure("deadline")
+111 |   expect(facts.events.filter(event => ["tool_started", "headers", "body_chunk"].includes(event.type)).map(event => event.type)).toEqual(["tool_started", "headers", "body_chunk"])
+112 |   expect({ live: facts.liveSocketCount, joined: facts.joinedSocketCount }).toEqual({ live: 0, joined: facts.socketCount })
+113 |   expect(facts.result).toMatchObject({ kind: "error", name: "AbortError" })
+                             ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "kind": "error",
+-   "name": "AbortError",
++   "kind": "value",
++   "output": "firstfinal",
++   "outputBytes": 10,
+  }
+
+- Expected  - 2
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\webfetch-body-105-baseline.test.ts:113:24)
+(fail) declared webfetch deadline remains active through actual delayed HTTP body [3503.36ms]
+webfetch105 module observation {"mode":"parent","cwd":"D:\\myhexin-local\\opencorvus\\packages\\opencorvus","importURL":"file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/webfetch-body-105-baseline.test.ts","sameInstance":true,"sameProject":true,"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mWzd6a\\test-73348-ivJ9JZ\\fixtures\\memory-OgfQME","beforeNewObservation":{"directoryKey":"c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-mwzd6a\\test-73348-ivj9jz\\fixtures\\memory-ogfqme","device":"382532482","inode":"11540474048540635","birthtimeNs":"1791389706193078500"}}
+webfetch105 registration observation {"mode":"parent","actualHookArguments":{"projectID":"prj_hFwqnnKTDvI7sZ8KM9wy","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-mWzd6a\\test-73348-ivJ9JZ\\fixtures\\memory-OgfQME"},"originalProbe":{"directoryKey":"c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-mwzd6a\\test-73348-ivj9jz\\fixtures\\memory-ogfqme","device":"382532482","inode":"11540474048540635","birthtimeNs":"1791389706193078500"},"hookTimeNewObservation":{"directoryKey":"c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-mwzd6a\\test-73348-ivj9jz\\fixtures\\memory-ogfqme","device":"382532482","inode":"11540474048540635","birthtimeNs":"1791389706193078500"},"sameNewObservedOccurrence":true,"git":{"top":{"exitCode":0,"stdout":"C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-mWzd6a/test-73348-ivJ9JZ/fixtures/memory-OgfQME\n","stderr":""},"common":{"exitCode":0,"stdout":".git\n","stderr":""}},"boundary":"Existing beforeDiscoveryCommit hook AFTER initial discovery; new observations are not guard locals or admitted facts"}

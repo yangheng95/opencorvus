@@ -58,6 +58,21 @@ v2 search receipts continue to record only dynamically activated extensions.
 
 ## General tool contracts
 
+Webfetch and the two Exa consumers share one HTTP response-body owner. The
+existing overall/parent deadline stays active through headers, body consumption
+and normal conversion, and is cleared once in the outer finally. Each physical
+fetch has its own abort authority combined with that whole-operation signal;
+failure or discard aborts only that request before joining its body cancellation.
+Webfetch's existing 5 MiB limit counts actual chunks before retaining them; Exa
+remains uncapped and preserves its complete current SSE content/structuredContent
+parsing. A discarded response whose cancellation rejects the identical primary
+cause is settled; a read failure still rejects its original cause, and distinct
+cleanup failures retain both causes in AggregateError. A challenged response is
+settled before the existing retry without resetting the whole deadline. Successful
+EOF keeps normal transport connection pooling. These joins do not claim a remote
+socket acknowledgement; public errors, fetched title and Source identities remain
+their existing producers' contracts.
+
 Overlapping built-in operations share a narrow typed interface rather than
 separate tool identities or a discovery prerequisite. `todo` reads or replaces
 the current Session checklist through `action: read | write`; write supplies

@@ -1,0 +1,888 @@
+[
+  {
+    "kind": "webfetch105 module observation",
+    "fact": {
+      "mode": "deadline",
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+      "importURL": "file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/webfetch-body-105-baseline.test.ts",
+      "sameInstance": true,
+      "sameProject": true,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-T0cQkP",
+      "beforeNewObservation": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-t0cqkp",
+        "device": "382532482",
+        "inode": "1125899910247767",
+        "birthtimeNs": "1791389964389167800"
+      }
+    }
+  },
+  {
+    "kind": "webfetch105 registration observation",
+    "fact": {
+      "mode": "deadline",
+      "actualHookArguments": {
+        "projectID": "prj_h7ZLWlgTHrQ6SFGXFjUx",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-T0cQkP"
+      },
+      "originalProbe": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-t0cqkp",
+        "device": "382532482",
+        "inode": "1125899910247767",
+        "birthtimeNs": "1791389964389167800"
+      },
+      "hookTimeNewObservation": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-t0cqkp",
+        "device": "382532482",
+        "inode": "1125899910247767",
+        "birthtimeNs": "1791389964389167800"
+      },
+      "sameNewObservedOccurrence": true,
+      "git": {
+        "top": {
+          "exitCode": 0,
+          "stdout": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-v0l9Hk/test-27012-QQYrRM/fixtures/memory-T0cQkP\n",
+          "stderr": ""
+        },
+        "common": {
+          "exitCode": 0,
+          "stdout": ".git\n",
+          "stderr": ""
+        }
+      },
+      "boundary": "Existing beforeDiscoveryCommit hook AFTER initial discovery; new observations are not guard locals or admitted facts"
+    }
+  },
+  {
+    "kind": "webfetch105 actual",
+    "fact": {
+      "mode": "deadline",
+      "projectID": "prj_h7ZLWlgTHrQ6SFGXFjUx",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-T0cQkP",
+      "sessionID": "ses_-zUScIG0EzzjdasOj4B0",
+      "executionAuthority": {
+        "kind": "conversation",
+        "sessionID": "ses_-zUScIG0EzzjdasOj4B0",
+        "projectID": "prj_h7ZLWlgTHrQ6SFGXFjUx",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-T0cQkP"
+      },
+      "url": "http://127.0.0.1:55828/deadline",
+      "requestedTimeoutMs": 50,
+      "finiteServerEOFMs": 250,
+      "parentSafetyMs": 1500,
+      "responseLimit": 5242880,
+      "authoredMaximum": 10,
+      "sentBytes": 10,
+      "socketCount": 1,
+      "liveSocketCount": 0,
+      "joinedSocketCount": 1,
+      "events": [
+        {
+          "type": "tool_started",
+          "at": 1791389967235,
+          "phase": "tool"
+        },
+        {
+          "type": "request",
+          "at": 1791389967260
+        },
+        {
+          "type": "headers",
+          "at": 1791389967261
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389967261,
+          "bytes": 5
+        },
+        {
+          "type": "body_eof",
+          "at": 1791389967518,
+          "bytes": 10
+        },
+        {
+          "type": "response_finish",
+          "at": 1791389967519,
+          "bytes": 10
+        },
+        {
+          "type": "response_close",
+          "at": 1791389967519,
+          "bytes": 10,
+          "phase": "tool"
+        },
+        {
+          "type": "tool_settled",
+          "at": 1791389967520,
+          "phase": "tool"
+        },
+        {
+          "type": "cleanup_started",
+          "at": 1791389967520,
+          "phase": "cleanup"
+        },
+        {
+          "type": "socket_close",
+          "at": 1791389967520,
+          "phase": "cleanup"
+        },
+        {
+          "type": "cleanup_completed",
+          "at": 1791389967520,
+          "phase": "cleanup"
+        }
+      ],
+      "result": {
+        "kind": "value",
+        "outputBytes": 10,
+        "output": "firstfinal"
+      }
+    }
+  },
+  {
+    "kind": "webfetch105 module observation",
+    "fact": {
+      "mode": "parent",
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+      "importURL": "file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/webfetch-body-105-baseline.test.ts",
+      "sameInstance": true,
+      "sameProject": true,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-fxSDkA",
+      "beforeNewObservation": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-fxsdka",
+        "device": "382532482",
+        "inode": "1407374886958423",
+        "birthtimeNs": "1791389967555776300"
+      }
+    }
+  },
+  {
+    "kind": "webfetch105 registration observation",
+    "fact": {
+      "mode": "parent",
+      "actualHookArguments": {
+        "projectID": "prj_h6x0oCaoDodG50ve5ThW",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-fxSDkA"
+      },
+      "originalProbe": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-fxsdka",
+        "device": "382532482",
+        "inode": "1407374886958423",
+        "birthtimeNs": "1791389967555776300"
+      },
+      "hookTimeNewObservation": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-fxsdka",
+        "device": "382532482",
+        "inode": "1407374886958423",
+        "birthtimeNs": "1791389967555776300"
+      },
+      "sameNewObservedOccurrence": true,
+      "git": {
+        "top": {
+          "exitCode": 0,
+          "stdout": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-v0l9Hk/test-27012-QQYrRM/fixtures/memory-fxSDkA\n",
+          "stderr": ""
+        },
+        "common": {
+          "exitCode": 0,
+          "stdout": ".git\n",
+          "stderr": ""
+        }
+      },
+      "boundary": "Existing beforeDiscoveryCommit hook AFTER initial discovery; new observations are not guard locals or admitted facts"
+    }
+  },
+  {
+    "kind": "webfetch105 actual",
+    "fact": {
+      "mode": "parent",
+      "projectID": "prj_h6x0oCaoDodG50ve5ThW",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-fxSDkA",
+      "sessionID": "ses_-zUScIFHhzzVVGHQsdh4",
+      "executionAuthority": {
+        "kind": "conversation",
+        "sessionID": "ses_-zUScIFHhzzVVGHQsdh4",
+        "projectID": "prj_h6x0oCaoDodG50ve5ThW",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-fxSDkA"
+      },
+      "url": "http://127.0.0.1:55838/parent",
+      "requestedTimeoutMs": 1000,
+      "finiteServerEOFMs": 250,
+      "parentSafetyMs": 1500,
+      "responseLimit": 5242880,
+      "authoredMaximum": 10,
+      "sentBytes": 5,
+      "socketCount": 1,
+      "liveSocketCount": 0,
+      "joinedSocketCount": 1,
+      "events": [
+        {
+          "type": "tool_started",
+          "at": 1791389969979,
+          "phase": "tool"
+        },
+        {
+          "type": "request",
+          "at": 1791389969990
+        },
+        {
+          "type": "headers",
+          "at": 1791389969990
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389969990,
+          "bytes": 5
+        },
+        {
+          "type": "parent_abort",
+          "at": 1791389970075
+        },
+        {
+          "type": "request_aborted",
+          "at": 1791389970076
+        },
+        {
+          "type": "socket_close",
+          "at": 1791389970076,
+          "phase": "tool"
+        },
+        {
+          "type": "tool_settled",
+          "at": 1791389970076,
+          "phase": "tool"
+        },
+        {
+          "type": "cleanup_started",
+          "at": 1791389970076,
+          "phase": "cleanup"
+        },
+        {
+          "type": "cleanup_completed",
+          "at": 1791389970076,
+          "phase": "cleanup"
+        }
+      ],
+      "result": {
+        "kind": "error",
+        "name": "AbortError",
+        "message": "Owned finite parent safety abort",
+        "sameParentReason": true
+      }
+    }
+  },
+  {
+    "kind": "webfetch105 module observation",
+    "fact": {
+      "mode": "oversize",
+      "cwd": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus",
+      "importURL": "file:///D:/myhexin-local/opencorvus/.tmp-product-iteration/webfetch-body-105-baseline.test.ts",
+      "sameInstance": true,
+      "sameProject": true,
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-KK3HjA",
+      "beforeNewObservation": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-kk3hja",
+        "device": "382532482",
+        "inode": "1688849863669079",
+        "birthtimeNs": "1791389970104683700"
+      }
+    }
+  },
+  {
+    "kind": "webfetch105 registration observation",
+    "fact": {
+      "mode": "oversize",
+      "actualHookArguments": {
+        "projectID": "prj_heYxE5rdlqERhrkIsCPs",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-KK3HjA"
+      },
+      "originalProbe": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-kk3hja",
+        "device": "382532482",
+        "inode": "1688849863669079",
+        "birthtimeNs": "1791389970104683700"
+      },
+      "hookTimeNewObservation": {
+        "directoryKey": "c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-test-run-v0l9hk\\test-27012-qqyrrm\\fixtures\\memory-kk3hja",
+        "device": "382532482",
+        "inode": "1688849863669079",
+        "birthtimeNs": "1791389970104683700"
+      },
+      "sameNewObservedOccurrence": true,
+      "git": {
+        "top": {
+          "exitCode": 0,
+          "stdout": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-v0l9Hk/test-27012-QQYrRM/fixtures/memory-KK3HjA\n",
+          "stderr": ""
+        },
+        "common": {
+          "exitCode": 0,
+          "stdout": ".git\n",
+          "stderr": ""
+        }
+      },
+      "boundary": "Existing beforeDiscoveryCommit hook AFTER initial discovery; new observations are not guard locals or admitted facts"
+    }
+  },
+  {
+    "kind": "webfetch105 actual",
+    "fact": {
+      "mode": "oversize",
+      "projectID": "prj_heYxE5rdlqERhrkIsCPs",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-KK3HjA",
+      "sessionID": "ses_-zUScIEdzzzQmOXC2JfB",
+      "executionAuthority": {
+        "kind": "conversation",
+        "sessionID": "ses_-zUScIEdzzzQmOXC2JfB",
+        "projectID": "prj_heYxE5rdlqERhrkIsCPs",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-v0l9Hk\\test-27012-QQYrRM\\fixtures\\memory-KK3HjA"
+      },
+      "url": "http://127.0.0.1:53326/oversize",
+      "requestedTimeoutMs": 1000,
+      "finiteServerEOFMs": 480,
+      "parentSafetyMs": 1500,
+      "responseLimit": 5242880,
+      "authoredMaximum": 6291456,
+      "sentBytes": 6291456,
+      "socketCount": 1,
+      "liveSocketCount": 0,
+      "joinedSocketCount": 1,
+      "events": [
+        {
+          "type": "tool_started",
+          "at": 1791389972457,
+          "phase": "tool"
+        },
+        {
+          "type": "request",
+          "at": 1791389972469
+        },
+        {
+          "type": "headers",
+          "at": 1791389972469
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972469,
+          "bytes": 65536
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972488,
+          "bytes": 131072
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972504,
+          "bytes": 196608
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972523,
+          "bytes": 262144
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972535,
+          "bytes": 327680
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972551,
+          "bytes": 393216
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972567,
+          "bytes": 458752
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972585,
+          "bytes": 524288
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972598,
+          "bytes": 589824
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972614,
+          "bytes": 655360
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972632,
+          "bytes": 720896
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972647,
+          "bytes": 786432
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972660,
+          "bytes": 851968
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972676,
+          "bytes": 917504
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972691,
+          "bytes": 983040
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972707,
+          "bytes": 1048576
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972722,
+          "bytes": 1114112
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972737,
+          "bytes": 1179648
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972752,
+          "bytes": 1245184
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972768,
+          "bytes": 1310720
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972783,
+          "bytes": 1376256
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972801,
+          "bytes": 1441792
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972813,
+          "bytes": 1507328
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972829,
+          "bytes": 1572864
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972844,
+          "bytes": 1638400
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972860,
+          "bytes": 1703936
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972875,
+          "bytes": 1769472
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972890,
+          "bytes": 1835008
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972906,
+          "bytes": 1900544
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972921,
+          "bytes": 1966080
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972937,
+          "bytes": 2031616
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972952,
+          "bytes": 2097152
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972968,
+          "bytes": 2162688
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389972985,
+          "bytes": 2228224
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973000,
+          "bytes": 2293760
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973015,
+          "bytes": 2359296
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973031,
+          "bytes": 2424832
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973046,
+          "bytes": 2490368
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973061,
+          "bytes": 2555904
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973077,
+          "bytes": 2621440
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973092,
+          "bytes": 2686976
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973108,
+          "bytes": 2752512
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973124,
+          "bytes": 2818048
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973140,
+          "bytes": 2883584
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973156,
+          "bytes": 2949120
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973171,
+          "bytes": 3014656
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973186,
+          "bytes": 3080192
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973202,
+          "bytes": 3145728
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973218,
+          "bytes": 3211264
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973233,
+          "bytes": 3276800
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973252,
+          "bytes": 3342336
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973264,
+          "bytes": 3407872
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973280,
+          "bytes": 3473408
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973295,
+          "bytes": 3538944
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973311,
+          "bytes": 3604480
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973326,
+          "bytes": 3670016
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973342,
+          "bytes": 3735552
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973357,
+          "bytes": 3801088
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973373,
+          "bytes": 3866624
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973388,
+          "bytes": 3932160
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973404,
+          "bytes": 3997696
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973419,
+          "bytes": 4063232
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973434,
+          "bytes": 4128768
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973450,
+          "bytes": 4194304
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973465,
+          "bytes": 4259840
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973480,
+          "bytes": 4325376
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973496,
+          "bytes": 4390912
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973514,
+          "bytes": 4456448
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973527,
+          "bytes": 4521984
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973542,
+          "bytes": 4587520
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973559,
+          "bytes": 4653056
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973575,
+          "bytes": 4718592
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973591,
+          "bytes": 4784128
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973606,
+          "bytes": 4849664
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973622,
+          "bytes": 4915200
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973638,
+          "bytes": 4980736
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973653,
+          "bytes": 5046272
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973669,
+          "bytes": 5111808
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973684,
+          "bytes": 5177344
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973699,
+          "bytes": 5242880
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973716,
+          "bytes": 5308416
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973732,
+          "bytes": 5373952
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973748,
+          "bytes": 5439488
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973763,
+          "bytes": 5505024
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973779,
+          "bytes": 5570560
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973794,
+          "bytes": 5636096
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973809,
+          "bytes": 5701632
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973825,
+          "bytes": 5767168
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973840,
+          "bytes": 5832704
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973855,
+          "bytes": 5898240
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973872,
+          "bytes": 5963776
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973887,
+          "bytes": 6029312
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973903,
+          "bytes": 6094848
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973918,
+          "bytes": 6160384
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973934,
+          "bytes": 6225920
+        },
+        {
+          "type": "body_chunk",
+          "at": 1791389973949,
+          "bytes": 6291456
+        },
+        {
+          "type": "body_eof",
+          "at": 1791389973951,
+          "bytes": 6291456
+        },
+        {
+          "type": "response_finish",
+          "at": 1791389973951,
+          "bytes": 6291456
+        },
+        {
+          "type": "response_close",
+          "at": 1791389973951,
+          "bytes": 6291456,
+          "phase": "tool"
+        },
+        {
+          "type": "tool_settled",
+          "at": 1791389973953,
+          "phase": "tool"
+        },
+        {
+          "type": "cleanup_started",
+          "at": 1791389973953,
+          "phase": "cleanup"
+        },
+        {
+          "type": "socket_close",
+          "at": 1791389973953,
+          "phase": "cleanup"
+        },
+        {
+          "type": "cleanup_completed",
+          "at": 1791389973953,
+          "phase": "cleanup"
+        }
+      ],
+      "result": {
+        "kind": "error",
+        "name": "Error",
+        "message": "Response too large (exceeds 5MB limit)",
+        "sameParentReason": false
+      }
+    }
+  }
+]

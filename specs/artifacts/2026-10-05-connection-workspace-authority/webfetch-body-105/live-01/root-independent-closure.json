@@ -1,0 +1,26 @@
+{
+  "observedAtUtc": "2026-10-07T17:25:39.2764601Z",
+  "occurrence": "webfetch-body-live-105-01-09742288-8a5e-433d-a354-289073ea4bab",
+  "birthObservations": [
+    {
+      "expected": {
+        "pid": 63880,
+        "processInstanceID": "win32:639269902508386432",
+        "occurrenceID": "3b4cf936-9de4-4100-a0f3-269b30642fa2"
+      },
+      "actual": null
+    },
+    {
+      "expected": {
+        "pid": 60396,
+        "processInstanceID": "win32:639269902517643062",
+        "occurrenceID": "db6fb0e7-9102-4bd0-8bcd-716a10bf89f3"
+      },
+      "actual": null
+    }
+  ],
+  "listeners": [],
+  "authPresent": false,
+  "modelsPresent": false,
+  "boundary": "Root fresh independent CIM/birth/listener/pair observation after fulfilled whole native/output/request settlement, not PID-only proof"
+}

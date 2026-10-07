@@ -515,8 +515,12 @@ they do not count as usable delivery files. Resource cards offer direct download
 and the existing content preview. The environment popover derives its delivery
 inventory from the same current conversation projection, including message-owned
 interactive artifacts, and opens those same exact resources without another
-registry or publication protocol. An empty resource inventory reports its actual
-download availability without inferring a required document. Task completion
+registry or publication protocol. Resource-free summaries retain their actual
+records, provider errors and failed/cancelled outcome. A completed summary with
+no resources, records or provider errors adds no file card to the original
+assistant reply; the actual narrative and completion remain their message and
+lifecycle projections. Meaningful summaries report actual download availability
+without inferring a required document. Task completion
 and review retain the exact request and occurrence contracts.
 
 Project metadata is scoped by its exact directory and latest request. The panel

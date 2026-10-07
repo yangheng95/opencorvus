@@ -1,5 +1,10 @@
 # Specs Storage Index
 
+- [Empty completed delivery106](records/2026-10/2026-10-08-empty-completed-delivery.md): one presentation predicate, Root-reviewed actual104 history pixels and exact native closure; preserved branch matrices remain unqualified.
+- [Empty completed delivery106 Recall](artifacts/2026-10-05-connection-workspace-authority/empty-delivery-plan-106.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/empty-delivery-106/README.md): source custody, before/after public facts and retained original failures.
+
+- [Whole HTTP body ownership105](records/2026-10/2026-10-08-http-response-body-ownership.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/webfetch-body-plan-105.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/webfetch-body-105/README.md): qualified shared local HTTP ownership; genuine live10501 acceptance pending.
+
 - [Actual source titles104](records/2026-10/2026-10-07-actual-source-titles.md): real HTML titles, positive HTTP/source contracts and genuine Sol/CLI/manual Sources acceptance.
 
 - [Actual fetched source titles104 Recall](artifacts/2026-10-05-connection-workspace-authority/source-titles-plan-104.md): actual HTTP HTML title producer and genuine Sources/CLI acceptance admission.

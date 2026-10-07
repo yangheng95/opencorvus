@@ -1,0 +1,28 @@
+{
+  "occurrence": "webfetch-body-live-105-01-09742288-8a5e-433d-a354-289073ea4bab",
+  "observedAtUtc": "2026-10-07T17:20:14.8399498Z",
+  "presence": [
+    {
+      "processID": 60396,
+      "originalOccurrencePresent": true,
+      "processInstanceID": "win32:639269902517643062",
+      "state": "exact_live"
+    },
+    {
+      "processID": 63880,
+      "originalOccurrencePresent": true,
+      "processInstanceID": "win32:639269902508386432",
+      "state": "exact_live"
+    }
+  ],
+  "phase": "supervision-72984-28",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18064,
+      "OwningProcess": 60396
+    }
+  ],
+  "nativeSettlement": null,
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference"
+}

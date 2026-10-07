@@ -1,0 +1,15 @@
+{
+  "pid": 60396,
+  "occurrence": "webfetch-body-live-105-01-09742288-8a5e-433d-a354-289073ea4bab",
+  "owner": {
+    "pid": 60396,
+    "processInstanceID": "win32:639269902517643062",
+    "occurrenceID": "3b6796a6-aaa3-4a48-8685-e33b75b9abbe"
+  },
+  "parent": {
+    "pid": 28408,
+    "processInstanceID": "win32:639269902517155912",
+    "occurrenceID": "9c5d423e-9504-4cb5-9310-949c154f9041"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

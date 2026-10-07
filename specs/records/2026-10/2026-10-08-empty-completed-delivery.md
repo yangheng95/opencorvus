@@ -1,0 +1,21 @@
+# Empty completed delivery106
+
+## Recall and bounded repair
+
+Follow [106 Recall](../../artifacts/2026-10-05-connection-workspace-authority/empty-delivery-plan-106.md). Actual readonly W3C Task104 delivered its real short reply and Source, but its zero-resource terminal summary repeated Agent delivery, No delivery files and No downloadable delivery files. Backend intentionally projects that completion occurrence; the reply remains the original assistant Message. This is redundant presentation, not missing files or a failed Task.
+
+Root implements one existing component Show predicate: render when status is not completed, or actual outputRows/resources, entries or providerErrors is nonempty. Only a completed wholly empty summary omits the file card. No narrative copy, new state/filter/backend publisher or locale change. Current07-panel narrows empty availability accordingly; all resource downloads/previews, resource-free records, errors and failed/cancelled branches retain their current presentation.
+
+## Actual evidence and owner
+
+[Evidence](../../artifacts/2026-10-05-connection-workspace-authority/empty-delivery-106/README.md) contains [before10601](../../artifacts/2026-10-05-connection-workspace-authority/empty-delivery-106/before-01/README.md) and [after10602](../../artifacts/2026-10-05-connection-workspace-authority/empty-delivery-106/after-02/README.md). Both fresh credentialless copies use original CLOSED104 current-schema source, exact Project prj_hyuRk1rfJuHe8i5OMv2M/Task tsk_g00VXNWt2u00YplT6eUw/epoch1/rootSession ses_-zUScT6pKzz4cd7Ilv6N and original registered SourceProject. Source native deaths, auth/models absence, actual readonly request/opened/completed events and no prompt owners guard before copy. No Task rearm, SQL repair, compatibility DB or new model request.
+
+Child CUA reported no browsers/apps and unavailable IAB; that failed capability and unfulfilled child screenshot remain explicit. Root assumed responsible UI/production ownership, personally operated isolated IAB74/75 and reviewed before/after actual1280 screenshots. Before shows completed text plus redundant empty card; after main-BUJ3kTlx shows original completed text/expanded real W3C Source with omitted empty card. Public full conversation payloads retain exact terminal Message msg_hfvMcdGIGxPiJ0QyX0Mq and the same canonical turnArtifacts: completed, output resources0, entries0, providerErrors0. Entire actual before/after summary equality is recorded; this proves data preservation, not pixel/DOM acceptance.
+
+Root closed/reset its pages and executed one public shutdown per scope. Original native archive checker then independently confirms before Host35748/Target77560 and after Host68376/Target67552 exact births retired,18062/18063 empty, both copied authority files absent. Whole production Handle settled receipts retain physical/output/request completion. Provider audit unavailable is correct for no-Provider history; current catalogue/model-unavailable notices remain separate from readable historical results.
+
+## Failures and unqualified matrix
+
+Preserve first outer editing command ParserError before mutation, initial child public scalar aggregation incorrectly counting a null pipeline as1 (final sum proves actual resources0), CUA unavailability, and Root after first17:02 relative-asset `/assets/main-BUJ3kTlx.js` DirectoryRequiredError. Correct actual `/ui/assets/main-BUJ3kTlx.js`200 readiness is retained without a production route workaround. Existing105 private return-await disposal preparation fault remains a separate proven fix, not a106 production guard change. Unknown timestamp logs and actual model-unavailable errors are archived; no console-clean claim.
+
+This scope qualifies one real completed text-only Task. Preserved nonempty resource/download, resource-free evidence, provider-error, failed/cancelled, interactive artifact and multi-occurrence/restart/race visual matrices were not rerun and remain unqualified here. Source review establishes unchanged branches, not their full GUI acceptance. No UI automated tests, hashes/pixel assertions or Provider mocks. Root owns final checks/Git delivery; this record does not claim a commit or push result before it occurs.

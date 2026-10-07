@@ -1,0 +1,606 @@
+[
+  {
+    "mode": "deadline",
+    "projectID": "prj_hM2RFJE0be4YM5IK95Kz",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-yB4swi",
+    "sessionID": "ses_-zUSc8JxJzzDKmOHhIkc",
+    "executionAuthority": {
+      "kind": "conversation",
+      "sessionID": "ses_-zUSc8JxJzzDKmOHhIkc",
+      "projectID": "prj_hM2RFJE0be4YM5IK95Kz",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-yB4swi"
+    },
+    "url": "http://127.0.0.1:58707/deadline",
+    "requestedTimeoutMs": 50,
+    "finiteServerEOFMs": 250,
+    "parentSafetyMs": 1500,
+    "responseLimit": 5242880,
+    "authoredMaximum": 10,
+    "sentBytes": 5,
+    "requests": [
+      {
+        "method": "GET",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      }
+    ],
+    "socketCount": 1,
+    "liveSocketCount": 0,
+    "joinedSocketCount": 1,
+    "events": [
+      {
+        "type": "tool_started",
+        "at": 1791392335405,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392335455
+      },
+      {
+        "type": "headers",
+        "at": 1791392335456
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392335456,
+        "bytes": 5
+      },
+      {
+        "type": "request_aborted",
+        "at": 1791392335467
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392335467,
+        "phase": "tool"
+      },
+      {
+        "type": "tool_settled",
+        "at": 1791392335469,
+        "phase": "tool"
+      },
+      {
+        "type": "cleanup_started",
+        "at": 1791392335469,
+        "phase": "cleanup"
+      },
+      {
+        "type": "cleanup_completed",
+        "at": 1791392335469,
+        "phase": "cleanup"
+      }
+    ],
+    "result": {
+      "kind": "error",
+      "name": "AbortError",
+      "message": "The operation was aborted.",
+      "sameParentReason": false
+    }
+  },
+  {
+    "mode": "parent",
+    "projectID": "prj_hdzcSd9fvtdw46LxtHF9",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-YUCe9r",
+    "sessionID": "ses_-zUSc8JD4zzl0fIN8jfs",
+    "executionAuthority": {
+      "kind": "conversation",
+      "sessionID": "ses_-zUSc8JD4zzl0fIN8jfs",
+      "projectID": "prj_hdzcSd9fvtdw46LxtHF9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-YUCe9r"
+    },
+    "url": "http://127.0.0.1:58731/parent",
+    "requestedTimeoutMs": 1000,
+    "finiteServerEOFMs": 250,
+    "parentSafetyMs": 1500,
+    "responseLimit": 5242880,
+    "authoredMaximum": 10,
+    "sentBytes": 5,
+    "requests": [
+      {
+        "method": "GET",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      }
+    ],
+    "socketCount": 1,
+    "liveSocketCount": 0,
+    "joinedSocketCount": 1,
+    "events": [
+      {
+        "type": "tool_started",
+        "at": 1791392338185,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392338203
+      },
+      {
+        "type": "headers",
+        "at": 1791392338203
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392338203,
+        "bytes": 5
+      },
+      {
+        "type": "parent_abort",
+        "at": 1791392338280
+      },
+      {
+        "type": "request_aborted",
+        "at": 1791392338280
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392338280,
+        "phase": "tool"
+      },
+      {
+        "type": "tool_settled",
+        "at": 1791392338280,
+        "phase": "tool"
+      },
+      {
+        "type": "cleanup_started",
+        "at": 1791392338280,
+        "phase": "cleanup"
+      },
+      {
+        "type": "cleanup_completed",
+        "at": 1791392338281,
+        "phase": "cleanup"
+      }
+    ],
+    "result": {
+      "kind": "error",
+      "name": "AbortError",
+      "message": "Owned finite parent safety abort",
+      "sameParentReason": true
+    }
+  },
+  {
+    "mode": "oversize",
+    "projectID": "prj_hmiA7zajsSfmUAGcUJjm",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-0lH7Es",
+    "sessionID": "ses_-zUSc8ISVzz3y5iN2ZK0",
+    "executionAuthority": {
+      "kind": "conversation",
+      "sessionID": "ses_-zUSc8ISVzz3y5iN2ZK0",
+      "projectID": "prj_hmiA7zajsSfmUAGcUJjm",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-0lH7Es"
+    },
+    "url": "http://127.0.0.1:58735/oversize",
+    "requestedTimeoutMs": 1000,
+    "finiteServerEOFMs": 120,
+    "parentSafetyMs": 1500,
+    "responseLimit": 5242880,
+    "authoredMaximum": 6291456,
+    "sentBytes": 5505024,
+    "requests": [
+      {
+        "method": "GET",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      }
+    ],
+    "socketCount": 1,
+    "liveSocketCount": 0,
+    "joinedSocketCount": 1,
+    "events": [
+      {
+        "type": "tool_started",
+        "at": 1791392341064,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392341097
+      },
+      {
+        "type": "headers",
+        "at": 1791392341097
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341098,
+        "bytes": 262144
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341109,
+        "bytes": 524288
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341125,
+        "bytes": 786432
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341140,
+        "bytes": 1048576
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341156,
+        "bytes": 1310720
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341172,
+        "bytes": 1572864
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341187,
+        "bytes": 1835008
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341205,
+        "bytes": 2097152
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341218,
+        "bytes": 2359296
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341242,
+        "bytes": 2621440
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341258,
+        "bytes": 2883584
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341273,
+        "bytes": 3145728
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341281,
+        "bytes": 3407872
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341297,
+        "bytes": 3670016
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341312,
+        "bytes": 3932160
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341327,
+        "bytes": 4194304
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341344,
+        "bytes": 4456448
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341362,
+        "bytes": 4718592
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341376,
+        "bytes": 4980736
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341392,
+        "bytes": 5242880
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392341408,
+        "bytes": 5505024
+      },
+      {
+        "type": "tool_settled",
+        "at": 1791392341409,
+        "phase": "tool"
+      },
+      {
+        "type": "request_aborted",
+        "at": 1791392341412
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392341412,
+        "phase": "tool"
+      },
+      {
+        "type": "cleanup_started",
+        "at": 1791392341412,
+        "phase": "cleanup"
+      },
+      {
+        "type": "cleanup_completed",
+        "at": 1791392341413,
+        "phase": "cleanup"
+      }
+    ],
+    "result": {
+      "kind": "error",
+      "name": "Error",
+      "message": "Response too large (exceeds 5MB limit)",
+      "sameParentReason": false
+    }
+  },
+  {
+    "mode": "status",
+    "projectID": "prj_hwxqRnxP3mNFMDA7t2s5",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-eusavv",
+    "sessionID": "ses_-zUSc8HbQzzCE5ojF3OC",
+    "executionAuthority": {
+      "kind": "conversation",
+      "sessionID": "ses_-zUSc8HbQzzCE5ojF3OC",
+      "projectID": "prj_hwxqRnxP3mNFMDA7t2s5",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-eusavv"
+    },
+    "url": "http://127.0.0.1:58738/status",
+    "requestedTimeoutMs": 1000,
+    "finiteServerEOFMs": 250,
+    "parentSafetyMs": 1500,
+    "responseLimit": 5242880,
+    "authoredMaximum": 10,
+    "sentBytes": 5,
+    "requests": [
+      {
+        "method": "GET",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      }
+    ],
+    "socketCount": 1,
+    "liveSocketCount": 0,
+    "joinedSocketCount": 1,
+    "events": [
+      {
+        "type": "tool_started",
+        "at": 1791392344358,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392344380
+      },
+      {
+        "type": "headers",
+        "at": 1791392344380
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392344380,
+        "bytes": 5
+      },
+      {
+        "type": "tool_settled",
+        "at": 1791392344381,
+        "phase": "tool"
+      },
+      {
+        "type": "request_aborted",
+        "at": 1791392344381
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392344381,
+        "phase": "tool"
+      },
+      {
+        "type": "cleanup_started",
+        "at": 1791392344381,
+        "phase": "cleanup"
+      },
+      {
+        "type": "cleanup_completed",
+        "at": 1791392344381,
+        "phase": "cleanup"
+      }
+    ],
+    "result": {
+      "kind": "error",
+      "name": "Error",
+      "message": "Request failed with status code: 418",
+      "sameParentReason": false
+    }
+  },
+  {
+    "mode": "header",
+    "projectID": "prj_hXkC2dMFTuOW2DwxAHhJ",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-p18kBY",
+    "sessionID": "ses_-zUSc8Gv7zzuizF76AWq",
+    "executionAuthority": {
+      "kind": "conversation",
+      "sessionID": "ses_-zUSc8Gv7zzuizF76AWq",
+      "projectID": "prj_hXkC2dMFTuOW2DwxAHhJ",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-p18kBY"
+    },
+    "url": "http://127.0.0.1:58741/header",
+    "requestedTimeoutMs": 1000,
+    "finiteServerEOFMs": 250,
+    "parentSafetyMs": 1500,
+    "responseLimit": 5242880,
+    "authoredMaximum": 10,
+    "sentBytes": 5,
+    "requests": [
+      {
+        "method": "GET",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      }
+    ],
+    "socketCount": 1,
+    "liveSocketCount": 0,
+    "joinedSocketCount": 1,
+    "events": [
+      {
+        "type": "tool_started",
+        "at": 1791392346977,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392346987
+      },
+      {
+        "type": "headers",
+        "at": 1791392346987
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392346987,
+        "bytes": 5
+      },
+      {
+        "type": "tool_settled",
+        "at": 1791392346988,
+        "phase": "tool"
+      },
+      {
+        "type": "request_aborted",
+        "at": 1791392346988
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392346988,
+        "phase": "tool"
+      },
+      {
+        "type": "cleanup_started",
+        "at": 1791392346988,
+        "phase": "cleanup"
+      },
+      {
+        "type": "cleanup_completed",
+        "at": 1791392346988,
+        "phase": "cleanup"
+      }
+    ],
+    "result": {
+      "kind": "error",
+      "name": "Error",
+      "message": "Response too large (exceeds 5MB limit)",
+      "sameParentReason": false
+    }
+  },
+  {
+    "mode": "retry",
+    "projectID": "prj_hAmKOgpzlQNuqmyTjVx0",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-aQnVrj",
+    "sessionID": "ses_-zUSc8GEqzz8zghiIkd1",
+    "executionAuthority": {
+      "kind": "conversation",
+      "sessionID": "ses_-zUSc8GEqzz8zghiIkd1",
+      "projectID": "prj_hAmKOgpzlQNuqmyTjVx0",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-YPEotR\\test-10952-KLpYcQ\\fixtures\\memory-aQnVrj"
+    },
+    "url": "http://127.0.0.1:50590/retry",
+    "requestedTimeoutMs": 1000,
+    "finiteServerEOFMs": 250,
+    "parentSafetyMs": 1500,
+    "responseLimit": 5242880,
+    "authoredMaximum": 10,
+    "sentBytes": 19,
+    "requests": [
+      {
+        "method": "GET",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      },
+      {
+        "method": "GET",
+        "userAgent": "opencorvus"
+      }
+    ],
+    "socketCount": 2,
+    "liveSocketCount": 0,
+    "joinedSocketCount": 2,
+    "events": [
+      {
+        "type": "tool_started",
+        "at": 1791392349596,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392349622
+      },
+      {
+        "type": "challenge_headers_body",
+        "at": 1791392349622,
+        "bytes": 9
+      },
+      {
+        "type": "request_aborted",
+        "at": 1791392349622
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392349622,
+        "phase": "tool"
+      },
+      {
+        "type": "request",
+        "at": 1791392349623
+      },
+      {
+        "type": "headers",
+        "at": 1791392349623
+      },
+      {
+        "type": "body_chunk",
+        "at": 1791392349623,
+        "bytes": 14
+      },
+      {
+        "type": "body_eof",
+        "at": 1791392349879,
+        "bytes": 19
+      },
+      {
+        "type": "response_finish",
+        "at": 1791392349880,
+        "bytes": 19
+      },
+      {
+        "type": "response_close",
+        "at": 1791392349880,
+        "bytes": 19,
+        "phase": "tool"
+      },
+      {
+        "type": "tool_settled",
+        "at": 1791392349881,
+        "phase": "tool"
+      },
+      {
+        "type": "cleanup_started",
+        "at": 1791392349881,
+        "phase": "cleanup"
+      },
+      {
+        "type": "socket_close",
+        "at": 1791392349882,
+        "phase": "cleanup"
+      },
+      {
+        "type": "cleanup_completed",
+        "at": 1791392349882,
+        "phase": "cleanup"
+      }
+    ],
+    "result": {
+      "kind": "value",
+      "outputBytes": 10
+    }
+  }
+]

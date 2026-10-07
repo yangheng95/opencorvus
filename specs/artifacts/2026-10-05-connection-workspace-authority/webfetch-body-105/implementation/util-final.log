@@ -1,0 +1,18 @@
+[1/1] START test/util/http-response-body.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real HTTP split UTF8/BOM bytes and exact byte boundary return complete EOF [31.11ms]
+(pass) real empty HTTP body returns exact empty bytes [9.58ms]
+(pass) actual fetch parent abort preserves exact original read/cancel error [91.40ms]
+(pass) real body limit cancels an unknown length body with original limit error [280.84ms]
+(pass) distinct real local stream cleanup error retains primary and cancellation cause [0.49ms]
+(pass) unconsumed body disposal settles its actual reader owner and preserves cleanup provenance [0.30ms]
+(pass) admitted mutable source chunks are copied before the next read mutates them [0.28ms]
+(pass) native local cancellation completion precedes disposal completion [28.30ms]
+
+ 8 pass
+ 0 fail
+ 14 expect() calls
+Ran 8 tests across 1 file. [2.04s]
+[1/1] DONE test/util/http-response-body.test.ts exit=0 duration=2.92s

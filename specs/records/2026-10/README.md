@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [Empty completed delivery106](2026-10-08-empty-completed-delivery.md)
+
+- [Whole HTTP response body ownership105](2026-10-08-http-response-body-ownership.md) and [Recall](../../artifacts/2026-10-05-connection-workspace-authority/webfetch-body-plan-105.md): genuine live acceptance pending.
+
 - [Actual source titles104](2026-10-07-actual-source-titles.md)
 
 - [Actual fetched source titles104 Recall](../../artifacts/2026-10-05-connection-workspace-authority/source-titles-plan-104.md)

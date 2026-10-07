@@ -1,0 +1,49 @@
+[1/1] START test/tool/webfetch-body.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+webfetch105 actual {"mode":"deadline","projectID":"prj_htDy05cUTGhil8K0XI4D","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-kMNLPd","sessionID":"ses_-zUScE293zzZmldmODdw","executionAuthority":{"kind":"conversation","sessionID":"ses_-zUScE293zzZmldmODdw","projectID":"prj_htDy05cUTGhil8K0XI4D","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-kMNLPd"},"url":"http://127.0.0.1:55213/deadline","requestedTimeoutMs":50,"finiteServerEOFMs":250,"parentSafetyMs":1500,"responseLimit":5242880,"authoredMaximum":10,"sentBytes":5,"requests":[{"method":"GET","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}],"socketCount":1,"liveSocketCount":0,"joinedSocketCount":1,"events":[{"type":"tool_started","at":1791390973810,"phase":"tool"},{"type":"request","at":1791390973838},{"type":"headers","at":1791390973839},{"type":"body_chunk","at":1791390973839,"bytes":5},{"type":"request_aborted","at":1791390973872},{"type":"socket_close","at":1791390973873,"phase":"tool"},{"type":"tool_settled","at":1791390973874,"phase":"tool"},{"type":"cleanup_started","at":1791390973874,"phase":"cleanup"},{"type":"cleanup_completed","at":1791390973875,"phase":"cleanup"}],"result":{"kind":"error","name":"AbortError","message":"The operation was aborted.","sameParentReason":false}}
+(pass) declared webfetch deadline remains active through actual delayed HTTP body [2897.09ms]
+webfetch105 actual {"mode":"parent","projectID":"prj_hyxcqsweeGbil6UOcJoj","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-YeLnts","sessionID":"ses_-zUScE1Ylzzebcbl1WqY","executionAuthority":{"kind":"conversation","sessionID":"ses_-zUScE1Ylzzebcbl1WqY","projectID":"prj_hyxcqsweeGbil6UOcJoj","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-YeLnts"},"url":"http://127.0.0.1:55216/parent","requestedTimeoutMs":1000,"finiteServerEOFMs":250,"parentSafetyMs":1500,"responseLimit":5242880,"authoredMaximum":10,"sentBytes":5,"requests":[{"method":"GET","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}],"socketCount":1,"liveSocketCount":0,"joinedSocketCount":1,"events":[{"type":"tool_started","at":1791390976064,"phase":"tool"},{"type":"request","at":1791390976077},{"type":"headers","at":1791390976077},{"type":"body_chunk","at":1791390976077,"bytes":5},{"type":"parent_abort","at":1791390976162},{"type":"request_aborted","at":1791390976162},{"type":"socket_close","at":1791390976162,"phase":"tool"},{"type":"tool_settled","at":1791390976162,"phase":"tool"},{"type":"cleanup_started","at":1791390976162,"phase":"cleanup"},{"type":"cleanup_completed","at":1791390976163,"phase":"cleanup"}],"result":{"kind":"error","name":"AbortError","message":"Owned finite parent safety abort","sameParentReason":true}}
+(pass) actual parent abort terminates a finite delayed HTTP body [2277.80ms]
+webfetch105 actual {"mode":"oversize","projectID":"prj_hkelreKqTuRf5tCKhg6Z","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-PDyJ16","sessionID":"ses_-zUScE0xQzzbcxXOpkWq","executionAuthority":{"kind":"conversation","sessionID":"ses_-zUScE0xQzzbcxXOpkWq","projectID":"prj_hkelreKqTuRf5tCKhg6Z","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-PDyJ16"},"url":"http://127.0.0.1:55218/oversize","requestedTimeoutMs":1000,"finiteServerEOFMs":120,"parentSafetyMs":1500,"responseLimit":5242880,"authoredMaximum":6291456,"sentBytes":5505024,"requests":[{"method":"GET","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}],"socketCount":1,"liveSocketCount":0,"joinedSocketCount":1,"events":[{"type":"tool_started","at":1791390978366,"phase":"tool"},{"type":"request","at":1791390978380},{"type":"headers","at":1791390978380},{"type":"body_chunk","at":1791390978381,"bytes":262144},{"type":"body_chunk","at":1791390978392,"bytes":524288},{"type":"body_chunk","at":1791390978407,"bytes":786432},{"type":"body_chunk","at":1791390978426,"bytes":1048576},{"type":"body_chunk","at":1791390978439,"bytes":1310720},{"type":"body_chunk","at":1791390978457,"bytes":1572864},{"type":"body_chunk","at":1791390978471,"bytes":1835008},{"type":"body_chunk","at":1791390978486,"bytes":2097152},{"type":"body_chunk","at":1791390978497,"bytes":2359296},{"type":"body_chunk","at":1791390978517,"bytes":2621440},{"type":"body_chunk","at":1791390978533,"bytes":2883584},{"type":"body_chunk","at":1791390978548,"bytes":3145728},{"type":"body_chunk","at":1791390978564,"bytes":3407872},{"type":"body_chunk","at":1791390978583,"bytes":3670016},{"type":"body_chunk","at":1791390978596,"bytes":3932160},{"type":"body_chunk","at":1791390978611,"bytes":4194304},{"type":"body_chunk","at":1791390978626,"bytes":4456448},{"type":"body_chunk","at":1791390978645,"bytes":4718592},{"type":"body_chunk","at":1791390978658,"bytes":4980736},{"type":"body_chunk","at":1791390978673,"bytes":5242880},{"type":"body_chunk","at":1791390978689,"bytes":5505024},{"type":"tool_settled","at":1791390978690,"phase":"tool"},{"type":"cleanup_started","at":1791390978690,"phase":"cleanup"},{"type":"request_aborted","at":1791390978690},{"type":"socket_close","at":1791390978690,"phase":"cleanup"},{"type":"cleanup_completed","at":1791390978690,"phase":"cleanup"}],"result":{"kind":"error","name":"Error","message":"Response too large (exceeds 5MB limit)","sameParentReason":false}}
+(pass) unknown-length finite six-MiB response returns current exact oversize error [2529.42ms]
+184 |         phase = "cleanup"
+185 |         events.push({ type: "cleanup_started", at: Date.now(), phase })
+186 |         for (const timer of timers) clearTimeout(timer)
+187 |         timers.clear()
+188 |         controller.abort(parentReason)
+189 |         const settlement = new Promise<void>((resolve, reject) =>
+                ^
+error: Server is not running.
+ code: "ERR_SERVER_NOT_RUNNING"
+
+      at <anonymous> (node:_http_server:190:60)
+      at new Promise (1:11)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\webfetch-body.test.ts:189:28)
+(fail) HTTP status rejection disposes its actual unconsumed body [4780.13ms]
+184 |         phase = "cleanup"
+185 |         events.push({ type: "cleanup_started", at: Date.now(), phase })
+186 |         for (const timer of timers) clearTimeout(timer)
+187 |         timers.clear()
+188 |         controller.abort(parentReason)
+189 |         const settlement = new Promise<void>((resolve, reject) =>
+                ^
+error: Server is not running.
+ code: "ERR_SERVER_NOT_RUNNING"
+
+      at <anonymous> (node:_http_server:190:60)
+      at new Promise (1:11)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\webfetch-body.test.ts:189:28)
+(fail) oversized declared Content-Length disposes the actual body with existing error [4742.96ms]
+webfetch105 actual {"mode":"retry","projectID":"prj_hEvYb3M1cpVqjhAk2W44","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-ckxquk","sessionID":"ses_-zUScDxoRzzUGtHgU7vm","executionAuthority":{"kind":"conversation","sessionID":"ses_-zUScDxoRzzUGtHgU7vm","projectID":"prj_hEvYb3M1cpVqjhAk2W44","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-6c4etz\\test-14968-mWcQyg\\fixtures\\memory-ckxquk"},"url":"http://127.0.0.1:60137/retry","requestedTimeoutMs":1000,"finiteServerEOFMs":250,"parentSafetyMs":1500,"responseLimit":5242880,"authoredMaximum":10,"sentBytes":19,"requests":[{"method":"GET","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"},{"method":"GET","userAgent":"opencorvus"}],"socketCount":2,"liveSocketCount":0,"joinedSocketCount":2,"events":[{"type":"tool_started","at":1791390990455,"phase":"tool"},{"type":"request","at":1791390990464},{"type":"challenge_headers_body","at":1791390990464,"bytes":9},{"type":"request","at":1791390990465},{"type":"headers","at":1791390990465},{"type":"body_chunk","at":1791390990465,"bytes":14},{"type":"response_finish","at":1791390990723,"bytes":14},{"type":"response_close","at":1791390990723,"bytes":14,"phase":"tool"},{"type":"body_eof","at":1791390990723,"bytes":19},{"type":"response_finish","at":1791390990723,"bytes":19},{"type":"response_close","at":1791390990723,"bytes":19,"phase":"tool"},{"type":"tool_settled","at":1791390990724,"phase":"tool"},{"type":"cleanup_started","at":1791390990724,"phase":"cleanup"},{"type":"socket_close","at":1791390990725,"phase":"cleanup"},{"type":"socket_close","at":1791390990725,"phase":"cleanup"},{"type":"cleanup_completed","at":1791390990725,"phase":"cleanup"}],"result":{"kind":"value","outputBytes":10}}
+(pass) actual challenge response is disposed before the current honest-UA retry returns [2510.84ms]
+
+ 4 pass
+ 2 fail
+ 16 expect() calls
+Ran 6 tests across 1 file. [21.53s]
+[1/1] DONE test/tool/webfetch-body.test.ts exit=1 duration=22.59s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\webfetch-body.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\tool\webfetch-body.test.ts

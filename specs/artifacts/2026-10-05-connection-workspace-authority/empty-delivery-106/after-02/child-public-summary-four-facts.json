@@ -1,0 +1,31 @@
+{
+  "owner": {
+    "pid": 67552,
+    "processInstanceID": "win32:639269890864371988",
+    "occurrenceID": "442fd31b-7b24-4ea0-bb59-34f83416a517"
+  },
+  "url": "http://localhost:18063/task/tsk_g00VXNWt2u00YplT6eUw/conversation?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Csource-title-104-01%5Cproject",
+  "occurrence": "empty-delivery-after-106-02-684a8275-879b-4da2-ad9a-4289534981b2",
+  "facts": [
+    {
+      "resourceCount": 0,
+      "userMessageID": "msg_task-root-control_art_hXbw2gVNlMbGUpu9I1m1_art_hXbw2gVNlMbGUpu9I1m1",
+      "task": {
+        "id": "tsk_g00VXNWt2u00YplT6eUw",
+        "title": "真实网页来源标题与无障碍介绍",
+        "status": "completed"
+      },
+      "messageID": "msg_hfvMcdGIGxPiJ0QyX0Mq",
+      "catalogComplete": true,
+      "entriesCount": 0,
+      "providerErrorsCount": 0,
+      "declaredOutputCount": 0
+    }
+  ],
+  "status": 200,
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\source-title-104-01\\project",
+  "originalTask": "tsk_g00VXNWt2u00YplT6eUw",
+  "requestID": null,
+  "originalProject": "prj_hyuRk1rfJuHe8i5OMv2M",
+  "observedAtUtc": "2026-10-07T17:06:31.7482931Z"
+}

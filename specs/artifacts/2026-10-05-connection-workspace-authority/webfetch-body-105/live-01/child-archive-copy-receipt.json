@@ -1,0 +1,23 @@
+{
+  "files": [
+    "launch-owner.json",
+    "startup.json",
+    "stdout.log",
+    "stderr.log",
+    "task-complete.json",
+    "authority-ready.json",
+    "managed-parent-ready.json",
+    "native-host-ready.json",
+    "native-host-settled.json",
+    "owned-config-hierarchy.json",
+    "preflight-ready.json",
+    "profile-selection-admitted.json",
+    "project-baseline.json",
+    "provider-pair-staging.json",
+    "task-boundary-admitted.json",
+    "task-occurrence-admitted.json",
+    "runtime.log"
+  ],
+  "boundary": "Nonsecret actual closed-run logs and receipts; auth/models content excluded",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/webfetch-body-live-105-01"
+}
