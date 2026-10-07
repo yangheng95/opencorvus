@@ -702,13 +702,15 @@ export namespace PromptProfileResolver {
     const profileID = PromptProfile.activeID(input.config)
     const builtIn = builtInPackages()[profileID]
     if (builtIn) {
-      const directory = input.scope === "global" ? undefined : input.projectDirectory
-      if (directory || input.scope === "global") {
-        const discovered = await discoverAvailableExternalPackages(directory, input.reconcileEvolutionMutations)
-        if (hasBuiltInProfileCollision(profileID, discovered.installations, discovered.issues)) {
-          throw new Error(
-            `External expert squad package id ${JSON.stringify(profileID)} collides with a built-in expert squad id.`,
-          )
+      if (input.projectDirectory) {
+        for (const entry of (
+          await discoverAvailableExternalPackages(input.projectDirectory, input.reconcileEvolutionMutations)
+        ).items) {
+          if (entry.id === profileID) {
+            throw new Error(
+              `External expert squad package id ${JSON.stringify(profileID)} collides with a built-in expert squad id.`,
+            )
+          }
         }
       }
       return { profileID, builtIn: true, pkg: await loadBuiltInRuntimePackage(profileID) }
@@ -786,21 +788,21 @@ export namespace PromptProfileResolver {
     const defaultSkills =
       input.defaultSkills ?? (await Instance.provide({ directory: input.projectDirectory, fn: () => Skill.all() }))
     const defaultSkillsByName = skillInventoryByName(defaultSkills)
-    const discovered = await discoverAvailableExternalPackages(input.projectDirectory)
-    const projectEntriesByID = new Map(discovered.items.map((entry) => [entry.id, entry]))
+    const projectEntries = (await discoverAvailableExternalPackages(input.projectDirectory)).items
+    const projectEntriesByID = new Map(projectEntries.map((entry) => [entry.id, entry]))
     for (const expertSquadID of Object.keys(input.config.skill_mounts ?? {}).sort(compareCanonicalStrings)) {
       ExpertSquadRegistry.parseID(expertSquadID)
       const builtIn = builtInPackages()[expertSquadID]
       const projectEntry = projectEntriesByID.get(expertSquadID)
-      const pinned =
-        input.packageRevision?.id === expertSquadID
-          ? await ExpertSquadRegistry.loadPackageRevisionSnapshot(input.packageRevision.packageDigest)
-          : undefined
-      if (builtIn && !pinned && hasBuiltInProfileCollision(expertSquadID, discovered.installations, discovered.issues)) {
+      if (builtIn && projectEntry) {
         throw new Error(
           `External expert squad package id ${JSON.stringify(expertSquadID)} collides with a built-in expert squad id.`,
         )
       }
+      const pinned =
+        input.packageRevision?.id === expertSquadID
+          ? await ExpertSquadRegistry.loadPackageRevisionSnapshot(input.packageRevision.packageDigest)
+          : undefined
       const active: SkillMountProfilePackage = pinned
         ? {
             profileID: expertSquadID,

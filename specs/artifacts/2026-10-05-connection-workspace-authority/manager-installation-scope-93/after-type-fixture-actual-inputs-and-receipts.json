@@ -1,0 +1,556 @@
+[
+  {
+    "project": {
+      "id": "prj_hDGkUy5Wu69QPeWgzwlV",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm"
+    },
+    "targetLocation": {
+      "kind": "project",
+      "configRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\.opencorvus",
+      "packagesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\.opencorvus\\expert-squads"
+    },
+    "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\.opencorvus\\expert-squads\\project-author\\project-over-global93",
+    "input": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\source-project-author-project-over-global93",
+      "installationScope": "project"
+    },
+    "definition": {
+      "manifest": {
+        "schema_version": 2,
+        "id": "project-over-global93",
+        "namespace": "project-author",
+        "label": "project-author project-over-global93",
+        "description": "Physical installation scope contract",
+        "version": "2026.10.07.1",
+        "product_pillars": [
+          "code"
+        ],
+        "readme": "README.md",
+        "selector": {
+          "summary": "Physical scope contract",
+          "selection_guidance": "Inspect the owned physical installation scope",
+          "instructions": "selector.md"
+        },
+        "capability_sets": {},
+        "capability_projection": {
+          "scheduler": {
+            "base_role": "orchestrator",
+            "capability_refs": []
+          },
+          "agents": {},
+          "virtual_workflows": {}
+        }
+      },
+      "files": {
+        "README.md": "# project-author/project-over-global93\n",
+        "selector.md": "# Physical scope contract\n"
+      }
+    },
+    "before": {
+      "items": [],
+      "issues": [
+        {
+          "phase": "package.identity",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads\\broken-global\\project-over-global93\\expert-squad.jsonc",
+          "namespace": "broken-global",
+          "id": "project-over-global93",
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      ]
+    },
+    "response": {
+      "method": "POST",
+      "url": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Yhs6Yb%5Ctest-37920-x5tSbQ%5Cfixtures%5Cmemory-NR6Ngm",
+      "status": 200,
+      "headers": {
+        "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "content-type": "application/json",
+        "vary": "Origin",
+        "x-opencorvus-request-id": "244b8647-2609-4427-8fdc-b2da3f96bb04"
+      },
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm",
+          "namespace": "project-author",
+          "id": "project-over-global93",
+          "version": "2026.10.07.1",
+          "packageDigest": "da8631b74309baab70f10ed79c3e16acc5840a7f0d552696ed25a80de97da802",
+          "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\.opencorvus\\expert-squads\\project-author\\project-over-global93"
+        }
+      }
+    },
+    "after": {
+      "items": [
+        {
+          "namespace": "project-author",
+          "id": "project-over-global93",
+          "version": "2026.10.07.1",
+          "schemaVersion": 2,
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\.opencorvus\\expert-squads\\project-author\\project-over-global93",
+          "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-NR6Ngm\\.opencorvus\\expert-squads\\project-author\\project-over-global93\\expert-squad.jsonc",
+          "location": "project",
+          "rawManifest": {
+            "schema_version": 2,
+            "id": "project-over-global93",
+            "namespace": "project-author",
+            "label": "project-author project-over-global93",
+            "description": "Physical installation scope contract",
+            "version": "2026.10.07.1",
+            "product_pillars": [
+              "code"
+            ],
+            "readme": "README.md",
+            "selector": {
+              "summary": "Physical scope contract",
+              "selection_guidance": "Inspect the owned physical installation scope",
+              "instructions": "selector.md"
+            },
+            "capability_sets": {},
+            "capability_projection": {
+              "scheduler": {
+                "base_role": "orchestrator",
+                "capability_refs": []
+              },
+              "agents": {},
+              "virtual_workflows": {}
+            }
+          }
+        }
+      ],
+      "issues": [
+        {
+          "phase": "package.identity",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads\\broken-global\\project-over-global93\\expert-squad.jsonc",
+          "namespace": "broken-global",
+          "id": "project-over-global93",
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      ]
+    },
+    "readme": {
+      "kind": "text",
+      "text": "# project-author/project-over-global93\n"
+    }
+  },
+  {
+    "project": {
+      "id": "prj_hkv1vjlvEeO9OUoUaWeU",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-IodIIC",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-IodIIC"
+    },
+    "targetLocation": {
+      "kind": "global",
+      "configRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config",
+      "packagesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads"
+    },
+    "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads\\global-author\\global-over-project93",
+    "input": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-IodIIC\\source-global-author-global-over-project93",
+      "installationScope": "global"
+    },
+    "definition": {
+      "manifest": {
+        "schema_version": 2,
+        "id": "global-over-project93",
+        "namespace": "global-author",
+        "label": "global-author global-over-project93",
+        "description": "Physical installation scope contract",
+        "version": "2026.10.07.1",
+        "product_pillars": [
+          "code"
+        ],
+        "readme": "README.md",
+        "selector": {
+          "summary": "Physical scope contract",
+          "selection_guidance": "Inspect the owned physical installation scope",
+          "instructions": "selector.md"
+        },
+        "capability_sets": {},
+        "capability_projection": {
+          "scheduler": {
+            "base_role": "orchestrator",
+            "capability_refs": []
+          },
+          "agents": {},
+          "virtual_workflows": {}
+        }
+      },
+      "files": {
+        "README.md": "# global-author/global-over-project93\n",
+        "selector.md": "# Physical scope contract\n"
+      }
+    },
+    "before": {
+      "items": [],
+      "issues": [
+        {
+          "phase": "package.identity",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-IodIIC\\.opencorvus\\expert-squads\\broken-project\\global-over-project93\\expert-squad.jsonc",
+          "namespace": "broken-project",
+          "id": "global-over-project93",
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      ]
+    },
+    "response": {
+      "method": "POST",
+      "url": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Yhs6Yb%5Ctest-37920-x5tSbQ%5Cfixtures%5Cmemory-IodIIC",
+      "status": 200,
+      "headers": {
+        "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "content-type": "application/json",
+        "vary": "Origin",
+        "x-opencorvus-request-id": "99a8115c-a436-44d5-9ae4-968b1fb03f30"
+      },
+      "body": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "global",
+          "projectDirectory": null,
+          "namespace": "global-author",
+          "id": "global-over-project93",
+          "version": "2026.10.07.1",
+          "packageDigest": "25dc12e1180ab5e619818d81885ab843b17df95e558c88f71309ba2644fe140d",
+          "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads\\global-author\\global-over-project93"
+        }
+      }
+    },
+    "after": {
+      "items": [
+        {
+          "namespace": "global-author",
+          "id": "global-over-project93",
+          "version": "2026.10.07.1",
+          "schemaVersion": 2,
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads\\global-author\\global-over-project93",
+          "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\runtime-root\\config\\expert-squads\\global-author\\global-over-project93\\expert-squad.jsonc",
+          "location": "global",
+          "rawManifest": {
+            "schema_version": 2,
+            "id": "global-over-project93",
+            "namespace": "global-author",
+            "label": "global-author global-over-project93",
+            "description": "Physical installation scope contract",
+            "version": "2026.10.07.1",
+            "product_pillars": [
+              "code"
+            ],
+            "readme": "README.md",
+            "selector": {
+              "summary": "Physical scope contract",
+              "selection_guidance": "Inspect the owned physical installation scope",
+              "instructions": "selector.md"
+            },
+            "capability_sets": {},
+            "capability_projection": {
+              "scheduler": {
+                "base_role": "orchestrator",
+                "capability_refs": []
+              },
+              "agents": {},
+              "virtual_workflows": {}
+            }
+          }
+        }
+      ],
+      "issues": [
+        {
+          "phase": "package.identity",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-IodIIC\\.opencorvus\\expert-squads\\broken-project\\global-over-project93\\expert-squad.jsonc",
+          "namespace": "broken-project",
+          "id": "global-over-project93",
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      ]
+    },
+    "readme": {
+      "kind": "text",
+      "text": "# global-author/global-over-project93\n"
+    }
+  },
+  {
+    "project": {
+      "id": "prj_hJTJjnxRhSkWZcpNKd8r",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij"
+    },
+    "targetLocation": {
+      "kind": "project",
+      "configRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij\\.opencorvus",
+      "packagesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij\\.opencorvus\\expert-squads"
+    },
+    "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij\\.opencorvus\\expert-squads\\incoming-author\\same-malformed93",
+    "input": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij\\source-incoming-author-same-malformed93",
+      "installationScope": "project"
+    },
+    "definition": {
+      "manifest": {
+        "schema_version": 2,
+        "id": "same-malformed93",
+        "namespace": "incoming-author",
+        "label": "incoming-author same-malformed93",
+        "description": "Physical installation scope contract",
+        "version": "2026.10.07.1",
+        "product_pillars": [
+          "code"
+        ],
+        "readme": "README.md",
+        "selector": {
+          "summary": "Physical scope contract",
+          "selection_guidance": "Inspect the owned physical installation scope",
+          "instructions": "selector.md"
+        },
+        "capability_sets": {},
+        "capability_projection": {
+          "scheduler": {
+            "base_role": "orchestrator",
+            "capability_refs": []
+          },
+          "agents": {},
+          "virtual_workflows": {}
+        }
+      },
+      "files": {
+        "README.md": "# incoming-author/same-malformed93\n",
+        "selector.md": "# Physical scope contract\n"
+      }
+    },
+    "before": {
+      "items": [],
+      "issues": [
+        {
+          "phase": "package.identity",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij\\.opencorvus\\expert-squads\\broken-target\\same-malformed93\\expert-squad.jsonc",
+          "namespace": "broken-target",
+          "id": "same-malformed93",
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      ]
+    },
+    "response": {
+      "method": "POST",
+      "url": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Yhs6Yb%5Ctest-37920-x5tSbQ%5Cfixtures%5Cmemory-FUQ3ij",
+      "status": 400,
+      "headers": {
+        "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "content-type": "application/json",
+        "vary": "Origin",
+        "x-opencorvus-request-id": "268a1744-0cbb-4f51-bd72-8f67227f9429"
+      },
+      "body": {
+        "name": "ExpertSquadPackageError",
+        "data": {
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      }
+    },
+    "after": {
+      "items": [],
+      "issues": [
+        {
+          "phase": "package.identity",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-FUQ3ij\\.opencorvus\\expert-squads\\broken-target\\same-malformed93\\expert-squad.jsonc",
+          "namespace": "broken-target",
+          "id": "same-malformed93",
+          "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      ]
+    },
+    "readme": {
+      "kind": "read_error",
+      "code": "ENOENT"
+    }
+  },
+  {
+    "project": {
+      "id": "prj_hxO7BxUFszjMyco79YSD",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG"
+    },
+    "targetLocation": {
+      "kind": "project",
+      "configRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus",
+      "packagesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads"
+    },
+    "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\incoming-author\\same-duplicate93",
+    "input": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\source-incoming-author-same-duplicate93",
+      "installationScope": "project"
+    },
+    "definition": {
+      "manifest": {
+        "schema_version": 2,
+        "id": "same-duplicate93",
+        "namespace": "incoming-author",
+        "label": "incoming-author same-duplicate93",
+        "description": "Physical installation scope contract",
+        "version": "2026.10.07.1",
+        "product_pillars": [
+          "code"
+        ],
+        "readme": "README.md",
+        "selector": {
+          "summary": "Physical scope contract",
+          "selection_guidance": "Inspect the owned physical installation scope",
+          "instructions": "selector.md"
+        },
+        "capability_sets": {},
+        "capability_projection": {
+          "scheduler": {
+            "base_role": "orchestrator",
+            "capability_refs": []
+          },
+          "agents": {},
+          "virtual_workflows": {}
+        }
+      },
+      "files": {
+        "README.md": "# incoming-author/same-duplicate93\n",
+        "selector.md": "# Physical scope contract\n"
+      }
+    },
+    "before": {
+      "items": [],
+      "issues": [
+        {
+          "phase": "identity.duplicate",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93",
+          "namespace": "duplicate-a",
+          "id": "same-duplicate93",
+          "message": "duplicate expert squad id \"same-duplicate93\" in project scope at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93 and C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93"
+        },
+        {
+          "phase": "identity.duplicate",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93",
+          "namespace": "duplicate-b",
+          "id": "same-duplicate93",
+          "message": "duplicate expert squad id \"same-duplicate93\" in project scope at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93 and C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93"
+        }
+      ]
+    },
+    "response": {
+      "method": "POST",
+      "url": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Yhs6Yb%5Ctest-37920-x5tSbQ%5Cfixtures%5Cmemory-TWDqKG",
+      "status": 400,
+      "headers": {
+        "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "content-type": "application/json",
+        "vary": "Origin",
+        "x-opencorvus-request-id": "6f3bfdad-29be-4055-a65c-9960b4778fd0"
+      },
+      "body": {
+        "name": "ExpertSquadPackageError",
+        "data": {
+          "message": "duplicate expert squad id \"same-duplicate93\" in project scope at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93 and C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93"
+        }
+      }
+    },
+    "after": {
+      "items": [],
+      "issues": [
+        {
+          "phase": "identity.duplicate",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93",
+          "namespace": "duplicate-a",
+          "id": "same-duplicate93",
+          "message": "duplicate expert squad id \"same-duplicate93\" in project scope at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93 and C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93"
+        },
+        {
+          "phase": "identity.duplicate",
+          "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93",
+          "namespace": "duplicate-b",
+          "id": "same-duplicate93",
+          "message": "duplicate expert squad id \"same-duplicate93\" in project scope at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-a\\same-duplicate93 and C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-TWDqKG\\.opencorvus\\expert-squads\\duplicate-b\\same-duplicate93"
+        }
+      ]
+    },
+    "readme": {
+      "kind": "read_error",
+      "code": "ENOENT"
+    }
+  },
+  {
+    "project": {
+      "id": "prj_hK8qNBS9znilaGWixzmR",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-dATQi2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-dATQi2"
+    },
+    "targetLocation": {
+      "kind": "project",
+      "configRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-dATQi2\\.opencorvus",
+      "packagesRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-dATQi2\\.opencorvus\\expert-squads"
+    },
+    "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-dATQi2\\.opencorvus\\expert-squads\\external-author\\base",
+    "input": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-Yhs6Yb\\test-37920-x5tSbQ\\fixtures\\memory-dATQi2\\source-external-author-base",
+      "installationScope": "project"
+    },
+    "definition": {
+      "manifest": {
+        "schema_version": 2,
+        "id": "base",
+        "namespace": "external-author",
+        "label": "external-author base",
+        "description": "Physical installation scope contract",
+        "version": "2026.10.07.1",
+        "product_pillars": [
+          "code"
+        ],
+        "readme": "README.md",
+        "selector": {
+          "summary": "Physical scope contract",
+          "selection_guidance": "Inspect the owned physical installation scope",
+          "instructions": "selector.md"
+        },
+        "capability_sets": {},
+        "capability_projection": {
+          "scheduler": {
+            "base_role": "orchestrator",
+            "capability_refs": []
+          },
+          "agents": {},
+          "virtual_workflows": {}
+        }
+      },
+      "files": {
+        "README.md": "# external-author/base\n",
+        "selector.md": "# Physical scope contract\n"
+      }
+    },
+    "before": {
+      "items": [],
+      "issues": []
+    },
+    "response": {
+      "method": "POST",
+      "url": "/expert-squad/import-folder?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-Yhs6Yb%5Ctest-37920-x5tSbQ%5Cfixtures%5Cmemory-dATQi2",
+      "status": 400,
+      "headers": {
+        "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "content-type": "application/json",
+        "vary": "Origin",
+        "x-opencorvus-request-id": "438f2c84-5316-4f8d-9b6a-5916b2c1f651"
+      },
+      "body": {
+        "name": "ExpertSquadPackageError",
+        "data": {
+          "message": "Expert squad package id \"base\" collides with a built-in expert squad id"
+        }
+      }
+    },
+    "after": {
+      "items": [],
+      "issues": []
+    },
+    "readme": {
+      "kind": "read_error",
+      "code": "ENOENT"
+    }
+  }
+]

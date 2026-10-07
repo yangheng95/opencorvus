@@ -1,5 +1,11 @@
 # Connection publication and workspace authority
 
+## Scope93 and94 continuation (2026-10-07)
+
+Expert activation89 is normally pushed59b2ac8d. [Manager93 Recall](../../artifacts/2026-10-05-connection-workspace-authority/manager-installation-scope-plan-93.md) admits genuine SDK/public install baseline before the physical-root diagnosis fix. [Builtin94 Recall](../../artifacts/2026-10-05-connection-workspace-authority/builtin-collision-runtime-plan-94.md) admits independent current/pinned runtime and mount baselines. Production remains frozen pending original baseline review; original93 unknown dynamic facts remain unknown. Logger95 consumer closure is still under read-only audit. Continuous Goal remains active.
+
+Final93/94 source changes are now qualified:93new5/29 plus mature3/38,94new11/24 plus89related5/49; total24cases140assertions across separate isolated commands. Both configured and full-source/exact-test compilers pass. Root independently re-runs new93/94 after owned-file formatting,16/53pass. Actual fixed Task scheduler/worker/mount matrix retains original revision; both physical installation directions succeed and their original malformed diagnostics remain. No nativeTCP/Provider/UI/restart claim is added. Normal scoped delivery is next.95's expanded true Pino consumer audit and genuine baseline are separate;96's cold500/shared catch provenance remain unresolved.
+
 ## Actual Sol common-tool and Write receipt continuation
 
 After c59cf33b normal delivery, Root separately approves the background helper's exact-owner cancellation predicate.17positive local Instance/helper tests/41assertions and formal/full explicit types qualify retained independent warning messages and complete physical unwind; initial missed-patch six failures are preserved. The existing warning sanitization/payload and all three caller/durable policies remain their current contracts. Ordinary active fault-after-abort, leased failure budget/handback, Event defer and restart remain distinct open qualifications. Source/chronology/Composer reviews and subsequent diagnostic preparation are indexed independently; no past native or screenshot is relabeled as this new helper's acceptance.

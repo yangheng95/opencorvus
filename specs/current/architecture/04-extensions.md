@@ -227,9 +227,16 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 同一个 Registry 和 Resolver 执行，禁止用缺失 project directory 把合法 global package 误判为未知。
 
 这里的写前保证以物理安装 scope 为边界：project 与 global 安装分别检查各自 scope 内的 namespace
-唯一性，并共用 manifest-ID 跨进程锁来串行发布；global 安装不扫描注册项目阻止合法覆盖。不同项目
+唯一性；同 ID discovery issue 只有归属于本次目标 packagesRoot 时才可拒绝该物理安装，另一 scope
+的诊断继续留在有效 catalog 中。两种安装共用 manifest-ID 跨进程锁来串行发布；global 安装不扫描注册项目阻止合法覆盖。不同项目
 可以各自拥有同名 project-local package，扫描不会把它们合成一个 catalog，也不会因无关 ID 重复
 阻止安装。平台从不扫描用户文件系统；从未注册的目录在首次打开时也使用相同的项目覆盖解析。
+
+当前内置专家团的配置、选择、未绑定 runtime 与 Skill mount target 使用同一精确 ID 碰撞政策：
+canonical physical installations 或 discovery issue 已声明该内置 ID 时，当前身份不可用。
+显式 global runtime 只检查 global 安装；Project runtime 检查 global 与该 Project。已固定 Task 的精确
+package revision 继续使用真实不可变 snapshot；该例外只适用于匹配 revision 的 mount target，
+其他 mount ID 仍需通过当前安装资格校验。
 
 Base 的原始请求、真实修订、权限与适用来源定义交付义务。Task 负责者直接执行普通交付；只有独立调查、能力、隔离或并行资源边界确实需要时才委派。来源读取、效果回执和审查结论具有各自对象、版本与时间范围；修复回到实际负责者，复核受影响义务及保留条件。查询空集只覆盖该查询，既有成功效果不能通过重放 create 修复。这些是 Agent 的判断合同，Host 不按业务含义替模型路由，也不将提示存在或固定流程节点数视为业务正确性证明。
 

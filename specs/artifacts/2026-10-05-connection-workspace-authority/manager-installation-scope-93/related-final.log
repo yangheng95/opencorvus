@@ -1,0 +1,33 @@
+[1/3] START test/expert-squad-manager-cas.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Expert Squad Manager package publication > publishes one CAS winner, restores an exact snapshot, and isolates project/global scope [3598.81ms]
+
+ 1 pass
+ 0 fail
+ 30 expect() calls
+Ran 1 test across 1 file. [5.23s]
+[1/3] DONE test/expert-squad-manager-cas.test.ts exit=0 duration=6.04s
+[2/3] START test/expert-squad-exact-archive-import.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Expert Squad exact archive handoff > imports the canonical archive only for its bound identity, version, and package digest [4199.10ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [5.55s]
+[2/3] DONE test/expert-squad-exact-archive-import.test.ts exit=0 duration=5.72s
+[3/3] START test/expert-squad-recovery-resilience.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Expert Squad package mutation recovery resilience > retains an unreconcilable journal and still opens the project [1660.39ms]
+
+ 1 pass
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [2.88s]
+[3/3] DONE test/expert-squad-recovery-resilience.test.ts exit=0 duration=3.03s

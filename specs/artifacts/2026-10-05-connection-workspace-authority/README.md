@@ -276,6 +276,17 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Activation backend admission89](89-backend-final-admission.md): sole selected envelope/current collision predicate/coherence400 implemented; existing22/122 and new5/49 backend contracts plus types qualified.
 - [Activation frontend admission89](89-frontend-final-admission.md): accepted envelope/winner/button-handler/currentTask scope and original-error Retry implemented; genuine Project/Chat/recovery/shadow/fixed-region screenshots personally reviewed, own page CLOSED.
 - [Residual selector parser92](residual-selector-parser-investigation-92.md): actual two-parent parser6 chain, unsupported major override risks and narrow upstream-backport candidate investigated; no implementation or security closure.
-- [Manager target scope93](manager-cross-scope-installation-investigation-93.md): real reverse-order Project import rejected by broken global same-ID issue; original dynamic facts limited; independent repair not yet admitted.
-- [Builtin runtime/mount collision94](builtin-collision-authority-investigation-94.md): two filtered-item dead checks audited across current/pinned/runtime/config scopes; fixed revisions remain distinct; repair held.
+- [Manager target scope93](manager-cross-scope-installation-investigation-93.md): original reverse-order failure retained; exact target-root repair now qualified through8cases67assertions and types; original unknowns remain unknown.
+- [Builtin runtime/mount collision94](builtin-collision-authority-investigation-94.md): two filtered-item checks replaced by shared current predicate;16cases73assertions/types qualify current and matching pinned identities.
 - [Shared logger namespace95](logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.
+
+- [Manager repair93 Recall](manager-installation-scope-plan-93.md): target physical-root diagnosis, dual-direction genuine SDK/HTTP baseline and focused publication/recovery acceptance.
+- [Manager93 final preparation](manager93-final-admission.md): complete diagnostic path provenance and sole publication-owner scope analysis.
+- [Builtin94 positive acceptance design](94-positive-contract-admission.md): current collision/mount and actual immutable revision matrices; implementation held.
+- [Builtin94 runtime Recall](builtin-collision-runtime-plan-94.md): exact current/pinned collision policy and genuine positive baseline admission.
+- [Logger95 final preparation](95-logger-final-admission.md): trusted envelope, subject data and exact consumer migration; implementation held.
+- [Logger95 expanded consumer closure](95-log-consumer-closure.md): true Pino field consumers distinguished from independent CLI/bridge/domain outputs.
+- [Logger95 Recall](logger-envelope-plan-95.md): one trusted event envelope/subject data and test-only baseline admission; production held.
+- [Manager93 qualified evidence](manager-installation-scope-93/README.md): dual-direction actual installed200, retained diagnostics, same-scope errors and CAS/archive/recovery.
+- [Builtin94 qualified evidence](builtin-collision-runtime-94/README.md): current/global/mount collision agreement and true fixed Task revision.
+- [Cold candidate96 investigation](cold-config-error-mapping-investigation-96.md): demonstrated named bootstrap500 versus writer400, with nested reader provenance explicitly unresolved.

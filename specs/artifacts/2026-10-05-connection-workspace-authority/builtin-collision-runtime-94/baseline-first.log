@@ -1,0 +1,222 @@
+[1/1] START test/expert-squad/builtin-collision-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1106 |   function defaultMcpServersForRefs(config: ConfigLike, refs: readonly string[]): Record<string, Config.Mcp> {
+1107 |     const result: Record<string, Config.Mcp> = {}
+1108 |     for (const ref of refs) {
+1109 |       const { serverName } = defaultMcpTypedPartsFromRef(ref)
+1110 |       const server = config.mcp?.[serverName]
+1111 |       if (!server) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
+                                    ^
+error: Active expert squad projects missing default MCP server default/mcp/browser.
+      at defaultMcpServersForRefs (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:1111:30)
+      at resolveSchedulerCapabilityForContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\expert-squad\prompt-profile-resolver.ts:1427:31)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:74:51)
+(fail) lawful unbound builtin Project and global return real materialized scheduler identity [1246.62ms]
+collision {"scope":"project","malformed":false,"issues":[],"result":{"kind":"error","name":"Error","message":"Active expert squad projects missing default MCP server default/mcp/browser."}}
+84 |     await using project = await memoryProject(`collision94-${scope}-${malformed}`)
+85 |     await collision(project.path, scope, malformed)
+86 |     const discovery = scope === "project" ? await ExpertSquadRegistry.discoverAvailable(project.path) : await ExpertSquadRegistry.discoverGlobalAvailable()
+87 |     const result = await observed(() => PromptProfileResolver.resolveSchedulerCapability({ ...(scope === "project" ? { projectDirectory: project.path } : { scope }), config, defaultSkills: [] }))
+88 |     console.log("collision", JSON.stringify({ scope, malformed, issues: discovery.issues, result: collisionFact(result) }))
+89 |     expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("base") })
+                                       ^
+error: expect(received).toEqual(expected)
+
+  {
+    "kind": "error",
+-   "message": "External expert squad package id "base" collides with a built-in expert squad id.",
++   "message": "Active expert squad projects missing default MCP server default/mcp/browser.",
+    "name": "Error",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:89:35)
+(fail) unbound project SDK-valid builtin collision returns original collision Error [1245.74ms]
+collision {"scope":"project","malformed":true,"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CF7DR3\\test-74208-WcuSdD\\fixtures\\memory-sYizH8\\.opencorvus\\expert-squads\\collision-check\\base\\expert-squad.jsonc","namespace":"collision-check","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"result":{"kind":"error","name":"Error","message":"Active expert squad projects missing default MCP server default/mcp/browser."}}
+84 |     await using project = await memoryProject(`collision94-${scope}-${malformed}`)
+85 |     await collision(project.path, scope, malformed)
+86 |     const discovery = scope === "project" ? await ExpertSquadRegistry.discoverAvailable(project.path) : await ExpertSquadRegistry.discoverGlobalAvailable()
+87 |     const result = await observed(() => PromptProfileResolver.resolveSchedulerCapability({ ...(scope === "project" ? { projectDirectory: project.path } : { scope }), config, defaultSkills: [] }))
+88 |     console.log("collision", JSON.stringify({ scope, malformed, issues: discovery.issues, result: collisionFact(result) }))
+89 |     expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("base") })
+                                       ^
+error: expect(received).toEqual(expected)
+
+  {
+    "kind": "error",
+-   "message": "External expert squad package id "base" collides with a built-in expert squad id.",
++   "message": "Active expert squad projects missing default MCP server default/mcp/browser.",
+    "name": "Error",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:89:35)
+(fail) unbound project malformed builtin collision returns original collision Error [1155.40ms]
+collision {"scope":"global","malformed":false,"issues":[],"result":{"kind":"error","name":"Error","message":"Active expert squad projects missing default MCP server default/mcp/browser."}}
+84 |     await using project = await memoryProject(`collision94-${scope}-${malformed}`)
+85 |     await collision(project.path, scope, malformed)
+86 |     const discovery = scope === "project" ? await ExpertSquadRegistry.discoverAvailable(project.path) : await ExpertSquadRegistry.discoverGlobalAvailable()
+87 |     const result = await observed(() => PromptProfileResolver.resolveSchedulerCapability({ ...(scope === "project" ? { projectDirectory: project.path } : { scope }), config, defaultSkills: [] }))
+88 |     console.log("collision", JSON.stringify({ scope, malformed, issues: discovery.issues, result: collisionFact(result) }))
+89 |     expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("base") })
+                                       ^
+error: expect(received).toEqual(expected)
+
+  {
+    "kind": "error",
+-   "message": "External expert squad package id "base" collides with a built-in expert squad id.",
++   "message": "Active expert squad projects missing default MCP server default/mcp/browser.",
+    "name": "Error",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:89:35)
+(fail) unbound global SDK-valid builtin collision returns original collision Error [1118.04ms]
+collision {"scope":"global","malformed":true,"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CF7DR3\\test-74208-WcuSdD\\runtime-root\\config\\expert-squads\\collision-check\\base\\expert-squad.jsonc","namespace":"collision-check","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"result":{"kind":"error","name":"Error","message":"Active expert squad projects missing default MCP server default/mcp/browser."}}
+84 |     await using project = await memoryProject(`collision94-${scope}-${malformed}`)
+85 |     await collision(project.path, scope, malformed)
+86 |     const discovery = scope === "project" ? await ExpertSquadRegistry.discoverAvailable(project.path) : await ExpertSquadRegistry.discoverGlobalAvailable()
+87 |     const result = await observed(() => PromptProfileResolver.resolveSchedulerCapability({ ...(scope === "project" ? { projectDirectory: project.path } : { scope }), config, defaultSkills: [] }))
+88 |     console.log("collision", JSON.stringify({ scope, malformed, issues: discovery.issues, result: collisionFact(result) }))
+89 |     expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("base") })
+                                       ^
+error: expect(received).toEqual(expected)
+
+  {
+    "kind": "error",
+-   "message": "External expert squad package id "base" collides with a built-in expert squad id.",
++   "message": "Active expert squad projects missing default MCP server default/mcp/browser.",
+    "name": "Error",
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:89:35)
+(fail) unbound global malformed builtin collision returns original collision Error [1270.54ms]
+(pass) lawful external Project wins over broken same-ID global and unbound builtin recovers after own collision removal [3203.31ms]
+lawful empty mount identity validation completed
+mount {"kind":"value"}
+115 |   await PromptProfileResolver.assertSkillMountConfig({ projectDirectory: project.path, config: { prompt_profile: { active: "research-studio" }, skill_mounts: mounts }, defaultSkills: [] })
+116 |   console.log("lawful empty mount identity validation completed")
+117 |   await collision(project.path, "project", true)
+118 |   const result = await observed(() => PromptProfileResolver.assertSkillMountConfig({ projectDirectory: project.path, config: { prompt_profile: { active: "research-studio" }, skill_mounts: mounts }, defaultSkills: [] }))
+119 |   console.log("mount", JSON.stringify(collisionFact(result)))
+120 |   expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("base") })
+                                      ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "kind": "error",
+-   "message": "External expert squad package id "base" collides with a built-in expert squad id.",
+-   "name": "Error",
++   "kind": "value",
+  }
+
+- Expected  - 3
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:120:33)
+(fail) nonactive builtin mount collision returns original Error and lawful empty mount validates identity [991.75ms]
+pinned {"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"workerID":"base-researcher","matrix":{"active_profile":"base","projection_hash":"2b0709b3f33f7d770f38af6f51bd786bda0de40edbe30c53a2fd36a3837906f6"}}
+(pass) actual Task immutable scheduler worker and mount matrix retain original owner after later installed collision [2924.59ms]
+other mount {"kind":"value"}
+151 |   await using project = await memoryProject("collision94-othermount")
+152 |   const revision = await PromptProfileResolver.resolveActivePackageRevision({ projectDirectory: project.path, config, defaultSkills: [] })
+153 |   await collision(project.path, "project", true, "research-studio")
+154 |   const result = await observed(() => PromptProfileResolver.assertSkillMountConfig({ projectDirectory: project.path, config: { ...config, skill_mounts: { "research-studio": { orchestrator: {} } } }, packageRevision: revision, defaultSkills: [] }))
+155 |   console.log("other mount", JSON.stringify(collisionFact(result)))
+156 |   expect(collisionFact(result)).toEqual({ kind: "error", name: "Error", message: message("research-studio") })
+                                      ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "kind": "error",
+-   "message": "External expert squad package id "research-studio" collides with a built-in expert squad id.",
+-   "name": "Error",
++   "kind": "value",
+  }
+
+- Expected  - 3
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:156:33)
+(fail) matching pinned mount does not exempt another colliding builtin mount target [1058.06ms]
+cold model {"status":200,"body":{"prompt_profile":{"active":"base"},"permission_mode":"full_access","agent":{},"plugin":[],"experimental":{"auto_question":true},"command":{},"$schema":"https://opencorvus.ai/config.json","model":"missing94/model","username":"hengu","mcp":{"browser":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","mcp","browser"],"timeout":30000},"computer":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"],"timeout":30000}},"assistant":{"max_executor_groups":5}}}
+162 |   const file = ConfigPaths.projectFile(project.path)
+163 |   await fs.mkdir(path.dirname(file), { recursive: true })
+164 |   await fs.writeFile(file, JSON.stringify({ model: "missing94/model", ...config }))
+165 |   const model = await coldRequest(project.path)
+166 |   console.log("cold model", JSON.stringify(model))
+167 |   expect(model).toMatchObject({ status: 400, body: { name: "ProviderModelNotFoundError", data: { providerID: "missing94", modelID: "model" } } })
+                      ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "body": {
+-     "data": {
+-       "modelID": "model",
+-       "providerID": "missing94",
++     "$schema": "https://opencorvus.ai/config.json",
++     "agent": {},
++     "assistant": {
++       "max_executor_groups": 5,
+      },
+-     "name": "ProviderModelNotFoundError",
++     "command": {},
++     "experimental": {
++       "auto_question": true,
++     },
++     "mcp": {
++       "browser": {
++         "command": [
++           "C:\Users\hengu\.bun\bin\bun.exe",
++           "mcp",
++           "browser",
++         ],
++         "timeout": 30000,
++         "type": "local",
++       },
++       "computer": {
++         "command": [
++           "C:\Users\hengu\.bun\bin\bun.exe",
++           "D:\myhexin-local\opencorvus\packages\opencorvus\src\mcp\computer\stdio.ts",
++         ],
++         "timeout": 30000,
++         "type": "local",
++       },
++     },
++     "model": "missing94/model",
++     "permission_mode": "full_access",
++     "plugin": [],
++     "prompt_profile": {
++       "active": "base",
++     },
++     "username": "hengu",
+    },
+-   "status": 400,
++   "status": 200,
+  }
+
+- Expected  - 5
++ Received  + 35
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:167:17)
+(fail) cold actual config preserves model-first error and builtin collision candidate wrapper [2150.99ms]
+
+ 2 pass
+ 8 fail
+ 15 expect() calls
+Ran 10 tests across 1 file. [20.12s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts
+[1/1] DONE test/expert-squad/builtin-collision-authority.test.ts exit=1 duration=20.96s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts

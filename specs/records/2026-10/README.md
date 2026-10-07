@@ -1,5 +1,10 @@
 # 2026-10 Records
 
+- [Physical installation scope93 Recall](../../artifacts/2026-10-05-connection-workspace-authority/manager-installation-scope-plan-93.md)
+- [Current builtin runtime identity94 Recall](../../artifacts/2026-10-05-connection-workspace-authority/builtin-collision-runtime-plan-94.md)
+- [Canonical diagnostic envelope95 Recall](../../artifacts/2026-10-05-connection-workspace-authority/logger-envelope-plan-95.md)
+- [Cold candidate error mapping96 investigation](../../artifacts/2026-10-05-connection-workspace-authority/cold-config-error-mapping-investigation-96.md)
+
 - [Connection publication, file reservation and workspace authority](2026-10-05-connection-workspace-authority.md)
 
 - [Skill mount cold-start latency qualification](2026-10-05-skill-mount-cold-start-latency.md)

@@ -1,5 +1,10 @@
 # Specs Storage Index
 
+- [Physical installation scope93](artifacts/2026-10-05-connection-workspace-authority/manager-installation-scope-plan-93.md)
+- [Current builtin runtime identity94](artifacts/2026-10-05-connection-workspace-authority/builtin-collision-runtime-plan-94.md)
+- [Canonical diagnostic envelope95](artifacts/2026-10-05-connection-workspace-authority/logger-envelope-plan-95.md)
+- [Cold candidate error mapping96 investigation](artifacts/2026-10-05-connection-workspace-authority/cold-config-error-mapping-investigation-96.md)
+
 - [Genuine complete-read publication acceptance](artifacts/2026-10-05-connection-workspace-authority/complete-read-live-acceptance-plan.md)
 
 - [Owned qualification settlement](artifacts/2026-10-05-connection-workspace-authority/owned-qualification-settlement-plan.md)

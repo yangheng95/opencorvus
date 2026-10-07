@@ -1,0 +1,14 @@
+packages/opencorvus/test/manager-installation-scope.test.ts(170,51): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { kind: string; text: string; code?: undefined; } | { kind: string; code: string | undefined; text?: undefined; }): void', gave the following error.
+    Type 'ExpertSquadPackageFile' is not assignable to type 'string | undefined'.
+      Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'string'.
+  Overload 2 of 2, '(expected: NoInfer<{ kind: string; text: string; code?: undefined; } | { kind: string; code: string | undefined; text?: undefined; }>): void', gave the following error.
+    Type 'ExpertSquadPackageFile' is not assignable to type 'string | undefined'.
+      Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'string'.
+packages/opencorvus/test/manager-installation-scope.test.ts(216,51): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: { kind: string; text: string; code?: undefined; } | { kind: string; code: string | undefined; text?: undefined; }): void', gave the following error.
+    Type 'ExpertSquadPackageFile' is not assignable to type 'string | undefined'.
+      Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'string'.
+  Overload 2 of 2, '(expected: NoInfer<{ kind: string; text: string; code?: undefined; } | { kind: string; code: string | undefined; text?: undefined; }>): void', gave the following error.
+    Type 'ExpertSquadPackageFile' is not assignable to type 'string | undefined'.
+      Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'string'.

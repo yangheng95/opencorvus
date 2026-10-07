@@ -1,0 +1,32 @@
+[1/1] START test/expert-squad/builtin-collision-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+lawful {"input":{"projectDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nsRkDY\\test-72248-VFMECc\\fixtures\\memory-ZIEsEC"},"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"identity":{"agentID":"orchestrator","baseRole":"orchestrator","sessionKind":"orchestrator","projectionHash":"0735223fd77304ddc9311e01a50ee13643dfba795f831a6a90792e6528b05df4"}}
+lawful {"input":{"scope":"global"},"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"identity":{"agentID":"orchestrator","baseRole":"orchestrator","sessionKind":"orchestrator","projectionHash":"0735223fd77304ddc9311e01a50ee13643dfba795f831a6a90792e6528b05df4"}}
+(pass) lawful unbound builtin Project and global return real materialized scheduler identity [2515.77ms]
+collision {"scope":"project","malformed":false,"issues":[],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound project SDK-valid builtin collision returns original collision Error [1864.55ms]
+collision {"scope":"project","malformed":true,"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nsRkDY\\test-72248-VFMECc\\fixtures\\memory-dl0J4D\\.opencorvus\\expert-squads\\collision-check\\base\\expert-squad.jsonc","namespace":"collision-check","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound project malformed builtin collision returns original collision Error [1907.76ms]
+collision {"scope":"global","malformed":false,"issues":[],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound global SDK-valid builtin collision returns original collision Error [1849.01ms]
+collision {"scope":"global","malformed":true,"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-nsRkDY\\test-72248-VFMECc\\runtime-root\\config\\expert-squads\\collision-check\\base\\expert-squad.jsonc","namespace":"collision-check","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound global malformed builtin collision returns original collision Error [1919.07ms]
+(pass) lawful external Project wins over broken same-ID global and unbound builtin recovers after own collision removal [3217.76ms]
+lawful empty mount identity validation completed
+mount {"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}
+(pass) nonactive builtin mount collision returns original Error and lawful empty mount validates identity [2164.33ms]
+pinned {"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"workerID":"base-researcher","matrix":{"active_profile":"base","projection_hash":"2b0709b3f33f7d770f38af6f51bd786bda0de40edbe30c53a2fd36a3837906f6"}}
+(pass) actual Task immutable scheduler worker and mount matrix retain original owner after later installed collision [2905.83ms]
+other mount {"kind":"error","name":"Error","message":"External expert squad package id \"research-studio\" collides with a built-in expert squad id."}
+(pass) matching pinned mount does not exempt another colliding builtin mount target [1025.65ms]
+cold model {"status":400,"body":{"name":"ProviderModelNotFoundError","data":{"providerID":"missing94","modelID":"model","suggestions":[]}}}
+cold collision {"status":500,"body":{"name":"ConfigCandidateValidationError","data":{"message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}}
+(pass) cold actual config preserves model-first error and builtin collision candidate wrapper [2979.75ms]
+
+ 10 pass
+ 0 fail
+ 22 expect() calls
+Ran 10 tests across 1 file. [24.87s]
+[1/1] DONE test/expert-squad/builtin-collision-authority.test.ts exit=0 duration=25.69s

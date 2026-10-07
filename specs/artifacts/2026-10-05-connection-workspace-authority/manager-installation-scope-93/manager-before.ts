@@ -701,9 +701,7 @@ export namespace ExpertSquadPackageManager {
       view: "installations",
       reconcileEvolutionMutations: false,
     })
-    const issue = identities.issues.find(
-      (issue) => issue.id === input.id && Filesystem.contains(input.targetLocation.packagesRoot, issue.location),
-    )
+    const issue = identities.issues.find((issue) => issue.id === input.id)
     if (issue) throw new Error(issue.message)
     const existing = identities.items.find(
       (identity) => identity.id === input.id && identity.location === input.targetLocation.kind,

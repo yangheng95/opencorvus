@@ -1,0 +1,13 @@
+{
+  "include": [
+    "../../packages/opencorvus/src/**/*.ts",
+    "../../packages/opencorvus/test/manager-installation-scope.test.ts"
+  ],
+  "exclude": [],
+  "extends": "../../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "../../packages/opencorvus/node_modules/@types/bun"
+    ]
+  }
+}

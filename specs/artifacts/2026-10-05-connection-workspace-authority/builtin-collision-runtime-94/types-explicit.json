@@ -1,0 +1,11 @@
+{
+  "exclude": [
+    "../../../../packages/opencorvus/src/skill/builtin/**/*",
+    "../../../../packages/opencorvus/dist/**/*"
+  ],
+  "include": [
+    "../../../../packages/opencorvus/src/**/*.ts",
+    "../../../../packages/opencorvus/test/expert-squad/builtin-collision-authority.test.ts"
+  ],
+  "extends": "../../../../packages/opencorvus/tsconfig.json"
+}
