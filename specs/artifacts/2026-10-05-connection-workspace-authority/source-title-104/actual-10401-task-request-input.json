@@ -1,0 +1,11 @@
+{
+  "title": "真实网页来源标题与无障碍介绍",
+  "request": "只读访问唯一指定官方网页 https://www.w3.org/WAI/fundamentals/accessibility-intro/ ，根据实际抓取内容用中文简要说明网页无障碍的意义，并给出该实际来源。只需短篇说明，不展开额外检索，不修改任何工程文件。",
+  "productPillar": "work",
+  "promptProfile": "base",
+  "model": "openai/gpt-6.1-sol",
+  "source": "source-title-104-01",
+  "requestID": "e367b615-131e-40f6-931d-aad72339e06d",
+  "requestSentAt": "2026-10-07T15:36:15.9398737Z",
+  "acceptedObservedAt": "2026-10-07T15:36:21.0290219Z"
+}

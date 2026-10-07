@@ -1,0 +1,53 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v6, provider v3, provider-utils v4, OpenRouter v2)
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled
+
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs 5546aa71424d4a49
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache miss, executing 7988ec0df26bbdd6
+@opencorvus-ai/overlay:typecheck: cache hit, replaying logs 63973119ab138c39
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: cache hit, replaying logs a277db6c9e34e985
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+@opencorvus-ai/util:typecheck: cache hit, replaying logs eb8f2e0a33e80f36
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs b97bd04b60329c10
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 7239d005dcd1ce0e
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+@opencorvus-ai/plugin:typecheck: cache hit, replaying logs e4f5c6c858444868
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    7 cached, 8 total
+  Time:    33.234s 
+
+$ bun run ./packages/opencorvus/script/check/routes.ts
+api:routes-check ok — 6 rules and route inventory clean across 34 files
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
+docs:check ok (345 ops, 25 groups)
+$ bun run --cwd packages/opencorvus check:control-lease-owners
+$ bun run script/check/control-lease-owners.ts
+control lease owner check passed (18 owners, 22 acquire sites, all declared)
+$ bun run ./packages/opencorvus/script/check/architecture-index.ts
+architecture-index ok — 18 current documents indexed, every link live
+$ bun run ./packages/opencorvus/script/check/package-topology.ts
+package-topology ok — 10 workspace packages, no dependency or generation cycle, bun.lock inputs aligned
+$ bun run ./script/check-release-mutation-topology.ts --treeish "72789f8ddde43cd6cbce952703c0f0b9509cc051"
+release-mutation-topology ok (b69ba97fb37b) — 5 canonical authorities
+$ bun run ./packages/opencorvus/script/check/module-topology.ts --treeish "72789f8ddde43cd6cbce952703c0f0b9509cc051"
+module-topology ok (treeish:72789f8ddde4) — 1136 modules, 5801 runtime edges, retained SCC sizes ; 4 clean imports passed
+[secret-scan] OK — 0 hits across tracked sources
+remote: fatal error in commit_refs        
+To https://github.com/yangheng95/opencorvus
+ ! [remote rejected]   main -> main (failure)
+error: failed to push some refs to 'https://github.com/yangheng95/opencorvus'

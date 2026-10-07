@@ -8,6 +8,7 @@ import { Config } from "../config/config"
 import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
 import { urlSource } from "./source"
+import { createDocument } from "@mixmark-io/domino"
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
 const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
@@ -103,7 +104,6 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
   const title = `${params.url} (${contentType})`
   const source = urlSource({
     url: response.url || params.url,
-    title: response.url || params.url,
     provider: "opencorvus-webfetch",
   })
 
@@ -128,6 +128,10 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
   }
 
   const content = new TextDecoder().decode(arrayBuffer)
+  if (mime === "text/html") {
+    const documentTitle = createDocument(content).title.trim()
+    if (documentTitle) source.title = documentTitle
+  }
 
   // Handle content based on requested format and actual content type
   switch (params.format) {

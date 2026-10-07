@@ -1,0 +1,28 @@
+{
+  "exactProcessFacts": [
+    {
+      "expected": {
+        "pid": 34404,
+        "processInstanceID": "win32:639269841395241324",
+        "occurrenceID": "d769cea3-f262-4d49-91ff-f1ac61fe6c02"
+      },
+      "actualProcess": null,
+      "originalPresent": false
+    },
+    {
+      "expected": {
+        "pid": 75184,
+        "processInstanceID": "win32:639269841404479063",
+        "occurrenceID": "968c8b85-1b82-4dee-9721-dcfb4bd53741"
+      },
+      "actualProcess": null,
+      "originalPresent": false
+    }
+  ],
+  "listeners": [],
+  "copiedModelsPresent": false,
+  "observedAtUtc": "2026-10-07T15:42:31.3075547Z",
+  "copiedAuthPresent": false,
+  "boundary": "Independent Windows PID/birth and port/pair facts, not process-name inference",
+  "occurrence": "source-title-104-01-77ddba54-aab8-4b41-b4f3-4b825bcb068c"
+}

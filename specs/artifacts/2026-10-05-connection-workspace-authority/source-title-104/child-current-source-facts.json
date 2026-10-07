@@ -1,0 +1,161 @@
+{
+  "access": "closed exact DB readonly BEGIN/ROLLBACK; no application imports/bootstrap",
+  "occurrence": "source-title-104-01-77ddba54-aab8-4b41-b4f3-4b825bcb068c",
+  "taskID": "tsk_g00VXNWt2u00YplT6eUw",
+  "projectID": "prj_hyuRk1rfJuHe8i5OMv2M",
+  "requestID": "e367b615-131e-40f6-931d-aad72339e06d",
+  "task": {
+    "id": "tsk_g00VXNWt2u00YplT6eUw",
+    "project_id": "prj_hyuRk1rfJuHe8i5OMv2M",
+    "session_id": "ses_-zUScT6pKzz4cd7Ilv6N",
+    "request_id": "e367b615-131e-40f6-931d-aad72339e06d",
+    "request": "只读访问唯一指定官方网页 https://www.w3.org/WAI/fundamentals/accessibility-intro/ ，根据实际抓取内容用中文简要说明网页无障碍的意义，并给出该实际来源。只需短篇说明，不展开额外检索，不修改任何工程文件。",
+    "product_pillar": "work"
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUScT6pKzz4cd7Ilv6N",
+      "parent_id": null,
+      "project_id": "prj_hyuRk1rfJuHe8i5OMv2M",
+      "kind": "root"
+    },
+    {
+      "id": "ses_-zUScT5xazzXz0EOnEHS",
+      "parent_id": "ses_-zUScT6pKzz4cd7Ilv6N",
+      "project_id": "prj_hyuRk1rfJuHe8i5OMv2M",
+      "kind": "orchestrator"
+    },
+    {
+      "id": "ses_hqAU4VDQLaTYmgRETGBz",
+      "parent_id": "ses_-zUScT5xazzXz0EOnEHS",
+      "project_id": "prj_hyuRk1rfJuHe8i5OMv2M",
+      "kind": "delegated-worker"
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VXNWtBH00RGlpyW8dv",
+      "seq": 3,
+      "type": "task.execution.opened",
+      "epoch": 1
+    },
+    {
+      "id": "pev_g0VXNXGdX003bxOJfS58",
+      "seq": 26,
+      "type": "task.completed",
+      "epoch": 1
+    }
+  ],
+  "promptOwners": [],
+  "webfetch": [
+    {
+      "partID": "prt_g0VXNWvoJ00Xfy4igwWk",
+      "messageID": "msg_hsxkcZKy3tiCVGv4FjXe",
+      "sessionID": "ses_-zUScT5xazzXz0EOnEHS",
+      "input": {
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+        "format": "markdown",
+        "timeout": 60
+      },
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+          "provider": "opencorvus-webfetch",
+          "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "prt_g0VXNWwbV000V9qDcuoI",
+      "messageID": "msg_hsxkcZKy3tiCVGv4FjXe",
+      "sessionID": "ses_-zUScT5xazzXz0EOnEHS",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+        "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "provider": {
+    "sourceFile": "source-title-104-01-final-provider-audit.json",
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "state": "settled",
+        "terminal": "eof"
+      }
+    ]
+  }
+}

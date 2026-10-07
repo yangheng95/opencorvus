@@ -1,5 +1,9 @@
 # Connection workspace authority investigation
 
+- [Actual source titles104 evidence](source-title-104/README.md): real fetched title, exact persisted source, genuine current CLI/Sol and personally reviewed Sources pixels.
+
+- [Actual fetched source titles104 Recall](source-titles-plan-104.md): actual HTML title, current private CLI contract and genuine native Sources acceptance.
+
 - [Desktop dock width103 Recall](subagent-dock-width-plan-103.md) and [evidence](dock-width-103/README.md): actual narrow desktop Sources failure and shared sizing correction.
 
 - [Sources and renderer102 evidence](subagent-rendering-flicker-102/README.md): actual before/first-after pixels, native closure, source preimages and current acceptance limits.

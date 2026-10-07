@@ -1,5 +1,9 @@
 # 2026-10 Records
 
+- [Actual source titles104](2026-10-07-actual-source-titles.md)
+
+- [Actual fetched source titles104 Recall](../../artifacts/2026-10-05-connection-workspace-authority/source-titles-plan-104.md)
+
 - [Desktop Sources width103](2026-10-07-source-dock-width.md)
 
 - [Desktop dock width103 Recall](../../artifacts/2026-10-05-connection-workspace-authority/subagent-dock-width-plan-103.md)

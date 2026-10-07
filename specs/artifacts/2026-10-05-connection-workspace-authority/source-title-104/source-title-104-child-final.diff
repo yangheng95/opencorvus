@@ -1,0 +1,69 @@
+diff --git a/bun.lock b/bun.lock
+index d0735ac0..aa35e20e 100644
+--- a/bun.lock
++++ b/bun.lock
+@@ -104,6 +104,7 @@
+         "@clack/prompts": "1.0.0-alpha.1",
+         "@hono/standard-validator": "0.1.5",
+         "@lydell/node-pty": "catalog:",
++        "@mixmark-io/domino": "2.2.0",
+         "@modelcontextprotocol/ext-apps": "1.3.0",
+         "@modelcontextprotocol/sdk": "1.31.0",
+         "@octokit/graphql": "9.0.2",
+diff --git a/packages/opencorvus/package.json b/packages/opencorvus/package.json
+index 40cd834a..84004a4f 100644
+--- a/packages/opencorvus/package.json
++++ b/packages/opencorvus/package.json
+@@ -84,6 +84,7 @@
+     "@clack/prompts": "1.0.0-alpha.1",
+     "@hono/standard-validator": "0.1.5",
+     "@lydell/node-pty": "catalog:",
++    "@mixmark-io/domino": "2.2.0",
+     "@modelcontextprotocol/ext-apps": "1.3.0",
+     "@modelcontextprotocol/sdk": "1.31.0",
+     "@octokit/graphql": "9.0.2",
+diff --git a/packages/opencorvus/src/tool/webfetch.ts b/packages/opencorvus/src/tool/webfetch.ts
+index bd41c1ec..0f7cd596 100644
+--- a/packages/opencorvus/src/tool/webfetch.ts
++++ b/packages/opencorvus/src/tool/webfetch.ts
+@@ -8,6 +8,7 @@ import { Config } from "../config/config"
+ import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
+ import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
+ import { urlSource } from "./source"
++import { createDocument } from "@mixmark-io/domino"
+ 
+ const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
+ const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
+@@ -103,7 +104,6 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
+   const title = `${params.url} (${contentType})`
+   const source = urlSource({
+     url: response.url || params.url,
+-    title: response.url || params.url,
+     provider: "opencorvus-webfetch",
+   })
+ 
+@@ -128,6 +128,10 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
+   }
+ 
+   const content = new TextDecoder().decode(arrayBuffer)
++  if (mime === "text/html") {
++    const documentTitle = createDocument(content).title.trim()
++    if (documentTitle) source.title = documentTitle
++  }
+ 
+   // Handle content based on requested format and actual content type
+   switch (params.format) {
+diff --git a/packages/opencorvus/test/session/source-persistence.test.ts b/packages/opencorvus/test/session/source-persistence.test.ts
+index 66b15425..3bcc154e 100644
+--- a/packages/opencorvus/test/session/source-persistence.test.ts
++++ b/packages/opencorvus/test/session/source-persistence.test.ts
+@@ -31,6 +31,9 @@ describe("message source persistence", () => {
+           cost: 0,
+           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+         })
++        expect(message.role).toBe("assistant")
++        if (message.role !== "assistant")
++          throw new Error("Source persistence fixture requires its actual assistant message")
+         const sources = [
+           urlSource({ url: "https://example.com/source#fragment", title: "Web source", provider: "exa" }),
+           fileSource({

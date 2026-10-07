@@ -1,0 +1,24 @@
+[1/2] START test/tool/webfetch-source-title.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Owned HTTP title outputs [{"title":"http://127.0.0.1:62115/redirect (text/html; charset=utf-8)","sources":[{"type":"source-url","sourceId":"948a1b4659f122d7d07134eb76550394ad727df1077159f63106606bd29d25e4","url":"http://127.0.0.1:62115/title","provider":"opencorvus-webfetch","title":"真正 & 标题 页面"}],"output":"<!doctype html><html><head><title>  真正 &amp; 标题\n 页面  </title></head><body><p>Actual content</p><script>document.title='Invented script title'</script></body></html>"},{"title":"http://127.0.0.1:62115/empty (text/html)","sources":[{"type":"source-url","sourceId":"a3ed63ce5f2c104d9a0b91989c57d2c68dc68211c2915bd65194687f017b3433","url":"http://127.0.0.1:62115/empty","provider":"opencorvus-webfetch"}],"output":"<html><head><title>\n </title></head><body>No title</body></html>"},{"title":"http://127.0.0.1:62115/plain (text/plain)","sources":[{"type":"source-url","sourceId":"9ae8fd8af070d71db93b9a4a1c2abc802942f8035604b8a3360e2ebba1cb2ad3","url":"http://127.0.0.1:62115/plain","provider":"opencorvus-webfetch"}],"output":"<title>Text is not HTML</title>"},{"title":"http://127.0.0.1:62115/image (image/png)","sources":[{"type":"source-url","sourceId":"f4087330b1472be04d475c1c4f3bd4464bfce6c0f19d692a6e4461b2665d9524","url":"http://127.0.0.1:62115/image","provider":"opencorvus-webfetch"}],"output":"Image fetched successfully","attachments":[{"type":"file","mime":"image/png","url":"data:image/png;base64,iVBORw=="}]}]
+Owned HTTP format outputs {"formats":[{"output":"Format &amp; 标题Actual headingActual body","metadata":{"originalBytes":44,"shownBytes":44,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:62115/formats (text/html)","sources":[{"type":"source-url","sourceId":"9b74ea3f3039f96f0fe49031cf5844dcc9d703bb770583c99e627f4897ac2472","url":"http://127.0.0.1:62115/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]},{"output":"Format & 标题\n\n# Actual heading\n\nActual body","metadata":{"originalBytes":46,"shownBytes":46,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:62115/formats (text/html)","sources":[{"type":"source-url","sourceId":"9b74ea3f3039f96f0fe49031cf5844dcc9d703bb770583c99e627f4897ac2472","url":"http://127.0.0.1:62115/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]},{"output":"<html><head><title>Format &amp; 标题</title></head><body><h1>Actual heading</h1><p>Actual body</p></body></html>","metadata":{"originalBytes":114,"shownBytes":114,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:62115/formats (text/html)","sources":[{"type":"source-url","sourceId":"9b74ea3f3039f96f0fe49031cf5844dcc9d703bb770583c99e627f4897ac2472","url":"http://127.0.0.1:62115/formats","provider":"opencorvus-webfetch","title":"Format & 标题"}]}],"untitled":{"output":"<html><body><p>Actual untitled body</p></body></html>","metadata":{"originalBytes":53,"shownBytes":53,"webfetchOutputClipped":false,"webfetchEmbeddedAttachmentCount":0},"title":"http://127.0.0.1:62115/untitled (text/html)","sources":[{"type":"source-url","sourceId":"8e2dc5066fd5beb34206a0b3d29739c32a757ef96b7d0bac4ef2d527988b80dd","url":"http://127.0.0.1:62115/untitled","provider":"opencorvus-webfetch"}]}}
+(pass) real fetched HTML titles preserve decoded identity, redirect URL and persisted source [2340.73ms]
+
+ 1 pass
+ 0 fail
+ 9 expect() calls
+Ran 1 test across 1 file. [4.23s]
+[1/2] DONE test/tool/webfetch-source-title.test.ts exit=0 duration=5.22s
+[2/2] START test/session/source-persistence.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) message source persistence > persists URL and source-file evidence once with durable timeline identities [2106.05ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [3.42s]
+[2/2] DONE test/session/source-persistence.test.ts exit=0 duration=3.60s

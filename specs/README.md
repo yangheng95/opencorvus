@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Actual source titles104](records/2026-10/2026-10-07-actual-source-titles.md): real HTML titles, positive HTTP/source contracts and genuine Sol/CLI/manual Sources acceptance.
+
+- [Actual fetched source titles104 Recall](artifacts/2026-10-05-connection-workspace-authority/source-titles-plan-104.md): actual HTTP HTML title producer and genuine Sources/CLI acceptance admission.
+
 - [Desktop Sources width103](records/2026-10/2026-10-07-source-dock-width.md): actual narrow dock and native expanded-source width repairs, genuine Work/Sol acceptance and original failures retained.
 
 - [Desktop dock width103 Recall](artifacts/2026-10-05-connection-workspace-authority/subagent-dock-width-plan-103.md): align current CSS and resizer width budgets after genuine narrow Sources failure.

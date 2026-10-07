@@ -31,6 +31,9 @@ describe("message source persistence", () => {
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
         })
+        expect(message.role).toBe("assistant")
+        if (message.role !== "assistant")
+          throw new Error("Source persistence fixture requires its actual assistant message")
         const sources = [
           urlSource({ url: "https://example.com/source#fragment", title: "Web source", provider: "exa" }),
           fileSource({

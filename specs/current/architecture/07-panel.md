@@ -458,6 +458,12 @@ the disclosure identity uses caption. Sources keep their chronological position
 behind the shared native Disclosure, initially collapsed with the first real
 source's readable identity and an honest count for that chronological source run;
 operator expansion state and exact source links remain available. The Source
+label uses an actual source title when supplied. Webfetch reads that title only
+from the fetched text/html document using the public HTML parser; an empty title
+remains optional and uses the existing URL preview. Redirected URL owns source
+identity and activation independently of the title. Historical source payloads
+retain their original recorded values.
+The Source
 Disclosure's native content box and expanded list are bounded by the actual
 source region, so long links ellipsize within that region without changing
 their full tooltip or activation target. Activity uses

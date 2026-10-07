@@ -1,0 +1,45 @@
+--- before/genuine-task-create.ps1
++++ current/genuine-task-create.ps1
+@@ -3,6 +3,7 @@
+  [Parameter(Mandatory=$true)][string]$RunRoot,
+  [Parameter(Mandatory=$true)][string]$EvidenceRoot,
+  [Parameter(Mandatory=$true)][ValidateRange(1,99999)][int]$EvidenceCase,
++ [Parameter(Mandatory=$true)][ValidateSet('code','work')][string]$ProductPillar,
+  [Parameter(Mandatory=$true)][string]$Title,
+  [Parameter(Mandatory=$true)][string]$Request,
+  [Parameter(Mandatory=$true)][string]$Source
+@@ -13,7 +14,16 @@
+ $taskFilePrefix27='actual-'+$EvidenceCase
+ $taskOwner27=Get-Content -Raw -LiteralPath "$taskRoot27/launch-owner.json" | ConvertFrom-Json
+ $taskPreflight27=Get-Content -Raw -LiteralPath "$taskRoot27/evidence/preflight-ready.json" | ConvertFrom-Json
++$taskProfile27=Get-Content -Raw -LiteralPath "$taskRoot27/evidence/profile-selection-admitted.json" | ConvertFrom-Json
++$taskAuthority27=Get-Content -Raw -LiteralPath "$taskRoot27/evidence/authority-ready.json" | ConvertFrom-Json
+ if ($taskPreflight27.occurrence -ne $taskOwner27.occurrence -or $taskPreflight27.preflight.credential -ne 'usable' -or $taskPreflight27.preflight.catalog -ne 'projected' -or $taskPreflight27.preflight.actualModel -ne 'gpt-6.1-sol' -or !$taskPreflight27.preflight.streaming) { throw 'Exact live preflight not qualified' }
++if ([string]::IsNullOrWhiteSpace($taskOwner27.promptProfile) -or $taskOwner27.promptProfile -ne $taskProfile27.profileID -or $taskOwner27.promptProfile -ne $taskAuthority27.admission.packageRevision.id -or $taskProfile27.namespace -ne $taskAuthority27.admission.packageRevision.namespace -or [IO.Path]::GetFullPath($taskOwner27.profileSelectionPath) -ne [IO.Path]::GetFullPath($taskProfile27.profileSelectionPath)) { throw 'Exact admitted Expert Squad profile required' }
++if ($taskAuthority27.pid -ne $taskOwner27.nativeTarget.pid -or $taskAuthority27.owner.processInstanceID -ne $taskOwner27.nativeTarget.processInstanceID -or $taskPreflight27.pid -ne $taskAuthority27.pid -or $taskPreflight27.owner.processInstanceID -ne $taskAuthority27.owner.processInstanceID -or !$taskAuthority27.pairedModels -or $taskAuthority27.admission.directory -ne $taskOwner27.project) { throw 'Exact profile authority and model preflight owner required' }
++if ($taskProfile27.selection.kind -eq 'builtin') {
++ if ($taskAuthority27.admission.packageRevision.scope -ne 'built_in' -or $null -ne $taskAuthority27.admission.packageRevision.projectID) { throw 'Actual builtin profile revision required' }
++} elseif ($taskProfile27.selection.kind -eq 'project') {
++ if ($taskAuthority27.admission.packageRevision.scope -ne 'project' -or $taskAuthority27.admission.packageRevision.projectID -ne $taskAuthority27.admission.projectID) { throw 'Actual project profile revision required' }
++} else { throw 'Unknown admitted profile selection' }
+ if ($taskRoot27 -ne [IO.Path]::GetFullPath($taskOwner27.runRoot) -or $taskEvidence27 -ne [IO.Path]::GetFullPath($taskOwner27.settlementEvidenceRoot)) { throw 'Exact owner root/evidence required' }
+ if (Test-Path -LiteralPath $taskOwner27.taskSelectionPath) { throw 'Occurrence already has an immutable Task selection' }
+ . (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly
+@@ -40,14 +50,14 @@
+  [Environment]::SetEnvironmentVariable('OPENCORVUS_DISABLE_AUTOUPDATE','1','Process')
+  [Environment]::SetEnvironmentVariable('OPENCORVUS_TASK_PROCESS_MODE','native','Process')
+  $taskSentAt27=[DateTime]::UtcNow.ToString('o')
+- & $taskBun27 run 'packages/opencorvus/src/index.ts' task create --url $taskURL27 --dir $taskOwner27.project --pillar code --request $taskRequest27 --title $taskTitle27 --model 'openai/gpt-6.1-sol' --source $Source --request-id $taskRequestID27 --format json 1> "$taskEvidence27/$taskFilePrefix27-task-accepted-cli.json" 2> "$taskEvidence27/$taskFilePrefix27-task-create-first.log"
++ & $taskBun27 run 'packages/opencorvus/src/index.ts' task create --url $taskURL27 --dir $taskOwner27.project --pillar $ProductPillar --expert-squad $taskOwner27.promptProfile --request $taskRequest27 --title $taskTitle27 --model 'openai/gpt-6.1-sol' --source $Source --request-id $taskRequestID27 --format json 1> "$taskEvidence27/$taskFilePrefix27-task-accepted-cli.json" 2> "$taskEvidence27/$taskFilePrefix27-task-create-first.log"
+  if($LASTEXITCODE -ne 0) { throw "Genuine Task CLI exit $LASTEXITCODE" }
+  $taskAcceptedAt27=[DateTime]::UtcNow.ToString('o')
+  $taskAccepted27=Get-Content -Raw -LiteralPath "$taskEvidence27/$taskFilePrefix27-task-accepted-cli.json" | ConvertFrom-Json
+  if (!$taskAccepted27.task_id -or !$taskAccepted27.project_id -or $taskAccepted27.directory -ne $taskOwner27.project) { throw 'Genuine Task acceptance contract mismatch' }
+- $taskSelection27=[ordered]@{occurrence=$taskOwner27.occurrence;taskID=$taskAccepted27.task_id;projectID=$taskAccepted27.project_id;directory=$taskAccepted27.directory;productPillar='code';requestID=$taskRequestID27;requestSentAt=$taskSentAt27;acceptedObservedAt=$taskAcceptedAt27}
++ $taskSelection27=[ordered]@{occurrence=$taskOwner27.occurrence;taskID=$taskAccepted27.task_id;projectID=$taskAccepted27.project_id;directory=$taskAccepted27.directory;productPillar=$ProductPillar;requestID=$taskRequestID27;requestSentAt=$taskSentAt27;acceptedObservedAt=$taskAcceptedAt27}
+  Write-OwnedLaunchFact "$taskEvidence27/$taskFilePrefix27-task-selection.json" $taskSelection27
+- Write-OwnedLaunchFact "$taskEvidence27/$taskFilePrefix27-task-request-input.json" ([ordered]@{title=$taskTitle27;request=$taskRequest27;model='openai/gpt-6.1-sol';source=$Source;requestID=$taskRequestID27;requestSentAt=$taskSentAt27;acceptedObservedAt=$taskAcceptedAt27})
++ Write-OwnedLaunchFact "$taskEvidence27/$taskFilePrefix27-task-request-input.json" ([ordered]@{title=$taskTitle27;request=$taskRequest27;productPillar=$ProductPillar;promptProfile=$taskOwner27.promptProfile;model='openai/gpt-6.1-sol';source=$Source;requestID=$taskRequestID27;requestSentAt=$taskSentAt27;acceptedObservedAt=$taskAcceptedAt27})
+  $taskStage27=Join-Path $taskRoot27 ('task-selection.'+[Guid]::NewGuid().ToString()+'.stage')
+  $taskSelection27 | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 -LiteralPath $taskStage27
+  [IO.File]::Move($taskStage27,$taskOwner27.taskSelectionPath)

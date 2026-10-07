@@ -1,0 +1,23 @@
+[1/2] START test/tool/webfetch-source-title.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Owned HTTP title outputs [{"title":"http://127.0.0.1:53874/redirect (text/html; charset=utf-8)","sources":[{"type":"source-url","sourceId":"575c69756a2f2122af5e6d90e32acdc691a7cdc4019aa4cac50e05c6061beefe","url":"http://127.0.0.1:53874/title","provider":"opencorvus-webfetch","title":"真正 & 标题 页面"}],"output":"<!doctype html><html><head><title>  真正 &amp; 标题\n 页面  </title></head><body><p>Actual content</p><script>document.title='Invented script title'</script></body></html>"},{"title":"http://127.0.0.1:53874/empty (text/html)","sources":[{"type":"source-url","sourceId":"4be57e995a37c126703039e508b1a5efa5b9bda99bdb1d51aa8e65ceb686495f","url":"http://127.0.0.1:53874/empty","provider":"opencorvus-webfetch"}],"output":"<html><head><title>\n </title></head><body>No title</body></html>"},{"title":"http://127.0.0.1:53874/plain (text/plain)","sources":[{"type":"source-url","sourceId":"7e6fc90d0d082638f3945f87070fd168d4d62bdc318a5d9a5abf6877a4fcb3b0","url":"http://127.0.0.1:53874/plain","provider":"opencorvus-webfetch"}],"output":"<title>Text is not HTML</title>"},{"title":"http://127.0.0.1:53874/image (image/png)","sources":[{"type":"source-url","sourceId":"9f8d1aef78fd5a50aa7e97bb438e266c83768cacbce8ba23f5b4bbabce576a27","url":"http://127.0.0.1:53874/image","provider":"opencorvus-webfetch"}],"output":"Image fetched successfully","attachments":[{"type":"file","mime":"image/png","url":"data:image/png;base64,iVBORw=="}]}]
+(pass) real fetched HTML titles preserve decoded identity, redirect URL and persisted source [2361.04ms]
+
+ 1 pass
+ 0 fail
+ 6 expect() calls
+Ran 1 test across 1 file. [4.28s]
+[1/2] DONE test/tool/webfetch-source-title.test.ts exit=0 duration=5.16s
+[2/2] START test/session/source-persistence.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) message source persistence > persists URL and source-file evidence once with durable timeline identities [2007.00ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [3.26s]
+[2/2] DONE test/session/source-persistence.test.ts exit=0 duration=3.44s
