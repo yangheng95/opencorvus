@@ -1,0 +1,45 @@
+Browser tab: 42, Title: "OpenCorvus", URL: "http://localhost:18026/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 35, 68-233, 245-259
++									68 container
++										69 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++										70 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-175-trigger, Secondary Actions: Expand
++										71 button New chat for this project
++				72 container chatSection
++					73 container Description: Loading task, ID: taskSwitchProgress
++					74 container
++						75 text 请只根据我提供的真实验证事实，写一份约600字的中文文件操作验收记录：同一个新文件依次执行 Write、Read、Edit、Read、Edit、Read；...
++						76 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-232-trigger, Secondary Actions: Expand
++						77 container Description: Not running, ID: taskStatus
++							78 text Not running
++						79 button Side chat
++						80 container solidChatHeaderRuntimeActions
++							81 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							82 checkbox Description: Open right dock, Value: 0
++					83 container
++						84 container Description: Conversation, ID: chatScroll
++							85 container
++								86 container
++									87 text User
++									88 text 请只根据我提供的真实验证事实，写一份约600字的中文文件操作验收记录：同一个新文件依次执行 Write、Read、Edit、Read、Edit、Read；state 从 initial 到 middle，再到 final；每次 Read 都是两行，marker 保持不变，末尾换行保留；独立磁盘核对最终58字节完全匹配。请介绍每一步的证据、区分工具回执与总结文字，以及两条使用建议。仅撰写记录，无需调用工具或修改文件。
++								89 container
++									90 text work
++									91 text 15s
++									92 heading 文件操作验收记录, Value: 1
++									93 heading 一、验收范围与依据, Value: 2
++									94 heading 二、逐步证据记录, Value: 2
++									95 heading 三、证据边界与结论, Value: 2
++									96 heading 四、使用建议, Value: 2
++						97 container chatHomeComposition
++							98 container chatForm
++								99 splitter Description: Drag to resize the message input, Value: 42
++								100 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								101 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								102 text Work
++								103 text Chat
++								104 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
++								105 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								106 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++									107 text openai/gpt-6.1-sol
++								108 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+The focused UI element is 39 button 请只根据我提供的真实验证事实，写一份约600字的中文文件操作验收记录：同一个新文件依次执行 Write、Read、Edit、Read、Edit、Read；...

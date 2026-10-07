@@ -1,0 +1,33 @@
+{
+  "sessionA": "ses_-zUSn3IzNzzdZ2AxFWCU",
+  "port": 18026,
+  "sessionB": "ses_-zUSn0xc3zzFGmP12qJE",
+  "projectID": "prj_hA9BhfYfLEA7IQzO8QHf",
+  "observedAtUtc": "2026-10-07T01:30:29.2145142Z",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/review-source-scope-before-68",
+  "sourceParentBoundary": {
+    "pid": 30712,
+    "birthRecorded": false,
+    "boundary": "launch parent only; cannot qualify exact original occurrence without birth"
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+  "credentialStaging": "None; one actual03 database copied, no source mutation/stitched history/new model call",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-edit-03",
+  "sourceKnownStates": [
+    {
+      "expected": {
+        "pid": 17008,
+        "processInstanceID": "win32:639268277001064850"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 43764,
+        "processInstanceID": "win32:639268277001173550"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "purpose": "Actual source62 ordinary file/text/file filter retirement baseline"
+}

@@ -1,0 +1,194 @@
+[
+  {
+    "access": "readonly exact closed owned original database; explicit transaction; no body/credential fields",
+    "filename": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-edit-03/runtime/data/opencorvus.db",
+    "tables": [
+      {
+        "name": "engine_artifact"
+      },
+      {
+        "name": "part"
+      },
+      {
+        "name": "session"
+      },
+      {
+        "name": "session_prompt_owner"
+      },
+      {
+        "name": "tool_part_outcome"
+      },
+      {
+        "name": "tool_part_request"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "ses_huiC4A7LV1punOxigyXh",
+        "project_id": "prj_ha9YDWTJCkGE97okwssq",
+        "parent_id": null,
+        "kind": "assistant",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\runtime\\data\\projects\\2026\\10\\06\\434e5bc3-47cf-42ad-9a50-fa84cd7bf902",
+        "title": "Reply with OK.",
+        "time_archived": null,
+        "experience": "chat",
+        "surface": "right-sidebar",
+        "messages": 2
+      },
+      {
+        "id": "ses_-zUSn3IzNzzdZ2AxFWCU",
+        "project_id": "prj_hA9BhfYfLEA7IQzO8QHf",
+        "parent_id": null,
+        "kind": "assistant",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+        "title": "请实际执行并验证这个文件工作流。目标文件是 C:/Users/hengu/.codex/opencorvus-product-iteration/2026...",
+        "time_archived": null,
+        "experience": "work",
+        "surface": "right-sidebar",
+        "messages": 8
+      },
+      {
+        "id": "ses_-zUSn0xc3zzFGmP12qJE",
+        "project_id": "prj_hA9BhfYfLEA7IQzO8QHf",
+        "parent_id": null,
+        "kind": "assistant",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+        "title": "请只根据我提供的真实验证事实，写一份约600字的中文文件操作验收记录：同一个新文件依次执行 Write、Read、Edit、Read、Edit、Read；...",
+        "time_archived": null,
+        "experience": "work",
+        "surface": "right-sidebar",
+        "messages": 2
+      }
+    ],
+    "tools": [
+      {
+        "sessionID": "ses_-zUSn3IzNzzdZ2AxFWCU",
+        "tool": "edit",
+        "outcomeShape": "text",
+        "outcomeType": null,
+        "count": 2,
+        "filediffType": "object",
+        "filesType": null
+      },
+      {
+        "sessionID": "ses_-zUSn3IzNzzdZ2AxFWCU",
+        "tool": "read",
+        "outcomeShape": "text",
+        "outcomeType": null,
+        "count": 3,
+        "filediffType": null,
+        "filesType": null
+      },
+      {
+        "sessionID": "ses_-zUSn3IzNzzdZ2AxFWCU",
+        "tool": "write",
+        "outcomeShape": "text",
+        "outcomeType": null,
+        "count": 1,
+        "filediffType": null,
+        "filesType": null
+      }
+    ],
+    "projects": [
+      {
+        "id": "prj_hA9BhfYfLEA7IQzO8QHf",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project"
+      },
+      {
+        "id": "prj_ha9YDWTJCkGE97okwssq",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\runtime\\data\\projects\\2026\\10\\06\\434e5bc3-47cf-42ad-9a50-fa84cd7bf902"
+      }
+    ],
+    "owners": []
+  },
+  {
+    "access": "readonly exact closed owned original database; explicit transaction; no body/credential fields",
+    "filename": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/runtime/data/opencorvus.db",
+    "tables": [
+      {
+        "name": "engine_artifact"
+      },
+      {
+        "name": "part"
+      },
+      {
+        "name": "session"
+      },
+      {
+        "name": "session_prompt_owner"
+      },
+      {
+        "name": "tool_part_outcome"
+      },
+      {
+        "name": "tool_part_request"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "ses_hXDZ11OFGwHG7QMoBxwV",
+        "project_id": "prj_hCgFtFTZODBP1BXOHDHJ",
+        "parent_id": null,
+        "kind": "assistant",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\runtime\\data\\projects\\2026\\10\\06\\e2e81387-66b6-40ad-a390-fc7a893567f1",
+        "title": "Reply with OK.",
+        "time_archived": null,
+        "experience": "chat",
+        "surface": "right-sidebar",
+        "messages": 2
+      },
+      {
+        "id": "ses_-zUSmY0NLzz5W92TdJ0R",
+        "project_id": "prj_hNQeZQj68ipEoFfbpR2l",
+        "parent_id": null,
+        "kind": "assistant",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\project",
+        "title": "In this isolated project C:/Users/hengu/.codex/opencorvus-product-iteration/2...",
+        "time_archived": null,
+        "experience": "work",
+        "surface": "right-sidebar",
+        "messages": 11
+      }
+    ],
+    "tools": [
+      {
+        "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+        "tool": "edit",
+        "outcomeShape": "text",
+        "outcomeType": null,
+        "count": 3,
+        "filediffType": "object",
+        "filesType": null
+      },
+      {
+        "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+        "tool": "read",
+        "outcomeShape": "text",
+        "outcomeType": null,
+        "count": 3,
+        "filediffType": null,
+        "filesType": null
+      },
+      {
+        "sessionID": "ses_-zUSmY0NLzz5W92TdJ0R",
+        "tool": "write",
+        "outcomeShape": "text",
+        "outcomeType": null,
+        "count": 1,
+        "filediffType": null,
+        "filesType": null
+      }
+    ],
+    "projects": [
+      {
+        "id": "prj_hNQeZQj68ipEoFfbpR2l",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\project"
+      },
+      {
+        "id": "prj_hCgFtFTZODBP1BXOHDHJ",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-review-04\\runtime\\data\\projects\\2026\\10\\06\\e2e81387-66b6-40ad-a390-fc7a893567f1"
+      }
+    ],
+    "owners": []
+  }
+]

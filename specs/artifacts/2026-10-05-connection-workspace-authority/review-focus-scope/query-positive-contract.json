@@ -1,0 +1,63 @@
+{
+  "executable": "review-focus-scope-history-readonly.ts",
+  "exitCode": 0,
+  "output": "review-focus-scope-history-readonly.json",
+  "observedAtUtc": "2026-10-07T02:20:21.8742255Z",
+  "completedScalarGroups": [
+    {
+      "outcomeShape": "text",
+      "outcome": "completed",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-edit-03/runtime/data/opencorvus.db",
+      "count": 1,
+      "session": "ses_-zUSn3IzNzzdZ2AxFWCU",
+      "tool": "Write",
+      "filediffType": null
+    },
+    {
+      "outcomeShape": "text",
+      "outcome": "completed",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-edit-03/runtime/data/opencorvus.db",
+      "count": 2,
+      "session": "ses_-zUSn3IzNzzdZ2AxFWCU",
+      "tool": "Edit",
+      "filediffType": "object"
+    },
+    {
+      "outcomeShape": "text",
+      "outcome": "completed",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-edit-03/runtime/data/opencorvus.db",
+      "count": 3,
+      "session": "ses_-zUSn3IzNzzdZ2AxFWCU",
+      "tool": "Read",
+      "filediffType": null
+    },
+    {
+      "outcomeShape": "text",
+      "outcome": "completed",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/runtime/data/opencorvus.db",
+      "count": 1,
+      "session": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "tool": "Write",
+      "filediffType": null
+    },
+    {
+      "outcomeShape": "text",
+      "outcome": "completed",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/runtime/data/opencorvus.db",
+      "count": 3,
+      "session": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "tool": "Edit",
+      "filediffType": "object"
+    },
+    {
+      "outcomeShape": "text",
+      "outcome": "completed",
+      "database": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-review-04/runtime/data/opencorvus.db",
+      "count": 3,
+      "session": "ses_-zUSmY0NLzz5W92TdJ0R",
+      "tool": "Read",
+      "filediffType": null
+    }
+  ],
+  "scope": "Actual readonly tool-data contract; no UI assertion, database mutation or provider request"
+}

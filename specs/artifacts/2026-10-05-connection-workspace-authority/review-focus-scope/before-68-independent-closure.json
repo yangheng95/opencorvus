@@ -1,0 +1,27 @@
+{
+  "occurrence": "review-source-scope-68-before-d2154c4d-464b-49d3-bb72-13158a620419",
+  "listeners": [],
+  "observedAtUtc": "2026-10-07T01:40:28.5864990Z",
+  "states": [
+    {
+      "expected": {
+        "pid": 69084,
+        "processInstanceID": "win32:639269334311326012",
+        "occurrenceID": "e5c1f76e-2fd0-4a03-8eff-1161e01b9539"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 50636,
+        "processInstanceID": "win32:639269334319557087",
+        "occurrenceID": "0a130cee-2586-4642-a2d0-cfc2029cf6f0"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  }
+}

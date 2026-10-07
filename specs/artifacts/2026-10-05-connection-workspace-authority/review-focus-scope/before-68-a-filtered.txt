@@ -1,0 +1,8 @@
+Browser tab: 42, Title: "OpenCorvus", URL: "http://localhost:18026/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 234-244, 257-258
++										257 text Select a file to view its diff.
+~										246 search text field (settable) Description: Filter changed files, Value: scope-boundary-no-match
++										258 button Clear file filter
+~											259 text No matching file changes
+The focused UI element is 246 search text field (settable) Description: Filter changed files, Value: scope-boundary-no-match

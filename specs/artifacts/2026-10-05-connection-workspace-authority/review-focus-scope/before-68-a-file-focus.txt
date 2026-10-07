@@ -1,0 +1,19 @@
+Browser tab: 42, Title: "OpenCorvus", URL: "http://localhost:18026/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 377-378
+~										376 container
++											377 text work actual-edit-result.txt Changed + 1 - 1
++											378 text 1
++											379 text 1
++											380 text marker: 632de62a-ef73-45cb-a765-036f4c35ba61
++											381 text -
++											382 text 2
++											383 text state: initial
++											384 text +
++											385 text 2
++											386 text state: final
+~										250 search text field (settable) Filter changed files
++											387 container work - ses_-zUSn3IzNzzdZ2AxFWCU
++												388 text Tool edits · work 1
++											389 (selected) Help: actual-edit-result.txt, Value: actual-edit-result.txt Changed, ID: change-row-0
+The focused UI element is 207 button actual-edit-result.txt +1 -1, Help: actual-edit-result.txt
