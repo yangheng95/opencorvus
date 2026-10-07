@@ -1,0 +1,44 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v6, provider v3, provider-utils v4, OpenRouter v2)
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled
+
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 7239d005dcd1ce0e
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache miss, executing cecc8d206db01553
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs 5546aa71424d4a49
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs b97bd04b60329c10
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+@opencorvus-ai/plugin:typecheck: cache hit, replaying logs e4f5c6c858444868
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: cache hit, replaying logs a277db6c9e34e985
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+@opencorvus-ai/util:typecheck: cache hit, replaying logs eb8f2e0a33e80f36
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+@opencorvus-ai/overlay:typecheck: cache hit, replaying logs bf21764cb09cb8dc
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    7 cached, 8 total
+  Time:    42.912s 
+
+$ bun run ./packages/opencorvus/script/check/routes.ts
+api:routes-check found 1 route inventory violation(s):
+
+  [generated-openapi-differs-tracked-openapi]
+    --- ../sdk/openapi.json (tracked)
++++ ../sdk/openapi.json (generated)
+-71996:                         "description": "One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.",
++71996:                         "description": "One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.",
+error: script "api:routes-check" exited with code 1
+husky - pre-push script failed (code 1)
+error: failed to push some refs to 'https://github.com/yangheng95/opencorvus'

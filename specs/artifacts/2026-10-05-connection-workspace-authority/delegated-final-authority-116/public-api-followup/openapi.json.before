@@ -71993,7 +71993,7 @@
                         "type": "array"
                       },
                       "sources": {
-                        "description": "One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.",
+                        "description": "One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.",
                         "items": {
                           "oneOf": [
                             {

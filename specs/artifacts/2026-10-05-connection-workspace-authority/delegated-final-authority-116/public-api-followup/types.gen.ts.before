@@ -19054,7 +19054,7 @@ export type GatewayControlActionData = {
               }
         }>
         /**
-         * One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.
+         * One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.
          */
         sources: Array<
           | {

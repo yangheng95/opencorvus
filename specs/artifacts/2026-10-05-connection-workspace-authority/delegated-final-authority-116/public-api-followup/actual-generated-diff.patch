@@ -1,0 +1,39 @@
+diff --git a/packages/sdk/js/src/gen/sdk.gen.ts b/packages/sdk/js/src/gen/sdk.gen.ts
+index dcdebd36..f25e27be 100644
+--- a/packages/sdk/js/src/gen/sdk.gen.ts
++++ b/packages/sdk/js/src/gen/sdk.gen.ts
+@@ -4833,7 +4833,7 @@ export class Control extends HeyApiClient {
+                   }
+             }>
+             /**
+-             * One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.
++             * One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.
+              */
+             sources: Array<
+               | {
+diff --git a/packages/sdk/js/src/gen/types.gen.ts b/packages/sdk/js/src/gen/types.gen.ts
+index ea910333..1f019bd6 100644
+--- a/packages/sdk/js/src/gen/types.gen.ts
++++ b/packages/sdk/js/src/gen/types.gen.ts
+@@ -19054,7 +19054,7 @@ export type GatewayControlActionData = {
+               }
+         }>
+         /**
+-         * One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.
++         * One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.
+          */
+         sources: Array<
+           | {
+diff --git a/packages/sdk/openapi.json b/packages/sdk/openapi.json
+index 3f941738..04f696f9 100644
+--- a/packages/sdk/openapi.json
++++ b/packages/sdk/openapi.json
+@@ -71993,7 +71993,7 @@
+                         "type": "array"
+                       },
+                       "sources": {
+-                        "description": "One to eight ordered Task evidence sources: a settled worker report or the root Tool facts preceding an exact dispatch.",
++                        "description": "One to eight ordered Task evidence sources: an exact physically settled worker final report or the root Tool facts preceding an exact dispatch.",
+                         "items": {
+                           "oneOf": [
+                             {
