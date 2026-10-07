@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Future Markdown authoring117 Recall](artifacts/2026-10-05-connection-workspace-authority/markdown-output-plan-117.md): actual116 unsupported emphasis boundaries; one shared guidance paragraph, fresh genuine11701 failed during input preparation; upstream cause and output qualification unresolved.
+
 - [Shared delegated final authority116](records/2026-10/2026-10-08-delegated-final-authority.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-plan-116.md): shared reader/role repair, positive matrix and fresh18-request Sources/answer/native qualification; original115 failure retained.
 
 - [Genuine delegated Sources115](records/2026-10/2026-10-08-sources-delegated.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/sources-delegated-plan-115.md): original live budget failure retained; actual child Source static UI passed; shared prompt/reader fixes pending116.

@@ -12,8 +12,6 @@ export const OBSERVABLE_WORK_NARRATIVE = [
   "Write each note in the language of the task itself. Runtime state names, internal outcome values, Host identifiers, and tool names belong to your reasoning and tool calls, not to the note the reader sees.",
   "",
   "Narrative is an ordinary visible assistant text part. It never replaces required tool calls, durable domain facts, tests, or the final result.",
-  "",
-  "For Markdown prose, keep inline emphasis valid: put label or sentence punctuation outside bold spans (`**标签**：正文`), or separate a bold span ending with punctuation from following prose (`**整句。** 后续文字`). Preserve requested literal text, code, and non-Markdown formats.",
 ].join("\n")
 
 export function withObservableWorkNarrative(prompt: string): string {

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Markdown authoring117 Recall](markdown-output-plan-117.md) and [evidence](markdown-output-117/README.md): shared future formatting guidance; fresh11701 failed during input preparation, parser/history unchanged and natural-output qualification unmet.
+
 - [Shared delegated final authority116 Recall](delegated-final-authority-plan-116.md) and [evidence](delegated-final-authority-116/README.md): single physical terminal authority repair with original115 failure and lawful baseline retained; positive matrix and fresh18-request Sources/answer/native qualification passed; original115 remains failed.
 
 - [Genuine delegated Sources115 Recall](sources-delegated-plan-115.md) and [evidence](sources-delegated-115/README.md): genuine32 budget failure, matched child Source tuples, actual child static UI and shared reader/role audit.

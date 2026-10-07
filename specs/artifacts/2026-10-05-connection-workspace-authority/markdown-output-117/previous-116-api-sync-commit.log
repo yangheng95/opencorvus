@@ -1,0 +1,11 @@
+[main 8523c7b5] docs: synchronize worker evidence API description
+ 15 files changed, 191382 insertions(+), 5 deletions(-)
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/README.md
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/actual-generated-diff.patch
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/docs-after-sdk.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/first-normal-push-failed.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/openapi.json.before
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/routes-after-sdk.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/sdk-build.log
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/sdk.gen.ts.before
+ create mode 100644 specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/public-api-followup/types.gen.ts.before

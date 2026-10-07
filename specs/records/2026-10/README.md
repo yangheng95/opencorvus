@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Future Markdown authoring117](2026-10-08-markdown-output.md)
+
 - [Shared delegated final authority116](2026-10-08-delegated-final-authority.md)
 
 - [Genuine delegated Sources115 and failed-history reading](2026-10-08-sources-delegated.md)

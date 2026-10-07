@@ -494,6 +494,13 @@ Full document Markdown is
 not clipped at the trace-preview limit. Worker errors remain visible instead
 of starting a synchronous parser path. Transcript prewarming is removed.
 
+Future assistant Markdown prose uses the existing shared observable-work-narrative
+guidance for valid emphasis boundaries: punctuation can follow a bold label, or
+whitespace can separate a punctuation-ending bold span from subsequent prose.
+Requested literal text, code and other formats retain their own contract. This is
+authoring guidance; the same renderer parses the actual text without rewriting
+persisted Messages, stripping delimiters or introducing another Markdown dialect.
+
 Interactive Artifact frames expose a shared copy/download/open strip. Downloads
 name their actual format: original attachments, Markdown, CSV, source code,
 patches, notebooks or visualization data. Editable Code and Spreadsheet exports

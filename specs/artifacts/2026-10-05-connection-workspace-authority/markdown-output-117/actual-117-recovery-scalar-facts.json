@@ -1,0 +1,83 @@
+{
+  "access": "same exactclosed117 readonly BEGIN/ROLLBACK currentTask artifact publiccontext and exactrootlease grants",
+  "artifacts": [
+    {
+      "id": "art_g0VXPRLRx00UJZaknuAl",
+      "kind": "task-infrastructure-error",
+      "time": 1791415612271,
+      "component": "process-recovery",
+      "operation": "handoff-process-owned-task-execution",
+      "reason": "Server shutdown source=http-client reason=http.shutdown",
+      "context": {
+        "schema_version": 1,
+        "origin": "process_shutdown",
+        "physical_evidence": {
+          "kind": "unmanaged_process_cause_unknown",
+          "reason": "Server shutdown source=http-client reason=http.shutdown"
+        },
+        "affected_subjects": [
+          {
+            "kind": "affected_created_session",
+            "session_id": "ses_-zUSaZUVQzzvx34mvWoT",
+            "session_created_at": 1791415412547
+          }
+        ]
+      }
+    },
+    {
+      "id": "art_g0VXPRLUG002E26qiXBs",
+      "kind": "orchestrator-stream-error",
+      "time": 1791415612415,
+      "reason": "OrchestratorAborted: Server shutdown source=http-client reason=http.shutdown",
+      "errorName": "OrchestratorAborted"
+    }
+  ],
+  "control": [
+    {
+      "id": "act_g0VXPQUbB00STd28N1gq",
+      "target": "task_root_ingress",
+      "target_id": "art_hJqwUC0RwUxFMKhxz0jt",
+      "owner_occurrence_id": "97df4df0-46ec-4719-8f75-1e4032d36d8c",
+      "time_activated": 1791415409108,
+      "expires_at": 1791415729162
+    }
+  ],
+  "grants": [
+    {
+      "lease_id": "act_g0VXPQUbB00STd28N1gq",
+      "ordinal": 1,
+      "expires_at": 1791415529108,
+      "time_created": 1791415409108
+    },
+    {
+      "lease_id": "act_g0VXPQUbB00STd28N1gq",
+      "ordinal": 2,
+      "expires_at": 1791415569137,
+      "time_created": 1791415449137
+    },
+    {
+      "lease_id": "act_g0VXPQUbB00STd28N1gq",
+      "ordinal": 3,
+      "expires_at": 1791415609146,
+      "time_created": 1791415489146
+    },
+    {
+      "lease_id": "act_g0VXPQUbB00STd28N1gq",
+      "ordinal": 4,
+      "expires_at": 1791415649143,
+      "time_created": 1791415529143
+    },
+    {
+      "lease_id": "act_g0VXPQUbB00STd28N1gq",
+      "ordinal": 5,
+      "expires_at": 1791415689159,
+      "time_created": 1791415569159
+    },
+    {
+      "lease_id": "act_g0VXPQUbB00STd28N1gq",
+      "ordinal": 6,
+      "expires_at": 1791415729162,
+      "time_created": 1791415609162
+    }
+  ]
+}

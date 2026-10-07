@@ -1,0 +1,34 @@
+[1/1] START test/verification-discipline.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) shared execution verification contract > projects the shared policy after coding custom instructions [1.61ms]
+(pass) shared execution verification contract > projects the shared policy after chat custom instructions [0.15ms]
+(pass) shared execution verification contract > projects the shared policy after work custom instructions [0.07ms]
+(pass) shared execution verification contract > projects the shared policy after control custom instructions [0.07ms]
+(pass) shared execution verification contract > projects the shared policy after mission custom instructions [0.06ms]
+(pass) shared execution verification contract > projects the policy into complete orchestrator execution prompts on each physical Turn [0.50ms]
+(pass) shared execution verification contract > projects the policy into complete delegated-worker execution prompts on each physical Turn [0.40ms]
+(pass) shared execution verification contract > projects the policy into complete intent-analysis execution prompts on each physical Turn [0.51ms]
+(pass) shared execution verification contract > projects the policy into complete requirements execution prompts on each physical Turn [0.51ms]
+(pass) shared execution verification contract > projects the policy into complete architect execution prompts on each physical Turn [0.50ms]
+(pass) shared execution verification contract > projects the policy into complete goal-workload-analyst execution prompts on each physical Turn [0.29ms]
+(pass) shared execution verification contract > projects the policy into complete build execution prompts on each physical Turn [0.34ms]
+(pass) shared execution verification contract > projects the policy into complete explore execution prompts on each physical Turn [0.31ms]
+(pass) shared execution verification contract > projects the policy into complete deep-research execution prompts on each physical Turn [0.24ms]
+(pass) shared execution verification contract > projects the policy into complete frontend-research execution prompts on each physical Turn [0.24ms]
+(pass) shared execution verification contract > projects the policy into complete frontend-design execution prompts on each physical Turn [0.44ms]
+(pass) shared execution verification contract > projects the policy into complete visual-qa execution prompts on each physical Turn [0.55ms]
+(pass) shared execution verification contract > projects the policy into complete integrity execution prompts on each physical Turn [0.47ms]
+(pass) shared execution verification contract > projects the policy into complete fact-check execution prompts on each physical Turn [0.38ms]
+(pass) shared execution verification contract > preserves the dedicated native compaction helper prompt [0.32ms]
+(pass) shared execution verification contract > preserves the dedicated native title helper prompt [0.11ms]
+(pass) shared execution verification contract > preserves the dedicated native summary helper prompt [0.07ms]
+(pass) shared execution verification contract > preserves the dedicated native memory helper prompt [0.05ms]
+(pass) shared execution verification contract > defines the ban for explicit input requirements and retains meaningful verification [0.06ms]
+
+ 24 pass
+ 0 fail
+ 70 expect() calls
+Ran 24 tests across 1 file. [2.67s]
+[1/1] DONE test/verification-discipline.test.ts exit=0 duration=3.75s

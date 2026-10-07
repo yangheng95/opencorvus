@@ -1,0 +1,28 @@
+{
+  "readonly": "BEGIN/ROLLBACK no application imports",
+  "activity": {
+    "id": "act_g0VXPQVmt0008167BVCP",
+    "assistant_message_id": "msg_hcXNHnGsCveJfVRd1BJr",
+    "time_created": 1791415413683,
+    "data": {
+      "outcome": "aborted",
+      "attempt_count": 2,
+      "error_class": "external_abort",
+      "error": {
+        "name": "ExecutionCancellationError",
+        "message": "Orchestrator execution signal aborted"
+      }
+    },
+    "outcome_time": 1791415612195
+  },
+  "events": [
+    {
+      "id": "pev_g0VXPQUYy00wJs4I9lg3",
+      "seq": 3,
+      "type": "task.execution.opened",
+      "payload": {
+        "execution_epoch": 1
+      }
+    }
+  ]
+}
