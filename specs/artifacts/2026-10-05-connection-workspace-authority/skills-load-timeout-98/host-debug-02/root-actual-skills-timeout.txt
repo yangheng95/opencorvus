@@ -1,0 +1,67 @@
+Browser tab: 56, Title: "OpenCorvus", URL: "http://localhost:18044/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18044/ui/
+	1 container
+		2 container Logs, ID: logDialog
+			3 container
+				4 heading Logs, Value: 2, ID: dialog-cl-97-title
+					5 text Logs
+				6 pop up button (collapsed) Log level DEBUG, ID: logLevelFilter-trigger, Secondary Actions: Expand
+					7 text DEBUG
+				8 button Refresh, ID: btnLogRefresh
+				9 button Description: Copy path, ID: btnLogOpenFile
+				10 button Copy, ID: btnLogCopy
+				11 button Clear, ID: btnLogClear
+				12 button Close, ID: btnCloseLog
+				13 container
+					14 text Server [ DEBUG ] skill-read-diagnostics 2026-10-07T10:01:06
+					15 text phase
+					16 text logDomain = non-session data = {"status":"started","phase":"state.read","spanID":"77508:190","processOccurre...
+					17 button (collapsed) Details, Secondary Actions: Expand
+						18 text Details
+					19 text Server [ DEBUG ] 0.0s skill-read-diagnostics 2026-10-07T10:01:06
+					20 text phase
+					21 text logDomain = non-session data = {"status":"completed","duration":0,"phase":"state.read","spanID":"77508:190",...
+					22 button (collapsed) Details, Secondary Actions: Expand
+						23 text Details
+					24 text Server [ DEBUG ] scheduler 2026-10-07T10:01:06
+					25 text run
+					26 text logDomain = non-session data = {"id":"automation-service.poll"}
+					27 button (collapsed) Details, Secondary Actions: Expand
+						28 text Details
+					29 text Server [ DEBUG ] scheduler 2026-10-07T10:01:06
+					30 text run
+					31 text logDomain = non-session data = {"id":"scheduler-message-delivery.poll"}
+					32 button (collapsed) Details, Secondary Actions: Expand
+						33 text Details
+					34 text Overlay [ ERROR ] project-load 2026-10-07T10:01:06
+					35 text extensions load failed
+					36 text directory = C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\skills-ui-debug... error = skills: signal timed out
+					37 button (collapsed) Details, Secondary Actions: Expand
+						38 text Details
+					39 text Server [ DEBUG ] skill-read-diagnostics 2026-10-07T10:01:07
+					40 text phase
+					41 text logDomain = non-session data = {"status":"started","phase":"state.read","spanID":"77508:191","processOccurre...
+					42 button (collapsed) Details, Secondary Actions: Expand
+						43 text Details
+					44 text Server [ DEBUG ] 0.0s skill-read-diagnostics 2026-10-07T10:01:07
+					45 text phase
+					46 text logDomain = non-session data = {"status":"completed","duration":0,"phase":"state.read","spanID":"77508:191",...
+					47 button (collapsed) Details, Secondary Actions: Expand
+						48 text Details
+					49 text Server [ ERROR ] overlay:project-load 2026-10-07T10:01:07
+					50 text extensions load failed
+					51 text logDomain = non-session data = {"directory":"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10...
+					52 button (collapsed) Details, Secondary Actions: Expand
+						53 text Details
+					54 text Server [ DEBUG ] skill-read-diagnostics 2026-10-07T10:01:07
+					55 text phase
+					56 text logDomain = non-session data = {"status":"started","phase":"state.read","spanID":"77508:192","processOccurre...
+					57 button (collapsed) Details, Secondary Actions: Expand
+						58 text Details
+					59 text Server [ DEBUG ] 0.0s skill-read-diagnostics 2026-10-07T10:01:07
+					60 text phase
+					61 text logDomain = non-session data = {"status":"completed","duration":1,"phase":"state.read","spanID":"77508:192",...
+					62 button (collapsed) Details, Secondary Actions: Expand
+						63 text Details
+
+The focused UI element is 6 pop up button (collapsed) Log level DEBUG, ID: logLevelFilter-trigger, Secondary Actions: Expand

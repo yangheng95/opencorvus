@@ -1,0 +1,51 @@
+param([string]$RunRoot,[string]$EvidenceRoot,[string]$EvidencePrefix,[int]$Port,[string]$HistoryProject)
+$ErrorActionPreference='Stop'
+$caseRun46=[IO.Path]::GetFullPath($RunRoot)
+$caseEvidence46=[IO.Path]::GetFullPath($EvidenceRoot)
+$casePort46=$Port
+$casePrefix46=$EvidencePrefix
+if($HistoryProject){
+ if(!(Test-Path -LiteralPath (Join-Path $caseRun46 'runtime/data/opencorvus.db')) -or (Test-Path -LiteralPath (Join-Path $caseRun46 'launch-owner.json')) -or (Test-Path -LiteralPath (Join-Path $caseRun46 'startup.json'))){throw 'Fresh prepared history clone required'}
+ $caseProject46=[IO.Path]::GetFullPath($HistoryProject)
+ if(!(Test-Path -LiteralPath $caseProject46 -PathType Container)){throw 'Exact retained history project missing'}
+ foreach($name46 in @('auth.json','models.json')){if(Test-Path -LiteralPath (Join-Path $caseRun46 ('runtime/data/'+$name46))){throw 'History presentation requires absent copied authority'}}
+}else{
+ if(Test-Path -LiteralPath $caseRun46){throw 'Preserve existing46 occurrence'}
+ $caseProject46=Join-Path $caseRun46 'project'
+}
+if(@(Get-NetTCPConnection -State Listen -ErrorAction Stop|Where-Object LocalPort -eq $casePort46).Count){throw 'Owned46 port occupied'}
+foreach($dir46 in @('runtime','project','evidence','home','appdata','localappdata','temp','xdg-config','xdg-data','xdg-cache','xdg-state','quarantine')){[IO.Directory]::CreateDirectory((Join-Path $caseRun46 $dir46))|Out-Null}
+if(!$HistoryProject){foreach($file46 in @('alpha.txt','keep.txt','switch.txt')){[IO.File]::WriteAllText((Join-Path $caseRun46 ('project/'+$file46)),('Owned46 '+$file46+"`n"),[Text.UTF8Encoding]::new($false))}}
+$caseOccurrence46=$casePrefix46+'-'+[Guid]::NewGuid().ToString()
+$caseBun46='C:/Users/hengu/.bun/bin/bun.exe'
+$caseWrapper46='D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts'
+$caseOld46=@{};Get-ChildItem Env:|ForEach-Object{$caseOld46[$_.Name]=$_.Value}
+$caseEnv46=@{}
+foreach($name46 in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($caseOld46.ContainsKey($name46)){$caseEnv46[$name46]=$caseOld46[$name46]}}
+foreach($mapping46 in @(@('HOME','home'),@('USERPROFILE','home'),@('APPDATA','appdata'),@('LOCALAPPDATA','localappdata'),@('TEMP','temp'),@('TMP','temp'),@('TMPDIR','temp'),@('XDG_CONFIG_HOME','xdg-config'),@('XDG_DATA_HOME','xdg-data'),@('XDG_CACHE_HOME','xdg-cache'),@('XDG_STATE_HOME','xdg-state'),@('OPENCORVUS_HOME','runtime'))){$caseEnv46[$mapping46[0]]=Join-Path $caseRun46 $mapping46[1]}
+$caseEnv46.HOMEDRIVE='C:';$caseEnv46.HOMEPATH=$caseEnv46.HOME.Substring(2).Replace('/','\')
+$caseEnv46.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1';$caseEnv46.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$caseArgs46=@($caseWrapper46,'--owned-host',(Join-Path $caseRun46 'evidence'),$caseOccurrence46,$caseBun46,'./src/index.ts','serve','--hostname','127.0.0.1','--port',[string]$casePort46,'--project-dir',$caseProject46,'--startup-receipt',(Join-Path $caseRun46 'startup.json'),'--startup-occurrence',$caseOccurrence46,'--log-level','INFO')
+if(@($caseArgs46|Where-Object{$_ -match '[\s"]'}).Count){throw 'Exact46 argument quoting requires review'}
+. (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly
+Write-OwnedLaunchFact (Join-Path $caseRun46 'launch-arguments.json') @{occurrence=$caseOccurrence46;arguments=$caseArgs46;port=$casePort46;credentialStaging='None'}
+try{
+ Get-ChildItem Env:|ForEach-Object{[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($name46 in $caseEnv46.Keys){[Environment]::SetEnvironmentVariable($name46,$caseEnv46[$name46],'Process')}
+ $caseProcess46=Start-Process -FilePath $caseBun46 -ArgumentList $caseArgs46 -WorkingDirectory 'D:/myhexin-local/opencorvus/packages/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $caseRun46 'stdout.log') -RedirectStandardError (Join-Path $caseRun46 'stderr.log') -PassThru
+}finally{
+ Get-ChildItem Env:|ForEach-Object{[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+ foreach($name46 in $caseOld46.Keys){[Environment]::SetEnvironmentVariable($name46,$caseOld46[$name46],'Process')}
+}
+Write-OwnedLaunchFact (Join-Path $caseRun46 'launcher.json') @{pid=$caseProcess46.Id;processInstanceID=('win32:'+([string]$caseProcess46.StartTime.ToUniversalTime().Ticks));occurrence=$caseOccurrence46}
+$caseDeadline46=[DateTime]::UtcNow.AddSeconds(40)
+do{
+ if(Test-Path -LiteralPath (Join-Path $caseRun46 'evidence/native-host-ready.json')){$caseReady46=Get-Content -Raw -LiteralPath (Join-Path $caseRun46 'evidence/native-host-ready.json')|ConvertFrom-Json -AsHashtable -DateKind String;break}
+ $caseProcess46.Refresh();if($caseProcess46.HasExited){throw 'Native46 Host exited before ready'}
+ Start-Sleep -Milliseconds 100
+}while([DateTime]::UtcNow -lt $caseDeadline46)
+if(!$caseReady46 -or $caseReady46.occurrence -ne $caseOccurrence46 -or (Get-OwnedNativeState $caseReady46.host) -ne 'exact_live' -or (Get-OwnedNativeState $caseReady46.target) -ne 'exact_live'){throw 'Exact46 native admission missing'}
+$caseOwner46=@{occurrence=$caseOccurrence46;runRoot=$caseRun46;runtime=(Join-Path $caseRun46 'runtime');project=$caseProject46;evidence=(Join-Path $caseRun46 'evidence');evidencePrefix=$casePrefix46;settlementEvidenceRoot=$caseEvidence46;port=$casePort46;host=$caseReady46.host;nativeTarget=$caseReady46.target;authorityStaging='None; no model Task requested';purpose=$(if($HistoryProject){'Real no-Provider closed-history UI presentation; no Task rearm'}else{'Real no-Provider Explorer selection reproduction'})}
+Write-OwnedLaunchFact (Join-Path $caseRun46 'launch-owner.json') $caseOwner46
+Write-OwnedLaunchFact (Join-Path $caseEvidence46 ($casePrefix46+'-launch-owner.json')) $caseOwner46
+$caseOwner46|ConvertTo-Json -Depth 6

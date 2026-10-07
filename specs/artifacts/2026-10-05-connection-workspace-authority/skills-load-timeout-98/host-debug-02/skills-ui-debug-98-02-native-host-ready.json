@@ -1,0 +1,39 @@
+{
+  "occurrence": "skills-ui-debug-98-02-9da07d06-bdbe-4c43-96aa-dec4e727d79c",
+  "outcome": "ready",
+  "host": {
+    "pid": 74912,
+    "processInstanceID": "win32:639269640246935025",
+    "occurrenceID": "d3c1affb-18ab-450b-b915-ddfd1f1c9eb4"
+  },
+  "parent": {
+    "pid": 55360,
+    "processInstanceID": "win32:639269640222974206",
+    "occurrenceID": "cc82a2e1-353f-40f7-b6d1-147e6a6e6443"
+  },
+  "target": {
+    "pid": 77508,
+    "processInstanceID": "win32:639269640256349451",
+    "occurrenceID": "00056cef-521e-4531-b48d-e093f17e489c"
+  },
+  "targetBirthAtMs": 1791367225634,
+  "observedAtUtc": "2026-10-07T10:00:25.679Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18044",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\startup.json",
+    "--startup-occurrence",
+    "skills-ui-debug-98-02-9da07d06-bdbe-4c43-96aa-dec4e727d79c",
+    "--log-level",
+    "DEBUG"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

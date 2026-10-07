@@ -1,0 +1,17 @@
+Browser tab: 241798782, Title: "OpenCorvus", URL: "http://localhost:18045/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18045/ui/
+	1 container 日志, ID: logDialog
+		2 container
+			3 heading 日志, Value: 2, ID: dialog-cl-97-title
+				4 text 日志
+			5 pop up button (collapsed) 日志级别 DEBUG, ID: logLevelFilter-trigger, Secondary Actions: Expand
+				6 text DEBUG
+			7 button 刷新, ID: btnLogRefresh
+			8 button Description: 复制路径, ID: btnLogOpenFile
+			9 button 复制, ID: btnLogCopy
+			10 button 清除, ID: btnLogClear
+			11 button 关闭, ID: btnCloseLog
+			12 search text field (settable) Description: 搜索已加载日志, Value: "duration":326
+			13 button 清除搜索
+
+The focused UI element is 12 search text field (settable) Description: 搜索已加载日志, Value: "duration":326

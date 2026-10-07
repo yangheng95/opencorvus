@@ -1,0 +1,536 @@
+[
+  {
+    "kind": "reader97 locked",
+    "fact": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\source",
+      "definition": {
+        "manifest": {
+          "schema_version": 2,
+          "namespace": "reader97",
+          "id": "reader-provenance97",
+          "label": "Reader provenance",
+          "description": "Owned physical reader measurement",
+          "version": "2026.10.07.1",
+          "product_pillars": [
+            "code"
+          ],
+          "readme": "README.md",
+          "selector": {
+            "summary": "Reader measurement",
+            "selection_guidance": "Inspect the actual package",
+            "instructions": "selector.md"
+          },
+          "capability_sets": {},
+          "capability_projection": {
+            "scheduler": {
+              "base_role": "orchestrator",
+              "capability_refs": []
+            },
+            "agents": {},
+            "virtual_workflows": {}
+          }
+        },
+        "files": {
+          "README.md": "# Reader provenance97\n",
+          "selector.md": "# Reader measurement\n"
+        }
+      },
+      "setup": {
+        "config": {
+          "prompt_profile": {
+            "active": "reader-provenance97"
+          },
+          "permission_mode": "full_access",
+          "agent": {},
+          "plugin": [],
+          "experimental": {
+            "auto_question": true
+          },
+          "command": {},
+          "username": "hengu",
+          "mcp": {
+            "browser": {
+              "type": "local",
+              "command": [
+                "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+                "mcp",
+                "browser"
+              ],
+              "timeout": 30000
+            },
+            "computer": {
+              "type": "local",
+              "command": [
+                "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+                "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+              ],
+              "timeout": 30000
+            }
+          }
+        },
+        "receipt": {
+          "operation": "installed",
+          "before": null,
+          "after": {
+            "installationScope": "project",
+            "projectDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0",
+            "namespace": "reader97",
+            "id": "reader-provenance97",
+            "version": "2026.10.07.1",
+            "packageDigest": "0c4d7c495176ca7cc53c43d8bfd7083a1c3c16661e0d1df70942ab0ecb8be15e",
+            "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97"
+          }
+        },
+        "project": {
+          "id": "prj_hbVnP9LOxwukeLWwl9GY",
+          "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0",
+          "sandboxes": [],
+          "time": {
+            "created": 1791366533883,
+            "updated": 1791366533883
+          }
+        }
+      },
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97",
+      "readme": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\opencorvus.jsonc",
+      "owner": {
+        "pid": 20916,
+        "ready": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\lock-barriers\\ready",
+        "release": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\lock-barriers\\release"
+      },
+      "before": {
+        "id": "reader-provenance97",
+        "namespace": "reader97",
+        "version": "2026.10.07.1"
+      },
+      "locked": {
+        "declaration": {
+          "kind": "value",
+          "value": {
+            "items": [
+              {
+                "id": "reader-provenance97",
+                "namespace": "reader97",
+                "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97",
+                "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\expert-squad.jsonc",
+                "readmePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+                "name": "Reader provenance",
+                "label": "Reader provenance",
+                "description": "Owned physical reader measurement",
+                "version": "2026.10.07.1",
+                "manifest": {
+                  "schema_version": 2,
+                  "namespace": "reader97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "version": "2026.10.07.1",
+                  "product_pillars": [
+                    "code"
+                  ],
+                  "readme": "README.md",
+                  "selector": {
+                    "summary": "Reader measurement",
+                    "selection_guidance": "Inspect the actual package",
+                    "instructions": "selector.md"
+                  },
+                  "capability_sets": {},
+                  "capability_projection": {
+                    "scheduler": {
+                      "capability_refs": [],
+                      "base_role": "orchestrator"
+                    },
+                    "agents": {},
+                    "virtual_workflows": {}
+                  }
+                },
+                "selector": {
+                  "ref": "selector/reader-provenance97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "summary": "Reader measurement",
+                  "selection_guidance": "Inspect the actual package"
+                },
+                "installationScope": "project"
+              }
+            ],
+            "issues": [],
+            "installations": [
+              {
+                "id": "reader-provenance97",
+                "namespace": "reader97",
+                "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97",
+                "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\expert-squad.jsonc",
+                "readmePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+                "name": "Reader provenance",
+                "label": "Reader provenance",
+                "description": "Owned physical reader measurement",
+                "version": "2026.10.07.1",
+                "manifest": {
+                  "schema_version": 2,
+                  "namespace": "reader97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "version": "2026.10.07.1",
+                  "product_pillars": [
+                    "code"
+                  ],
+                  "readme": "README.md",
+                  "selector": {
+                    "summary": "Reader measurement",
+                    "selection_guidance": "Inspect the actual package",
+                    "instructions": "selector.md"
+                  },
+                  "capability_sets": {},
+                  "capability_projection": {
+                    "scheduler": {
+                      "capability_refs": [],
+                      "base_role": "orchestrator"
+                    },
+                    "agents": {},
+                    "virtual_workflows": {}
+                  }
+                },
+                "selector": {
+                  "ref": "selector/reader-provenance97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "summary": "Reader measurement",
+                  "selection_guidance": "Inspect the actual package"
+                },
+                "installationScope": "project"
+              }
+            ],
+            "warnings": []
+          }
+        },
+        "direct": {
+          "kind": "error",
+          "error": {
+            "name": "Error",
+            "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'",
+            "code": "EBUSY",
+            "errno": -16,
+            "syscall": "open",
+            "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+            "cause": null
+          }
+        },
+        "resolver": {
+          "kind": "error",
+          "error": {
+            "name": "Error",
+            "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'",
+            "code": "EBUSY",
+            "errno": -16,
+            "syscall": "open",
+            "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+            "cause": null
+          }
+        },
+        "candidate": {
+          "kind": "error",
+          "error": {
+            "name": "ConfigCandidateValidationError",
+            "message": "ConfigCandidateValidationError: EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'",
+            "code": null,
+            "errno": null,
+            "syscall": null,
+            "path": null,
+            "cause": null
+          }
+        },
+        "http": {
+          "kind": "value",
+          "value": {
+            "status": 400,
+            "headers": {
+              "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+              "content-type": "application/json",
+              "vary": "Origin",
+              "x-opencorvus-request-id": "a3d246a2-8a21-48da-8470-88da43e5c155"
+            },
+            "body": {
+              "name": "ConfigCandidateValidationError",
+              "data": {
+                "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "reader97 physical",
+    "fact": {
+      "pid": 20916,
+      "exitCode": 0,
+      "terminal": {
+        "exitCode": 0,
+        "signal": null
+      },
+      "stdout": "LOCK_READY\r\nLOCK_RELEASED\r\n",
+      "stderr": "#< CLIXML\r\n<Objs Version=\"1.1.0.1\" xmlns=\"http://schemas.microsoft.com/powershell/2004/04\"><Obj S=\"progress\" RefId=\"0\"><TN RefId=\"0\"><T>System.Management.Automation.PSCustomObject</T><T>System.Object</T></TN><MS><I64 N=\"SourceId\">1</I64><PR N=\"Record\"><AV>Preparing modules for first use.</AV><AI>0</AI><Nil /><PI>-1</PI><PC>-1</PC><T>Completed</T><SR>-1</SR><SD> </SD></PR></MS></Obj></Objs>"
+    }
+  },
+  {
+    "kind": "reader97 recovered",
+    "fact": {
+      "identity": {
+        "id": "reader-provenance97",
+        "namespace": "reader97",
+        "version": "2026.10.07.1"
+      },
+      "recoveredCandidate": {
+        "kind": "value"
+      },
+      "recoveredHTTP": {
+        "kind": "value",
+        "value": {
+          "status": 200,
+          "headers": {
+            "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+            "content-type": "application/json",
+            "vary": "Origin",
+            "x-opencorvus-request-id": "f1d8fcc0-287d-467a-9e31-dd3ae57078e6"
+          },
+          "body": {
+            "initialized": true,
+            "branch": "master",
+            "commit": "b9e0a08",
+            "clean": false,
+            "dirty": true,
+            "staged": 0,
+            "modified": 0,
+            "untracked": 11,
+            "conflicts": 0,
+            "ahead": 0,
+            "behind": 0,
+            "hasRemote": false
+          }
+        }
+      },
+      "locked": {
+        "declaration": {
+          "kind": "value",
+          "value": {
+            "items": [
+              {
+                "id": "reader-provenance97",
+                "namespace": "reader97",
+                "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97",
+                "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\expert-squad.jsonc",
+                "readmePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+                "name": "Reader provenance",
+                "label": "Reader provenance",
+                "description": "Owned physical reader measurement",
+                "version": "2026.10.07.1",
+                "manifest": {
+                  "schema_version": 2,
+                  "namespace": "reader97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "version": "2026.10.07.1",
+                  "product_pillars": [
+                    "code"
+                  ],
+                  "readme": "README.md",
+                  "selector": {
+                    "summary": "Reader measurement",
+                    "selection_guidance": "Inspect the actual package",
+                    "instructions": "selector.md"
+                  },
+                  "capability_sets": {},
+                  "capability_projection": {
+                    "scheduler": {
+                      "capability_refs": [],
+                      "base_role": "orchestrator"
+                    },
+                    "agents": {},
+                    "virtual_workflows": {}
+                  }
+                },
+                "selector": {
+                  "ref": "selector/reader-provenance97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "summary": "Reader measurement",
+                  "selection_guidance": "Inspect the actual package"
+                },
+                "installationScope": "project"
+              }
+            ],
+            "issues": [],
+            "installations": [
+              {
+                "id": "reader-provenance97",
+                "namespace": "reader97",
+                "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97",
+                "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\expert-squad.jsonc",
+                "readmePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+                "name": "Reader provenance",
+                "label": "Reader provenance",
+                "description": "Owned physical reader measurement",
+                "version": "2026.10.07.1",
+                "manifest": {
+                  "schema_version": 2,
+                  "namespace": "reader97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "version": "2026.10.07.1",
+                  "product_pillars": [
+                    "code"
+                  ],
+                  "readme": "README.md",
+                  "selector": {
+                    "summary": "Reader measurement",
+                    "selection_guidance": "Inspect the actual package",
+                    "instructions": "selector.md"
+                  },
+                  "capability_sets": {},
+                  "capability_projection": {
+                    "scheduler": {
+                      "capability_refs": [],
+                      "base_role": "orchestrator"
+                    },
+                    "agents": {},
+                    "virtual_workflows": {}
+                  }
+                },
+                "selector": {
+                  "ref": "selector/reader-provenance97",
+                  "id": "reader-provenance97",
+                  "label": "Reader provenance",
+                  "description": "Owned physical reader measurement",
+                  "summary": "Reader measurement",
+                  "selection_guidance": "Inspect the actual package"
+                },
+                "installationScope": "project"
+              }
+            ],
+            "warnings": []
+          }
+        },
+        "direct": {
+          "kind": "error",
+          "error": {
+            "name": "Error",
+            "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'",
+            "code": "EBUSY",
+            "errno": -16,
+            "syscall": "open",
+            "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+            "cause": null
+          }
+        },
+        "resolver": {
+          "kind": "error",
+          "error": {
+            "name": "Error",
+            "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'",
+            "code": "EBUSY",
+            "errno": -16,
+            "syscall": "open",
+            "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md",
+            "cause": null
+          }
+        },
+        "candidate": {
+          "kind": "error",
+          "error": {
+            "name": "ConfigCandidateValidationError",
+            "message": "ConfigCandidateValidationError: EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'",
+            "code": null,
+            "errno": null,
+            "syscall": null,
+            "path": null,
+            "cause": null
+          }
+        },
+        "http": {
+          "kind": "value",
+          "value": {
+            "status": 400,
+            "headers": {
+              "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+              "content-type": "application/json",
+              "vary": "Origin",
+              "x-opencorvus-request-id": "a3d246a2-8a21-48da-8470-88da43e5c155"
+            },
+            "body": {
+              "name": "ConfigCandidateValidationError",
+              "data": {
+                "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-vW47R0\\.opencorvus\\expert-squads\\reader97\\reader-provenance97\\README.md'"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "reader97 semantic",
+    "fact": {
+      "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-3EF8FD",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CJcxoY\\test-74640-S1KYs9\\fixtures\\memory-3EF8FD\\.opencorvus\\expert-squads\\reader97\\base",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "result": {
+        "kind": "value",
+        "value": {
+          "status": 400,
+          "headers": {
+            "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+            "content-type": "application/json",
+            "vary": "Origin",
+            "x-opencorvus-request-id": "2c085b5b-bb41-4ceb-96d8-4b665a6dc0a2"
+          },
+          "body": {
+            "name": "ConfigCandidateValidationError",
+            "data": {
+              "message": "External expert squad package id \"base\" collides with a built-in expert squad id."
+            }
+          }
+        }
+      }
+    }
+  }
+]

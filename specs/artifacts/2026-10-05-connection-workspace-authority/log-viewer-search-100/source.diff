@@ -1,0 +1,245 @@
+--- before/test\log-utils.test.ts
++++ current/test\log-utils.test.ts
+@@ -1,5 +1,5 @@
+ import { describe, expect, test } from "bun:test"
+-import { parseServerLogLine } from "../src/utils/log"
++import { matchesLogEntrySearch, parseServerLogLine } from "../src/utils/log"
+ 
+ describe("parseServerLogLine", () => {
+   test("parses Pino JSONL server records", () => {
+@@ -86,3 +86,53 @@
+     })
+   })
+ })
++
++describe("loaded log literal search", () => {
++  const raw =
++    '{"level":"warn","time":"2026-10-07T09:11:58.030Z","service":"logger-observation","message":"Subject chronology","data":{"sessionID":"ses_actual","duration":333,"path":"/session?directory=C:/owned"},"retained":"RAW.[token]"}'
++  const actual = { ...parseServerLogLine(raw), source: "server" }
++  const other = { ...parseServerLogLine('{"level":"info","service":"session","message":"created"}'), source: "server" }
++  const selected = [actual, other]
++
++  test("matches actual header, nested values, keys and literal raw punctuation", () => {
++    for (const query of [
++      "LOGGER-OBSERVATION",
++      "subject CHRONOLOGY",
++      "09:11:58",
++      "0.3s",
++      "WARN",
++      "ses_actual",
++      "duration",
++      "333",
++      "C:/owned",
++      "RAW.[token]",
++    ]) {
++      expect(selected.filter((entry) => matchesLogEntrySearch(entry, query))).toEqual([actual])
++    }
++    expect(selected.filter((entry) => matchesLogEntrySearch(entry, "SERVER"))).toEqual(selected)
++    expect(actual.raw).toBe(raw)
++    expect(actual.fields.data).toEqual({ sessionID: "ses_actual", duration: 333, path: "/session?directory=C:/owned" })
++  })
++
++  test("empty query preserves the current level-selected sequence and identities", () => {
++    for (const query of ["", "  "]) {
++      const result = selected.filter((entry) => matchesLogEntrySearch(entry, query))
++      expect(result).toEqual(selected)
++      expect(result[0]).toBe(actual)
++      expect(result[1]).toBe(other)
++    }
++    const warnSelected = [actual]
++    expect(warnSelected.filter((entry) => matchesLogEntrySearch(entry, "subject"))).toEqual(warnSelected)
++  })
++
++  test("filters a bounded 500-entry loaded set in actual input order", () => {
++    const loaded = Array.from({ length: 500 }, (_, index) => ({
++      ...other,
++      message: `loaded row ${index}`,
++      fields: { ordinal: index, group: index % 100 === 0 ? "retrieval-target" : "ordinary" },
++    }))
++    const result = loaded.filter((entry) => matchesLogEntrySearch(entry, "RETRIEVAL-TARGET"))
++    expect(result.map((entry) => entry.fields.ordinal)).toEqual([0, 100, 200, 300, 400])
++    expect(result).toEqual([loaded[0], loaded[100], loaded[200], loaded[300], loaded[400]])
++  })
++})
+--- before/src\components\LogViewer.tsx
++++ current/src\components\LogViewer.tsx
+@@ -12,18 +12,14 @@
+ import type { LogEntry, LogLevel, LogSource } from "../store/app"
+ import { t } from "../utils/i18n"
+ import { apiJson } from "../services/api"
+-import {
+-  pathRevealFailureText,
+-  pathRevealLabelKey,
+-  pathRevealNoticeKey,
+-  revealPath,
+-} from "../services/workspace"
++import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../services/workspace"
+ import { useAsyncAction } from "../solid/async-action"
+ import { Dialog } from "./ui/Dialog"
+ import { Disclosure } from "./ui/Disclosure"
+ import { Button } from "./ui/Button"
+ import { SelectControl } from "./ui/SelectControl"
+-import { fmtElapsed, logDetailFields, parseServerLogLine, stringifyLogValue } from "../utils/log"
++import { SearchField } from "./ui/SearchField"
++import { fmtElapsed, logDetailFields, matchesLogEntrySearch, parseServerLogLine, stringifyLogValue } from "../utils/log"
+ import { copyText } from "../services/clipboard"
+ 
+ // ── Re-export types so callers can use them without importing store/app ──
+@@ -259,6 +255,7 @@
+ // ── LogViewer ──
+ 
+ export function LogViewer(props: LogViewerProps) {
++  const [searchQuery, setSearchQuery] = createSignal("")
+   const [serverLogsSeq, setServerLogsSeq] = createSignal(0)
+   const [serverLogError, setServerLogError] = createSignal("")
+   const [refreshPending, setRefreshPending] = createSignal(false)
+@@ -269,10 +266,16 @@
+   let copyGeneration = 0
+   let copyNoticeTimer: ReturnType<typeof setTimeout> | undefined
+ 
+-  // Merged & filtered log entries
+-  const entries = createMemo(() => {
++  // Current level-qualified records, independent of the local search query.
++  const loadedEntries = createMemo(() => {
+     serverLogsSeq()
+     return buildLogEntries(filteredLogEntries(), props.ndjsonEvents ?? [], appStore.logFilterLevel)
++  })
++
++  const entries = createMemo(() => {
++    const loaded = loadedEntries()
++    const query = searchQuery()
++    return query.trim() ? loaded.filter((entry) => matchesLogEntrySearch(entry, query)) : loaded
+   })
+ 
+   const invalidateRefresh = () => {
+@@ -381,6 +384,7 @@
+   }
+ 
+   const handleClose = () => {
++    setSearchQuery("")
+     invalidateRefresh()
+     invalidateCopy()
+     props.onClose?.()
+@@ -401,6 +405,7 @@
+     }
+     invalidateRefresh()
+     invalidateCopy()
++    setSearchQuery("")
+   })
+ 
+   onCleanup(() => {
+@@ -480,19 +485,23 @@
+           <Button type="button" id="btnLogClear" variant="ghost" size="sm" tone="danger" onClick={handleClear}>
+             {t("common.clear")}
+           </Button>
+-          <Button
+-            type="button"
+-            id="btnCloseLog"
+-            variant="ghost"
+-            size="sm"
+-            tone="neutral"
+-            onClick={handleClose}
+-          >
++          <Button type="button" id="btnCloseLog" variant="ghost" size="sm" tone="neutral" onClick={handleClose}>
+             {t("common.close")}
+           </Button>
+         </>
+       }
+     >
++      <SearchField
++        class="log-viewer-search"
++        value={searchQuery()}
++        placeholder={t("log.search_loaded")}
++        clearLabel={t("log.clear_search")}
++        onValueChange={setSearchQuery}
++        onClear={() => setSearchQuery("")}
++        onKeyDown={(event) => {
++          if (event.key === "Enter") event.preventDefault()
++        }}
++      />
+       <Show when={copyNotice()}>
+         {(notice) => (
+           <div
+@@ -518,7 +527,10 @@
+         when={entries().length > 0}
+         fallback={
+           <div id="logViewerBody" class="log-viewer">
+-            <Show when={serverLogError()} fallback={<div class="empty-hint">{t("log.empty")}</div>}>
++            <Show
++              when={serverLogError()}
++              fallback={<div class="empty-hint">{t(searchQuery().trim() ? "log.search_empty" : "log.empty")}</div>}
++            >
+               {(message) => (
+                 <div class="empty-hint" role="alert">
+                   {message()}
+--- before/src\i18n\en-US.json
++++ current/src\i18n\en-US.json
+@@ -977,6 +977,9 @@
+   "log.copy_success": "Logs copied",
+   "log.copying": "Copying…",
+   "log.empty": "No logs",
++  "log.search_loaded": "Search loaded logs",
++  "log.clear_search": "Clear search",
++  "log.search_empty": "No loaded logs match this search.",
+   "log.fields": "Structured fields",
+   "log.filter_level": "Log level",
+   "log.open_file": "Open File",
+--- before/src\i18n\zh-CN.json
++++ current/src\i18n\zh-CN.json
+@@ -976,6 +976,9 @@
+   "log.copy_success": "日志已复制",
+   "log.copying": "正在复制…",
+   "log.empty": "暂无日志",
++  "log.search_loaded": "搜索已加载日志",
++  "log.clear_search": "清除搜索",
++  "log.search_empty": "已加载日志中没有匹配项。",
+   "log.fields": "结构化字段",
+   "log.filter_level": "日志级别",
+   "log.open_file": "打开文件",
+--- before/src\utils\log.ts
++++ current/src\utils\log.ts
+@@ -5,6 +5,7 @@
+ import { appStore, appendLog, type LogEntry, type LogLevel } from "../store/app"
+ import { apiJson } from "../services/api"
+ import { formatErrorDetails } from "./error-details"
++import { matchesSearchParts } from "../services/text-search"
+ 
+ // ── Types ──
+ 
+@@ -207,6 +208,22 @@
+ 
+ // ── Current log parsing and display helpers ──
+ 
++export function matchesLogEntrySearch(
++  entry: Pick<ServerLogEntry, "source" | "level" | "ts" | "delta" | "service" | "message" | "fields" | "raw">,
++  query: string,
++): boolean {
++  return matchesSearchParts(query, [
++    entry.source,
++    entry.level,
++    entry.ts,
++    entry.delta,
++    entry.service,
++    entry.message,
++    stringifyLogValue(entry.fields),
++    entry.raw,
++  ])
++}
++
+ // ── stringifyLogValue ──
+ 
+ export function stringifyLogValue(value: unknown, space = 0): string {
+--- before/src\styles\surfaces\settings.css
++++ current/src\styles\surfaces\settings.css
+@@ -1093,6 +1093,11 @@
+ /* Log viewer container — scrollable mono-font region that holds
+    the log lines. LogViewer owns the dialog height, so the list flexes
+    with the resizable form instead of staying capped at a short fixed size. */
++.log-viewer-search {
++  flex: 0 0 auto;
++  width: 100%;
++}
++
+ .log-viewer {
+   flex: 1 1 auto;
+   height: auto;

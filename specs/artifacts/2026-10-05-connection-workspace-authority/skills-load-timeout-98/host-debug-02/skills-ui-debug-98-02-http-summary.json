@@ -1,0 +1,1498 @@
+{
+  "unknownTimestampLines": [],
+  "unparsedSourceLines": 0,
+  "afterTargetBirthUtc": "2026-10-07T10:00:25.6349451Z",
+  "target": {
+    "pid": 77508,
+    "processInstanceID": "win32:639269640256349451",
+    "occurrenceID": "00056cef-521e-4531-b48d-e093f17e489c"
+  },
+  "qualifier": "Only canonical timestamp rows are assigned to the new process window; ambiguous raw lines retained separately",
+  "retainedNewLines": 2400,
+  "requests": [
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:44.418Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "59c67b9e-6fae-41dd-bc1c-460e8ee340e2",
+        "method": "GET",
+        "path": "/project/current",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:45.189Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "59c67b9e-6fae-41dd-bc1c-460e8ee340e2",
+        "method": "GET",
+        "path": "/project/current",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 771
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:45.231Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "25fcfd09-9917-4519-ade5-6198aa79d561",
+        "method": "POST",
+        "path": "/coding/chat/session",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:45.270Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "25fcfd09-9917-4519-ade5-6198aa79d561",
+        "method": "POST",
+        "path": "/coding/chat/session",
+        "status": "completed",
+        "statusCode": 201,
+        "duration": 38
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.123Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "65deef19-f7a8-4c9d-9c2e-4d30dd82be3a",
+        "method": "GET",
+        "path": "/ui",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.124Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "65deef19-f7a8-4c9d-9c2e-4d30dd82be3a",
+        "method": "GET",
+        "path": "/ui",
+        "status": "completed",
+        "statusCode": 308,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.129Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4384dfcc-93dc-4c46-a852-92edf4efd3d4",
+        "method": "GET",
+        "path": "/ui/",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.131Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4384dfcc-93dc-4c46-a852-92edf4efd3d4",
+        "method": "GET",
+        "path": "/ui/",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.150Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1bf10a5d-5e78-463c-82f5-99e1238f1912",
+        "method": "GET",
+        "path": "/ui/assets/main-BQvzF595.js",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.152Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "fcbf7311-0538-4017-ba29-58217c42ef46",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.153Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3adf1b00-5f81-45b3-9375-541e5947abc9",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.153Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1bf10a5d-5e78-463c-82f5-99e1238f1912",
+        "method": "GET",
+        "path": "/ui/assets/main-BQvzF595.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.155Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3adf1b00-5f81-45b3-9375-541e5947abc9",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.157Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "867c72ad-4a5f-4316-94cc-08906c5d9894",
+        "method": "GET",
+        "path": "/ui/assets/main-W-YoMEpm.css",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.157Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "fcbf7311-0538-4017-ba29-58217c42ef46",
+        "method": "GET",
+        "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.158Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "53eaa9a5-7dae-4a0a-b6d0-0f5d79161117",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.159Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "70a72fd8-a5e9-4b66-b684-3ee30fdd7859",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.169Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "53eaa9a5-7dae-4a0a-b6d0-0f5d79161117",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 11
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.170Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "70a72fd8-a5e9-4b66-b684-3ee30fdd7859",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 11
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.170Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "867c72ad-4a5f-4316-94cc-08906c5d9894",
+        "method": "GET",
+        "path": "/ui/assets/main-W-YoMEpm.css",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 13
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.213Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1ae0f87d-a60a-4103-8422-70267471cf8c",
+        "method": "GET",
+        "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.218Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1ae0f87d-a60a-4103-8422-70267471cf8c",
+        "method": "GET",
+        "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.280Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0d01cf23-cc2a-41ff-b85e-053aa2475eca",
+        "method": "GET",
+        "path": "/ui/i18n/zh-CN.json",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.281Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "98e6b3a4-a27f-42e7-83ae-818ab10139b0",
+        "method": "GET",
+        "path": "/ui/i18n/en-US.json",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.282Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0d01cf23-cc2a-41ff-b85e-053aa2475eca",
+        "method": "GET",
+        "path": "/ui/i18n/zh-CN.json",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.282Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "98e6b3a4-a27f-42e7-83ae-818ab10139b0",
+        "method": "GET",
+        "path": "/ui/i18n/en-US.json",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.438Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "881e67d1-7f8d-4f67-b215-feb648526e40",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.439Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "881e67d1-7f8d-4f67-b215-feb648526e40",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.451Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3ab1936f-f769-4e93-8e55-da5bb4c688b4",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.453Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3ab1936f-f769-4e93-8e55-da5bb4c688b4",
+        "method": "GET",
+        "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.454Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "bcaa5c09-14e3-47b9-a3f5-c5aacc4d94e6",
+        "method": "GET",
+        "path": "/global/composer-references",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.464Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "33086caa-a365-4390-a49d-f513c2c0e49e",
+        "method": "GET",
+        "path": "/global/projects/discover",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.465Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7640052e-d58c-4a7b-b47c-8382bb2c5ead",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.472Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7640052e-d58c-4a7b-b47c-8382bb2c5ead",
+        "method": "GET",
+        "path": "/work-ledger/events",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 7
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.487Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "33086caa-a365-4390-a49d-f513c2c0e49e",
+        "method": "GET",
+        "path": "/global/projects/discover",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 23
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.494Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8d4f90a8-b0a7-4540-aadb-ff0c1036f4da",
+        "method": "GET",
+        "path": "/mailbox",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.498Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8d4f90a8-b0a7-4540-aadb-ff0c1036f4da",
+        "method": "GET",
+        "path": "/mailbox",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 4
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.498Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0325cd0f-78d9-4974-ae3c-ff9fbe30fc06",
+        "method": "GET",
+        "path": "/expert-squad/catalog",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.501Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "97649e78-bbbb-4bab-9568-7fa79fb42da9",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.503Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "be95c656-783e-4309-ad6c-edbe05d3e9e5",
+        "method": "GET",
+        "path": "/mission-skill/catalog",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.514Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "97649e78-bbbb-4bab-9568-7fa79fb42da9",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 13
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.516Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "be95c656-783e-4309-ad6c-edbe05d3e9e5",
+        "method": "GET",
+        "path": "/mission-skill/catalog",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 13
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.517Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0889062a-faaf-4c18-96d8-c149d56750c2",
+        "method": "GET",
+        "path": "/chat/capability",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.518Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "af3b08a6-bf0a-488a-88af-1d169111c88a",
+        "method": "GET",
+        "path": "/global/tasks",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.521Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "af3b08a6-bf0a-488a-88af-1d169111c88a",
+        "method": "GET",
+        "path": "/global/tasks",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.521Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d1de09da-5451-4bc1-8ce0-9644112d14ed",
+        "method": "GET",
+        "path": "/path",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.522Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d1de09da-5451-4bc1-8ce0-9644112d14ed",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.530Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "bcaa5c09-14e3-47b9-a3f5-c5aacc4d94e6",
+        "method": "GET",
+        "path": "/global/composer-references",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 76
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.530Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7d9157ce-7074-40af-a7ba-0cf70301cb8e",
+        "method": "GET",
+        "path": "/vcs",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.532Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7d9157ce-7074-40af-a7ba-0cf70301cb8e",
+        "method": "GET",
+        "path": "/vcs",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.544Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "fd319bf3-1e4b-4800-aa4f-ab85480e114d",
+        "method": "GET",
+        "path": "/experimental/project-memory",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.546Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "fd319bf3-1e4b-4800-aa4f-ab85480e114d",
+        "method": "GET",
+        "path": "/experimental/project-memory",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.546Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8bc42f50-5f72-4fe2-9f6b-d2b61a3ac5c7",
+        "method": "GET",
+        "path": "/skill/mounts",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.548Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "65e6ef1b-5a5f-4ed7-a9ac-fc128ba7daef",
+        "method": "GET",
+        "path": "/mcp",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.550Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "65e6ef1b-5a5f-4ed7-a9ac-fc128ba7daef",
+        "method": "GET",
+        "path": "/mcp",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.550Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0d3a81d1-3a03-4843-a781-11fee98d0c2d",
+        "method": "GET",
+        "path": "/config",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.551Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0d3a81d1-3a03-4843-a781-11fee98d0c2d",
+        "method": "GET",
+        "path": "/config",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.552Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "db6c225e-b749-40f1-b5c0-cc9f2752d38e",
+        "method": "GET",
+        "path": "/channel",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.555Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "db6c225e-b749-40f1-b5c0-cc9f2752d38e",
+        "method": "GET",
+        "path": "/channel",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.588Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0889062a-faaf-4c18-96d8-c149d56750c2",
+        "method": "GET",
+        "path": "/chat/capability",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 71
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.610Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "b71a9d60-bfc9-4f52-9c63-a0e9924efa00",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.619Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "b71a9d60-bfc9-4f52-9c63-a0e9924efa00",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 9
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.620Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "ec1e0f1e-e7c4-49d5-9980-0324819cd941",
+        "method": "GET",
+        "path": "/mission",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.622Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "ec1e0f1e-e7c4-49d5-9980-0324819cd941",
+        "method": "GET",
+        "path": "/mission",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.753Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0325cd0f-78d9-4974-ae3c-ff9fbe30fc06",
+        "method": "GET",
+        "path": "/expert-squad/catalog",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 255
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.759Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7bceb5ce-439d-4f88-95a6-50d13a576891",
+        "method": "GET",
+        "path": "/expert-squad/inspect",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:00:51.762Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "7bceb5ce-439d-4f88-95a6-50d13a576891",
+        "method": "GET",
+        "path": "/expert-squad/inspect",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:01.552Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "cb0e15cf-3645-40d3-8039-e396403bbbd5",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:01.553Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "cb0e15cf-3645-40d3-8039-e396403bbbd5",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:07.476Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "61c0ef84-70b1-426f-b18a-1e93a2eedb9b",
+        "method": "GET",
+        "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:07.486Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "61c0ef84-70b1-426f-b18a-1e93a2eedb9b",
+        "method": "GET",
+        "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 10
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:10.940Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8bc42f50-5f72-4fe2-9f6b-d2b61a3ac5c7",
+        "method": "GET",
+        "path": "/skill/mounts",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 19394
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:11.557Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d9ce8dd9-5d1f-480b-b3e8-11d8a84f1896",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:11.558Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "d9ce8dd9-5d1f-480b-b3e8-11d8a84f1896",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:21.556Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4c0b4145-8eb6-41c4-a528-48def069b7fc",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:21.557Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "4c0b4145-8eb6-41c4-a528-48def069b7fc",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:31.548Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "179c067c-16f0-439e-b60f-7c083683cc97",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:31.549Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "179c067c-16f0-439e-b60f-7c083683cc97",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:41.559Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "53523f51-7303-4d27-b53b-3f8ee0458335",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:41.560Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "53523f51-7303-4d27-b53b-3f8ee0458335",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:51.560Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3a953347-db61-4916-ac04-4cb18a1ea151",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:01:51.560Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3a953347-db61-4916-ac04-4cb18a1ea151",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:01.556Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "309183bb-66e7-471e-a661-106f12270abe",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:01.557Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "309183bb-66e7-471e-a661-106f12270abe",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:11.551Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "dfa6d150-e689-45ff-b514-52c74642ece6",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:11.551Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "dfa6d150-e689-45ff-b514-52c74642ece6",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:21.562Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8cb06b1d-a1e3-416a-ab27-91a2555786c6",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:21.563Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "8cb06b1d-a1e3-416a-ab27-91a2555786c6",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:31.548Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e7c42a74-e89b-4c97-b660-f1a355c0fd38",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:31.549Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e7c42a74-e89b-4c97-b660-f1a355c0fd38",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:41.547Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "35f8af81-022f-4e5d-9017-227c7dc09eef",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:41.547Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "35f8af81-022f-4e5d-9017-227c7dc09eef",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:51.546Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "24996dc7-1845-4087-a225-2cccd109b8f0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:02:51.547Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "24996dc7-1845-4087-a225-2cccd109b8f0",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:01.558Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "a27cb9a1-be66-4131-a92b-5d2a2b3021b9",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:01.558Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "a27cb9a1-be66-4131-a92b-5d2a2b3021b9",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:11.546Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "2422068f-821b-4120-80b1-bcf203364695",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:11.547Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "2422068f-821b-4120-80b1-bcf203364695",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:21.556Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3c6d670f-4d95-4d20-8e47-42006de0ed1c",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:21.556Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "3c6d670f-4d95-4d20-8e47-42006de0ed1c",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:31.551Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "c24c2355-bc21-4051-9a8d-440651fa2a77",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:31.551Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "c24c2355-bc21-4051-9a8d-440651fa2a77",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:41.567Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "ed2a17b1-a138-4353-9e62-834bbc61a44a",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:03:41.567Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "ed2a17b1-a138-4353-9e62-834bbc61a44a",
+        "method": "GET",
+        "path": "/global/health",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:04:00.084Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1997ffef-e742-401f-82b1-b2b673b69b65",
+        "method": "POST",
+        "path": "/shutdown",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-07T10:04:00.085Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "1997ffef-e742-401f-82b1-b2b673b69b65",
+        "method": "POST",
+        "path": "/shutdown",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    }
+  ]
+}

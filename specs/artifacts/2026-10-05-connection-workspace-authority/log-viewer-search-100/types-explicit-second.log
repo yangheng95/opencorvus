@@ -1,0 +1,18 @@
+test/log-utils.test.ts(110,63): error TS2345: Argument of type '{ source: string; level: string; ts: string; delta: string; service: string; message: string; fields: Record<string, unknown>; raw: string; }' is not assignable to parameter of type 'Pick<LogEntry, "source" | "raw" | "message" | "delta" | "service" | "level" | "ts" | "fields">'.
+  Types of property 'source' are incompatible.
+    Type 'string' is not assignable to type 'LogSource'.
+test/log-utils.test.ts(112,61): error TS2345: Argument of type '{ source: string; level: string; ts: string; delta: string; service: string; message: string; fields: Record<string, unknown>; raw: string; }' is not assignable to parameter of type 'Pick<LogEntry, "source" | "raw" | "message" | "delta" | "service" | "level" | "ts" | "fields">'.
+  Types of property 'source' are incompatible.
+    Type 'string' is not assignable to type 'LogSource'.
+test/log-utils.test.ts(119,71): error TS2345: Argument of type '{ source: string; level: string; ts: string; delta: string; service: string; message: string; fields: Record<string, unknown>; raw: string; }' is not assignable to parameter of type 'Pick<LogEntry, "source" | "raw" | "message" | "delta" | "service" | "level" | "ts" | "fields">'.
+  Types of property 'source' are incompatible.
+    Type 'string' is not assignable to type 'LogSource'.
+test/log-utils.test.ts(125,65): error TS2345: Argument of type '{ source: string; level: string; ts: string; delta: string; service: string; message: string; fields: Record<string, unknown>; raw: string; }' is not assignable to parameter of type 'Pick<LogEntry, "source" | "raw" | "message" | "delta" | "service" | "level" | "ts" | "fields">'.
+  Types of property 'source' are incompatible.
+    Type 'string' is not assignable to type 'LogSource'.
+test/log-utils.test.ts(126,61): error TS2345: Argument of type '{ source: string; level: string; ts: string; delta: string; service: string; message: string; fields: Record<string, unknown>; raw: string; }' is not assignable to parameter of type 'Pick<LogEntry, "source" | "raw" | "message" | "delta" | "service" | "level" | "ts" | "fields">'.
+  Types of property 'source' are incompatible.
+    Type 'string' is not assignable to type 'LogSource'.
+test/log-utils.test.ts(135,67): error TS2345: Argument of type '{ message: string; fields: { ordinal: number; group: string; }; source: string; level: string; ts: string; delta: string; service: string; raw: string; }' is not assignable to parameter of type 'Pick<LogEntry, "source" | "raw" | "message" | "delta" | "service" | "level" | "ts" | "fields">'.
+  Types of property 'source' are incompatible.
+    Type 'string' is not assignable to type 'LogSource'.

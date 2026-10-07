@@ -1,0 +1,152 @@
+{
+  "target": {
+    "pid": 73684,
+    "processInstanceID": "win32:639269650120720325",
+    "occurrenceID": "f821232c-bf72-42cb-8505-25abab07c243"
+  },
+  "occurrence": "log-search-ui-100-45714671-e0f1-4db8-b0e9-14f2a0a8f6bc",
+  "qualifier": "Actual canonical Chat creation and public diagnostic input; no model prompt or copied authority",
+  "observedAtUtc": "2026-10-07T10:17:43.5610258Z",
+  "requests": [
+    {
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 10:17:42 GMT"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Content-Length": [
+          "213"
+        ],
+        "x-opencorvus-request-id": [
+          "df9eb5a7-4a23-4bc8-ba5d-fefe8d8884c9"
+        ]
+      },
+      "url": "http://127.0.0.1:18045/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clog-search-ui-100%5Cproject",
+      "method": "GET",
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\log-search-ui-100\\project"
+      },
+      "body": {
+        "id": "prj_hpkUxP8KORVKkTyibxOh",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\log-search-ui-100\\project",
+        "sandboxes": [],
+        "time": {
+          "created": 1791368262898,
+          "updated": 1791368262898
+        }
+      },
+      "status": 200,
+      "input": null,
+      "rawBody": "{\"id\":\"prj_hpkUxP8KORVKkTyibxOh\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\log-search-ui-100\\\\project\",\"sandboxes\":[],\"time\":{\"created\":1791368262898,\"updated\":1791368262898}}"
+    },
+    {
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 10:17:42 GMT"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Content-Length": [
+          "400"
+        ],
+        "x-opencorvus-request-id": [
+          "0a249a37-52cd-4d84-b1ac-acec907bd45e"
+        ]
+      },
+      "url": "http://127.0.0.1:18045/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clog-search-ui-100%5Cproject",
+      "method": "POST",
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\log-search-ui-100\\project"
+      },
+      "body": {
+        "session": {
+          "id": "ses_-zUSdlK7jzzF47Hl23uW",
+          "slug": "jolly-knight",
+          "version": "local",
+          "projectID": "prj_hpkUxP8KORVKkTyibxOh",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\log-search-ui-100\\project",
+          "title": "Chat",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1791368263512,
+            "updated": 1791368263512
+          }
+        }
+      },
+      "status": 201,
+      "input": {},
+      "rawBody": "{\"session\":{\"id\":\"ses_-zUSdlK7jzzF47Hl23uW\",\"slug\":\"jolly-knight\",\"version\":\"local\",\"projectID\":\"prj_hpkUxP8KORVKkTyibxOh\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\log-search-ui-100\\\\project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791368263512,\"updated\":1791368263512}}}"
+    },
+    {
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 10:17:42 GMT"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Content-Length": [
+          "4"
+        ],
+        "x-opencorvus-request-id": [
+          "b023a814-c011-4e4d-a910-0f61d0558bb1"
+        ]
+      },
+      "url": "http://127.0.0.1:18045/log?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clog-search-ui-100%5Cproject",
+      "method": "POST",
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\log-search-ui-100\\project"
+      },
+      "body": true,
+      "status": 200,
+      "input": {
+        "entries": [
+          {
+            "service": "logger-envelope95-observation",
+            "message": "Logger subject chronology95",
+            "extra": {
+              "service": "subject-lifecycle",
+              "time": {
+                "created": 1791368263512,
+                "updated": 1791368263512
+              },
+              "observed": "actual Chat lifecycle",
+              "sessionID": "ses_-zUSdlK7jzzF47Hl23uW",
+              "logDomain": "subject-lifecycle",
+              "level": "info"
+            },
+            "level": "warn"
+          }
+        ]
+      },
+      "rawBody": "true"
+    }
+  ]
+}

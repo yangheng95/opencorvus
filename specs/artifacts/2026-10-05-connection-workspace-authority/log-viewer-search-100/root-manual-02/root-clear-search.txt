@@ -1,0 +1,33 @@
+Browser tab: 57, Title: "OpenCorvus", URL: "http://localhost:18046/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18046/ui/
+	1 container
+		2 container Logs, ID: logDialog
+			3 container
+				4 heading Logs, Value: 2, ID: dialog-cl-97-title
+					5 text Logs
+				6 pop up button (collapsed) Log level WARN, ID: logLevelFilter-trigger, Secondary Actions: Expand
+					15 text WARN
+				8 button Refresh, ID: btnLogRefresh
+				9 button Description: Copy path, ID: btnLogOpenFile
+				10 button Copy, ID: btnLogCopy
+				11 button Clear, ID: btnLogClear
+				12 button Close, ID: btnCloseLog
+				13 search text field (settable) Search loaded logs
+				16 container
+					17 text Server [ WARN ] worktree.gc 2026-10-07T10:32:07
+					18 text failed to read git worktree registry; preserving the entire project
+					19 text logDomain = non-session data = {"projectID":"prj_hq7TiBmwhaUETCQtmP1l","primaryDir":"C:\\Users\\hengu\\.code...
+					20 button (collapsed) Details, Secondary Actions: Expand
+						21 text Details
+					22 text Server [ WARN ] logger-envelope95-observation 2026-10-07T10:32:07
+					23 text Logger subject chronology95
+					24 text logDomain = non-session data = {"time":{"created":1791369127783,"updated":1791369127783},"observed":"actual...
+					25 button (collapsed) Details, Secondary Actions: Expand
+						26 text Details
+					27 text Overlay [ WARN ] composer-reference 2026-10-07T10:32:29
+					28 text Reference catalog unavailable for composer
+					29 text error = expert squads: signal timed out requestKey = api:0:expert-squad:catalog:project:C:\Users\hengu\.codex\opencorvus-product-i...
+					30 button (collapsed) Details, Secondary Actions: Expand
+						31 text Details
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18046/ui/

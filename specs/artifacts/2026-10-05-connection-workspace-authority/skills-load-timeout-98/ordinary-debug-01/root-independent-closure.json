@@ -1,0 +1,60 @@
+{
+  "listeners": [],
+  "qualifier": "Independent exact-birth observation after canonical checker and parent command/output joined; retained owned root, no credential contents",
+  "observedAtUtc": "2026-10-07T09:48:54.9293671Z",
+  "pairMetadata": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 50212,
+        "processInstanceID": "win32:639269631346965376",
+        "occurrenceID": "c4925b2b-22d3-42fe-aef7-6cb055785763"
+      },
+      "role": "owner",
+      "mode": "serial",
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 33780,
+        "processInstanceID": "win32:639269631346481192",
+        "occurrenceID": "ef32fcf4-dbde-4c12-b368-9b648371f001"
+      },
+      "role": "helperOwner",
+      "mode": "serial",
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 36924,
+        "processInstanceID": "win32:639269631409168985",
+        "occurrenceID": "fc59b367-3630-4e44-84c4-16a5961ec8dc"
+      },
+      "role": "owner",
+      "mode": "restart-parallel",
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 7784,
+        "processInstanceID": "win32:639269631408647951",
+        "occurrenceID": "c4367bfb-8940-4270-a25d-0ee64fdeee7d"
+      },
+      "role": "helperOwner",
+      "mode": "restart-parallel",
+      "state": "dead_or_reused"
+    },
+    {
+      "role": "checker-parent",
+      "expected": {
+        "pid": 43944,
+        "processInstanceID": "win32:639269631318405744",
+        "occurrenceID": "c27cfde2-e8c6-4eec-af66-39bceb856221"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

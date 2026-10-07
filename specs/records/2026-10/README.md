@@ -1,5 +1,12 @@
 # 2026-10 Records
 
+- [Log search100 and reader/latency qualification checkpoint](2026-10-07-log-search-and-reader-latency-qualification.md)
+
+- [Log search100 Recall](../../artifacts/2026-10-05-connection-workspace-authority/log-viewer-search-plan-100.md)
+
+- [Skills98 qualification Recall](../../artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-plan-98.md)
+- [Reader97 measurement Recall](../../artifacts/2026-10-05-connection-workspace-authority/candidate-reader-measurement-plan-97.md)
+
 - [Diagnostic95/candidate96 checkpoint](2026-10-07-diagnostic-envelope-candidate-status.md)
 - [Reader provenance97 investigation](../../artifacts/2026-10-05-connection-workspace-authority/candidate-reader-provenance-investigation-97.md)
 - [Skills timeout98 investigation](../../artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-investigation-98.md)

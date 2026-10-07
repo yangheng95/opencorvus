@@ -1,0 +1,43 @@
+Browser tab: 241798782, Title: "OpenCorvus", URL: "http://localhost:18045/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18045/ui/
+	1 container 日志, ID: logDialog
+		2 container
+			3 heading 日志, Value: 2, ID: dialog-cl-97-title
+				4 text 日志
+			5 pop up button (collapsed) 日志级别 DEBUG, ID: logLevelFilter-trigger, Secondary Actions: Expand
+				6 text DEBUG
+			7 button 刷新, ID: btnLogRefresh
+			8 button Description: 复制路径, ID: btnLogOpenFile
+			9 button 复制, ID: btnLogCopy
+			10 button 清除, ID: btnLogClear
+			11 button 关闭, ID: btnCloseLog
+			12 search text field (settable) Description: 搜索已加载日志, Value: ses_-zUSdlK7jzzF47Hl23uW
+			13 button 清除搜索
+			14 container
+				19 text Server [ INFO ] session 2026-10-07T10:17:43
+				20 text created
+				21 text logDomain = non-session data = {"id":"ses_-zUSdlK7jzzF47Hl23uW","slug":"jolly-knight","version":"local","pro...
+				15 button (collapsed) 详情, Secondary Actions: Expand
+					22 text 详情
+				16 text Server [ WARN ] logger-envelope95-observation 2026-10-07T10:17:43
+				17 text Logger subject chronology95
+				18 text logDomain = non-session data = {"service":"subject-lifecycle","time":{"created":1791368263512,"updated":1791...
+				23 container
+					24 button (expanded) 详情, Secondary Actions: Collapse
+						25 text 详情
+					26 text 结构化字段 {
+  "logDomain": "non-session",
+  "data": {
+    "service": "subject-lifecycle",
+    "time": {
+      "created": 1791368263512,
+      "updated": 1791368263512
+    },
+    "observed": "actual Chat lifecycle",
+    "sessionID": "ses_-zUSdlK7jzzF47Hl23uW",
+    "logDomain": "subject-lifecycle",
+    "level": "info"
+  }
+} 原始日志 {"level":"warn","time":"2026-10-07T10:17:43.557Z","service":"logger-envelope95-observation","logDomain":"non-session","data":{"service":"subject-lifecycle","time":{"created":1791368263512,"updated":1791368263512},"observed":"actual Chat lifecycle","sessionID":"ses_-zUSdlK7jzzF47Hl23uW","logDomain":"subject-lifecycle","level":"info"},"message":"Logger subject chronology95"}
+
+The focused UI element is 24 button (expanded) 详情, Secondary Actions: Collapse

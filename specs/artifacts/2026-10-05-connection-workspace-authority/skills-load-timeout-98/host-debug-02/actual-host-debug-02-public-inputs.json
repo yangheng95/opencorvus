@@ -1,0 +1,152 @@
+{
+  "qualifier": "Actual canonical Chat creation and public diagnostic input; no model prompt or copied authority",
+  "target": {
+    "pid": 77508,
+    "processInstanceID": "win32:639269640256349451",
+    "occurrenceID": "00056cef-521e-4531-b48d-e093f17e489c"
+  },
+  "observedAtUtc": "2026-10-07T10:00:45.2837495Z",
+  "requests": [
+    {
+      "method": "GET",
+      "rawBody": "{\"id\":\"prj_h4vmTTQbLakUl7WLwYEi\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\skills-ui-debug-98-02\\\\project\",\"sandboxes\":[],\"time\":{\"created\":1791367244475,\"updated\":1791367244475}}",
+      "url": "http://127.0.0.1:18044/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cskills-ui-debug-98-02%5Cproject",
+      "input": null,
+      "status": 200,
+      "body": {
+        "id": "prj_h4vmTTQbLakUl7WLwYEi",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project",
+        "sandboxes": [],
+        "time": {
+          "created": 1791367244475,
+          "updated": 1791367244475
+        }
+      },
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 10:00:44 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Content-Length": [
+          "217"
+        ],
+        "x-opencorvus-request-id": [
+          "59c67b9e-6fae-41dd-bc1c-460e8ee340e2"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project"
+      }
+    },
+    {
+      "method": "POST",
+      "rawBody": "{\"session\":{\"id\":\"ses_-zUSdpb1Yzz6oAlehx48\",\"slug\":\"brave-cabin\",\"version\":\"local\",\"projectID\":\"prj_h4vmTTQbLakUl7WLwYEi\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\skills-ui-debug-98-02\\\\project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791367245235,\"updated\":1791367245235}}}",
+      "url": "http://127.0.0.1:18044/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cskills-ui-debug-98-02%5Cproject",
+      "input": {},
+      "status": 201,
+      "body": {
+        "session": {
+          "id": "ses_-zUSdpb1Yzz6oAlehx48",
+          "slug": "brave-cabin",
+          "version": "local",
+          "projectID": "prj_h4vmTTQbLakUl7WLwYEi",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project",
+          "title": "Chat",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1791367245235,
+            "updated": 1791367245235
+          }
+        }
+      },
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 10:00:44 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Content-Length": [
+          "403"
+        ],
+        "x-opencorvus-request-id": [
+          "25fcfd09-9917-4519-ade5-6198aa79d561"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project"
+      }
+    },
+    {
+      "method": "POST",
+      "rawBody": "true",
+      "url": "http://127.0.0.1:18044/log?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Cskills-ui-debug-98-02%5Cproject",
+      "input": {
+        "entries": [
+          {
+            "service": "logger-envelope95-observation",
+            "level": "warn",
+            "extra": {
+              "level": "info",
+              "logDomain": "subject-lifecycle",
+              "sessionID": "ses_-zUSdpb1Yzz6oAlehx48",
+              "time": {
+                "created": 1791367245235,
+                "updated": 1791367245235
+              },
+              "observed": "actual Chat lifecycle",
+              "service": "subject-lifecycle"
+            },
+            "message": "Logger subject chronology95"
+          }
+        ]
+      },
+      "status": 200,
+      "body": true,
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 10:00:44 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Content-Length": [
+          "4"
+        ],
+        "x-opencorvus-request-id": [
+          "93768aa4-8114-4d46-ba9b-7e0e361d625e"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project"
+      }
+    }
+  ],
+  "occurrence": "skills-ui-debug-98-02-9da07d06-bdbe-4c43-96aa-dec4e727d79c"
+}

@@ -1,0 +1,9 @@
+# Real package reader97 measurement
+
+Read [measurement Recall](../candidate-reader-measurement-plan-97.md), [preparation/actual result](preparation-report.md) and [repair influence](repair-impact-audit.md). Production error policy remains unmodified; this is a genuine before measurement, not repaired reader acceptance.
+
+Configured isolated new checker has2 positive cases/8 expectations, configured and explicit source/test types0. Real SDK/Manager creates lawful installed package; owned Windows PowerShell/.NET FileShare.None locks only its README. All five stage records precede assertions. Accepted declaration remains lawful; direct Registry and Resolver each produce actual Error/EBUSY/-16/open on the exact installed README. Candidate loses those fields/cause and cold outsideInstance Hono `/vcs` returns400 ConfigCandidateValidationError/requestID. Root independently reads the full actual facts. No mock/stub, message-keyword attribution, Provider or TCP/UI claim.
+
+Explicit release and supervised handle exited/outputSettled/settled/dispose join completes0 with LOCK_READY/LOCK_RELEASED. Unlock package/candidate/runtime returns genuine identity/success/200; separate malformed builtin input retains semantic400. PID20916 plus terminal/output are qualified; independent birth observation, other filesystem codes/readers/Auth, immutable/global/midpublication and restart/races remain unknown. Original files/raw outputs are retained and not rewritten for future policy.
+
+Nine Registry bytes/text sites plus installation metadata, optional paths, discovery issue reduction, Manager/current/pinned/config/public route wrappers were audited. A future single package-file I/O owner must preserve original cause and semantic parse/optional-file meaning; selected operational/discovery/status/schema policy still requires explicit Root admission and positive contracts. No future type/503 expectation was fabricated by this measurement. Goal continues.

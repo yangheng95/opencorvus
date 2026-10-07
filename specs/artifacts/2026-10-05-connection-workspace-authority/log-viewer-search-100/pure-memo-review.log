@@ -1,0 +1,25 @@
+bun test v1.3.14 (0d9b296a)
+
+test\log-utils.test.ts:
+(pass) parseServerLogLine > parses Pino JSONL server records [0.15ms]
+(pass) parseServerLogLine > historic non-string time remains unknown and its original lifecycle details remain visible [0.09ms]
+(pass) parseServerLogLine > unparsed diagnostic line is preserved as the actual raw output [0.14ms]
+(pass) loaded log literal search > matches actual header, nested values, keys and literal raw punctuation [0.64ms]
+(pass) loaded log literal search > empty query preserves the current level-selected sequence and identities [0.15ms]
+(pass) loaded log literal search > filters a bounded 500-entry loaded set in actual input order [1.35ms]
+
+ 6 pass
+ 0 fail
+ 26 expect() calls
+Ran 6 tests across 1 file. [229.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\text-search.test.ts:
+(pass) matchesSearchParts > normalizes the query and returns models containing the complete substring [0.31ms]
+(pass) matchesSearchParts > returns the provider's models when its ID contains the query [0.06ms]
+(pass) matchesSearchParts > returns the provider's models when its name contains the query [0.22ms]
+
+ 3 pass
+ 0 fail
+ 3 expect() calls
+Ran 3 tests across 1 file. [141.00ms]

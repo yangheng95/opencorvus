@@ -1,0 +1,1192 @@
+{
+  "status": "passed",
+  "startedAt": "2026-10-07T09:45:34.601Z",
+  "output": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\skills-load-timeout-98\\ordinary-debug-01",
+  "parent": {
+    "pid": 43944,
+    "processInstanceID": "win32:639269631318405744",
+    "occurrenceID": "c27cfde2-e8c6-4eec-af66-39bceb856221"
+  },
+  "port": 18043,
+  "inputPolicy": {
+    "profile": "ordinary",
+    "output": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\skills-load-timeout-98\\ordinary-debug-01",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01",
+    "port": 18043
+  },
+  "cases": [
+    {
+      "count": 0,
+      "mode": "serial",
+      "occurrenceID": "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+      "files": 0,
+      "bytes": 0,
+      "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01",
+      "projects": {
+        "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a",
+        "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b"
+      },
+      "observations": [
+        {
+          "label": "first-a",
+          "side": "a",
+          "status": 200,
+          "requestID": "4d03b924-b584-4794-82e5-8e1f3a4516d1",
+          "elapsedMilliseconds": 384.241,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "warm-a",
+          "side": "a",
+          "status": 200,
+          "requestID": "896b67fb-d07b-45fe-a3ca-cee7dc754206",
+          "elapsedMilliseconds": 101.15290000000005,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "first-b",
+          "side": "b",
+          "status": 200,
+          "requestID": "827c241b-a67a-4e8d-bdc5-fefaf8b2d2fa",
+          "elapsedMilliseconds": 150.58820000000014,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "parallel-a1",
+          "side": "a",
+          "status": 200,
+          "requestID": "17cfe3b5-090d-49d0-bb36-f4e66c6cf16c",
+          "elapsedMilliseconds": 146.70280000000002,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "parallel-a2",
+          "side": "a",
+          "status": 200,
+          "requestID": "deb60656-af51-45e5-a4bb-3fa287e7ff65",
+          "elapsedMilliseconds": 216.28899999999976,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "parallel-b",
+          "side": "b",
+          "status": 200,
+          "requestID": "6c4d4d1c-68dd-4c3c-9a68-e5075f7d6c7a",
+          "elapsedMilliseconds": 260.95930000000044,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "refresh-a",
+          "side": "a",
+          "status": 200,
+          "requestID": "c01125c6-fe91-4918-8f82-11a97a79617e",
+          "elapsedMilliseconds": 118.73379999999997,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        }
+      ],
+      "preflight": "loopback port bind/close succeeded",
+      "command": {
+        "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "args": [
+          "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+          "serve",
+          "--hostname",
+          "127.0.0.1",
+          "--port",
+          "18043",
+          "--startup-receipt",
+          "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\skills-load-timeout-98\\ordinary-debug-01\\ordinary-n0-serial.startup.json",
+          "--startup-occurrence",
+          "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+          "--parent-pid",
+          "43944",
+          "--parent-process-instance-id",
+          "win32:639269631318405744",
+          "--print-logs",
+          "--log-level",
+          "DEBUG",
+          "--project-dir",
+          "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a"
+        ],
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\launch"
+      },
+      "owner": {
+        "pid": 50212,
+        "processInstanceID": "win32:639269631346965376",
+        "occurrenceID": "c4925b2b-22d3-42fe-aef7-6cb055785763"
+      },
+      "actualChild": {
+        "ProcessId": 50212,
+        "ParentProcessId": 33780,
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CreationDate": "/Date(1791366334696)/"
+      },
+      "helperOwner": {
+        "pid": 33780,
+        "processInstanceID": "win32:639269631346481192",
+        "occurrenceID": "ef32fcf4-dbde-4c12-b368-9b648371f001"
+      },
+      "actualHelper": {
+        "ProcessId": 33780,
+        "ParentProcessId": 43944,
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+        "CreationDate": "/Date(1791366334648)/"
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:18043",
+        "pid": 50212
+      },
+      "health": {
+        "status": 200,
+        "requestID": "4a43d65e-d526-4120-ab1d-62f5b7905ace",
+        "healthy": true,
+        "version": "local",
+        "paths": {
+          "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\runtime\\data\\opencorvus.db",
+          "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\runtime\\data",
+          "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\home"
+        }
+      },
+      "metadataFiles": {
+        "auth.json": {
+          "present": false
+        },
+        "models.json": {
+          "present": false
+        }
+      },
+      "modelCatalogProvenance": {
+        "present": false,
+        "expectedProducer": "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
+        "observedProvision": false,
+        "observation": "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification"
+      },
+      "projectBoundary": [
+        {
+          "side": "a",
+          "status": 200,
+          "requestID": "c9182aec-0ae8-4567-8687-9d42942e4c13",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a"
+        },
+        {
+          "side": "b",
+          "status": 200,
+          "requestID": "3e87f401-4023-42c8-9b63-73649b06c49a",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b"
+        }
+      ],
+      "status": "http-completed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VXM6beg00kuLL6IqD6"
+        }
+      },
+      "disposal": {
+        "occurrenceID": "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+        "pid": 50212,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "terminal": {
+        "occurrenceID": "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+        "pid": 50212,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalOwner": "dead_or_reused",
+      "physicalHelper": "dead_or_reused",
+      "finalPort": "free",
+      "diagnosticRows": 578,
+      "timing": {
+        "diagnosticRows": 560,
+        "initializations": 17,
+        "dispositions": [
+          "creator",
+          "creator",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled"
+        ],
+        "httpUnattributedInitializations": 7
+      }
+    },
+    {
+      "count": 0,
+      "mode": "restart-parallel",
+      "occurrenceID": "04dafe5b-f53b-4115-9fd5-cdde9354bd8a",
+      "files": 0,
+      "bytes": 0,
+      "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01",
+      "projects": {
+        "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a",
+        "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b"
+      },
+      "observations": [
+        {
+          "label": "cancel-observation-a",
+          "side": "a",
+          "outcome": "caller-aborted",
+          "errorType": "AbortError",
+          "elapsedMilliseconds": 181.46399999999994,
+          "clientAccepted": false,
+          "requestID": "c912f588-2ba7-4583-80e6-738b84aeeccd",
+          "backend": {
+            "outcome": "settled",
+            "status": 200,
+            "duration": 382
+          }
+        },
+        {
+          "label": "post-cancel-a",
+          "side": "a",
+          "status": 200,
+          "requestID": "8065db1c-f66c-4feb-9fd4-9fdd3b6e09c9",
+          "elapsedMilliseconds": 170.22450000000026,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "parallel-b",
+          "side": "b",
+          "status": 200,
+          "requestID": "aef044da-328e-4ca1-868f-610c55def49e",
+          "elapsedMilliseconds": 206.3140000000003,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        },
+        {
+          "label": "settled-a",
+          "side": "a",
+          "status": 200,
+          "requestID": "826811c8-ea2a-4929-9294-495deefcd0d2",
+          "elapsedMilliseconds": 100.66350000000057,
+          "projection": {
+            "scope": "project",
+            "activeProfile": "base",
+            "totalSkills": 7,
+            "sources": {
+              "unknown": 1,
+              "builtin": 6
+            },
+            "risks": {
+              "low": 6,
+              "medium": 1
+            },
+            "agents": [
+              {
+                "id": "orchestrator",
+                "role": "orchestrator"
+              },
+              {
+                "id": "universal-build",
+                "role": "build"
+              },
+              {
+                "id": "base-developer",
+                "role": "build"
+              },
+              {
+                "id": "base-planner",
+                "role": "delegated-worker"
+              },
+              {
+                "id": "base-researcher",
+                "role": "explore"
+              },
+              {
+                "id": "base-tester",
+                "role": "delegated-worker"
+              }
+            ],
+            "grants": [
+              {
+                "agent": "orchestrator",
+                "grants": 7
+              },
+              {
+                "agent": "universal-build",
+                "grants": 6
+              },
+              {
+                "agent": "base-developer",
+                "grants": 7
+              },
+              {
+                "agent": "base-planner",
+                "grants": 7
+              },
+              {
+                "agent": "base-researcher",
+                "grants": 7
+              },
+              {
+                "agent": "base-tester",
+                "grants": 7
+              }
+            ],
+            "unmounted": 6
+          },
+          "sourceAdmission": "accepted",
+          "sourceCategories": {
+            "package-resource": 1,
+            "builtin": 6
+          }
+        }
+      ],
+      "preflight": "loopback port bind/close succeeded",
+      "command": {
+        "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "args": [
+          "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+          "serve",
+          "--hostname",
+          "127.0.0.1",
+          "--port",
+          "18043",
+          "--startup-receipt",
+          "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\skills-load-timeout-98\\ordinary-debug-01\\ordinary-n0-restart-parallel.startup.json",
+          "--startup-occurrence",
+          "04dafe5b-f53b-4115-9fd5-cdde9354bd8a",
+          "--parent-pid",
+          "43944",
+          "--parent-process-instance-id",
+          "win32:639269631318405744",
+          "--print-logs",
+          "--log-level",
+          "DEBUG",
+          "--project-dir",
+          "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a"
+        ],
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\launch"
+      },
+      "owner": {
+        "pid": 36924,
+        "processInstanceID": "win32:639269631409168985",
+        "occurrenceID": "fc59b367-3630-4e44-84c4-16a5961ec8dc"
+      },
+      "actualChild": {
+        "ProcessId": 36924,
+        "ParentProcessId": 7784,
+        "ExecutablePath": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+        "CreationDate": "/Date(1791366340916)/"
+      },
+      "helperOwner": {
+        "pid": 7784,
+        "processInstanceID": "win32:639269631408647951",
+        "occurrenceID": "c4367bfb-8940-4270-a25d-0ee64fdeee7d"
+      },
+      "actualHelper": {
+        "ProcessId": 7784,
+        "ParentProcessId": 43944,
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe",
+        "CreationDate": "/Date(1791366340864)/"
+      },
+      "startup": {
+        "schemaVersion": 1,
+        "occurrenceID": "04dafe5b-f53b-4115-9fd5-cdde9354bd8a",
+        "outcome": "listening",
+        "url": "http://127.0.0.1:18043",
+        "pid": 36924
+      },
+      "health": {
+        "status": 200,
+        "requestID": "ca56d8c6-917c-4f68-86df-1de0d620d05e",
+        "healthy": true,
+        "version": "local",
+        "paths": {
+          "database": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\runtime\\data\\opencorvus.db",
+          "data": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\runtime\\data",
+          "home": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\home"
+        }
+      },
+      "metadataFiles": {
+        "auth.json": {
+          "present": false
+        },
+        "models.json": {
+          "present": false
+        }
+      },
+      "modelCatalogProvenance": {
+        "present": false,
+        "expectedProducer": "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
+        "observedProvision": false,
+        "observation": "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification"
+      },
+      "cancelRequestID": "c912f588-2ba7-4583-80e6-738b84aeeccd",
+      "cancelOutcome": {
+        "outcome": "caller-aborted",
+        "requestID": "c912f588-2ba7-4583-80e6-738b84aeeccd"
+      },
+      "projectBoundary": [
+        {
+          "side": "a",
+          "status": 200,
+          "requestID": "ff0ffae1-8bd8-4bdb-915a-7da973529ab8",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a"
+        },
+        {
+          "side": "b",
+          "status": 200,
+          "requestID": "1d459e63-ffb2-42f5-96dc-b3cba57baebf",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b"
+        }
+      ],
+      "status": "http-completed",
+      "shutdown": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VXM6d5o00Msy6xb5u2"
+        }
+      },
+      "disposal": {
+        "occurrenceID": "04dafe5b-f53b-4115-9fd5-cdde9354bd8a",
+        "pid": 36924,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "terminal": {
+        "occurrenceID": "04dafe5b-f53b-4115-9fd5-cdde9354bd8a",
+        "pid": 36924,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalOwner": "dead_or_reused",
+      "physicalHelper": "dead_or_reused",
+      "finalPort": "free",
+      "diagnosticRows": 310,
+      "timing": {
+        "diagnosticRows": 298,
+        "initializations": 7,
+        "dispositions": [
+          "creator",
+          "creator",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "creator",
+          "creator",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled",
+          "cached-settled"
+        ],
+        "httpUnattributedInitializations": 0
+      }
+    }
+  ],
+  "qualification": "Actual ordinary fresh UNCONNECTED source HTTP; empty configuration, default builtins/catalog policy, compatibility disabled; no authorized Sol/preflight/UI qualification",
+  "completedAt": "2026-10-07T09:45:46.443Z",
+  "cleanup": "Owned ordinary root retained for Root physical review; no automatic directory deletion"
+}

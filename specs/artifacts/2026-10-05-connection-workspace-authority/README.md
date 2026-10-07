@@ -1,5 +1,14 @@
 # Connection workspace authority investigation
 
+- [Search100 final evidence](log-viewer-search-100/README.md): current matcher/list/Copy,9/29 data checks, real six screenshots and native closure.
+- [Reader97 real before measurement](candidate-reader-provenance-97/README.md): lawful installed README actualEBUSY→candidate400→unlock200; policy still held.
+- [Skills98 complete observed scopes](skills-load-timeout-98/README.md): fast ordinary baseline and actual19.345s UI package phase, both closed; cause still under investigation.
+
+- [Log search100 Recall](log-viewer-search-plan-100.md): actual retrieval cost, current search primitive and one matching list/Copy output; manual acceptance pending.
+
+- [Skills98 qualification Recall](skills-load-timeout-plan-98.md): current canonical ordinary checker and genuine phase attribution; no latency patch yet.
+- [Reader97 measurement Recall](candidate-reader-measurement-plan-97.md): real lock/declaration/read/candidate/runtime/recovery inputs; no source patch yet.
+
 - [Diagnostic95 qualified evidence](logger-envelope-95/README.md): one event/subject owner, real before/after pixels, original export bytes and exact native closure.
 - [Candidate96 qualified evidence](cold-config-status-96/README.md): actual semantic400, canonical VCS declaration/SDK/docs and focused positive outputs.
 - [Reader provenance97 investigation](candidate-reader-provenance-investigation-97.md): corrected source stages, genuine physical probe held.

@@ -1,0 +1,39 @@
+{
+  "count": 0,
+  "mode": "serial",
+  "occurrenceID": "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+  "files": 0,
+  "bytes": 0,
+  "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01",
+  "projects": {
+    "a": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a",
+    "b": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-b"
+  },
+  "observations": [],
+  "preflight": "loopback port bind/close succeeded",
+  "command": {
+    "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+    "args": [
+      "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\index.ts",
+      "serve",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "18043",
+      "--startup-receipt",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\skills-load-timeout-98\\ordinary-debug-01\\ordinary-n0-serial.startup.json",
+      "--startup-occurrence",
+      "675949c8-7b63-409f-ab74-d2b53d91a3b3",
+      "--parent-pid",
+      "43944",
+      "--parent-process-instance-id",
+      "win32:639269631318405744",
+      "--print-logs",
+      "--log-level",
+      "DEBUG",
+      "--project-dir",
+      "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\project-a"
+    ],
+    "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-load-debug-98-01\\launch"
+  }
+}

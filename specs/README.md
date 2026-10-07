@@ -1,5 +1,12 @@
 # Specs Storage Index
 
+- [Log search100 and reader/latency checkpoint](records/2026-10/2026-10-07-log-search-and-reader-latency-qualification.md): real search/pixels/Copy closed,97/98/99 remain active.
+
+- [Log search100 Recall](artifacts/2026-10-05-connection-workspace-authority/log-viewer-search-plan-100.md): one loaded-record query/list/Copy projection, source frozen; real manual acceptance pending.
+
+- [Skills98 qualification Recall](artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-plan-98.md): fresh ordinary DEBUG/cold/warm/parallel/cancel measurement, source repair held.
+- [Reader97 measurement Recall](artifacts/2026-10-05-connection-workspace-authority/candidate-reader-measurement-plan-97.md): real Windows physical read fault preparation, production held.
+
 - [Diagnostic95/candidate96 checkpoint](records/2026-10/2026-10-07-diagnostic-envelope-candidate-status.md): canonical logging/native UI/export and shared semantic400 qualification; continuous work remains active.
 - [Reader provenance97 investigation](artifacts/2026-10-05-connection-workspace-authority/candidate-reader-provenance-investigation-97.md): genuine fault-probe preparation, source stages corrected; no probe or implementation yet.
 - [Skills timeout98 investigation](artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-investigation-98.md): actual15s client timeout and19439ms backend200; shared cause under investigation.

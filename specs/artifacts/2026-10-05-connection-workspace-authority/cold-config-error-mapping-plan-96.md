@@ -26,7 +26,7 @@ After source review run identical new checker, current94file, relevant real publ
 
 ## Status
 
-Current96 exact named400 policy and canonical touched VCS400 declaration are implemented, with42 focused cases/100 expectations, types and generated SDK/API docs qualified. Read cold-config-status-96/README.md for evidence and limits. Original admissions below preserve chronology; nested reader provenance remains open under97 and no native/Provider scope is claimed. Scoped Git delivery is pending at this update; Goal continues.
+Current96 exact named400 policy and canonical touched VCS400 declaration are implemented, with42 focused cases/100 expectations, types and generated SDK/API docs qualified. Read cold-config-status-96/README.md for evidence and limits. Original admissions below preserve chronology; nested reader provenance remains open under97 and no native/Provider scope is claimed. Normally pushed7696236e with full hooks; Goal continues.
 
 ## Root implementation admission
 

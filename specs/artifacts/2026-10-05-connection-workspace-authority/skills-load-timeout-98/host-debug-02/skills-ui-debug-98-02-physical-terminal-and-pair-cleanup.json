@@ -1,0 +1,63 @@
+{
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 77508,
+        "processInstanceID": "win32:639269640256349451",
+        "occurrenceID": "00056cef-521e-4531-b48d-e093f17e489c"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 74912,
+        "processInstanceID": "win32:639269640246935025",
+        "occurrenceID": "d3c1affb-18ab-450b-b915-ddfd1f1c9eb4"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "listeners": null,
+  "observedAtUtc": "2026-10-07T10:04:02.0104014Z",
+  "nativeSettlement": {
+    "occurrence": "skills-ui-debug-98-02-9da07d06-bdbe-4c43-96aa-dec4e727d79c",
+    "outcome": "settled",
+    "host": {
+      "pid": 74912,
+      "processInstanceID": "win32:639269640246935025",
+      "occurrenceID": "d3c1affb-18ab-450b-b915-ddfd1f1c9eb4"
+    },
+    "target": {
+      "pid": 77508,
+      "processInstanceID": "win32:639269640256349451",
+      "occurrenceID": "00056cef-521e-4531-b48d-e093f17e489c"
+    },
+    "observedAtUtc": "2026-10-07T10:04:00.207Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "already_absent",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\runtime\\data\\models.json"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "occurrence": "skills-ui-debug-98-02-9da07d06-bdbe-4c43-96aa-dec4e727d79c",
+  "physicalCompletion": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

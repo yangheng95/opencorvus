@@ -1,0 +1,32 @@
+Browser tab: 56, Title: "OpenCorvus", URL: "http://localhost:18044/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18044/ui/
+	1 container
+		2 container Logs, ID: logDialog
+			3 container
+				4 heading Logs, Value: 2, ID: dialog-cl-97-title
+					5 text Logs
+				6 pop up button (collapsed) Log level ERROR, ID: logLevelFilter-trigger, Secondary Actions: Expand
+					14 text ERROR
+				8 button Refresh, ID: btnLogRefresh
+				9 button Description: Copy path, ID: btnLogOpenFile
+				10 button Copy, ID: btnLogCopy
+				11 button Clear, ID: btnLogClear
+				12 button Close, ID: btnCloseLog
+				13 container
+					15 text Overlay [ ERROR ] project-load 2026-10-07T10:01:06
+					16 text extensions load failed
+					17 text directory = C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\skills-ui-debug... error = skills: signal timed out
+					25 container
+						26 button (expanded) Details, Secondary Actions: Collapse
+							27 text Details
+						28 text Structured fields {
+  "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\skills-ui-debug-98-02\\project",
+  "error": "skills: signal timed out"
+}
+					20 text Server [ ERROR ] overlay:project-load 2026-10-07T10:01:07
+					21 text extensions load failed
+					22 text logDomain = non-session data = {"directory":"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10...
+					23 button (collapsed) Details, Secondary Actions: Expand
+						24 text Details
+
+The focused UI element is 26 button (expanded) Details, Secondary Actions: Collapse

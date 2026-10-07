@@ -30,7 +30,7 @@ Before production edits Root reviews frozen baseline and full consumer map, then
 
 ## Status
 
-Current95 source/consumer repair is implemented and the bounded local/native/manual visual scope is qualified. Original admissions and failures below remain historical evidence. Read logger-envelope-95/README.md for final32 backend cases, parser3/4, actual before/after pixels/export and exact owned closure; full migrated physical scripts and new Provider Task acceptance remain unqualified. Scoped Git delivery is pending at this update; continuous work remains active.
+Current95 source/consumer repair is implemented and the bounded local/native/manual visual scope is qualified. Original admissions and failures below remain historical evidence. Read logger-envelope-95/README.md for final32 backend cases, parser3/4, actual before/after pixels/export and exact owned closure; full migrated physical scripts and new Provider Task acceptance remain unqualified. Normally pushed7696236e with full hooks; continuous work remains active.
 
 ## Root native preimage admission after93/94 delivery
 

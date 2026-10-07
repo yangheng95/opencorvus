@@ -1,0 +1,7 @@
+{
+  "stage": "startup receipt read before HTTP client",
+  "firstAttemptSucceeded": false,
+  "message": "First input guard found startup.json not yet present after native Job ready; aborted before HttpClient/request creation",
+  "qualifier": "Tool invocation readiness ordering failure, not route/credential/product verdict",
+  "observedAtUtc": "2026-10-07T10:17:41.0202015Z"
+}
