@@ -1,0 +1,71 @@
+{
+  "readonly": true,
+  "task": {
+    "id": "tsk_g00VXOqttz00prFbPtvK",
+    "project_id": "prj_h5oPc1HsKsPNLsx8M6GO",
+    "session_id": "ses_-zUSb95wYzzIbc6sZ7Qd",
+    "request_id": "8af1355a-f62c-4cab-b9f5-100d02af9c75",
+    "product_pillar": "work"
+  },
+  "session": {
+    "id": "ses_-zUSb95wYzzIbc6sZ7Qd",
+    "project_id": "prj_h5oPc1HsKsPNLsx8M6GO",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-115-01\\project"
+  },
+  "epoch": 1,
+  "openedEventID": "pev_g0VXOqu4Q00BwpI5mVrf",
+  "terminalEventID": "pev_g0VXOs9BI00mpxVzMHbN",
+  "promptOwners": [],
+  "pendingInbox": [],
+  "researcher": {
+    "id": "ses_hHMluivaiGrBTj2IejMm",
+    "parent_id": "ses_-zUSb94yczzwzBtwQkXj",
+    "project_id": "prj_h5oPc1HsKsPNLsx8M6GO",
+    "kind": "explore",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-115-01\\project"
+  },
+  "orchestrator": {
+    "id": "ses_-zUSb94yczzwzBtwQkXj",
+    "parent_id": "ses_-zUSb95wYzzIbc6sZ7Qd",
+    "project_id": "prj_h5oPc1HsKsPNLsx8M6GO",
+    "kind": "orchestrator"
+  },
+  "sources": [
+    {
+      "id": "prt_g0VXOrMN000BS2qw7eXE",
+      "messageID": "msg_g0VXOrLCL00Yh0FqXpRR",
+      "sessionID": "ses_hHMluivaiGrBTj2IejMm",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+        "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXOrNRF00J9sQ2qvuL",
+      "messageID": "msg_g0VXOrMQy00yIS6RweaP",
+      "sessionID": "ses_hHMluivaiGrBTj2IejMm",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "cb990aa86289aadf92cfcd259b42886f9bd56679313f62a15da8b62c2116c679",
+        "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+        "title": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXOrORR005ST4fdWmO",
+      "messageID": "msg_g0VXOrNVB00Hjj64SlZS",
+      "sessionID": "ses_hHMluivaiGrBTj2IejMm",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+        "title": "Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ]
+}

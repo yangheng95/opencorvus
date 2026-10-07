@@ -1,0 +1,7 @@
+# Genuine delegated Sources115 and actual failed-history reading
+
+[Original Recall](../../artifacts/2026-10-05-connection-workspace-authority/sources-delegated-plan-115.md), [Root review](../../artifacts/2026-10-05-connection-workspace-authority/sources-delegated-115/root-manual-review.md), [shared audit](../../artifacts/2026-10-05-connection-workspace-authority/sources-delegated-115/read-only-shared-audit.md).
+
+Genuine GPT-6.1 Sol research produced three exact child Source tuples, then the32 cumulative request budget exhausted and the Task failed. Provider responses and complete native closure are retained; Source/reply checker requiring completed status was not run. A plan prerequisite conflict and coordinated-final reader/context mismatch are independently proved contributors, with broader shared occurrence boundaries audited. Production repair is held for116.
+
+Separate credentialless immutable failed-history service allowed Root to personally verify actual researcher Sources at380/280px: complete titles, native pointer/Space/Enter/Tab/tooltip/W3C activation, child-only follow pause and End/Home return/release. The original failed Task/request/epoch/source data stayed unchanged. Pages and owned native service were closed. Static Source UI passed; live final delivery, rendering cadence, same-group3/file/document/SideChat remain unqualified. No UI automation or source patch was used.

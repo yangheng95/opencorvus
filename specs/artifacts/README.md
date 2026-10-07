@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [Shared delegated final authority116](2026-10-05-connection-workspace-authority/delegated-final-authority-116/README.md): actual115 coordinated-final error and shared occurrence plan; production held.
+
+- [Genuine delegated Sources115](2026-10-05-connection-workspace-authority/sources-delegated-115/README.md): genuine failed32 audit and actual immutable-history child Sources380/280px qualification; complete live delivery pending.
+
 - [Expanded Sources114](2026-10-05-connection-workspace-authority/sources-expanded-114/README.md): actual wide before, complete wide/narrow/constrained-main titles, native links and exact closure.
 
 - [Keyboard reading113 evidence](2026-10-05-connection-workspace-authority/keyboard-reading-113/README.md): original61-row trace, clean actual main/child keyboard review, Sources regression and exact closure.

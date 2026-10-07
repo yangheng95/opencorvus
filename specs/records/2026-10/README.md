@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Genuine delegated Sources115 and failed-history reading](2026-10-08-sources-delegated.md)
+
 - [Expanded Sources readability114](2026-10-08-sources-expanded.md)
 
 - [Sources reading and keyboard ownership113](2026-10-08-keyboard-reading.md)

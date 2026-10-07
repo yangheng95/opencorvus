@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+- [Shared delegated final authority116 Recall](artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-plan-116.md): planned single physical terminal authority and bounded Researcher role correction; implementation held.
+
+- [Genuine delegated Sources115](records/2026-10/2026-10-08-sources-delegated.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/sources-delegated-plan-115.md): original live budget failure retained; actual child Source static UI passed; shared prompt/reader fixes pending116.
+
+- [Actual failed-history child Sources115](artifacts/2026-10-05-connection-workspace-authority/sources-delegated-static-plan-115.md): separate credentialless immutable failed-history UI preparation; original budget failure retained.
+
 - [Expanded Sources114](records/2026-10/2026-10-08-sources-expanded.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/sources-expanded-plan-114.md): complete actual wide/narrow/constrained-main titles and native links; shared/file/document/Sources3 limits explicit.
 
 - [Keyboard reading113](records/2026-10/2026-10-08-keyboard-reading.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/keyboard-reading-plan-113.md): actual early intent consumption repaired; main and child Home/End evidence, Sources regression and explicit limits.

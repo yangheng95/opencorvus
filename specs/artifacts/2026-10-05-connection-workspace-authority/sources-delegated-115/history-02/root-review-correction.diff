@@ -1,0 +1,10 @@
+
+InputObject                                                                                                                                                                                          SideIndicator
+-----------                                                                                                                                                                                          -------------
+$failed=Get-Content -Raw -LiteralPath (Join-Path $sourceRun 'evidence/failed.json')|ConvertFrom-Json -AsHashtable -DateKind String                                                                   =>
+if($sourceOwner.requestBudget -ne 32 -or $audit.maxRequests -ne 32 -or $audit.requests.Count -ne 32 -or $audit.exhausted -ne $true){throw 'Original11501 exact cumulative budget evidence required'} =>
+                                                                                                                                                                                                     =>
+$failed=Get-Content -Raw -LiteralPath (Join-Path $sourceRun 'failed.json')|ConvertFrom-Json -AsHashtable -DateKind String                                                                            <=
+if($audit.requests.Count -ne 32 -or $audit.exhausted -ne $true){throw 'Original11501 exact cumulative budget evidence required'}                                                                     <=
+
+

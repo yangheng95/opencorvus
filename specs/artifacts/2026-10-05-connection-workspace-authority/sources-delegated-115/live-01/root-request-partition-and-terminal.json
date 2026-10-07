@@ -1,0 +1,112 @@
+{
+  "boundary": "Actual captured requestContext grouping; no actor inferred from request index or UI name",
+  "requests": 32,
+  "maxRequests": 32,
+  "exhausted": true,
+  "groups": [
+    {
+      "sessionID": "ses_hXNxlXLNRcwG58rbQgiv",
+      "agentID": "memory",
+      "requests": 1,
+      "firstReadAt": 1791406868354,
+      "lastReadAt": 1791406870758
+    },
+    {
+      "sessionID": "ses_hXNxlXLNRcwG58rbQgiv",
+      "agentID": "chat",
+      "requests": 1,
+      "firstReadAt": 1791406871126,
+      "lastReadAt": 1791406872534
+    },
+    {
+      "sessionID": "ses_-zUSb95wYzzIbc6sZ7Qd",
+      "agentID": "memory",
+      "requests": 1,
+      "firstReadAt": 1791406928210,
+      "lastReadAt": 1791406937251
+    },
+    {
+      "sessionID": "ses_-zUSb94yczzwzBtwQkXj",
+      "agentID": "orchestrator",
+      "requests": 11,
+      "firstReadAt": 1791406933960,
+      "lastReadAt": 1791407162249
+    },
+    {
+      "sessionID": "ses_hHMluivaiGrBTj2IejMm",
+      "agentID": "base-researcher",
+      "requests": 10,
+      "firstReadAt": 1791406945890,
+      "lastReadAt": 1791407122380
+    },
+    {
+      "sessionID": "ses_hf93F5xrPiubA2qY8xni",
+      "agentID": "base-tester",
+      "requests": 8,
+      "firstReadAt": 1791407164948,
+      "lastReadAt": 1791407217900
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ses_hXNxlXLNRcwG58rbQgiv",
+      "parent_id": null,
+      "kind": "assistant",
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"d652cf4e-41df-4b90-bf28-28a0c6b14f68\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_h8vl96LNInrea0r8Mxr6\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSb95wYzzIbc6sZ7Qd",
+      "parent_id": null,
+      "kind": "root",
+      "title": "Sources 子会话真实阅读验收115",
+      "metadata": "{\"taskConfigSnapshot\":{\"prompt_profile\":{\"active\":\"base\"},\"permission_mode\":\"full_access\",\"$schema\":\"https://opencorvus.ai/config.json\",\"model\":\"openai/gpt-6.1-sol\",\"small_model\":\"openai/gpt-6.1-sol\",\"agent\":{},\"plugin\":[],\"experimental\":{\"auto_question\":true},\"command\":{},\"terminal\":{\"default_profile_id\":\"powershell\",\"profiles\":{\"powershell\":{\"label\":\"Windows PowerShell\",\"command\":\"C:\\\\WINDOWS\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"pwsh\":{\"label\":\"PowerShell\",\"command\":\"C:\\\\Users\\\\hengu\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\",\"args\":[\"-NoLogo\"],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"powershell\"},\"cmd\":{\"label\":\"Command Prompt\",\"command\":\"C:\\\\WINDOWS\\\\system32\\\\cmd.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"command-prompt\"},\"git-bash\":{\"label\":\"Git Bash\",\"command\":\"C:\\\\Program Files\\\\Git\\\\bin\\\\bash.exe\",\"args\":[],\"env\":{\"TERM\":\"xterm-256color\",\"COLORTERM\":\"truecolor\"},\"icon\":\"bash\"}}},\"username\":\"\",\"mcp\":{\"browser\":{\"type\":\"local\",\"command\":[\"C:\\\\Users\\\\hengu\\\\.bun\\\\bin\\\\bun.exe\",\"mcp\",\"browser\"],\"timeout\":30000},\"computer\":{\"type\":\"local\",\"command\":[\"C:\\\\Users\\\\hengu\\\\.bun\\\\bin\\\\bun.exe\",\"D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\src\\\\mcp\\\\computer\\\\stdio.ts\"],\"timeout\":30000}}},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSb94yczzwzBtwQkXj",
+      "parent_id": "ses_-zUSb95wYzzIbc6sZ7Qd",
+      "kind": "orchestrator",
+      "title": "Agent: Sources 子会话真实阅读验收115",
+      "metadata": null
+    },
+    {
+      "id": "ses_hHMluivaiGrBTj2IejMm",
+      "parent_id": "ses_-zUSb94yczzwzBtwQkXj",
+      "kind": "explore",
+      "title": "base-researcher (explore): 独立阅读且仅阅读三个官方网页：1. https://www.w3.org/WAI/fundamentals/accessibility-intro/ 2. ht",
+      "metadata": null
+    },
+    {
+      "id": "ses_hf93F5xrPiubA2qY8xni",
+      "parent_id": "ses_-zUSb94yczzwzBtwQkXj",
+      "kind": "delegated-worker",
+      "title": "base-tester (delegated-worker): base-tester: 独立核对原请求：安排 Base 资料研究员独立阅读 https://www.w3.org/WAI/fundamentals/accessibility-intr",
+      "metadata": null
+    }
+  ],
+  "terminal": [
+    {
+      "id": "pev_g0VXOs9BI00mpxVzMHbN",
+      "kind": "event",
+      "type": "task.failed",
+      "aggregate_type": "task",
+      "aggregate_id": "tsk_g00VXOqttz00prFbPtvK",
+      "project_id": "prj_h5oPc1HsKsPNLsx8M6GO",
+      "task_id": null,
+      "session_id": null,
+      "interaction_id": null,
+      "stream_id": null,
+      "source": "state.task",
+      "target": null,
+      "causation_id": null,
+      "correlation_id": null,
+      "reply_to": null,
+      "seq": 108,
+      "deadline_ms": null,
+      "emitted_at": 1791407223629,
+      "payload": "{\"execution_epoch\":1,\"summary\":\"Orchestrator execution interrupted: Error: E2E_REQUEST_BUDGET_EXHAUSTED\",\"error\":\"Orchestrator error: Error: E2E_REQUEST_BUDGET_EXHAUSTED\",\"terminalReason\":\"interrupted\"}"
+    }
+  ],
+  "owners": [],
+  "pending": []
+}

@@ -1,0 +1,65 @@
+{
+  "observedAtUtc": "2026-10-07T21:07:06.3731138Z",
+  "listeners": null,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 73196,
+        "processInstanceID": "win32:639270036557242074",
+        "occurrenceID": "6dfe6467-579e-492f-aaac-4eb79aaec158"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 38692,
+        "processInstanceID": "win32:639270036547684868",
+        "occurrenceID": "d8ecace4-7d39-4524-b52a-612e68506a55"
+      }
+    }
+  ],
+  "physicalCompletion": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-115-01\\runtime\\data\\auth.json",
+      "copiedLength": 2194
+    },
+    {
+      "outcome": "removed",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-115-01\\runtime\\data\\models.json",
+      "copiedLength": 9155406
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "sources-delegated-live-115-01-491b426c-a907-46a7-af9a-bb391b35d306",
+    "outcome": "settled",
+    "host": {
+      "pid": 38692,
+      "processInstanceID": "win32:639270036547684868",
+      "occurrenceID": "d8ecace4-7d39-4524-b52a-612e68506a55"
+    },
+    "target": {
+      "pid": 73196,
+      "processInstanceID": "win32:639270036557242074",
+      "occurrenceID": "6dfe6467-579e-492f-aaac-4eb79aaec158"
+    },
+    "observedAtUtc": "2026-10-07T21:07:03.89Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "occurrence": "sources-delegated-live-115-01-491b426c-a907-46a7-af9a-bb391b35d306"
+}

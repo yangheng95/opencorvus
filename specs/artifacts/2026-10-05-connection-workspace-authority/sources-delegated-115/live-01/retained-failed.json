@@ -1,0 +1,10 @@
+{
+  "pid": 73196,
+  "occurrence": "sources-delegated-live-115-01-491b426c-a907-46a7-af9a-bb391b35d306",
+  "error": {
+    "name": "Error",
+    "message": "E2E_REQUEST_BUDGET_EXHAUSTED"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

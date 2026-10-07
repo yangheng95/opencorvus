@@ -1,5 +1,9 @@
 # Connection workspace authority investigation
 
+- [Shared delegated final authority116 Recall](delegated-final-authority-plan-116.md) and [evidence](delegated-final-authority-116/README.md): single terminal authority proposal with original115 failure retained; implementation held.
+
+- [Genuine delegated Sources115 Recall](sources-delegated-plan-115.md) and [evidence](sources-delegated-115/README.md): genuine32 budget failure, matched child Source tuples, actual child static UI and shared reader/role audit.
+
 - [Expanded Sources114 Recall](sources-expanded-plan-114.md) and [evidence](sources-expanded-114/README.md): complete actual expanded titles in wide/narrow/constrained-main columns; native navigation and explicit shared/file/document limits.
 
 - [Keyboard reading113 Recall](keyboard-reading-plan-113.md) and [evidence](keyboard-reading-113/README.md): actual early intent consumption repaired; clean main/child keyboard evidence and Sources regression; remaining matrices explicit.

@@ -1,0 +1,26 @@
+{
+  "occurrence": "sources-delegated-history-115-02-2c367899-332f-4629-8d7f-75f2ac6db4bc",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-history-115-02\\evidence",
+    "sources-delegated-history-115-02-2c367899-332f-4629-8d7f-75f2ac6db4bc",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18075",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-115-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-history-115-02\\startup.json",
+    "--startup-occurrence",
+    "sources-delegated-history-115-02-2c367899-332f-4629-8d7f-75f2ac6db4bc",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18075,
+  "credentialStaging": "None"
+}
