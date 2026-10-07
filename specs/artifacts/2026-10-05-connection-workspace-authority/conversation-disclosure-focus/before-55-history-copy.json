@@ -1,0 +1,28 @@
+{
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/conversation-disclosure-focus-55",
+  "port": 18018,
+  "observedAtUtc": "2026-10-07T00:00:40.7745907Z",
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "credentialStaging": "None; CLOSED original50; no old Task rearm"
+}

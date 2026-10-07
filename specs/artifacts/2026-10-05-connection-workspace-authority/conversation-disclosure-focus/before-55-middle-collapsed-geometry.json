@@ -1,0 +1,68 @@
+{
+  "active": {
+    "name": null,
+    "tag": "BODY"
+  },
+  "observedAt": 1791331326617,
+  "scroll": {
+    "clientHeight": 635,
+    "follow": "false",
+    "height": 1971,
+    "top": 564
+  },
+  "target": {
+    "expanded": "false",
+    "rect": {
+      "bottom": 366.5729370117187,
+      "height": 24,
+      "left": 434,
+      "right": 557.9791717529297,
+      "top": 342.57293701171875,
+      "width": 123.97917175292967,
+      "x": 434,
+      "y": 342.57293701171875
+    }
+  },
+  "virtualCount": "3",
+  "virtualItems": [
+    {
+      "id": "orchestrator:session:ses_-zUSggTYXzz7GI8kPMXy:message:msg_task-root-control_art_h8XUHrlITibqwPiTrJfa_art_h8XUHrlITibqwPiTrJfa",
+      "rect": {
+        "bottom": 92.57290649414062,
+        "height": 531.90625,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": -439.3333435058594,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -439.3333435058594
+      }
+    },
+    {
+      "id": "subagent-grid:ses_h2DgZxsNX9pyHQtshbUr",
+      "rect": {
+        "bottom": 692.5729217529297,
+        "height": 596,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": 96.57292175292967,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": 96.57292175292967
+      }
+    },
+    {
+      "id": "orchestrator:session:ses_-zUSggTYXzz7GI8kPMXy:message:msg_task-root-control_art_hqRfFBsDe0MlKDHLw8AU_art_hqRfFBsDe0MlKDHLw8AU",
+      "rect": {
+        "bottom": 1209.0104370117188,
+        "height": 508.4375,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": 700.5729370117188,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": 700.5729370117188
+      }
+    }
+  ]
+}

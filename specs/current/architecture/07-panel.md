@@ -327,6 +327,12 @@ within the conversation width. Authored paragraph line boundaries and long
 identifiers remain readable in main/child transcripts and progress previews.
 An explicit expansion releases the nearest transcript's existing follow mode
 before layout grows, preserving the operator's reading position.
+The main conversation scrollport keeps native scroll anchoring disabled in both
+reading and follow modes. Its existing Virtua owner compensates virtual-item
+resizes; explicit history restoration, user navigation and bottom following
+retain their existing controls. The inner virtual window's own opt-out alone
+does not define the policy of the surrounding scrollport. Child transcript and
+editor scrollports keep their separate existing ownership.
 The canonical scheduler participant message places its subject and unchanged
 body before grouped delivery references. Task and Mission consume that same
 persisted Markdown; the Overlay neither parses protocol keywords nor creates

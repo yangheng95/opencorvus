@@ -1,0 +1,37 @@
+Browser tab: 34, Title: "OpenCorvus", URL: "http://127.0.0.1:18018/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 140-172, 192-208
++									192 container
++										193 button (collapsed) Secondary Actions: Expand
++										194 button (collapsed) Secondary Actions: Expand
++											195 image
++										196 button (collapsed) Secondary Actions: Expand
++											197 image
++										198 container
++											199 button (collapsed) Secondary Actions: Expand
++											200 button
++											201 button
++											202 button (collapsed) Secondary Actions: Expand
++											203 button
++											204 button
++											205 button (collapsed) Secondary Actions: Expand
++								206 container solidChatComposer
++									207 container
++										208 text Model configuration unavailable
++										209 text You can still read this conversation. Review the details or choose a model before sending a message.
++										210 button (collapsed) Details, Secondary Actions: Expand
++											211 text Details
++										212 button Retry
++										213 container chatForm
++											214 splitter Description: Drag to resize the message input, Value: 42
++											215 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++											216 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++											217 text Code
++											218 text Task
++											219 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
++											220 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++											221 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++												222 text Choose model
++											223 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
++									224 button Scroll to bottom
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18018/ui/

@@ -1,0 +1,79 @@
+{
+  "access": "readonly closed original50 database; explicit transaction; exact Session only",
+  "sessionID": "ses_h0wiOTw2b6yPztYlG8J4",
+  "messages": [
+    {
+      "id": "msg_hj0Ilfvxy85DeFlK6diN",
+      "session_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "time_created": 1791325064363,
+      "time_updated": 1791325064380,
+      "role": "user",
+      "parentID": null,
+      "completed": null,
+      "finish": null
+    },
+    {
+      "id": "msg_g0VXJJPvL00enkYpVNFn",
+      "session_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "time_created": 1791325064831,
+      "time_updated": 1791325071166,
+      "role": "assistant",
+      "parentID": "msg_hj0Ilfvxy85DeFlK6diN",
+      "completed": 1791325071165,
+      "finish": "stop"
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VXJJQ3v00PiTLrZXCz",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "task_id": null,
+      "session_id": null,
+      "emitted_at": 1791325065362,
+      "payload": "{\"inputMessageID\":\"msg_hj0Ilfvxy85DeFlK6diN\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXJJQ5N00IDMpmMVaB",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "task_id": null,
+      "session_id": null,
+      "emitted_at": 1791325065452,
+      "payload": "{\"inputMessageID\":\"msg_hj0Ilfvxy85DeFlK6diN\",\"status\":{\"type\":\"streaming\"}}"
+    },
+    {
+      "id": "pev_g0VXJJRZz00k5Fz2mn9i",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "task_id": null,
+      "session_id": null,
+      "emitted_at": 1791325071194,
+      "payload": "{\"inputMessageID\":\"msg_hj0Ilfvxy85DeFlK6diN\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXJNDcM0063a0IH6cL",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "task_id": null,
+      "session_id": null,
+      "emitted_at": 1791325970837,
+      "payload": "{\"inputMessageID\":\"msg_hj0Ilfvxy85DeFlK6diN\",\"status\":{\"type\":\"idle\"}}"
+    },
+    {
+      "id": "pev_g0VXJNDch00LEe35LlT7",
+      "type": "agent.execution.lifecycle",
+      "aggregate_type": "session",
+      "aggregate_id": "ses_h0wiOTw2b6yPztYlG8J4",
+      "task_id": null,
+      "session_id": null,
+      "emitted_at": 1791325970858,
+      "payload": "{\"inputMessageID\":\"msg_hj0Ilfvxy85DeFlK6diN\",\"status\":{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Server shutdown source=http-client reason=http.shutdown\"}}"
+    }
+  ],
+  "owners": []
+}

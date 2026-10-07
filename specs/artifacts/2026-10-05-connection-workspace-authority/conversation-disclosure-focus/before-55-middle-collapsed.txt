@@ -1,0 +1,38 @@
+Browser tab: 33, Title: "OpenCorvus", URL: "http://127.0.0.1:18018/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 196-256
+~												195 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									196 container
++										197 text orchestrator
++										198 text 1m 18s
++										199 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										200 button (collapsed) Description: artifact_select · Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。), Secondary Actions: Expand
++											201 text artifact_select
++											202 text Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。)
++											203 image
++										204 text 独立验收已通过，实际读取凭证也已正式发布。我复核了三次物化回执及随后重新打开缓存的命令和结果：hello 两次均完整读取并匹配 26 字节；notes 完整匹配 520 字节、20 行。两文件均为 UTF-8 无 BOM、仅 LF 换行，共同只读快照恰含这两份资源。现在正式交付文件、快照与验收记录，并结束本任务；项目历史任务和跨任务报告的覆盖限制保持明确，不宣称你已下载。
++										205 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											206 text manage_task
++											207 text action=complete_task
++											208 image
++										209 container 2 files
++											210 container
++												211 text Agent delivery 2 files 文件加载与完整正式交付验收50
++											212 button (collapsed) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++												213 text hello.txt
++												214 text producer, verifier
++												215 text  · 
++												216 text 26 B
++												217 text Preview
++											218 button Copy filename
++											219 button Description: Download: hello.txt, Help: Download
++											220 button (collapsed) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Expand
++												221 text notes.txt
++												222 text producer, verifier
++												223 text  · 
++												224 text 520 B
++												225 text Preview
++											226 button Copy filename
++											227 button Description: Download: notes.txt, Help: Download
++											228 button (collapsed) Inspect delivery records (3), Secondary Actions: Expand
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18018/ui/

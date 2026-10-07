@@ -1,0 +1,56 @@
+{
+  "afterTargetBirthUtc": "2026-10-07T00:34:17.4113399Z",
+  "unparseableSourceLines": 0,
+  "requests": [
+    {
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "method": "GET",
+      "time": "2026-10-07T00:34:33.239Z",
+      "statusCode": 200,
+      "requestID": "469aef20-9f23-4d47-ae51-c5d9e9c7f3da"
+    },
+    {
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "method": "GET",
+      "time": "2026-10-07T00:34:33.297Z",
+      "statusCode": 400,
+      "requestID": "5582ef21-e826-4cec-888b-32cd9c0dd512"
+    },
+    {
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "method": "GET",
+      "time": "2026-10-07T00:34:33.420Z",
+      "statusCode": 200,
+      "requestID": "6f4319ae-ab21-460b-be8b-74f1ae364612"
+    },
+    {
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "method": "GET",
+      "time": "2026-10-07T00:34:33.436Z",
+      "statusCode": 400,
+      "requestID": "889e3cf5-903e-44cc-ae53-3eaa831076c5"
+    },
+    {
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation/session/ses_hGzJHWeYBSh6xDoVwkSy",
+      "method": "GET",
+      "time": "2026-10-07T00:38:10.613Z",
+      "statusCode": 200,
+      "requestID": "f8c8be8f-7046-4866-ba69-8fafd921d4d3"
+    },
+    {
+      "path": "/shutdown",
+      "method": "POST",
+      "time": "2026-10-07T00:42:39.689Z",
+      "statusCode": 200,
+      "requestID": "8bdf685a-c65d-42ec-b123-16e8f7881737"
+    }
+  ],
+  "target": {
+    "pid": 56324,
+    "processInstanceID": "win32:639269300574113399",
+    "occurrenceID": "b7f4069f-6770-4071-8194-8b8aa414bbb1"
+  },
+  "filteredNativeLines": 295,
+  "scope": "Diagnostic-free UI policy qualification; manual page37; history and local new draft only",
+  "occurrence": "disclosure-scrollport-58-5cca705d-aec8-4bf7-88fc-afb768ec4fe5"
+}

@@ -1,0 +1,56 @@
+{
+  "active": {
+    "card": "subagent-session:ses_hGzJHWeYBSh6xDoVwkSy",
+    "connected": true,
+    "expanded": "true",
+    "item": "subagent-grid:ses_h2DgZxsNX9pyHQtshbUr",
+    "name": "Handoff context",
+    "rect": {
+      "bottom": -924.7604370117188,
+      "height": 24,
+      "left": 434,
+      "right": 557.9791717529297,
+      "top": -948.7604370117188,
+      "width": 123.97917175292967,
+      "x": 434,
+      "y": -948.7604370117188
+    },
+    "tag": "BUTTON"
+  },
+  "observedAt": 1791331315951,
+  "scroll": {
+    "clientHeight": 635,
+    "follow": "false",
+    "height": 3345,
+    "top": 1855.3333740234375
+  },
+  "virtualCount": "3",
+  "virtualItems": [
+    {
+      "id": "subagent-grid:ses_h2DgZxsNX9pyHQtshbUr",
+      "rect": {
+        "bottom": 775.020751953125,
+        "height": 1969.78125,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": -1194.760498046875,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -1194.760498046875
+      }
+    },
+    {
+      "id": "orchestrator:session:ses_-zUSggTYXzz7GI8kPMXy:message:msg_task-root-control_art_hqRfFBsDe0MlKDHLw8AU_art_hqRfFBsDe0MlKDHLw8AU",
+      "rect": {
+        "bottom": 1291.4583740234375,
+        "height": 508.4375,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": 783.0208740234375,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": 783.0208740234375
+      }
+    }
+  ]
+}

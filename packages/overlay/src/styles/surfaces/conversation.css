@@ -21,7 +21,8 @@
   overflow-y: scroll;
   overscroll-behavior-y: contain;
   scrollbar-gutter: stable;
-  overflow-anchor: auto;
+  /* Virtua owns item resize compensation across this complete scrollport. */
+  overflow-anchor: none;
   padding-block: var(--ui-gap-4xl) var(--conversation-composer-block-size);
   padding-inline: var(--conversation-message-start-inset) var(--conversation-message-end-inset);
   display: flex;
@@ -32,10 +33,6 @@
   cursor: default;
   background: var(--chat-canvas);
   transition: padding-inline var(--ui-duration-slow) var(--ui-timing-standard);
-}
-
-.chat-scroll[data-follow-lock="true"] {
-  overflow-anchor: none;
 }
 
 .conversation-body {

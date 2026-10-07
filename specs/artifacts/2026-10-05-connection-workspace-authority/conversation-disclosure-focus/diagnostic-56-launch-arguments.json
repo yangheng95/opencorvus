@@ -1,0 +1,26 @@
+{
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-disclosure-diagnostic-56\\evidence",
+    "disclosure-diagnostic-56-ab5f940a-c64f-416e-8646-d464465e89b3",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18019",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-disclosure-diagnostic-56\\startup.json",
+    "--startup-occurrence",
+    "disclosure-diagnostic-56-ab5f940a-c64f-416e-8646-d464465e89b3",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "disclosure-diagnostic-56-ab5f940a-c64f-416e-8646-d464465e89b3",
+  "port": 18019
+}

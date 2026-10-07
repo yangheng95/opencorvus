@@ -1,0 +1,75 @@
+{
+  "active": {
+    "card": "subagent-session:ses_hGzJHWeYBSh6xDoVwkSy",
+    "connected": true,
+    "expanded": "false",
+    "item": "subagent-grid:ses_h2DgZxsNX9pyHQtshbUr",
+    "name": "Handoff context",
+    "rect": {
+      "height": 24,
+      "width": 123.97917175292967,
+      "x": 434,
+      "y": 424.5729370117187
+    },
+    "tag": "BUTTON"
+  },
+  "observedAt": 1791331292260,
+  "scroll": {
+    "clientHeight": 635,
+    "follow": "false",
+    "height": 1971,
+    "rect": {
+      "bottom": 720.0000457763672,
+      "height": 635.3333740234375,
+      "left": 337.66668701171875,
+      "right": 1280.0000610351562,
+      "top": 84.66667175292969,
+      "width": 942.3333740234376,
+      "x": 337.66668701171875,
+      "y": 84.66667175292969
+    },
+    "top": 482
+  },
+  "virtualCount": "3",
+  "virtualItems": [
+    {
+      "id": "orchestrator:session:ses_-zUSggTYXzz7GI8kPMXy:message:msg_task-root-control_art_h8XUHrlITibqwPiTrJfa_art_h8XUHrlITibqwPiTrJfa",
+      "rect": {
+        "bottom": 174.57290649414062,
+        "height": 531.90625,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": -357.3333435058594,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": -357.3333435058594
+      }
+    },
+    {
+      "id": "subagent-grid:ses_h2DgZxsNX9pyHQtshbUr",
+      "rect": {
+        "bottom": 774.5729217529297,
+        "height": 596,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": 178.5729217529297,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": 178.5729217529297
+      }
+    },
+    {
+      "id": "orchestrator:session:ses_-zUSggTYXzz7GI8kPMXy:message:msg_task-root-control_art_hqRfFBsDe0MlKDHLw8AU_art_hqRfFBsDe0MlKDHLw8AU",
+      "rect": {
+        "bottom": 1291.0104370117188,
+        "height": 508.4375,
+        "left": 421.3333435058594,
+        "right": 1181.000030517578,
+        "top": 782.5729370117188,
+        "width": 759.6666870117188,
+        "x": 421.3333435058594,
+        "y": 782.5729370117188
+      }
+    }
+  ]
+}

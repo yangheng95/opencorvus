@@ -1,0 +1,49 @@
+{
+  "occurrence": "disclosure-writer-57-9cf17b10-de6e-40a5-951a-79302616e8ab",
+  "unparseableSourceLines": 0,
+  "requests": [
+    {
+      "time": "2026-10-07T00:26:53.278Z",
+      "requestID": "82ba8720-5e94-4cd3-9468-5c2f19200cca",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "statusCode": 200,
+      "method": "GET"
+    },
+    {
+      "time": "2026-10-07T00:26:53.335Z",
+      "requestID": "42f64237-be2b-44bb-82c5-f24016d71d95",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "statusCode": 400,
+      "method": "GET"
+    },
+    {
+      "time": "2026-10-07T00:26:53.447Z",
+      "requestID": "fc3aa548-4285-4482-8cf0-62cbbbfc65bb",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "statusCode": 200,
+      "method": "GET"
+    },
+    {
+      "time": "2026-10-07T00:26:53.495Z",
+      "requestID": "5a5c2a21-3316-43e4-95a3-7ac246ff3bbb",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "statusCode": 400,
+      "method": "GET"
+    },
+    {
+      "time": "2026-10-07T00:31:03.500Z",
+      "requestID": "89d58064-9ac3-4b9b-9bcd-10f0d05efda5",
+      "path": "/shutdown",
+      "statusCode": 200,
+      "method": "POST"
+    }
+  ],
+  "scope": "Temporary bounded writer observation; manual page36; actual history only",
+  "afterTargetBirthUtc": "2026-10-07T00:26:26.3105423Z",
+  "filteredNativeLines": 245,
+  "target": {
+    "pid": 57792,
+    "processInstanceID": "win32:639269295863105423",
+    "occurrenceID": "ce9dc487-a0d4-49ba-a7f8-20e45152941f"
+  }
+}

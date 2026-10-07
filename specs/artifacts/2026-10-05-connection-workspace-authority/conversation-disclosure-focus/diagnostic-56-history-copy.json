@@ -1,0 +1,29 @@
+{
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      }
+    }
+  ],
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "purpose": "Temporary observing UI diagnostics; no functionality patch",
+  "port": 18019,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/conversation-disclosure-diagnostic-56",
+  "credentialStaging": "None; CLOSED original50; no old Task rearm",
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "observedAtUtc": "2026-10-07T00:18:28.1351799Z"
+}

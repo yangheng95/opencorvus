@@ -1,0 +1,64 @@
+{
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "disclosure-scrollport-58-5cca705d-aec8-4bf7-88fc-afb768ec4fe5",
+    "outcome": "settled",
+    "host": {
+      "pid": 51732,
+      "processInstanceID": "win32:639269300566310439",
+      "occurrenceID": "a62e156c-7422-4211-b109-7627a29f941f"
+    },
+    "target": {
+      "pid": 56324,
+      "processInstanceID": "win32:639269300574113399",
+      "occurrenceID": "b7f4069f-6770-4071-8194-8b8aa414bbb1"
+    },
+    "observedAtUtc": "2026-10-07T00:42:39.827Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-disclosure-scrollport-58\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "outcome": "already_absent"
+    },
+    {
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-disclosure-scrollport-58\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "outcome": "removed"
+    }
+  ],
+  "chain": [
+    {
+      "expected": {
+        "pid": 56324,
+        "processInstanceID": "win32:639269300574113399",
+        "occurrenceID": "b7f4069f-6770-4071-8194-8b8aa414bbb1"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 51732,
+        "processInstanceID": "win32:639269300566310439",
+        "occurrenceID": "a62e156c-7422-4211-b109-7627a29f941f"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-07T00:42:41.3809152Z",
+  "occurrence": "disclosure-scrollport-58-5cca705d-aec8-4bf7-88fc-afb768ec4fe5"
+}

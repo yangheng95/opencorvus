@@ -148,6 +148,7 @@ Selected current operating deliverables; this is not an exhaustive inventory of 
 - [Explorer initial loading48 and genuine50](2026-10-05-connection-workspace-authority/explorer-initial-loading-plan.md): initial Loading→list visuals passed; genuine50 full checks/formal Task/resource/snapshot/native notes download passed, whole886676ms;44 generation cause and pointer candidate51 remain open.
 
 - [Subagent progress activation51](2026-10-05-connection-workspace-authority/subagent-progress-activation-plan.md): visible header action qualified by actual54 pointer and natural Tab/Enter; nested collapse focus55 remains under investigation; owned scopes closed.
+- [Conversation disclosure focus55](2026-10-05-connection-workspace-authority/conversation-disclosure-focus-plan.md): main scrollport policy qualified without diagnostics in actual58 middle/edge/message/narrow cases; focus visibility59 and footer shrink60 retained; owned scopes closed.
 
 - [History and Composer config isolation52](2026-10-05-connection-workspace-authority/history-composer-config-isolation-plan.md): single passive-read owner;9 local service tests/43 assertions and real Task/Session history visuals passed; ordinary Session stream400 retained as shared audit53, all52 scopes closed.
 

@@ -1,0 +1,64 @@
+{
+  "nativeSettlement": {
+    "occurrence": "disclosure-diagnostic-56-ab5f940a-c64f-416e-8646-d464465e89b3",
+    "outcome": "settled",
+    "host": {
+      "pid": 72720,
+      "processInstanceID": "win32:639269291498808055",
+      "occurrenceID": "971b4e87-973d-4154-8c15-22d875aba942"
+    },
+    "target": {
+      "pid": 20328,
+      "processInstanceID": "win32:639269291506600900",
+      "occurrenceID": "52487255-35cc-49d7-a296-6c75f178060a"
+    },
+    "observedAtUtc": "2026-10-07T00:24:03.718Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "observedAtUtc": "2026-10-07T00:24:05.3375460Z",
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 20328,
+        "processInstanceID": "win32:639269291506600900",
+        "occurrenceID": "52487255-35cc-49d7-a296-6c75f178060a"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 72720,
+        "processInstanceID": "win32:639269291498808055",
+        "occurrenceID": "971b4e87-973d-4154-8c15-22d875aba942"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-disclosure-diagnostic-56\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "outcome": "already_absent"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-disclosure-diagnostic-56\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "copiedLength": 2001983,
+      "outcome": "removed"
+    }
+  ],
+  "occurrence": "disclosure-diagnostic-56-ab5f940a-c64f-416e-8646-d464465e89b3",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

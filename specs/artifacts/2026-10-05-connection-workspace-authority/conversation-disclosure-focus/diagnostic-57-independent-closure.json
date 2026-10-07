@@ -1,0 +1,33 @@
+{
+  "authority": {
+    "modelsPresent": false,
+    "authPresent": false
+  },
+  "observedAtUtc": "2026-10-07T00:33:02.1334134Z",
+  "occurrence": "disclosure-writer-57-9cf17b10-de6e-40a5-951a-79302616e8ab",
+  "nativeStates": [
+    {
+      "expected": {
+        "pid": 48148,
+        "processInstanceID": "win32:639269295855635221",
+        "occurrenceID": "1f4e6e09-b3fd-4acd-adfc-81fbb99e9ab4"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 57792,
+        "processInstanceID": "win32:639269295863105423",
+        "occurrenceID": "ce9dc487-a0d4-49ba-a7f8-20e45152941f"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "ownedPages": {
+    "ids": [
+      36
+    ],
+    "closed": true
+  },
+  "listeners": []
+}

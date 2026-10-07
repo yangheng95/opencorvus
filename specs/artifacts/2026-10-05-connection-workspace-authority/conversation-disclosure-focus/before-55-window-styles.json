@@ -1,0 +1,37 @@
+{
+  "ancestors": [
+    {
+      "item": "orchestrator:session:ses_-zUSggTYXzz7GI8kPMXy:message:msg_task-root-control_art_h8XUHrlITibqwPiTrJfa_art_h8XUHrlITibqwPiTrJfa",
+      "parent": {
+        "index": "0",
+        "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;",
+        "visibility": "visible"
+      }
+    },
+    {
+      "item": "subagent-grid:ses_h2DgZxsNX9pyHQtshbUr",
+      "parent": {
+        "index": "1",
+        "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 543.906px;",
+        "visibility": "visible"
+      }
+    }
+  ],
+  "time": 1791331744492,
+  "window": {
+    "anchor": "none",
+    "class": "conversation-virtual-window",
+    "position": "relative",
+    "rect": {
+      "bottom": 2634.7916564941406,
+      "height": 3034.125,
+      "left": 421.3333435058594,
+      "right": 1181.000030517578,
+      "top": -399.3333435058594,
+      "width": 759.6666870117188,
+      "x": 421.3333435058594,
+      "y": -399.3333435058594
+    },
+    "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 3034.12px;"
+  }
+}

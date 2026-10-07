@@ -1,0 +1,84 @@
+{
+  "occurrence": "disclosure-focus-55-before-d82b2b94-181c-437c-a1f7-376d82d0f152",
+  "unparseableSourceLines": 0,
+  "requests": [
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:01:01.846Z",
+      "requestID": "778c7c2e-3d6f-48ac-8582-b5b322a9e7bd",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "statusCode": 200
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:01:01.900Z",
+      "requestID": "c5226752-0f91-4947-9def-e98ecbf2da49",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "statusCode": 400
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:01:01.994Z",
+      "requestID": "22f9a5c4-6f5d-47ec-b580-5164312b9b18",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "statusCode": 200
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:01:02.029Z",
+      "requestID": "5b3a205e-6a06-4b59-8bbf-03951acffce8",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "statusCode": 400
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:10:12.178Z",
+      "requestID": "1eef8d99-9ddf-480f-8746-745c02de70f7",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation/session/ses_hGzJHWeYBSh6xDoVwkSy",
+      "statusCode": 200
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:12:26.619Z",
+      "requestID": "5617fc4b-6ac6-4a20-a00d-6707daeb4fdf",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/conversation",
+      "statusCode": 200
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:12:26.673Z",
+      "requestID": "6181643e-94ae-453a-abc4-91e38a9996ed",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "statusCode": 400
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:12:26.829Z",
+      "requestID": "1ed195e6-8622-49ed-9a39-b5adbd722af5",
+      "path": "/task/tsk_g00VXJJVS500QnIDtJVs/events",
+      "statusCode": 200
+    },
+    {
+      "method": "GET",
+      "time": "2026-10-07T00:12:26.858Z",
+      "requestID": "9d9ead56-a335-48d2-a5f1-8fe826462e5f",
+      "path": "/session/ses_-zUSggUQgzzprQcl946c/config",
+      "statusCode": 400
+    },
+    {
+      "method": "POST",
+      "time": "2026-10-07T00:15:42.696Z",
+      "requestID": "561123e6-a21d-4f12-bc3d-b7890d1142fe",
+      "path": "/shutdown",
+      "statusCode": 200
+    }
+  ],
+  "filteredNativeLines": 566,
+  "scope": "Actual completed history reading only; manual pages33/34; no submitted Task, Message or model operation",
+  "target": {
+    "pid": 36020,
+    "processInstanceID": "win32:639269280423813657",
+    "occurrenceID": "451534ef-7fef-40dd-924d-24deb4e68c18"
+  },
+  "afterTargetBirthUtc": "2026-10-07T00:00:42.3813657Z"
+}

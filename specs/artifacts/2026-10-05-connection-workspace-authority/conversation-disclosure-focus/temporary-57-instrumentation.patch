@@ -1,0 +1,157 @@
+diff --git a/packages/overlay/src/components/Conversation.tsx b/packages/overlay/src/components/Conversation.tsx
+index bc353ccd..524e69ff 100644
+--- a/packages/overlay/src/components/Conversation.tsx
++++ b/packages/overlay/src/components/Conversation.tsx
+@@ -246,6 +246,7 @@ function VirtualizedConversationCards(props: {
+   }
+ 
+   function convergeMeasuredContent(): void {
++    observeDisclosurePhase?.("measure-before")
+     if (props.tracking()) {
+       const lastIndex = order().length - 1
+       if (lastIndex >= 0) {
+@@ -253,9 +254,131 @@ function VirtualizedConversationCards(props: {
+       }
+     }
+     props.onMeasuredContentChanged()
++    observeDisclosurePhase?.("measure-after")
+   }
+ 
+   const measuredContentChangedOnFrame = createAnimationFrameScheduler(convergeMeasuredContent)
++  // Temporary bounded read-only diagnostic admitted by disclosure-focus55.
++  let observeDisclosurePhase: ((phase: string) => void) | undefined
++  let stopDisclosureObservation: (() => void) | undefined
++
++  const observeDisclosureClick = (event: MouseEvent) => {
++    const trigger = event.target instanceof Element
++      ? event.target.closest<HTMLElement>('[data-ui="delegated-context-toggle"]') : null
++    if (!trigger || !props.container.contains(trigger)) return
++    stopDisclosureObservation?.()
++    const item = trigger.closest<HTMLElement>("[data-virtual-card-id]")
++    const ancestors: HTMLElement[] = []
++    for (let node: HTMLElement | null = trigger; node; node = node.parentElement) {
++      ancestors.push(node)
++      if (node === props.container) break
++    }
++    const started = performance.now()
++    const owner = { source: boardStore.selectedSource ? { kind: boardStore.selectedSource.kind, id: boardStore.selectedSource.id } : null, selectEpoch: boardStore.selectEpoch }
++    let stopped = false
++    let raf = 0
++    let frames = 0
++    let timer: ReturnType<typeof setTimeout>
++    const describe = (node: Element | null) => node ? {
++      tag: node.tagName, id: node.id,
++      class: node.getAttribute("class"), index: node.getAttribute("index"),
++      capturedAncestor: ancestors.includes(node as HTMLElement), originalTrigger: node === trigger, originalItem: node === item,
++      ui: node.getAttribute("data-ui"), itemID: node.getAttribute("data-virtual-card-id"),
++      connected: node.isConnected,
++    } : null
++    const snapshot = (phase: string) => {
++      if (stopped) return
++      try {
++        const handle = virtualizer
++        const itemID = item?.dataset.virtualCardId
++        const index = itemID ? order().indexOf(itemID) : -1
++        console.debug("[disclosure-focus55]", JSON.stringify({
++          phase, elapsed: performance.now() - started, owner,
++          treeEpoch: cardTreeStore.treeEpoch, order: [...order()], itemID,
++          trigger: describe(trigger), item: describe(item), active: describe(document.activeElement),
++          activeOriginal: document.activeElement === trigger, expanded: trigger.getAttribute("aria-expanded"),
++          scrollTop: props.container.scrollTop, scrollHeight: props.container.scrollHeight,
++          follow: props.tracking(), followLock: props.container.getAttribute("data-follow-lock"),
++          virtual: handle ? { cache: structuredClone(handle.cache), offset: handle.scrollOffset,
++            size: handle.scrollSize, viewport: handle.viewportSize,
++            itemOffset: index >= 0 ? handle.getItemOffset(index) : null,
++            itemSize: index >= 0 ? handle.getItemSize(index) : null } : null,
++          ancestors: ancestors.map((node) => {
++            const style = getComputedStyle(node)
++            const rect = node.getBoundingClientRect()
++            return { ...describe(node), top: rect.top, height: rect.height,
++              display: style.display, visibility: style.visibility, overflowAnchor: style.overflowAnchor }
++          }),
++        }))
++      } catch (error) { console.debug("[disclosure-focus55]", JSON.stringify({ phase: "observation-failed", error: error instanceof Error ? error.name : "unknown" })) }
++    }
++    const onScroll = () => snapshot("scroll")
++    let restoreScrollDescriptor: (() => void) | undefined
++    const container = props.container
++    const originalOwnDescriptor = Object.getOwnPropertyDescriptor(container, "scrollTop")
++    let descriptorOwner: object | null = container
++    let nativeDescriptor: PropertyDescriptor | undefined
++    while (descriptorOwner && !nativeDescriptor) {
++      nativeDescriptor = Object.getOwnPropertyDescriptor(descriptorOwner, "scrollTop")
++      descriptorOwner = Object.getPrototypeOf(descriptorOwner)
++    }
++    if ((!originalOwnDescriptor || originalOwnDescriptor.configurable) && nativeDescriptor?.get && nativeDescriptor.set && Object.isExtensible(container)) {
++      const nativeGet = nativeDescriptor.get
++      const nativeSet = nativeDescriptor.set
++      const observedGet = function (this: HTMLElement) { return nativeGet.call(this) }
++      const observedSet = function (this: HTMLElement, value: unknown) {
++        const before = nativeGet.call(this)
++        const stack = new Error("scrollTop setter observation").stack
++        try { nativeSet.call(this, value) }
++        finally {
++          try { console.debug("[disclosure-focus55]", JSON.stringify({ phase: "scrollTop-setter", elapsed: performance.now() - started, value, before, result: nativeGet.call(this), stack })) } catch {}
++        }
++      }
++      try {
++        Object.defineProperty(container, "scrollTop", { configurable: true, enumerable: nativeDescriptor.enumerable, get: observedGet, set: observedSet })
++        restoreScrollDescriptor = () => {
++          const current = Object.getOwnPropertyDescriptor(container, "scrollTop")
++          if (current?.get !== observedGet || current.set !== observedSet) {
++            console.debug("[disclosure-focus55]", JSON.stringify({ phase: "diagnostic-unavailable", reason: "scrollTop descriptor owner changed; preserved successor" }))
++            return
++          }
++          if (originalOwnDescriptor) Object.defineProperty(container, "scrollTop", originalOwnDescriptor)
++          else delete (container as unknown as Record<string, unknown>).scrollTop
++        }
++      } catch { console.debug("[disclosure-focus55]", JSON.stringify({ phase: "diagnostic-unavailable", reason: "scrollTop descriptor installation failed" })) }
++    } else console.debug("[disclosure-focus55]", JSON.stringify({ phase: "diagnostic-unavailable", reason: "scrollTop descriptor unsafe" }))
++    const observer = new MutationObserver((records) => {
++      const relevant = records.filter((record) => ancestors.includes(record.target as HTMLElement) ||
++        [...record.removedNodes, ...record.addedNodes].some((node) => ancestors.some((ancestor) => node === ancestor || node.contains(ancestor))))
++      if (!relevant.length) return
++      console.debug("[disclosure-focus55]", JSON.stringify({ phase: "mutation", records: relevant.slice(0, 32).map((record) => ({
++        type: record.type, attribute: record.attributeName, target: describe(record.target instanceof Element ? record.target : null),
++        added: [...record.addedNodes].slice(0, 16).map((node) => describe(node instanceof Element ? node : null)),
++        removed: [...record.removedNodes].slice(0, 16).map((node) => describe(node instanceof Element ? node : null)),
++      })) }))
++      snapshot("mutation-after")
++    })
++    const stop = () => {
++      if (stopped) return
++      snapshot("end")
++      stopped = true
++      observer.disconnect()
++      props.container.removeEventListener("scroll", onScroll, true)
++      cancelAnimationFrame(raf)
++      clearTimeout(timer)
++      restoreScrollDescriptor?.()
++      observeDisclosurePhase = undefined
++      stopDisclosureObservation = undefined
++    }
++    stopDisclosureObservation = stop
++    observeDisclosurePhase = snapshot
++    observer.observe(props.container, { subtree: true, childList: true, attributes: true, attributeFilter: ["style", "class", "hidden", "aria-expanded"] })
++    props.container.addEventListener("scroll", onScroll, { capture: true, passive: true })
++    timer = setTimeout(stop, 1000)
++    const frame = () => { snapshot(`raf-${++frames}`); if (frames < 3) raf = requestAnimationFrame(frame) }
++    snapshot("click-capture")
++    raf = requestAnimationFrame(frame)
++  }
+ 
+   const highlightCard = (cardID: string) => {
+     const target = props.container.querySelector<HTMLElement>(`[data-card-id="${CSS.escape(cardID)}"]`)
+@@ -319,9 +442,12 @@ function VirtualizedConversationCards(props: {
+       measuredContentChangedOnFrame.schedule()
+     }
+     props.container.addEventListener("click", onLayoutShiftSignal, { passive: true })
++    props.container.addEventListener("click", observeDisclosureClick, true)
+     props.container.addEventListener("transitionend", onLayoutShiftSignal, true)
+     onCleanup(() => {
+       props.container.removeEventListener("click", onLayoutShiftSignal)
++      props.container.removeEventListener("click", observeDisclosureClick, true)
++      stopDisclosureObservation?.()
+       props.container.removeEventListener("transitionend", onLayoutShiftSignal, true)
+       ro.disconnect()
+       virtualRootResizeObserver = undefined

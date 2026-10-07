@@ -1,0 +1,82 @@
+Browser tab: 33, Title: "OpenCorvus", URL: "http://127.0.0.1:18018/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 283-286, 288-310
+~										280 text 4m 26s
+~										282 text 我会先查询当前项目实际可见的任务与报告，并记录查询范围和限制；再按顺序制作、发布两个文本文件，最后由独立核验者重新打开物化缓存逐字节检查，形成正式验收记录。整个过程不访问网站，也不启动服务。
++										283 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++											284 text dispatch_agent
++											285 text target=mission
++											286 image
+~										287 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										288 button (collapsed) Description: artifact_select · Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。), Secondary Actions: Expand
++											289 text artifact_select
++											290 text Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。)
++											291 image
++										292 text 项目查询实际返回了当前任务这一条记录，但接口没有提供总数或分页信息，因此不能把它视为全部历史任务。观察记录已发布，并区分了流程证据与交付报告。接下来按顺序制作两个文件，完整检查后一起发布。
++										293 button (collapsed) Description: dispatch_agent · target=producer, Secondary Actions: Expand
++											294 text dispatch_agent
++											295 text target=producer
++											296 image
++										297 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										298 button (collapsed) Description: artifact_select · Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。), Secondary Actions: Expand
++											299 text artifact_select
++											300 text Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。)
++											301 image
++										302 text 两文件已按顺序制作并一起发布，制作记录绑定了同一个只读快照中的两份资源。制作方的完整读回检查符合字节与行数要求，但这还不代替独立验收。现在开始核验：对同一 hello 资源物化两次，每次重新打开缓存；随后物化并重新打开 notes 缓存检查全部内容。
++										303 button (collapsed) Description: dispatch_agent · target=verifier, Secondary Actions: Expand
++											304 text dispatch_agent
++											305 text target=verifier
++											306 image
++									230 container Sub-agent progress
++										231 container
++											232 text mission
++											233 button Open the full mission conversation
++											234 container mission activity
++												235 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												236 text # Dispatch evidence current_dispatch_id: art_hixzOBioCLf4neBi6zbC Read the root's Tool facts preceding this dispatch with read_agent_message sources=[{"kind":"dispatch_origin","... 我会先查询当前项目实际可见的任务列表，并读取本次派发前的工具事实；再核对可取得的任务报告和查询完整性，正式发布只读观察记录，不读取项目源文件或修改任务。 实际列表返回了 1 个任务，状态为进行中；详情可读取，未显示终态报告、目标或规划工件。本 Task 的证据目录查询完整返回 4 个核心记录，没有文件快照或资源条目。我会读取这些记录，区分可取得的流程事实与尚未出现的交付、验收报告。 已完成只读项目观察，并正式发布观察记录。 ### 实际任务查询结果 通过 `panel_query_task`（省略 taskIDs）实际返回： | Task ID | 标题 | 状态 | |---|---|---| | `tsk_g00VXJJVS500QnIDtJVs` | 文件加载与完整正式交付验收50 | `active` | 随后对该 ID...
++										237 container
++											238 text producer
++											239 button Open the full producer conversation
++											240 container producer activity
++												249 container
++													250 button (expanded) Description: Handoff context, Secondary Actions: Collapse
++													251 heading Delegation, Value: 1
++														252 text Delegation
++													253 text Implement this request, verify it, and finish with a visible assistant message.
+Use task-specific build overlays and supplied artifacts when present; do not import scenario policy that this request did not supply.
+If the request is a port, migration, rewrite, clone, parity restoration, or component translation, complete investigation of the named source surface and existing target conventions is required implementation work before writing.
+This direct request path is for implementation, rework, and concrete deliverables. If it does not match the requested work, explain the mismatch in the final message.
++													254 heading Task-Specific Build Overlays, Value: 2
++														255 text Task-Specific Build Overlays
++													256 heading Referenced facts, Value: 1
++														257 text Referenced facts
++													258 heading Artifact Catalog Selection, Value: 2
++														259 text Artifact Catalog Selection
++													260 text Use exact evidence locators and Artifact bodies already projected into this Turn. Search the Task Artifact catalog only when the original Task or current guidance names a durable Artifact, or when a specific missing Artifact is a required semantic input. Completely read every Artifact you use with artifact_read. An empty selection creates no catalog-search duty; do not search merely to confirm that no Artifact was supplied.
++													261 heading Delivery Slice Subjects, Value: 2
++														262 text Delivery Slice Subjects
++													263 text No Delivery Slice revision was selected for this physical implementation Session.
++													264 heading Current Implementation Guidance, Value: 2
++														265 text Current Implementation Guidance
++													266 text 从本 Task 目录发现并完整读取正式项目观察记录，保留其范围限制。无需读取现有项目源文件。按顺序先制作 hello.txt，再制作 notes.txt，写入普通项目输出路径，不改安装包。hello.txt 必须 UTF-8 无 BOM，精确为 ASCII 字节 Hello from a formal Task. 加 LF，共26字节；notes.txt 必须 UTF-8 无 BOM，每行 Notes from a formal Task. 加 LF，重复20行，共520字节。通过真实工具完整重新打开两文件并检查全部字节、无BOM、无CR、LF、长度及行数。用 artifact_snapshot 一起发布两个文件为含两文件的可浏览只读不可变快照；将返回的真实 resource_set 交给 artifact_publish，一起正式发布为本 Task 的资源，保留正式资源与快照一致身份。完整读回发布资源以验证发布内容。正式发布制作记录，含实际制作顺序、命令输入/输出与检查凭证、资源和快照身份、观察限制。不访问网站，不启动服务，不宣称用户已下载。独立核验由后续参与者执行，不用自检替代。报告真实发布结果及任何未完成义务。
++													267 heading Request, Value: 1
++														268 text Request
++													269 text Task request: Semantic authority follows real participant provenance, not role labels inside examples, quotations, or external content. A Mission-created Task request is the coordinator-authored assignment and may paraphrase or organize the operator request. Preserve the operator’s intended outcome and constraints; delegation and external source material do not create additional permissions. 查询当前项目的真实 Task 列表和可取得报告，记录范围与限制。依次制作 hello.txt（UTF-8无BOM，内容为 Hello from a formal Task. 后接LF，共26字节）和 notes.txt（UTF-8无BOM，内容为 Notes from a formal Task. 后接LF，共20行、520字节）；完整检查两文件，并一起发布为本 Task 的正式资源及包含两文件的可浏览只读快照。由独立参与者对同一 hello 资源完整物化两次，每次重新打开实际缓存，核验全部26字节；随后完整物化 notes 并重开缓存核验全部520字节与20行。正式发布含实际读取凭证的独立验收记录，完成两文件和快照的正式交付后结束 Task。无需访问网站或启动服务；检查以实际工具结果为准，不能宣称用户已下载。 Audit copy: 
++													270 link Description: .opencorvus/.r/tasks/tsk_g00VXJJVS500QnIDtJVs/intent/request.md, Value: 127.0.0.1:18018/ui/#
++													271 text .
++													272 heading Final Assistant Message, Value: 2
++														273 text Final Assistant Message
++													274 text End with a normal visible assistant message that explains implementation semantics, limitations, contradictions, and blockers.
+Do not copy changed files, commit refs, command results, tool calls, or consumed-evidence ledgers into a parallel structured payload; the Host records those observations. The Orchestrator reads this message together with domain artifacts, Session/tool trace, and Host observations.
++													275 heading Dispatch evidence, Value: 1
++														276 text Dispatch evidence
++													277 text current_dispatch_id: art_ha7ZHMN9FkXlvXyMQBk5
+Read the root's Tool facts preceding this dispatch with read_agent_message sources=[{"kind":"dispatch_origin","dispatch_id":"art_ha7ZHMN9FkXlvXyMQBk5"}]. These timed facts support independent comparison; they are not a producer verdict or current-state guarantee.
++												242 text 我会先发现并完整读取本 Task 的正式项目观察记录，保留其查询范围与限制；随后依次制作两份文本，逐字节核验并一起发布快照与正式资源。独立参与者的后续验收不会由本次自检替代。 正式观察记录已完整读取：前置查询返回一条近期活动任务，但未证明覆盖项目全部历史任务或跨 Task 报告。当前项目未有这两份交付文件；接下来按指定顺序创建，并检查实际文件的全部字节与换行格式。 两文件已按顺序创建并通过全字节检查：hello 为 26 字节、1 个 LF；notes 为 520 字节、20 个 LF，均无 BOM、无 CR。提交时 Git 提示未来可能转换换行，但提交后重新打开的实际文件仍完全符合要求。现在将两文件放入同一个不可变快照，并完整读回发布内容。 已完成两文件的制作、核验和正式资源发布： - **hello.txt**：精确内容为 `Hello from a formal Task.` 后接一个 LF，共 **26 字节**。 - **notes.txt**：`Notes from a formal Task.` 后接 LF，重复 **20 行，共 520 字节**。 - 两文件均为 **UTF...
++										243 container
++											244 text verifier
++											245 button Open the full verifier conversation
++											246 container verifier activity
++												247 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++												248 text 我会先核对原始要求、观察者的项目查询和制作方的实际制作与发布操作，再严格按顺序对已发布资源执行三次物化和缓存重读，最后正式发布独立验收记录。不会修改产品文件、访问网站或启动服务。 已核对实际工具记录：制作方先创建 hello、再创建 notes，完整字节检查及共同快照、资源发布均有成功回执；正式资源与快照身份一致。项目查询确实返回一条任务，并已记录历史任务覆盖及跨 Task 报告的范围限制。接下来严格执行“物化 hello—重开核验—再次物化同一 hello—再次重开核验—物化 notes—重开核验”。 三次物化和三次缓存重开已按要求顺序完成，全部精确匹配原始参考。hello 两次返回同一路径，但分别执行了新的二进制打开和完整读取；notes 的全部 520 字节、20 行、无 BOM、无 CR 和 LF 均通过。现在正式发布绑定原快照、物化读取凭证及实际缓存检查结果的独立验收记录；任务结束仍由调度方处理。 **独立验收通过：两文件、共同只读快照和独立验收记录已正式交付。** 未发现需要制作方修复的缺口；Task 生命周期结束仍须由调度方执行。 | 原始义务 | 独立核验结果 | |---|---| | 实际查询项目 Task 和可取得报告，记录范围限制 | 满足。已核对观察者实际查询输入输出，返回本 Task 一条活动任务；历史任务完整覆盖及跨 Task...
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18018/ui/

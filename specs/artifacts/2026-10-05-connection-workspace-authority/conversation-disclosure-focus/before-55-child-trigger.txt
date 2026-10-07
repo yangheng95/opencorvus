@@ -1,0 +1,24 @@
+Browser tab: 33, Title: "OpenCorvus", URL: "http://127.0.0.1:18018/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++											268 text 我会先发现并完整读取本 Task 的正式项目观察记录，保留其查询范围与限制；随后依次制作两份文本，逐字节核验并一起发布快照与正式资源。独立参与者的后续验收不会由本次自检替代。
++											269 text 正式观察记录已完整读取：前置查询返回一条近期活动任务，但未证明覆盖项目全部历史任务或跨 Task 报告。当前项目未有这两份交付文件；接下来按指定顺序创建，并检查实际文件的全部字节与换行格式。
++											270 text 两文件已按顺序创建并通过全字节检查：hello 为 26 字节、1 个 LF；notes 为 520 字节、20 个 LF，均无 BOM、无 CR。提交时 Git 提示未来可能转换换行，但提交后重新打开的实际文件仍完全符合要求。现在将两文件放入同一个不可变快照，并完整读回发布内容。
++										271 container
++											272 text 已完成两文件的制作、核验和正式资源发布：
++											273 content list
++												274 container
++													275 AXListMarker • 
++													276 text hello.txt ：精确内容为  Hello from a formal Task.  后接一个 LF，共  26 字节 。
++												277 container
++													278 AXListMarker • 
++													279 text notes.txt ： Notes from a formal Task.  后接 LF，重复  20 行，共 520 字节 。
++												280 container
++													281 AXListMarker • 
++													282 text 两文件均为  UTF-8 无 BOM、无 CR ，已重新打开实际文件并检查全部字节；发布后也完整读回了两个资源，内容符合要求。
++												283 container
++													284 AXListMarker • 
++													285 text 两文件已一起发布到同一个可浏览、只读的不可变快照，制作记录使用该快照返回的同一资源集合正式发布，保留资源身份一致性。
++											286 text 已完整读取前置项目观察记录并保留限制：查询返回一条近期活动任务，但不证明覆盖项目全部历史任务；报告观察范围限于当前 Task，不能视为全项目跨 Task 报告查询。
++											287 text 尚未完成独立验收
++											288 text ：后续参与者仍须对同一 hello 资源物化两次、每次重开缓存核验，再物化并核验 notes，最后正式发布含实际读取凭证的独立验收记录。本次自检不替代这些义务，因此不宣称 Task 已验收结束，也不宣称用户已下载。
+The focused UI element is 227 button (collapsed) Description: Handoff context, Secondary Actions: Expand

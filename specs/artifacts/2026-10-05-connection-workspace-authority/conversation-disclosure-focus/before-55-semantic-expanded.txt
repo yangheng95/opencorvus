@@ -1,0 +1,34 @@
+Browser tab: 33, Title: "OpenCorvus", URL: "http://127.0.0.1:18018/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 93, 278-357
++								195 container Sub-agent progress
++									196 container
++										197 text mission
++										198 button Open the full mission conversation
++										199 container mission activity
++											200 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++											201 text # Dispatch evidence current_dispatch_id: art_hixzOBioCLf4neBi6zbC Read the root's Tool facts preceding this dispatch with read_agent_message sources=[{"kind":"dispatch_origin","... 我会先查询当前项目实际可见的任务列表，并读取本次派发前的工具事实；再核对可取得的任务报告和查询完整性，正式发布只读观察记录，不读取项目源文件或修改任务。 实际列表返回了 1 个任务，状态为进行中；详情可读取，未显示终态报告、目标或规划工件。本 Task 的证据目录查询完整返回 4 个核心记录，没有文件快照或资源条目。我会读取这些记录，区分可取得的流程事实与尚未出现的交付、验收报告。 已完成只读项目观察，并正式发布观察记录。 ### 实际任务查询结果 通过 `panel_query_task`（省略 taskIDs）实际返回： | Task ID | 标题 | 状态 | |---|---|---| | `tsk_g00VXJJVS500QnIDtJVs` | 文件加载与完整正式交付验收50 | `active` | 随后对该 ID...
++									202 container
++										203 text producer
++										204 button Open the full producer conversation
++										205 container producer activity
++											206 container
++												207 button (expanded) Description: Handoff context, Secondary Actions: Collapse
++												208 heading Delegation, Value: 1
++												209 heading Task-Specific Build Overlays, Value: 2
++												210 heading Referenced facts, Value: 1
++												211 heading Artifact Catalog Selection, Value: 2
++												212 heading Delivery Slice Subjects, Value: 2
++												213 heading Current Implementation Guidance, Value: 2
++												214 heading Request, Value: 1
++												215 link 127.0.0.1:18018/ui/#
++												216 heading Final Assistant Message, Value: 2
++												217 text Rendering…
++											218 text 我会先发现并完整读取本 Task 的正式项目观察记录，保留其查询范围与限制；随后依次制作两份文本，逐字节核验并一起发布快照与正式资源。独立参与者的后续验收不会由本次自检替代。 正式观察记录已完整读取：前置查询返回一条近期活动任务，但未证明覆盖项目全部历史任务或跨 Task 报告。当前项目未有这两份交付文件；接下来按指定顺序创建，并检查实际文件的全部字节与换行格式。 两文件已按顺序创建并通过全字节检查：hello 为 26 字节、1 个 LF；notes 为 520 字节、20 个 LF，均无 BOM、无 CR。提交时 Git 提示未来可能转换换行，但提交后重新打开的实际文件仍完全符合要求。现在将两文件放入同一个不可变快照，并完整读回发布内容。 已完成两文件的制作、核验和正式资源发布： - **hello.txt**：精确内容为 `Hello from a formal Task.` 后接一个 LF，共 **26 字节**。 - **notes.txt**：`Notes from a formal Task.` 后接 LF，重复 **20 行，共 520 字节**。 - 两文件均为 **UTF...
++									219 container
++										220 text verifier
++										221 button Open the full verifier conversation
++										222 container verifier activity
++											223 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++											224 text 我会先核对原始要求、观察者的项目查询和制作方的实际制作与发布操作，再严格按顺序对已发布资源执行三次物化和缓存重读，最后正式发布独立验收记录。不会修改产品文件、访问网站或启动服务。 已核对实际工具记录：制作方先创建 hello、再创建 notes，完整字节检查及共同快照、资源发布均有成功回执；正式资源与快照身份一致。项目查询确实返回一条任务，并已记录历史任务覆盖及跨 Task 报告的范围限制。接下来严格执行“物化 hello—重开核验—再次物化同一 hello—再次重开核验—物化 notes—重开核验”。 三次物化和三次缓存重开已按要求顺序完成，全部精确匹配原始参考。hello 两次返回同一路径，但分别执行了新的二进制打开和完整读取；notes 的全部 520 字节、20 行、无 BOM、无 CR 和 LF 均通过。现在正式发布绑定原快照、物化读取凭证及实际缓存检查结果的独立验收记录；任务结束仍由调度方处理。 **独立验收通过：两文件、共同只读快照和独立验收记录已正式交付。** 未发现需要制作方修复的缺口；Task 生命周期结束仍须由调度方执行。 | 原始义务 | 独立核验结果 | |---|---| | 实际查询项目 Task 和可取得报告，记录范围限制 | 满足。已核对观察者实际查询输入输出，返回本 Task 一条活动任务；历史任务完整覆盖及跨 Task...
+The focused UI element is 207 button (expanded) Description: Handoff context, Secondary Actions: Collapse

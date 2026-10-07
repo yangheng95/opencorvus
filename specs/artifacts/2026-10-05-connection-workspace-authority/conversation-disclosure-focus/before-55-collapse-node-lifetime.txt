@@ -1,0 +1,67 @@
+Browser tab: 33, Title: "OpenCorvus", URL: "http://127.0.0.1:18018/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 249-310
++									249 container
++										250 text orchestrator
++										251 text 4m 26s
++										252 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										253 text 我会先查询当前项目实际可见的任务与报告，并记录查询范围和限制；再按顺序制作、发布两个文本文件，最后由独立核验者重新打开物化缓存逐字节检查，形成正式验收记录。整个过程不访问网站，也不启动服务。
++										254 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++											255 text dispatch_agent
++											256 text target=mission
++											257 image
++										258 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										259 button (collapsed) Description: artifact_select · Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。), Secondary Actions: Expand
++											260 text artifact_select
++											261 text Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。)
++											262 image
++										263 text 项目查询实际返回了当前任务这一条记录，但接口没有提供总数或分页信息，因此不能把它视为全部历史任务。观察记录已发布，并区分了流程证据与交付报告。接下来按顺序制作两个文件，完整检查后一起发布。
++										264 button (collapsed) Description: dispatch_agent · target=producer, Secondary Actions: Expand
++											265 text dispatch_agent
++											266 text target=producer
++											267 image
++										268 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										269 button (collapsed) Description: artifact_select · Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。), Secondary Actions: Expand
++											270 text artifact_select
++											271 text Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。)
++											272 image
++										273 text 两文件已按顺序制作并一起发布，制作记录绑定了同一个只读快照中的两份资源。制作方的完整读回检查符合字节与行数要求，但这还不代替独立验收。现在开始核验：对同一 hello 资源物化两次，每次重新打开缓存；随后物化并重新打开 notes 缓存检查全部内容。
++										274 button (collapsed) Description: dispatch_agent · target=verifier, Secondary Actions: Expand
++											275 text dispatch_agent
++											276 text target=verifier
++											277 image
++												278 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									279 container
++										280 text orchestrator
++										281 text 1m 18s
++										282 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										283 button (collapsed) Description: artifact_select · Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。), Secondary Actions: Expand
++											284 text artifact_select
++											285 text Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。)
++											286 image
++										287 text 独立验收已通过，实际读取凭证也已正式发布。我复核了三次物化回执及随后重新打开缓存的命令和结果：hello 两次均完整读取并匹配 26 字节；notes 完整匹配 520 字节、20 行。两文件均为 UTF-8 无 BOM、仅 LF 换行，共同只读快照恰含这两份资源。现在正式交付文件、快照与验收记录，并结束本任务；项目历史任务和跨任务报告的覆盖限制保持明确，不宣称你已下载。
++										288 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											289 text manage_task
++											290 text action=complete_task
++											291 image
++										292 container 2 files
++											293 container
++												294 text Agent delivery 2 files 文件加载与完整正式交付验收50
++											295 button (collapsed) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++												296 text hello.txt
++												297 text producer, verifier
++												298 text  · 
++												299 text 26 B
++												300 text Preview
++											301 button Copy filename
++											302 button Description: Download: hello.txt, Help: Download
++											303 button (collapsed) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Expand
++												304 text notes.txt
++												305 text producer, verifier
++												306 text  · 
++												307 text 520 B
++												308 text Preview
++											309 button Copy filename
++											310 button Description: Download: notes.txt, Help: Download
++											311 button (collapsed) Inspect delivery records (3), Secondary Actions: Expand
+The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:18018/ui/

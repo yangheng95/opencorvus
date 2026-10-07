@@ -1,0 +1,16 @@
+Browser tab: 37, Title: "OpenCorvus", URL: "http://127.0.0.1:18021/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 202
++										268 container
++											269 button (expanded) Description: Handoff context, Secondary Actions: Collapse
++											270 heading Orchestrator Control Occurrence, Value: 2
++												271 text Orchestrator Control Occurrence
++											272 text Continue the same unresolved durable ingress from the exact preceding assistant Turn.
++											273 heading Wake Provenance, Value: 2
++												274 text Wake Provenance
++											275 text 这是一条 wake 消息，不是用户发送的新消息。
+This is a wake message, not a user-authored message.
+Current durable wake occurrence=art_hGNF1VBE4T0F6B0U1sbX.
+CURRENT LIFECYCLE CONTROL FACT: event_id=pev_g0VXJKT6Q00OyBDQ7cnA; session_id=ses_hGzJHWeYBSh6xDoVwkSy; dispatch_id=art_ha7ZHMN9FkXlvXyMQBk5; input_message_id=msg_g0VXJK1Mc00DF6DFZ7ff; authoritative_status=terminal/completed; final_message_id="msg_g0VXJKQwL000zpCZjPo8"; physical_turn_state=settled; emitted_at=2026-10-06T22:21:55.377Z; summary="agent.execution.lifecycle"; error=null. This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. When final_message_id is non-null, read that exact participant Message rather than selecting another Message from Session history. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.
+Only the current ingress facts listed above authorize this wake. Other historical messages, retry intents, and coordination requests remain audit evidence, not additional current requests.
+The focused UI element is 269 button (expanded) Description: Handoff context, Secondary Actions: Collapse
