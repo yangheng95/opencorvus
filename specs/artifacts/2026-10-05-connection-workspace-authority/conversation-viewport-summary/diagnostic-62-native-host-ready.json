@@ -1,0 +1,39 @@
+{
+  "occurrence": "follow-writer-62-6e082a9c-1a8a-436b-9d56-5aadbb152e64",
+  "outcome": "ready",
+  "host": {
+    "pid": 73736,
+    "processInstanceID": "win32:639269316149433315",
+    "occurrenceID": "841bd911-a219-4c20-8154-495eb27ccda3"
+  },
+  "parent": {
+    "pid": 61656,
+    "processInstanceID": "win32:639269316127491876",
+    "occurrenceID": "6bd7c76e-afd5-4fd3-826b-9d2c437f59c0"
+  },
+  "target": {
+    "pid": 68416,
+    "processInstanceID": "win32:639269316158552980",
+    "occurrenceID": "b2c2fbb6-0935-4809-86c1-d5968125a0d2"
+  },
+  "targetBirthAtMs": 1791334815855,
+  "observedAtUtc": "2026-10-07T01:00:15.892Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18023",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-follow-writer-62\\startup.json",
+    "--startup-occurrence",
+    "follow-writer-62-6e082a9c-1a8a-436b-9d56-5aadbb152e64",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

@@ -1,0 +1,53 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18022/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 239-249, 251-257, 290-371
++									210 text orchestrator
++									211 text 1m 18s
++									212 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									213 button (collapsed) Description: artifact_select · Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。), Secondary Actions: Expand
++										214 text artifact_select
++										215 text Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。)
++										216 image
++									217 text 独立验收已通过，实际读取凭证也已正式发布。我复核了三次物化回执及随后重新打开缓存的命令和结果：hello 两次均完整读取并匹配 26 字节；notes 完整匹配 520 字节、20 行。两文件均为 UTF-8 无 BOM、仅 LF 换行，共同只读快照恰含这两份资源。现在正式交付文件、快照与验收记录，并结束本任务；项目历史任务和跨任务报告的覆盖限制保持明确，不宣称你已下载。
++									218 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++										219 text manage_task
++										220 text action=complete_task
++										221 image
++									222 container 2 files
++										223 container
++											224 text Agent delivery 2 files 文件加载与完整正式交付验收50
++										225 button (collapsed) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++											226 text hello.txt
++											227 text producer, verifier
++											228 text  · 
++											229 text 26 B
++											230 text Preview
++										231 button Copy filename
++										232 button Description: Download: hello.txt, Help: Download
++										233 button (collapsed) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Expand
++											234 text notes.txt
++											235 text producer, verifier
++											236 text  · 
++											237 text 520 B
++											238 text Preview
++										239 button Copy filename
++										240 button Description: Download: notes.txt, Help: Download
++										241 button (collapsed) Inspect delivery records (3), Secondary Actions: Expand
++								242 container
++									243 text Model configuration unavailable
++									244 text You can still read this conversation. Review the details or choose a model before sending a message.
++									245 button (collapsed) Details, Secondary Actions: Expand
++										246 text Details
++									247 button Retry
++									248 container chatForm
++										249 splitter Description: Drag to resize the message input, Value: 42
++										250 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++										251 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++										252 text Code
++										253 text Task
++										254 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
++										255 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++										256 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++											257 text Choose model
++										258 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 177 button Review

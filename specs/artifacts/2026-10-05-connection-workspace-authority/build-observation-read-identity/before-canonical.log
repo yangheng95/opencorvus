@@ -1,0 +1,56 @@
+[1/1] START test/server/build-observation-content-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold Build content original response 400 {
+  name: "ProviderModelNotFoundError",
+  data: {
+    providerID: "build-reader-unavailable",
+    modelID: "model",
+    suggestions: [],
+  },
+}
+55 |       const object = fixture.diffs.find((diff) => diff.file === file)?.after
+56 |       if (!object) throw new Error(`Production observation has no after object for ${file}`)
+57 |       expect(object.bytes).toBe(bytes)
+58 |       const response = await read(project.path, file, 0, bytes)
+59 |       if (response.status !== 200) console.log("cold Build content original response", response.status, await response.clone().json())
+60 |       expect({ status: response.status, text: await response.text(), range: response.headers.get("content-range"), object: response.headers.get("x-opencorvus-git-object"), bytes: response.headers.get("x-opencorvus-object-bytes"), complete: response.headers.get("x-opencorvus-content-complete"), binary: response.headers.get("x-opencorvus-content-binary") }).toEqual({ status: 200, text, range: `bytes 0-${bytes - 1}/${bytes}`, object: object.oid, bytes: String(bytes), complete: "1", binary: "0" })
+                                                                                                                                                                                                                                                                                                                                                                           ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "binary": "0",
+-   "bytes": "26",
+-   "complete": "1",
+-   "object": "9dce677d4de157661f95ab14f6d0e4c7896faa77",
+-   "range": "bytes 0-25/26",
+-   "status": 200,
+-   "text": 
+- "hello immutable resource!
+- "
+- ,
++   "binary": null,
++   "bytes": null,
++   "complete": null,
++   "object": null,
++   "range": null,
++   "status": 400,
++   "text": "{"name":"ProviderModelNotFoundError","data":{"providerID":"build-reader-unavailable","modelID":"model","suggestions":[]}}",
+  }
+
+- Expected  - 10
++ Received  + 7
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts:60:359)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts:52:9)
+(fail) cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [7813.14ms]
+
+ 0 pass
+ 1 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [10.58s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts
+[1/1] DONE test/server/build-observation-content-read.test.ts exit=1 duration=10.79s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts

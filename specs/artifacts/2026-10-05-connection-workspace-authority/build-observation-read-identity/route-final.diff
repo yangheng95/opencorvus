@@ -1,0 +1,12 @@
+diff --git a/packages/opencorvus/src/server/project-route-context.ts b/packages/opencorvus/src/server/project-route-context.ts
+index 9920db52..5097085d 100644
+--- a/packages/opencorvus/src/server/project-route-context.ts
++++ b/packages/opencorvus/src/server/project-route-context.ts
+@@ -47,6 +47,7 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
+ ]
+ 
+ const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
++  /^GET \/task\/[^/]+\/build-observation\/[^/]+\/content$/,
+   /^GET \/coding\/(?:chat|work)\/sessions$/,
+   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,
+   /^GET \/session\/[^/]+\/conversation$/,

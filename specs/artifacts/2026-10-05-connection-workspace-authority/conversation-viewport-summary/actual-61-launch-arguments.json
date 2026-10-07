@@ -1,0 +1,26 @@
+{
+  "occurrence": "viewport-summary-61-b9dd94a7-0982-4409-b550-4e14673fb6ee",
+  "port": 18022,
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-viewport-summary-61\\evidence",
+    "viewport-summary-61-b9dd94a7-0982-4409-b550-4e14673fb6ee",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18022",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-viewport-summary-61\\startup.json",
+    "--startup-occurrence",
+    "viewport-summary-61-b9dd94a7-0982-4409-b550-4e14673fb6ee",
+    "--log-level",
+    "INFO"
+  ]
+}

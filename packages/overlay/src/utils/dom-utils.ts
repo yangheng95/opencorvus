@@ -224,11 +224,10 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       // explicitly disable the browser's `overflow-anchor` (so the
       // controller owns all anchoring), so without this follow-up
       // frame the user sees the conversation drift upward by exactly
-      // the height the late layout gained. The spec forbids
-      // MutationObserver / ResizeObserver inside setupAutoScroll
-      // (overlay scroll single-source contract)
-      // — a single extra rAF re-pin is the bounded, observer-free way
-      // to catch the drift. Gated on `isTracking()` so a user who has
+      // the height the late layout gained. The existing content observer
+      // also reports resized direct content boxes; this single extra rAF
+      // catches a late layout before another notification arrives.
+      // Gated on `isTracking()` so a user who has
       // scrolled away never gets yanked back.
       requestAnimationFrame(() => {
         if (disposed || !opts.isTracking()) return

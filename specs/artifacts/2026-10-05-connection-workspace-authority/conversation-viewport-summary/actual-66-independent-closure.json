@@ -1,0 +1,27 @@
+{
+  "occurrence": "viewport-paint-66-b3318e61-f7aa-49d3-98e3-fce1a89a2f9e",
+  "observedAtUtc": "2026-10-07T01:17:01.6815918Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 72740,
+        "processInstanceID": "win32:639269323797857928",
+        "occurrenceID": "b740d9ea-9141-42af-85d7-57ffd566ee4b"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 73848,
+        "processInstanceID": "win32:639269323805684537",
+        "occurrenceID": "6b27c15d-a765-4c22-830b-59670d677c0e"
+      }
+    }
+  ],
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "listeners": []
+}

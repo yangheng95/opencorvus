@@ -1,0 +1,63 @@
+diff --git a/packages/overlay/src/components/Conversation.tsx b/packages/overlay/src/components/Conversation.tsx
+index bc353ccd..9ecbd28e 100644
+--- a/packages/overlay/src/components/Conversation.tsx
++++ b/packages/overlay/src/components/Conversation.tsx
+@@ -574,6 +574,58 @@ export function Conversation(props: {
+     syncComposerClearance()
+     const composerObserver = new ResizeObserver(composerClearanceOnFrame.schedule)
+     composerObserver.observe(composerMount)
++    // Temporary actual-owner observation63; removed before final qualification.
++    let stopFollowWriterObservation: (() => void) | undefined
++    const observeFollowEndWriter = (event: KeyboardEvent) => {
++      if (event.target !== el || event.key !== "End") return
++      stopFollowWriterObservation?.()
++      const originalOwn = Object.getOwnPropertyDescriptor(el, "scrollTop")
++      let descriptor = originalOwn
++      let prototype = Object.getPrototypeOf(el)
++      while (!descriptor && prototype) {
++        descriptor = Object.getOwnPropertyDescriptor(prototype, "scrollTop")
++        prototype = Object.getPrototypeOf(prototype)
++      }
++      if (!descriptor?.get || !descriptor.set || originalOwn?.configurable === false) return
++      const nativeGet = descriptor.get
++      const nativeSet = descriptor.set
++      let records = 0
++      const log = (phase: string, detail: Record<string, unknown> = {}) => {
++        if (records++ >= 200) return
++        console.debug(`[follow-writer63] ${JSON.stringify({
++          phase, time: Date.now(), source: boardStore.selectedSource?.id, epoch: boardStore.selectEpoch,
++          top: nativeGet.call(el), height: el.scrollHeight, client: el.clientHeight,
++          follow: el.getAttribute("data-follow-lock"), ...detail,
++        })}`)
++      }
++      Object.defineProperty(el, "scrollTop", {
++        configurable: true,
++        enumerable: descriptor.enumerable,
++        get: () => nativeGet.call(el),
++        set: (value: number) => {
++          const before = nativeGet.call(el)
++          nativeSet.call(el, value)
++          log("setter", { before, requested: value, result: nativeGet.call(el), stack: new Error().stack })
++        },
++      })
++      const onObservedScroll = () => log("native-scroll")
++      el.addEventListener("scroll", onObservedScroll, { passive: true })
++      const timer = window.setTimeout(() => stopFollowWriterObservation?.(), 1500)
++      stopFollowWriterObservation = () => {
++        window.clearTimeout(timer)
++        el.removeEventListener("scroll", onObservedScroll)
++        if (originalOwn) Object.defineProperty(el, "scrollTop", originalOwn)
++        else Reflect.deleteProperty(el, "scrollTop")
++        log("restored")
++        stopFollowWriterObservation = undefined
++      }
++      log("capture-end")
++    }
++    el.addEventListener("keydown", observeFollowEndWriter, true)
++    onCleanup(() => {
++      el.removeEventListener("keydown", observeFollowEndWriter, true)
++      stopFollowWriterObservation?.()
++    })
+     // Conversation is rendered directly into an existing `.chat-scroll`
+     // host owned by main.tsx. The host remains the
+     // single scroll container while `virtua` owns only the virtualized

@@ -1,0 +1,26 @@
+[1/2] START test/server/build-observation-content-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [10778.66ms]
+
+ 1 pass
+ 0 fail
+ 10 expect() calls
+Ran 1 test across 1 file. [13.41s]
+[1/2] DONE test/server/build-observation-content-read.test.ts exit=0 duration=13.62s
+[2/2] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.58ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.18ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.14ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.05ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.10ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1353.00ms]
+[2/2] DONE test/project-route-context.test.ts exit=0 duration=1.54s

@@ -34,6 +34,13 @@ Snapshot/live ordering, durable terminal/error recovery and abort cleanup retain
 their existing owners. Session config and execution routes keep their runtime
 validation contract.
 
+Task Build observation content GET uses the same Project identity admission
+independently of executable model bootstrap. The handler retains actual Task
+membership, Task-owned observation/file/side identity and bounded ranges, then
+reads the persisted immutable Git object through its existing process owner.
+Working files and current model availability do not substitute for that content;
+config and execution routes retain their runtime validation.
+
 Each subagent progress card exposes one visible header Open button with the
 same real Session callback used by article/header clicks. Pointer and keyboard
 activation share that control; nested Handoff disclosure and content actions
@@ -333,6 +340,17 @@ resizes; explicit history restoration, user navigation and bottom following
 retain their existing controls. The inner virtual window's own opt-out alone
 does not define the policy of the surrounding scrollport. Child transcript and
 editor scrollports keep their separate existing ownership.
+The same measured Composer block size supplies main content end padding and
+native scroll-padding clearance, including the existing edge-fade extent, so
+browser focus scrolling can use the region above the floating Composer's paint.
+The terminal file-change summary preserves its
+natural block size as a nonshrinking flex item alongside the virtual window;
+the main scrollport owns their combined overflow.
+Virtual-window measurement notifies the existing complete-scrollport follow
+controller. It does not navigate to the last virtual item, whose endpoint
+excludes the terminal summary and Composer clearance. Explicit requested-card
+navigation retains the virtualizer's item targeting; reading and preserved
+history retain their existing tracking and anchor controls.
 The canonical scheduler participant message places its subject and unchanged
 body before grouped delivery references. Task and Mission consume that same
 persisted Markdown; the Overlay neither parses protocol keywords nor creates

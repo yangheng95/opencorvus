@@ -1,0 +1,37 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18022/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 345-371
+~										343 container
+~											344 button (collapsed) Description: artifact_select · Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。), Secondary Actions: Expand
++												345 text artifact_select
++												346 text Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。)
++												347 image
++											348 text 独立验收已通过，实际读取凭证也已正式发布。我复核了三次物化回执及随后重新打开缓存的命令和结果：hello 两次均完整读取并匹配 26 字节；notes 完整匹配 520 字节、20 行。两文件均为 UTF-8 无 BOM、仅 LF 换行，共同只读快照恰含这两份资源。现在正式交付文件、快照与验收记录，并结束本任务；项目历史任务和跨任务报告的覆盖限制保持明确，不宣称你已下载。
++											349 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++												350 text manage_task
++												351 text action=complete_task
++												352 image
++											353 container 2 files
++												354 container
++													355 text Agent delivery 2 files 文件加载与完整正式交付验收50
++												356 button (collapsed) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++													357 text hello.txt
++													358 text producer, verifier
++													359 text  · 
++													360 text 26 B
++													361 text Preview
++												362 button Copy filename
++												363 button Description: Download: hello.txt, Help: Download
++												364 button (collapsed) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Expand
++													365 text notes.txt
++													366 text producer, verifier
++													367 text  · 
++													368 text 520 B
++													369 text Preview
++												370 button Copy filename
++												371 button Description: Download: notes.txt, Help: Download
++												372 button (collapsed) Inspect delivery records (3), Secondary Actions: Expand
++										373 button Copy message
++										374 pop up button (collapsed) Description: View model usage for this turn: 965K Token, Secondary Actions: Expand
++										375 text Oct 7, 06:26 AM
+The focused UI element is 342 button (collapsed) Description: Handoff context, Secondary Actions: Expand

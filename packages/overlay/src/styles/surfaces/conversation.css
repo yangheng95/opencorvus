@@ -24,6 +24,7 @@
   /* Virtua owns item resize compensation across this complete scrollport. */
   overflow-anchor: none;
   padding-block: var(--ui-gap-4xl) var(--conversation-composer-block-size);
+  scroll-padding-block-end: calc(var(--conversation-composer-block-size) + var(--conversation-edge-fade-size));
   padding-inline: var(--conversation-message-start-inset) var(--conversation-message-end-inset);
   display: flex;
   flex-direction: column;
@@ -769,6 +770,7 @@
 }
 
 .conversation-artifact-summary {
+  flex-shrink: 0;
   width: var(--conversation-card-inline-size);
   max-width: 100%;
   margin-block: var(--ui-gap-sm) var(--ui-gap-lg);

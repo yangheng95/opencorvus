@@ -1,0 +1,31 @@
+[1/1] START test/server/build-observation-content-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+1782 |       .select({ id: EngineBuildObservationCleanupTable.observation_id })
+1783 |       .from(EngineBuildObservationCleanupTable)
+1784 |       .where(and(eq(EngineBuildObservationCleanupTable.observation_id, observationID), eq(EngineBuildObservationCleanupTable.task_id, input.taskID)))
+1785 |       .get()
+1786 |     if (!cleanup) {
+1787 |       throw new Error(`Build observation cleanup owner ${observationID} is missing for durable observation publication`)
+                       ^
+error: Build observation cleanup owner art_g0VXJxr0g00KSI59LLy4 is missing for durable observation publication
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\persist.ts:1787:17)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1808:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at transaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1806:31)
+      at recordTaskLevelBuildHostObservation (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\persist.ts:1772:12)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts:40:26)
+(fail) cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [7694.50ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [10.60s]
+[1/1] DONE test/server/build-observation-content-read.test.ts exit=1 duration=10.79s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts

@@ -1,0 +1,30 @@
+Browser tab: 38, Title: "OpenCorvus", URL: "http://localhost:18022/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 210-238
++									343 container
++										344 text orchestrator
++										345 text 4m 26s
++										346 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										347 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++											348 text dispatch_agent
++											349 text target=mission
++											350 image
++										351 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										352 button (collapsed) Description: artifact_select · Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。), Secondary Actions: Expand
++											353 text artifact_select
++											354 text Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。)
++											355 image
++										356 button (collapsed) Description: dispatch_agent · target=producer, Secondary Actions: Expand
++											357 text dispatch_agent
++											358 text target=producer
++											359 image
++										360 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										361 button (collapsed) Description: artifact_select · Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。), Secondary Actions: Expand
++											362 text artifact_select
++											363 text Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。)
++											364 image
++										365 button (collapsed) Description: dispatch_agent · target=verifier, Secondary Actions: Expand
++											366 text dispatch_agent
++											367 text target=verifier
++											368 image
+The focused UI element is 254 button Open the full verifier conversation

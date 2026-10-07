@@ -1,0 +1,23 @@
+Browser tab: 40, Title: "OpenCorvus", URL: "http://localhost:18024/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 143-175, 197-211
+~								195 container solidChatComposer
+~									196 container
++										197 text Model configuration unavailable
++										198 text You can still read this conversation. Review the details or choose a model before sending a message.
++										199 button (collapsed) Details, Secondary Actions: Expand
++											200 text Details
++										201 button Retry
++										202 container chatForm
++											203 splitter Description: Drag to resize the message input, Value: 42
++											204 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++											205 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++											206 text Code
++											207 text Task
++											208 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
++											209 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-466-trigger, Secondary Actions: Expand
++											210 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++												211 text Choose model
++											212 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
++									213 button Scroll to bottom
+The focused UI element is 93 container Description: Conversation, ID: chatScroll

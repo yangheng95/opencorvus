@@ -167,7 +167,6 @@ function VirtualizedConversationItem(props: {
 function VirtualizedConversationCards(props: {
   container: HTMLElement
   pinnedCardID: () => string | null
-  tracking: () => boolean
   onMeasuredContentChanged: () => void
   onCardScrollRequest: () => void
   onOpenSubagentConversation: (sessionID: string) => void
@@ -246,12 +245,6 @@ function VirtualizedConversationCards(props: {
   }
 
   function convergeMeasuredContent(): void {
-    if (props.tracking()) {
-      const lastIndex = order().length - 1
-      if (lastIndex >= 0) {
-        virtualizer?.scrollToIndex(lastIndex, { align: "end", smooth: false })
-      }
-    }
     props.onMeasuredContentChanged()
   }
 
@@ -887,14 +880,7 @@ export function Conversation(props: {
       <VirtualizedConversationCards
         container={el}
         pinnedCardID={historyAnchorPinID}
-        tracking={tracking}
-        onMeasuredContentChanged={() => {
-          if (tracking()) {
-            scrollController?.scrollToBottom()
-            return
-          }
-          scrollController?.contentChanged()
-        }}
+        onMeasuredContentChanged={() => scrollController?.contentChanged()}
         onCardScrollRequest={() => setTracking(false)}
         onOpenSubagentConversation={props.onOpenSubagentConversation}
       />

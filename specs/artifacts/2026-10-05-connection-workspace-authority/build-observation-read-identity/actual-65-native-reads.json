@@ -1,0 +1,132 @@
+{
+  "authorityStaging": "None; no Provider/Task submission",
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "crossProject": {
+    "text": "{\"name\":\"NotFoundError\",\"data\":{\"message\":\"Task not found: tsk_g00VXJJVS500QnIDtJVs\"}}",
+    "status": 404,
+    "bytes": 86,
+    "headers": {
+      "Content-Type": "application/json",
+      "x-opencorvus-request-id": "a78d1918-806c-49be-b9ff-f355a7380ac4",
+      "Content-Length": "86",
+      "Vary": "Origin",
+      "Date": "Wed, 07 Oct 2026 01:06:38 GMT",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+    }
+  },
+  "target": {
+    "pid": 42768,
+    "processInstanceID": "win32:639269318069425332",
+    "occurrenceID": "472328d4-7ac1-4d3e-81c9-395ce7c34b73"
+  },
+  "config": {
+    "text": "{\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}",
+    "status": 400,
+    "bytes": 109,
+    "headers": {
+      "Content-Type": "application/json",
+      "x-opencorvus-request-id": "29d91f23-b7e3-4388-aea2-a9d495533344",
+      "Content-Length": "109",
+      "Vary": "Origin",
+      "Date": "Wed, 07 Oct 2026 01:06:38 GMT",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+    }
+  },
+  "reads": [
+    {
+      "partial": {
+        "text": "lo from",
+        "status": 200,
+        "bytes": 7,
+        "headers": {
+          "Date": "Wed, 07 Oct 2026 01:06:37 GMT",
+          "Vary": "Origin",
+          "Content-Type": "application/octet-stream",
+          "Content-Length": "7",
+          "Accept-Ranges": "bytes",
+          "x-opencorvus-content-complete": "0",
+          "Content-Range": "bytes 3-9/26",
+          "x-opencorvus-object-bytes": "26",
+          "x-opencorvus-content-binary": "0",
+          "x-opencorvus-git-object": "292cc65cf98bd2ad1c495bac9bf6b03c78a39c12",
+          "x-opencorvus-request-id": "4eddc38a-584d-46d5-bc18-d8b7244cb6df",
+          "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        }
+      },
+      "expectedFull": true,
+      "file": "hello.txt",
+      "full": {
+        "text": "Hello from a formal Task.\n",
+        "status": 200,
+        "bytes": 26,
+        "headers": {
+          "Date": "Wed, 07 Oct 2026 01:06:37 GMT",
+          "Vary": "Origin",
+          "Content-Type": "application/octet-stream",
+          "Content-Length": "26",
+          "Accept-Ranges": "bytes",
+          "x-opencorvus-content-complete": "1",
+          "Content-Range": "bytes 0-25/26",
+          "x-opencorvus-object-bytes": "26",
+          "x-opencorvus-content-binary": "0",
+          "x-opencorvus-git-object": "292cc65cf98bd2ad1c495bac9bf6b03c78a39c12",
+          "x-opencorvus-request-id": "594fd831-9169-4589-a0ec-1319172d96cf",
+          "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        }
+      },
+      "expectedPartial": true
+    },
+    {
+      "partial": {
+        "text": "es from",
+        "status": 200,
+        "bytes": 7,
+        "headers": {
+          "Date": "Wed, 07 Oct 2026 01:06:37 GMT",
+          "Vary": "Origin",
+          "Content-Type": "application/octet-stream",
+          "Content-Length": "7",
+          "Accept-Ranges": "bytes",
+          "x-opencorvus-content-complete": "0",
+          "Content-Range": "bytes 3-9/520",
+          "x-opencorvus-object-bytes": "520",
+          "x-opencorvus-content-binary": "0",
+          "x-opencorvus-git-object": "309e4f86d15e9ff439082640c16ce941d0723e4f",
+          "x-opencorvus-request-id": "29f7ae95-20ff-430b-b11d-4fcd356728d9",
+          "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        }
+      },
+      "expectedFull": true,
+      "file": "notes.txt",
+      "full": {
+        "text": "Notes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\nNotes from a formal Task.\n",
+        "status": 200,
+        "bytes": 520,
+        "headers": {
+          "Date": "Wed, 07 Oct 2026 01:06:37 GMT",
+          "Vary": "Origin",
+          "Content-Type": "application/octet-stream",
+          "Content-Length": "520",
+          "Accept-Ranges": "bytes",
+          "x-opencorvus-content-complete": "1",
+          "Content-Range": "bytes 0-519/520",
+          "x-opencorvus-object-bytes": "520",
+          "x-opencorvus-content-binary": "0",
+          "x-opencorvus-git-object": "309e4f86d15e9ff439082640c16ce941d0723e4f",
+          "x-opencorvus-request-id": "de8aa34d-2e09-4f1f-bfec-1df2f79318a2",
+          "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        }
+      },
+      "expectedPartial": true
+    }
+  ],
+  "host": {
+    "pid": 41868,
+    "processInstanceID": "win32:639269318061896221",
+    "occurrenceID": "628e3292-1164-4dc4-b564-9c44740d10b0"
+  },
+  "qualified": true,
+  "artifactID": "art_hiysXi5kyLJ7ciXBAtLV",
+  "occurrence": "viewport-follow-65-0b36e09b-6988-4301-8c82-46af62afa95f",
+  "observedAtUtc": "2026-10-07T01:06:39.0105537Z"
+}

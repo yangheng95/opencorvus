@@ -1,0 +1,49 @@
+[1/2] START test/server/build-observation-content-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+63 |       await fs.writeFile(path.join(project.path, file), "Current working text differs.\n")
+64 |       const again = await read(project.path, file, 0, bytes)
+65 |       expect({ status: again.status, text: await again.text(), object: again.headers.get("x-opencorvus-git-object") }).toEqual({ status: 200, text, object: object.oid })
+66 |     }
+67 |     const crossProject = await read(other.path, "hello.txt", 0, 26)
+68 |     expect({ status: crossProject.status, body: await crossProject.text() }).toEqual({ status: 404, body: `Task not found: ${fixture.taskID}` })
+                                                                                  ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "body": "Task not found: tsk_g00VXJy2Qb00dRjKGQD1",
++   "body": "{"name":"NotFoundError","data":{"message":"Task not found: tsk_g00VXJy2Qb00dRjKGQD1"}}",
+    "status": 404,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts:68:78)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts:52:9)
+(fail) cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [12829.07ms]
+
+ 0 pass
+ 1 fail
+ 9 expect() calls
+Ran 1 test across 1 file. [15.36s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts
+[1/2] DONE test/server/build-observation-content-read.test.ts exit=1 duration=15.62s
+[2/2] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.74ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [5.15ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.26ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.16ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.12ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1.54s]
+[2/2] DONE test/project-route-context.test.ts exit=0 duration=1.77s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\build-observation-content-read.test.ts

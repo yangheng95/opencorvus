@@ -1,0 +1,38 @@
+Browser tab: 41, Title: "OpenCorvus", URL: "http://localhost:18025/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 243-270
+~												242 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									243 container
++										244 text orchestrator
++										245 text 1m 18s
++										246 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										247 button (collapsed) Description: artifact_select · Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。), Secondary Actions: Expand
++											248 text artifact_select
++											249 text Selected Artifact source (正式交付可浏览只读快照，完整清单恰含hello.txt与notes.txt，身份与实际资源一致。)
++											250 image
++										251 text 独立验收已通过，实际读取凭证也已正式发布。我复核了三次物化回执及随后重新打开缓存的命令和结果：hello 两次均完整读取并匹配 26 字节；notes 完整匹配 520 字节、20 行。两文件均为 UTF-8 无 BOM、仅 LF 换行，共同只读快照恰含这两份资源。现在正式交付文件、快照与验收记录，并结束本任务；项目历史任务和跨任务报告的覆盖限制保持明确，不宣称你已下载。
++										252 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											253 text manage_task
++											254 text action=complete_task
++											255 image
++										256 container 2 files
++											257 container
++												258 text Agent delivery 2 files 文件加载与完整正式交付验收50
++											259 button (collapsed) hello.txt producer, verifier · 26 B Preview, Help: hello.txt, Secondary Actions: Expand
++												260 text hello.txt
++												261 text producer, verifier
++												262 text  · 
++												263 text 26 B
++												264 text Preview
++											265 button Copy filename
++											266 button Description: Download: hello.txt, Help: Download
++											267 button (collapsed) notes.txt producer, verifier · 520 B Preview, Help: notes.txt, Secondary Actions: Expand
++												268 text notes.txt
++												269 text producer, verifier
++												270 text  · 
++												271 text 520 B
++												272 text Preview
++											273 button Copy filename
++											274 button Description: Download: notes.txt, Help: Download
++											275 button (collapsed) Inspect delivery records (3), Secondary Actions: Expand
+The focused UI element is 242 button (collapsed) Description: Handoff context, Secondary Actions: Expand

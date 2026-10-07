@@ -47,6 +47,7 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
 ]
 
 const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
+  /^GET \/task\/[^/]+\/build-observation\/[^/]+\/content$/,
   /^GET \/coding\/(?:chat|work)\/sessions$/,
   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^GET \/session\/[^/]+\/conversation$/,

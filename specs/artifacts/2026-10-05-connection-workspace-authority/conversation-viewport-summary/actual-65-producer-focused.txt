@@ -1,0 +1,33 @@
+Browser tab: 40, Title: "OpenCorvus", URL: "http://localhost:18024/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 95-123
++									247 container
++										248 text orchestrator
++										249 text 4m 26s
++										250 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										251 text 我会先查询当前项目实际可见的任务与报告，并记录查询范围和限制；再按顺序制作、发布两个文本文件，最后由独立核验者重新打开物化缓存逐字节检查，形成正式验收记录。整个过程不访问网站，也不启动服务。
++										252 button (collapsed) Description: dispatch_agent · target=mission, Secondary Actions: Expand
++											253 text dispatch_agent
++											254 text target=mission
++											255 image
++										256 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										257 button (collapsed) Description: artifact_select · Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。), Secondary Actions: Expand
++											258 text artifact_select
++											259 text Selected Artifact source (前置项目观察已正式发布且记录实际返回的一条近期任务、可取得证据与完整性限制，支持开始文件制作。)
++											260 image
++										261 text 项目查询实际返回了当前任务这一条记录，但接口没有提供总数或分页信息，因此不能把它视为全部历史任务。观察记录已发布，并区分了流程证据与交付报告。接下来按顺序制作两个文件，完整检查后一起发布。
++										262 button (collapsed) Description: dispatch_agent · target=producer, Secondary Actions: Expand
++											263 text dispatch_agent
++											264 text target=producer
++											265 image
++										266 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										267 button (collapsed) Description: artifact_select · Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。), Secondary Actions: Expand
++											268 text artifact_select
++											269 text Selected Artifact source (确认制作记录已绑定 hello 与 notes 两份真实发布资源及同一个快照，独立验收义务仍明确待执行。)
++											270 image
++										271 text 两文件已按顺序制作并一起发布，制作记录绑定了同一个只读快照中的两份资源。制作方的完整读回检查符合字节与行数要求，但这还不代替独立验收。现在开始核验：对同一 hello 资源物化两次，每次重新打开缓存；随后物化并重新打开 notes 缓存检查全部内容。
++										272 button (collapsed) Description: dispatch_agent · target=verifier, Secondary Actions: Expand
++											273 text dispatch_agent
++											274 text target=verifier
++											275 image
+The focused UI element is 135 button (collapsed) Description: Handoff context, Secondary Actions: Expand
