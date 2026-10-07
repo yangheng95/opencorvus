@@ -1,6 +1,10 @@
 import { normalizedServerRoutePath } from "@opencorvus-ai/transport-protocol"
 
 const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
+  "GET /expert-squad/search",
+  "GET /expert-squad/catalog",
+  "GET /mission-skill/catalog",
+  "GET /experimental/project-memory",
   "POST /project/current/init-git",
   "GET /expert-squad/market",
   "GET /expert-squad/market/detail",
@@ -46,13 +50,15 @@ const PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS = [
   /^POST \/provider\/[^/]+\/(?:test|auth\/prompts|auth\/execute|oauth\/authorize|oauth\/callback)$/,
 ]
 
-const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
+const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
   /^GET \/task\/[^/]+\/build-observation\/[^/]+\/content$/,
   /^GET \/coding\/(?:chat|work)\/sessions$/,
   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,
+  /^PATCH \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^GET \/session\/[^/]+\/conversation$/,
   /^GET \/session\/[^/]+\/conversation\/history$/,
   /^GET \/session\/[^/]+\/events$/,
+  /^GET \/session\/[^/]+\/side-chat$/,
 ]
 
 /** Selects the least-capable Project authority required by the exact route. */
@@ -70,7 +76,7 @@ export function projectRouteContextKind(routePath: string, method?: string): Pro
   if (
     PROJECT_IDENTITY_ROUTE_KEYS.has(routeKey) ||
     PROJECT_IDENTITY_PROVIDER_ROUTE_KEYS.some((pattern) => pattern.test(routeKey)) ||
-    PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS.some((pattern) => pattern.test(routeKey))
+    PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS.some((pattern) => pattern.test(routeKey))
   ) {
     return "identity"
   }

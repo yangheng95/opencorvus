@@ -1,0 +1,33 @@
+{
+  "sourceKnownStates": [
+    {
+      "expected": {
+        "pid": 17008,
+        "processInstanceID": "win32:639268277001064850"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 43764,
+        "processInstanceID": "win32:639268277001173550"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-06/live-sol-edit-03",
+  "projectID": "prj_hA9BhfYfLEA7IQzO8QHf",
+  "purpose": "Actual source62 ordinary file/text/file rename model-coupling baseline",
+  "sourceParentBoundary": {
+    "pid": 30712,
+    "birthRecorded": false,
+    "boundary": "launch parent only; cannot qualify exact original occurrence without birth"
+  },
+  "sessionB": "ses_-zUSn0xc3zzFGmP12qJE",
+  "clone": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/conversation-rename-before-73",
+  "port": 18029,
+  "sessionA": "ses_-zUSn3IzNzzdZ2AxFWCU",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+  "observedAtUtc": "2026-10-07T02:32:59.5622311Z",
+  "credentialStaging": "None; one actual03 database copied, no source mutation/stitched history/new model call"
+}

@@ -1,0 +1,55 @@
+[1/1] START test/server/conversation-rename-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+cold rename original response 400 {
+  name: "ProviderModelNotFoundError",
+  data: {
+    providerID: "rename-unavailable",
+    modelID: "model",
+    suggestions: [],
+  },
+}
+42 |     await runOutsideInstanceContext(async () => {
+43 |       for (const [experience, original, title] of [["chat", fixture.chat, "重命名 Chat 🙂"], ["work", fixture.work, "重命名 Work 文档"]] as const) {
+44 |         const response = await patch(experience, original.id, project.path, `  ${title}  `)
+45 |         const body = await response.json()
+46 |         if (response.status !== 200) console.log("cold rename original response", response.status, body)
+47 |         expect({ status: response.status, session: body.session }).toMatchObject({ status: 200, session: { id: original.id, title, projectID: fixture.projectID, directory: project.path, kind: "assistant", metadata: { conversation: { surface: "right-sidebar", experience } } } })
+                                                                        ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "session": {
+-     "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-gQ5YGr\test-41860-1Fr85m\fixtures\memory-Z5nm3r",
+-     "id": "ses_-zUSfdVGMzzBFbKz9ZOT",
+-     "kind": "assistant",
+-     "metadata": {
+-       "conversation": {
+-         "experience": "chat",
+-         "surface": "right-sidebar",
+-       },
+-     },
+-     "projectID": "prj_hIzT2WQw2fWnmmHaCPdH",
+-     "title": "重命名 Chat 🙂",
+-   },
+-   "status": 200,
++   "session": undefined,
++   "status": 400,
+  }
+
+- Expected  - 14
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-rename-identity.test.ts:47:68)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-rename-identity.test.ts:42:11)
+(fail) cold Chat and Work rename persist real titles and publish updates without an executable model [3387.29ms]
+
+ 0 pass
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [6.07s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-rename-identity.test.ts
+[1/1] DONE test/server/conversation-rename-identity.test.ts exit=1 duration=6.31s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\conversation-rename-identity.test.ts

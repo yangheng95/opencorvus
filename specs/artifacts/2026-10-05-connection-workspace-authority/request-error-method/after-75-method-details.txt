@@ -1,0 +1,24 @@
+Browser tab: 47, Title: "OpenCorvus", URL: "http://localhost:18031/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 239
+~										235 button (expanded) Details, Secondary Actions: Collapse
++										239 text HTTP POST 400 session/ses_-zUSggUQgzzprQcl946c/side-chat?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject
+
+Request ID: 7dcbd305-9907-4aca-88e2-b0595b3e1c18
+
+ApiError: API 400 session/ses_-zUSggUQgzzprQcl946c/side-chat?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clive-sol-publication-50%5Cproject: {"name":"ProviderModelNotFoundError","data":{"providerID":"openai","modelID":"gpt-6.1-sol","suggestions":[]}}
+    at Te (http://localhost:18031/ui/assets/main-BssQ7dSn.js:67:134407)
+    at async re (http://localhost:18031/ui/assets/main-BssQ7dSn.js:220:4880)
+
+response body:
+{
+  "name": "ProviderModelNotFoundError",
+  "data": {
+    "providerID": "openai",
+    "modelID": "gpt-6.1-sol",
+    "suggestions": []
+  }
+}
+~									240 container
++										241 text A little room to explore Ask a question, or quote a passage from the main conversation.
+The focused UI element is 235 button (expanded) Details, Secondary Actions: Collapse

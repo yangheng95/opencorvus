@@ -1,0 +1,392 @@
+diff --git a/bun.lock b/bun.lock
+index 9bb08bc3..eb8e5ded 100644
+--- a/bun.lock
++++ b/bun.lock
+@@ -105,7 +105,7 @@
+         "@hono/standard-validator": "0.1.5",
+         "@lydell/node-pty": "catalog:",
+         "@modelcontextprotocol/ext-apps": "1.3.0",
+-        "@modelcontextprotocol/sdk": "1.26.0",
++        "@modelcontextprotocol/sdk": "1.31.0",
+         "@octokit/graphql": "9.0.2",
+         "@octokit/rest": "catalog:",
+         "@opencorvus-ai/channel-config": "workspace:*",
+@@ -215,7 +215,7 @@
+         "@kobalte/core": "catalog:",
+         "@lezer/highlight": "^1.2.3",
+         "@modelcontextprotocol/ext-apps": "1.3.0",
+-        "@modelcontextprotocol/sdk": "1.26.0",
++        "@modelcontextprotocol/sdk": "1.31.0",
+         "@opencorvus-ai/plugin": "workspace:*",
+         "@opencorvus-ai/sdk": "workspace:*",
+         "@opencorvus-ai/transport-protocol": "workspace:*",
+@@ -374,6 +374,7 @@
+     "@babel/core": "7.29.7",
+     "@grpc/grpc-js": "1.14.5",
+     "@hono/node-server": "2.1.0",
++    "@modelcontextprotocol/sdk": "1.31.0",
+     "@types/bun": "catalog:",
+     "@types/node": "catalog:",
+     "astro": "7.2.8",
+@@ -1187,7 +1188,7 @@
+ 
+     "@modelcontextprotocol/ext-apps": ["@modelcontextprotocol/ext-apps@1.3.0", "", { "peerDependencies": { "@modelcontextprotocol/sdk": "^1.24.0", "react": "^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0", "zod": "^3.25.0 || ^4.0.0" }, "optionalPeers": ["react", "react-dom"] }, "sha512-lYBq7iFIwu3tUYJi/BwlspUdwcmr6VbyCKA9+a3Q5JAM4ZjTtCzkX9Gh95moTtex+knp7EXZMZbjpMeGj6CKQQ=="],
+ 
+-    "@modelcontextprotocol/sdk": ["@modelcontextprotocol/sdk@1.26.0", "", { "dependencies": { "@hono/node-server": "^1.19.9", "ajv": "^8.17.1", "ajv-formats": "^3.0.1", "content-type": "^1.0.5", "cors": "^2.8.5", "cross-spawn": "^7.0.5", "eventsource": "^3.0.2", "eventsource-parser": "^3.0.0", "express": "^5.2.1", "express-rate-limit": "^8.2.1", "hono": "^4.11.4", "jose": "^6.1.3", "json-schema-typed": "^8.0.2", "pkce-challenge": "^5.0.0", "raw-body": "^3.0.0", "zod": "^3.25 || ^4.0", "zod-to-json-schema": "^3.25.1" }, "peerDependencies": { "@cfworker/json-schema": "^4.1.1" }, "optionalPeers": ["@cfworker/json-schema"] }, "sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg=="],
++    "@modelcontextprotocol/sdk": ["@modelcontextprotocol/sdk@1.31.0", "", { "dependencies": { "@hono/node-server": "^1.19.9 || ^2.0.5", "ajv": "^8.17.1", "ajv-formats": "^3.0.1", "content-type": "^1.0.5", "cors": "^2.8.5", "cross-spawn": "^7.0.5", "eventsource": "^3.0.2", "eventsource-parser": "^3.0.0", "express": "^5.2.1", "express-rate-limit": "^8.2.1", "hono": "^4.11.4", "jose": "^6.1.3", "json-schema-typed": "^8.0.2", "pkce-challenge": "^5.0.0", "raw-body": "^3.0.0", "zod": "^3.25 || ^4.0", "zod-to-json-schema": "^3.25.1" }, "peerDependencies": { "@cfworker/json-schema": "^4.1.1" }, "optionalPeers": ["@cfworker/json-schema"] }, "sha512-UvTMgnNlnIBO/22ob2RcVGDlcvOslQs8T59+FTGdA0L27a39fdGF/EDETNtDVK4DZGpwomlsYpRdA8UXcVL/pw=="],
+ 
+     "@monogrid/gainmap-js": ["@monogrid/gainmap-js@3.4.0", "", { "dependencies": { "promise-worker-transferable": "^1.0.4" }, "peerDependencies": { "three": ">= 0.159.0" } }, "sha512-2Z0FATFHaoYJ8b+Y4y4Hgfn3FRFwuU5zRrk+9dFWp4uGAdHGqVEdP7HP+gLA3X469KXHmfupJaUbKo1b/aDKIg=="],
+ 
+@@ -4089,8 +4090,6 @@
+ 
+     "@isaacs/cliui/wrap-ansi": ["wrap-ansi@8.1.0", "", { "dependencies": { "ansi-styles": "^6.1.0", "string-width": "^5.0.1", "strip-ansi": "^7.0.1" } }, "sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ=="],
+ 
+-    "@modelcontextprotocol/sdk/ajv": ["ajv@8.18.0", "", { "dependencies": { "fast-deep-equal": "^3.1.3", "fast-uri": "^3.0.1", "json-schema-traverse": "^1.0.0", "require-from-string": "^2.0.2" } }, "sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A=="],
+-
+     "@modelcontextprotocol/sdk/zod-to-json-schema": ["zod-to-json-schema@3.25.2", "", { "peerDependencies": { "zod": "^3.25.28 || ^4" } }, "sha512-O/PgfnpT1xKSDeQYSCfRI5Gy3hPf91mKVDuYLUHZJMiDFptvP41MSnWofm8dnCm0256ZNfZIM7DSzuSMAFnjHA=="],
+ 
+     "@octokit/core/@octokit/graphql": ["@octokit/graphql@7.1.1", "", { "dependencies": { "@octokit/request": "^8.4.1", "@octokit/types": "^13.0.0", "universal-user-agent": "^6.0.0" } }, "sha512-3mkDltSfcDUoa176nlGoA32RGjeWjl3K7F/BwHwRMJUW/IteSa4bnSV8p2ThNkcIcZU2umkZWxwETSSCJf2Q7g=="],
+diff --git a/package.json b/package.json
+index 19f1c097..d83a48bf 100644
+--- a/package.json
++++ b/package.json
+@@ -131,6 +131,7 @@
+     "web-tree-sitter"
+   ],
+   "overrides": {
++    "@modelcontextprotocol/sdk": "1.31.0",
+     "@ai-sdk/cerebras": "2.0.51",
+     "@ai-sdk/fireworks": "2.0.52",
+     "@ai-sdk/google-vertex": "4.0.126",
+diff --git a/packages/opencorvus/package.json b/packages/opencorvus/package.json
+index d2444633..40cd834a 100644
+--- a/packages/opencorvus/package.json
++++ b/packages/opencorvus/package.json
+@@ -85,7 +85,7 @@
+     "@hono/standard-validator": "0.1.5",
+     "@lydell/node-pty": "catalog:",
+     "@modelcontextprotocol/ext-apps": "1.3.0",
+-    "@modelcontextprotocol/sdk": "1.26.0",
++    "@modelcontextprotocol/sdk": "1.31.0",
+     "@octokit/graphql": "9.0.2",
+     "@octokit/rest": "catalog:",
+     "@opencorvus-ai/channel-config": "workspace:*",
+diff --git a/packages/opencorvus/src/config/mcp-schema.ts b/packages/opencorvus/src/config/mcp-schema.ts
+index a91554e8..8301244f 100644
+--- a/packages/opencorvus/src/config/mcp-schema.ts
++++ b/packages/opencorvus/src/config/mcp-schema.ts
+@@ -29,9 +29,18 @@ export namespace McpConfigSchema {
+         .optional()
+         .describe("OAuth client ID. If not provided, dynamic client registration (RFC 7591) will be attempted."),
+       clientSecret: z.string().optional().describe("OAuth client secret (if required by the authorization server)"),
++      issuer: z.string().url().optional().describe("Authorization server issuer for a pre-registered OAuth client"),
+       scope: z.string().optional().describe("OAuth scopes to request during authorization"),
+     })
+     .strict()
++    .superRefine((value, context) => {
++      if (value.clientId && !value.issuer)
++        context.addIssue({
++          code: "custom",
++          path: ["issuer"],
++          message: "A pre-registered MCP OAuth client requires its authorization server issuer",
++        })
++    })
+     .meta({
+       ref: "McpOAuthConfig",
+     })
+diff --git a/packages/opencorvus/src/mcp/auth.ts b/packages/opencorvus/src/mcp/auth.ts
+index 3d9fd1a0..3646c886 100644
+--- a/packages/opencorvus/src/mcp/auth.ts
++++ b/packages/opencorvus/src/mcp/auth.ts
+@@ -6,6 +6,7 @@ import { withSharedJsonFactLock } from "../util/process-lock"
+ 
+ export namespace McpAuth {
+   export const Tokens = z.object({
++    issuer: z.string().url().optional(),
+     accessToken: z.string(),
+     refreshToken: z.string().optional(),
+     expiresAt: z.number().optional(),
+@@ -14,6 +15,7 @@ export namespace McpAuth {
+   export type Tokens = z.infer<typeof Tokens>
+ 
+   export const ClientInfo = z.object({
++    issuer: z.string().url().optional(),
+     clientId: z.string(),
+     clientSecret: z.string().optional(),
+     clientIdIssuedAt: z.number().optional(),
+@@ -749,7 +751,7 @@ export namespace McpAuth {
+     finishing?: { oauthState: string; ownerID: string },
+     expectedRefresh?: RefreshSnapshot,
+   ): Promise<void> {
+-    const committedTokens = Tokens.parse(tokens)
++    const committedTokens = Tokens.required({ issuer: true }).parse(tokens)
+     let target:
+       | {
+           tokenClientInfo: ClientInfo | undefined
+@@ -794,6 +796,8 @@ export namespace McpAuth {
+               serverUrl: serverUrl ?? entry?.serverUrl,
+               credentialIdentity: credentialIdentity ?? entry?.credentialIdentity,
+             }
++            if (target.tokenClientInfo)
++              target.tokenClientInfo = ClientInfo.required({ issuer: true }).parse(target.tokenClientInfo)
+             return {
+               ...(entry ? { ...entry, staticCredential: undefined } : {}),
+               tokens: committedTokens,
+@@ -859,6 +863,7 @@ export namespace McpAuth {
+     callbackGeneration?: string,
+     callbackRedirectUrl?: string,
+   ): Promise<void> {
++    clientInfo = ClientInfo.required({ issuer: true }).parse(clientInfo)
+     await updateStore(
+       authKey,
+       (entry) => ({
+diff --git a/packages/opencorvus/src/mcp/index.ts b/packages/opencorvus/src/mcp/index.ts
+index 323eec65..9f5c879f 100644
+--- a/packages/opencorvus/src/mcp/index.ts
++++ b/packages/opencorvus/src/mcp/index.ts
+@@ -2916,6 +2916,7 @@ export namespace MCP {
+       clientId: oauth?.clientId,
+       clientSecret: oauth?.clientSecret,
+       scope: oauth?.scope,
++      issuer: oauth?.issuer,
+     })
+   }
+ 
+@@ -3269,6 +3270,7 @@ export namespace MCP {
+             clientId: oauthConfig?.clientId,
+             clientSecret: oauthConfig?.clientSecret,
+             scope: oauthConfig?.scope,
++            issuer: oauthConfig?.issuer,
+           },
+           "connection",
+           undefined,
+@@ -4377,6 +4379,7 @@ export namespace MCP {
+       clientId: oauthConfig?.clientId,
+       clientSecret: oauthConfig?.clientSecret,
+       scope: oauthConfig?.scope,
++      issuer: oauthConfig?.issuer,
+     }
+     const credentialIdentity = McpOAuthProvider.credentialIdentity(mcpConfig.url, oauthProviderConfig)
+     // Revoking the previous flow and establishing this one's lease is one
+diff --git a/packages/opencorvus/src/mcp/oauth-provider.ts b/packages/opencorvus/src/mcp/oauth-provider.ts
+index fc6aec07..428e699e 100644
+--- a/packages/opencorvus/src/mcp/oauth-provider.ts
++++ b/packages/opencorvus/src/mcp/oauth-provider.ts
+@@ -2,8 +2,7 @@ import { UnauthorizedError, type OAuthClientProvider } from "@modelcontextprotoc
+ import type {
+   OAuthClientMetadata,
+   OAuthTokens,
+-  OAuthClientInformation,
+-  OAuthClientInformationFull,
++  OAuthClientInformationMixed,
+ } from "@modelcontextprotocol/sdk/shared/auth.js"
+ import { McpAuth } from "./auth"
+ import { oauthAuthorizationLogFields } from "./oauth-log"
+@@ -16,6 +15,7 @@ const OAUTH_CALLBACK_PATH = "/mcp/oauth/callback"
+ const CONNECTION_AUTHORIZATION_DISABLED_REDIRECT = "opencorvus://oauth-authorization-disabled"
+ 
+ export interface McpOAuthConfig {
++  issuer?: string
+   clientId?: string
+   clientSecret?: string
+   scope?: string
+@@ -39,16 +39,36 @@ export class McpOAuthTokenCommitUncertainError extends Error {
+   }
+ }
+ 
++export class McpOAuthIssuerRequiredError extends UnauthorizedError {
++  constructor(readonly source: "stored_credentials" | "configured_client") {
++    super("MCP OAuth issuer is missing; explicit re-authorization or configured issuer is required")
++    this.name = "McpOAuthIssuerRequiredError"
++  }
++}
++
+ const McpOAuthCredentialIdentity = z
+   .object({
+     serverUrl: z.string(),
+     clientId: z.string().optional(),
+     clientSecret: z.string().optional(),
+     scope: z.string().optional(),
++    issuer: z.string().url().optional(),
+   })
+   .strict()
+ 
+ export class McpOAuthProvider implements OAuthClientProvider {
++  private async retireUnboundCredentials(entry: McpAuth.Entry | undefined): Promise<boolean> {
++    const credentials = [entry?.tokens, entry?.clientInfo, entry?.tokenClientInfo]
++    if (!credentials.some((value) => value && !value.issuer)) return false
++    await this.assertCurrent?.()
++    await McpAuth.invalidateCredentials(this.authKey, "all", this.authRevision, {
++      tokens: entry?.tokens,
++      clientInfo: entry?.clientInfo,
++      tokenClientInfo: entry?.tokenClientInfo,
++    })
++    if (this.mode === "connection") throw new McpOAuthIssuerRequiredError("stored_credentials")
++    return true
++  }
+   private clientSnapshotRead = false
+   private clientInfoSnapshot: McpAuth.ClientInfo | undefined
+   private tokenClientInfoSnapshot: McpAuth.ClientInfo | undefined
+@@ -92,6 +112,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+       clientId: config.clientId,
+       clientSecret: config.clientSecret,
+       scope: config.scope,
++      issuer: config.issuer,
+     })
+   }
+ 
+@@ -103,6 +124,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+         clientId: parsed.clientId,
+         clientSecret: parsed.clientSecret,
+         scope: parsed.scope,
++        issuer: parsed.issuer,
+       },
+     }
+   }
+@@ -157,19 +179,25 @@ export class McpOAuthProvider implements OAuthClientProvider {
+     }
+   }
+ 
+-  async clientInformation(): Promise<OAuthClientInformation | undefined> {
++  async clientInformation(): Promise<OAuthClientInformationMixed | undefined> {
+     // Capture the exact store inputs this SDK attempt selected. A rejected
+     // refresh is not allowed to invalidate a newer callback's client/token
+     // set merely because both providers still hold the same flow revision.
+-    const entry =
++    let entry =
+       this.mode === "authorization"
+         ? await this.authorizationEntry()
+         : await McpAuth.getForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
+     this.captureCredentialSnapshot(entry)
++    if (await this.retireUnboundCredentials(entry)) {
++      entry = undefined
++      this.captureCredentialSnapshot(undefined)
++    }
+ 
+     // Check config first (pre-registered client)
+     if (this.config.clientId) {
++      if (!this.config.issuer) throw new McpOAuthIssuerRequiredError("configured_client")
+       return {
++        issuer: this.config.issuer,
+         client_id: this.config.clientId,
+         client_secret: this.config.clientSecret,
+       }
+@@ -178,7 +206,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+     // Check stored client info (from dynamic registration)
+     // Use getForUrl to validate credentials are for the current server URL
+     const useTokenClient = this.mode === "connection" && entry?.tokens
+-    const clientInfo = useTokenClient ? (entry.tokenClientInfo ?? entry.clientInfo) : entry?.clientInfo
++    const clientInfo = useTokenClient ? (entry?.tokenClientInfo ?? entry?.clientInfo) : entry?.clientInfo
+     const callbackBinding = this.callbackBinding
+     const clientBindingIsCurrent = useTokenClient
+       ? true
+@@ -193,6 +221,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+         return undefined
+       }
+       return {
++        issuer: clientInfo.issuer,
+         client_id: clientInfo.clientId,
+         client_secret: clientInfo.clientSecret,
+       }
+@@ -203,13 +232,14 @@ export class McpOAuthProvider implements OAuthClientProvider {
+     return undefined
+   }
+ 
+-  async saveClientInformation(info: OAuthClientInformationFull): Promise<void> {
++  async saveClientInformation(info: OAuthClientInformationMixed): Promise<void> {
+     this.requireAuthorizationAuthority()
+     const callbackBinding = this.requireCallbackBinding()
+     await this.assertCurrent?.()
+     await McpAuth.updateClientInfo(
+       this.authKey,
+       {
++        issuer: z.string().url().parse(info.issuer),
+         clientId: info.client_id,
+         clientSecret: info.client_secret,
+         clientIdIssuedAt: info.client_id_issued_at,
+@@ -237,6 +267,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+     // store snapshot here; otherwise retain the snapshot clientInformation
+     // already returned instead of mixing facts from two generations.
+     const current = await McpAuth.getForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
++    await this.retireUnboundCredentials(current)
+     if (!this.clientSnapshotRead) {
+       this.captureCredentialSnapshot(current)
+     } else {
+@@ -263,6 +294,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+     this.storedTokensDisclosed = true
+ 
+     return {
++      issuer: this.tokenSnapshot.issuer,
+       access_token: this.tokenSnapshot.accessToken,
+       token_type: "Bearer",
+       refresh_token: this.tokenSnapshot.refreshToken,
+@@ -279,6 +311,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
+     }
+     await this.assertCurrent?.()
+     const committedTokens = {
++      issuer: z.string().url().parse(tokens.issuer),
+       accessToken: tokens.access_token,
+       refreshToken: tokens.refresh_token,
+       expiresAt: tokens.expires_in ? Date.now() / 1000 + tokens.expires_in : undefined,
+diff --git a/packages/overlay/package.json b/packages/overlay/package.json
+index 7e5a8238..4dbb8734 100644
+--- a/packages/overlay/package.json
++++ b/packages/overlay/package.json
+@@ -46,7 +46,7 @@
+     "@kobalte/core": "catalog:",
+     "@lezer/highlight": "^1.2.3",
+     "@modelcontextprotocol/ext-apps": "1.3.0",
+-    "@modelcontextprotocol/sdk": "1.26.0",
++    "@modelcontextprotocol/sdk": "1.31.0",
+     "@opencorvus-ai/plugin": "workspace:*",
+     "@opencorvus-ai/sdk": "workspace:*",
+     "@opencorvus-ai/transport-protocol": "workspace:*",
+diff --git a/packages/sdk/js/src/gen/types.gen.ts b/packages/sdk/js/src/gen/types.gen.ts
+index 14cf62af..0addf945 100644
+--- a/packages/sdk/js/src/gen/types.gen.ts
++++ b/packages/sdk/js/src/gen/types.gen.ts
+@@ -3266,6 +3266,7 @@ export type McpAppHostRequest =
+               }>
+               mimeType?: string
+               name: string
++              size?: number
+               title?: string
+               type: "resource_link"
+               uri: string
+@@ -3342,6 +3343,10 @@ export type McpOAuthConfig = {
+    * OAuth client secret (if required by the authorization server)
+    */
+   clientSecret?: string
++  /**
++   * Authorization server issuer for a pre-registered OAuth client
++   */
++  issuer?: string
+   /**
+    * OAuth scopes to request during authorization
+    */
+diff --git a/packages/sdk/openapi.json b/packages/sdk/openapi.json
+index 8610268c..43b81a7d 100644
+--- a/packages/sdk/openapi.json
++++ b/packages/sdk/openapi.json
+@@ -11687,6 +11687,9 @@
+                             "name": {
+                               "type": "string"
+                             },
++                            "size": {
++                              "type": "number"
++                            },
+                             "title": {
+                               "type": "string"
+                             },
+@@ -11883,6 +11886,11 @@
+             "description": "OAuth client secret (if required by the authorization server)",
+             "type": "string"
+           },
++          "issuer": {
++            "description": "Authorization server issuer for a pre-registered OAuth client",
++            "format": "uri",
++            "type": "string"
++          },
+           "scope": {
+             "description": "OAuth scopes to request during authorization",
+             "type": "string"

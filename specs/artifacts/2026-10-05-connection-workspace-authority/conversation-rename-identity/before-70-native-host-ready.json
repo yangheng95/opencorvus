@@ -1,0 +1,39 @@
+{
+  "occurrence": "conversation-rename-70-before-6f2575f9-6aec-4d25-b7e3-cc00f8e3b284",
+  "outcome": "ready",
+  "host": {
+    "pid": 38984,
+    "processInstanceID": "win32:639269369518768366",
+    "occurrenceID": "ece4133d-c030-45b3-a1bb-7f89887ee290"
+  },
+  "parent": {
+    "pid": 76500,
+    "processInstanceID": "win32:639269369484963856",
+    "occurrenceID": "13cb9498-d846-4598-888b-d5274db643a4"
+  },
+  "target": {
+    "pid": 67312,
+    "processInstanceID": "win32:639269369526928645",
+    "occurrenceID": "c53a0c39-d30d-416a-a4bc-7bb997acc920"
+  },
+  "targetBirthAtMs": 1791340152692,
+  "observedAtUtc": "2026-10-07T02:29:12.742Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18028",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-rename-before-70\\startup.json",
+    "--startup-occurrence",
+    "conversation-rename-70-before-6f2575f9-6aec-4d25-b7e3-cc00f8e3b284",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

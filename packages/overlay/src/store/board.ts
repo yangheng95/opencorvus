@@ -374,7 +374,9 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
       if (boardStore.boardEtag) headers["If-None-Match"] = boardStore.boardEtag
       const directory = selectedTaskOwningDirectory(taskID)
       const boardPath = directoryScopedPath(`task/${encodeURIComponent(taskID)}/board`, directory, "loadBoard")
+      const method = "GET" as const
       const res = await apiRequest<any>(boardPath, {
+        method,
         authority,
         headers,
         signal: AbortSignal.timeout(10000),
@@ -384,7 +386,7 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
         clearBoardRetry()
         return
       }
-      if (!res.ok) throw new ApiError(res.status, boardPath, res.body, res.headers)
+      if (!res.ok) throw new ApiError(res.status, boardPath, res.body, res.headers, method)
       const etag = res.headers["etag"] || res.headers["ETag"]
       if (etag) setBoardEtag(etag)
       const data = res.body

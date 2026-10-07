@@ -41,6 +41,18 @@ reads the persisted immutable Git object through its existing process owner.
 Working files and current model availability do not substitute for that content;
 config and execution routes retain their runtime validation.
 
+Expert Squad search and active catalog, Mission Skill catalog and Project memory
+GET use Project identity admission. Their inventory generations, Session lineage,
+Task-fixed package revision, skill cache invalidation and canonical memory envelope
+remain authoritative. First memory read keeps idempotent envelope materialization.
+These readers preserve actual configuration/package errors without execution-model
+bootstrap; model configuration, prompts and memory organization retain runtime admission.
+
+Shared HTTP errors carry the dispatched method, path, status, decoded response body
+and request ID. Details include that method; binary readers keep the actual path,
+including POST Artifact reads. Caller-init mutation cannot alter the captured method.
+Ordinary non-HTTP errors retain their own facts.
+
 Each subagent progress card exposes one visible header Open button with the
 same real Session callback used by article/header clicks. Pointer and keyboard
 activation share that control; nested Handoff disclosure and content actions
@@ -233,6 +245,13 @@ parent edge. The canonical atomic fork copies only completed reference history,
 remaps Message/Part and accepted-input identities, and snapshots the source root
 configuration overlay. Shared LLM system composition marks inherited context as
 reference and only newly authored side-chat requests as active instructions.
+
+Listing retained Side chats uses Project identity admission independently of
+execution-model bootstrap. The addressed source must belong to the current
+Project; the list reads that source's nonarchived retained side Sessions through
+the existing metadata relation. Creating a side Session keeps its runtime
+admission, canonical fork and configuration contract. An unavailable current
+model can block creation or sending while the historical list remains readable.
 
 The panel uses the canonical Session prompt, abort and event contracts with its
 own exact target and stream lifetime. Connection snapshots and the shared
@@ -1008,7 +1027,12 @@ bounds, leading icon, trailing indicator anchor, and adjacent-row positions
 remain unchanged. Stopping a Task, Mission, or Chat from this menu requires an
 item-named confirmation before dispatch. The row menu has no rename action;
 double-clicking the canonical row main button invokes its existing domain rename
-dialog while single click retains selection. Pinned items remain inside their
+dialog while single click retains selection. Ordinary Chat/Work title PATCH uses
+Project identity admission independently of execution-model bootstrap. Its
+existing exact directory, Project and conversation-experience checks, normalized
+title validation, transactional title/time update and Session.Updated publication
+remain authoritative. Archive, selection and execution retain their respective
+runtime admission. Pinned items remain inside their
 canonical Project group or one-list projection and sort before unpinned siblings
 without changing activity time.
 

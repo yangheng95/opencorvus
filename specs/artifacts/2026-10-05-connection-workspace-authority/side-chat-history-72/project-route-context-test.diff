@@ -1,0 +1,22 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/side-chat-history-72/project-route-context-test.before.txt b/packages/opencorvus/test/project-route-context.test.ts
+index 09bbdd22..7115f2d4 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/side-chat-history-72/project-route-context-test.before.txt
++++ b/packages/opencorvus/test/project-route-context.test.ts
+@@ -7,6 +7,8 @@ describe("Project route context authority", () => {
+       tail: projectRouteContextKind("/session/ses_1/conversation", "GET"),
+       history: projectRouteContextKind("/session/ses_1/conversation/history", "GET"),
+       events: projectRouteContextKind("/session/ses_1/events", "GET"),
++      sideHistory: projectRouteContextKind("/session/ses_1/side-chat", "GET"),
++      sideCreate: projectRouteContextKind("/session/ses_1/side-chat", "POST"),
+       config: projectRouteContextKind("/session/ses_1/config", "GET"),
+       configWrite: projectRouteContextKind("/session/ses_1/config", "PATCH"),
+       prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
+@@ -14,6 +16,8 @@ describe("Project route context authority", () => {
+       tail: "identity",
+       history: "identity",
+       events: "identity",
++      sideHistory: "identity",
++      sideCreate: "runtime",
+       config: "runtime",
+       configWrite: "runtime",
+       prompt: "runtime",

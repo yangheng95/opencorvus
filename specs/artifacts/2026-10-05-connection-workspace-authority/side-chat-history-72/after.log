@@ -1,0 +1,30 @@
+[1/2] START test/server/side-chat.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) source-scoped side conversations > cold side-history list retains persisted references with missing current model and exact Project authority [6970.19ms]
+(pass) source-scoped side conversations > assistant source creates an independent root from complete history through the real routes [2770.08ms]
+(pass) source-scoped side conversations > root source creates an independent root from complete history through the real routes [2715.60ms]
+(pass) source-scoped side conversations > mission source creates an independent root from complete history through the real routes [3360.47ms]
+(pass) source-scoped side conversations > project authority resolves an exact not-found response for a foreign source [4570.40ms]
+
+ 5 pass
+ 0 fail
+ 40 expect() calls
+Ran 5 tests across 1 file. [22.94s]
+[1/2] DONE test/server/side-chat.test.ts exit=0 duration=23.15s
+[2/2] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.54ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.16ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.08ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.05ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.07ms]
+
+ 5 pass
+ 0 fail
+ 5 expect() calls
+Ran 5 tests across 1 file. [1124.00ms]
+[2/2] DONE test/project-route-context.test.ts exit=0 duration=1.28s

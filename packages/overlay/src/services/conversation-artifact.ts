@@ -78,8 +78,10 @@ async function readChunk(input: {
   byteOffset: number
   signal?: AbortSignal
 }): Promise<ArtifactByteChunk> {
-  const response = await apiRequest<Uint8Array>(taskScopedPath(input.taskID, input.directory, "/artifact-read"), {
-    method: "POST",
+  const path = taskScopedPath(input.taskID, input.directory, "/artifact-read")
+  const method = "POST" as const
+  const response = await apiRequest<Uint8Array>(path, {
+    method,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       locator: input.locator,
@@ -90,7 +92,7 @@ async function readChunk(input: {
     authority: input.authority,
     signal: input.signal,
   })
-  if (!response.ok) throw new ApiError(response.status, "Conversation Artifact read", response.body, response.headers)
+  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers, method)
   const range = parseContentRange(responseHeader(response.headers, "Content-Range"))
   const disposition = parseDisposition(responseHeader(response.headers, "Content-Disposition"))
   const bytes = response.body

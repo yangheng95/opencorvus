@@ -1,0 +1,534 @@
+diff --git a/packages/overlay/src/services/api.ts b/packages/overlay/src/services/api.ts
+index 5a9dcf44..04c2e783 100644
+--- a/packages/overlay/src/services/api.ts
++++ b/packages/overlay/src/services/api.ts
+@@ -9,7 +9,7 @@
+ import { DEFAULT_SERVER } from "./default-server"
+ import { joinServerBaseUrl } from "@opencorvus-ai/transport-protocol"
+ import { getHostTransport } from "./host-transport-runtime"
+-import type { ResponseKind, TransportResponse } from "./host-transport"
++import type { ResponseKind, TransportRequest, TransportResponse } from "./host-transport"
+ import { bytesToArrayBuffer } from "../utils/binary"
+ import {
+   ApiAuthorityChangedError,
+@@ -157,7 +157,14 @@ export class ApiError extends Error {
+   readonly path: string
+   readonly body: unknown
+   readonly requestID: string | undefined
+-  constructor(status: number, path: string, body: unknown, responseHeaders: Readonly<Record<string, string>>) {
++  readonly method: NonNullable<TransportRequest["method"]>
++  constructor(
++    status: number,
++    path: string,
++    body: unknown,
++    responseHeaders: Readonly<Record<string, string>>,
++    method: NonNullable<TransportRequest["method"]>,
++  ) {
+     const decodedBody = materializeApiErrorBody(body)
+     super(formatApiErrorMessage(status, path, decodedBody))
+     this.name = "ApiError"
+@@ -165,6 +172,7 @@ export class ApiError extends Error {
+     this.path = path
+     this.body = decodedBody
+     this.requestID = pickHeader(responseHeaders, "x-opencorvus-request-id")?.trim() || undefined
++    this.method = method
+   }
+ 
+   get summary(): string {
+@@ -251,10 +259,12 @@ export function serverSettledRequest(init: ApiJsonInit): ApiJsonInit {
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ export async function apiJson<T = any>(path: string, init?: ApiJsonInit): Promise<T> {
+   const authority = init?.authority ?? captureApiAuthority()
+-  const res = await apiRequest<T>(path, { ...init, authority, responseKind: "json" })
++  assertApiAuthorityCurrent(authority)
++  const method = methodFromInit(init)
++  const res = await apiRequest<T>(path, { ...init, authority, method, responseKind: "json" })
+   assertApiAuthorityCurrent(authority, { phase: "response", response: res })
+   if (!res.ok) {
+-    const error = new ApiError(res.status, path, res.body, res.headers)
++    const error = new ApiError(res.status, path, res.body, res.headers, method)
+     publishApiError(error, authority)
+     assertApiAuthorityCurrent(authority, { phase: "response", response: res })
+     throw error
+@@ -535,16 +545,17 @@ function createBlobInFlightEntry(raw: string, key: string, authority?: ApiAuthor
+         return objectUrl
+       }
+       const { pathOnly, query } = splitPathQuery(raw.replace(/^\/+/, ""))
++      const method = "GET" as const
+       const res = await transport.request<Uint8Array>({
+         authority,
+         path: pathOnly,
+         query,
+-        method: "GET",
++        method,
+         responseKind: "binary",
+         signal: controller.signal,
+       })
+       if (authority) assertApiAuthorityCurrent(authority, { phase: "response", response: res })
+-      if (!res.ok) throw new ApiError(res.status, raw, res.body, res.headers)
++      if (!res.ok) throw new ApiError(res.status, raw, res.body, res.headers, method)
+       const ct = res.headers["content-type"] || res.headers["Content-Type"] || "application/octet-stream"
+       const blob = new Blob([bytesToArrayBuffer(res.body as Uint8Array)], { type: ct })
+       const objectUrl = URL.createObjectURL(blob)
+diff --git a/packages/overlay/src/services/browser-preview.ts b/packages/overlay/src/services/browser-preview.ts
+index 5f1f3050..bd36a7b8 100644
+--- a/packages/overlay/src/services/browser-preview.ts
++++ b/packages/overlay/src/services/browser-preview.ts
+@@ -96,12 +96,14 @@ export async function loadTaskBrowserPreviewEvidenceCaptureObjectUrl(input: {
+     input.directory,
+     `/evidence/${encodeURIComponent(input.evidenceID)}/capture.png`,
+   )
++  const method = "GET" as const
+   const response = await apiRequest<Uint8Array>(path, {
++    method,
+     responseKind: "binary",
+     signal: input.signal,
+     authority,
+   })
+-  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers)
++  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers, method)
+   const contentType = response.headers["content-type"] || response.headers["Content-Type"] || "image/png"
+   return {
+     url: URL.createObjectURL(new Blob([bytesToArrayBuffer(response.body)], { type: contentType })),
+diff --git a/packages/overlay/src/services/conversation-artifact.ts b/packages/overlay/src/services/conversation-artifact.ts
+index 9c7e069e..eea1a29a 100644
+--- a/packages/overlay/src/services/conversation-artifact.ts
++++ b/packages/overlay/src/services/conversation-artifact.ts
+@@ -78,8 +78,10 @@ async function readChunk(input: {
+   byteOffset: number
+   signal?: AbortSignal
+ }): Promise<ArtifactByteChunk> {
+-  const response = await apiRequest<Uint8Array>(taskScopedPath(input.taskID, input.directory, "/artifact-read"), {
+-    method: "POST",
++  const path = taskScopedPath(input.taskID, input.directory, "/artifact-read")
++  const method = "POST" as const
++  const response = await apiRequest<Uint8Array>(path, {
++    method,
+     headers: { "Content-Type": "application/json" },
+     body: JSON.stringify({
+       locator: input.locator,
+@@ -90,7 +92,7 @@ async function readChunk(input: {
+     authority: input.authority,
+     signal: input.signal,
+   })
+-  if (!response.ok) throw new ApiError(response.status, "Conversation Artifact read", response.body, response.headers)
++  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers, method)
+   const range = parseContentRange(responseHeader(response.headers, "Content-Range"))
+   const disposition = parseDisposition(responseHeader(response.headers, "Content-Disposition"))
+   const bytes = response.body
+diff --git a/packages/overlay/src/services/diff.ts b/packages/overlay/src/services/diff.ts
+index beb376d3..02d25e3b 100644
+--- a/packages/overlay/src/services/diff.ts
++++ b/packages/overlay/src/services/diff.ts
+@@ -298,15 +298,14 @@ async function readObservedTextSide(input: {
+       offset: String(offset),
+       length: String(length),
+     })
+-    const response = await apiRequest<Uint8Array>(
+-      taskScopedPath(
+-        input.taskID,
+-        input.directory,
+-        `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
+-      ),
+-      { responseKind: "binary", authority: input.authority },
++    const path = taskScopedPath(
++      input.taskID,
++      input.directory,
++      `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
+     )
+-    if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
++    const method = "GET" as const
++    const response = await apiRequest<Uint8Array>(path, { method, responseKind: "binary", authority: input.authority })
++    if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers, method)
+     const bytes = response.body
+     textChunks.push(decoder.decode(bytes, { stream: offset + bytes.byteLength < input.object.bytes }))
+     offset += bytes.byteLength
+diff --git a/packages/overlay/src/services/project-archive.ts b/packages/overlay/src/services/project-archive.ts
+index ca586078..01da62ea 100644
+--- a/packages/overlay/src/services/project-archive.ts
++++ b/packages/overlay/src/services/project-archive.ts
+@@ -25,12 +25,14 @@ function saveBytesAsDownload(bytes: Uint8Array, filename: string): void {
+ }
+ 
+ export async function downloadZipArchive(input: { path: string }): Promise<boolean> {
++  const method = "GET" as const
+   const response = await apiRequest<Uint8Array>(input.path, {
++    method,
+     responseKind: "binary",
+     timeoutMilliseconds: ZIP_ARCHIVE_DOWNLOAD_TIMEOUT_MILLISECONDS,
+   })
+   if (!response.ok) {
+-    throw new ApiError(response.status, input.path, response.body, response.headers)
++    throw new ApiError(response.status, input.path, response.body, response.headers, method)
+   }
+   const filename = contentDispositionFilename(
+     response.headers["content-disposition"] || response.headers["Content-Disposition"],
+diff --git a/packages/overlay/src/store/board.ts b/packages/overlay/src/store/board.ts
+index c63b6dc5..930752d5 100644
+--- a/packages/overlay/src/store/board.ts
++++ b/packages/overlay/src/store/board.ts
+@@ -374,7 +374,9 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
+       if (boardStore.boardEtag) headers["If-None-Match"] = boardStore.boardEtag
+       const directory = selectedTaskOwningDirectory(taskID)
+       const boardPath = directoryScopedPath(`task/${encodeURIComponent(taskID)}/board`, directory, "loadBoard")
++      const method = "GET" as const
+       const res = await apiRequest<any>(boardPath, {
++        method,
+         authority,
+         headers,
+         signal: AbortSignal.timeout(10000),
+@@ -384,7 +386,7 @@ export async function loadBoard(options: LoadBoardOptions = {}): Promise<void> {
+         clearBoardRetry()
+         return
+       }
+-      if (!res.ok) throw new ApiError(res.status, boardPath, res.body, res.headers)
++      if (!res.ok) throw new ApiError(res.status, boardPath, res.body, res.headers, method)
+       const etag = res.headers["etag"] || res.headers["ETag"]
+       if (etag) setBoardEtag(etag)
+       const data = res.body
+diff --git a/packages/overlay/src/utils/error-details.ts b/packages/overlay/src/utils/error-details.ts
+index e86a4fee..29848f00 100644
+--- a/packages/overlay/src/utils/error-details.ts
++++ b/packages/overlay/src/utils/error-details.ts
+@@ -7,9 +7,15 @@ export function formatErrorDetails(err: unknown): string {
+   if (err == null) return ""
+   if (err instanceof Error) {
+     const parts: string[] = []
+-    const meta = err as Error & { status?: unknown; path?: unknown; body?: unknown; requestID?: unknown }
++    const meta = err as Error & {
++      status?: unknown
++      path?: unknown
++      method?: unknown
++      body?: unknown
++      requestID?: unknown
++    }
+     if (typeof meta.status === "number" && typeof meta.path === "string") {
+-      parts.push(`HTTP ${meta.status} ${meta.path}`)
++      parts.push(`HTTP ${typeof meta.method === "string" ? `${meta.method} ` : ""}${meta.status} ${meta.path}`)
+     }
+     if (typeof meta.requestID === "string" && meta.requestID) parts.push(`Request ID: ${meta.requestID}`)
+     parts.push(err.stack || `${err.name}: ${err.message}`)
+diff --git a/packages/overlay/test/api-error.test.ts b/packages/overlay/test/api-error.test.ts
+index 2e6005b4..5419c645 100644
+--- a/packages/overlay/test/api-error.test.ts
++++ b/packages/overlay/test/api-error.test.ts
+@@ -17,11 +17,13 @@ import { downloadZipArchive } from "../src/services/project-archive"
+ //   - `message` prefers common server fields (message, error, detail)
+ //   - 2xx returns the parsed body unchanged (no behavior regression)
+ 
+-function fakeTransport(responder: (req: TransportRequest) => TransportResponse<unknown>): HostTransport {
++function fakeTransport(
++  responder: (req: TransportRequest) => TransportResponse<unknown> | Promise<TransportResponse<unknown>>,
++): HostTransport {
+   return {
+     kind: "tauri",
+     async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
+-      return responder(req) as TransportResponse<T>
++      return (await responder(req)) as TransportResponse<T>
+     },
+     openStream() {
+       throw new Error("openStream not used in apiJson tests")
+@@ -37,6 +39,66 @@ function fakeTransport(responder: (req: TransportRequest) => TransportResponse<u
+ 
+ const TEST_DIRECTORY = "D:/opencorvus/api-error-test"
+ 
++test("generic error details preserve their ordinary error identity", () => {
++  const error = new Error("Ordinary failure")
++  error.stack = "Error: Ordinary failure"
++  expect(formatErrorDetails(error)).toBe("Error: Ordinary failure")
++})
++
++test.each(["GET", "POST", "PUT", "PATCH", "DELETE"] as const)(
++  "retains actual %s dispatch identity in typed HTTP details",
++  async (method) => {
++    const records: Array<{ method: TransportRequest["method"]; path: string }> = []
++    const body = { message: "Actual request failure" }
++    __setHostTransportForTest(
++      fakeTransport((request) => {
++        records.push({ method: request.method, path: request.path })
++        return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
++      }),
++    )
++    const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
++    expect(records).toEqual([{ method, path: "attachment" }])
++    expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
++    const typed = error as ApiError
++    typed.stack = "ApiError: method fixture stack"
++    expect(formatErrorDetails(typed)).toBe(
++      `HTTP ${method} 400 attachment\n\nRequest ID: request-${method}\n\nApiError: method fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
++    )
++  },
++)
++
++test("concurrent same-path errors retain dispatched methods after caller init mutation", async () => {
++  const records: Array<{ method: TransportRequest["method"]; path: string }> = []
++  const releases = new Map<string, () => void>()
++  __setHostTransportForTest(
++    fakeTransport(async (request) => {
++      records.push({ method: request.method, path: request.path })
++      await new Promise<void>((resolve) => releases.set(request.method!, resolve))
++      return {
++        status: 400,
++        ok: false,
++        headers: { "x-opencorvus-request-id": `actual-${request.method}` },
++        body: { message: `${request.method} failure` },
++      }
++    }),
++  )
++  const mutable: RequestInit = {}
++  const first = apiJson("attachment", mutable).catch((error: unknown) => error)
++  const second = apiJson("attachment", { method: "POST" }).catch((error: unknown) => error)
++  mutable.method = "DELETE"
++  releases.get("POST")!()
++  releases.get("GET")!()
++  const errors = await Promise.all([first, second])
++  expect(records).toEqual([
++    { method: "GET", path: "attachment" },
++    { method: "POST", path: "attachment" },
++  ])
++  expect(errors).toMatchObject([
++    { method: "GET", status: 400, path: "attachment", requestID: "actual-GET", body: { message: "GET failure" } },
++    { method: "POST", status: 400, path: "attachment", requestID: "actual-POST", body: { message: "POST failure" } },
++  ])
++})
++
+ beforeEach(() => configure({ directory: TEST_DIRECTORY }))
+ 
+ afterEach(() => {
+@@ -46,16 +108,52 @@ afterEach(() => {
+ 
+ describe("apiJson + ApiError", () => {
+   test.each([
+-    { name: "named UTF8 JSON", status: 404, text: '{"name":"NotFoundError","data":{"message":"原产物不可用"}}', body: { name: "NotFoundError", data: { message: "原产物不可用" } }, detail: "原产物不可用" },
+-    { name: "message JSON", status: 409, text: '{"message":"Read conflict"}', body: { message: "Read conflict" }, detail: "Read conflict" },
+-    { name: "problem JSON", status: 429, text: '{"detail":"Read limit reached"}', body: { detail: "Read limit reached" }, detail: "Read limit reached" },
+-    { name: "plain authentication response", status: 401, text: " Unauthorized ", body: "Unauthorized", detail: "Unauthorized" },
+-    { name: "malformed JSON text", status: 502, text: '{"message": upstream unavailable', body: '{"message": upstream unavailable', detail: '{"message": upstream unavailable' },
++    {
++      name: "named UTF8 JSON",
++      status: 404,
++      text: '{"name":"NotFoundError","data":{"message":"原产物不可用"}}',
++      body: { name: "NotFoundError", data: { message: "原产物不可用" } },
++      detail: "原产物不可用",
++    },
++    {
++      name: "message JSON",
++      status: 409,
++      text: '{"message":"Read conflict"}',
++      body: { message: "Read conflict" },
++      detail: "Read conflict",
++    },
++    {
++      name: "problem JSON",
++      status: 429,
++      text: '{"detail":"Read limit reached"}',
++      body: { detail: "Read limit reached" },
++      detail: "Read limit reached",
++    },
++    {
++      name: "plain authentication response",
++      status: 401,
++      text: " Unauthorized ",
++      body: "Unauthorized",
++      detail: "Unauthorized",
++    },
++    {
++      name: "malformed JSON text",
++      status: 502,
++      text: '{"message": upstream unavailable',
++      body: '{"message": upstream unavailable',
++      detail: '{"message": upstream unavailable',
++    },
+     { name: "empty bytes", status: 503, text: "", body: "", detail: "" },
+   ])("materializes one binary $name body for every diagnostic", ({ status, text, body, detail }) => {
+-    const error = new ApiError(status, "binary/read", new TextEncoder().encode(text), {
+-      "X-OpenCorvus-Request-ID": "binary-response-1",
+-    })
++    const error = new ApiError(
++      status,
++      "binary/read",
++      new TextEncoder().encode(text),
++      {
++        "X-OpenCorvus-Request-ID": "binary-response-1",
++      },
++      "GET",
++    )
+     expect(error.body).toEqual(body)
+     expect(error.message).toBe(`API ${status} binary/read${detail ? `: ${detail}` : ""}`)
+     expect(error.summary).toBe(`API ${status}${detail ? `: ${detail}` : ""}`)
+@@ -63,7 +161,7 @@ describe("apiJson + ApiError", () => {
+     error.stack = "ApiError: binary fixture stack"
+     const rendered = typeof body === "string" ? body : JSON.stringify(body, null, 2)
+     expect(formatErrorDetails(error)).toBe(
+-      `HTTP ${status} binary/read\n\nRequest ID: binary-response-1\n\nApiError: binary fixture stack${rendered ? `\n\nresponse body:\n${rendered}` : ""}`,
++      `HTTP GET ${status} binary/read\n\nRequest ID: binary-response-1\n\nApiError: binary fixture stack${rendered ? `\n\nresponse body:\n${rendered}` : ""}`,
+     )
+   })
+ 
+@@ -86,7 +184,7 @@ describe("apiJson + ApiError", () => {
+       expect(typed.summary).toBe("API 500: Public explanation")
+       typed.stack = "ApiError: fixture stack"
+       expect(formatErrorDetails(typed)).toBe(
+-        `HTTP 500 attachment\n\nRequest ID: ${requestID}\n\nApiError: fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
++        `HTTP GET 500 attachment\n\nRequest ID: ${requestID}\n\nApiError: fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
+       )
+     },
+   )
+@@ -134,14 +232,17 @@ describe("apiJson + ApiError", () => {
+       summary: "API 503",
+       message: "API 503 attachment?directory=D%3A%2Fproject",
+     },
+-  ])("derives a concise summary and preserves the complete $status diagnostic", ({ status, body, summary, message }) => {
+-    const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body, {})
+-    expect(error.summary).toBe(summary)
+-    expect(error.message).toBe(message)
+-    expect(error.status).toBe(status)
+-    expect(error.path).toBe("attachment?directory=D%3A%2Fproject")
+-    expect(error.body).toBe(body)
+-  })
++  ])(
++    "derives a concise summary and preserves the complete $status diagnostic",
++    ({ status, body, summary, message }) => {
++      const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body, {}, "GET")
++      expect(error.summary).toBe(summary)
++      expect(error.message).toBe(message)
++      expect(error.status).toBe(status)
++      expect(error.path).toBe("attachment?directory=D%3A%2Fproject")
++      expect(error.body).toBe(body)
++    },
++  )
+ 
+   test("applies an explicit empty Basic Auth username", () => {
+     configure({ username: "", password: "secret" })
+diff --git a/packages/overlay/test/binary-api-error-services.test.ts b/packages/overlay/test/binary-api-error-services.test.ts
+index c0d6204e..9ba57158 100644
+--- a/packages/overlay/test/binary-api-error-services.test.ts
++++ b/packages/overlay/test/binary-api-error-services.test.ts
+@@ -11,10 +11,28 @@ import { setBoardStore } from "../src/store/board"
+ const directory = "D:/binary-error-contract"
+ const taskID = "tsk_binarycontract"
+ const originalFetch = globalThis.fetch
+-const groups: ChangeGroup[] = [{
+-  id: "artifact:art_binary", observationKind: "immutable_build_interval", taskID, artifactID: "art_binary", additions: 1, deletions: 0,
+-  changes: [{ file: "report.txt", status: "added", additions: 1, deletions: 0, isText: true, evidence: { kind: "complete", receipts: [{ artifactID: "art_binary", fileIndex: 0 }] }, beforeObject: null, afterObject: { oid: "a".repeat(40), bytes: 6 } }],
+-}]
++const groups: ChangeGroup[] = [
++  {
++    id: "artifact:art_binary",
++    observationKind: "immutable_build_interval",
++    taskID,
++    artifactID: "art_binary",
++    additions: 1,
++    deletions: 0,
++    changes: [
++      {
++        file: "report.txt",
++        status: "added",
++        additions: 1,
++        deletions: 0,
++        isText: true,
++        evidence: { kind: "complete", receipts: [{ artifactID: "art_binary", fileIndex: 0 }] },
++        beforeObject: null,
++        afterObject: { oid: "a".repeat(40), bytes: 6 },
++      },
++    ],
++  },
++]
+ 
+ beforeEach(() => {
+   configure({ serverUrl: "http://127.0.0.1:7878", directory })
+@@ -29,23 +47,58 @@ afterEach(() => {
+ })
+ 
+ test.each([
+-  { name: "archive", path: "project/archive", route: "/project/archive", read: () => downloadZipArchive({ path: "project/archive" }) },
+-  { name: "preview capture", path: "task/tsk_binarycontract/browser-preview/evidence/art_capture/capture.png?directory=D%3A%2Fbinary-error-contract", route: "/task/tsk_binarycontract/browser-preview/evidence/art_capture/capture.png", read: () => loadTaskBrowserPreviewEvidenceCaptureObjectUrl({ taskID, directory, evidenceID: "art_capture" }) },
+-  { name: "conversation resource", path: "Conversation Artifact read", route: "/task/tsk_binarycontract/artifact-read", read: () => loadConversationArtifactContent({ taskID, locator: { source: "task_artifact_resource", ref: { path: "report.txt" } } }) },
+-  { name: "build observation", path: "build observation content", route: "/task/tsk_binarycontract/build-observation/art_binary/content", read: () => resolveDiff({ filePath: "report.txt", groupID: "artifact:art_binary" }, groups) },
+-])("$name projects local Response-fixture transport bytes through ApiError", async ({ path, route, read }) => {
++  {
++    name: "archive",
++    method: "GET",
++    path: "project/archive",
++    route: "/project/archive",
++    read: () => downloadZipArchive({ path: "project/archive" }),
++  },
++  {
++    name: "preview capture",
++    method: "GET",
++    path: "task/tsk_binarycontract/browser-preview/evidence/art_capture/capture.png?directory=D%3A%2Fbinary-error-contract",
++    route: "/task/tsk_binarycontract/browser-preview/evidence/art_capture/capture.png",
++    read: () => loadTaskBrowserPreviewEvidenceCaptureObjectUrl({ taskID, directory, evidenceID: "art_capture" }),
++  },
++  {
++    name: "conversation resource",
++    method: "POST",
++    path: "task/tsk_binarycontract/artifact-read?directory=D%3A%2Fbinary-error-contract",
++    route: "/task/tsk_binarycontract/artifact-read",
++    read: () =>
++      loadConversationArtifactContent({
++        taskID,
++        locator: { source: "task_artifact_resource", ref: { path: "report.txt" } },
++      }),
++  },
++  {
++    name: "build observation",
++    method: "GET",
++    path: "task/tsk_binarycontract/build-observation/art_binary/content?file=report.txt&side=after&offset=0&length=6&directory=D%3A%2Fbinary-error-contract",
++    route: "/task/tsk_binarycontract/build-observation/art_binary/content",
++    read: () => resolveDiff({ filePath: "report.txt", groupID: "artifact:art_binary" }, groups),
++  },
++])("$name projects local Response-fixture transport bytes through ApiError", async ({ path, route, method, read }) => {
+   let actualRoute = ""
++  let actualMethod = ""
+   const body = { name: "NotFoundError", data: { message: "原产物不可用" } }
+-  globalThis.fetch = Object.assign(async (input: Parameters<typeof fetch>[0]) => {
+-    actualRoute = new URL(String(input)).pathname
+-    return new Response(new TextEncoder().encode(JSON.stringify(body)), {
+-      status: 404, headers: { "content-type": "application/json", "x-opencorvus-request-id": "binary-service-response-1" },
+-    })
+-  }, { preconnect: originalFetch.preconnect })
++  globalThis.fetch = Object.assign(
++    async (input: Parameters<typeof fetch>[0], init?: RequestInit) => {
++      actualRoute = new URL(String(input)).pathname
++      actualMethod = init?.method ?? "GET"
++      return new Response(new TextEncoder().encode(JSON.stringify(body)), {
++        status: 404,
++        headers: { "content-type": "application/json", "x-opencorvus-request-id": "binary-service-response-1" },
++      })
++    },
++    { preconnect: originalFetch.preconnect },
++  )
+   const result = await read().catch((error: unknown) => error)
+   expect(result).toBeInstanceOf(ApiError)
+   const error = result as ApiError
+-  expect(actualRoute).toBe(route)
++  expect({ route: actualRoute, method: actualMethod }).toEqual({ route, method })
++  expect(error.method).toBe(method)
+   expect(error.status).toBe(404)
+   expect(error.path).toBe(path)
+   expect(error.body).toEqual(body)
+@@ -56,12 +109,20 @@ test.each([
+ 
+ test("successful binary transport preserves exact bytes and diff content", async () => {
+   const bytes = new Uint8Array([0, 255, 1, 128, 13, 10])
+-  globalThis.fetch = Object.assign(async () => new Response(bytes, { status: 206, headers: { "content-type": "application/octet-stream" } }), { preconnect: originalFetch.preconnect })
+-  const response = await createTauriTransport("browser").request<Uint8Array>({ path: "global/health", responseKind: "binary" })
++  globalThis.fetch = Object.assign(
++    async () => new Response(bytes, { status: 206, headers: { "content-type": "application/octet-stream" } }),
++    { preconnect: originalFetch.preconnect },
++  )
++  const response = await createTauriTransport("browser").request<Uint8Array>({
++    path: "global/health",
++    responseKind: "binary",
++  })
+   expect(response.status).toBe(206)
+   expect(response.body).toBeInstanceOf(Uint8Array)
+   expect([...response.body]).toEqual([0, 255, 1, 128, 13, 10])
+-  globalThis.fetch = Object.assign(async () => new Response(new TextEncoder().encode("report"), { status: 200 }), { preconnect: originalFetch.preconnect })
++  globalThis.fetch = Object.assign(async () => new Response(new TextEncoder().encode("report"), { status: 200 }), {
++    preconnect: originalFetch.preconnect,
++  })
+   const change = await resolveDiff({ filePath: "report.txt", groupID: "artifact:art_binary" }, groups)
+   expect(change).toEqual({ ...groups[0]!.changes[0], before: "", after: "report" })
+ })

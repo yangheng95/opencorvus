@@ -1,0 +1,96 @@
+{
+  "sdkInput": [
+    "1.31.0"
+  ],
+  "sdkAdvisoryCount": 0,
+  "advisoryCount": 10,
+  "severityCounts": [
+    {
+      "count": 10,
+      "severity": ""
+    }
+  ],
+  "inputTupleDelta": [
+    {
+      "before": [
+        "1.26.0"
+      ],
+      "name": "@modelcontextprotocol/sdk",
+      "after": [
+        "1.31.0"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "name": "http-cache-semantics",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "vulnerable_versions": "<=4.2.0"
+    },
+    {
+      "name": "sprintf-js",
+      "severity": "moderate",
+      "url": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "title": "sprintf-js vulnerable to denial of service through unbounded precision specifiers",
+      "vulnerable_versions": "<=1.1.3"
+    },
+    {
+      "name": "smol-toml",
+      "severity": "moderate",
+      "url": "https://github.com/advisories/GHSA-r4xh-jqrq-34v2",
+      "title": "smol-toml: Quadratic-time parse() from parseKey rescanning to end of document on each key line",
+      "vulnerable_versions": "<=1.8.0"
+    },
+    {
+      "name": "proxy-addr",
+      "severity": "critical",
+      "url": "https://github.com/advisories/GHSA-jqcg-44mw-7w3h",
+      "title": "proxy-addr vulnerable to IP spoofing via IPv4-mapped IPv6 trust subnet",
+      "vulnerable_versions": ">=1.1.0 <2.0.8"
+    },
+    {
+      "name": "seroval",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-jp82-f5mq-hwhp",
+      "title": "Seroval: Memory exhaustion via unchecked TypedArray length in JSON deserialization",
+      "vulnerable_versions": "<=1.6.2"
+    },
+    {
+      "name": "postcss-selector-parser",
+      "severity": "moderate",
+      "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+      "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "vulnerable_versions": "<7.1.6"
+    },
+    {
+      "name": "katex",
+      "severity": "low",
+      "url": "https://github.com/advisories/GHSA-238p-pmpm-9mq7",
+      "title": "KaTeX: Existing prototype pollution can bypass trust restrictions",
+      "vulnerable_versions": ">=0.11.0 <0.18.2"
+    },
+    {
+      "name": "source-map-js",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "vulnerable_versions": ">=1.0.0 <1.2.2"
+    },
+    {
+      "name": "braces",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "vulnerable_versions": "<=3.0.3"
+    },
+    {
+      "name": "sharp",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
+      "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+      "vulnerable_versions": "<0.35.5"
+    }
+  ]
+}

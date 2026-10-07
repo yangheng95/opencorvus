@@ -1,0 +1,31 @@
+[1/1] START test/server/side-chat.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+84 |       status: 400,
+85 |       body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-side-provider", modelID: "missing-side-model" } },
+86 |     })
+87 |     await Instance.disposeAll()
+88 |     const list = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.source.id}/side-chat`, { headers }))
+89 |     expect(list.status).toBe(200)
+                             ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 400
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\side-chat.test.ts:89:25)
+(fail) source-scoped side conversations > cold side-history list retains persisted references with missing current model and exact Project authority [4707.53ms]
+(pass) source-scoped side conversations > assistant source creates an independent root from complete history through the real routes [2756.43ms]
+(pass) source-scoped side conversations > root source creates an independent root from complete history through the real routes [2550.65ms]
+(pass) source-scoped side conversations > mission source creates an independent root from complete history through the real routes [2549.74ms]
+(pass) source-scoped side conversations > project authority resolves an exact not-found response for a foreign source [4332.77ms]
+
+ 4 pass
+ 1 fail
+ 34 expect() calls
+Ran 5 tests across 1 file. [19.55s]
+[1/1] DONE test/server/side-chat.test.ts exit=1 duration=19.77s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\side-chat.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\side-chat.test.ts

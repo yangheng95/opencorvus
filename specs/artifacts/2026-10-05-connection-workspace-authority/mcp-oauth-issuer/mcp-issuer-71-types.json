@@ -1,0 +1,20 @@
+{
+  "extends": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\**\\*.ts",
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\mcp\\oauth-issuer.test.ts",
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\mcp\\auth-durable-revision.test.ts",
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\mcp\\durable-oauth-finish.test.ts",
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\mcp\\oauth-callback-durable-legitimacy.test.ts",
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\mcp\\oauth-state-single-use.test.ts"
+  ],
+  "exclude": [
+    "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\skill\\builtin\\**\\*"
+  ],
+  "files": [
+    "../packages/opencorvus/src/sql.d.ts"
+  ]
+}

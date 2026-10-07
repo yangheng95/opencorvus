@@ -1,0 +1,29 @@
+{
+  "observedAtUtc": "2026-10-07T02:23:29.4762627Z",
+  "purpose": "Real upward wheel provenance on genuine completed long Task50; bounded sole-controller observing code; no Task rearm/provider/auth copy",
+  "port": 18027,
+  "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+  "credentialStaging": "None; source50 untouched; no Task rearm",
+  "producerSessionID": "ses_hGzJHWeYBSh6xDoVwkSy",
+  "sourceNativeStates": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69392,
+        "processInstanceID": "win32:639269218560109472",
+        "occurrenceID": "7c41c26b-1fa7-4bb1-9a4d-11db04037ad1"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 67468,
+        "processInstanceID": "win32:639269218567932415",
+        "occurrenceID": "dbfff604-3c81-4a16-90ea-4abbc9ccc9d8"
+      }
+    }
+  ],
+  "source": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50",
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\input-follow-before-69",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project"
+}

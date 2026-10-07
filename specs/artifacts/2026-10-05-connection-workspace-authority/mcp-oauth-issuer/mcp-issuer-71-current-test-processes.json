@@ -1,0 +1,37 @@
+[
+  {
+    "ProcessId": 44636,
+    "ParentProcessId": 62540,
+    "CreationDate": "2026-10-07T10:58:27.993641+08:00",
+    "Name": "opencorvus-process-supervisor.exe",
+    "CommandLine": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe --request C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-V1NHxl\\runner-62540-L5u227\\runtime-root\\tmp\\supervisor-hjnhRl\\request.json"
+  },
+  {
+    "ProcessId": 70532,
+    "ParentProcessId": 44636,
+    "CreationDate": "2026-10-07T10:58:28.041174+08:00",
+    "Name": "bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe test --timeout=60000 --parallel=1 D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\isolated-test-entry.test.ts"
+  },
+  {
+    "ProcessId": 70088,
+    "ParentProcessId": 21460,
+    "CreationDate": "2026-10-07T10:59:29.851304+08:00",
+    "Name": "opencorvus-process-supervisor.exe",
+    "CommandLine": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe --request C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vNcdLD\\runner-21460-ZJMb6Z\\runtime-root\\tmp\\supervisor-0rj4VB\\request.json"
+  },
+  {
+    "ProcessId": 66780,
+    "ParentProcessId": 70088,
+    "CreationDate": "2026-10-07T10:59:29.948355+08:00",
+    "Name": "bun.exe",
+    "CommandLine": "C:\\Users\\hengu\\.bun\\bin\\bun.exe test --timeout=60000 --parallel=1 D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\isolated-test-entry.test.ts"
+  },
+  {
+    "ProcessId": 71500,
+    "ParentProcessId": 70532,
+    "CreationDate": "2026-10-07T10:59:30.664532+08:00",
+    "Name": "opencorvus-process-supervisor.exe",
+    "CommandLine": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-3f665b2bfd616ca5\\debug\\opencorvus-process-supervisor.exe --request C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-V1NHxl\\test-70532-DO2vin\\runtime-root\\tmp\\supervisor-uazlJG\\request.json"
+  }
+]

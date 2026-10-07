@@ -2916,6 +2916,7 @@ export namespace MCP {
       clientId: oauth?.clientId,
       clientSecret: oauth?.clientSecret,
       scope: oauth?.scope,
+      issuer: oauth?.issuer,
     })
   }
 
@@ -3269,6 +3270,7 @@ export namespace MCP {
             clientId: oauthConfig?.clientId,
             clientSecret: oauthConfig?.clientSecret,
             scope: oauthConfig?.scope,
+            issuer: oauthConfig?.issuer,
           },
           "connection",
           undefined,
@@ -4377,6 +4379,7 @@ export namespace MCP {
       clientId: oauthConfig?.clientId,
       clientSecret: oauthConfig?.clientSecret,
       scope: oauthConfig?.scope,
+      issuer: oauthConfig?.issuer,
     }
     const credentialIdentity = McpOAuthProvider.credentialIdentity(mcpConfig.url, oauthProviderConfig)
     // Revoking the previous flow and establishing this one's lease is one

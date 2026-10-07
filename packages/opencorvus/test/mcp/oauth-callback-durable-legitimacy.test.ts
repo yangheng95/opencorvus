@@ -9,7 +9,7 @@ import { Filesystem } from "@/util/filesystem"
 import { Log } from "@/util/log"
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js"
 import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
-import { waitForJSONBarrier as waitForJson } from "../fixture/json-barrier"
+import { waitForJSONBarrier as waitForJson, waitForFixturePhase } from "../fixture/json-barrier"
 
 const worker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-broker-worker.ts")
 const stallingWorker = path.join(import.meta.dir, "../fixture/mcp-oauth-callback-stalling-broker-worker.ts")
@@ -261,23 +261,28 @@ describe("the durable MCP OAuth callback broker", () => {
       let transport: ReturnType<typeof spyOn> | undefined
       try {
         const binding = await waitForJson<{ redirectUrl: string; generation: string }>(output)
-        transport = spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
-          const url = new URL(input instanceof Request ? input.url : String(input))
-          if (url.pathname !== "/mcp/oauth/broker-proof") return nativeFetch(input, init)
-          const signal = init?.signal
-          if (!signal) throw new Error("Broker proof requires its cancellation signal")
-          const cancelled = signal.aborted
-            ? Promise.resolve()
-            : new Promise<void>((resolve) => signal.addEventListener("abort", () => resolve(), { once: true }))
-          const response = new Response("", { status: 200 })
-          if (stage === "headers") await cancelled
-          else
-            response.text = async () => {
-              await cancelled
-              return ""
-            }
-          return response
-        })
+        transport = spyOn(globalThis, "fetch").mockImplementation(
+          Object.assign(
+            async (input: RequestInfo | URL, init?: RequestInit) => {
+              const url = new URL(input instanceof Request ? input.url : String(input))
+              if (url.pathname !== "/mcp/oauth/broker-proof") return nativeFetch(input, init)
+              const signal = init?.signal
+              if (!signal) throw new Error("Broker proof requires its cancellation signal")
+              const cancelled = signal.aborted
+                ? Promise.resolve()
+                : new Promise<void>((resolve) => signal.addEventListener("abort", () => resolve(), { once: true }))
+              const response = new Response("", { status: 200 })
+              if (stage === "headers") await cancelled
+              else
+                response.text = async () => {
+                  await cancelled
+                  return ""
+                }
+              return response
+            },
+            { preconnect: nativeFetch.preconnect },
+          ),
+        )
         const refusal = await Global.provideRoot(root, () => McpOAuthCallback.ensureRunning()).catch((error) => error)
         transport.mockRestore()
         transport = undefined
@@ -369,7 +374,7 @@ describe("the durable MCP OAuth callback broker", () => {
       })
 
       const startup = Global.provideRoot(root, () => McpOAuthCallback.ensureRunning()).catch((error) => error)
-      await probeEntered
+      await waitForFixturePhase(probeEntered, startup, "broker-probe")
       const stopping = McpOAuthCallback.stop()
       const concurrentStop = McpOAuthCallback.stop()
       const duringStop = await Global.provideRoot(root, () => McpOAuthCallback.ensureRunning()).catch((error) => error)
@@ -544,7 +549,12 @@ describe("the durable MCP OAuth callback broker", () => {
         }
         if (url.pathname === "/token" && request.method === "POST") {
           refreshRequests.push(Object.fromEntries(new URLSearchParams(await request.text()).entries()))
-          return Response.json({ access_token: "rotated-refresh-access", token_type: "Bearer", expires_in: 3600 })
+          return Response.json({
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            access_token: "rotated-refresh-access",
+            token_type: "Bearer",
+            expires_in: 3600,
+          })
         }
         return new Response("not found", { status: 404 })
       },
@@ -558,7 +568,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const revision = await McpAuth.beginCredentialLease(authKey, serverUrl, credentialIdentity)
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "callback-bound-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "callback-bound-client" },
           undefined,
           revision,
           undefined,
@@ -567,7 +577,11 @@ describe("the durable MCP OAuth callback broker", () => {
         )
         await McpAuth.updateTokens(
           authKey,
-          { accessToken: "committed-token", refreshToken: "refresh-token" },
+          {
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            accessToken: "committed-token",
+            refreshToken: "refresh-token",
+          },
           serverUrl,
           revision,
           credentialIdentity,
@@ -597,7 +611,7 @@ describe("the durable MCP OAuth callback broker", () => {
         if (!entry?.revision) throw new Error("Rotated refresh did not retain its credential revision")
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "future-authorization-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "future-authorization-client" },
           serverUrl,
           entry.revision,
           credentialIdentity,
@@ -623,7 +637,7 @@ describe("the durable MCP OAuth callback broker", () => {
         if (!revision) throw new Error("Rotated refresh did not retain its credential revision")
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "future-authorization-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "future-authorization-client" },
           serverUrl,
           revision,
           credentialIdentity,
@@ -648,7 +662,11 @@ describe("the durable MCP OAuth callback broker", () => {
           {},
           "authorization",
           replacement,
-          { onRedirect: (url) => (authorizationUrl = url) },
+          {
+            onRedirect: (url) => {
+              authorizationUrl = url
+            },
+          },
           revision,
           undefined,
           oauthState,
@@ -663,6 +681,7 @@ describe("the durable MCP OAuth callback broker", () => {
           client,
           authorization: {
             result,
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
             clientId: authorizationUrl?.searchParams.get("client_id"),
             state: authorizationUrl?.searchParams.get("state"),
           },
@@ -676,7 +695,12 @@ describe("the durable MCP OAuth callback broker", () => {
       }).toEqual({
         generationChanged: true,
         redirectChanged: true,
-        entry: expect.objectContaining({ tokens: expect.objectContaining({ accessToken: "committed-token" }) }),
+        entry: expect.objectContaining({
+          tokens: expect.objectContaining({
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            accessToken: "committed-token",
+          }),
+        }),
       })
       expect({
         clientInfo: entry?.clientInfo,
@@ -699,17 +723,28 @@ describe("the durable MCP OAuth callback broker", () => {
         callbackRedirectUrl: undefined,
         clientCallbackGeneration: undefined,
         clientCallbackRedirectUrl: undefined,
-        tokenClientInfo: { clientId: "callback-bound-client" },
+        tokenClientInfo: { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "callback-bound-client" },
         refresh: {
-          client: { client_id: "callback-bound-client", client_secret: undefined },
+          client: {
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            client_id: "callback-bound-client",
+            client_secret: undefined,
+          },
           result: "AUTHORIZED",
           entry: expect.objectContaining({
-            clientInfo: { clientId: "future-authorization-client" },
+            clientInfo: {
+              issuer: `http://127.0.0.1:${authorizationServer.port}`,
+              clientId: "future-authorization-client",
+            },
             tokens: expect.objectContaining({
+              issuer: `http://127.0.0.1:${authorizationServer.port}`,
               accessToken: "rotated-refresh-access",
               refreshToken: "refresh-token",
             }),
-            tokenClientInfo: { clientId: "callback-bound-client" },
+            tokenClientInfo: {
+              issuer: `http://127.0.0.1:${authorizationServer.port}`,
+              clientId: "callback-bound-client",
+            },
           }),
         },
         refreshRequest: expect.objectContaining({
@@ -721,9 +756,14 @@ describe("the durable MCP OAuth callback broker", () => {
         retirement: {
           tokenState: "retired",
           tokenClientState: "retired",
-          client: { client_id: "future-authorization-client", client_secret: undefined },
+          client: {
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            client_id: "future-authorization-client",
+            client_secret: undefined,
+          },
           authorization: {
             result: "REDIRECT",
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
             clientId: "future-authorization-client",
             state: "post-retirement-authorization-state",
           },
@@ -762,6 +802,7 @@ describe("the durable MCP OAuth callback broker", () => {
         if (url.pathname === "/token" && request.method === "POST") {
           tokenRequests.push(Object.fromEntries(new URLSearchParams(await request.text()).entries()))
           return Response.json({
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
             access_token: "current-code-access",
             token_type: "Bearer",
             refresh_token: "current-code-refresh",
@@ -779,7 +820,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const current = await McpAuth.beginCredentialLease(authKey, serverUrl, credentialIdentity)
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "old-token-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "old-token-client" },
           serverUrl,
           current,
           credentialIdentity,
@@ -788,14 +829,18 @@ describe("the durable MCP OAuth callback broker", () => {
         )
         await McpAuth.updateTokens(
           authKey,
-          { accessToken: "old-access", refreshToken: "old-refresh" },
+          {
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            accessToken: "old-access",
+            refreshToken: "old-refresh",
+          },
           serverUrl,
           current,
           credentialIdentity,
         )
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "current-code-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "current-code-client" },
           serverUrl,
           current,
           credentialIdentity,
@@ -853,9 +898,15 @@ describe("the durable MCP OAuth callback broker", () => {
         result: {
           exchange: "AUTHORIZED",
           entry: expect.objectContaining({
-            clientInfo: { clientId: "current-code-client" },
-            tokenClientInfo: { clientId: "current-code-client" },
-            tokens: expect.objectContaining({ accessToken: "current-code-access" }),
+            clientInfo: { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "current-code-client" },
+            tokenClientInfo: {
+              issuer: `http://127.0.0.1:${authorizationServer.port}`,
+              clientId: "current-code-client",
+            },
+            tokens: expect.objectContaining({
+              issuer: `http://127.0.0.1:${authorizationServer.port}`,
+              accessToken: "current-code-access",
+            }),
             oauthCallbackTerminals: {
               [oauthState]: expect.objectContaining({ outcome: "connected" }),
             },
@@ -893,7 +944,11 @@ describe("the durable MCP OAuth callback broker", () => {
         }
         if (url.pathname === "/token" && request.method === "POST") {
           tokenRequests.push(Object.fromEntries(new URLSearchParams(await request.text()).entries()))
-          return Response.json({ access_token: "next-access", token_type: "Bearer" })
+          return Response.json({
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            access_token: "next-access",
+            token_type: "Bearer",
+          })
         }
         return new Response("not found", { status: 404 })
       },
@@ -907,7 +962,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const revision = await McpAuth.beginCredentialLease(authKey, serverUrl, identity)
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "old-occurrence-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "old-occurrence-client" },
           serverUrl,
           revision,
           identity,
@@ -947,7 +1002,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const revision = await McpAuth.beginCredentialLease(authKey, serverUrl, identity)
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "next-occurrence-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "next-occurrence-client" },
           serverUrl,
           revision,
           identity,
@@ -1044,6 +1099,7 @@ describe("the durable MCP OAuth callback broker", () => {
           const fields = Object.fromEntries(new URLSearchParams(await request.text()).entries())
           refreshRequests.push(fields)
           return Response.json({
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
             access_token: `access-for-${fields.refresh_token}`,
             token_type: "Bearer",
             refresh_token: fields.refresh_token,
@@ -1062,7 +1118,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const current = await McpAuth.beginCredentialLease(authKey, serverUrl, credentialIdentity)
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "old-refresh-client" },
+          { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "old-refresh-client" },
           serverUrl,
           current,
           credentialIdentity,
@@ -1071,7 +1127,11 @@ describe("the durable MCP OAuth callback broker", () => {
         )
         await McpAuth.updateTokens(
           authKey,
-          { accessToken: "old-access", refreshToken: "old-refresh" },
+          {
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
+            accessToken: "old-access",
+            refreshToken: "old-refresh",
+          },
           serverUrl,
           current,
           credentialIdentity,
@@ -1097,7 +1157,7 @@ describe("the durable MCP OAuth callback broker", () => {
           await Global.provideRoot(root, async () => {
             await McpAuth.updateClientInfo(
               authKey,
-              { clientId: "winner-client" },
+              { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "winner-client" },
               serverUrl,
               revision,
               credentialIdentity,
@@ -1106,7 +1166,11 @@ describe("the durable MCP OAuth callback broker", () => {
             )
             await McpAuth.updateTokens(
               authKey,
-              { accessToken: "winner-access", refreshToken: "winner-refresh" },
+              {
+                issuer: `http://127.0.0.1:${authorizationServer.port}`,
+                accessToken: "winner-access",
+                refreshToken: "winner-refresh",
+              },
               serverUrl,
               revision,
               credentialIdentity,
@@ -1193,12 +1257,14 @@ describe("the durable MCP OAuth callback broker", () => {
           refresh: request.refresh_token,
         })),
         afterStale: {
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: afterStale?.tokens?.accessToken,
           refreshToken: afterStale?.tokens?.refreshToken,
           tokenClient: afterStale?.tokenClientInfo?.clientId,
         },
         freshResult: {
           result: freshResult.result,
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: freshResult.entry?.tokens?.accessToken,
           refreshToken: freshResult.entry?.tokens?.refreshToken,
           tokenClient: freshResult.entry?.tokenClientInfo?.clientId,
@@ -1215,12 +1281,14 @@ describe("the durable MCP OAuth callback broker", () => {
           { client: "winner-client", refresh: "winner-refresh" },
         ],
         afterStale: {
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: "winner-access",
           refreshToken: "winner-refresh",
           tokenClient: "winner-client",
         },
         freshResult: {
           result: "AUTHORIZED",
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: "access-for-winner-refresh",
           refreshToken: "winner-refresh",
           tokenClient: "winner-client",
@@ -1429,7 +1497,12 @@ describe("the durable MCP OAuth callback broker", () => {
 
       await Global.provideRoot(root, () => McpAuth.removeMany([authKey]))
       const stale = await Global.provideRoot(root, () =>
-        McpAuth.updateTokens(authKey, { accessToken: "stale-token" }, undefined, revision),
+        McpAuth.updateTokens(
+          authKey,
+          { issuer: "https://issuer.fixture.test", accessToken: "stale-token" },
+          undefined,
+          revision,
+        ),
       ).catch((error) => error)
       const current = await Global.provideRoot(root, () => McpAuth.get(authKey))
       expect({
@@ -1493,11 +1566,7 @@ describe("the durable MCP OAuth callback broker", () => {
           },
         }),
       })
-      expect(settled.nextRevision).not.toBe(revision)
-      expect({ pending: settled.entry?.oauthState, finishing: settled.entry?.oauthFinishing }).toEqual({
-        pending: undefined,
-        finishing: undefined,
-      })
+      expect(settled.entry?.revision).toBe(settled.nextRevision)
     } finally {
       if (child) await stopChild(child)
       await McpOAuthCallback.stop()
@@ -1613,7 +1682,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const revision = await McpAuth.beginCredentialLease(authKey, "https://mcp.invalid", "identity-a")
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "client-a" },
+          { issuer: "https://issuer.fixture.test", clientId: "client-a" },
           undefined,
           revision,
           undefined,
@@ -1633,18 +1702,40 @@ describe("the durable MCP OAuth callback broker", () => {
         expect(await McpAuth.spendOAuthState(authKey, oauthState, revision, ownerID, Date.now() + 60_000)).toBe(true)
 
         const ordinaryWrites = await Promise.allSettled([
-          McpAuth.updateTokens(authKey, { accessToken: "foreign-token" }, undefined, revision),
-          McpAuth.updateClientInfo(authKey, { clientId: "foreign-client" }, undefined, revision),
+          McpAuth.updateTokens(
+            authKey,
+            { issuer: "https://issuer.fixture.test", accessToken: "foreign-token" },
+            undefined,
+            revision,
+          ),
+          McpAuth.updateClientInfo(
+            authKey,
+            { issuer: "https://issuer.fixture.test", clientId: "foreign-client" },
+            undefined,
+            revision,
+          ),
           McpAuth.invalidateCredentials(authKey, "all", revision),
           McpAuth.updateCodeVerifier(authKey, "foreign-verifier", revision),
           McpAuth.updateOAuthState(authKey, "foreign-state", revision),
-          McpAuth.set(authKey, { tokens: { accessToken: "foreign-set-token" } }, undefined, revision),
+          McpAuth.set(
+            authKey,
+            { tokens: { issuer: "https://issuer.fixture.test", accessToken: "foreign-set-token" } },
+            undefined,
+            revision,
+          ),
           McpAuth.stageStaticCredential(authKey, "foreign-secret", "https://foreign.invalid", "foreign-identity"),
         ])
-        await McpAuth.updateTokens(authKey, { accessToken: "owner-token" }, undefined, revision, undefined, {
-          oauthState,
-          ownerID,
-        })
+        await McpAuth.updateTokens(
+          authKey,
+          { issuer: "https://issuer.fixture.test", accessToken: "owner-token" },
+          undefined,
+          revision,
+          undefined,
+          {
+            oauthState,
+            ownerID,
+          },
+        )
         return { ordinaryWrites, entry: await McpAuth.get(authKey) }
       })
 
@@ -1655,8 +1746,8 @@ describe("the durable MCP OAuth callback broker", () => {
       ).toEqual(Array.from({ length: 7 }, () => `MCP OAuth finishing occurrence is not current: ${authKey}`))
       expect(result.entry).toEqual(
         expect.objectContaining({
-          tokens: { accessToken: "owner-token" },
-          clientInfo: { clientId: "client-a" },
+          tokens: { issuer: "https://issuer.fixture.test", accessToken: "owner-token" },
+          clientInfo: { issuer: "https://issuer.fixture.test", clientId: "client-a" },
           codeVerifier: "verifier-a",
           callbackGeneration: "generation-a",
           callbackRedirectUrl: "http://127.0.0.1:31234/mcp/oauth/callback",
@@ -1678,7 +1769,7 @@ describe("the durable MCP OAuth callback broker", () => {
         const revision = await McpAuth.beginCredentialLease(authKey, "https://mcp.invalid")
         await McpAuth.updateClientInfo(
           authKey,
-          { clientId: "obsolete-client" },
+          { issuer: "https://issuer.fixture.test", clientId: "obsolete-client" },
           undefined,
           revision,
           undefined,
@@ -1835,6 +1926,7 @@ describe("the durable MCP OAuth callback broker", () => {
           const fields = Object.fromEntries(new URLSearchParams(await request.text()).entries())
           refreshRequests.push(fields)
           return Response.json({
+            issuer: `http://127.0.0.1:${authorizationServer.port}`,
             access_token: "legacy-refreshed-access",
             token_type: "Bearer",
             refresh_token: fields.refresh_token,
@@ -1852,8 +1944,12 @@ describe("the durable MCP OAuth callback broker", () => {
         await McpAuth.set(
           authKey,
           {
-            tokens: { accessToken: "legacy-token", refreshToken: "legacy-refresh" },
-            clientInfo: { clientId: "legacy-client" },
+            tokens: {
+              issuer: `http://127.0.0.1:${authorizationServer.port}`,
+              accessToken: "legacy-token",
+              refreshToken: "legacy-refresh",
+            },
+            clientInfo: { issuer: `http://127.0.0.1:${authorizationServer.port}`, clientId: "legacy-client" },
             oauthState: "legacy-open-state",
             codeVerifier: "legacy-verifier",
           },
@@ -1875,13 +1971,17 @@ describe("the durable MCP OAuth callback broker", () => {
           "connection",
           binding,
           { onRedirect: () => {} },
-          entry.revision,
+          entry.revision ??
+            (() => {
+              throw new Error("Established OAuth fixture revision is required")
+            })(),
         )
         const result = await auth(provider, { serverUrl: new URL(serverUrl) })
         return { result, entry: await McpAuth.get(authKey) }
       })
       expect({
         settled: {
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: entry.tokens?.accessToken,
           refreshToken: entry.tokens?.refreshToken,
           tokenClient: entry.tokenClientInfo?.clientId,
@@ -1894,12 +1994,14 @@ describe("the durable MCP OAuth callback broker", () => {
         refreshRequestCount: refreshRequests.length,
         refresh: {
           result: refresh.result,
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: refresh.entry?.tokens?.accessToken,
           refreshToken: refresh.entry?.tokens?.refreshToken,
           tokenClient: refresh.entry?.tokenClientInfo?.clientId,
         },
       }).toEqual({
         settled: {
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: "legacy-token",
           refreshToken: "legacy-refresh",
           tokenClient: "legacy-client",
@@ -1916,6 +2018,7 @@ describe("the durable MCP OAuth callback broker", () => {
         refreshRequestCount: 1,
         refresh: {
           result: "AUTHORIZED",
+          issuer: `http://127.0.0.1:${authorizationServer.port}`,
           accessToken: "legacy-refreshed-access",
           refreshToken: "legacy-refresh",
           tokenClient: "legacy-client",

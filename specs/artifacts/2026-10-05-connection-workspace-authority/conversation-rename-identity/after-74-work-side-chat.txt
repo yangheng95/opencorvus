@@ -1,0 +1,101 @@
+Browser tab: 46, Title: "OpenCorvus", URL: "http://localhost:18030/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 70-150
+~				68 container workspaceMain
+~					69 container chatSection
++						70 container Description: Loading task, ID: taskSwitchProgress
++						71 container
++							72 text 重命名验收74 · Work
++							73 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-232-trigger, Secondary Actions: Expand
++							74 container Description: Not running, ID: taskStatus
++								75 text Not running
++							76 button Side chat
++							77 container solidChatHeaderRuntimeActions
++								78 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++								79 checkbox Description: Close right dock, Value: 1
++						80 container
++							81 container Description: Conversation, ID: chatScroll
++								82 container
++									83 text work
++									84 text 15s
++									85 heading 文件操作验收记录, Value: 1
++										86 text 文件操作验收记录
++									87 heading 一、验收范围与依据, Value: 2
++										88 text 一、验收范围与依据
++									89 container
++										90 text 本记录仅依据用户提供的真实验证事实撰写，不重新执行工具、不修改文件，也不补充未提供的回执内容。验收对象为同一个新建文本文件，操作顺序严格为  Write、Read、Edit、Read、Edit、Read 。检查重点是状态逐步变化、两行结构稳定、marker 不变，以及末尾换行保留。
++									91 heading 二、逐步证据记录, Value: 2
++										92 text 二、逐步证据记录
++									93 content list
++										94 container
++											95 AXListMarker 1. 
++											96 text Write：建立初始文件。  首次写入形成两行文本，包含 marker 和  state: initial ，末尾保留换行。写入工具回执用于确认该操作已执行；文件实际内容由紧随其后的读取验证。
++										97 container
++											98 AXListMarker 2. 
++											99 text 第一次 Read：核验初始状态。  读取结果为两行，state 为  initial ，marker 与写入内容一致，末尾换行保留，证明初始文件符合要求。
++										100 container
++											101 AXListMarker 3. 
++											102 text 第一次 Edit：修改为中间状态。  将  state: initial  替换为  state: middle 。编辑回执确认替换执行，是否保持其余内容不变，则由下一次读取核验。
++										103 container
++											104 AXListMarker 4. 
++											105 text 第二次 Read：核验中间状态。  结果仍为两行，state 已变为  middle ，marker 未变，末尾换行保留，确认第一次修改符合要求。
++										106 container
++											107 AXListMarker 5. 
++											108 text 第二次 Edit：修改为最终状态。  将  state: middle  替换为  state: final ，完成第二次状态转换；编辑回执与后续读取分别承担执行确认和结果验证。
++										109 container
++											110 AXListMarker 6. 
++											111 text 第三次 Read：核验最终状态。  结果仍为两行，state 为  final ，marker 保持不变，末尾换行保留。独立磁盘核对进一步确认最终文件为  58 字节，且内容完全匹配 。
++									112 heading 三、证据边界与结论, Value: 2
++										113 text 三、证据边界与结论
++									114 text 工具回执是操作与读取的直接证据；本记录中的总结文字仅归纳事实，不能替代回执或磁盘核对。三次读取证明各阶段内容符合预期，独立磁盘核对确认最终落盘结果。依据所提供事实，本次文件操作验收通过。
++									115 heading 四、使用建议, Value: 2
++										116 text 四、使用建议
++									117 content list
++										118 container
++											119 AXListMarker • 
++											120 text 保留按时间顺序排列的工具回执及完整读取结果，便于追溯每次状态变化。
++										121 container
++											122 AXListMarker • 
++											123 text 验收文本时同时检查内容、行数和末尾换行；字节数应与完整内容核对结合使用，不能单独证明正确性。
++							124 container chatHomeComposition
++								125 container
++									126 text Model configuration unavailable
++									127 text You can still read this conversation. Review the details or choose a model before sending a message.
++									128 button (collapsed) Details, Secondary Actions: Expand
++										129 text Details
++									130 button Retry
++									131 container chatForm
++										132 splitter Description: Drag to resize the message input, Value: 42
++										133 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++										134 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++										135 text Work
++										136 text Chat
++										137 pop up button (collapsed) Description: View launch references, Secondary Actions: Expand
++										138 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++										139 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++											140 text Choose model
++										141 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
++					142 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
++					143 container Description: Tools panel, ID: rightDock
++						144 container tabs-cl-64
++							145 tab group Open tools
++								146 container
++									147 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
++									148 button Close tab
++							149 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
++							150 button Close panel
++							151 container Description: Side chat, ID: centerWorkbenchSideChat
++								152 container Side chat
++									153 pop up button (collapsed) Choose a side chat Side chat, ID: select-cl-291-trigger, Secondary Actions: Expand
++										154 text Side chat
++									155 button New side chat
++									156 text Ask about this conversation while the main task keeps working.
++									157 container
++										158 text Side chat needs attention
++										159 button (collapsed) Details, Secondary Actions: Expand
++											160 text Details
++										161 button Try again
++										162 button Dismiss
++									163 text A little room to explore
++									164 text Ask a question, or quote a passage from the main conversation.
+The focused UI element is 76 button Side chat

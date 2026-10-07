@@ -1,0 +1,28 @@
+[1/1] START test/server/passive-workspace-metadata.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+58 |     await fs.mkdir(path.dirname(configPath), { recursive: true })
+59 |     await fs.writeFile(configPath, JSON.stringify({ model: "missing-passive-provider/missing-passive-model", prompt_profile: { active: "metadata-one" } }))
+60 |     await Instance.disposeAll()
+61 |     Server.resetProjectRoutesAppForTest()
+62 |     const search = await request(project.path, "/expert-squad/search?query=metadata&limit=1")
+63 |     expect(search.status).toBe(200)
+                               ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 400
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\passive-workspace-metadata.test.ts:63:27)
+(fail) cold passive workspace metadata > real SDK packages, scoped skill files and canonical memory stay readable with missing current model [3251.83ms]
+(pass) cold passive workspace metadata > foreign Session catalog and skill reads retain exact Project lineage errors [5121.96ms]
+
+ 1 pass
+ 1 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [11.38s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\passive-workspace-metadata.test.ts
+[1/1] DONE test/server/passive-workspace-metadata.test.ts exit=1 duration=11.66s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\passive-workspace-metadata.test.ts

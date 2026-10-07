@@ -1,0 +1,57 @@
+$ bun script/run-tests.ts test/mcp/durable-oauth-finish.test.ts
+[1/1] START test/mcp/durable-oauth-finish.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) MCP OAuth finish from durable facts > ordinary admission without a pending authorization reports needs_auth [1969.76ms]
+206 |       fn: async () => {
+207 |         const original = {
+208 |           type: "remote" as const,
+209 |           transport: "streamable-http" as const,
+210 |           url: "https://debug-original.invalid/mcp",
+211 |           oauth: { issuer: `http://127.0.0.1:${server.port}`, clientId: CLIENT_ID },
+                                                     ^
+ReferenceError: server is not defined
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\durable-oauth-finish.test.ts:211:48)
+      at run (node:async_hooks:62:22)
+      at run (node:async_hooks:62:22)
+      at run (node:async_hooks:62:22)
+      at provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1391:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\durable-oauth-finish.test.ts:204:20)
+(fail) MCP OAuth finish from durable facts > OAuth debug authorization refuses a replaced canonical MCP definition [1614.12ms]
+
+T  MCP OAuth Debug
+|
+•  Server: durable-finish-server
+|
+•  URL: http://127.0.0.1:64530/mcp
+|
+•  Auth status: ✗ not authenticated
+[?25l|
+o  HTTP response: 401 Unauthorized
+[?25h|
+•  WWW-Authenticate: Bearer resource_metadata="http://127.0.0.1:64530/.well-known/oauth-protected-resource"
+|
+!  Server returned 401 Unauthorized
+|
+•  Testing OAuth flow (without completing authorization)...
+|
+•  OAuth authorization is required
+|
+•  Client ID available: present
+|
+—  Debug complete
+
+(pass) MCP OAuth finish from durable facts > the real MCP debug SDK probe retires its incomplete authorization occurrence [1832.75ms]
+(pass) MCP OAuth finish from durable facts > the MCP debug probe preserves an existing interactive authorization owner [1954.34ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission uses a stored token while callback broker maintenance is unreachable [2028.42ms]
+(fail) MCP OAuth finish from durable facts > an in-flight production refresh commits across callback broker rotation [120010.28ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > provider-controlled refresh errors project one fixed connection failure [120028.11ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > ordinary admission preserves a live startAuth occurrence and its original callback succeeds [120030.24ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > a process with no in-memory flow finishes the callback from the durable lease, state and verifier [120026.97ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > a peer broker finishes a durable flow and settles the initiating backend waiter [120014.14ms]
+  ^ a beforeEach/afterEach hook timed out for this test.

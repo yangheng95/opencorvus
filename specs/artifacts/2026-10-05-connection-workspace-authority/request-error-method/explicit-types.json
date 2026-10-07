@@ -1,0 +1,5 @@
+{
+  "extends": "../../packages/overlay/tsconfig.json",
+  "include": ["../../packages/overlay/src/**/*.ts", "../../packages/overlay/src/**/*.tsx", "../../packages/overlay/test/api-error.test.ts", "../../packages/overlay/test/binary-api-error-services.test.ts", "../../packages/overlay/test/tauri-transport-error-body.test.ts"],
+  "compilerOptions": { "types": ["../../packages/overlay/node_modules/vite/client", "../../packages/opencorvus/node_modules/@types/bun"] }
+}

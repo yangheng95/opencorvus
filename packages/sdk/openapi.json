@@ -11687,6 +11687,9 @@
                             "name": {
                               "type": "string"
                             },
+                            "size": {
+                              "type": "number"
+                            },
                             "title": {
                               "type": "string"
                             },
@@ -11881,6 +11884,11 @@
           },
           "clientSecret": {
             "description": "OAuth client secret (if required by the authorization server)",
+            "type": "string"
+          },
+          "issuer": {
+            "description": "Authorization server issuer for a pre-registered OAuth client",
+            "format": "uri",
             "type": "string"
           },
           "scope": {

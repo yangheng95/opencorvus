@@ -1,0 +1,3 @@
+$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+src/mcp/oauth-provider.ts(205,42): error TS18048: 'entry' is possibly 'undefined'.
+src/mcp/oauth-provider.ts(205,67): error TS18048: 'entry' is possibly 'undefined'.

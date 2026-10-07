@@ -1,0 +1,12 @@
+[1/1] START test/server/passive-workspace-metadata.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold passive workspace metadata > real SDK packages, scoped skill files and canonical memory stay readable with missing current model [8011.68ms]
+(pass) cold passive workspace metadata > foreign Session catalog and skill reads retain exact Project lineage errors [3600.81ms]
+
+ 2 pass
+ 0 fail
+ 19 expect() calls
+Ran 2 tests across 1 file. [14.09s]
+[1/1] DONE test/server/passive-workspace-metadata.test.ts exit=0 duration=14.29s

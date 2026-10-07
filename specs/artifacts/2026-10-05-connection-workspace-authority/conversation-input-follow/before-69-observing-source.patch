@@ -1,0 +1,121 @@
+diff --git a/packages/overlay/src/utils/dom-utils.ts b/packages/overlay/src/utils/dom-utils.ts
+index e9cadcf7..ac8a49ea 100644
+--- a/packages/overlay/src/utils/dom-utils.ts
++++ b/packages/overlay/src/utils/dom-utils.ts
+@@ -87,7 +87,46 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+   let touchStartY: number | null = null
+   let observedContentElements = new Set<Element>()
+ 
+-  const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
++  // Temporary actual67 event provenance; retired after the isolated observation.
++  let diagnosticUntil67 = 0
++  const diagnosticOwner67 = el.dataset.ui || el.id || el.className
++  function observeInput67(stage: string, detail: Record<string, unknown> = {}) {
++    if (performance.now() > diagnosticUntil67) return
++    console.debug("[input-follow67]", JSON.stringify({
++      stage, owner: diagnosticOwner67, now: performance.now(), top: el.scrollTop,
++      expectedTop, programScrollTarget, upwardInputIntentUntil, pointerScrollIntent,
++      touchStartY, tracking: opts.isTracking(), bottomDistance: distanceFromBottom(),
++      rafPending, ...detail,
++    }))
++  }
++  function observeRealInput67(event: WheelEvent | KeyboardEvent) {
++    diagnosticUntil67 = performance.now() + 1000
++    const ancestors = []
++    let target = event.target instanceof Element ? event.target : null
++    while (target && el.contains(target)) {
++      const node = target as HTMLElement
++      ancestors.push({ tag: target.tagName, id: target.id, class: target.className,
++        ui: node.dataset?.ui, top: node.scrollTop, height: node.scrollHeight,
++        client: node.clientHeight, overflowY: getComputedStyle(target).overflowY })
++      if (target === el) break
++      target = target.parentElement
++    }
++    observeInput67(event.type, { trusted: event.isTrusted, defaultPrevented: event.defaultPrevented,
++      key: event instanceof KeyboardEvent ? event.key : undefined,
++      deltaY: event instanceof WheelEvent ? event.deltaY : undefined,
++      deltaX: event instanceof WheelEvent ? event.deltaX : undefined,
++      deltaMode: event instanceof WheelEvent ? event.deltaMode : undefined, ancestors })
++    let frames = 0
++    const inspectFrame = () => {
++      if (disposed || frames >= 3) return
++      observeInput67("observation-frame", { frame: ++frames, defaultPrevented: event.defaultPrevented })
++      if (frames < 3) requestAnimationFrame(inspectFrame)
++    }
++    requestAnimationFrame(inspectFrame)
++  }
++  console.debug("[input-follow67]", JSON.stringify({ stage: "ready", owner: diagnosticOwner67 }))
++
++  const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll("resize"))
+ 
+   function onReadingIntent(event: Event) {
+     // Only the nearest transcript owns this operator intent.
+@@ -114,11 +153,14 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+   }
+ 
+   function onWheel(event: WheelEvent) {
++    if (event.deltaY < 0) observeRealInput67(event)
+     if (event.deltaY < 0) rememberUpwardInputIntent()
++    observeInput67("wheel-intent")
+   }
+ 
+   function onKeyDown(event: KeyboardEvent) {
+     if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") {
++      observeRealInput67(event)
+       rememberUpwardInputIntent()
+     }
+   }
+@@ -156,10 +198,12 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+   }
+ 
+   function onScroll() {
++    observeInput67("scroll-before")
+     const nextTop = el.scrollTop
+     const delta = nextTop - expectedTop
+     const bottomDistance = distanceFromBottom()
+     if (programScrollTarget !== null && Math.abs(nextTop - programScrollTarget) <= PROGRAM_TOLERANCE) {
++      observeInput67("scroll-program-echo", { delta })
+       programScrollTarget = null
+       expectedTop = nextTop
+       if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
+@@ -167,6 +211,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+       return
+     }
+     if (Math.abs(delta) <= PROGRAM_TOLERANCE) {
++      observeInput67("scroll-small-delta", { delta })
+       expectedTop = nextTop
+       if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
+       syncFollowLockAttribute()
+@@ -176,6 +221,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+     expectedTop = nextTop
+     const ownsUpwardMovement = pointerScrollIntent || performance.now() <= upwardInputIntentUntil
+     if (opts.isTracking() && movedUp && ownsUpwardMovement && bottomDistance > BOTTOM_TOLERANCE) {
++      observeInput67("scroll-owned-upward", { delta })
+       upwardInputIntentUntil = 0
+       opts.onUserScrollUp()
+       syncFollowLockAttribute()
+@@ -189,12 +235,15 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+   }
+ 
+   function pinToBottom() {
++    observeInput67("pin-before")
+     el.scrollTop = el.scrollHeight
+     programScrollTarget = el.scrollTop
+     expectedTop = el.scrollTop
++    observeInput67("pin-after")
+   }
+ 
+-  function scheduleFollowScroll() {
++  function scheduleFollowScroll(source = "content") {
++    observeInput67("schedule-before", { source })
+     if (disposed) return
+     syncFollowLockAttribute()
+     if (!opts.isTracking()) return
+@@ -205,6 +254,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
+     // mistaken for operator upward scrolling and release follow mode.
+     expectedTop = el.scrollTop
+     programScrollTarget = null
++    observeInput67("schedule-rebased", { source })
+     // Every content mutation must rebase the expected position, including
+     // mutations coalesced behind an already queued correction frame.
+     if (rafPending) return

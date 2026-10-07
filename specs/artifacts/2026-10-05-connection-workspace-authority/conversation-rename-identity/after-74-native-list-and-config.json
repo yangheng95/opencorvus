@@ -1,0 +1,25 @@
+[
+  {
+    "requestID": "e4bcb3a6-f6bb-449f-8068-43c80777a859",
+    "body": [],
+    "path": "/session/ses_-zUSn0xc3zzFGmP12qJE/side-chat",
+    "method": "GET",
+    "status": 200,
+    "observedAtUtc": "2026-10-07T02:49:44.7724001Z"
+  },
+  {
+    "requestID": "7366ae30-44e8-4a0b-8f0c-ed7858b20ec5",
+    "body": {
+      "name": "ProviderModelNotFoundError",
+      "data": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "suggestions": []
+      }
+    },
+    "path": "/session/ses_-zUSn0xc3zzFGmP12qJE/config",
+    "method": "GET",
+    "status": 400,
+    "observedAtUtc": "2026-10-07T02:49:44.8090046Z"
+  }
+]

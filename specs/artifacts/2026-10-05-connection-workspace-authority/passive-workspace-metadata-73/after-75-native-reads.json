@@ -1,0 +1,377 @@
+[
+  {
+    "observedAtUtc": "2026-10-07T03:23:13.5773865Z",
+    "body": {
+      "catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+      "entries": [
+        {
+          "id": "advanced",
+          "name": "Advanced",
+          "display_label": "Advanced",
+          "description": "Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.",
+          "built_in": true,
+          "product_pillars": [
+            "code",
+            "work"
+          ],
+          "source": {
+            "kind": "built_in"
+          }
+        },
+        {
+          "id": "base",
+          "name": "Base",
+          "display_label": "Base",
+          "description": "Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.",
+          "built_in": true,
+          "product_pillars": [
+            "code",
+            "work"
+          ],
+          "source": {
+            "kind": "built_in"
+          }
+        },
+        {
+          "id": "research-studio",
+          "name": "Research Studio",
+          "display_label": "Research Studio",
+          "description": "A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.",
+          "built_in": true,
+          "product_pillars": [
+            "code",
+            "work"
+          ],
+          "source": {
+            "kind": "built_in"
+          }
+        },
+        {
+          "id": "squad-sdk",
+          "name": "Generate Expert Squads",
+          "display_label": "Generate Expert Squads",
+          "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
+          "built_in": true,
+          "product_pillars": [
+            "code",
+            "work"
+          ],
+          "system_role": "expert_squad_generator",
+          "source": {
+            "kind": "built_in"
+          }
+        },
+        {
+          "id": "task-resource-qa",
+          "name": "Task Resource QA",
+          "display_label": "qa/Task Resource QA",
+          "description": "Current Project observation, a small durable text resource, and independent verification through a real Task.",
+          "built_in": false,
+          "product_pillars": [
+            "code"
+          ],
+          "source": {
+            "kind": "installed_package",
+            "installation_scope": "project",
+            "namespace": "qa"
+          }
+        }
+      ],
+      "next_cursor": null,
+      "total_count": 5
+    },
+    "requestID": "74d9ed46-3c3b-4e74-8061-a67a459383f9",
+    "status": 200,
+    "method": "GET",
+    "path": "/expert-squad/search?view=effective&query=&limit=20&productPillar=code"
+  },
+  {
+    "observedAtUtc": "2026-10-07T03:23:13.6736221Z",
+    "body": {
+      "active": {
+        "effective": "task-resource-qa",
+        "project": "task-resource-qa",
+        "session_override": "task-resource-qa",
+        "package_revision": {
+          "scope": "project",
+          "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+          "namespace": "qa",
+          "id": "task-resource-qa",
+          "version": "2026.10.06.2",
+          "package_digest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+        }
+      },
+      "default": "base",
+      "scope": {
+        "kind": "session",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\live-sol-publication-50\\project",
+        "sessionID": "ses_-zUSggUQgzzprQcl946c"
+      },
+      "launch_catalog_revision": "01c04b2fdddafc50d5057c8f6a840c07b16200b34146ac04bb37905385763509",
+      "active_agent_projection": {
+        "source_expert_squad_id": "task-resource-qa",
+        "prompt_profile_active": "task-resource-qa",
+        "scheduler_projection_hash": "dc4defcd024ce01cf3db507b27acee2c7b8b3c0d415ba2c4d8379c9a249039a1",
+        "projection_hash": "6abe2d566004ac0695ab8114533694ef9b167350dad1707d094796b000dd4692",
+        "virtual_workflows": {
+          "query-produce-verify": {
+            "label": "Observe, Produce, Verify",
+            "description": "Observe current Project Tasks, produce the requested durable resource, and independently verify the settled result.",
+            "nodes": {
+              "inspect": {
+                "agent_id": "mission",
+                "description": "Observe the current Project Task list and report the actual result or precise error.",
+                "depends_on": []
+              },
+              "produce": {
+                "agent_id": "producer",
+                "description": "Create and publish the requested text resource after the observation is available.",
+                "depends_on": [
+                  "inspect"
+                ]
+              },
+              "verify": {
+                "agent_id": "verifier",
+                "description": "Independently verify original requirements against the settled producer result and immutable resource.",
+                "depends_on": [
+                  "produce"
+                ]
+              }
+            }
+          }
+        },
+        "agents": [
+          {
+            "agent_id": "mission",
+            "base_role": "explore",
+            "session_kind": "explore",
+            "dispatch_adapter_id": "explore",
+            "label": "Project Observer",
+            "description": "Read-only observer of current Project Tasks; a projected explorer, not a native Mission.",
+            "projection_hash": "5ddb03c66630a22f87749e31af91febcee28d157f0700df85fec6a62598c5927",
+            "capability_refs": [
+              "capability:tool:platform:tool-registry:artifact_publish",
+              "capability:tool:platform:tool-registry:artifact_read",
+              "capability:tool:platform:tool-registry:artifact_search",
+              "capability:tool:platform:tool-registry:artifact_select",
+              "capability:tool:platform:tool-registry:artifact_snapshot",
+              "capability:tool:platform:tool-registry:capability_search",
+              "capability:tool:platform:tool-registry:external_code_search",
+              "capability:tool:platform:tool-registry:glob",
+              "capability:tool:platform:tool-registry:memory",
+              "capability:tool:platform:tool-registry:panel_query_task",
+              "capability:tool:platform:tool-registry:publish_interactive_artifact",
+              "capability:tool:platform:tool-registry:read",
+              "capability:tool:platform:tool-registry:read_agent_message",
+              "capability:tool:platform:tool-registry:request_orchestrator_decision",
+              "capability:tool:platform:tool-registry:search_code",
+              "capability:tool:platform:tool-registry:send_mailbox_message",
+              "capability:tool:platform:tool-registry:webfetch",
+              "capability:tool:platform:tool-registry:websearch"
+            ]
+          },
+          {
+            "agent_id": "producer",
+            "base_role": "build",
+            "session_kind": "build",
+            "dispatch_adapter_id": "build",
+            "label": "Text Producer",
+            "description": "Produces and publishes the requested verified text resource in this Task.",
+            "projection_hash": "755364a48b38bc60654edacdb6faede6fb982a5c149f029227534391647083c6",
+            "capability_refs": [
+              "capability:tool:platform:tool-registry:apply_patch",
+              "capability:tool:platform:tool-registry:artifact_publish",
+              "capability:tool:platform:tool-registry:artifact_read",
+              "capability:tool:platform:tool-registry:artifact_search",
+              "capability:tool:platform:tool-registry:artifact_select",
+              "capability:tool:platform:tool-registry:artifact_snapshot",
+              "capability:tool:platform:tool-registry:bash",
+              "capability:tool:platform:tool-registry:browser_preview",
+              "capability:tool:platform:tool-registry:browser_preview_capture",
+              "capability:tool:platform:tool-registry:capability_search",
+              "capability:tool:platform:tool-registry:edit",
+              "capability:tool:platform:tool-registry:external_code_search",
+              "capability:tool:platform:tool-registry:glob",
+              "capability:tool:platform:tool-registry:memory",
+              "capability:tool:platform:tool-registry:mission_state",
+              "capability:tool:platform:tool-registry:planner",
+              "capability:tool:platform:tool-registry:publish_interactive_artifact",
+              "capability:tool:platform:tool-registry:question",
+              "capability:tool:platform:tool-registry:read",
+              "capability:tool:platform:tool-registry:read_agent_message",
+              "capability:tool:platform:tool-registry:request_orchestrator_decision",
+              "capability:tool:platform:tool-registry:schedule",
+              "capability:tool:platform:tool-registry:search_code",
+              "capability:tool:platform:tool-registry:send_mailbox_message",
+              "capability:tool:platform:tool-registry:skill",
+              "capability:tool:platform:tool-registry:todo",
+              "capability:tool:platform:tool-registry:webfetch",
+              "capability:tool:platform:tool-registry:websearch",
+              "capability:tool:platform:tool-registry:write"
+            ]
+          },
+          {
+            "agent_id": "verifier",
+            "base_role": "delegated-worker",
+            "session_kind": "delegated-worker",
+            "dispatch_adapter_id": "delegated_worker",
+            "label": "Independent Verifier",
+            "description": "Independently compares original authority, settled producer facts and immutable published resource bytes.",
+            "projection_hash": "f9825e2770ddac146258de926cae4ce8d5e42c6f701cfa7758242dd3c28af677",
+            "capability_refs": [
+              "capability:tool:platform:tool-registry:apply_patch",
+              "capability:tool:platform:tool-registry:artifact_publish",
+              "capability:tool:platform:tool-registry:artifact_read",
+              "capability:tool:platform:tool-registry:artifact_search",
+              "capability:tool:platform:tool-registry:artifact_select",
+              "capability:tool:platform:tool-registry:artifact_snapshot",
+              "capability:tool:platform:tool-registry:bash",
+              "capability:tool:platform:tool-registry:browser_preview",
+              "capability:tool:platform:tool-registry:capability_search",
+              "capability:tool:platform:tool-registry:edit",
+              "capability:tool:platform:tool-registry:external_code_search",
+              "capability:tool:platform:tool-registry:glob",
+              "capability:tool:platform:tool-registry:memory",
+              "capability:tool:platform:tool-registry:publish_interactive_artifact",
+              "capability:tool:platform:tool-registry:question",
+              "capability:tool:platform:tool-registry:read",
+              "capability:tool:platform:tool-registry:read_agent_message",
+              "capability:tool:platform:tool-registry:request_orchestrator_decision",
+              "capability:tool:platform:tool-registry:search_code",
+              "capability:tool:platform:tool-registry:send_mailbox_message",
+              "capability:tool:platform:tool-registry:skill",
+              "capability:tool:platform:tool-registry:todo",
+              "capability:tool:platform:tool-registry:webfetch",
+              "capability:tool:platform:tool-registry:websearch",
+              "capability:tool:platform:tool-registry:write"
+            ]
+          }
+        ]
+      },
+      "active_skill_projection": {
+        "active_squad_id": "task-resource-qa",
+        "built_in": false,
+        "projection_hash": "8c374e47f0e4de0472e1b8eccdb26d4028be8d6a25878c83752b68b380d9563c",
+        "projected_tool_ids": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "browser_preview_capture",
+          "cancel_subagent",
+          "capability_search",
+          "dispatch_agent",
+          "edit",
+          "evolve_expert_squad_from_feedback",
+          "external_code_search",
+          "glob",
+          "manage_task",
+          "memory",
+          "mission_state",
+          "no_action",
+          "panel_query_task",
+          "planner",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "read_context",
+          "read_task_message",
+          "request_orchestrator_decision",
+          "respond_agent_coordination",
+          "schedule",
+          "scheduler_message",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "wait",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "projected_agent_ids": [
+          "mission",
+          "producer",
+          "verifier"
+        ],
+        "selector_skill_names": [
+          "advanced-expert-squad",
+          "base-expert-squad",
+          "research-studio-expert-squad",
+          "squad-sdk-expert-squad"
+        ],
+        "production_skill_names": [],
+        "projected_skill_names": [],
+        "production_grants": []
+      }
+    },
+    "requestID": "3980c460-3cf4-404d-9089-cd22963fe4f8",
+    "status": 200,
+    "method": "GET",
+    "path": "/expert-squad/catalog?sessionID=ses_-zUSggUQgzzprQcl946c"
+  },
+  {
+    "observedAtUtc": "2026-10-07T03:23:13.6859109Z",
+    "body": {
+      "mission_skills": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "required_tools": [
+            "panel_expert_squad_inspect",
+            "panel_multica_catalog",
+            "panel_create_task",
+            "panel_query_task",
+            "panel_query_task_artifacts",
+            "panel_read_task_artifact",
+            "panel_read_task_message",
+            "panel_read_task_dispatch_evidence",
+            "panel_complete_mission",
+            "panel_block_mission",
+            "panel_resume_task",
+            "panel_extend_task_acceptance",
+            "panel_cancel_task",
+            "panel_respond_interaction"
+          ]
+        }
+      ],
+      "issues": []
+    },
+    "requestID": "634b1b89-de3a-4009-8f8d-03dcd4bef8c1",
+    "status": 200,
+    "method": "GET",
+    "path": "/mission-skill/catalog?sessionID=ses_-zUSggUQgzzprQcl946c"
+  },
+  {
+    "observedAtUtc": "2026-10-07T03:23:13.6884408Z",
+    "body": {
+      "filename": "MEMORY.MD",
+      "scope": "project",
+      "content": "# Project Memory\n\n## Active task\n- Task: `tsk_g00VXJJVS500QnIDtJVs` — 文件加载与完整正式交付验收50.\n- Goal: formally deliver two verified text files and a browsable read-only snapshot containing both, with independently verified materialization and a formally published acceptance record containing actual read evidence.\n- Status: requirements captured only. No tool results, created files, publications, independent verification, or completion evidence have been supplied.\n\n## Required workflow and acceptance criteria\n1. Query the current project's actual Task list and obtainable reports. Record the scope of what was accessible and any limitations.\n2. Create the files in order:\n   - `hello.txt`: UTF-8 without BOM; exact content `Hello from a formal Task.` followed by LF; total 26 bytes.\n   - `notes.txt`: UTF-8 without BOM; 20 lines, each containing `Notes from a formal Task.` followed by LF; total 520 bytes.\n3. Completely inspect both files, including their full contents, encoding/BOM status, line endings, byte counts, and the required line count for `notes.txt`.\n4. Publish both together as formal resources of this Task, and publish a browsable read-only snapshot containing both files.\n5. Have an independent participant fully materialize the same published `hello` resource twice. For each materialization, reopen the actual cache and verify all 26 bytes.\n6. Then have the independent participant fully materialize `notes`, reopen its actual cache, and verify all 520 bytes and all 20 lines.\n7. Formally publish the independent acceptance record, including evidence of the actual reads. End the Task only after formal delivery of both files and the snapshot is complete.\n\n## Constraints and evidence discipline\n- No website access or service startup is needed.\n- Verification and completion claims must be grounded in actual tool results, not assumptions or planned actions.\n- Do not claim that the user has downloaded the files.\n- Preserve resource identity across the two independent `hello` materializations; both must target the same resource.\n- Access limitations, unavailable reports, and unmet verification or publication requirements must remain explicit rather than being treated as completed.\n",
+      "revision": 1,
+      "tokenCount": 557,
+      "status": "idle",
+      "pendingCount": 0,
+      "droppedPendingCount": 0,
+      "timeCreated": 1791325085858,
+      "timeUpdated": 1791325099876
+    },
+    "requestID": "4163a0ab-6056-4612-8b1c-8f9c1dd15c03",
+    "status": 200,
+    "method": "GET",
+    "path": "/experimental/project-memory"
+  },
+  {
+    "observedAtUtc": "2026-10-07T03:23:13.6915963Z",
+    "body": [],
+    "requestID": "ece528ed-2fa4-4923-8a40-e221d51cb26c",
+    "status": 200,
+    "method": "GET",
+    "path": "/session/ses_-zUSggUQgzzprQcl946c/side-chat"
+  }
+]

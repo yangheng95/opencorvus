@@ -1,0 +1,57 @@
+$ bun script/run-tests.ts test/mcp/durable-oauth-finish.test.ts
+[1/1] START test/mcp/durable-oauth-finish.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) MCP OAuth finish from durable facts > ordinary admission without a pending authorization reports needs_auth [3623.80ms]
+(pass) MCP OAuth finish from durable facts > OAuth debug authorization refuses a replaced canonical MCP definition [1929.22ms]
+
+T  MCP OAuth Debug
+|
+•  Server: durable-finish-server
+|
+•  URL: http://127.0.0.1:60209/mcp
+|
+•  Auth status: ✗ not authenticated
+[?25l|
+o  HTTP response: 401 Unauthorized
+[?25h|
+•  WWW-Authenticate: Bearer resource_metadata="http://127.0.0.1:60209/.well-known/oauth-protected-resource"
+|
+!  Server returned 401 Unauthorized
+|
+•  Testing OAuth flow (without completing authorization)...
+|
+•  OAuth authorization is required
+|
+•  Client ID available: present
+|
+—  Debug complete
+
+(pass) MCP OAuth finish from durable facts > the real MCP debug SDK probe retires its incomplete authorization occurrence [2068.38ms]
+(pass) MCP OAuth finish from durable facts > the MCP debug probe preserves an existing interactive authorization owner [1878.36ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission uses a stored token while callback broker maintenance is unreachable [1903.75ms]
+(pass) MCP OAuth finish from durable facts > an in-flight production refresh commits across callback broker rotation [1945.27ms]
+(pass) MCP OAuth finish from durable facts > provider-controlled refresh errors project one fixed connection failure [1737.70ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission preserves a live startAuth occurrence and its original callback succeeds [2263.65ms]
+(pass) MCP OAuth finish from durable facts > a process with no in-memory flow finishes the callback from the durable lease, state and verifier [2448.01ms]
+(pass) MCP OAuth finish from durable facts > a peer broker finishes a durable flow and settles the initiating backend waiter [6270.41ms]
+(pass) MCP OAuth finish from durable facts > ambiguous token commit and transient terminal publication converge for listener and waiters [3212.90ms]
+(pass) MCP OAuth finish from durable facts > successful exchange with persistently failed terminal publication converges to one uncertain outcome [3318.75ms]
+(pass) MCP OAuth finish from durable facts > failed exchange with persistently failed terminal publication converges to one uncertain outcome [3378.88ms]
+(pass) MCP OAuth finish from durable facts > persistent pre-rename token-store failure publishes one non-replayable uncertain terminal [2760.74ms]
+(pass) MCP OAuth finish from durable facts > a peer SDK duplicate joins the finishing occurrence owned by another backend [2531.35ms]
+(pass) MCP OAuth finish from durable facts > Project deletion terminalizes its durable OAuth callback for local and peer waiters [2350.14ms]
+(pass) MCP OAuth finish from durable facts > a deleted-Project callback can revoke only the occurrence captured before a replacement lease [2250.80ms]
+(pass) MCP OAuth finish from durable facts > committed Project deletion reports credential residue and durable recovery retires it [3452.62ms]
+(pass) MCP OAuth finish from durable facts > a non-connected post-auth status is one fixed failed terminal for the finisher and waiter [2752.55ms]
+(pass) MCP OAuth finish from durable facts > an authorization-code rejection maps one remote exchange to the fixed failed terminal [2268.47ms]
+(pass) MCP OAuth finish from durable facts > provider rejection has one fixed listener, local-waiter and peer-waiter contract [2819.81ms]
+(pass) MCP OAuth finish from durable facts > missing code has one fixed listener, local-waiter and peer-waiter contract [2924.84ms]
+(pass) MCP OAuth finish from durable facts > a committed configuration replacement maps the authorize-time flow to a revoked terminal [2151.31ms]
+(fail) MCP OAuth finish from durable facts > a mid-exchange configuration replacement keeps the token request on the authorize-time endpoint [120001.20ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > a finishing owner commits exact lease extensions while the token exchange is blocked [120012.55ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > an admitted exchange keeps the authorize-time redirect binding across broker rotation [120027.13ms]
+  ^ a beforeEach/afterEach hook timed out for this test.

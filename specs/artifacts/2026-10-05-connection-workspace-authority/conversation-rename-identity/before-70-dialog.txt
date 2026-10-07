@@ -1,0 +1,13 @@
+Browser tab: 44, Title: "OpenCorvus", URL: "http://localhost:18028/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18028/ui/
+	1 container Rename chat, ID: appDialog
+		2 container
+			3 heading Rename chat, Value: 2, ID: dialog-cl-93-title
+				4 text Rename chat
+			5 container appDialogInputField
+				6 text Enter a new title
+				7 text field (settable) Enter a new title, Value: 请只根据我提供的真实验证事实，写一份约600字的中文文件操作验收记录：同一个新文件依次执行 Write、Read、Edit、Read、Edit、Read；..., ID: appDialogInput
+			8 button Cancel, ID: btnAppDialogCancel
+			9 button OK, ID: btnAppDialogOk
+
+The focused UI element is 7 text field (settable) Enter a new title, Value: 请只根据我提供的真实验证事实，写一份约600字的中文文件操作验收记录：同一个新文件依次执行 Write、Read、Edit、Read、Edit、Read；..., ID: appDialogInput

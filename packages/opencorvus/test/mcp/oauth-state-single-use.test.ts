@@ -15,6 +15,7 @@ const URL = "https://single-use.example.invalid/mcp"
 async function durableFlow(): Promise<{ authKey: string; revision: string }> {
   const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
   const identity = McpOAuthProvider.credentialIdentity(URL, {
+    issuer: "https://issuer.fixture.test",
     clientId: "single-use-client",
     clientSecret: undefined,
     scope: undefined,

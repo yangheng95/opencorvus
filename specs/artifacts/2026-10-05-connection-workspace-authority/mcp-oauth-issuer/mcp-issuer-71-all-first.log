@@ -1,0 +1,128 @@
+$ bun script/run-tests.ts test/mcp/oauth-issuer.test.ts test/mcp/auth-durable-revision.test.ts test/mcp/durable-oauth-finish.test.ts test/mcp/oauth-callback-durable-legitimacy.test.ts test/mcp/oauth-state-single-use.test.ts
+[1/5] START test/mcp/oauth-issuer.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real SDK refresh persists and reads the exact authorization issuer [125.01ms]
+(pass) different issuer reaches the actual SDK authorization-required boundary [63.84ms]
+(pass) legacy unstamped credentials settle to typed reauthorization and exact retirement [88.98ms]
+(pass) pre-registered configuration exposes its missing issuer validation contract [2.15ms]
+
+ 4 pass
+ 0 fail
+ 9 expect() calls
+Ran 4 tests across 1 file. [1.90s]
+[1/5] DONE test/mcp/oauth-issuer.test.ts exit=0 duration=2.11s
+[2/5] START test/mcp/auth-durable-revision.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) MCP credential lease generation > one established lease stays valid across every write of its own flow [129.18ms]
+(pass) MCP credential lease generation > beginning a new lease refuses the previous holder and admits the new one, in one store write [74.19ms]
+(pass) MCP credential lease generation > a peer's revoke through the shared store is visible to a later reader [47.24ms]
+(pass) MCP credential lease generation > a lease held before removal never matches anything after recreation [77.73ms]
+(pass) MCP credential lease generation > the empty generation is never a lease: a write presenting it is refused outright [37.94ms]
+(pass) MCP credential lease generation > legacy token admission mints a fence that rejects its refresh writer after removal [57.49ms]
+(pass) MCP credential lease generation > a refresh that read the pending flow's old token cannot overwrite or invalidate its connected token [129.74ms]
+
+ 7 pass
+ 0 fail
+ 17 expect() calls
+Ran 7 tests across 1 file. [2.07s]
+[2/5] DONE test/mcp/auth-durable-revision.test.ts exit=0 duration=2.35s
+[3/5] START test/mcp/durable-oauth-finish.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+189 |             oauth: { issuer: "https://issuer.fixture.test", clientId: CLIENT_ID },
+190 |           }
+191 |           await Config.updateProjectPatchAtomic(() => ({ mcp: { [SERVER]: mcpConfig } }))
+192 | 
+193 |           const result = await MCP.add(SERVER, mcpConfig)
+194 |           expect(result.status[SERVER]).toEqual({ status: "needs_auth" })
+                                              ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "status": "needs_auth",
++   "error": "MCP OAuth connection failed",
++   "status": "failed",
+  }
+
+- Expected  - 1
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\durable-oauth-finish.test.ts:194:41)
+(fail) MCP OAuth finish from durable facts > ordinary admission without a pending authorization reports needs_auth [2941.78ms]
+(pass) MCP OAuth finish from durable facts > OAuth debug authorization refuses a replaced canonical MCP definition [2661.46ms]
+
+T  MCP OAuth Debug
+|
+•  Server: durable-finish-server
+|
+•  URL: http://127.0.0.1:49557/mcp
+|
+•  Auth status: ✗ not authenticated
+[?25l|
+o  HTTP response: 401 Unauthorized
+[?25h|
+•  WWW-Authenticate: Bearer resource_metadata="http://127.0.0.1:49557/.well-known/oauth-protected-resource"
+|
+!  Server returned 401 Unauthorized
+|
+•  Testing OAuth flow (without completing authorization)...
+|
+x  Connection error: Incompatible auth server: does not support dynamic client registration
+|
+—  Debug complete
+
+275 |       const entry = await McpAuth.get(authKey)
+276 |       expect({
+277 |         flowPhase: entry?.oauthState ? "pending" : "settled",
+278 |         verifierLifecycle: entry?.codeVerifier ? "retained" : "cleared",
+279 |         terminalOutcomes: Object.values(entry?.oauthCallbackTerminals ?? {}).map((terminal) => terminal.outcome),
+280 |       }).toEqual({
+               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "flowPhase": "settled",
+-   "terminalOutcomes": [
+-     "revoked",
+-   ],
++   "terminalOutcomes": [],
+    "verifierLifecycle": "cleared",
+  }
+
+- Expected  - 3
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\durable-oauth-finish.test.ts:280:10)
+(fail) MCP OAuth finish from durable facts > the real MCP debug SDK probe retires its incomplete authorization occurrence [2642.27ms]
+992 |  */
+993 | export async function registerClient(authorizationServerUrl, { metadata, clientMetadata, scope, fetchFn }) {
+994 |     let registrationUrl;
+995 |     if (metadata) {
+996 |         if (!metadata.registration_endpoint) {
+997 |             throw new Error('Incompatible auth server: does not support dynamic client registration');
+                            ^
+error: Incompatible auth server: does not support dynamic client registration
+      at registerClient (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:997:23)
+      at authInternal (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:566:58)
+      at processTicksAndRejections (unknown:7:39)
+(fail) MCP OAuth finish from durable facts > the MCP debug probe preserves an existing interactive authorization owner [2554.72ms]
+(pass) MCP OAuth finish from durable facts > ordinary admission uses a stored token while callback broker maintenance is unreachable [2554.04ms]
+(fail) MCP OAuth finish from durable facts > an in-flight production refresh commits across callback broker rotation [120014.84ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > provider-controlled refresh errors project one fixed connection failure [120027.09ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > ordinary admission preserves a live startAuth occurrence and its original callback succeeds [120013.82ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > a process with no in-memory flow finishes the callback from the durable lease, state and verifier [120028.74ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > a peer broker finishes a durable flow and settles the initiating backend waiter [120015.90ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > ambiguous token commit and transient terminal publication converge for listener and waiters [120012.85ms]
+  ^ a beforeEach/afterEach hook timed out for this test.
+(fail) MCP OAuth finish from durable facts > successful exchange with persistently failed terminal publication converges to one uncertain outcome [120011.87ms]
+  ^ a beforeEach/afterEach hook timed out for this test.

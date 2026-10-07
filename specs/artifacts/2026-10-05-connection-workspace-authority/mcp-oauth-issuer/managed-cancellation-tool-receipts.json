@@ -1,0 +1,26 @@
+{
+  "scope": "Self-created failed canonical test invocations only",
+  "action": "tools.write_stdin Ctrl+C",
+  "sessions": [
+    82760,
+    28096,
+    18266
+  ],
+  "tty": false,
+  "results": [
+    {
+      "session": 82760,
+      "exitCode": 1
+    },
+    {
+      "session": 28096,
+      "exitCode": 1
+    },
+    {
+      "session": 18266,
+      "exitCode": 1
+    }
+  ],
+  "pidTreeKill": false,
+  "limitations": "Pre-cancel full descendant inventory not captured; six known roots/direct children check is not an old whole-Job receipt"
+}

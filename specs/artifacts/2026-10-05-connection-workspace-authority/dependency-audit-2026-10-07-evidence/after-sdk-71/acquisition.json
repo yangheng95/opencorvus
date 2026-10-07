@@ -1,0 +1,8 @@
+{
+  "endpoint": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+  "status": 200,
+  "scope": "All matched published package name/version tuples in current bun.lock; not a production reachability filter",
+  "inputPackages": 1779,
+  "observedAtUTC": "2026-10-07T03:42:36.5301221Z",
+  "credentials": "No default credentials, Cookie, Authorization, proxy or package-manager config"
+}

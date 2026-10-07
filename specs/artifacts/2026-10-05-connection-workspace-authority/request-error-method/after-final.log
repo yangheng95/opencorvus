@@ -1,0 +1,62 @@
+bun test v1.3.14 (0d9b296a)
+
+test\api-error.test.ts:
+(pass) generic error details preserve their ordinary error identity [0.31ms]
+(pass) retains actual GET dispatch identity in typed HTTP details [1.73ms]
+(pass) retains actual POST dispatch identity in typed HTTP details [0.12ms]
+(pass) retains actual PUT dispatch identity in typed HTTP details [0.11ms]
+(pass) retains actual PATCH dispatch identity in typed HTTP details [0.07ms]
+(pass) retains actual DELETE dispatch identity in typed HTTP details [0.06ms]
+(pass) concurrent same-path errors retain dispatched methods after caller init mutation [0.49ms]
+(pass) apiJson + ApiError > materializes one binary named UTF8 JSON body for every diagnostic [0.20ms]
+(pass) apiJson + ApiError > materializes one binary message JSON body for every diagnostic [0.04ms]
+(pass) apiJson + ApiError > materializes one binary problem JSON body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary plain authentication response body for every diagnostic [0.05ms]
+(pass) apiJson + ApiError > materializes one binary malformed JSON text body for every diagnostic [0.04ms]
+(pass) apiJson + ApiError > materializes one binary empty bytes body for every diagnostic [0.02ms]
+(pass) apiJson + ApiError > preserves the actual x-opencorvus-request-id response correlation in complete diagnostics [0.26ms]
+(pass) apiJson + ApiError > preserves the actual X-OpenCorvus-Request-ID response correlation in complete diagnostics [0.08ms]
+(pass) apiJson + ApiError > binary archive failure preserves decoded public body and its response correlation [0.29ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 500 diagnostic [0.08ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 400 diagnostic [0.03ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 502 diagnostic [0.04ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 503 diagnostic [0.01ms]
+(pass) apiJson + ApiError > applies an explicit empty Basic Auth username [0.25ms]
+(pass) apiJson + ApiError > 2xx returns the parsed body unchanged [0.15ms]
+(pass) apiJson + ApiError > 4xx throws ApiError carrying status / path / body / readable message [0.22ms]
+(pass) apiJson + ApiError > ApiError prefers `message` over `error` when both are present [0.18ms]
+(pass) apiJson + ApiError > ApiError renders the message carried by a NamedError envelope [0.21ms]
+(pass) apiJson + ApiError > ApiError falls back to status + path when body is empty [0.14ms]
+(pass) apiJson + ApiError > ApiError with a string body uses the string as detail [0.14ms]
+(pass) apiJson + ApiError > apiJsonWithTimeout preserves ApiError status / path / body [0.36ms]
+
+ 28 pass
+ 0 fail
+ 107 expect() calls
+Ran 28 tests across 1 file. [203.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\binary-api-error-services.test.ts:
+(pass) archive projects local Response-fixture transport bytes through ApiError [4.30ms]
+(pass) preview capture projects local Response-fixture transport bytes through ApiError [0.48ms]
+(pass) conversation resource projects local Response-fixture transport bytes through ApiError [0.93ms]
+(pass) build observation projects local Response-fixture transport bytes through ApiError [0.68ms]
+(pass) successful binary transport preserves exact bytes and diff content [0.62ms]
+
+ 5 pass
+ 0 fail
+ 40 expect() calls
+Ran 5 tests across 1 file. [209.00ms]
+bun test v1.3.14 (0d9b296a)
+
+test\tauri-transport-error-body.test.ts:
+(pass) tauri transport error body > preserves JSON response bodies on non-2xx API responses [1.80ms]
+(pass) tauri transport error body > aborts stalled requests with the transport default timeout [6.18ms]
+(pass) tauri transport error body > preserves caller-owned abort signals [0.30ms]
+(pass) tauri transport error body > server-settled requests resolve with the actual server response [0.24ms]
+(pass) tauri transport error body > server-settled requests preserve the caller signal and its AbortError result [0.23ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [183.00ms]

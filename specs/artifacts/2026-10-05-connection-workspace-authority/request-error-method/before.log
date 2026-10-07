@@ -1,0 +1,199 @@
+bun test v1.3.14 (0d9b296a)
+
+test\api-error.test.ts:
+44 |     records.push({ method: request.method, path: request.path })
+45 |     return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
+46 |   }))
+47 |   const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
+48 |   expect(records).toEqual([{ method, path: "attachment" }])
+49 |   expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
+                     ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "body": {
+-     "message": "Actual request failure",
+-   },
+-   "method": "GET",
+-   "path": "attachment",
+-   "requestID": "request-GET",
+-   "status": 400,
+- }
++ [ApiError: API 400 attachment: Actual request failure]
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\api-error.test.ts:49:17)
+(fail) retains actual GET dispatch identity in typed HTTP details [2.58ms]
+44 |     records.push({ method: request.method, path: request.path })
+45 |     return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
+46 |   }))
+47 |   const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
+48 |   expect(records).toEqual([{ method, path: "attachment" }])
+49 |   expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
+                     ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "body": {
+-     "message": "Actual request failure",
+-   },
+-   "method": "POST",
+-   "path": "attachment",
+-   "requestID": "request-POST",
+-   "status": 400,
+- }
++ [ApiError: API 400 attachment: Actual request failure]
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\api-error.test.ts:49:17)
+(fail) retains actual POST dispatch identity in typed HTTP details [0.49ms]
+44 |     records.push({ method: request.method, path: request.path })
+45 |     return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
+46 |   }))
+47 |   const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
+48 |   expect(records).toEqual([{ method, path: "attachment" }])
+49 |   expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
+                     ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "body": {
+-     "message": "Actual request failure",
+-   },
+-   "method": "PUT",
+-   "path": "attachment",
+-   "requestID": "request-PUT",
+-   "status": 400,
+- }
++ [ApiError: API 400 attachment: Actual request failure]
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\api-error.test.ts:49:17)
+(fail) retains actual PUT dispatch identity in typed HTTP details [0.44ms]
+44 |     records.push({ method: request.method, path: request.path })
+45 |     return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
+46 |   }))
+47 |   const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
+48 |   expect(records).toEqual([{ method, path: "attachment" }])
+49 |   expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
+                     ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "body": {
+-     "message": "Actual request failure",
+-   },
+-   "method": "PATCH",
+-   "path": "attachment",
+-   "requestID": "request-PATCH",
+-   "status": 400,
+- }
++ [ApiError: API 400 attachment: Actual request failure]
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\api-error.test.ts:49:17)
+(fail) retains actual PATCH dispatch identity in typed HTTP details [0.39ms]
+44 |     records.push({ method: request.method, path: request.path })
+45 |     return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
+46 |   }))
+47 |   const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
+48 |   expect(records).toEqual([{ method, path: "attachment" }])
+49 |   expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
+                     ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "body": {
+-     "message": "Actual request failure",
+-   },
+-   "method": "DELETE",
+-   "path": "attachment",
+-   "requestID": "request-DELETE",
+-   "status": 400,
+- }
++ [ApiError: API 400 attachment: Actual request failure]
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\api-error.test.ts:49:17)
+(fail) retains actual DELETE dispatch identity in typed HTTP details [0.32ms]
+66 |   mutable.method = "DELETE"
+67 |   releases.get("POST")!()
+68 |   releases.get("GET")!()
+69 |   const errors = await Promise.all([first, second])
+70 |   expect(records).toEqual([{ method: "GET", path: "attachment" }, { method: "POST", path: "attachment" }])
+71 |   expect(errors).toMatchObject([{ method: "GET", status: 400, path: "attachment", requestID: "actual-GET", body: { message: "GET failure" } }, { method: "POST", status: 400, path: "attachment", requestID: "actual-POST", body: { message: "POST failure" } }])
+                      ^
+error: expect(received).toMatchObject(expected)
+
+  [
+-   {
+-     "body": {
+-       "message": "GET failure",
+-     },
+-     "method": "GET",
+-     "path": "attachment",
+-     "requestID": "actual-GET",
+-     "status": 400,
+-   },
+-   {
+-     "body": {
+-       "message": "POST failure",
+-     },
+-     "method": "POST",
+-     "path": "attachment",
+-     "requestID": "actual-POST",
+-     "status": 400,
+-   },
++   [ApiError: API 400 attachment: GET failure],
++   [ApiError: API 400 attachment: POST failure],
+  ]
+
+- Expected  - 18
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\api-error.test.ts:71:18)
+(fail) concurrent same-path errors retain dispatched methods after caller init mutation [1.25ms]
+(pass) apiJson + ApiError > materializes one binary named UTF8 JSON body for every diagnostic [0.42ms]
+(pass) apiJson + ApiError > materializes one binary message JSON body for every diagnostic [0.07ms]
+(pass) apiJson + ApiError > materializes one binary problem JSON body for every diagnostic [0.05ms]
+(pass) apiJson + ApiError > materializes one binary plain authentication response body for every diagnostic [0.08ms]
+(pass) apiJson + ApiError > materializes one binary malformed JSON text body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary empty bytes body for every diagnostic [0.02ms]
+(pass) apiJson + ApiError > preserves the actual x-opencorvus-request-id response correlation in complete diagnostics [0.39ms]
+(pass) apiJson + ApiError > preserves the actual X-OpenCorvus-Request-ID response correlation in complete diagnostics [0.14ms]
+(pass) apiJson + ApiError > binary archive failure preserves decoded public body and its response correlation [0.41ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 500 diagnostic [0.07ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 400 diagnostic [0.04ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 502 diagnostic [0.02ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 503 diagnostic [0.01ms]
+(pass) apiJson + ApiError > applies an explicit empty Basic Auth username [0.31ms]
+(pass) apiJson + ApiError > 2xx returns the parsed body unchanged [0.18ms]
+(pass) apiJson + ApiError > 4xx throws ApiError carrying status / path / body / readable message [0.28ms]
+(pass) apiJson + ApiError > ApiError prefers `message` over `error` when both are present [0.26ms]
+(pass) apiJson + ApiError > ApiError renders the message carried by a NamedError envelope [0.31ms]
+(pass) apiJson + ApiError > ApiError falls back to status + path when body is empty [0.20ms]
+(pass) apiJson + ApiError > ApiError with a string body uses the string as detail [0.18ms]
+(pass) apiJson + ApiError > apiJsonWithTimeout preserves ApiError status / path / body [0.49ms]
+
+6 tests failed:
+(fail) retains actual GET dispatch identity in typed HTTP details [2.58ms]
+(fail) retains actual POST dispatch identity in typed HTTP details [0.49ms]
+(fail) retains actual PUT dispatch identity in typed HTTP details [0.44ms]
+(fail) retains actual PATCH dispatch identity in typed HTTP details [0.39ms]
+(fail) retains actual DELETE dispatch identity in typed HTTP details [0.32ms]
+(fail) concurrent same-path errors retain dispatched methods after caller init mutation [1.25ms]
+
+ 21 pass
+ 6 fail
+ 101 expect() calls
+Ran 27 tests across 1 file. [248.00ms]

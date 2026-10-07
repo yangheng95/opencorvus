@@ -1,0 +1,76 @@
+{
+  "geometry": {
+    "client": 635,
+    "follow": "false",
+    "height": 2112,
+    "top": 756.6666870117188
+  },
+  "logs": [
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"ready\",\"owner\":\"chatScroll\"}",
+      "timestamp": "2026-10-07T02:24:42.611Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"wheel\",\"owner\":\"chatScroll\",\"now\":31954.699999809265,\"top\":756.6666870117188,\"expectedTop\":1476.6666259765625,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"trusted\":true,\"defaultPrevented\":false,\"deltaY\":-720,\"deltaX\":0,\"deltaMode\":0,\"ancestors\":[{\"tag\":\"DIV\",\"id\":\"chatScroll\",\"class\":\"chat-scroll session-content\",\"top\":756.6666870117188,\"height\":2112,\"client\":635,\"overflowY\":\"scroll\"}]}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"wheel-intent\",\"owner\":\"chatScroll\",\"now\":31955.199999809265,\"top\":756.6666870117188,\"expectedTop\":1476.6666259765625,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":32205.199999809265,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":31955.5,\"top\":756.6666870117188,\"expectedTop\":1476.6666259765625,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":32205.199999809265,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-owned-upward\",\"owner\":\"chatScroll\",\"now\":31955.699999809265,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":32205.199999809265,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"delta\":-719.9999389648438}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":31956.400000095367,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:14.337Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":31971.5,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":1,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:25:14.350Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":32004.299999713898,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":2,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:25:14.373Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":32020.299999713898,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":3,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:25:14.389Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":32190.799999713898,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:14.569Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":32203.599999904633,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:14.640Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    }
+  ]
+}

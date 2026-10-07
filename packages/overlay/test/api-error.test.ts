@@ -17,11 +17,13 @@ import { downloadZipArchive } from "../src/services/project-archive"
 //   - `message` prefers common server fields (message, error, detail)
 //   - 2xx returns the parsed body unchanged (no behavior regression)
 
-function fakeTransport(responder: (req: TransportRequest) => TransportResponse<unknown>): HostTransport {
+function fakeTransport(
+  responder: (req: TransportRequest) => TransportResponse<unknown> | Promise<TransportResponse<unknown>>,
+): HostTransport {
   return {
     kind: "tauri",
     async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
-      return responder(req) as TransportResponse<T>
+      return (await responder(req)) as TransportResponse<T>
     },
     openStream() {
       throw new Error("openStream not used in apiJson tests")
@@ -37,6 +39,66 @@ function fakeTransport(responder: (req: TransportRequest) => TransportResponse<u
 
 const TEST_DIRECTORY = "D:/opencorvus/api-error-test"
 
+test("generic error details preserve their ordinary error identity", () => {
+  const error = new Error("Ordinary failure")
+  error.stack = "Error: Ordinary failure"
+  expect(formatErrorDetails(error)).toBe("Error: Ordinary failure")
+})
+
+test.each(["GET", "POST", "PUT", "PATCH", "DELETE"] as const)(
+  "retains actual %s dispatch identity in typed HTTP details",
+  async (method) => {
+    const records: Array<{ method: TransportRequest["method"]; path: string }> = []
+    const body = { message: "Actual request failure" }
+    __setHostTransportForTest(
+      fakeTransport((request) => {
+        records.push({ method: request.method, path: request.path })
+        return { status: 400, ok: false, headers: { "x-opencorvus-request-id": `request-${method}` }, body }
+      }),
+    )
+    const error = await apiJson("attachment", { method: method.toLowerCase() }).catch((reason: unknown) => reason)
+    expect(records).toEqual([{ method, path: "attachment" }])
+    expect(error).toMatchObject({ method, status: 400, path: "attachment", body, requestID: `request-${method}` })
+    const typed = error as ApiError
+    typed.stack = "ApiError: method fixture stack"
+    expect(formatErrorDetails(typed)).toBe(
+      `HTTP ${method} 400 attachment\n\nRequest ID: request-${method}\n\nApiError: method fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
+    )
+  },
+)
+
+test("concurrent same-path errors retain dispatched methods after caller init mutation", async () => {
+  const records: Array<{ method: TransportRequest["method"]; path: string }> = []
+  const releases = new Map<string, () => void>()
+  __setHostTransportForTest(
+    fakeTransport(async (request) => {
+      records.push({ method: request.method, path: request.path })
+      await new Promise<void>((resolve) => releases.set(request.method!, resolve))
+      return {
+        status: 400,
+        ok: false,
+        headers: { "x-opencorvus-request-id": `actual-${request.method}` },
+        body: { message: `${request.method} failure` },
+      }
+    }),
+  )
+  const mutable: RequestInit = {}
+  const first = apiJson("attachment", mutable).catch((error: unknown) => error)
+  const second = apiJson("attachment", { method: "POST" }).catch((error: unknown) => error)
+  mutable.method = "DELETE"
+  releases.get("POST")!()
+  releases.get("GET")!()
+  const errors = await Promise.all([first, second])
+  expect(records).toEqual([
+    { method: "GET", path: "attachment" },
+    { method: "POST", path: "attachment" },
+  ])
+  expect(errors).toMatchObject([
+    { method: "GET", status: 400, path: "attachment", requestID: "actual-GET", body: { message: "GET failure" } },
+    { method: "POST", status: 400, path: "attachment", requestID: "actual-POST", body: { message: "POST failure" } },
+  ])
+})
+
 beforeEach(() => configure({ directory: TEST_DIRECTORY }))
 
 afterEach(() => {
@@ -46,16 +108,52 @@ afterEach(() => {
 
 describe("apiJson + ApiError", () => {
   test.each([
-    { name: "named UTF8 JSON", status: 404, text: '{"name":"NotFoundError","data":{"message":"原产物不可用"}}', body: { name: "NotFoundError", data: { message: "原产物不可用" } }, detail: "原产物不可用" },
-    { name: "message JSON", status: 409, text: '{"message":"Read conflict"}', body: { message: "Read conflict" }, detail: "Read conflict" },
-    { name: "problem JSON", status: 429, text: '{"detail":"Read limit reached"}', body: { detail: "Read limit reached" }, detail: "Read limit reached" },
-    { name: "plain authentication response", status: 401, text: " Unauthorized ", body: "Unauthorized", detail: "Unauthorized" },
-    { name: "malformed JSON text", status: 502, text: '{"message": upstream unavailable', body: '{"message": upstream unavailable', detail: '{"message": upstream unavailable' },
+    {
+      name: "named UTF8 JSON",
+      status: 404,
+      text: '{"name":"NotFoundError","data":{"message":"原产物不可用"}}',
+      body: { name: "NotFoundError", data: { message: "原产物不可用" } },
+      detail: "原产物不可用",
+    },
+    {
+      name: "message JSON",
+      status: 409,
+      text: '{"message":"Read conflict"}',
+      body: { message: "Read conflict" },
+      detail: "Read conflict",
+    },
+    {
+      name: "problem JSON",
+      status: 429,
+      text: '{"detail":"Read limit reached"}',
+      body: { detail: "Read limit reached" },
+      detail: "Read limit reached",
+    },
+    {
+      name: "plain authentication response",
+      status: 401,
+      text: " Unauthorized ",
+      body: "Unauthorized",
+      detail: "Unauthorized",
+    },
+    {
+      name: "malformed JSON text",
+      status: 502,
+      text: '{"message": upstream unavailable',
+      body: '{"message": upstream unavailable',
+      detail: '{"message": upstream unavailable',
+    },
     { name: "empty bytes", status: 503, text: "", body: "", detail: "" },
   ])("materializes one binary $name body for every diagnostic", ({ status, text, body, detail }) => {
-    const error = new ApiError(status, "binary/read", new TextEncoder().encode(text), {
-      "X-OpenCorvus-Request-ID": "binary-response-1",
-    })
+    const error = new ApiError(
+      status,
+      "binary/read",
+      new TextEncoder().encode(text),
+      {
+        "X-OpenCorvus-Request-ID": "binary-response-1",
+      },
+      "GET",
+    )
     expect(error.body).toEqual(body)
     expect(error.message).toBe(`API ${status} binary/read${detail ? `: ${detail}` : ""}`)
     expect(error.summary).toBe(`API ${status}${detail ? `: ${detail}` : ""}`)
@@ -63,7 +161,7 @@ describe("apiJson + ApiError", () => {
     error.stack = "ApiError: binary fixture stack"
     const rendered = typeof body === "string" ? body : JSON.stringify(body, null, 2)
     expect(formatErrorDetails(error)).toBe(
-      `HTTP ${status} binary/read\n\nRequest ID: binary-response-1\n\nApiError: binary fixture stack${rendered ? `\n\nresponse body:\n${rendered}` : ""}`,
+      `HTTP GET ${status} binary/read\n\nRequest ID: binary-response-1\n\nApiError: binary fixture stack${rendered ? `\n\nresponse body:\n${rendered}` : ""}`,
     )
   })
 
@@ -86,7 +184,7 @@ describe("apiJson + ApiError", () => {
       expect(typed.summary).toBe("API 500: Public explanation")
       typed.stack = "ApiError: fixture stack"
       expect(formatErrorDetails(typed)).toBe(
-        `HTTP 500 attachment\n\nRequest ID: ${requestID}\n\nApiError: fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
+        `HTTP GET 500 attachment\n\nRequest ID: ${requestID}\n\nApiError: fixture stack\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
       )
     },
   )
@@ -134,14 +232,17 @@ describe("apiJson + ApiError", () => {
       summary: "API 503",
       message: "API 503 attachment?directory=D%3A%2Fproject",
     },
-  ])("derives a concise summary and preserves the complete $status diagnostic", ({ status, body, summary, message }) => {
-    const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body, {})
-    expect(error.summary).toBe(summary)
-    expect(error.message).toBe(message)
-    expect(error.status).toBe(status)
-    expect(error.path).toBe("attachment?directory=D%3A%2Fproject")
-    expect(error.body).toBe(body)
-  })
+  ])(
+    "derives a concise summary and preserves the complete $status diagnostic",
+    ({ status, body, summary, message }) => {
+      const error = new ApiError(status, "attachment?directory=D%3A%2Fproject", body, {}, "GET")
+      expect(error.summary).toBe(summary)
+      expect(error.message).toBe(message)
+      expect(error.status).toBe(status)
+      expect(error.path).toBe("attachment?directory=D%3A%2Fproject")
+      expect(error.body).toBe(body)
+    },
+  )
 
   test("applies an explicit empty Basic Auth username", () => {
     configure({ username: "", password: "secret" })

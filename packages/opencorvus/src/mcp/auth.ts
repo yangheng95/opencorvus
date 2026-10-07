@@ -6,6 +6,7 @@ import { withSharedJsonFactLock } from "../util/process-lock"
 
 export namespace McpAuth {
   export const Tokens = z.object({
+    issuer: z.string().url().optional(),
     accessToken: z.string(),
     refreshToken: z.string().optional(),
     expiresAt: z.number().optional(),
@@ -14,6 +15,7 @@ export namespace McpAuth {
   export type Tokens = z.infer<typeof Tokens>
 
   export const ClientInfo = z.object({
+    issuer: z.string().url().optional(),
     clientId: z.string(),
     clientSecret: z.string().optional(),
     clientIdIssuedAt: z.number().optional(),
@@ -749,7 +751,7 @@ export namespace McpAuth {
     finishing?: { oauthState: string; ownerID: string },
     expectedRefresh?: RefreshSnapshot,
   ): Promise<void> {
-    const committedTokens = Tokens.parse(tokens)
+    const committedTokens = Tokens.required({ issuer: true }).parse(tokens)
     let target:
       | {
           tokenClientInfo: ClientInfo | undefined
@@ -794,6 +796,8 @@ export namespace McpAuth {
               serverUrl: serverUrl ?? entry?.serverUrl,
               credentialIdentity: credentialIdentity ?? entry?.credentialIdentity,
             }
+            if (target.tokenClientInfo)
+              target.tokenClientInfo = ClientInfo.required({ issuer: true }).parse(target.tokenClientInfo)
             return {
               ...(entry ? { ...entry, staticCredential: undefined } : {}),
               tokens: committedTokens,
@@ -859,6 +863,7 @@ export namespace McpAuth {
     callbackGeneration?: string,
     callbackRedirectUrl?: string,
   ): Promise<void> {
+    clientInfo = ClientInfo.required({ issuer: true }).parse(clientInfo)
     await updateStore(
       authKey,
       (entry) => ({

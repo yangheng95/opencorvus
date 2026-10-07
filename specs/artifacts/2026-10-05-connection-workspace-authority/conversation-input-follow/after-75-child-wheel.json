@@ -1,0 +1,38 @@
+{
+  "before": [
+    {
+      "client": 635,
+      "follow": "false",
+      "height": 2227,
+      "id": "chatScroll",
+      "top": 827.3333129882812,
+      "ui": null
+    },
+    {
+      "client": 577,
+      "follow": "true",
+      "height": 1377,
+      "id": "",
+      "top": 800.6666870117188,
+      "ui": "subagent-conversation-scroll"
+    }
+  ],
+  "after": [
+    {
+      "client": 635,
+      "follow": "false",
+      "height": 2227,
+      "id": "chatScroll",
+      "top": 827.3333129882812,
+      "ui": null
+    },
+    {
+      "client": 577,
+      "follow": "false",
+      "height": 1377,
+      "id": "",
+      "top": 368.6666564941406,
+      "ui": "subagent-conversation-scroll"
+    }
+  ]
+}

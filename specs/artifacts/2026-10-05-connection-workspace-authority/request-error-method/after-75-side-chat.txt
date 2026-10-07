@@ -1,0 +1,22 @@
+Browser tab: 47, Title: "OpenCorvus", URL: "http://localhost:18031/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 224-283
+~									220 tab (selectable, settable, boolean) Description: Expert Squad agents, Value: 0, ID: tabs-cl-64-trigger-subagent
++								224 container
++									225 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
++									226 button Close tab
++							227 container Description: Side chat, ID: centerWorkbenchSideChat
++								228 container Side chat
++									229 pop up button (collapsed) Choose a side chat Side chat, ID: select-cl-396-trigger, Secondary Actions: Expand
++										230 text Side chat
++									231 button New side chat
++									232 text Ask about this conversation while the main task keeps working.
++									233 container
++										234 text Side chat needs attention
++										235 button (collapsed) Details, Secondary Actions: Expand
++											236 text Details
++										237 button Try again
++										238 button Dismiss
++									239 text A little room to explore
++									240 text Ask a question, or quote a passage from the main conversation.
+The focused UI element is 89 button Side chat

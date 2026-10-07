@@ -1,0 +1,60 @@
+{
+  "observedAtUtc": "2026-10-07T03:28:55.940Z",
+  "databasePath": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-07/live-sol-publication-50/runtime/data/opencorvus.db",
+  "openMode": "bun:sqlite readonly:true",
+  "transaction": "BEGIN/ROLLBACK",
+  "queries": [
+    {
+      "sql": "SELECT id, project_id, session_id FROM engine_task WHERE id = ?",
+      "parameters": [
+        "tsk_g00VXJJVS500QnIDtJVs"
+      ]
+    },
+    {
+      "sql": "SELECT id, task_id, kind, json_extract(payload, '$.protocol') AS protocol, json_extract(payload, '$.package_revision') AS package_revision FROM engine_artifact WHERE task_id = ? AND kind = 'task_package_revision_binding'",
+      "parameters": [
+        "tsk_g00VXJJVS500QnIDtJVs"
+      ]
+    }
+  ],
+  "task": {
+    "id": "tsk_g00VXJJVS500QnIDtJVs",
+    "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+    "session_id": "ses_-zUSggUQgzzprQcl946c"
+  },
+  "binding": {
+    "id": "art_g0VXJJVZQ00Xa86Yjewl",
+    "taskID": "tsk_g00VXJJVS500QnIDtJVs",
+    "kind": "task_package_revision_binding",
+    "protocol": "task-package-revision-binding-v1",
+    "package_revision": {
+      "scope": "project",
+      "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+      "namespace": "qa",
+      "id": "task-resource-qa",
+      "version": "2026.10.06.2",
+      "package_digest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+    }
+  },
+  "publicAPI": {
+    "observedAtUtc": "2026-10-07T03:23:13.6736221Z",
+    "method": "GET",
+    "path": "/expert-squad/catalog?sessionID=ses_-zUSggUQgzzprQcl946c",
+    "status": 200,
+    "requestID": "3980c460-3cf4-404d-9089-cd22963fe4f8",
+    "active": {
+      "effective": "task-resource-qa",
+      "project": "task-resource-qa",
+      "session_override": "task-resource-qa",
+      "package_revision": {
+        "scope": "project",
+        "project_id": "prj_hPvQfn30WwjxI3dAvRek",
+        "namespace": "qa",
+        "id": "task-resource-qa",
+        "version": "2026.10.06.2",
+        "package_digest": "5f643d74d679d3cbcedbe480a931350103fbe50283b1af8fdc724537cdafebdd"
+      }
+    }
+  },
+  "qualification": "Exact original Task root Session and one immutable binding match Root's current public active.package_revision; no revision replacement, concurrency or other Project matrix is claimed"
+}

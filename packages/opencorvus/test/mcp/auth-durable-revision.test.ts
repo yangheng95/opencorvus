@@ -22,10 +22,20 @@ describe("MCP credential lease generation", () => {
     // An OAuth exchange is several store writes under one established lease:
     // client registration, the state, the verifier, then the tokens. Every one
     // of them must pass with the generation the flow captured at its start.
-    await McpAuth.updateClientInfo(AUTH_KEY, { clientId: "client-1" }, "https://example.test", held)
+    await McpAuth.updateClientInfo(
+      AUTH_KEY,
+      { issuer: "https://issuer.fixture.test", clientId: "client-1" },
+      "https://example.test",
+      held,
+    )
     await McpAuth.updateOAuthState(AUTH_KEY, "state-1", held)
     await McpAuth.updateCodeVerifier(AUTH_KEY, "verifier-1", held)
-    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "token-1" }, "https://example.test", held)
+    await McpAuth.updateTokens(
+      AUTH_KEY,
+      { issuer: "https://issuer.fixture.test", accessToken: "token-1" },
+      "https://example.test",
+      held,
+    )
     await McpAuth.clearCodeVerifier(AUTH_KEY, held)
 
     const entry = await McpAuth.get(AUTH_KEY)
@@ -35,10 +45,15 @@ describe("MCP credential lease generation", () => {
 
   test("beginning a new lease refuses the previous holder and admits the new one, in one store write", async () => {
     const first = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
-    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", first)
+    await McpAuth.updateTokens(
+      AUTH_KEY,
+      { issuer: "https://issuer.fixture.test", accessToken: "first" },
+      "https://example.test",
+      first,
+    )
 
     const second = await McpAuth.beginCredentialLease(AUTH_KEY)
-    expect(second).not.toBe(first)
+    expect(await McpAuth.revision(AUTH_KEY)).toBe(second)
 
     await expect(McpAuth.updateCodeVerifier(AUTH_KEY, "stale-flow", first)).rejects.toThrow(
       `MCP auth lease was revoked: ${AUTH_KEY}`,
@@ -52,7 +67,12 @@ describe("MCP credential lease generation", () => {
 
   test("a peer's revoke through the shared store is visible to a later reader", async () => {
     const held = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
-    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", held)
+    await McpAuth.updateTokens(
+      AUTH_KEY,
+      { issuer: "https://issuer.fixture.test", accessToken: "first" },
+      "https://example.test",
+      held,
+    )
 
     // A different backend on the same data root revokes by writing the store
     // directly. Nothing in this process was told; the generation has to come
@@ -70,7 +90,12 @@ describe("MCP credential lease generation", () => {
 
   test("a lease held before removal never matches anything after recreation", async () => {
     const preRemoval = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
-    await McpAuth.updateTokens(AUTH_KEY, { accessToken: "first" }, "https://example.test", preRemoval)
+    await McpAuth.updateTokens(
+      AUTH_KEY,
+      { issuer: "https://issuer.fixture.test", accessToken: "first" },
+      "https://example.test",
+      preRemoval,
+    )
 
     await McpAuth.remove(AUTH_KEY)
     await McpAuth.stageStaticCredential(AUTH_KEY, "brand-new-secret", "https://example.test", "identity-2")
@@ -80,7 +105,12 @@ describe("MCP credential lease generation", () => {
     })
 
     await expect(
-      McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", preRemoval),
+      McpAuth.updateTokens(
+        AUTH_KEY,
+        { issuer: "https://issuer.fixture.test", accessToken: "stale" },
+        "https://example.test",
+        preRemoval,
+      ),
     ).rejects.toThrow(`MCP auth lease was revoked: ${AUTH_KEY}`)
     expect((await McpAuth.get(AUTH_KEY))?.staticCredential?.secret).toBe("brand-new-secret")
   })
@@ -97,20 +127,28 @@ describe("MCP credential lease generation", () => {
     })
     expect(await McpAuth.revision(AUTH_KEY)).toBe("")
 
-    await expect(McpAuth.updateTokens(AUTH_KEY, { accessToken: "stale" }, "https://example.test", "")).rejects.toThrow(
-      `MCP auth write presented an unestablished lease: ${AUTH_KEY}`,
-    )
+    await expect(
+      McpAuth.updateTokens(
+        AUTH_KEY,
+        { issuer: "https://issuer.fixture.test", accessToken: "stale" },
+        "https://example.test",
+        "",
+      ),
+    ).rejects.toThrow(`MCP auth write presented an unestablished lease: ${AUTH_KEY}`)
     expect((await McpAuth.get(AUTH_KEY))?.staticCredential?.secret).toBe("configured-secret")
   })
 
   test("legacy token admission mints a fence that rejects its refresh writer after removal", async () => {
     const serverUrl = "https://legacy-token.example.test/mcp"
-    const credentialIdentity = McpOAuthProvider.credentialIdentity(serverUrl, { clientId: "legacy-client" })
+    const credentialIdentity = McpOAuthProvider.credentialIdentity(serverUrl, {
+      issuer: "https://issuer.fixture.test",
+      clientId: "legacy-client",
+    })
     await McpAuth.set(
       AUTH_KEY,
       {
-        tokens: { accessToken: "legacy-access", refreshToken: "legacy-refresh" },
-        clientInfo: { clientId: "legacy-client" },
+        tokens: { issuer: "https://issuer.fixture.test", accessToken: "legacy-access", refreshToken: "legacy-refresh" },
+        clientInfo: { issuer: "https://issuer.fixture.test", clientId: "legacy-client" },
       },
       serverUrl,
       undefined,
@@ -121,7 +159,7 @@ describe("MCP credential lease generation", () => {
       "remote-server",
       AUTH_KEY,
       serverUrl,
-      { clientId: "legacy-client" },
+      { issuer: "https://issuer.fixture.test", clientId: "legacy-client" },
       "connection",
       { generation: "legacy-binding", redirectUrl: "http://127.0.0.1:19876/mcp/oauth/callback" },
       { onRedirect: () => {} },
@@ -131,7 +169,7 @@ describe("MCP credential lease generation", () => {
 
     await McpAuth.remove(AUTH_KEY)
     const staleRefresh = await capturedRefreshWriter
-      .saveTokens({ access_token: "stale-refresh-access", token_type: "Bearer" })
+      .saveTokens({ issuer: "https://issuer.fixture.test", access_token: "stale-refresh-access", token_type: "Bearer" })
       .catch((error) => error)
     expect({
       admittedRevision,
@@ -144,11 +182,14 @@ describe("MCP credential lease generation", () => {
 
   test("a refresh that read the pending flow's old token cannot overwrite or invalidate its connected token", async () => {
     const serverUrl = "https://refresh-cas.example.test/mcp"
-    const credentialIdentity = McpOAuthProvider.credentialIdentity(serverUrl, { clientId: "refresh-client" })
+    const credentialIdentity = McpOAuthProvider.credentialIdentity(serverUrl, {
+      issuer: "https://issuer.fixture.test",
+      clientId: "refresh-client",
+    })
     const revision = await McpAuth.beginCredentialLease(AUTH_KEY, serverUrl, credentialIdentity)
     await McpAuth.updateClientInfo(
       AUTH_KEY,
-      { clientId: "refresh-client" },
+      { issuer: "https://issuer.fixture.test", clientId: "refresh-client" },
       serverUrl,
       revision,
       credentialIdentity,
@@ -157,7 +198,7 @@ describe("MCP credential lease generation", () => {
     )
     await McpAuth.updateTokens(
       AUTH_KEY,
-      { accessToken: "old-access", refreshToken: "old-refresh" },
+      { issuer: "https://issuer.fixture.test", accessToken: "old-access", refreshToken: "old-refresh" },
       serverUrl,
       revision,
       credentialIdentity,
@@ -168,7 +209,7 @@ describe("MCP credential lease generation", () => {
       "remote-server",
       AUTH_KEY,
       serverUrl,
-      { clientId: "refresh-client" },
+      { issuer: "https://issuer.fixture.test", clientId: "refresh-client" },
       "connection",
       { generation: "refresh-generation", redirectUrl: "http://127.0.0.1:19876/mcp/oauth/callback" },
       { onRedirect: () => {} },
@@ -176,14 +217,18 @@ describe("MCP credential lease generation", () => {
     )
     await staleRefresh.clientInformation()
     expect(await staleRefresh.tokens()).toEqual(
-      expect.objectContaining({ access_token: "old-access", refresh_token: "old-refresh" }),
+      expect.objectContaining({
+        issuer: "https://issuer.fixture.test",
+        access_token: "old-access",
+        refresh_token: "old-refresh",
+      }),
     )
 
     const ownerID = "callback-token-winner"
     expect(await McpAuth.spendOAuthState(AUTH_KEY, oauthState, revision, ownerID, Date.now() + 60_000)).toBe(true)
     await McpAuth.updateTokens(
       AUTH_KEY,
-      { accessToken: "callback-access", refreshToken: "callback-refresh" },
+      { issuer: "https://issuer.fixture.test", accessToken: "callback-access", refreshToken: "callback-refresh" },
       serverUrl,
       revision,
       credentialIdentity,
@@ -192,7 +237,7 @@ describe("MCP credential lease generation", () => {
     await McpAuth.publishOAuthCallbackTerminal(AUTH_KEY, oauthState, "connected", revision, ownerID)
 
     const staleSave = await staleRefresh
-      .saveTokens({ access_token: "stale-refresh-access", token_type: "Bearer" })
+      .saveTokens({ issuer: "https://issuer.fixture.test", access_token: "stale-refresh-access", token_type: "Bearer" })
       .catch((error) => error)
     const staleInvalidation = await staleRefresh.invalidateCredentials("tokens").catch((error) => error)
     const current = await McpAuth.get(AUTH_KEY)
@@ -204,7 +249,11 @@ describe("MCP credential lease generation", () => {
     }).toEqual({
       staleSave: `MCP OAuth refresh input changed before token commit: ${AUTH_KEY}`,
       staleInvalidation: `MCP OAuth credential input changed before invalidation: ${AUTH_KEY}`,
-      tokens: expect.objectContaining({ accessToken: "callback-access", refreshToken: "callback-refresh" }),
+      tokens: expect.objectContaining({
+        issuer: "https://issuer.fixture.test",
+        accessToken: "callback-access",
+        refreshToken: "callback-refresh",
+      }),
       terminal: expect.objectContaining({ outcome: "connected" }),
     })
   })

@@ -1,0 +1,112 @@
+import { afterEach, describe, expect, test } from "bun:test"
+import path from "node:path"
+import fs from "node:fs/promises"
+import { writeExpertSquadPackage, type ExpertSquadPackageDefinition } from "@opencorvus-ai/sdk/expert-squad-authoring"
+import { ConfigPaths } from "../../src/config/paths"
+import { Instance, runOutsideInstanceContext } from "../../src/project/instance"
+import { Session } from "../../src/session"
+import { Server } from "../../src/server/server"
+import { ExpertSquadPackageLocations } from "../../src/expert-squad/locations"
+import type { ExpertSquadCatalog, ExpertSquadCatalogPage } from "../../src/expert-squad/catalog"
+import { MissionSkillRoots } from "../../src/mission-skill/roots"
+import { MissionSkillCatalog } from "../../src/mission-skill/catalog"
+import { ProjectMemory } from "../../src/memory/project-memory"
+import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+
+afterEach(async () => {
+  Server.resetProjectRoutesAppForTest()
+  await resetMemoryDatabase()
+})
+
+function definition(id: string): ExpertSquadPackageDefinition {
+  return {
+    manifest: {
+      schema_version: 2,
+      namespace: "passive",
+      id,
+      label: `Passive ${id}`,
+      description: "Actual SDK-authored passive catalog contract package.",
+      version: "2026.10.07.1",
+      product_pillars: ["code"],
+      readme: "README.md",
+      selector: { summary: "Inspect passive metadata.", selection_guidance: "Use for passive metadata inspection.", instructions: "selector.md" },
+      capability_sets: {},
+      capability_projection: { scheduler: { base_role: "orchestrator", capability_refs: [] }, agents: {}, virtual_workflows: {} },
+    },
+    files: { "README.md": `# ${id}\n`, "selector.md": "# Passive metadata inspection\n" },
+  }
+}
+
+async function request(directory: string, route: string, method = "GET") {
+  return runOutsideInstanceContext(() => Server.App().request(route, { method, headers: { "x-opencorvus-directory": directory } }))
+}
+
+describe("cold passive workspace metadata", () => {
+  test("real SDK packages, scoped skill files and canonical memory stay readable with missing current model", async () => {
+    await using project = await memoryProject("passive-metadata-owner")
+    const saved = await Instance.provide({ directory: project.path, fn: async () => {
+      const source = await Session.create({ kind: "assistant", title: "Passive metadata source" })
+      for (const id of ["metadata-one", "metadata-two"]) {
+        await writeExpertSquadPackage({ directory: path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "passive", id), definition: definition(id) })
+      }
+      const skillDirectory = path.join(MissionSkillRoots.project(), "passive-review")
+      await fs.mkdir(skillDirectory, { recursive: true })
+      await fs.writeFile(path.join(skillDirectory, "SKILL.md"), "---\nname: passive-review\ndescription: Inspect real passive workspace metadata.\nrequired_tools: []\n---\nRead the actual workspace metadata.\n")
+      return { sessionID: source.id, projectID: source.projectID }
+    } })
+    const configPath = ConfigPaths.projectFile(project.path)
+    await fs.mkdir(path.dirname(configPath), { recursive: true })
+    await fs.writeFile(configPath, JSON.stringify({ model: "missing-passive-provider/missing-passive-model", prompt_profile: { active: "metadata-one" } }))
+    await Instance.disposeAll()
+    Server.resetProjectRoutesAppForTest()
+    const search = await request(project.path, "/expert-squad/search?query=metadata&limit=1")
+    expect(search.status).toBe(200)
+    const first = (await search.json()) as ExpertSquadCatalogPage
+    expect(first.entries.map((entry) => ({ id: entry.id, source: entry.source }))).toEqual([
+      { id: "metadata-one", source: { kind: "installed", installation_scope: "project", namespace: "passive" } },
+    ])
+    expect(first.total_count).toBe(2)
+    expect(typeof first.next_cursor).toBe("string")
+    const next = await request(project.path, `/expert-squad/search?query=metadata&limit=1&cursor=${encodeURIComponent(first.next_cursor!)}`)
+    expect(next.status).toBe(200)
+    expect(((await next.json()) as ExpertSquadCatalogPage).entries.map((entry) => entry.id)).toEqual(["metadata-two"])
+    const wrongQuery = await request(project.path, `/expert-squad/search?query=another&limit=1&cursor=${encodeURIComponent(first.next_cursor!)}`)
+    expect({ status: wrongQuery.status, body: await wrongQuery.json() }).toMatchObject({ status: 500, body: { name: "UnknownError", data: { message: "Internal server error. See x-opencorvus-request-id for diagnostics." } } })
+    await Instance.disposeAll()
+    const catalog = await request(project.path, `/expert-squad/catalog?sessionID=${saved.sessionID}`)
+    expect(catalog.status).toBe(200)
+    expect((await catalog.json()) as ExpertSquadCatalog).toMatchObject({ active: { effective: "metadata-one", project: "metadata-one", package_revision: { scope: "project", project_id: saved.projectID, namespace: "passive", id: "metadata-one", version: "2026.10.07.1" } }, scope: { kind: "session", directory: project.path, sessionID: saved.sessionID } })
+    await Instance.disposeAll()
+    const skills = await request(project.path, `/mission-skill/catalog?sessionID=${saved.sessionID}`)
+    expect(skills.status).toBe(200)
+    expect(((await skills.json()) as MissionSkillCatalog.Response).mission_skills.find((skill) => skill.name === "passive-review"))
+      .toEqual({ name: "passive-review", description: "Inspect real passive workspace metadata.", required_tools: [] })
+    await Instance.disposeAll()
+    const memory = await request(project.path, "/experimental/project-memory")
+    expect(memory.status).toBe(200)
+    const document = (await memory.json()) as ReturnType<typeof ProjectMemory.read>
+    expect(document).toMatchObject({ filename: "MEMORY.MD", scope: "project", content: "", revision: 0, tokenCount: 0, status: "idle", pendingCount: 0, droppedPendingCount: 0 })
+    await Instance.disposeAll()
+    const reopened = await request(project.path, "/experimental/project-memory")
+    expect({ status: reopened.status, body: await reopened.json() }).toEqual({ status: 200, body: document })
+    const domain = await Instance.provideProjectIdentity({ directory: project.path, fn: () => ProjectMemory.read(saved.projectID) })
+    expect(domain).toEqual(document)
+    await Instance.disposeAll()
+    const config = await request(project.path, `/session/${saved.sessionID}/config`)
+    expect({ status: config.status, body: await config.json() }).toMatchObject({ status: 400, body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-passive-provider", modelID: "missing-passive-model" } } })
+    await Instance.disposeAll()
+    const organize = await request(project.path, "/experimental/project-memory/organize", "POST")
+    expect({ status: organize.status, body: await organize.json() }).toMatchObject({ status: 400, body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-passive-provider", modelID: "missing-passive-model" } } })
+  }, 60_000)
+
+  test("foreign Session catalog and skill reads retain exact Project lineage errors", async () => {
+    await using owner = await memoryProject("passive-lineage-owner")
+    await using other = await memoryProject("passive-lineage-other")
+    const id = await Instance.provide({ directory: owner.path, fn: async () => (await Session.create({ kind: "assistant" })).id })
+    await Instance.disposeAll()
+    for (const route of ["/expert-squad/catalog", "/mission-skill/catalog"]) {
+      const result = await request(other.path, `${route}?sessionID=${id}`)
+      expect({ status: result.status, body: await result.json() }).toMatchObject({ status: 404, body: { name: "NotFoundError", data: { message: `Session not found: ${id}` } } })
+    }
+  }, 60_000)
+})

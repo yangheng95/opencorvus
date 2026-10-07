@@ -1,0 +1,57 @@
+[1/2] START test/server/passive-workspace-metadata.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+85 |     await Instance.disposeAll()
+86 |     Server.resetProjectRoutesAppForTest()
+87 |     const search = await request(project.path, "/expert-squad/search?query=metadata&limit=1")
+88 |     expect(search.status).toBe(200)
+89 |     const first = (await search.json()) as ExpertSquadCatalogPage
+90 |     expect(first.entries.map((entry) => ({ id: entry.id, source: entry.source }))).toEqual([
+                                                                                        ^
+error: expect(received).toEqual(expected)
+
+- [
+-   {
+-     "id": "metadata-one",
+-     "source": {
+-       "installation_scope": "project",
+-       "kind": "installed_package",
+-       "namespace": "passive",
+-     },
+-   },
+- ]
++ []
+
+- Expected  - 10
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\passive-workspace-metadata.test.ts:90:84)
+(fail) cold passive workspace metadata > real SDK packages, scoped skill files and canonical memory stay readable with missing current model [3779.05ms]
+(pass) cold passive workspace metadata > foreign Session catalog and skill reads retain exact Project lineage errors [3758.50ms]
+
+ 1 pass
+ 1 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [10.46s]
+[1/2] DONE test/server/passive-workspace-metadata.test.ts exit=1 duration=10.68s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\passive-workspace-metadata.test.ts
+[2/2] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.57ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.11ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.16ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.11ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.09ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.06ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.09ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [1074.00ms]
+[2/2] DONE test/project-route-context.test.ts exit=0 duration=1.23s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\passive-workspace-metadata.test.ts

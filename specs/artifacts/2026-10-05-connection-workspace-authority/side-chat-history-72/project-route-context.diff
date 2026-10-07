@@ -1,0 +1,12 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/side-chat-history-72/project-route-context.before.txt b/packages/opencorvus/src/server/project-route-context.ts
+index 5097085d..700539f1 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/side-chat-history-72/project-route-context.before.txt
++++ b/packages/opencorvus/src/server/project-route-context.ts
+@@ -53,6 +53,7 @@ const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
+   /^GET \/session\/[^/]+\/conversation$/,
+   /^GET \/session\/[^/]+\/conversation\/history$/,
+   /^GET \/session\/[^/]+\/events$/,
++  /^GET \/session\/[^/]+\/side-chat$/,
+ ]
+ 
+ /** Selects the least-capable Project authority required by the exact route. */

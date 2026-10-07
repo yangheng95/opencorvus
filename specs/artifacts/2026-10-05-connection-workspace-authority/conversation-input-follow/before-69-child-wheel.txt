@@ -1,0 +1,56 @@
+Browser tab: 43, Title: "OpenCorvus", URL: "http://localhost:18027/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 359-362, 364-367, 370-397
+~										358 text 我会先发现并完整读取本 Task 的正式项目观察记录，保留其查询范围与限制；随后依次制作两份文本，逐字节核验并一起发布快照与正式资源。独立参与者的后续验收不会由本次自检替代。
++										359 button (collapsed) Description: bash · git status --short; git log -3 --oneline; git ls-files hello.txt notes.txt, Secondary Actions: Expand
++											360 text bash
++											361 text git status --short; git log -3 --oneline; git ls-files hello.txt notes.txt
++											362 image
+~										363 text 正式观察记录已完整读取：前置查询返回一条近期活动任务，但未证明覆盖项目全部历史任务或跨 Task 报告。当前项目未有这两份交付文件；接下来按指定顺序创建，并检查实际文件的全部字节与换行格式。
++										364 button (collapsed) Description: apply_patch · Success. Updated the following files: A notes.txt, Secondary Actions: Expand
++											365 text apply_patch
++											366 text Success. Updated the following files: A notes.txt
++											367 image
+~										368 button (collapsed) Description: read · hello.txt @1+100 (1 lines), Secondary Actions: Expand
+~											369 text read
++											370 text hello.txt @1+100 (1 lines)
++											371 image
++										372 container Sources
++											373 button (collapsed) Sources 1, Secondary Actions: Expand
++												374 text Sources
++												375 text 1
++										376 button (collapsed) Description: read · notes.txt @1+100 (20 lines), Secondary Actions: Expand
++											377 text read
++											378 text notes.txt @1+100 (20 lines)
++											379 image
++										380 container Sources
++											381 button (collapsed) Sources 1, Secondary Actions: Expand
++												382 text Sources
++												383 text 1
++										384 button (collapsed) Secondary Actions: Expand, Description: bash · git status --short; python -c 'from pathlib import Path; cases=[("hello.txt",b"Hello from a formal Task.\n"),("notes.txt",b"Notes from a formal Task.\n"*20)]; [(print(name,len(data),repr(data)),None if data==expected else (_ for _ in ()).throw(AssertionError(name))) for name,expected in cases for data in [Path(name).read_bytes()]]'
++											385 text bash
++											386 text git status --short; python -c 'from pathlib import Path; cases=[("hello.txt",b"Hello from a formal Task.\n"),("notes.txt",b"Notes from a formal Task.\n"*20)]; [(print(name,len(data),repr(data)),None if data==expected else (_ for _ in ()).throw(AssertionError(name))) for name,expected in cases for data in [Path(name).read_bytes()]]'
++											387 image
++										388 text 两文件已按顺序创建并通过全字节检查：hello 为 26 字节、1 个 LF；notes 为 520 字节、20 个 LF，均无 BOM、无 CR。提交时 Git 提示未来可能转换换行，但提交后重新打开的实际文件仍完全符合要求。现在将两文件放入同一个不可变快照，并完整读回发布内容。
++										389 button (collapsed) Description: artifact_publish · Published task-resource-qa/development-report, Secondary Actions: Expand
++											390 text artifact_publish
++											391 text Published task-resource-qa/development-report
++											392 image
++										393 text 已完成两文件的制作、核验和正式资源发布：
++										394 content list
++											395 container
++												396 AXListMarker • 
++												397 text hello.txt ：精确内容为  Hello from a formal Task.  后接一个 LF，共  26 字节 。
++											398 container
++												399 AXListMarker • 
++												400 text notes.txt ： Notes from a formal Task.  后接 LF，重复  20 行，共 520 字节 。
++											401 container
++												402 AXListMarker • 
++												403 text 两文件均为  UTF-8 无 BOM、无 CR ，已重新打开实际文件并检查全部字节；发布后也完整读回了两个资源，内容符合要求。
++											404 container
++												405 AXListMarker • 
++												406 text 两文件已一起发布到同一个可浏览、只读的不可变快照，制作记录使用该快照返回的同一资源集合正式发布，保留资源身份一致性。
++										407 text 已完整读取前置项目观察记录并保留限制：查询返回一条近期活动任务，但不证明覆盖项目全部历史任务；报告观察范围限于当前 Task，不能视为全项目跨 Task 报告查询。
++										408 container
++											409 text 尚未完成独立验收 ：后续参与者仍须对同一 hello 资源物化两次、每次重开缓存核验，再物化并核验 notes，最后正式发布含实际读取凭证的独立验收记录。本次自检不替代这些义务，因此不宣称 Task 已验收结束，也不宣称用户已下载。
+The focused UI element is 260 button Open the full producer conversation

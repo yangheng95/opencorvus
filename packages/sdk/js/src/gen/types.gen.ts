@@ -3266,6 +3266,7 @@ export type McpAppHostRequest =
               }>
               mimeType?: string
               name: string
+              size?: number
               title?: string
               type: "resource_link"
               uri: string
@@ -3342,6 +3343,10 @@ export type McpOAuthConfig = {
    * OAuth client secret (if required by the authorization server)
    */
   clientSecret?: string
+  /**
+   * Authorization server issuer for a pre-registered OAuth client
+   */
+  issuer?: string
   /**
    * OAuth scopes to request during authorization
    */

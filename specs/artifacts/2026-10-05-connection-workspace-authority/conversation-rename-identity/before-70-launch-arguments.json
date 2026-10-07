@@ -1,0 +1,26 @@
+{
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-rename-before-70\\evidence",
+    "conversation-rename-70-before-6f2575f9-6aec-4d25-b7e3-cc00f8e3b284",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18028",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-06\\live-sol-edit-03\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\conversation-rename-before-70\\startup.json",
+    "--startup-occurrence",
+    "conversation-rename-70-before-6f2575f9-6aec-4d25-b7e3-cc00f8e3b284",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18028,
+  "occurrence": "conversation-rename-70-before-6f2575f9-6aec-4d25-b7e3-cc00f8e3b284",
+  "credentialStaging": "None"
+}

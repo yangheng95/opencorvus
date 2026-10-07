@@ -1,0 +1,27 @@
+{
+  "occurrence": "product-experience-75-after-dae1f013-0323-4f16-b60d-ad5f84356457",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "observedAtUtc": "2026-10-07T03:32:53.9884776Z",
+  "listeners": [],
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 25140,
+        "processInstanceID": "win32:639269394038575866",
+        "occurrenceID": "74f7e0d0-a68d-4052-9a7f-2980fdb5c358"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 76512,
+        "processInstanceID": "win32:639269394046272990",
+        "occurrenceID": "d43b893c-cac1-47f4-a2f7-094e7d467600"
+      }
+    }
+  ]
+}

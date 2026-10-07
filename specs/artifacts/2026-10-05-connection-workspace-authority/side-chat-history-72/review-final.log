@@ -1,0 +1,15 @@
+[1/1] START test/server/side-chat.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) source-scoped side conversations > cold side-history list retains persisted references with missing current model and exact Project authority [9946.26ms]
+(pass) source-scoped side conversations > assistant source creates an independent root from complete history through the real routes [3995.67ms]
+(pass) source-scoped side conversations > root source creates an independent root from complete history through the real routes [3608.54ms]
+(pass) source-scoped side conversations > mission source creates an independent root from complete history through the real routes [3621.29ms]
+(pass) source-scoped side conversations > project authority resolves an exact not-found response for a foreign source [5216.73ms]
+
+ 5 pass
+ 0 fail
+ 41 expect() calls
+Ran 5 tests across 1 file. [29.37s]
+[1/1] DONE test/server/side-chat.test.ts exit=0 duration=29.60s

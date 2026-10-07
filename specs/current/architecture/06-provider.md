@@ -11,6 +11,8 @@
 > 消息修复在 `vendor-messages.ts`。`hexin-discovery.ts` / `hexin-profiles.ts` 是项目特化的内部供应商
 > 发现机制（同心同德）。`policy.ts` 提供模型策略 / 限制校验。原 `codex-live.ts` 已删除；Codex 认证由 Provider Auth Plugin 承担。
 
+MCP OAuth uses the extension credential owner, not Provider account OAuth. Its persisted tokens and client information retain their authorization-server issuer; pre-registered clients declare `mcp.oauth.issuer`. Legacy unbound MCP credentials require explicit re-authorization. See [04-extensions.md](04-extensions.md) for the single revision/snapshot-bound lifecycle.
+
 ## 核心挑战
 
 不同 LLM 提供商在 4 个维度上各不相同：

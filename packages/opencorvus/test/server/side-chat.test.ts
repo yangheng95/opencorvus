@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { Instance } from "../../src/project/instance"
+import { Instance, runOutsideInstanceContext } from "../../src/project/instance"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { ConfigPaths } from "../../src/config/paths"
 import { Session } from "../../src/session"
 import { Identifier } from "../../src/id/id"
 import { Server } from "../../src/server/server"
@@ -56,6 +59,95 @@ async function reply(sessionID: string, parentID: string, text: string, complete
 }
 
 describe("source-scoped side conversations", () => {
+  test("cold side-history list retains persisted references with missing current model and exact Project authority", async () => {
+    await using project = await memoryProject("cold-side-history")
+    await using other = await memoryProject("cold-side-history-other")
+    const saved = await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const source = await Session.create({ kind: "root", title: "Persisted main task" })
+        const request = await input(source.id, "Original complete source question")
+        await reply(source.id, request, "Original complete source answer")
+        const first = await Session.fork({ sessionID: source.id, purpose: "side-chat" })
+        const second = await Session.fork({ sessionID: source.id, purpose: "side-chat" })
+        const emptySource = await Session.create({ kind: "assistant", title: "Empty side list source" })
+        return { source, first, second, emptySource }
+      },
+    })
+    const configPath = ConfigPaths.projectFile(project.path)
+    await fs.mkdir(path.dirname(configPath), { recursive: true })
+    await fs.writeFile(configPath, JSON.stringify({ model: "missing-side-provider/missing-side-model" }))
+    await Instance.disposeAll()
+    Server.resetProjectRoutesAppForTest()
+    const headers = { "x-opencorvus-directory": project.path }
+    const config = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/config`, { headers }),
+    )
+    expect({ status: config.status, body: await config.json() }).toMatchObject({
+      status: 400,
+      body: {
+        name: "ProviderModelNotFoundError",
+        data: { providerID: "missing-side-provider", modelID: "missing-side-model" },
+      },
+    })
+    await Instance.disposeAll()
+    const list = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/side-chat`, { headers }),
+    )
+    expect(list.status).toBe(200)
+    const sides = (await list.json()) as Session.Info[]
+    expect(
+      sides
+        .map((side) => ({
+          id: side.id,
+          projectID: side.projectID,
+          kind: side.kind,
+          source: SideChatIdentity.parse(side.metadata?.sideChat).sourceSessionID,
+        }))
+        .sort((left, right) => left.id.localeCompare(right.id)),
+    ).toEqual(
+      [saved.first, saved.second]
+        .map((side) => ({ id: side.id, projectID: saved.source.projectID, kind: "assistant", source: saved.source.id }))
+        .sort((left, right) => left.id.localeCompare(right.id)),
+    )
+    const actualCreationTimes = sides.map((side) => side.time.created)
+    expect(actualCreationTimes).toEqual([...actualCreationTimes].sort((left, right) => right - left))
+    const conversation = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.second.id}/conversation`, { headers }),
+    )
+    expect(conversation.status).toBe(200)
+    const body = (await conversation.json()) as { transcript: Array<{ parts: Array<{ type: string; text?: string }> }> }
+    expect(
+      body.transcript.map((message) => message.parts.filter((part) => part.type === "text").map((part) => part.text)),
+    ).toEqual([["Original complete source question"], ["Original complete source answer"]])
+    await Instance.disposeAll()
+    const empty = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.emptySource.id}/side-chat`, { headers }),
+    )
+    expect({ status: empty.status, body: await empty.json() }).toEqual({ status: 200, body: [] })
+    await Instance.disposeAll()
+    const foreign = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/side-chat`, {
+        headers: { "x-opencorvus-directory": other.path },
+      }),
+    )
+    expect({ status: foreign.status, body: await foreign.json() }).toMatchObject({
+      status: 404,
+      body: { name: "NotFoundError", data: { message: `Session not found: ${saved.source.id}` } },
+    })
+    await Instance.disposeAll()
+    const create = await runOutsideInstanceContext(() =>
+      Server.App().request(`/session/${saved.source.id}/side-chat`, { method: "POST", headers }),
+    )
+    expect({ status: create.status, body: await create.json() }).toMatchObject({
+      status: 400,
+      body: {
+        name: "ProviderModelNotFoundError",
+        data: { providerID: "missing-side-provider", modelID: "missing-side-model" },
+      },
+    })
+  }, 60_000)
+
   for (const kind of ["assistant", "root", "mission"] as const) {
     test(`${kind} source creates an independent root from complete history through the real routes`, async () => {
       await using project = await memoryProject()

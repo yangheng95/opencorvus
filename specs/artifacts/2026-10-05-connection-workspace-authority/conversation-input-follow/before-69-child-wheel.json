@@ -1,0 +1,371 @@
+{
+  "hit": {
+    "class": "subagent-conversation-panel__scroll",
+    "tag": "DIV",
+    "ui": "subagent-conversation-scroll"
+  },
+  "owners": [
+    {
+      "follow": "false",
+      "id": "chatScroll",
+      "top": 686.6666870117188,
+      "ui": null
+    },
+    {
+      "follow": "false",
+      "id": "",
+      "top": 368.6666564941406,
+      "ui": "subagent-conversation-scroll"
+    }
+  ],
+  "logs": [
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"ready\",\"owner\":\"chatScroll\"}",
+      "timestamp": "2026-10-07T02:24:42.611Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"wheel\",\"owner\":\"chatScroll\",\"now\":31954.699999809265,\"top\":756.6666870117188,\"expectedTop\":1476.6666259765625,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"trusted\":true,\"defaultPrevented\":false,\"deltaY\":-720,\"deltaX\":0,\"deltaMode\":0,\"ancestors\":[{\"tag\":\"DIV\",\"id\":\"chatScroll\",\"class\":\"chat-scroll session-content\",\"top\":756.6666870117188,\"height\":2112,\"client\":635,\"overflowY\":\"scroll\"}]}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"wheel-intent\",\"owner\":\"chatScroll\",\"now\":31955.199999809265,\"top\":756.6666870117188,\"expectedTop\":1476.6666259765625,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":32205.199999809265,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":31955.5,\"top\":756.6666870117188,\"expectedTop\":1476.6666259765625,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":32205.199999809265,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-owned-upward\",\"owner\":\"chatScroll\",\"now\":31955.699999809265,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":32205.199999809265,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"delta\":-719.9999389648438}",
+      "timestamp": "2026-10-07T02:25:14.324Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":31956.400000095367,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:14.337Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":31971.5,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":1,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:25:14.350Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":32004.299999713898,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":2,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:25:14.373Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":32020.299999713898,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":3,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:25:14.389Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":32190.799999713898,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:14.569Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":32203.599999904633,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:14.640Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"keydown\",\"owner\":\"chatScroll\",\"now\":76340.59999990463,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"trusted\":true,\"defaultPrevented\":false,\"key\":\"PageUp\",\"ancestors\":[{\"tag\":\"DIV\",\"id\":\"chatScroll\",\"class\":\"chat-scroll session-content\",\"top\":756.6666870117188,\"height\":2112,\"client\":635,\"overflowY\":\"scroll\"}]}",
+      "timestamp": "2026-10-07T02:25:58.708Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":76352.19999980927,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":1,\"defaultPrevented\":true}",
+      "timestamp": "2026-10-07T02:25:58.721Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":76368.90000009537,\"top\":756.6666870117188,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":720.3333129882812,\"rafPending\":false,\"frame\":2,\"defaultPrevented\":true}",
+      "timestamp": "2026-10-07T02:25:58.737Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76385.59999990463,\"top\":755.3333129882812,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":721.6666870117188,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.754Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-small-delta\",\"owner\":\"chatScroll\",\"now\":76386,\"top\":755.3333129882812,\"expectedTop\":756.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":721.6666870117188,\"rafPending\":false,\"delta\":-1.3333740234375}",
+      "timestamp": "2026-10-07T02:25:58.754Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"chatScroll\",\"now\":76387.2999997139,\"top\":755.3333129882812,\"expectedTop\":755.3333129882812,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":721.6666870117188,\"rafPending\":false,\"frame\":3,\"defaultPrevented\":true}",
+      "timestamp": "2026-10-07T02:25:58.762Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76405.5,\"top\":750,\"expectedTop\":755.3333129882812,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":727,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.774Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76419.09999990463,\"top\":738.6666870117188,\"expectedTop\":750,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":738.3333129882812,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.790Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76435.69999980927,\"top\":719.3333129882812,\"expectedTop\":738.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":757.6666870117188,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.805Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76452.40000009537,\"top\":686.6666870117188,\"expectedTop\":719.3333129882812,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":790.3333129882812,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.822Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76469,\"top\":630,\"expectedTop\":686.6666870117188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":847,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.838Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76485.69999980927,\"top\":550,\"expectedTop\":630,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":927,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.854Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76502.40000009537,\"top\":474,\"expectedTop\":550,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1003,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.871Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76519,\"top\":417.3333435058594,\"expectedTop\":474,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1059.6666564941406,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.888Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76535.59999990463,\"top\":374.6666564941406,\"expectedTop\":417.3333435058594,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1102.3333435058594,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.910Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76560.90000009537,\"top\":341.3333435058594,\"expectedTop\":374.6666564941406,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1135.6666564941406,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.955Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76568.90000009537,\"top\":314.6666564941406,\"expectedTop\":341.3333435058594,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1162.3333435058594,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:58.955Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76585.59999990463,\"top\":292.6666564941406,\"expectedTop\":314.6666564941406,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1184.3333435058594,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.031Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76602.09999990463,\"top\":274.6666564941406,\"expectedTop\":292.6666564941406,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1202.3333435058594,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.032Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76618.90000009537,\"top\":259.3333435058594,\"expectedTop\":274.6666564941406,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1217.6666564941406,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.032Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76635.7999997139,\"top\":246,\"expectedTop\":259.3333435058594,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1231,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.032Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76652.5,\"top\":234.6666717529297,\"expectedTop\":246,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1242.3333282470703,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.032Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76669.09999990463,\"top\":225.3333282470703,\"expectedTop\":234.6666717529297,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1251.6666717529297,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.037Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76685.5,\"top\":217.3333282470703,\"expectedTop\":225.3333282470703,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1259.6666717529297,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.054Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76702.5,\"top\":210,\"expectedTop\":217.3333282470703,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1267,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.070Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76719,\"top\":204.6666717529297,\"expectedTop\":210,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1272.3333282470703,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.089Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76736.7999997139,\"top\":199.3333282470703,\"expectedTop\":204.6666717529297,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1277.6666717529297,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.105Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76752.19999980927,\"top\":195.3333282470703,\"expectedTop\":199.3333282470703,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1281.6666717529297,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.121Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76769.19999980927,\"top\":192,\"expectedTop\":195.3333282470703,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1285,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.138Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76785.69999980927,\"top\":190,\"expectedTop\":192,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1287,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.154Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-small-delta\",\"owner\":\"chatScroll\",\"now\":76785.90000009537,\"top\":190,\"expectedTop\":192,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1287,\"rafPending\":false,\"delta\":-2}",
+      "timestamp": "2026-10-07T02:25:59.154Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76806.90000009537,\"top\":188,\"expectedTop\":190,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1289,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.175Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-small-delta\",\"owner\":\"chatScroll\",\"now\":76807,\"top\":188,\"expectedTop\":190,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1289,\"rafPending\":false,\"delta\":-2}",
+      "timestamp": "2026-10-07T02:25:59.175Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76818.7999997139,\"top\":186.6666717529297,\"expectedTop\":188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1290.3333282470703,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.187Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-small-delta\",\"owner\":\"chatScroll\",\"now\":76819,\"top\":186.6666717529297,\"expectedTop\":188,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1290.3333282470703,\"rafPending\":false,\"delta\":-1.3333282470703125}",
+      "timestamp": "2026-10-07T02:25:59.187Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"chatScroll\",\"now\":76835.59999990463,\"top\":185.3333282470703,\"expectedTop\":186.6666717529297,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1291.6666717529297,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:25:59.204Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-small-delta\",\"owner\":\"chatScroll\",\"now\":76835.69999980927,\"top\":185.3333282470703,\"expectedTop\":186.6666717529297,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1291.6666717529297,\"rafPending\":false,\"delta\":-1.333343505859375}",
+      "timestamp": "2026-10-07T02:25:59.204Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":77044.09999990463,\"top\":185.3333282470703,\"expectedTop\":185.3333282470703,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1291.6666717529297,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:59.412Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"schedule-before\",\"owner\":\"chatScroll\",\"now\":77052.09999990463,\"top\":185.3333282470703,\"expectedTop\":185.3333282470703,\"programScrollTarget\":1476.6666259765625,\"upwardInputIntentUntil\":76590.69999980927,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":1291.6666717529297,\"rafPending\":false,\"source\":\"content\"}",
+      "timestamp": "2026-10-07T02:25:59.420Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"ready\",\"owner\":\"subagent-conversation-scroll\"}",
+      "timestamp": "2026-10-07T02:26:52.713Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"wheel\",\"owner\":\"subagent-conversation-scroll\",\"now\":153034.09999990463,\"top\":368.6666564941406,\"expectedTop\":800.6666870117188,\"programScrollTarget\":null,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":431.3333435058594,\"rafPending\":false,\"trusted\":true,\"defaultPrevented\":false,\"deltaY\":-432,\"deltaX\":0,\"deltaMode\":0,\"ancestors\":[{\"tag\":\"DIV\",\"id\":\"\",\"class\":\"subagent-conversation-panel__scroll\",\"ui\":\"subagent-conversation-scroll\",\"top\":368.6666564941406,\"height\":1377,\"client\":577,\"overflowY\":\"auto\"}]}",
+      "timestamp": "2026-10-07T02:27:15.405Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"wheel-intent\",\"owner\":\"subagent-conversation-scroll\",\"now\":153034.2999997139,\"top\":368.6666564941406,\"expectedTop\":800.6666870117188,\"programScrollTarget\":null,\"upwardInputIntentUntil\":153284.2999997139,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":431.3333435058594,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:27:15.406Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-before\",\"owner\":\"subagent-conversation-scroll\",\"now\":153034.5,\"top\":368.6666564941406,\"expectedTop\":800.6666870117188,\"programScrollTarget\":null,\"upwardInputIntentUntil\":153284.2999997139,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":431.3333435058594,\"rafPending\":false}",
+      "timestamp": "2026-10-07T02:27:15.406Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"scroll-owned-upward\",\"owner\":\"subagent-conversation-scroll\",\"now\":153034.59999990463,\"top\":368.6666564941406,\"expectedTop\":368.6666564941406,\"programScrollTarget\":null,\"upwardInputIntentUntil\":153284.2999997139,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":true,\"bottomDistance\":431.3333435058594,\"rafPending\":false,\"delta\":-432.0000305175781}",
+      "timestamp": "2026-10-07T02:27:15.406Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"subagent-conversation-scroll\",\"now\":153034.69999980927,\"top\":368.6666564941406,\"expectedTop\":368.6666564941406,\"programScrollTarget\":null,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":431.3333435058594,\"rafPending\":false,\"frame\":1,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:27:15.406Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"subagent-conversation-scroll\",\"now\":153049.90000009537,\"top\":368.6666564941406,\"expectedTop\":368.6666564941406,\"programScrollTarget\":null,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":431.3333435058594,\"rafPending\":false,\"frame\":2,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:27:15.421Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    },
+    {
+      "level": "debug",
+      "message": "[input-follow67] {\"stage\":\"observation-frame\",\"owner\":\"subagent-conversation-scroll\",\"now\":153066.69999980927,\"top\":368.6666564941406,\"expectedTop\":368.6666564941406,\"programScrollTarget\":null,\"upwardInputIntentUntil\":0,\"pointerScrollIntent\":false,\"touchStartY\":null,\"tracking\":false,\"bottomDistance\":431.3333435058594,\"rafPending\":false,\"frame\":3,\"defaultPrevented\":false}",
+      "timestamp": "2026-10-07T02:27:15.438Z",
+      "url": "http://localhost:18027/ui/assets/main-SE-UNRmD.js"
+    }
+  ]
+}

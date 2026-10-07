@@ -2,8 +2,7 @@ import { UnauthorizedError, type OAuthClientProvider } from "@modelcontextprotoc
 import type {
   OAuthClientMetadata,
   OAuthTokens,
-  OAuthClientInformation,
-  OAuthClientInformationFull,
+  OAuthClientInformationMixed,
 } from "@modelcontextprotocol/sdk/shared/auth.js"
 import { McpAuth } from "./auth"
 import { oauthAuthorizationLogFields } from "./oauth-log"
@@ -16,6 +15,7 @@ const OAUTH_CALLBACK_PATH = "/mcp/oauth/callback"
 const CONNECTION_AUTHORIZATION_DISABLED_REDIRECT = "opencorvus://oauth-authorization-disabled"
 
 export interface McpOAuthConfig {
+  issuer?: string
   clientId?: string
   clientSecret?: string
   scope?: string
@@ -39,16 +39,36 @@ export class McpOAuthTokenCommitUncertainError extends Error {
   }
 }
 
+export class McpOAuthIssuerRequiredError extends UnauthorizedError {
+  constructor(readonly source: "stored_credentials" | "configured_client") {
+    super("MCP OAuth issuer is missing; explicit re-authorization or configured issuer is required")
+    this.name = "McpOAuthIssuerRequiredError"
+  }
+}
+
 const McpOAuthCredentialIdentity = z
   .object({
     serverUrl: z.string(),
     clientId: z.string().optional(),
     clientSecret: z.string().optional(),
     scope: z.string().optional(),
+    issuer: z.string().url().optional(),
   })
   .strict()
 
 export class McpOAuthProvider implements OAuthClientProvider {
+  private async retireUnboundCredentials(entry: McpAuth.Entry | undefined): Promise<boolean> {
+    const credentials = [entry?.tokens, entry?.clientInfo, entry?.tokenClientInfo]
+    if (!credentials.some((value) => value && !value.issuer)) return false
+    await this.assertCurrent?.()
+    await McpAuth.invalidateCredentials(this.authKey, "all", this.authRevision, {
+      tokens: entry?.tokens,
+      clientInfo: entry?.clientInfo,
+      tokenClientInfo: entry?.tokenClientInfo,
+    })
+    if (this.mode === "connection") throw new McpOAuthIssuerRequiredError("stored_credentials")
+    return true
+  }
   private clientSnapshotRead = false
   private clientInfoSnapshot: McpAuth.ClientInfo | undefined
   private tokenClientInfoSnapshot: McpAuth.ClientInfo | undefined
@@ -92,6 +112,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
       clientId: config.clientId,
       clientSecret: config.clientSecret,
       scope: config.scope,
+      issuer: config.issuer,
     })
   }
 
@@ -103,6 +124,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
         clientId: parsed.clientId,
         clientSecret: parsed.clientSecret,
         scope: parsed.scope,
+        issuer: parsed.issuer,
       },
     }
   }
@@ -157,19 +179,25 @@ export class McpOAuthProvider implements OAuthClientProvider {
     }
   }
 
-  async clientInformation(): Promise<OAuthClientInformation | undefined> {
+  async clientInformation(): Promise<OAuthClientInformationMixed | undefined> {
     // Capture the exact store inputs this SDK attempt selected. A rejected
     // refresh is not allowed to invalidate a newer callback's client/token
     // set merely because both providers still hold the same flow revision.
-    const entry =
+    let entry =
       this.mode === "authorization"
         ? await this.authorizationEntry()
         : await McpAuth.getForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
     this.captureCredentialSnapshot(entry)
+    if (await this.retireUnboundCredentials(entry)) {
+      entry = undefined
+      this.captureCredentialSnapshot(undefined)
+    }
 
     // Check config first (pre-registered client)
     if (this.config.clientId) {
+      if (!this.config.issuer) throw new McpOAuthIssuerRequiredError("configured_client")
       return {
+        issuer: this.config.issuer,
         client_id: this.config.clientId,
         client_secret: this.config.clientSecret,
       }
@@ -178,7 +206,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     // Check stored client info (from dynamic registration)
     // Use getForUrl to validate credentials are for the current server URL
     const useTokenClient = this.mode === "connection" && entry?.tokens
-    const clientInfo = useTokenClient ? (entry.tokenClientInfo ?? entry.clientInfo) : entry?.clientInfo
+    const clientInfo = useTokenClient ? (entry?.tokenClientInfo ?? entry?.clientInfo) : entry?.clientInfo
     const callbackBinding = this.callbackBinding
     const clientBindingIsCurrent = useTokenClient
       ? true
@@ -193,6 +221,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
         return undefined
       }
       return {
+        issuer: clientInfo.issuer,
         client_id: clientInfo.clientId,
         client_secret: clientInfo.clientSecret,
       }
@@ -203,13 +232,14 @@ export class McpOAuthProvider implements OAuthClientProvider {
     return undefined
   }
 
-  async saveClientInformation(info: OAuthClientInformationFull): Promise<void> {
+  async saveClientInformation(info: OAuthClientInformationMixed): Promise<void> {
     this.requireAuthorizationAuthority()
     const callbackBinding = this.requireCallbackBinding()
     await this.assertCurrent?.()
     await McpAuth.updateClientInfo(
       this.authKey,
       {
+        issuer: z.string().url().parse(info.issuer),
         clientId: info.client_id,
         clientSecret: info.client_secret,
         clientIdIssuedAt: info.client_id_issued_at,
@@ -237,6 +267,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     // store snapshot here; otherwise retain the snapshot clientInformation
     // already returned instead of mixing facts from two generations.
     const current = await McpAuth.getForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
+    await this.retireUnboundCredentials(current)
     if (!this.clientSnapshotRead) {
       this.captureCredentialSnapshot(current)
     } else {
@@ -263,6 +294,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     this.storedTokensDisclosed = true
 
     return {
+      issuer: this.tokenSnapshot.issuer,
       access_token: this.tokenSnapshot.accessToken,
       token_type: "Bearer",
       refresh_token: this.tokenSnapshot.refreshToken,
@@ -279,6 +311,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     }
     await this.assertCurrent?.()
     const committedTokens = {
+      issuer: z.string().url().parse(tokens.issuer),
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: tokens.expires_in ? Date.now() / 1000 + tokens.expires_in : undefined,

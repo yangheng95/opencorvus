@@ -1,0 +1,55 @@
+[1/4] START test/server/conversation-rename-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Chat and Work rename persist real titles and publish updates without an executable model [4438.20ms]
+
+ 1 pass
+ 0 fail
+ 12 expect() calls
+Ran 1 test across 1 file. [10.65s]
+[1/4] DONE test/server/conversation-rename-identity.test.ts exit=0 duration=11.04s
+[2/4] START test/server/side-chat.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) source-scoped side conversations > cold side-history list retains persisted references with missing current model and exact Project authority [7031.41ms]
+(pass) source-scoped side conversations > assistant source creates an independent root from complete history through the real routes [3029.57ms]
+(pass) source-scoped side conversations > root source creates an independent root from complete history through the real routes [2528.39ms]
+(pass) source-scoped side conversations > mission source creates an independent root from complete history through the real routes [2632.09ms]
+(pass) source-scoped side conversations > project authority resolves an exact not-found response for a foreign source [4352.24ms]
+
+ 5 pass
+ 0 fail
+ 41 expect() calls
+Ran 5 tests across 1 file. [21.74s]
+[2/4] DONE test/server/side-chat.test.ts exit=0 duration=21.92s
+[3/4] START test/server/passive-workspace-metadata.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold passive workspace metadata > real SDK packages, scoped skill files and canonical memory stay readable with missing current model [7332.03ms]
+(pass) cold passive workspace metadata > foreign Session catalog and skill reads retain exact Project lineage errors [3659.32ms]
+
+ 2 pass
+ 0 fail
+ 19 expect() calls
+Ran 2 tests across 1 file. [13.12s]
+[3/4] DONE test/server/passive-workspace-metadata.test.ts exit=0 duration=13.28s
+[4/4] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [4.37ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.13ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.11ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.09ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.08ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.05ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.05ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [1093.00ms]
+[4/4] DONE test/project-route-context.test.ts exit=0 duration=1.24s

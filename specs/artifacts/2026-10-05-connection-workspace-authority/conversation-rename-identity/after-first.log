@@ -1,0 +1,27 @@
+[1/2] START test/server/conversation-rename-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Chat and Work rename persist real titles and publish updates without an executable model [3996.30ms]
+
+ 1 pass
+ 0 fail
+ 12 expect() calls
+Ran 1 test across 1 file. [7.16s]
+[1/2] DONE test/server/conversation-rename-identity.test.ts exit=0 duration=7.35s
+[2/2] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.62ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.16ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.17ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.11ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.06ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [4.95ms]
+
+ 6 pass
+ 0 fail
+ 6 expect() calls
+Ran 6 tests across 1 file. [1039.00ms]
+[2/2] DONE test/project-route-context.test.ts exit=0 duration=1.18s

@@ -767,6 +767,13 @@ writer 则在写入前被拒。Project deletion cleanup 是唯一不走该 ordin
 OAuth callback 和 dynamic-client 日志只投影 correlation/presence 等固定字段；connection failure 只投影 endpoint presence，不记录 URL、
 userinfo/query、provider query error、client id、token SDK error 或 broker proof material。已向远端披露 stored refresh token 后的
 `UnauthorizedError` 属于固定 failed connection，不重新解释为首次 interactive `needs_auth`。
+MCP OAuth credentials bind their authorization-server `issuer` independently of the MCP resource URL. The single
+`mcp.oauth.issuer` configuration is required for pre-registered clients and participates in credential identity.
+Tokens, dynamic-client information and token-bound client snapshots retain the SDK-provided issuer. New writes
+require it. Legacy unbound credentials retire only under their exact snapshot/revision and require explicit
+re-authorization; neither discovery nor a resource URL supplies a guessed binding. Existing callback state,
+verifier, finishing occurrence and terminal receipts remain in the same durable owner.
+
 只有仍为 `pending` 的 provider rejection 和 missing-code callback 才能在一个 store write 中同时 abandon state/verifier 并
 发布 terminal；若 code finish 在其后抢先 spend，先加入 callback receipt 捕获的同 runtime operation；若 peer process 已将 exact
 state 移入 finishing，则等待 durable terminal，若 peer 已发布 terminal 则直接投影其真实 outcome。connected 与任一固定 failure

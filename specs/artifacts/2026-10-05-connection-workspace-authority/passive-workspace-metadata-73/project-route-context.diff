@@ -1,0 +1,15 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/passive-workspace-metadata-73/project-route-context.before.txt b/packages/opencorvus/src/server/project-route-context.ts
+index 3ab338a4..50a3cd05 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/passive-workspace-metadata-73/project-route-context.before.txt
++++ b/packages/opencorvus/src/server/project-route-context.ts
+@@ -1,6 +1,10 @@
+ import { normalizedServerRoutePath } from "@opencorvus-ai/transport-protocol"
+ 
+ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
++  "GET /expert-squad/search",
++  "GET /expert-squad/catalog",
++  "GET /mission-skill/catalog",
++  "GET /experimental/project-memory",
+   "POST /project/current/init-git",
+   "GET /expert-squad/market",
+   "GET /expert-squad/market/detail",

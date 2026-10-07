@@ -1,0 +1,35 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/passive-workspace-metadata-73/project-route-context-test.before.txt b/packages/opencorvus/test/project-route-context.test.ts
+index ef0b15e2..e2e04007 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/passive-workspace-metadata-73/project-route-context-test.before.txt
++++ b/packages/opencorvus/test/project-route-context.test.ts
+@@ -2,6 +2,30 @@ import { describe, expect, test } from "bun:test"
+ import { projectRouteContextKind } from "@/server/project-route-context"
+ 
+ describe("Project route context authority", () => {
++  test("uses exact identity metadata reads while memory organization and prompt retain runtime", () => {
++    expect({
++      search: projectRouteContextKind("/expert-squad/search", "GET"),
++      catalog: projectRouteContextKind("/expert-squad/catalog", "GET"),
++      missionSkills: projectRouteContextKind("/mission-skill/catalog", "GET"),
++      memory: projectRouteContextKind("/experimental/project-memory", "GET"),
++      organize: projectRouteContextKind("/experimental/project-memory/organize", "POST"),
++      prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
++      config: projectRouteContextKind("/session/ses_1/config", "GET"),
++      vcs: projectRouteContextKind("/vcs", "GET"),
++      channel: projectRouteContextKind("/channel", "GET"),
++    }).toEqual({
++      search: "identity",
++      catalog: "identity",
++      missionSkills: "identity",
++      memory: "identity",
++      organize: "runtime",
++      prompt: "runtime",
++      config: "runtime",
++      vcs: "runtime",
++      channel: "runtime",
++    })
++  })
++
+   test("classifies ordinary conversation title mutations through exact Project identity", () => {
+     expect({
+       chatTitle: projectRouteContextKind("/coding/chat/session/ses_1", "PATCH"),

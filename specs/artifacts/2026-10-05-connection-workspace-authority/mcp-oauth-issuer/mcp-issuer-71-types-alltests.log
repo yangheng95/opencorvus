@@ -1,0 +1,107 @@
+packages/opencorvus/src/expert-squad/builtin/index.ts(4,28): error TS2307: Cannot find module './base/README.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(5,30): error TS2307: Cannot find module './base/selector.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(6,38): error TS2307: Cannot find module './base/agents/base-developer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(7,36): error TS2307: Cannot find module './base/agents/base-planner/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(8,39): error TS2307: Cannot find module './base/agents/base-researcher/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(9,35): error TS2307: Cannot find module './base/agents/base-tester/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(10,41): error TS2307: Cannot find module './base/agents/orchestrator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(11,34): error TS2307: Cannot find module './base/skills/method/SKILL.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(13,32): error TS2307: Cannot find module './advanced/README.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(14,34): error TS2307: Cannot find module './advanced/selector.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(15,47): error TS2307: Cannot find module './advanced/agents/claim-verifier/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(16,56): error TS2307: Cannot find module './advanced/agents/implementation-engineer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(17,51): error TS2307: Cannot find module './advanced/agents/interface-designer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(18,61): error TS2307: Cannot find module './advanced/agents/interface-integrity-reviewer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(19,55): error TS2307: Cannot find module './advanced/agents/interface-investigator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(20,45): error TS2307: Cannot find module './advanced/agents/orchestrator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(21,52): error TS2307: Cannot find module './advanced/agents/request-interpreter/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(22,53): error TS2307: Cannot find module './advanced/agents/requirement-engineer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(23,54): error TS2307: Cannot find module './advanced/agents/research-investigator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(24,51): error TS2307: Cannot find module './advanced/agents/solution-architect/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(25,52): error TS2307: Cannot find module './advanced/agents/source-investigator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(26,58): error TS2307: Cannot find module './advanced/agents/system-integrity-reviewer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(27,46): error TS2307: Cannot find module './advanced/agents/test-engineer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(28,48): error TS2307: Cannot find module './advanced/agents/visual-reviewer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(29,50): error TS2307: Cannot find module './advanced/agents/workload-reviewer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(30,38): error TS2307: Cannot find module './advanced/skills/method/SKILL.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(32,39): error TS2307: Cannot find module './research-studio/README.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(33,41): error TS2307: Cannot find module './research-studio/selector.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(34,52): error TS2307: Cannot find module './research-studio/agents/orchestrator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(35,47): error TS2307: Cannot find module './research-studio/agents/research-studio-analyst/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(36,52): error TS2307: Cannot find module './research-studio/agents/research-studio-fact-checker/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(37,47): error TS2307: Cannot find module './research-studio/agents/research-studio-planner/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(38,50): error TS2307: Cannot find module './research-studio/agents/research-studio-researcher/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(39,46): error TS2307: Cannot find module './research-studio/agents/research-studio-writer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(40,62): error TS2307: Cannot find module './research-studio/skills/analysis-report-quality/SKILL.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(41,57): error TS2307: Cannot find module './research-studio/skills/analysis-report-quality/references/decision-research-report-template.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(44,33): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/README.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(45,35): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/selector.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(46,46): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/agents/orchestrator/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(47,51): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-contract-reviewer/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(48,48): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-import-analyst/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(49,41): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-planner/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(50,48): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-source-analyst/system.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(51,42): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/skills/authoring/SKILL.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(52,51): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/skills/authoring/references/authoring-quality-method.md' or its corresponding type declarations.
+packages/opencorvus/src/expert-squad/builtin/index.ts(54,39): error TS2307: Cannot find module '../../../../../expert-squads/builtin/squad-sdk/skills/import/SKILL.md' or its corresponding type declarations.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(211,48): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(219,91): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(225,41): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(416,41): error TS2339: Property 'type' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'type' does not exist on type '{ enabled: false; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(419,53): error TS2339: Property 'oauth' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'oauth' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(419,85): error TS2339: Property 'oauth' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'oauth' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(425,75): error TS2339: Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(426,83): error TS2339: Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(430,24): error TS2339: Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(439,24): error TS2339: Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }'.
+  Property 'url' does not exist on type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; }'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(444,45): error TS2345: Argument of type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; } | { ...; }' is not assignable to parameter of type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; }'.
+  Type '{ enabled: false; }' is not assignable to type '{ type: "local"; command: string[]; environment?: Record<string, string> | undefined; enabled?: boolean | undefined; timeout?: number | undefined; } | { type: "remote"; url: string; ... 5 more ...; timeout?: number | undefined; }'.
+    Type '{ enabled: false; }' is missing the following properties from type '{ type: "remote"; url: string; transport: "streamable-http" | "sse"; enabled?: boolean | undefined; headers?: Record<string, string> | undefined; oauth?: false | { clientId?: string | undefined; clientSecret?: string | undefined; issuer?: string | undefined; scope?: string | undefined; } | undefined; credential?: { ...': type, url, transport
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(832,97): error TS2345: Argument of type 'number | ReadableStream<Uint8Array<ArrayBuffer>> | undefined' is not assignable to parameter of type 'BodyInit | null | undefined'.
+  Type 'number' is not assignable to type 'BodyInit | null | undefined'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(952,86): error TS2345: Argument of type 'number | ReadableStream<Uint8Array<ArrayBuffer>> | undefined' is not assignable to parameter of type 'BodyInit | null | undefined'.
+  Type 'number' is not assignable to type 'BodyInit | null | undefined'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1052,97): error TS2345: Argument of type 'number | ReadableStream<Uint8Array<ArrayBuffer>> | undefined' is not assignable to parameter of type 'BodyInit | null | undefined'.
+  Type 'number' is not assignable to type 'BodyInit | null | undefined'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1117,62): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(expected: undefined): void', gave the following error.
+    Argument of type '{ spent: boolean; }' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 2, '(expected: undefined): void', gave the following error.
+    Argument of type '{ spent: boolean; }' is not assignable to parameter of type 'undefined'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1162,52): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1167,97): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1172,41): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1181,41): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1204,41): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1213,41): error TS2552: Cannot find name 'server'. Did you mean 'SERVER'?
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1225,41): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1307,52): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1312,97): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1389,97): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1393,41): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1592,54): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1597,99): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1690,54): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1695,108): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1716,54): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1769,54): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1774,108): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1797,54): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(1877,35): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(2010,52): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(2016,39): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(2177,54): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/durable-oauth-finish.test.ts(2182,99): error TS2304: Cannot find name 'server'.
+packages/opencorvus/test/mcp/oauth-callback-durable-legitimacy.test.ts(264,67): error TS2345: Argument of type '(input: any, init: any) => Promise<Response>' is not assignable to parameter of type 'typeof fetch'.
+  Property 'preconnect' is missing in type '(input: any, init: any) => Promise<Response>' but required in type 'typeof fetch'.
+packages/opencorvus/test/mcp/oauth-callback-durable-legitimacy.test.ts(651,34): error TS2322: Type 'URL' is not assignable to type 'void | Promise<void>'.
+packages/opencorvus/test/mcp/oauth-callback-durable-legitimacy.test.ts(1874,11): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.

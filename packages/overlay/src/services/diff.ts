@@ -298,15 +298,14 @@ async function readObservedTextSide(input: {
       offset: String(offset),
       length: String(length),
     })
-    const response = await apiRequest<Uint8Array>(
-      taskScopedPath(
-        input.taskID,
-        input.directory,
-        `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
-      ),
-      { responseKind: "binary", authority: input.authority },
+    const path = taskScopedPath(
+      input.taskID,
+      input.directory,
+      `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
     )
-    if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
+    const method = "GET" as const
+    const response = await apiRequest<Uint8Array>(path, { method, responseKind: "binary", authority: input.authority })
+    if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers, method)
     const bytes = response.body
     textChunks.push(decoder.decode(bytes, { stream: offset + bytes.byteLength < input.object.bytes }))
     offset += bytes.byteLength

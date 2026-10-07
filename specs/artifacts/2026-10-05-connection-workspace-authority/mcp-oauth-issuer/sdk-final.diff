@@ -1,0 +1,49 @@
+diff --git a/packages/sdk/js/src/gen/types.gen.ts b/packages/sdk/js/src/gen/types.gen.ts
+index 14cf62af..0addf945 100644
+--- a/packages/sdk/js/src/gen/types.gen.ts
++++ b/packages/sdk/js/src/gen/types.gen.ts
+@@ -3266,6 +3266,7 @@ export type McpAppHostRequest =
+               }>
+               mimeType?: string
+               name: string
++              size?: number
+               title?: string
+               type: "resource_link"
+               uri: string
+@@ -3342,6 +3343,10 @@ export type McpOAuthConfig = {
+    * OAuth client secret (if required by the authorization server)
+    */
+   clientSecret?: string
++  /**
++   * Authorization server issuer for a pre-registered OAuth client
++   */
++  issuer?: string
+   /**
+    * OAuth scopes to request during authorization
+    */
+diff --git a/packages/sdk/openapi.json b/packages/sdk/openapi.json
+index 8610268c..43b81a7d 100644
+--- a/packages/sdk/openapi.json
++++ b/packages/sdk/openapi.json
+@@ -11687,6 +11687,9 @@
+                             "name": {
+                               "type": "string"
+                             },
++                            "size": {
++                              "type": "number"
++                            },
+                             "title": {
+                               "type": "string"
+                             },
+@@ -11883,6 +11886,11 @@
+             "description": "OAuth client secret (if required by the authorization server)",
+             "type": "string"
+           },
++          "issuer": {
++            "description": "Authorization server issuer for a pre-registered OAuth client",
++            "format": "uri",
++            "type": "string"
++          },
+           "scope": {
+             "description": "OAuth scopes to request during authorization",
+             "type": "string"

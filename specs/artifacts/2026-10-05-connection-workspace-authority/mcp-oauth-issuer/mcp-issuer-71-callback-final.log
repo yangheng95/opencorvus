@@ -1,0 +1,99 @@
+$ bun script/run-tests.ts test/mcp/oauth-callback-durable-legitimacy.test.ts
+[1/1] START test/mcp/oauth-callback-durable-legitimacy.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the durable MCP OAuth callback broker > a peer waiter observes the exact durable terminal published by the finishing process [396.49ms]
+(pass) the durable MCP OAuth callback broker > an unreferenced broker does not keep a one-shot process alive [384.77ms]
+(pass) the durable MCP OAuth callback broker > a durable port-zero broker identity is a typed malformed-identity refusal [35.20ms]
+(pass) the durable MCP OAuth callback broker > two same-root backends share one callback identity and the peer takes over after owner exit [1332.75ms]
+(pass) the durable MCP OAuth callback broker > peer monitoring admits only one proof and takeover attempt at a time [3346.62ms]
+(pass) the durable MCP OAuth callback broker > a cancelled headers probe preserves the live broker identity [1143.08ms]
+(pass) the durable MCP OAuth callback broker > a cancelled body probe preserves the live broker identity [1152.31ms]
+(pass) the durable MCP OAuth callback broker > a peer monitor survives an unreachable owner stall and later takes over automatically [5064.65ms]
+(pass) the durable MCP OAuth callback broker > stop retires a broker startup that is still probing its persisted identity [61.80ms]
+(pass) the durable MCP OAuth callback broker > a verified peer identity handoff retires the previous local server handle [375.06ms]
+(pass) the durable MCP OAuth callback broker > independent data roots own distinct authenticated callback identities [494.50ms]
+(pass) the durable MCP OAuth callback broker > same-state callback waiters and cancellation remain isolated by data root [108.64ms]
+992 |  */
+993 | export async function registerClient(authorizationServerUrl, { metadata, clientMetadata, scope, fetchFn }) {
+994 |     let registrationUrl;
+995 |     if (metadata) {
+996 |         if (!metadata.registration_endpoint) {
+997 |             throw new Error('Incompatible auth server: does not support dynamic client registration');
+                            ^
+error: Incompatible auth server: does not support dynamic client registration
+      at registerClient (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:997:23)
+      at authInternal (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:315:43)
+(fail) the durable MCP OAuth callback broker > callback identity rotation settles only callback-bound facts and preserves committed tokens [138.84ms]
+292 |             // A provider that only expects this call after a registration keeps working, unbound.
+293 |         }
+294 |     };
+295 |     if (!clientInformation) {
+296 |         if (authorizationCode !== undefined) {
+297 |             throw new Error('Existing OAuth client information is required when exchanging an authorization code');
+                            ^
+error: Existing OAuth client information is required when exchanging an authorization code
+      at authInternal (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:297:23)
+(fail) the durable MCP OAuth callback broker > authorization-code exchange uses its current callback client while an old token client coexists [124.93ms]
+292 |             // A provider that only expects this call after a registration keeps working, unbound.
+293 |         }
+294 |     };
+295 |     if (!clientInformation) {
+296 |         if (authorizationCode !== undefined) {
+297 |             throw new Error('Existing OAuth client information is required when exchanging an authorization code');
+                            ^
+error: Existing OAuth client information is required when exchanging an authorization code
+      at authInternal (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:297:23)
+(fail) the durable MCP OAuth callback broker > a superseded finishing provider cannot read the next occurrence client or verifier [171.00ms]
+992 |  */
+993 | export async function registerClient(authorizationServerUrl, { metadata, clientMetadata, scope, fetchFn }) {
+994 |     let registrationUrl;
+995 |     if (metadata) {
+996 |         if (!metadata.registration_endpoint) {
+997 |             throw new Error('Incompatible auth server: does not support dynamic client registration');
+                            ^
+error: Incompatible auth server: does not support dynamic client registration
+      at registerClient (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:997:23)
+      at authInternal (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:315:43)
+(fail) the durable MCP OAuth callback broker > one refresh attempt never mixes client and token snapshots across a callback commit [98.35ms]
+(pass) the durable MCP OAuth callback broker > a reachable foreign listener rotates the broker and settles the obsolete callback generation [87.95ms]
+(pass) the durable MCP OAuth callback broker > terminal history survives a new lease and a replaced pending flow publishes its own terminal [107.06ms]
+(pass) the durable MCP OAuth callback broker > credential retirement terminalizes pending and finishing waiters before retaining terminal-only tombstones [189.94ms]
+(pass) the durable MCP OAuth callback broker > a pre-rename retirement retry rotates the terminal tombstone before stale-writer admission [111.81ms]
+(pass) the durable MCP OAuth callback broker > a killed finishing owner converges to a retained non-replayable uncertain terminal [758.99ms]
+(pass) the durable MCP OAuth callback broker > an ambiguous terminal write reconciles from the exact committed occurrence [102.79ms]
+(pass) the durable MCP OAuth callback broker > finishing admission and renewal converge to the exact owner across committed and uncommitted writes [163.93ms]
+(pass) the durable MCP OAuth callback broker > the live finishing occurrence is the exclusive writer of credential and flow facts [153.89ms]
+(pass) the durable MCP OAuth callback broker > an ambiguous generation-settlement write reconciles every obsolete callback fact [76.93ms]
+(pass) the durable MCP OAuth callback broker > broker startup retries generation settlement after identity publication [59.57ms]
+(pass) the durable MCP OAuth callback broker > broker startup accepts an exact identity committed by an ambiguous atomic rename [34.08ms]
+(pass) the durable MCP OAuth callback broker > terminal polling converts repeated durable read failures into one observed waiter error [217.61ms]
+992 |  */
+993 | export async function registerClient(authorizationServerUrl, { metadata, clientMetadata, scope, fetchFn }) {
+994 |     let registrationUrl;
+995 |     if (metadata) {
+996 |         if (!metadata.registration_endpoint) {
+997 |             throw new Error('Incompatible auth server: does not support dynamic client registration');
+                            ^
+error: Incompatible auth server: does not support dynamic client registration
+      at registerClient (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:997:23)
+      at authInternal (D:\myhexin-local\opencorvus\node_modules\.bun\@modelcontextprotocol+sdk@1.31.0\node_modules\@modelcontextprotocol\sdk\dist\esm\client\auth.js:315:43)
+(fail) the durable MCP OAuth callback broker > the first broker generation terminalizes legacy callback-bound facts [78.25ms]
+
+5 tests failed:
+(fail) the durable MCP OAuth callback broker > callback identity rotation settles only callback-bound facts and preserves committed tokens [138.84ms]
+(fail) the durable MCP OAuth callback broker > authorization-code exchange uses its current callback client while an old token client coexists [124.93ms]
+(fail) the durable MCP OAuth callback broker > a superseded finishing provider cannot read the next occurrence client or verifier [171.00ms]
+(fail) the durable MCP OAuth callback broker > one refresh attempt never mixes client and token snapshots across a callback commit [98.35ms]
+(fail) the durable MCP OAuth callback broker > the first broker generation terminalizes legacy callback-bound facts [78.25ms]
+
+ 24 pass
+ 5 fail
+ 52 expect() calls
+Ran 29 tests across 1 file. [17.72s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\oauth-callback-durable-legitimacy.test.ts
+[1/1] DONE test/mcp/oauth-callback-durable-legitimacy.test.ts exit=1 duration=17.94s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\mcp\oauth-callback-durable-legitimacy.test.ts
+error: script "test" exited with code 1

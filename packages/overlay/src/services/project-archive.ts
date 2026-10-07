@@ -25,12 +25,14 @@ function saveBytesAsDownload(bytes: Uint8Array, filename: string): void {
 }
 
 export async function downloadZipArchive(input: { path: string }): Promise<boolean> {
+  const method = "GET" as const
   const response = await apiRequest<Uint8Array>(input.path, {
+    method,
     responseKind: "binary",
     timeoutMilliseconds: ZIP_ARCHIVE_DOWNLOAD_TIMEOUT_MILLISECONDS,
   })
   if (!response.ok) {
-    throw new ApiError(response.status, input.path, response.body, response.headers)
+    throw new ApiError(response.status, input.path, response.body, response.headers, method)
   }
   const filename = contentDispositionFilename(
     response.headers["content-disposition"] || response.headers["Content-Disposition"],

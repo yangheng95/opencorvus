@@ -1,0 +1,9 @@
+{
+  "extends": "../../../../packages/opencorvus/tsconfig.json",
+  "include": [
+    "../../../../packages/opencorvus/src/**/*.d.ts",
+    "../../../../packages/opencorvus/test/server/side-chat.test.ts",
+    "../../../../packages/opencorvus/test/project-route-context.test.ts"
+  ],
+  "exclude": []
+}

@@ -1,0 +1,88 @@
+$ bun run ./packages/opencorvus/script/check/routes.ts
+api:routes-check found 1 route inventory violation(s):
+
+  [generated-openapi-differs-tracked-openapi]
+    --- ../sdk/openapi.json (tracked)
++++ ../sdk/openapi.json (generated)
+-11690:                             "title": {
++11690:                             "size": {
+-11691:                               "type": "string"
++11691:                               "type": "number"
+-11693:                             "type": {
++11693:                             "title": {
+-11694:                               "const": "resource_link",
++11694:                               "type": "string"
+-11695:                               "type": "string"
++11695:                             },
+-11696:                             },
++11696:                             "type": {
+-11697:                             "uri": {
++11697:                               "const": "resource_link",
+-11699:                             }
++11699:                             },
+-11700:                           },
++11700:                             "uri": {
+-11701:                           "required": [
++11701:                               "type": "string"
+-11702:                             "name",
++11702:                             }
+-11703:                             "uri",
++11703:                           },
+-11704:                             "type"
++11704:                           "required": [
+-11705:                           ],
++11705:                             "name",
+-11706:                           "type": "object"
++11706:                             "uri",
+-11707:                         },
++11707:                             "type"
+-11708:                         {
++11708:                           ],
+-11709:                           "properties": {
++11709:                           "type": "object"
+-11710:                             "_meta": {
++11710:                         },
+-11711:                               "additionalProperties": {},
++11711:                         {
+-11712:                               "propertyNames": {
++11712:                           "properties": {
+-11713:                                 "type": "string"
++11713:                             "_meta": {
+-11714:                               },
++11714:                               "additionalProperties": {},
+-11715:                               "type": "object"
++11715:                               "propertyNames": {
+-11716:                             },
++11716:                                 "type": "string"
+-11717:                             "annotations": {
++11717:                               },
+-11718:                               "properties": {
++11718:                               "type": "object"
+-11719:                                 "audience": {
++11719:                             },
+-11720:                                   "items": {
++11720:                             "annotations": {
+-11721:                                     "enum": [
++11721:                               "properties": {
+-11722:                                       "user",
++11722:                                 "audience": {
+-11723:                                       "assistant"
++11723:                                   "items": {
+-11724:                                     ],
++11724:                                     "enum": [
+-11725:                                     "type": "string"
++11725:                                       "user",
+-11726:                                   },
++11726:                                       "assistant"
+-11727:                                   "type": "array"
++11727:                                     ],
+-11728:                                 },
++11728:                                     "type": "string"
+-11729:                                 "lastModified": {
++11729:                                   },
+-11730:                                   "format": "date-time",
++11730:                                   "type": "array"
+-11731:                                   "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
++11731:                                 },
+... (truncated, more diffs follow)
+error: script "api:routes-check" exited with code 1

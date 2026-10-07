@@ -9,7 +9,7 @@
 import { DEFAULT_SERVER } from "./default-server"
 import { joinServerBaseUrl } from "@opencorvus-ai/transport-protocol"
 import { getHostTransport } from "./host-transport-runtime"
-import type { ResponseKind, TransportResponse } from "./host-transport"
+import type { ResponseKind, TransportRequest, TransportResponse } from "./host-transport"
 import { bytesToArrayBuffer } from "../utils/binary"
 import {
   ApiAuthorityChangedError,
@@ -157,7 +157,14 @@ export class ApiError extends Error {
   readonly path: string
   readonly body: unknown
   readonly requestID: string | undefined
-  constructor(status: number, path: string, body: unknown, responseHeaders: Readonly<Record<string, string>>) {
+  readonly method: NonNullable<TransportRequest["method"]>
+  constructor(
+    status: number,
+    path: string,
+    body: unknown,
+    responseHeaders: Readonly<Record<string, string>>,
+    method: NonNullable<TransportRequest["method"]>,
+  ) {
     const decodedBody = materializeApiErrorBody(body)
     super(formatApiErrorMessage(status, path, decodedBody))
     this.name = "ApiError"
@@ -165,6 +172,7 @@ export class ApiError extends Error {
     this.path = path
     this.body = decodedBody
     this.requestID = pickHeader(responseHeaders, "x-opencorvus-request-id")?.trim() || undefined
+    this.method = method
   }
 
   get summary(): string {
@@ -251,10 +259,12 @@ export function serverSettledRequest(init: ApiJsonInit): ApiJsonInit {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function apiJson<T = any>(path: string, init?: ApiJsonInit): Promise<T> {
   const authority = init?.authority ?? captureApiAuthority()
-  const res = await apiRequest<T>(path, { ...init, authority, responseKind: "json" })
+  assertApiAuthorityCurrent(authority)
+  const method = methodFromInit(init)
+  const res = await apiRequest<T>(path, { ...init, authority, method, responseKind: "json" })
   assertApiAuthorityCurrent(authority, { phase: "response", response: res })
   if (!res.ok) {
-    const error = new ApiError(res.status, path, res.body, res.headers)
+    const error = new ApiError(res.status, path, res.body, res.headers, method)
     publishApiError(error, authority)
     assertApiAuthorityCurrent(authority, { phase: "response", response: res })
     throw error
@@ -535,16 +545,17 @@ function createBlobInFlightEntry(raw: string, key: string, authority?: ApiAuthor
         return objectUrl
       }
       const { pathOnly, query } = splitPathQuery(raw.replace(/^\/+/, ""))
+      const method = "GET" as const
       const res = await transport.request<Uint8Array>({
         authority,
         path: pathOnly,
         query,
-        method: "GET",
+        method,
         responseKind: "binary",
         signal: controller.signal,
       })
       if (authority) assertApiAuthorityCurrent(authority, { phase: "response", response: res })
-      if (!res.ok) throw new ApiError(res.status, raw, res.body, res.headers)
+      if (!res.ok) throw new ApiError(res.status, raw, res.body, res.headers, method)
       const ct = res.headers["content-type"] || res.headers["Content-Type"] || "application/octet-stream"
       const blob = new Blob([bytesToArrayBuffer(res.body as Uint8Array)], { type: ct })
       const objectUrl = URL.createObjectURL(blob)

@@ -1,0 +1,320 @@
+// Observed comparison evidence and immutable content authority.
+import { boardStore } from "../store/board"
+import type { FileChange, FileChangeReceipt } from "../components/DiffView"
+import { apiRequest, ApiError, captureApiAuthority, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import { taskScopedPath } from "./task-path"
+import { taskOwningDirectory } from "./task-directory"
+import { diffLines } from "diff"
+const BUILD_OBSERVATION_CONTENT_CHUNK_BYTES = 256 * 1024
+export interface DiffTarget {
+  filePath: string
+  groupID?: string
+  sessionID?: string
+  agentID?: string
+}
+export interface ChangeGroup {
+  id: string
+  observationKind: "tool_interval" | "saved_session_interval" | "immutable_build_interval" | "path_coverage"
+  taskID?: string
+  artifactID?: string
+  sessionID?: string
+  agentID?: string
+  commitRef?: string
+  publishedCommitRef?: string
+  diffBaseRef?: string
+  diffHeadRef?: string
+  additions: number | null
+  deletions: number | null
+  changes: FileChange[]
+  unavailableReceipts?: readonly FileChangeReceipt[]
+}
+export interface ChangeSummary {
+  files: number
+  additions: number | null
+  deletions: number | null
+  hasUnresolvedChanges: boolean
+}
+export function changeGroupIdentity(group: ChangeGroup): string {
+  return JSON.stringify([
+    group.observationKind,
+    group.id,
+    group.taskID,
+    group.artifactID,
+    group.sessionID,
+    group.agentID,
+    group.diffBaseRef,
+    group.diffHeadRef,
+    group.commitRef,
+    group.publishedCommitRef,
+  ])
+}
+export function textComparisonCounts(before: string, after: string): { additions: number; deletions: number } {
+  const counts = { additions: 0, deletions: 0 }
+  for (const change of diffLines(before, after)) {
+    if (change.added) counts.additions += change.count ?? 0
+    if (change.removed) counts.deletions += change.count ?? 0
+  }
+  return counts
+}
+export function summarizeFileChanges(changes: readonly FileChange[]): ChangeSummary {
+  const overlapping = new Set(changes.map((change) => change.file)).size !== changes.length
+  const known =
+    !overlapping &&
+    changes.every(
+      (change) => change.evidence.kind === "complete" && change.additions !== null && change.deletions !== null,
+    )
+  return {
+    files: new Set(changes.map((change) => change.file)).size,
+    hasUnresolvedChanges: changes.some((change) => change.evidence.kind === "incomplete"),
+    additions: known ? changes.reduce((sum, change) => sum + change.additions!, 0) : null,
+    deletions: known ? changes.reduce((sum, change) => sum + change.deletions!, 0) : null,
+  }
+}
+export function summarizeChangeGroups(groups: readonly ChangeGroup[]): ChangeSummary {
+  const summary = summarizeFileChanges(groups.flatMap((group) => group.changes))
+  return groups.some((group) => (group.unavailableReceipts?.length ?? 0) > 0)
+    ? { ...summary, additions: null, deletions: null, hasUnresolvedChanges: true }
+    : summary
+}
+export function changeGroupsRevisionKey(groups: readonly ChangeGroup[]): string {
+  return JSON.stringify(groups)
+}
+function text(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value.trim() : undefined
+}
+function record(value: unknown): value is Record<string, any> {
+  return !!value && typeof value === "object" && !Array.isArray(value)
+}
+function status(value: unknown): FileChange["status"] {
+  return value === "added" || value === "deleted" || value === "modified" ? value : undefined
+}
+function incomplete(
+  file: string,
+  receipts: readonly FileChangeReceipt[],
+  reason: "saved_session_flags_missing" | "unknown_resource",
+): FileChange {
+  return { file, additions: null, deletions: null, evidence: { kind: "incomplete", reason, receipts } }
+}
+export function savedSessionChangeGroups(raw: unknown, sessionID: string): ChangeGroup[] {
+  if (!Array.isArray(raw)) return []
+  const changes = raw.flatMap((item, fileIndex): FileChange[] =>
+    record(item) && text(item.file)
+      ? [
+          {
+            ...incomplete(item.file, [{ sessionID, fileIndex }], "saved_session_flags_missing"),
+            status: status(item.status),
+          },
+        ]
+      : [],
+  )
+  return changes.length
+    ? [
+        {
+          id: `session:${sessionID}:saved`,
+          sessionID,
+          observationKind: "saved_session_interval",
+          ...summarizeFileChanges(changes),
+          changes,
+        },
+      ]
+    : []
+}
+function object(value: unknown): { oid: string; bytes: number } | null | undefined {
+  if (value === null) return null
+  if (
+    record(value) &&
+    typeof value.oid === "string" &&
+    /^[a-f0-9]{40,64}$/.test(value.oid) &&
+    Number.isSafeInteger(value.bytes) &&
+    value.bytes >= 0
+  )
+    return { oid: value.oid, bytes: value.bytes }
+  return undefined
+}
+export function immutableBuildChangeGroups(board: unknown): ChangeGroup[] {
+  if (!record(board) || !Array.isArray(board.artifacts)) return []
+  const nodes = Array.isArray(board.sessionInvocationTopology?.nodes) ? board.sessionInvocationTopology.nodes : []
+  return board.artifacts.flatMap((artifact: any): ChangeGroup[] => {
+    if (
+      !record(artifact) ||
+      artifact.kind !== "build_host_observation" ||
+      !text(artifact.id) ||
+      !record(artifact.payload)
+    )
+      return []
+    const payload = artifact.payload
+    const sessionID = text(payload.session_id)
+    const node = nodes.find((candidate: any) => candidate.sessionID === sessionID)
+    const changes: FileChange[] = (Array.isArray(payload.diffs) ? payload.diffs : []).flatMap(
+      (item: any, fileIndex: number): FileChange[] => {
+        if (!record(item) || !text(item.file)) return []
+        const file = item.file
+        const receipts = [{ artifactID: artifact.id, fileIndex }]
+        const beforeObject = object(item.before),
+          afterObject = object(item.after),
+          physical = status(item.status)
+        const validSides =
+          physical === "added"
+            ? beforeObject === null && !!afterObject
+            : physical === "deleted"
+              ? !!beforeObject && afterObject === null
+              : physical === "modified" && !!beforeObject && !!afterObject
+        if (!validSides || typeof item.is_binary !== "boolean")
+          return [{ ...incomplete(file, receipts, "unknown_resource"), status: physical }]
+        const isText = !item.is_binary
+        if (isText && ![item.additions, item.deletions].every((count) => Number.isSafeInteger(count) && count >= 0))
+          return [{ ...incomplete(file, receipts, "unknown_resource"), status: physical }]
+        return [
+          {
+            file,
+            status: physical,
+            isText,
+            beforeObject,
+            afterObject,
+            additions: isText ? item.additions : null,
+            deletions: isText ? item.deletions : null,
+            evidence: { kind: "complete", receipts },
+          },
+        ]
+      },
+    )
+    return changes.length
+      ? [
+          {
+            id: `artifact:${artifact.id}`,
+            observationKind: "immutable_build_interval",
+            taskID: text(payload.task_id) ?? text(board.task?.id),
+            artifactID: artifact.id,
+            sessionID,
+            agentID: text(node?.agent),
+            commitRef: text(payload.contribution_commit_ref),
+            publishedCommitRef: text(payload.published_commit_ref),
+            diffBaseRef: text(payload.diff_base_ref),
+            diffHeadRef: text(payload.diff_head_ref),
+            ...summarizeFileChanges(changes),
+            changes,
+          },
+        ]
+      : []
+  })
+}
+export function currentChangeGroups(): ChangeGroup[] {
+  const board = boardStore.board as any
+  const artifacts = immutableBuildChangeGroups(board)
+  if (artifacts.length) return artifacts
+  return board?.kind === "session" && text(board.sessionID)
+    ? savedSessionChangeGroups(board.changes, board.sessionID)
+    : []
+}
+export async function resolveCurrentChangeGroups(): Promise<ChangeGroup[]> {
+  return currentChangeGroups()
+}
+export function hasDiffBody(change: FileChange | null | undefined): boolean {
+  return (
+    !!change &&
+    change.evidence.kind === "complete" &&
+    typeof change.before === "string" &&
+    typeof change.after === "string"
+  )
+}
+export function isKnownTextDiff(change: FileChange | null | undefined): boolean {
+  return change?.evidence.kind === "complete" && change.isText === true
+}
+export class DiffSelectionError extends Error {
+  constructor(readonly reason: "ambiguous_group" | "ambiguous_path") {
+    super(`Observed diff selection is ambiguous: ${reason}`)
+    this.name = "DiffSelectionError"
+  }
+}
+export async function resolveDiff(
+  target: DiffTarget,
+  groups: readonly ChangeGroup[] = currentChangeGroups(),
+): Promise<FileChange | null> {
+  const matching = groups.filter((group) =>
+    target.groupID
+      ? group.id === target.groupID
+      : target.sessionID
+        ? group.sessionID === target.sessionID
+        : target.agentID
+          ? group.agentID === target.agentID
+          : group.changes.some((change) => change.file === target.filePath),
+  )
+  if (matching.length > 1) throw new DiffSelectionError("ambiguous_group")
+  const group = matching[0]
+  const matches = group?.changes.filter((change) => change.file === target.filePath) ?? []
+  if (matches.length > 1) throw new DiffSelectionError("ambiguous_path")
+  const change = matches[0] ?? null
+  if (!change || change.evidence.kind === "incomplete" || hasDiffBody(change) || change.isText !== true) return change
+  if (
+    group?.observationKind !== "immutable_build_interval" ||
+    !group.artifactID ||
+    !group.taskID ||
+    change.beforeObject === undefined ||
+    change.afterObject === undefined
+  )
+    return {
+      file: change.file,
+      status: change.status,
+      additions: null,
+      deletions: null,
+      evidence: { kind: "incomplete", reason: "unknown_resource", receipts: change.evidence.receipts },
+    }
+  const authority = captureApiAuthority()
+  const directory = taskOwningDirectory(group.taskID)
+  const [before, after] = await Promise.all(
+    ["before", "after"].map((side) =>
+      readObservedTextSide({
+        taskID: group.taskID!,
+        artifactID: group.artifactID!,
+        file: change.file,
+        side: side as "before" | "after",
+        object: (side === "before" ? change.beforeObject : change.afterObject)!,
+        authority,
+        directory,
+      }),
+    ),
+  )
+  assertApiAuthorityCurrent(authority)
+  return { ...change, before, after }
+}
+async function readObservedTextSide(input: {
+  taskID: string
+  artifactID: string
+  file: string
+  side: "before" | "after"
+  object: { oid: string; bytes: number } | null
+  authority: ApiAuthority
+  directory: string
+}): Promise<string> {
+  if (input.object === null) return ""
+  const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true })
+  const textChunks: string[] = []
+  let offset = 0
+  while (offset < input.object.bytes) {
+    const length = Math.min(BUILD_OBSERVATION_CONTENT_CHUNK_BYTES, input.object.bytes - offset)
+    const query = new URLSearchParams({
+      file: input.file,
+      side: input.side,
+      offset: String(offset),
+      length: String(length),
+    })
+    const response = await apiRequest<Uint8Array>(
+      taskScopedPath(
+        input.taskID,
+        input.directory,
+        `/build-observation/${encodeURIComponent(input.artifactID)}/content?${query.toString()}`,
+      ),
+      { responseKind: "binary", authority: input.authority },
+    )
+    if (!response.ok) throw new ApiError(response.status, "build observation content", response.body, response.headers)
+    const bytes = response.body
+    textChunks.push(decoder.decode(bytes, { stream: offset + bytes.byteLength < input.object.bytes }))
+    offset += bytes.byteLength
+    if (bytes.byteLength !== length) {
+      throw new Error(
+        `Build observation ${input.artifactID} returned ${bytes.byteLength} bytes for requested ${length}-byte range`,
+      )
+    }
+  }
+  return textChunks.join("")
+}

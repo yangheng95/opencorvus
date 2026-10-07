@@ -1,0 +1,34 @@
+diff --git a/packages/opencorvus/src/server/project-route-context.ts b/packages/opencorvus/src/server/project-route-context.ts
+index 5097085d..700539f1 100644
+--- a/packages/opencorvus/src/server/project-route-context.ts
++++ b/packages/opencorvus/src/server/project-route-context.ts
+@@ -53,6 +53,7 @@ const PROJECT_IDENTITY_CONVERSATION_READ_ROUTE_KEYS = [
+   /^GET \/session\/[^/]+\/conversation$/,
+   /^GET \/session\/[^/]+\/conversation\/history$/,
+   /^GET \/session\/[^/]+\/events$/,
++  /^GET \/session\/[^/]+\/side-chat$/,
+ ]
+ 
+ /** Selects the least-capable Project authority required by the exact route. */
+diff --git a/packages/opencorvus/test/project-route-context.test.ts b/packages/opencorvus/test/project-route-context.test.ts
+index 09bbdd22..7115f2d4 100644
+--- a/packages/opencorvus/test/project-route-context.test.ts
++++ b/packages/opencorvus/test/project-route-context.test.ts
+@@ -7,6 +7,8 @@ describe("Project route context authority", () => {
+       tail: projectRouteContextKind("/session/ses_1/conversation", "GET"),
+       history: projectRouteContextKind("/session/ses_1/conversation/history", "GET"),
+       events: projectRouteContextKind("/session/ses_1/events", "GET"),
++      sideHistory: projectRouteContextKind("/session/ses_1/side-chat", "GET"),
++      sideCreate: projectRouteContextKind("/session/ses_1/side-chat", "POST"),
+       config: projectRouteContextKind("/session/ses_1/config", "GET"),
+       configWrite: projectRouteContextKind("/session/ses_1/config", "PATCH"),
+       prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
+@@ -14,6 +16,8 @@ describe("Project route context authority", () => {
+       tail: "identity",
+       history: "identity",
+       events: "identity",
++      sideHistory: "identity",
++      sideCreate: "runtime",
+       config: "runtime",
+       configWrite: "runtime",
+       prompt: "runtime",

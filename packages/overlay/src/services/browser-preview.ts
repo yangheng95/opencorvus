@@ -96,12 +96,14 @@ export async function loadTaskBrowserPreviewEvidenceCaptureObjectUrl(input: {
     input.directory,
     `/evidence/${encodeURIComponent(input.evidenceID)}/capture.png`,
   )
+  const method = "GET" as const
   const response = await apiRequest<Uint8Array>(path, {
+    method,
     responseKind: "binary",
     signal: input.signal,
     authority,
   })
-  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers)
+  if (!response.ok) throw new ApiError(response.status, path, response.body, response.headers, method)
   const contentType = response.headers["content-type"] || response.headers["Content-Type"] || "image/png"
   return {
     url: URL.createObjectURL(new Blob([bytesToArrayBuffer(response.body)], { type: contentType })),

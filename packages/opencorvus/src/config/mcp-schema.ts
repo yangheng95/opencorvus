@@ -29,9 +29,18 @@ export namespace McpConfigSchema {
         .optional()
         .describe("OAuth client ID. If not provided, dynamic client registration (RFC 7591) will be attempted."),
       clientSecret: z.string().optional().describe("OAuth client secret (if required by the authorization server)"),
+      issuer: z.string().url().optional().describe("Authorization server issuer for a pre-registered OAuth client"),
       scope: z.string().optional().describe("OAuth scopes to request during authorization"),
     })
     .strict()
+    .superRefine((value, context) => {
+      if (value.clientId && !value.issuer)
+        context.addIssue({
+          code: "custom",
+          path: ["issuer"],
+          message: "A pre-registered MCP OAuth client requires its authorization server issuer",
+        })
+    })
     .meta({
       ref: "McpOAuthConfig",
     })

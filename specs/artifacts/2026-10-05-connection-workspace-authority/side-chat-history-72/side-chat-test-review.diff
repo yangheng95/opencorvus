@@ -1,0 +1,108 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/side-chat-history-72/side-chat-test-review-before.txt b/packages/opencorvus/test/server/side-chat.test.ts
+index dbbaeeb2..4b82100e 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/side-chat-history-72/side-chat-test-review-before.txt
++++ b/packages/opencorvus/test/server/side-chat.test.ts
+@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test"
+ import { Instance, runOutsideInstanceContext } from "../../src/project/instance"
+ import fs from "node:fs/promises"
+ import path from "node:path"
++import { ConfigPaths } from "../../src/config/paths"
+ import { Session } from "../../src/session"
+ import { Identifier } from "../../src/id/id"
+ import { Server } from "../../src/server/server"
+@@ -73,43 +74,77 @@ describe("source-scoped side conversations", () => {
+         return { source, first, second, emptySource }
+       },
+     })
+-    await fs.mkdir(path.join(project.path, ".opencorvus"), { recursive: true })
+-    await fs.writeFile(path.join(project.path, ".opencorvus", "opencorvus.jsonc"),
+-      JSON.stringify({ model: "missing-side-provider/missing-side-model" }))
++    const configPath = ConfigPaths.projectFile(project.path)
++    await fs.mkdir(path.dirname(configPath), { recursive: true })
++    await fs.writeFile(configPath, JSON.stringify({ model: "missing-side-provider/missing-side-model" }))
+     await Instance.disposeAll()
+     Server.resetProjectRoutesAppForTest()
+     const headers = { "x-opencorvus-directory": project.path }
+-    const config = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.source.id}/config`, { headers }))
++    const config = await runOutsideInstanceContext(() =>
++      Server.App().request(`/session/${saved.source.id}/config`, { headers }),
++    )
+     expect({ status: config.status, body: await config.json() }).toMatchObject({
+       status: 400,
+-      body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-side-provider", modelID: "missing-side-model" } },
++      body: {
++        name: "ProviderModelNotFoundError",
++        data: { providerID: "missing-side-provider", modelID: "missing-side-model" },
++      },
+     })
+     await Instance.disposeAll()
+-    const list = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.source.id}/side-chat`, { headers }))
++    const list = await runOutsideInstanceContext(() =>
++      Server.App().request(`/session/${saved.source.id}/side-chat`, { headers }),
++    )
+     expect(list.status).toBe(200)
+     const sides = (await list.json()) as Session.Info[]
+-    expect(sides.map((side) => ({ id: side.id, projectID: side.projectID, kind: side.kind, source: SideChatIdentity.parse(side.metadata?.sideChat).sourceSessionID })))
+-      .toEqual([saved.second, saved.first].map((side) => ({ id: side.id, projectID: saved.source.projectID, kind: "assistant", source: saved.source.id })))
+-    const conversation = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.second.id}/conversation`, { headers }))
++    expect(
++      sides
++        .map((side) => ({
++          id: side.id,
++          projectID: side.projectID,
++          kind: side.kind,
++          source: SideChatIdentity.parse(side.metadata?.sideChat).sourceSessionID,
++        }))
++        .sort((left, right) => left.id.localeCompare(right.id)),
++    ).toEqual(
++      [saved.first, saved.second]
++        .map((side) => ({ id: side.id, projectID: saved.source.projectID, kind: "assistant", source: saved.source.id }))
++        .sort((left, right) => left.id.localeCompare(right.id)),
++    )
++    const actualCreationTimes = sides.map((side) => side.time.created)
++    expect(actualCreationTimes).toEqual([...actualCreationTimes].sort((left, right) => right - left))
++    const conversation = await runOutsideInstanceContext(() =>
++      Server.App().request(`/session/${saved.second.id}/conversation`, { headers }),
++    )
+     expect(conversation.status).toBe(200)
+     const body = (await conversation.json()) as { transcript: Array<{ parts: Array<{ type: string; text?: string }> }> }
+-    expect(body.transcript.map((message) => message.parts.filter((part) => part.type === "text").map((part) => part.text)))
+-      .toEqual([["Original complete source question"], ["Original complete source answer"]])
++    expect(
++      body.transcript.map((message) => message.parts.filter((part) => part.type === "text").map((part) => part.text)),
++    ).toEqual([["Original complete source question"], ["Original complete source answer"]])
+     await Instance.disposeAll()
+-    const empty = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.emptySource.id}/side-chat`, { headers }))
++    const empty = await runOutsideInstanceContext(() =>
++      Server.App().request(`/session/${saved.emptySource.id}/side-chat`, { headers }),
++    )
+     expect({ status: empty.status, body: await empty.json() }).toEqual({ status: 200, body: [] })
+     await Instance.disposeAll()
+-    const foreign = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.source.id}/side-chat`, {
+-      headers: { "x-opencorvus-directory": other.path },
+-    }))
++    const foreign = await runOutsideInstanceContext(() =>
++      Server.App().request(`/session/${saved.source.id}/side-chat`, {
++        headers: { "x-opencorvus-directory": other.path },
++      }),
++    )
+     expect({ status: foreign.status, body: await foreign.json() }).toMatchObject({
+-      status: 404, body: { name: "NotFoundError", data: { message: `Session not found: ${saved.source.id}` } },
++      status: 404,
++      body: { name: "NotFoundError", data: { message: `Session not found: ${saved.source.id}` } },
+     })
+     await Instance.disposeAll()
+-    const create = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.source.id}/side-chat`, { method: "POST", headers }))
++    const create = await runOutsideInstanceContext(() =>
++      Server.App().request(`/session/${saved.source.id}/side-chat`, { method: "POST", headers }),
++    )
+     expect({ status: create.status, body: await create.json() }).toMatchObject({
+       status: 400,
+-      body: { name: "ProviderModelNotFoundError", data: { providerID: "missing-side-provider", modelID: "missing-side-model" } },
++      body: {
++        name: "ProviderModelNotFoundError",
++        data: { providerID: "missing-side-provider", modelID: "missing-side-model" },
++      },
+     })
+   }, 60_000)
+ 
