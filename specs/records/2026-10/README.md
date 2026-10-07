@@ -1,9 +1,15 @@
 # 2026-10 Records
 
+- [Diagnostic95/candidate96 checkpoint](2026-10-07-diagnostic-envelope-candidate-status.md)
+- [Reader provenance97 investigation](../../artifacts/2026-10-05-connection-workspace-authority/candidate-reader-provenance-investigation-97.md)
+- [Skills timeout98 investigation](../../artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-investigation-98.md)
+- [LogViewer scroll99 investigation](../../artifacts/2026-10-05-connection-workspace-authority/log-viewer-scroll-investigation-99.md)
+
 - [Physical installation scope93 Recall](../../artifacts/2026-10-05-connection-workspace-authority/manager-installation-scope-plan-93.md)
 - [Current builtin runtime identity94 Recall](../../artifacts/2026-10-05-connection-workspace-authority/builtin-collision-runtime-plan-94.md)
 - [Canonical diagnostic envelope95 Recall](../../artifacts/2026-10-05-connection-workspace-authority/logger-envelope-plan-95.md)
 - [Cold candidate error mapping96 investigation](../../artifacts/2026-10-05-connection-workspace-authority/cold-config-error-mapping-investigation-96.md)
+- [Shared candidate status96 Recall](../../artifacts/2026-10-05-connection-workspace-authority/cold-config-error-mapping-plan-96.md)
 
 - [Connection publication, file reservation and workspace authority](2026-10-05-connection-workspace-authority.md)
 

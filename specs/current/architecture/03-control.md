@@ -374,3 +374,9 @@ server/routes/panel.ts          ControlMessage HTTP 入口 + control stream SSE
 
 - [task-control-plane.md](task-control-plane.md) — 进入 EngineService 之后的 Task Control Loop
 - [04-extensions.md](04-extensions.md) — channel 类型与 ACP/MCP/plugin 的边界
+
+## Canonical diagnostic logging
+
+Backend diagnostic records use one Pino producer: International Organization for Standardization (ISO) 8601 event `time`, method `level` and explicit `message`, optional explicit logger `service`, and actual SessionContext-owned `logDomain`/`sessionID`. Caller tags and extra fields merge as structured `data`; extra wins within that subject namespace. A caller sessionID remains subject data and does not create an ambient Session. Immediate and initialization-buffered records share the same prepared bindings/attributes dispatcher, capturing ambient identity once. Buffered event time retains Pino's drain-time semantics.
+
+Entity lifecycle times remain under `data.time`; diagnostic event time does not replace durable Task, Mission, Session, queue, lease or occurrence chronology. Error serializers and existing redaction run on original method attributes before the library nests them. Empty subject data may be omitted. Raw log read/tail/file/export transport retains its current string/byte contracts. Historical ambiguous timestamps remain unknown and their original raw data is retained; no lifecycle-time, timestamp/ts or plaintext parser reconstructs a current clock.

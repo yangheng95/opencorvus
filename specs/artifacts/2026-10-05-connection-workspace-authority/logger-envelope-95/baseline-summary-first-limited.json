@@ -1,0 +1,80 @@
+[
+  {
+    "recordCount": 1,
+    "caseID": "conflicts",
+    "observed": [
+      {
+        "logDomain": "non-session",
+        "sessionID": "request-session",
+        "timeType": "subject-object",
+        "service": "subject-service",
+        "hasCurrentData": false,
+        "level": "subject-level",
+        "message": "envelope95-conflicts"
+      }
+    ]
+  },
+  {
+    "recordCount": 1,
+    "caseID": "session-context",
+    "observed": [
+      {
+        "logDomain": "session",
+        "sessionID": "ses_-zUSeKOWzzzuGIuNoCHI",
+        "timeType": "subject-object",
+        "service": "envelope95-context",
+        "hasCurrentData": false,
+        "level": "info",
+        "message": "envelope95-reinitialized"
+      }
+    ]
+  },
+  {
+    "recordCount": 3,
+    "caseID": "timer-export",
+    "observed": [
+      {
+        "logDomain": "non-session",
+        "sessionID": null,
+        "timeType": "subject-object",
+        "service": "envelope95-export",
+        "hasCurrentData": false,
+        "level": "info",
+        "message": "envelope95-timer"
+      },
+      {
+        "logDomain": "non-session",
+        "sessionID": null,
+        "timeType": "subject-object",
+        "service": "envelope95-export",
+        "hasCurrentData": false,
+        "level": "info",
+        "message": "envelope95-timer"
+      },
+      {
+        "logDomain": "non-session",
+        "sessionID": null,
+        "timeType": "subject-object",
+        "service": "envelope95-export",
+        "hasCurrentData": false,
+        "level": "error",
+        "message": "envelope95-error"
+      }
+    ]
+  },
+  {
+    "recordCount": 1,
+    "caseID": "public-ingress",
+    "observed": [
+      {
+        "logDomain": "non-session",
+        "sessionID": "request-ingress",
+        "timeType": "subject-object",
+        "service": "subject-ingress",
+        "hasCurrentData": false,
+        "level": "warn",
+        "message": "envelope95-public"
+      }
+    ]
+  }
+]

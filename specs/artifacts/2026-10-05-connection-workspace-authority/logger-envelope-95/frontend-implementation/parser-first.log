@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+test\log-utils.test.ts:
+(pass) parseServerLogLine > parses Pino JSONL server records [2.26ms]
+(pass) parseServerLogLine > historic non-string time remains unknown and its original lifecycle details remain visible [0.13ms]
+(pass) parseServerLogLine > unparsed diagnostic line is preserved as the actual raw output [0.08ms]
+
+ 3 pass
+ 0 fail
+ 4 expect() calls
+Ran 3 tests across 1 file. [236.00ms]

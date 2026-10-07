@@ -2178,6 +2178,30 @@
         },
         "type": "object"
       },
+      "ConfigCandidateValidationError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ConfigCandidateValidationError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "ContextOverflowError": {
         "properties": {
           "data": {
@@ -14888,6 +14912,40 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "ProviderModelNotFoundError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "modelID": {
+                "type": "string"
+              },
+              "providerID": {
+                "type": "string"
+              },
+              "suggestions": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "providerID",
+              "modelID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProviderModelNotFoundError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
         "type": "object"
       },
       "ProviderMonetaryBalanceUsage": {
@@ -134663,6 +134721,23 @@
               }
             },
             "description": "VCS info"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ConfigCandidateValidationError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProviderModelNotFoundError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Runtime configuration candidate or model rejected"
           },
           "500": {
             "content": {

@@ -1,5 +1,11 @@
 # Connection workspace authority investigation
 
+- [Diagnostic95 qualified evidence](logger-envelope-95/README.md): one event/subject owner, real before/after pixels, original export bytes and exact native closure.
+- [Candidate96 qualified evidence](cold-config-status-96/README.md): actual semantic400, canonical VCS declaration/SDK/docs and focused positive outputs.
+- [Reader provenance97 investigation](candidate-reader-provenance-investigation-97.md): corrected source stages, genuine physical probe held.
+- [Skills timeout98 investigation](skills-load-timeout-investigation-98.md): actual slow successful backend versus client deadline, shared path investigation.
+- [LogViewer scroll99 investigation](log-viewer-scroll-investigation-99.md): manual failures/source candidates, root cause unqualified.
+
 - [Genuine complete-read acceptance20](complete-read-live-acceptance-plan.md) and [evidence](complete-read-live-acceptance/README.md): fresh streamed Sol scope after source18 and qualified private settlement19; fixed96/900s/180s, real report sources/download/closure.
 
 - [Owned qualification settlement plan](owned-qualification-settlement-plan.md) and [evidence](owned-qualification-settlement/README.md): enduring one-owner supervision, fixed real Task boundary and genuine public process/pair closure before new model acceptance.
@@ -286,7 +292,8 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Builtin94 runtime Recall](builtin-collision-runtime-plan-94.md): exact current/pinned collision policy and genuine positive baseline admission.
 - [Logger95 final preparation](95-logger-final-admission.md): trusted envelope, subject data and exact consumer migration; implementation held.
 - [Logger95 expanded consumer closure](95-log-consumer-closure.md): true Pino field consumers distinguished from independent CLI/bridge/domain outputs.
-- [Logger95 Recall](logger-envelope-plan-95.md): one trusted event envelope/subject data and test-only baseline admission; production held.
+- [Logger95 Recall](logger-envelope-plan-95.md): one canonical producer implemented; focused contracts, real pixels/export and exact closure qualified.
 - [Manager93 qualified evidence](manager-installation-scope-93/README.md): dual-direction actual installed200, retained diagnostics, same-scope errors and CAS/archive/recovery.
 - [Builtin94 qualified evidence](builtin-collision-runtime-94/README.md): current/global/mount collision agreement and true fixed Task revision.
 - [Cold candidate96 investigation](cold-config-error-mapping-investigation-96.md): demonstrated named bootstrap500 versus writer400, with nested reader provenance explicitly unresolved.
+- [Shared candidate96 Recall](cold-config-error-mapping-plan-96.md): shared named400 and canonical VCS declaration implemented;42 focused cases100 expectations and generated docs qualified.

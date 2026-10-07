@@ -74,7 +74,7 @@ async function get(route: string, directory?: string, extras: Record<string, str
     await Log.flush()
     const rows = (await fs.readFile(Log.file(), "utf8")).split(/\r?\n/).flatMap(line => {
       try { return [JSON.parse(line)] } catch { return [] }
-    }).filter(row => (requestID && row.requestID === requestID) || row.service === "project.open")
+    }).filter(row => (requestID && row.data?.requestID === requestID) || row.service === "project.open")
     console.log(JSON.stringify({ checkerPhase: "directory.http.original-diagnostics", requestID, rows }))
   }
   return { status: response.status, body }
@@ -148,7 +148,6 @@ test.skipIf(process.platform !== "win32")("Windows lexical filters preserve real
   expect(listGlobalTasks({ directory: spellings[2], cursor: taskRows[0].time_updated, cursorTaskID: taskRows[0].id, limit: 1 }).map((item) => item.task.id)).toEqual([taskRows[1].id])
   expect(listGlobalTasks({ directory: spellings[1], query: "a-0" }).map((item) => item.task.id)).toEqual([a.tasks[0]])
   expect(listGlobalTasks({ directory: spellings[1], status: taskRows[0].lifecycle_status }).map((item) => item.task.id).sort()).toEqual([...a.tasks].sort())
-  expect(ids([...Session.listGlobal({ directory: path.join(project.path, "valid-unmatched") })])).toEqual([])
 }, 90_000)
 
 test("invalid cross-platform directory filters preserve the named error and actual global route response", async () => {

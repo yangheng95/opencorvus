@@ -1,0 +1,21 @@
+Browser tab: 241798778, Title: "OpenCorvus", URL: "http://localhost:18042/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 143-151, 161-162
++					168 container
++						169 button (expanded) 详情, Secondary Actions: Collapse
++							170 text 详情
++						171 text 结构化字段 {
+  "logDomain": "non-session",
+  "data": {
+    "service": "subject-lifecycle",
+    "level": "info",
+    "sessionID": "ses_-zUSe1sXFzzvvi1qoSpw",
+    "logDomain": "subject-lifecycle",
+    "time": {
+      "created": 1791364317986,
+      "updated": 1791364317986
+    },
+    "observed": "actual Chat lifecycle"
+  }
+} 原始日志 {"level":"warn","time":"2026-10-07T09:11:58.030Z","service":"logger-envelope95-observation","logDomain":"non-session","data":{"service":"subject-lifecycle","level":"info","sessionID":"ses_-zUSe1sXFzzvvi1qoSpw","logDomain":"subject-lifecycle","time":{"created":1791364317986,"updated":1791364317986},"observed":"actual Chat lifecycle"},"message":"Logger subject chronology95"}
+The focused UI element is 169 button (expanded) 详情, Secondary Actions: Collapse

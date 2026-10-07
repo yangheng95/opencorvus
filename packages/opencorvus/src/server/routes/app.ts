@@ -5,6 +5,8 @@ import { NativeAgentInfoSchema } from "@/agent/native-agent-info"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Global } from "@/global"
 import { Vcs } from "@/project/vcs"
+import { ConfigCandidateValidationError } from "@/config/candidate-validation"
+import { Provider } from "@/provider/provider"
 import { streamCommitMessage } from "@/project/vcs-commit-message"
 import { Instance } from "@/project/instance"
 import { Command } from "@/command"
@@ -408,6 +410,14 @@ export function AppRoutes(root: Hono) {
             content: {
               "application/json": {
                 schema: resolver(Vcs.Info),
+              },
+            },
+          },
+          400: {
+            description: "Runtime configuration candidate or model rejected",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([ConfigCandidateValidationError.Schema, Provider.ModelNotFoundError.Schema])),
               },
             },
           },

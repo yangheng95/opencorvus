@@ -1,0 +1,31 @@
+Browser tab: 241798769, Title: "OpenCorvus", URL: "http://localhost:18041/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 105-106, 140-141
++					137 text Server [ INFO ] 0.0s permission-authority 2026-10-07T08:17:43
++					138 text permission continuation recovery
++					139 text projectID = prj_h80YfNdNVWfVihywjDuY requested = 0 replayed = 0 resumed = 0 live = 0 duration = 1
+~					93 button (collapsed) 详情, Secondary Actions: Expand
++						140 text 详情
++					141 text Server [ INFO ] 0.6s server 2026-10-07T08:17:43
++					142 text request
++					143 text requestID = 5d8cdb2b-59f7-4d96-8861-f44a0041f1ce method = GET path = /project/current status = completed statusCode = 200 duration = 647
+~					94 button (collapsed) 详情, Secondary Actions: Expand
++						144 text 详情
++					145 text Server [ WARN ] worktree.gc 2026-10-07T08:17:43
++					146 text failed to read git worktree registry; preserving the entire project
++					147 text projectID = prj_h80YfNdNVWfVihywjDuY primaryDir = C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\logger-envelope... error = WorktreeRemoveFailedError: fatal: not a git repository (or any of the parent... logDomain = non-session
+~					95 button (collapsed) 详情, Secondary Actions: Expand
++						148 text 详情
++					149 text Server [ INFO ] server 2026-10-07T08:17:43
++					150 text request
++					151 text requestID = 6ad0b1dd-bf6a-4d3d-bc3f-a2f40af9df64 method = POST path = /coding/chat/session status = started logDomain = non-session
+~					96 button (collapsed) 详情, Secondary Actions: Expand
++						152 text 详情
++					153 container
++						154 button (expanded) 详情, Secondary Actions: Collapse
++							155 text 详情
++						156 text 结构化字段 {
+  "logDomain": "non-session",
+  "observed": "actual Chat lifecycle"
+} 原始日志 {"level":"warn","time":"2026-10-07T08:17:43.919Z","service":"logger-envelope95-observation","service":"subject-lifecycle","level":"info","logDomain":"non-session","observed":"actual Chat lifecycle","message":"Logger subject chronology95"}
+The focused UI element is 154 button (expanded) 详情, Secondary Actions: Collapse

@@ -59,7 +59,7 @@ describe("Server cross-origin response contract", () => {
     expect(await response.json()).toEqual({ name: "UnknownError", data: { message: publicUnknownErrorMessage() } })
     await Log.flush()
     const logs = (await fs.readFile(Log.file(), "utf8")).trim().split("\n").map((line) => JSON.parse(line))
-    expect(logs.find((entry) => entry.requestID === requestID && entry.message === "request failed")).toMatchObject({
+    expect(logs.find((entry) => entry.data?.requestID === requestID && entry.message === "request failed")?.data).toMatchObject({
       requestID,
       method: "POST",
       path: "/attachment",

@@ -26,7 +26,7 @@ test("timeout, caller cancellation and original typed errors remain distinct", (
   assert.throws(() => clientFailure(original), (actual) => actual === original)
 })
 test("exact response identity and sole serial admission correlate observations", () => {
-  const rows = ["first", "second"].map((requestID) => ({ service: "server", path: "/skill/mounts", status: "started", requestID }))
+  const rows = ["first", "second"].map((requestID) => ({ service: "server", data: { path: "/skill/mounts", status: "started", requestID } }))
   assert.equal(observedRequestID(rows, "first"), "first")
   assert.equal(observedRequestID(rows.slice(1)), "second")
   assert.throws(() => observedRequestID(rows), /Uncorrelated concurrent request starts/)
@@ -43,7 +43,7 @@ test("safe complete-source counts preserve all supplied categories and role gran
 })
 test("late HTTP200 remains an exact backend receipt beside a client timeout", () => {
   const client = clientFailure(new DOMException("15s expired", "TimeoutError"))
-  const rows = [{ service: "server", requestID: "owned-original", status: "completed", statusCode: 200, duration: 19456 }]
+  const rows = [{ service: "server", data: { requestID: "owned-original", status: "completed", statusCode: 200, duration: 19456 } }]
   assert.deepEqual({ client, backend: backendReceipt(rows, "owned-original") }, {
     client: "client-timeout", backend: { outcome: "settled", status: 200, duration: 19456 },
   })

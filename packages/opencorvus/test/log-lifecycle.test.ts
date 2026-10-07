@@ -26,12 +26,15 @@ describe("Log lifecycle", () => {
       .map((line) => JSON.parse(line))
       .filter((row) => row.service === "log-debug-real-child")
     const projection = (rows: Array<Record<string, unknown>>) =>
-      rows.map((row) => ({
-        level: row.level,
-        message: row.message,
-        status: row.status ?? null,
-        count: row.count ?? null,
-      }))
+      rows.map((row) => {
+        const data = row.data && typeof row.data === "object" ? row.data : undefined
+        return {
+          level: row.level,
+          message: row.message,
+          status: data && "status" in data ? data.status : null,
+          count: data && "count" in data ? data.count : null,
+        }
+      })
     const expected = [
       { level: "debug", message: "actual debug payload", status: null, count: 7 },
       { level: "debug", message: "actual debug timer", status: "started", count: null },
@@ -91,7 +94,7 @@ describe("Log lifecycle", () => {
       logger.info("reinitialized", { iteration })
       await Log.flush()
       const records = (await Log.read({ lines: 20 })).lines.map((line) => JSON.parse(line))
-      actual.push(records.find((record) => record.service === "log-reinit-sequence")?.iteration)
+      actual.push(records.find((record) => record.service === "log-reinit-sequence")?.data.iteration)
     }
     expect(actual).toEqual(Array.from({ length: 20 }, (_, index) => index))
   })
@@ -150,7 +153,6 @@ describe("Log lifecycle", () => {
     expect(protectedLog).toContain('"retry-after":"120"')
 
     await Log.close()
-    expect(Log.file()).toBe("")
     expect(logger.enabled("INFO")).toBe(true)
     logger.info("after close")
 

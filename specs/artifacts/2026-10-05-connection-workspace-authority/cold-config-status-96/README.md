@@ -1,0 +1,9 @@
+# Candidate status96 evidence
+
+Read [Recall and admissions](../cold-config-error-mapping-plan-96.md) and [actual check report](report.md). Original cold outside-Instance Server.App `/vcs` semantic failures returned named500 while config writers returned400; only the existing ConfigCandidateValidationError shared policy now returns400, preserving its original packet and request identity. Real model-first400, valid runtime200, current collision/mount authority and immutable Task409 retain their owners.
+
+The touched GET/vcs declaration reuses the actual candidate/model constructor schemas in its400 union. Canonical SDK transaction, generated OpenAPI/types and English/Chinese API docs follow those schemas. The complete generated difference is20 type additions and75 OpenAPI additions; no generated runtime changed. Current94 cold expected status changes500→400; historical94 evidence remains immutable500. New metadata output uses actual Server.openapi and schema constructors, not source-string checks.
+
+Final focused commands total42 cases/100 expectations: new96=11/33, current94=11/24, HTTP exception contracts6/23 and candidate validation14/20. Configured and explicit touched backend types pass; post-generation SDK/Overlay configured types pass; docs:check345 operations/25 groups passes. The local canonical constructor Hono matrix is a response contract, not real nested reader failure or native TCP/Provider/visual acceptance.
+
+Candidate validation still catches nested Registry/Skill/capability failures and can lose their infrastructure provenance. This checkpoint does not fix or qualify those paths. [Investigation97](../candidate-reader-provenance-investigation-97.md) separately corrects actual snapshot read and capability preflight stages; no physical fault probe or97 source implementation is admitted yet. Goal continues.

@@ -262,12 +262,12 @@ try {
             for (const line of text.split(/\r?\n/)) {
               let value: any
               try { value = JSON.parse(line) } catch { continue }
-              if (value.level === "warn" && value.service === "server" && value.reason === refused.body.data.reason) return value
+              if (value.level === "warn" && value.service === "server" && value.data?.reason === refused.body.data.reason) return value
             }
           })
           assert.equal(record.refusalWarning.message, "restart unavailable for current process owner")
-          assert.equal(record.refusalWarning.reason, refused.body.data.reason)
-          assert.equal(record.refusalWarning.detail, refused.body.data.message)
+          assert.equal(record.refusalWarning.data.reason, refused.body.data.reason)
+          assert.equal(record.refusalWarning.data.detail, refused.body.data.message)
           record.stderrPath = stderrPath
         }
         record.continuedHealth = await request("/global/health")

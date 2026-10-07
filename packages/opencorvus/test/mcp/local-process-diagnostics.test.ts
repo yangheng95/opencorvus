@@ -4,6 +4,7 @@ import path from "node:path"
 import { MCP } from "@/mcp"
 import { Instance } from "@/project/instance"
 import { Log } from "@/util/log"
+import z from "zod"
 import { createLocalMcpProcessDiagnostics } from "@/mcp/local-process-diagnostics"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -24,10 +25,10 @@ describe("local MCP process diagnostics", () => {
         'setTimeout(() => write("er header-fixture-value\\n"), 1);',
         'setTimeout(() => write("x-api-key=api-fixture-value\\n"), 2);',
         'setTimeout(() => write("cookie: session=cookie-fixture-value\\n"), 3);',
-        'setTimeout(() => write(`opaque ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`), 4);',
-        'const unicode = Buffer.from(`unicode 你 ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`);',
-        'setTimeout(() => write(unicode.subarray(0, 9)), 5);',
-        'setTimeout(() => write(unicode.subarray(9)), 6);',
+        "setTimeout(() => write(`opaque ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`), 4);",
+        "const unicode = Buffer.from(`unicode 你 ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`);",
+        "setTimeout(() => write(unicode.subarray(0, 9)), 5);",
+        "setTimeout(() => write(unicode.subarray(9)), 6);",
         'setTimeout(() => write("x".repeat(4_100) + "\\n"), 7);',
         "const rl = readline.createInterface({ input: process.stdin });",
         "rl.on('line', (line) => {",
@@ -57,10 +58,19 @@ describe("local MCP process diagnostics", () => {
 
     await Log.flush()
     const records = (await Log.read({ lines: 400 })).lines
-      .map((line) => JSON.parse(line) as Record<string, unknown>)
-      .filter((record) => record["service"] === "mcp" && record["key"] === key)
+      .map((line) =>
+        z
+          .object({
+            service: z.string().optional(),
+            message: z.string().optional(),
+            data: z.record(z.string(), z.unknown()).optional(),
+          })
+          .passthrough()
+          .parse(JSON.parse(line)),
+      )
+      .filter((record) => record.service === "mcp" && record.data?.key === key)
     expect(
-      records.filter((record) => record["message"] === "local mcp stderr").map((record) => record["diagnostic"]),
+      records.filter((record) => record.message === "local mcp stderr").map((record) => record.data?.diagnostic),
     ).toEqual([
       "authorization: <redacted>",
       "x-api-key=<redacted>",
@@ -69,7 +79,7 @@ describe("local MCP process diagnostics", () => {
       "unicode 你 <redacted>",
       "[local MCP stderr line omitted: exceeded 4000 characters]",
     ])
-    expect(records.find((record) => record["message"] === "local mcp startup failed")).toMatchObject({
+    expect(records.find((record) => record.message === "local mcp startup failed")?.data).toMatchObject({
       diagnosticID: match![1],
       cwd: project.path,
       stderr: [

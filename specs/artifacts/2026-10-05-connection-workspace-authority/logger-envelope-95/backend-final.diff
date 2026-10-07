@@ -1,0 +1,494 @@
+diff --git a/packages/opencorvus/script/http-exception-response-real.ts b/packages/opencorvus/script/http-exception-response-real.ts
+index 0c77f36e..1f24f35f 100644
+--- a/packages/opencorvus/script/http-exception-response-real.ts
++++ b/packages/opencorvus/script/http-exception-response-real.ts
+@@ -344,12 +344,12 @@ try {
+         .filter((line) => line.startsWith("{"))
+         .map((line) => JSON.parse(line))
+       const errorReceipt = entries.find(
+-        (entry) => entry.service === "server" && entry.message === "request failed" && entry.requestID === diagnosticID,
++        (entry) => entry.service === "server" && entry.message === "request failed" && entry.data?.requestID === diagnosticID,
+       )
+       assert(errorReceipt, "Same actual unauthorized response must correlate to its settled server error log")
+-      assert.equal(errorReceipt.method, "GET")
+-      assert.equal(errorReceipt.path, "/global/health")
+-      assert.equal(errorReceipt.statusCode, 401)
++      assert.equal(errorReceipt.data.method, "GET")
++      assert.equal(errorReceipt.data.path, "/global/health")
++      assert.equal(errorReceipt.data.statusCode, 401)
+       fact.errorLogReceipt = errorReceipt
+       fact.status = "passed"
+     } catch (error) {
+diff --git a/packages/opencorvus/script/server-restart-e2e.ts b/packages/opencorvus/script/server-restart-e2e.ts
+index 7dc4be5b..2132f536 100644
+--- a/packages/opencorvus/script/server-restart-e2e.ts
++++ b/packages/opencorvus/script/server-restart-e2e.ts
+@@ -262,11 +262,11 @@ try {
+             for (const line of text.split(/\r?\n/)) {
+               let value: any
+               try { value = JSON.parse(line) } catch { continue }
+-              if (value.level === "warn" && value.service === "server" && value.reason === refused.body.data.reason) return value
++              if (value.level === "warn" && value.service === "server" && value.data?.reason === refused.body.data.reason) return value
+             }
+           })
+           assert.equal(record.refusalWarning.message, "restart unavailable for current process owner")
+-          assert.equal(record.refusalWarning.reason, refused.body.data.reason)
++          assert.equal(record.refusalWarning.data.reason, refused.body.data.reason)
+           assert.equal(record.refusalWarning.detail, refused.body.data.message)
+           record.stderrPath = stderrPath
+         }
+diff --git a/packages/opencorvus/script/skill-mount-cold-start-check.ts b/packages/opencorvus/script/skill-mount-cold-start-check.ts
+index d80704ad..902737a5 100644
+--- a/packages/opencorvus/script/skill-mount-cold-start-check.ts
++++ b/packages/opencorvus/script/skill-mount-cold-start-check.ts
+@@ -35,14 +35,14 @@ export function benchmarkInput(args: readonly string[]): BenchmarkInput {
+   return { profile, output: path.resolve(output), ...(runRoot ? { runRoot: path.resolve(runRoot) } : {}), port }
+ }
+ export function observedRequestID(rows: readonly Record<string, any>[], responseID?: string | null): string {
+-  const starts = rows.filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
++  const starts = rows.filter((row) => row.service === "server" && row.data?.path === "/skill/mounts" && row.data?.status === "started")
+   if (responseID) {
+-    assert(starts.some((row) => row.requestID === responseID), "Response request identity must have an observed start")
++    assert(starts.some((row) => row.data?.requestID === responseID), "Response request identity must have an observed start")
+     return responseID
+   }
+   assert.equal(starts.length, 1, "Uncorrelated concurrent request starts cannot identify a timeout")
+-  assert.equal(typeof starts[0].requestID, "string")
+-  return starts[0].requestID
++  assert.equal(typeof starts[0].data?.requestID, "string")
++  return starts[0].data.requestID
+ }
+ export function clientFailure(error: unknown): "client-timeout" | "caller-aborted" {
+   assert(error instanceof Error, "Typed client error required")
+@@ -51,10 +51,10 @@ export function clientFailure(error: unknown): "client-timeout" | "caller-aborte
+   throw error
+ }
+ export function backendReceipt(rows: readonly Record<string, any>[], requestID: string) {
+-  const completed = rows.filter((row) => row.service === "server" && row.requestID === requestID && row.status === "completed")
++  const completed = rows.filter((row) => row.service === "server" && row.data?.requestID === requestID && row.data?.status === "completed")
+   assert(completed.length <= 1, "Exact request must have one backend completion")
+   const row = completed[0]
+-  return row ? { outcome: "settled" as const, status: row.statusCode as number, duration: row.duration as number } : undefined
++  return row ? { outcome: "settled" as const, status: row.data?.statusCode as number, duration: row.data?.duration as number } : undefined
+ }
+ export class OrdinaryProjectBoundaryError extends Error {
+   readonly expected: string
+@@ -389,8 +389,8 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
+       } catch (correlationError) {
+         observation.backend = { outcome: "unknown-request-identity", reason: (correlationError as Error).message }
+         const candidateIDs = [...new Set(rows.slice(offset)
+-          .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
+-          .map((row) => String(row.requestID)))]
++          .filter((row) => row.service === "server" && row.data?.path === "/skill/mounts" && row.data?.status === "started")
++          .map((row) => String(row.data?.requestID)))]
+         observation.unattributedBackendCandidates = await Promise.all(candidateIDs.map(async (id) => ({
+           requestID: id, receipt: await convergeBackend(id) ?? { outcome: "convergence-deadline" },
+         })))
+@@ -509,7 +509,7 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
+       fact.modelCatalogProvenance = {
+         ...metadata["models.json"], expectedProducer: "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
+         observedProvision: rows.some((row) => row.service === "models.dev" && row.message === "provisioned bundled model catalog" &&
+-          typeof row.source === "string" && path.resolve(row.source) === path.resolve(input.root, "runtime", "data", "models.json")),
++          typeof row.data?.source === "string" && path.resolve(row.data?.source) === path.resolve(input.root, "runtime", "data", "models.json")),
+         observation: "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification",
+       }
+     }
+@@ -535,14 +535,14 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
+           .slice(offset)
+           .some(
+             (row) =>
+-              row.service === "skill-read-diagnostics" && row.phase === "state.initialize" && row.status === "started",
++              row.service === "skill-read-diagnostics" && row.data?.phase === "state.initialize" && row.data?.status === "started",
+           )
+       )
+         await delay(10)
+       const candidates = rows
+         .slice(offset)
+-        .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
+-      fact.cancelRequestID = candidates.length === 1 ? candidates[0].requestID : null
++        .filter((row) => row.service === "server" && row.data?.path === "/skill/mounts" && row.data?.status === "started")
++      fact.cancelRequestID = candidates.length === 1 ? candidates[0].data.requestID : null
+       if (!completed) controller.abort(new DOMException("Owned caller cancellation", "AbortError"))
+       const cancelResult = await first
+       fact.cancelOutcome = {
+@@ -609,19 +609,19 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
+             row.service === "skill-read-diagnostics" ||
+             (row.service === "server" &&
+               row.message === "request" &&
+-              ["/skill/mounts", "/global/health", "/shutdown"].includes(row.path)),
++              ["/skill/mounts", "/global/health", "/shutdown"].includes(row.data?.path)),
+         )
+         .map((row) =>
+           row.service === "skill-read-diagnostics"
+             ? row
+             : {
+                 service: row.service,
+-                requestID: row.requestID,
+-                method: row.method,
+-                path: row.path,
+-                status: row.status,
+-                statusCode: row.statusCode,
+-                duration: row.duration,
++                requestID: row.data?.requestID,
++                method: row.data?.method,
++                path: row.data?.path,
++                status: row.data?.status,
++                statusCode: row.data?.statusCode,
++                duration: row.data?.duration,
+                 time: row.time,
+               },
+         )
+@@ -629,15 +629,15 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
+       fact.diagnosticRows = selected.length
+       const diagnostics = selected.filter((row) => row.service === "skill-read-diagnostics")
+       const initializations = diagnostics.filter(
+-        (row) => row.phase === "state.initialize" && row.status === "completed",
++        (row) => row.data?.phase === "state.initialize" && row.data?.status === "completed",
+       )
+       fact.timing = {
+         diagnosticRows: diagnostics.length,
+         initializations: initializations.length,
+         dispositions: diagnostics
+-          .filter((row) => row.phase === "state.read" && row.status === "completed")
+-          .map((row) => row.disposition),
+-        httpUnattributedInitializations: initializations.filter((row) => row.http?.requestID === null).length,
++          .filter((row) => row.data?.phase === "state.read" && row.data?.status === "completed")
++          .map((row) => row.data?.disposition),
++        httpUnattributedInitializations: initializations.filter((row) => row.data?.http?.requestID === null).length,
+       }
+       assert(
+         initializations.length > 0,
+@@ -645,21 +645,21 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
+       )
+       for (const observation of observations.filter((entry) => entry.status === 200)) {
+         const requestEvents = diagnostics.filter(
+-          (row) => row.phase === "request" && row.http?.requestID === observation.requestID,
++          (row) => row.data?.phase === "request" && row.data?.http?.requestID === observation.requestID,
+         )
+         assert.deepEqual(
+-          requestEvents.map((row) => row.status),
++          requestEvents.map((row) => row.data?.status),
+           ["started", "completed"],
+           "Actual HTTP request identity must correlate with balanced diagnostics",
+         )
+       }
+       const started = diagnostics
+-        .filter((row) => row.status === "started")
+-        .map((row) => row.spanID)
++        .filter((row) => row.data?.status === "started")
++        .map((row) => row.data?.spanID)
+         .sort()
+       const completed = diagnostics
+-        .filter((row) => row.status === "completed")
+-        .map((row) => row.spanID)
++        .filter((row) => row.data?.status === "completed")
++        .map((row) => row.data?.spanID)
+         .sort()
+       assert.deepEqual(completed, started, "Real diagnostic phases settle exactly their started spans")
+       await fs.writeFile(path.join(output, `${prefix}.result.json`), JSON.stringify(fact, null, 2), { flag: "wx" })
+diff --git a/packages/opencorvus/script/skill-mount-cold-start-contract.test.ts b/packages/opencorvus/script/skill-mount-cold-start-contract.test.ts
+index 7cc580b5..6bc15cb9 100644
+--- a/packages/opencorvus/script/skill-mount-cold-start-contract.test.ts
++++ b/packages/opencorvus/script/skill-mount-cold-start-contract.test.ts
+@@ -26,7 +26,7 @@ test("timeout, caller cancellation and original typed errors remain distinct", (
+   assert.throws(() => clientFailure(original), (actual) => actual === original)
+ })
+ test("exact response identity and sole serial admission correlate observations", () => {
+-  const rows = ["first", "second"].map((requestID) => ({ service: "server", path: "/skill/mounts", status: "started", requestID }))
++  const rows = ["first", "second"].map((requestID) => ({ service: "server", data: { path: "/skill/mounts", status: "started", requestID } }))
+   assert.equal(observedRequestID(rows, "first"), "first")
+   assert.equal(observedRequestID(rows.slice(1)), "second")
+   assert.throws(() => observedRequestID(rows), /Uncorrelated concurrent request starts/)
+@@ -43,7 +43,7 @@ test("safe complete-source counts preserve all supplied categories and role gran
+ })
+ test("late HTTP200 remains an exact backend receipt beside a client timeout", () => {
+   const client = clientFailure(new DOMException("15s expired", "TimeoutError"))
+-  const rows = [{ service: "server", requestID: "owned-original", status: "completed", statusCode: 200, duration: 19456 }]
++  const rows = [{ service: "server", data: { requestID: "owned-original", status: "completed", statusCode: 200, duration: 19456 } }]
+   assert.deepEqual({ client, backend: backendReceipt(rows, "owned-original") }, {
+     client: "client-timeout", backend: { outcome: "settled", status: 200, duration: 19456 },
+   })
+diff --git a/packages/opencorvus/src/util/log-support-bundle.ts b/packages/opencorvus/src/util/log-support-bundle.ts
+index 2c283ec4..42a5dce5 100644
+--- a/packages/opencorvus/src/util/log-support-bundle.ts
++++ b/packages/opencorvus/src/util/log-support-bundle.ts
+@@ -82,13 +82,13 @@ function stringField(record: Record<string, unknown>, key: string): string | und
+ }
+ 
+ function timestampField(record: Record<string, unknown>): string | undefined {
+-  return stringField(record, "time") ?? stringField(record, "timestamp") ?? stringField(record, "ts")
++  return stringField(record, "time")
+ }
+ 
+ function sortedDetails(record: Record<string, unknown>): Record<string, unknown> {
+   const details: Record<string, unknown> = {}
+   for (const key of Object.keys(record).sort()) {
+-    if (key === "time" || key === "timestamp" || key === "ts") continue
++    if (key === "time" && typeof record.time === "string") continue
+     if (key === "level" || key === "service" || key === "message") continue
+     details[key] = record[key]
+   }
+diff --git a/packages/opencorvus/src/util/log.ts b/packages/opencorvus/src/util/log.ts
+index cb1c9b5f..429b244c 100644
+--- a/packages/opencorvus/src/util/log.ts
++++ b/packages/opencorvus/src/util/log.ts
+@@ -1,6 +1,6 @@
+ import path from "path"
+ import fs from "fs/promises"
+-import pino, { type Logger as PinoLogger } from "pino"
++import pino from "pino"
+ import { Global } from "../global"
+ import z from "zod"
+ import { Glob } from "./glob"
+@@ -56,7 +56,7 @@ export namespace Log {
+   type DurableDestination = ReturnType<typeof pino.destination>
+ 
+   type PendingRecord = {
+-    tags: Record<string, any>
++    bindings: Record<string, any>
+     level: PinoLevel
+     message: any
+     attributes: Record<string, any>
+@@ -358,6 +358,7 @@ export namespace Log {
+         base: undefined,
+         level: pinoLevel[selectedLevel],
+         messageKey: "message",
++        nestedKey: "data",
+         errorKey: "error",
+         timestamp: pino.stdTimeFunctions.isoTime,
+         formatters: {
+@@ -385,60 +386,57 @@ export namespace Log {
+     return output
+   }
+ 
+-  function emit(
+-    logger: () => PinoLogger,
++  function prepareRecord(
+     tags: Record<string, any>,
+-    recordLevel: PinoLevel,
+-    message: any,
+-    extra?: Record<string, any>,
++    extra: Record<string, any> | undefined,
++    ambient: Record<string, string>,
+   ) {
+-    if (pendingInitializations === 0 && !logger().isLevelEnabled(recordLevel)) return
+-    const attributes = {
+-      ...sanitizeRecord(extra),
+-      ...sanitizeRecord(SessionObservability.logTags()),
++    const { service, ...subjectTags } = tags
++    return {
++      bindings: { ...(service === undefined ? {} : { service }), ...ambient },
++      attributes: { ...subjectTags, ...sanitizeRecord(extra) },
+     }
++  }
++
++  function dispatch(record: PendingRecord) {
++    root.child(record.bindings)[record.level](record.attributes, record.message)
++  }
++
++  function emit(tags: Record<string, any>, recordLevel: PinoLevel, message: any, extra?: Record<string, any>) {
++    if (pendingInitializations === 0 && !root.isLevelEnabled(recordLevel)) return
++    const prepared = prepareRecord(tags, extra, SessionObservability.logTags())
+     const safeMessage = message === undefined || message === null ? undefined : sanitizeMessage(message)
+     if (pendingInitializations > 0) {
+-      pendingRecords.push({ tags: { ...tags }, level: recordLevel, message: safeMessage, attributes })
++      pendingRecords.push({ ...prepared, level: recordLevel, message: safeMessage })
+       return
+     }
+-    logger()[recordLevel](attributes, safeMessage)
++    dispatch({ ...prepared, level: recordLevel, message: safeMessage })
+   }
+ 
+   function drainPendingRecords() {
+     for (const record of pendingRecords.splice(0)) {
+-      root.child(record.tags)[record.level](record.attributes, record.message)
++      dispatch(record)
+     }
+   }
+ 
+   export function create(tags?: Record<string, any>) {
+     const ownTags = sanitizeRecord(tags)
+-    let cachedGeneration = -1
+-    let cachedLogger: PinoLogger | undefined
+-
+-    function logger() {
+-      if (!cachedLogger || cachedGeneration !== generation) {
+-        cachedLogger = root.child(ownTags)
+-        cachedGeneration = generation
+-      }
+-      return cachedLogger
+-    }
+ 
+     const result: Logger = {
+       enabled(selectedLevel: Level) {
+-        return pendingInitializations > 0 || logger().isLevelEnabled(pinoLevel[selectedLevel])
++        return pendingInitializations > 0 || root.isLevelEnabled(pinoLevel[selectedLevel])
+       },
+       debug(message?: any, extra?: Record<string, any>) {
+-        emit(logger, ownTags, "debug", message, extra)
++        emit(ownTags, "debug", message, extra)
+       },
+       info(message?: any, extra?: Record<string, any>) {
+-        emit(logger, ownTags, "info", message, extra)
++        emit(ownTags, "info", message, extra)
+       },
+       error(message?: any, extra?: Record<string, any>) {
+-        emit(logger, ownTags, "error", message, extra)
++        emit(ownTags, "error", message, extra)
+       },
+       warn(message?: any, extra?: Record<string, any>) {
+-        emit(logger, ownTags, "warn", message, extra)
++        emit(ownTags, "warn", message, extra)
+       },
+       tag(key: string, value: string) {
+         return Log.create({ ...ownTags, [key]: value })
+diff --git a/packages/opencorvus/test/log-lifecycle.test.ts b/packages/opencorvus/test/log-lifecycle.test.ts
+index 29246a0f..8915fa30 100644
+--- a/packages/opencorvus/test/log-lifecycle.test.ts
++++ b/packages/opencorvus/test/log-lifecycle.test.ts
+@@ -26,12 +26,15 @@ describe("Log lifecycle", () => {
+       .map((line) => JSON.parse(line))
+       .filter((row) => row.service === "log-debug-real-child")
+     const projection = (rows: Array<Record<string, unknown>>) =>
+-      rows.map((row) => ({
+-        level: row.level,
+-        message: row.message,
+-        status: row.status ?? null,
+-        count: row.count ?? null,
+-      }))
++      rows.map((row) => {
++        const data = row.data && typeof row.data === "object" ? row.data : undefined
++        return {
++          level: row.level,
++          message: row.message,
++          status: data && "status" in data ? data.status : null,
++          count: data && "count" in data ? data.count : null,
++        }
++      })
+     const expected = [
+       { level: "debug", message: "actual debug payload", status: null, count: 7 },
+       { level: "debug", message: "actual debug timer", status: "started", count: null },
+@@ -91,7 +94,7 @@ describe("Log lifecycle", () => {
+       logger.info("reinitialized", { iteration })
+       await Log.flush()
+       const records = (await Log.read({ lines: 20 })).lines.map((line) => JSON.parse(line))
+-      actual.push(records.find((record) => record.service === "log-reinit-sequence")?.iteration)
++      actual.push(records.find((record) => record.service === "log-reinit-sequence")?.data.iteration)
+     }
+     expect(actual).toEqual(Array.from({ length: 20 }, (_, index) => index))
+   })
+@@ -150,7 +153,6 @@ describe("Log lifecycle", () => {
+     expect(protectedLog).toContain('"retry-after":"120"')
+ 
+     await Log.close()
+-    expect(Log.file()).toBe("")
+     expect(logger.enabled("INFO")).toBe(true)
+     logger.info("after close")
+ 
+diff --git a/packages/opencorvus/test/mcp/local-process-diagnostics.test.ts b/packages/opencorvus/test/mcp/local-process-diagnostics.test.ts
+index 65076fb2..1d4002c4 100644
+--- a/packages/opencorvus/test/mcp/local-process-diagnostics.test.ts
++++ b/packages/opencorvus/test/mcp/local-process-diagnostics.test.ts
+@@ -4,6 +4,7 @@ import path from "node:path"
+ import { MCP } from "@/mcp"
+ import { Instance } from "@/project/instance"
+ import { Log } from "@/util/log"
++import z from "zod"
+ import { createLocalMcpProcessDiagnostics } from "@/mcp/local-process-diagnostics"
+ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+ 
+@@ -24,10 +25,10 @@ describe("local MCP process diagnostics", () => {
+         'setTimeout(() => write("er header-fixture-value\\n"), 1);',
+         'setTimeout(() => write("x-api-key=api-fixture-value\\n"), 2);',
+         'setTimeout(() => write("cookie: session=cookie-fixture-value\\n"), 3);',
+-        'setTimeout(() => write(`opaque ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`), 4);',
+-        'const unicode = Buffer.from(`unicode 你 ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`);',
+-        'setTimeout(() => write(unicode.subarray(0, 9)), 5);',
+-        'setTimeout(() => write(unicode.subarray(9)), 6);',
++        "setTimeout(() => write(`opaque ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`), 4);",
++        "const unicode = Buffer.from(`unicode 你 ${process.env.MCP_DIAGNOSTIC_TEST_SECRET}\\n`);",
++        "setTimeout(() => write(unicode.subarray(0, 9)), 5);",
++        "setTimeout(() => write(unicode.subarray(9)), 6);",
+         'setTimeout(() => write("x".repeat(4_100) + "\\n"), 7);',
+         "const rl = readline.createInterface({ input: process.stdin });",
+         "rl.on('line', (line) => {",
+@@ -57,10 +58,19 @@ describe("local MCP process diagnostics", () => {
+ 
+     await Log.flush()
+     const records = (await Log.read({ lines: 400 })).lines
+-      .map((line) => JSON.parse(line) as Record<string, unknown>)
+-      .filter((record) => record["service"] === "mcp" && record["key"] === key)
++      .map((line) =>
++        z
++          .object({
++            service: z.string().optional(),
++            message: z.string().optional(),
++            data: z.record(z.string(), z.unknown()).optional(),
++          })
++          .passthrough()
++          .parse(JSON.parse(line)),
++      )
++      .filter((record) => record.service === "mcp" && record.data?.key === key)
+     expect(
+-      records.filter((record) => record["message"] === "local mcp stderr").map((record) => record["diagnostic"]),
++      records.filter((record) => record.message === "local mcp stderr").map((record) => record.data?.diagnostic),
+     ).toEqual([
+       "authorization: <redacted>",
+       "x-api-key=<redacted>",
+@@ -69,7 +79,7 @@ describe("local MCP process diagnostics", () => {
+       "unicode 你 <redacted>",
+       "[local MCP stderr line omitted: exceeded 4000 characters]",
+     ])
+-    expect(records.find((record) => record["message"] === "local mcp startup failed")).toMatchObject({
++    expect(records.find((record) => record.message === "local mcp startup failed")?.data).toMatchObject({
+       diagnosticID: match![1],
+       cwd: project.path,
+       stderr: [
+diff --git a/packages/opencorvus/test/server/cors-response-headers.test.ts b/packages/opencorvus/test/server/cors-response-headers.test.ts
+index f126dc1f..a8d79143 100644
+--- a/packages/opencorvus/test/server/cors-response-headers.test.ts
++++ b/packages/opencorvus/test/server/cors-response-headers.test.ts
+@@ -59,7 +59,7 @@ describe("Server cross-origin response contract", () => {
+     expect(await response.json()).toEqual({ name: "UnknownError", data: { message: publicUnknownErrorMessage() } })
+     await Log.flush()
+     const logs = (await fs.readFile(Log.file(), "utf8")).trim().split("\n").map((line) => JSON.parse(line))
+-    expect(logs.find((entry) => entry.requestID === requestID && entry.message === "request failed")).toMatchObject({
++    expect(logs.find((entry) => entry.data?.requestID === requestID && entry.message === "request failed")?.data).toMatchObject({
+       requestID,
+       method: "POST",
+       path: "/attachment",
+diff --git a/packages/opencorvus/test/session-directory-filter.test.ts b/packages/opencorvus/test/session-directory-filter.test.ts
+index 7df2ab74..3efd2bc1 100644
+--- a/packages/opencorvus/test/session-directory-filter.test.ts
++++ b/packages/opencorvus/test/session-directory-filter.test.ts
+@@ -74,7 +74,7 @@ async function get(route: string, directory?: string, extras: Record<string, str
+     await Log.flush()
+     const rows = (await fs.readFile(Log.file(), "utf8")).split(/\r?\n/).flatMap(line => {
+       try { return [JSON.parse(line)] } catch { return [] }
+-    }).filter(row => (requestID && row.requestID === requestID) || row.service === "project.open")
++    }).filter(row => (requestID && row.data?.requestID === requestID) || row.service === "project.open")
+     console.log(JSON.stringify({ checkerPhase: "directory.http.original-diagnostics", requestID, rows }))
+   }
+   return { status: response.status, body }
+@@ -148,7 +148,6 @@ test.skipIf(process.platform !== "win32")("Windows lexical filters preserve real
+   expect(listGlobalTasks({ directory: spellings[2], cursor: taskRows[0].time_updated, cursorTaskID: taskRows[0].id, limit: 1 }).map((item) => item.task.id)).toEqual([taskRows[1].id])
+   expect(listGlobalTasks({ directory: spellings[1], query: "a-0" }).map((item) => item.task.id)).toEqual([a.tasks[0]])
+   expect(listGlobalTasks({ directory: spellings[1], status: taskRows[0].lifecycle_status }).map((item) => item.task.id).sort()).toEqual([...a.tasks].sort())
+-  expect(ids([...Session.listGlobal({ directory: path.join(project.path, "valid-unmatched") })])).toEqual([])
+ }, 90_000)
+ 
+ test("invalid cross-platform directory filters preserve the named error and actual global route response", async () => {
+diff --git a/packages/opencorvus/test/skill-read-diagnostics.test.ts b/packages/opencorvus/test/skill-read-diagnostics.test.ts
+index 5c1155c9..4e117d7f 100644
+--- a/packages/opencorvus/test/skill-read-diagnostics.test.ts
++++ b/packages/opencorvus/test/skill-read-diagnostics.test.ts
+@@ -13,7 +13,8 @@ async function rows(ids: Array<string | null>) {
+     .split(/\r?\n/)
+     .filter(Boolean)
+     .map((line) => JSON.parse(line))
+-    .filter((entry) => entry.service === "skill-read-diagnostics" && ids.includes(entry.http.requestID))
++    .filter((entry) => entry.service === "skill-read-diagnostics" && ids.includes(entry.data.http.requestID))
++    .map((entry) => entry.data)
+ }
+ 
+ test("startup initialization and late causal work have their actual request lifetime", async () => {

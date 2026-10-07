@@ -1,0 +1,99 @@
+--- log-utils.before.test.ts
++++ packages/overlay/test/log-utils.test.ts
+@@ -9,11 +9,16 @@
+         time: "2026-06-03T10:00:00.123Z",
+         service: "server",
+         message: "provider refresh failed",
+-        path: "/provider/refresh",
+-        status: "failed",
+-        error: {
+-          type: "ProviderCatalogRefreshError",
+-          message: "models.dev unavailable",
++        logDomain: "session",
++        sessionID: "ses_actual",
++        data: {
++          duration: 1250,
++          path: "/provider/refresh",
++          status: "failed",
++          time: { created: 100, updated: 200 },
++          level: "info",
++          service: "subject-service",
++          error: { type: "ProviderCatalogRefreshError", message: "models.dev unavailable" },
+         },
+       }),
+     )
+@@ -23,27 +28,61 @@
+       ts: "2026-06-03T10:00:00",
+       service: "server",
+       message: "provider refresh failed",
++      delta: "1.3s",
+     })
+     expect(entry.fields).toMatchObject({
+       service: "server",
+-      path: "/provider/refresh",
+-      status: "failed",
+-      error: {
+-        type: "ProviderCatalogRefreshError",
+-        message: "models.dev unavailable",
++      logDomain: "session",
++      sessionID: "ses_actual",
++      data: {
++        duration: 1250,
++        path: "/provider/refresh",
++        status: "failed",
++        time: { created: 100, updated: 200 },
++        level: "info",
++        service: "subject-service",
++        error: { type: "ProviderCatalogRefreshError", message: "models.dev unavailable" },
+       },
+     })
+   })
+ 
+-  test("keeps old text logs readable for existing files", () => {
+-    const entry = parseServerLogLine("WARN  2026-03-10T10:00:01 +2ms service=server seeded warning")
++  test("historic non-string time remains unknown and its original lifecycle details remain visible", () => {
++    const raw = JSON.stringify({
++      level: "info",
++      time: { created: 100, updated: 200 },
++      timestamp: "subject-date",
++      ts: "subject-ts",
++      service: "session",
++      message: "created",
++      duration: 800,
++    })
++    expect(parseServerLogLine(raw)).toEqual({
++      level: "info",
++      ts: "",
++      delta: "",
++      service: "session",
++      message: "created",
++      fields: {
++        time: { created: 100, updated: 200 },
++        timestamp: "subject-date",
++        ts: "subject-ts",
++        service: "session",
++        duration: 800,
++      },
++      raw,
++    })
++  })
+ 
+-    expect(entry).toMatchObject({
+-      level: "warn",
+-      ts: "2026-03-10T10:00:01",
+-      delta: "+2ms",
+-      service: "server",
+-      message: "seeded warning",
++  test("unparsed diagnostic line is preserved as the actual raw output", () => {
++    const raw = "unparsed owned diagnostic output"
++    expect(parseServerLogLine(raw)).toEqual({
++      level: "info",
++      ts: "",
++      delta: "",
++      service: "",
++      message: raw,
++      fields: {},
++      raw,
+     })
+   })
+ })

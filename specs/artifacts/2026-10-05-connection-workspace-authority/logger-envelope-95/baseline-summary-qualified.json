@@ -1,0 +1,87 @@
+[
+  {
+    "observed": [
+      {
+        "message": "envelope95-conflicts",
+        "service": "subject-service",
+        "subject": 0,
+        "timeKind": "Object"
+      }
+    ],
+    "caseID": "conflicts"
+  },
+  {
+    "observed": [
+      {
+        "message": "created",
+        "service": "session",
+        "subject": 0,
+        "timeKind": "Object"
+      },
+      {
+        "message": "created",
+        "service": "session",
+        "subject": 0,
+        "timeKind": "Object"
+      },
+      {
+        "message": "envelope95-buffered",
+        "service": "envelope95-context",
+        "subject": 0,
+        "timeKind": "String"
+      },
+      {
+        "message": "envelope95-caller-only",
+        "service": "envelope95-context",
+        "subject": 0,
+        "timeKind": "String"
+      }
+    ],
+    "caseID": "session-before-reinitialization"
+  },
+  {
+    "observed": [
+      {
+        "message": "envelope95-reinitialized",
+        "service": "envelope95-context",
+        "subject": 0,
+        "timeKind": "String"
+      }
+    ],
+    "caseID": "session-context"
+  },
+  {
+    "observed": [
+      {
+        "message": "envelope95-timer",
+        "service": "envelope95-export",
+        "subject": 0,
+        "timeKind": "String"
+      },
+      {
+        "message": "envelope95-timer",
+        "service": "envelope95-export",
+        "subject": 0,
+        "timeKind": "String"
+      },
+      {
+        "message": "envelope95-error",
+        "service": "envelope95-export",
+        "subject": 0,
+        "timeKind": "Object"
+      }
+    ],
+    "caseID": "timer-export"
+  },
+  {
+    "observed": [
+      {
+        "message": "envelope95-public",
+        "service": "subject-ingress",
+        "subject": 0,
+        "timeKind": "Object"
+      }
+    ],
+    "caseID": "public-ingress"
+  }
+]

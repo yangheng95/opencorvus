@@ -1,0 +1,97 @@
+Browser tab: 55, Title: "OpenCorvus", URL: "http://localhost:18042/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18042/ui/
+	1 container
+		2 container Logs, ID: logDialog
+			3 container
+				4 heading Logs, Value: 2, ID: dialog-cl-97-title
+					5 text Logs
+				6 pop up button (collapsed) Log level DEBUG, ID: logLevelFilter-trigger, Secondary Actions: Expand
+					7 text DEBUG
+				8 button Refresh, ID: btnLogRefresh
+				9 button Description: Copy path, ID: btnLogOpenFile
+				10 button Copy, ID: btnLogCopy
+				11 button Clear, ID: btnLogClear
+				12 button Close, ID: btnCloseLog
+				13 container
+					89 text Server [ INFO ] 0.2s project.open 2026-10-07T09:11:57
+					90 text project.open.stage
+					91 text logDomain = non-session data = {"stage":"terminal-profile.ensure-default","platform":"win32","directory":"C:...
+					92 button (collapsed) Details, Secondary Actions: Expand
+						93 text Details
+					94 text Server [ INFO ] project.open 2026-10-07T09:11:57
+					95 text project.open.stage
+					96 text logDomain = non-session data = {"stage":"channel-supervisor.sync","platform":"win32","directory":"C:\\Users\...
+					97 button (collapsed) Details, Secondary Actions: Expand
+						98 text Details
+					99 text Server [ INFO ] 0.0s project.open 2026-10-07T09:11:57
+					100 text project.open.stage
+					101 text logDomain = non-session data = {"stage":"channel-supervisor.sync","platform":"win32","directory":"C:\\Users\...
+					102 button (collapsed) Details, Secondary Actions: Expand
+						103 text Details
+					104 text Server [ INFO ] 0.4s project.open 2026-10-07T09:11:57
+					105 text project.open.stage
+					106 text logDomain = non-session data = {"stage":"instance.init","platform":"win32","directory":"C:\\Users\\hengu\\.c...
+					107 button (collapsed) Details, Secondary Actions: Expand
+						108 text Details
+					109 text Server [ INFO ] 0.0s permission-authority 2026-10-07T09:11:57
+					110 text permission continuation recovery
+					111 text logDomain = non-session data = {"projectID":"prj_hKia9xriRuiOxwphbO3x","requested":0,"replayed":0,"resumed":...
+					112 button (collapsed) Details, Secondary Actions: Expand
+						113 text Details
+					64 text Server [ INFO ] 0.6s server 2026-10-07T09:11:57
+					65 text request
+					66 text logDomain = non-session data = {"requestID":"d43e74b1-48d5-43d8-8d08-bec05a5a15ae","method":"GET","path":"/p...
+					67 button (collapsed) Details, Secondary Actions: Expand
+						68 text Details
+					69 text Server [ WARN ] worktree.gc 2026-10-07T09:11:57
+					70 text failed to read git worktree registry; preserving the entire project
+					71 text logDomain = non-session data = {"projectID":"prj_hKia9xriRuiOxwphbO3x","primaryDir":"C:\\Users\\hengu\\.code...
+					72 button (collapsed) Details, Secondary Actions: Expand
+						73 text Details
+					74 text Server [ INFO ] server 2026-10-07T09:11:57
+					75 text request
+					76 text logDomain = non-session data = {"requestID":"2aab56fc-7472-49c4-bc76-f6bf3ae3f963","method":"POST","path":"/...
+					77 button (collapsed) Details, Secondary Actions: Expand
+						78 text Details
+					79 text Server [ INFO ] session 2026-10-07T09:11:57
+					80 text created
+					81 text logDomain = non-session data = {"id":"ses_-zUSe1sXFzzvvi1qoSpw","slug":"lucky-tiger","version":"local","proj...
+					82 button (collapsed) Details, Secondary Actions: Expand
+						83 text Details
+					84 text Server [ INFO ] 0.0s server 2026-10-07T09:11:58
+					85 text request
+					86 text logDomain = non-session data = {"requestID":"2aab56fc-7472-49c4-bc76-f6bf3ae3f963","method":"POST","path":"/...
+					87 button (collapsed) Details, Secondary Actions: Expand
+						88 text Details
+					114 text Server [ WARN ] logger-envelope95-observation 2026-10-07T09:11:58
+					115 text Logger subject chronology95
+					116 text logDomain = non-session data = {"service":"subject-lifecycle","level":"info","sessionID":"ses_-zUSe1sXFzzvvi...
+					117 button (collapsed) Details, Secondary Actions: Expand
+						118 text Details
+					119 text Server [ INFO ] runtime.memory 2026-10-07T09:12:49
+					120 text runtime.memory.metrics
+					121 text logDomain = non-session data = {"pid":76004,"uptimeMs":124230,"process":{"rss":587649024,"heapUsed":21379390...
+					122 button (collapsed) Details, Secondary Actions: Expand
+						123 text Details
+					124 text Server [ INFO ] runtime.memory 2026-10-07T09:13:49
+					125 text runtime.memory.metrics
+					126 text logDomain = non-session data = {"pid":76004,"uptimeMs":184246,"process":{"rss":588132352,"heapUsed":21484666...
+					127 button (collapsed) Details, Secondary Actions: Expand
+						128 text Details
+					129 text Server [ INFO ] runtime.memory 2026-10-07T09:14:49
+					130 text runtime.memory.metrics
+					131 text logDomain = non-session data = {"pid":76004,"uptimeMs":244263,"process":{"rss":588980224,"heapUsed":21585906...
+					132 button (collapsed) Details, Secondary Actions: Expand
+						133 text Details
+					134 text Server [ INFO ] server 2026-10-07T09:14:56
+					135 text request
+					136 text logDomain = non-session data = {"requestID":"4acf9a37-c467-4a96-bc31-64e1ca06ca2f","method":"GET","path":"/u...
+					137 button (collapsed) Details, Secondary Actions: Expand
+						138 text Details
+					139 text Server [ INFO ] 0.0s server 2026-10-07T09:14:56
+					140 text request
+					141 text logDomain = non-session data = {"requestID":"4acf9a37-c467-4a96-bc31-64e1ca06ca2f","method":"GET","path":"/u...
+					142 button (collapsed) Details, Secondary Actions: Expand
+						143 text Details
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18042/ui/

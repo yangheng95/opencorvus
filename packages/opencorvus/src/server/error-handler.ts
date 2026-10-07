@@ -47,6 +47,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "SkillMarketUpstreamError") return 502
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400
+  if (err.name === "ConfigCandidateValidationError") return 400
   if (err.name === "ProviderAuthOAuthExchangeActiveError") return 409
   if (err.name === "ProviderAuthOAuthExchangeUncertainError") return 409
   if (err.name === "ProviderCredentialExchangeReplacedError") return 409

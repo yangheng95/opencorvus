@@ -13,7 +13,8 @@ async function rows(ids: Array<string | null>) {
     .split(/\r?\n/)
     .filter(Boolean)
     .map((line) => JSON.parse(line))
-    .filter((entry) => entry.service === "skill-read-diagnostics" && ids.includes(entry.http.requestID))
+    .filter((entry) => entry.service === "skill-read-diagnostics" && ids.includes(entry.data.http.requestID))
+    .map((entry) => entry.data)
 }
 
 test("startup initialization and late causal work have their actual request lifetime", async () => {

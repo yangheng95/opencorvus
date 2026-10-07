@@ -1,0 +1,18 @@
+Browser tab: 241798778, Title: "OpenCorvus", URL: "http://localhost:18042/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 117-118
++					159 container
++						160 button (expanded) 详情, Secondary Actions: Collapse
++							161 text 详情
++						162 text 结构化字段 {
+  "logDomain": "non-session",
+  "data": {
+    "requestID": "291ea507-5ea3-42fb-8893-0b9095b8439b",
+    "method": "GET",
+    "path": "/expert-squad/catalog",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 333
+  }
+} 原始日志 {"level":"info","time":"2026-10-07T09:14:57.477Z","service":"server","logDomain":"non-session","data":{"requestID":"291ea507-5ea3-42fb-8893-0b9095b8439b","method":"GET","path":"/expert-squad/catalog","status":"completed","statusCode":200,"duration":333},"message":"request"}
+The focused UI element is 160 button (expanded) 详情, Secondary Actions: Collapse

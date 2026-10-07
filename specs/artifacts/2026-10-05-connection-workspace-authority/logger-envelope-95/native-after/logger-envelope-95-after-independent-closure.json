@@ -1,0 +1,27 @@
+{
+  "occurrence": "logger-envelope-95-after-98070c07-1924-4866-927a-3342ffe7b125",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "observedAtUtc": "2026-10-07T09:31:59.4174055Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69572,
+        "processInstanceID": "win32:639269610443655433",
+        "occurrenceID": "e69e8b5f-35ea-44a9-90cd-7623a4332240"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 76004,
+        "processInstanceID": "win32:639269610453294146",
+        "occurrenceID": "183273b7-c767-450c-a215-91c0c97f3a38"
+      }
+    }
+  ],
+  "listeners": []
+}

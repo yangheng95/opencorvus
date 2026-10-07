@@ -1,0 +1,284 @@
+--- log.before.ts
++++ packages/overlay/src/utils/log.ts
+@@ -205,10 +205,7 @@
+   },
+ }
+ 
+-// ── Log viewer helpers ──
+-// aggregation functions .
+-// These functions are used by both the path and by any
+-// future Solid log-viewer component.
++// ── Current log parsing and display helpers ──
+ 
+ // ── stringifyLogValue ──
+ 
+@@ -245,23 +242,6 @@
+   source?: string
+ }
+ 
+-function parseLogValue(raw: string): unknown {
+-  const text = String(raw || "").trim()
+-  if (!text) return ""
+-  if (text === "true") return true
+-  if (text === "false") return false
+-  if (text === "null") return null
+-  if (/^-?\d+(?:\.\d+)?$/.test(text)) return Number(text)
+-  if (/^[\[{"]/.test(text)) {
+-    try {
+-      return JSON.parse(text)
+-    } catch {
+-      /* fall through */
+-    }
+-  }
+-  return text
+-}
+-
+ function parsePinoLogLine(raw: string): ServerLogEntry | undefined {
+   let value: unknown
+   try {
+@@ -277,12 +257,18 @@
+   const service = typeof record.service === "string" ? record.service : ""
+   const fields = { ...record }
+   delete fields.level
+-  delete fields.time
++  if (typeof record.time === "string") delete fields.time
+   delete fields.message
+   return {
+     level,
+     ts,
+-    delta: typeof record.duration === "number" ? fmtElapsed(record.duration) : "",
++    delta:
++      record.data &&
++      typeof record.data === "object" &&
++      !Array.isArray(record.data) &&
++      typeof (record.data as Record<string, unknown>).duration === "number"
++        ? fmtElapsed((record.data as Record<string, unknown>).duration as number)
++        : "",
+     service,
+     message,
+     fields,
+@@ -290,117 +276,9 @@
+   }
+ }
+ 
+-function scanBalancedLogValue(text: string, start: number): number {
+-  if (text[start] === '"') {
+-    let escaped = false
+-    for (let i = start + 1; i < text.length; i++) {
+-      const ch = text[i]
+-      if (escaped) {
+-        escaped = false
+-        continue
+-      }
+-      if (ch === "\\") {
+-        escaped = true
+-        continue
+-      }
+-      if (ch === '"') return i + 1
+-    }
+-    return text.length
+-  }
+-  const pairs: Record<string, string> = { "{": "}", "[": "]" }
+-  const stack: string[] = [text[start]]
+-  let quoted = false
+-  let escaped = false
+-  for (let i = start + 1; i < text.length; i++) {
+-    const ch = text[i]
+-    if (quoted) {
+-      if (escaped) {
+-        escaped = false
+-        continue
+-      }
+-      if (ch === "\\") {
+-        escaped = true
+-        continue
+-      }
+-      if (ch === '"') quoted = false
+-      continue
+-    }
+-    if (ch === '"') {
+-      quoted = true
+-      continue
+-    }
+-    if (ch === "{" || ch === "[") {
+-      stack.push(ch)
+-      continue
+-    }
+-    if (ch === "}" || ch === "]") {
+-      const open = stack[stack.length - 1]
+-      if (pairs[open] === ch) {
+-        stack.pop()
+-        if (stack.length === 0) return i + 1
+-      }
+-    }
+-  }
+-  return text.length
+-}
+-
+-function scanLogValueEnd(text: string, start: number): number {
+-  if (!text[start]) return start
+-  const first = text[start]
+-  if (first === '"' || first === "{" || first === "[") return scanBalancedLogValue(text, start)
+-  let cursor = start
+-  while (cursor < text.length) {
+-    const nextSpace = text.indexOf(" ", cursor)
+-    if (nextSpace < 0) return text.length
+-    let probe = nextSpace
+-    while (probe < text.length && text[probe] === " ") probe++
+-    if (/^[A-Za-z0-9_.-]+=/.test(text.slice(probe))) return nextSpace
+-    return nextSpace
+-  }
+-  return text.length
+-}
+-
+-function parseLeadingLogFields(text: string): {
+-  fields: Record<string, unknown>
+-  end: number
+-} {
+-  const fields: Record<string, unknown> = {}
+-  let index = 0
+-  while (index < text.length) {
+-    while (text[index] === " ") index++
+-    const match = /^([A-Za-z0-9_.-]+)=/.exec(text.slice(index))
+-    if (!match) break
+-    const key = match[1]
+-    index += match[0].length
+-    const end = scanLogValueEnd(text, index)
+-    fields[key] = parseLogValue(text.slice(index, end))
+-    index = end
+-  }
+-  return { fields, end: index }
+-}
+-
+ export function parseServerLogLine(raw: string): ServerLogEntry {
+-  const pinoLine = parsePinoLogLine(raw)
+-  if (pinoLine) return pinoLine
+-  const match = raw.match(/^(DEBUG|INFO|WARN|ERROR)\s+(\S+)\s+(\+\d+ms)\s+(.*)$/)
+-  if (!match) {
+-    return { level: "info", ts: "", delta: "", service: "", message: raw, fields: {}, raw }
+-  }
+-  const [, level, ts, delta, rest] = match
+-  const parsed = parseLeadingLogFields(rest)
+-  const service = typeof parsed.fields.service === "string" ? parsed.fields.service : ""
+-  const message = rest.slice(parsed.end).trim() || rest.trim()
+-  return {
+-    level: level.toLowerCase(),
+-    ts,
+-    delta,
+-    service,
+-    message,
+-    fields: parsed.fields,
+-    raw,
+-  }
+-}
+-
++  return parsePinoLogLine(raw) ?? { level: "info", ts: "", delta: "", service: "", message: raw, fields: {}, raw }
++}
+ // ── logDetailFields ──
+ // Strip the "service" key from a fields object (it is displayed separately).
+ 
+@@ -415,104 +293,3 @@
+ export function ndjsonEventTypeLabel(type: string): string {
+   return (type || "").replace(/\./g, " › ")
+ }
+-
+-// ── logViewerEntries ──
+-// Aggregate overlay client logs, server log lines, and pipeline ndjson events
+-// into a unified sorted array for the log viewer.
+-// Parameters are accepted explicitly so that this function can be unit-tested
+-// without depending on module-level state:
+-// serverLogLines — raw server-log text lines (from _serverLogLines
+-// ndjsonEvents — ndjson event objects (from state.ndjsonEvents
+-
+-export interface LogViewerEntry {
+-  level: string
+-  ts: string
+-  service: string
+-  delta: string
+-  message: string
+-  fields: Record<string, unknown>
+-  raw: string
+-  source: string
+-}
+-
+-function isRecord(value: unknown): value is Record<string, unknown> {
+-  return !!value && typeof value === "object" && !Array.isArray(value)
+-}
+-
+-export function logViewerEntries(serverLogLines: string[], ndjsonEvents: any[]): LogViewerEntry[] {
+-  const minLevel: Record<string, number> = { debug: 0, info: 1, warn: 2, error: 3 }
+-  const threshold = minLevel[AppLog.filterLevel] || 0
+-
+-  // Overlay client logs
+-  const clientLines: LogViewerEntry[] = AppLog.filtered().map((e) => ({
+-    level: e.level,
+-    ts: e.ts,
+-    service: e.service,
+-    delta: "",
+-    message: e.message,
+-    fields: isRecord(e.extra) ? (e.extra as Record<string, unknown>) : e.extra == null ? {} : { extra: e.extra },
+-    raw: "",
+-    source: "overlay",
+-  }))
+-
+-  // Server logs
+-  const serverLines: LogViewerEntry[] = serverLogLines
+-    .map(parseServerLogLine)
+-    .filter((e) => (minLevel[e.level] || 0) >= threshold)
+-    .map((e) => ({ ...e, source: "server" }))
+-
+-  // Pipeline execution events → unified log entries
+-  const ndjsonLines: LogViewerEntry[] = (ndjsonEvents || [])
+-    .filter((ev: any) => ev.kind !== "tool_delta")
+-    .map((ev: any): LogViewerEntry | null => {
+-      const level = ev.kind === "error" ? "error" : "info"
+-      if ((minLevel[level] || 0) < threshold) return null
+-      const stage: string = ev.stage || ""
+-      const kind: string = ev.kind || ""
+-      const toolName: string = ev.toolName || ""
+-      const summary: string = ev.summary || ev.text || ""
+-      const parts: string[] = []
+-      if (kind === "tool_call" && toolName) parts.push(`→ ${toolName}`)
+-      else if (kind === "tool_result" && toolName) parts.push(`← ${toolName}`)
+-      else if (kind === "status") parts.push(summary)
+-      else if (kind === "message_delta") parts.push("[text delta]")
+-      if (kind !== "status" && summary) {
+-        parts.push(summary.length > 150 ? summary.slice(0, 150) + "\u2026" : summary)
+-      }
+-      const elapsed = typeof ev.elapsed_ms === "number" ? fmtElapsed(ev.elapsed_ms) : ""
+-      return {
+-        level,
+-        ts: ev.at || "",
+-        service: stage,
+-        delta: elapsed,
+-        message: parts.join(" "),
+-        fields: {
+-          kind,
+-          ...(toolName ? { tool: toolName } : {}),
+-          ...(ev.status ? { status: ev.status } : {}),
+-        },
+-        raw: "",
+-        source: "pipeline",
+-      }
+-    })
+-    .filter((e): e is LogViewerEntry => e !== null)
+-
+-  return [...serverLines, ...ndjsonLines, ...clientLines].sort((a, b) => (a.ts || "").localeCompare(b.ts || ""))
+-}
+-
+-// ── formatLogViewerText ──
+-// Serialise a list of log viewer entries to a plain-text string for copying.
+-
+-export function formatLogViewerText(entries: LogViewerEntry[]): string {
+-  return entries
+-    .map((e) => {
+-      const parts = [`[${String(e.source || "client").toUpperCase()}]`, `[${String(e.level || "info").toUpperCase()}]`]
+-      if (e.ts) parts.push(e.ts)
+-      if (e.service) parts.push(e.service)
+-      parts.push(e.message || "")
+-      const fields = logDetailFields(e.fields)
+-      if (Object.keys(fields).length) parts.push(stringifyLogValue(fields))
+-      return parts.join(" ")
+-    })
+-    .join("\n")
+-}

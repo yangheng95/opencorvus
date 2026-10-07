@@ -1,9 +1,15 @@
 # Specs Storage Index
 
+- [Diagnostic95/candidate96 checkpoint](records/2026-10/2026-10-07-diagnostic-envelope-candidate-status.md): canonical logging/native UI/export and shared semantic400 qualification; continuous work remains active.
+- [Reader provenance97 investigation](artifacts/2026-10-05-connection-workspace-authority/candidate-reader-provenance-investigation-97.md): genuine fault-probe preparation, source stages corrected; no probe or implementation yet.
+- [Skills timeout98 investigation](artifacts/2026-10-05-connection-workspace-authority/skills-load-timeout-investigation-98.md): actual15s client timeout and19439ms backend200; shared cause under investigation.
+- [LogViewer scroll99 investigation](artifacts/2026-10-05-connection-workspace-authority/log-viewer-scroll-investigation-99.md): actual scroll/capture failures retained; root cause remains unknown.
+
 - [Physical installation scope93](artifacts/2026-10-05-connection-workspace-authority/manager-installation-scope-plan-93.md)
 - [Current builtin runtime identity94](artifacts/2026-10-05-connection-workspace-authority/builtin-collision-runtime-plan-94.md)
 - [Canonical diagnostic envelope95](artifacts/2026-10-05-connection-workspace-authority/logger-envelope-plan-95.md)
 - [Cold candidate error mapping96 investigation](artifacts/2026-10-05-connection-workspace-authority/cold-config-error-mapping-investigation-96.md)
+- [Shared candidate status96 Recall](artifacts/2026-10-05-connection-workspace-authority/cold-config-error-mapping-plan-96.md)
 
 - [Genuine complete-read publication acceptance](artifacts/2026-10-05-connection-workspace-authority/complete-read-live-acceptance-plan.md)
 

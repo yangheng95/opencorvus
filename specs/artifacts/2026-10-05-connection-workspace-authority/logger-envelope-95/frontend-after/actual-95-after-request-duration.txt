@@ -1,0 +1,28 @@
+Browser tab: 241798778, Title: "OpenCorvus", URL: "http://localhost:18042/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++					134 text Server [ INFO ] server 2026-10-07T09:14:57
++					135 text request
++					136 text logDomain = non-session data = {"requestID":"e59ffd4d-169c-4272-938a-fb44ebc8ca5e","method":"GET","path":"/c...
++					137 button (collapsed) 详情, Secondary Actions: Expand
++						138 text 详情
++					139 text Server [ INFO ] 0.0s server 2026-10-07T09:14:57
++					140 text request
++					141 text logDomain = non-session data = {"requestID":"46ab0aa4-2d3f-4408-93f8-8f5a260a2062","method":"GET","path":"/c...
++					142 button (collapsed) 详情, Secondary Actions: Expand
++						143 text 详情
++					144 text Server [ INFO ] 0.0s server 2026-10-07T09:14:57
++					145 text request
++					146 text logDomain = non-session data = {"requestID":"e59ffd4d-169c-4272-938a-fb44ebc8ca5e","method":"GET","path":"/c...
++					147 button (collapsed) 详情, Secondary Actions: Expand
++						148 text 详情
++					149 text Server [ INFO ] 0.0s server 2026-10-07T09:15:07
++					150 text request
++					151 text logDomain = non-session data = {"requestID":"0f233398-b40a-4e1a-8f8b-6044457b5104","method":"GET","path":"/g...
++					152 button (collapsed) 详情, Secondary Actions: Expand
++						153 text 详情
++					154 text Overlay [ ERROR ] project-load 2026-10-07T09:15:12
++					155 text extensions load failed
++					156 text directory = C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-07\logger-envelope... error = skills: signal timed out
++					157 button (collapsed) 详情, Secondary Actions: Expand
++						158 text 详情
+The focused UI element is 81 container 日志, ID: logDialog

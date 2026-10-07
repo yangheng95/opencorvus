@@ -1,0 +1,13 @@
+{
+  "include": [
+    "../../../../../packages/overlay/src/**/*.ts",
+    "../../../../../packages/overlay/src/**/*.tsx",
+    "../../../../../packages/overlay/test/log-utils.test.ts",
+    "../../../../../node_modules/.bun/bun-types@1.3.14/node_modules/bun-types/index.d.ts",
+    "../../../../../packages/overlay/node_modules/vite/client.d.ts"
+  ],
+  "extends": "../../../../../packages/overlay/tsconfig.json",
+  "compilerOptions": {
+    "types": []
+  }
+}

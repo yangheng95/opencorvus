@@ -1,0 +1,152 @@
+{
+  "requests": [
+    {
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project"
+      },
+      "rawBody": "{\"id\":\"prj_hKia9xriRuiOxwphbO3x\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\logger-envelope-after-95\\\\project\",\"sandboxes\":[],\"time\":{\"created\":1791364317389,\"updated\":1791364317389}}",
+      "url": "http://127.0.0.1:18042/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clogger-envelope-after-95%5Cproject",
+      "method": "GET",
+      "headers": {
+        "Content-Length": [
+          "220"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 09:11:57 GMT"
+        ],
+        "x-opencorvus-request-id": [
+          "d43e74b1-48d5-43d8-8d08-bec05a5a15ae"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 200,
+      "input": null,
+      "body": {
+        "id": "prj_hKia9xriRuiOxwphbO3x",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project",
+        "sandboxes": [],
+        "time": {
+          "created": 1791364317389,
+          "updated": 1791364317389
+        }
+      }
+    },
+    {
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project"
+      },
+      "rawBody": "{\"session\":{\"id\":\"ses_-zUSe1sXFzzvvi1qoSpw\",\"slug\":\"lucky-tiger\",\"version\":\"local\",\"projectID\":\"prj_hKia9xriRuiOxwphbO3x\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\logger-envelope-after-95\\\\project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791364317986,\"updated\":1791364317986}}}",
+      "url": "http://127.0.0.1:18042/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clogger-envelope-after-95%5Cproject",
+      "method": "POST",
+      "headers": {
+        "Content-Length": [
+          "406"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 09:11:57 GMT"
+        ],
+        "x-opencorvus-request-id": [
+          "2aab56fc-7472-49c4-bc76-f6bf3ae3f963"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 201,
+      "input": {},
+      "body": {
+        "session": {
+          "id": "ses_-zUSe1sXFzzvvi1qoSpw",
+          "slug": "lucky-tiger",
+          "version": "local",
+          "projectID": "prj_hKia9xriRuiOxwphbO3x",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project",
+          "title": "Chat",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1791364317986,
+            "updated": 1791364317986
+          }
+        }
+      }
+    },
+    {
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project"
+      },
+      "rawBody": "true",
+      "url": "http://127.0.0.1:18042/log?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clogger-envelope-after-95%5Cproject",
+      "method": "POST",
+      "headers": {
+        "Content-Length": [
+          "4"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Date": [
+          "Wed, 07 Oct 2026 09:11:57 GMT"
+        ],
+        "x-opencorvus-request-id": [
+          "ba3bc102-35d7-421a-866e-cde02e6a491f"
+        ],
+        "Vary": [
+          "Origin"
+        ]
+      },
+      "status": 200,
+      "input": {
+        "entries": [
+          {
+            "extra": {
+              "service": "subject-lifecycle",
+              "level": "info",
+              "sessionID": "ses_-zUSe1sXFzzvvi1qoSpw",
+              "logDomain": "subject-lifecycle",
+              "time": {
+                "created": 1791364317986,
+                "updated": 1791364317986
+              },
+              "observed": "actual Chat lifecycle"
+            },
+            "message": "Logger subject chronology95",
+            "level": "warn",
+            "service": "logger-envelope95-observation"
+          }
+        ]
+      },
+      "body": true
+    }
+  ],
+  "occurrence": "logger-envelope-95-after-98070c07-1924-4866-927a-3342ffe7b125",
+  "target": {
+    "pid": 76004,
+    "processInstanceID": "win32:639269610453294146",
+    "occurrenceID": "183273b7-c767-450c-a215-91c0c97f3a38"
+  },
+  "qualifier": "Actual canonical Chat creation and public diagnostic input; no model prompt or copied authority",
+  "observedAtUtc": "2026-10-07T09:11:58.0342926Z"
+}

@@ -1,0 +1,186 @@
+{
+  "physicalBytesAtObservation": 110538,
+  "manifest": {
+    "schema": "opencorvus.log-support-bundle.v1",
+    "exportedAt": "2026-10-07T09:18:12.310Z",
+    "application": {
+      "version": "local",
+      "channel": "local"
+    },
+    "runtime": {
+      "platform": "win32",
+      "architecture": "x64",
+      "bun": "1.3.14"
+    },
+    "source": {
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\runtime\\log",
+      "current": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\runtime\\log\\dev.log",
+      "retention": "current log plus the 10 most recently modified production logs; dev.log is retained separately"
+    },
+    "totals": {
+      "fileCount": 1,
+      "byteCount": 62745,
+      "lineCount": 197,
+      "parsedLineCount": 197,
+      "unparsedLineCount": 0,
+      "levelCounts": {
+        "INFO": 193,
+        "WARN": 2,
+        "ERROR": 2
+      }
+    },
+    "files": [
+      {
+        "name": "dev.log",
+        "current": true,
+        "size": 62745,
+        "modified": "2026-10-07T09:18:12.318Z",
+        "lineCount": 197,
+        "parsedLineCount": 197,
+        "unparsedLineCount": 0,
+        "levelCounts": {
+          "INFO": 193,
+          "WARN": 2,
+          "ERROR": 2
+        },
+        "services": [
+          "automation-service",
+          "config",
+          "db",
+          "default",
+          "event-service",
+          "file.watcher",
+          "format",
+          "logger-envelope95-observation",
+          "mission.caller-receipt",
+          "overlay:project-load",
+          "permission-authority",
+          "plugin",
+          "project",
+          "project.open",
+          "runtime.memory",
+          "server",
+          "session",
+          "worktree.gc"
+        ],
+        "firstTimestamp": "2026-10-07T09:10:49.268Z",
+        "lastTimestamp": "2026-10-07T09:18:12.306Z",
+        "rawPath": "logs/raw/dev.log",
+        "formattedPath": "logs/formatted/dev.log"
+      }
+    ]
+  },
+  "subject": [
+    {
+      "level": "warn",
+      "time": "2026-10-07T09:11:58.030Z",
+      "service": "logger-envelope95-observation",
+      "logDomain": "non-session",
+      "data": {
+        "service": "subject-lifecycle",
+        "level": "info",
+        "sessionID": "ses_-zUSe1sXFzzvvi1qoSpw",
+        "logDomain": "subject-lifecycle",
+        "time": {
+          "created": 1791364317986,
+          "updated": 1791364317986
+        },
+        "observed": "actual Chat lifecycle"
+      },
+      "message": "Logger subject chronology95"
+    }
+  ],
+  "entries": [
+    {
+      "FullName": "README.txt",
+      "Length": 649
+    },
+    {
+      "FullName": "manifest.json",
+      "Length": 1843
+    },
+    {
+      "FullName": "logs/raw/dev.log",
+      "Length": 62745
+    },
+    {
+      "FullName": "logs/formatted/dev.log",
+      "Length": 70423
+    }
+  ],
+  "parsedRows": 197,
+  "missingCompletion": [],
+  "physicalPrefixEqual": true,
+  "snapshotBytes": 62745,
+  "exportByteCount": 14253,
+  "missingResponse": {
+    "name": "LogFileNotFoundError",
+    "data": {
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\runtime\\log",
+      "file": "owned95-missing.log",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\runtime\\log\\owned95-missing.log",
+      "message": "Log file does not exist: owned95-missing.log"
+    }
+  },
+  "occurrence": "logger-envelope-95-after-98070c07-1924-4866-927a-3342ffe7b125",
+  "missingRequestID": "c6477f2c-a956-45d8-82e9-edb1030bb52d",
+  "created": [
+    {
+      "level": "info",
+      "time": "2026-10-07T09:11:57.988Z",
+      "service": "session",
+      "logDomain": "non-session",
+      "data": {
+        "id": "ses_-zUSe1sXFzzvvi1qoSpw",
+        "slug": "lucky-tiger",
+        "version": "local",
+        "projectID": "prj_hKia9xriRuiOxwphbO3x",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1791364317986,
+          "updated": 1791364317986
+        }
+      },
+      "message": "created"
+    }
+  ],
+  "observedAtUtc": "2026-10-07T09:32:10.0012681Z",
+  "qualifier": "Genuine GET/log/export ZIP; exact retained snapshot prefix comparison with same physical file, no mutable-source hash or current whole-file equality claim",
+  "exportHeaders": {
+    "x-opencorvus-log-line-count": [
+      "197"
+    ],
+    "Access-Control-Expose-Headers": [
+      "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+    ],
+    "Content-Type": [
+      "application/zip"
+    ],
+    "x-opencorvus-request-id": [
+      "8836f745-e785-497d-a352-2e7dac4fa8d5"
+    ],
+    "Vary": [
+      "Origin"
+    ],
+    "x-opencorvus-log-file-count": [
+      "1"
+    ],
+    "Content-Length": [
+      "14253"
+    ],
+    "Date": [
+      "Wed, 07 Oct 2026 09:18:12 GMT"
+    ],
+    "Content-Disposition": [
+      "attachment; filename=\"opencorvus-log-support-20261007T091812Z.zip\""
+    ]
+  }
+}

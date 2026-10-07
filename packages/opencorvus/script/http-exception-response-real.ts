@@ -344,12 +344,12 @@ try {
         .filter((line) => line.startsWith("{"))
         .map((line) => JSON.parse(line))
       const errorReceipt = entries.find(
-        (entry) => entry.service === "server" && entry.message === "request failed" && entry.requestID === diagnosticID,
+        (entry) => entry.service === "server" && entry.message === "request failed" && entry.data?.requestID === diagnosticID,
       )
       assert(errorReceipt, "Same actual unauthorized response must correlate to its settled server error log")
-      assert.equal(errorReceipt.method, "GET")
-      assert.equal(errorReceipt.path, "/global/health")
-      assert.equal(errorReceipt.statusCode, 401)
+      assert.equal(errorReceipt.data.method, "GET")
+      assert.equal(errorReceipt.data.path, "/global/health")
+      assert.equal(errorReceipt.data.statusCode, 401)
       fact.errorLogReceipt = errorReceipt
       fact.status = "passed"
     } catch (error) {

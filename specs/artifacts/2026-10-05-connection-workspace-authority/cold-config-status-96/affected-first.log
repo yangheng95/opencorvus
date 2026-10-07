@@ -1,0 +1,101 @@
+[1/3] START test/expert-squad/builtin-collision-authority.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+lawful {"input":{"projectDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lWCbNo\\test-36512-fRJgSo\\fixtures\\memory-uB3uhG"},"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"identity":{"agentID":"orchestrator","baseRole":"orchestrator","sessionKind":"orchestrator","projectionHash":"0735223fd77304ddc9311e01a50ee13643dfba795f831a6a90792e6528b05df4"}}
+lawful {"input":{"scope":"global"},"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"identity":{"agentID":"orchestrator","baseRole":"orchestrator","sessionKind":"orchestrator","projectionHash":"0735223fd77304ddc9311e01a50ee13643dfba795f831a6a90792e6528b05df4"}}
+(pass) lawful unbound builtin Project and global return real materialized scheduler identity [2825.60ms]
+collision {"scope":"project","malformed":false,"issues":[],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound project SDK-valid builtin collision returns original collision Error [2256.10ms]
+collision {"scope":"project","malformed":true,"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lWCbNo\\test-36512-fRJgSo\\fixtures\\memory-LTTTuU\\.opencorvus\\expert-squads\\collision-check\\base\\expert-squad.jsonc","namespace":"collision-check","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound project malformed builtin collision returns original collision Error [2152.51ms]
+collision {"scope":"global","malformed":false,"issues":[],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound global SDK-valid builtin collision returns original collision Error [2302.89ms]
+collision {"scope":"global","malformed":true,"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lWCbNo\\test-36512-fRJgSo\\runtime-root\\config\\expert-squads\\collision-check\\base\\expert-squad.jsonc","namespace":"collision-check","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) unbound global malformed builtin collision returns original collision Error [2206.19ms]
+(pass) lawful external Project wins over broken same-ID global and unbound builtin recovers after own collision removal [3644.74ms]
+explicit global supplied Project {"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"result":{"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}
+(pass) explicit global scope keeps global authority when a Project directory is supplied [2297.72ms]
+lawful empty mount identity validation completed
+mount {"kind":"error","name":"Error","message":"External expert squad package id \"base\" collides with a built-in expert squad id."}
+(pass) nonactive builtin mount collision returns original Error and lawful empty mount validates identity [2133.46ms]
+pinned {"revision":{"scope":"built_in","projectID":null,"namespace":"builtin","id":"base","version":"2026.09.30.1","packageDigest":"f27e9b9ce9cda0ca5ff4bdb5f1cf62e245466184026e7ed306bb0fb197b6f1bf"},"workerID":"base-researcher","matrix":{"active_profile":"base","projection_hash":"2b0709b3f33f7d770f38af6f51bd786bda0de40edbe30c53a2fd36a3837906f6"}}
+(pass) actual Task immutable scheduler worker and mount matrix retain original owner after later installed collision [3079.73ms]
+other mount {"kind":"error","name":"Error","message":"External expert squad package id \"research-studio\" collides with a built-in expert squad id."}
+(pass) matching pinned mount does not exempt another colliding builtin mount target [1139.80ms]
+cold model {"status":400,"body":{"name":"ProviderModelNotFoundError","data":{"providerID":"missing94","modelID":"model","suggestions":[]}}}
+cold collision {"status":400,"body":{"name":"ConfigCandidateValidationError","data":{"message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}}
+363 |     body: { name: "ProviderModelNotFoundError", data: { providerID: "missing94", modelID: "model" } },
+364 |   })
+365 |   await fs.writeFile(file, JSON.stringify(config))
+366 |   const rejected = await coldRequest(project.path)
+367 |   console.log("cold collision", JSON.stringify(rejected))
+368 |   expect(rejected).toMatchObject({
+                         ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "body": {
+      "data": {
+        "message": "External expert squad package id "base" collides with a built-in expert squad id.",
+      },
+      "name": "ConfigCandidateValidationError",
+    },
+-   "status": 500,
++   "status": 400,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts:368:20)
+(fail) cold actual config preserves model-first error and builtin collision candidate wrapper [3097.36ms]
+
+ 10 pass
+ 1 fail
+ 24 expect() calls
+Ran 11 tests across 1 file. [30.19s]
+[1/3] DONE test/expert-squad/builtin-collision-authority.test.ts exit=1 duration=31.19s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts
+[2/3] START test/server/http-exception-response.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) authored HTTP exception responses > projects the actual Basic Auth public response and challenge [6.31ms]
+(pass) authored HTTP exception responses > retains supplied entity and semantic headers with the canonical context identity [1.27ms]
+(pass) authored HTTP exception responses > projects the current message-authored 400 envelope [0.94ms]
+(pass) authored HTTP exception responses > projects the current message-authored 404 envelope [0.54ms]
+(pass) authored HTTP exception responses > projects the current message-authored 403 envelope [0.43ms]
+(pass) authored HTTP exception responses > projects the current message-authored 503 envelope [0.30ms]
+
+ 6 pass
+ 0 fail
+ 23 expect() calls
+Ran 6 tests across 1 file. [1281.00ms]
+[2/3] DONE test/server/http-exception-response.test.ts exit=0 duration=1.45s
+[3/3] START test/server/validation-error-projection.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) public validation error projection > projects the canonical OAuth expiry error with its response identity [7.83ms]
+(pass) public validation error projection > projects the canonical API metadata error with its response identity [1.32ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for root union [0.90ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for dynamic record key [0.49ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for strict object [0.83ms]
+(pass) public validation error projection > retains the explicit diagnostic contract for authored custom prose [0.66ms]
+(pass) public validation error projection > normalizes Standard Schema property-key locations and message-only errors [0.12ms]
+(pass) public validation error projection > passes transformed query, param and JSON values to the typed handler [3.32ms]
+(pass) public validation error projection > retains optional JSON inference and the parsed empty object [1.17ms]
+(pass) public validation error projection > uses the shared projection for query failures [1.36ms]
+(pass) public validation error projection > uses the shared projection for param failures [0.83ms]
+(pass) public validation error projection > retains the parser-authored malformed JSON response [5.08ms]
+(pass) public validation error projection > projects the canonical Global Chat attachment MIME location [2.73ms]
+(pass) public validation error projection > publishes the actual request metadata and explicit BadRequestError schema [42.02ms]
+
+ 14 pass
+ 0 fail
+ 20 expect() calls
+Ran 14 tests across 1 file. [2.34s]
+[3/3] DONE test/server/validation-error-projection.test.ts exit=0 duration=2.56s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\builtin-collision-authority.test.ts

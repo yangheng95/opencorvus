@@ -1,0 +1,149 @@
+{
+  "target": {
+    "pid": 67752,
+    "processInstanceID": "win32:639269576877941363",
+    "occurrenceID": "f51ef61f-17d1-4abd-9144-e200bf679508"
+  },
+  "requests": [
+    {
+      "status": 200,
+      "input": null,
+      "rawBody": "{\"id\":\"prj_h80YfNdNVWfVihywjDuY\",\"worktree\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\logger-envelope-before-95\\\\project\",\"sandboxes\":[],\"time\":{\"created\":1791361063237,\"updated\":1791361063237}}",
+      "method": "GET",
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\project"
+      },
+      "body": {
+        "id": "prj_h80YfNdNVWfVihywjDuY",
+        "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\project",
+        "sandboxes": [],
+        "time": {
+          "created": 1791361063237,
+          "updated": 1791361063237
+        }
+      },
+      "url": "http://127.0.0.1:18041/project/current?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clogger-envelope-before-95%5Cproject",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 08:17:43 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "5d8cdb2b-59f7-4d96-8861-f44a0041f1ce"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Content-Length": [
+          "221"
+        ]
+      }
+    },
+    {
+      "status": 201,
+      "input": {},
+      "rawBody": "{\"session\":{\"id\":\"ses_-zUSeFX4rzzek6a3LD10\",\"slug\":\"quick-panda\",\"version\":\"local\",\"projectID\":\"prj_h80YfNdNVWfVihywjDuY\",\"directory\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-07\\\\logger-envelope-before-95\\\\project\",\"title\":\"Chat\",\"kind\":\"assistant\",\"metadata\":{\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"}},\"time\":{\"created\":1791361063878,\"updated\":1791361063878}}}",
+      "method": "POST",
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\project"
+      },
+      "body": {
+        "session": {
+          "id": "ses_-zUSeFX4rzzek6a3LD10",
+          "slug": "quick-panda",
+          "version": "local",
+          "projectID": "prj_h80YfNdNVWfVihywjDuY",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\project",
+          "title": "Chat",
+          "kind": "assistant",
+          "metadata": {
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1791361063878,
+            "updated": 1791361063878
+          }
+        }
+      },
+      "url": "http://127.0.0.1:18041/coding/chat/session?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clogger-envelope-before-95%5Cproject",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 08:17:43 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "6ad0b1dd-bf6a-4d3d-bc3f-a2f40af9df64"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Content-Length": [
+          "407"
+        ]
+      }
+    },
+    {
+      "status": 200,
+      "input": {
+        "entries": [
+          {
+            "extra": {
+              "time": null,
+              "service": "subject-lifecycle",
+              "level": "info",
+              "sessionID": null,
+              "logDomain": "subject-lifecycle",
+              "observed": "actual Chat lifecycle"
+            },
+            "service": "logger-envelope95-observation",
+            "message": "Logger subject chronology95",
+            "level": "warn"
+          }
+        ]
+      },
+      "rawBody": "true",
+      "method": "POST",
+      "requestHeaders": {
+        "x-opencorvus-directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\project"
+      },
+      "body": true,
+      "url": "http://127.0.0.1:18041/log?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-07%5Clogger-envelope-before-95%5Cproject",
+      "headers": {
+        "Date": [
+          "Wed, 07 Oct 2026 08:17:43 GMT"
+        ],
+        "Access-Control-Expose-Headers": [
+          "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+        ],
+        "x-opencorvus-request-id": [
+          "01d08ddb-1539-4ae4-9818-576f4ce7f00f"
+        ],
+        "Content-Type": [
+          "application/json"
+        ],
+        "Vary": [
+          "Origin"
+        ],
+        "Content-Length": [
+          "4"
+        ]
+      }
+    }
+  ],
+  "observedAtUtc": "2026-10-07T08:17:43.9262079Z",
+  "qualifier": "Actual canonical Chat creation and public diagnostic input; no model prompt or copied authority",
+  "occurrence": "logger-envelope-95-before-2181a302-b59e-43f6-9f3e-3081d8a4cb1c"
+}

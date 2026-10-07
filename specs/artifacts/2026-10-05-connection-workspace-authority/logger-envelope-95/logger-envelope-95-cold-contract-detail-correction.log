@@ -1,0 +1,18 @@
+[1/1] START script/skill-mount-cold-start-contract.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) ordinary and fixture are explicit distinct inputs [0.58ms]
+(pass) ordinary unconnected input supplies the empty configuration object [0.04ms]
+(pass) invalid input reports the precise admission contract [1.44ms]
+(pass) timeout, caller cancellation and original typed errors remain distinct [0.24ms]
+(pass) exact response identity and sole serial admission correlate observations [0.37ms]
+(pass) safe complete-source counts preserve all supplied categories and role grants [0.32ms]
+(pass) late HTTP200 remains an exact backend receipt beside a client timeout [0.18ms]
+(pass) public fresh nonGit Project establishes its exact configuration boundary [0.33ms]
+(pass) source admission classifies builtin, owned filesystem and exact package resource [0.77ms]
+
+ 9 pass
+ 0 fail
+Ran 9 tests across 1 file. [1464.00ms]
+[1/1] DONE script/skill-mount-cold-start-contract.test.ts exit=0 duration=2.33s

@@ -1,0 +1,9 @@
+# Restart diagnostic subject correction
+
+Root final source review found an actual missed subject property in script/server-restart-e2e.ts:270. The original production warning at server/routes/app.ts:276–277 logs extra reason/detail, and current95 nests these under data. Corrected only record.refusalWarning.detail to record.refusalWarning.data.detail. The original pre-correction source, exact one-line delta, initial backend-final.diff/32-case checks and freeze report remain preserved, not overwritten.
+
+Read every parsed-Pino Row/value/errorReceipt access in the three migrated scripts. Restart now uses envelope level/service/message and data.reason/detail. HTTP exception checker uses envelope service/message and data.requestID/method/path/statusCode. Cold checker uses data for request/phase/provision/HTTP/disposition/span fields, including starts[0] and cancellation candidate indices. Remaining row.service/message/time are canonical envelope; matrix grant rows, observation/status, actual HTTP response bodies/receipt metadata and terminal physical facts are independent domain objects and were not rewritten. No other flat-Pino subject access was found in this exact follow-up audit.
+
+Canonical pure cold-start contract replay passed9 cases and fileexit0 in2.33s. Explicit logger-envelope-95-types.json whole backend source plus all touched tests and all three scripts exited0 after the correction. Raw logs/config remain in .tmp and are copied here. No new native/Provider/UI/service operation or Git mutation occurred.
+
+The original32 cases qualify focused backend/data/log/consumer fixtures, not the three standalone full physical scripts. Types do not catch an any-typed wrong property; the missed detail is a real source checker error despite previous types0 and is now fixed. Actual denied restart/error log native acceptance remains Root-owned and pending separate admission. Source refrozen after this exact correction.

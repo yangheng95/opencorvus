@@ -1,0 +1,25 @@
+# 96 frozen baseline
+
+Recall: test-only Root cold-config-error-mapping-plan-96. Only new test/server/config-candidate-status.test.ts and this evidence; no source/other tests/Provider/UI/service or delegation.
+
+Exact command from packages/opencorvus: bun run script/run-tests.ts test/server/config-candidate-status.test.ts. First baseline exit1 1pass4fail10assert retained baseline-first.log/test snapshot. One preparation assertion guessed VCS branch/main and minimal DTO; corrected to actual hostGit branch output and current VCS public positive fields. Shared matrix originally looped in one test so candidate first failure prevented remaining rows; now six independent cases, all genuine Hono/serverErrorResponse with canonical Named constructors. No mock/stub.
+
+Qualified baseline exit1 7pass3fail26assert. Two independent cold actual outsideInstance /vcs cases (builtin collision and lawful Manager-installed external profile plus nonactive colliding builtin mount) returned named candidate500 versus desired400. Local shared Hono candidate row also500 versus400. Genuine cold unavailable model400 and lawful runtime200 pass; independent shared Model400/Auth503/Database503/OwnedPrompt409/plainUnknown500 requestID/body pass. Full actual cold config/project/path/headers/body, actual SDK definition/Manager receipt/discovery and matrix packets captured before assertions in baseline-qualified.log and its one valid array baseline-actual-facts.json. No genuine malformedAuth reader integration executed; constructor matrix cannot qualify nested catch provenance. No nativeTCP/UI/restart claim.
+
+Final own test only formatted with installed Prettier after qualified run; baseline-qualified-test.ts is semantic-identical final snapshot. Original first output retained. Source remains Root-held until95 closure/review; candidate400 expectation unchanged,94 old500 test untouched. Ready exact sole named mapper patch then original rerun. Broad validator-catch infrastructure reachability remains unknown/unrepaired.
+
+## Root-source final after
+
+After Root's exact shared mapper entry and95 physical preimage closure, identical frozen96 checker exit0:10pass/28assert. Full actual output after-first.log and matching extracted after-actual-facts.json preserve real cold statuses/packets/headers/Project/config/discovery/Manager publication. No log-field assertions.
+
+Admitted94 current contract changed only cold status500→400 (94-before.ts/94-after.ts), preserving original historical evidence. First PowerShell exact replacement failed to match LF source while using platform CRLF: affected-first.log retained actual old assertion failure10pass1fail/24assert; other HTTP6/23 and validation14/20 passed. After joining that complete runner, exact one-line patch applied. Same three-file runner affected-final.log exit0:94file11/24, HTTP6/23, validation14/20. Combined final96+affected checks:41cases95assertions. No other old test changed.
+
+Configured backend and explicit full backend+new96+affected94 types both exit0 (configured-types.log / explicit-types-first.log, input archived explicit-types.json). Exact compiler commands use node --max-old-space-size=8192 packages/opencorvus/node_modules/typescript/bin/tsc --noEmit -p packages/opencorvus/tsconfig.json and -p .tmp-product-iteration/cold-config-status-96/explicit-types.json. Compiler was concurrent with the numeric-only expectation change; both literal states are type-identical. No extra source/test adaptation was required.
+
+Final source/test frozen. Genuine cold local Hono runtime qualified, constructor matrix is not genuine nested reader acceptance. Broad nested Auth/I/O wrapping remains unknown/unrepaired; TCP/UI/Provider/restart/interprocess matrices unqualified. Root owns shared source/docs/index/Git review and delivery.
+
+## Canonical VCS declaration extension
+
+Read Root final declaration admission and actual generated packages/sdk/openapi.json before authoring expected data. Preserved previous passing test as test-before-openapi.ts. Added one nonUI Server.openapi data case: actual VCS400 anyOf refs point to the sole canonical Candidate/Model named components, exact name/data schema shapes, and each real constructor packet parses through its formal Schema. Runtime/bootstrap packet cases unchanged. No SDK/source changes by child.
+
+Same isolated runner new96+current94: metadata-after-first.log exit0,96file11pass33assert/94file11pass24assert (22/57). Together with previously unchanged HTTP6/23 and validation14/20, bounded final suite totals42cases100assertions. Matching actual Server.openapi/cold/shared packets extracted into metadata-actual-facts.json; exact final test metadata-final-test.ts. Configured and explicit fullsrc/new96/94 types both0 (metadata-configured-types.log/metadata-explicit-types.log), same commands/input as preceding section. No new failure in this extension. Root canonical generation/review/docs owned separately; generated snapshots do not claim exhaustive route metadata or genuine nested reader/Provider/native acceptance. Broad swallowed reader provenance remains unknown/unrepaired.

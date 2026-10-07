@@ -1,0 +1,25 @@
+{
+  "files": [
+    "../packages/opencorvus/src/sql.d.ts"
+  ],
+  "extends": "D:/myhexin-local/opencorvus/packages/opencorvus/tsconfig.json",
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/log-envelope.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/log-lifecycle.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/skill-read-diagnostics.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/session-directory-filter.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/mcp/local-process-diagnostics.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/server/cors-response-headers.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/skill-mount-cold-start-contract.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/skill-mount-cold-start-check.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/http-exception-response-real.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/server-restart-e2e.ts"
+  ],
+  "exclude": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/skill/builtin/**/*"
+  ],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

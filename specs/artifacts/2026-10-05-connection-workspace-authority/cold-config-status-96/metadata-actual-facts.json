@@ -1,0 +1,665 @@
+[
+  {
+    "kind": "candidate96 openapi",
+    "fact": {
+      "response": {
+        "description": "Runtime configuration candidate or model rejected",
+        "content": {
+          "application/json": {
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ConfigCandidateValidationError"
+                },
+                {
+                  "$ref": "#/components/schemas/ProviderModelNotFoundError"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "candidate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "const": "ConfigCandidateValidationError"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ]
+      },
+      "model": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "const": "ProviderModelNotFoundError"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "providerID": {
+                "type": "string"
+              },
+              "modelID": {
+                "type": "string"
+              },
+              "suggestions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "providerID",
+              "modelID"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ]
+      }
+    }
+  },
+  {
+    "kind": "candidate96 collision",
+    "fact": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-VMgDLq\\.opencorvus\\expert-squads\\collision96\\base",
+      "discovery": {
+        "items": [],
+        "issues": [
+          {
+            "phase": "package.identity",
+            "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-VMgDLq\\.opencorvus\\expert-squads\\collision96\\base\\expert-squad.jsonc",
+            "namespace": "collision96",
+            "id": "base",
+            "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+          }
+        ],
+        "installations": [],
+        "warnings": []
+      }
+    }
+  },
+  {
+    "kind": "candidate96 cold",
+    "fact": {
+      "project": {
+        "id": "prj_hj7mVPrgiC0XdykBYD9J",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-VMgDLq",
+        "sandboxes": [],
+        "time": {
+          "created": 1791363345878,
+          "updated": 1791363345878
+        }
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-VMgDLq",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-VMgDLq\\.opencorvus\\opencorvus.jsonc",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "result": {
+        "status": 400,
+        "headers": {
+          "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+          "content-type": "application/json",
+          "vary": "Origin",
+          "x-opencorvus-request-id": "29247422-b06b-4377-aecf-c2e986ea18ae"
+        },
+        "body": {
+          "name": "ConfigCandidateValidationError",
+          "data": {
+            "message": "External expert squad package id \"base\" collides with a built-in expert squad id."
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 installed",
+    "fact": {
+      "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\source",
+      "definition": {
+        "manifest": {
+          "schema_version": 2,
+          "namespace": "candidate96",
+          "id": "mount-active96",
+          "label": "Mount active",
+          "description": "Owned mount contract",
+          "version": "2026.10.07.1",
+          "product_pillars": [
+            "code"
+          ],
+          "readme": "README.md",
+          "selector": {
+            "summary": "Owned mount",
+            "selection_guidance": "Inspect mount",
+            "instructions": "selector.md"
+          },
+          "capability_sets": {},
+          "capability_projection": {
+            "scheduler": {
+              "base_role": "orchestrator",
+              "capability_refs": []
+            },
+            "agents": {},
+            "virtual_workflows": {}
+          }
+        },
+        "files": {
+          "README.md": "# Mount active\n",
+          "selector.md": "# Mount\n"
+        }
+      },
+      "receipt": {
+        "operation": "installed",
+        "before": null,
+        "after": {
+          "installationScope": "project",
+          "projectDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41",
+          "namespace": "candidate96",
+          "id": "mount-active96",
+          "version": "2026.10.07.1",
+          "packageDigest": "d38145b2f00da936ec3a805b001d63fa9109e61cac651ffddca76867eb494067",
+          "targetRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96"
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 collision",
+    "fact": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\collision96\\base",
+      "discovery": {
+        "items": [
+          {
+            "id": "mount-active96",
+            "namespace": "candidate96",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96",
+            "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\expert-squad.jsonc",
+            "readmePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\README.md",
+            "name": "Mount active",
+            "label": "Mount active",
+            "description": "Owned mount contract",
+            "version": "2026.10.07.1",
+            "manifest": {
+              "schema_version": 2,
+              "namespace": "candidate96",
+              "id": "mount-active96",
+              "label": "Mount active",
+              "description": "Owned mount contract",
+              "version": "2026.10.07.1",
+              "product_pillars": [
+                "code"
+              ],
+              "readme": "README.md",
+              "selector": {
+                "summary": "Owned mount",
+                "selection_guidance": "Inspect mount",
+                "instructions": "selector.md"
+              },
+              "capability_sets": {},
+              "capability_projection": {
+                "scheduler": {
+                  "capability_refs": [],
+                  "base_role": "orchestrator"
+                },
+                "agents": {},
+                "virtual_workflows": {}
+              }
+            },
+            "selector": {
+              "ref": "selector/mount-active96",
+              "id": "mount-active96",
+              "label": "Mount active",
+              "description": "Owned mount contract",
+              "summary": "Owned mount",
+              "selection_guidance": "Inspect mount"
+            },
+            "installationScope": "project"
+          }
+        ],
+        "issues": [
+          {
+            "phase": "package.identity",
+            "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\collision96\\base\\expert-squad.jsonc",
+            "namespace": "collision96",
+            "id": "base",
+            "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+          }
+        ],
+        "installations": [
+          {
+            "id": "mount-active96",
+            "namespace": "candidate96",
+            "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96",
+            "manifestPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\expert-squad.jsonc",
+            "readmePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\README.md",
+            "name": "Mount active",
+            "label": "Mount active",
+            "description": "Owned mount contract",
+            "version": "2026.10.07.1",
+            "manifest": {
+              "schema_version": 2,
+              "namespace": "candidate96",
+              "id": "mount-active96",
+              "label": "Mount active",
+              "description": "Owned mount contract",
+              "version": "2026.10.07.1",
+              "product_pillars": [
+                "code"
+              ],
+              "readme": "README.md",
+              "selector": {
+                "summary": "Owned mount",
+                "selection_guidance": "Inspect mount",
+                "instructions": "selector.md"
+              },
+              "capability_sets": {},
+              "capability_projection": {
+                "scheduler": {
+                  "capability_refs": [],
+                  "base_role": "orchestrator"
+                },
+                "agents": {},
+                "virtual_workflows": {}
+              }
+            },
+            "selector": {
+              "ref": "selector/mount-active96",
+              "id": "mount-active96",
+              "label": "Mount active",
+              "description": "Owned mount contract",
+              "summary": "Owned mount",
+              "selection_guidance": "Inspect mount"
+            },
+            "installationScope": "project"
+          }
+        ],
+        "warnings": []
+      }
+    }
+  },
+  {
+    "kind": "candidate96 cold",
+    "fact": {
+      "project": {
+        "id": "prj_hYIbVPNrl7h2IBWg6FKz",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41",
+        "sandboxes": [],
+        "time": {
+          "created": 1791363348818,
+          "updated": 1791363348818
+        }
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-AIwH41\\.opencorvus\\opencorvus.jsonc",
+      "config": {
+        "prompt_profile": {
+          "active": "mount-active96"
+        },
+        "permission_mode": "full_access",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        },
+        "skill_mounts": {
+          "base": {
+            "orchestrator": {}
+          }
+        }
+      },
+      "result": {
+        "status": 400,
+        "headers": {
+          "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+          "content-type": "application/json",
+          "vary": "Origin",
+          "x-opencorvus-request-id": "975acf55-f195-4a03-a671-d05cb3724296"
+        },
+        "body": {
+          "name": "ConfigCandidateValidationError",
+          "data": {
+            "message": "External expert squad package id \"base\" collides with a built-in expert squad id."
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 collision",
+    "fact": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-lsATSI\\.opencorvus\\expert-squads\\collision96\\base",
+      "discovery": {
+        "items": [],
+        "issues": [
+          {
+            "phase": "package.identity",
+            "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-lsATSI\\.opencorvus\\expert-squads\\collision96\\base\\expert-squad.jsonc",
+            "namespace": "collision96",
+            "id": "base",
+            "message": "[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+          }
+        ],
+        "installations": [],
+        "warnings": []
+      }
+    }
+  },
+  {
+    "kind": "candidate96 cold",
+    "fact": {
+      "project": {
+        "id": "prj_hPJEWK9ioDc2IxyXLXNH",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-lsATSI",
+        "sandboxes": [],
+        "time": {
+          "created": 1791363351853,
+          "updated": 1791363351853
+        }
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-lsATSI",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-lsATSI\\.opencorvus\\opencorvus.jsonc",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        },
+        "model": "missing96/model"
+      },
+      "result": {
+        "status": 400,
+        "headers": {
+          "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+          "content-type": "application/json",
+          "vary": "Origin",
+          "x-opencorvus-request-id": "f3acc333-e142-4661-85dd-8d57a4f49aa1"
+        },
+        "body": {
+          "name": "ProviderModelNotFoundError",
+          "data": {
+            "providerID": "missing96",
+            "modelID": "model",
+            "suggestions": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 cold",
+    "fact": {
+      "project": {
+        "id": "prj_hZrLJ29PVLRdV4asTuqs",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-jmRYib",
+        "sandboxes": [],
+        "time": {
+          "created": 1791363355188,
+          "updated": 1791363355188
+        }
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-jmRYib",
+      "file": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-CA7Bwg\\test-29752-tDBapw\\fixtures\\memory-jmRYib\\.opencorvus\\opencorvus.jsonc",
+      "config": {
+        "prompt_profile": {
+          "active": "base"
+        },
+        "permission_mode": "full_access",
+        "agent": {},
+        "plugin": [],
+        "experimental": {
+          "auto_question": true
+        },
+        "command": {},
+        "username": "hengu",
+        "mcp": {
+          "browser": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "mcp",
+              "browser"
+            ],
+            "timeout": 30000
+          },
+          "computer": {
+            "type": "local",
+            "command": [
+              "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+              "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"
+            ],
+            "timeout": 30000
+          }
+        }
+      },
+      "result": {
+        "status": 200,
+        "headers": {
+          "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+          "content-type": "application/json",
+          "vary": "Origin",
+          "x-opencorvus-request-id": "3728e72f-6cc4-40c4-a042-8ceb507ddbe0"
+        },
+        "body": {
+          "initialized": true,
+          "branch": "master",
+          "commit": "1f9774c",
+          "clean": false,
+          "dirty": true,
+          "staged": 0,
+          "modified": 0,
+          "untracked": 3,
+          "conflicts": 0,
+          "ahead": 0,
+          "behind": 0,
+          "hasRemote": false
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 shared",
+    "fact": {
+      "index": 0,
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "8fce86bb-3e28-4386-adfa-4ce4755af0f8"
+      },
+      "body": {
+        "name": "ConfigCandidateValidationError",
+        "data": {
+          "message": "Invalid owned candidate"
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 shared",
+    "fact": {
+      "index": 1,
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "3bb601f5-c8b9-42bf-8e5b-45e37e63c9f4"
+      },
+      "body": {
+        "name": "ProviderModelNotFoundError",
+        "data": {
+          "providerID": "missing96",
+          "modelID": "model",
+          "suggestions": []
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 shared",
+    "fact": {
+      "index": 2,
+      "status": 503,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "f82c7e8c-150a-4335-b206-4cd946789790"
+      },
+      "body": {
+        "name": "AuthReadError",
+        "data": {
+          "operation": "read_saved_credentials",
+          "reason": "malformed_json",
+          "message": "Owned malformed saved credentials"
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 shared",
+    "fact": {
+      "index": 3,
+      "status": 503,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "e49fa728-a5e0-4cb1-945e-ce5466ddc8f8"
+      },
+      "body": {
+        "name": "DatabaseUnavailableError",
+        "data": {
+          "message": "Owned unavailable database",
+          "path": "/owned96/database",
+          "operation": "read",
+          "code": "SQLITE_CANTOPEN"
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 shared",
+    "fact": {
+      "index": 4,
+      "status": 409,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "b9c81a40-fead-46b9-9a3b-15f8b0c2aa67"
+      },
+      "body": {
+        "name": "OwnedPromptControllersError",
+        "data": {
+          "message": "Owned prompt controllers remain",
+          "operation": "owned96"
+        }
+      }
+    }
+  },
+  {
+    "kind": "candidate96 shared",
+    "fact": {
+      "index": 5,
+      "status": 500,
+      "headers": {
+        "content-type": "application/json",
+        "x-opencorvus-request-id": "087889a8-1079-4f2d-8094-8b0e38b762a8"
+      },
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    }
+  }
+]

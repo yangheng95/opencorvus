@@ -1,0 +1,161 @@
+[1/1] START test/log-envelope.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+LOGGER_ENVELOPE_95 {"caseID":"conflicts","inputs":{"tags":{"service":"envelope95","time":"tag-time","level":"tag-level","message":"tag-message","sessionID":"caller-session"},"extra":{"time":{"created":31,"updated":37},"level":"subject-level","message":"subject-message","service":"subject-service","sessionID":"request-session","logDomain":"subject-domain","value":7}},"raw":"{\"level\":\"info\",\"time\":\"2026-10-07T07:58:22.213Z\",\"service\":\"envelope95\",\"time\":\"tag-time\",\"message\":\"tag-message\",\"sessionID\":\"caller-session\",\"actor\":\"request-actor\",\"time\":{\"created\":31,\"updated\":37},\"level\":\"subject-level\",\"message\":\"subject-message\",\"service\":\"subject-service\",\"sessionID\":\"request-session\",\"logDomain\":\"non-session\",\"value\":7,\"message\":\"envelope95-conflicts\"}\n","records":[{"level":"subject-level","time":{"created":31,"updated":37},"service":"subject-service","message":"envelope95-conflicts","sessionID":"request-session","actor":"request-actor","logDomain":"non-session","value":7}]}
+52 |     logDomain: "subject-domain",
+53 |     value: 7,
+54 |   }
+55 |   Log.create(tags).clone().tag("actor", "request-actor").info("envelope95-conflicts", extra)
+56 |   const { records } = await capture("conflicts", { tags, extra })
+57 |   expect(requiredRecord(records, "envelope95-conflicts")).toMatchObject({
+                                                               ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "data": {
+-     "actor": "request-actor",
+-     "level": "subject-level",
+-     "logDomain": "subject-domain",
+-     "message": "subject-message",
+-     "service": "subject-service",
+-     "sessionID": "request-session",
+-     "time": {
+-       "created": 31,
+-       "updated": 37,
+-     },
+-     "value": 7,
+-   },
+-   "level": "info",
++   "actor": "request-actor",
++   "level": "subject-level",
+    "logDomain": "non-session",
+    "message": "envelope95-conflicts",
+-   "service": "envelope95",
+-   "time": StringMatching /^\d{4}-\d{2}-\d{2}T.*Z$/,
++   "service": "subject-service",
++   "sessionID": "request-session",
++   "time": {
++     "created": 31,
++     "updated": 37,
++   },
++   "value": 7,
+  }
+
+- Expected  - 16
++ Received  + 9
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\log-envelope.test.ts:57:59)
+{"level":"info","time":"2026-10-07T07:58:22.241Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(fail) canonical event envelope retains conflicting caller tags and fields as subject data [127.00ms]
+LOGGER_ENVELOPE_95 {"caseID":"session-context","inputs":{"session":{"id":"ses_-zUSeKOWzzzuGIuNoCHI","slug":"sunny-panda","version":"local","projectID":"prj_hDbG71LLz4KauPAjTwWO","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-yMYtoQ\\test-71576-ZHfWWz\\fixtures\\memory-B1rMh2","title":"Logger envelope context","kind":"assistant","time":{"created":1791359905090,"updated":1791359905090}},"caller":{"id":"ses_-zUSeKOWczzWzqc65kmI","slug":"neon-meadow","version":"local","projectID":"prj_hDbG71LLz4KauPAjTwWO","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-yMYtoQ\\test-71576-ZHfWWz\\fixtures\\memory-B1rMh2","title":"Logger caller identity","kind":"assistant","time":{"created":1791359905113,"updated":1791359905113}},"persisted":{"id":"ses_-zUSeKOWzzzuGIuNoCHI","slug":"sunny-panda","projectID":"prj_hDbG71LLz4KauPAjTwWO","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-yMYtoQ\\test-71576-ZHfWWz\\fixtures\\memory-B1rMh2","title":"Logger envelope context","version":"local","kind":"assistant","time":{"created":1791359905090,"updated":1791359905090}}},"raw":"{\"level\":\"info\",\"time\":\"2026-10-07T07:58:25.176Z\",\"service\":\"envelope95-context\",\"sessionID\":\"ses_-zUSeKOWczzWzqc65kmI\",\"value\":17,\"logDomain\":\"session\",\"sessionID\":\"ses_-zUSeKOWzzzuGIuNoCHI\",\"message\":\"envelope95-reinitialized\"}\n","records":[{"level":"info","time":"2026-10-07T07:58:25.176Z","service":"envelope95-context","sessionID":"ses_-zUSeKOWzzzuGIuNoCHI","value":17,"logDomain":"session","message":"envelope95-reinitialized"}]}
+93 |       // Observe all actual records before asserting, including baseline's flat Session subject.
+94 |       expect({ persistedID: persisted.id, persistedTime: persisted.time }).toEqual({
+95 |         persistedID: session.id,
+96 |         persistedTime: session.time,
+97 |       })
+98 |       expect(created).toMatchObject({
+                           ^
+error: expect(received).toMatchObject(expected)
+
+Matcher error: received value must be a non-null object
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\log-envelope.test.ts:98:23)
+{"level":"info","time":"2026-10-07T07:58:25.228Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(fail) actual Session subjects and buffered contexts keep distinct ambient and caller identity [3008.59ms]
+LOGGER_ENVELOPE_95 {"caseID":"timer-export","inputs":{"operation":"actual-timer","errorMessage":"Actual serialization error","providerDiagnostic":{"statusCode":429,"responseHeaders":{"set-cookie":"<redacted>","retry-after":"2"}}},"raw":"{\"level\":\"info\",\"time\":\"2026-10-07T07:58:25.268Z\",\"service\":\"envelope95-export\",\"status\":\"started\",\"operation\":\"actual-timer\",\"logDomain\":\"non-session\",\"message\":\"envelope95-timer\"}\n{\"level\":\"info\",\"time\":\"2026-10-07T07:58:25.268Z\",\"service\":\"envelope95-export\",\"status\":\"completed\",\"duration\":1,\"operation\":\"actual-timer\",\"logDomain\":\"non-session\",\"message\":\"envelope95-timer\"}\n{\"level\":\"error\",\"time\":\"2026-10-07T07:58:25.269Z\",\"service\":\"envelope95-export\",\"error\":{\"type\":\"Error\",\"message\":\"Actual serialization error\",\"stack\":\"Error: Actual serialization error\\n    at <anonymous> (D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\test\\\\log-envelope.test.ts:129:16)\\n    at processTicksAndRejections (native:7:39)\"},\"cause\":{\"type\":\"AI_APICallError\",\"message\":\"Local fixture response\",\"stack\":\"AI_APICallError: Local fixture response\\n    at <anonymous> (D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\test\\\\log-envelope.test.ts:130:16)\\n    at processTicksAndRejections (native:7:39)\",\"statusCode\":429,\"isRetryable\":false,\"responseHeaders\":{\"set-cookie\":\"<redacted>\",\"retry-after\":\"2\"},\"responseBody\":\"{\\\"error\\\":{\\\"message\\\":\\\"Local fixture response\\\"}}\",\"url\":\"https://example.invalid/fixture\"},\"time\":{\"created\":41,\"updated\":43},\"logDomain\":\"non-session\",\"message\":\"envelope95-error\"}\n","records":[{"level":"info","time":"2026-10-07T07:58:25.268Z","service":"envelope95-export","status":"started","operation":"actual-timer","logDomain":"non-session","message":"envelope95-timer"},{"level":"info","time":"2026-10-07T07:58:25.268Z","service":"envelope95-export","status":"completed","duration":1,"operation":"actual-timer","logDomain":"non-session","message":"envelope95-timer"},{"level":"error","time":{"created":41,"updated":43},"service":"envelope95-export","error":{"type":"Error","message":"Actual serialization error","stack":"Error: Actual serialization error\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\log-envelope.test.ts:129:16)\n    at processTicksAndRejections (native:7:39)"},"cause":{"type":"AI_APICallError","message":"Local fixture response","stack":"AI_APICallError: Local fixture response\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\test\\log-envelope.test.ts:130:16)\n    at processTicksAndRejections (native:7:39)","statusCode":429,"isRetryable":false,"responseHeaders":{"set-cookie":"<redacted>","retry-after":"2"},"responseBody":"{\"error\":{\"message\":\"Local fixture response\"}}","url":"https://example.invalid/fixture"},"logDomain":"non-session","message":"envelope95-error"}]}
+LOGGER_ENVELOPE_95_EXPORT {"current":{"name":"dev.log","current":true,"size":1304,"modified":"2026-10-07T07:58:25.269Z","lineCount":3,"parsedLineCount":3,"unparsedLineCount":0,"levelCounts":{"INFO":2,"ERROR":1},"services":["envelope95-export"],"firstTimestamp":"2026-10-07T07:58:25.268Z","lastTimestamp":"2026-10-07T07:58:25.268Z","rawPath":"logs/raw/dev.log","formattedPath":"logs/formatted/dev.log"},"exportedRaw":"{\"level\":\"info\",\"time\":\"2026-10-07T07:58:25.268Z\",\"service\":\"envelope95-export\",\"status\":\"started\",\"operation\":\"actual-timer\",\"logDomain\":\"non-session\",\"message\":\"envelope95-timer\"}\n{\"level\":\"info\",\"time\":\"2026-10-07T07:58:25.268Z\",\"service\":\"envelope95-export\",\"status\":\"completed\",\"duration\":1,\"operation\":\"actual-timer\",\"logDomain\":\"non-session\",\"message\":\"envelope95-timer\"}\n{\"level\":\"error\",\"time\":\"2026-10-07T07:58:25.269Z\",\"service\":\"envelope95-export\",\"error\":{\"type\":\"Error\",\"message\":\"Actual serialization error\",\"stack\":\"Error: Actual serialization error\\n    at <anonymous> (D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\test\\\\log-envelope.test.ts:129:16)\\n    at processTicksAndRejections (native:7:39)\"},\"cause\":{\"type\":\"AI_APICallError\",\"message\":\"Local fixture response\",\"stack\":\"AI_APICallError: Local fixture response\\n    at <anonymous> (D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\test\\\\log-envelope.test.ts:130:16)\\n    at processTicksAndRejections (native:7:39)\",\"statusCode\":429,\"isRetryable\":false,\"responseHeaders\":{\"set-cookie\":\"<redacted>\",\"retry-after\":\"2\"},\"responseBody\":\"{\\\"error\\\":{\\\"message\\\":\\\"Local fixture response\\\"}}\",\"url\":\"https://example.invalid/fixture\"},\"time\":{\"created\":41,\"updated\":43},\"logDomain\":\"non-session\",\"message\":\"envelope95-error\"}\n","formatted":"[2026-10-07T07:58:25.268Z] INFO  [envelope95-export] envelope95-timer\n  {\n    \"logDomain\": \"non-session\",\n    \"operation\": \"actual-timer\",\n    \"status\": \"started\"\n  }\n\n[2026-10-07T07:58:25.268Z] INFO  [envelope95-export] envelope95-timer\n  {\n    \"duration\": 1,\n    \"logDomain\": \"non-session\",\n    \"operation\": \"actual-timer\",\n    \"status\": \"completed\"\n  }\n\n[timestamp-unavailable] ERROR [envelope95-export] envelope95-error\n  {\n    \"cause\": {\n      \"type\": \"AI_APICallError\",\n      \"message\": \"Local fixture response\",\n      \"stack\": \"AI_APICallError: Local fixture response\\n    at <anonymous> (D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\test\\\\log-envelope.test.ts:130:16)\\n    at processTicksAndRejections (native:7:39)\",\n      \"statusCode\": 429,\n      \"isRetryable\": false,\n      \"responseHeaders\": {\n        \"set-cookie\": \"<redacted>\",\n        \"retry-after\": \"2\"\n      },\n      \"responseBody\": \"{\\\"error\\\":{\\\"message\\\":\\\"Local fixture response\\\"}}\",\n      \"url\": \"https://example.invalid/fixture\"\n    },\n    \"error\": {\n      \"type\": \"Error\",\n      \"message\": \"Actual serialization error\",\n      \"stack\": \"Error: Actual serialization error\\n    at <anonymous> (D:\\\\myhexin-local\\\\opencorvus\\\\packages\\\\opencorvus\\\\test\\\\log-envelope.test.ts:129:16)\\n    at processTicksAndRejections (native:7:39)\"\n    },\n    \"logDomain\": \"non-session\"\n  }\n"}
+158 |   } finally {
+159 |     await zip.close()
+160 |   }
+161 |   console.log("LOGGER_ENVELOPE_95_EXPORT", JSON.stringify({ current, exportedRaw, formatted }))
+162 |   expect(exportedRaw).toBe(observed.raw)
+163 |   expect(observed.records.filter((entry) => entry.message === "envelope95-timer")).toMatchObject([
+                                                                                         ^
+error: expect(received).toMatchObject(expected)
+
+  [
+    {
+-     "data": {
+-       "operation": "actual-timer",
+-       "status": "started",
+-     },
++     "level": "info",
++     "logDomain": "non-session",
++     "message": "envelope95-timer",
++     "operation": "actual-timer",
++     "service": "envelope95-export",
++     "status": "started",
++     "time": "2026-10-07T07:58:25.268Z",
+    },
+    {
+-     "data": {
+-       "duration": Any<Number>,
+-       "operation": "actual-timer",
+-       "status": "completed",
+-     },
++     "duration": 1,
++     "level": "info",
++     "logDomain": "non-session",
++     "message": "envelope95-timer",
++     "operation": "actual-timer",
++     "service": "envelope95-export",
++     "status": "completed",
++     "time": "2026-10-07T07:58:25.268Z",
+    },
+  ]
+
+- Expected  - 9
++ Received  + 15
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\log-envelope.test.ts:163:84)
+{"level":"info","time":"2026-10-07T07:58:25.478Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(fail) real timers, serializers and support ZIP retain canonical chronology and redacted data [217.94ms]
+LOGGER_ENVELOPE_95 {"caseID":"public-ingress","inputs":{"input":{"entries":[{"service":"envelope95-ingress","level":"warn","message":"envelope95-public","extra":{"time":{"created":47},"service":"subject-ingress","sessionID":"request-ingress","status":"accepted"}}]},"response":{"status":200,"body":true}},"raw":"{\"level\":\"warn\",\"time\":\"2026-10-07T07:58:27.045Z\",\"service\":\"envelope95-ingress\",\"time\":{\"created\":47},\"service\":\"subject-ingress\",\"sessionID\":\"request-ingress\",\"status\":\"accepted\",\"logDomain\":\"non-session\",\"message\":\"envelope95-public\"}\n","records":[{"level":"warn","time":{"created":47},"service":"subject-ingress","sessionID":"request-ingress","status":"accepted","logDomain":"non-session","message":"envelope95-public"}]}
+199 |     body: JSON.stringify(input),
+200 |   })
+201 |   const body: unknown = await response.json()
+202 |   const { records } = await capture("public-ingress", { input, response: { status: response.status, body } })
+203 |   expect({ status: response.status, body }).toEqual({ status: 200, body: true })
+204 |   expect(requiredRecord(records, "envelope95-public")).toMatchObject({
+                                                             ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "data": {
+-     "service": "subject-ingress",
+-     "sessionID": "request-ingress",
+-     "status": "accepted",
+-     "time": {
+-       "created": 47,
+-     },
+-   },
+    "level": "warn",
+    "logDomain": "non-session",
+-   "service": "envelope95-ingress",
+-   "time": Any<String>,
++   "message": "envelope95-public",
++   "service": "subject-ingress",
++   "sessionID": "request-ingress",
++   "status": "accepted",
++   "time": {
++     "created": 47,
++   },
+  }
+
+- Expected  - 10
++ Received  + 7
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\log-envelope.test.ts:204:56)
+{"level":"info","time":"2026-10-07T07:58:27.083Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+(fail) public log ingress retains its real accepted result and canonical subject envelope [1608.57ms]
+{"level":"info","time":"2026-10-07T07:58:27.090Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+
+ 0 pass
+ 4 fail
+ 7 expect() calls
+Ran 4 tests across 1 file. [8.58s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\log-envelope.test.ts
+[1/1] DONE test/log-envelope.test.ts exit=1 duration=10.04s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\log-envelope.test.ts

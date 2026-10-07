@@ -1,0 +1,29 @@
+Browser tab: 241798778, Title: "OpenCorvus", URL: "http://localhost:18042/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 132-133
++					149 container
++						150 button (expanded) 详情, Secondary Actions: Collapse
++							151 text 详情
++						152 text 结构化字段 {
+  "logDomain": "non-session",
+  "data": {
+    "id": "ses_-zUSe1sXFzzvvi1qoSpw",
+    "slug": "lucky-tiger",
+    "version": "local",
+    "projectID": "prj_hKia9xriRuiOxwphbO3x",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      }
+    },
+    "time": {
+      "created": 1791364317986,
+      "updated": 1791364317986
+    }
+  }
+} 原始日志 {"level":"info","time":"2026-10-07T09:11:57.988Z","service":"session","logDomain":"non-session","data":{"id":"ses_-zUSe1sXFzzvvi1qoSpw","slug":"lucky-tiger","version":"local","projectID":"prj_hKia9xriRuiOxwphbO3x","directory":"C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-after-95\\project","title":"Chat","kind":"assistant","metadata":{"conversation":{"experience":"chat","surface":"right-sidebar"}},"time":{"created":1791364317986,"updated":1791364317986}},"message":"created"}
+The focused UI element is 150 button (expanded) 详情, Secondary Actions: Collapse

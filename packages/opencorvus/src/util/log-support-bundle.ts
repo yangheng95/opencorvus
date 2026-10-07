@@ -82,13 +82,13 @@ function stringField(record: Record<string, unknown>, key: string): string | und
 }
 
 function timestampField(record: Record<string, unknown>): string | undefined {
-  return stringField(record, "time") ?? stringField(record, "timestamp") ?? stringField(record, "ts")
+  return stringField(record, "time")
 }
 
 function sortedDetails(record: Record<string, unknown>): Record<string, unknown> {
   const details: Record<string, unknown> = {}
   for (const key of Object.keys(record).sort()) {
-    if (key === "time" || key === "timestamp" || key === "ts") continue
+    if (key === "time" && typeof record.time === "string") continue
     if (key === "level" || key === "service" || key === "message") continue
     details[key] = record[key]
   }

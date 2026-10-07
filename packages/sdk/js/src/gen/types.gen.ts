@@ -723,6 +723,13 @@ export type Config = {
   }
 }
 
+export type ConfigCandidateValidationError = {
+  data: {
+    message: string
+  }
+  name: "ConfigCandidateValidationError"
+}
+
 export type ContextOverflowError = {
   data: {
     message: string
@@ -4261,6 +4268,15 @@ export type ProviderConfig = {
     [key: string]: unknown
   }
   whitelist?: Array<string>
+}
+
+export type ProviderModelNotFoundError = {
+  data: {
+    modelID: string
+    providerID: string
+    suggestions?: Array<string>
+  }
+  name: "ProviderModelNotFoundError"
 }
 
 export type ProviderMonetaryBalanceUsage = {
@@ -38435,6 +38451,10 @@ export type VcsGetData = {
 }
 
 export type VcsGetErrors = {
+  /**
+   * Runtime configuration candidate or model rejected
+   */
+  400: ConfigCandidateValidationError | ProviderModelNotFoundError
   /**
    * Internal server error
    */

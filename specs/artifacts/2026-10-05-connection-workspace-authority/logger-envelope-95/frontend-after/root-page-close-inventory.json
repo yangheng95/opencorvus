@@ -1,0 +1,37 @@
+{
+  "apps": [],
+  "browsers": [
+    {
+      "family": "chrome",
+      "id": "3",
+      "metadata": {
+        "extensionInstanceId": "a0819a59-0e2e-4112-8e53-cb088dac913d"
+      },
+      "name": "Chrome",
+      "profileName": "Heng",
+      "type": "extension",
+      "tabs": []
+    },
+    {
+      "id": "2",
+      "metadata": {
+        "codexSessionId": "01a1077d-405b-7cd0-9862-d2de38d76d87"
+      },
+      "name": "Codex In-app Browser",
+      "type": "iab",
+      "tabs": []
+    },
+    {
+      "id": "1",
+      "metadata": {
+        "codexSessionId": "01a1077d-405b-7cd0-9862-d2de38d76d87"
+      },
+      "name": "Codex MCP Apps",
+      "type": "mcpapps",
+      "tabs": []
+    }
+  ],
+  "errors": [
+    "Browser 3: Error: User unavailable"
+  ]
+}

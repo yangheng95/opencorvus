@@ -1,0 +1,26 @@
+{
+  "qualifier": "Actual Root tool completion receipts; no new UI/Provider qualification",
+  "commands": [
+    {
+      "output": "$ tsc --noEmit",
+      "command": "bun run typecheck",
+      "cwd": "packages/sdk/js",
+      "phase": "after canonical SDK96 generation",
+      "exit": 0
+    },
+    {
+      "output": "$ tsc --noEmit",
+      "command": "bun run typecheck",
+      "cwd": "packages/overlay",
+      "phase": "after canonical SDK96 generation",
+      "exit": 0
+    },
+    {
+      "output": "docs:check ok (345 ops, 25 groups)",
+      "command": "bun run docs:check",
+      "cwd": "repository root",
+      "exit": 0
+    }
+  ],
+  "observedAtUtc": "2026-10-07T09:36:39.5879368Z"
+}

@@ -35,14 +35,14 @@ export function benchmarkInput(args: readonly string[]): BenchmarkInput {
   return { profile, output: path.resolve(output), ...(runRoot ? { runRoot: path.resolve(runRoot) } : {}), port }
 }
 export function observedRequestID(rows: readonly Record<string, any>[], responseID?: string | null): string {
-  const starts = rows.filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
+  const starts = rows.filter((row) => row.service === "server" && row.data?.path === "/skill/mounts" && row.data?.status === "started")
   if (responseID) {
-    assert(starts.some((row) => row.requestID === responseID), "Response request identity must have an observed start")
+    assert(starts.some((row) => row.data?.requestID === responseID), "Response request identity must have an observed start")
     return responseID
   }
   assert.equal(starts.length, 1, "Uncorrelated concurrent request starts cannot identify a timeout")
-  assert.equal(typeof starts[0].requestID, "string")
-  return starts[0].requestID
+  assert.equal(typeof starts[0].data?.requestID, "string")
+  return starts[0].data.requestID
 }
 export function clientFailure(error: unknown): "client-timeout" | "caller-aborted" {
   assert(error instanceof Error, "Typed client error required")
@@ -51,10 +51,10 @@ export function clientFailure(error: unknown): "client-timeout" | "caller-aborte
   throw error
 }
 export function backendReceipt(rows: readonly Record<string, any>[], requestID: string) {
-  const completed = rows.filter((row) => row.service === "server" && row.requestID === requestID && row.status === "completed")
+  const completed = rows.filter((row) => row.service === "server" && row.data?.requestID === requestID && row.data?.status === "completed")
   assert(completed.length <= 1, "Exact request must have one backend completion")
   const row = completed[0]
-  return row ? { outcome: "settled" as const, status: row.statusCode as number, duration: row.duration as number } : undefined
+  return row ? { outcome: "settled" as const, status: row.data?.statusCode as number, duration: row.data?.duration as number } : undefined
 }
 export class OrdinaryProjectBoundaryError extends Error {
   readonly expected: string
@@ -389,8 +389,8 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
       } catch (correlationError) {
         observation.backend = { outcome: "unknown-request-identity", reason: (correlationError as Error).message }
         const candidateIDs = [...new Set(rows.slice(offset)
-          .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
-          .map((row) => String(row.requestID)))]
+          .filter((row) => row.service === "server" && row.data?.path === "/skill/mounts" && row.data?.status === "started")
+          .map((row) => String(row.data?.requestID)))]
         observation.unattributedBackendCandidates = await Promise.all(candidateIDs.map(async (id) => ({
           requestID: id, receipt: await convergeBackend(id) ?? { outcome: "convergence-deadline" },
         })))
@@ -509,7 +509,7 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
       fact.modelCatalogProvenance = {
         ...metadata["models.json"], expectedProducer: "canonical ModelsDev.provisionDefaultCatalog in fresh owned runtime",
         observedProvision: rows.some((row) => row.service === "models.dev" && row.message === "provisioned bundled model catalog" &&
-          typeof row.source === "string" && path.resolve(row.source) === path.resolve(input.root, "runtime", "data", "models.json")),
+          typeof row.data?.source === "string" && path.resolve(row.data?.source) === path.resolve(input.root, "runtime", "data", "models.json")),
         observation: "Metadata only; no contents read, copied catalog, projected Sol or Provider generation qualification",
       }
     }
@@ -535,14 +535,14 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
           .slice(offset)
           .some(
             (row) =>
-              row.service === "skill-read-diagnostics" && row.phase === "state.initialize" && row.status === "started",
+              row.service === "skill-read-diagnostics" && row.data?.phase === "state.initialize" && row.data?.status === "started",
           )
       )
         await delay(10)
       const candidates = rows
         .slice(offset)
-        .filter((row) => row.service === "server" && row.path === "/skill/mounts" && row.status === "started")
-      fact.cancelRequestID = candidates.length === 1 ? candidates[0].requestID : null
+        .filter((row) => row.service === "server" && row.data?.path === "/skill/mounts" && row.data?.status === "started")
+      fact.cancelRequestID = candidates.length === 1 ? candidates[0].data.requestID : null
       if (!completed) controller.abort(new DOMException("Owned caller cancellation", "AbortError"))
       const cancelResult = await first
       fact.cancelOutcome = {
@@ -609,19 +609,19 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
             row.service === "skill-read-diagnostics" ||
             (row.service === "server" &&
               row.message === "request" &&
-              ["/skill/mounts", "/global/health", "/shutdown"].includes(row.path)),
+              ["/skill/mounts", "/global/health", "/shutdown"].includes(row.data?.path)),
         )
         .map((row) =>
           row.service === "skill-read-diagnostics"
             ? row
             : {
                 service: row.service,
-                requestID: row.requestID,
-                method: row.method,
-                path: row.path,
-                status: row.status,
-                statusCode: row.statusCode,
-                duration: row.duration,
+                requestID: row.data?.requestID,
+                method: row.data?.method,
+                path: row.data?.path,
+                status: row.data?.status,
+                statusCode: row.data?.statusCode,
+                duration: row.data?.duration,
                 time: row.time,
               },
         )
@@ -629,15 +629,15 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
       fact.diagnosticRows = selected.length
       const diagnostics = selected.filter((row) => row.service === "skill-read-diagnostics")
       const initializations = diagnostics.filter(
-        (row) => row.phase === "state.initialize" && row.status === "completed",
+        (row) => row.data?.phase === "state.initialize" && row.data?.status === "completed",
       )
       fact.timing = {
         diagnosticRows: diagnostics.length,
         initializations: initializations.length,
         dispositions: diagnostics
-          .filter((row) => row.phase === "state.read" && row.status === "completed")
-          .map((row) => row.disposition),
-        httpUnattributedInitializations: initializations.filter((row) => row.http?.requestID === null).length,
+          .filter((row) => row.data?.phase === "state.read" && row.data?.status === "completed")
+          .map((row) => row.data?.disposition),
+        httpUnattributedInitializations: initializations.filter((row) => row.data?.http?.requestID === null).length,
       }
       assert(
         initializations.length > 0,
@@ -645,21 +645,21 @@ async function occurrence(input: Awaited<ReturnType<typeof fixture>>, mode: "ser
       )
       for (const observation of observations.filter((entry) => entry.status === 200)) {
         const requestEvents = diagnostics.filter(
-          (row) => row.phase === "request" && row.http?.requestID === observation.requestID,
+          (row) => row.data?.phase === "request" && row.data?.http?.requestID === observation.requestID,
         )
         assert.deepEqual(
-          requestEvents.map((row) => row.status),
+          requestEvents.map((row) => row.data?.status),
           ["started", "completed"],
           "Actual HTTP request identity must correlate with balanced diagnostics",
         )
       }
       const started = diagnostics
-        .filter((row) => row.status === "started")
-        .map((row) => row.spanID)
+        .filter((row) => row.data?.status === "started")
+        .map((row) => row.data?.spanID)
         .sort()
       const completed = diagnostics
-        .filter((row) => row.status === "completed")
-        .map((row) => row.spanID)
+        .filter((row) => row.data?.status === "completed")
+        .map((row) => row.data?.spanID)
         .sort()
       assert.deepEqual(completed, started, "Real diagnostic phases settle exactly their started spans")
       await fs.writeFile(path.join(output, `${prefix}.result.json`), JSON.stringify(fact, null, 2), { flag: "wx" })

@@ -48,6 +48,16 @@ headers are materialized through Hono's response API and merged with the
 existing context. This retains Basic Auth's Unauthorized body and
 WWW-Authenticate challenge without a second error message or body parser.
 
+The shared named-error policy maps ConfigCandidateValidationError to400 while
+retaining its original named packet and request identity. Invalid current
+profile or mount candidates therefore reject cold runtime initialization as a
+validation failure, consistently with the existing Project/global writer
+status. Model validation still runs first; original ProviderModelNotFoundError
+remains400, AuthReadError/DatabaseUnavailableError remain503, and unknown
+operational errors remain masked500. Candidate validation's existing broad
+catch can wrap nested reader failures before this boundary; this status policy
+does not establish or repair that separate cause-provenance contract.
+
 Schema validation failures instead return400 directly through the sole
 server-owned validator hook. The wrapper accepts target/schema and delegates to
 hono-openapi, preserving its resolver metadata, successful parsed values and

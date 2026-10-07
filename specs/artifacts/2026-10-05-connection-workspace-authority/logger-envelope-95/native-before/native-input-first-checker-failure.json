@@ -1,0 +1,20 @@
+{
+  "error": "Native ready is not HTTP listener authority",
+  "cause": "New checker used listening/occurrence fields; current receipt uses outcome/occurrenceID",
+  "recordedAtUtc": "2026-10-07T08:17:39.6315298Z",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18041,
+      "OwningProcess": 67752
+    }
+  ],
+  "stage": "Before HttpClient and request creation",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "logger-envelope-95-before-2181a302-b59e-43f6-9f3e-3081d8a4cb1c",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18041",
+    "pid": 67752
+  }
+}

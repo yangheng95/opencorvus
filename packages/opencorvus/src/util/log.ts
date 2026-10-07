@@ -1,6 +1,6 @@
 import path from "path"
 import fs from "fs/promises"
-import pino, { type Logger as PinoLogger } from "pino"
+import pino from "pino"
 import { Global } from "../global"
 import z from "zod"
 import { Glob } from "./glob"
@@ -56,7 +56,7 @@ export namespace Log {
   type DurableDestination = ReturnType<typeof pino.destination>
 
   type PendingRecord = {
-    tags: Record<string, any>
+    bindings: Record<string, any>
     level: PinoLevel
     message: any
     attributes: Record<string, any>
@@ -358,6 +358,7 @@ export namespace Log {
         base: undefined,
         level: pinoLevel[selectedLevel],
         messageKey: "message",
+        nestedKey: "data",
         errorKey: "error",
         timestamp: pino.stdTimeFunctions.isoTime,
         formatters: {
@@ -385,60 +386,57 @@ export namespace Log {
     return output
   }
 
-  function emit(
-    logger: () => PinoLogger,
+  function prepareRecord(
     tags: Record<string, any>,
-    recordLevel: PinoLevel,
-    message: any,
-    extra?: Record<string, any>,
+    extra: Record<string, any> | undefined,
+    ambient: Record<string, string>,
   ) {
-    if (pendingInitializations === 0 && !logger().isLevelEnabled(recordLevel)) return
-    const attributes = {
-      ...sanitizeRecord(extra),
-      ...sanitizeRecord(SessionObservability.logTags()),
+    const { service, ...subjectTags } = tags
+    return {
+      bindings: { ...(service === undefined ? {} : { service }), ...ambient },
+      attributes: { ...subjectTags, ...sanitizeRecord(extra) },
     }
+  }
+
+  function dispatch(record: PendingRecord) {
+    root.child(record.bindings)[record.level](record.attributes, record.message)
+  }
+
+  function emit(tags: Record<string, any>, recordLevel: PinoLevel, message: any, extra?: Record<string, any>) {
+    if (pendingInitializations === 0 && !root.isLevelEnabled(recordLevel)) return
+    const prepared = prepareRecord(tags, extra, SessionObservability.logTags())
     const safeMessage = message === undefined || message === null ? undefined : sanitizeMessage(message)
     if (pendingInitializations > 0) {
-      pendingRecords.push({ tags: { ...tags }, level: recordLevel, message: safeMessage, attributes })
+      pendingRecords.push({ ...prepared, level: recordLevel, message: safeMessage })
       return
     }
-    logger()[recordLevel](attributes, safeMessage)
+    dispatch({ ...prepared, level: recordLevel, message: safeMessage })
   }
 
   function drainPendingRecords() {
     for (const record of pendingRecords.splice(0)) {
-      root.child(record.tags)[record.level](record.attributes, record.message)
+      dispatch(record)
     }
   }
 
   export function create(tags?: Record<string, any>) {
     const ownTags = sanitizeRecord(tags)
-    let cachedGeneration = -1
-    let cachedLogger: PinoLogger | undefined
-
-    function logger() {
-      if (!cachedLogger || cachedGeneration !== generation) {
-        cachedLogger = root.child(ownTags)
-        cachedGeneration = generation
-      }
-      return cachedLogger
-    }
 
     const result: Logger = {
       enabled(selectedLevel: Level) {
-        return pendingInitializations > 0 || logger().isLevelEnabled(pinoLevel[selectedLevel])
+        return pendingInitializations > 0 || root.isLevelEnabled(pinoLevel[selectedLevel])
       },
       debug(message?: any, extra?: Record<string, any>) {
-        emit(logger, ownTags, "debug", message, extra)
+        emit(ownTags, "debug", message, extra)
       },
       info(message?: any, extra?: Record<string, any>) {
-        emit(logger, ownTags, "info", message, extra)
+        emit(ownTags, "info", message, extra)
       },
       error(message?: any, extra?: Record<string, any>) {
-        emit(logger, ownTags, "error", message, extra)
+        emit(ownTags, "error", message, extra)
       },
       warn(message?: any, extra?: Record<string, any>) {
-        emit(logger, ownTags, "warn", message, extra)
+        emit(ownTags, "warn", message, extra)
       },
       tag(key: string, value: string) {
         return Log.create({ ...ownTags, [key]: value })

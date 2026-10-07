@@ -1,0 +1,117 @@
+[1/1] START test/server/config-candidate-status.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+candidate96 collision {"root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-5AVUj7\\.opencorvus\\expert-squads\\collision96\\base","discovery":{"items":[],"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-5AVUj7\\.opencorvus\\expert-squads\\collision96\\base\\expert-squad.jsonc","namespace":"collision96","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"installations":[],"warnings":[]}}
+candidate96 cold {"project":{"id":"prj_hcrNGe8UimT4zXieEQ14","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-5AVUj7","sandboxes":[],"time":{"created":1791361317053,"updated":1791361317053}},"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-5AVUj7","file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-5AVUj7\\.opencorvus\\opencorvus.jsonc","config":{"prompt_profile":{"active":"base"},"permission_mode":"full_access","agent":{},"plugin":[],"experimental":{"auto_question":true},"command":{},"username":"hengu","mcp":{"browser":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","mcp","browser"],"timeout":30000},"computer":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"],"timeout":30000}}},"result":{"status":500,"headers":{"access-control-expose-headers":"Content-Disposition,Content-Range,ETag,x-opencorvus-request-id","content-type":"application/json","vary":"Origin","x-opencorvus-request-id":"fb6b453c-8ce6-4753-8bd6-30f0bc92cfb2"},"body":{"name":"ConfigCandidateValidationError","data":{"message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}}}
+58 | test("cold builtin collision returns canonical candidate validation 400", async () => {
+59 |   await using project = await memoryProject("candidate96-collision")
+60 |   const config = await configFor(project.path)
+61 |   await collision(project.path)
+62 |   const result = await cold(project.path, { ...config, prompt_profile: { active: "base" } })
+63 |   expect({ status: result.status, body: result.body }).toEqual({ status: 400, body: { name: "ConfigCandidateValidationError", data: { message: collisionMessage } } })
+                                                            ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+        "message": "External expert squad package id "base" collides with a built-in expert squad id.",
+      },
+      "name": "ConfigCandidateValidationError",
+    },
+-   "status": 400,
++   "status": 500,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts:63:56)
+(fail) cold builtin collision returns canonical candidate validation 400 [2809.20ms]
+candidate96 installed {"sourceDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\source","definition":{"manifest":{"schema_version":2,"namespace":"candidate96","id":"mount-active96","label":"Mount active","description":"Owned mount contract","version":"2026.10.07.1","product_pillars":["code"],"readme":"README.md","selector":{"summary":"Owned mount","selection_guidance":"Inspect mount","instructions":"selector.md"},"capability_sets":{},"capability_projection":{"scheduler":{"base_role":"orchestrator","capability_refs":[]},"agents":{},"virtual_workflows":{}}},"files":{"README.md":"# Mount active\n","selector.md":"# Mount\n"}},"receipt":{"operation":"installed","before":null,"after":{"installationScope":"project","projectDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G","namespace":"candidate96","id":"mount-active96","version":"2026.10.07.1","packageDigest":"d38145b2f00da936ec3a805b001d63fa9109e61cac651ffddca76867eb494067","targetRoot":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96"}}}
+candidate96 collision {"root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\collision96\\base","discovery":{"items":[{"id":"mount-active96","namespace":"candidate96","root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96","manifestPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\expert-squad.jsonc","readmePath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\README.md","name":"Mount active","label":"Mount active","description":"Owned mount contract","version":"2026.10.07.1","manifest":{"schema_version":2,"namespace":"candidate96","id":"mount-active96","label":"Mount active","description":"Owned mount contract","version":"2026.10.07.1","product_pillars":["code"],"readme":"README.md","selector":{"summary":"Owned mount","selection_guidance":"Inspect mount","instructions":"selector.md"},"capability_sets":{},"capability_projection":{"scheduler":{"capability_refs":[],"base_role":"orchestrator"},"agents":{},"virtual_workflows":{}}},"selector":{"ref":"selector/mount-active96","id":"mount-active96","label":"Mount active","description":"Owned mount contract","summary":"Owned mount","selection_guidance":"Inspect mount"},"installationScope":"project"}],"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\collision96\\base\\expert-squad.jsonc","namespace":"collision96","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"installations":[{"id":"mount-active96","namespace":"candidate96","root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96","manifestPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\expert-squad.jsonc","readmePath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\expert-squads\\candidate96\\mount-active96\\README.md","name":"Mount active","label":"Mount active","description":"Owned mount contract","version":"2026.10.07.1","manifest":{"schema_version":2,"namespace":"candidate96","id":"mount-active96","label":"Mount active","description":"Owned mount contract","version":"2026.10.07.1","product_pillars":["code"],"readme":"README.md","selector":{"summary":"Owned mount","selection_guidance":"Inspect mount","instructions":"selector.md"},"capability_sets":{},"capability_projection":{"scheduler":{"capability_refs":[],"base_role":"orchestrator"},"agents":{},"virtual_workflows":{}}},"selector":{"ref":"selector/mount-active96","id":"mount-active96","label":"Mount active","description":"Owned mount contract","summary":"Owned mount","selection_guidance":"Inspect mount"},"installationScope":"project"}],"warnings":[]}}
+candidate96 cold {"project":{"id":"prj_hlIXqV3hgEHmD4lSo6rG","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G","sandboxes":[],"time":{"created":1791361319738,"updated":1791361319738}},"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G","file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gQGv8G\\.opencorvus\\opencorvus.jsonc","config":{"prompt_profile":{"active":"mount-active96"},"permission_mode":"full_access","agent":{},"plugin":[],"experimental":{"auto_question":true},"command":{},"username":"hengu","mcp":{"browser":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","mcp","browser"],"timeout":30000},"computer":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"],"timeout":30000}},"skill_mounts":{"base":{"orchestrator":{}}}},"result":{"status":500,"headers":{"access-control-expose-headers":"Content-Disposition,Content-Range,ETag,x-opencorvus-request-id","content-type":"application/json","vary":"Origin","x-opencorvus-request-id":"d263866f-532b-4c05-84c0-ab0552dbcdce"},"body":{"name":"ConfigCandidateValidationError","data":{"message":"External expert squad package id \"base\" collides with a built-in expert squad id."}}}}
+74 |   await writeExpertSquadPackage({ directory: sourceDirectory, definition })
+75 |   const receipt = await Instance.provideProjectIdentity({ directory: project.path, fn: () => ExpertSquadPackageManager.importDirectory({ projectDirectory: project.path, sourceDirectory, installationScope: "project" }) })
+76 |   console.log("candidate96 installed", JSON.stringify({ sourceDirectory, definition, receipt }))
+77 |   await collision(project.path)
+78 |   const result = await cold(project.path, { ...config, prompt_profile: { active: "mount-active96" }, skill_mounts: { base: { orchestrator: {} } } })
+79 |   expect({ status: result.status, body: result.body }).toEqual({ status: 400, body: { name: "ConfigCandidateValidationError", data: { message: collisionMessage } } })
+                                                            ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+        "message": "External expert squad package id "base" collides with a built-in expert squad id.",
+      },
+      "name": "ConfigCandidateValidationError",
+    },
+-   "status": 400,
++   "status": 500,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts:79:56)
+(fail) cold lawful external active profile with colliding nonactive builtin mount returns candidate 400 [2877.88ms]
+candidate96 collision {"root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-9vhXvi\\.opencorvus\\expert-squads\\collision96\\base","discovery":{"items":[],"issues":[{"phase":"package.identity","location":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-9vhXvi\\.opencorvus\\expert-squads\\collision96\\base\\expert-squad.jsonc","namespace":"collision96","id":"base","message":"[\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"namespace\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"id\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"}],"installations":[],"warnings":[]}}
+candidate96 cold {"project":{"id":"prj_h0LVAkq1nLo2UDAEk1Cj","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-9vhXvi","sandboxes":[],"time":{"created":1791361322687,"updated":1791361322687}},"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-9vhXvi","file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-9vhXvi\\.opencorvus\\opencorvus.jsonc","config":{"prompt_profile":{"active":"base"},"permission_mode":"full_access","agent":{},"plugin":[],"experimental":{"auto_question":true},"command":{},"username":"hengu","mcp":{"browser":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","mcp","browser"],"timeout":30000},"computer":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"],"timeout":30000}},"model":"missing96/model"},"result":{"status":400,"headers":{"access-control-expose-headers":"Content-Disposition,Content-Range,ETag,x-opencorvus-request-id","content-type":"application/json","vary":"Origin","x-opencorvus-request-id":"8d229468-3870-4f31-8f94-d129af97db16"},"body":{"name":"ProviderModelNotFoundError","data":{"providerID":"missing96","modelID":"model","suggestions":[]}}}}
+(pass) cold unavailable explicit model preserves model-first canonical 400 [2795.92ms]
+candidate96 cold {"project":{"id":"prj_hbsULzgX9X3Q9bpDiOk9","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gUbnrt","sandboxes":[],"time":{"created":1791361325562,"updated":1791361325562}},"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gUbnrt","file":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-TeMtfy\\test-70684-sxkQUI\\fixtures\\memory-gUbnrt\\.opencorvus\\opencorvus.jsonc","config":{"prompt_profile":{"active":"base"},"permission_mode":"full_access","agent":{},"plugin":[],"experimental":{"auto_question":true},"command":{},"username":"hengu","mcp":{"browser":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","mcp","browser"],"timeout":30000},"computer":{"type":"local","command":["C:\\Users\\hengu\\.bun\\bin\\bun.exe","D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\mcp\\computer\\stdio.ts"],"timeout":30000}}},"result":{"status":200,"headers":{"access-control-expose-headers":"Content-Disposition,Content-Range,ETag,x-opencorvus-request-id","content-type":"application/json","vary":"Origin","x-opencorvus-request-id":"014cc8bd-5513-4b10-9272-ad03b053b520"},"body":{"initialized":true,"branch":"master","commit":"788bdf3","clean":false,"dirty":true,"staged":0,"modified":0,"untracked":3,"conflicts":0,"ahead":0,"behind":0,"hasRemote":false}}}
+89 | 
+90 | test("cold lawful runtime returns its real VCS output", async () => {
+91 |   await using project = await memoryProject("candidate96-lawful")
+92 |   const result = await cold(project.path, await configFor(project.path))
+93 |   expect(result.status).toBe(200)
+94 |   expect(result.body).toEqual({ branch: "main" })
+                           ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "branch": "main",
++   "ahead": 0,
++   "behind": 0,
++   "branch": "master",
++   "clean": false,
++   "commit": "788bdf3",
++   "conflicts": 0,
++   "dirty": true,
++   "hasRemote": false,
++   "initialized": true,
++   "modified": 0,
++   "staged": 0,
++   "untracked": 3,
+  }
+
+- Expected  - 1
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts:94:23)
+(fail) cold lawful runtime returns its real VCS output [4256.39ms]
+candidate96 shared {"index":0,"status":500,"headers":{"content-type":"application/json","x-opencorvus-request-id":"8f2e4a24-e309-481a-aab4-319ba40f086f"},"body":{"name":"ConfigCandidateValidationError","data":{"message":"Invalid owned candidate"}}}
+106 |   for (const [index, row] of rows.entries()) {
+107 |     const app = new Hono().onError(serverErrorResponse).get("/owned", () => { throw row.error })
+108 |     const response = await app.request("/owned")
+109 |     const actual = { index, status: response.status, headers: Object.fromEntries(response.headers), body: await response.json() }
+110 |     console.log("candidate96 shared", JSON.stringify(actual))
+111 |     expect(actual.status).toBe(row.status)
+                                ^
+error: expect(received).toBe(expected)
+
+Expected: 400
+Received: 500
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts:111:27)
+(fail) shared actual Hono responses preserve canonical named statuses and request identity [3.92ms]
+
+ 1 pass
+ 4 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [15.33s]
+[1/1] DONE test/server/config-candidate-status.test.ts exit=1 duration=16.19s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts

@@ -1,0 +1,38 @@
+Browser tab: 241798769, Title: "OpenCorvus", URL: "http://localhost:18041/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~					93 text Server [ INFO ] server 2026-10-07T08:18:37
+~					94 text request
+~					95 text requestID = 9356d424-a422-45dc-a62e-32c65537bde5 method = GET path = /global/composer-references status = started logDomain = non-session
++					96 button (collapsed) 详情, Secondary Actions: Expand
++						97 text 详情
+~					98 text Server [ INFO ] server 2026-10-07T08:18:37
+~					99 text request
+~					100 text requestID = e39a45d5-9a5a-4669-b760-a2e57b2bd809 method = GET path = /global/projects/discover status = started logDomain = non-session
+~					103 text Server [ INFO ] server 2026-10-07T08:18:37
+~					104 text request
+~					105 text requestID = b63f8643-6e43-49c6-93b4-900488e106eb method = GET path = /work-ledger/events status = started logDomain = non-session
+~					108 text Server [ INFO ] 0.0s server 2026-10-07T08:18:37
+~					109 text request
+~					110 text requestID = b63f8643-6e43-49c6-93b4-900488e106eb method = GET path = /work-ledger/events status = completed statusCode = 200 duration = 5
+~					113 text Server [ INFO ] 0.0s server 2026-10-07T08:18:37
+~					114 text request
+~					115 text requestID = e39a45d5-9a5a-4669-b760-a2e57b2bd809 method = GET path = /global/projects/discover status = completed statusCode = 200 duration = 12
+~					118 text Server [ INFO ] 0.0s server 2026-10-07T08:18:37
+~					119 text request
+~					120 text requestID = 9356d424-a422-45dc-a62e-32c65537bde5 method = GET path = /global/composer-references status = completed statusCode = 200 duration = 31
++					123 text Server [ INFO ] server 2026-10-07T08:18:37
++					124 text request
++					125 text requestID = fba31118-cf59-4860-86c5-8f36c0652d00 method = GET path = /mailbox status = started logDomain = non-session
++					126 button (collapsed) 详情, Secondary Actions: Expand
++						127 text 详情
++					128 text Server [ INFO ] 0.0s server 2026-10-07T08:18:37
++					129 text request
++					130 text requestID = fba31118-cf59-4860-86c5-8f36c0652d00 method = GET path = /mailbox status = completed statusCode = 200 duration = 4
++					131 button (collapsed) 详情, Secondary Actions: Expand
++						132 text 详情
++					133 text Server [ INFO ] server 2026-10-07T08:18:37
++					134 text request
++					135 text requestID = 5e01ad60-4324-4648-ba0a-04eb77a494c9 method = GET path = /expert-squad/catalog status = started logDomain = non-session
++					136 button (collapsed) 详情, Secondary Actions: Expand
++						137 text 详情
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18041/ui/

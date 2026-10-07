@@ -1,0 +1,26 @@
+{
+  "credentialStaging": "None",
+  "port": 18041,
+  "occurrence": "logger-envelope-95-before-2181a302-b59e-43f6-9f3e-3081d8a4cb1c",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\evidence",
+    "logger-envelope-95-before-2181a302-b59e-43f6-9f3e-3081d8a4cb1c",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18041",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-07\\logger-envelope-before-95\\startup.json",
+    "--startup-occurrence",
+    "logger-envelope-95-before-2181a302-b59e-43f6-9f3e-3081d8a4cb1c",
+    "--log-level",
+    "INFO"
+  ]
+}
