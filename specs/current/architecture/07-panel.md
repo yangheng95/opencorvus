@@ -470,8 +470,10 @@ identity and activation independently of the title. Historical source payloads
 retain their original recorded values.
 The Source
 Disclosure's native content box and expanded list are bounded by the actual
-source region, so long links ellipsize within that region without changing
-their full tooltip or activation target. Activity uses
+source region. Expanded source labels use that available width and wrap long
+titles or tokens within it; the collapsed preview keeps its compact ellipsis.
+Indexes, icons, full tooltips and activation targets keep their actual source
+identity. Activity uses
 the owning card's live state, including Mission and subagent cards. Reduced
 motion retains static status. Valid JSON displays expandable values with
 multiline strings intact; full raw content and copy remain available.

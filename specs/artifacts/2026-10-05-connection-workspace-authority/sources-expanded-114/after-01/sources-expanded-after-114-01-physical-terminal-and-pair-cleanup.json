@@ -1,0 +1,64 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "sources-expanded-after-114-01-a551b3c9-6681-40c1-a6b4-ded70104db0d",
+    "outcome": "settled",
+    "host": {
+      "pid": 70004,
+      "processInstanceID": "win32:639270024726405545",
+      "occurrenceID": "69514f9a-1c59-44d4-9df8-e1dd2dd7d954"
+    },
+    "target": {
+      "pid": 70368,
+      "processInstanceID": "win32:639270024735718485",
+      "occurrenceID": "248eb0ad-b3eb-42f5-8151-79fdfb653a6b"
+    },
+    "observedAtUtc": "2026-10-07T20:47:45.058Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-07T20:47:48.2602853Z",
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-expanded-after-114-01\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-expanded-after-114-01\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "presentAfter": false
+    }
+  ],
+  "occurrence": "sources-expanded-after-114-01-a551b3c9-6681-40c1-a6b4-ded70104db0d",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 70368,
+        "processInstanceID": "win32:639270024735718485",
+        "occurrenceID": "248eb0ad-b3eb-42f5-8151-79fdfb653a6b"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 70004,
+        "processInstanceID": "win32:639270024726405545",
+        "occurrenceID": "69514f9a-1c59-44d4-9df8-e1dd2dd7d954"
+      }
+    }
+  ],
+  "listeners": null
+}

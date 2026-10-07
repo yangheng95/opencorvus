@@ -1,0 +1,30 @@
+diff --git a/packages/overlay/src/styles/surfaces/messages.css b/packages/overlay/src/styles/surfaces/messages.css
+index 2ed4f821..145254d2 100644
+--- a/packages/overlay/src/styles/surfaces/messages.css
++++ b/packages/overlay/src/styles/surfaces/messages.css
+@@ -1018,10 +1018,10 @@
+ .msg-source-chip {
+   appearance: none;
+   display: inline-flex;
+-  align-items: center;
++  align-items: baseline;
+   gap: var(--ui-gap-xs);
+   min-width: 0;
+-  max-width: min(100%, calc(310px * var(--ui-scale)));
++  max-width: 100%;
+   min-height: var(--oc-density-chip-height);
+   padding: 0 var(--ui-gap-xs);
+   border: 0;
+@@ -1060,9 +1060,9 @@
+ 
+ .msg-source-chip__label {
+   min-width: 0;
+-  overflow: hidden;
+-  text-overflow: ellipsis;
+-  white-space: nowrap;
++  white-space: normal;
++  overflow-wrap: anywhere;
++  text-align: start;
+ }
+ 
+ .msg-source-tooltip {

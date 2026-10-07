@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Expanded Sources114 Recall](sources-expanded-plan-114.md) and [evidence](sources-expanded-114/README.md): complete actual expanded titles in wide/narrow/constrained-main columns; native navigation and explicit shared/file/document limits.
+
 - [Keyboard reading113 Recall](keyboard-reading-plan-113.md) and [evidence](keyboard-reading-113/README.md): actual early intent consumption repaired; clean main/child keyboard evidence and Sources regression; remaining matrices explicit.
 
 - [Sources reading112 final](sources-reading-112/README.md): actual main opening pause qualified; shared panels/live/Source3/113 Home unknown.
