@@ -1,0 +1,28 @@
+{
+  "method": "GET",
+  "headers": {
+    "Access-Control-Expose-Headers": [
+      "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id"
+    ],
+    "Vary": [
+      "Origin"
+    ],
+    "x-opencorvus-request-id": [
+      "1e98a37b-9844-4bcd-bc3f-1a74cbc6d7a8"
+    ],
+    "Date": [
+      "Wed, 07 Oct 2026 19:25:33 GMT"
+    ],
+    "Content-Type": [
+      "application/json"
+    ],
+    "Content-Length": [
+      "134299"
+    ]
+  },
+  "requestedUri": "http://127.0.0.1:18069/task/tsk_g00VXOBi8f00PNKt2D7j/conversation?tail_limit=2000&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-08%2Fmultiple-sources-live-109-01%2Fproject",
+  "finalUri": "http://127.0.0.1:18069/task/tsk_g00VXOBi8f00PNKt2D7j/conversation?tail_limit=2000&directory=C%3A%2FUsers%2Fhengu%2F.codex%2Fopencorvus-product-iteration%2F2026-10-08%2Fmultiple-sources-live-109-01%2Fproject",
+  "observedAtUtc": "2026-10-07T19:25:33.8051641Z",
+  "boundary": "Actual public HTTP data read; no UI assertion or beforeHTTP claim",
+  "status": 200
+}

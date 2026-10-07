@@ -1,4 +1,10 @@
 # Connection workspace authority investigation
+
+- [Keyboard reading113 Recall](keyboard-reading-plan-113.md) and [audit](keyboard-reading-113/README.md): main Home followtrue after112; timing cause unknown, production/helper held.
+
+- [Sources reading112 final](sources-reading-112/README.md): actual main opening pause qualified; shared panels/live/Source3/113 Home unknown.
+
+- [Sources reading112 actual before](sources-reading-112/before-01/README.md): Root real pointer/follow symptom, keyboard unknown and exact native closure; after held.
 - [Sources reading112 Recall](sources-reading-plan-112.md) and [evidence](sources-reading-112/README.md): all current scroll owners audited; actual before pending/repair held.
 
 - [Natural Task answer111 record](../../records/2026-10/2026-10-08-natural-task-answer.md) and [evidence](final-answer-111/README.md): manual three-summary before-terminal success, exact native closure; same-entry reply checker0; separate112 Sources-reading limits retained.
@@ -340,3 +346,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Builtin94 qualified evidence](builtin-collision-runtime-94/README.md): current/global/mount collision agreement and true fixed Task revision.
 - [Cold candidate96 investigation](cold-config-error-mapping-investigation-96.md): demonstrated named bootstrap500 versus writer400, with nested reader provenance explicitly unresolved.
 - [Shared candidate96 Recall](cold-config-error-mapping-plan-96.md): shared named400 and canonical VCS declaration implemented;42 focused cases100 expectations and generated docs qualified.
+
+

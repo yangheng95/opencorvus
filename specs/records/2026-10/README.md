@@ -1,4 +1,8 @@
 # 2026-10 Records
+
+- [Main Sources reading112](2026-10-08-sources-reading.md)
+
+- [Sources reading112 actual before](2026-10-08-sources-reading-before.md)
 - [Sources reading112 proposal](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-plan-112.md): source-owner audit and CLOSED109-history before plan only; actual reproduction pending, repair held.
 
 - [Natural Task answer111](2026-10-08-natural-task-answer.md): actual wide/narrow natural answer before terminal and exact closure; checker custody failure preserved.

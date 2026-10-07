@@ -1,4 +1,10 @@
 # Specs Storage Index
+
+- [Keyboard reading113 Recall](artifacts/2026-10-05-connection-workspace-authority/keyboard-reading-plan-113.md): main accepted Home reaches top with followtrue; shared-owner timing unknown, plan only; Sources112 passed separately.
+
+- [Main Sources reading112](records/2026-10/2026-10-08-sources-reading.md): actual opening pause repair qualified, original before retained; shared/live matrices unknown.
+
+- [Sources reading112 actual before](records/2026-10/2026-10-08-sources-reading-before.md): Root real pointer/follow symptom and exact closure; no patch/after claim.
 - [Sources reading112 Recall](artifacts/2026-10-05-connection-workspace-authority/sources-reading-plan-112.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/sources-reading-112/README.md): shared scroll-owner candidate; genuine before reproduction pending, repair held.
 
 - [Natural Task answer111](records/2026-10/2026-10-08-natural-task-answer.md): genuine three-summary manual wide/narrow acceptance and exact closure; same-entry reply/source checkers0, first custody failure retained.

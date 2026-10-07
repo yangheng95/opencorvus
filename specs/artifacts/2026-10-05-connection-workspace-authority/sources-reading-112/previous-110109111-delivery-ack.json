@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-10-07T19:03:38.1696475Z",
+  "commit": "9fcbab6efd309999acd5921b66bb8ed99ab3f38d",
+  "upstream": "9fcbab6efd309999acd5921b66bb8ed99ab3f38d",
+  "parents": "b660477eebb88a700a7a8e9a2743b45869440939",
+  "subject": "fix: preserve tool history and deliver conversational replies",
+  "committedAt": "2026-10-08 02:57:29 +0800",
+  "outgoing": [],
+  "trackedStatus": [
+    " M specs/artifacts/2026-10-05-connection-workspace-authority/sources-reading-plan-112.md"
+  ],
+  "remote": "origin",
+  "branch": "main",
+  "normalPush": {
+    "source": "Root direct tools.write_stdin managed86120 terminal exit_code0 plus copied full original stdout/stderr; not inferred from log tail",
+    "managedSessionID": 86120,
+    "exitCode": 0
+  },
+  "boundary": "Previous110109111 delivery metadata; child read-only Git confirms current refs/outgoing. No new fetch/merge/push and no112 implementation/acceptance.",
+  "rootToolExitFacts": {
+    "upstreamMerge": 0,
+    "confirmFetch": 0,
+    "fetch": 0,
+    "source": "Root direct current message reports actual rootexec exit0; empty raw fetch stdout is preserved, not itself an exit qualification"
+  },
+  "originalLogDirectory": "D:/myhexin-local/opencorvus/.tmp-product-iteration"
+}

@@ -9,7 +9,6 @@ import { Disclosure } from "./ui/Disclosure"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { AppLog } from "../utils/log"
-import { pauseAutoScrollForReading } from "../utils/dom-utils"
 
 export type ConversationSourcePart = {
   type: "source-url" | "source-document" | "source-file"
@@ -177,9 +176,6 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
     >
       <Disclosure.Trigger
         class="msg-sources__heading"
-        onClick={(event) => {
-          if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
-        }}
         aria-label={`${t("chat.sources")}: ${preview()} (${props.sources.length})`}
         title={preview()}
         indicatorPosition="end"

@@ -457,8 +457,13 @@ running or empty-result information. Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position
 behind the shared native Disclosure, initially collapsed with the first real
 source's readable identity and an honest count for that chronological source run;
-operator expansion state and exact source links remain available. The Source
-label uses an actual source title when supplied. Webfetch reads that title only
+operator expansion state and exact source links remain available. Source
+opening activation uses the existing transcript reading-intent notification
+before the native toggle. The nearest transcript pauses follow-to-bottom while
+its operator reads; native pointer and keyboard behavior, source identity and
+the single expansion store remain authoritative. The explicit bottom control
+resumes following through the same existing scroll owner.
+The label uses an actual source title when supplied. Webfetch reads that title only
 from the fetched text/html document using the public HTML parser; an empty title
 remains optional and uses the existing URL preview. Redirected URL owns source
 identity and activation independently of the title. Historical source payloads

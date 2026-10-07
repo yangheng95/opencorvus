@@ -1,6 +1,9 @@
-# Sources reading112 evidence
+# Sources reading112
 
-- [Recall and bounded before](../sources-reading-plan-112.md).
-- [Original source audit](original-source-audit.md): reading-intent candidate/all shared scroll owners; actual causal timing and remount/rearm unknown.
-- Root genuine109 [manual review](../multiple-sources-109/live-01/root-manual-review.md) distinguishes qualified3 separate Sources1/external pages from unqualified all3 visibility/narrow-first2/Source3.
-- Before18068 preparation only; after18069/source repair HELD. No native/UI/model/credential/helper/test operation yet by this child. Root owns manual reproduction and whole closure evidence.
+[Before](before-01/README.md) retains original pointer/follow symptom and keyboard uncertainty. [After](after-02/README.md) qualifies main Source opening reading pause through Root real page/manual pixels, exact three original Source tuples and whole native closure. [Recall](../sources-reading-plan-112.md). Shared panels/live append/sourceSwitch/Source3/113 Home remain unknown.
+
+- [Root manual review](root-manual-review.md), [original shared-owner audit](original-source-audit.md).
+- [Exact Source change](SourceParts.diff), [type readiness](types.log), [build readiness](build.log): actual pages and pixels qualify the visual behavior.
+- [Previous normal delivery](previous-110109111-delivery.md): original9fcb commit/push/fetch/merge logs and exact Git metadata retained.
+- Fresh Root physical custody: [before](before-01/root-independent-final-closure.json), [after](after-02/root-independent-final-closure.json).
+

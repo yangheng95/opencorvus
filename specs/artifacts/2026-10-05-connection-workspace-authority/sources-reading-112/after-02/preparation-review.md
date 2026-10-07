@@ -1,0 +1,2 @@
+# After112 selector preparation
+Only the existing sole helper selector changed: sources-reading-after-112-02 /Oct08/port18069 /sources-reading-112/after-02, exact label/run/evidence validation preserved. CLOSED109 original owner, fulfilled whole native settlement, pair paths/absence, original18066, readonly Task/Project/root/request/epoch/owners and full three Source tuple guards unchanged. Full before/final/diff retained; AST0. No copy/launch/SQL/Provider/UI execution. Root current after asset main-BBIOXh9a.js belongs later readiness, not the copy helper.

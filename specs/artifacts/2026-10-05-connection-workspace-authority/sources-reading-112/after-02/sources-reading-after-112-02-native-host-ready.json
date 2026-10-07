@@ -1,0 +1,39 @@
+{
+  "occurrence": "sources-reading-after-112-02-cbd9ee4c-4179-4256-aa87-0513d6f5938b",
+  "outcome": "ready",
+  "host": {
+    "pid": 37496,
+    "processInstanceID": "win32:639269975555537039",
+    "occurrenceID": "9c55dd1a-3168-4a3c-9913-b339d9921747"
+  },
+  "parent": {
+    "pid": 43540,
+    "processInstanceID": "win32:639269975534853431",
+    "occurrenceID": "1b74e791-752a-413c-9925-c893a0e9486b"
+  },
+  "target": {
+    "pid": 71380,
+    "processInstanceID": "win32:639269975565632140",
+    "occurrenceID": "a7438857-38c8-43c8-a330-74c8f34353a3"
+  },
+  "targetBirthAtMs": 1791400756563,
+  "observedAtUtc": "2026-10-07T19:19:16.592Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18069",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\multiple-sources-live-109-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-reading-after-112-02\\startup.json",
+    "--startup-occurrence",
+    "sources-reading-after-112-02-cbd9ee4c-4179-4256-aa87-0513d6f5938b",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

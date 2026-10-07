@@ -1,0 +1,14 @@
+
+InputObject                                                             SideIndicator
+-----------                                                             -------------
+if($copyPort -ne 18069){throw 'Only admitted112 history port'}          =>
+$caseStage='after-02'                                                   =>
+$caseRunName='sources-reading-after-112-02'                             =>
+if($copyLabel -ne $caseRunName){throw 'Exact after112 label required'}  =>
+                                                                        =>
+if($copyPort -ne 18068){throw 'Only admitted112 history port'}          <=
+$caseStage='before-01'                                                  <=
+$caseRunName='sources-reading-before-112-01'                            <=
+if($copyLabel -ne $caseRunName){throw 'Exact before112 label required'} <=
+
+

@@ -1,4 +1,10 @@
 # Artifact entry points
+
+- [Keyboard reading113 investigation](2026-10-05-connection-workspace-authority/keyboard-reading-113/README.md): original audit and bounded shared-owner manual proposal; no source/runtime admission.
+
+- [Sources reading112 final evidence](2026-10-05-connection-workspace-authority/sources-reading-112/README.md): actual main opening pause, unchanged three Source tuples and exact closure.
+
+- [Sources reading112 before evidence](2026-10-05-connection-workspace-authority/sources-reading-112/before-01/README.md): actual pointer symptom, unchanged source custody and exact closure.
 - [Sources reading112 evidence](2026-10-05-connection-workspace-authority/sources-reading-112/README.md): exact closed109-history before proposal; no source/UI qualification yet.
 
 - [Natural Task answer111 evidence](2026-10-05-connection-workspace-authority/final-answer-111/README.md): actual Chinese answer before terminal,15EOF and exact closure; first checker failure retained.
