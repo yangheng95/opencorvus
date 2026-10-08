@@ -1,0 +1,146 @@
+bun test v1.3.14 (0d9b296a)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [3278.43ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [4822.49ms]
+
+test\mission-message-origin-projection.test.ts:
+(pass) projects Mission operator and scheduler wake origins through one persisted and live contract [2091.83ms]
+(pass) keeps the right-sidebar display source authoritative over its retained wake reason [1.96ms]
+(pass) hydrates nested wake provenance through the Task conversation route [2110.75ms]
+
+test\orchestrator-mission-root-message-read.test.ts:
+247 |       expect(sourceDelta).toMatchObject({
+248 |         transcriptMode: "delta",
+249 |         transcript: [],
+250 |         removedMessageIDs: [messageID],
+251 |       })
+252 |       expect(targetDelta).toMatchObject({
+                                ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "removedMessageIDs": [
+-     "msg_g0VXQQk8k00zoueUD7NQ",
+-   ],
++   "events": [],
++   "history": {
++     "hasMore": false,
++     "limit": 1,
++     "oldestMessageID": null,
++     "oldestOrderKey": null,
++     "oldestTimestamp": null,
++   },
++   "lastLiveSequence": 1,
++   "liveEpoch": 1791430229070,
++   "removedMessageIDs": [],
+    "transcript": [
+      {
+        "info": {
++         "agent": "orchestrator",
++         "agentID": "orchestrator",
++         "author": "mission",
++         "channel": "orchestrator",
++         "extra": {
++           "task_root_message": {
++             "kind": "mission",
++             "protocol": "task-root-message",
++             "source": "mission.acceptance_resume",
++             "taskID": "tsk_g00VXQQk2M00UfJP4HMa",
++           },
++         },
+          "id": "msg_g0VXQQk8k00zoueUD7NQ",
++         "model": {
++           "modelID": "gpt-5.6-sol",
++           "providerID": "openai",
++         },
++         "orderKey": "v1:0001791430245236:0000000000000030:0000000000000000:message:msg_g0VXQQk8k00zoueUD7NQ",
++         "originSource": "",
++         "parentSessionID": "ses_-zUSZZFxdzzHKTArQmNx",
++         "resolvedRole": "mission",
++         "role": "user",
++         "sessionAgentID": "orchestrator",
+          "sessionID": "ses_-zUSZZFqvzzgmeFnsZ6A",
++         "time": {
++           "created": 1791430245236,
++         },
+        },
++       "parts": [
++         {
++           "id": "prt_g0VXQQk8o00JnIIASTwK",
++           "messageID": "msg_g0VXQQk8k00zoueUD7NQ",
++           "orderKey": "v1:0001791430245236:0000000000000031:0000000000000000:part:prt_g0VXQQk8o00JnIIASTwK",
++           "sessionID": "ses_-zUSZZFqvzzgmeFnsZ6A",
++           "text": "Update the report snapshot, then run the independent reviewer continuation.",
++           "type": "text",
++         },
++       ],
+      },
+    ],
+    "transcriptMode": "delta",
++   "view": {
++     "messages": [
++       {
++         "agentID": "orchestrator",
++         "inputMessageID": "msg_g0VXQQk8k00zoueUD7NQ",
++         "messageID": "msg_g0VXQQk8k00zoueUD7NQ",
++         "orderKey": "v1:0001791430245236:0000000000000030:0000000000000000:message:msg_g0VXQQk8k00zoueUD7NQ",
++         "parentSessionID": "ses_-zUSZZFxdzzHKTArQmNx",
++         "placement": "top_level",
++         "sessionAgentID": "orchestrator",
++         "sessionID": "ses_-zUSZZFqvzzgmeFnsZ6A",
++         "stage": "orchestrator",
++         "time": 1791430245236,
++       },
++     ],
++     "sessions": [
++       {
++         "activity": [],
++         "agentID": "orchestrator",
++         "firstMessageTime": 1791430245236,
++         "firstObservedAt": 1791430245236,
++         "inputPreview": {
++           "messageID": "msg_g0VXQQk8k00zoueUD7NQ",
++           "observedAt": 1791430245236,
++           "source": "user_message",
++           "text": "Update the report snapshot, then run the independent reviewer continuation.",
++         },
++         "lastDisplayMessageID": "msg_g0VXQQk8k00zoueUD7NQ",
++         "lastMessageTime": 1791430245236,
++         "lastObservedAt": 1791430245236,
++         "messageIDs": [
++           "msg_g0VXQQk8k00zoueUD7NQ",
++         ],
++         "orderKey": "v1:0001791430245236:0000000000000050:0000000000000000:session:ses_-zUSZZFqvzzgmeFnsZ6A",
++         "parentSessionID": "ses_-zUSZZFxdzzHKTArQmNx",
++         "placement": "top_level",
++         "sessionID": "ses_-zUSZZFqvzzgmeFnsZ6A",
++         "stage": "orchestrator",
++         "todoUpdatedAt": 0,
++         "todos": [],
++       },
++     ],
++     "topLevelSessionIDs": [
++       "ses_-zUSZZFqvzzgmeFnsZ6A",
++     ],
++   },
+  }
+
+- Expected  - 3
++ Received  + 92
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\orchestrator-mission-root-message-read.test.ts:252:27)
+(fail) Mission acceptance wake reads its exact Mission-authored Task-root message [2332.86ms]
+(pass) successor runtime replays one atomic Task-root Message move after registering its durable bridge [3120.07ms]
+
+test\server\session-conversation-history.test.ts:
+(pass) session conversation history > cold assistant history advances a bounded real control-only identity window [2741.81ms]
+(pass) session conversation history > cold mission history advances a bounded real control-only identity window [2922.23ms]
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4421.82ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3965.64ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1925.45ms]
+
+ 11 pass
+ 1 fail
+ 75 expect() calls
+Ran 12 tests across 4 files. [36.56s]

@@ -1,0 +1,483 @@
+{
+  "observedAt": "2026-10-08T03:04:37.1191082Z",
+  "taskID": "tsk_g00VXQH5hY006MZJOq32",
+  "sessionID": "ses_hxxrih8AV0FKQyAmHwuL",
+  "sessionStatus": 200,
+  "taskStatus": 200,
+  "sessionMessages": [
+    {
+      "id": "msg_g0VXQI5Bg00S6y2AlsdB",
+      "role": "user",
+      "created": 1791428181149,
+      "completed": null,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQI5Bg00DnC2zW1sO",
+          "type": "text",
+          "tool": null,
+          "status": null,
+          "textLength": 2239,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQI5Bg01EBtOGumIQ",
+          "type": "text",
+          "tool": null,
+          "status": null,
+          "textLength": 329,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQI5FV00qITsFkGyI",
+      "role": "assistant",
+      "created": 1791428181381,
+      "completed": 1791428199319,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQI5OT008VDwc9D9V",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQI8co00ODGhqcXz4",
+          "type": "text",
+          "tool": null,
+          "status": null,
+          "textLength": 67,
+          "rawLength": null,
+          "start": 1791428195423,
+          "end": 1791428195423
+        },
+        {
+          "id": "prt_g0VXQI8u500fX0GbxHgZ",
+          "type": "tool",
+          "tool": "artifact_search",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQI9tD007g8Jg5hKS",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQI9vW00RtDfnVd9R",
+      "role": "assistant",
+      "created": 1791428199362,
+      "completed": 1791428214946,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQI9zu00yVKii4BAT",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIDN800ScOrGf5XQ",
+          "type": "tool",
+          "tool": "artifact_read",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIDxK00Yvblp4ajO",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQIDzV00VS183B0Ws",
+      "role": "assistant",
+      "created": 1791428214986,
+      "completed": 1791428243115,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQIE3u00SLeHiZJ5l",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIKnB00DqIpLs1AW",
+          "type": "tool",
+          "tool": "artifact_select",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQILHS00nm3cFlwR8",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQILK800gtzq6ShMD",
+      "role": "assistant",
+      "created": 1791428243172,
+      "completed": 1791428251229,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQILOs00hIqH7HmvQ",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIN1K00Jj7rcWvV0",
+          "type": "tool",
+          "tool": "artifact_read",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQINOS00jSD2XKRmM",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQINQo00Fo5PVpue7",
+      "role": "assistant",
+      "created": 1791428251274,
+      "completed": 1791428278387,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQINV600yvjOSP3n1",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIQpz00yDdJNZOYp",
+          "type": "reasoning",
+          "tool": null,
+          "status": null,
+          "textLength": 0,
+          "rawLength": null,
+          "start": 1791428264367,
+          "end": 1791428264412
+        },
+        {
+          "id": "prt_g0VXQIQuH00Mk5VPpP7s",
+          "type": "tool",
+          "tool": "bash",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIUSo00cjffUpo50",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQIUUw00HMwyP2wUf",
+      "role": "assistant",
+      "created": 1791428278438,
+      "completed": 1791428316500,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQIUZG003Fi17aRGQ",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIdPK006X9Ub50EB",
+          "type": "reasoning",
+          "tool": null,
+          "status": null,
+          "textLength": 0,
+          "rawLength": null,
+          "start": 1791428312686,
+          "end": 1791428312692
+        },
+        {
+          "id": "prt_g0VXQIdPV00hCEE7GnQ4",
+          "type": "tool",
+          "tool": "bash",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIeNc00RzRZX2crZ",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQIePc00wPuiTnWrd",
+      "role": "assistant",
+      "created": 1791428316549,
+      "completed": 1791428325688,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQIeVT00N31LkVcNY",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIfal00ZWnSot000",
+          "type": "reasoning",
+          "tool": null,
+          "status": null,
+          "textLength": 0,
+          "rawLength": null,
+          "start": 1791428321083,
+          "end": 1791428321088
+        },
+        {
+          "id": "prt_g0VXQIfd900cmiPycmpO",
+          "type": "text",
+          "tool": null,
+          "status": null,
+          "textLength": 134,
+          "rawLength": null,
+          "start": 1791428324850,
+          "end": 1791428324850
+        },
+        {
+          "id": "prt_g0VXQIgZb005LM3uhYV1",
+          "type": "tool",
+          "tool": "read_agent_message",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIgln00cvl1uVfzy",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQIgno00Ys7qQ3uUK",
+      "role": "assistant",
+      "created": 1791428325736,
+      "completed": 1791428335189,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQIgsr00Cps9avT7i",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIi4O00KdxJpgfrz",
+          "type": "tool",
+          "tool": "read_agent_message",
+          "status": "completed",
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIjFK00MMeiqje5x",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQIjH900xneOOekZn",
+      "role": "assistant",
+      "created": 1791428335243,
+      "completed": 1791428359199,
+      "hasError": false,
+      "parts": [
+        {
+          "id": "prt_g0VXQIjMn00wzbA55RSc",
+          "type": "step-start",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        },
+        {
+          "id": "prt_g0VXQIke000SGEXVoRmo",
+          "type": "text",
+          "tool": null,
+          "status": null,
+          "textLength": 1151,
+          "rawLength": null,
+          "start": 1791428358735,
+          "end": 1791428358735
+        },
+        {
+          "id": "prt_g0VXQIpUM00pR0ZdzWoq",
+          "type": "step-finish",
+          "tool": null,
+          "status": null,
+          "textLength": null,
+          "rawLength": null,
+          "start": null,
+          "end": null
+        }
+      ]
+    }
+  ],
+  "taskTranscriptIDs": [
+    "msg_g0VXQI5Bg00S6y2AlsdB",
+    "msg_g0VXQI5FV00qITsFkGyI",
+    "msg_g0VXQI9vW00RtDfnVd9R",
+    "msg_g0VXQIDzV00VS183B0Ws",
+    "msg_g0VXQILK800gtzq6ShMD",
+    "msg_g0VXQINQo00Fo5PVpue7",
+    "msg_g0VXQIUUw00HMwyP2wUf",
+    "msg_g0VXQIePc00wPuiTnWrd",
+    "msg_g0VXQIgno00Ys7qQ3uUK",
+    "msg_g0VXQIjH900xneOOekZn"
+  ],
+  "viewMessageIDs": [
+    "msg_g0VXQI5Bg00S6y2AlsdB",
+    "msg_g0VXQI5FV00qITsFkGyI",
+    "msg_g0VXQI9vW00RtDfnVd9R",
+    "msg_g0VXQIDzV00VS183B0Ws",
+    "msg_g0VXQILK800gtzq6ShMD",
+    "msg_g0VXQINQo00Fo5PVpue7",
+    "msg_g0VXQIUUw00HMwyP2wUf",
+    "msg_g0VXQIePc00wPuiTnWrd",
+    "msg_g0VXQIgno00Ys7qQ3uUK",
+    "msg_g0VXQIjH900xneOOekZn"
+  ],
+  "viewSessions": [
+    {
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL",
+      "messageIDs": [
+        "msg_g0VXQI5Bg00S6y2AlsdB",
+        "msg_g0VXQI5FV00qITsFkGyI",
+        "msg_g0VXQI9vW00RtDfnVd9R",
+        "msg_g0VXQIDzV00VS183B0Ws",
+        "msg_g0VXQILK800gtzq6ShMD",
+        "msg_g0VXQINQo00Fo5PVpue7",
+        "msg_g0VXQIUUw00HMwyP2wUf",
+        "msg_g0VXQIePc00wPuiTnWrd",
+        "msg_g0VXQIgno00Ys7qQ3uUK",
+        "msg_g0VXQIjH900xneOOekZn"
+      ]
+    }
+  ],
+  "mode": "snapshot",
+  "lastLiveSequence": 1778,
+  "liveEpoch": 1791427847620
+}

@@ -1,0 +1,83 @@
+{
+  "pid": 77008,
+  "occurrence": "child-message-identity-live-125-01-c3eb8850-1e85-49b9-a980-50717ffd155d",
+  "selected": {
+    "occurrence": "child-message-identity-live-125-01-c3eb8850-1e85-49b9-a980-50717ffd155d",
+    "taskID": "tsk_g00VXQSWk8005qXp7nDu",
+    "projectID": "prj_hjQFuyEq58Nwno6vVIkm",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\child-message-identity-live-125-01\\project",
+    "productPillar": "work",
+    "requestID": "3f1c76b4-d244-4815-836e-37b1430561ac",
+    "requestSentAt": "2026-10-08T03:37:46.9431294Z",
+    "acceptedObservedAt": "2026-10-08T03:37:51.0225001Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXQSWk8005qXp7nDu",
+    "projectID": "prj_hjQFuyEq58Nwno6vVIkm",
+    "rootSessionID": "ses_-zUSZXT7UzzjHlcVbH55",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXQSWt700Njmqf2WH5",
+    "openedAt": 1791430670348
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXQSWk8005qXp7nDu",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXQSWt700Njmqf2WH5",
+    "openedAt": 1791430670348,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXQTv5Y00KGyxpkvA4",
+    "terminalAt": 1791431000402
+  },
+  "ownedPromptSessions": [],
+  "sessionIDs": [
+    "ses_-zUSZXT7UzzjHlcVbH55",
+    "ses_-zUSZXSFZzz4wClc2OjG",
+    "ses_h2Ih7JJtPuBia0P4RvR5",
+    "ses_hyJ7PUVhU8dAcCxQZXTF"
+  ],
+  "artifactIDs": [
+    {
+      "id": "art_g0VXQSWse006g7DlF8EF",
+      "kind": "task_package_revision_binding"
+    },
+    {
+      "id": "art_g0VXQSWsv00H3CljWTMZ",
+      "kind": "task_execution_capsule_binding"
+    },
+    {
+      "id": "art_g0VXQSc7t00Dbbyg0yCp",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hxwixVVOJsjmJd8olLqx",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXQSquC00Q71NWA7AG",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXQT3GV006w4VZZtiR",
+      "kind": "dispatch_lineage"
+    },
+    {
+      "id": "art_hsgYKG76IFymCopzxv0T",
+      "kind": "task_root_ingress_disposition"
+    },
+    {
+      "id": "art_g0VXQTjFU009pgVFFrou",
+      "kind": "dispatch_settlement"
+    },
+    {
+      "id": "art_g0VXQTubz00RI3RkIwEG",
+      "kind": "task_completion_decision"
+    },
+    {
+      "id": "art_hB8e9nyLTKkfVwBFcSdJ",
+      "kind": "task_root_ingress_disposition"
+    }
+  ],
+  "observedAt": "2026-10-08T03:43:22.621Z",
+  "requests": 20,
+  "qualification": "Exact durable Task completed and its physical prompt owners unwound; Root separately qualifies declared resource, real UI/native download and whole service chain"
+}

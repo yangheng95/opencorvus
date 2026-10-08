@@ -1,0 +1,30 @@
+bun test v1.3.14 (0d9b296a)
+
+test\inspect-task-live-observation.test.ts:
+2616 |       `).get())
+2617 |   }
+2618 | 
+2619 |   function assertTaskRootMessageMutable(db: Database.TxOrDb, messageID: string): void {
+2620 |     if (taskRootMessageIsImmutable(db, messageID)) {
+2621 |       throw new Error(`Task-root causal Message ${messageID} is immutable`)
+                       ^
+error: Task-root causal Message msg_g0VXQOkQv00xtiy2x2tE is immutable
+      at assertTaskRootMessageMutable (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2621:17)
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2270:39)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2309:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2357:39)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2395:65)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:102:21)
+(fail) Task child snapshot and changed-message delta retain a real control-only assistant identity [2745.89ms]
+
+ 0 pass
+ 1 filtered out
+ 1 fail
+Ran 1 test across 1 file. [5.33s]

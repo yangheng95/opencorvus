@@ -1,0 +1,39 @@
+138 |       const { id, messageID, sessionID, ...payload } = persisted[0]!.payload
+139 |       assert.deepEqual(payload, source)
+140 |     }
+141 |   }
+142 |   assert.equal(provider.length, complete.requests)
+143 |   assert.deepEqual(provider, Array.from({ length: complete.requests }, () => ({ model: "gpt-6.1-sol", streaming: true, status: 200, state: "settled", terminal: "eof" })))
+               ^
+AssertionError: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      model: 'gpt-6.1-sol',
+      state: 'settled',
+      status: 200,
+...
+      streaming: true,
++     terminal: 'error'
+-     terminal: 'eof'
+    },
+    {
+      model: 'gpt-6.1-sol',
+      state: 'settled',
+      status: 200,
+
+ generatedMessage: true,
+     actual: [
+  [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...]
+],
+   expected: [
+  [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...], [Object ...]
+],
+   operator: "deepStrictEqual",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\verify-current-source-facts.ts:143:10
+
+Bun v1.3.14 (Windows x64)

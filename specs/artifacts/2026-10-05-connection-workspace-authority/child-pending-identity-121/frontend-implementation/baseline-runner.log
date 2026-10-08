@@ -1,0 +1,47 @@
+bun test v1.3.14 (0d9b296a)
+
+test\subagent-conversation-service.test.ts:
+29 |   const info = (id: string, time: number) => ({ id, sessionID: target.sessionID, agentID: "build-agent", sessionAgentID: "build-agent", role: "assistant", author: "build-agent", channel: "build", originSource: "", resolvedRole: "build", orderKey: orderKey(time,id), time: {created:time} })
+30 |   const visible=info("visible-message",100), control=info("control-message",200)
+31 |   const body={id:"body-part",messageID:visible.id,sessionID:target.sessionID,type:"text",text:"Previous visible answer",orderKey:"v1:0000000000000101:0000000000000031:0000000000000000:part:body-part"}
+32 |   const step={id:"step-part",messageID:control.id,sessionID:target.sessionID,type:"step-start",orderKey:"v1:0000000000000201:0000000000000031:0000000000000000:part:step-part"}
+33 |   const base=parseSubagentConversation(target,{lastLiveSequence:1,liveEpoch:1,transcriptMode:"snapshot",removedMessageIDs:[],transcript:[{info:visible,parts:[body]},{info:control,parts:[step]}],view:{messages:[{messageID:visible.id,sessionID:target.sessionID,agentID:"build-agent",stage:"build",time:100,orderKey:visible.orderKey}],sessions:[{sessionID:target.sessionID,agentID:"build-agent",messageIDs:[visible.id,control.id]}]}})
+34 |   expect(base.messages.map(message=>message.messageID)).toEqual([visible.id,control.id])
+                                                             ^
+error: expect(received).toEqual(expected)
+
+  [
+    "visible-message",
+-   "control-message",
+  ]
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:34:57)
+(fail) actual control-only owner accepts pending Part without message replay [2.60ms]
+(pass) task child transcript uses the exact task/session route and canonical order [2.56ms]
+(pass) persisted child transcript projects exact live Part snapshots and later deltas [1.10ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.26ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.11ms]
+(pass) standalone child transcript is rooted at the selected session [0.33ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.18ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.06ms]
+(pass) bursty transcript revisions coalesce into one refresh [33.80ms]
+(pass) a revision received during refresh schedules one trailing refresh [36.87ms]
+(pass) queued revisions refresh once when the immediate target load settles [47.63ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [15.57ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [1.48ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.18ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.09ms]
+(pass) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.70ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.34ms]
+(pass) Side Chat's ordered snapshot parser retains the connection's captured authority [0.86ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.45ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.14ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [29.86ms]
+
+ 20 pass
+ 1 fail
+ 46 expect() calls
+Ran 21 tests across 1 file. [475.00ms]

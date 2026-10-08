@@ -1,0 +1,18 @@
+{
+  "include": [
+    "../packages/opencorvus/src/**/*.ts",
+    "../packages/opencorvus/test/inspect-task-live-observation.test.ts",
+    "../packages/opencorvus/test/server/session-conversation-history.test.ts",
+    "../packages/opencorvus/test/orchestrator-mission-root-message-read.test.ts",
+    "../packages/opencorvus/test/mission-message-origin-projection.test.ts"
+  ],
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "compilerOptions": {
+    "jsxImportSource": "solid-js",
+    "jsx": "preserve"
+  },
+  "exclude": [
+    "../packages/opencorvus/dist/**/*",
+    "../packages/opencorvus/src/skill/builtin/**/*"
+  ]
+}

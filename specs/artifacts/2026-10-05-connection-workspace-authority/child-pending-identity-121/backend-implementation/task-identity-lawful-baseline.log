@@ -1,0 +1,28 @@
+bun test v1.3.14 (0d9b296a)
+
+test\inspect-task-live-observation.test.ts:
+112 |       const route = new Hono().route("/", EngineRoutes())
+113 |       const response = await route.request(`/task/${owner.taskID}/conversation/session/${owner.sessionID}`)
+114 |       expect(response.status).toBe(200)
+115 |       const snapshot = await response.json()
+116 |       expect(snapshot.transcript.map((message: { info: { id: string } }) => message.info.id))
+117 |         .toEqual([input.info.id, owner.messageID])
+               ^
+error: expect(received).toEqual(expected)
+
+  [
+    "msg_g0VXQOr6j00ktR9hD66K",
+-   "msg_g0VXQOr7G00EzXWGPXSK",
+  ]
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\inspect-task-live-observation.test.ts:117:10)
+(fail) Task child snapshot and changed-message delta retain a real control-only assistant identity [2524.28ms]
+
+ 0 pass
+ 1 filtered out
+ 1 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [4.76s]

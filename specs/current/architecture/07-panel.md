@@ -157,6 +157,21 @@ bundles retire only their exact old projected Message before replacement, preser
 other Messages and older loaded pages. Real Part removal validates its original
 Session/Message/Part/type before mutation; no new projection owner is introduced.
 
+Task and Session conversation hydration, child snapshots/deltas and preceding
+history retain the complete authorized Message identity window. Mission
+conversation uses the same Session readers. `view.sessions.messageIDs` records
+that window's actual membership; `view.messages` records its display placement.
+Control-only Messages consume the bounded window and advance its canonical
+history cursor. Reasoning bodies remain omitted by the current transport
+projection. Changed Task Messages replace their own identity bundle; delta
+removal IDs describe actual deletion or movement out of the addressed Session.
+The child and Side chat parser retains those validated identities so a later
+pending Part can attach to its real Message without replaying message creation.
+The shared strict message-display predicate is applied when projecting cards
+and Side chat lists. A real assistant error retains its reason and error state;
+identity-only rows do not create visible message boundaries. Archive and
+turn-artifact consumers retain their existing visible-output contracts.
+
 Review selection is exact group/path. Material request identity includes endpoints,
 objects, evidence and receipts in memory; ambiguous shorthand is a precise error.
 Loading/failure cannot present a previous preview. The existing logical immutable

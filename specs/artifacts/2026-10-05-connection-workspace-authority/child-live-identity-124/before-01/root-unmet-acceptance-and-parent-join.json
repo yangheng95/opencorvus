@@ -1,0 +1,19 @@
+{
+  "ownTabInventory": [],
+  "operation": "POST /task/:taskID/artifact-read",
+  "boundary": "Original failure preserved; no original Task restart, new POST shutdown, mutable file substitution or Sources checker",
+  "parentManagedSession": 69279,
+  "outcome": "connection-refused-after-native-hard-stop",
+  "latePendingVisualAcceptance": "unmet",
+  "viewportReset": true,
+  "nativeSavedFileAcceptance": "unmet",
+  "downloadEvent": "15s-timeout-no-path",
+  "observedAt": "2026-10-08T03:14:10Z",
+  "parentActualExitCode": 1,
+  "taskID": "tsk_g00VXQH5hY006MZJOq32",
+  "artifact": "desktop-keyboard-checklist.json",
+  "businessStatus": "completed",
+  "ownPageClosed": true,
+  "resourceByteAcceptance": "unmet",
+  "bytesAccepted": 0
+}

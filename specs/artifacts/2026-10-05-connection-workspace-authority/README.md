@@ -370,3 +370,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Shared candidate96 Recall](cold-config-error-mapping-plan-96.md): shared named400 and canonical VCS declaration implemented;42 focused cases100 expectations and generated docs qualified.
 
 
+- [Genuine identity124](child-live-identity-124/README.md) and [admission](child-live-identity-plan-124.md): actual7/6 reader omission followed by10/10, completed genuine Code Task, private supervision failure and full physical/pair closure; live pending/download acceptance unmet.
+- [Complete identity121](child-pending-identity-121/README.md), [fresh125](child-message-identity-125/README.md) and [125 admission](child-message-identity-after-plan-125.md): full identity window/parser, positive data checks and actual Sources; original oracle failure retained.

@@ -1,0 +1,16 @@
+{
+  "extends": "D:/myhexin-local/opencorvus/packages/overlay/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "D:/myhexin-local/opencorvus/packages/overlay/node_modules/vite/client",
+      "D:/myhexin-local/opencorvus/packages/opencorvus/node_modules/@types/bun"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/overlay/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/overlay/src/**/*.tsx",
+    "D:/myhexin-local/opencorvus/packages/overlay/src/**/*.js",
+    "D:/myhexin-local/opencorvus/packages/overlay/test/subagent-conversation-service.test.ts"
+  ]
+}

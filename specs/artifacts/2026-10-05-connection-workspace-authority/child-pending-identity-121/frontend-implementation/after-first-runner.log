@@ -1,0 +1,119 @@
+bun test v1.3.14 (0d9b296a)
+
+test\subagent-conversation-service.test.ts:
+(pass) actual control-only owner accepts pending Part without message replay [4.94ms]
+510 |   }
+511 |   return value as Record<string, any>
+512 | }
+513 | 
+514 | function requireArray(value: unknown, label: string): any[] {
+515 |   if (!Array.isArray(value)) throw new Error(`${label} must be an array`)
+                                             ^
+error: subagent conversation child-session view.sessions must be an array
+      at requireArray (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:515:40)
+      at parseSubagentConversation (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:582:21)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:130:24)
+(fail) task child transcript uses the exact task/session route and canonical order [1.78ms]
+510 |   }
+511 |   return value as Record<string, any>
+512 | }
+513 | 
+514 | function requireArray(value: unknown, label: string): any[] {
+515 |   if (!Array.isArray(value)) throw new Error(`${label} must be an array`)
+                                             ^
+error: subagent conversation child-session view.sessions must be an array
+      at requireArray (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:515:40)
+      at parseSubagentConversation (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:582:21)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:159:27)
+(fail) persisted child transcript projects exact live Part snapshots and later deltas [0.46ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.29ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.13ms]
+510 |   }
+511 |   return value as Record<string, any>
+512 | }
+513 | 
+514 | function requireArray(value: unknown, label: string): any[] {
+515 |   if (!Array.isArray(value)) throw new Error(`${label} must be an array`)
+                                             ^
+error: subagent conversation child-session view.sessions must be an array
+      at requireArray (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:515:40)
+      at parseSubagentConversation (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:582:21)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:319:9)
+(fail) standalone child transcript is rooted at the selected session [0.42ms]
+335 |     loadSubagentConversation({
+336 |       source: { kind: "task", id: "task-one" },
+337 |       sessionID: "child-session",
+338 |       directory: "/repo",
+339 |     }),
+340 |   ).rejects.toThrow("session identity drift")
+                  ^
+error: expect(received).toThrow(expected)
+
+Expected substring: "session identity drift"
+Received message: "subagent conversation child-session view.sessions must be an array"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:340:13)
+(fail) transcript identity drift is rejected instead of silently merging sessions [0.37ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.08ms]
+(pass) bursty transcript revisions coalesce into one refresh [29.58ms]
+(pass) a revision received during refresh schedules one trailing refresh [47.97ms]
+(pass) queued revisions refresh once when the immediate target load settles [49.08ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [19.81ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [0.54ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.13ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.10ms]
+510 |   }
+511 |   return value as Record<string, any>
+512 | }
+513 | 
+514 | function requireArray(value: unknown, label: string): any[] {
+515 |   if (!Array.isArray(value)) throw new Error(`${label} must be an array`)
+                                             ^
+error: subagent conversation child-session view.sessions must be an array
+      at requireArray (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:515:40)
+      at parseSubagentConversation (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:582:21)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:552:37)
+(fail) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.86ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.38ms]
+585 |     },
+586 |   })
+587 |   const close = connectSideChat({ sessionID: "child-session", directory: "D:/owned", authority }, {
+588 |     transcript(value) { values.push(value.targetKey) },
+589 |     connection() {}, activity() {}, interactions() {},
+590 |     error(error) { throw error },
+                               ^
+error: subagent conversation child-session view.sessions must be an array
+      at error (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:590:26)
+      at onEvent (D:\myhexin-local\opencorvus\packages\overlay\src\services\side-chat.ts:131:22)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:594:14)
+(fail) Side Chat's ordered snapshot parser retains the connection's captured authority [1.24ms]
+510 |   }
+511 |   return value as Record<string, any>
+512 | }
+513 | 
+514 | function requireArray(value: unknown, label: string): any[] {
+515 |   if (!Array.isArray(value)) throw new Error(`${label} must be an array`)
+                                             ^
+error: subagent conversation child-session view.sessions must be an array
+      at requireArray (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:515:40)
+      at parseSubagentConversation (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:582:21)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:620:25)
+(fail) held A read retains its exact response while B returns its own child transcript [0.79ms]
+510 |   }
+511 |   return value as Record<string, any>
+512 | }
+513 | 
+514 | function requireArray(value: unknown, label: string): any[] {
+515 |   if (!Array.isArray(value)) throw new Error(`${label} must be an array`)
+                                                                              ^
+error: subagent conversation child-session view.sessions must be an array
+      at requireArray (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:515:73)
+      at parseSubagentConversation (D:\myhexin-local\opencorvus\packages\overlay\src\services\subagent-conversation.ts:582:21)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:635:18)
+(fail) same child identifiers under a new authority replace the prior delta base [0.30ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [30.17ms]
+
+ 13 pass
+ 8 fail
+ 21 expect() calls
+Ran 21 tests across 1 file. [418.00ms]

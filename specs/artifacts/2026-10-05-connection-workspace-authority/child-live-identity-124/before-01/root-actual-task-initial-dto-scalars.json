@@ -1,0 +1,194 @@
+{
+  "observedAt": "2026-10-08T02:57:20.9874495Z",
+  "route": "Task conversation initial",
+  "taskID": "tsk_g00VXQH5hY006MZJOq32",
+  "status": 200,
+  "transcript": [
+    {
+      "role": "user",
+      "partTypes": [
+        "text"
+      ],
+      "id": "msg_g0VXQH6kd00aH7c8go07",
+      "partIDs": [
+        "prt_g0VXQH6kF00GuTE0HIuV"
+      ],
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "role": "user",
+      "partTypes": [
+        "text"
+      ],
+      "id": "msg_task-root-control_art_hTKvGCviRJQCqh0tb1jO_art_hTKvGCviRJQCqh0tb1jO",
+      "partIDs": [
+        "prt_task-root-control_art_hTKvGCviRJQCqh0tb1jO_art_hTKvGCviRJQCqh0tb1jO"
+      ],
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "role": "assistant",
+      "partTypes": [
+        "step-start",
+        "text",
+        "tool",
+        "step-finish",
+        "step-start",
+        "tool",
+        "step-finish",
+        "step-start",
+        "tool",
+        "step-finish",
+        "step-start",
+        "step-start",
+        "tool",
+        "step-finish",
+        "step-start",
+        "tool",
+        "step-finish",
+        "step-start",
+        "tool",
+        "step-finish",
+        "step-start",
+        "text",
+        "tool",
+        "step-finish"
+      ],
+      "id": "msg_hmBwlL4pPdBjAeOSXOjC",
+      "partIDs": [
+        "prt_g0VXQH6v600v78XfrCAc",
+        "prt_g0VXQH9Bz00aBRoPfLiN",
+        "prt_g0VXQH9WW000TvSHzCjV",
+        "prt_g0VXQH9zI005RRH5CnZV",
+        "prt_g0VXQHA5l00eRs1shljT",
+        "prt_g0VXQHCdJ007b63pRBvy",
+        "prt_g0VXQHeEO007gt85Hn0d",
+        "prt_g0VXQHeL8003cke0cB4k",
+        "prt_g0VXQHgJW00qf0FRC31y",
+        "prt_g0VXQHiPL00keOFSM2K1",
+        "prt_g0VXQHiXD00X3kphwBc6",
+        "prt_g0VXQHouu00ownCiagtb",
+        "prt_g0VXQHrXG00LenEqs4Xs",
+        "prt_g0VXQHrlQ00MnnU7O6HW",
+        "prt_g0VXQHrsH00o87L3FMAW",
+        "prt_g0VXQHtpM00Gib3dliKi",
+        "prt_g0VXQHuhW00tKu4WLLcb",
+        "prt_g0VXQHuoP00mrDvJzHY2",
+        "prt_g0VXQHwO700JnZ6UQf04",
+        "prt_g0VXQHwnS004cADZbMjg",
+        "prt_g0VXQHwvQ00WQQBMAkcW",
+        "prt_g0VXQI0Ov0030vgPGHd5",
+        "prt_g0VXQI1C600rO04Yn6ZA",
+        "prt_g0VXQI5Mc00SXMkZfXXq"
+      ],
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "role": "user",
+      "partTypes": [
+        "text",
+        "text"
+      ],
+      "id": "msg_g0VXQI5Bg00S6y2AlsdB",
+      "partIDs": [
+        "prt_g0VXQI5Bg00DnC2zW1sO",
+        "prt_g0VXQI5Bg01EBtOGumIQ"
+      ],
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    },
+    {
+      "role": "assistant",
+      "partTypes": [
+        "step-start",
+        "text",
+        "tool",
+        "step-finish"
+      ],
+      "id": "msg_g0VXQI5FV00qITsFkGyI",
+      "partIDs": [
+        "prt_g0VXQI5OT008VDwc9D9V",
+        "prt_g0VXQI8co00ODGhqcXz4",
+        "prt_g0VXQI8u500fX0GbxHgZ",
+        "prt_g0VXQI9tD007g8Jg5hKS"
+      ],
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    },
+    {
+      "role": "assistant",
+      "partTypes": [
+        "step-start",
+        "tool",
+        "step-finish"
+      ],
+      "id": "msg_g0VXQI9vW00RtDfnVd9R",
+      "partIDs": [
+        "prt_g0VXQI9zu00yVKii4BAT",
+        "prt_g0VXQIDN800ScOrGf5XQ",
+        "prt_g0VXQIDxK00Yvblp4ajO"
+      ],
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    }
+  ],
+  "viewMessages": [
+    {
+      "stage": "user",
+      "agentID": "orchestrator",
+      "messageID": "msg_g0VXQH6kd00aH7c8go07",
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "stage": "orchestrator",
+      "agentID": "orchestrator",
+      "messageID": "msg_task-root-control_art_hTKvGCviRJQCqh0tb1jO_art_hTKvGCviRJQCqh0tb1jO",
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "stage": "orchestrator",
+      "agentID": "orchestrator",
+      "messageID": "msg_hmBwlL4pPdBjAeOSXOjC",
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "stage": "delegated-worker",
+      "agentID": "base-tester",
+      "messageID": "msg_g0VXQI5Bg00S6y2AlsdB",
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    },
+    {
+      "stage": "delegated-worker",
+      "agentID": "base-tester",
+      "messageID": "msg_g0VXQI5FV00qITsFkGyI",
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    },
+    {
+      "stage": "delegated-worker",
+      "agentID": "base-tester",
+      "messageID": "msg_g0VXQI9vW00RtDfnVd9R",
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    }
+  ],
+  "sessions": [
+    {
+      "stage": "orchestrator",
+      "messageIDs": [
+        "msg_g0VXQH6kd00aH7c8go07",
+        "msg_task-root-control_art_hTKvGCviRJQCqh0tb1jO_art_hTKvGCviRJQCqh0tb1jO",
+        "msg_hmBwlL4pPdBjAeOSXOjC"
+      ],
+      "agentID": "orchestrator",
+      "parentSessionID": "ses_-zUSZiuA8zzcVlQCJqaf",
+      "sessionID": "ses_-zUSZitHvzzCCS8HOooJ"
+    },
+    {
+      "stage": "delegated-worker",
+      "messageIDs": [
+        "msg_g0VXQI5Bg00S6y2AlsdB",
+        "msg_g0VXQI5FV00qITsFkGyI",
+        "msg_g0VXQI9vW00RtDfnVd9R"
+      ],
+      "agentID": "base-tester",
+      "parentSessionID": "ses_-zUSZitHvzzCCS8HOooJ",
+      "sessionID": "ses_hxxrih8AV0FKQyAmHwuL"
+    }
+  ]
+}

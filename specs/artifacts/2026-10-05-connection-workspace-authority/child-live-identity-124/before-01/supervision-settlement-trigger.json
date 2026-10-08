@@ -1,0 +1,18 @@
+{
+  "firstFailedPath": null,
+  "pinned": {
+    "taskID": "tsk_g00VXQH5hY006MZJOq32",
+    "projectID": "prj_hCDjw1y5eQsSwD6si0Fh",
+    "rootSessionID": "ses_-zUSZiuA8zzcVlQCJqaf",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXQH5qV00cvinGAznR",
+    "openedAt": 1791427944792
+  },
+  "occurrence": "sources-late-open-live-124-01-4444235a-0bfa-44a2-a136-307d2624b80d",
+  "totalDeadlineMs": 1791428844792,
+  "reason": "fixed-task-maximum",
+  "boundary": "Pinned Task boundary cached once; no progress renewal; stop request is distinct from physical settlement",
+  "observedAtUtc": "2026-10-08T03:07:25.4942198Z",
+  "pid": 72252,
+  "preparationDeadlineMs": 1791428445673
+}

@@ -1,0 +1,11 @@
+{
+  "title": "普通桌面键盘清单验收124",
+  "request": "请创建一个 UTF-8 JSON 文件 desktop-keyboard-checklist.json，内容是30条互不重复的桌面应用键盘交互手工检查清单。顶层为数组，每条包含 id、category、title、steps、expected、explanation：id唯一，category和title为简明字符串，steps为具体操作字符串数组，expected描述人工可观察的正确结果，explanation解释这项检查的目的。覆盖实际常见的焦点移动、输入编辑、菜单、对话框、列表、快捷键和滚动交互；不要引用或虚构规范，不加入网页来源链接，不生成大段重复内容。请实际保存有效JSON，检查完整30条和字段内容，将这一个文件作为真实交付文件提供，并用中文简要说明结果。\n",
+  "productPillar": "code",
+  "promptProfile": "base",
+  "model": "openai/gpt-6.1-sol",
+  "source": "product-experience-124",
+  "requestID": "b6c5fa98-ef95-4c40-8591-33eee86395f0",
+  "requestSentAt": "2026-10-08T02:52:20.6667016Z",
+  "acceptedObservedAt": "2026-10-08T02:52:25.4611217Z"
+}

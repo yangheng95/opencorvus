@@ -1,0 +1,289 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/subagent-conversation-service.test.ts.before b/packages/overlay/test/subagent-conversation-service.test.ts
+index f3d4cf91..9f609ea4 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/subagent-conversation-service.test.ts.before
++++ b/packages/overlay/test/subagent-conversation-service.test.ts
+@@ -24,6 +24,171 @@ import type { StreamHandlers, StreamOpenRequest } from "../src/services/host-tra
+ 
+ setLocaleData("en-US", enUS)
+ 
++test("actual control-only owner accepts pending Part without message replay", () => {
++  const target: SubagentConversationTarget = {
++    source: { kind: "task", id: "task-one" },
++    sessionID: "child-session",
++    directory: "/repo",
++    authority: captureApiAuthority(),
++  }
++  const info = (id: string, time: number) => ({
++    id,
++    sessionID: target.sessionID,
++    agentID: "build-agent",
++    sessionAgentID: "build-agent",
++    role: "assistant",
++    author: "build-agent",
++    channel: "build",
++    originSource: "",
++    resolvedRole: "build",
++    orderKey: orderKey(time, id),
++    time: { created: time },
++  })
++  const visible = info("visible-message", 100),
++    control = info("control-message", 200)
++  const body = {
++    id: "body-part",
++    messageID: visible.id,
++    sessionID: target.sessionID,
++    type: "text",
++    text: "Previous visible answer",
++    orderKey: "v1:0000000000000101:0000000000000031:0000000000000000:part:body-part",
++  }
++  const step = {
++    id: "step-part",
++    messageID: control.id,
++    sessionID: target.sessionID,
++    type: "step-start",
++    orderKey: "v1:0000000000000201:0000000000000031:0000000000000000:part:step-part",
++  }
++  const base = parseSubagentConversation(target, {
++    lastLiveSequence: 1,
++    liveEpoch: 1,
++    transcriptMode: "snapshot",
++    removedMessageIDs: [],
++    transcript: [
++      { info: visible, parts: [body] },
++      { info: control, parts: [step] },
++    ],
++    view: {
++      messages: [
++        {
++          messageID: visible.id,
++          sessionID: target.sessionID,
++          agentID: "build-agent",
++          stage: "build",
++          time: 100,
++          orderKey: visible.orderKey,
++        },
++      ],
++      sessions: [{ sessionID: target.sessionID, agentID: "build-agent", messageIDs: [visible.id, control.id] }],
++    },
++  })
++  expect(base.messages.map((message) => message.messageID)).toEqual([visible.id, control.id])
++  expect(projectSubagentConversationCard(base)?.parts).toEqual([body])
++  const pending = {
++    id: "pending-tool",
++    messageID: control.id,
++    sessionID: target.sessionID,
++    type: "tool",
++    callID: "current-call",
++    tool: "apply_patch",
++    state: { status: "pending", input: {}, time: { start: 202 } },
++    orderKey: "v1:0000000000000202:0000000000000031:0000000000000000:part:pending-tool",
++  }
++  const live = observeSubagentConversationLiveEvent(createSubagentConversationLiveProjection(target.sessionID), {
++    type: "message.part.updated",
++    payload: { part: pending },
++  })
++  const promoted = projectSubagentConversationLive(base, live)
++  expect(promoted.messages[1]).toMatchObject({ messageID: control.id, info: control, parts: [step, pending] })
++  expect(
++    projectSubagentConversationCard(promoted, "running")?.parts.map((part) => ({
++      type: part.type,
++      messageID: part.messageID,
++    })),
++  ).toEqual([
++    { type: "text", messageID: visible.id },
++    { type: "boundary", messageID: control.id },
++    { type: "tool", messageID: control.id },
++  ])
++  const running = {
++    ...pending,
++    state: { status: "running", input: { patch: "Current actual input" }, time: { start: 202 } },
++  }
++  const active = observeSubagentConversationLiveEvent(live, {
++    type: "message.part.updated",
++    payload: { part: running },
++  })
++  expect(
++    projectSubagentConversationCard(projectSubagentConversationLive(base, active), "running")?.parts.at(-1),
++  ).toMatchObject(running)
++  const completed = {
++    ...pending,
++    state: {
++      status: "completed",
++      input: { patch: "Current actual input" },
++      output: "Applied patch",
++      time: { start: 202, end: 203 },
++    },
++  }
++  const done = observeSubagentConversationLiveEvent(active, {
++    type: "message.part.updated",
++    payload: { part: completed },
++  })
++  expect(
++    projectSubagentConversationCard(projectSubagentConversationLive(base, done), "completed")?.parts.at(-1),
++  ).toMatchObject(completed)
++  const error = {
++    ...pending,
++    state: { status: "error", input: {}, error: "Actual operation failed", time: { start: 202, end: 204 } },
++  }
++  expect(
++    projectSubagentConversationCard(
++      projectSubagentConversationLive(
++        base,
++        observeSubagentConversationLiveEvent(done, { type: "message.part.updated", payload: { part: error } }),
++      ),
++      "error",
++    )?.parts.at(-1),
++  ).toMatchObject(error)
++  const retired = observeSubagentConversationLiveEvent(done, {
++    type: "message.part.removed",
++    payload: { sessionID: target.sessionID, messageID: control.id, partID: pending.id, partType: "tool" },
++  })
++  expect(projectSubagentConversationCard(projectSubagentConversationLive(base, retired))?.parts).toEqual([body])
++  const errored = {
++    ...base,
++    messages: [
++      base.messages[0]!,
++      {
++        ...base.messages[1]!,
++        info: { ...control, error: { name: "OperationError", data: { message: "Actual Message failure" } } },
++      },
++    ],
++  }
++  expect(projectSubagentConversationCard(errored)).toMatchObject({
++    status: "error",
++    errorReason: "Actual Message failure",
++    messageID: visible.id,
++  })
++  const missingActor = structuredClone(base.messages[1]!.info)
++  delete missingActor.sessionAgentID
++  expect(() =>
++    parseSubagentConversation(target, {
++      lastLiveSequence: 1,
++      liveEpoch: 1,
++      transcriptMode: "snapshot",
++      removedMessageIDs: [],
++      transcript: [{ info: missingActor, parts: [step] }],
++      view: {
++        messages: [],
++        sessions: [{ sessionID: target.sessionID, agentID: "build-agent", messageIDs: [control.id] }],
++      },
++    }),
++  ).toThrow(`subagent conversation child-session message control-message session actor drift`)
++})
++
+ function orderKey(time: number, id: string): string {
+   return `v1:${String(time).padStart(16, "0")}:0000000000000030:0000000000000000:message:${id}`
+ }
+@@ -46,7 +211,7 @@ function transport(requests: TransportRequest[], response: Record<string, unknow
+ }
+ 
+ function payload() {
+-  return {
++  const result = {
+     lastLiveSequence: 12,
+     liveEpoch: 1779000000000,
+     transcriptMode: "snapshot",
+@@ -59,8 +224,13 @@ function payload() {
+           role: "assistant",
+           author: "build-agent",
+           channel: "build",
++          agentID: "build-agent",
++          sessionAgentID: "build-agent",
++          originSource: "",
++          time: { created: 200 },
++          orderKey: orderKey(200, "message-late"),
+         },
+-        parts: [{ id: "late-text", type: "text", text: "Done" }],
++        parts: [{ id: "late-text", messageID: "message-late", sessionID: "child-session", type: "text", text: "Done", orderKey: "v1:0000000000000201:0000000000000031:0000000000000000:part:late-text" }],
+       },
+       {
+         info: {
+@@ -70,8 +240,12 @@ function payload() {
+           author: "orchestrator",
+           channel: "build",
+           originSource: "delegate_agent",
++          agentID: "build-agent",
++          sessionAgentID: "build-agent",
++          time: { created: 100 },
++          orderKey: orderKey(100, "message-early"),
+         },
+-        parts: [{ id: "early-text", type: "text", text: "Starting" }],
++        parts: [{ id: "early-text", messageID: "message-early", sessionID: "child-session", type: "text", text: "Starting", orderKey: "v1:0000000000000101:0000000000000031:0000000000000000:part:early-text" }],
+       },
+     ],
+     view: {
+@@ -95,34 +269,55 @@ function payload() {
+       ],
+     },
+   }
++  return {
++    ...result,
++    view: {
++      ...result.view,
++      sessions: [
++        { sessionID: "child-session", agentID: "build-agent", messageIDs: result.transcript.map((row) => row.info.id) },
++      ],
++    },
++  }
+ }
+-
+ afterEach(() => {
+   __setHostTransportForTest(undefined)
+   configure({ serverUrl: "http://127.0.0.1:7878", password: "" })
+ })
+ 
++test("canonical child metadata and Part ownership retain precise admission errors", () => {
++  const target: SubagentConversationTarget = { source: { kind: "task", id: "task-one" }, sessionID: "child-session", directory: "/repo", authority: captureApiAuthority() }
++  const badPart = payload()
++  Object.assign(badPart.transcript[0]!.parts[0]!, { messageID: "another-message" })
++  expect(() => parseSubagentConversation(target, badPart)).toThrow("subagent conversation child-session message message-late Part owner drift")
++  const badView = payload()
++  badView.view.messages[0]!.agentID = "another-agent"
++  expect(() => parseSubagentConversation(target, badView)).toThrow("subagent conversation child-session message message-late view identity drift")
++  const badMembership = payload()
++  badMembership.view.sessions[0]!.messageIDs.push("missing-real-payload")
++  expect(() => parseSubagentConversation(target, badMembership)).toThrow("subagent conversation child-session missing transcript message missing-real-payload")
++})
++
+ test("task child transcript uses the exact task/session route and canonical order", async () => {
+   const requests: TransportRequest[] = []
+   __setHostTransportForTest(transport(requests, payload()))
+ 
+   const result = await loadSubagentConversation({
+     source: { kind: "task", id: "task one" },
+-    sessionID: "child/session",
++    sessionID: "child-session",
+     directory: "D:/repo",
+   })
+ 
+   expect(requests).toHaveLength(1)
+-  expect(requests[0]?.path).toBe("task/task%20one/conversation/session/child%2Fsession")
++  expect(requests[0]?.path).toBe("task/task%20one/conversation/session/child-session")
+   expect(requests[0]?.query?.directory).toBe("D:/repo")
+   expect(result.messages.map((message) => message.messageID)).toEqual(["message-early", "message-late"])
+   expect(result.messages[0]?.parts[0]?.text).toBe("Starting")
+ 
+   const card = projectSubagentConversationCard(result, "running")
+   expect(card).toMatchObject({
+-    id: "subagent-transcript:child/session",
++    id: "subagent-transcript:child-session",
+     kind: "agent",
+-    sessionID: "child/session",
++    sessionID: "child-session",
+     status: "running",
+   })
+   expect(card?.collapsedContextMessageIDs).toEqual(["message-early"])
+@@ -284,6 +479,7 @@ test("a live child message with an empty origin source projects the selected tra
+     agentID: "interface-designer",
+     stage: "frontend-design",
+   })
++  projected.messages[0]!.parts.push({ id: "actual-empty-origin-text", type: "text", text: "Current interface evidence" })
+   expect(projectSubagentConversationCard(projected, "running")).toMatchObject({
+     sessionID: "child-session",
+     agentID: "interface-designer",
+@@ -662,3 +858,5 @@ test("a new authority owns refresh cadence while the retired in-flight request s
+     controller.dispose()
+   }
+ })
++
++

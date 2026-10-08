@@ -1,0 +1,64 @@
+bun test v1.3.14 (0d9b296a)
+
+test\server\session-conversation-history.test.ts:
+52 |     Server.resetProjectRoutesAppForTest()
+53 |     const headers = { "x-opencorvus-directory": project.path }
+54 |     const tailResponse = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.sessionID}/conversation?tail_limit=1`, { headers }))
+55 |     expect(tailResponse.status).toBe(200)
+56 |     const tail = await tailResponse.json()
+57 |     expect(tail.transcript).toMatchObject([{ info: { id: saved.messageIDs[1], sessionID: saved.sessionID }, parts: [{ id: saved.partIDs[1], type: "step-start" }] }])
+                                 ^
+error: expect(received).toMatchObject(expected)
+
+- [
+-   {
+-     "info": {
+-       "id": "msg_g0VXQP1JW00YCQnl8XQn",
+-       "sessionID": "ses_-zUSZayhZzzwcqfySSYF",
+-     },
+-     "parts": [
+-       {
+-         "id": "prt_g0VXQP1Jc00CYYGWVPQS",
+-         "type": "step-start",
+-       },
+-     ],
+-   },
+- ]
++ []
+
+- Expected  - 14
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-conversation-history.test.ts:57:29)
+(fail) session conversation history > cold assistant history advances a bounded real control-only identity window [3151.11ms]
+76 | 	}
+77 | 	withStatement(callback) {
+78 | 		if (this.finalized) throw new Error("Cannot execute a finalized Bun SQLite prepared query");
+79 | 		let result;
+80 | 		try {
+81 | 			result = callback();
+     ^
+SQLiteError: session: mission identity metadata is incomplete
+      errno: 1811,
+ byteOffset: -1,
+       code: "SQLITE_CONSTRAINT_TRIGGER"
+
+      at run (unknown:1:1)
+      at #run (bun:sqlite:185:20)
+      at withStatement (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:81:13)
+      at persistPreparedNextInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:733:25)
+      at run (node:async_hooks:62:22)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1585:26)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1836:18
+      at D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10
+      at transaction (bun:sqlite:416:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.js:40:10)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1834:31)
+      at processTicksAndRejections (unknown:7:39)
+(fail) session conversation history > cold mission history advances a bounded real control-only identity window [2052.91ms]
+
+ 0 pass
+ 3 filtered out
+ 2 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [8.08s]

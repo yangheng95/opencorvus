@@ -1,0 +1,133 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/subagent-conversation.ts.before b/packages/overlay/src/services/subagent-conversation.ts
+index 6b9418f9..c5782a93 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/subagent-conversation.ts.before
++++ b/packages/overlay/src/services/subagent-conversation.ts
+@@ -2,10 +2,14 @@ import type { BoardSource } from "../store/board"
+ import type { CardNode } from "../store/card-tree"
+ import type { AgentActivityRecord } from "../utils/agent-activity"
+ import { conversationMessageDisplayStage, isDelegatedContextMessage } from "../utils/message-origin"
++import {
++  assistantMessageErrorReason,
++  conversationMessageHasDisplayContent,
++  isCardBodyMessagePart,
++} from "../utils/message-part"
+ import { orderedMessageParts, roleLabel } from "../utils/message"
+ import { compareTimelineOrderKeys, requireTimelineOrderKeyDomain } from "../utils/timeline-order"
+ import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api"
+-import { formatErrorDetails } from "./diagnostics"
+ 
+ export interface SubagentTranscriptMessage {
+   messageID: string
+@@ -458,14 +462,13 @@ export function projectSubagentConversationCard(
+   conversation: SubagentConversationTranscript,
+   status: CardNode["status"] = "completed",
+ ): CardNode | null {
+-  const messages = conversation.messages
++  const messages = conversation.messages.filter(conversationMessageHasDisplayContent)
+   const first = messages[0]
+   if (!first) return null
+   const last = messages.at(-1) ?? first
+   const errorReason = messages
+-    .map((message) => message.info.error)
++    .map((message) => assistantMessageErrorReason(message.info))
+     .filter(Boolean)
+-    .map(formatErrorDetails)
+     .at(-1)
+   const parts: any[] = []
+   for (const [index, message] of messages.entries()) {
+@@ -478,7 +481,7 @@ export function projectSubagentConversationCard(
+         time: message.time,
+       })
+     }
+-    for (const part of orderedMessageParts({ parts: message.parts })) {
++    for (const part of orderedMessageParts({ parts: message.parts.filter(isCardBodyMessagePart) })) {
+       parts.push({
+         ...part,
+         messageID: String(part.messageID || message.messageID),
+@@ -579,40 +582,55 @@ export function parseSubagentConversation(
+     transcriptByMessageID.set(messageID, message)
+   }
+ 
+-  const messages = viewMessages.map((raw) => {
+-    const meta = requireObject(raw, `subagent conversation ${sessionID} view message`)
+-    const messageID = String(meta.messageID || "")
+-    const ownerSessionID = String(meta.sessionID || "")
+-    const agentID = String(meta.agentID || "")
+-    const stage = String(meta.stage || "")
+-    const parentSessionID = String(meta.parentSessionID || "") || undefined
+-    const time = Number(meta.time || 0)
+-    if (!messageID || !ownerSessionID || !agentID || !stage || !(time > 0)) {
+-      throw new Error(`subagent conversation ${sessionID} view message has incomplete identity`)
++  const membership = new Map<string, { sessionID: string; agentID: string }>()
++  for (const raw of requireArray(view.sessions, `subagent conversation ${sessionID} view.sessions`)) {
++    const session = requireObject(raw, `subagent conversation ${sessionID} session`)
++    if (!session.sessionID || !session.agentID)
++      throw new Error(`subagent conversation ${sessionID} session has incomplete identity`)
++    for (const id of requireArray(session.messageIDs, `subagent conversation ${sessionID} session.messageIDs`)) {
++      if (typeof id !== "string" || !id || membership.has(id))
++        throw new Error(`subagent conversation ${sessionID} invalid message membership ${id}`)
++      membership.set(id, { sessionID: String(session.sessionID), agentID: String(session.agentID) })
+     }
+-    const orderKey = requireTimelineOrderKeyDomain(
+-      meta.orderKey,
+-      `subagent conversation ${sessionID} message ${messageID}`,
+-      "message",
+-    )
+-    const message = transcriptByMessageID.get(messageID)
+-    if (!message) throw new Error(`subagent conversation ${sessionID} missing transcript message ${messageID}`)
+-    const info = requireObject(message.info, `subagent conversation ${sessionID} message ${messageID} info`)
+-    if (String(info.sessionID || "") !== ownerSessionID) {
++  }
++  const messages: SubagentTranscriptMessage[] = []
++  for (const [messageID, message] of transcriptByMessageID) {
++    const owner = membership.get(messageID)
++    if (!owner || owner.sessionID !== String(message.info.sessionID || ""))
+       throw new Error(`subagent conversation ${sessionID} message ${messageID} session identity drift`)
++    if (String(message.info.sessionAgentID || "") !== owner.agentID)
++      throw new Error(`subagent conversation ${sessionID} message ${messageID} session actor drift`)
++    const parts = requireArray(message.parts, `subagent conversation ${sessionID} message ${messageID} parts`)
++    for (const part of parts) {
++      if (!part?.id || part.messageID !== messageID || part.sessionID !== owner.sessionID)
++        throw new Error(`subagent conversation ${sessionID} message ${messageID} Part owner drift`)
++      requireTimelineOrderKeyDomain(part.orderKey, `subagent conversation Part ${part.id}`, "part")
+     }
+-    return {
+-      messageID,
+-      sessionID: ownerSessionID,
+-      agentID,
+-      stage,
+-      parentSessionID,
+-      time,
+-      orderKey,
+-      info,
+-      parts: requireArray(message.parts, `subagent conversation ${sessionID} message ${messageID} parts`),
+-    } satisfies SubagentTranscriptMessage
+-  })
++    if (owner.sessionID === sessionID) messages.push(liveMessageFromInfo(sessionID, messageID, message.info, parts))
++  }
++  for (const messageID of membership.keys())
++    if (!transcriptByMessageID.has(messageID))
++      throw new Error(`subagent conversation ${sessionID} missing transcript message ${messageID}`)
++  const visibleIDs = new Set<string>()
++  for (const raw of viewMessages) {
++    const meta = requireObject(raw, `subagent conversation ${sessionID} view message`)
++    const messageID = String(meta.messageID || "")
++    if (visibleIDs.has(messageID))
++      throw new Error(`subagent conversation ${sessionID} duplicate view message ${messageID}`)
++    visibleIDs.add(messageID)
++    const original = transcriptByMessageID.get(messageID)
++    if (!original) throw new Error(`subagent conversation ${sessionID} missing transcript message ${messageID}`)
++    const actual = liveMessageFromInfo(String(original.info.sessionID || ""), messageID, original.info, original.parts)
++    if (
++      meta.sessionID !== actual.sessionID ||
++      meta.agentID !== actual.agentID ||
++      meta.stage !== actual.stage ||
++      meta.time !== actual.time ||
++      meta.orderKey !== actual.orderKey ||
++      (String(meta.parentSessionID || "") || undefined) !== actual.parentSessionID
++    )
++      throw new Error(`subagent conversation ${sessionID} message ${messageID} view identity drift`)
++  }
+   messages.sort((left, right) =>
+     compareTimelineOrderKeys(left.orderKey, right.orderKey, `subagent conversation ${sessionID}`),
+   )

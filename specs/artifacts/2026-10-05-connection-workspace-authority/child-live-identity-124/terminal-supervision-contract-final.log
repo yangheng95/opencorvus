@@ -1,0 +1,7 @@
+{"code":"TASK_COMPLETION_IDENTITY_MISMATCH","case":"foreign-task","type":"System.IO.InvalidDataException"}
+{"code":"TASK_COMPLETION_IDENTITY_MISMATCH","case":"wrong-epoch","type":"System.IO.InvalidDataException"}
+{"code":"TASK_COMPLETION_BUDGET_INVALID","case":"late-terminal","type":"System.IO.InvalidDataException"}
+{"code":"TASK_COMPLETION_BUDGET_INVALID","case":"late-observed","type":"System.IO.InvalidDataException"}
+{"code":"TASK_COMPLETION_OWNERS_INVALID","case":"missing-owner-array","type":"System.IO.InvalidDataException"}
+{"code":"TASK_COMPLETION_OWNERS_INVALID","case":"active-owner","type":"System.IO.InvalidDataException"}
+{"originalTriggerUnchanged":true,"qualified":"pure private function contract only","occurrence":"sources-late-open-live-124-01-4444235a-0bfa-44a2-a136-307d2624b80d","cases":11,"epoch":1,"taskID":"tsk_g00VXQH5hY006MZJOq32"}

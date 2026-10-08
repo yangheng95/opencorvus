@@ -1,0 +1,31 @@
+#125 exact memory reader error audit
+
+## Recall / actual retained failure
+
+Original Source/final once oracle stopped at source guard143 all-EOF requirement.20 actual Sol/streaming/HTTP200/settled Responses include19 EOF and1 error. No repeat/rearm/budget change or oracle/source repair. Task exact tsk_g00VXQSWk8005qXp7nDu completed epoch1 at1791431000402; Root owns native/pages/pair closure. Actual Source tuples/read Tool outcomes are already in child-current-source-facts. This report reads safe audit/source/log metadata plus one closed readonly transaction only, no reasoning/prompt/args/credentials or application bootstrap.
+
+## Exact physical evidence
+
+Error Response is formally bound, not attributed by index: Session ses_-zUSZXT7UzzjHlcVbH55, streamRequest requestID actual Task ID, agentID memory, provider openai/model/API model gpt-6.1-sol. Received1791430672425, bound2427, one chunk5410B first/last2428, terminal error1791430673068. That reader fact contains no error object/name/code/cause. A later Response has the SAME supplied formal Session/request/agent/model identity, received1791430675097 and EOF1791430684461. This proves another physical request and later EOF for the same caller identity; without logical activity/attempt binding it does not alone prove which retry attempt or a committed memory result.
+
+The exact error preceded Task completion by minutes and shutdown much later; no evidence identifies it as shutdown cancellation. util/stream-activity settlementTrackedReadableStream distinguishes signal abort→aborted, consumer cancel→cancelled, and pull catch→error. Pull catch includes reader.read failure, onChunk observer failure or enqueue failure; safe observer forwarding is meant to catch callbacks, but error kind alone does not preserve the original cause. Thus ordinary explicit cancellation is not the directly recorded branch, yet a lower-layer abort/error propagated before owner signal is still UNKNOWN. HTTP200 and5410B do not prove successful provider payload or normal network EOF.
+
+## Current caller and logical recovery limits
+
+ProjectMemoryOrganizer282–306 is the only literal agentID memory LLM.stream producer found. It uses collectLLMText, current helper projection/small model, tools{}, toolChoice none, retries0 at SDK level and source user or selected occurrenceID. collectLLMText840+ runs withLLMActivity default policy, consumes fullStream, throws actual SDK error events, accepted semantic heartbeat and bounded retries. Organizer checkpoint/parse/commit occurs only after collected text succeeds; catch releases lease and rethrows. Background per-project scheduledRuns/again redrive is separate from logical provider retry, and preserves project ownership. SDK retries0 does not disable the outer activity policy.
+
+Actual audit identity is consistent with this producer, but does not carry logical activity/attempt or assistantMessageID. No exact logical retry/cause can be assigned merely from helper name or~2s gap. One allowed Node25 readOnly BEGIN/ROLLBACK query scoped provider-activity facts to this actual Session returned no linked assistant activity rows; the helper's default sink does not itself persist SessionProcessor assistant facts. This is an observation limit, not proof no activity existed. The Task protocol query limited task_id column returned no rows and is not a lifecycle verdict; actual task-complete receipt remains business completion authority. No second query or raw DB message read was used.
+
+Selected safe log window had no warn/error record exposing this cause. This does not prove cause-free execution: activity retry classification may not be logged by this collector/sink. Current memory final commit/status was not captured by the allowed query. Later EOF alone is not committed-memory success. Raw first payload is neither retained nor reconstructed here.
+
+## Shared mechanism / oracle impact
+
+Task/Mission/ordinary Session and text-only helpers share LLM/activity policy and provider response wrapper, while main SessionProcessor supplies persisted per-assistant activity/attempt facts and helpers may not. Accepted Tool/Source and completed Task can coexist with an internally recovered failed physical helper request. Serial continuation, concurrent Projects and retry attempts require exact current context, not latest/FIFO/time matching. Current single Project Task cannot dynamically qualify Mission/restart/multiproject. No scheduler/wake/business-terminal defect is demonstrated by this physical reader error; it also cannot be dismissed because Task completed. All original failed oracle evidence remains.
+
+Current all-EOF Source guard deliberately rejects any such physical error, even if Task and Source predicates succeeded; it is stricter than “Task completed and requested URLs read.” Do not silently loosen it or relabel this run full pass. Root must separately decide declared acceptance scope after cause/recovery evidence, preserving failed attempt visibility. No repair is justified at provider/parser/retry/timeout based only on terminal label.
+
+## Smallest actionable observation gap
+
+The existing exact Response scalar owner should preserve a safe error classification/cause origin at its current settlement edge if separately admitted, using actual error type/fixed classification and credential-safe scalar fields, not contents/header/raw args. Text-helper logical activity ID/attempt should be bound through the same existing ProviderRequestContext authority used by SessionProcessor, and actual completion/commit outcome recorded through existing owner, without another counter/store/parser or ambient inference. Focused positive tests: true read error, explicit abort, consumer cancellation and callback failure distinguish actual safe cause; concurrent helper retries preserve exact same logical activity/current attempt and result, mixed real causes stay visible. Actual local HTTP qualification is distinct from genuine Provider behavior. No new observation/source/oracle implementation admitted here.
+
+Original20 response/19EOF/1error failure remains FAILED for its oracle. Actual completed business Task and three Source data facts remain independently true. Actual first-error cause, logical retry attempt and memory commit remain UNKNOWN.

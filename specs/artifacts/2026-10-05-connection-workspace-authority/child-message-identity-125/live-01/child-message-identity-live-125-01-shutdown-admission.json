@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-08T03:51:07.5417912Z",
+  "occurrence": "child-message-identity-live-125-01-c3eb8850-1e85-49b9-a980-50717ffd155d",
+  "owner": {
+    "pid": 77008,
+    "processInstanceID": "win32:639270273904499282",
+    "occurrenceID": "2887625e-e7cd-4779-8934-f0bc536c1215"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXQVs8V00MBhn3Ry1O"
+  }
+}

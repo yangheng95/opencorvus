@@ -1,0 +1,26 @@
+bun test v1.3.14 (0d9b296a)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [2813.65ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [4593.49ms]
+
+test\mission-message-origin-projection.test.ts:
+(pass) projects Mission operator and scheduler wake origins through one persisted and live contract [2263.05ms]
+(pass) keeps the right-sidebar display source authoritative over its retained wake reason [2.01ms]
+(pass) hydrates nested wake provenance through the Task conversation route [2101.76ms]
+
+test\orchestrator-mission-root-message-read.test.ts:
+(pass) Mission acceptance wake reads its exact Mission-authored Task-root message [2201.19ms]
+(pass) successor runtime replays one atomic Task-root Message move after registering its durable bridge [2821.65ms]
+
+test\server\session-conversation-history.test.ts:
+(pass) session conversation history > cold assistant history advances a bounded real control-only identity window [2623.16ms]
+(pass) session conversation history > cold mission history advances a bounded real control-only identity window [2470.59ms]
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4022.87ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3569.58ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1725.96ms]
+
+ 12 pass
+ 0 fail
+ 81 expect() calls
+Ran 12 tests across 4 files. [45.27s]

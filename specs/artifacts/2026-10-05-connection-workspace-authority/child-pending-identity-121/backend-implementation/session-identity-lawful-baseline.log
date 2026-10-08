@@ -1,0 +1,69 @@
+bun test v1.3.14 (0d9b296a)
+
+test\server\session-conversation-history.test.ts:
+56 |     Server.resetProjectRoutesAppForTest()
+57 |     const headers = { "x-opencorvus-directory": project.path }
+58 |     const tailResponse = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.sessionID}/conversation?tail_limit=1`, { headers }))
+59 |     expect(tailResponse.status).toBe(200)
+60 |     const tail = await tailResponse.json()
+61 |     expect(tail.transcript).toMatchObject([{ info: { id: saved.messageIDs[1], sessionID: saved.sessionID }, parts: [{ id: saved.partIDs[1], type: "step-start" }] }])
+                                 ^
+error: expect(received).toMatchObject(expected)
+
+- [
+-   {
+-     "info": {
+-       "id": "msg_g0VXQP8mN00VL1WWnOnG",
+-       "sessionID": "ses_-zUSZarEQzzVQIY4uTU7",
+-     },
+-     "parts": [
+-       {
+-         "id": "prt_g0VXQP8mS00Sz47624QM",
+-         "type": "step-start",
+-       },
+-     ],
+-   },
+- ]
++ []
+
+- Expected  - 14
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-conversation-history.test.ts:61:29)
+(fail) session conversation history > cold assistant history advances a bounded real control-only identity window [2762.34ms]
+56 |     Server.resetProjectRoutesAppForTest()
+57 |     const headers = { "x-opencorvus-directory": project.path }
+58 |     const tailResponse = await runOutsideInstanceContext(() => Server.App().request(`/session/${saved.sessionID}/conversation?tail_limit=1`, { headers }))
+59 |     expect(tailResponse.status).toBe(200)
+60 |     const tail = await tailResponse.json()
+61 |     expect(tail.transcript).toMatchObject([{ info: { id: saved.messageIDs[1], sessionID: saved.sessionID }, parts: [{ id: saved.partIDs[1], type: "step-start" }] }])
+                                 ^
+error: expect(received).toMatchObject(expected)
+
+- [
+-   {
+-     "info": {
+-       "id": "msg_g0VXQP9UB00Rmcpq7Rea",
+-       "sessionID": "ses_-zUSZaqWIzzxh24nBqjI",
+-     },
+-     "parts": [
+-       {
+-         "id": "prt_g0VXQP9UF00gE2ZnlX3T",
+-         "type": "step-start",
+-       },
+-     ],
+-   },
+- ]
++ []
+
+- Expected  - 14
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-conversation-history.test.ts:61:29)
+(fail) session conversation history > cold mission history advances a bounded real control-only identity window [2518.46ms]
+
+ 0 pass
+ 3 filtered out
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [7.70s]

@@ -1,0 +1,11 @@
+# Private terminal supervision repair qualification
+
+Only existing ignored launcher changed. Shared Assert-OwnedTaskCompletion now validates actual owner/boundary/completion tuple and is called by active supervision and final success path; valid completion at the unchanged900s whole-service hard stop yields completed-service-maximum. Wrapper failed priority and old fixed-task-maximum failures remain. No original124 receipt/trigger changed and no launch/rearm/native/Provider/UI/DB/source action.
+
+Pure checker: pwsh -NoProfile -File .tmp-product-iteration/terminal-supervision-124-contract.ps1, exit0.11 local function/decision contracts: real124 completion true; completed/active/wrapper-failed/preboundary reason; foreign-task/wrong-epoch/late-terminal/late-observed/missing-owner-array/active-owner map to actual InvalidDataException fixed codes. This does not qualify native shutdown or a new Task. Existing original124 exit1 remains.
+
+Two initial checker failures retained. The actual cause of budget validation failure was PowerShell ConvertFrom-Json automatically producing UTC DateTime; converting it to string discarded timezone and changed epoch comparison. Validator now preserves actual UTC DateTime via DateTimeOffset and rejects nonUTC DateTime; string timestamps use TryParse. Parenthesized arithmetic also makes fixed budget intent explicit. No receipt timestamp rewritten. All corrected local cases pass.
+
+Complete before/final/diff/checker/raw logs preserved. Physical/pair settlement functions unchanged; final already rejects original old timeout triggers before completion qualification. Root owns review/future native qualification/indices/delivery. No increase to900000, no added UIhold timer/store or production policy.
+
+Root final review correction: removed the preboundary-null absence-core case from the actual ignored checker. Final10 execution uses that actual .tmp script, exit0,10 positive output/typed-error contracts. terminal-supervision-contract-final10.log and final10.ps1 are current; original11 log/checker archive remains historical. Running the old formal verbatim archive directly has an incompatible PSScriptRoot and is not the current execution command. EOF excess blank lines removed from the actual launcher; full final diff/snapshot refreshed. No native execution or extra cases.

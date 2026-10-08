@@ -1,0 +1,556 @@
+{
+  "seq": null,
+  "viewIDs": [
+    "msg_g0VXQSXnB00pEJG9yO5P",
+    "msg_task-root-control_art_haOvvpKAYPabfcvPXoW4_art_haOvvpKAYPabfcvPXoW4",
+    "msg_howWuvmeEp12L0HNkuvV",
+    "msg_g0VXQSc9w00tDoyDUOWK",
+    "msg_g0VXQScDG001f5rolwbJ",
+    "msg_g0VXQSdkK00t2TrB12kI",
+    "msg_g0VXQSfLq008yEirk6vO",
+    "msg_g0VXQSgnx00VtX7pUPJV",
+    "msg_g0VXQShpR00QZOlyZdGy",
+    "msg_task-root-control_art_hzNtp6XDY5gNQeM4U82f_art_hzNtp6XDY5gNQeM4U82f",
+    "msg_hKqV61Paw6hrvx03kqcW",
+    "msg_g0VXQT3IZ00HWYe0RveN",
+    "msg_g0VXQT3Mj00tWXNe9G5Z",
+    "msg_g0VXQT64N00MH5o5sTDL"
+  ],
+  "observedAt": "2026-10-08T03:40:51.9432366+00:00",
+  "epoch": null,
+  "sessions": [
+    {
+      "sessionID": "ses_-zUSZXSFZzz4wClc2OjG",
+      "agentID": "orchestrator",
+      "messageIDs": [
+        "msg_g0VXQSXnB00pEJG9yO5P",
+        "msg_task-root-control_art_haOvvpKAYPabfcvPXoW4_art_haOvvpKAYPabfcvPXoW4",
+        "msg_howWuvmeEp12L0HNkuvV",
+        "msg_task-root-control_art_hzNtp6XDY5gNQeM4U82f_art_hzNtp6XDY5gNQeM4U82f",
+        "msg_hKqV61Paw6hrvx03kqcW"
+      ],
+      "lastDisplayMessageID": "msg_hKqV61Paw6hrvx03kqcW"
+    },
+    {
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "messageIDs": [
+        "msg_g0VXQSc9w00tDoyDUOWK",
+        "msg_g0VXQScDG001f5rolwbJ",
+        "msg_g0VXQSdkK00t2TrB12kI",
+        "msg_g0VXQSfLq008yEirk6vO",
+        "msg_g0VXQSgnx00VtX7pUPJV",
+        "msg_g0VXQShpR00QZOlyZdGy"
+      ],
+      "lastDisplayMessageID": "msg_g0VXQShpR00QZOlyZdGy"
+    },
+    {
+      "sessionID": "ses_hyJ7PUVhU8dAcCxQZXTF",
+      "agentID": "base-tester",
+      "messageIDs": [
+        "msg_g0VXQT3IZ00HWYe0RveN",
+        "msg_g0VXQT3Mj00tWXNe9G5Z",
+        "msg_g0VXQT64N00MH5o5sTDL",
+        "msg_g0VXQT9bJ00uuNX7Rd2F"
+      ],
+      "lastDisplayMessageID": "msg_g0VXQT64N00MH5o5sTDL"
+    }
+  ],
+  "transcript": [
+    {
+      "id": "msg_g0VXQSXnB00pEJG9yO5P",
+      "partTypes": [
+        "text"
+      ],
+      "sessionID": "ses_-zUSZXSFZzz4wClc2OjG",
+      "agentID": "orchestrator",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSXmp00NMe5boyvl",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "msg_task-root-control_art_haOvvpKAYPabfcvPXoW4_art_haOvvpKAYPabfcvPXoW4",
+      "partTypes": [
+        "text"
+      ],
+      "sessionID": "ses_-zUSZXSFZzz4wClc2OjG",
+      "agentID": "orchestrator",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_task-root-control_art_haOvvpKAYPabfcvPXoW4_art_haOvvpKAYPabfcvPXoW4",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "msg_howWuvmeEp12L0HNkuvV",
+      "partTypes": [
+        "step-start",
+        "text",
+        "tool",
+        "step-finish"
+      ],
+      "sessionID": "ses_-zUSZXSFZzz4wClc2OjG",
+      "agentID": "orchestrator",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSXzn009wX0exXsb",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSZYK006WAkF6r2J",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": "dispatch_agent",
+          "id": "prt_g0VXQSa1000yQPqSP65l",
+          "status": "completed",
+          "callID": "call_41e1d81e436d4369bb657e598acec3d7",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQScOR00oRoN3SdYB",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQSc9w00tDoyDUOWK",
+      "partTypes": [
+        "text",
+        "text"
+      ],
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSc9w00kSQUu09fQ",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSc9w01L4puS5uw1",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQScDG001f5rolwbJ",
+      "partTypes": [
+        "step-start",
+        "text",
+        "tool",
+        "step-finish"
+      ],
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQScM100jmI6O9IBM",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQScxL007L8JTADow",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": "read_agent_message",
+          "id": "prt_g0VXQSdNi00HoHynhn2K",
+          "status": "completed",
+          "callID": "call_b3212505a6df4d94aba6bc398d3c77da",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSdi700N4yHrdOiK",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQSdkK00t2TrB12kI",
+      "partTypes": [
+        "step-start",
+        "tool",
+        "source-url",
+        "step-finish"
+      ],
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSdo8000yc8Qs4DP",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": "webfetch",
+          "id": "prt_g0VXQSevU005J3Juj4sW",
+          "status": "completed",
+          "callID": "call_aa184d5176fc4e8c967b3e079009ab58",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSfJI00cmqnhKuaM",
+          "status": null,
+          "callID": null,
+          "type": "source-url"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSfJN007f6W7OziT",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQSfLq008yEirk6vO",
+      "partTypes": [
+        "step-start",
+        "tool",
+        "source-url",
+        "step-finish"
+      ],
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSfPx00A7ztgV5df",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": "webfetch",
+          "id": "prt_g0VXQSgUt00I8lgWKqhK",
+          "status": "completed",
+          "callID": "call_5e6e3bb597494b309710d0a8cfdfa35a",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSglR00Os4fxeU9F",
+          "status": null,
+          "callID": null,
+          "type": "source-url"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSglV00hYPFX4AYZ",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQSgnx00VtX7pUPJV",
+      "partTypes": [
+        "step-start",
+        "tool",
+        "source-url",
+        "step-finish"
+      ],
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSgs3003z7dpzEki",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": "webfetch",
+          "id": "prt_g0VXQShXH00E7IN5tbm0",
+          "status": "completed",
+          "callID": "call_c1637330a23e4475b151ff30b314b287",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQShn00057HTlr19j",
+          "status": null,
+          "callID": null,
+          "type": "source-url"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQShn400KID7E2rtZ",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQShpR00QZOlyZdGy",
+      "partTypes": [
+        "step-start",
+        "text",
+        "step-finish"
+      ],
+      "sessionID": "ses_h2Ih7JJtPuBia0P4RvR5",
+      "agentID": "base-researcher",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQShtE00dyTNC1FqW",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSj9T00q6WRlQ782",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSqr500Vxh3yZFzz",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_task-root-control_art_hzNtp6XDY5gNQeM4U82f_art_hzNtp6XDY5gNQeM4U82f",
+      "partTypes": [
+        "text"
+      ],
+      "sessionID": "ses_-zUSZXSFZzz4wClc2OjG",
+      "agentID": "orchestrator",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_task-root-control_art_hzNtp6XDY5gNQeM4U82f_art_hzNtp6XDY5gNQeM4U82f",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "msg_hKqV61Paw6hrvx03kqcW",
+      "partTypes": [
+        "step-start",
+        "tool",
+        "step-finish",
+        "step-start",
+        "text",
+        "tool",
+        "step-finish"
+      ],
+      "sessionID": "ses_-zUSZXSFZzz4wClc2OjG",
+      "agentID": "orchestrator",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQSrAz00q5xnTOtH1",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": "read_agent_message",
+          "id": "prt_g0VXQSvqx00X7cZuzvOt",
+          "status": "completed",
+          "callID": "call_6fc19f5eef104fd0a96300ca222b9491",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSw9500APwsDXAJG",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSwGG00kmZTVZKVm",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQSz6z00jVIcHAMpd",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": "dispatch_agent",
+          "id": "prt_g0VXQSzXZ00e9Ry0fl4q",
+          "status": "completed",
+          "callID": "call_2ae04db7cfff4134848358fef77f558b",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQT3YW00Yqgi9dmCn",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQT3IZ00HWYe0RveN",
+      "partTypes": [
+        "text",
+        "text"
+      ],
+      "sessionID": "ses_hyJ7PUVhU8dAcCxQZXTF",
+      "agentID": "base-tester",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQT3IZ00O6ffdXhhs",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQT3IZ01lvdnptULK",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQT3Mj00tWXNe9G5Z",
+      "partTypes": [
+        "step-start",
+        "text",
+        "tool",
+        "step-finish"
+      ],
+      "sessionID": "ses_hyJ7PUVhU8dAcCxQZXTF",
+      "agentID": "base-tester",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQT3Tv00kicxZV7rX",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQT4wP00i9Mqy4CAg",
+          "status": null,
+          "callID": null,
+          "type": "text"
+        },
+        {
+          "tool": "read_agent_message",
+          "id": "prt_g0VXQT5rd00C0Pp4xmfF",
+          "status": "completed",
+          "callID": "call_11994a3029c042c298f94f221c31a19a",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQT61a00kAkcV2yMj",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQT64N00MH5o5sTDL",
+      "partTypes": [
+        "step-start",
+        "tool",
+        "step-finish"
+      ],
+      "sessionID": "ses_hyJ7PUVhU8dAcCxQZXTF",
+      "agentID": "base-tester",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQT68z00Zm5WmDdkq",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        },
+        {
+          "tool": "read_agent_message",
+          "id": "prt_g0VXQT86U00clBHX6Hjd",
+          "status": "completed",
+          "callID": "call_e3985d45b66e400dbb780c2b3a241c29",
+          "type": "tool"
+        },
+        {
+          "tool": null,
+          "id": "prt_g0VXQT9YU00sH9U4YhUg",
+          "status": null,
+          "callID": null,
+          "type": "step-finish"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VXQT9bJ00uuNX7Rd2F",
+      "partTypes": [
+        "step-start"
+      ],
+      "sessionID": "ses_hyJ7PUVhU8dAcCxQZXTF",
+      "agentID": "base-tester",
+      "parts": [
+        {
+          "tool": null,
+          "id": "prt_g0VXQT9fF004mxaAtaG2",
+          "status": null,
+          "callID": null,
+          "type": "step-start"
+        }
+      ]
+    }
+  ]
+}

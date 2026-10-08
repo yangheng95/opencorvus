@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [Complete conversation identity121](records/2026-10/2026-10-08-conversation-message-identity.md) and [fresh125](artifacts/2026-10-05-connection-workspace-authority/child-message-identity-125/README.md): full real identity window and shared parser; backend12/81/service22/58 and real desktop Sources qualified, original all-EOF oracle failure retained.
+
+- [Genuine child identity124 before](records/2026-10/2026-10-08-child-message-identity-before.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/child-live-identity-124/README.md): actual7/6 public identity omission, later10/10 and completed Task; private supervision failure retained, full owned scope closed, pending/download acceptance unmet.
+
 - [Embedded expert squad search123](records/2026-10/2026-10-08-embedded-search-generation.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/dynamic-search-generation-plan-123.md): canonical embedded plus payload identities own one reviewed localization projection;11 focused contracts/types passed, original baselines retained.
 
 - [256k compaction window and stable Task anchor](records/2026-10/2026-10-08-compaction-window-and-task-anchor.md): explicit longer-context configuration and shared repeated/incremental checkpoint reconstruction repair; original failed Task remains immutable.
@@ -10,7 +14,7 @@
 
 - [Child Sources spacing120 Recall](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-plan-120.md) and [real evidence](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/README.md): child inner inset16→8, genuine wide/narrow Source titles and boundaries reviewed; both credentialless scopes closed and original canonical equality verified.
 
-- [Child pending identity121 investigation](artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-plan-121.md): shared parser risk identified, actual11902 cause remains unknown; no production change.
+- [Child pending identity121 Recall](artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-plan-121.md): actual124 identity omission repaired in shared readers/parser; original11902 historical DTO and large pending viewport remain unknown.
 
 - [Narrow evidence table122 Recall](artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-plan-122.md) and [real evidence](artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-122/README.md): intrinsic table width, local horizontal scrolling and native keyboard focus qualified; first keyboard failure retained, all3 scopes closed.
 

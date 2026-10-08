@@ -1,0 +1,17 @@
+bun test v1.3.14 (0d9b296a)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [2517.92ms]
+(pass) Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor [4394.05ms]
+
+test\server\session-conversation-history.test.ts:
+(pass) session conversation history > cold assistant history advances a bounded real control-only identity window [2686.36ms]
+(pass) session conversation history > cold mission history advances a bounded real control-only identity window [2542.02ms]
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4332.14ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3451.49ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1764.48ms]
+
+ 7 pass
+ 0 fail
+ 51 expect() calls
+Ran 7 tests across 2 files. [24.03s]

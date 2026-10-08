@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\orchestrator-mission-root-message-read.test.ts:
+(pass) Mission acceptance wake reads its exact Mission-authored Task-root message [2280.44ms]
+(pass) successor runtime replays one atomic Task-root Message move after registering its durable bridge [2653.41ms]
+
+ 2 pass
+ 0 fail
+ 21 expect() calls
+Ran 2 tests across 1 file. [7.16s]

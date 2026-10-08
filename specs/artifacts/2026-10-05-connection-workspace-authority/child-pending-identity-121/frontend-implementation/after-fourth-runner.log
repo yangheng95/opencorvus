@@ -1,0 +1,29 @@
+bun test v1.3.14 (0d9b296a)
+
+test\subagent-conversation-service.test.ts:
+(pass) actual control-only owner accepts pending Part without message replay [5.85ms]
+(pass) task child transcript uses the exact task/session route and canonical order [2.23ms]
+(pass) persisted child transcript projects exact live Part snapshots and later deltas [0.61ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.27ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.13ms]
+(pass) standalone child transcript is rooted at the selected session [0.38ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.19ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.07ms]
+(pass) bursty transcript revisions coalesce into one refresh [28.33ms]
+(pass) a revision received during refresh schedules one trailing refresh [38.78ms]
+(pass) queued revisions refresh once when the immediate target load settles [47.14ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [15.94ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [2.08ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.11ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.09ms]
+(pass) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.81ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.33ms]
+(pass) Side Chat's ordered snapshot parser retains the connection's captured authority [0.88ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.50ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.28ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [44.76ms]
+
+ 21 pass
+ 0 fail
+ 55 expect() calls
+Ran 21 tests across 1 file. [403.00ms]

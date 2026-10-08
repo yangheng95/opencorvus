@@ -1,0 +1,32 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/message-part.ts.before b/packages/overlay/src/utils/message-part.ts
+index 95715af4..b672f6c7 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/message-part.ts.before
++++ b/packages/overlay/src/utils/message-part.ts
+@@ -39,6 +39,27 @@ export function messagePartHasDisplayContent(part: any): boolean {
+   return true
+ }
+ 
++export function assistantMessageErrorReason(info: any): string | undefined {
++  if (String(info?.role || "") !== "assistant" || !info?.error) return undefined
++  const error = info.error
++  if (typeof error === "object") {
++    const dataMessage = error?.data?.message
++    if (typeof dataMessage === "string" && dataMessage.trim()) return dataMessage.trim()
++    const message = error?.message
++    if (typeof message === "string" && message.trim()) return message.trim()
++    const name = error?.name
++    if (typeof name === "string" && name.trim()) return name.trim()
++  }
++  throw new Error(`assistant message ${String(info.id || "")} has an error without a displayable reason`)
++}
++
++export function conversationMessageHasDisplayContent(message: { info?: unknown; parts?: unknown } | null | undefined): boolean {
++  return Boolean(
++    assistantMessageErrorReason(message?.info) ||
++      (Array.isArray(message?.parts) && message.parts.some(messagePartHasDisplayContent)),
++  )
++}
++
+ /** Parts rendered inside chronological collapsed execution disclosures. */
+ export function isCollapsedExecutionMessagePart(part: any): boolean {
+   const type = messagePartType(part)

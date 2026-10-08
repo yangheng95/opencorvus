@@ -1,0 +1,87 @@
+bun test v1.3.14 (0d9b296a)
+
+test\subagent-conversation-service.test.ts:
+(pass) actual control-only owner accepts pending Part without message replay [6.25ms]
+138 |   expect(requests[0]?.query?.directory).toBe("D:/repo")
+139 |   expect(result.messages.map((message) => message.messageID)).toEqual(["message-early", "message-late"])
+140 |   expect(result.messages[0]?.parts[0]?.text).toBe("Starting")
+141 | 
+142 |   const card = projectSubagentConversationCard(result, "running")
+143 |   expect(card).toMatchObject({
+                     ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "id": "subagent-transcript:child/session",
++   "agentID": "build-agent",
++   "childIDs": [],
++   "collapsedContextMessageIDs": [
++     "message-early",
++   ],
++   "errorReason": undefined,
++   "id": "subagent-transcript:child-session",
+    "kind": "agent",
++   "messageID": "message-early",
++   "orderKey": "v1:0000000000000100:0000000000000030:0000000000000000:message:message-early",
++   "parts": [
++     {
++       "id": "early-text",
++       "messageID": "message-early",
++       "orderKey": "v1:0000000000000101:0000000000000031:0000000000000000:part:early-text",
++       "sessionID": "child-session",
++       "text": "Starting",
++       "type": "text",
++     },
++     {
++       "messageID": "message-late",
++       "role": "build",
++       "roleLabel": "Build",
++       "time": 200,
++       "type": "boundary",
++     },
++     {
++       "id": "late-text",
++       "messageID": "message-late",
++       "orderKey": "v1:0000000000000201:0000000000000031:0000000000000000:part:late-text",
++       "sessionID": "child-session",
++       "text": "Done",
++       "type": "text",
++     },
++   ],
++   "role": "build",
+    "sessionID": "child-session",
++   "stage": "build",
+    "status": "running",
++   "time": 100,
++   "title": "build-agent",
+  }
+
+- Expected  - 1
++ Received  + 38
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\subagent-conversation-service.test.ts:143:16)
+(fail) task child transcript uses the exact task/session route and canonical order [2.27ms]
+(pass) persisted child transcript projects exact live Part snapshots and later deltas [0.74ms]
+(pass) a new live child message projects before the persisted transcript refreshes [0.19ms]
+(pass) a live child message with an empty origin source projects the selected transcript [0.13ms]
+(pass) standalone child transcript is rooted at the selected session [0.39ms]
+(pass) transcript identity drift is rejected instead of silently merging sessions [0.49ms]
+(pass) transcript revision follows only exact selected-session transcript facts [0.06ms]
+(pass) bursty transcript revisions coalesce into one refresh [36.33ms]
+(pass) a revision received during refresh schedules one trailing refresh [62.18ms]
+(pass) queued revisions refresh once when the immediate target load settles [40.70ms]
+(pass) a new transcript target owns a fresh initial observation and refresh cadence [29.48ms]
+(pass) task transcript delta replaces changed messages and removes deleted messages [1.70ms]
+(pass) task transcript snapshot replaces the prior live epoch [0.13ms]
+(pass) a same-named session in another project replaces the prior target transcript [0.08ms]
+(pass) current Task and Mission/Chat child reads retain the supplied authority and exact public routes [0.74ms]
+(pass) a supplied retired child target produces the exact local admission error after credential ABA [0.35ms]
+(pass) Side Chat's ordered snapshot parser retains the connection's captured authority [0.89ms]
+(pass) held A read retains its exact response while B returns its own child transcript [0.48ms]
+(pass) same child identifiers under a new authority replace the prior delta base [0.23ms]
+(pass) a new authority owns refresh cadence while the retired in-flight request settles [44.30ms]
+
+ 20 pass
+ 1 fail
+ 46 expect() calls
+Ran 21 tests across 1 file. [450.00ms]

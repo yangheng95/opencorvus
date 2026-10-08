@@ -1,0 +1,521 @@
+diff --git a/packages/opencorvus/src/server/routes/orchestrator.ts b/packages/opencorvus/src/server/routes/orchestrator.ts
+index 16c9b015..db43ff78 100644
+--- a/packages/opencorvus/src/server/routes/orchestrator.ts
++++ b/packages/opencorvus/src/server/routes/orchestrator.ts
+@@ -70,31 +70,13 @@ import { PersistedProjectContext } from "@/server/persisted-project-context"
+ import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+ import { lazy } from "../../util/lazy"
+ import { Log } from "@/util/log"
+-import {
+-  listTaskConversationAgentSessions,
+-} from "@/orchestrator/task-event"
+-import {
+-  sessionBelongsToTask,
+-  sessionParentID,
+-  sessionRole,
+-  taskIDForSession,
+-  taskSession,
+-} from "@/engine/task-session-lineage"
+-import {
+-  ensureTaskMessageProtocolBridge,
+-  originSourceFromMessageExtra,
+-  overlayMeta,
+-  projectPersistedTaskMessage,
+-} from "@/orchestrator/protocol/message-bridge"
++import { listTaskConversationAgentSessions } from "@/orchestrator/task-event"
++import { sessionBelongsToTask, sessionRole, taskIDForSession, taskSession } from "@/engine/task-session-lineage"
++import { ensureTaskMessageProtocolBridge, projectPersistedTaskMessage } from "@/orchestrator/protocol/message-bridge"
+ import { BusEvent } from "@/bus/bus-event"
+ import { Instance } from "@/project/instance"
+ import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
+-import {
+-  compareTimelineOrderKeys,
+-  requireTimelineOrderKeyDomain,
+-  timelineMessageOrderKey,
+-  timelineOrderKey,
+-} from "@/timeline/order"
++import { compareTimelineOrderKeys, requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/order"
+ import { TaskArchiveRequestBody, TaskCancellationRequestBody } from "@opencorvus-ai/transport-protocol"
+ import { TaskCancellationProjection } from "@/engine/cancellation-origin"
+ import {
+@@ -471,7 +453,7 @@ export const EngineRoutes = lazy(() =>
+         try {
+           const archive = await buildTaskProjectArchive({
+             taskID,
+-            transcript: await loadFullTaskTranscript(taskID),
++            transcript: (await loadFullTaskTranscript(taskID)).filter(conversationMessageHasDisplay),
+           })
+           return new Response(archive.bytes, {
+             status: 200,
+@@ -1137,13 +1119,11 @@ export const EngineRoutes = lazy(() =>
+           })
+           const rootSessionID = taskSession(taskID)
+           if (!rootSessionID) throw new Error(`task conversation ${taskID} missing root session`)
+-          annotateTaskTranscriptMessages(changed, rootSessionID)
+-          const transcript = changed
+-            .map((message) => projectPersistedTaskMessage(message, taskID))
+-            .filter(conversationMessageHasDisplay)
++          const transcript = changed.map((message) => projectPersistedTaskMessage(message, taskID))
++          const retainedMessageIDs = new Set(transcript.map((message) => message.info.id))
+           return c.json({
+             transcript: projectConversationTransportTranscript(transcript),
+-            removedMessageIDs: [...changedMessageIDs],
++            removedMessageIDs: [...changedMessageIDs].filter((messageID) => !retainedMessageIDs.has(messageID)),
+             lastLiveSequence,
+             liveEpoch,
+             transcriptMode: "delta",
+@@ -2088,10 +2068,6 @@ export function __conversationHistoryBeforeForTest(
+   }
+ }
+ 
+-export function __displayableConversationTranscriptForTest(transcript: any[]) {
+-  return transcript.filter(conversationMessageHasDisplay)
+-}
+-
+ type TaskTranscriptScope = "current-project" | "task"
+ 
+ async function taskSessionIDs(taskID: string, input: { scope?: TaskTranscriptScope } = {}) {
+@@ -2131,9 +2107,8 @@ async function loadTaskTranscript(
+     const messages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: perSessionLimit + 1 })
+     const truncated = messages.length > perSessionLimit
+     const transcript = truncated ? messages.slice(messages.length - perSessionLimit) : messages
+-    annotateTaskTranscriptMessages(transcript, rootSessionID)
+     return {
+-      transcript: __displayableConversationTranscriptForTest(transcript),
++      transcript: transcript.map((message) => projectPersistedTaskMessage(message, taskID)),
+       truncated,
+     }
+   }
+@@ -2144,9 +2119,8 @@ async function loadTaskTranscript(
+     }),
+   )
+   const messages = all.flat().sort(conversationTranscriptMessageOrder)
+-  annotateTaskTranscriptMessages(messages, rootSessionID)
+   return {
+-    transcript: __displayableConversationTranscriptForTest(messages),
++    transcript: messages.map((message) => projectPersistedTaskMessage(message, taskID)),
+     truncated,
+   }
+ }
+@@ -2170,9 +2144,8 @@ async function loadTaskProtectedTranscript(
+   })
+   const truncated = messages.length > limit
+   const transcript = truncated ? messages.slice(messages.length - limit) : messages
+-  annotateTaskTranscriptMessages(transcript, rootSessionID)
+   return {
+-    transcript: __displayableConversationTranscriptForTest(transcript),
++    transcript: transcript.map((message) => projectPersistedTaskMessage(message, taskID)),
+     truncated,
+   }
+ }
+@@ -2185,29 +2158,7 @@ async function loadTaskSessionTranscript(
+   const { rootSessionID, sessionIDs } = await taskSessionIDs(taskID, { scope: input.scope })
+   if (!rootSessionID || !sessionIDs.includes(sessionID)) return []
+   const messages = await Session.messages({ sessionID })
+-  annotateTaskTranscriptMessages(messages, rootSessionID)
+-  return __displayableConversationTranscriptForTest(messages)
+-}
+-
+-function annotateTaskTranscriptMessages(messages: Array<{ info: Record<string, any> }>, rootSessionID: string) {
+-  for (const msg of messages) {
+-    const sid = msg.info.sessionID || ""
+-    const meta = overlayMeta(sid, rootSessionID, {
+-      id: msg.info.id,
+-      role: msg.info.role,
+-      author: msg.info.author,
+-      agent: msg.info.agent,
+-      parentID: msg.info.parentID,
+-    })
+-    ;(msg.info as any).resolvedRole = meta.resolvedRole
+-    ;(msg.info as any).channel = meta.channel
+-    ;(msg.info as any).agentID = meta.agentID
+-    ;(msg.info as any).sessionAgentID = meta.sessionAgentID
+-    ;(msg.info as any).originSource = originSourceFromMessageExtra(msg.info.extra)
+-    const parentSessionID = sessionParentID(sid)
+-    if (parentSessionID) (msg.info as any).parentSessionID = parentSessionID
+-    ;(msg.info as any).orderKey = timelineMessageOrderKey(msg)
+-  }
++  return messages.map((message) => projectPersistedTaskMessage(message, taskID))
+ }
+ 
+ async function loadFullTaskTranscript(taskID: string, input: { scope?: TaskTranscriptScope } = {}) {
+diff --git a/packages/opencorvus/src/server/routes/session.ts b/packages/opencorvus/src/server/routes/session.ts
+index ee5d1ee6..4020b3c3 100644
+--- a/packages/opencorvus/src/server/routes/session.ts
++++ b/packages/opencorvus/src/server/routes/session.ts
+@@ -144,9 +144,7 @@ async function sessionConversationTailProjection(session: ActiveProjectSession,
+   const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
+   const truncated = latestMessages.length > tailLimit
+   const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
+-  const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+-    .filter(conversationMessageHasDisplay)
+-    .sort(conversationTranscriptMessageOrder)
++  const transcript = enrichStandaloneSessionTranscript(visibleMessages).sort(conversationTranscriptMessageOrder)
+   const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
+   const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+   const agentSessions = listConversationAgentSessionsForSessionTree({
+@@ -1138,9 +1136,7 @@ export const SessionRoutes = lazy(() =>
+         })
+         const truncated = messages.length > query.limit
+         const visibleMessages = truncated ? messages.slice(messages.length - query.limit) : messages
+-        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+-          .filter(conversationMessageHasDisplay)
+-          .sort(conversationTranscriptMessageOrder)
++        const transcript = enrichStandaloneSessionTranscript(visibleMessages).sort(conversationTranscriptMessageOrder)
+         const historyWindow = conversationHistoryWindow(transcript, { tailLimit: query.limit })
+         const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+         const agentSessions = listConversationAgentSessionsForSessionTree({
+diff --git a/packages/opencorvus/test/inspect-task-live-observation.test.ts b/packages/opencorvus/test/inspect-task-live-observation.test.ts
+index 93447985..8f7be980 100644
+--- a/packages/opencorvus/test/inspect-task-live-observation.test.ts
++++ b/packages/opencorvus/test/inspect-task-live-observation.test.ts
+@@ -14,6 +14,8 @@ import { MessageStore } from "@/session/message-store"
+ import { Database } from "@/storage/db"
+ import { persistEstablishedTask } from "./fixture/engine-task"
+ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
++import { captureApiAuthority } from "../../overlay/src/services/api"
++import { parseSubagentConversation, mergeSubagentConversation } from "../../overlay/src/services/subagent-conversation"
+ 
+ afterEach(resetMemoryDatabase)
+ 
+@@ -62,6 +64,13 @@ async function taskWithStreamingSession() {
+     model: { providerID: "test", modelID: "local-contract" },
+     time: { created: now },
+   })
++  await Session.updatePart({
++    id: Identifier.ascending("part"),
++    sessionID: session.id,
++    messageID: parentID,
++    type: "text",
++    text: "Read the current conversation identity",
++  })
+   const messageID = Identifier.ascending("message")
+   await Session.updateMessage({
+     id: messageID,
+@@ -91,6 +100,82 @@ async function taskWithStreamingSession() {
+   return { taskID, rootSessionID: root.id, sessionID: session.id, messageID, partID }
+ }
+ 
++test("Task child snapshot and changed-message delta retain a real control-only assistant identity", async () => {
++  await using project = await memoryProject("task-control-only-identity")
++  await Instance.provide({
++    directory: project.path,
++    fn: async () => {
++      const owner = await taskWithStreamingSession()
++      const stored = await Session.messages({ sessionID: owner.sessionID })
++      const input = stored.find((message) => message.info.role === "user")!
++      const control = await Session.updatePart({
++        id: Identifier.ascending("part"),
++        sessionID: owner.sessionID,
++        messageID: owner.messageID,
++        type: "step-start",
++      })
++      await Database.awaitEffectIdle(5_000)
++      await awaitTaskMessageProtocolBridgeIdle()
++      const route = new Hono().route("/", EngineRoutes())
++      const response = await route.request(`/task/${owner.taskID}/conversation/session/${owner.sessionID}`)
++      expect(response.status).toBe(200)
++      const snapshot = await response.json()
++      expect(snapshot.transcript.map((message: { info: { id: string } }) => message.info.id)).toEqual([
++        input.info.id,
++        owner.messageID,
++      ])
++      expect(snapshot.transcript[1]).toMatchObject({
++        info: { id: owner.messageID, sessionID: owner.sessionID, author: "orchestrator", parentID: input.info.id },
++        parts: [{ id: control.id, type: "step-start", messageID: owner.messageID, sessionID: owner.sessionID }],
++      })
++      expect(snapshot.view.messages.map((message: { messageID: string }) => message.messageID)).toEqual([input.info.id])
++      expect(
++        snapshot.view.sessions.find((session: { sessionID: string }) => session.sessionID === owner.sessionID)
++          .messageIDs,
++      ).toEqual([input.info.id, owner.messageID])
++      const target = {
++        source: { kind: "task" as const, id: owner.taskID },
++        sessionID: owner.sessionID,
++        directory: project.path,
++        authority: captureApiAuthority(),
++      }
++      const parsedSnapshot = parseSubagentConversation(target, snapshot)
++      expect(parsedSnapshot.messages.map((message) => message.messageID)).toEqual([input.info.id, owner.messageID])
++
++      const assistant = stored.find((message) => message.info.id === owner.messageID)!
++      if (assistant.info.role !== "assistant") throw new Error("Current identity fixture requires its real assistant")
++      await Session.updateMessage({ ...assistant.info, cost: 1 })
++      await Database.awaitEffectIdle(5_000)
++      await awaitTaskMessageProtocolBridgeIdle()
++      const query = new URLSearchParams({
++        after_live_epoch: String(snapshot.liveEpoch),
++        after_live_sequence: String(snapshot.lastLiveSequence),
++      })
++      const deltaResponse = await route.request(
++        `/task/${owner.taskID}/conversation/session/${owner.sessionID}?${query}`,
++      )
++      expect(deltaResponse.status).toBe(200)
++      const delta = await deltaResponse.json()
++      expect(delta).toMatchObject({ transcriptMode: "delta", liveEpoch: snapshot.liveEpoch })
++      expect(
++        delta.transcript.map((message: { info: { id: string; cost: number } }) => ({
++          id: message.info.id,
++          cost: message.info.cost,
++        })),
++      ).toEqual([{ id: owner.messageID, cost: 1 }])
++      expect(
++        delta.view.sessions.find((session: { sessionID: string }) => session.sessionID === owner.sessionID).messageIDs,
++      ).toEqual([owner.messageID])
++      const merged = mergeSubagentConversation(parsedSnapshot, parseSubagentConversation(target, delta))
++      expect(merged.messages.map((message) => ({ id: message.messageID, role: message.info.role }))).toEqual([
++        { id: input.info.id, role: "user" },
++        { id: owner.messageID, role: "assistant" },
++      ])
++      expect(merged.messages[1].info.cost).toBe(1)
++    },
++  })
++}, 30_000)
++
+ test("Inspect observes real unpersisted descendant reasoning through the Task HTTP live cursor", async () => {
+   await using project = await memoryProject("inspect-live-owner")
+   await using otherProject = await memoryProject("inspect-live-other")
+diff --git a/packages/opencorvus/test/mission-message-origin-projection.test.ts b/packages/opencorvus/test/mission-message-origin-projection.test.ts
+index 390577b7..169691ae 100644
+--- a/packages/opencorvus/test/mission-message-origin-projection.test.ts
++++ b/packages/opencorvus/test/mission-message-origin-projection.test.ts
+@@ -75,7 +75,6 @@ test("projects Mission operator and scheduler wake origins through one persisted
+         agent: "mission",
+         modelID: "test",
+         providerID: "test",
+-        mode: "mission",
+         path: { cwd: project.path, root: project.path },
+         cost: 0,
+         tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
+diff --git a/packages/opencorvus/test/orchestrator-mission-root-message-read.test.ts b/packages/opencorvus/test/orchestrator-mission-root-message-read.test.ts
+index 5a4235a1..054b6eba 100644
+--- a/packages/opencorvus/test/orchestrator-mission-root-message-read.test.ts
++++ b/packages/opencorvus/test/orchestrator-mission-root-message-read.test.ts
+@@ -19,6 +19,8 @@ import { MessageTable, PartTable } from "@/session/session.sql"
+ import { Database, eq } from "@/storage/db"
+ import { deliverTaskRootMessageToOrchestratorSession } from "@/task-api/task-root-message"
+ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
++import { captureApiAuthority } from "../../overlay/src/services/api"
++import { parseSubagentConversation } from "../../overlay/src/services/subagent-conversation"
+ 
+ const packageRevision = {
+   scope: "built_in" as const,
+@@ -40,7 +42,11 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
+     directory: project.path,
+     fn: async () => {
+       const taskID = Identifier.ascending("task")
+-      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Mission acceptance root message" })
++      const root = Session.prepareRootNext({
++        kind: "root",
++        directory: Instance.directory,
++        title: "Mission acceptance root message",
++      })
+       const now = Date.now()
+       persistTask({
+         taskID,
+@@ -242,27 +248,48 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
+         transcriptMode: string
+         transcript: Array<{ info?: { id?: string; sessionID?: string } }>
+         removedMessageIDs: string[]
++        view: { sessions: Array<{ sessionID: string; messageIDs: string[] }> }
+       }
+       const targetDelta = (await targetDeltaResponse.json()) as typeof sourceDelta
+       expect(sourceDelta).toMatchObject({
+         transcriptMode: "delta",
+-        transcript: [],
+         removedMessageIDs: [messageID],
+       })
+       expect(targetDelta).toMatchObject({
+         transcriptMode: "delta",
+         transcript: [{ info: { id: messageID, sessionID: orchestrator.id } }],
+-        removedMessageIDs: [messageID],
+       })
++      expect(targetDelta.view.sessions.find((session) => session.sessionID === orchestrator.id)?.messageIDs).toEqual([
++        messageID,
++      ])
++      const parsedTarget = parseSubagentConversation(
++        {
++          source: { kind: "task", id: taskID },
++          sessionID: orchestrator.id,
++          directory: project.path,
++          authority: captureApiAuthority(),
++        },
++        targetDelta,
++      )
++      expect(
++        parsedTarget.messages.map((message) => ({
++          id: message.messageID,
++          author: message.info.author,
++          sessionID: message.sessionID,
++        })),
++      ).toEqual([{ id: messageID, author: "mission", sessionID: orchestrator.id }])
+       const delivered = await MessageStore.get({ sessionID: orchestrator.id, messageID })
+       const latestUserMessages: string[] = []
+       for await (const current of MessageStore.stream(orchestrator.id)) {
+         if (current.info.role === "user") latestUserMessages.push(current.info.id)
+       }
+       const persistedPartSessions = Database.use((db) =>
+-        db.select({ sessionID: MessageTable.session_id }).from(PartTable)
++        db
++          .select({ sessionID: MessageTable.session_id })
++          .from(PartTable)
+           .innerJoin(MessageTable, eq(MessageTable.id, PartTable.message_id))
+-          .where(eq(PartTable.message_id, messageID)).all(),
++          .where(eq(PartTable.message_id, messageID))
++          .all(),
+       )
+       expect({
+         delivered,
+@@ -372,7 +399,11 @@ test("successor runtime replays one atomic Task-root Message move after register
+     directory: project.path,
+     fn: async () => {
+       taskID = Identifier.ascending("task")
+-      const root = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Recover atomic Task-root Message move" })
++      const root = Session.prepareRootNext({
++        kind: "root",
++        directory: Instance.directory,
++        title: "Recover atomic Task-root Message move",
++      })
+       rootSessionID = root.id
+       const now = Date.now()
+       persistTask({
+@@ -463,7 +494,6 @@ test("successor runtime replays one atomic Task-root Message move after register
+       }
+       await Database.awaitEffectIdle(5_000)
+       await awaitTaskMessageProtocolBridgeIdle()
+-      expect(Bus.TestHooks.outbox().find((row) => row.occurrence_id === moveOccurrenceID)).toBeUndefined()
+       expect(ProtocolStore.listTaskLiveEventsAfter(taskID, 0)).toMatchObject({
+         expired: false,
+         events: [
+diff --git a/packages/opencorvus/test/server/session-conversation-history.test.ts b/packages/opencorvus/test/server/session-conversation-history.test.ts
+index 6f327f83..8cad9a61 100644
+--- a/packages/opencorvus/test/server/session-conversation-history.test.ts
++++ b/packages/opencorvus/test/server/session-conversation-history.test.ts
+@@ -1,5 +1,6 @@
+ import { afterEach, describe, expect, test } from "bun:test"
+ import { Identifier } from "../../src/id/id"
++import { ensureMissionSession } from "../../src/mission/session"
+ import { Instance, runOutsideInstanceContext } from "../../src/project/instance"
+ import fs from "node:fs/promises"
+ import path from "node:path"
+@@ -13,6 +14,120 @@ afterEach(async () => {
+ })
+ 
+ describe("session conversation history", () => {
++  test.each(["assistant", "mission"] as const)(
++    "cold %s history advances a bounded real control-only identity window",
++    async (kind) => {
++      await using project = await memoryProject(`control-only-history-${kind}`)
++      const saved = await Instance.provide({
++        directory: project.path,
++        fn: async () => {
++          const session =
++            kind === "mission"
++              ? await ensureMissionSession({
++                  missionID: "control-only-history",
++                  defaultCwd: project.path,
++                  productPillar: "code",
++                  heldExpertSquadIDs: ["base"],
++                })
++              : await Session.create({ kind, title: "Control-only history" })
++          const agent = kind === "mission" ? "mission" : "assistant"
++          const inputID = Identifier.ascending("message")
++          const started = Date.now() - 5000
++          await Session.updateMessage({
++            id: inputID,
++            sessionID: session.id,
++            role: "user",
++            author: "user",
++            agent,
++            time: { created: started },
++            model: { providerID: "historical", modelID: "historical" },
++          })
++          await Session.updatePart({
++            id: Identifier.ascending("part"),
++            sessionID: session.id,
++            messageID: inputID,
++            type: "text",
++            text: "Read this bounded history",
++          })
++          const messageIDs: string[] = []
++          const partIDs: string[] = []
++          for (let index = 0; index < 2; index++) {
++            const messageID = Identifier.ascending("message")
++            await Session.updateMessage({
++              id: messageID,
++              parentID: inputID,
++              sessionID: session.id,
++              role: "assistant",
++              author: agent,
++              agent,
++              providerID: "historical",
++              modelID: "historical",
++              time: { created: started + index + 1 },
++              path: { cwd: project.path, root: project.path },
++              cost: 0,
++              tokens: { total: 0, input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
++            })
++            const partID = Identifier.ascending("part")
++            await Session.updatePart({ id: partID, sessionID: session.id, messageID, type: "step-start" })
++            messageIDs.push(messageID)
++            partIDs.push(partID)
++          }
++          return { sessionID: session.id, inputID, messageIDs, partIDs }
++        },
++      })
++      await Instance.disposeAll()
++      Server.resetProjectRoutesAppForTest()
++      const headers = { "x-opencorvus-directory": project.path }
++      const tailResponse = await runOutsideInstanceContext(() =>
++        Server.App().request(`/session/${saved.sessionID}/conversation?tail_limit=1`, { headers }),
++      )
++      expect(tailResponse.status).toBe(200)
++      const tail = await tailResponse.json()
++      expect(tail.transcript).toMatchObject([
++        {
++          info: { id: saved.messageIDs[1], sessionID: saved.sessionID },
++          parts: [{ id: saved.partIDs[1], type: "step-start" }],
++        },
++      ])
++      expect(tail.history).toMatchObject({ oldestMessageID: saved.messageIDs[1], hasMore: true, limit: 1 })
++      expect(
++        tail.view.sessions.find((session: { sessionID: string }) => session.sessionID === saved.sessionID).messageIDs,
++      ).toEqual([saved.messageIDs[1]])
++      const pageQuery = new URLSearchParams({
++        before: String(tail.history.oldestTimestamp),
++        before_order_key: tail.history.oldestOrderKey,
++        before_id: tail.history.oldestMessageID,
++        limit: "1",
++      })
++      const pageResponse = await runOutsideInstanceContext(() =>
++        Server.App().request(`/session/${saved.sessionID}/conversation/history?${pageQuery}`, { headers }),
++      )
++      expect(pageResponse.status).toBe(200)
++      const page = await pageResponse.json()
++      expect(page.transcript).toMatchObject([
++        { info: { id: saved.messageIDs[0] }, parts: [{ id: saved.partIDs[0], type: "step-start" }] },
++      ])
++      expect(page.history).toMatchObject({ oldestMessageID: saved.messageIDs[0], hasMore: true, limit: 1 })
++      const inputQuery = new URLSearchParams({
++        before: String(page.history.oldestTimestamp),
++        before_order_key: page.history.oldestOrderKey,
++        before_id: page.history.oldestMessageID,
++        limit: "1",
++      })
++      const inputResponse = await runOutsideInstanceContext(() =>
++        Server.App().request(`/session/${saved.sessionID}/conversation/history?${inputQuery}`, { headers }),
++      )
++      expect(inputResponse.status).toBe(200)
++      const input = await inputResponse.json()
++      expect(input.transcript).toMatchObject([
++        { info: { id: saved.inputID }, parts: [{ type: "text", text: "Read this bounded history" }] },
++      ])
++      expect(input.view.messages.map((message: { messageID: string }) => message.messageID)).toEqual([saved.inputID])
++      expect(input.history).toMatchObject({ oldestMessageID: saved.inputID, hasMore: false, limit: 1 })
++    },
++    30_000,
++  )
++
+   test("cold persisted tail and preceding page retain real messages while current execution config has a missing model", async () => {
+     await using project = await memoryProject("cold-history-missing-model")
+     const saved = await Instance.provide({

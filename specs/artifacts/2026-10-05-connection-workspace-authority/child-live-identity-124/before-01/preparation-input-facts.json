@@ -1,0 +1,17 @@
+{
+  "inactivityMilliseconds": 180000,
+  "output": "desktop-keyboard-checklist.json",
+  "preparationMilliseconds": 600000,
+  "port": 18086,
+  "case": "12401",
+  "pillar": "code",
+  "run": "sources-late-open-live-124-01",
+  "rows": 30,
+  "model": "openai/gpt-6.1-sol",
+  "requestBudget": 32,
+  "requestUTF8Bytes": 750,
+  "finalLF": true,
+  "taskMaximumMilliseconds": 900000,
+  "execution": "HELD: proposal/preparation only",
+  "SourceOracle": "Not applicable: no URLs requested, do not reuse3Source checker"
+}

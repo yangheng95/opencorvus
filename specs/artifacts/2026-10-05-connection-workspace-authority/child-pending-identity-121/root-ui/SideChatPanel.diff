@@ -1,0 +1,46 @@
+diff --git a/packages/overlay/src/components/SideChatPanel.tsx b/packages/overlay/src/components/SideChatPanel.tsx
+index 82f04340..e9ae5aa8 100644
+--- a/packages/overlay/src/components/SideChatPanel.tsx
++++ b/packages/overlay/src/components/SideChatPanel.tsx
+@@ -22,6 +22,7 @@ import { quotedPrompt, type Quotation } from "../services/quotation"
+ import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
+ import { formatErrorDetails } from "../services/diagnostics"
+ import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
++import { assistantMessageErrorReason, conversationMessageHasDisplayContent } from "../utils/message-part"
+ import { t } from "../utils/i18n"
+ import { ConversationCard } from "./ConversationCard"
+ import { QuotationSelection } from "./QuotationSelection"
+@@ -45,6 +46,7 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
+     const message = props.message
+     const user = message.info.role === "user"
+     const time = message.info.time as { completed?: number } | undefined
++    const errorReason = assistantMessageErrorReason(message.info)
+     return {
+       id: `side-message:${message.messageID}`,
+       kind: "agent" as const,
+@@ -56,7 +58,12 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
+       title: message.agentID,
+       parts: message.parts,
+       childIDs: [],
+-      status: user || time?.completed ? ("completed" as const) : ("running" as const),
++      status: errorReason
++        ? ("error" as const)
++        : user || time?.completed
++          ? ("completed" as const)
++          : ("running" as const),
++      errorReason,
+       orderKey: message.orderKey,
+       time: message.time,
+     }
+@@ -90,8 +97,9 @@ export function SideChatPanel(props: {
+   const session = createMemo(() => sessions().find((item) => item.id === selected()))
+   const key = () => composerDraftKey("side-chat", getServerUrl(), props.source?.directory ?? "", selected())
+   const inherited = createMemo(() => new Set(session()?.metadata.sideChat.inheritedMessageIDs ?? []))
+-  const history = createMemo(() => transcript()?.messages.filter((item) => inherited().has(item.messageID)) ?? [])
+-  const messages = createMemo(() => transcript()?.messages.filter((item) => !inherited().has(item.messageID)) ?? [])
++  const displayedMessages = createMemo(() => transcript()?.messages.filter(conversationMessageHasDisplayContent) ?? [])
++  const history = createMemo(() => displayedMessages().filter((item) => inherited().has(item.messageID)))
++  const messages = createMemo(() => displayedMessages().filter((item) => !inherited().has(item.messageID)))
+   const messageIDs = createMemo(() => messages().map((message) => message.messageID))
+   const messageByID = createMemo(() => new Map(messages().map((message) => [message.messageID, message])))
+   const sessionLabel = (item: SideChatSession) =>

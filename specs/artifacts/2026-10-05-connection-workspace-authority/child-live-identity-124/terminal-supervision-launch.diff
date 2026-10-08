@@ -1,0 +1,72 @@
+--- live-sol-launch.before.ps1
++++ live-sol-launch.ps1
+@@ -13,6 +13,44 @@
+   $stream=[IO.File]::Open($stage,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write)
+   try{$bytes=[Text.UTF8Encoding]::new($false).GetBytes(($Value|ConvertTo-Json -Depth 12));$stream.Write($bytes,0,$bytes.Length)}finally{$stream.Dispose()}
+   try{[IO.File]::Move($stage,$Target)}finally{if(Test-Path -LiteralPath $stage){Remove-Item -LiteralPath $stage -ErrorAction Stop}}
++}
++function Assert-OwnedTaskCompletion($Stored,$Boundary,$Complete) {
++  function Reject-Completion([string]$Code) {
++    $error=[IO.InvalidDataException]::new($Code)
++    $error.Data['code']=$Code
++    throw $error
++  }
++  if(!$Boundary -or !$Complete -or !$Complete.selected -or !$Complete.pinned -or !$Complete.lifecycle){Reject-Completion 'TASK_COMPLETION_SHAPE_INVALID'}
++  foreach($receipt in @($Boundary,$Complete)) {
++    if($receipt.pid -ne $Stored.owner.ProcessId -or $receipt.occurrence -ne $Stored.occurrence -or $receipt.selected.occurrence -ne $Stored.occurrence -or [IO.Path]::GetFullPath($receipt.selected.directory) -ne [IO.Path]::GetFullPath($Stored.project)){Reject-Completion 'TASK_COMPLETION_IDENTITY_MISMATCH'}
++    if(!$receipt.selected.taskID -or !$receipt.selected.projectID -or !$receipt.selected.requestID -or $receipt.selected.taskID -ne $receipt.pinned.taskID -or $receipt.selected.projectID -ne $receipt.pinned.projectID){Reject-Completion 'TASK_COMPLETION_IDENTITY_MISMATCH'}
++  }
++  foreach($key in @('taskID','projectID','rootSessionID','epoch','openedEventID','openedAt')) {
++    if(!$Complete.pinned.$key -or $Complete.pinned.$key -ne $Boundary.pinned.$key){Reject-Completion 'TASK_COMPLETION_IDENTITY_MISMATCH'}
++  }
++  foreach($key in @('taskID','projectID','requestID','productPillar','requestSentAt','acceptedObservedAt')) {
++    if(!$Complete.selected.$key -or $Complete.selected.$key -ne $Boundary.selected.$key){Reject-Completion 'TASK_COMPLETION_IDENTITY_MISMATCH'}
++  }
++  if($Complete.lifecycle.status -ne 'completed' -or !$Complete.lifecycle.terminalEventID){Reject-Completion 'TASK_COMPLETION_TERMINAL_INVALID'}
++  foreach($key in @('taskID','epoch','openedEventID','openedAt')) {
++    if($Complete.lifecycle.$key -ne $Complete.pinned.$key){Reject-Completion 'TASK_COMPLETION_IDENTITY_MISMATCH'}
++  }
++  if($Complete.ownedPromptSessions -isnot [array] -or $Complete.ownedPromptSessions.Count -ne 0){Reject-Completion 'TASK_COMPLETION_OWNERS_INVALID'}
++  $opened=[long]$Complete.pinned.openedAt; $deadline=[long]$Boundary.totalDeadlineMs
++  $terminal=[long]$Complete.lifecycle.terminalAt
++  $observed=[DateTimeOffset]::MinValue
++  if($Complete.observedAt -is [DateTime]) {
++    if($Complete.observedAt.Kind -ne [DateTimeKind]::Utc){Reject-Completion 'TASK_COMPLETION_BUDGET_INVALID'}
++    $observed=[DateTimeOffset]::new($Complete.observedAt)
++  } elseif(![DateTimeOffset]::TryParse([string]$Complete.observedAt,[ref]$observed)){Reject-Completion 'TASK_COMPLETION_BUDGET_INVALID'}
++  $observedMs=$observed.ToUnixTimeMilliseconds()
++  if($deadline -ne ($opened+900000) -or $terminal -lt $opened -or $terminal -gt $deadline -or $observedMs -lt $terminal -or $observedMs -gt $deadline){Reject-Completion 'TASK_COMPLETION_BUDGET_INVALID'}
++  return $true
++}
++function Get-OwnedTaskMaximumReason([bool]$WrapperFailed,[bool]$CompletionValidated,[long]$Now,[long]$Deadline) {
++  if($WrapperFailed){return 'immutable-wrapper-failure'}
++  if($Now -ge $Deadline){if($CompletionValidated){return 'completed-service-maximum'};return 'fixed-task-maximum'}
++  return $null
+ }
+ function Get-OwnedNativeState($Expected) {
+   if(!$Expected.pid -or $Expected.processInstanceID -notmatch '^win32:[0-9]+$'){throw 'Exact native Windows occurrence required'}
+@@ -110,7 +148,15 @@
+       if($opened -lt $launched -or $opened -gt $now -or $opened -gt $PreparationDeadlineMilliseconds -or [long]$candidate.totalDeadlineMs -ne ($opened+900000) -or [long]$candidate.pinned.epoch -lt 1 -or !$candidate.pinned.openedEventID -or !$candidate.pinned.rootSessionID -or !$candidate.selected.requestID){throw 'Actual Task boundary must retain admitted identity and fixed 900000 milliseconds'}
+       $boundary=$candidate
+     }
+-    if(!$reason -and $boundary -and $now -ge [long]$boundary.totalDeadlineMs){$reason='fixed-task-maximum'}
++    if(!$reason -and $boundary){
++      $completionValidated=$false
++      $completePath=Join-Path $stored.evidence 'task-complete.json'
++      if(Test-Path -LiteralPath $completePath){
++        $complete=Get-Content -Raw -LiteralPath $completePath|ConvertFrom-Json
++        $completionValidated=Assert-OwnedTaskCompletion $stored $boundary $complete
++      }
++      $reason=Get-OwnedTaskMaximumReason $false $completionValidated $now ([long]$boundary.totalDeadlineMs)
++    }
+     if(!$reason -and !$boundary -and $now -ge $PreparationDeadlineMilliseconds){$reason='fixed-preparation-maximum'}
+     $rootPresent=@($chain.presence|Where-Object {$_.processID -eq $stored.owner.ProcessId -and $_.originalOccurrencePresent}).Count
+     if(!$reason -and !$rootPresent){$reason='original-root-exited'}
+@@ -248,6 +294,5 @@
+ $taskBoundPath = Join-Path $taskNormalizedOwner.evidence 'task-boundary-admitted.json'
+ if(!(Test-Path -LiteralPath $taskBoundPath)){throw "Task boundary receipt missing after physical settlement: $taskBoundPath"}
+ $taskBound = Get-Content -Raw -LiteralPath $taskBoundPath | ConvertFrom-Json
+-if($taskBound.pid -ne $taskNormalizedOwner.owner.ProcessId -or $taskBound.occurrence -ne $taskNormalizedOwner.occurrence -or !$taskComplete.pinned.taskID -or !$taskComplete.pinned.rootSessionID -or $taskComplete.pinned.taskID -ne $taskBound.pinned.taskID -or $taskComplete.pinned.projectID -ne $taskBound.pinned.projectID -or $taskComplete.pinned.rootSessionID -ne $taskBound.pinned.rootSessionID -or $taskComplete.pinned.epoch -ne $taskBound.pinned.epoch -or $taskComplete.pinned.openedEventID -ne $taskBound.pinned.openedEventID -or $taskComplete.pinned.openedAt -ne $taskBound.pinned.openedAt -or $taskComplete.selected.requestID -ne $taskBound.selected.requestID){throw "Task completion and admitted boundary identities differ: $taskCompletePath"}
+-if($taskComplete.pid -ne $taskNormalizedOwner.owner.ProcessId -or $taskComplete.occurrence -ne $taskNormalizedOwner.occurrence -or $taskComplete.selected.occurrence -ne $taskNormalizedOwner.occurrence -or $taskComplete.selected.taskID -ne $taskComplete.pinned.taskID -or $taskComplete.selected.projectID -ne $taskComplete.pinned.projectID -or [IO.Path]::GetFullPath($taskComplete.selected.directory) -ne [IO.Path]::GetFullPath($taskNormalizedOwner.project) -or $taskComplete.lifecycle.status -ne 'completed' -or $taskComplete.lifecycle.epoch -ne $taskComplete.pinned.epoch -or $taskComplete.lifecycle.openedEventID -ne $taskComplete.pinned.openedEventID -or @($taskComplete.ownedPromptSessions).Count -ne 0){throw "Task completion receipt does not bind the exact accepted occurrence: $taskCompletePath"}
++$null=Assert-OwnedTaskCompletion $taskNormalizedOwner $taskBound $taskComplete
+ Write-Output 'Exact Task checker completion and physical settlement qualified; download and visual acceptance remain Root-owned.'

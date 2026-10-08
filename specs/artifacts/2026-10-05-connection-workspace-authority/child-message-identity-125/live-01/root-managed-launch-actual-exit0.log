@@ -1,0 +1,13 @@
+Owned Sol Target PID 77008, Host PID 41576, occurrence child-message-identity-live-125-01-c3eb8850-1e85-49b9-a980-50717ffd155d; native settlement remains required.
+
+occurrence            : child-message-identity-live-125-01-c3eb8850-1e85-49b9-a980-50717ffd155d
+physicalCompletion    : True
+pairedCleanupComplete : True
+observedAtUtc         : 2026/10/8 3:51:10
+chain                 : {@{expected=; state=dead_or_reused; originalOccurrencePresent=False}, @{expected=; state=dead_or_reused; originalOccurrencePresent=False}}
+boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup
+listeners             : 
+copiedPair            : {@{path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-08\child-message-identity-live-125-01\runtime\data\auth.json; outcome=removed; copiedLength=2194; presentAfter=False}, @{path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-08\child-message-identity-live-125-01\runtime\data\models.json; outcome=removed; copiedLength=9155406; presentAfter=False}}
+nativeSettlement      : @{occurrence=child-message-identity-live-125-01-c3eb8850-1e85-49b9-a980-50717ffd155d; outcome=settled; host=; target=; observedAtUtc=2026/10/8 3:51:07; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup}
+
+Exact Task checker completion and physical settlement qualified; download and visual acceptance remain Root-owned.

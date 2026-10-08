@@ -1,0 +1,123 @@
+{
+  "messageID": "msg_hgMnnVKPLLsyQJJMWXzn",
+  "userMessageID": "msg_task-root-control_art_h8Dpeh6e3CfzG0SOjSVN_art_h8Dpeh6e3CfzG0SOjSVN",
+  "task": {
+    "id": "tsk_g00VXQH5hY006MZJOq32",
+    "title": "普通桌面键盘清单验收124",
+    "status": "completed"
+  },
+  "declaredOutputs": [
+    {
+      "declarationLocator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hCDjw1y5eQsSwD6si0Fh",
+            "task_id": "tsk_g00VXQH5hY006MZJOq32",
+            "snapshot_id": "b946cb1e-53f2-5140-a1a2-8c82d9c1c932",
+            "manifest_sha256": "e2d7e6852b6d8401ace78caed108a656e2bbfb7731b0a15e3dcee931878ed421"
+          },
+          "tree": "resources",
+          "path": "desktop-keyboard-checklist.json",
+          "media_type": "application/json",
+          "bytes": 14366,
+          "sha256": "d83b15109889ac95f31ce2fc36a0bce1b5c0a7f5603b01328b7ce009f719bf9a"
+        }
+      },
+      "producer": {
+        "owner_kind": "projected-scheduler",
+        "expert_squad_id": "base",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "package_digest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "agent_id": "orchestrator",
+        "projection_hash": "25ad6de814379c3e16553c2b757bf68936cb3e4397a468fa35b80c89b008ca66",
+        "session_id": "ses_-zUSZitHvzzCCS8HOooJ",
+        "message_id": "msg_hmBwlL4pPdBjAeOSXOjC",
+        "tool_call_id": "call_1ba68170db3d4bad9aababe5fd8419a5"
+      },
+      "label": "desktop-keyboard-checklist.json",
+      "resources": [
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hCDjw1y5eQsSwD6si0Fh",
+            "task_id": "tsk_g00VXQH5hY006MZJOq32",
+            "snapshot_id": "b946cb1e-53f2-5140-a1a2-8c82d9c1c932",
+            "manifest_sha256": "e2d7e6852b6d8401ace78caed108a656e2bbfb7731b0a15e3dcee931878ed421"
+          },
+          "tree": "resources",
+          "path": "desktop-keyboard-checklist.json",
+          "media_type": "application/json",
+          "bytes": 14366,
+          "sha256": "d83b15109889ac95f31ce2fc36a0bce1b5c0a7f5603b01328b7ce009f719bf9a"
+        }
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "source": "task_artifact",
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hCDjw1y5eQsSwD6si0Fh",
+            "task_id": "tsk_g00VXQH5hY006MZJOq32",
+            "snapshot_id": "b946cb1e-53f2-5140-a1a2-8c82d9c1c932",
+            "manifest_sha256": "e2d7e6852b6d8401ace78caed108a656e2bbfb7731b0a15e3dcee931878ed421"
+          },
+          "tree": "resources",
+          "path": "desktop-keyboard-checklist.json",
+          "media_type": "application/json",
+          "bytes": 14366,
+          "sha256": "d83b15109889ac95f31ce2fc36a0bce1b5c0a7f5603b01328b7ce009f719bf9a"
+        }
+      },
+      "kind": "task_artifact_resource",
+      "schema_diagnostic_truncated": false,
+      "label": "desktop-keyboard-checklist.json",
+      "label_truncated": false,
+      "goal_id": null,
+      "import_source_task_id": null,
+      "producer": {
+        "owner_kind": "projected-scheduler",
+        "expert_squad_id": "base",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "package_digest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "agent_id": "orchestrator",
+        "projection_hash": "25ad6de814379c3e16553c2b757bf68936cb3e4397a468fa35b80c89b008ca66",
+        "session_id": "ses_-zUSZitHvzzCCS8HOooJ",
+        "message_id": "msg_hmBwlL4pPdBjAeOSXOjC",
+        "tool_call_id": "call_1ba68170db3d4bad9aababe5fd8419a5"
+      },
+      "created_at_ms": 1791428129428,
+      "bytes": 14366,
+      "sha256": "d83b15109889ac95f31ce2fc36a0bce1b5c0a7f5603b01328b7ce009f719bf9a",
+      "resource_count": 1,
+      "resource_media_types": [
+        "application/json"
+      ],
+      "resource_media_types_truncated": false,
+      "version": {
+        "state": "immutable",
+        "publication_sequence": 1
+      }
+    }
+  ],
+  "catalogComplete": true,
+  "providerErrors": []
+}

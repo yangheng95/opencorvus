@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\inspect-task-live-observation.test.ts:
+(pass) Task child snapshot and changed-message delta retain a real control-only assistant identity [2678.93ms]
+
+ 1 pass
+ 1 filtered out
+ 0 fail
+ 11 expect() calls
+Ran 1 test across 1 file. [4.92s]

@@ -1,0 +1,48 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/tree-writer.ts.before b/packages/overlay/src/services/tree-writer.ts
+index cb5bc618..dda98045 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-121/frontend-implementation/tree-writer.ts.before
++++ b/packages/overlay/src/services/tree-writer.ts
+@@ -39,7 +39,7 @@ import {
+ } from "../store/card-tree-stats"
+ import { boardStore, setBoardProjectionHandler, setBoardStore } from "../store/board"
+ import { agentStageLabel, normalizeAgentRole, roleLabel } from "../utils/message"
+-import { isBoundaryMessagePart, isCardBodyMessagePart, messagePartHasDisplayContent } from "../utils/message-part"
++import { assistantMessageErrorReason, conversationMessageHasDisplayContent, isBoundaryMessagePart, isCardBodyMessagePart, messagePartHasDisplayContent } from "../utils/message-part"
+ import { conversationMessageDisplayStage, isDelegatedContextMessage, type MessageOrigin } from "../utils/message-origin"
+ import { stageAccent } from "../utils/card-color"
+ import { t } from "../utils/i18n"
+@@ -113,20 +113,6 @@ function assistantMessageWasAborted(info: any): boolean {
+   return messageInfoIsAssistant(info) && String(info?.error?.name || "") === "MessageAbortedError"
+ }
+ 
+-function assistantMessageErrorReason(info: any): string | undefined {
+-  if (!messageInfoIsAssistant(info) || !info?.error) return undefined
+-  const error = info.error
+-  if (typeof error === "object") {
+-    const dataMessage = error?.data?.message
+-    if (typeof dataMessage === "string" && dataMessage.trim()) return dataMessage.trim()
+-    const message = error?.message
+-    if (typeof message === "string" && message.trim()) return message.trim()
+-    const name = error?.name
+-    if (typeof name === "string" && name.trim()) return name.trim()
+-  }
+-  throw new Error(`assistant message ${String(info.id || "")} has an error without a displayable reason`)
+-}
+-
+ function assistantMessageSettlement(info: any): ProjectedSessionStatus | undefined {
+   if (!messageInfoIsAssistant(info)) return
+   const completedAt = Number(info?.time?.completed)
+@@ -1095,12 +1081,7 @@ function conversationPartIsProjectable(part: any): boolean {
+   return isCardBodyMessagePart(part)
+ }
+ 
+-function transcriptMessageHasDisplay(message: any): boolean {
+-  return Boolean(
+-    assistantMessageErrorReason(message?.info) ||
+-      (Array.isArray(message?.parts) && message.parts.some(conversationPartHasDisplay)),
+-  )
+-}
++const transcriptMessageHasDisplay = conversationMessageHasDisplayContent
+ 
+ function createSessionCardNode(
+   cardID: string,
