@@ -1,0 +1,46 @@
+{
+  "observedAtUtc": "2026-10-08T18:51:27.7720582Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/live-01",
+  "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "bindings": true,
+  "states": [
+    {
+      "expected": {
+        "pid": 77936,
+        "processInstanceID": "win32:639270464599331036",
+        "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "ports": [],
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\models.json"
+    }
+  ],
+  "nativeTerminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "pairedCleanup": true,
+  "readQualified": true,
+  "boundary": "Readonly census admission only; whole DB startup/parent/canonical eligibility UNKNOWN"
+}

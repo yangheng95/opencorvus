@@ -1,0 +1,4167 @@
+{
+  "observedAtUtc": "2026-10-08T18:54:13.811Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "access": "bun:sqlite readonly BEGIN/ROLLBACK; no production bootstrap",
+  "internalTables": [],
+  "tables": [
+    {
+      "name": "automation",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "scope",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "recurrence",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "execution_mode",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "model_provider_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "model_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "reasoning_effort",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "surface",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "prompt",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "agent",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "status",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "due_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_input_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_definition_tombstone",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_input_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_delay_settlement",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "disposition",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "assistant_message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "accepted_input_message_ids",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "fire_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "automation_revision_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "scheduled_due_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "origin",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "input_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_fire_attempt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "fire_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "ordinal",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "lease_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "lease_grant_ordinal",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "lease_expires_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_fire_attempt_receipt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "attempt_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "outcome",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "retry_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "automation_revision_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "fire_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "available_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_project_target",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "automation_revision_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 2
+        },
+        {
+          "name": "position",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_run",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "automation_revision_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "fire_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "target_project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mission_opened_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mission_disposition",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mission_closure_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "started_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "automation_run_receipt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "run_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "outcome",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "disposition",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "closure_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "retry_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "bus_publication_attempt_receipt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "retry_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "bus_publication_delivery",
+      "rows": 1001,
+      "columns": [
+        {
+          "name": "occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "phase",
+          "type": "TEXT",
+          "primaryKey": 2
+        },
+        {
+          "name": "subscriber_id",
+          "type": "TEXT",
+          "primaryKey": 3
+        },
+        {
+          "name": "effect_contract",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "bus_publication_delivery_receipt",
+      "rows": 1001,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "phase",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "subscriber_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "outcome",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "retry_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "bus_publication_outbox",
+      "rows": 139,
+      "columns": [
+        {
+          "name": "occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "directory",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "event_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "properties",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "causation",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "bus_publication_phase_receipt",
+      "rows": 417,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "phase",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "platform",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "input",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "channel_ingress_outcome",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "result",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "control_account",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "email",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "url",
+          "type": "TEXT",
+          "primaryKey": 2
+        },
+        {
+          "name": "access_token",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "refresh_token",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "token_expiry",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "active",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "database_authority",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "key",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "instance_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "decision_log",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "goal_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "phase",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "key",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "value",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_artifact",
+      "rows": 10,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "label",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_bytes",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_block_sha256s",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_block_index_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_artifact_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_schema_diagnostic",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_producer",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_import_source_task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_resource_count",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_resource_media_types",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_search_text",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_search_text_truncated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_metadata_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_artifact_catalog_revision",
+      "rows": 10,
+      "columns": [
+        {
+          "name": "revision",
+          "type": "INTEGER",
+          "primaryKey": 1
+        }
+      ]
+    },
+    {
+      "name": "engine_artifact_version",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "artifact_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "label",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_bytes",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_block_sha256s",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload_block_index_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_artifact_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_schema_diagnostic",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_producer",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_import_source_task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_resource_count",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_resource_media_types",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_search_text",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_search_text_truncated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_metadata_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "catalog_revision",
+          "type": "INTEGER",
+          "primaryKey": 2
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_browser_preview_target_identity",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "canonical_url",
+          "type": "TEXT",
+          "primaryKey": 2
+        },
+        {
+          "name": "artifact_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "observation_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "git_dir",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_build_observation_cleanup_receipt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "observation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "outcome",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_channel_binding",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "platform",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "channel",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "thread",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_control_activation_lease",
+      "rows": 1016,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "target",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "target_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_activated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "expires_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_control_activation_lease_grant",
+      "rows": 1016,
+      "columns": [
+        {
+          "name": "lease_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "ordinal",
+          "type": "INTEGER",
+          "primaryKey": 2
+        },
+        {
+          "name": "expires_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_git_checkpoint_outcome",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "result",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_git_checkpoint_request",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "stage",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "operation_key",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "input",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_goal",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "requirement_set_artifact_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "requirement_set_artifact_revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "requirement_set_artifact_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "contract_graph_artifact_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "contract_graph_artifact_revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "contract_graph_artifact_sha256",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "supersede_of",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "slug",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "objective",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "acceptance_specs",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owned_paths",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "priority",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "order_index",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "metadata",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_interaction_outcome",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "interaction_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "outcome",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "response",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source_kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "external_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "body",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_metric_result",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "metric_spec_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "iteration",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "delivery_slice_revision_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "raw_value",
+          "type": "REAL",
+          "primaryKey": 0
+        },
+        {
+          "name": "normalized_value",
+          "type": "REAL",
+          "primaryKey": 0
+        },
+        {
+          "name": "met_target",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "met_floor",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "evidence_ref",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "evidence_fresh",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "computed_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_metric_spec",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "scope",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "goal_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "unit",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "direction",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "target",
+          "type": "REAL",
+          "primaryKey": 0
+        },
+        {
+          "name": "floor",
+          "type": "REAL",
+          "primaryKey": 0
+        },
+        {
+          "name": "weight",
+          "type": "REAL",
+          "primaryKey": 0
+        },
+        {
+          "name": "observation_class",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "evaluator_kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "evaluator_config",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "frozen_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "created_by",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_progress_snapshot",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "summary",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_task",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "global_creation_allocation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "product_pillar",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "attachments",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "system_artifacts",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "priority",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "budget",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "metadata",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_archived",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_pinned",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_task_creation_contract",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "fingerprint",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "contract",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "creator_tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_task_root_ingress",
+      "rows": 3,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "execution_epoch",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "sequence",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "inline_payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "policy_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_accepted",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_task_root_ingress_policy",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "semantic_turn_limit",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "activation_limit",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "absolute_deadline",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "execution_epoch",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "due_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "creator_ingress_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "creator_activation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "input_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "engine_task_wait_settlement",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "wait_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "ingress_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "disposition",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "event_job",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "event_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "match_json",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "prompt",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "agent",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "enabled",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "one_shot",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "cooldown_ms",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_input_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "event_job_definition_tombstone",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_input_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "queue_position",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "event_job_revision_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "event_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "causation_fire_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "causal_cycle",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "created_session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mission_opened_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mission_disposition",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mission_closure_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "event_job_fire_receipt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "fire_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "definition_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "queue_position",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "outcome",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "disposition",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "closure_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "retry_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "event_occurrence",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "bus_outbox_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "event_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "properties",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "global_creation_allocation",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request_fingerprint",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "request_contract",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "resolution_seed",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "task_resolution",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "materialized_project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "materialized_project_generation",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_materialized",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "rejected_error",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_rejected",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "accepted_project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "accepted_target_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "accepted_initial_config_overlay",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_accepted",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_project_retained",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "directory",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "interactive_artifact",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_chunk",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "file_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "content",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "token_count",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_embedding",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "chunk_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "embedding",
+          "type": "BLOB",
+          "primaryKey": 0
+        },
+        {
+          "name": "model",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_file",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "key",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "importance",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "confidence",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_fts",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "content",
+          "type": "",
+          "primaryKey": 0
+        },
+        {
+          "name": "chunk_id",
+          "type": "",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_fts_config",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "k",
+          "type": "",
+          "primaryKey": 1
+        },
+        {
+          "name": "v",
+          "type": "",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_fts_content",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "primaryKey": 1
+        },
+        {
+          "name": "c0",
+          "type": "",
+          "primaryKey": 0
+        },
+        {
+          "name": "c1",
+          "type": "",
+          "primaryKey": 0
+        },
+        {
+          "name": "c2",
+          "type": "",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_fts_data",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "primaryKey": 1
+        },
+        {
+          "name": "block",
+          "type": "BLOB",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_fts_docsize",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "primaryKey": 1
+        },
+        {
+          "name": "sz",
+          "type": "BLOB",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "memory_fts_idx",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "segid",
+          "type": "",
+          "primaryKey": 1
+        },
+        {
+          "name": "term",
+          "type": "",
+          "primaryKey": 2
+        },
+        {
+          "name": "pgno",
+          "type": "",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "message",
+      "rows": 22,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "data",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "part",
+      "rows": 59,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "data",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "permission_execution_result",
+      "rows": 8,
+      "columns": [
+        {
+          "name": "attempt_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "result",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "permission_ledger",
+      "rows": 40,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_call_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "attempt_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "event_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mode",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "policy_revision",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "provider_kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "provider_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "provider_digest",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tool_name",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "effect_class",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "scope_version",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "scope",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "fingerprint",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "summary",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "decision_scope",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source_event_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "decision_slot",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "outcome_slot",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "actor_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "reason",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "metadata",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "permission_policy",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "mode",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "revision",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "project",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "worktree",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "icon_url",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "icon_color",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_pinned",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_initialized",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "sandboxes",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "commands",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "generation",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "directory_key",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "directory",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "generation",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "operation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_pid",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_process_instance_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_generation",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "operation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_pid",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_process_instance_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "protocol_delivery_receipt",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "inbox_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "receipt",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "protocol_event",
+      "rows": 60,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "aggregate_type",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "aggregate_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "interaction_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "stream_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "target",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "causation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "correlation_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "reply_to",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "seq",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "deadline_ms",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "emitted_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "envelope_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "actor",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "actor_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "visible_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "provider_activity_outcome",
+      "rows": 17,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "request_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "data",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "provider_activity_request",
+      "rows": 17,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "assistant_message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "provider_usage_event",
+      "rows": 19,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "occurred_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "provider_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "model_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "purpose",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "input_tokens",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "output_tokens",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "reasoning_tokens",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "cache_read_tokens",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "cache_write_tokens",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "total_tokens",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "cost_usd",
+          "type": "REAL",
+          "primaryKey": 0
+        },
+        {
+          "name": "billing_status",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "agent_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "quick_note",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "content",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "summary",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "tags",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "status",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "user_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "runtime_execution_capacity_lease",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "resource_key",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "slot",
+          "type": "INTEGER",
+          "primaryKey": 2
+        },
+        {
+          "name": "lease_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_acquired",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "expires_at",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "session",
+      "rows": 5,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "parent_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "slug",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "directory",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "version",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "share_url",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "summary_additions",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "summary_deletions",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "summary_files",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "permission",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "metadata",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_archived",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_pinned",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "session_control_event",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "control_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "session_control_record",
+      "rows": 1,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "kind",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "source",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "directory",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "generation",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_pid",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_process_instance_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_acquired",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "session_share",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "secret",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "url",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "task_plan",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "parent_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "goal",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "status",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "priority",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "notes",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "progress_pct",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "todo",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "content",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "status",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "priority",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "position",
+          "type": "INTEGER",
+          "primaryKey": 2
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "todo_snapshot",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "revision",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "tool_part_outcome",
+      "rows": 14,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "request_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "data",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "tool_part_progress",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "request_part_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "title",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "metadata",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "tool_part_request",
+      "rows": 14,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "message_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "data",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "workbench_brief_snapshot",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "content",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "inputs",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "worker_turn_descriptor",
+      "rows": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "task_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "session_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "hash",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "agent",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "payload",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_updated",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "workspace",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "branch",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "config",
+          "type": "TEXT",
+          "primaryKey": 0
+        }
+      ]
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0,
+      "columns": [
+        {
+          "name": "occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 1
+        },
+        {
+          "name": "project_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "project_generation",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "workspace_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "lifecycle",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "authority",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_occurrence_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_pid",
+          "type": "INTEGER",
+          "primaryKey": 0
+        },
+        {
+          "name": "owner_process_instance_id",
+          "type": "TEXT",
+          "primaryKey": 0
+        },
+        {
+          "name": "time_created",
+          "type": "INTEGER",
+          "primaryKey": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "project": {
+      "fields": [
+        "id",
+        "worktree"
+      ],
+      "rows": [
+        {
+          "id": "prj_hVAc7t3PtYTtTTJZWWvx",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365"
+        },
+        {
+          "id": "prj_honTzv1SylD1sTwgEqBC",
+          "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project"
+        }
+      ]
+    },
+    "engine_task": {
+      "fields": [
+        "id",
+        "project_id",
+        "session_id",
+        "request_id"
+      ],
+      "rows": [
+        {
+          "id": "tsk_g00VXRkMRi00ID2TqzPU",
+          "project_id": "prj_honTzv1SylD1sTwgEqBC",
+          "session_id": "ses_-zUSYFdRdzzk2frR62zX",
+          "request_id": "0f315e79-0af3-438e-b26e-d312f2f3e65e"
+        }
+      ]
+    },
+    "session": {
+      "fields": [
+        "id",
+        "project_id",
+        "parent_id",
+        "kind",
+        "directory"
+      ],
+      "rows": [
+        {
+          "id": "ses_-zUSYFccyzzf546Yf4gG",
+          "project_id": "prj_honTzv1SylD1sTwgEqBC",
+          "parent_id": "ses_-zUSYFdRdzzk2frR62zX",
+          "kind": "orchestrator",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project"
+        },
+        {
+          "id": "ses_-zUSYFdRdzzk2frR62zX",
+          "project_id": "prj_honTzv1SylD1sTwgEqBC",
+          "parent_id": null,
+          "kind": "root",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project"
+        },
+        {
+          "id": "ses_hCXtaZtUsxlBDPJGPORp",
+          "project_id": "prj_hVAc7t3PtYTtTTJZWWvx",
+          "parent_id": null,
+          "kind": "assistant",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\projects\\2026\\10\\08\\cb73cc46-5056-4f0c-89f9-8d25f4793365"
+        },
+        {
+          "id": "ses_hMlVNrRdOLxQf4XhSds7",
+          "project_id": "prj_honTzv1SylD1sTwgEqBC",
+          "parent_id": "ses_-zUSYFccyzzf546Yf4gG",
+          "kind": "explore",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project"
+        },
+        {
+          "id": "ses_hmr5hLvn696a1dvBqrh0",
+          "project_id": "prj_honTzv1SylD1sTwgEqBC",
+          "parent_id": "ses_-zUSYFccyzzf546Yf4gG",
+          "kind": "delegated-worker",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project"
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "aggregate_type": "session",
+      "type": "agent.execution.lifecycle",
+      "count": 5
+    },
+    {
+      "aggregate_type": "task",
+      "type": "agent.execution.lifecycle",
+      "count": 42
+    },
+    {
+      "aggregate_type": "task",
+      "type": "artifact.persisted",
+      "count": 10
+    },
+    {
+      "aggregate_type": "task",
+      "type": "task.completed",
+      "count": 1
+    },
+    {
+      "aggregate_type": "task",
+      "type": "task.created",
+      "count": 1
+    },
+    {
+      "aggregate_type": "task",
+      "type": "task.execution.opened",
+      "count": 1
+    }
+  ],
+  "boundary": "Schema/count/ID census only; every canonical lifecycle/recovery/publication frontier still requires review before any clone/startup; no raw payload/text/args/credentials"
+}

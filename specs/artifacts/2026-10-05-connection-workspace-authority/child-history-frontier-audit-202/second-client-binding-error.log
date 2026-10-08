@@ -1,0 +1,22 @@
+23 | 	}
+24 | 	prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
+25 | 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper);
+26 | 	}
+27 | 	prepareOneTimeQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
+28 | 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper, false, true);
+                                            ^
+SQLiteError: no such table: protocol_event
+      errno: 1,
+ byteOffset: -1,
+
+      at prepare (bun:sqlite:345:37)
+      at prepareOneTimeQuery (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.cjs:28:40)
+      at _prepare (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\sqlite-core\query-builders\select.cjs:560:71)
+      at all (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\sqlite-core\query-builders\select.cjs:586:15)
+      at lifecycleRows (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-lifecycle.ts:38:6)
+      at taskLifecycleProjectionInTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\engine\task-lifecycle.ts:64:42)
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\child-history-frontier-audit-202.ts:30:13)
+      at map (1:11)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\child-history-frontier-audit-202.ts:29:24
+
+Bun v1.3.14 (Windows x64)

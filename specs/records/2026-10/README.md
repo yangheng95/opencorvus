@@ -381,3 +381,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [2026-10-09 最终长回合闭合](2026-10-09-final-long-main-200.md)：200真实两长回复/同ID卸载返回/15047高度/followfalse；原20153=0/6EOF/native+pairclosed，final同Scope资格完成，197原失败保留。
 
+- [2026-10-09 单 agent 子侧栏历史调查](2026-10-09-child-history-readonly-201-203.md)：原153全库只读/当前Task与发布终态/控制输入和记忆前沿；原工具隔离与连接错误保留并修正。201/203实际0，未启动历史副本，子侧栏视觉仍未验。
+

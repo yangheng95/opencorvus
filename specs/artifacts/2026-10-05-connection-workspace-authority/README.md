@@ -483,3 +483,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [200 最终长回合闭合](markdown-main-final-200/README.md)：final17cc7cfb/同输入两轮5955/64+9903/70、实际卸载/返回与15047高度/followfalse；原20153=0/6EOF/native+pairclosed。197原1保留，原child Dock独立未验。
 
+- [201 子侧栏历史普查](child-history-readonly-census-201/README.md) / [202 当前事实](child-history-frontier-audit-202/README.md) / [203 启动前沿](child-history-startup-frontiers-203/README.md)：单 agent 只读原153全库90表/2项目/1任务/5会话；139发布/1001投递/17 Provider/14工具闭合，3输入处置与15助手完成、8权限终态、记忆idle。永久进程身份按操作系统证明确已死亡；未启动副本，子侧栏视觉与完整启动资格仍待满足。
+

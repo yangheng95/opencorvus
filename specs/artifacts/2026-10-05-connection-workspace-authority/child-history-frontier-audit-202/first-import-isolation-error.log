@@ -1,0 +1,14 @@
+82 | function assertTestRuntimeIsolation(input: OpenCorvusRuntimePathInput, root: string) {
+83 |   if (!input.env.OPENCORVUS_TEST_HOME?.trim()) return
+84 |   const paths = platformPath(input.platform)
+85 |   const processRoot = input.env.OPENCORVUS_TEST_PROCESS_ROOT?.trim()
+86 |   if (!processRoot || !paths.isAbsolute(processRoot)) {
+87 |     throw new OpenCorvusTestRuntimeIsolationError(
+                   ^
+OpenCorvusTestRuntimeIsolationError: OPENCORVUS_TEST_HOME requires an absolute OPENCORVUS_TEST_PROCESS_ROOT from the test-runtime preload
+ code: "INVALID_OPENCORVUS_TEST_RUNTIME"
+
+      at assertTestRuntimeIsolation (D:\myhexin-local\opencorvus\packages\util\src\runtime-paths.ts:87:15)
+      at resolveOpenCorvusRuntimePaths (D:\myhexin-local\opencorvus\packages\util\src\runtime-paths.ts:103:3)
+
+Bun v1.3.14 (Windows x64)

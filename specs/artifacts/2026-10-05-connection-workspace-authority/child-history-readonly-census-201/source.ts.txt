@@ -1,0 +1,39 @@
+import fs from "node:fs"
+import path from "node:path"
+import { Database } from "bun:sqlite"
+
+const sourceRun = "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01"
+const out = "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-history-readonly-census-201"
+const guard = JSON.parse(fs.readFileSync(path.join(out, "guard.json"), "utf8"))
+if (!guard.readQualified || path.resolve(guard.sourceRun) !== path.resolve(sourceRun) ||
+  guard.occurrence !== "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda") throw Error("Exact admitted201 closed-source read required")
+const dbPath = path.join(sourceRun, "runtime/data/opencorvus.db")
+for (const item of [sourceRun, path.join(sourceRun, "runtime"), path.join(sourceRun, "runtime/data"), dbPath]) {
+  if (fs.lstatSync(item).isSymbolicLink()) throw Error("Source read ancestor is a link")
+}
+const quote = (name: string) => `"${name.replaceAll('"', '""')}"`
+const db = new Database(dbPath, { readonly: true })
+db.exec("BEGIN")
+try {
+  const allTables = db.query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all() as {name: string}[]
+  const tables = allTables.filter(t=>!t.name.startsWith("sqlite_")).map(t=>({
+    name: t.name,
+    rows: (db.query(`SELECT COUNT(*) AS count FROM ${quote(t.name)}`).get() as {count: number}).count,
+    columns: (db.query(`PRAGMA table_info(${quote(t.name)})`).all() as {name: string; type: string; pk: number}[]).map(c=>({name:c.name,type:c.type,primaryKey:c.pk})),
+  }))
+  const metadata = Object.fromEntries(["project", "engine_task", "session"].map(name=>{
+    const table = tables.find(t=>t.name===name)
+    if (!table) return [name,{available:false}]
+    const fields = ["id", "project_id", "session_id", "request_id", "parent_id", "kind", "worktree", "directory"].filter(f=>table.columns.some(c=>c.name===f))
+    return [name,{fields,rows:db.query(`SELECT ${fields.map(quote).join(",")} FROM ${quote(name)} ORDER BY id`).all()}]
+  }))
+  const protocol = tables.find(t=>t.name==="protocol_event")
+  const eventFields = ["aggregate_type", "type"].filter(f=>protocol?.columns.some(c=>c.name===f))
+  const events = eventFields.length === 2 ? db.query("SELECT aggregate_type,type,COUNT(*) AS count FROM protocol_event GROUP BY aggregate_type,type ORDER BY aggregate_type,type").all() : {available:false}
+  const result = {observedAtUtc:new Date().toISOString(),sourceRun,occurrence:guard.occurrence,access:"bun:sqlite readonly BEGIN/ROLLBACK; no production bootstrap",internalTables:allTables.filter(t=>t.name.startsWith("sqlite_")).map(t=>t.name),tables,metadata,events,boundary:"Schema/count/ID census only; every canonical lifecycle/recovery/publication frontier still requires review before any clone/startup; no raw payload/text/args/credentials"}
+  fs.writeFileSync(path.join(out,"census.json"),JSON.stringify(result,null,2),{flag:"wx"})
+  console.log(JSON.stringify({tables:tables.length,nonempty:tables.filter(t=>t.rows>0).map(t=>({name:t.name,rows:t.rows})),metadata}))
+} finally {
+  db.exec("ROLLBACK")
+  db.close()
+}

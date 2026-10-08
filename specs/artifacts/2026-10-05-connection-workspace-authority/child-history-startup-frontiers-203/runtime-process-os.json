@@ -1,0 +1,17 @@
+{
+  "observations": [
+    {
+      "targetID": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35",
+      "receiptID": "act_g0VXRkF3G00oXeV8wUOH",
+      "identity": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35"
+      },
+      "semantic": "process-liveness.ts uses Number.MAX_SAFE_INTEGER as storage representation; OS identity decides physical death",
+      "representationExpiresAt": 9007199254740991,
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T19:37:23.3553915Z"
+}

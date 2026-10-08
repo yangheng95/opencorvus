@@ -2827,3 +2827,5 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [200 最终长回合闭合](artifacts/2026-10-05-connection-workspace-authority/markdown-main-final-200/README.md)：同原输入真实5955/64与9903/70，完成后同ID返回/15047高度/followfalse；原20153=0/6SolEOF/native+pairclosed，补齐final长回合整体资格。197原1不改，原child Dock/更多矩阵继续。
 
+- [201 子侧栏真实历史](artifacts/2026-10-05-connection-workspace-authority/child-history-readonly-census-201/README.md) / [202 当前合同事实](artifacts/2026-10-05-connection-workspace-authority/child-history-frontier-audit-202/README.md) / [203 启动前沿](artifacts/2026-10-05-connection-workspace-authority/child-history-startup-frontiers-203/README.md)：单 agent 只读原153全库，真实子树/Task与发布终态/控制输入和idle记忆；永久进程身份由操作系统确认死亡。未启动副本，子侧栏视觉与完整启动资格待满足。
+

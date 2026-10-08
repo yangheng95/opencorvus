@@ -1,0 +1,52 @@
+import fs from "node:fs"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+import { createRequire } from "node:module"
+import { Database as Sqlite } from "bun:sqlite"
+
+const repo="D:/myhexin-local/opencorvus"
+const sourceRun="C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01"
+const base=path.join(repo,"specs/artifacts/2026-10-05-connection-workspace-authority")
+const out=path.join(base,"child-history-frontier-audit-202")
+const originalGuard=JSON.parse(fs.readFileSync(path.join(base,"child-history-readonly-census-201/guard.json"),"utf8"))
+const currentGuard=JSON.parse(fs.readFileSync(path.join(out,"guard.json"),"utf8"))
+if(!originalGuard.readQualified || !currentGuard.readQualified || originalGuard.occurrence!==currentGuard.occurrence || path.resolve(originalGuard.sourceRun)!==path.resolve(sourceRun)) throw Error("Exact201/202 source read admission required")
+process.env.OPENCORVUS_HOME=path.join(repo,".tmp-product-iteration/child-history-frontier-202/runtime")
+process.env.OPENCORVUS_TEST_HOME=path.join(repo,".tmp-product-iteration/child-history-frontier-202/home")
+process.env.OPENCORVUS_TEST_PROCESS_ROOT=path.join(repo,".tmp-product-iteration/child-history-frontier-202")
+const require=createRequire(path.join(repo,"packages/opencorvus/package.json"))
+const {drizzle}=await import(pathToFileURL(require.resolve("drizzle-orm/bun-sqlite")).href)
+const {taskLifecycleProjectionInTransaction}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/engine/task-lifecycle.ts")).href)
+const {findSchemaDrift}=await import(pathToFileURL(path.join(repo,"packages/opencorvus/src/storage/schema-contract.ts")).href)
+const dbPath=path.join(sourceRun,"runtime/data/opencorvus.db")
+for(const item of [sourceRun,path.join(sourceRun,"runtime"),path.join(sourceRun,"runtime/data"),dbPath]) if(fs.lstatSync(item).isSymbolicLink()) throw Error("Source read link refused")
+const sqlite=new Sqlite(dbPath,{readonly:true})
+sqlite.exec("BEGIN")
+try {
+  const db=drizzle(sqlite)
+  const schemaDrift=findSchemaDrift(sqlite) ?? null
+  const taskRows=sqlite.query("SELECT id FROM engine_task ORDER BY id").all() as {id:string}[]
+  const tasks=taskRows.map(row=>{
+    const p=taskLifecycleProjectionInTransaction(db,row.id)
+    return {taskID:p.taskID,status:p.status,epoch:p.epoch,openedEventID:p.openedEventID,openedAt:p.openedAt,terminalEventID:p.terminalEventID,terminalAt:p.terminalAt,requestEventID:p.requestEventID}
+  })
+  const publications=sqlite.query(`SELECT o.occurrence_id,o.project_id,o.directory,o.event_type,
+    SUM(CASE WHEN p.phase='exact' THEN 1 ELSE 0 END) AS exact_receipts,
+    SUM(CASE WHEN p.phase='wildcard' THEN 1 ELSE 0 END) AS wildcard_receipts,
+    SUM(CASE WHEN p.phase='global' THEN 1 ELSE 0 END) AS global_receipts
+    FROM bus_publication_outbox o LEFT JOIN bus_publication_phase_receipt p ON p.occurrence_id=o.occurrence_id
+    GROUP BY o.occurrence_id ORDER BY o.occurrence_id`).all()
+  const deliveries=sqlite.query(`SELECT d.occurrence_id,d.phase,d.subscriber_id,r.outcome,r.time_created AS receipt_at
+    FROM bus_publication_delivery d LEFT JOIN bus_publication_delivery_receipt r
+    ON r.occurrence_id=d.occurrence_id AND r.phase=d.phase AND r.subscriber_id=d.subscriber_id
+    AND r.outcome IN ('succeeded','ignored') ORDER BY d.occurrence_id,d.phase,d.subscriber_id`).all()
+  const provider=sqlite.query(`SELECT r.id,r.assistant_message_id,o.id AS outcome_id,
+    json_extract(o.data,'$.outcome') AS outcome,o.time_created AS terminal_at
+    FROM provider_activity_request r LEFT JOIN provider_activity_outcome o ON o.request_id=r.id ORDER BY r.id`).all()
+  const tools=sqlite.query(`SELECT r.id,r.message_id,o.id AS outcome_id,
+    json_extract(o.data,'$.outcome') AS outcome,json_extract(o.data,'$.time.end') AS terminal_at
+    FROM tool_part_request r LEFT JOIN tool_part_outcome o ON o.request_part_id=r.id ORDER BY r.id`).all()
+  const result={observedAtUtc:new Date().toISOString(),occurrence:currentGuard.occurrence,sourceRun,access:"readonly explicit Drizzle client/BEGIN/ROLLBACK; production canonical Task reducer; no Database.use/Instance/bootstrap",schemaDrift,tasks,publications,deliveries,provider,tools,boundary:"First canonical schema/Task and identity receipt subset only; NOT whole DB startup eligibility; control/leases/ingress/permissions/wakes/config/native-history adapter remain to qualify"}
+  fs.writeFileSync(path.join(out,"result.json"),JSON.stringify(result,null,2),{flag:"wx"})
+  console.log(JSON.stringify({schemaDrift,tasks,publications:publications.length,deliveries:deliveries.length,provider,tools}))
+} finally {sqlite.exec("ROLLBACK");sqlite.close()}

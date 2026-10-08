@@ -1,0 +1,35 @@
+{
+  "observedAtUtc": "2026-10-08T19:19:45.6868738Z",
+  "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 77936,
+        "processInstanceID": "win32:639270464599331036",
+        "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+      }
+    }
+  ],
+  "listenerCount": 0,
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "readQualified": true,
+  "boundary": "Fresh original native/pair check plus201 immutable closure bindings; no clone admission"
+}
