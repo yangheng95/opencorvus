@@ -1,0 +1,104 @@
+{
+  "finalUiUri": "http://127.0.0.1:18088/ui/",
+  "uiStatus": 200,
+  "scriptSrc": "http://127.0.0.1:18088/ui/assets/main-CQe8fTRL.js",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "owner": {
+    "observedAtUtc": "2026-10-08T04:40:55.1898607Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\reader-helper-live-127-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\reader-helper-live-127-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\reader-helper-live-127-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\reader-helper-live-127-01\\evidence",
+    "evidencePrefix": "reader-helper-live-127-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\reader-helper-live-127-01\\startup.json",
+    "occurrence": "reader-helper-live-127-01-ca48d5a7-3865-4ee0-80bf-1c2d87f278dd",
+    "port": 18088,
+    "owner": {
+      "processInstanceID": "win32:639270312546778963",
+      "ProcessId": 65852
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639270312546778963",
+        "ProcessId": 65852
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\reader-helper-live-127-01\\task-selection.json",
+    "taskSelectionRequired": true,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\reader-helper-live-127\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 24,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\reader-helper-live-127\\live-01",
+    "host": {
+      "pid": 77908,
+      "processInstanceID": "win32:639270312539026270",
+      "occurrenceID": "4fc4c922-26fc-4122-8e29-34baa4a5b9b3"
+    },
+    "nativeTarget": {
+      "pid": 65852,
+      "processInstanceID": "win32:639270312546778963",
+      "occurrenceID": "2fcc73a4-0b4e-4970-a742-81b5965f3714"
+    },
+    "targetBirthAtMs": 1791434454677,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "assetStatus": 200,
+  "asset": "/ui/assets/main-CQe8fTRL.js",
+  "observedAtUtc": "2026-10-08T04:41:19.4128987Z",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18088,
+      "OwningProcess": 65852
+    }
+  ],
+  "uiUri": "http://127.0.0.1:18088/ui",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "reader-helper-live-127-01-ca48d5a7-3865-4ee0-80bf-1c2d87f278dd",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18088",
+    "pid": 65852
+  }
+}

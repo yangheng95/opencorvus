@@ -1,0 +1,21 @@
+{
+  "pid": 65852,
+  "owner": {
+    "pid": 65852,
+    "processInstanceID": "win32:639270312546778963",
+    "occurrenceID": "1db36906-dc43-4028-89dd-2871c263ef06"
+  },
+  "occurrence": "reader-helper-live-127-01-ca48d5a7-3865-4ee0-80bf-1c2d87f278dd",
+  "port": 18088,
+  "preflight": {
+    "sessionID": "ses_hjygw8vOuKm1lY0inQNi",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 24,
+  "budgetScope": "preflight-and-entire-formal-task-cumulative-same-process",
+  "nextAction": "root-owned-genuine-cli-task-create",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

@@ -1,0 +1,23 @@
+{
+  "occurrence": "reader-helper-live-127-01-ca48d5a7-3865-4ee0-80bf-1c2d87f278dd",
+  "outcome": "settled",
+  "host": {
+    "pid": 77908,
+    "processInstanceID": "win32:639270312539026270",
+    "occurrenceID": "4fc4c922-26fc-4122-8e29-34baa4a5b9b3"
+  },
+  "target": {
+    "pid": 65852,
+    "processInstanceID": "win32:639270312546778963",
+    "occurrenceID": "2fcc73a4-0b4e-4970-a742-81b5965f3714"
+  },
+  "observedAtUtc": "2026-10-08T04:46:35.954Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

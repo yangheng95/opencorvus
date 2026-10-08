@@ -1,0 +1,15 @@
+{
+  "pid": 65852,
+  "occurrence": "reader-helper-live-127-01-ca48d5a7-3865-4ee0-80bf-1c2d87f278dd",
+  "owner": {
+    "pid": 65852,
+    "processInstanceID": "win32:639270312546778963",
+    "occurrenceID": "1db36906-dc43-4028-89dd-2871c263ef06"
+  },
+  "parent": {
+    "pid": 43540,
+    "processInstanceID": "win32:639270312546336442",
+    "occurrenceID": "6967e88d-b6f4-459b-b34c-d4e753019d2b"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

@@ -1,0 +1,46 @@
+{
+  "observedAt": "2026-10-08T04:47:48.776Z",
+  "access": "one closed SQLite readonly BEGIN/ROLLBACK transaction; scalar projection only, no bootstrap",
+  "occurrence": "reader-helper-live-127-01-ca48d5a7-3865-4ee0-80bf-1c2d87f278dd",
+  "selected": {
+    "taskID": "tsk_g00VXQiYV6007lvMUG4y",
+    "projectID": "prj_hqJC4zeAb1LXFFbq1Y74",
+    "requestID": "5d9803e3-7b34-488d-958a-59c95d18ccb9",
+    "productPillar": "work"
+  },
+  "task": {
+    "id": "tsk_g00VXQiYV6007lvMUG4y",
+    "project_id": "prj_hqJC4zeAb1LXFFbq1Y74",
+    "session_id": "ses_-zUSZHRNgzzzDHzO4YA2",
+    "request_id": "5d9803e3-7b34-488d-958a-59c95d18ccb9",
+    "product_pillar": "work"
+  },
+  "expectedInputOccurrence": {
+    "kind": "task_create",
+    "id": "tsk_g00VXQiYV6007lvMUG4y",
+    "key": "task_create:tsk_g00VXQiYV6007lvMUG4y"
+  },
+  "documents": [
+    {
+      "fileID": "mem_hwXL5gsCwkr1I4umRFZl",
+      "chunkID": "mck_hWPqVAFGvv2mR72HRypf",
+      "projectID": "prj_hqJC4zeAb1LXFFbq1Y74",
+      "validJSON": 1,
+      "version": 1,
+      "revision": 1,
+      "status": "idle",
+      "createdAt": 1791434490243,
+      "updatedAt": 1791434499751,
+      "tokenCount": 332,
+      "coverage": [
+        "tsk_g00VXQiYV6007lvMUG4y"
+      ],
+      "leaseID": null,
+      "leaseRevision": null,
+      "leaseExpiresAt": null,
+      "selectedTaskCoveredInRecentWindow": true
+    }
+  ],
+  "selectedPendingOccurrences": [],
+  "interpretation": "Recent coverage is bounded; missing ID does not prove never covered. Pending row and current status are separate observations, not a fabricated commit."
+}

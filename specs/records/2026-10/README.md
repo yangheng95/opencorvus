@@ -263,5 +263,6 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Reader/helper observation126](2026-10-08-reader-helper-observation.md): safe actual error/helper attempt provenance, focused local checks and preserved first failures; integrated types0 after preserved fixture failure,125 cause UNKNOWN and enqueue genuine execution unmet.
 
 
-- [Reader/helper127 prepared plan](../../artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-plan-127.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-127/live-01/README.md): preparation only; actual runtime/model/Task/UI acceptance held pending Root source delivery and explicit admission,125 failure unchanged.
+- [Genuine reader/helper127](2026-10-08-reader-helper-live.md): actual19stream200EOF/Memory revision1 coverage/oncechecker0, Root manual Sources/reply/full closure; prior125failure and genuineerror/title/allmatrix limits retained.
+
 

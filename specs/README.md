@@ -2719,5 +2719,6 @@ The current connection-workspace authority record also includes metadata selecti
 - [Shared logger namespace95](artifacts/2026-10-05-connection-workspace-authority/logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.
 
 
-- [Reader/helper127 prepared plan](artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-plan-127.md) and [inputs](artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-127/live-01/README.md): preparation only; actual runtime/model/Task/UI acceptance held pending Root source delivery and explicit admission,125 failure unchanged.
+- [Genuine reader/helper127](records/2026-10/2026-10-08-reader-helper-live.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-127/README.md): actual19Solstream200EOF, canonical Memory revision1/coverage, once strict checker0 and Root desktop Sources/reply/full closure;125causeUNKNOWN/enqueuegenuineUNMET preserved.
+
 

@@ -375,5 +375,6 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Observation126 Recall](reader-helper-observation-plan-126.md), [evidence](reader-helper-observation-126/README.md), [cause](reader-error-cause-plan-126.md), [helper identity](helper-activity-identity-plan-126.md), [positive qualification](reader-helper-positive-qualification-plan-126.md): one reader/context pipeline;39/145 local reader contracts and helper/association/Trace checks qualified, integrated types0 after preserved fixture failure;125 cause remains UNKNOWN.
 
 
-- [Reader/helper127 prepared plan](reader-helper-live-plan-127.md) and [inputs](reader-helper-live-127/live-01/README.md): preparation only; actual runtime/model/Task/UI acceptance held pending Root source delivery and explicit admission,125 failure unchanged.
+- [Genuine reader/helper127](reader-helper-live-127/README.md) and [admission](reader-helper-live-plan-127.md): actual19Solstream200EOF, exact helper Activity/current Memory coverage and strict oncechecker0, Root desktop/fullclosure;125causeUNKNOWN/enqueuegenuineUNMET/titlegenuineunknown preserved.
+
 
