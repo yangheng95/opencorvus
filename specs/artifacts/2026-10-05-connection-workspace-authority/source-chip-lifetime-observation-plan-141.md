@@ -1,0 +1,45 @@
+#141 SourceChip lifecycle observation proposal
+
+## Recall / authorization
+
+User continues Sources-first reading and sideDock Rendering flicker investigation. Root admits plan preparation ONLY after reading140. No product edits, tests/UI automation, native/DB/model/runtime/credentials/Git or delegation.142 genuine execution is separately provider-prepared and separately Root-admitted. Current139 stable keyboard/narrow/actual externalURL passes remain, initial Tooltip pixel-missing/Escape focus0 remains unexplained. Temporal proximity to worker completion is not root-cause proof.
+
+Read140 Recall, SourceParts114–171/all branches, shared Tooltip wrapper, installed Kobalte TooltipTrigger362–460 and public tooltip types, AppLog implementation, RightDock466 id, existing card/project/live→history definitions in140. Exact source tuple and actual DOM lifetime, not title/model/time correlation, is this narrow experiment's objective. No changes to original137/139 evidence or Root images.
+
+## Depth and actual candidate
+
+SourceParts uses For over source objects. projectSubagentConversationCard461+ spreads all Parts into fresh objects on status/transcript projection; stable canonical card/disclosure keys do not establish stable source anchor reference. A SourceChip remount creates fresh Kobalte Tooltip state and can retire focused original trigger. Actual139 old node retirement has not been captured. TextPart rendering has its own current accepted-input/HTML guard; no broad TextPart/card tracing or repair is admitted here. This experiment does not resolve every possible focus movement, Tooltip pointer state, DOM replacement or async Rendering issue.
+
+## Single temporary production scope
+
+Future Root admission may modify ONLY SourceChip in existing SourceParts.tsx, importing Solid onMount/onCleanup/untrack as required and using existing AppLog already imported. One local `HTMLElement | undefined` trigger reference, assigned through same ref callback on each existing polymorphic Tooltip.Trigger (actual a, button, span). Do not add wrapper DOM, trigger attribute policy, event listener, onFocus/onBlur/onKeyDown/onClick override, MutationObserver, global registry/map, counter owner, timer, selection gate, imperative focus restore or scroll action. Existing URL href/preview, file action, span tabIndex, ARIA labels, Tooltip.Root delay/placement/fitViewport and Portal remain untouched.
+
+Installed Kobalte public TooltipTriggerCommonProps index-e2a3bfb4.d.ts111–123 accepts element/callback ref for its actual ElementOf polymorphic as. TooltipTrigger source363 splits caller ref and444 merges it with existing internal context.setTriggerRef/localref. Thus caller observation ref does not replace library's ownership. Shared ui/Tooltip.tsx exposes original Kobalte Trigger directly. A callback accepting HTMLElement is sufficient for current a/button/span; no unsafe cast/component fake ref or parallel tooltip state.
+
+## Exact bounded observations
+
+onMount emits one AppLog.debug service `source-chip-lifetime-observation`, fixed message `mount`; onCleanup emits `cleanup` before this component's observation context disappears. Extra observedAt ISO milliseconds and local lifecycle date label identify log correlation only, never identity/owner or completion proof. Source tuple is actual type/sourceId/sessionID/messageID; missing optional session/message is explicit null, not guessed from board or title. If useful keep the actual mount tuple scalar snapshot for matching cleanup, plus current tuple separately; no source object/body copy.
+
+DOM fields: trigger.tagName or null; trigger.isConnected; trigger.ownerDocument.activeElement === trigger; closest('#rightDock')?.id and closest('#rightDockBody')?.id (real RightDock.tsx466 id); optionally closest('[data-ui="subagent-conversation-scroll"]') boolean only. No broad selector search/global document traversal, activeElement content/name/value, URL (especially query), filename/snippet/title, raw HTML/document text/prompt/toolargs/headers/auth or full source payload. Main location may have no dock ancestor: record null rather than assign invented region. Ref assignment itself only captures actual element and does not log or read layout.
+
+ALL extra props reads, DOM metadata reads and AppLog calls live in untrack inside bounded try/catch. Observation failure must not change native ref mounting, cleanup, Tooltip or Source click execution and must not create fallback logging. No geometry/layout reads are necessary. Cleanup may already see disconnected node or changed activeElement depending on Solid disposal order; report actual values, do not rewrite false as prior focus. A cleanup record with false focus does not alone establish source caused focus loss. Ref reassignment/tag switch inside a still-mounted component is outside this mount/cleanup trace; keep that limit explicit rather than add listeners.
+
+AppLog is current local2000 buffer + server500ms/50batch POST/log uploader, as133 plan details. Root real DEBUG service needed; current backend stores service overlay:source-chip-lifetime-observation. Collection via owned GET/log/files + log/tail or current raw dev.log (actual response path authority) follows existing Root custody, no new publisher/reader. Root preserves actual upload failure and logger capture gaps; missing log does not prove no lifecycle. Diagnostic logging changes timing, so reproducing/nonreproducing under it is not final repair qualification.
+
+## Root real142 experiment / decision
+
+After separately reviewed142 inputs/current source/types/build/servedasset/native/auth+models/model streaming preflight, Root naturally opens live child Sources and native Tabs from expanded summary to actual Source leaf. Capture actual current source tuple, old trigger reference/connected/focus through existing safe Root read-only observation and actual Tooltip pixel/AX, then allow natural worker projection/completion. Compare old-chip cleanup/new-chip mount exact same tuple and actual lost focus/Tooltip. Stable completed repeat, Escape and Enter actual official URL remain separate controls. No programmatic focus, synthetic Source/DOM fixture, forced worker timing or test automation.
+
+Positive evidence of same canonical tuple old trigger focus→actual cleanup/detach→new trigger mount can support render identity retirement; objects recreated in source alone cannot. Lifecycle logs without actual pixel/focus transition do not qualify cause. No cleanup/new mount with actual focus lost leaves other primitives unknown; do not introduce forced focus restoration. Timestamp proximity by itself never determines order/cause across logging500ms upload; use extra observedAt and actual input/node facts, retaining uncertainty where ordering unobserved.
+
+## Impact / retirement / later repair
+
+### Root narrow temporary source admission — 2026-10-08T07:09Z
+
+Root read full141/140/142 Recall, full SourceParts/sharedTooltip, exact card projection cloning and current TextPart guards. SourceParts has zero source diff before edit.138/139 abd26bb974f52602012e6bf9b8f49c7b1eeefd8a normally pushed, parent45509 actualterminal0 joined/fresh HEAD-upstream equality/outgoingempty/worktreeclean confirmed. All previous Root native scopes/pages closed and unknown111 untouched. Existing polymorphic Trigger merges caller ref rather than replacing library ownership, as exact installed source/types reviewed by child.
+
+Root admits SourceChip-only temporary onMount/onCleanup/ref observation, existing AppLog safe tuple/tag/connected/focused/real ancestor IDs/actual date label, all untrack+try-catch. No source rendering/key/order/URL/title/disclosure/Tooltip/keyboard/scroll policy change or UI automation tests. Preserve Root preimage/full diagnostic source and verify Overlay types/build. Actual142 runtime remains separately HELD until prerequisites/review; logs alone cannot claim actual focus cause. Remove all temporary observation before final production repair and independent fresh pixels.
+
+All Sources branches share the local observation, including main/child, Task/Mission/Session, URL/file/document; actual missing owner tuple remains null. No changes to canonical source producers, transport138 identity, disclosure state, live/history merging, CardParts runs, TextPart renderer, permission/API/model or scrolling. Source-document and long URL not forced by this run; they remain unknown unless naturally sampled.
+
+Root must preserve preimages/full scope diff, configured Overlay types/build and original failures. No UI tests needed/permitted for temporary UI-only observation. Remove every lifecycle ref/log hook/import diagnostic before final product repair and fresh actual after visual qualification. If real identity retirement proven, later minimal plan belongs in existing chip keyed lifetime, preserving genuine Source removal/switch and library focus/Tooltip semantics; not global cache/shadow map/focus patch. If no proof, current product remains unfixed/unknown. Only this proposal is delivered now; no source/runtime execution.

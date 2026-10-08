@@ -1,4 +1,5 @@
-import { For, Match, Show, Switch } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
+import { Match, Show, Switch } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
@@ -192,7 +193,12 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
       </Disclosure.Trigger>
       <Show when={expanded()}>
         <Disclosure.Content class="msg-sources__list">
-          <For each={props.sources}>{(source, index) => <SourceChip source={source} index={index()} />}</For>
+          <Key
+            each={props.sources}
+            by={(source) => JSON.stringify([source.type, source.sessionID ?? null, source.messageID ?? null, source.sourceId])}
+          >
+            {(source, index) => <SourceChip source={source()} index={index()} />}
+          </Key>
         </Disclosure.Content>
       </Show>
     </Disclosure.Root>

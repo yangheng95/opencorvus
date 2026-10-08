@@ -1,0 +1,20 @@
+11 | assert.ok(run && evidence)
+12 | const guard = spawnSync(process.execPath, [path.resolve(import.meta.dir, "verify-current-source-facts.ts"), ...args], { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 })
+13 | fs.writeFileSync(path.join(evidence, "final-answer-source-checker.stdout.log"), guard.stdout ?? "", { flag: "wx" })
+14 | fs.writeFileSync(path.join(evidence, "final-answer-source-checker.stderr.log"), guard.stderr ?? "", { flag: "wx" })
+15 | fs.writeFileSync(path.join(evidence, "final-answer-source-checker-exit.json"), JSON.stringify({ status: guard.status, signal: guard.signal, spawnError: guard.error?.message }, null, 2), { flag: "wx" })
+16 | assert.equal(guard.status, 0, "Original Source checker must qualify once")
+            ^
+AssertionError: Original Source checker must qualify once
+
+1 !== 0
+
+ generatedMessage: false,
+     actual: 1,
+   expected: 0,
+   operator: "strictEqual",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\verify-current-final-answer.ts:16:8
+
+Bun v1.3.14 (Windows x64)

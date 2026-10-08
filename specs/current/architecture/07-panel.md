@@ -763,6 +763,13 @@ in the shared transport projector; item-count and ordinary text/Tool bounds stay
 unchanged. Full Source rendering/navigation still uses the current transcript
 owner, and compact data qualification does not imply a live long-URL UI pass.
 
+Expanded Source controls retain identity by the canonical tuple of type,
+sessionID, messageID and sourceId. Reprojecting the same citation updates its
+current payload and ordinal without retiring its focused link or Tooltip owner.
+Actual source removal, owner changes and disclosure collapse retire that control
+through the shared keyed primitive; no focus restoration or shadow source store
+owns the interaction.
+
 ## Shared visual primitives
 
 The existing design-language tokens own geometry, typography and neutral

@@ -1,0 +1,28 @@
+{
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "phase": "supervision-66732-51",
+  "presence": [
+    {
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processID": 38728,
+      "processInstanceID": "win32:639270415334401867"
+    },
+    {
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processID": 6120,
+      "processInstanceID": "win32:639270415325950215"
+    }
+  ],
+  "nativeSettlement": null,
+  "occurrence": "sources-lifetime-after-144-01-c4404ee2-5059-4210-acd9-f57c986a8234",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18095,
+      "OwningProcess": 38728
+    }
+  ],
+  "observedAtUtc": "2026-10-08T07:37:33.6762757Z"
+}

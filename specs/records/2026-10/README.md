@@ -312,3 +312,20 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 
 
+
+- [Sources lifetime140 investigation](../../artifacts/2026-10-05-connection-workspace-authority/source-reading-render-lifetime-investigation-140.md):139stablekeyboardqualified/initialfocus0UNKNOWN; initialobject-keyhypothesis laterhasbounded142focusedcleanup evidence, notall139/flickerproof.
+
+- [SourceChip141 temporary observation](../../artifacts/2026-10-05-connection-workspace-authority/source-chip-lifetime-observation-plan-141.md):Rootmetadata-onlydiagnosticran142 andisremoved143; diagnosticnotfix/samplingnotcadence.
+
+- [Sources lifetime142 genuine preparation](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-live-plan-142.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-live-142/README.md):actual142closed19SolEOF/focusedcleanup evidence; FIRSTcombinedonce1wrongarchiveprefixbeforeDB retained/notrerun, noSourcequalificationpass.
+
+- [Sources lifetime140–142 record](2026-10-08-source-lifetime.md):priorstablekeyboard andinitialunknown, candidate/diagnostic/preparationlimits separated.
+
+
+- [SourceChip143 canonical identity repair](../../artifacts/2026-10-05-connection-workspace-authority/source-chip-identity-repair-plan-143.md):Rootadmitted/implementedKey1.5.3/typeSIDMIDsourceIdaccessor+explicitdep/oneworkspacelock;141diagremoved, types/build/package/module/docs0+Root144actualsamecitationfocus/Tooltipretainedacrosslive→terminal, scopednotgeneralRenderingfix.
+
+- [Fresh lifetime144 after plan](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-after-plan-144.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-after-144/README.md):actualRootscopedlivefocus/narrowkeyboard/navqualified, Taskdone209002ms18SolEOF/combinedONCE0/nestedSource0/fullclosure;142originalonce1notwashed/generalRenderingunknown.
+
+
+
+- [Markdown lifetime145 investigation](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-lifetime-observation-plan-145.md): component retirement and HTML-clear paths audited; actual diagnosis remains pending.

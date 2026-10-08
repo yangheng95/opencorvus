@@ -416,3 +416,18 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 
 
+
+- [Sources lifetime140 investigation](source-reading-render-lifetime-investigation-140.md):139stablekeyboardqualified/initialfocus0UNKNOWN; initialobject-keyhypothesis laterhasbounded142focusedcleanup evidence, notall139/flickerproof.
+
+- [SourceChip141 temporary observation](source-chip-lifetime-observation-plan-141.md):Rootmetadata-onlydiagnosticran142 andisremoved143; diagnosticnotfix/samplingnotcadence.
+
+- [Sources lifetime142 genuine preparation](sources-lifetime-live-plan-142.md) and [inputs](sources-lifetime-live-142/README.md):actual142closed19SolEOF/focusedcleanup evidence; FIRSTcombinedonce1wrongarchiveprefixbeforeDB retained/notrerun, noSourcequalificationpass.
+
+
+- [SourceChip143 canonical identity repair](source-chip-identity-repair-plan-143.md):Rootadmitted/implementedKey1.5.3/typeSIDMIDsourceIdaccessor+explicitdep/oneworkspacelock;141diagremoved, types/build/package/module/docs0+Root144actualsamecitationfocus/Tooltipretainedacrosslive→terminal, scopednotgeneralRenderingfix.
+
+- [Fresh lifetime144 after plan](sources-lifetime-after-plan-144.md) and [inputs](sources-lifetime-after-144/README.md):actualRootscopedlivefocus/narrowkeyboard/navqualified, Taskdone209002ms18SolEOF/combinedONCE0/nestedSource0/fullclosure;142originalonce1notwashed/generalRenderingunknown.
+
+
+
+- [Markdown lifetime145 investigation](subagent-markdown-lifetime-observation-plan-145.md): read-only actual-owner paths and bounded observation proposal; Sources143/144 qualification remains scoped, no general Rendering fix.

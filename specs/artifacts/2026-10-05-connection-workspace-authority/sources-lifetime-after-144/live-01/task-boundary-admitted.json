@@ -1,0 +1,26 @@
+{
+  "pid": 38728,
+  "occurrence": "sources-lifetime-after-144-01-c4404ee2-5059-4210-acd9-f57c986a8234",
+  "selected": {
+    "occurrence": "sources-lifetime-after-144-01-c4404ee2-5059-4210-acd9-f57c986a8234",
+    "taskID": "tsk_g00VXRPjfX00K3k2f1HP",
+    "projectID": "prj_huLbvRD1EhrxWPiFn1fO",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-lifetime-after-144-01\\project",
+    "productPillar": "work",
+    "requestID": "a2389138-ffe9-463d-8d3e-a2e2898c4dc3",
+    "requestSentAt": "2026-10-08T07:32:57.2828394Z",
+    "acceptedObservedAt": "2026-10-08T07:33:01.9739497Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXRPjfX00K3k2f1HP",
+    "projectID": "prj_huLbvRD1EhrxWPiFn1fO",
+    "rootSessionID": "ses_-zUSYaGDQzzUVKPoaEJ3",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXRPjnC00V2tY0Fd2I",
+    "openedAt": 1791444781387
+  },
+  "totalDeadlineMs": 1791445681387,
+  "maximumMilliseconds": 900000,
+  "inactivityMilliseconds": 180000,
+  "boundary": "Fixed actual Task opening boundary survives monitor failure; parent supervision owns settlement"
+}

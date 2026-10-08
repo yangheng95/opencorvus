@@ -1,0 +1,23 @@
+{
+  "active": {
+    "ariaLabel": "Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+    "connected": true,
+    "describedBy": "tooltip-cl-411-content",
+    "href": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+    "tag": "A"
+  },
+  "dockTextLength": 2234,
+  "dockTextTail": "同浏览器、辅助技术及其他用户代理可靠解释；非标准控件应提供名称、角色和值。\n\n\n少量原文依据：\n“Keyboard focus does not get trapped in any part of the content”“Providing a name, role, and value for non-standard user interface components”\n\n\n资料定位与限制：这是原则和需求概览，范围还包括浏览器、创作工具，并介绍 WCAG、UAAG、ATAG 和 WAI-ARIA。页面明确警告：  \n“This is not a complete list of all accessibility requirements.”因而不能把这四类举例当作完整合规检查表。\n\n\n\n3. MDN：Accessibility\n来源：https://developer.mozilla.org/en-US/docs/Web/Accessibility\n- **读取状态**：成功。",
+  "observedAt": "2026-10-08T07:34:04.934Z",
+  "taskStatus": "Running1m 3s",
+  "tooltip": {
+    "id": "tooltip-cl-411-content",
+    "rect": {
+      "height": 86.4000015258789,
+      "width": 420,
+      "x": 840,
+      "y": 283
+    },
+    "text": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3Chttps://www.w3.org/WAI/fundamentals/accessibility-intro/opencorvus-webfetch"
+  }
+}

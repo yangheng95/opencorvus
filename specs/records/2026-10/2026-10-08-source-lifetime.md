@@ -1,0 +1,27 @@
+# 2026-10-08 Sources lifetime140–144 diagnosis and repair preparation
+
+## Recall
+
+UserrealSourcesreading/keyboard/sideDocklifetime remainprimary.138139abd26bb9normalpush45509terminal0/freshsame/clean is priorRootdelivery.139stableintroTooltip/nativekeyboard/W3C/narrowqualifiedbutinitialTooltipmissing/Escfocus0UNKNOWN.140objectkeysourcecandidate initiallyhypothesis;141temporarymetadataobservation was diagnosticnotfix. Childwritesexisting-evidencedocs only, no source/test/helper/runtime/log/Model/UI/native/DB/Git/delegation.
+
+##142 actual bounded diagnosis, original failure retained
+
+[142evidence](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-live-142/README.md)/[qualification](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-live-142/live-01/qualification.md) bind Rootexactsamecanonicalcitation focusedconnectedoldchipcleanup→freshsame-tupleunfocusedmount plus Rootactuallaterfocusloss.140candidate nowhasbounded142identityretirementevidence, notevery139/Renderingissueproof. Fullprivate7,777,370bytelog selected175saferows includesonefocusedcleanup; first167rows/firstfocusloss preserved, tail5000zero iscapturegap. Samplingcutoffdiffers, nocadence/performanceclaim. No childownvisual/logcapture.
+
+Rootsolepublicshutdown/fullJoboutputrequest/75864+76300exactdead18094free/pairclosed/parent40193terminal0joined. Safeactualreader19Sol/streamtrue/HTTP200/settledEOF. FIRSTcombinedSource/replyonce1 failedbeforeexacttask-complete read duewrongarchiveprefix, beforeDBfacts/Sourcequalification. Exactbasenamelatercopiedwithoutoracle rerun;original1/rawerrorunchanged.5generatedfilefirstbirthparse safelystoppedwithoutmove, explicitUTCcorrectionprivatepreserve5. Physical/diagnosticfactsdonotmakecheckerpassed.
+
+##143 source implementation,144 genuine after held
+
+[143Rootadmission](../../artifacts/2026-10-05-connection-workspace-authority/source-chip-identity-repair-plan-143.md) usesinstalledmatureKey1.5.3/explicitOverlaydep/oneworkspacelock, soleSourceParts canonical[type,SID,MID,sourceId] currentaccessor;141diagnosticsALLremoved. No copiedkeymap/cache/focusrestore/newowner. At142diagnosischeckpointsourcechanged/types-build-realafterwerepending; subsequent143readiness and Rootscoped144qualification are below.
+
+[144freshplan](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-after-plan-144.md)/[inputs](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-after-144/README.md) naturalSolthreeURLfinitecasewasHELDatpreparation; Rootsubsequentfiniteadmission/actualqualification isbelow. Existingarchivecontractmustensureactualexacttask-completebeforefutureonce, notmodifyoracle orrepeat142. Sameactualfocus acrossnaturalupdates/stablekeyboard/nav/pixels/fullclosure independentlyrequired; noforcedtiming/model/Source/Memory orsyntheticmessage.125causeUNKNOWN/enqueueactualUNMET/titleunknown/active128norearm/fullTaskMissionSession/recovery/parallelProject/document/longURLmatrices retained. Currentcommitpushnotclaimed.
+
+##143/144 final scoped Root qualification
+
+[143currentevidence](../../artifacts/2026-10-05-connection-workspace-authority/source-chip-identity-repair-143/README.md)/[Rootactual144manual](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-after-144/live-01/root-manual-qualification.md)/[144evidence](../../artifacts/2026-10-05-connection-workspace-authority/sources-lifetime-after-144/README.md) records canonicalSourceKey/accessor+declaredinstalled1.5.3/oneworkspacelock/total141diagnosticremoval and types/build/package/module/docsactual0. Thosechecksareprerequisites, notpixels. Rootcurrent07canonicalidentitysentence remainsowner, childdoesnoteditit.
+
+RootnativeTabatRunning47sintrofocus/fullTooltip, Running1m3dock2234→Completed3m29dock2986 retainsactualsamehref/fulltitle/tooltip-cl-411/focusedconnectedA/readingpixels. SourceID8bb78863.../Session ses_hqu0VR1cieZMnZMP2WdW/Message msg_g0VXRPoy000WSF9i22Dx/Partprt_g0VXRPqkT00PnRP7yeQB isrealpersistedtuple, notmodeltimingguess. No rawDOMobjectreferenceequalityclaim. Naturalupdatesoverlappedreading, noforceddelay/source. Escapeanchorretained/Tooltip0; FIRSTEnterown122exactW3Cheading/summarypagequalifiedandclosed. Narrow883×886/dock280/x603.2Tooltip420×86.4/x446y338/fulltitleURLprovider/EscTabnextwebfetchqualified.3independentSource1/introon/otherscollapsed; light→darkUNKNOWN/notcontrolledtheme, noallSource3matrix. Childdidnotoperate/viewthosepages.
+
+Tasktsk_g00VXRPjfX00K3k2f1HP/Projectprj_huLbvRD1EhrxWPiFn1fO/requesta2389138-ffe9-463d-8d3e-a2e2898c4dc3 epoch1completed209002ms/18Solstream200EOF/24bounds. Mandatoryexactcollectorbasenamespre-reviewed; currentcombinedSIXargsONCE0/nestedSourceONCE0/actualnaturalanswerbeforeterminal. RootsolefullJoboutputrequest/pair/exact38728Host6120dead18095free/parent51277terminal0joined/own121122closed/reset/5privateBuncustody. Original142once1notrerun/139initialanomaly/130134rangebeforefailures intact, noMemoryquery.
+
+143repairqualifiedforactualunchangedintrocitationreadingthroughnaturalprojection/terminal/stablekeyboard/narrow. GeneralMarkdownRenderingNOTfixed; metadata mutation/reorder/removal/longURL/document/missingtitle/mainMissionSession/restart/parallelsharedmatrices unknown.125causeUNKNOWN/enqueueactualUNMET/titleunknown/active128norearm retained. Current143144commitpushpendingRootdelivery, notdeclaredcomplete. Furtherinvestigationsareseparatefuturebatch andnotgatesfor thisscoped result.
