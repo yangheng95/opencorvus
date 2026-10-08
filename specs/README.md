@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources keyboard continuity214](records/2026-10/2026-10-09-source-keyboard-continuity-214.md) and [real scope evidence](artifacts/2026-10-05-connection-workspace-authority/source-keyboard-continuity-214/README.md): focused virtual item retention and shared native reading input, actual Source End/Home and caret qualified; Tool Tab focus remains unmet, all original failures retained, whole history/native0 closed.
+
 - [Long transcript End212/213](records/2026-10/2026-10-09-long-transcript-end-follow-212-213.md) and [actual fix evidence](artifacts/2026-10-05-connection-workspace-authority/transcript-end-follow-213/README.md): explicit follow request survives virtual tail measurement; real long streaming, local Tool End and caret reviewed,8 streamed200/EOF/native0. Original212 UI and503 qualification failures retained; other caller visual matrix remains open.
 
 - [Native Ctrl Home/End211](records/2026-10/2026-10-09-transcript-control-home-end-211.md) and [real before/after](artifacts/2026-10-05-connection-workspace-authority/transcript-control-home-211/README.md): shared modifier recognition fixes native navigation being pulled back or failing to rearm; actual Main/child/caret reviewed, original failures retained, native scope naturally0.

@@ -174,7 +174,6 @@ function VirtualizedConversationCards(props: {
   let virtualizer: VirtualizerHandle | undefined
   let rootEl: HTMLDivElement | undefined
   let virtualRootResizeObserver: ResizeObserver | undefined
-  const [focusedItemID, setFocusedItemID] = createSignal<string | null>(null)
 
   const records = createMemo(() => conversationAgentRecordsForSource(boardStore.selectedSource))
   const items = createMemo(
@@ -224,14 +223,11 @@ function VirtualizedConversationCards(props: {
 
   const pinnedIndexes = createMemo(() => {
     const pinID = props.pinnedCardID()
+    if (!pinID) return []
     const ids = order()
-    const target = pinID ? scrollTarget(pinID) : null
-    const indexes = new Set<number>()
-    for (const itemID of [target?.itemID, focusedItemID()]) {
-      const index = itemID ? ids.indexOf(itemID) : -1
-      if (index >= 0) indexes.add(index)
-    }
-    return [...indexes]
+    const target = scrollTarget(pinID)
+    const pinnedIndex = target ? ids.indexOf(target.itemID) : -1
+    return pinnedIndex >= 0 ? [pinnedIndex] : []
   })
 
   const scrollTargetElement = (cardID: string): HTMLElement | null => {
@@ -315,21 +311,9 @@ function VirtualizedConversationCards(props: {
     const onLayoutShiftSignal = () => {
       measuredContentChangedOnFrame.schedule()
     }
-    const syncFocusedItem = (target: EventTarget | null) => {
-      const item = target instanceof Element ? target.closest("[data-virtual-card-id]") : null
-      setFocusedItemID(item && props.container.contains(item) ? item.getAttribute("data-virtual-card-id") : null)
-    }
-    const onFocusChange = (event: FocusEvent) => {
-      syncFocusedItem(event.type === "focusout" ? event.relatedTarget : event.target)
-    }
-    syncFocusedItem(document.activeElement)
-    props.container.addEventListener("focusin", onFocusChange)
-    props.container.addEventListener("focusout", onFocusChange)
     props.container.addEventListener("click", onLayoutShiftSignal, { passive: true })
     props.container.addEventListener("transitionend", onLayoutShiftSignal, true)
     onCleanup(() => {
-      props.container.removeEventListener("focusin", onFocusChange)
-      props.container.removeEventListener("focusout", onFocusChange)
       props.container.removeEventListener("click", onLayoutShiftSignal)
       props.container.removeEventListener("transitionend", onLayoutShiftSignal, true)
       ro.disconnect()

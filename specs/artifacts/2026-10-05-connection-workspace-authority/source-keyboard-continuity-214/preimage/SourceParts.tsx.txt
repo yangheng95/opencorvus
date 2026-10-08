@@ -137,6 +137,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             class="msg-source-chip"
             href={props.source.url}
             data-browser-preview-url={props.source.url}
+            onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
             aria-label={`${t("chat.source_open_web")}: ${label()}`}
           >
             <Show when={props.showIndex}>
@@ -154,6 +155,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             as="button"
             type="button"
             class="msg-source-chip"
+            onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
             onClick={() => void openSourceFile(props.source)}
             aria-label={`${t("chat.source_open_file")}: ${detail()}`}
           >
@@ -169,6 +171,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             as="span"
             class="msg-source-chip"
             tabIndex={0}
+            onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
             aria-label={label()}
           >
             <Show when={props.showIndex}>
@@ -215,6 +218,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
               role="region"
               aria-label={excerptLabel()}
               tabIndex={0}
+              onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
             >
               {props.source.snippet}
             </Disclosure.Content>

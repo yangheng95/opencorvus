@@ -1,0 +1,59 @@
+{
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18134,
+      "OwningProcess": 45336
+    }
+  ],
+  "owner": {
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-keyboard-continuity-214-01\\runtime",
+    "observedProcessChain": [
+      {
+        "pid": 45336,
+        "processInstanceID": "win32:639270976602202898",
+        "occurrenceID": "8fe022e4-7446-4337-ab2f-53c7ee24095d"
+      }
+    ],
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-keyboard-continuity-214-01\\evidence",
+    "owner": {
+      "processInstanceID": "win32:639270976602202898",
+      "ProcessId": 45336
+    },
+    "authorityStaging": "None; no model Task requested",
+    "occurrence": "source-keyboard-continuity-214-01-9922e7d2-0dd2-4699-86bb-0b01dab61d0e",
+    "nativeTarget": {
+      "pid": 45336,
+      "processInstanceID": "win32:639270976602202898",
+      "occurrenceID": "8fe022e4-7446-4337-ab2f-53c7ee24095d"
+    },
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "evidencePrefix": "source-keyboard-continuity-214-01",
+    "port": 18134,
+    "host": {
+      "pid": 44168,
+      "processInstanceID": "win32:639270976594433842",
+      "occurrenceID": "6d6a9f69-b530-48d9-bc2b-06b980cac0b5"
+    },
+    "targetBirthAtMs": 1791500860220,
+    "nativeDeadlineAt": 1791501759365,
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-keyboard-continuity-214-01",
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-keyboard-continuity-214\\live-01"
+  },
+  "observedAtUtc": "2026-10-08T23:07:56.0115886Z",
+  "scriptSrc": "http://127.0.0.1:18134/ui/assets/main-Bg2eNYXQ.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-keyboard-continuity-214-01-9922e7d2-0dd2-4699-86bb-0b01dab61d0e",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18134",
+    "pid": 45336
+  },
+  "uiStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18134/ui/",
+  "assetStatus": 200,
+  "uiUri": "http://127.0.0.1:18134/ui",
+  "asset": "/ui/assets/main-Bg2eNYXQ.js"
+}

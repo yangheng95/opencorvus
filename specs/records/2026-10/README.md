@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources keyboard continuity214](2026-10-09-source-keyboard-continuity-214.md): virtual focus retention/shared focus reading, actual same-source native End/Home; Tool Tab lifetime remains open, original events/failures and complete native0/canonical custody retained.
+
 - [Long transcript End212/213](2026-10-09-long-transcript-end-follow-212-213.md): real virtual measurement root cause, shared follow-request repair, long streaming/local Tool/caret manual evidence; original failures retained, current native/model0, remaining caller visual matrix explicit.
 
 - [Native Ctrl Home/End211](2026-10-09-transcript-control-home-end-211.md): actual same-owner modifier root cause, Main/child positive key behavior and native textarea caret; original failures retained, native scope naturally0.

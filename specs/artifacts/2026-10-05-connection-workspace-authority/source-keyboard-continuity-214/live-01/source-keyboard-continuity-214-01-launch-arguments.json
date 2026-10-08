@@ -1,0 +1,27 @@
+{
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-keyboard-continuity-214-01\\evidence",
+    "source-keyboard-continuity-214-01-9922e7d2-0dd2-4699-86bb-0b01dab61d0e",
+    "1791501759365",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18134",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-keyboard-continuity-214-01\\startup.json",
+    "--startup-occurrence",
+    "source-keyboard-continuity-214-01-9922e7d2-0dd2-4699-86bb-0b01dab61d0e",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "source-keyboard-continuity-214-01-9922e7d2-0dd2-4699-86bb-0b01dab61d0e",
+  "port": 18134,
+  "credentialStaging": "None"
+}

@@ -1,0 +1,27 @@
+{
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "occurrence": "source-keyboard-continuity-214-01-9922e7d2-0dd2-4699-86bb-0b01dab61d0e",
+  "states": [
+    {
+      "expected": {
+        "pid": 44168,
+        "processInstanceID": "win32:639270976594433842",
+        "occurrenceID": "6d6a9f69-b530-48d9-bc2b-06b980cac0b5"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 45336,
+        "processInstanceID": "win32:639270976602202898",
+        "occurrenceID": "8fe022e4-7446-4337-ab2f-53c7ee24095d"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "observedAtUtc": "2026-10-08T23:22:20.5634025Z"
+}

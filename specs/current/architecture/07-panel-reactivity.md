@@ -271,6 +271,12 @@ box retains its local End action. Editable controls retain caret navigation,
 and other modified shortcuts retain browser/application handling. Native key
 actions are not prevented, and there is one scroll/follow implementation.
 
+Native focus entering a descendant control declares reading through that same
+nearest transcript controller. Sources, Tool buttons and local reading regions
+share this input; the scroll owner itself retains its navigation/follow state.
+An explicit End can resume following while the focused item remains mounted,
+and subsequent Tab navigation pauses following for the newly focused control.
+
 The sub-agent panel owns at most 32 recent reading positions, keyed by the
 canonical target identity including API authority, parent source, session and
 directory. These positions contain only viewport geometry and follow intent;
@@ -340,6 +346,13 @@ physical runtime shutdown cannot extend already completed work.
 - Unknown event payloads are reported; they are not silently ignored or mapped
   to a guessed card family.
 - Card scrolling uses exact card IDs through the conversation virtualizer.
+- The conversation virtualizer keeps the item owning real keyboard focus
+  mounted through its existing `keepMounted` policy, alongside any history
+  anchor. Scoped native focus events update that item's canonical ID and clear
+  it when focus leaves; index projection uses the current item order. Scrolling
+  an item out of view preserves its virtual mount and transcript key ownership;
+  inner control identity remains owned by that control's rendering projection.
+  No focus migration or global keyboard routing is introduced.
 
 ## Mailbox Projection
 

@@ -1,0 +1,21 @@
+Side chat needs attention
+Details
+HTTP POST 400 session/ses_-zUSUqRtKzzhTi3AMNfG/side-chat?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-09%5Ctranscript-end-follow-213-01%5Cproject
+
+Request ID: 78dd893a-f2b3-4f74-8ef2-f7499a328fa6
+
+ApiError: API 400 session/ses_-zUSUqRtKzzhTi3AMNfG/side-chat?directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-09%5Ctranscript-end-follow-213-01%5Cproject: {"name":"ProviderModelNotFoundError","data":{"providerID":"openai","modelID":"gpt-6.1-sol","suggestions":[]}}
+    at Te (http://localhost:18134/ui/assets/main-Bg2eNYXQ.js:67:134404)
+    at async fe (http://localhost:18134/ui/assets/main-Bg2eNYXQ.js:224:5106)
+
+response body:
+{
+  "name": "ProviderModelNotFoundError",
+  "data": {
+    "providerID": "openai",
+    "modelID": "gpt-6.1-sol",
+    "suggestions": []
+  }
+}
+Try again
+Dismiss

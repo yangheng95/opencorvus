@@ -95,20 +95,12 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   function onReadingIntent(event: Event) {
     // Only the nearest transcript owns this operator intent.
     event.stopPropagation()
-    releaseFollowForReading()
-  }
-
-  function releaseFollowForReading() {
     restoreTop = null
     programScrollTarget = null
     inputIntent = null
     expectedTop = el.scrollTop
     opts.onUserScrollUp()
     syncFollowLockAttribute()
-  }
-
-  function onFocusIn(event: FocusEvent) {
-    if (event.target !== el && ownsTranscriptInput(event.target)) releaseFollowForReading()
   }
 
   function syncObservedContentElements() {
@@ -310,7 +302,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   el.addEventListener("wheel", onWheel, { passive: true })
   el.addEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
-  el.addEventListener("focusin", onFocusIn)
   el.addEventListener("keydown", onKeyDown)
   el.addEventListener("pointerdown", onPointerDown)
   el.addEventListener("touchstart", onTouchStart, { passive: true })
@@ -334,7 +325,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       disposed = true
       el.removeEventListener("wheel", onWheel)
       el.removeEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
-      el.removeEventListener("focusin", onFocusIn)
       el.removeEventListener("keydown", onKeyDown)
       el.removeEventListener("pointerdown", onPointerDown)
       el.removeEventListener("touchstart", onTouchStart)

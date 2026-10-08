@@ -1,0 +1,19 @@
+{
+  "actual": {
+    "level": "info",
+    "time": "2026-10-08T23:20:58.631Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "02f705d2-275e-4f98-8fde-b5579c537bb6",
+      "method": "GET",
+      "path": "/ui/assets/main-BOwxTyIC.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 3
+    },
+    "message": "request"
+  },
+  "boundary": "Original current Target timestamp-window real GET completed200; no post-closure network request or source replay",
+  "observedAtUtc": "2026-10-08T23:25:57.4127676Z"
+}
