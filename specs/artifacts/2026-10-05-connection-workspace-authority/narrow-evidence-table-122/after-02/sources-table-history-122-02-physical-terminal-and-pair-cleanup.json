@@ -1,0 +1,64 @@
+{
+  "chain": [
+    {
+      "expected": {
+        "pid": 78828,
+        "processInstanceID": "win32:639270216075092109",
+        "occurrenceID": "7061a1a5-270a-4901-aa76-5803574f59a2"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 58196,
+        "processInstanceID": "win32:639270216067470087",
+        "occurrenceID": "0f5cf788-402d-4e4f-b1d5-c62cb3f536b4"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "listeners": null,
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-02\\runtime\\data\\auth.json",
+      "outcome": "already_absent",
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-02\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "sources-table-history-122-02-10f398b5-8e55-4383-9a4f-3026f31fabe2",
+    "outcome": "settled",
+    "host": {
+      "pid": 58196,
+      "processInstanceID": "win32:639270216067470087",
+      "occurrenceID": "0f5cf788-402d-4e4f-b1d5-c62cb3f536b4"
+    },
+    "target": {
+      "pid": 78828,
+      "processInstanceID": "win32:639270216075092109",
+      "occurrenceID": "7061a1a5-270a-4901-aa76-5803574f59a2"
+    },
+    "observedAtUtc": "2026-10-08T02:14:13.558Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "sources-table-history-122-02-10f398b5-8e55-4383-9a4f-3026f31fabe2",
+  "observedAtUtc": "2026-10-08T02:14:16.1584622Z",
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

@@ -1,0 +1,2 @@
+# After122 helper freeze
+Currentsole2helpers exacttarget sources-table-history-122-02/18084/Bafter02, stageafter-02. SamebeforeCustody predecessor actual122before01/18083/Bbefore01 owner/fullphysical/parentjoined/fresh productionobserver/pair; no former120target or fallback. Original116source/native/Task/Source3/SQL unchanged. Completepreimages/unifieddiff/final/AST0 retained. No copy/observe/SQL/native/UI/model/tests/Git execution. Missing parentjoin blocks; Rootbuildactualasset and fullreview required before release.

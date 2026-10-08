@@ -1,0 +1,38 @@
+{
+  "settlement": {
+    "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+    "outcome": "settled",
+    "host": {
+      "pid": 41860,
+      "processInstanceID": "win32:639270207181111807",
+      "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+    },
+    "target": {
+      "pid": 63936,
+      "processInstanceID": "win32:639270207190986466",
+      "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+    },
+    "observedAtUtc": "2026-10-08T01:54:25.417Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "exitCode": 0,
+  "host": {
+    "pid": 41860,
+    "processInstanceID": "win32:639270207181111807",
+    "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+  },
+  "target": {
+    "pid": 63936,
+    "processInstanceID": "win32:639270207190986466",
+    "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+  },
+  "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner"
+}

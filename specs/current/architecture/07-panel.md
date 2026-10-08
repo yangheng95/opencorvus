@@ -473,6 +473,11 @@ Child conversation message dividers retain the shared transcript margin and use
 the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the
 Source count and grouping remain attached to their actual chronological run.
+Native Markdown tables share one intrinsic-width policy within a bounded local
+horizontal scroll surface. The existing Marked renderer emits focusable native
+tables and delegates header/body cells and rows to its standard primitives;
+keyboard focus is visible and native horizontal keys reach the remaining cells.
+Table identity, alignment, links and inline rendering remain ordinary Markdown.
 The label uses an actual source title when supplied. Webfetch reads that title only
 from the fetched text/html document using the public HTML parser; an empty title
 remains optional and uses the existing URL preview. Redirected URL owns source

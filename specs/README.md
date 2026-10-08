@@ -10,7 +10,7 @@
 
 - [Child pending identity121 investigation](artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-plan-121.md): shared parser risk identified, actual11902 cause remains unknown; no production change.
 
-- [Narrow evidence table122 investigation](artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-plan-122.md): real tester table squeezes columns in280px child; exact layout/root-source change held pending measured geometry.
+- [Narrow evidence table122 Recall](artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-plan-122.md) and [real evidence](artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-122/README.md): intrinsic table width, local horizontal scrolling and native keyboard focus qualified; first keyboard failure retained, all3 scopes closed.
 
 - [Tool input status118 Recall](artifacts/2026-10-05-connection-workspace-authority/tool-input-status-plan-118.md): real preparation labels captured; fresh11801 failed before execution/Sources; remaining phases and upstream cause unresolved.
 

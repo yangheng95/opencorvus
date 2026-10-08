@@ -1,0 +1,58 @@
+{
+  "finalUiUri": "http://127.0.0.1:18085/ui/",
+  "scriptSrc": "http://127.0.0.1:18085/ui/assets/main-CghBI5gM.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18085,
+      "OwningProcess": 77428
+    }
+  ],
+  "asset": "/ui/assets/main-CghBI5gM.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "sources-table-history-122-03-36f8f727-a60e-4e83-8d10-de7fe777b3eb",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18085",
+    "pid": 77428
+  },
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "uiStatus": 200,
+  "assetStatus": 200,
+  "observedAtUtc": "2026-10-08T02:20:09.4687738Z",
+  "owner": {
+    "port": 18085,
+    "owner": {
+      "ProcessId": 77428,
+      "processInstanceID": "win32:639270227384446429"
+    },
+    "targetBirthAtMs": 1791425938444,
+    "authorityStaging": "None; no model Task requested",
+    "occurrence": "sources-table-history-122-03-36f8f727-a60e-4e83-8d10-de7fe777b3eb",
+    "evidencePrefix": "sources-table-history-122-03",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01\\project",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-03\\runtime",
+    "host": {
+      "pid": 57712,
+      "processInstanceID": "win32:639270227376555280",
+      "occurrenceID": "550b2e99-ffe3-4fcf-b20e-7bd1f9f9ff31"
+    },
+    "nativeTarget": {
+      "pid": 77428,
+      "processInstanceID": "win32:639270227384446429",
+      "occurrenceID": "34ddc054-34a2-4039-90ae-44dc97abbfd2"
+    },
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-03\\evidence",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\narrow-evidence-table-122\\after-03",
+    "observedProcessChain": [
+      {
+        "pid": 77428,
+        "processInstanceID": "win32:639270227384446429",
+        "occurrenceID": "34ddc054-34a2-4039-90ae-44dc97abbfd2"
+      }
+    ],
+    "purpose": "Current credentialless completed116 history; no Provider or Task rearm",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-03"
+  },
+  "uiUri": "http://127.0.0.1:18085/ui"
+}

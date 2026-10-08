@@ -1,0 +1,225 @@
+{
+  "clone": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-02",
+  "beforeCustody": {
+    "run": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-table-history-122-01",
+    "states": [
+      {
+        "expected": {
+          "pid": 41860,
+          "processInstanceID": "win32:639270207181111807",
+          "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "expected": {
+          "pid": 63936,
+          "processInstanceID": "win32:639270207190986466",
+          "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "evidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-122/before-01",
+    "physical": {
+      "nativeSettlement": {
+        "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+        "outcome": "settled",
+        "host": {
+          "pid": 41860,
+          "processInstanceID": "win32:639270207181111807",
+          "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+        },
+        "target": {
+          "pid": 63936,
+          "processInstanceID": "win32:639270207190986466",
+          "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+        },
+        "observedAtUtc": "2026-10-08T01:54:25.417Z",
+        "terminal": {
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+      },
+      "observedAtUtc": "2026-10-08T01:54:28.4437784Z",
+      "physicalCompletion": true,
+      "chain": [
+        {
+          "expected": {
+            "pid": 63936,
+            "processInstanceID": "win32:639270207190986466",
+            "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+          },
+          "originalOccurrencePresent": false,
+          "state": "dead_or_reused"
+        },
+        {
+          "expected": {
+            "pid": 41860,
+            "processInstanceID": "win32:639270207181111807",
+            "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+          },
+          "originalOccurrencePresent": false,
+          "state": "dead_or_reused"
+        }
+      ],
+      "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+      "copiedPair": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-01\\runtime\\data\\auth.json",
+          "outcome": "already_absent",
+          "presentAfter": false
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-01\\runtime\\data\\models.json",
+          "presentAfter": false,
+          "outcome": "removed",
+          "copiedLength": 2001983
+        }
+      ],
+      "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+      "pairedCleanupComplete": true,
+      "listeners": null
+    },
+    "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+    "joined": {
+      "settlement": {
+        "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+        "outcome": "settled",
+        "host": {
+          "pid": 41860,
+          "processInstanceID": "win32:639270207181111807",
+          "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+        },
+        "target": {
+          "pid": 63936,
+          "processInstanceID": "win32:639270207190986466",
+          "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+        },
+        "observedAtUtc": "2026-10-08T01:54:25.417Z",
+        "terminal": {
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+      },
+      "exitCode": 0,
+      "host": {
+        "pid": 41860,
+        "processInstanceID": "win32:639270207181111807",
+        "occurrenceID": "2ed1f5a7-c8f3-486e-a2c0-d705884821cb"
+      },
+      "target": {
+        "pid": 63936,
+        "processInstanceID": "win32:639270207190986466",
+        "occurrenceID": "adfc2edb-d0ee-49c5-93f1-8b0ab30ef294"
+      },
+      "occurrence": "sources-table-history-122-01-c089f97a-ef30-4f1c-ad67-1375a4d25e1f",
+      "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner"
+    }
+  },
+  "credentialStaging": "None; source116 untouched; no Task rearm",
+  "sourceNativeStates": [
+    {
+      "expected": {
+        "pid": 46900,
+        "processInstanceID": "win32:639270092104435723",
+        "occurrenceID": "0ae71044-818f-463f-a905-58aac7bc6e72"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 54144,
+        "processInstanceID": "win32:639270092115119092",
+        "occurrenceID": "782b57c1-229e-4b31-a048-998bb03ba9c0"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T01:59:37.1093427Z",
+  "taskID": "tsk_g00VXPEP5D00XfusiwHa",
+  "sourceFacts": {
+    "readonly": true,
+    "task": {
+      "id": "tsk_g00VXPEP5D00XfusiwHa",
+      "project_id": "prj_hoMEpOaw6YyjA5A3ghXe",
+      "session_id": "ses_-zUSalam0zzusUDptT1E",
+      "request_id": "db871059-964f-44af-867b-b8e3b268c7f8",
+      "product_pillar": "work"
+    },
+    "session": {
+      "id": "ses_-zUSalam0zzusUDptT1E",
+      "project_id": "prj_hoMEpOaw6YyjA5A3ghXe",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01\\project"
+    },
+    "epoch": 1,
+    "openedEventID": "pev_g0VXPEPEv005w0pajze6",
+    "terminalEventID": "pev_g0VXPF3uo00uHQF3AptT",
+    "promptOwners": [],
+    "pendingInbox": [],
+    "researcher": {
+      "id": "ses_hsFrVx41KXXRhwx6MJrv",
+      "parent_id": "ses_-zUSalZldzzzn6Rjs2xm",
+      "project_id": "prj_hoMEpOaw6YyjA5A3ghXe",
+      "kind": "explore",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01\\project"
+    },
+    "orchestrator": {
+      "id": "ses_-zUSalZldzzzn6Rjs2xm",
+      "parent_id": "ses_-zUSalam0zzusUDptT1E",
+      "project_id": "prj_hoMEpOaw6YyjA5A3ghXe",
+      "kind": "orchestrator"
+    },
+    "sources": [
+      {
+        "id": "prt_g0VXPEYi500b9jKBSjPc",
+        "messageID": "msg_g0VXPESm600aU6qInkcH",
+        "sessionID": "ses_hsFrVx41KXXRhwx6MJrv",
+        "payload": {
+          "type": "source-url",
+          "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+          "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+          "provider": "opencorvus-webfetch"
+        }
+      },
+      {
+        "id": "prt_g0VXPEZiI004O6woe5pM",
+        "messageID": "msg_g0VXPEYlh00VK0i5tRwv",
+        "sessionID": "ses_hsFrVx41KXXRhwx6MJrv",
+        "payload": {
+          "type": "source-url",
+          "sourceId": "cb990aa86289aadf92cfcd259b42886f9bd56679313f62a15da8b62c2116c679",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/",
+          "title": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C",
+          "provider": "opencorvus-webfetch"
+        }
+      },
+      {
+        "id": "prt_g0VXPEaaN00taHihwWXP",
+        "messageID": "msg_g0VXPEZln00c3j39PH9D",
+        "sessionID": "ses_hsFrVx41KXXRhwx6MJrv",
+        "payload": {
+          "type": "source-url",
+          "sourceId": "5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+          "title": "Accessibility | MDN",
+          "provider": "opencorvus-webfetch"
+        }
+      }
+    ]
+  },
+  "purpose": "Root real completed116 native table local overflow after; no model/rearm",
+  "rootSessionID": "ses_-zUSalam0zzusUDptT1E",
+  "source": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01",
+  "port": 18084,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01\\project"
+}

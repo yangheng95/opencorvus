@@ -1,0 +1,64 @@
+{
+  "nativeSettlement": {
+    "occurrence": "sources-table-history-122-03-36f8f727-a60e-4e83-8d10-de7fe777b3eb",
+    "outcome": "settled",
+    "host": {
+      "pid": 57712,
+      "processInstanceID": "win32:639270227376555280",
+      "occurrenceID": "550b2e99-ffe3-4fcf-b20e-7bd1f9f9ff31"
+    },
+    "target": {
+      "pid": 77428,
+      "processInstanceID": "win32:639270227384446429",
+      "occurrenceID": "34ddc054-34a2-4039-90ae-44dc97abbfd2"
+    },
+    "observedAtUtc": "2026-10-08T02:38:40.739Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-08T02:38:43.4602752Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "listeners": null,
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-03\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 2001983,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-table-history-122-03\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "occurrence": "sources-table-history-122-03-36f8f727-a60e-4e83-8d10-de7fe777b3eb",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 77428,
+        "processInstanceID": "win32:639270227384446429",
+        "occurrenceID": "34ddc054-34a2-4039-90ae-44dc97abbfd2"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 57712,
+        "processInstanceID": "win32:639270227376555280",
+        "occurrenceID": "550b2e99-ffe3-4fcf-b20e-7bd1f9f9ff31"
+      }
+    }
+  ]
+}

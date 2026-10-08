@@ -1,0 +1,2 @@
+# Third122 helper preparation freeze
+After02 genuine keyboardfailed retainsoriginalgeometry/pixels/raw. Exactcurrent2helpers→sources-table-history-122-03/18085/Bafter03/caseStageafter03. SolebeforeCustody predecessoractual122after02/18084/Bafter02 physical/fullnative/outputrequest/parentjoin; missingparent88345joinedreceipt blocks, never assumed from publicshutdown. Source116guards/SQL unchanged; nooldcasefallback. Fullpreimages/unifieddiff/finals/AST0 stored. Rootfullreview/newsourceactualasset readiness pending. No copy/observer/SQL/launch/UI/model/Git/test executed.

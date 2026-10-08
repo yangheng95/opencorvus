@@ -164,13 +164,6 @@ marked.use({
     },
   ],
   renderer: {
-    table({ header, rows }) {
-      const renderRow = (cells: typeof header) =>
-        this.tablerow({ text: cells.map((cell) => this.tablecell(cell)).join("") })
-      const head = renderRow(header)
-      const body = rows.map(renderRow).join("")
-      return `<table tabindex="0">\n<thead>\n${head}</thead>\n${body ? `<tbody>${body}</tbody>` : ""}</table>\n`
-    },
     code({ text, lang }: { text: string; lang?: string }) {
       const language = lang && hljs.getLanguage(lang) ? lang : ""
       if (!language) return wrapCodeBlock(text, "", escapeHtml(text))

@@ -8,7 +8,7 @@
 
 - [Child pending identity121 investigation](child-pending-identity-plan-121.md): shared parser lifetime risk, actual11902 cause still unknown; source held.
 
-- [Narrow evidence table122 investigation](narrow-evidence-table-plan-122.md): actual tester280px columns squeezed; exact current table geometry/source change held.
+- [Narrow evidence table122 Recall](narrow-evidence-table-plan-122.md) and [real evidence](narrow-evidence-table-122/README.md): actual intrinsic columns/local horizontal/key focus qualified at280/380, first keyboard failure and native browser timeout retained; all3 scopes closed.
 
 - [Tool input status118 Recall](tool-input-status-plan-118.md) and [evidence](tool-input-status-118/README.md): separate current pending/running counts; real main preparation display verified, fresh11801 failed before Sources/execution; remaining qualification explicit.
 

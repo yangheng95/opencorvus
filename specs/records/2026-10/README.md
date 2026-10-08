@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Readable native Markdown tables122](2026-10-08-native-markdown-table-reading.md): shared intrinsic width/local overflow and native keyboard focus, actual Sources regression and closed scopes.
+
 - [Child Sources message spacing120](2026-10-08-child-source-spacing.md): actual child inner inset16→8, real before/after wide/narrow titles and boundaries reviewed, credentialless scopes closed.
 
 - [256k compaction window and stable Task anchor](2026-10-08-compaction-window-and-task-anchor.md): explicit longer-context configuration and shared incremental/repeated checkpoint repair.

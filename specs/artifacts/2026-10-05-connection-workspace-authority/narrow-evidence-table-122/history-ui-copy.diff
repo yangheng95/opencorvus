@@ -1,0 +1,45 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-122/preimages/history-ui-copy.before.ps1 b/.tmp-product-iteration/history-ui-copy.ps1
+index 5a07c6e4..ce0f71cb 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-122/preimages/history-ui-copy.before.ps1
++++ b/.tmp-product-iteration/history-ui-copy.ps1
+@@ -2,24 +2,24 @@ param([Parameter(Mandatory=$true)][string]$SourceRun,[Parameter(Mandatory=$true)
+ $ErrorActionPreference='Stop'
+ $copyRun=[IO.Path]::GetFullPath($CaseRun);$copyEvidence=[IO.Path]::GetFullPath($CaseEvidence);$copyLabel=$CaseLabel;$copyPort=$CasePort;$copyPurpose=$CasePurpose
+ $sourceRun=[IO.Path]::GetFullPath($SourceRun);$sourceEvidence=[IO.Path]::GetFullPath($SourceEvidence)
+-if($copyPort -ne 18082){throw 'Only admitted120 history port'}
+-$caseStage='after-02'
+-$caseRunName='sources-density-history-120-02'
+-if($copyLabel -ne $caseRunName){throw 'Exact history120 label required'}
+-if($copyRun -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/'+$caseRunName) -or $copyEvidence -ne [IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/'+$caseStage)){throw 'Exact fresh120 run/evidence required'}
++if($copyPort -ne 18083){throw 'Only admitted122 history port'}
++$caseStage='before-01'
++$caseRunName='sources-table-history-122-01'
++if($copyLabel -ne $caseRunName){throw 'Exact history122 label required'}
++if($copyRun -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/'+$caseRunName) -or $copyEvidence -ne [IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-122/'+$caseStage)){throw 'Exact fresh122 run/evidence required'}
+ if(Test-Path -LiteralPath $copyRun){throw 'Preserve existing copy occurrence'}
+ if(@(Get-NetTCPConnection -State Listen -ErrorAction Stop|Where-Object LocalPort -eq $copyPort).Count){throw 'Fresh port occupied'}
+ . (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly
+-$beforeRun='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-density-history-120-01'
+-$beforeEvidence='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/before-01'
++$beforeRun='C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-density-history-120-02'
++$beforeEvidence='D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/after-02'
+ $beforeOwner=Get-Content -Raw -LiteralPath (Join-Path $beforeRun 'launch-owner.json')|ConvertFrom-Json -AsHashtable -DateKind String
+-$beforePhysical=Get-Content -Raw -LiteralPath (Join-Path $beforeEvidence 'sources-density-history-120-01-physical-terminal-and-pair-cleanup.json')|ConvertFrom-Json -AsHashtable -DateKind String
+-$beforeJoined=Get-Content -Raw -LiteralPath (Join-Path $beforeEvidence 'sources-density-history-120-01-launcher-native-joined.json')|ConvertFrom-Json -AsHashtable -DateKind String
+-if([IO.Path]::GetFullPath($beforeOwner.runRoot) -ne [IO.Path]::GetFullPath($beforeRun) -or [IO.Path]::GetFullPath($beforeOwner.settlementEvidenceRoot) -ne [IO.Path]::GetFullPath($beforeEvidence) -or $beforeOwner.port -ne 18080 -or $beforeOwner.evidencePrefix -ne 'sources-density-history-120-01'){throw 'Exact before120 owner scope required'}
++$beforePhysical=Get-Content -Raw -LiteralPath (Join-Path $beforeEvidence 'sources-density-history-120-02-physical-terminal-and-pair-cleanup.json')|ConvertFrom-Json -AsHashtable -DateKind String
++$beforeJoined=Get-Content -Raw -LiteralPath (Join-Path $beforeEvidence 'sources-density-history-120-02-launcher-native-joined.json')|ConvertFrom-Json -AsHashtable -DateKind String
++if([IO.Path]::GetFullPath($beforeOwner.runRoot) -ne [IO.Path]::GetFullPath($beforeRun) -or [IO.Path]::GetFullPath($beforeOwner.settlementEvidenceRoot) -ne [IO.Path]::GetFullPath($beforeEvidence) -or $beforeOwner.port -ne 18082 -or $beforeOwner.evidencePrefix -ne 'sources-density-history-120-02'){throw 'Exact before120 owner scope required'}
+ if($beforePhysical.occurrence -ne $beforeOwner.occurrence -or !$beforePhysical.physicalCompletion -or !$beforePhysical.pairedCleanupComplete -or $beforeJoined.occurrence -ne $beforeOwner.occurrence -or $beforeJoined.exitCode -ne 0){throw 'Before120 full physical/parent join required'}
+ foreach($settlement in @($beforePhysical.nativeSettlement,$beforeJoined.settlement)){if($settlement.occurrence -ne $beforeOwner.occurrence -or $settlement.outcome -ne 'settled' -or !$settlement.physicalCompletion -or !$settlement.outputDrainComplete -or !$settlement.requestCleanupComplete){throw 'Before120 full native/output/request settlement required'};foreach($b in @(@{actual=$settlement.host;expected=$beforeOwner.host},@{actual=$settlement.target;expected=$beforeOwner.nativeTarget})){foreach($f in @('pid','processInstanceID','occurrenceID')){if($b.actual[$f] -ne $b.expected[$f]){throw 'Before120 actual native identity mismatch'}}}}
+ $beforeStates=@(@{expected=$beforeOwner.host;state=(Get-OwnedNativeState $beforeOwner.host)},@{expected=$beforeOwner.nativeTarget;state=(Get-OwnedNativeState $beforeOwner.nativeTarget)})
+-if(@($beforeStates|Where-Object state -ne 'dead_or_reused').Count -or @(Get-NetTCPConnection -State Listen -ErrorAction Stop|Where-Object LocalPort -eq 18080).Count){throw 'Before120 native/port not closed'}
++if(@($beforeStates|Where-Object state -ne 'dead_or_reused').Count -or @(Get-NetTCPConnection -State Listen -ErrorAction Stop|Where-Object LocalPort -eq 18082).Count){throw 'Before120 native/port not closed'}
+ foreach($name in @('auth.json','models.json')){if(Test-Path -LiteralPath (Join-Path $beforeRun ('runtime/data/'+$name))){throw 'Before120 pair retained'}}
+ $beforeCustody=@{run=$beforeRun;evidence=$beforeEvidence;occurrence=$beforeOwner.occurrence;states=$beforeStates;physical=$beforePhysical;joined=$beforeJoined}
+ $sourceOwner=Get-Content -Raw -LiteralPath (Join-Path $sourceRun 'launch-owner.json')|ConvertFrom-Json -AsHashtable -DateKind String
+@@ -88,3 +88,4 @@ Write-Output ($copyLabel+' fresh CLOSED116 copy prepared; pair absent.')
+ 
+ 
+ 
++
