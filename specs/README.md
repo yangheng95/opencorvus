@@ -2824,3 +2824,6 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [196 正文重建/滚动修复](artifacts/2026-10-05-connection-workspace-authority/markdown-remount-repair-196/README.md) / [197 长场景](artifacts/2026-10-05-connection-workspace-authority/markdown-remount-197/README.md) / [198 Sources/Side Chat](artifacts/2026-10-05-connection-workspace-authority/markdown-side-sources-198/README.md) / [199 最终页面](artifacts/2026-10-05-connection-workspace-authority/markdown-final-199/README.md)：单renderer结果保留/输入归属修复，真实72/56块返回保持14992高度和阅读pause；197原1在cap保留，198/199实际0/8与2EOF/native+pairclosed。长回合整体0/原child Dock仍未达成。
 
+
+- [200 最终长回合闭合](artifacts/2026-10-05-connection-workspace-authority/markdown-main-final-200/README.md)：同原输入真实5955/64与9903/70，完成后同ID返回/15047高度/followfalse；原20153=0/6SolEOF/native+pairclosed，补齐final长回合整体资格。197原1不改，原child Dock/更多矩阵继续。
+

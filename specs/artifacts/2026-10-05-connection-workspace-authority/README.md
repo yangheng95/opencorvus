@@ -480,3 +480,6 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [196 正文重建/滚动修复](markdown-remount-repair-196/README.md) / [197 长场景](markdown-remount-197/README.md) / [198 Sources/Side Chat](markdown-side-sources-198/README.md) / [199 最终页面](markdown-final-199/README.md)：实际72/56块同ID返回/14992高度/followfalse，Sources1219/192px和SideChat同7IDs；197原cap1保留，198/199实际0/8与2EOF/native+pairclosed。原child Dock/完整矩阵未验。
 
+
+- [200 最终长回合闭合](markdown-main-final-200/README.md)：final17cc7cfb/同输入两轮5955/64+9903/70、实际卸载/返回与15047高度/followfalse；原20153=0/6EOF/native+pairclosed。197原1保留，原child Dock独立未验。
+

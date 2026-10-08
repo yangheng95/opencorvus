@@ -378,3 +378,6 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [2026-10-09 正文重建与滚动修复](2026-10-09-markdown-remount-repair-196-199.md)：196单renderer保留结果/输入归属，197实际长正文返回合格但原cap1保留；198/199短实际0/8与2EOF/native+pairclosed；原child Dock和长回合整体0仍待验。
 
+
+- [2026-10-09 最终长回合闭合](2026-10-09-final-long-main-200.md)：200真实两长回复/同ID卸载返回/15047高度/followfalse；原20153=0/6EOF/native+pairclosed，final同Scope资格完成，197原失败保留。
+
