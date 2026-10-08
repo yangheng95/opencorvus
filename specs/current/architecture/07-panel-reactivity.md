@@ -232,6 +232,27 @@ Conversation scroll owner to its current bottom in the same frame. This is one
 presentation convergence path, not a second message state; preserved history
 and operator-released follow mode do not perform the bottom write.
 
+Completed Markdown presentation belongs to the existing renderer service,
+independently of a text component's lifetime. Successful non-streaming worker
+results are retained by exact full text, mode, locale/resource sequence and
+actual code-copy label/icon inputs. The service keeps at most 32 results and
+4,000,000 UTF-16 code units of keys and HTML, evicting least recently used
+results. A remounted model installs a matching produced artifact before paint;
+misses retain the same off-thread lexer/parser and bounded HTML mount batches.
+Worker failure clears retained results and remains a visible render error.
+Streaming output uses current worker replies, and an older revision cannot
+overwrite an immediately restored completed result. Last-subscriber disposal
+retires the worker while completed artifacts remain within the same authority.
+
+Transcript follow remains owned by each caller's tracking signal. The shared
+controller releases follow on owned upward input before asynchronous resize;
+editable keyboard controls and another nested transcript retain their input.
+Program echoes, layout clamping and near-bottom geometry alone cannot rearm
+released follow. Owned downward movement reaching the bottom can rearm it;
+explicit bottom and new selection/send actions retain their caller-owned
+behavior. Sources reading intent clears stale event attribution and pauses the
+nearest transcript through the existing reading event.
+
 The Right Dock tab strip retains metadata independently of component lifetime.
 When the Dock is open, Kobalte mounts only the selected tab body; closing the
 Dock, changing selection, or closing a tab disposes the prior component through

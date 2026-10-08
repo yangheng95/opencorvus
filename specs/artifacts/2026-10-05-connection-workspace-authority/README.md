@@ -477,3 +477,6 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [194 真实 Rendering 复现](markdown-two-turn-194/README.md) / [195 根因调查](markdown-return-height-investigation-195.md)：真实同ID卸载/返回，两轮结束后截图Rendering、height14391→835/followtrue；原99384=0/6SolEOF/native+pairclosed。没有renderer补丁，原child Dock仍未验。
 
+
+- [196 正文重建/滚动修复](markdown-remount-repair-196/README.md) / [197 长场景](markdown-remount-197/README.md) / [198 Sources/Side Chat](markdown-side-sources-198/README.md) / [199 最终页面](markdown-final-199/README.md)：实际72/56块同ID返回/14992高度/followfalse，Sources1219/192px和SideChat同7IDs；197原cap1保留，198/199实际0/8与2EOF/native+pairclosed。原child Dock/完整矩阵未验。
+

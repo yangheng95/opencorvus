@@ -1,0 +1,105 @@
+{
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "markdown-final-199-01-04c9e4fa-76d4-4ee6-9626-457a11ea94ad",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18123",
+    "pid": 65480
+  },
+  "observedAtUtc": "2026-10-08T17:51:09.8141135Z",
+  "uiUri": "http://127.0.0.1:18123/ui",
+  "uiStatus": 200,
+  "assetStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18123/ui/",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18123,
+      "OwningProcess": 65480
+    }
+  ],
+  "scriptSrc": "http://127.0.0.1:18123/ui/assets/main-Cp0YwYBu.js",
+  "asset": "/ui/assets/main-Cp0YwYBu.js",
+  "owner": {
+    "observedAtUtc": "2026-10-08T17:50:55.2081419Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-final-199-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-final-199-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-final-199-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-final-199-01\\evidence",
+    "evidencePrefix": "markdown-final-199-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-final-199-01\\startup.json",
+    "occurrence": "markdown-final-199-01-04c9e4fa-76d4-4ee6-9626-457a11ea94ad",
+    "port": 18123,
+    "owner": {
+      "processInstanceID": "win32:639270786545292778",
+      "ProcessId": 65480
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639270786545292778",
+        "ProcessId": 65480
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-final-199-01\\task-selection.json",
+    "taskSelectionRequired": false,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\side-chat-final-185\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 6,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\markdown-final-199\\live-01",
+    "qualificationKind": "NativeService",
+    "host": {
+      "pid": 73948,
+      "processInstanceID": "win32:639270786537411475",
+      "occurrenceID": "0a5dd10b-8b9f-43d5-88fe-6ef2da186280"
+    },
+    "nativeTarget": {
+      "pid": 65480,
+      "processInstanceID": "win32:639270786545292778",
+      "occurrenceID": "a272e4ca-353f-4ce9-befd-30ac1e85df8a"
+    },
+    "targetBirthAtMs": 1791481854529,
+    "preparationMaximumMilliseconds": 600000
+  }
+}

@@ -1,0 +1,11 @@
+# 198 Short current Sources/Side Chat/native closure
+
+## Recall
+
+Single agent;196 three UI repairs/current main-DlD3bPPR.js/type47830=0/build45504=0.197 genuine long main proved6275/72 and9301/56, canonical first absence/reentry, immediate retained blocks/normal14992height/followfalse, cold-stream reading position4421 unchanged while content grew. Original197 launcher8459=1 because Root's final interactions exceeded birth+600000, owner fixed-preparation-maximum; preserve that verdict and all6EOF/actual native0/pairclosed separately. Side Chat not tested197. Native down inside table at17:25:50 did not move outer viewport; outer-area down17:26:28.594 rearmed following but was beyond admitted cap, so within-budget downward qualification remains UNMET. Do not erase these with198.
+
+Fresh R C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/markdown-side-sources-198-01; E markdown-side-sources-198/live-01; prefix markdown-side-sources-198-01/port18122. Current sole NativeService12 actual Sol streams including real preflight/full auth+models, original600000/180000idle, current /ui/asset200. This is a distinct short Sources/Side Chat/whole-native scope; it cannot establish197 long-loop originalforeground0. No Task/squad/subagent or history clone/rearm/fixture/UI test.
+
+Actual request: 请查阅 MDN 官方文档，用一段话说明 button 元素的键盘行为并提供来源。直接在本聊天回答，不创建任务或修改文件。 Native genuine Source group/excerpt focus/reading pause if returned, then Side Chat open actual inherited history, close/reopen same IDs/current real rendered text and immediate screenshot. No extra long question. Native outer-area up/down/explicit bottom and real code-copy/link only if meaningful visible controls exist. Record actual data/unknowns; no forced source counts, cache instrumentation or model delays.
+
+Root closes own pages/service immediately after finite checks, target under3minutes where model completes naturally, never waits for later analysis inside live run. Bound remains original600000; arbitrary second requests should not consume it. Current sole shutdown/originalforeground0/actualnativeoutputrequest/HostTargetparentport/pair/allEOF separately qualify198.197 original failure and long-loop UNMET retained. After closure finish docs/indices/month/source diff review/commit/fetch+merge/push. Larger matrix/original child Dock/locale/error/eviction remain open, goal active.

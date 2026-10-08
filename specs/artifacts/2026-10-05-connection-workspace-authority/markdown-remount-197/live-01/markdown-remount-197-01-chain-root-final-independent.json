@@ -1,0 +1,44 @@
+{
+  "listeners": [],
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "nativeSettlement": {
+    "occurrence": "markdown-remount-197-01-5a7a8ceb-cb67-4432-87c4-53822c212a3d",
+    "outcome": "settled",
+    "host": {
+      "pid": 69440,
+      "processInstanceID": "win32:639270765865981521",
+      "occurrenceID": "e8703476-121c-48b1-bdb8-f27fbed74082"
+    },
+    "target": {
+      "pid": 68088,
+      "processInstanceID": "win32:639270765875763585",
+      "occurrenceID": "dd83b97c-d637-454c-b38c-5fdeb1fba0f7"
+    },
+    "observedAtUtc": "2026-10-08T17:26:33.301Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-08T17:29:08.5635178Z",
+  "presence": [
+    {
+      "processInstanceID": "win32:639270765875763585",
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "processID": 68088
+    },
+    {
+      "processInstanceID": "win32:639270765865981521",
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "processID": 69440
+    }
+  ],
+  "occurrence": "markdown-remount-197-01-5a7a8ceb-cb67-4432-87c4-53822c212a3d",
+  "phase": "root-final-independent"
+}

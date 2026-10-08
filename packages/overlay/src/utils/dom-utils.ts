@@ -49,11 +49,10 @@ import { escapeHtml } from "./markdown"
  * events that land within `PROGRAM_TOLERANCE` px of that position are
  * treated as program-echo and never fire `onUserScrollUp`.
  *
- * Browser layout can also change `scrollTop` before a caller's
- * `contentChanged()` notification arrives. Therefore an unmatched upward
- * scroll is not sufficient evidence of operator intent: follow mode is
- * released only when an upward wheel, keyboard, touch, or active native
- * scrollbar gesture owns that movement.
+ * Owned upward input releases follow before asynchronous layout can change
+ * the viewport. Layout/program echoes cannot rearm it; reaching the bottom
+ * through owned downward movement can. Native scrollbar gestures retain
+ * their actual movement attribution.
  */
 const BOTTOM_TOLERANCE = 8
 const PROGRAM_TOLERANCE = 2
@@ -83,7 +82,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let expectedTop = el.scrollTop
   let programScrollTarget: number | null = null
   let pointerScrollIntent = false
-  let upwardInputIntentUntil = 0
+  let inputIntent: { direction: "up" | "down"; expiresAt: number } | null = null
   let touchStartY: number | null = null
   let observedContentElements = new Set<Element>()
 
@@ -93,6 +92,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     // Only the nearest transcript owns this operator intent.
     event.stopPropagation()
     programScrollTarget = null
+    inputIntent = null
     expectedTop = el.scrollTop
     opts.onUserScrollUp()
     syncFollowLockAttribute()
@@ -109,22 +109,38 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     observedContentElements = nextElements
   }
 
-  function rememberUpwardInputIntent() {
-    upwardInputIntentUntil = performance.now() + 250
+  function ownsTranscriptInput(target: EventTarget | null): boolean {
+    return target instanceof Element && target.closest("[data-follow-lock]") === el
   }
 
-  function onWheel(event: WheelEvent) {
-    if (event.deltaY < 0) rememberUpwardInputIntent()
-  }
-
-  function onKeyDown(event: KeyboardEvent) {
-    if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") {
-      rememberUpwardInputIntent()
+  function rememberInputIntent(direction: "up" | "down") {
+    inputIntent = { direction, expiresAt: performance.now() + 250 }
+    if (direction === "up") {
+      programScrollTarget = null
+      expectedTop = el.scrollTop
+      opts.onUserScrollUp()
+      syncFollowLockAttribute()
     }
   }
 
+  function onWheel(event: WheelEvent) {
+    if (!ownsTranscriptInput(event.target)) return
+    if (event.deltaY < 0) rememberInputIntent("up")
+    else if (event.deltaY > 0) rememberInputIntent("down")
+  }
+
+  function onKeyDown(event: KeyboardEvent) {
+    if (!ownsTranscriptInput(event.target) || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"], [role="slider"]')) return
+    if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") rememberInputIntent("up")
+    else if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === "End") rememberInputIntent("down")
+  }
+
   function onPointerDown(event: PointerEvent) {
-    if (event.target === el) pointerScrollIntent = true
+    if (event.target === el) {
+      pointerScrollIntent = true
+      inputIntent = null
+    }
   }
 
   function clearPointerScrollIntent() {
@@ -132,13 +148,14 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onTouchStart(event: TouchEvent) {
-    touchStartY = event.touches[0]?.clientY ?? null
+    touchStartY = ownsTranscriptInput(event.target) ? event.touches[0]?.clientY ?? null : null
   }
 
   function onTouchMove(event: TouchEvent) {
+    if (!ownsTranscriptInput(event.target)) return
     const nextY = event.touches[0]?.clientY ?? null
-    if (touchStartY !== null && nextY !== null && nextY > touchStartY) {
-      rememberUpwardInputIntent()
+    if (touchStartY !== null && nextY !== null && nextY !== touchStartY) {
+      rememberInputIntent(nextY > touchStartY ? "up" : "down")
     }
     touchStartY = nextY
   }
@@ -162,27 +179,26 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     if (programScrollTarget !== null && Math.abs(nextTop - programScrollTarget) <= PROGRAM_TOLERANCE) {
       programScrollTarget = null
       expectedTop = nextTop
-      if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
       syncFollowLockAttribute()
       return
     }
     if (Math.abs(delta) <= PROGRAM_TOLERANCE) {
       expectedTop = nextTop
-      if (bottomDistance <= BOTTOM_TOLERANCE) opts.onAtBottom?.()
       syncFollowLockAttribute()
       return
     }
     const movedUp = delta < -PROGRAM_TOLERANCE
     expectedTop = nextTop
-    const ownsUpwardMovement = pointerScrollIntent || performance.now() <= upwardInputIntentUntil
+    const direction = inputIntent && performance.now() <= inputIntent.expiresAt ? inputIntent.direction : null
+    const ownsUpwardMovement = pointerScrollIntent || direction === "up"
     if (opts.isTracking() && movedUp && ownsUpwardMovement && bottomDistance > BOTTOM_TOLERANCE) {
-      upwardInputIntentUntil = 0
+      inputIntent = null
       opts.onUserScrollUp()
       syncFollowLockAttribute()
       return
     }
-    if (bottomDistance <= BOTTOM_TOLERANCE && !(movedUp && ownsUpwardMovement)) {
-      upwardInputIntentUntil = 0
+    if (bottomDistance <= BOTTOM_TOLERANCE && delta > PROGRAM_TOLERANCE && (pointerScrollIntent || direction === "down")) {
+      inputIntent = null
       opts.onAtBottom?.()
     }
     syncFollowLockAttribute()

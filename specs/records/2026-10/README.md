@@ -375,3 +375,6 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [2026-10-09 Markdown 返回失败](2026-10-09-markdown-return-194-195.md)：194真实卸载/返回与完成后Rendering截图、高度坍缩和follow重启；native0/6SolEOF/pairclosed，195根因调查尚待实施。
 
+
+- [2026-10-09 正文重建与滚动修复](2026-10-09-markdown-remount-repair-196-199.md)：196单renderer保留结果/输入归属，197实际长正文返回合格但原cap1保留；198/199短实际0/8与2EOF/native+pairclosed；原child Dock和长回合整体0仍待验。
+

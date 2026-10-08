@@ -1,0 +1,7 @@
+# 199 Final current bundle and native closure
+
+[Admission199](../markdown-final-live-plan-199.md), final196 source including reviewed nearest-owner touch-move guard, main-Cp0YwYBu.js200/own18123. Final type91679=0/build61940=0 (53.75s)/renderer security surface0. Real auth+full models/preflight separately usable/projected/actual gpt-6.1-sol stream.
+
+Current /ui with real Reply with OK/OK two canonical messages and one rendered block each recorded in read-only facts. [Current screenshot](live-01/root-final-current-page.jpg) shows shell/User prompt and sidebar tooltip; that tooltip obscures the assistant answer, so screenshot is current-page boot evidence, not answer/long-body visual qualification. No Side Chat, Source, touch, locale/error/eviction or long-return claim from199. Relevant real desktop body/reopen pixels remain197/198 on the prior bundle with identical cache/wheel/key methods.
+
+Own tab16 closed/inventoryempty; public shutdown0/original foreground52498=0. Final2 actual gpt-6.1-sol streamed200/settledEOF under6; full native terminal0/Job/output/request, original Host73948/Target65480 exact retired, port released and auth+complete models pair copies removed. Independent chain retained separately. This is final current/native short qualification.197 original long foreground1 remains a required outstanding same-scope rerun. Wider UI/function goal and original child Dock remain active.

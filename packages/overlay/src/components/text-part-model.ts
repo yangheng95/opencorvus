@@ -11,15 +11,14 @@ export function visibleStreamingText(text: string, limit = STREAMING_ACTIVE_TEXT
   return source.length <= n ? source : `... ${source.slice(-n)}`
 }
 
-/** Parse/highlight off-thread; commit bounded batches after browser paints.
- * Frozen HTML strings retain their Solid For identity across updates. */
+/** Restore finished artifacts before paint; parse/highlight misses off-thread
+ * and commit bounded batches. Frozen strings retain their Solid For identity. */
 export function createStreamingTextPartModel(props: { text: string; streaming?: boolean }) {
   const [frozenHtml, setFrozenHtml] = createSignal<string[]>([])
   const [activeText, setActiveText] = createSignal("")
   const [pending, setPending] = createSignal(false)
   const [error, setError] = createSignal("")
   let revision = 0
-  let requestFrame = 0
   let mountFrame = 0
   let target: string[] = []
   let complete = false
@@ -55,6 +54,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
       latestText.startsWith(request.text) &&
       request.streaming === latestStreaming
     if (reply.revision !== -1 && !currentSource) return
+    if (reply.revision !== -1 && reply.revision < receivedRevision) return
     if (reply.error) {
       setError(reply.error)
       setPending(false)
@@ -92,7 +92,6 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
     latestText = text
     revision++
     complete = false
-    if (requestFrame) cancelAnimationFrame(requestFrame)
     if (!append && mountFrame) {
       cancelAnimationFrame(mountFrame)
       mountFrame = 0
@@ -106,20 +105,29 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
         setActiveText("")
       }
     })
-    requestFrame = requestAnimationFrame(() => {
-      requestFrame = 0
-      try {
-        renderer.render(text, streaming, revision, localeSeq)
-      } catch (reason) {
-        setError(String(reason))
-        setPending(false)
+    try {
+      const artifact = renderer.render(text, streaming, revision, localeSeq)
+      if (artifact) {
+        if (mountFrame) cancelAnimationFrame(mountFrame)
+        mountFrame = 0
+        target = artifact.html.slice()
+        receivedRevision = revision
+        complete = true
+        batch(() => {
+          setFrozenHtml(target.slice())
+          setActiveText("")
+          setError("")
+          setPending(false)
+        })
       }
-    })
+    } catch (reason) {
+      setError(String(reason))
+      setPending(false)
+    }
   })
 
   onCleanup(() => {
     disposed = true
-    cancelAnimationFrame(requestFrame)
     cancelAnimationFrame(mountFrame)
     renderer.dispose()
   })
