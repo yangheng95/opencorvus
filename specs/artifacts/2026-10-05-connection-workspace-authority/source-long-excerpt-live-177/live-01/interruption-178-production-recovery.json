@@ -1,0 +1,52 @@
+{
+  "observedAtUtc": "2026-10-08T12:56:21.277Z",
+  "recoveryOwner": {
+    "pid": 40380,
+    "processInstanceID": "win32:639270609805913011",
+    "occurrenceID": "f0121bd0-3d0a-4c07-9977-ddefaa1d7e62"
+  },
+  "result": {
+    "inspected": 1,
+    "removed": 1,
+    "retainedCurrent": 0,
+    "retainedLive": 0,
+    "retainedUnknown": 0,
+    "quarantined": 0,
+    "unreconciled": []
+  },
+  "owners": [
+    {
+      "owner": {
+        "pid": 65556,
+        "processInstanceID": "win32:639270593701864841",
+        "occurrenceID": "b04faead-b7ac-4b6f-9136-7fcc1b3920c2"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "owner": {
+        "pid": 41532,
+        "processInstanceID": "win32:639270593709235529",
+        "occurrenceID": "b04faead-b7ac-4b6f-9136-7fcc1b3920c2"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "owner": {
+        "pid": 77972,
+        "processInstanceID": "win32:639270593709734382",
+        "occurrenceID": "bda0ae7b-920b-4527-9476-b0d654cfdaf7"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "owner": {
+        "pid": 17208,
+        "processInstanceID": "win32:639270593681159568",
+        "occurrenceID": "14161308-e9bc-4c8d-976c-d882b1e9234e"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Production orphan-request recovery only; original Host output drain, parent exit result and full native settlement remain unqualified"
+}

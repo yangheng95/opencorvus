@@ -1065,6 +1065,50 @@
   text-align: start;
 }
 
+.msg-source-entry {
+  display: contents;
+}
+
+.msg-source-entry[data-has-excerpt="true"] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ui-gap-xs);
+  width: 100%;
+  min-width: 0;
+}
+
+.msg-source-excerpt {
+  width: 100%;
+  min-width: 0;
+}
+
+.msg-source-excerpt__heading {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.msg-source-excerpt__body {
+  max-height: min(calc(8 * var(--oc-density-chip-height)), 40vh);
+  min-width: 0;
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.msg-source-excerpt__body:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: var(--ui-gap-3xs);
+}
+
 .msg-source-tooltip {
   display: grid;
   gap: var(--ui-gap-xs);

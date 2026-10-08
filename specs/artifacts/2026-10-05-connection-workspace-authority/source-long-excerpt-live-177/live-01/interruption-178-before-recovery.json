@@ -1,0 +1,67 @@
+{
+  "request": {
+    "kind": "command",
+    "detached": false,
+    "terminate_children_on_root_exit": true,
+    "request_id": "7ede6526-c675-400a-969a-366a85636a89",
+    "owner_pid": 65556,
+    "owner_process_instance_id": "win32:639270593701864841",
+    "runtime_occurrence_id": "b04faead-b7ac-4b6f-9136-7fcc1b3920c2",
+    "ready_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-long-excerpt-live-177-01\\runtime\\tmp\\supervisor-NcIMoj\\ready.json",
+    "settled_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-long-excerpt-live-177-01\\runtime\\tmp\\supervisor-NcIMoj\\settled.json",
+    "cancel_file": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-long-excerpt-live-177-01\\runtime\\tmp\\supervisor-NcIMoj\\cancel"
+  },
+  "listeners": [],
+  "ready": {
+    "protocol": 3,
+    "detached": false,
+    "request_id": "7ede6526-c675-400a-969a-366a85636a89",
+    "helper_pid": 41532,
+    "target_pid": 77972,
+    "target_process_instance_id": "win32:639270593709734382",
+    "runtime_occurrence_id": "b04faead-b7ac-4b6f-9136-7fcc1b3920c2",
+    "terminate_children_on_root_exit": true
+  },
+  "owners": [
+    {
+      "owner": {
+        "pid": 65556,
+        "processInstanceID": "win32:639270593701864841",
+        "role": "host"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "owner": {
+        "pid": 41532,
+        "processInstanceID": "win32:639270593709235529",
+        "role": "helper"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "owner": {
+        "pid": 77972,
+        "processInstanceID": "win32:639270593709734382",
+        "role": "target"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "owner": {
+        "pid": 17208,
+        "processInstanceID": "win32:639270593681159568",
+        "role": "parent"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T12:55:32.6146455Z",
+  "helper": {
+    "protocol": 1,
+    "request_id": "7ede6526-c675-400a-969a-366a85636a89",
+    "helper_pid": 41532,
+    "helper_process_instance_id": "win32:639270593709235529",
+    "runtime_occurrence_id": "b04faead-b7ac-4b6f-9136-7fcc1b3920c2"
+  }
+}

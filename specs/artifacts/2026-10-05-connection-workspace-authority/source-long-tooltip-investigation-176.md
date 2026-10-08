@@ -39,3 +39,35 @@ Root先保存本before原PNG/JSON/source preimage，再独立准入最小呈现�
 ## 本批最终状态
 
 Root [171人工记录](source-multiple-search-live-171/live-01/root-manual-qualification.md)确认190087ms/24 Sol200EOF/exhaustedfalse/173原5argsONCE0/allclosed。175成熟URLschema修复8schema+1persist0/types95817实际0，173 Root修正后local7DATA0/types89488实际0。真实UI4与3 Sources组/data projection合格不代表不同documents；longsnippet3536 Tooltip883.823>720仍FAIL、childtext2529 growth UNMET。176仅调查HELD未实现，新175提交推送待Root，持续目标ACTIVE。
+
+## Root选型后的唯一最小实施proposal（只方案，生产仍未准入）
+
+### Root four-file UI implementation admission — 2026-10-08T12:24Z
+
+Root fullread176/177/171 Recall, personally viewed actual Tooltip883.823px failure and group4/group3 pixels; verified current SourceChip/Disclosure/tooltip/css/domutils flow plus official APG (WIP).17514c2fa1f normalpush56581actual0joined/freshsame/outgoingempty/secret0/fullhooks, all171 native/page/pairclosed and original173ONCE0. Admit SourceParts/messages.css/EN/CN plus current07 UX note, exact preimages/diffs preserved. SourceEntry uses one canonical tuple helper for existing Key and prefixed excerpt cardExpanded state; permanent display-contents wrapper preserves leaf ownership/inline flow when snippet absent, snippet presence promotes full-width normal flow without replacing link owner. Whole snippet only native Disclosure reading region, focusable outside Tooltip, no new scroll/focus writer. Region maxheight=min(8 existing chip-height,40vh), fullprewrap/wrap/overflowauto/nativekeys; trigger/bodyfocus reuse existing readingintent. Caption Source excerpt/来源摘要. Tooltip removes snippet and retains identity/detail/metadata. No provider/data/parser/Key/count/fileaction changes or UI tests. Type/build/publicsurface/CSS prerequisites then fresh177 real pixels required; extreme metadata/title/URL and allconsumers remain unknown.
+
+Root已选完整SourceSnippet移出Tooltip至正常flow，175本地commit14c2fa1f9aa2c605f541e55b7ad73b479acce3f4/fetchmerge/outgoing仅owncommit已完成，push56581仍hooks；不提前称pushpass。未来只四文件：packages/overlay/src/components/SourceParts.tsx、styles/surfaces/messages.css、i18n/en-US.json、i18n/zh-CN.json。Root另补current07公开UX，child不改架构/共享indices。
+
+### 身份与单状态
+
+全仓SourceTooltipContent仅SourceChip调用，SourceChip仅SourceParts的Key children；CardParts是SourceParts唯一import调用，主/child/SideChat通过同呈现流消费。现Key字段[type,sessionID??null,messageID??null,sourceId]是实际canonical leaf tuple；excerpt状态必须同tuple而不是index、title、URL或邻近Tool猜关系。SourceEntry在现Key槽中接收current source accessor与current index/showIndex，无新cache/map/Signal。若新增excerpt key使原tuple表达重复，可在同SourceParts文件提取唯一private sourceIdentity(source)生成JSON tuple，同时现Key by和excerpt `source-excerpt:`前缀key复用；不是public helper/第二identity。外层Sources group现key语义不改，不把group key当leaf key。
+
+excerpt仅cardExpanded(excerptKey,false)/setCardExpanded单一既有store状态，nativeDisclosure defaultcollapsed，真实source退休/重现按同conversationUI owner语义处理，禁止本地open signal或双写。保持143 Key	current props getter；正常无snippet（不trim改实际内容，仅判真实字符串是否有内容）仍原inlineleaf结构/密度，避免无故所有leaf block。
+
+### 精确DOM与文本owner
+
+有snippet时SourceEntry正常fullavailablewidth wrapper内保留原SourceChip link/button/span，然后一个现Disclosure.Root/Trigger/Content。Trigger用新chat.source_excerpt caption（EN `Source excerpt` / CN `来源摘要`），native summary自身Enter/Space默认，不preventDefault、不嵌套交互在summary。打开时复用pauseAutoScrollForReading(currentTarget)；正文进入focus时同primitive声明阅读。正文是正常HTML region/div tabindex0并以caption提供可达名称，位于Disclosure.Content，全文唯一 `{source.snippet}`，不parse/substring/clamp/复制到aria-label或Tooltip；role region是正常页内阅读语义，不是tooltip/dialog。真实Tab在打开summary后可进入正文，Arrow/Page/Home/End原生滚动正文到末段，不新键盘gate或scroll/focus writer。若nested原生wheel/keys不能保持父reading控制，需要实际Root复验后按机制分析，不猜fallback。
+
+Tooltip保留当前非交互label/detail/author/date/provider四字段，彻底删除原snippet span，仍Kobalte ownsfocus/dismissal/position，不新Popover/trigger/tooltip state；实际nativeSourceURLs/file range/document原动作、leaf aria-label/ordinals/count保持。全文不裁，provider snippet生产/Tool输出/持久化均不动，不隐藏Rendering。
+
+### 单feature CSS owner
+
+messages.css新增SourceEntry/excerpt scoped规则，wrapper仅snippet branch width100%/min-width0，沿当前gap/caption/border/focus-visible tokens，不改Source6/message margin/全局Tooltip chrome。正文white-space:pre-wrap/overflow-wrap:anywhere保真实换行与长token，min-width0、max-height采用现尺寸token合理有界、overflow-y:auto；focus-visible现outline/color recipe，不能outline:none。有界scroll viewport是正常DOM region可Tab/focus，不能把共享tooltip pointer-events改为auto来伪修交互。具体高度需Root实际wide380/narrow280/总viewport验收后确认，方案不预造视觉成功或另deadline/config。
+
+### 边界与验收
+
+只解决本次已见3536snippet导致883.823px Tooltip的责任错位。极长title/detail/metadata仍可能独立超高，不能从移snippet宣称全部Tooltip Height解决。真实长摘要展开后末段必须可见且keyboard native滚动可达；pointer、Source nativeTab身份Tooltip全部可见、Escape/Tabnext/Enter官方URL、naturalupdate reading与explicitbottom分别实测。单组4/3 ordinals/真实chronology和无snippet inline布局需保留。177原自然输入、不强制长snippet；未自然捕获记UNMET，原171失败/once/raw保持。该段仅最小proposal，四文件生产实施未准入。
+
+## Root当前实施与有限资格
+
+四文件/current07已实施，types/build/CSS0；177真实3256字摘要在192px普通阅读区完整native滚动，identityTooltip约70px。详见[source177](source-long-excerpt-live-177/README.md)。原177whole native closure缺失，178生产recovery1/1后pairedcopyclosed；173未运行，未采矩阵UNMET。用户现只允许单agent。

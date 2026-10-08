@@ -1,0 +1,22 @@
+{
+  "observedAtUtc": "2026-10-08T12:46:14.7736988Z",
+  "presence": [
+    {
+      "processID": 77972,
+      "processInstanceID": "win32:639270593709734382",
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "processID": 65556,
+      "processInstanceID": "win32:639270593701864841",
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "phase": "after-single-agent-steering",
+  "listeners": [],
+  "nativeSettlement": null,
+  "occurrence": "source-long-excerpt-live-177-01-88f7c6fd-9e59-46b4-a13a-f43a5007a07c",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference"
+}

@@ -33,6 +33,10 @@ export function isConversationSourcePart(part: any): part is ConversationSourceP
   return part?.type === "source-url" || part?.type === "source-document" || part?.type === "source-file"
 }
 
+function sourceIdentity(source: ConversationSourcePart): string {
+  return JSON.stringify([source.type, source.sessionID ?? null, source.messageID ?? null, source.sourceId])
+}
+
 function sourceDirectory(): string {
   const source = boardStore.selectedSource
   return source?.directory?.trim() || selectedTaskDirectory().trim()
@@ -106,7 +110,6 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
     <Tooltip.Content class="msg-source-tooltip" data-ui="message-source-tooltip">
       <strong>{sourceLabel(props.source)}</strong>
       <span>{sourceDetail(props.source)}</span>
-      <span>{props.source.snippet || ""}</span>
       <span>{[props.source.author, props.source.publishedAt, props.source.provider].filter(Boolean).join(" · ")}</span>
     </Tooltip.Content>
   )
@@ -175,6 +178,46 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   )
 }
 
+function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {
+  const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
+  const expanded = () => cardExpanded(excerptKey(), false)
+  const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
+
+  return (
+    <div class="msg-source-entry" data-has-excerpt={props.source.snippet ? "true" : undefined}>
+      <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} />
+      <Show when={Boolean(props.source.snippet)}>
+        <Disclosure.Root
+          class="msg-source-excerpt"
+          open={expanded()}
+          onOpenChange={(open) => setCardExpanded(excerptKey(), open)}
+        >
+          <Disclosure.Trigger
+            class="msg-source-excerpt__heading"
+            aria-label={excerptLabel()}
+            onClick={(event) => {
+              if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
+            }}
+          >
+            {t("chat.source_excerpt")}
+          </Disclosure.Trigger>
+          <Show when={expanded()}>
+            <Disclosure.Content
+              class="msg-source-excerpt__body"
+              role="region"
+              aria-label={excerptLabel()}
+              tabIndex={0}
+              onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
+            >
+              {props.source.snippet}
+            </Disclosure.Content>
+          </Show>
+        </Disclosure.Root>
+      </Show>
+    </div>
+  )
+}
+
 export function SourceParts(props: { sources: ConversationSourcePart[] }) {
   const preview = () => (props.sources[0] ? sourceLabel(props.sources[0]) : "")
   const key = () => {
@@ -209,9 +252,9 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
         <Disclosure.Content class="msg-sources__list">
           <Key
             each={props.sources}
-            by={(source) => JSON.stringify([source.type, source.sessionID ?? null, source.messageID ?? null, source.sourceId])}
+            by={sourceIdentity}
           >
-            {(source, index) => <SourceChip source={source()} index={index()} showIndex={props.sources.length > 1} />}
+            {(source, index) => <SourceEntry source={source()} index={index()} showIndex={props.sources.length > 1} />}
           </Key>
         </Disclosure.Content>
       </Show>

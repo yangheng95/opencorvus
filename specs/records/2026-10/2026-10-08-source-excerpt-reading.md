@@ -1,0 +1,9 @@
+# Source excerpt reading
+
+## Recall
+
+User requires sustained Sources-first UI/UX repair and now a single agent. Read [176 root-cause/admission](../../artifacts/2026-10-05-connection-workspace-authority/source-long-tooltip-investigation-176.md), [177 plan](../../artifacts/2026-10-05-connection-workspace-authority/source-long-excerpt-live-plan-177.md), native Disclosure/SourceParts/styles/reading intent/current07 and [178 shared interruption audit](../../artifacts/2026-10-05-connection-workspace-authority/source-native-interruption-investigation-178.md).
+
+The previous actual3536-char Source snippet made a noninteractive Tooltip883.823px tall in a720px viewport. Shared pointer-events:none and focus remaining on its Source trigger mean CSS clipping or tooltip scrolling cannot supply full accessible reading. Full snippet now belongs to one normal native Disclosure reading region; identity/detail/metadata remain in Tooltip. Existing conversation store owns expansion by canonical Source tuple, and existing reading intent pauses transcript following. No provider data, Source identity, URL/file action or global Tooltip primitive changed.
+
+[177 manual pixels/interactions](../../artifacts/2026-10-05-connection-workspace-authority/source-long-excerpt-live-177/live-01/root-manual-qualification.md) qualify real3256-char excerpt in192px-wide/narrow reading viewport, native End/PageDown/pointer wheel to actual tail, parent0/followfalse and identity Tooltip about70px. Types/build/CSS passed. Task completed180251ms; last-observed23Solstream200EOF does not replace whole physical closure. Original Host settlement missing; exact production orphan recovery inspected1/removed1 then paired-copy cleanup completed, original173 checker not run. Missing closure/officialEnter/globalbottom/growth/otherconsumer/extremefield qualification is explicit. No UI automation or further delegation. Continuous goal active; commit/push separately recorded when observed.

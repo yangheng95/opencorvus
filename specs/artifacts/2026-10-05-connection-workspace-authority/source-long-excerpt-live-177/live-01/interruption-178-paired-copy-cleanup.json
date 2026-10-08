@@ -1,0 +1,27 @@
+{
+  "recovery": {
+    "inspected": 1,
+    "removed": 1,
+    "retainedCurrent": 0,
+    "retainedLive": 0,
+    "retainedUnknown": 0,
+    "quarantined": 0,
+    "unreconciled": []
+  },
+  "boundary": "Separate recovered custody cleanup; original native output drain and full closure not reconstructed",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-long-excerpt-live-177-01\\runtime\\data\\auth.json",
+      "outcome": "removed"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-long-excerpt-live-177-01\\runtime\\data\\models.json",
+      "outcome": "removed"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T12:56:42.6963412Z",
+  "originalWholeQualification": "UNMET",
+  "listeners": []
+}
