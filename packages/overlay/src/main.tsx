@@ -488,7 +488,7 @@ function requestSideChat(quotation?: Quotation, prompt?: string) {
   if (fileEditorReserved()) return
   const source = sideChatSource()
   if (!source) throw new Error(t("side_chat.source_required"))
-  setSideChatRequest({ source, quotation, prompt })
+  setSideChatRequest({ source, intent: quotation || prompt?.trim() ? "fork" : "open", quotation, prompt })
   showRightDockForExplicitAction()
   openCenterWorkbenchPanel("side-chat")
 }

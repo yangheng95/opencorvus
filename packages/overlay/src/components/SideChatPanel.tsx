@@ -37,6 +37,7 @@ import { InteractionCard, type InteractionData } from "./InteractionCard"
 
 export interface SideChatRequest {
   source: SideChatSource
+  intent: "open" | "fork"
   quotation?: Quotation
   prompt?: string
 }
@@ -82,6 +83,7 @@ export function SideChatPanel(props: {
   const [transcript, setTranscript] = createSignal<SubagentConversationTranscript>()
   const [connected, setConnected] = createSignal(false)
   const [creating, setCreating] = createSignal(false)
+  const [sessionListState, setSessionListState] = createSignal<"idle" | "loading" | "ready" | "error">("idle")
   const [sending, setSending] = createSignal(false)
   const [active, setActive] = createSignal(false)
   const [interactions, setInteractions] = createSignal<InteractionData[]>([])
@@ -105,6 +107,7 @@ export function SideChatPanel(props: {
   const sessionLabel = (item: SideChatSession) =>
     t("side_chat.numbered", { number: sessions().length - sessions().findIndex((entry) => entry.id === item.id) })
   const running = createMemo(() => sending() || active())
+  const preparing = () => creating() || sessionListState() === "loading"
   const report = (error: unknown) => setError(formatErrorDetails(error))
   onMount(() => {
     follow = setupAutoScroll(scroll, {
@@ -117,34 +120,38 @@ export function SideChatPanel(props: {
     generation++
     follow?.cleanup()
   })
-  createEffect(
-    on(sourceKey, async () => {
-      const current = ++generation
-      const authority = captureApiAuthority()
-      const source = props.source
-      setSessions([])
-      setSelected("")
-      setTranscript(undefined)
-      setError("")
-      setCreating(false)
-      if (!source) return
-      try {
-        const items = await listSideChats({ ...source, authority })
-        if (current !== generation || !isApiAuthorityCurrent(authority)) return
-        setSessions((current) => [
-          ...current,
-          ...items.filter((item) => !current.some((saved) => saved.id === item.id)),
-        ])
-        setSelected((current) => current || items[0]?.id || "")
-      } catch (error) {
-        if (current === generation && isApiAuthorityCurrent(authority)) report(error)
+  async function loadSessions() {
+    const current = ++generation
+    const authority = captureApiAuthority()
+    const source = props.source
+    setSessionListState(source ? "loading" : "idle")
+    setSessions([])
+    setSelected("")
+    setTranscript(undefined)
+    setError("")
+    setCreating(false)
+    if (!source) return
+    try {
+      const items = await listSideChats({ ...source, authority })
+      if (current !== generation || !isApiAuthorityCurrent(authority)) return
+      setSessions((current) => [
+        ...current,
+        ...items.filter((item) => !current.some((saved) => saved.id === item.id)),
+      ])
+      setSelected((current) => current || items[0]?.id || "")
+      setSessionListState("ready")
+    } catch (error) {
+      if (current === generation && isApiAuthorityCurrent(authority)) {
+        setSessionListState("error")
+        report(error)
       }
-    }),
-  )
+    }
+  }
+  createEffect(on(sourceKey, () => void loadSessions()))
   async function create(request?: SideChatRequest) {
     if (fileEditorReserved()) return
     const source = request?.source ?? props.source
-    if (!source || creating()) return
+    if (!source || creating() || sessionListState() !== "ready") return
     const current = generation
     const authority = captureApiAuthority()
     if (source.authority && !isApiAuthorityCurrent(source.authority)) return
@@ -174,6 +181,7 @@ export function SideChatPanel(props: {
       !request ||
       fileEditorReserved() ||
       creating() ||
+      sessionListState() !== "ready" ||
       request === attemptedRequest ||
       !props.source ||
       props.source.sessionID !== request.source.sessionID ||
@@ -181,6 +189,14 @@ export function SideChatPanel(props: {
     )
       return
     attemptedRequest = request
+    if (request.intent === "open" && session()) {
+      const current = generation
+      props.consumeRequest(request)
+      queueMicrotask(() => {
+        if (current === generation && !fileEditorReserved()) textarea?.focus()
+      })
+      return
+    }
     void create(request)
   })
   createEffect(
@@ -316,7 +332,7 @@ export function SideChatPanel(props: {
           variant="ghost"
           size="icon"
           tone="neutral"
-          disabled={fileEditorReserved() || creating() || !props.source}
+          disabled={fileEditorReserved() || creating() || sessionListState() !== "ready" || !props.source}
           onClick={() => void create()}
           title={t("side_chat.new")}
           aria-label={t("side_chat.new")}
@@ -331,20 +347,25 @@ export function SideChatPanel(props: {
           details={error()}
           actions={
             <>
-              <Show when={props.request && !creating()}>
+              <Show when={(sessionListState() === "error" || props.request) && !preparing()}>
                 <Button
                   variant="outline"
                   size="sm"
                   tone="neutral"
-                  disabled={fileEditorReserved()}
-                  onClick={() => void create(props.request)}
+                  disabled={fileEditorReserved() || sessionListState() === "loading"}
+                  onClick={() => {
+                    if (sessionListState() === "error") void loadSessions()
+                    else void create(props.request)
+                  }}
                 >
                   {t("side_chat.retry")}
                 </Button>
               </Show>
-              <Button variant="ghost" size="sm" tone="neutral" onClick={() => setError("")}>
-                {t("common.dismiss")}
-              </Button>
+              <Show when={sessionListState() !== "error"}>
+                <Button variant="ghost" size="sm" tone="neutral" onClick={() => setError("")}>
+                  {t("common.dismiss")}
+                </Button>
+              </Show>
             </>
           }
         >
@@ -406,9 +427,9 @@ export function SideChatPanel(props: {
         <Show when={!messages().length}>
           <div class="side-chat-panel__empty">
             <span class="side-chat-panel__empty-icon">
-              <Icon name={creating() ? "loading" : "side-chat"} size="medium" />
+              <Icon name={preparing() ? "loading" : "side-chat"} size="medium" />
             </span>
-            <strong>{creating() ? t("side_chat.creating") : t("side_chat.empty")}</strong>
+            <strong>{preparing() ? t("side_chat.creating") : t("side_chat.empty")}</strong>
             <span>{t("side_chat.empty_hint")}</span>
             <Show when={selected() && !creating()}>
               <div class="side-chat-suggestions">

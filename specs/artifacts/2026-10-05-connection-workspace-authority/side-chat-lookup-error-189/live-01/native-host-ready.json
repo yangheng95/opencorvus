@@ -1,0 +1,37 @@
+{
+  "occurrence": "side-chat-lookup-error-189-01-16a36941-9750-4ab8-8d6e-f9339913ecf0",
+  "outcome": "ready",
+  "host": {
+    "pid": 64728,
+    "processInstanceID": "win32:639270710646688464",
+    "occurrenceID": "dcba76a7-4702-4978-973e-e71adf5a190a"
+  },
+  "parent": {
+    "pid": 72708,
+    "processInstanceID": "win32:639270710625143158",
+    "occurrenceID": "3658a034-0e49-4fe0-b135-28e83f2f7818"
+  },
+  "target": {
+    "pid": 62468,
+    "processInstanceID": "win32:639270710654558934",
+    "occurrenceID": "fc5d81e5-9a15-4e78-a8ac-d9c4ba23810f"
+  },
+  "targetBirthAtMs": 1791474265455,
+  "observedAtUtc": "2026-10-08T15:44:25.499Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-lookup-error-189-01\\runtime",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-lookup-error-189-01\\project",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-lookup-error-189-01\\evidence",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-lookup-error-189-01\\startup.json",
+    "18116",
+    "side-chat-lookup-error-189-01-16a36941-9750-4ab8-8d6e-f9339913ecf0",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-lookup-error-189-01\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\side-chat-lookup-error-189\\live-01\\profile-selection.json",
+    "8",
+    "NativeService"
+  ],
+  "authority": "Production ProcessSupervisor.spawnHostCommand foreground Windows Job; no detached transfer"
+}

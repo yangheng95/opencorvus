@@ -322,8 +322,13 @@ the panel neither invents another catalog nor switches global project state.
 ## Side conversations and quotations
 
 The selected Chat, Task-root or Mission can open a Side chat in the Right Dock,
-including from a transcript text selection or `/side [question]`. Each side chat
-is an independent assistant Session root. `metadata.sideChat` records its source
+including from a transcript text selection or `/side [question]`.
+Opening without a quotation or question selects a retained side Session after
+its canonical list settles, creating the first only when that list is empty.
+Explicit New side chat, quotations and questions create a fresh fork. List
+failures remain lookup errors and retry the same lookup, rather than implying
+an empty history. The internal request carries that explicit opening intent.
+Each side chat is an independent assistant Session root. `metadata.sideChat` records its source
 Session and inherited Message identities; this reference is not an execution
 parent edge. The canonical atomic fork copies only completed reference history,
 remaps Message/Part and accepted-input identities, and snapshots the source root

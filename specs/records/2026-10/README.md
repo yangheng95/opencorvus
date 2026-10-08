@@ -367,3 +367,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Single Chat Sources](2026-10-08-single-chat-sources.md)：真实深色摘要/官方URL/底部跟随，修正诊断scope；保179原launcher1，181实际0，后续只单agent。
 
 - [Side Chat display projection](2026-10-08-side-chat-display-projection.md)：修复真实step-start错误；继承历史与Source回复真实合格，184maximum1保留，185actual0，单agent继续。
+
+- [Side Chat opening intent](2026-10-08-side-chat-opening-intent.md)：真实重开历史/草稿、明确New、离线查询retry；保186无效same-history，单agent继续。

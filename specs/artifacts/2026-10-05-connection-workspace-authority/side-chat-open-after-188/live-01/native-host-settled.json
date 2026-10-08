@@ -1,0 +1,23 @@
+{
+  "occurrence": "side-chat-open-after-188-01-a1f72a12-8909-4032-853f-f740df077695",
+  "outcome": "settled",
+  "host": {
+    "pid": 66140,
+    "processInstanceID": "win32:639270702258680704",
+    "occurrenceID": "4f379dd4-451a-42a8-a00e-381e53522e55"
+  },
+  "target": {
+    "pid": 44568,
+    "processInstanceID": "win32:639270702266390504",
+    "occurrenceID": "ecc3830f-ff0d-47b4-8d05-d162e0b85a37"
+  },
+  "observedAtUtc": "2026-10-08T15:36:08.720Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

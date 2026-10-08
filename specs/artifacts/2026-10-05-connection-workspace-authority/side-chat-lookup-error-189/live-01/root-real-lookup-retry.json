@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-08T15:47:35.000Z",
+  "buttons": [
+    {
+      "disabled": false,
+      "label": "Choose a side chat"
+    },
+    {
+      "disabled": true,
+      "label": "New side chat"
+    },
+    {
+      "disabled": false,
+      "label": "Try again"
+    }
+  ],
+  "connection": "Offline",
+  "panel": "Side chatAsk about this conversation while the main task keeps working.Side chat needs attentionDetailsTypeError: Failed to fetch\n    at Object.request (http://localhost:18116/ui/assets/main-BhY0gyMH.js:67:1196)\n    at eu (http://localhost:18116/ui/assets/main-BhY0gyMH.js:67:132734)\n    at Te (http://localhost:18116/ui/assets/main-BhY0gyMH.js:67:134296)\n    at JTe (http://localhost:18116/ui/assets/main-BhY0gyMH.js:220:29742)\n    at le (http://localhost:18116/ui/assets/main-BhY0gyMH.js:224:4639)\n    at HTMLButtonElement.onClick [as $$click] (http://localhost:18116/ui/assets/main-BhY0gyMH.js:224:8027)\n    at o (http://localhost:18116/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:23933)\n    at HTMLDocument.Ln (http://localhost:18116/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:24329)Try againA little room to exploreAsk a question, or quote a passage from the main conversation."
+}

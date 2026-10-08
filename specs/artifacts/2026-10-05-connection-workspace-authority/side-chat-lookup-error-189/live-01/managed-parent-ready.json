@@ -1,0 +1,15 @@
+{
+  "pid": 62468,
+  "occurrence": "side-chat-lookup-error-189-01-16a36941-9750-4ab8-8d6e-f9339913ecf0",
+  "owner": {
+    "pid": 62468,
+    "processInstanceID": "win32:639270710654558934",
+    "occurrenceID": "04f7e445-7a2d-4cb8-adda-d2f022fd1358"
+  },
+  "parent": {
+    "pid": 72724,
+    "processInstanceID": "win32:639270710654135981",
+    "occurrenceID": "893f99a9-cef2-42b3-95bc-f1ec798f23d5"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

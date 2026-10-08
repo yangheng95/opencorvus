@@ -1,0 +1,7 @@
+# Side Chat opening intent
+
+## Recall
+
+Single-agent continuous UI/Sources work; previous16e0e769 already pushed. [186 observation](../../artifacts/2026-10-05-connection-workspace-authority/markdown-panel-return-186/README.md) exposes different inherited IDs/Side chat2 on a plain reopen; it is invalid for same-owner Rendering, and original pictures remain. [187 analysis](../../artifacts/2026-10-05-connection-workspace-authority/side-chat-open-intent-plan-187.md) separates open from fork in the one current UI request, uses canonical successful list before creating first and retains explicit New/quote/question fork. One async list lifecycle prevents failed lookup being treated as empty. Current07 contract updated, no backend/model routing change or second cache.
+
+[188 actual UI](../../artifacts/2026-10-05-connection-workspace-authority/side-chat-open-after-188/README.md) same IDs/title/draft on reopen and independent explicitNew IDs/draft,4SolEOF/launcher0/wholeclosed. [189 real offline error](../../artifacts/2026-10-05-connection-workspace-authority/side-chat-lookup-error-189/README.md) visible same-lookup retry after controlled own shutdown;3SolEOF/launcher0/wholeclosed. Final types80853/build17171actual0. No UI tests/Task/squad/subagent/release. GenericRendering and unobserved entrance/error/restore matrices remain unknown; continuous goal active. Scoped commit/push follows observed delivery.
