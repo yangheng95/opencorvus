@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "types": [
+      "D:/myhexin-local/opencorvus/packages/opencorvus/node_modules/@types/bun"
+    ]
+  },
+  "include": [
+    "../.tmp-product-iteration/verify-current-file-sources-128.ts"
+  ],
+  "exclude": [],
+  "extends": "../packages/opencorvus/tsconfig.json"
+}

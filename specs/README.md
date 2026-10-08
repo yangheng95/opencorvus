@@ -2722,3 +2722,10 @@ The current connection-workspace authority record also includes metadata selecti
 - [Genuine reader/helper127](records/2026-10/2026-10-08-reader-helper-live.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-127/README.md): actual19Solstream200EOF, canonical Memory revision1/coverage, once strict checker0 and Root desktop Sources/reply/full closure;125causeUNKNOWN/enqueuegenuineUNMET preserved.
 
 
+
+- [Sources128 actual blocked](artifacts/2026-10-05-connection-workspace-authority/source-file-live-128/README.md), [Recall](artifacts/2026-10-05-connection-workspace-authority/source-file-live-plan-128.md) and [remaining coverage](artifacts/2026-10-05-connection-workspace-authority/sources-remaining-coverage-plan-128.md): original absolute read failed, fileSources/ranges/editor UNMET; whole owned scope CLOSED, actual TaskProcessBoundaryError/native root matched, no persisted error code, no completed oracle or Taskfailed inference.
+
+
+- [Source-file boundary129](artifacts/2026-10-05-connection-workspace-authority/source-file-boundary-investigation-129.md): shared Task/filesystem integrity versus operator Full access audited; actual128typed boundary/input mismatch verified, no guard repair admitted. No permission bypass or copied-source workaround.
+
+

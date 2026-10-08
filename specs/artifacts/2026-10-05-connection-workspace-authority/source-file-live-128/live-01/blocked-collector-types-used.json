@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "types": [
+      "D:/myhexin-local/opencorvus/packages/opencorvus/node_modules/@types/bun"
+    ]
+  },
+  "include": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/source-file-128-blocked-facts.ts"
+  ],
+  "exclude": [],
+  "extends": "../packages/opencorvus/tsconfig.json"
+}

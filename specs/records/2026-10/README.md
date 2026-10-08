@@ -266,3 +266,12 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Genuine reader/helper127](2026-10-08-reader-helper-live.md): actual19stream200EOF/Memory revision1 coverage/oncechecker0, Root manual Sources/reply/full closure; prior125failure and genuineerror/title/allmatrix limits retained.
 
 
+
+- [Sources128 actual blocked](../../artifacts/2026-10-05-connection-workspace-authority/source-file-live-128/README.md), [Recall](../../artifacts/2026-10-05-connection-workspace-authority/source-file-live-plan-128.md) and [remaining coverage](../../artifacts/2026-10-05-connection-workspace-authority/sources-remaining-coverage-plan-128.md): original absolute read failed, fileSources/ranges/editor UNMET; whole owned scope CLOSED, actual TaskProcessBoundaryError/native root matched, no persisted error code, no completed oracle or Taskfailed inference.
+
+
+- [Source-file boundary129](../../artifacts/2026-10-05-connection-workspace-authority/source-file-boundary-investigation-129.md): shared Task/filesystem integrity versus operator Full access audited; actual128typed boundary/input mismatch verified, no guard repair admitted. No permission bypass or copied-source workaround.
+
+- [File Sources128/129 record](2026-10-08-source-file-boundary.md): original blocked read, exact closure, functional UNMET and pending boundary diagnosis.
+
+

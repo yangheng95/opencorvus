@@ -1,0 +1,11 @@
+# Root actual128 blocked scope
+
+Root read full128 Recall and prepared checker, then admitted fresh18089/Work/Sol/24/600/180/900 bounds. Actual paired preflight and HTTP200 main-CQe8fTRL.js preceded genuine Tasktsk_g00VXQnK0O00ntikGIQO creation.
+
+Root personally opened owned114 and observed first README1–50 read failed, then model-authored Question asking for the unavailable contents. Composer displayed Full access. Screenshot root-external-read-failed-full-access.jpg retains that actual scene; a Question is not a permission packet and the label is not proof of filesystem authority. No answer, substitute copy or old-case rearm occurred. File Sources, range opening and final requested report are UNMET.
+
+Root closed114, reset viewport, preserved preexisting unknown111. Sole owned public shutdown settled Target72456/Host73752 foreground Job/output/request at05:02:04Z; paircleanup05:02:07.3859922Z and independent exact-birth deaths/18089 release qualified. Parent27587 returned terminal1 solely because no Task completion receipt existed; this is not an assertion that the Task entered failed. Five actual Sol streaming200/EOF requests are distinct from business completion. Five exact generated Bun files created04:59:49Z were privately preserved after closure.
+
+One closed readonly BEGIN/ROLLBACK collector, after source review and focused compiler0, observed exact failed read Partprt_g0VXQnLyt00AindgRZnW/call_5f289a18316d4ee5a34665e14140b131 in real orchestrator Session. Failure name TaskProcessBoundaryError and message explicitly identify original D README outside actual C Task project. Persisted bindingart_g0VXQnKAI00Pf4dXIExp protocol task-native-process-binding-v2 has that same native/logical root and actualTask/Project. No error code was retained in the failure, so source-declared code is not an actual receipt claim.
+
+This confirms correct integrity isolation and a test-input scope mismatch. Source count0; only Task opened epoch1 lifecycle was observed. Question Tool failed with MessageAbortedError on Root's service shutdown; the interaction projection's nullable outcome/reference is retained as an observation, not inferred terminal business state. Completed file-source oracle was never invoked. Original128 remains incomplete/recovery-eligible and must not be restarted or relabeled as passing. Original125 reader error remains unknown.

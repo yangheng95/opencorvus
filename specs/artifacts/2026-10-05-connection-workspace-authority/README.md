@@ -378,3 +378,10 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Genuine reader/helper127](reader-helper-live-127/README.md) and [admission](reader-helper-live-plan-127.md): actual19Solstream200EOF, exact helper Activity/current Memory coverage and strict oncechecker0, Root desktop/fullclosure;125causeUNKNOWN/enqueuegenuineUNMET/titlegenuineunknown preserved.
 
 
+
+- [Sources128 actual blocked](source-file-live-128/README.md), [Recall](source-file-live-plan-128.md) and [remaining coverage](sources-remaining-coverage-plan-128.md): original absolute read failed, fileSources/ranges/editor UNMET; whole owned scope CLOSED, actual TaskProcessBoundaryError/native root matched, no persisted error code, no completed oracle or Taskfailed inference.
+
+
+- [Source-file boundary129](source-file-boundary-investigation-129.md): shared Task/filesystem integrity versus operator Full access audited; actual128typed boundary/input mismatch verified, no guard repair admitted. No permission bypass or copied-source workaround.
+
+
