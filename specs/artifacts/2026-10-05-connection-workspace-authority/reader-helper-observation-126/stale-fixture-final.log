@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\memory\project-memory.test.ts:
+(pass) Project MEMORY.MD pending input and organizer document > injects a capacity notice that requires a visible user prompt without delegating organization to the main agent [2227.86ms]
+
+ 1 pass
+ 24 filtered out
+ 0 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [5.21s]

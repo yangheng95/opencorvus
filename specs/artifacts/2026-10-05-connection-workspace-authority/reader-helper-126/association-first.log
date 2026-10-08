@@ -1,0 +1,16 @@
+[1/1] START test/provider-request-association.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+{"boundary":"collect activity → production SDK/owned local HTTP; not genuine Provider E2E","contexts":[{"sessionID":"helper-session-alpha","streamRequest":{"requestID":"helper-request-alpha","agentID":"helper-alpha","providerID":"request-association","modelID":"local-stream-model","apiModelID":"local-stream-model"},"activity":{"id":"act_g0VXQdEru006CV6tL3Ec","attempt":0}},{"sessionID":"helper-session-beta","streamRequest":{"requestID":"helper-request-beta","agentID":"helper-beta","providerID":"request-association","modelID":"local-stream-model","apiModelID":"local-stream-model"},"activity":{"id":"act_g0VXQdErv00SLDdetBBT","attempt":0}}],"actual":[{"context":{"sessionID":"helper-session-alpha","streamRequest":{"requestID":"helper-request-alpha","agentID":"helper-alpha","providerID":"request-association","modelID":"local-stream-model","apiModelID":"local-stream-model"},"activity":{"id":"act_g0VXQdEru006CV6tL3Ec","attempt":0}},"model":"local-stream-model","stream":true,"status":200,"reader":"settled","terminal":"eof"},{"context":{"sessionID":"helper-session-beta","streamRequest":{"requestID":"helper-request-beta","agentID":"helper-beta","providerID":"request-association","modelID":"local-stream-model","apiModelID":"local-stream-model"},"activity":{"id":"act_g0VXQdErv00SLDdetBBT","attempt":0}},"model":"local-stream-model","stream":true,"status":200,"reader":"settled","terminal":"eof"}],"values":["reply:helper-request-alpha","reply:helper-request-beta"]}
+(pass) parallel collected helper activities retain actual SDK and HTTP request identities [2195.13ms]
+(pass) concurrent same-model callers retain the actual Session and distinct agent identities [1621.03ms]
+(pass) delayed SDK use and successive physical responses retain the original copied caller [1680.85ms]
+(pass) context-free consumers preserve the production model cache and real streamed output [1697.16ms]
+(pass) one real SDK multi-step stream binds both HTTP responses to its original caller [1756.11ms]
+
+ 5 pass
+ 0 fail
+ 37 expect() calls
+Ran 5 tests across 1 file. [10.84s]
+[1/1] DONE test/provider-request-association.test.ts exit=0 duration=11.60s

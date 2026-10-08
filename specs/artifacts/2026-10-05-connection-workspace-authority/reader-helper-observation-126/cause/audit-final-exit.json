@@ -1,0 +1,5 @@
+{
+  "exitCode": 0,
+  "command": "bun run script/run-tests.ts test/real-provider-audit.test.ts",
+  "reason": "original touched map callback type repair"
+}

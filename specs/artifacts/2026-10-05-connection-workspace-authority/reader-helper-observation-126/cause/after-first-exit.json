@@ -1,0 +1,4 @@
+{
+  "command": "bun run script/run-tests.ts test/provider-response-observation.test.ts test/real-provider-audit.test.ts test/stream-activity-abort.test.ts",
+  "exitCode": 0
+}

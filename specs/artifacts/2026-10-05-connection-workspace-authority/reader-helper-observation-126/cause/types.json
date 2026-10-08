@@ -1,0 +1,14 @@
+{
+  "include": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/provider-response-observation.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/real-provider-audit.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/test/stream-activity-abort.test.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/script/real-provider-audit.ts"
+  ],
+  "extends": "D:/myhexin-local/opencorvus/packages/opencorvus/tsconfig.json",
+  "exclude": [
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/skill/builtin/**/*",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/dist/**/*"
+  ]
+}

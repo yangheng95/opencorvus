@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Reader/helper observation126](records/2026-10/2026-10-08-reader-helper-observation.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/reader-helper-observation-126/README.md): single safe reader cause/helper attempt pipeline; focused local contracts passed, integrated types0 after preserved fixture failure;125 original failure and cause UNKNOWN preserved.
+
 - [Complete conversation identity121](records/2026-10/2026-10-08-conversation-message-identity.md) and [fresh125](artifacts/2026-10-05-connection-workspace-authority/child-message-identity-125/README.md): full real identity window and shared parser; backend12/81/service22/58 and real desktop Sources qualified, original all-EOF oracle failure retained.
 
 - [Genuine child identity124 before](records/2026-10/2026-10-08-child-message-identity-before.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/child-live-identity-124/README.md): actual7/6 public identity omission, later10/10 and completed Task; private supervision failure retained, full owned scope closed, pending/download acceptance unmet.
@@ -2715,3 +2717,7 @@ The current connection-workspace authority record also includes metadata selecti
 - [Manager target scope93](artifacts/2026-10-05-connection-workspace-authority/manager-cross-scope-installation-investigation-93.md): real reverse-order Project import rejected by broken global same-ID issue; original dynamic facts limited; independent repair not yet admitted.
 - [Builtin runtime/mount collision94](artifacts/2026-10-05-connection-workspace-authority/builtin-collision-authority-investigation-94.md): two filtered-item dead checks audited across current/pinned/runtime/config scopes; fixed revisions remain distinct; repair held.
 - [Shared logger namespace95](artifacts/2026-10-05-connection-workspace-authority/logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.
+
+
+- [Reader/helper127 prepared plan](artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-plan-127.md) and [inputs](artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-127/live-01/README.md): preparation only; actual runtime/model/Task/UI acceptance held pending Root source delivery and explicit admission,125 failure unchanged.
+

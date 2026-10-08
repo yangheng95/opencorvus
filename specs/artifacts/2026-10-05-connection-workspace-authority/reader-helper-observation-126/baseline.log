@@ -1,0 +1,121 @@
+bun test v1.3.14 (0d9b296a)
+
+test\memory\project-memory.test.ts:
+{"contract":"memory collector retry","calls":[{"sessionID":"ses_-zUSZNSVDzzrYDUNs6gy","userID":"msg_g0VXQcXdD00B5iBgJPJ6"},{"sessionID":"ses_-zUSZNSVDzzrYDUNs6gy","userID":"msg_g0VXQcXdD00B5iBgJPJ6"}],"result":{"status":"idle","revision":1},"document":{"revision":1,"pendingCount":0}}
+1019 |             document: { status: "idle", revision: 1, pendingCount: 0 },
+1020 |           })
+1021 |           expect(body.document.content).toContain("pending owner's canonical model")
+1022 |           expect(modelRequests).toContainEqual(model)
+1023 |           console.info(JSON.stringify({ contract: "memory collector retry", calls: streamCalls.map((call) => ({ activity: call.activity, sessionID: call.sessionID, userID: call.user?.id, requestID: call.requestID })), result: body.result, document: { revision: body.document.revision, pendingCount: body.document.pendingCount } }))
+1024 |           expect(streamCalls.map((call) => call.activity?.attempt)).toEqual([0, 1])
+                                                                           ^
+error: expect(received).toEqual(expected)
+
+  [
+-   0,
+-   1,
++   undefined,
++   undefined,
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\project-memory.test.ts:1024:69)
+(fail) Project MEMORY.MD pending input and organizer document > manual organize route uses the pending FIFO owner's canonical Session model [5348.06ms]
+
+test\session\title-activity.test.ts:
+61 |     )
+62 |     const setTitleSpy = track(spyOn(Session, "setTitle").mockResolvedValue(session))
+63 | 
+64 |     await ensureTitle({ session, history, abort: new AbortController().signal })
+65 | 
+66 |     expect(streamSpy.mock.calls[0]![0]).toMatchObject({
+                                             ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "activity": {
+-     "attempt": 0,
+-     "id": Any<String>,
++   "abort": AbortSignal {},
++   "agent": {
++     "model": undefined,
++     "options": {},
++     "permission": undefined,
++     "prompt": undefined,
++     "promptAppend": undefined,
++     "steps": undefined,
++     "temperature": undefined,
++     "tools": undefined,
++     "topP": undefined,
++     "variant": undefined,
+    },
++   "agentID": "title",
++   "messages": [
++     {
++       "content": 
++ "Generate a title for this conversation:
++ "
++ ,
++       "role": "user",
++     },
++   ],
+    "model": {
+      "id": "title-model",
+      "providerID": "test",
+    },
+    "retries": 0,
+    "sessionID": "session-title-activity",
++   "small": true,
++   "system": [],
++   "tools": {},
++   "user": {
++     "agent": "assistant",
++     "author": "user",
++     "id": "message-title-user",
++     "model": {
++       "modelID": "title-model",
++       "providerID": "test",
++     },
++     "role": "user",
++     "sessionID": "session-title-activity",
++     "time": {
++       "created": 1,
++     },
++   },
+  }
+
+- Expected  - 3
++ Received  + 39
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\title-activity.test.ts:66:41)
+(fail) Session title LLM activity > streams a generated title and persists the normalized first line [2.15ms]
+{"contract":"title activity retry","calls":[{"sessionID":"session-title-activity","userID":"message-title-user","agentID":"title"},{"sessionID":"session-title-activity","userID":"message-title-user","agentID":"title"}]}
+85 |       })() } as never
+86 |     }))
+87 |     const writer = track(spyOn(Session, "setTitle").mockResolvedValue(session))
+88 |     await ensureTitle({ session, history, abort: new AbortController().signal })
+89 |     console.info(JSON.stringify({ contract: "title activity retry", calls: inputs.map((input) => ({ activity: input.activity, sessionID: input.sessionID, userID: input.user?.id, agentID: input.agentID })) }))
+90 |     expect(inputs.map((input) => input.activity?.attempt)).toEqual([0, 1])
+                                                                ^
+error: expect(received).toEqual(expected)
+
+  [
+-   0,
+-   1,
++   undefined,
++   undefined,
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\title-activity.test.ts:90:60)
+(fail) Session title LLM activity > binds the title collector retry to one actual activity and persists its result [2179.67ms]
+
+ 0 pass
+ 25 filtered out
+ 3 fail
+ 7 expect() calls
+Ran 3 tests across 2 files. [9.90s]

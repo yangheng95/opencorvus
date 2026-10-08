@@ -495,7 +495,7 @@ export namespace AgentTrace {
     taskID: string
     sessionID: string
     streamRequest: StreamRequestIdentity
-    activity: NonNullable<ProviderRequestContext["activity"]>
+    activity: NonNullable<ProviderRequestContext["activity"]> & { assistantMessageID: string }
     phase: "aborted" | "settled"
     observation: ReturnType<ReturnType<typeof createLLMStreamObservation>["snapshot"]>
     pendingToolInputs: ReturnType<typeof observePendingToolInputStructure> & { sourceUTF16Budget: number }

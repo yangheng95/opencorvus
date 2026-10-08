@@ -372,3 +372,8 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [Genuine identity124](child-live-identity-124/README.md) and [admission](child-live-identity-plan-124.md): actual7/6 reader omission followed by10/10, completed genuine Code Task, private supervision failure and full physical/pair closure; live pending/download acceptance unmet.
 - [Complete identity121](child-pending-identity-121/README.md), [fresh125](child-message-identity-125/README.md) and [125 admission](child-message-identity-after-plan-125.md): full identity window/parser, positive data checks and actual Sources; original oracle failure retained.
+- [Observation126 Recall](reader-helper-observation-plan-126.md), [evidence](reader-helper-observation-126/README.md), [cause](reader-error-cause-plan-126.md), [helper identity](helper-activity-identity-plan-126.md), [positive qualification](reader-helper-positive-qualification-plan-126.md): one reader/context pipeline;39/145 local reader contracts and helper/association/Trace checks qualified, integrated types0 after preserved fixture failure;125 cause remains UNKNOWN.
+
+
+- [Reader/helper127 prepared plan](reader-helper-live-plan-127.md) and [inputs](reader-helper-live-127/live-01/README.md): preparation only; actual runtime/model/Task/UI acceptance held pending Root source delivery and explicit admission,125 failure unchanged.
+

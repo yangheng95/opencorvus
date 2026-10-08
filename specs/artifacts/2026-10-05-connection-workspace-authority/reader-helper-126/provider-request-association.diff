@@ -1,0 +1,55 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/reader-helper-126/provider-request-association.before.ts b/packages/opencorvus/test/provider-request-association.test.ts
+index 34d82c61..9823e96f 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/reader-helper-126/provider-request-association.before.ts
++++ b/packages/opencorvus/test/provider-request-association.test.ts
+@@ -5,6 +5,8 @@ import { Provider } from "@/provider/provider"
+ import { Instance } from "@/project/instance"
+ import { CredentialRedactor, RealProviderAudit } from "../script/real-provider-audit"
+ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
++import { collectLLMText, type LLMActivityEvent } from "@/llm/activity"
++import type { ProviderRequestContext } from "@/util/provider-response-observation"
+ 
+ afterEach(async () => {
+   await Provider.resetAll()
+@@ -54,6 +56,41 @@ async function withLocalProvider(run: (fixture: {
+   } finally { await server.stop(true) }
+ }
+ 
++test("parallel collected helper activities retain actual SDK and HTTP request identities", async () => {
++  await withLocalProvider(async ({ config, model, audit, accepted }) => {
++    const helpers = [
++      { ...context("helper-alpha", "helper-request-alpha"), sessionID: "helper-session-alpha" },
++      { ...context("helper-beta", "helper-request-beta"), sessionID: "helper-session-beta" },
++    ]
++    const contexts: ProviderRequestContext[] = []
++    const events: LLMActivityEvent[][] = helpers.map(() => [])
++    const values = await Promise.all(helpers.map((helper, index) => collectLLMText({
++      context: { sessionID: helper.sessionID, provider: providerID, model: modelID },
++      external: new AbortController().signal,
++      sink: event => { events[index]!.push(event) },
++      start: async run => {
++        const requestContext: ProviderRequestContext = { ...helper, activity: { id: run.id, attempt: run.attempt } }
++        contexts[index] = requestContext
++        const language = await Provider.getLanguage(model, { config, requestContext })
++        return streamText({ model: language, prompt: helper.streamRequest.requestID, abortSignal: run.signal, maxRetries: 0 })
++      },
++    })))
++    const actual = audit.requests.map(request => ({ context: request.response_reader.requestContext,
++      model: request.model, stream: request.streaming, status: request.status, reader: request.response_reader.state,
++      terminal: request.response_reader.terminal?.kind })).sort((left, right) =>
++        left.context!.streamRequest.requestID.localeCompare(right.context!.streamRequest.requestID))
++    console.log(JSON.stringify({ boundary: "collect activity → production SDK/owned local HTTP; not genuine Provider E2E", contexts, actual, values }))
++    expect(values).toEqual(["reply:helper-request-alpha", "reply:helper-request-beta"])
++    expect(accepted.toSorted()).toEqual(["helper-request-alpha", "helper-request-beta"])
++    expect(new Set(contexts.map(item => item.activity!.id)).size).toBe(2)
++    expect(actual).toEqual(contexts.map(item => ({ context: item, model: modelID, stream: true, status: 200, reader: "settled", terminal: "eof" })))
++    expect(events.map((runEvents, index) => ({ started: runEvents.find(event => event.type === "started")!.id,
++      terminal: runEvents.at(-1) }))).toMatchObject(contexts.map(item => ({ started: item.activity!.id,
++        terminal: { type: "terminal", id: item.activity!.id, outcome: "done" } })))
++    expect(contexts.map(item => item.activity!.attempt)).toEqual([0, 0])
++  })
++})
++
+ test("concurrent same-model callers retain the actual Session and distinct agent identities", async () => {
+   await withLocalProvider(async ({ config, model, audit, accepted }) => {
+     const callers = [

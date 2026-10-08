@@ -1,0 +1,69 @@
+[1/3] START test/provider-response-observation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) actual reader rejection publishes fixed safe cause and preserves original error [10.44ms]
+(pass) actual chunk callback rejection retains its operation and original object [0.60ms]
+(pass) unknown getter-bearing producer error retains original and fixed unknown cause [0.24ms]
+(pass) exact Response registration retains its actual owner through a typed conflict [0.45ms]
+(pass) controlled split and empty chunks preserve exact bytes and joined EOF scalars [2.87ms]
+(pass) cancelled waits for actual upstream cleanup before publishing physical settlement [1.12ms]
+(pass) aborted waits for actual upstream cleanup before publishing physical settlement [0.46ms]
+(pass) actual read error retains its producer error and error settlement [0.36ms]
+(pass) an already-aborted owner retains its exact abort reason and joins upstream cleanup [0.46ms]
+(pass) diagnostic callback failures preserve the actual response output and EOF [2.83ms]
+(pass) two concurrent real HTTP responses retain exact object ownership and actual SSE bytes [12.72ms]
+
+ 11 pass
+ 0 fail
+ 33 expect() calls
+Ran 11 tests across 1 file. [1412.00ms]
+[1/3] DONE test/provider-response-observation.test.ts exit=0 duration=2.28s
+[2/3] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) actual HTTP flat and nested schemas publish bounded structural facts with unchanged input acknowledgement [9.24ms]
+(pass) actual local response chunk error publishes safe origin with genuine helper attempt and original error [10.56ms]
+(pass) exact reader binding projects genuine caller, unknown caller and credential-redacted identity states [10.14ms]
+(pass) throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error [6.21ms]
+(pass) concurrent real local HTTP audit entries report their exact reader bytes and EOF [9.02ms]
+(pass) real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states [6.27ms]
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [7.44ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [8.14ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [9.10ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [9.40ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [6.15ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [6.29ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [30.55ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [1.24ms]
+(pass) copied OAuth access expires with an explicit authority error [0.30ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.74ms]
+(pass) the last authorized streaming request completes before the next is refused [0.61ms]
+(pass) the audit reports exact model and streaming contract errors [1.65ms]
+(pass) an exhausted cumulative balance returns the budget error [0.17ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.15ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [9.76ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.72ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.80ms]
+
+ 23 pass
+ 0 fail
+ 99 expect() calls
+Ran 23 tests across 1 file. [1365.00ms]
+[2/3] DONE test/real-provider-audit.test.ts exit=0 duration=1.53s
+[3/3] START test/stream-activity-abort.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) abortableIterable cancellation settlement > returns the exact abort outcome after requesting cleanup from a parked provider iterator [6.10ms]
+(pass) abortableIterable cancellation settlement > completes an ordinary consumer close after upstream cleanup completes [0.44ms]
+(pass) activity-tracked response stream settlement > returns the exact activity abort and requests cancellation of a parked response reader [57.92ms]
+(pass) activity-tracked response stream settlement > awaits ordinary consumer cancellation before reporting upstream response cleanup [1.03ms]
+(pass) activity-tracked response stream settlement > reports ordinary EOF and response read failure through the same settlement contract [0.63ms]
+
+ 5 pass
+ 0 fail
+ 13 expect() calls
+Ran 5 tests across 1 file. [1330.00ms]
+[3/3] DONE test/stream-activity-abort.test.ts exit=0 duration=1.50s

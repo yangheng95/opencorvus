@@ -1,0 +1,17 @@
+bun test v1.3.14 (0d9b296a)
+
+test\memory\project-memory.test.ts:
+{"contract":"memory collector retry","calls":[{"activity":{"id":"act_g0VXQd4rY00lOvX893A8","attempt":0},"sessionID":"ses_-zUSZMva6zzYB64gEw81","userID":"msg_g0VXQd4Zt00opVtseimA"},{"activity":{"id":"act_g0VXQd4rY00lOvX893A8","attempt":1},"sessionID":"ses_-zUSZMva6zzYB64gEw81","userID":"msg_g0VXQd4Zt00opVtseimA"}],"result":{"status":"idle","revision":1},"document":{"revision":1,"pendingCount":0}}
+(pass) Project MEMORY.MD pending input and organizer document > manual organize route uses the pending FIFO owner's canonical Session model [6024.46ms]
+
+test\session\title-activity.test.ts:
+(pass) Session title LLM activity > streams a generated title and persists the normalized first line [1.51ms]
+{"contract":"title activity retry","calls":[{"activity":{"id":"act_g0VXQd5Ui00wWCh7KuNn","attempt":0},"sessionID":"session-title-activity","userID":"message-title-user","agentID":"title"},{"activity":{"id":"act_g0VXQd5Ui00wWCh7KuNn","attempt":1},"sessionID":"session-title-activity","userID":"message-title-user","agentID":"title"}]}
+(pass) Session title LLM activity > binds the title collector retry to one actual activity and persists its result [2314.94ms]
+(pass) Session title LLM activity > composes the execution occurrence abort into the title activity signal [1.16ms]
+
+ 4 pass
+ 24 filtered out
+ 0 fail
+ 17 expect() calls
+Ran 4 tests across 2 files. [11.25s]

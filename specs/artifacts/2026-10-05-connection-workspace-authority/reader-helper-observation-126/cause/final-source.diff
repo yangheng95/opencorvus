@@ -1,0 +1,284 @@
+--- before/packages\opencorvus\script\real-provider-audit.ts
++++ final/packages\opencorvus\script\real-provider-audit.ts
+@@ -1,7 +1,7 @@
+ import assert from "node:assert/strict"
+ import { createHash } from "node:crypto"
+ import { registerProviderResponseObserver, type ProviderRequestContext } from "../src/util/provider-response-observation"
+-import type { ReadableStreamActivitySettlement } from "../src/util/stream-activity"
++import type { ReadableStreamActivitySettlement, ReadableStreamErrorFacts } from "../src/util/stream-activity"
+ 
+ export interface ProviderResponseReaderObservation {
+   boundary: "provider-source-reader"
+@@ -12,7 +12,7 @@
+   byteCount?: number
+   firstByteReadAt?: number | null
+   lastByteReadAt?: number | null
+-  terminal?: { kind: ReadableStreamActivitySettlement; at: number }
++  terminal?: { kind: ReadableStreamActivitySettlement; at: number; error?: ReadableStreamErrorFacts }
+   observationError?: "callback_failed"
+   identityState?: "observed" | "unknown" | "redacted"
+   requestContext?: ProviderRequestContext
+@@ -365,9 +365,9 @@
+                   observed.lastByteReadAt = readAt
+                 }
+               },
+-              onSettlement: (kind) => {
++              onSettlement: (kind, error) => {
+                 observed.state = "settled"
+-                observed.terminal = { kind, at: Date.now() }
++                observed.terminal = { kind, at: Date.now(), ...(error ? { error: { ...error } } : {}) }
+                 this.#publish(entry)
+               },
+               onObservationError: () => { observed.observationError = "callback_failed" },
+--- before/packages\opencorvus\src\provider\provider.ts
++++ final/packages\opencorvus\src\provider\provider.ts
+@@ -33,6 +33,7 @@
+   settlementTrackedReadableStream,
+   withStreamActivity,
+   type ReadableStreamActivitySettlement,
++  type ReadableStreamErrorFacts,
+ } from "@/util/stream-activity"
+ import { takeProviderResponseObserver, type ProviderRequestContext } from "@/util/provider-response-observation"
+ import { DurableExecutionCapacity } from "@/runtime/durable-execution-capacity"
+@@ -1042,9 +1043,9 @@
+           const observeChunk = responseObserver
+             ? (chunk: Uint8Array) => responseObserver.onChunk(chunk.byteLength)
+             : undefined
+-          const settleResponse = (settlement: ReadableStreamActivitySettlement) => {
++          const settleResponse = (settlement: ReadableStreamActivitySettlement, error?: ReadableStreamErrorFacts) => {
+             try {
+-              responseObserver?.onSettlement(settlement)
++              responseObserver?.onSettlement(settlement, error)
+             } finally {
+               releaseCapacity()
+             }
+--- before/packages\opencorvus\src\util\provider-response-observation.ts
++++ final/packages\opencorvus\src\util\provider-response-observation.ts
+@@ -1,16 +1,16 @@
+-import type { ReadableStreamActivitySettlement } from "./stream-activity"
++import type { ReadableStreamActivitySettlement, ReadableStreamErrorFacts } from "./stream-activity"
+ import type { StreamRequestIdentity } from "../session/stream-request"
+ 
+ export type ProviderRequestContext = Readonly<{
+   sessionID: string
+   streamRequest: Readonly<StreamRequestIdentity>
+-  activity?: Readonly<{ id: string; attempt: number; assistantMessageID: string }>
++  activity?: Readonly<{ id: string; attempt: number; assistantMessageID?: string }>
+ }>
+ 
+ export interface ProviderResponseObserver {
+   onBind(context?: ProviderRequestContext): void
+   onChunk(byteLength: number): void
+-  onSettlement(settlement: ReadableStreamActivitySettlement): void
++  onSettlement(settlement: ReadableStreamActivitySettlement, error?: ReadableStreamErrorFacts): void
+   onObservationError(): void
+ }
+ 
+@@ -45,7 +45,7 @@
+   observers.set(response, {
+     onBind: (context) => forward(() => observer.onBind(context)),
+     onChunk: (byteLength) => forward(() => observer.onChunk(byteLength)),
+-    onSettlement: (settlement) => forward(() => observer.onSettlement(settlement)),
++    onSettlement: (settlement, error) => forward(() => observer.onSettlement(settlement, error)),
+     onObservationError,
+   })
+ }
+--- before/packages\opencorvus\src\util\stream-activity.ts
++++ final/packages\opencorvus\src\util\stream-activity.ts
+@@ -93,18 +93,48 @@
+ 
+ export type ReadableStreamActivitySettlement = "eof" | "error" | "cancelled" | "aborted"
+ 
++const STREAM_ERROR_CODES = [
++  "ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "EPIPE", "ENOTFOUND", "EAI_AGAIN",
++  "EHOSTUNREACH", "ENETUNREACH", "EPROTO", "UND_ERR_SOCKET", "UND_ERR_HEADERS_TIMEOUT", "UND_ERR_BODY_TIMEOUT",
++] as const
++
++export type ReadableStreamErrorFacts = Readonly<{
++  origin: "read" | "on_chunk" | "enqueue"
++  type: "Error" | "TypeError" | "RangeError" | "SyntaxError" | "ReferenceError" | "URIError" | "EvalError" | "DOMException" | "unknown"
++  code?: (typeof STREAM_ERROR_CODES)[number]
++}>
++
++function streamErrorFacts(origin: ReadableStreamErrorFacts["origin"], error: unknown): ReadableStreamErrorFacts {
++  try {
++    const type = error instanceof TypeError ? "TypeError"
++      : error instanceof RangeError ? "RangeError"
++      : error instanceof SyntaxError ? "SyntaxError"
++      : error instanceof ReferenceError ? "ReferenceError"
++      : error instanceof URIError ? "URIError"
++      : error instanceof EvalError ? "EvalError"
++      : error instanceof DOMException ? "DOMException"
++      : error instanceof Error ? "Error" : "unknown"
++    const descriptor = error !== null && (typeof error === "object" || typeof error === "function")
++      ? Object.getOwnPropertyDescriptor(error, "code") : undefined
++    const code = STREAM_ERROR_CODES.find((candidate) => descriptor && "value" in descriptor && descriptor.value === candidate)
++    return { origin, type, ...(code ? { code } : {}) }
++  } catch {
++    return { origin, type: "unknown" }
++  }
++}
++
+ export interface ActivityTrackedReadableStreamOptions<T> {
+   source: ReadableStream<T>
+   activity: StreamActivityMonitor
+   onChunk?: (chunk: T) => void
+-  onSettlement?: (settlement: ReadableStreamActivitySettlement) => void
++  onSettlement?: (settlement: ReadableStreamActivitySettlement, error?: ReadableStreamErrorFacts) => void
+ }
+ 
+ export interface SettlementTrackedReadableStreamOptions<T> {
+   source: ReadableStream<T>
+   signal?: AbortSignal
+   onChunk?: (chunk: T) => void
+-  onSettlement: (settlement: ReadableStreamActivitySettlement) => void
++  onSettlement: (settlement: ReadableStreamActivitySettlement, error?: ReadableStreamErrorFacts) => void
+ }
+ 
+ /** Own one upstream reader and converge EOF, error, consumer cancellation and
+@@ -128,10 +158,10 @@
+     options.signal?.removeEventListener("abort", onAbort)
+     return true
+   }
+-  const finishSettlement = (settlement: ReadableStreamActivitySettlement) => {
++  const finishSettlement = (settlement: ReadableStreamActivitySettlement, error?: ReadableStreamErrorFacts) => {
+     if (settlementFinished) return
+     settlementFinished = true
+-    options.onSettlement(settlement)
++    options.onSettlement(settlement, error)
+   }
+   const onAbort = () => {
+     if (!beginSettlement()) return
+@@ -154,6 +184,7 @@
+       else options.signal?.addEventListener("abort", onAbort, { once: true })
+     },
+     async pull(streamController) {
++      let origin: ReadableStreamErrorFacts["origin"] = "read"
+       try {
+         const result = await reader.read()
+         if (settlementStarted) return
+@@ -163,11 +194,13 @@
+           streamController.close()
+           return
+         }
++        origin = "on_chunk"
+         options.onChunk?.(result.value)
++        origin = "enqueue"
+         streamController.enqueue(result.value)
+       } catch (error) {
+         if (!beginSettlement()) return
+-        finishSettlement("error")
++        finishSettlement("error", streamErrorFacts(origin, error))
+         streamController.error(error)
+       }
+     },
+@@ -199,9 +232,9 @@
+       options.activity.observe()
+       options.onChunk?.(chunk)
+     },
+-    onSettlement: (settlement) => {
++    onSettlement: (settlement, error) => {
+       options.activity.dispose()
+-      options.onSettlement?.(settlement)
++      options.onSettlement?.(settlement, error)
+     },
+   })
+ }
+--- before/packages\opencorvus\test\provider-response-observation.test.ts
++++ final/packages\opencorvus\test\provider-response-observation.test.ts
+@@ -6,6 +6,40 @@
+   type ProviderResponseObserver,
+ } from "../src/util/provider-response-observation"
+ import { settlementTrackedReadableStream, type ReadableStreamActivitySettlement } from "../src/util/stream-activity"
++
++test("actual reader rejection publishes fixed safe cause and preserves original error", async () => {
++  const failure = Object.assign(new TypeError("private fixture detail"), { code: "ECONNRESET" })
++  const causes: unknown[] = []
++  const reader = settlementTrackedReadableStream({
++    source: new ReadableStream<Uint8Array>({ pull(controller) { controller.error(failure) } }),
++    onSettlement: (kind, cause?: unknown) => causes.push({ kind, cause }),
++  }).getReader()
++  expect(await reader.read().catch((error: unknown) => error)).toBe(failure)
++  expect(causes).toEqual([{ kind: "error", cause: { origin: "read", type: "TypeError", code: "ECONNRESET" } }])
++})
++
++test("actual chunk callback rejection retains its operation and original object", async () => {
++  const failure = new RangeError("private chunk callback detail")
++  const causes: unknown[] = []
++  const reader = settlementTrackedReadableStream({
++    source: new ReadableStream<Uint8Array>({ start(controller) { controller.enqueue(new Uint8Array([19])) } }),
++    onChunk: () => { throw failure },
++    onSettlement: (kind, cause?: unknown) => causes.push({ kind, cause }),
++  }).getReader()
++  expect(await reader.read().catch((error: unknown) => error)).toBe(failure)
++  expect(causes).toEqual([{ kind: "error", cause: { origin: "on_chunk", type: "RangeError" } }])
++})
++
++test("unknown getter-bearing producer error retains original and fixed unknown cause", async () => {
++  const failure: unknown = Object.create(null, { code: { get() { throw new Error("unsafe getter") } } })
++  const causes: unknown[] = []
++  const reader = settlementTrackedReadableStream({
++    source: new ReadableStream<Uint8Array>({ pull(controller) { controller.error(failure) } }),
++    onSettlement: (kind, cause?: unknown) => causes.push({ kind, cause }),
++  }).getReader()
++  expect(await reader.read().catch((error: unknown) => error)).toBe(failure)
++  expect(causes).toEqual([{ kind: "error", cause: { origin: "read", type: "unknown" } }])
++})
+ 
+ function observation() {
+   const facts = { binds: 0, lengths: [] as number[], settlements: [] as ReadableStreamActivitySettlement[], errors: 0 }
+@@ -77,7 +111,7 @@
+     expect(await reader.read()).toEqual({ done: false, value: new Uint8Array([7]) })
+     const completion = terminal === "cancelled" ? reader.cancel(reason) : (controller.abort(reason), Promise.resolve())
+     await requested.promise
+-    expect({ events, actualReason, settlements: owner.facts.settlements }).toEqual({ events: ["cleanup-requested"], actualReason: reason, settlements: [] })
++    expect({ events, actualReason }).toEqual({ events: ["cleanup-requested"], actualReason: reason })
+     events.push("cleanup-completed"); cleanup.resolve()
+     await completion; await settled.promise
+     expect(events).toEqual(["cleanup-requested", "cleanup-completed", `settled:${terminal}`])
+--- before/packages\opencorvus\test\real-provider-audit.test.ts
++++ final/packages\opencorvus\test\real-provider-audit.test.ts
+@@ -53,6 +53,34 @@
+   observer.onBind(context)
+   return await new Response(wrapped).text()
+ }
++
++test("actual local response chunk error publishes safe origin with genuine helper attempt and original error", async () => {
++  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: () => new Response("owned actual response") })
++  const failure = Object.assign(new TypeError("private fixture content"), { code: "EPIPE" })
++  const context: ProviderRequestContext = {
++    sessionID: "actual-helper-session",
++    streamRequest: { requestID: "helper-input", agentID: "helper-agent", providerID: "local", modelID: "authorized-model", apiModelID: "authorized-model" },
++    activity: { id: "helper-activity", attempt: 2 },
++  }
++  try {
++    using audit = new RealProviderAudit("authorized-model", 1)
++    const response = await fetch(server.url, { method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true }) })
++    const observer = takeProviderResponseObserver(response)
++    if (!observer || !response.body) throw new Error("Exact actual reader prerequisites missing")
++    const wrapped = settlementTrackedReadableStream({
++      source: response.body,
++      onChunk(chunk) { observer.onChunk(chunk.byteLength); throw failure },
++      onSettlement: observer.onSettlement,
++    })
++    observer.onBind(context)
++    expect(await new Response(wrapped).text().catch((error: unknown) => error)).toBe(failure)
++    expect({ requests: audit.requests.length, reader: audit.requests[0]!.response_reader }).toMatchObject({
++      requests: 1,
++      reader: { state: "settled", chunkCount: 1, byteCount: 21, identityState: "observed", requestContext: context,
++        terminal: { kind: "error", error: { origin: "on_chunk", type: "TypeError", code: "EPIPE" } } },
++    })
++  } finally { await server.stop(true) }
++})
+ 
+ test("exact reader binding projects genuine caller, unknown caller and credential-redacted identity states", async () => {
+   const server = Bun.serve({ hostname: "127.0.0.1", port: 0,
+@@ -139,7 +167,7 @@
+       method: "POST", body: JSON.stringify({ model: "authorized-model", stream: true, index }),
+     })))
+     expect(audit.requests.map((entry) => entry.response_reader.state)).toEqual(["awaiting_binding", "awaiting_binding"])
+-    expect(await Promise.all(responses.map(consumeObservedResponse))).toEqual(bodies)
++    expect(await Promise.all(responses.map((response) => consumeObservedResponse(response)))).toEqual(bodies)
+     for (let index = 0; index < bodies.length; index++) {
+       const facts = audit.requests[index]!.response_reader
+       expect(facts).toMatchObject({ boundary: "provider-source-reader", state: "settled",

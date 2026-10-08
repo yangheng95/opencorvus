@@ -1,0 +1,1 @@
+packages/opencorvus/test/memory/project-memory.test.ts(1628,13): error TS2353: Object literal may only specify known properties, and 'query' does not exist in type '{ projectID: string; sessionID: string; memoryToolAvailable: boolean; }'.

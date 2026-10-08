@@ -1,0 +1,33 @@
+[1/1] START test/real-provider-audit.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) actual HTTP flat and nested schemas publish bounded structural facts with unchanged input acknowledgement [16.17ms]
+(pass) actual local response chunk error publishes safe origin with genuine helper attempt and original error [10.57ms]
+(pass) exact reader binding projects genuine caller, unknown caller and credential-redacted identity states [12.71ms]
+(pass) throwing audit publisher preserves actual HTTP output, EOF and the exact exhausted-budget error [6.06ms]
+(pass) concurrent real local HTTP audit entries report their exact reader bytes and EOF [10.90ms]
+(pass) real local HTTP204 empty reader, HTTP error and unbound consumers retain actual observation states [7.59ms]
+(pass) actual local HTTP preserves flat, nested and unnamed tool declaration facts [12.43ms]
+(pass) actual local HTTP reports precise tools structural states with unchanged acknowledgements [7.95ms]
+(pass) an undeclared request ceiling retains every real local transport receipt [7.46ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after successful completion [6.41ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after body completion [4.35ms]
+(pass) outer audit lifetime observes real HTTP cleanup and restores fetch after cleanup completion [6.59ms]
+(pass) native plugin reuses the process audit and publishes one actual transport observation [24.94ms]
+(pass) copied OAuth refresh grants return a precise authority error while access is current [1.16ms]
+(pass) copied OAuth access expires with an explicit authority error [0.17ms]
+(pass) copied authority permits valid streaming and retains local observation after expiry [0.55ms]
+(pass) the last authorized streaming request completes before the next is refused [0.38ms]
+(pass) the audit reports exact model and streaming contract errors [1.54ms]
+(pass) an exhausted cumulative balance returns the budget error [0.19ms]
+(pass) known original and refreshed credentials produce redacted diagnostics [0.17ms]
+(pass) registered input evidence records exact decoded positions while a real local HTTP receiver gets the original bytes [8.22ms]
+(pass) probe declarations return precise configuration errors for ambiguous identities and known credentials [0.32ms]
+(pass) sensitive JSON path components have explicit redacted location evidence [0.49ms]
+
+ 23 pass
+ 0 fail
+ 99 expect() calls
+Ran 23 tests across 1 file. [1422.00ms]
+[1/1] DONE test/real-provider-audit.test.ts exit=0 duration=2.19s

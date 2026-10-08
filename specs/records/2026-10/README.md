@@ -260,3 +260,8 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Shared logger namespace95](../../artifacts/2026-10-05-connection-workspace-authority/logger-reserved-fields-investigation-95.md): actual Session subject-time collisions and Pino reserved envelope ownership audited; raw unknown chronology preserved, product repair held.
 - [Genuine child identity124 before](2026-10-08-child-message-identity-before.md): actual public identity omission and completed Task; supervision tooling failure retained, scope closed and live/download limits explicit.
 - [Complete conversation identity121](2026-10-08-conversation-message-identity.md): shared reader/parser repair, positive contracts and real125 Sources; original combined oracle failure and remaining live limits explicit.
+- [Reader/helper observation126](2026-10-08-reader-helper-observation.md): safe actual error/helper attempt provenance, focused local checks and preserved first failures; integrated types0 after preserved fixture failure,125 cause UNKNOWN and enqueue genuine execution unmet.
+
+
+- [Reader/helper127 prepared plan](../../artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-plan-127.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/reader-helper-live-127/live-01/README.md): preparation only; actual runtime/model/Task/UI acceptance held pending Root source delivery and explicit admission,125 failure unchanged.
+

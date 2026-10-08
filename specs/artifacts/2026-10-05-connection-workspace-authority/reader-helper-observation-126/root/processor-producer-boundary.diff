@@ -1,0 +1,85 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/reader-helper-observation-126/root/processor-producer-boundary.before.ts b/packages/opencorvus/test/session/processor-producer-boundary.test.ts
+index b4405f20..cd4eb6ef 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/reader-helper-observation-126/root/processor-producer-boundary.before.ts
++++ b/packages/opencorvus/test/session/processor-producer-boundary.test.ts
+@@ -29,6 +29,8 @@ import { EngineTaskTable } from "@/engine/engine.sql"
+ import { AgentTrace } from "@/trace"
+ import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
+ 
++// These producer-boundary spies intentionally expose only fullStream. The unknown
++// intermediate marks that partial fixture boundary, not a complete SDK result.
+ afterEach(async () => {
+   await Instance.disposeAll()
+   await resetMemoryDatabase()
+@@ -65,7 +67,7 @@ test("real idle retry scopes pending JSON observations to each actual attempt be
+           })
+         } else yield { type: "tool-input-end", id }
+       })(),
+-    }) as Awaited<ReturnType<typeof LLM.stream>>)
++    }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+     const running = process({}, { onChunk: async ({ chunk }: { chunk: { type: string } }) => {
+       if (chunk.type === "tool-input-end") { entered.resolve(); await release.promise }
+     } })
+@@ -289,7 +291,7 @@ test("processor observation records accepted and rejected current event identiti
+       yield { type: "tool-input-delta", id: "known-call", delta: "late" }
+       yield { type: "tool-result", toolCallId: "known-call", toolName: "echo", input: {}, output: { title: "Echo", output: "actual result", metadata: {} } }
+       yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+-    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
++    })() }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+     try {
+       await process({})
+       const settled = recorded.find((entry) => entry.phase === "settled")
+@@ -320,7 +322,7 @@ test("abort during an awaited caller hook publishes its immediate hook phase and
+     })
+     const stream = spyOn(LLM, "stream").mockImplementation(async () => ({ fullStream: (async function* () {
+       yield { type: "start" }
+-    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
++    })() }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+     const running = process({}, { onChunk: async () => { hookEntered.resolve(); await hookRelease.promise } })
+     try {
+       await hookEntered.promise
+@@ -333,7 +335,7 @@ test("abort during an awaited caller hook publishes its immediate hook phase and
+       expect(processor.message.error).toMatchObject({ name: "MessageAbortedError" })
+       expect(recorded.find((entry) => entry.phase === "settled")).toMatchObject({ taskID,
+         observation: { phase: "aborted", received: 1, finished: 1, failures: { abort: 1 } } })
+-      expect(AgentTrace.readTaskEvents(taskID).filter((entry) => entry.kind === "llm_stream_observation").map((entry) => entry.payload.phase))
++      expect(AgentTrace.readTaskEvents(taskID).filter((entry) => entry.kind === "llm_stream_observation").map((entry) => { if (!entry.payload) throw new Error("Expected canonical stream observation payload"); return entry.payload.phase }))
+         .toEqual(["aborted", "settled"])
+     } finally { hookRelease.resolve(); await running; stream.mockRestore(); recorder.mockRestore() }
+   }, { bindTask: true })
+@@ -357,7 +359,7 @@ test("an aborted current attempt records its exact pending JSON structure throug
+       yield { type: "tool-input-start", id: "partial-input", toolName: "echo" }
+       yield { type: "tool-input-delta", id: "partial-input", delta: '{"x":' }
+       yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+-    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
++    })() }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+     const running = process({}, { onChunk: async ({ chunk }: any) => {
+       if (chunk.type === "finish") { entered.resolve(); await release.promise }
+     } })
+@@ -390,7 +392,7 @@ test("a throwing diagnostic trace recorder preserves the original successful pro
+       yield { type: "text-delta", id: "answer", text: "Original successful output" }
+       yield { type: "text-end", id: "answer" }
+       yield { type: "finish", finishReason: "stop", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+-    })() }) as Awaited<ReturnType<typeof LLM.stream>>)
++    })() }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+     try {
+       expect(await process({})).toBe("continue")
+       expect(recorder.mock.calls.length).toBeGreaterThanOrEqual(1)
+@@ -446,7 +448,7 @@ for (const boundary of ["complete", "cancel"] as const) {
+           }
+           yield { type: "finish", finishReason: "tool-calls", totalUsage: { inputTokens: 1, outputTokens: 1, totalTokens: 2 } }
+         })(),
+-      }) as Awaited<ReturnType<typeof LLM.stream>>)
++      }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+       const running = process({})
+       try {
+         await entered.promise
+@@ -524,7 +526,7 @@ test("a delta received during slow draft publication produces a complete latest
+         await providerRelease.promise
+         input.abort.throwIfAborted()
+       })(),
+-    }) as Awaited<ReturnType<typeof LLM.stream>>)
++    }) as unknown as Awaited<ReturnType<typeof LLM.stream>>)
+     const running = process({})
+     try {
+       await lastDelta.promise

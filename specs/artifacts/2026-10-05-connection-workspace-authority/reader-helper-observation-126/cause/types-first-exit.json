@@ -1,0 +1,4 @@
+{
+  "command": "node --max-old-space-size=8192 packages/opencorvus/node_modules/typescript/bin/tsc --noEmit -p cause/types.json",
+  "exitCode": 2
+}

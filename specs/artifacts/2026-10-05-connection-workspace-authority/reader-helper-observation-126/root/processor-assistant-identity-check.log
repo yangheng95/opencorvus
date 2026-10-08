@@ -1,0 +1,10 @@
+bun test v1.3.14 (0d9b296a)
+
+test\session\processor-producer-boundary.test.ts:
+(pass) real idle retry scopes pending JSON observations to each actual attempt before external cancellation [2478.39ms]
+
+ 1 pass
+ 9 filtered out
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [4.39s]

@@ -1,0 +1,97 @@
+[1/1] START test/provider-response-observation.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+13 |   const reader = settlementTrackedReadableStream({
+14 |     source: new ReadableStream<Uint8Array>({ pull(controller) { controller.error(failure) } }),
+15 |     onSettlement: (kind, cause?: unknown) => causes.push({ kind, cause }),
+16 |   }).getReader()
+17 |   expect(await reader.read().catch((error: unknown) => error)).toBe(failure)
+18 |   expect(causes).toEqual([{ kind: "error", cause: { origin: "read", type: "TypeError", code: "ECONNRESET" } }])
+                      ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "cause": {
+-       "code": "ECONNRESET",
+-       "origin": "read",
+-       "type": "TypeError",
+-     },
++     "cause": undefined,
+      "kind": "error",
+    },
+  ]
+
+- Expected  - 5
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-response-observation.test.ts:18:18)
+(fail) actual reader rejection publishes fixed safe cause and preserves original error [6.56ms]
+25 |     source: new ReadableStream<Uint8Array>({ start(controller) { controller.enqueue(new Uint8Array([19])) } }),
+26 |     onChunk: () => { throw failure },
+27 |     onSettlement: (kind, cause?: unknown) => causes.push({ kind, cause }),
+28 |   }).getReader()
+29 |   expect(await reader.read().catch((error: unknown) => error)).toBe(failure)
+30 |   expect(causes).toEqual([{ kind: "error", cause: { origin: "on_chunk", type: "RangeError" } }])
+                      ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "cause": {
+-       "origin": "on_chunk",
+-       "type": "RangeError",
+-     },
++     "cause": undefined,
+      "kind": "error",
+    },
+  ]
+
+- Expected  - 4
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-response-observation.test.ts:30:18)
+(fail) actual chunk callback rejection retains its operation and original object [0.54ms]
+36 |   const reader = settlementTrackedReadableStream({
+37 |     source: new ReadableStream<Uint8Array>({ pull(controller) { controller.error(failure) } }),
+38 |     onSettlement: (kind, cause?: unknown) => causes.push({ kind, cause }),
+39 |   }).getReader()
+40 |   expect(await reader.read().catch((error: unknown) => error)).toBe(failure)
+41 |   expect(causes).toEqual([{ kind: "error", cause: { origin: "read", type: "unknown" } }])
+                      ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "cause": {
+-       "origin": "read",
+-       "type": "unknown",
+-     },
++     "cause": undefined,
+      "kind": "error",
+    },
+  ]
+
+- Expected  - 4
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-response-observation.test.ts:41:18)
+(fail) unknown getter-bearing producer error retains original and fixed unknown cause [0.35ms]
+(pass) exact Response registration retains its actual owner through a typed conflict [0.35ms]
+(pass) controlled split and empty chunks preserve exact bytes and joined EOF scalars [1.55ms]
+(pass) cancelled waits for actual upstream cleanup before publishing physical settlement [0.70ms]
+(pass) aborted waits for actual upstream cleanup before publishing physical settlement [0.25ms]
+(pass) actual read error retains its producer error and error settlement [0.20ms]
+(pass) an already-aborted owner retains its exact abort reason and joins upstream cleanup [0.27ms]
+(pass) diagnostic callback failures preserve the actual response output and EOF [1.62ms]
+(pass) two concurrent real HTTP responses retain exact object ownership and actual SSE bytes [9.57ms]
+
+ 8 pass
+ 3 fail
+ 33 expect() calls
+Ran 11 tests across 1 file. [1234.00ms]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-response-observation.test.ts
+[1/1] DONE test/provider-response-observation.test.ts exit=1 duration=1.99s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-response-observation.test.ts

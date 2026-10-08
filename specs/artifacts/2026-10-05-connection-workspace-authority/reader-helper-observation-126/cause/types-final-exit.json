@@ -1,0 +1,5 @@
+{
+  "includes": "all src plus observer/audit/abort tests and real-provider-audit.ts",
+  "command": "node tsc --noEmit -p cause/types.json",
+  "exitCode": 0
+}
