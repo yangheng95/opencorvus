@@ -439,3 +439,14 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [Markdown main148只读调查](markdown-main-render-retirement-investigation-148.md)：147 full safe样本的main四Parts退休与worker730rows分离；viewport/buffer/epoch原因未证，下一观察仅proposal，无Rendering修复。
 
+
+- [149 临时观察](markdown-viewport-lifetime-observation-plan-149.md)：最终 types/build 实际0；诊断不是 Rendering 修复，须在154前移除。
+
+- [150 实际闭合](markdown-visible-owner-live-150/README.md)：193505ms、19 Sol EOF、原 once0；首次 offscreen 点击失败与误导截图名保留，live child 未验收。
+
+- [151 只读分析](store-card-node-lifetime-investigation-151.md)：store in-place 反证保留；[152 功能修复](store-card-accessor-repair-plan-152.md)限定 accessor，不宣称最终视觉通过。
+
+
+- [153 闭合比较](store-card-accessor-after-153/README.md)：225041ms、19 Sol EOF、原 once0；live child 未验收。[154 最终准备](store-card-accessor-final-154/README.md)已实际闭合，限定主区合格、首次live Source阅读失败保留；[156 offscreen 只读线索](offscreen-markdown-measurement-investigation-156.md)未证明根因。
+
+- [157 Sources UX只读调查](sources-reading-usability-investigation-157.md)与[158 focus/follow后续计划](source-reading-focus-follow-plan-158.md)：154首次live Source焦点滚出视口失败保留，后续refocus/窄Tooltip/官方Enter成功分开；待准入，连续目标 ACTIVE。

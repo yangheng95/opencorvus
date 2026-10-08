@@ -1,0 +1,346 @@
+diff --git a/packages/overlay/src/components/Card.tsx b/packages/overlay/src/components/Card.tsx
+index 60aaefb2..10f244be 100644
+--- a/packages/overlay/src/components/Card.tsx
++++ b/packages/overlay/src/components/Card.tsx
+@@ -241,7 +241,7 @@ export function Card(props: { node: CardNode; depth: number }) {
+               <For each={visibleChildIDs()}>
+                 {(id) => (
+                   <StoreCardNode id={id} ownerID={props.node.id}>
+-                    {(node) => <Card node={node} depth={props.depth + 1} />}
++                    {(node) => <Card node={node()} depth={props.depth + 1} />}
+                   </StoreCardNode>
+                 )}
+               </For>
+diff --git a/packages/overlay/src/components/CardParts.tsx b/packages/overlay/src/components/CardParts.tsx
+index 9f1d4863..7aa08ab5 100644
+--- a/packages/overlay/src/components/CardParts.tsx
++++ b/packages/overlay/src/components/CardParts.tsx
+@@ -77,7 +77,11 @@ function RenderableCardPart(props: {
+     <Switch fallback={unsupportedPartFallback(part())}>
+       <Match when={part()?.type === "text" && (part().text || "").trim()}>
+         <div data-quotation-message={part().messageID} data-quotation-session={part().sessionID}>
+-          <TextPart text={part().text || ""} streaming={props.streaming && part() === props.streamingTextPart} />
++          <TextPart
++            text={part().text || ""}
++            streaming={props.streaming && part() === props.streamingTextPart}
++            observation={{ partID: part().id, messageID: part().messageID, sessionID: part().sessionID }}
++          />
+         </div>
+       </Match>
+       <Match when={part()?.type === "part-error"}>
+diff --git a/packages/overlay/src/components/Conversation.tsx b/packages/overlay/src/components/Conversation.tsx
+index 4ec38efe..ac9a2145 100644
+--- a/packages/overlay/src/components/Conversation.tsx
++++ b/packages/overlay/src/components/Conversation.tsx
+@@ -1,4 +1,4 @@
+-import { ErrorBoundary, For, Show, createMemo, onMount, onCleanup, createSignal, createEffect, on } from "solid-js"
++import { ErrorBoundary, For, Show, createMemo, onMount, onCleanup, createSignal, createEffect, on, untrack } from "solid-js"
+ import { Portal } from "solid-js/web"
+ import { Virtualizer, type CustomContainerComponentProps, type VirtualizerHandle } from "virtua/solid"
+ import { cardTreeStore, publishedCardTreeVersion } from "../store/card-tree"
+@@ -37,6 +37,8 @@ import { SubagentProgressGrid } from "./SubagentProgressGrid"
+ import { ConversationCard } from "./ConversationCard"
+ import { ConversationArtifactSummary } from "./ConversationArtifactSummary"
+ import type { ComposerIntent } from "@opencorvus-ai/transport-protocol"
++import { AppLog } from "../utils/log"
++import { markdownElementLifetimeSnapshot } from "./text-part-model"
+ 
+ const ESTIMATED_CARD_HEIGHT = 320
+ const VIRTUAL_BUFFER_PIXELS = ESTIMATED_CARD_HEIGHT * 4
+@@ -136,20 +138,57 @@ function equalConversationItems(
+ function VirtualizedConversationItem(props: {
+   item: () => SubagentConversationItem
+   onOpenSubagentConversation: (sessionID: string) => void
++  observationMetrics: (id: string) => Record<string, number | boolean | null>
+ }) {
++  let observationRoot: HTMLDivElement | undefined
++  const constructedAt = new Date().toISOString()
++  let mountedElement: ReturnType<typeof markdownElementLifetimeSnapshot> | null = null
++  let mountedItem: { id: string; kind: string; cardID: string | null } | null = null
++  const observe = (phase: "mount" | "cleanup") => {
++    untrack(() => {
++      try {
++        let current: SubagentConversationItem | null = null
++        try { current = props.item() } catch { /* Current item may already be removed at cleanup. */ }
++        if (phase === "mount" && current) {
++          mountedItem = { id: current.id, kind: current.kind, cardID: current.kind === "card" ? current.cardID : null }
++        }
++        if (!mountedItem) return
++        let metrics: Record<string, number | boolean | null> | null = null
++        try { metrics = props.observationMetrics(mountedItem.id) } catch { /* Actual metrics are unavailable. */ }
++        const element = markdownElementLifetimeSnapshot(observationRoot)
++        if (phase === "mount") mountedElement = element
++        AppLog.debug("conversation-row-lifetime-observation", phase, {
++          observedAt: new Date().toISOString(),
++          constructedAt,
++          mountedItem,
++          currentItemAvailable: Boolean(current),
++          currentItem: current ? { id: current.id, kind: current.kind, cardID: current.kind === "card" ? current.cardID : null } : null,
++          mountedElement,
++          currentElement: element,
++          metricsRequestedID: mountedItem.id,
++          metricsAvailable: Boolean(metrics),
++          metrics,
++        })
++      } catch {
++        // Observation failure must preserve actual row rendering and disposal.
++      }
++    })
++  }
++  onMount(() => observe("mount"))
++  onCleanup(() => observe("cleanup"))
+   const item = createMemo(props.item)
+   const gridItem = createMemo(() => {
+     const current = item()
+     return current.kind === "subagent-grid" ? current : null
+   })
+   return (
+-    <div class="conversation-virtual-item" data-virtual-card-id={item().id}>
++    <div ref={observationRoot} class="conversation-virtual-item" data-virtual-card-id={item().id}>
+       <ErrorBoundary fallback={(error) => <ConversationCardRenderFailure id={item().id} error={error} />}>
+         <Show
+           when={gridItem()}
+           fallback={
+             <StoreCardNode id={(item() as Extract<SubagentConversationItem, { kind: "card" }>).cardID}>
+-              {(node) => <ConversationCard node={node} depth={0} collapsible={false} />}
++              {(node) => <ConversationCard node={node()} depth={0} collapsible={false} />}
+             </StoreCardNode>
+           }
+         >
+@@ -189,6 +228,26 @@ function VirtualizedConversationCards(props: {
+   )
+   const order = createMemo(() => items().map((item) => item.id))
+   const itemByID = createMemo(() => new Map(items().map((item) => [item.id, item])))
++  const observationMetrics = (id: string): Record<string, number | boolean | null> => {
++    const ids = order()
++    const index = ids.indexOf(id)
++    const handle = virtualizer
++    const validIndex = index >= 0 && index < ids.length
++    return {
++      handleAvailable: Boolean(handle),
++      index,
++      orderCount: ids.length,
++      bufferPixels: VIRTUAL_BUFFER_PIXELS,
++      pinned: validIndex ? pinnedIndexes().includes(index) : null,
++      scrollOffset: handle?.scrollOffset ?? null,
++      scrollSize: handle?.scrollSize ?? null,
++      viewportSize: handle?.viewportSize ?? null,
++      nearestViewportStart: handle && ids.length > 0 ? handle.findItemIndex(handle.scrollOffset) : null,
++      nearestViewportEnd: handle && ids.length > 0 ? handle.findItemIndex(handle.scrollOffset + handle.viewportSize) : null,
++      itemOffset: handle && validIndex ? handle.getItemOffset(index) : null,
++      itemSize: handle && validIndex ? handle.getItemSize(index) : null,
++    }
++  }
+   function subagentSessionForCard(cardID: string): string | undefined {
+     const direct = subagentSessionIDFromProgressCardID(cardID)
+     if (direct) return direct
+@@ -364,6 +423,7 @@ function VirtualizedConversationCards(props: {
+                 <VirtualizedConversationItem
+                   item={currentItem}
+                   onOpenSubagentConversation={props.onOpenSubagentConversation}
++                  observationMetrics={observationMetrics}
+                 />
+               )
+             }}
+diff --git a/packages/overlay/src/components/StoreCardNode.tsx b/packages/overlay/src/components/StoreCardNode.tsx
+index 4e21e288..043692a3 100644
+--- a/packages/overlay/src/components/StoreCardNode.tsx
++++ b/packages/overlay/src/components/StoreCardNode.tsx
+@@ -1,4 +1,4 @@
+-import type { JSX } from "solid-js"
++import type { Accessor, JSX } from "solid-js"
+ 
+ import { cardTreeStore, type CardNode } from "../store/card-tree"
+ 
+@@ -11,6 +11,6 @@ export function storeCardNode(id: string, ownerID?: string): CardNode {
+   return node
+ }
+ 
+-export function StoreCardNode(props: { id: string; ownerID?: string; children: (node: CardNode) => JSX.Element }) {
+-  return <>{props.children(storeCardNode(props.id, props.ownerID))}</>
++export function StoreCardNode(props: { id: string; ownerID?: string; children: (node: Accessor<CardNode>) => JSX.Element }) {
++  return props.children(() => storeCardNode(props.id, props.ownerID))
+ }
+diff --git a/packages/overlay/src/components/TextPart.tsx b/packages/overlay/src/components/TextPart.tsx
+index e98cc530..d49ce8d4 100644
+--- a/packages/overlay/src/components/TextPart.tsx
++++ b/packages/overlay/src/components/TextPart.tsx
+@@ -1,7 +1,7 @@
+ /** @jsxImportSource solid-js */
+ import { For, Show, type JSX } from "solid-js"
+ import { t } from "../utils/i18n"
+-import { createStreamingTextPartModel } from "./text-part-model"
++import { createStreamingTextPartModel, type MarkdownLifetimeObservationContext } from "./text-part-model"
+ 
+ function isStandaloneSourceFileMarkup(html: string): boolean {
+   return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
+@@ -10,8 +10,20 @@ function isStandaloneSourceFileMarkup(html: string): boolean {
+ /** Worker-backed Markdown with stable completed blocks and a raw live tail.
+  * DOM insertion is spread across frames for both streaming and loaded text. */
+ 
+-export function TextPart(props: { text: string; streaming?: boolean; trailing?: JSX.Element }) {
+-  return <StreamingMarkdownPart text={props.text} streaming={props.streaming} trailing={props.trailing} />
++export function TextPart(props: {
++  text: string
++  streaming?: boolean
++  trailing?: JSX.Element
++  observation?: MarkdownLifetimeObservationContext
++}) {
++  return (
++    <StreamingMarkdownPart
++      text={props.text}
++      streaming={props.streaming}
++      trailing={props.trailing}
++      observation={props.observation}
++    />
++  )
+ }
+ 
+ export function StreamingMarkdownPart(props: {
+@@ -20,11 +32,18 @@ export function StreamingMarkdownPart(props: {
+   className?: string
+   activeTextClassName?: string
+   trailing?: JSX.Element
++  observation?: MarkdownLifetimeObservationContext
+ }) {
+-  const { frozenHtml, activeText, pending, error } = createStreamingTextPartModel(props)
++  let rootElement: HTMLDivElement | undefined
++  const { frozenHtml, activeText, pending, error } = createStreamingTextPartModel({
++    get text() { return props.text },
++    get streaming() { return props.streaming },
++    get observation() { return props.observation },
++    observationElement: () => rootElement,
++  })
+ 
+   return (
+-    <div class={props.className || "msg-text"}>
++    <div ref={rootElement} class={props.className || "msg-text"}>
+       <For each={frozenHtml()}>
+         {(html) => (
+           <div
+diff --git a/packages/overlay/src/components/text-part-model.ts b/packages/overlay/src/components/text-part-model.ts
+index cfae2fa1..2be972b8 100644
+--- a/packages/overlay/src/components/text-part-model.ts
++++ b/packages/overlay/src/components/text-part-model.ts
+@@ -1,7 +1,50 @@
+-import { batch, createEffect, createSignal, onCleanup } from "solid-js"
++import { batch, createEffect, createSignal, onCleanup, onMount, untrack } from "solid-js"
+ import { createMarkdownRenderer } from "../services/markdown-render"
+ import { localeTag } from "../utils/i18n"
+ import { appStore } from "../store/app"
++import { cardTreeStore } from "../store/card-tree"
++import { boardStore } from "../store/board"
++import { AppLog } from "../utils/log"
++
++export type MarkdownLifetimeObservationContext = { partID: string; messageID: string; sessionID: string }
++
++/** Temporary lifecycle metadata collector; callers protect and untrack every read. */
++export function markdownElementLifetimeSnapshot(element: HTMLElement | undefined) {
++  const main = element?.closest<HTMLElement>("#chatScroll")
++  const child = element?.closest<HTMLElement>('[data-ui="subagent-conversation-scroll"]')
++  const scroller = child ?? main
++  const rect = element?.getBoundingClientRect()
++  const scrollRect = scroller?.getBoundingClientRect()
++  const source = boardStore.selectedSource
++  return {
++    elementPresent: Boolean(element),
++    connected: element?.isConnected ?? null,
++    tag: element?.tagName ?? null,
++    dockID: element?.closest("#rightDock")?.id ?? null,
++    dockBodyID: element?.closest("#rightDockBody")?.id ?? null,
++    virtualItemID: element?.closest(".conversation-virtual-item")?.getAttribute("data-virtual-card-id") ?? null,
++    cardID: element?.closest("[data-card-id]")?.getAttribute("data-card-id") ?? null,
++    childScroll: Boolean(child),
++    mainScroll: Boolean(main),
++    rect: rect ? { top: rect.top, bottom: rect.bottom, height: rect.height } : null,
++    scroll: scroller && scrollRect ? {
++      id: scroller.id || null,
++      child: Boolean(child),
++      top: scrollRect.top,
++      bottom: scrollRect.bottom,
++      scrollTop: scroller.scrollTop,
++      clientHeight: scroller.clientHeight,
++      scrollHeight: scroller.scrollHeight,
++    } : null,
++    intersectsScroll: element?.isConnected && rect && scrollRect
++      ? rect.bottom > scrollRect.top && rect.top < scrollRect.bottom
++      : null,
++    viewport: { width: window.innerWidth, height: window.innerHeight },
++    treeEpoch: cardTreeStore.treeEpoch,
++    treeReplacementCause: cardTreeStore.treeReplacementCause,
++    selectedSource: source ? { kind: source.kind, id: source.id } : null,
++  }
++}
+ 
+ export const STREAMING_ACTIVE_TEXT_LIMIT = 12_000
+ 
+@@ -13,7 +56,12 @@ export function visibleStreamingText(text: string, limit = STREAMING_ACTIVE_TEXT
+ 
+ /** Parse/highlight off-thread; commit bounded batches after browser paints.
+  * Frozen HTML strings retain their Solid For identity across updates. */
+-export function createStreamingTextPartModel(props: { text: string; streaming?: boolean }) {
++export function createStreamingTextPartModel(props: {
++  text: string
++  streaming?: boolean
++  observation?: MarkdownLifetimeObservationContext
++  observationElement?: () => HTMLElement | undefined
++}) {
+   const [frozenHtml, setFrozenHtml] = createSignal<string[]>([])
+   const [activeText, setActiveText] = createSignal("")
+   const [pending, setPending] = createSignal(false)
+@@ -29,6 +77,47 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   let latestLocale = ""
+   let latestLocaleSeq = -1
+   let latestStreaming = false
++  const constructedAt = new Date().toISOString()
++  let mountedTuple: MarkdownLifetimeObservationContext | null = null
++  let mountedElement: ReturnType<typeof markdownElementLifetimeSnapshot> | null = null
++  const observe = (phase: "mount" | "cleanup") => {
++    untrack(() => {
++      try {
++        const value = props.observation
++        if (
++          !value ||
++          ![value.partID, value.messageID, value.sessionID].every((id) => typeof id === "string" && id.trim().length > 0)
++        ) return
++        const tuple = { partID: value.partID, messageID: value.messageID, sessionID: value.sessionID }
++        const element = markdownElementLifetimeSnapshot(props.observationElement?.())
++        if (phase === "mount") {
++          mountedTuple = tuple
++          mountedElement = element
++        }
++        AppLog.debug("markdown-viewport-lifetime-observation", phase, {
++          observedAt: new Date().toISOString(),
++          constructedAt,
++          mountedTuple,
++          currentTuple: tuple,
++          mountedElement,
++          currentElement: element,
++          revision,
++          receivedRevision,
++          textLength: latestText.length,
++          streaming: latestStreaming,
++          localeSeq: latestLocaleSeq,
++          frozenCount: frozenHtml().length,
++          activeLength: activeText().length,
++          pending: pending(),
++          error: Boolean(error()),
++          renderingState: pending() && frozenHtml().length === 0 && !activeText(),
++        })
++      } catch {
++        // Temporary observation has no Markdown execution authority.
++      }
++    })
++  }
++  onMount(() => observe("mount"))
+ 
+   const mount = () => {
+     mountFrame = 0
+@@ -118,6 +207,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   })
+ 
+   onCleanup(() => {
++    observe("cleanup")
+     disposed = true
+     cancelAnimationFrame(requestFrame)
+     cancelAnimationFrame(mountFrame)

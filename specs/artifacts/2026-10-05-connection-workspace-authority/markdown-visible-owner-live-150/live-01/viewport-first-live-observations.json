@@ -1,0 +1,2385 @@
+[
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:14.782Z",
+    "service": "overlay:conversation-row-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:14.267Z",
+      "constructedAt": "2026-10-08T08:34:24.427Z",
+      "mountedItem": {
+        "id": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "kind": "subagent-grid",
+        "cardID": null
+      },
+      "currentItemAvailable": true,
+      "currentItem": {
+        "id": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "kind": "subagent-grid",
+        "cardID": null
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 473.5833435058594,
+          "bottom": 564.9166793823242,
+          "height": 91.33333587646484
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 117.33333587646484,
+          "clientHeight": 635,
+          "scrollHeight": 753
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 612.2396240234375,
+          "bottom": 813.5729675292969,
+          "height": 201.33334350585938
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 884
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "metricsRequestedID": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+      "metricsAvailable": true,
+      "metrics": {
+        "handleAvailable": true,
+        "index": 2,
+        "orderCount": 3,
+        "bufferPixels": 1280,
+        "pinned": false,
+        "scrollOffset": 0,
+        "scrollSize": 696.90625,
+        "viewportSize": 448,
+        "nearestViewportStart": 0,
+        "nearestViewportEnd": 1,
+        "itemOffset": 495.578125,
+        "itemSize": 201.328125
+      }
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:14.782Z",
+    "service": "overlay:conversation-row-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:14.431Z",
+      "constructedAt": "2026-10-08T08:35:14.422Z",
+      "mountedItem": {
+        "id": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "kind": "subagent-grid",
+        "cardID": null
+      },
+      "currentItemAvailable": true,
+      "currentItem": {
+        "id": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "kind": "subagent-grid",
+        "cardID": null
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 612.2396240234375,
+          "bottom": 813.5729675292969,
+          "height": 201.33334350585938
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 884
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 612.2396240234375,
+          "bottom": 813.5729675292969,
+          "height": 201.33334350585938
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 884
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "metricsRequestedID": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+      "metricsAvailable": true,
+      "metrics": {
+        "handleAvailable": true,
+        "index": 2,
+        "orderCount": 3,
+        "bufferPixels": 1280,
+        "pinned": false,
+        "scrollOffset": 0,
+        "scrollSize": 696.90625,
+        "viewportSize": 448,
+        "nearestViewportStart": 0,
+        "nearestViewportEnd": 1,
+        "itemOffset": 495.578125,
+        "itemSize": 201.328125
+      }
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:22.487Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:21.968Z",
+      "constructedAt": "2026-10-08T08:34:24.365Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 67.33333587646484,
+          "bottom": 67.33333587646484,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 102,
+          "clientHeight": 635,
+          "scrollHeight": 738
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 175.33334350585938,
+          "bottom": 353.90626525878906,
+          "height": 178.5729217529297
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 884
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 327,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 2,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:22.487Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:21.97Z",
+      "constructedAt": "2026-10-08T08:34:24.364Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 383.8958435058594,
+          "bottom": 383.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 102,
+          "clientHeight": 635,
+          "scrollHeight": 738
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 491.8958435058594,
+          "bottom": 538.9166793823242,
+          "height": 47.020835876464844
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 884
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 62,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 1,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:22.487Z",
+    "service": "overlay:conversation-row-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:21.978Z",
+      "constructedAt": "2026-10-08T08:35:21.968Z",
+      "mountedItem": {
+        "id": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "kind": "card",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC"
+      },
+      "currentItemAvailable": true,
+      "currentItem": {
+        "id": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "kind": "card",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 829.5729370117188,
+          "bottom": 881.5729370117188,
+          "height": 52
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 829.5729370117188,
+          "bottom": 881.5729370117188,
+          "height": 52
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "metricsRequestedID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+      "metricsAvailable": true,
+      "metrics": {
+        "handleAvailable": true,
+        "index": 3,
+        "orderCount": 4,
+        "bufferPixels": 1280,
+        "pinned": false,
+        "scrollOffset": 0,
+        "scrollSize": 1016.90625,
+        "viewportSize": 448,
+        "nearestViewportStart": 0,
+        "nearestViewportEnd": 1,
+        "itemOffset": 696.90625,
+        "itemSize": 320
+      }
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:22.487Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:21.979Z",
+      "constructedAt": "2026-10-08T08:35:21.969Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:22.487Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:21.979Z",
+      "constructedAt": "2026-10-08T08:35:21.971Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:32.931Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:32.417Z",
+      "constructedAt": "2026-10-08T08:35:32.413Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 960
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 960
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.355Z",
+      "constructedAt": "2026-10-08T08:35:32.413Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 960
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 915.5729370117188,
+          "bottom": 962.5937728881836,
+          "height": 47.020835876464844
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1085
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 15,
+      "receivedRevision": 15,
+      "textLength": 103,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 1,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.358Z",
+      "constructedAt": "2026-10-08T08:35:21.969Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 175.33334350585938,
+          "bottom": 353.90626525878906,
+          "height": 178.5729217529297
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1085
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 327,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 2,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.362Z",
+      "constructedAt": "2026-10-08T08:35:21.971Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1204
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 491.8958435058594,
+          "bottom": 538.9166793823242,
+          "height": 47.020835876464844
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1085
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 62,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 1,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:conversation-row-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.374Z",
+      "constructedAt": "2026-10-08T08:35:48.355Z",
+      "mountedItem": {
+        "id": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "kind": "card",
+        "cardID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm"
+      },
+      "currentItemAvailable": true,
+      "currentItem": {
+        "id": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "kind": "card",
+        "cardID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 1030.5833740234375,
+          "bottom": 1082.5833740234375,
+          "height": 52
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 1030.5833740234375,
+          "bottom": 1082.5833740234375,
+          "height": 52
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "metricsRequestedID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+      "metricsAvailable": true,
+      "metrics": {
+        "handleAvailable": true,
+        "index": 4,
+        "orderCount": 5,
+        "bufferPixels": 1280,
+        "pinned": false,
+        "scrollOffset": 0,
+        "scrollSize": 1217.921875,
+        "viewportSize": 448,
+        "nearestViewportStart": 0,
+        "nearestViewportEnd": 1,
+        "itemOffset": 897.921875,
+        "itemSize": 320
+      }
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.376Z",
+      "constructedAt": "2026-10-08T08:35:48.357Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.376Z",
+      "constructedAt": "2026-10-08T08:35:48.361Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.377Z",
+      "constructedAt": "2026-10-08T08:35:48.364Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:conversation-row-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.656Z",
+      "constructedAt": "2026-10-08T08:35:48.355Z",
+      "mountedItem": {
+        "id": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "kind": "card",
+        "cardID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm"
+      },
+      "currentItemAvailable": false,
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 1030.5833740234375,
+          "bottom": 1082.5833740234375,
+          "height": 52
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 1022.5833740234375,
+          "bottom": 1090.5833740234375,
+          "height": 68
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "metricsRequestedID": "delegated-worker:session:ses_hxsSLoPUx6AgqMADXmke:message:msg_g0VXRfXYv008DFSOFaEm",
+      "metricsAvailable": true,
+      "metrics": {
+        "handleAvailable": true,
+        "index": -1,
+        "orderCount": 5,
+        "bufferPixels": 1280,
+        "pinned": null,
+        "scrollOffset": 0,
+        "scrollSize": 973.921875,
+        "viewportSize": 448,
+        "nearestViewportStart": 0,
+        "nearestViewportEnd": 1,
+        "itemOffset": null,
+        "itemSize": null
+      }
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.658Z",
+      "constructedAt": "2026-10-08T08:35:48.357Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 915.5729370117188,
+          "bottom": 962.5937728881836,
+          "height": 47.020835876464844
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 103,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 1,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.662Z",
+      "constructedAt": "2026-10-08T08:35:48.361Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 175.33334350585938,
+          "bottom": 353.90626525878906,
+          "height": 178.5729217529297
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 327,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 2,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "cleanup",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.664Z",
+      "constructedAt": "2026-10-08T08:35:48.364Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1405
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 491.8958435058594,
+          "bottom": 538.9166793823242,
+          "height": 47.020835876464844
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 1,
+      "receivedRevision": 1,
+      "textLength": 62,
+      "streaming": false,
+      "localeSeq": 3,
+      "frozenCount": 1,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:conversation-row-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.674Z",
+      "constructedAt": "2026-10-08T08:35:48.656Z",
+      "mountedItem": {
+        "id": "subagent-grid:ses_hxsSLoPUx6AgqMADXmke",
+        "kind": "subagent-grid",
+        "cardID": null
+      },
+      "currentItemAvailable": true,
+      "currentItem": {
+        "id": "subagent-grid:ses_hxsSLoPUx6AgqMADXmke",
+        "kind": "subagent-grid",
+        "cardID": null
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "subagent-grid:ses_hxsSLoPUx6AgqMADXmke",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 1014.5833740234375,
+          "bottom": 1105.9167098999023,
+          "height": 91.33333587646484
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "subagent-grid:ses_hxsSLoPUx6AgqMADXmke",
+        "cardID": null,
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 1014.5833740234375,
+          "bottom": 1105.9167098999023,
+          "height": 91.33333587646484
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "metricsRequestedID": "subagent-grid:ses_hxsSLoPUx6AgqMADXmke",
+      "metricsAvailable": true,
+      "metrics": {
+        "handleAvailable": true,
+        "index": 4,
+        "orderCount": 5,
+        "bufferPixels": 1280,
+        "pinned": false,
+        "scrollOffset": 0,
+        "scrollSize": 973.921875,
+        "viewportSize": 448,
+        "nearestViewportStart": 0,
+        "nearestViewportEnd": 1,
+        "itemOffset": 897.921875,
+        "itemSize": 76
+      }
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.675Z",
+      "constructedAt": "2026-10-08T08:35:48.661Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRfTSc00FU2LVOwEc",
+        "messageID": "msg_hc1nQB54RtIXZUlYAnzM",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hYmRPqlKs1D67XCEqkYC_art_hYmRPqlKs1D67XCEqkYC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 909.5729370117188,
+          "bottom": 909.5729370117188,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": false,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.676Z",
+      "constructedAt": "2026-10-08T08:35:48.663Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf83x00Iob371vHy",
+        "messageID": "msg_g0VXRf84K00Wml6BU1km",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "cardID": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 169.33334350585938,
+          "bottom": 169.33334350585938,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  },
+  {
+    "level": "debug",
+    "time": "2026-10-08T08:35:48.861Z",
+    "service": "overlay:markdown-viewport-lifetime-observation",
+    "message": "mount",
+    "data": {
+      "observedAt": "2026-10-08T08:35:48.677Z",
+      "constructedAt": "2026-10-08T08:35:48.665Z",
+      "mountedTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "currentTuple": {
+        "partID": "prt_g0VXRf8yo00MhJP64HYX",
+        "messageID": "msg_hDHfzV7bvQ7ip77PaN6p",
+        "sessionID": "ses_-zUSYKry7zzCTYTGXbE9"
+      },
+      "mountedElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "currentElement": {
+        "elementPresent": true,
+        "connected": true,
+        "tag": "DIV",
+        "dockID": null,
+        "dockBodyID": null,
+        "virtualItemID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "cardID": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+        "childScroll": false,
+        "mainScroll": true,
+        "rect": {
+          "top": 485.8958435058594,
+          "bottom": 485.8958435058594,
+          "height": 0
+        },
+        "scroll": {
+          "id": "chatScroll",
+          "child": false,
+          "top": 84.66667175292969,
+          "bottom": 720.0000457763672,
+          "scrollTop": 0,
+          "clientHeight": 635,
+          "scrollHeight": 1161
+        },
+        "intersectsScroll": true,
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "treeEpoch": 2,
+        "treeReplacementCause": "task-switch-hydrate",
+        "selectedSource": {
+          "kind": "task",
+          "id": "tsk_g00VXRf77v00ggeNEFiR"
+        }
+      },
+      "revision": 0,
+      "receivedRevision": 0,
+      "textLength": 0,
+      "streaming": false,
+      "localeSeq": -1,
+      "frozenCount": 0,
+      "activeLength": 0,
+      "pending": false,
+      "error": false,
+      "renderingState": false
+    }
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "observedAt": "2026-10-08T08:35:14.489Z",
+  "rows": [
+    {
+      "connected": true,
+      "id": "user:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_g0VXRf84K00Wml6BU1km",
+      "rect": {
+        "bottom": 409.90626525878906,
+        "height": 285.2395935058594,
+        "top": 124.66667175292967
+      }
+    },
+    {
+      "connected": true,
+      "id": "orchestrator:session:ses_-zUSYKry7zzCTYTGXbE9:message:msg_task-root-control_art_hDgq5Js7immXkIdUpqLC_art_hDgq5Js7immXkIdUpqLC",
+      "rect": {
+        "bottom": 608.2500152587891,
+        "height": 186.3541717529297,
+        "top": 421.8958435058594
+      }
+    },
+    {
+      "connected": true,
+      "id": "subagent-grid:ses_hLiBybXrfBDdW52dGFSv",
+      "rect": {
+        "bottom": 813.5729675292969,
+        "height": 201.33334350585935,
+        "top": 612.2396240234375
+      }
+    }
+  ],
+  "scroll": {
+    "clientHeight": 635,
+    "height": 884,
+    "top": 0
+  },
+  "status": "Running1m 7s"
+}

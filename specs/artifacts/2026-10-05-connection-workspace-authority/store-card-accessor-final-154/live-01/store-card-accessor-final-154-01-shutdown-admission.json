@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-08T09:21:59.0053806Z",
+  "occurrence": "store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde",
+  "owner": {
+    "pid": 78304,
+    "processInstanceID": "win32:639270477265345774",
+    "occurrenceID": "eec12ed0-1361-4e92-a97a-38cfb072024c"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXRrAPe00VhGXjDs8l"
+  }
+}

@@ -149,7 +149,7 @@ function VirtualizedConversationItem(props: {
           when={gridItem()}
           fallback={
             <StoreCardNode id={(item() as Extract<SubagentConversationItem, { kind: "card" }>).cardID}>
-              {(node) => <ConversationCard node={node} depth={0} collapsible={false} />}
+              {(node) => <ConversationCard node={node()} depth={0} collapsible={false} />}
             </StoreCardNode>
           }
         >

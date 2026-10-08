@@ -1,0 +1,104 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "markdown-visible-owner-live-150-01-f3a43e96-4f60-4c62-8c95-4d8d544a4615",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18097",
+    "pid": 47764
+  },
+  "assetStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18097/ui/",
+  "observedAtUtc": "2026-10-08T08:34:01.3270342Z",
+  "owner": {
+    "observedAtUtc": "2026-10-08T08:33:26.7714837Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\evidence",
+    "evidencePrefix": "markdown-visible-owner-live-150-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\startup.json",
+    "occurrence": "markdown-visible-owner-live-150-01-f3a43e96-4f60-4c62-8c95-4d8d544a4615",
+    "port": 18097,
+    "owner": {
+      "processInstanceID": "win32:639270452062307417",
+      "ProcessId": 47764
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639270452062307417",
+        "ProcessId": 47764
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\task-selection.json",
+    "taskSelectionRequired": true,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\markdown-visible-owner-live-150\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 24,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\markdown-visible-owner-live-150\\live-01",
+    "host": {
+      "pid": 65396,
+      "processInstanceID": "win32:639270452054678140",
+      "occurrenceID": "4aeb1f5e-e726-4964-bde9-37c58c91383a"
+    },
+    "nativeTarget": {
+      "pid": 47764,
+      "processInstanceID": "win32:639270452062307417",
+      "occurrenceID": "b0154813-d5ab-44eb-a9b6-34fa27c8b362"
+    },
+    "targetBirthAtMs": 1791448406230,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18097,
+      "OwningProcess": 47764
+    }
+  ],
+  "asset": "/ui/assets/main-C-hItqDW.js",
+  "uiStatus": 200,
+  "uiUri": "http://127.0.0.1:18097/ui",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "scriptSrc": "http://127.0.0.1:18097/ui/assets/main-C-hItqDW.js"
+}

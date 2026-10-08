@@ -1,0 +1,45 @@
+diff --git a/packages/overlay/src/components/Card.tsx b/packages/overlay/src/components/Card.tsx
+index 60aaefb2..10f244be 100644
+--- a/packages/overlay/src/components/Card.tsx
++++ b/packages/overlay/src/components/Card.tsx
+@@ -241,7 +241,7 @@ export function Card(props: { node: CardNode; depth: number }) {
+               <For each={visibleChildIDs()}>
+                 {(id) => (
+                   <StoreCardNode id={id} ownerID={props.node.id}>
+-                    {(node) => <Card node={node} depth={props.depth + 1} />}
++                    {(node) => <Card node={node()} depth={props.depth + 1} />}
+                   </StoreCardNode>
+                 )}
+               </For>
+diff --git a/packages/overlay/src/components/Conversation.tsx b/packages/overlay/src/components/Conversation.tsx
+index 4ec38efe..7d5251f1 100644
+--- a/packages/overlay/src/components/Conversation.tsx
++++ b/packages/overlay/src/components/Conversation.tsx
+@@ -149,7 +149,7 @@ function VirtualizedConversationItem(props: {
+           when={gridItem()}
+           fallback={
+             <StoreCardNode id={(item() as Extract<SubagentConversationItem, { kind: "card" }>).cardID}>
+-              {(node) => <ConversationCard node={node} depth={0} collapsible={false} />}
++              {(node) => <ConversationCard node={node()} depth={0} collapsible={false} />}
+             </StoreCardNode>
+           }
+         >
+diff --git a/packages/overlay/src/components/StoreCardNode.tsx b/packages/overlay/src/components/StoreCardNode.tsx
+index 4e21e288..043692a3 100644
+--- a/packages/overlay/src/components/StoreCardNode.tsx
++++ b/packages/overlay/src/components/StoreCardNode.tsx
+@@ -1,4 +1,4 @@
+-import type { JSX } from "solid-js"
++import type { Accessor, JSX } from "solid-js"
+ 
+ import { cardTreeStore, type CardNode } from "../store/card-tree"
+ 
+@@ -11,6 +11,6 @@ export function storeCardNode(id: string, ownerID?: string): CardNode {
+   return node
+ }
+ 
+-export function StoreCardNode(props: { id: string; ownerID?: string; children: (node: CardNode) => JSX.Element }) {
+-  return <>{props.children(storeCardNode(props.id, props.ownerID))}</>
++export function StoreCardNode(props: { id: string; ownerID?: string; children: (node: Accessor<CardNode>) => JSX.Element }) {
++  return props.children(() => storeCardNode(props.id, props.ownerID))
+ }

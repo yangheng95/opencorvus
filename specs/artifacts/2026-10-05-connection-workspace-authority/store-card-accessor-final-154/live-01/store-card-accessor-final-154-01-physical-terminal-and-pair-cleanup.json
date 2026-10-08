@@ -1,0 +1,65 @@
+{
+  "observedAtUtc": "2026-10-08T09:22:01.8269603Z",
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde",
+    "outcome": "settled",
+    "host": {
+      "pid": 66828,
+      "processInstanceID": "win32:639270477257789747",
+      "occurrenceID": "122d54ff-9176-422b-8462-3b2d1c1cacce"
+    },
+    "target": {
+      "pid": 78304,
+      "processInstanceID": "win32:639270477265345774",
+      "occurrenceID": "eec12ed0-1361-4e92-a97a-38cfb072024c"
+    },
+    "observedAtUtc": "2026-10-08T09:21:59.254Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 78304,
+        "processInstanceID": "win32:639270477265345774",
+        "occurrenceID": "eec12ed0-1361-4e92-a97a-38cfb072024c"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 66828,
+        "processInstanceID": "win32:639270477257789747",
+        "occurrenceID": "122d54ff-9176-422b-8462-3b2d1c1cacce"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "copiedLength": 2194,
+      "presentAfter": false,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-final-154-01\\runtime\\data\\auth.json"
+    },
+    {
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-final-154-01\\runtime\\data\\models.json"
+    }
+  ],
+  "occurrence": "store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde"
+}

@@ -62,6 +62,15 @@ conversation cards. `cardTreeStore` is the renderer source. `messages.ts`
 retains message content and hydration indexes; it is not a second rendered
 tree.
 
+`StoreCardNode` passes one reactive canonical `CardNode` accessor to its child
+factory, invoking that factory once per enclosing owner. Both virtual main
+conversation cards and recursive card children read the accessor in their
+component props. Updating an unrelated conversation item may rebuild its item
+projection while retaining the same card ID; that update changes the reader's
+dependencies without recreating its child factory. Real enclosing row removal
+still retires the subtree. The canonical required lookup and missing-card error
+remain the same; there is no separate card snapshot or renderer cache.
+
 Hydration and live Server-Sent Events converge on the same writer. A payload
 that lacks canonical identity or an `orderKey` fails before store mutation.
 The shared event-ownership policy routes only message/tree events into that

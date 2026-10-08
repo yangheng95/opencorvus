@@ -1,0 +1,35 @@
+#154 Root final accessor and Sources qualification
+
+## Recall and source
+
+User prioritizes Sources display and repeated Rendering. Root removed ALL149 diagnostics from their four precise preimages, retaining only152 StoreCardNode Accessor children directly once and node() in both Conversation and recursive Card. Source143 canonical Key unchanged, original Markdown worker/input/Rendering label unchanged. Final configured types92447/build94631 actualterminal0 joined/publicsurface passed. Root actual HTTP200/asset200 main-Ck2-tcfB.js before actual Task create; auth and complete model catalog independently usable/projected/actual streaming gpt-6.1-sol. No UI tests, generated Source fixtures or forced timing.
+
+Actual Task tsk_g00VXRpfCf00hKin7FDT, Project prj_hF3Muc2ULNnUntEgr5l5, request f221c871-7b02-4d3a-8137-cfff0e48f5f1, occurrence store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde. Accepted09:16:01.3348034; epoch1 opened pev_g0VXRpfKI00ztUb6ipeU/1791450960749; terminal pev_g0VXRqbiO00Z3d7FH0Cz/1791451183924,223175ms/20 actual streaming Sol HTTP200/settled/EOF. Original24 cumulative/preparation600000/idle180000/Task and service900000 fixed. Live researcher ses_hUCue0urxBbhqZFx0RYd, later tester ses_hHuZwyDOCQi4MImlv8iI are real participants, not manufactured scenes.
+
+## Main reading / bounded accessor acceptance
+
+Root actual hidden126 at localhost:18099/ui. root-main-natural-first.jpg Running14s shows accepted user and introduction. Native main wheel09:16:28.735 reached top0/client635/height832; same actual user row124.7–409.9 and introduction421.9–608.3, first researcher grid appeared. Root personally saw these accepted bodies, not Rendering placeholders.
+
+Opening the actual child resized main and native focus navigation changed reading position; do not assume original geometry remained unchanged throughout. Root later wheel up again at Running2m33, then narrow883x886 and reset. At09:19:53.082 after genuine second tester membership and terminal, maintop0/client1159/height2301 contains same canonical user and introduction rows with accepted prose, followed by real first grid/control/second grid/final control. root-source-natural-update.jpg personally shows this. Different viewport width changes text height; this is not pixel-identical geometry or a frame-by-frame flash-rate proof. Sampled visible old text remains readable with the final accessor contract, which is the bounded152 acceptance; no global Virtua/offscreen/sideDock flicker fix claimed.156 measurement/follow lead remains unknown.
+
+## Live Sources failure retained
+
+Root opened actual researcher with native Enter at Running36s; root-live-child-first.jpg shows true live child text/tools/source headings. Unlike150/153, this is an actual live-child scene. Researcher first WAI principles attempt appears as webfetch markdown failed, then naturally retries the same requested page and succeeds; original failed real Tool remains visible. No hiding/tool rewriting, model delay or replay.
+
+At Running56s Source Return then native Tab focused actual W3C intro anchor. root-live-source-native-tab-facts.json09:16:58.145 has exacthref, docktop362.6667/client577/height939 and tooltip0; screenshot shows following has moved the focused Source outside view as new prose arrived. This is an actual reading failure. It does not prove anchor remount or that its initial Tooltip ever opened. At09:17:18.388 native child wheel up returns SAMEfocusedURL anchor to y375.53–407.93/docktop0/height2185, still tooltip0. Source identity/key is unchanged, but DOM object lifetime and exact follow-lock transition were not instrumented.158 source analysis independently finds SourceChip focus does not declare existing reading intent, and mature Tooltip dismisses on ancestor scroll. That narrow next repair requires further Root cause/admission; do not relabel this154 as all Sources interactions passing.
+
+After native Escape/Shift+Tab/Tab, root-live-source-refocus.jpg at Running1m56 shows real focus ring and full title/URL/provider Tooltip619, docktop0. Child researcher is already completed while parent Task still runs: this scene is live parent, completed child, not ongoing researcher streaming. Explicit re-focus is recorded honestly, not continuity across the initial failed focus scene.
+
+## Narrow / native link / terminal
+
+Actual883x886/rightDock280 screenshot shows wrapped full leaf title; count1 plus ordinal1 is visually redundant157 candidate. Root scroll/resize closes Tooltip under mature policy. Native Shift+Tab/Tab recreates actual focus event: root-narrow-source-refocus.jpg09:18:55.428 shows Tooltip619 rect x446/y338/420x86.125 with full title and URL inside viewport. No viewport-bound clipping. Source remains real W3C intro anchor.
+
+Escape retains leaf; native Enter opens own127 at exact official W3C intro URL with actual heading/summary. Root personally viewed root-source-enter-official.jpg and closed127. No other external link or website mutation. An immediate list returned only126 before127 appeared; Root did not repeat Enter. Browser viewport reset is asynchronous: root-live-source-default-restored.jpg was still narrow and MUST NOT be used as confirmed default geometry. Later observed default1093x1244 is the actual root-source-natural-update/terminal scene, not assumed1280x720.
+
+Terminal screenshot shows dark theme with mediaDarktrue after earlier Light. This actual ambient change is not a controlled theme matrix or a product cause claim. Root read actual Chinese three-point final report and all three requested links in root-terminal-main-report.jpg. Escape then next native Tab reaches genuine webfetch markdown disclosure; tooltip0 and focus facts saved. Three chronological independent Source1 groups retain meaningful titles; no Task-global Source aggregation or synthetic multi-source/document scene. File/document/multi-source same-group/recovery matrices remain unqualified.
+
+## Whole closure / one original oracle / delivery
+
+Root closed own126 and127, reset viewport, sole public shutdown joined original foreground Job/output/request. Parent6115 actualterminal0 joined. Exact target78304 birth win32:639270477265345774 and Host66828 birth win32:639270477257789747 independently dead;18099free/copiedpairremoved. Five exact generated files privately preserved after workspace/UTC birth checks. Final provider audit selected after whole closure, exact mandatory original basenames archived first.
+
+Original sixarg Source/reply collector executed ONCE0, nested original Source checker ONCE0;20 actual streamed Sol200EOF, three genuine producer/source tuples and final answer before terminal qualified. No Source rerun, Memory checker, oldTaskrearm or alteredbudget.152 bounded visible-main lifetime contract can be committed independently;154 live Sources reading failure remains158 actionable next work.157 ordinal redundancy and156 offscreen hypothesis remain separately scoped. Continuous user goal remains active; this batch does not declare all issues complete.

@@ -44,3 +44,17 @@ Tasktsk_g00VXRPjfX00K3k2f1HP/Projectprj_huLbvRD1EhrxWPiFn1fO/requesta2389138-ffe
 
 147 System/effective Light/mediaLighttrue全部实际scene一致，不洗139/144旧themeunknown。[restored verification](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-147/live-01/restored-source-verification.json)明确三个临时prod精确恢复83f2 preimages、Source143 Key不变，types80481/build13412实际0 joined/publicsurface pass。当前仅调查文档/证据交付，不Markdown修复。125原因unknown、active128 no rearm及全未采样矩阵保留；本轮commit/push仍由Root收敛，不提前宣称完成。
 
+
+## 149–156 当前比较 checkpoint
+
+149 capture gaps 修正后的最终 types99911/build1218 实际0 joined。150 和153均完成且完整闭合，当前事实分别以 [150 Root 人工记录](../../artifacts/2026-10-05-connection-workspace-authority/markdown-visible-owner-live-150/live-01/root-manual-qualification.md)与 [153 Root 人工记录](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/live-01/root-manual-qualification.md)为依据。本整理者仅阅读归档及153单张阅读截图，没有页面交互。
+
+150 完成193505ms、19 Sol EOF、原组合 once0；首次 offscreen Open 点击失败及误导文件名保留。153 完成225041ms、19 Sol EOF、原组合 once0/nested0，parent30224 实际0 joined，63112/77936死亡、18098释放、pair清除。两轮 completed child Sources 有限定人工证据，live child 均 UNMET；采样没有观察到重复 Rendering 不等于全局无闪烁。
+
+[151](../../artifacts/2026-10-05-connection-workspace-authority/store-card-node-lifetime-investigation-151.md)的 store in-place 反证保留。[152](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-repair-plan-152.md)限定 accessor 功能修复，[153](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/README.md)仍带149诊断作比较；[154](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-final-154/README.md)现已完成无诊断运行，限定结果以以下154段为准。[156](../../artifacts/2026-10-05-connection-workspace-authority/offscreen-markdown-measurement-investigation-156.md)仅 offscreen measurement 只读线索，不能将退休计数换算闪烁率或推定 Virtua 错误。125原因未知、active128不重启及未采矩阵保持。
+
+## 154 无诊断闭合与157/158下一步
+
+[154 Root人工记录](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-final-154/live-01/root-manual-qualification.md)是当前视觉事实依据。全部149诊断移除，main-Ck2-tcfB.js真实服务；223175ms、20 Sol200EOF、原组合once0/nested0，parent6115实际0 joined，78304/66828死亡、18099释放、pair清除、126/127关闭。152可见主区旧正文保留仅按真实采样有限合格，不宣称一般Rendering或offscreen机制修复。
+
+首次live child native Tab实际focus href却被新正文滚出视口、Tooltip0，是158待处理真实阅读失败；后续wheel/refocus成功独立保留。窄883/dock280完整标题URL Tooltip及native官方Enter合格；名为default-restored的截图仍窄，实际后来default1093x1244。自然主题变暗/mediaDarktrue原因UNKNOWN，不是受控矩阵。157 Sources只读UX和158 focus/follow计划待准入；156仍未证明根因，用户Sol明确要求与连续目标ACTIVE保持。此整理没有个人UI操作，不覆盖150首次失败、153比较或Root人工原件。
