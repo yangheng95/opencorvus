@@ -1,0 +1,28 @@
+{
+  "phase": "supervision-45808-40",
+  "observedAtUtc": "2026-10-08T08:03:08.2094700Z",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "occurrence": "subagent-markdown-live-147-01-423b4368-9a22-4ae9-a393-6f809c41247b",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18096,
+      "OwningProcess": 43856
+    }
+  ],
+  "nativeSettlement": null,
+  "presence": [
+    {
+      "processID": 43856,
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processInstanceID": "win32:639270431380936479"
+    },
+    {
+      "processID": 75336,
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processInstanceID": "win32:639270431372939825"
+    }
+  ]
+}

@@ -25,3 +25,22 @@ RootnativeTabatRunning47sintrofocus/fullTooltip, Running1m3dock2234→Completed3
 Tasktsk_g00VXRPjfX00K3k2f1HP/Projectprj_huLbvRD1EhrxWPiFn1fO/requesta2389138-ffe9-463d-8d3e-a2e2898c4dc3 epoch1completed209002ms/18Solstream200EOF/24bounds. Mandatoryexactcollectorbasenamespre-reviewed; currentcombinedSIXargsONCE0/nestedSourceONCE0/actualnaturalanswerbeforeterminal. RootsolefullJoboutputrequest/pair/exact38728Host6120dead18095free/parent51277terminal0joined/own121122closed/reset/5privateBuncustody. Original142once1notrerun/139initialanomaly/130134rangebeforefailures intact, noMemoryquery.
 
 143repairqualifiedforactualunchangedintrocitationreadingthroughnaturalprojection/terminal/stablekeyboard/narrow. GeneralMarkdownRenderingNOTfixed; metadata mutation/reorder/removal/longURL/document/missingtitle/mainMissionSession/restart/parallelsharedmatrices unknown.125causeUNKNOWN/enqueueactualUNMET/titleunknown/active128norearm retained. Current143144commitpushpendingRootdelivery, notdeclaredcomplete. Furtherinvestigationsareseparatefuturebatch andnotgatesfor thisscoped result.
+
+## 145–147 历史准备 checkpoint：诊断不是 Rendering 交付
+
+143/144 的2649e93及83f2eb45已正常推送，重试 parent18275实际exit0 joined，fresh HEAD与upstream相同、outgoing为空。首次push34589实际exit1是月记录英文连写触发 provider-key 误报；正确分词后原扫描0，143目录保留首次原日志及receipt，无hook跳过。此交付仍只限定真实144 Source focus/Tooltip场景。
+
+[145 Root观察准入](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-lifetime-observation-plan-145.md)的三个临时UI源仅增加 logger-safe 实际tuple及mounted/current/revision标量，原Source Key不变；当时 types40880/build54500 pending；后续诊断运行及撤除后的最终结果见下节。没有actual Markdown同text remount或Rendering根因证明，temporary diagnostic不是fix。必须真实Root页面及对应owner事实判定，不能靠名称、终态或日志计数。
+
+[146主题调查](../../artifacts/2026-10-05-connection-workspace-authority/theme-transition-investigation-146.md)保持light→dark原因UNKNOWN，没有主题修复或受控主题矩阵。[147 frozen方案](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-plan-147.md)/[准备输入](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-147/README.md)为新18096 Work/Base/Sol24及600/180/900有限边界，同原始三URL请求字节、无forced timing/Source/Markdown或Memory要求；runtime HELD等待Root build/currentasset和独立准入。
+
+原139初次focus异常、142原once1/捕获局限、144 Source限定成功及一般Rendering未修复的界线保留。未采runtime/log/DB/模型、未UI/native/Git或改Source/helper/tests。文档检查不是实际运行资格，147没有pass声明。
+
+## 147实际结束：worker连续性与main退休分离；145已撤除
+
+[147 Root authoritative manual](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-147/live-01/root-manual-qualification.md)/[当前qualification](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-147/README.md)记录Task tsk_g00VXRWOum00D5RHQb6e完成209393ms、19Sol streaming200/settledEOF、Source/中文reply原once combined0/nested0。parent38982实际0 joined、43856/75336 exact deaths、18096free/pairclosed、own123closed/reset、5generated files私有保全。child未操作或自行视觉。
+
+完整private raw4,671,580 bytes安全投影1588rows、overall101mount97cleanup。researcher730rows两个text mount各1、无uploadedcleanup，属capture边界；main root4Parts41/36/21/1mount、41/36/20/0cleanup另算。same长度非same内容，state记录非flash次数，无自然cadence或all-sideDock lifetime推论。Root实际自然样本没有Rendering像素，问题仍unresolved；[148 fullsafe只读调查](../../artifacts/2026-10-05-connection-workspace-authority/markdown-main-render-retirement-investigation-148.md)需后续virtualbuffer/epoch/parentbranch证据，不是产品fix。
+
+147 System/effective Light/mediaLighttrue全部实际scene一致，不洗139/144旧themeunknown。[restored verification](../../artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-147/live-01/restored-source-verification.json)明确三个临时prod精确恢复83f2 preimages、Source143 Key不变，types80481/build13412实际0 joined/publicsurface pass。当前仅调查文档/证据交付，不Markdown修复。125原因unknown、active128 no rearm及全未采样矩阵保留；本轮commit/push仍由Root收敛，不提前宣称完成。
+

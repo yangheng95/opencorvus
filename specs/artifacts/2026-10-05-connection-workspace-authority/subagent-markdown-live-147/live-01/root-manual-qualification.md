@@ -1,0 +1,35 @@
+#147 Root actual Markdown lifetime observation
+
+## Recall and qualification boundary
+
+User's Sources reading and sideDock Rendering concern remain active. This is a bounded diagnostic run after145 temporary actual-Part metadata observation, not a Markdown repair. Root personally operated owned hidden123 at localhost:18096/ui and reviewed actual screenshots. No UI automation tests, generated messages, DOM focus injection, forced worker/model timing or synthetic Sources. Sources143/144 repair2649e93 plus documentation correction83f2eb45 are already normally pushed; their scope remains unchanged. Exact temporary source/preimages and current main-BHBB1ZJx served200, types40880/build54500 actualterminal0 joined/public surface pass preceded execution.
+
+One Work/builtin/base/gpt-6.1-sol run with user-authorized auth plus complete catalog separately qualified usable/projected/actual streaming model. Fixed24 cumulative/preparation600000/idle180000/Task+service900000 unchanged. Task tsk_g00VXRWOum00D5RHQb6e, Project prj_h53tcmn0Bc0GFgoSQjl1, request672dc339-8d49-4e99-943c-e9320db1bc72, occurrence subagent-markdown-live-147-01-423b4368-9a22-4ae9-a393-6f809c41247b. Actual epoch1 opened pev_g0VXRWP2z0054DDFhWMt/1791446369904, completed209393ms;19 actual streamed Sol HTTP200/settled/EOF and prompt owners unwound.
+
+## Personally viewed natural child and Sources
+
+Root selected actual base-researcher via main progress Open, no transcript switch later. `root-child-natural-first.jpg` shows Running32s child13s, first introduction prose and two natural chronological Source1 groups; no Rendering pixels in that frame. `root-child-natural-streaming.jpg` and facts at08:00:55 show Running1m23, full natural research text/dock2718, final MDN directions and research boundary. This sampled frame had no visible Markdown state. It does not prove transient Rendering never occurred or that all user scenarios passed. Root did not measure flash duration or production frequency.
+
+At Running2m44 Root used native Return on first Source disclosure then native Tab into actual citation. `root-source-native-tab.jpg` and facts show actual A/W3C introduction href/full accessible title/tooltip-cl-1948-content and full title/URL/provider pixels. `root-completed-retained-source.jpg` personally shows Completed3m29, current actual final Chinese three points and requested links, with the same selected base-researcher and focused Source/Tooltip. `root-narrow-retained-source.jpg` after real883x886 viewport shows wrapped citation and full Tooltip within viewport; exact same href and active A persisted (`root-narrow-theme-source-scalars.json`). Native Escape retained leaf focus; next native Tab reached principles webfetch and Tooltip0 (`root-narrow-escape-tab-theme-scalars.json`). Only introduction Source was expanded; three separate Source1 groups remain three groups. No external Enter case in147, no metadata mutation/removal or longURL/document matrix claim.
+
+Initial, natural streaming, Source reading and narrow/after-key scenes captured actual startup theme System, effective Light and mediaLighttrue. Actual images agree. No settings writes or simulated media change. This lawful observed scene does not explain139/144 earlier light→dark frames; their cause remains UNKNOWN. No broad settings/app state or locale-generation injection was read.
+
+## Safe lifecycle evidence and limits
+
+Actual own HTTP tail5000 selected first910 safe metadata records, separately retained with sample cutoff. After whole closure Root privately archived complete4,671,580-byte dev.log, selected actual service overlay:markdown-lifetime-observation into `markdown-complete-closed-observations.json`:1588 records/101mount97cleanup overall. Counts are diagnostic sample quantities and logging can influence timing. Equal lengths do not prove equal text; no raw text/HTML/prompt/URL/credentials/digests are logged.
+
+Selected researcher Session ses_hyITYL6VaGuTlo3idrlj has730 safe records with two distinct canonical text mounts: intro Part prt_g0VXRWV1e00es5uXzZnu/Message msg_g0VXRWUBQ00gafl6OSBY/constructed08:00:04.223, research Part prt_g0VXRWbog003tSLqDQeY/Message msg_g0VXRWaZ800NfmBSeCEf/constructed08:00:19.565.182 accepted inputs/replies/mount batches per phase captured; no selected-researcher cleanup was in this complete uploaded collection. Page closure does not guarantee Solid cleanup upload, so absence of a terminal cleanup log is a capture limit. These actual owner events must not be mixed with main root-session records.
+
+Main orchestrator Session ses_-zUSYTa1rzzXIMUHr3Ej repeatedly records the same canonical text Part cleanup with accepted frozen blocks and fresh owners with zero frozen blocks. Actual current/mounted tuples and full safe records support this owner-retirement observation; original pending/new-owner label is a possible implication, not personally observed repeated Rendering pixels. Main Virtual range/keepMounted/viewport/treeEpoch and intended run changes were not captured, so lawful offscreen recycling versus abnormal remount remains UNKNOWN.148 read-only audit supplies candidate paths; no fix admitted from counts alone. General sideDock Rendering remains unresolved for the reported scene, not presented as completed.
+
+## Whole closure, original collector and retirement
+
+Root closed own123/reset viewport, sole public shutdown joined production foreground Job/output/request. Exact Target43856 birth win32:639270431380936479 and Host75336 birth win32:639270431372939825 independently dead,18096 released and both copied auth/catalog removed. Parent38982 actualterminal0 joined; five exact born07:58:58–59 generated files privately preserved with absolute workspace/UTC checks.
+
+Exact unprefixed collector basenames reviewed/copied before original six-argument combined Source/reply ONCE0 and nested Source once0. Three actual webfetch producer→persisted Source tuples and final answer-before-terminal decision qualified, all19 Sol streams EOF. No Memory query, old Task rearm or replay. Native/Task/data/lifecycle/pixels are distinct evidence; pure model logs do not replace screenshots.
+
+Root preserved all three-file temporary observation source and full diff, then precisely restored verified83f2eb45 preimages for CardParts/TextPart/text-part-model; no SourceKey change. All145 diagnostic interfaces/props/helper/hooks/imports/log calls retired. Restored typecheck80481/build13412 are independently pending at this record's creation; do not claim final restored build from the former diagnostic build. Next observation/repair requires separate Root admission and real evidence. Current Task run is closed; goal remains active.
+
+### Actual restored-source verification — 2026-10-08T08:08Z
+
+Restored types80481 and build13412 both actualterminal0 joined. Current restored build public surface check passed; original temporary diagnostic source remains only in archived evidence. `restored-source-verification.json` binds those actual exits. No new functional repair or general Rendering qualification follows from these prerequisite checks.

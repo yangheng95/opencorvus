@@ -2774,4 +2774,12 @@ The current connection-workspace authority record also includes metadata selecti
 
 
 
-- [Markdown lifetime145 investigation](artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-lifetime-observation-plan-145.md): read-only root-cause paths and bounded diagnostic proposal; no actual same-text remount proof or general Rendering fix.
+- [Markdown lifetime145 临时观察](artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-lifetime-observation-plan-145.md)：147观察完成、三临时代码精确撤除，restore types/build0；Source Key保持，一般Rendering unresolved，诊断不是修复。
+
+- [Theme146只读调查](artifacts/2026-10-05-connection-workspace-authority/theme-transition-investigation-146.md)：139/144自动light→dark原因UNKNOWN，不归因viewport/时钟/Source Key，无主题修复声明。
+
+- [Markdown147 genuine准备](artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-plan-147.md)与[输入](artifacts/2026-10-05-connection-workspace-authority/subagent-markdown-live-147/README.md)：新18096 Work/Base/Sol24有限边界，同原三URL字节、无Memory/forced timing；实际Task209393ms/19SolEOF/原combined与nested各ONCE0/full closure，worker与main退休分离；不是Markdown fix。
+
+
+- [Markdown main148只读调查](artifacts/2026-10-05-connection-workspace-authority/markdown-main-render-retirement-investigation-148.md)：147 full safe样本的main四Parts退休与worker730rows分离；viewport/buffer/epoch原因未证，下一观察仅proposal，无Rendering修复。
+

@@ -1,0 +1,226 @@
+diff --git a/packages/overlay/src/components/CardParts.tsx b/packages/overlay/src/components/CardParts.tsx
+index 9f1d4863..7aa08ab5 100644
+--- a/packages/overlay/src/components/CardParts.tsx
++++ b/packages/overlay/src/components/CardParts.tsx
+@@ -77,7 +77,11 @@ function RenderableCardPart(props: {
+     <Switch fallback={unsupportedPartFallback(part())}>
+       <Match when={part()?.type === "text" && (part().text || "").trim()}>
+         <div data-quotation-message={part().messageID} data-quotation-session={part().sessionID}>
+-          <TextPart text={part().text || ""} streaming={props.streaming && part() === props.streamingTextPart} />
++          <TextPart
++            text={part().text || ""}
++            streaming={props.streaming && part() === props.streamingTextPart}
++            observation={{ partID: part().id, messageID: part().messageID, sessionID: part().sessionID }}
++          />
+         </div>
+       </Match>
+       <Match when={part()?.type === "part-error"}>
+diff --git a/packages/overlay/src/components/TextPart.tsx b/packages/overlay/src/components/TextPart.tsx
+index e98cc530..39fa2ac5 100644
+--- a/packages/overlay/src/components/TextPart.tsx
++++ b/packages/overlay/src/components/TextPart.tsx
+@@ -1,7 +1,7 @@
+ /** @jsxImportSource solid-js */
+ import { For, Show, type JSX } from "solid-js"
+ import { t } from "../utils/i18n"
+-import { createStreamingTextPartModel } from "./text-part-model"
++import { createStreamingTextPartModel, type MarkdownLifetimeObservationContext } from "./text-part-model"
+ 
+ function isStandaloneSourceFileMarkup(html: string): boolean {
+   return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
+@@ -10,8 +10,20 @@ function isStandaloneSourceFileMarkup(html: string): boolean {
+ /** Worker-backed Markdown with stable completed blocks and a raw live tail.
+  * DOM insertion is spread across frames for both streaming and loaded text. */
+ 
+-export function TextPart(props: { text: string; streaming?: boolean; trailing?: JSX.Element }) {
+-  return <StreamingMarkdownPart text={props.text} streaming={props.streaming} trailing={props.trailing} />
++export function TextPart(props: {
++  text: string
++  streaming?: boolean
++  trailing?: JSX.Element
++  observation?: MarkdownLifetimeObservationContext
++}) {
++  return (
++    <StreamingMarkdownPart
++      text={props.text}
++      streaming={props.streaming}
++      trailing={props.trailing}
++      observation={props.observation}
++    />
++  )
+ }
+ 
+ export function StreamingMarkdownPart(props: {
+@@ -20,6 +32,7 @@ export function StreamingMarkdownPart(props: {
+   className?: string
+   activeTextClassName?: string
+   trailing?: JSX.Element
++  observation?: MarkdownLifetimeObservationContext
+ }) {
+   const { frozenHtml, activeText, pending, error } = createStreamingTextPartModel(props)
+ 
+diff --git a/packages/overlay/src/components/text-part-model.ts b/packages/overlay/src/components/text-part-model.ts
+index cfae2fa1..f501617c 100644
+--- a/packages/overlay/src/components/text-part-model.ts
++++ b/packages/overlay/src/components/text-part-model.ts
+@@ -1,7 +1,10 @@
+-import { batch, createEffect, createSignal, onCleanup } from "solid-js"
++import { batch, createEffect, createSignal, onCleanup, onMount, untrack } from "solid-js"
+ import { createMarkdownRenderer } from "../services/markdown-render"
+ import { localeTag } from "../utils/i18n"
+ import { appStore } from "../store/app"
++import { AppLog } from "../utils/log"
++
++export type MarkdownLifetimeObservationContext = { partID: string; messageID: string; sessionID: string }
+ 
+ export const STREAMING_ACTIVE_TEXT_LIMIT = 12_000
+ 
+@@ -13,7 +16,11 @@ export function visibleStreamingText(text: string, limit = STREAMING_ACTIVE_TEXT
+ 
+ /** Parse/highlight off-thread; commit bounded batches after browser paints.
+  * Frozen HTML strings retain their Solid For identity across updates. */
+-export function createStreamingTextPartModel(props: { text: string; streaming?: boolean }) {
++export function createStreamingTextPartModel(props: {
++  text: string
++  streaming?: boolean
++  observation?: MarkdownLifetimeObservationContext
++}) {
+   const [frozenHtml, setFrozenHtml] = createSignal<string[]>([])
+   const [activeText, setActiveText] = createSignal("")
+   const [pending, setPending] = createSignal(false)
+@@ -29,6 +36,56 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   let latestLocale = ""
+   let latestLocaleSeq = -1
+   let latestStreaming = false
++  const constructedAt = new Date().toISOString()
++  let mountedTuple: MarkdownLifetimeObservationContext | null = null
++  const currentTuple = (): MarkdownLifetimeObservationContext | null => {
++    const value = props.observation
++    if (
++      !value ||
++      ![value.partID, value.messageID, value.sessionID].every((id) => typeof id === "string" && id.trim().length > 0)
++    )
++      return null
++    return { partID: value.partID, messageID: value.messageID, sessionID: value.sessionID }
++  }
++  const observe = (phase: string, detail: Record<string, number | boolean> = {}) => {
++    untrack(() => {
++      try {
++        const tuple = currentTuple()
++        if (!tuple) return
++        AppLog.debug("markdown-lifetime-observation", phase, {
++          observedAt: new Date().toISOString(),
++          constructedAt,
++          mountedTuple,
++          currentTuple: tuple,
++          revision,
++          receivedRevision,
++          textLength: latestText.length,
++          streaming: latestStreaming,
++          localeSeq: latestLocaleSeq,
++          frozenCount: frozenHtml().length,
++          activeLength: activeText().length,
++          targetCount: target.length,
++          pending: pending(),
++          error: Boolean(error()),
++          complete,
++          renderingState: pending() && frozenHtml().length === 0 && !activeText(),
++          ...detail,
++        })
++      } catch {
++        // Temporary metadata observation must not alter Markdown execution.
++      }
++    })
++  }
++  onMount(() => {
++    untrack(() => {
++      try {
++        mountedTuple = currentTuple()
++      } catch {
++        // Observation metadata has no rendering authority.
++      }
++    })
++    observe("mount")
++  })
+ 
+   const mount = () => {
+     mountFrame = 0
+@@ -36,6 +93,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+     const current = frozenHtml()
+     let prefix = 0
+     while (prefix < current.length && prefix < target.length && current[prefix] === target[prefix]) prefix++
++    observe("mount-before", { prefix, previousFrozenCount: current.length })
+     const next = current.slice(0, prefix)
+     const deadline = performance.now() + 4
+     for (let index = prefix; index < target.length && index < prefix + 16; index++) {
+@@ -46,6 +104,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+     if (complete && prefix === target.length && current.length !== target.length) setFrozenHtml(target.slice())
+     if (frozenHtml().length < target.length) mountFrame = requestAnimationFrame(mount)
+     else if (complete) setPending(false)
++    observe("mount-after", { prefix, previousFrozenCount: current.length })
+   }
+   const renderer = createMarkdownRenderer((reply, request) => {
+     if (disposed) return
+@@ -54,10 +113,24 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+       request.localeSeq === latestLocaleSeq &&
+       latestText.startsWith(request.text) &&
+       request.streaming === latestStreaming
+-    if (reply.revision !== -1 && !currentSource) return
++    const replyDetail = {
++      owner: reply.owner,
++      requestRevision: request.revision,
++      replyRevision: reply.revision,
++      replyStart: reply.start,
++      replyHtmlCount: reply.html.length,
++      replyDone: reply.done,
++      replyError: Boolean(reply.error),
++      currentSource,
++    }
++    if (reply.revision !== -1 && !currentSource) {
++      observe("reply-discarded", replyDetail)
++      return
++    }
+     if (reply.error) {
+       setError(reply.error)
+       setPending(false)
++      observe("reply-error", replyDetail)
+       return
+     }
+     // Older append-only snapshots still contain valid completed blocks. Keep
+@@ -71,6 +144,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+     complete = reply.done && reply.revision === revision
+     setActiveText(visibleStreamingText(reply.activeText))
+     if (!mountFrame) mountFrame = requestAnimationFrame(mount)
++    observe("reply-accepted", replyDetail)
+   })
+ 
+   createEffect(() => {
+@@ -85,6 +159,12 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+       localeSeq === latestLocaleSeq
+     )
+       return
++    const changeDetail = {
++      textChanged: text !== latestText,
++      streamingChanged: streaming !== latestStreaming,
++      localeChanged: locale !== latestLocale,
++      localeSeqChanged: localeSeq !== latestLocaleSeq,
++    }
+     latestLocale = locale
+     latestLocaleSeq = localeSeq
+     latestStreaming = streaming
+@@ -106,6 +186,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+         setActiveText("")
+       }
+     })
++    observe("input-accepted", changeDetail)
+     requestFrame = requestAnimationFrame(() => {
+       requestFrame = 0
+       try {
+@@ -118,6 +199,7 @@ export function createStreamingTextPartModel(props: { text: string; streaming?:
+   })
+ 
+   onCleanup(() => {
++    observe("cleanup")
+     disposed = true
+     cancelAnimationFrame(requestFrame)
+     cancelAnimationFrame(mountFrame)
