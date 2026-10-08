@@ -30,6 +30,16 @@ between preparation phases and before launching the next physical process.
 Complete settlement alone authorizes isolated test-runtime removal; uncertainty
 retains that owned runtime and reports the actual failure.
 
+The supervised Host facade requires an explicit root-exit policy. Foreground
+owners pass `terminateChildrenOnRootExit=true` to reclaim their owned descendants
+when the root command exits; other existing Host callers explicitly retain
+their current `false` policy. Task admission retains its current policy. The
+single adapter forwards that decision to ProcessSupervisor. Request deadlines
+belong to ProcessFacade controls across admission and execution, followed by
+the shared settlement budget; a low-level supervisor cleanup deadline alone
+does not bound a running command. Natural exit and `deadline_exceeded` remain
+distinct terminal receipts even when both reach complete physical settlement.
+
 Backend and Overlay checks use one900000ms execution deadline per selected file;
 the generic test command entry uses it per command. Output cannot extend it.
 Supervisor preparation and the complete multi-file suite are separate boundaries.

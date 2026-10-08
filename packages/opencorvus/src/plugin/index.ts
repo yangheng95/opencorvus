@@ -178,7 +178,7 @@ export namespace Plugin {
           credentials,
           sessions: unavailableSessions,
           serverUrl: new URL(IN_PROCESS_BASE_URL),
-          process: supervisedHostProcessFacade(`plugin:${specifier}`),
+          process: supervisedHostProcessFacade(`plugin:${specifier}`, false),
           resources: emptyResources(),
         }
         const hook = await (plugin as unknown as (input: GlobalProviderPluginInput) => Promise<Hooks>)(input)
@@ -540,7 +540,7 @@ export namespace Plugin {
       function pluginInput(resources: PluginResources = emptyResources(), specifier = "anonymous"): PluginInput {
         return {
           ...baseInput,
-          process: supervisedHostProcessFacade(`plugin:${specifier}`),
+          process: supervisedHostProcessFacade(`plugin:${specifier}`, false),
           resources,
         }
       }

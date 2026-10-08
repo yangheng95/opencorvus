@@ -1,0 +1,28 @@
+{
+  "occurrence": "native-history-deadline-204-deadline-c3f7a68a-c0df-4628-8b6a-ef7c9f9be9d3",
+  "outcome": "ready",
+  "host": {
+    "pid": 62632,
+    "processInstanceID": "win32:639270859102482906",
+    "occurrenceID": "ac1a8b3a-56e0-4283-98c7-520325b693a6"
+  },
+  "parent": {
+    "pid": 61332,
+    "processInstanceID": "win32:639270859094829872",
+    "occurrenceID": "7bee4ca5-cb23-4a22-bd65-636d42e4a901"
+  },
+  "target": {
+    "pid": 21112,
+    "processInstanceID": "win32:639270859111568468",
+    "occurrenceID": "5cee7312-2752-45a7-a013-66c7d3454489"
+  },
+  "targetBirthAtMs": 1791489111156,
+  "deadlineAt": 1791489120150,
+  "observedAtUtc": "2026-10-08T19:51:51.198Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\native-host-deadline-target-204.ts",
+    "deadline"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

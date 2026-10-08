@@ -5,7 +5,7 @@ import { ProcessSupervisor } from "../src/shell/process-supervisor"
 describe("Plugin structured process capability", () => {
   test("runs structured argv through the central supervisor and settles its owner", async () => {
     const owner = "plugin:test-process-capability"
-    const processFacade = supervisedHostProcessFacade(owner)
+    const processFacade = supervisedHostProcessFacade(owner, false)
     const result = await processFacade.run({
       command: {
         executable: process.execPath,
@@ -24,7 +24,7 @@ describe("Plugin structured process capability", () => {
   })
 
   test("host detached capability preserves real stdin/output and exact terminal receipt", async () => {
-    const result = await supervisedHostProcessFacade("plugin:detached-transport").run({
+    const result = await supervisedHostProcessFacade("plugin:detached-transport", false).run({
       command: { executable: process.execPath, args: ["-e", "process.stdin.pipe(process.stdout)"] },
       ownership: "detached", occurrenceID: "detached-input", input: "detached bytes", timeoutMs: 5000,
     })
@@ -37,7 +37,7 @@ describe("Plugin structured process capability", () => {
   })
 
   test("host detached control cancellation settles the actual process occurrence", async () => {
-    const handle = await supervisedHostProcessFacade("plugin:detached-cancel").spawn({
+    const handle = await supervisedHostProcessFacade("plugin:detached-cancel", false).spawn({
       command: { executable: process.execPath, args: ["-e", "setInterval(() => {}, 1000)"] },
       ownership: "detached", occurrenceID: "detached-cancel", stdout: "ignore", stderr: "ignore",
     })
@@ -61,7 +61,7 @@ describe("Plugin structured process capability", () => {
       unref() {},
     }))
     try {
-      const handle = await supervisedHostProcessFacade("plugin:test-signal-fact").spawn({
+      const handle = await supervisedHostProcessFacade("plugin:test-signal-fact", false).spawn({
         command: { executable: "signal-fact", args: [] },
         occurrenceID: "plugin-process-capability-signal",
         stdout: "ignore",

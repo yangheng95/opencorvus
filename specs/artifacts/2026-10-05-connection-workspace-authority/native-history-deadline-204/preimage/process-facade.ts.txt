@@ -27,11 +27,7 @@ function terminalReceipt(
 
 type SupervisedTaskIdentity = Readonly<{ taskID: string; cwd: string }>
 
-function supervisedProcessFacade(input: {
-  owner: string
-  task?: SupervisedTaskIdentity
-  terminateChildrenOnRootExit: boolean
-}): ProcessFacade {
+function supervisedProcessFacade(input: { owner: string; task?: SupervisedTaskIdentity }): ProcessFacade {
   const spawner: ProcessSpawner = async (request): Promise<ProcessSpawnedHandle> => {
     if (request.windowsVerbatimArguments) {
       throw new Error("The supervised process facade does not accept verbatim Windows command-line strings")
@@ -63,7 +59,6 @@ function supervisedProcessFacade(input: {
       owner: input.owner,
       gracefulTerminationMs: request.gracefulTerminationMs,
       signal: request.controlSignal,
-      terminateChildrenOnRootExit: input.terminateChildrenOnRootExit,
     }
     const handle = input.task
       ? await ProcessSupervisor.spawnTaskCommand(input.task, command)
@@ -112,10 +107,10 @@ function supervisedProcessFacade(input: {
   return createProcessFacade(spawner, { settlementTimeoutMs: PROCESS_SETTLEMENT_TIMEOUT_MS })
 }
 
-export function supervisedHostProcessFacade(owner: string, terminateChildrenOnRootExit: boolean): ProcessFacade {
-  return supervisedProcessFacade({ owner, terminateChildrenOnRootExit })
+export function supervisedHostProcessFacade(owner: string): ProcessFacade {
+  return supervisedProcessFacade({ owner })
 }
 
 export function supervisedTaskProcessFacade(identity: SupervisedTaskIdentity, owner: string): ProcessFacade {
-  return supervisedProcessFacade({ owner, task: identity, terminateChildrenOnRootExit: false })
+  return supervisedProcessFacade({ owner, task: identity })
 }

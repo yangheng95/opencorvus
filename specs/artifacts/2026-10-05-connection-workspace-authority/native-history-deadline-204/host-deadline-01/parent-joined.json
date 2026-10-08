@@ -1,0 +1,26 @@
+{
+  "expectedReason": "deadline_exceeded",
+  "observedAtUtc": "2026-10-08T19:52:00.8032853Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 62632,
+        "processInstanceID": "win32:639270859102482906",
+        "occurrenceID": "ac1a8b3a-56e0-4283-98c7-520325b693a6"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 21112,
+        "processInstanceID": "win32:639270859111568468",
+        "occurrenceID": "5cee7312-2752-45a7-a013-66c7d3454489"
+      }
+    }
+  ],
+  "occurrence": "native-history-deadline-204-deadline-c3f7a68a-c0df-4628-8b6a-ef7c9f9be9d3",
+  "actualExitCode": 1,
+  "expectedExitCode": 1,
+  "boundary": "Actual foreground Host exit and full native receipt; deadline failure is not business success"
+}

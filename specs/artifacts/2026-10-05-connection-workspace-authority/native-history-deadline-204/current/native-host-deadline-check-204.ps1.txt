@@ -1,0 +1,47 @@
+param([Parameter(Mandatory=$true)][ValidateSet('deadline','natural')][string]$Mode)
+$ErrorActionPreference='Stop'
+$checkMode204=$Mode
+$checkRoot204=[IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/.tmp-product-iteration/native-history-deadline-204/'+$checkMode204+'-01')
+$checkEvidence204=[IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/native-history-deadline-204/host-'+$checkMode204+'-01')
+if(Test-Path -LiteralPath $checkRoot204){throw 'Preserve prior204 occurrence'}
+if(Test-Path -LiteralPath $checkEvidence204){throw 'Preserve prior204 evidence'}
+[IO.Directory]::CreateDirectory($checkRoot204) | Out-Null
+[IO.Directory]::CreateDirectory($checkEvidence204) | Out-Null
+. (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly
+$checkOccurrence204='native-history-deadline-204-'+$checkMode204+'-'+[Guid]::NewGuid().ToString()
+$checkDeadline204=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()+10000
+$checkBun204='C:/Users/hengu/.bun/bin/bun.exe'
+$checkArgs204=@((Join-Path $PSScriptRoot 'live-sol-cli-owned.ts'),'--owned-host',$checkEvidence204,$checkOccurrence204,[string]$checkDeadline204,$checkBun204,(Join-Path $PSScriptRoot 'native-host-deadline-target-204.ts'),$checkMode204)
+if(@($checkArgs204 | Where-Object {$_ -match '[\s"]'}).Count){throw 'Explicit204 arguments require quoting review'}
+$oldEnv204=@{}
+Get-ChildItem Env: | ForEach-Object {$oldEnv204[$_.Name]=$_.Value}
+$checkEnv204=@{}
+foreach($key204 in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($oldEnv204.ContainsKey($key204)){$checkEnv204[$key204]=$oldEnv204[$key204]}}
+foreach($entry204 in @(@('OPENCORVUS_HOME','runtime'),@('OPENCORVUS_TEST_HOME','home'),@('TEMP','temp'),@('TMP','temp'),@('APPDATA','appdata'),@('LOCALAPPDATA','localappdata'),@('XDG_CONFIG_HOME','config'),@('XDG_DATA_HOME','data'),@('XDG_CACHE_HOME','cache'),@('XDG_STATE_HOME','state'))){$checkEnv204[$entry204[0]]=Join-Path $checkRoot204 $entry204[1];[IO.Directory]::CreateDirectory($checkEnv204[$entry204[0]]) | Out-Null}
+$checkEnv204.OPENCORVUS_TEST_PROCESS_ROOT=$checkRoot204
+$checkEnv204.OPENCORVUS_TASK_PROCESS_MODE='native'
+$checkEnv204.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$checkEnv204.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1'
+try {
+  Get-ChildItem Env: | ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+  foreach($key204 in $checkEnv204.Keys){[Environment]::SetEnvironmentVariable($key204,$checkEnv204[$key204],'Process')}
+  $checkProcess204=Start-Process -FilePath $checkBun204 -ArgumentList $checkArgs204 -WorkingDirectory 'D:/myhexin-local/opencorvus/packages/opencorvus' -WindowStyle Hidden -RedirectStandardOutput (Join-Path $checkRoot204 'stdout.log') -RedirectStandardError (Join-Path $checkRoot204 'stderr.log') -PassThru
+} finally {
+  Get-ChildItem Env: | ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+  foreach($key204 in $oldEnv204.Keys){[Environment]::SetEnvironmentVariable($key204,$oldEnv204[$key204],'Process')}
+}
+Write-OwnedLaunchFact (Join-Path $checkEvidence204 'launch.json') @{occurrence=$checkOccurrence204;deadlineAt=$checkDeadline204;mode=$checkMode204;hostPID=$checkProcess204.Id;run=$checkRoot204;arguments=$checkArgs204;authority='Exact own process command; no model/provider/UI'}
+$checkProcess204.WaitForExit()
+$checkReady204=Get-Content -Raw -LiteralPath (Join-Path $checkEvidence204 'native-host-ready.json') | ConvertFrom-Json -AsHashtable -DateKind String
+$checkSettled204=Get-Content -Raw -LiteralPath (Join-Path $checkEvidence204 'native-host-settled.json') | ConvertFrom-Json -AsHashtable -DateKind String
+$checkStates204=@(@{expected=$checkReady204.host;state=(Get-OwnedNativeState $checkReady204.host)},@{expected=$checkReady204.target;state=(Get-OwnedNativeState $checkReady204.target)})
+$checkExpectedExit204=if($checkMode204 -eq 'deadline'){1}else{7}
+$checkExpectedReason204=if($checkMode204 -eq 'deadline'){'deadline_exceeded'}else{'exited'}
+Write-OwnedLaunchFact (Join-Path $checkEvidence204 'parent-joined.json') @{occurrence=$checkOccurrence204;observedAtUtc=[DateTime]::UtcNow.ToString('o');actualExitCode=$checkProcess204.ExitCode;expectedExitCode=$checkExpectedExit204;expectedReason=$checkExpectedReason204;states=$checkStates204;boundary='Actual foreground Host exit and full native receipt; deadline failure is not business success'}
+Copy-Item -LiteralPath (Join-Path $checkRoot204 'stdout.log') -Destination (Join-Path $checkEvidence204 'stdout.log')
+Copy-Item -LiteralPath (Join-Path $checkRoot204 'stderr.log') -Destination (Join-Path $checkEvidence204 'stderr.log')
+if($checkProcess204.ExitCode -ne $checkExpectedExit204 -or $checkSettled204.terminal.reason -cne $checkExpectedReason204){throw 'Actual204 process terminal contract failed'}
+if($checkReady204.occurrence -cne $checkOccurrence204 -or $checkSettled204.occurrence -cne $checkOccurrence204 -or [long]$checkReady204.deadlineAt -ne $checkDeadline204 -or [long]$checkSettled204.deadlineAt -ne $checkDeadline204){throw 'Actual204 deadline/occurrence transport failed'}
+foreach($kind204 in @('host','target')){foreach($field204 in @('pid','processInstanceID','occurrenceID')){if($checkReady204[$kind204][$field204] -cne $checkSettled204[$kind204][$field204]){throw 'Actual204 native receipt identity failed'}}}
+if(!$checkSettled204.physicalCompletion -or !$checkSettled204.outputDrainComplete -or !$checkSettled204.requestCleanupComplete -or @($checkStates204 | Where-Object state -ne 'dead_or_reused').Count){throw 'Actual204 whole closure contract failed'}
+@{mode=$checkMode204;occurrence=$checkOccurrence204;rawHostExit=$checkProcess204.ExitCode;terminal=$checkSettled204.terminal;states=$checkStates204;physicalCompletion=$checkSettled204.physicalCompletion;deadlineAt=$checkDeadline204} | ConvertTo-Json -Depth 8

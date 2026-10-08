@@ -116,7 +116,7 @@ export namespace Process {
     if (cmd.length === 0) throw new Error("Command is required")
     const command = normalizeExecutableArgv(cmd)
     const exactEnvironment = environment(opts, "Process.spawnHost")
-    const facade = opts.ownership === "process" ? NodeProcess : supervisedHostProcessFacade("process:spawn-host")
+    const facade = opts.ownership === "process" ? NodeProcess : supervisedHostProcessFacade("process:spawn-host", false)
     const handle = await facade.spawn({
       command: { executable: command[0]!, args: command.slice(1) },
       cwd: opts.cwd,
@@ -185,7 +185,7 @@ export namespace Process {
   }
 
   export function runHost(cmd: string[], opts: RunOptions = {}): Promise<Result> {
-    return runWithFacade(cmd, opts, supervisedHostProcessFacade(opts.owner?.trim() || "process:run-host"))
+    return runWithFacade(cmd, opts, supervisedHostProcessFacade(opts.owner?.trim() || "process:run-host", false))
   }
 
   export function runTask(

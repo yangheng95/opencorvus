@@ -1,0 +1,27 @@
+$ bun script/run-tests.ts test/foreground-process-facade.test.ts test/plugin-process-facade.test.ts
+[1/2] START test/foreground-process-facade.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) foreground facade returns the root's real exit after settling its owned child tree [295.81ms]
+(pass) foreground facade settles an output-active child tree at its request deadline and its peer naturally [2564.41ms]
+
+ 2 pass
+ 0 fail
+ 6 expect() calls
+Ran 2 tests across 1 file. [3.95s]
+[1/2] DONE test/foreground-process-facade.test.ts exit=0 duration=4.69s
+[2/2] START test/plugin-process-facade.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Plugin structured process capability > runs structured argv through the central supervisor and settles its owner [180.74ms]
+(pass) Plugin structured process capability > host detached capability preserves real stdin/output and exact terminal receipt [79.10ms]
+(pass) Plugin structured process capability > host detached control cancellation settles the actual process occurrence [14.83ms]
+(pass) Plugin structured process capability > projects the supervisor's exact signal terminal fact [0.49ms]
+
+ 4 pass
+ 0 fail
+ 7 expect() calls
+Ran 4 tests across 1 file. [1272.00ms]
+[2/2] DONE test/plugin-process-facade.test.ts exit=0 duration=1.41s

@@ -2829,3 +2829,5 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [201 子侧栏真实历史](artifacts/2026-10-05-connection-workspace-authority/child-history-readonly-census-201/README.md) / [202 当前合同事实](artifacts/2026-10-05-connection-workspace-authority/child-history-frontier-audit-202/README.md) / [203 启动前沿](artifacts/2026-10-05-connection-workspace-authority/child-history-startup-frontiers-203/README.md)：单 agent 只读原153全库，真实子树/Task与发布终态/控制输入和idle记忆；永久进程身份由操作系统确认死亡。未启动副本，子侧栏视觉与完整启动资格待满足。
 
+- [204 原生运行器截止](artifacts/2026-10-05-connection-workspace-authority/native-history-deadline-204/README.md)：修复长驻Host没有实际截止控制，沿用唯一ProcessFacade/原生监督器；6项聚焦功能测试及真实截止/自然退出结算。普通Sol新Host与子侧栏视觉待验，单 agent继续。
+

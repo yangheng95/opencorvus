@@ -383,3 +383,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [2026-10-09 单 agent 子侧栏历史调查](2026-10-09-child-history-readonly-201-203.md)：原153全库只读/当前Task与发布终态/控制输入和记忆前沿；原工具隔离与连接错误保留并修正。201/203实际0，未启动历史副本，子侧栏视觉仍未验。
 
+- [2026-10-09 原生运行器截止](2026-10-09-native-history-deadline-204.md)：修正Host无运行期限的根因，现有ProcessFacade接管；6正向真实测试/类型通过，实际截止1和自然7原生结算保留。子侧栏视觉仍待验。
+

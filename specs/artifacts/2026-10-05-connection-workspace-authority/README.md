@@ -485,3 +485,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [201 子侧栏历史普查](child-history-readonly-census-201/README.md) / [202 当前事实](child-history-frontier-audit-202/README.md) / [203 启动前沿](child-history-startup-frontiers-203/README.md)：单 agent 只读原153全库90表/2项目/1任务/5会话；139发布/1001投递/17 Provider/14工具闭合，3输入处置与15助手完成、8权限终态、记忆idle。永久进程身份按操作系统证明确已死亡；未启动副本，子侧栏视觉与完整启动资格仍待满足。
 
+- [204 原生运行器截止](native-history-deadline-204/README.md)：唯一ProcessFacade控制期限/显式前台子树策略，6项真实功能检查通过，实际Host截止1与自然7完整结算。普通Sol新Host与子侧栏真实截图仍待验，单 agent继续。
+

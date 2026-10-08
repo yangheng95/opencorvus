@@ -31,7 +31,7 @@ type CommandInactivityInput = {
   onStderr?: (chunk: Buffer) => void
 }
 export function runHostCommandWithInactivity(input: CommandInactivityInput): Promise<CommandInactivityResult> {
-  return runCommand(input, supervisedHostProcessFacade("inactivity-command"))
+  return runCommand(input, supervisedHostProcessFacade("inactivity-command", false))
 }
 export function runTaskCommandWithInactivity(
   identity: ProcessSupervisor.TaskProcessIdentity,

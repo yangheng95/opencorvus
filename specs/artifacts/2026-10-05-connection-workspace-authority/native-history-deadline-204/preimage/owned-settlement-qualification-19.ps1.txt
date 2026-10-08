@@ -1,0 +1,147 @@
+param(
+  [Parameter(Mandatory=$true)][ValidateSet('failure','preparation-deadline','manual-join','early-target-exit')][string]$Case,
+  [Parameter(Mandatory=$true)][string]$RunRoot,
+  [Parameter(Mandatory=$true)][ValidateRange(1,65535)][int]$Port,
+  [Parameter(Mandatory=$true)][string]$EvidenceRoot
+)
+$ErrorActionPreference='Stop'
+$taskRun=[IO.Path]::GetFullPath($RunRoot)
+$taskFormalEvidence=[IO.Path]::GetFullPath($EvidenceRoot)
+$taskQualificationPort=$Port
+. (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly
+$taskPrefix=[IO.Path]::GetFileName($taskRun).ToLower()+'-'+$Case
+$taskOccurrence=$taskPrefix+'-'+[Guid]::NewGuid().ToString()
+$taskBun='C:/Users/hengu/.bun/bin/bun.exe'
+$taskPackage='D:/myhexin-local/opencorvus/packages/opencorvus'
+if(Test-Path -LiteralPath $taskRun){throw 'Fresh no-Provider qualification directory required'}
+if(@(Get-NetTCPConnection -ErrorAction Stop|Where-Object {$_.State -eq 'Listen' -and $_.LocalPort -in @($taskQualificationPort,($taskQualificationPort+1))}).Count){throw 'Qualification service/grandchild port occupied'}
+$taskRuntime=Join-Path $taskRun 'runtime'
+$taskProject=Join-Path $taskRun 'project'
+$taskLocalEvidence=Join-Path $taskRun 'evidence'
+foreach($directory in @($taskRuntime,$taskProject,$taskLocalEvidence,$taskFormalEvidence,(Join-Path $taskRuntime 'config'),(Join-Path $taskRun 'home'),(Join-Path $taskRun 'appdata'),(Join-Path $taskRun 'localappdata'),(Join-Path $taskRun 'temp'))){[IO.Directory]::CreateDirectory($directory)|Out-Null}
+[IO.File]::WriteAllText((Join-Path $taskRuntime 'config/opencorvus.jsonc'),'{"prompt_profile":{"active":"base"}}',[Text.UTF8Encoding]::new($false))
+$taskEnvironmentBefore=@{}
+Get-ChildItem Env:|ForEach-Object {$taskEnvironmentBefore[$_.Name]=$_.Value}
+$taskEnvironment=@{}
+foreach($name in @('PATH','SystemRoot','WINDIR','ComSpec','PATHEXT','LANG','LC_ALL','LC_CTYPE')){if($taskEnvironmentBefore.ContainsKey($name)){$taskEnvironment[$name]=$taskEnvironmentBefore[$name]}}
+$taskEnvironment.HOME=Join-Path $taskRun 'home'
+$taskEnvironment.USERPROFILE=$taskEnvironment.HOME
+$taskEnvironment.HOMEDRIVE='C:'
+$taskEnvironment.HOMEPATH=$taskEnvironment.HOME.Substring(2).Replace('/','\')
+$taskEnvironment.APPDATA=Join-Path $taskRun 'appdata'
+$taskEnvironment.LOCALAPPDATA=Join-Path $taskRun 'localappdata'
+$taskEnvironment.TEMP=Join-Path $taskRun 'temp'
+$taskEnvironment.TMP=$taskEnvironment.TEMP
+$taskEnvironment.TMPDIR=$taskEnvironment.TEMP
+$taskEnvironment.OPENCORVUS_HOME=$taskRuntime
+$taskEnvironment.OPENCORVUS_DISABLE_EXTERNAL_SKILLS='1'
+$taskEnvironment.OPENCORVUS_DISABLE_AUTOUPDATE='1'
+$taskEnvironment.OPENCORVUS_TASK_PROCESS_MODE='native'
+foreach($name in @('CONFIG','DATA','CACHE','STATE')){$taskEnvironment['XDG_'+$name+'_HOME']=Join-Path $taskRun ('xdg-'+$name.ToLower());[IO.Directory]::CreateDirectory($taskEnvironment['XDG_'+$name+'_HOME'])|Out-Null}
+$taskProcess=$null
+$taskReceipt=$null
+$taskJobs=@()
+try {
+  try {
+    Get-ChildItem Env:|ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+    foreach($name in $taskEnvironment.Keys){[Environment]::SetEnvironmentVariable($name,$taskEnvironment[$name],'Process')}
+    $taskStartup=Join-Path $taskRun 'startup.json'
+    $taskWrapper=Join-Path $PSScriptRoot 'live-sol-cli-owned.ts'
+    $taskTargetScript=Join-Path $PSScriptRoot 'native-owned-target-21.ts'
+    $taskMode=if($Case -eq 'early-target-exit'){'early-target-exit'}else{'serve'}
+    $taskArgs=@($taskWrapper,'--owned-host',$taskLocalEvidence,$taskOccurrence,$taskBun,$taskTargetScript,$taskRun,[string]$taskQualificationPort,$taskOccurrence,$taskMode)
+    if(@($taskArgs|Where-Object {$_ -match '[\s"]'}).Count){throw 'Qualification launch requires quoting review'}
+    $taskProcess=Start-Process -FilePath $taskBun -ArgumentList $taskArgs -WorkingDirectory $taskPackage -WindowStyle Hidden -RedirectStandardOutput (Join-Path $taskRun 'stdout.log') -RedirectStandardError (Join-Path $taskRun 'stderr.log') -PassThru
+  } finally {
+    Get-ChildItem Env:|ForEach-Object {[Environment]::SetEnvironmentVariable($_.Name,$null,'Process')}
+    foreach($name in $taskEnvironmentBefore.Keys){[Environment]::SetEnvironmentVariable($name,$taskEnvironmentBefore[$name],'Process')}
+  }
+  $taskNativeReadyPath=Join-Path $taskLocalEvidence 'native-host-ready.json'
+  $taskNativeReadyDeadline=[DateTime]::UtcNow.AddSeconds(90)
+  do{
+    if(Test-Path -LiteralPath (Join-Path $taskLocalEvidence 'native-host-error.json')){throw 'Actual native Host admission failed'}
+    if(Test-Path -LiteralPath $taskNativeReadyPath){$taskNativeReady=Get-Content -Raw -LiteralPath $taskNativeReadyPath|ConvertFrom-Json;break}
+    $taskProcess.Refresh();if($taskProcess.HasExited){throw 'Actual native Host exited before readiness'}
+    Start-Sleep -Milliseconds 100
+  }while([DateTime]::UtcNow -lt $taskNativeReadyDeadline)
+  if(!$taskNativeReady -or $taskNativeReady.occurrence -ne $taskOccurrence -or $taskNativeReady.host.pid -ne $taskProcess.Id -or (Get-OwnedNativeState $taskNativeReady.host) -ne 'exact_live' -or (Get-OwnedNativeState $taskNativeReady.target) -ne 'exact_live'){throw 'Actual native Host/Target admission failed'}
+  $taskOwner=@{ProcessId=$taskNativeReady.target.pid;processInstanceID=$taskNativeReady.target.processInstanceID}
+  $taskReceipt=[ordered]@{observedAtUtc=[DateTime]::UtcNow.ToString('o');runRoot=$taskRun;runtime=$taskRuntime;project=$taskProject;evidence=$taskLocalEvidence;settlementEvidenceRoot=$taskFormalEvidence;evidencePrefix=$taskPrefix;occurrence=$taskOccurrence;port=$taskQualificationPort;owner=$taskOwner;host=$taskNativeReady.host;nativeTarget=$taskNativeReady.target;targetBirthAtMs=$taskNativeReady.targetBirthAtMs;qualification='Actual no-Provider development serve; no Task/Session seeded, no copied authority'}
+  Write-OwnedLaunchFact (Join-Path $taskRun 'launch-owner.json') $taskReceipt
+  $taskReceipt=Get-Content -Raw -LiteralPath (Join-Path $taskRun 'launch-owner.json')|ConvertFrom-Json
+  if($Case -eq 'early-target-exit'){
+    & (Join-Path $PSScriptRoot 'live-sol-shutdown.ps1') -RunRoot $taskRun -EvidenceRoot $taskFormalEvidence -EvidencePrefix $taskPrefix -Reason 'qualification-early-target-exit'|Out-Null
+    $taskPhysical=Get-Content -Raw -LiteralPath (Join-Path $taskFormalEvidence ($taskPrefix+'-physical-terminal-and-pair-cleanup.json'))|ConvertFrom-Json
+    $taskAdmission=Get-Content -Raw -LiteralPath (Join-Path $taskFormalEvidence ($taskPrefix+'-shutdown-admission.json'))|ConvertFrom-Json
+    $taskFirstFailure=Get-Content -Raw -LiteralPath (Join-Path $taskLocalEvidence 'failed.json')|ConvertFrom-Json
+    if(!$taskPhysical.physicalCompletion -or !$taskPhysical.pairedCleanupComplete -or $taskPhysical.nativeSettlement.terminal.exitCode -ne 1 -or $taskAdmission.dispatch -or $taskFirstFailure.pid -ne $taskOwner.ProcessId -or $taskFirstFailure.occurrence -ne $taskOccurrence -or $taskFirstFailure.error.message -ne 'Explicit actual checker Target failure before serve'){throw 'Actual early Target exception/whole settlement contract failed'}
+    Write-OwnedLaunchFact (Join-Path $taskFormalEvidence ($taskPrefix+'-qualified.json')) @{case=$Case;occurrence=$taskOccurrence;observedAtUtc=[DateTime]::UtcNow.ToString('o');physicalCompletion=$true;pairedCleanupComplete=$true;nativeSettlement=$taskPhysical.nativeSettlement;admission=$taskAdmission;firstFailure=$taskFirstFailure;boundary='Actual early exception and exit1 retained; no health, public shutdown, Task, Provider or UI pass'}
+    Write-Output 'Qualified actual early Target exception and production native settlement.'
+    return
+  }
+  $taskReadyDeadline=[DateTime]::UtcNow.AddSeconds(60)
+  do {
+    if(Test-Path -LiteralPath $taskStartup){
+      $taskReady=Get-Content -Raw -LiteralPath $taskStartup|ConvertFrom-Json
+      if($taskReady.outcome -ne 'listening' -or $taskReady.pid -ne $taskOwner.ProcessId -or $taskReady.occurrenceID -ne $taskOccurrence){throw 'Genuine startup identity failed'}
+      break
+    }
+    $taskProcess.Refresh()
+    if($taskProcess.HasExited){throw 'Actual serve exited before readiness'}
+    Start-Sleep -Milliseconds 250
+  }while([DateTime]::UtcNow -lt $taskReadyDeadline)
+  if(!$taskReady){throw 'Actual serve readiness timed out'}
+  $taskHealth=Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$taskQualificationPort/global/health" -TimeoutSec 15
+  $taskHealthBody=$taskHealth.Content|ConvertFrom-Json
+  if($taskHealth.StatusCode -ne 200 -or !$taskHealthBody.healthy){throw 'Actual service health contract failed'}
+  Write-OwnedLaunchFact (Join-Path $taskLocalEvidence 'qualification-health.json') @{status=[int]$taskHealth.StatusCode;body=$taskHealthBody;occurrence=$taskOccurrence;observedAtUtc=[DateTime]::UtcNow.ToString('o')}
+  $taskGrandchild=Get-Content -Raw -LiteralPath (Join-Path $taskLocalEvidence 'grandchild-ready.json')|ConvertFrom-Json
+  $taskGrandListeners=@(Get-NetTCPConnection -ErrorAction Stop|Where-Object {$_.State -eq 'Listen' -and $_.LocalPort -eq ($taskQualificationPort+1)}|Select-Object LocalAddress,LocalPort,OwningProcess)
+  $taskGrandState=Get-OwnedNativeState $taskGrandchild.owner
+  Write-OwnedLaunchFact (Join-Path $taskLocalEvidence 'grandchild-pre-shutdown-physical.json') @{occurrence=$taskOccurrence;expected=$taskGrandchild.owner;state=$taskGrandState;listeners=$taskGrandListeners;expectedPort=($taskQualificationPort+1);observedAtUtc=[DateTime]::UtcNow.ToString('o')}
+  if((Get-OwnedNativeState $taskGrandchild.owner) -ne 'exact_live' -or $taskGrandListeners.Count -ne 1 -or $taskGrandListeners[0].OwningProcess -ne $taskGrandchild.owner.pid){throw 'Actual grandchild must survive exited parent with its own listener'}
+  $taskBorn=[long]$taskReceipt.targetBirthAtMs
+  $taskPreparationDeadline=$taskBorn+600000
+  if($Case -eq 'failure'){
+    # Explicit checker fault injection; not a product or Provider failure.
+    Write-OwnedLaunchFact (Join-Path $taskLocalEvidence 'failed.json') @{pid=$taskOwner.ProcessId;occurrence=$taskOccurrence;error=@{name='OwnedCheckerQualificationFailure';message='Explicit first-failure settlement qualification after actual healthy200'};qualification='Local supervisor control input; no model/Task pass or product defect claim'}
+  }elseif($Case -eq 'preparation-deadline'){
+    $taskPreparationDeadline=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()+10000
+    Write-OwnedLaunchFact (Join-Path $taskLocalEvidence 'qualification-deadline-policy.json') @{kind='short-no-Provider-preparation-policy';preparationDeadlineMs=$taskPreparationDeadline;genuineTaskMaximumMs=900000;taskBoundary='No Task is seeded; actual Task total remains unqualified by this case'}
+  }else{
+    $taskHelper=Join-Path $PSScriptRoot 'live-sol-shutdown.ps1'
+    foreach($index in 1..2){
+      $taskJobs+=Start-Job -ScriptBlock {param($run,$evidence,$prefix,$helper,$reason);& $helper -RunRoot $run -EvidenceRoot $evidence -EvidencePrefix $prefix -Reason $reason} -ArgumentList $taskRun,$taskFormalEvidence,$taskPrefix,$taskHelper,('qualified-manual-'+$index)
+    }
+  }
+  Watch-OwnedQualification -LaunchReceipt $taskReceipt -EvidenceRoot $taskFormalEvidence -PreparationDeadlineMilliseconds $taskPreparationDeadline|Out-Null
+  foreach($job in $taskJobs){
+    $finished=Wait-Job -Job $job -Timeout 60
+    if(!$finished -or $job.State -ne 'Completed'){throw 'Concurrent manual settlement did not complete'}
+    $joinedOutput=@(Receive-Job -Job $job -ErrorAction Stop)
+    Write-OwnedLaunchFact (Join-Path $taskLocalEvidence ('manual-job-'+$job.Id+'.json')) @{state=$job.State.ToString();output=$joinedOutput;qualification='Actual competing callers join the same physical receipt'}
+    Remove-Job -Job $job
+  }
+  $taskPhysical=Get-Content -Raw -LiteralPath (Join-Path $taskFormalEvidence ($taskPrefix+'-physical-terminal-and-pair-cleanup.json'))|ConvertFrom-Json
+  $taskAdmission=Get-Content -Raw -LiteralPath (Join-Path $taskFormalEvidence ($taskPrefix+'-shutdown-admission.json'))|ConvertFrom-Json
+  if(!$taskPhysical.physicalCompletion -or !$taskPhysical.pairedCleanupComplete -or @($taskPhysical.chain|Where-Object originalOccurrencePresent).Count -or @($taskPhysical.listeners|Where-Object {$_}).Count){throw 'Real chain/port/pair contract failed'}
+  if(!$taskAdmission.dispatch -or $taskAdmission.status -ne 200 -or $taskAdmission.pageClosed){throw 'Actual public shutdown admission failed'}
+  $taskProcess.Refresh()
+  if(!$taskProcess.HasExited){throw 'Original actual child still live after closure'}
+  $taskTrigger=$null
+  if(Test-Path -LiteralPath (Join-Path $taskLocalEvidence 'supervision-settlement-trigger.json')){$taskTrigger=Get-Content -Raw -LiteralPath (Join-Path $taskLocalEvidence 'supervision-settlement-trigger.json')|ConvertFrom-Json}
+  if($Case -eq 'failure' -and $taskTrigger.reason -ne 'immutable-wrapper-failure'){throw 'First-failure trigger contract mismatch'}
+  if($Case -eq 'preparation-deadline' -and ($taskTrigger.reason -ne 'fixed-preparation-maximum' -or $taskTrigger.preparationDeadlineMs -ne $taskPreparationDeadline)){throw 'Fixed preparation trigger contract mismatch'}
+  if((Get-OwnedNativeState $taskGrandchild.owner) -ne 'dead_or_reused'){throw 'Actual outer foreground Job grandchild settlement failed'}
+  $taskGrandAfter=@(Get-NetTCPConnection -ErrorAction Stop|Where-Object {$_.State -eq 'Listen' -and $_.LocalPort -eq ($taskQualificationPort+1)})
+  if($taskGrandAfter.Count){throw 'Actual grandchild listener still present after Job settlement'}
+  & (Join-Path $PSScriptRoot 'live-sol-shutdown.ps1') -RunRoot $taskRun -EvidenceRoot $taskFormalEvidence -EvidencePrefix $taskPrefix -Reason 'post-completion-join'|Out-Null
+  Write-OwnedLaunchFact (Join-Path $taskFormalEvidence ($taskPrefix+'-qualified.json')) @{case=$Case;occurrence=$taskOccurrence;observedAtUtc=[DateTime]::UtcNow.ToString('o');grandchild=$taskGrandchild.owner;grandchildBefore="exact_live";grandchildAfter="dead_or_reused";nativeSettlement=$taskPhysical.nativeSettlement;healthStatus=200;shutdownStatus=$taskAdmission.status;exitCode=$taskProcess.ExitCode;physicalCompletion=$taskPhysical.physicalCompletion;pairedCleanupComplete=$taskPhysical.pairedCleanupComplete;trigger=$taskTrigger;boundary='Real existing serve and sole supervisor/shutdown; no Provider, seeded Task, UI automation, fake HTTP server, timer extension or process kill'}
+  Write-Output "Qualified actual no-Provider settlement case $Case on port $taskQualificationPort."
+} catch {
+  $taskOriginalFailure=$_
+  if($taskReceipt){
+    try {& (Join-Path $PSScriptRoot 'live-sol-shutdown.ps1') -RunRoot $taskRun -EvidenceRoot $taskFormalEvidence -EvidencePrefix $taskPrefix -Reason 'qualification-checker-error'|Out-Null}catch {Write-Output 'Exact qualification cleanup remains blocked; retained original evidence and authority boundary.'}
+  }
+  throw $taskOriginalFailure
+}

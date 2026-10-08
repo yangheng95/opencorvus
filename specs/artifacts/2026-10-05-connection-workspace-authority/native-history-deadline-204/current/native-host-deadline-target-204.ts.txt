@@ -1,0 +1,8 @@
+import { spawn } from "node:child_process"
+
+const mode = process.argv[2]
+if (mode !== "deadline" && mode !== "natural") throw Error("Exact owned204 process mode required")
+const child = spawn(process.execPath, ["-e", "setInterval(()=>{},1000)"], { stdio: "ignore" })
+process.stdout.write(`owned-native-child:${child.pid}\n`)
+if (mode === "natural") setTimeout(() => process.exit(7), 100)
+else setInterval(() => process.stdout.write("native-active-byte\n"), 30)
