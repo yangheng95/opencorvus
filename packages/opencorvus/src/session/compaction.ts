@@ -544,8 +544,8 @@ export namespace SessionCompaction {
     return {
       ...estimate,
       estimatedTokens: estimate.totalTokensEst,
-      usableBudget: capacity.status === "known" ? capacity.tokens : undefined,
-      exceeds: capacity.status === "known" && estimate.totalTokensEst > capacity.tokens,
+      usableBudget: capacity.tokens,
+      exceeds: estimate.totalTokensEst > capacity.tokens,
     }
   }
 
@@ -644,10 +644,13 @@ export namespace SessionCompaction {
     )
     const latest = prior.at(-1)
     if (!latest) return undefined
+    const checkpoint = messages[latest.assistantIndex]!.parts.find(
+      (part): part is Message.CompactionPart => part.type === "compaction",
+    )!
     const head = messages.slice(latest.assistantIndex)
     return head.length
       ? {
-          anchor_id: sourceUserMessageID,
+          anchor_id: checkpoint.anchor_id,
           head,
         }
       : { head: [] }

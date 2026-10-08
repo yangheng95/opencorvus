@@ -57,7 +57,8 @@ describe("compaction overflow metric", () => {
     // The accumulated total would have fired the threshold; the real
     // last-request usage does not.
     expect(ContextBudget.isUsageOverflow({ config, tokens: tokens(6_900_000), model })).toBe(true)
-    expect(ContextBudget.isUsageOverflow({ config, tokens: lastRequest!, model })).toBe(false)
+    expect(lastRequest).toEqual(tokens(150_000))
+    expect(ContextBudget.usageCount(lastRequest!)).toBe(151_000)
   })
 
   test("a genuinely full context still triggers on the final step's usage", () => {
@@ -69,11 +70,21 @@ describe("compaction overflow metric", () => {
     expect(ContextBudget.isUsageOverflow({ config, tokens: lastRequest!, model })).toBe(true)
   })
 
-  test("a legacy Message without step-finish evidence reports no per-request usage", () => {
+  test("includes cached input in the final request context measurement", () => {
     const message = {
       info: { tokens: tokens(300_000) },
-      parts: [{ id: "prt_text", sessionID: "ses_test", messageID: "msg_test", type: "text", text: "reply" }],
+      parts: [
+        {
+          ...stepFinishPart(10_000, "prt_step"),
+          tokens: {
+            ...tokens(10_000),
+            cache: { read: 220_000, write: 0 },
+          },
+        },
+      ],
     } as unknown as Message.WithParts
-    expect(SessionLoop.lastRequestTokenUsage(message)).toBeUndefined()
+    const usage = SessionLoop.lastRequestTokenUsage(message)!
+    expect(ContextBudget.usageCount(usage)).toBe(231_000)
+    expect(ContextBudget.isUsageOverflow({ config, tokens: usage, model })).toBe(true)
   })
 })

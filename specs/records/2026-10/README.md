@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [256k compaction window and stable Task anchor](2026-10-08-compaction-window-and-task-anchor.md): explicit longer-context configuration and shared incremental/repeated checkpoint repair.
+
 - [Bounded live Tool payload viewport119](2026-10-08-live-tool-payload-viewport.md)
 
 - [Accurate Tool preparation and execution118](2026-10-08-tool-input-status.md)

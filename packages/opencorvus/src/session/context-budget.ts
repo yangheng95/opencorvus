@@ -5,6 +5,7 @@ import type { Message } from "./message"
 
 export namespace ContextBudget {
   export const COMPACTION_THRESHOLD_DEFAULT = 0.9
+  export const MAX_CONTEXT_TOKENS_DEFAULT = 256_000
   export const DEFAULT_TAIL_TURNS = 2
   export const MIN_PRESERVE_RECENT_TOKENS = 2_000
   export const PRESERVE_RECENT_RATIO = 0.25
@@ -15,24 +16,22 @@ export namespace ContextBudget {
     const output = input.effectiveOutputTokens ?? ProviderTransform.maxOutputTokens(input.model)
     const reserved = Math.max(output, input.config.compaction?.reserved ?? 0)
     const limits = [
+      input.config.compaction?.max_context_tokens ?? MAX_CONTEXT_TOKENS_DEFAULT,
       context > 0 ? Math.max(0, context - reserved) : undefined,
       prompt && prompt > 0 ? prompt : undefined,
     ].filter((value): value is number => value !== undefined)
-    return limits.length ? { status: "known" as const, tokens: Math.min(...limits) } : { status: "unknown" as const }
+    return { status: "known" as const, tokens: Math.min(...limits) }
   }
 
   export function usable(input: { config: Config.Info; model: Provider.Model; effectiveOutputTokens?: number }) {
-    const budget = capacity(input)
-    return budget.status === "known" ? budget.tokens : 0
+    return capacity(input).tokens
   }
 
   export function preserveRecent(input: { config: Config.Info; model: Provider.Model }) {
-    return (
+    return Math.min(
+      Math.floor(usable(input) * threshold(input)),
       input.config.compaction?.preserve_recent_tokens ??
-      Math.min(
-        Math.floor(usable(input) * threshold(input)),
         Math.max(MIN_PRESERVE_RECENT_TOKENS, Math.floor(usable(input) * PRESERVE_RECENT_RATIO)),
-      )
     )
   }
 
@@ -47,7 +46,6 @@ export namespace ContextBudget {
   export function predictiveLimit(input: { config: Config.Info; model: Provider.Model }) {
     if (input.config.compaction?.auto === false) return undefined
     const budget = capacity(input)
-    if (budget.status === "unknown") return undefined
     const usableBudget = budget.tokens
     const ratio = threshold({ config: input.config })
     return {
@@ -63,7 +61,6 @@ export namespace ContextBudget {
     model: Provider.Model
   }) {
     if (input.config.compaction?.auto === false) return false
-    if (capacity(input).status === "unknown") return false
     return usageCount(input.tokens) >= usable(input) * threshold({ config: input.config })
   }
 }

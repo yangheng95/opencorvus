@@ -88,9 +88,27 @@ ID、API 模型 ID、endpoint、catalog revision，以及该请求实际使用�
 
 context-derived prompt budget 为 `context - reserved_output`。同时存在独立 `input` 时使用
 `min(input, context-derived)`，不能再从 `input` 重复扣除 output reservation。只有 `input` 时
-直接使用 input；只有 `context` 时使用 context-derived；两者都缺失时 predictive authority 是
-typed unknown。估算器在同一单位中计算 system blocks、可见 messages、Tool schemas、附件/媒体
-估算与 output reservation。禁止猜保守上限、动态学习第二阈值或自动换模型。
+直接使用 input；只有 `context` 时使用 context-derived。最终 prompt budget 还与显式运行配置
+`compaction.max_context_tokens` 相交；该配置默认 **256000 tokens**，超过 256k 必须明确配置更大值。
+Provider 的未知物理容量保持未知；配置窗口提供已知的运行预算，不冒充 Provider 上限。
+估算器在同一单位中计算 system blocks、可见 messages、Tool schemas、附件/媒体
+估算与 output reservation。禁止动态学习第二阈值或自动换模型。
+
+例如，在现有 `opencorvus.jsonc` 配置中允许最多 512k 的 prompt context：
+
+```json
+{
+  "compaction": {
+    "max_context_tokens": 512000
+  }
+}
+```
+
+默认自动触发线仍为运行预算的 90%，因此 256k 窗口在估算达到 230400 tokens 时压缩。
+预测、实际 usage 触发、普通/摘要流式请求的最终容量校验共享 `ContextBudget`；较小的模型容量或
+output reservation 可以进一步收窄窗口。`auto=false` 只关闭自动压缩，最终请求仍受配置窗口限制。
+新字段必须是正整数，并由同一配置 schema 生成 API（Application Programming Interface，应用程序接口）
+与 SDK（Software Development Kit，软件开发工具包）契约；没有另一个模型目录或 UI 状态来源。
 
 Provider 原始流错误只在 `Message.fromError(raw, { providerID })` 规范化一次。Tool cleanup 只消费
 canonical Message error 的严格投影；它不得重新解析 Provider object。predictive 与 reactive
@@ -111,7 +129,8 @@ Provider step 发送前复核最终输入容量，使用该请求实际的 outpu
 只有正常 `stop`、有最终可见正文且替换后估算 token 少于被替换历史的摘要才可发布 checkpoint。
 达到输出上限、异常终止或不缩小的结果保留为 typed failed assistant/control，上一有效 Session
 memory 与原始历史继续权威。所有摘要识别、持久化与 memory 重建共享这一完成判定。
-默认近期保留预算为可用 prompt 的 25%，上限为触发线；明确配置继续优先。保留边界可以是
+默认近期保留预算为配置窗口与模型容量相交后可用 prompt 的 25%（默认窗口对应 64000 tokens）；
+明确配置的近期保留量也以触发线为上限。保留边界可以是
 用户消息或已完成、Tool/result 完整配对的 assistant step，选择与重建共用同一判定。
 大 Tool 输出在送入 summarizer 前使用现有精确结果引用与有界 preview，reader 可分页读取原文；
 不是额外的不可见历史替换。历史附件保留可寻址 locator，摘要里的截图/焦点不授予当前桌面状态。

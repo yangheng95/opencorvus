@@ -1570,11 +1570,26 @@ export namespace Message {
           result.splice(0, result.length, ...newer, result[summaryIndex]!, msg)
           break
         }
+        // An assistant-step tail newer than the summary's source has already
+        // been traversed. Continue toward the original anchor instead of
+        // searching for that tail again in older history.
+        const collectedTail = part.tail_start_id
+          ? result.find((candidate) => candidate.info.id === part.tail_start_id)
+          : undefined
+        const tailSatisfied = !part.tail_start_id || (!!collectedTail && isCompactionTailBoundary(collectedTail))
+        if (tailSatisfied) {
+          const summaryIndex = result.findIndex((candidate) => candidate.info.id === checkpoint.summaryID)
+          if (summaryIndex < 0) break
+          const newer = result.slice(0, summaryIndex)
+          const tailIndex = collectedTail ? result.indexOf(collectedTail) : -1
+          const tailBlock = tailIndex > summaryIndex ? result.slice(summaryIndex + 1, tailIndex + 1) : []
+          result.splice(0, result.length, ...newer, ...tailBlock, result[summaryIndex]!, msg)
+        }
         retain = {
           tailID: part.tail_start_id,
           anchorID: part.anchor_id,
           afterCompactionIndex: result.length,
-          tailSatisfied: !part.tail_start_id,
+          tailSatisfied,
         }
         continue
       }

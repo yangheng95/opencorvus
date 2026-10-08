@@ -452,6 +452,10 @@ export type Config = {
      */
     auto?: boolean
     /**
+     * Maximum prompt-context tokens for streamed requests and automatic compaction. Defaults to 256000; explicitly set a larger value to use a longer context. Model input capacity and output reservation may lower this ceiling.
+     */
+    max_context_tokens?: number
+    /**
      * Token budget for verbatim recent-tail retention. Defaults to 25% of usable prompt capacity, bounded by the compaction trigger; explicit zero retains no tail.
      */
     preserve_recent_tokens?: number

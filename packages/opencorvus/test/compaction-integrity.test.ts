@@ -30,7 +30,7 @@ afterEach(resetMemoryDatabase)
 describe("compaction request and continuation contracts", () => {
   test("intersects input capacity with the actual combined-window output reservation", () => {
     const model = limitModel({ context: 400_000, input: 272_000, output: 128_000 })
-    expect(ContextBudget.capacity({ config: {}, model })).toEqual({ status: "known", tokens: 272_000 })
+    expect(ContextBudget.capacity({ config: {}, model })).toEqual({ status: "known", tokens: 256_000 })
     expect(
       ContextBudget.capacity({
         config: {},
@@ -42,17 +42,72 @@ describe("compaction request and continuation contracts", () => {
       ContextBudget.capacity({ config: {}, model: limitModel({ context: 0, input: 80_000, output: 8_000 }) }),
     ).toEqual({ status: "known", tokens: 80_000 })
     expect(ContextBudget.capacity({ config: {}, model: limitModel({ context: 0, output: 8_000 }) })).toEqual({
-      status: "unknown",
+      status: "known",
+      tokens: 256_000,
     })
     expect(ContextBudget.capacity({ config: {}, model: limitModel({ context: 8_000, output: 8_000 }) })).toEqual({
       status: "known",
       tokens: 0,
     })
-    expect(ContextBudget.preserveRecent({ config: {}, model })).toBe(68_000)
+    expect(ContextBudget.preserveRecent({ config: {}, model })).toBe(64_000)
     expect(ContextBudget.preserveRecent({ config: { compaction: { preserve_recent_tokens: 4_000 } }, model })).toBe(
       4_000,
     )
   })
+
+  test.each(["before-source", "after-source"] as const)(
+    "preserves the initial anchor with an assistant tail %s and repeated continuation compaction",
+    async (placement) => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const session = await Session.create({ kind: "assistant", title: "Stable incremental compaction anchor" })
+          const initial = await user(session.id, "Original Task authority")
+          await assistant(session.id, initial.id, "Earlier evidence ".repeat(1_000), true)
+          let next: Message.User
+          let tail: Message.Assistant
+          if (placement === "before-source") {
+            tail = await assistant(session.id, initial.id, "Verified tool result", true)
+            next = await user(session.id, "Incremental guidance")
+          } else {
+            next = await user(session.id, "Incremental guidance")
+            tail = await assistant(session.id, next.id, "Verified tool result", true)
+          }
+          const summary = await assistant(session.id, next.id, "Verified prior work", false, true)
+          await Session.publishCompactionCheckpoint({
+            info: summary,
+            part: {
+              id: Identifier.ascending("part"),
+              sessionID: session.id,
+              messageID: summary.id,
+              type: "compaction",
+              auto: true,
+              anchor_id: initial.id,
+              tail_start_id: tail.id,
+            },
+          })
+          const projected = await Message.filterCompacted(MessageStore.stream(session.id))
+          expect(projected.map((message) => message.info.id)).toEqual([
+            initial.id,
+            summary.id,
+            ...(placement === "before-source" ? [tail.id, next.id] : [next.id, tail.id]),
+          ])
+          expect(projected[0]?.parts).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: "text", text: "Original Task authority" })]),
+          )
+          const repeated = SessionCompaction.TestHooks.repeatedCompactionInput(projected, next.id)
+          expect(repeated).toMatchObject({ anchor_id: initial.id })
+          expect(repeated?.head[0]?.info.id).toBe(summary.id)
+          Database.close()
+          Database.Client()
+          expect(
+            (await Message.filterCompacted(MessageStore.stream(session.id))).map((message) => message.info.id),
+          ).toEqual(projected.map((message) => message.info.id))
+        },
+      })
+    },
+  )
 
   test("prices compaction system, tools and binary images in the same request envelope", () => {
     const request = {
@@ -328,6 +383,7 @@ describe("real local streaming compaction transport", () => {
           directory: project.path,
           fn: async () => {
             await Config.updateGlobalPatch({
+              compaction: { max_context_tokens: 19_000 },
               provider: {
                 [target.providerID]: {
                   name: "Local continuation transport",
@@ -337,7 +393,7 @@ describe("real local streaming compaction transport", () => {
                     [target.modelID]: {
                       name: "Checkpoint",
                       tool_call: true,
-                      limit: { context: 20_000, output: 1_000 },
+                      limit: { context: 1_000_000, output: 1_000 },
                     },
                   },
                 },
@@ -437,7 +493,7 @@ describe("real local streaming compaction transport", () => {
           directory: project.path,
           fn: async () => {
             await Config.updateGlobalPatch({
-              compaction: { tail_turns: 0 },
+              compaction: { tail_turns: 0, max_context_tokens: 256_000 },
               provider: {
                 [target.providerID]: {
                   name: "Local compaction transport",
@@ -573,6 +629,43 @@ describe("real local streaming compaction transport", () => {
                   expect.objectContaining({ role: "user", content: "Continue the same task after compaction." }),
                 ]),
               )
+              await assistant(session.id, next.id, "New verified evidence ".repeat(1_000))
+              const repeatedControl = await SessionCompaction.create({
+                sessionID: session.id,
+                source: next,
+                auto: true,
+              })
+              const repeatedOutcome = await SessionLoop.TestHooks.executeCompactionControl({
+                control: repeatedControl,
+                sessionID: session.id,
+                run: async () =>
+                  SessionCompaction.process(
+                    {
+                      sessionID: session.id,
+                      parentID: next.id,
+                      messages: await Message.filterCompacted(MessageStore.stream(session.id)),
+                      abort: AbortSignal.timeout(30_000),
+                      auto: true,
+                      model: target,
+                    },
+                    { prepareProviderTool: ({ tool }) => tool },
+                  ),
+              })
+              expect(repeatedOutcome).toBe("continue")
+              expect(SessionControl.get(repeatedControl.id)?.status).toBe("consumed")
+              const repeatedHistory = await Message.filterCompacted(MessageStore.stream(session.id))
+              const repeatedSummary = repeatedHistory.find(
+                (message) => message.info.role === "assistant" && message.info.summary,
+              )
+              expect(repeatedSummary?.parts.find((part) => part.type === "compaction")).toMatchObject({
+                anchor_id: source.id,
+              })
+              expect(repeatedHistory.map((message) => message.info.id)).toEqual([
+                source.id,
+                repeatedSummary!.info.id,
+                next.id,
+              ])
+              expect(requests).toHaveLength(3)
             } else {
               expect(outcome).toMatchObject({
                 name: "CompactionSummaryInvalidError",

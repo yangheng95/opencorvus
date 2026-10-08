@@ -303,9 +303,9 @@ export namespace LLM {
     })
     const checkCapacity = (messages: ModelMessage[], activeTools = tools, stepSystem = system) => {
       const estimate = RequestBudget.estimate({ system: stepSystem, messages, tools: activeTools })
-      if (capacity.status === "known" && estimate.totalTokensEst > capacity.tokens) {
+      if (estimate.totalTokensEst > capacity.tokens) {
         throw new Message.ContextOverflowError({
-          message: `Final request exceeds declared prompt capacity: estimated ${estimate.totalTokensEst} tokens, capacity ${capacity.tokens}; system=${estimate.systemTokensEst}, tools=${estimate.toolSchemaTokensEst}, messages=${estimate.messagePayloadTokensEst}, media=${estimate.mediaTokensEst}.`,
+          message: `Final request exceeds configured prompt capacity: estimated ${estimate.totalTokensEst} tokens, capacity ${capacity.tokens}; system=${estimate.systemTokensEst}, tools=${estimate.toolSchemaTokensEst}, messages=${estimate.messagePayloadTokensEst}, media=${estimate.mediaTokensEst}.`,
         })
       }
     }

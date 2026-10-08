@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [256k compaction window and stable Task anchor](records/2026-10/2026-10-08-compaction-window-and-task-anchor.md): explicit longer-context configuration and shared repeated/incremental checkpoint reconstruction repair; original failed Task remains immutable.
+
 - [Live Tool payload viewport119 Recall](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-plan-119.md): genuine11901 Sources/answer complete; large live-preview viewport after still unmet.
 
 - [Independent large-file11902 plan](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/large-input-live-plan-11902.md): fresh Code artifact plus actual live-input sampling proposed; original11901 preserved, execution held.

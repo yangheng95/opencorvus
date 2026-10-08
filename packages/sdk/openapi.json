@@ -1541,6 +1541,12 @@
                 "description": "Enable automatic compaction when context is full",
                 "type": "boolean"
               },
+              "max_context_tokens": {
+                "description": "Maximum prompt-context tokens for streamed requests and automatic compaction. Defaults to 256000; explicitly set a larger value to use a longer context. Model input capacity and output reservation may lower this ceiling.",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
+              },
               "preserve_recent_tokens": {
                 "description": "Token budget for verbatim recent-tail retention. Defaults to 25% of usable prompt capacity, bounded by the compaction trigger; explicit zero retains no tail.",
                 "maximum": 9007199254740991,

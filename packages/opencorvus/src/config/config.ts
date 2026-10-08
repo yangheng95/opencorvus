@@ -1633,6 +1633,14 @@ export namespace Config {
         .object({
           auto: z.boolean().optional().describe("Enable automatic compaction when context is full"),
           prune: z.boolean().optional().describe("Enable pruning of old tool outputs"),
+          max_context_tokens: z
+            .number()
+            .int()
+            .positive()
+            .optional()
+            .describe(
+              "Maximum prompt-context tokens for streamed requests and automatic compaction. Defaults to 256000; explicitly set a larger value to use a longer context. Model input capacity and output reservation may lower this ceiling.",
+            ),
           reserved: z
             .number()
             .int()

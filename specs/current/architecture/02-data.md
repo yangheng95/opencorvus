@@ -491,6 +491,13 @@ assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由�
 该 receipt 投影，不按 source 或 wall-clock 猜测。只有 OS 证明原 occurrence `dead_or_reused` 后才原子替换并
 终态化废弃 assistant。服务重启只销毁 Runtime，不能使 Session、message、descriptor
 或 durable coordination request 失效。
+
+Compaction history reconstruction preserves the original dispatch authority input across incremental
+continuations. During newest-first traversal, a completed assistant-step tail already encountered before
+the checkpoint's source input satisfies that boundary immediately; reconstruction continues toward the
+checkpoint's original anchor. Repeated compaction for the same source keeps that checkpoint anchor,
+not the incremental source Message. Worker descriptor/Task authority checks remain strict. Invalid
+historical markers are not rewritten or repaired by a different dispatch or a new Session.
 Windows 进程对象即使在退出后仍可能因外部 query handle 而保持可查询；只有持有 `SYNCHRONIZE` 权限的
 process handle 经零时长 `WaitForSingleObject` 返回 `WAIT_TIMEOUT`，才可结合匹配的 creation FILETIME 证明
 `exact_live`。已 signaled 的 process object 必须投影为 `dead_or_reused`；`GetProcessTimes` 在未退出时的 exit
