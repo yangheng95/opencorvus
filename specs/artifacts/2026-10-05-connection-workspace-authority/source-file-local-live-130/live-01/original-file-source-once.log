@@ -1,0 +1,17 @@
+94 |   assert.equal(promptOwners.length,0)
+95 |   assert.equal(provider.length,complete.requests)
+96 |   for(const row of provider) assert.deepEqual({model:row.model,streaming:row.streaming,status:row.status,reader:row.reader,terminal:row.terminal},{model:"gpt-6.1-sol",streaming:true,status:200,reader:"settled",terminal:"eof"})
+97 |   for(const file of manifest.files){
+98 |     const qualifying=reads.filter(read=>read.outcome?.outcome === "completed" && read.envelopeKind === "json" && Array.isArray(read.result?.sources)).flatMap(read=>read.result.sources.map((source:Record<string,unknown>)=>({read,source}))).filter(({source}: {source: {type:string;path:string;range?:unknown}})=>source.type === "source-file" && path.resolve(source.path) === path.resolve(file.path))
+99 |     assert.ok(qualifying.length > 0,`UNMET actual read Source for ${file.path}`)
+                ^
+AssertionError: UNMET actual read Source for C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/source-file-local-live-130-01/project/references/README.md
+ generatedMessage: false,
+     actual: false,
+   expected: true,
+   operator: "==",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\verify-current-file-sources-128.ts:99:12
+
+Bun v1.3.14 (Windows x64)

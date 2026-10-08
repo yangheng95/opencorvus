@@ -1,0 +1,20 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "include": [
+    "./file-source-facts-validation.ts",
+    "./file-source-facts-offline.ts",
+    "./verify-current-file-sources-128.ts",
+    "./file-source-facts-validation.test.ts"
+  ],
+  "exclude": [
+    "../packages/opencorvus/dist/**/*"
+  ],
+  "compilerOptions": {
+    "types": [
+      "bun"
+    ],
+    "typeRoots": [
+      "../packages/opencorvus/node_modules/@types"
+    ]
+  }
+}

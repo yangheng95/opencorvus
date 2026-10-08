@@ -1,0 +1,18 @@
+.tmp-product-iteration/file-source-facts-offline.ts(1,16): error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+.tmp-product-iteration/file-source-facts-offline.ts(3,25): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+.tmp-product-iteration/file-source-facts-offline.ts(4,26): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+.tmp-product-iteration/file-source-facts-validation.test.ts(1,30): error TS2307: Cannot find module 'bun:test' or its corresponding type declarations.
+.tmp-product-iteration/file-source-facts-validation.test.ts(2,16): error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+.tmp-product-iteration/file-source-facts-validation.test.ts(3,18): error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+.tmp-product-iteration/file-source-facts-validation.test.ts(5,70): error TS2339: Property 'dir' does not exist on type 'ImportMeta'.
+.tmp-product-iteration/file-source-facts-validation.ts(1,18): error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+.tmp-product-iteration/file-source-facts-validation.ts(5,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Error'.
+.tmp-product-iteration/file-source-facts-validation.ts(35,194): error TS18048: 'range' is possibly 'undefined'.
+.tmp-product-iteration/file-source-facts-validation.ts(35,234): error TS18048: 'range' is possibly 'undefined'.
+.tmp-product-iteration/verify-current-file-sources-128.ts(2,20): error TS2307: Cannot find module 'node:assert/strict' or its corresponding type declarations.
+.tmp-product-iteration/verify-current-file-sources-128.ts(3,16): error TS2307: Cannot find module 'node:fs' or its corresponding type declarations.
+.tmp-product-iteration/verify-current-file-sources-128.ts(4,18): error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+.tmp-product-iteration/verify-current-file-sources-128.ts(5,26): error TS2307: Cannot find module 'bun:sqlite' or its corresponding type declarations.
+.tmp-product-iteration/verify-current-file-sources-128.ts(8,78): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+.tmp-product-iteration/verify-current-file-sources-128.ts(9,14): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+packages/opencorvus/src/util/canonical-digest.ts(1,28): error TS2307: Cannot find module 'node:crypto' or its corresponding type declarations.

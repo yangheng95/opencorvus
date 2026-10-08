@@ -1,0 +1,12 @@
+Current result: [130 actual evidence](../README.md) records completedTask/3Sourcefiles and22SolEOF, first-range UI failure and originaloncechecker-toolchainfailure. No full Sources UI/oracle pass. The preparation text below is historical, not currentruntimeHELD or a newadmission.
+
+#130 original prepared inputs — now actual scope CLOSED
+
+Run C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/source-file-local-live-130-01; formal evidence this directory; port18090; prefix source-file-local-live-130-01; numeric13001; Work/builtin base/openai/gpt-6.1-sol. Cumulative24/preparation600000/idle180000/task900000 fixed. New scope, not128 rearm. No actual Task/Project/Session/native identities yet.
+
+Prepared request.txt is UTF-8 final LF, profile-selection.json exact builtin selection, expected-file-manifest.json uses three actual future project references paths. Source originals unchanged. Root must release native startup/preflight/readiness, then separately stage inputs, then Task create. Script stage-inputs-130.ps1 currently only parsed0; no copy or Git command has executed. Future script's two readonly Git observations record actual source HEAD/per-file diff; Root must explicitly include these in execution release. Direct bytes equality is original-to-target custody, not source digest acceptance.
+
+Launch current live-sol-launch.ps1 with RunRoot/EvidenceRoot/Port18090/EvidencePrefix/ProfileSelectionPath/RequestBudget24. Root derives ExpectedAsset from actual packages/overlay/dist-vite/index.html and separately uses source-title-104-readiness.ps1 after startup/listener. stage-inputs-130.ps1 receives exact RunRoot/EvidenceRoot; then genuine-task-create.ps1 receives EvidenceCase13001/ProductPillar work/Title真实项目文件Sources范围验收130/Request actual request.txt/Source product-experience-source-file-local-130. No permissions/model/config fallback.
+
+Completed and whole-closed only: copy actual task-complete, selection/request, physical/final audit custody to formal directory. Run SAME verify-current-file-sources-128.ts exactly once with six arguments Run/Evidence/13001/prefix/expected-file-manifest.json/actual final audit path. Historical helper name does not bind task128; code uses mandatory actual args. Do not run URL oracle or completed checker if blocked/noncomplete. Root personally reviews file title/range/content, actual main text and within-project editor; editable current contract is not outside-source readonly qualification. Preserve failures and all unmet Source/range/UI obligations.
+

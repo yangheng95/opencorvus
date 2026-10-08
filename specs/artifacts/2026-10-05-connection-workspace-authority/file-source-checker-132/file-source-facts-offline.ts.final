@@ -1,0 +1,7 @@
+import fs from "node:fs"
+import { validateFileSourceFacts } from "./file-source-facts-validation"
+const [input, output] = process.argv.slice(2)
+if (!input || !output || process.argv.slice(2).length !== 2) throw new Error("Saved actual facts input and new output required")
+const result = validateFileSourceFacts(JSON.parse(fs.readFileSync(input, "utf8")))
+fs.writeFileSync(output, JSON.stringify({ mode: "offline saved actual facts; original once collector not repeated", ...result }, null, 2) + "\n", { flag: "wx" })
+console.log(JSON.stringify(result))

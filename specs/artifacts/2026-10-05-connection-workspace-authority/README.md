@@ -385,3 +385,12 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [Source-file boundary129](source-file-boundary-investigation-129.md): shared Task/filesystem integrity versus operator Full access audited; actual128typed boundary/input mismatch verified, no guard repair admitted. No permission bypass or copied-source workaround.
 
 
+
+- [Local file Sources130 actual evidence](source-file-local-live-130/README.md) and [Recall](source-file-local-live-plan-130.md): Taskcompleted/3inlineReads+persistedSources/22SolEOF/fullclosure; initial range UI failure and originaloncechecker contract failure preserved, no fullpass.
+
+
+- [Source range131 investigation](source-file-range-investigation-131.md): initial07-panel170–200 correctfile remainedtop1; repeated loadedtarget laterrevealed, no productionfix or universalpass.
+
+- [File-source checker132 contract](file-source-checker-contract-plan-132.md): original130oncefailure assumedmandatoryreceipt forpureRead; canonicalinline/deferredunion and persistedSources mustbe respected, sole privatevalidator repaired; offline3unique savedtuples/pure3tests7expect/types0 only, original130once1/UI131failure preserved.
+
+

@@ -1,0 +1,45 @@
+import path from "node:path"
+import { normalizeToolResult } from "../packages/opencorvus/src/session/tool-result-normalization"
+
+export class FileSourceValidationError extends Error {
+  override readonly name = "FileSourceValidationError"
+  constructor(readonly code: string) { super(code) }
+}
+type Row = Record<string, any>
+export function validateFileSourceFacts(facts: Row) {
+  const tuples: Row[] = []
+  const reject = (code: string): never => { throw new FileSourceValidationError(code) }
+  for (const expected of facts.manifest.files as Row[]) {
+    const matches: Row[] = []
+    for (const read of facts.reads as Row[]) {
+      if (read.outcome?.outcome !== "completed") continue
+      const outcome = read.outcome
+      let output: string
+      if (outcome.resultAttemptID) {
+        if (read.envelopeKind === "undefined") output = ""
+        else if (read.envelopeKind === "json" && read.result !== null) output = normalizeToolResult(read.result).output
+        else reject("DEFERRED_READ_RESULT_INVALID")
+      } else if (typeof outcome.output === "string") output = outcome.output
+      else reject("INLINE_READ_OUTPUT_INVALID")
+      const resolved = /^<path>([^\r\n]+)<\/path>\r?\n<type>file<\/type>\r?\n<content>/.exec(output!)?.[1]
+      if (!resolved) reject("READ_FILE_ENVELOPE_INVALID")
+      if (path.resolve(resolved!) !== path.resolve(expected.path)) continue
+      if (typeof read.input.filePath !== "string" || typeof outcome.title !== "string") reject("READ_INPUT_IDENTITY_INVALID")
+      const metadata = outcome.metadata
+      const start = read.input.offset ?? 1
+      if (!Number.isInteger(start) || start < 1 || !Number.isInteger(metadata?.lines) || metadata.lines < 1 || !Number.isInteger(metadata.totalLines) || metadata.totalLines < start + metadata.lines - 1 || typeof metadata.truncated !== "boolean") reject("READ_PAGE_METADATA_INVALID")
+      const range = start === 1 && !metadata.truncated ? undefined : { startLine: start, endLine: start + metadata.lines - 1 }
+      if (range?.startLine !== expected.range.startLine || range?.endLine !== expected.range.endLine) continue
+      for (const source of facts.sources as Row[]) {
+        const p = source.payload
+        if (source.sessionID !== read.sessionID || source.messageID !== read.messageID || p.type !== "source-file" || path.resolve(p.path) !== path.resolve(resolved!) || p.range?.startLine !== range?.startLine || p.range?.endLine !== range?.endLine) continue
+        if (p.provider !== "opencorvus-read" || p.title !== outcome.title.trim() || typeof p.sourceId !== "string" || !p.sourceId || typeof source.partID !== "string" || !source.partID) reject("SOURCE_IDENTITY_INVALID")
+        matches.push({ readPartID: read.partID, inputPath: read.input.filePath, sourcePartID: source.partID, sourceId: p.sourceId, sessionID: read.sessionID, messageID: read.messageID, path: resolved, range, title: p.title, provider: p.provider, lines: metadata.lines, totalLines: metadata.totalLines, truncated: metadata.truncated, requestOrderKey: read.orderKey ?? null, sourceOrderKey: source.orderKey ?? null })
+      }
+    }
+    if (matches.length === 0) reject("EXPECTED_FILE_SOURCE_UNMET")
+    if (matches.length > 1) tuples.push({ state: "unknown_ambiguous_producer", path: expected.path, candidates: matches })
+    else tuples.push({ state: "qualified_unique_tuple", ...matches[0] })
+  }
+  return { taskID: facts.taskID, projectID: facts.projectID, occurrence: facts.occurrence, tuples, boundary: "Actual completed Read output/page metadata and canonical persisted Source; causal identity is unknown if several producers match" }
+}

@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.tmp-product-iteration\file-source-facts-validation.test.ts:
+(pass) saved actual three inline Read Source tuples qualify exact range and identity [0.65ms]
+(pass) invalid actual page metadata maps to the explicit data error [1.04ms]
+(pass) multiple same-tuple producer records preserve unknown association [0.69ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [1095.00ms]

@@ -1,0 +1,13 @@
+#132 private checker qualification
+
+Original130 once1/log/facts unchanged; no DB/query/bootstrap/model/UI/native/Git. Existing collector calls one pure validateFileSourceFacts, removes envelope-only loop and captures true source/request time/orderKey in future collection. It preserves original inline/deferred outcome authority and canonical persisted Source association, emits unknown_ambiguous_producer for multiple matching producers, no first-source guess or returned sources assumption.
+
+Offline saved130 facts validation exit0 produces three qualified_unique_tuple results with actual path/range/title/provider/Session/Message/sourceID/Part. Original saved facts have no orderKey; result records null and only unique tuple qualification, not claimed direct Source→Tool causal protocol. Final pure cases3pass7expects: actual three tuples/lines50,31,36; invalid page metadata typed error; duplicated producer record explicit unknown ambiguity. That last local data mutation is not a fabricated persisted Source or E2E.
+
+Commands: bun run .tmp-product-iteration/file-source-facts-offline.ts <actualsaved130facts> <newcreateonceoutput>; bun test ./.tmp-product-iteration/file-source-facts-validation.test.ts; bun x tsc --noEmit -p .tmp-product-iteration/file-source-132-tsconfig.json. All final exit0. New outputs offline-file-source-validation-final.json/log are current; initial offline result remains original provenance. No original collector rerun. Root original Task22 Sol200EOF is independent, not recomputed here;131 editor/range visual failure not washed.
+
+First Bun test path without ./ failed discovery; corrected exact path passes, raw failure kept. Initial explicit type input missed Bun type roots due ignored script directory; corrected mature actual installed @types/bun root. Two source type errors override/range optional corrected without output-policy weakening, raw first/second type failures kept. Full final helper/validator/offline/test/typeconfig and before/diff stored. Current offline checker qualifies local data oracle only, not real native/UI or fresh collection. Root owns indices/docs/commit and future genuine run admission.
+
+## Root real scenario boundary
+
+[Root actual130 manual report](../source-file-local-live-130/live-01/root-manual-qualification.md) and [130evidence](../source-file-local-live-130/README.md) remain authoritative for UI/Task/Provider/physical facts. Offline3unique tuple success cannot repair first07Panel170–200 navigation, unknownpointer/Loadingdiff wording, or missing original Source/requestorderKey. No directcausalprotocol claim, collectorreplay, new Task/rearm or Model/native/DB/UI execution accompanied132. Original125causeUNKNOWN/active128notrearmed and fullsourcecoverage limits retained.

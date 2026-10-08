@@ -1,0 +1,41 @@
+--- checker.before.ts
++++ verify-current-file-sources-128.ts
+@@ -1,3 +1,4 @@
++import { validateFileSourceFacts } from "./file-source-facts-validation"
+ import assert from "node:assert/strict"
+ import fs from "node:fs"
+ import path from "node:path"
+@@ -68,12 +69,12 @@
+   const sessions = db.query("WITH RECURSIVE tree(id) AS (SELECT session_id FROM engine_task WHERE id=? UNION ALL SELECT s.id FROM session s JOIN tree t ON t.id=s.parent_id) SELECT s.id,s.parent_id,s.project_id,s.kind FROM session s JOIN tree t ON t.id=s.id ORDER BY s.time_created,s.id").all(taskID) as Array<Record<string, unknown>>
+   const ids = sessions.map(row => String(row.id)), placeholders = ids.map(() => "?").join(",")
+   const rows = db.query(`SELECT p.id,p.message_id,p.data,p.time_created,m.session_id FROM part p JOIN message m ON m.id=p.message_id WHERE m.session_id IN (${placeholders}) ORDER BY p.time_created,p.id`).all(...ids) as Array<Record<string, unknown>>
+-  const sources = rows.map(row => ({partID:row.id,messageID:row.message_id,sessionID:row.session_id,payload:JSON.parse(String(row.data))})).filter(row=>row.payload.type === "source-file")
++  const sources = rows.map(row => ({partID:row.id,messageID:row.message_id,sessionID:row.session_id,timeCreated:row.time_created,orderKey:timelineOrderKey({domain:"part",time:Number(row.time_created),id:String(row.id)}),payload:JSON.parse(String(row.data))})).filter(row=>row.payload.type === "source-file")
+   const tools = db.query(`SELECT r.id,r.message_id,r.data,r.time_created,m.session_id,o.data AS outcome_data FROM tool_part_request r JOIN message m ON m.id=r.message_id LEFT JOIN tool_part_outcome o ON o.request_part_id=r.id WHERE m.session_id IN (${placeholders}) ORDER BY r.time_created,r.id`).all(...ids) as Array<Record<string, unknown>>
+   const reads = tools.map(row=>({row,input:JSON.parse(String(row.data)),outcome:row.outcome_data?JSON.parse(String(row.outcome_data)):null})).filter(row=>row.input.tool === "read").map(row=>{
+     const stored = row.outcome?.resultAttemptID ? db.query("SELECT result FROM permission_execution_result WHERE attempt_id=?").get(row.outcome.resultAttemptID) as {result:string}|null : null
+     const envelope = stored ? JSON.parse(stored.result) : null
+-    return {partID:row.row.id,messageID:row.row.message_id,sessionID:row.row.session_id,input:row.input.input,outcome:row.outcome,resultAttemptID:row.outcome?.resultAttemptID,envelopeKind:envelope?.kind,result:envelope?.kind === "json" ? envelope.value : null}
++    return {partID:row.row.id,messageID:row.row.message_id,sessionID:row.row.session_id,timeCreated:row.row.time_created,orderKey:timelineOrderKey({domain:"part",time:Number(row.row.time_created),id:String(row.row.id)}),input:row.input.input,outcome:row.outcome,resultAttemptID:row.outcome?.resultAttemptID,envelopeKind:envelope?.kind,result:envelope?.kind === "json" ? envelope.value : null}
+   })
+   const lifecycle = db.query("SELECT id,seq,type,payload FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=? AND type IN ('task.execution.opened','task.execution.reopened','task.completed','task.failed','task.cancelled') ORDER BY seq,id").all(taskID) as Array<Record<string, unknown>>
+   const events=lifecycle.map(row=>({id:row.id,type:row.type,seq:row.seq,payload:JSON.parse(String(row.payload))}))
+@@ -94,16 +95,8 @@
+   assert.equal(promptOwners.length,0)
+   assert.equal(provider.length,complete.requests)
+   for(const row of provider) assert.deepEqual({model:row.model,streaming:row.streaming,status:row.status,reader:row.reader,terminal:row.terminal},{model:"gpt-6.1-sol",streaming:true,status:200,reader:"settled",terminal:"eof"})
+-  for(const file of manifest.files){
+-    const qualifying=reads.filter(read=>read.outcome?.outcome === "completed" && read.envelopeKind === "json" && Array.isArray(read.result?.sources)).flatMap(read=>read.result.sources.map((source:Record<string,unknown>)=>({read,source}))).filter(({source}: {source: {type:string;path:string;range?:unknown}})=>source.type === "source-file" && path.resolve(source.path) === path.resolve(file.path))
+-    assert.ok(qualifying.length > 0,`UNMET actual read Source for ${file.path}`)
+-    assert.ok(qualifying.some(({source}: {source:{range?:unknown}})=>(source.range as {startLine?:number;endLine?:number}|undefined)?.startLine === file.range.startLine && (source.range as {startLine?:number;endLine?:number}|undefined)?.endLine === file.range.endLine),`UNMET actual requested file range for ${file.path}`)
+-    for(const {read,source} of qualifying){
+-      assert.equal(source.provider,"opencorvus-read");assert.ok(typeof source.title === "string" && source.title.trim().length>0);assert.equal(typeof read.result.title,"string");assert.equal(source.title,read.result.title.trim())
+-      const persisted=sources.filter(row=>row.sessionID === read.sessionID && row.messageID === read.messageID && row.payload.sourceId === source.sourceId)
+-      assert.equal(persisted.length,1);const {id,messageID,sessionID,...payload}=persisted[0]!.payload;assert.deepEqual(payload,source)
+-    }
+-  }
++  const fileValidation = validateFileSourceFacts(facts)
++  fs.writeFileSync(path.join(evidence,"file-source-validation.json"),JSON.stringify(fileValidation,null,2),{flag:"wx"})
+   console.log(JSON.stringify({status:"qualified",taskID,projectID,occurrence,epoch,filePaths:manifest.files.map((file:{path:string})=>file.path),sourcePartIDs:sources.map(source=>source.partID),providerRequests:provider.length,boundary:"Actual file read/result/persisted Source range facts; UI editor/readOnly/Chinese answer remain Root manual acceptance"}))
+ } finally {db.exec("ROLLBACK");db.close()}
+ 

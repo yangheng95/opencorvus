@@ -275,3 +275,14 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [File Sources128/129 record](2026-10-08-source-file-boundary.md): original blocked read, exact closure, functional UNMET and pending boundary diagnosis.
 
 
+
+- [Local file Sources130 actual evidence](../../artifacts/2026-10-05-connection-workspace-authority/source-file-local-live-130/README.md) and [Recall](../../artifacts/2026-10-05-connection-workspace-authority/source-file-local-live-plan-130.md): Taskcompleted/3inlineReads+persistedSources/22SolEOF/fullclosure; initial range UI failure and originaloncechecker contract failure preserved, no fullpass.
+
+
+- [Source range131 investigation](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-investigation-131.md): initial07-panel170–200 correctfile remainedtop1; repeated loadedtarget laterrevealed, no productionfix or universalpass.
+
+- [File-source checker132 contract](../../artifacts/2026-10-05-connection-workspace-authority/file-source-checker-contract-plan-132.md): original130oncefailure assumedmandatoryreceipt forpureRead; canonicalinline/deferredunion and persistedSources mustbe respected, sole privatevalidator repaired; offline3unique savedtuples/pure3tests7expect/types0 only, original130once1/UI131failure preserved.
+
+- [Local file Sources130 record](2026-10-08-source-file-local.md): actualdata versus initialUI/checkertoolchainfailures and closedcustody.
+
+

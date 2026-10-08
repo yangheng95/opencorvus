@@ -1,0 +1,24 @@
+import { expect, test } from "bun:test"
+import fs from "node:fs"
+import path from "node:path"
+import { FileSourceValidationError, validateFileSourceFacts } from "./file-source-facts-validation"
+const original = JSON.parse(fs.readFileSync(path.resolve(import.meta.dir, "../specs/artifacts/2026-10-05-connection-workspace-authority/source-file-local-live-130/live-01/child-current-file-source-facts.json"), "utf8"))
+test("saved actual three inline Read Source tuples qualify exact range and identity", () => {
+  const result = validateFileSourceFacts(original)
+  expect(result.tuples.map((row) => ({ state: row.state, path: row.path, range: row.range, provider: row.provider }))).toEqual(original.manifest.files.map((row: any) => ({ state: "qualified_unique_tuple", path: row.path.replaceAll("/", path.sep), range: row.range, provider: "opencorvus-read" })))
+  expect(result.tuples.map((row) => row.lines)).toEqual([50, 31, 36])
+  expect(result.tuples.map((row) => [row.messageID, row.sessionID, row.sourcePartID])).toEqual(original.sources.map((row: any) => [row.messageID, row.sessionID, row.partID]))
+})
+test("invalid actual page metadata maps to the explicit data error", () => {
+  const facts = structuredClone(original);facts.reads[0].outcome.metadata.lines = 0
+  let actual: unknown
+  try {validateFileSourceFacts(facts)} catch(error) {actual = error}
+  expect(actual).toBeInstanceOf(FileSourceValidationError)
+  expect(actual).toMatchObject({ name: "FileSourceValidationError", code: "READ_PAGE_METADATA_INVALID" })
+})
+test("multiple same-tuple producer records preserve unknown association", () => {
+  const facts = structuredClone(original);facts.reads.push(structuredClone(facts.reads[0]))
+  const result = validateFileSourceFacts(facts)
+  expect(result.tuples[0]).toMatchObject({ state: "unknown_ambiguous_producer", path: facts.manifest.files[0].path })
+  expect(result.tuples[0].candidates.length).toBe(2)
+})

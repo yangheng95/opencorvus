@@ -1,0 +1,109 @@
+import assert from "node:assert/strict"
+import fs from "node:fs"
+import path from "node:path"
+import { Database } from "bun:sqlite"
+import { timelineOrderKey, compareTimelineOrderKeys } from "../packages/opencorvus/src/timeline/order"
+
+const [runArg, evidenceArg, evidenceCase, prefix, manifestFile, auditFile] = process.argv.slice(2)
+assert.equal(process.argv.slice(2).length, 6, "Mandatory run/evidence/case/prefix/expectedSourceManifest/finalAudit arguments required")
+for (const arg of [runArg, evidenceArg, evidenceCase, prefix, manifestFile, auditFile]) assert.ok(arg?.trim().length)
+assert.ok(path.isAbsolute(runArg!))
+assert.ok(path.isAbsolute(evidenceArg!))
+assert.ok(path.isAbsolute(auditFile!))
+assert.ok(path.isAbsolute(manifestFile!))
+assert.match(evidenceCase!, /^[a-z0-9-]+$/)
+assert.match(prefix!, /^[a-z0-9-]+$/)
+const run = path.resolve(runArg!)
+const evidence = path.resolve(evidenceArg!)
+const read = (file: string) => JSON.parse(fs.readFileSync(file, "utf8"))
+const manifest = read(manifestFile!)
+assert.deepEqual(Object.keys(manifest), ["files"])
+assert.equal(manifest.files.length, 3)
+for (const file of manifest.files) {
+  assert.ok(path.isAbsolute(file.path))
+  assert.ok(Number.isInteger(file.range.startLine) && file.range.startLine > 0)
+  assert.ok(Number.isInteger(file.range.endLine) && file.range.endLine >= file.range.startLine)
+}
+const owner = read(path.join(run, "launch-owner.json"))
+const selection = read(path.join(evidence, `actual-${evidenceCase}-task-selection.json`))
+const request = read(path.join(evidence, `actual-${evidenceCase}-task-request-input.json`))
+const complete = read(path.join(evidence, "task-complete.json"))
+const physical = read(path.join(evidence, `${prefix}-physical-terminal-and-pair-cleanup.json`))
+const audit = read(auditFile!)
+const { taskID, projectID, requestID, occurrence } = selection
+assert.equal(owner.occurrence, occurrence)
+assert.equal(owner.evidencePrefix, prefix)
+assert.equal(path.resolve(owner.runRoot), run)
+assert.equal(path.resolve(owner.settlementEvidenceRoot), evidence)
+assert.equal(path.resolve(selection.directory), path.resolve(owner.project))
+assert.equal(request.requestID, requestID)
+assert.equal(typeof request.source, "string")
+assert.ok(request.source.trim().length)
+assert.equal(complete.occurrence, occurrence)
+assert.deepEqual(complete.selected, selection)
+assert.equal(complete.pinned.taskID, taskID)
+assert.equal(complete.pinned.projectID, projectID)
+assert.equal(complete.lifecycle.taskID, taskID)
+assert.equal(complete.lifecycle.epoch, complete.pinned.epoch)
+assert.equal(complete.lifecycle.openedEventID, complete.pinned.openedEventID)
+assert.equal(complete.lifecycle.status, "completed")
+assert.ok(Number.isInteger(complete.requests) && complete.requests > 0)
+assert.equal(physical.occurrence, occurrence)
+assert.equal(physical.physicalCompletion, true)
+assert.equal(physical.pairedCleanupComplete, true)
+assert.equal(physical.nativeSettlement.occurrence, occurrence)
+assert.equal(physical.nativeSettlement.outcome, "settled")
+assert.equal(physical.nativeSettlement.physicalCompletion, true)
+assert.equal(physical.nativeSettlement.outputDrainComplete, true)
+assert.equal(physical.nativeSettlement.requestCleanupComplete, true)
+assert.deepEqual(physical.nativeSettlement.host, owner.host)
+assert.deepEqual(physical.nativeSettlement.target, owner.nativeTarget)
+assert.equal(physical.copiedPair.length, 2)
+assert.deepEqual(physical.copiedPair.map((row: {presentAfter:boolean}) => row.presentAfter), [false, false])
+const epoch = complete.pinned.epoch
+const db = new Database(path.join(run, "runtime/data/opencorvus.db"), { readonly: true })
+try {
+  db.exec("BEGIN")
+  const task = db.query("SELECT id,project_id,session_id,request_id,request,product_pillar FROM engine_task WHERE id=?").get(taskID) as Record<string, unknown>
+  const sessions = db.query("WITH RECURSIVE tree(id) AS (SELECT session_id FROM engine_task WHERE id=? UNION ALL SELECT s.id FROM session s JOIN tree t ON t.id=s.parent_id) SELECT s.id,s.parent_id,s.project_id,s.kind FROM session s JOIN tree t ON t.id=s.id ORDER BY s.time_created,s.id").all(taskID) as Array<Record<string, unknown>>
+  const ids = sessions.map(row => String(row.id)), placeholders = ids.map(() => "?").join(",")
+  const rows = db.query(`SELECT p.id,p.message_id,p.data,p.time_created,m.session_id FROM part p JOIN message m ON m.id=p.message_id WHERE m.session_id IN (${placeholders}) ORDER BY p.time_created,p.id`).all(...ids) as Array<Record<string, unknown>>
+  const sources = rows.map(row => ({partID:row.id,messageID:row.message_id,sessionID:row.session_id,payload:JSON.parse(String(row.data))})).filter(row=>row.payload.type === "source-file")
+  const tools = db.query(`SELECT r.id,r.message_id,r.data,r.time_created,m.session_id,o.data AS outcome_data FROM tool_part_request r JOIN message m ON m.id=r.message_id LEFT JOIN tool_part_outcome o ON o.request_part_id=r.id WHERE m.session_id IN (${placeholders}) ORDER BY r.time_created,r.id`).all(...ids) as Array<Record<string, unknown>>
+  const reads = tools.map(row=>({row,input:JSON.parse(String(row.data)),outcome:row.outcome_data?JSON.parse(String(row.outcome_data)):null})).filter(row=>row.input.tool === "read").map(row=>{
+    const stored = row.outcome?.resultAttemptID ? db.query("SELECT result FROM permission_execution_result WHERE attempt_id=?").get(row.outcome.resultAttemptID) as {result:string}|null : null
+    const envelope = stored ? JSON.parse(stored.result) : null
+    return {partID:row.row.id,messageID:row.row.message_id,sessionID:row.row.session_id,input:row.input.input,outcome:row.outcome,resultAttemptID:row.outcome?.resultAttemptID,envelopeKind:envelope?.kind,result:envelope?.kind === "json" ? envelope.value : null}
+  })
+  const lifecycle = db.query("SELECT id,seq,type,payload FROM protocol_event WHERE aggregate_type='task' AND aggregate_id=? AND type IN ('task.execution.opened','task.execution.reopened','task.completed','task.failed','task.cancelled') ORDER BY seq,id").all(taskID) as Array<Record<string, unknown>>
+  const events=lifecycle.map(row=>({id:row.id,type:row.type,seq:row.seq,payload:JSON.parse(String(row.payload))}))
+  const promptOwners=db.query(`SELECT session_id FROM session_prompt_owner WHERE session_id IN (${placeholders})`).all(...ids)
+  const provider=audit.requests.map((row:{model:string;streaming:boolean;status:number;response_reader:{state:string;terminal?:{kind:string};requestContext?:unknown};error?:unknown})=>({model:row.model,streaming:row.streaming,status:row.status,reader:row.response_reader.state,terminal:row.response_reader.terminal?.kind,context:row.response_reader.requestContext,error:row.error}))
+  const decisions=db.query("SELECT id,payload FROM engine_artifact WHERE task_id=? AND kind='task_completion_decision' ORDER BY time_created,id").all(taskID) as {id:string;payload:string}[]
+  const texts=rows.map(row=>({id:String(row.id),messageID:row.message_id,sessionID:row.session_id,timeCreated:Number(row.time_created),part:JSON.parse(String(row.data))})).filter(row=>row.part.type === "text")
+  const messageRows=db.query(`SELECT id,data FROM message WHERE session_id IN (${placeholders})`).all(...ids) as {id:string;data:string}[]
+  const messageRoles=new Map(messageRows.map(row=>[row.id,JSON.parse(row.data).role]))
+  const decision=decisions.at(-1), decisionPayload=decision?JSON.parse(decision.payload):null
+  const terminal=decisionPayload?tools.find(row=>row.id===decisionPayload.tool_part_id):undefined
+  const ownReply=decisionPayload?texts.filter(row=>row.sessionID===decisionPayload.orchestrator_session_id && messageRoles.get(String(row.messageID))==="assistant" && typeof row.part.text==="string" && row.part.text.trim().length>0):[]
+  const chronology=terminal&&ownReply.length?{state:"observed",terminalPartID:terminal.id,decisionID:decision!.id,texts:ownReply.map(row=>({partID:row.id,messageID:row.messageID,precedesTerminal:compareTimelineOrderKeys(timelineOrderKey({domain:"part",time:row.timeCreated,id:row.id}),timelineOrderKey({domain:"part",time:Number(terminal.time_created),id:String(terminal.id)}))<0}))}:{state:"UNMET: actual natural orchestrator reply/terminal not observed"}
+  const facts={access:"Closed exact owned SQLite readonly BEGIN/ROLLBACK; no bootstrap or file source copies",taskID,projectID,requestID,occurrence,manifest,task,sessions,events,promptOwners,reads,sources,provider,decisions:decisions.map(row=>({...row,payload:JSON.parse(row.payload)})),texts,naturalReplyChronology:chronology}
+  fs.writeFileSync(path.join(evidence,"child-current-file-source-facts.json"),JSON.stringify(facts,null,2),{flag:"wx"})
+  assert.equal(task.id,taskID);assert.equal(task.project_id,projectID);assert.equal(task.request_id,requestID);assert.equal(task.session_id,complete.pinned.rootSessionID);assert.equal(task.request,request.request)
+  assert.equal(events[0]!.id,complete.pinned.openedEventID);assert.equal(events.at(-1)!.type,"task.completed");assert.equal(events.at(-1)!.payload.execution_epoch,epoch)
+  assert.equal(promptOwners.length,0)
+  assert.equal(provider.length,complete.requests)
+  for(const row of provider) assert.deepEqual({model:row.model,streaming:row.streaming,status:row.status,reader:row.reader,terminal:row.terminal},{model:"gpt-6.1-sol",streaming:true,status:200,reader:"settled",terminal:"eof"})
+  for(const file of manifest.files){
+    const qualifying=reads.filter(read=>read.outcome?.outcome === "completed" && read.envelopeKind === "json" && Array.isArray(read.result?.sources)).flatMap(read=>read.result.sources.map((source:Record<string,unknown>)=>({read,source}))).filter(({source}: {source: {type:string;path:string;range?:unknown}})=>source.type === "source-file" && path.resolve(source.path) === path.resolve(file.path))
+    assert.ok(qualifying.length > 0,`UNMET actual read Source for ${file.path}`)
+    assert.ok(qualifying.some(({source}: {source:{range?:unknown}})=>(source.range as {startLine?:number;endLine?:number}|undefined)?.startLine === file.range.startLine && (source.range as {startLine?:number;endLine?:number}|undefined)?.endLine === file.range.endLine),`UNMET actual requested file range for ${file.path}`)
+    for(const {read,source} of qualifying){
+      assert.equal(source.provider,"opencorvus-read");assert.ok(typeof source.title === "string" && source.title.trim().length>0);assert.equal(typeof read.result.title,"string");assert.equal(source.title,read.result.title.trim())
+      const persisted=sources.filter(row=>row.sessionID === read.sessionID && row.messageID === read.messageID && row.payload.sourceId === source.sourceId)
+      assert.equal(persisted.length,1);const {id,messageID,sessionID,...payload}=persisted[0]!.payload;assert.deepEqual(payload,source)
+    }
+  }
+  console.log(JSON.stringify({status:"qualified",taskID,projectID,occurrence,epoch,filePaths:manifest.files.map((file:{path:string})=>file.path),sourcePartIDs:sources.map(source=>source.partID),providerRequests:provider.length,boundary:"Actual file read/result/persisted Source range facts; UI editor/readOnly/Chinese answer remain Root manual acceptance"}))
+} finally {db.exec("ROLLBACK");db.close()}
+
