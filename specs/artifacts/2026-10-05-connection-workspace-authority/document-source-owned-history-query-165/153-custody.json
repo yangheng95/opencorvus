@@ -1,0 +1,68 @@
+{
+  "case": 153,
+  "run": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01",
+  "e": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\store-card-accessor-after-153\\live-01",
+  "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+  "projectID": "prj_honTzv1SylD1sTwgEqBC",
+  "selection": {
+    "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+    "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+    "projectID": "prj_honTzv1SylD1sTwgEqBC",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "productPillar": "work",
+    "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+    "requestSentAt": "2026-10-08T08:54:52.9833319Z",
+    "acceptedObservedAt": "2026-10-08T08:54:57.5662113Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+    "projectID": "prj_honTzv1SylD1sTwgEqBC",
+    "rootSessionID": "ses_-zUSYFdRdzzk2frR62zX",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXRkMYy000N2amTfW0",
+    "openedAt": 1791449697006
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXRkMYy000N2amTfW0",
+    "openedAt": 1791449697006,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXRlJUn00LNIxnTZ2w",
+    "terminalAt": 1791449922047
+  },
+  "host": {
+    "pid": 77936,
+    "processInstanceID": "win32:639270464599331036",
+    "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+  },
+  "target": {
+    "pid": 63112,
+    "processInstanceID": "win32:639270464606887343",
+    "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+  },
+  "fresh": {
+    "targetState": "dead_or_reused",
+    "host": {
+      "pid": 77936,
+      "processInstanceID": "win32:639270464599331036",
+      "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+    },
+    "target": {
+      "pid": 63112,
+      "processInstanceID": "win32:639270464606887343",
+      "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+    },
+    "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+    "authPresent": false,
+    "modelsPresent": false,
+    "port": 18098,
+    "case": 153,
+    "observedAtUtc": "2026-10-08T11:01:53.3392410Z",
+    "hostState": "dead_or_reused",
+    "listenerCount": 0
+  },
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true
+}

@@ -495,7 +495,10 @@ keyboard focus is visible and native horizontal keys reach the remaining cells.
 Table identity, alignment, links and inline rendering remain ordinary Markdown.
 The label uses an actual source title when supplied. Webfetch reads that title only
 from the fetched text/html document using the public HTML parser; an empty title
-remains optional and uses the existing URL preview. Redirected URL owns source
+remains optional and uses a path-and-query preview followed by the hostname,
+keeping same-site resource differences near the start of a compact label.
+The complete URL remains available in its tooltip and activation target.
+Redirected URL owns source
 identity and activation independently of the title. Historical source payloads
 retain their original recorded values.
 The Source

@@ -57,7 +57,7 @@ function sourceLabel(source: ConversationSourcePart): string {
           return title
         }
       }
-      return `${url.hostname}${url.pathname}${url.search}`
+      return `${url.pathname}${url.search} · ${url.hostname}`
     } catch {
       return title || source.url
     }

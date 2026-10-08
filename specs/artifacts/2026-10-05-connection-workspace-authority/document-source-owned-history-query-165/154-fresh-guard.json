@@ -1,0 +1,21 @@
+{
+  "targetState": "dead_or_reused",
+  "host": {
+    "pid": 66828,
+    "processInstanceID": "win32:639270477257789747",
+    "occurrenceID": "122d54ff-9176-422b-8462-3b2d1c1cacce"
+  },
+  "target": {
+    "pid": 78304,
+    "processInstanceID": "win32:639270477265345774",
+    "occurrenceID": "eec12ed0-1361-4e92-a97a-38cfb072024c"
+  },
+  "occurrence": "store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde",
+  "authPresent": false,
+  "modelsPresent": false,
+  "port": 18099,
+  "case": 154,
+  "observedAtUtc": "2026-10-08T11:01:54.4640460Z",
+  "hostState": "dead_or_reused",
+  "listenerCount": 0
+}

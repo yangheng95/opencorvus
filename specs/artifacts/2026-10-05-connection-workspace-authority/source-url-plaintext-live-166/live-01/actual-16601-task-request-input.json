@@ -1,0 +1,11 @@
+{
+  "title": "纯文本URL Sources真实验收166",
+  "request": "请委托合适的只读研究员阅读以下三份官方纯文本资料，并根据实际读取内容给我一份简短中文报告，用三点分别说明 JSON 数据交换的重要规则、ABNF 如何描述语法，以及 W3C 网站 robots.txt 对爬虫访问表达了什么。每点附对应来源链接，明确两份 RFC 与网站爬虫策略的性质不同，不扩大到其他页面；由任务负责人根据实际发现最终给出可读总结。无需修改文件或制作额外报告文件。\n1. https://www.rfc-editor.org/rfc/rfc8259.txt\n2. https://www.rfc-editor.org/rfc/rfc5234.txt\n3. https://www.w3.org/robots.txt\n",
+  "productPillar": "work",
+  "promptProfile": "base",
+  "model": "openai/gpt-6.1-sol",
+  "source": "product-experience-source-url-plaintext-166",
+  "requestID": "8a3a2234-b85f-44ba-b880-1354077ea098",
+  "requestSentAt": "2026-10-08T11:06:08.5659509Z",
+  "acceptedObservedAt": "2026-10-08T11:06:13.2379858Z"
+}

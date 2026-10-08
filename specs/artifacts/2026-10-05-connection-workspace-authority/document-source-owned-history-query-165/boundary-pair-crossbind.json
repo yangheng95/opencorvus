@@ -1,0 +1,345 @@
+[
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-markdown-live-147-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-markdown-live-147-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 43856,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "subagent-markdown-live-147-01-423b4368-9a22-4ae9-a393-6f809c41247b",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXRWOum00D5RHQb6e",
+      "projectID": "prj_h53tcmn0Bc0GFgoSQjl1",
+      "rootSessionID": "ses_-zUSYTaxZzzS3ZvUhX4r",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXRWP2z0054DDFhWMt",
+      "openedAt": 1791446369904
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 43856,
+    "boundaryOccurrence": "subagent-markdown-live-147-01-423b4368-9a22-4ae9-a393-6f809c41247b",
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 43856,
+          "processInstanceID": "win32:639270431380936479",
+          "occurrenceID": "bb488a84-acee-4b79-8898-ef158414f9cc"
+        }
+      },
+      {
+        "originalOccurrencePresent": false,
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 75336,
+          "processInstanceID": "win32:639270431372939825",
+          "occurrenceID": "aa4454d3-3c3f-417c-a277-782fe5170cde"
+        }
+      }
+    ],
+    "case": 147
+  },
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\markdown-visible-owner-live-150-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 47764,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "markdown-visible-owner-live-150-01-f3a43e96-4f60-4c62-8c95-4d8d544a4615",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXRf77v00ggeNEFiR",
+      "projectID": "prj_hlba09HHCdnWjhWz5H5w",
+      "rootSessionID": "ses_-zUSYKsl7zzjGd76kYfy",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXRf7FT00sXA5LWesO",
+      "openedAt": 1791448446479
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 47764,
+    "boundaryOccurrence": "markdown-visible-owner-live-150-01-f3a43e96-4f60-4c62-8c95-4d8d544a4615",
+    "chain": [
+      {
+        "expected": {
+          "pid": 47764,
+          "processInstanceID": "win32:639270452062307417",
+          "occurrenceID": "b0154813-d5ab-44eb-a9b6-34fa27c8b362"
+        },
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false
+      },
+      {
+        "expected": {
+          "pid": 65396,
+          "processInstanceID": "win32:639270452054678140",
+          "occurrenceID": "4aeb1f5e-e726-4964-bde9-37c58c91383a"
+        },
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false
+      }
+    ],
+    "case": 150
+  },
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 63112,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+      "projectID": "prj_honTzv1SylD1sTwgEqBC",
+      "rootSessionID": "ses_-zUSYFdRdzzk2frR62zX",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXRkMYy000N2amTfW0",
+      "openedAt": 1791449697006
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 63112,
+    "boundaryOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+    "chain": [
+      {
+        "expected": {
+          "pid": 63112,
+          "processInstanceID": "win32:639270464606887343",
+          "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+        },
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false
+      },
+      {
+        "expected": {
+          "pid": 77936,
+          "processInstanceID": "win32:639270464599331036",
+          "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+        },
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false
+      }
+    ],
+    "case": 153
+  },
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-final-154-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-final-154-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 78304,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXRpfCf00hKin7FDT",
+      "projectID": "prj_hF3Muc2ULNnUntEgr5l5",
+      "rootSessionID": "ses_-zUSYAKgKzz0sbNpyofS",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXRpfKI00ztUb6ipeU",
+      "openedAt": 1791450960749
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 78304,
+    "boundaryOccurrence": "store-card-accessor-final-154-01-a76b7f19-ed44-4fba-9546-168f46520cde",
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 78304,
+          "processInstanceID": "win32:639270477265345774",
+          "occurrenceID": "eec12ed0-1361-4e92-a97a-38cfb072024c"
+        },
+        "originalOccurrencePresent": false
+      },
+      {
+        "state": "dead_or_reused",
+        "expected": {
+          "pid": 66828,
+          "processInstanceID": "win32:639270477257789747",
+          "occurrenceID": "122d54ff-9176-422b-8462-3b2d1c1cacce"
+        },
+        "originalOccurrencePresent": false
+      }
+    ],
+    "case": 154
+  },
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-reading-focus-after-159-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-reading-focus-after-159-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 34280,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "sources-reading-focus-after-159-01-e7198ae1-fde0-4e67-8d1d-15415289cd20",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXRud2R00OXBs7F1T",
+      "projectID": "prj_hFoH6j1XjifCYeiDetbh",
+      "rootSessionID": "ses_-zUSY5MqQzz5znVR8T6p",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXRudAA00pB9yQoMSy",
+      "openedAt": 1791452144067
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 34280,
+    "boundaryOccurrence": "sources-reading-focus-after-159-01-e7198ae1-fde0-4e67-8d1d-15415289cd20",
+    "chain": [
+      {
+        "expected": {
+          "pid": 34280,
+          "processInstanceID": "win32:639270489067370394",
+          "occurrenceID": "0bf945b1-8edc-4ac4-96cd-271f707b749a"
+        },
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false
+      },
+      {
+        "expected": {
+          "pid": 51368,
+          "processInstanceID": "win32:639270489059480806",
+          "occurrenceID": "d592a7bc-1026-4a2b-aacb-a62dad306ae4"
+        },
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false
+      }
+    ],
+    "case": 159
+  },
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-file-focus-live-160-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-file-focus-live-160-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 44544,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXRybX300WIjs1vDo",
+      "projectID": "prj_h4jW34TAsAK72cmvPz10",
+      "rootSessionID": "ses_-zUSY1OLAzzB3l7bzIEe",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXRybfR00wNH2zVUxU",
+      "openedAt": 1791453091589
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 44544,
+    "boundaryOccurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 44544,
+          "processInstanceID": "win32:639270498527862835",
+          "occurrenceID": "41b1e75a-d61f-450e-84fc-38be09cfc7de"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 77184,
+          "processInstanceID": "win32:639270498520126717",
+          "occurrenceID": "8602b045-1a9d-4acf-a1e5-c0489d5f7c33"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "case": 160
+  },
+  {
+    "physicalPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-density-after-163-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-density-after-163-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "outcome": "removed"
+      }
+    ],
+    "boundaryPID": 50396,
+    "fixedDeadlineEqual": true,
+    "completeOccurrence": "subagent-density-after-163-01-307e004f-d75f-481e-ac28-50a360af5405",
+    "boundaryPinned": {
+      "taskID": "tsk_g00VXS5OB300myYO0mkg",
+      "projectID": "prj_h13db3EFayyhYA7nR3II",
+      "rootSessionID": "ses_-zUSXubhPzzHpIpKSt6f",
+      "epoch": 1,
+      "openedEventID": "pev_g0VXS5OJB00rg1l9jxVc",
+      "openedAt": 1791454708549
+    },
+    "fullSelectedAndPinnedEqual": true,
+    "completePID": 50396,
+    "boundaryOccurrence": "subagent-density-after-163-01-307e004f-d75f-481e-ac28-50a360af5405",
+    "chain": [
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 50396,
+          "processInstanceID": "win32:639270514673299190",
+          "occurrenceID": "eb112123-b5dd-4535-8f99-1187a52909e8"
+        },
+        "state": "dead_or_reused"
+      },
+      {
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 77324,
+          "processInstanceID": "win32:639270514665406492",
+          "occurrenceID": "d601e3e2-20b6-456a-8a62-f8d38e12a05b"
+        },
+        "state": "dead_or_reused"
+      }
+    ],
+    "case": 163
+  }
+]

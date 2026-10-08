@@ -96,3 +96,21 @@ Root确认160 commitfa5c3d81正常push61813实际0/freshsame/outgoing为空。[1
 Root [163人工记录](../../artifacts/2026-10-05-connection-workspace-authority/subagent-density-after-163/live-01/root-manual-qualification.md)确认types73073/build93148实际0与main-qV471CDZ真实200；111842ms/16 Sol EOF/file sixargs once0，parent76619实际0 joined、50396/77324死亡、18102释放/pair清除/自有131关闭reset。Root宽380/窄280真实seam22.667px较160减少4px，Source6/pad8/border.667/Tool25/count1/三message chronology保留，真实quote→Tool margin8可读。
 
 Tooltip857/focus/terminalfollowfalse、nativeEnd1040/followtrue、Tab reentryfalse及READMEfirstline1限定合格。text1267 unchanged⇒file growth UNMET；完整三endranges由160独立证据保持，非163重验。156未知/全部原失败及未采file-document/multi-source/Main/SideChat/恢复等矩阵保持。此整理无个人UI交互，162仅一个CSS文件由Root交付；连续目标ACTIVE。
+
+## 164–166 新覆盖准备
+
+Root确认162 ba0db1d7 push22669实际0/freshsame/outgoing为空。[164 producer调查](../../artifacts/2026-10-05-connection-workspace-authority/source-document-production-investigation-164.md)明确document Source来源契约；[165状态](../../artifacts/2026-10-05-connection-workspace-authority/document-source-owned-history-query-165/README.md)仅七owned closed树census在10:56获准，E2E执行中，当前没有query结果声明。无UserDB/rearm/bootstrap/model/私有内容导出；真实document occurrence与UI仍UNMET。
+
+[166准备](../../artifacts/2026-10-05-connection-workspace-authority/source-url-plaintext-live-166/README.md)current ba0不变，18103/WorkBaseSol24/600000/180000/900000 runtime HELD；三个官方URL的primary text/plain预查不是product/model/UI pass，自然请求不强制title/annotation。Sources连续目标ACTIVE，file growth/未采矩阵及156未知保持。
+
+## 165–168 当前checkpoint（上段为历史准备）
+
+165实际child和独立review：7 qualified owned scopes、26 Session含7roots、15URLPart/6filePart/0docPart，非unique资源/group或全局不可达，docUI未验。Root [166人工记录](../../artifacts/2026-10-05-connection-workspace-authority/source-url-plaintext-live-166/live-01/root-manual-qualification.md)确认165307ms/17 Sol EOF/原combined once0+nested0/parent8924实际0 joined/19912+37956死亡18103释放pair清除132133关闭。真实titlelessURL自然增长阅读与限定native交互合格，窄collapsed两RFC同prefix ellipsis失败保留。
+
+167 Root11:14已准入仅SourceParts path+query·host及Root07文案，type/build正在跑，未视觉通过。168 prepared/runtime HELD待独立准入，原once不重跑；document/multi-source/livefile/generalRendering及未采矩阵未知，连续目标Sol ACTIVE。
+
+## 168 当前最终限定资格（前述running/HELD为历史）
+
+Root [168人工记录](../../artifacts/2026-10-05-connection-workspace-authority/source-url-path-first-live-168/live-01/root-manual-qualification.md)确认176879ms/16 Sol EOF/原combined once0+nested0、parent11938实际0 joined、4232/71352及18104/pair退休/134135关闭。types56135/build46762实际0；380/280 collapsed两RFC paths区别/W3C可读，text1022→2829同href/rect/Tooltip/followfalse自然增长、End/reentry/官方Enter限定合格。immediate reentryTooltip undefined不算pass。
+
+166 Root人工末尾更正sole shutdown line89实际archive writer，原launcher错误归因/raw保留，原once不重跑。165 Rootreview支持7scopes/26Session含7roots/15URLPart/6filePart/0docPart，仅授权范围Part统计。generalRendering/doc/extremepath/samepath跨host/真实Sources3及未采矩阵未知，连续目标ACTIVE，本批提交推送不提前宣称。

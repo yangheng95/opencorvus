@@ -1,0 +1,37 @@
+# Plain-text URL Sources live166 — preparation HELD
+
+## Recall
+
+User's primary requirement remains genuine Sources display and interaction. Root confirmed previous 162 delivery 162ba0db1d7 normal push terminal0/fresh same and all163 closed/original file oracle ONCE0. This independent case targets naturally titleless URL Sources; it does not repair production or reopen a previous Task. Preparation only: no runtime creation, credentials, model, native process, UI, database, network, tests, Git, helper changes or delegation. Root owns release, indices and delivery.
+
+Root's external read-only primary verification reported text/plain for https://www.rfc-editor.org/rfc/rfc8259.txt (784 lines), https://www.rfc-editor.org/rfc/rfc5234.txt (799 lines), and https://www.w3.org/robots.txt (127 lines). These are external observations, not product webfetch, actual redirect/final URL/title, model or Sources acceptance. Exact URLs are retained without query or fragments. Prepared input files are permitted by this verification; actual166 remains UNKNOWN.
+
+## Current source and impact
+
+Read packages/opencorvus/src/tool/webfetch.ts, tool/source.ts, packages/overlay/src/components/SourceParts.tsx, existing verify-current-source-facts.ts and verify-current-final-answer.ts, and previous144/163 prepared contracts. WebFetchParameters requires an absolute HTTP(S) URL; format defaults to markdown and timeout is optional. A relative URL is not a lawful input. The natural request specifies resources, not tools, format or execution sequence.
+
+executeWebFetch uses the actual response.url (otherwise requested URL) to create urlSource. Only actual text/html MIME invokes the document-title extractor. Other textual MIME returns text through the existing bounded output path without adding a Source title. Tool outcome title is URL plus content type and is distinct from Source.title. A .txt suffix alone proves neither response MIME nor absence of title. source.ts canonicalSourceUrl removes the fragment and retains the URL's canonical serialization; URL identity generates the existing Source ID. Plain-text webfetch produces source-url, not source-document.
+
+SourceParts.sourceLabel projects an absent title, or a title equal to the URL, to hostname + pathname + search. This is existing display behavior, not a new fallback proposed here. Tooltip/open uses the real URL. Full/compact identity preservation138, canonical Key143, reading focus158/159, expanded wrapping114 and density162 remain unchanged. This scenario can naturally qualify absent-title display; it cannot force title=URL, a long URL, Source-document, or one group containing three sources.
+
+Redirect risk is real: product fetch may return a different final canonical URL. Current single Source oracle requires actual requested URL coverage and canonical source/persisted payload agreement. Root must inspect genuine redirect facts; a mismatch is retained as failure/unknown, not handled by changing URLs, inventing expected titles or adding checker fallback after execution. RFC output may truncate according to the existing tool byte budget; the final report must use actual readable evidence rather than claim complete reading from external line counts.
+
+## Fresh fixed scope
+
+Run C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/source-url-plaintext-live-166-01; port18103; numeric16601; prefix source-url-plaintext-live-166-01. Work/builtin/base/builtin/gpt-6.1-sol; cumulative24 requests including preflight/helpers/workers; preparation600000ms, semantic inactivity180000ms, Task plus service900000ms unchanged. Actual Task/Project/Session/epoch/input/native identities, paired files, build asset, response MIME/final URL and Source count UNKNOWN. No forced role routing, tools, count, annotations, delays or synthetic Source Parts. A read-oriented researcher is requested naturally through the existing Base capability; successful delegation remains an actual outcome, not preparation proof.
+
+## Root acceptance and custody
+
+### Root finite166 admission — 2026-10-08T11:00Z
+
+Root fullread166/164/165/162/163 Recall, original request/profile/3URLsmanifest, actual webfetch MIME/title/responseURL and canonicalSourceUrl contracts. Root primary external opens confirm3exact text/plain resources; that does not preclaim productresponse/title/redirect/UI. Current sourceba0db1d7 normallypushed22669actual0/freshsame/outgoingempty, no product changes after163. Existing types73073/build93148actual0/publicsurface/CSScheck0 qualify thissame source, current main-qV471CDZ.js needs freshactualHTTP/asset200. All163 ownpage/native50396+77324/18102/pairclosed,76619actual0joined/fileoriginalONCE0.165 independent readonly census is separate, no app/provider run.
+
+Root admits fresh166Run/18103(originallyabsent) WorkBase/gpt-6.1-sol24/prep600000/idle180000/Taskservice900000, authorizedpairedcredentials+completecatalog/actualusableprojectedstreamSolpreflight. Exact originalpreparedURLs/request, no artificialquery/fragments/sourcefixtures/modeldelay/extrahelpers/userwindow/process actions. Actual noTitle labels/fullURL/Sourcegroups/nativeTab/Escape/Enter/wide+narrow/naturalupdate/follow andfinalChinese report sampled separately; missing scenesUNKNOWN. Original nativewholeJoboutputrequest/parentbirthportpair/pageclosure/exactoriginalbasenames then combinedURLsixargs ONCE/nestedSourceonce, noMemory/rearm/oraclechange. Redirect/error retainsoriginalfailure ratherthanalteringmanifest; no globaldocument/longURL/fullmatrixpass inferred.
+
+Root first reviews this request/profile/manifest and current source/types/build/actual served asset, then independently admits the sole mature launcher/readiness/create/shutdown/observer. Credential plus complete target catalog, usable/projected/actual streaming Sol preflight retain current contracts. No extra helper or nonstreaming request.
+
+Manual target: actual titleless source-url labels distinguish both RFC paths and robots.txt; expanded labels, URL tooltip, ordinal/count and links remain readable in main and actual child at380/280 if genuinely produced. Native Tab/Escape/Enter and reading focus through natural updates, plus explicit return-to-bottom, are independent real observations. Each RFC is a normative technical document; robots.txt is site crawler policy, not another RFC or an accessibility standard. Root verifies the Chinese three-point final findings and links against actual results. Missing live overlap, child Source, title=URL, grouped Sources3, document/file, long URL remain UNMET; three independent Sources1 are not Sources3.
+
+After exact whole native/output/request/pair/page closure and archive under original mandatory basenames, invoke existing .tmp-product-iteration/verify-current-final-answer.ts ONCE with six arguments: RunRoot, EvidenceRoot, 16601, prefix, this expected-source-manifest.json, actual final-provider-audit path. It invokes the existing Source validator once; no separate Source repetition, Memory checker or Task rearm. Actual complete.requests controls provider count; all original streaming200/EOF requirements remain. Data oracle cannot establish pixels or independent title correctness. Any scheduling/owner/retry/terminal anomaly requires shared Task/Mission/Session entry, occurrence, normal/terminal, restart, serial/parallel and multi-project audit.
+
+Status: input preparation frozen; all execution and visual acceptance HELD pending Root admission.

@@ -1,0 +1,55 @@
+{
+  "case": 160,
+  "access": "readonly BEGIN/ROLLBACK exact Task descendants",
+  "task": {
+    "id": "tsk_g00VXRybX300WIjs1vDo",
+    "project_id": "prj_h4jW34TAsAK72cmvPz10",
+    "session_id": "ses_-zUSY1OLAzzB3l7bzIEe",
+    "request_id": "1e499ba0-2771-435b-a43d-621f7e7b634e",
+    "product_pillar": "work"
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUSY1OLAzzB3l7bzIEe",
+      "parent_id": null,
+      "project_id": "prj_h4jW34TAsAK72cmvPz10",
+      "kind": "root"
+    },
+    {
+      "id": "ses_-zUSY1NV5zzyLalYqMXw",
+      "parent_id": "ses_-zUSY1OLAzzB3l7bzIEe",
+      "project_id": "prj_h4jW34TAsAK72cmvPz10",
+      "kind": "orchestrator"
+    },
+    {
+      "id": "ses_h0A4dYD9LcrnqpVHNyF3",
+      "parent_id": "ses_-zUSY1NV5zzyLalYqMXw",
+      "project_id": "prj_h4jW34TAsAK72cmvPz10",
+      "kind": "explore"
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VXRybfR00wNH2zVUxU",
+      "type": "task.execution.opened",
+      "seq": 3,
+      "emitted_at": 1791453091589,
+      "epoch": 1
+    },
+    {
+      "id": "pev_g0VXRz55c00zLtE53SGp",
+      "type": "task.completed",
+      "seq": 38,
+      "emitted_at": 1791453203404,
+      "epoch": 1
+    }
+  ],
+  "promptOwners": [],
+  "classCounts": {
+    "source-url": 0,
+    "source-file": 3,
+    "source-document": 0
+  },
+  "documents": [],
+  "withheld": "sourceId,title,filename,providerMetadata,fileIDs,content,URL,path"
+}

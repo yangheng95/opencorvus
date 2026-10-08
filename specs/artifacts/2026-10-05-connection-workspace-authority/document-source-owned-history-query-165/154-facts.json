@@ -1,0 +1,61 @@
+{
+  "case": 154,
+  "access": "readonly BEGIN/ROLLBACK exact Task descendants",
+  "task": {
+    "id": "tsk_g00VXRpfCf00hKin7FDT",
+    "project_id": "prj_hF3Muc2ULNnUntEgr5l5",
+    "session_id": "ses_-zUSYAKgKzz0sbNpyofS",
+    "request_id": "f221c871-7b02-4d3a-8137-cfff0e48f5f1",
+    "product_pillar": "work"
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUSYAKgKzz0sbNpyofS",
+      "parent_id": null,
+      "project_id": "prj_hF3Muc2ULNnUntEgr5l5",
+      "kind": "root"
+    },
+    {
+      "id": "ses_-zUSYAJrfzzTanHxOG13",
+      "parent_id": "ses_-zUSYAKgKzz0sbNpyofS",
+      "project_id": "prj_hF3Muc2ULNnUntEgr5l5",
+      "kind": "orchestrator"
+    },
+    {
+      "id": "ses_hUCue0urxBbhqZFx0RYd",
+      "parent_id": "ses_-zUSYAJrfzzTanHxOG13",
+      "project_id": "prj_hF3Muc2ULNnUntEgr5l5",
+      "kind": "explore"
+    },
+    {
+      "id": "ses_hHuZwyDOCQi4MImlv8iI",
+      "parent_id": "ses_-zUSYAJrfzzTanHxOG13",
+      "project_id": "prj_hF3Muc2ULNnUntEgr5l5",
+      "kind": "delegated-worker"
+    }
+  ],
+  "events": [
+    {
+      "id": "pev_g0VXRpfKI00ztUb6ipeU",
+      "type": "task.execution.opened",
+      "seq": 3,
+      "emitted_at": 1791450960749,
+      "epoch": 1
+    },
+    {
+      "id": "pev_g0VXRqbiO00Z3d7FH0Cz",
+      "type": "task.completed",
+      "seq": 53,
+      "emitted_at": 1791451183924,
+      "epoch": 1
+    }
+  ],
+  "promptOwners": [],
+  "classCounts": {
+    "source-url": 3,
+    "source-file": 0,
+    "source-document": 0
+  },
+  "documents": [],
+  "withheld": "sourceId,title,filename,providerMetadata,fileIDs,content,URL,path"
+}

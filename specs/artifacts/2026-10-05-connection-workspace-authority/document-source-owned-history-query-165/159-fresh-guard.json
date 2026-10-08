@@ -1,0 +1,21 @@
+{
+  "targetState": "dead_or_reused",
+  "host": {
+    "pid": 51368,
+    "processInstanceID": "win32:639270489059480806",
+    "occurrenceID": "d592a7bc-1026-4a2b-aacb-a62dad306ae4"
+  },
+  "target": {
+    "pid": 34280,
+    "processInstanceID": "win32:639270489067370394",
+    "occurrenceID": "0bf945b1-8edc-4ac4-96cd-271f707b749a"
+  },
+  "occurrence": "sources-reading-focus-after-159-01-e7198ae1-fde0-4e67-8d1d-15415289cd20",
+  "authPresent": false,
+  "modelsPresent": false,
+  "port": 18100,
+  "case": 159,
+  "observedAtUtc": "2026-10-08T11:01:55.5710751Z",
+  "hostState": "dead_or_reused",
+  "listenerCount": 0
+}

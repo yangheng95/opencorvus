@@ -456,3 +456,6 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [160 File Sources闭合](sources-file-focus-live-plan-160.md)与[限定资格](sources-file-focus-live-160/README.md)：111815ms/16 Sol EOF/原file once0；focus与实际三range边界合格，file live growth UNMET，首次导航失败保留；[161密度调查](sources-density-investigation-plan-161.md)实际26.667px，无CSS改动。
 
 - [162 scoped密度方案](subagent-transcript-density-plan-162.md)：仅inspector CSS md8/dead margin16，163实际宽窄seam22.667px限定合格，types/build0；[163准备](subagent-density-after-plan-163.md)/[说明](subagent-density-after-163/README.md)18102已闭合/111842ms/16 Sol EOF/file once0，file growth仍UNMET、完整endranges只引用160。
+
+- [164 document producer](source-document-production-investigation-164.md) / [165 census](document-source-owned-history-query-165/README.md)：7scopes/26Sessions/15URLPart/6filePart/0docPart，仅owned Part统计，document UI未验；[166闭合](source-url-plaintext-live-166/README.md)165307ms/17 Sol EOF/once0，窄collapsed辨识失败保留。
+- [167 collapsed identity](source-url-collapsed-identity-investigation-167.md)：path+query·host在168宽380/窄280同站点collapsed区别限定合格，types/build0；[168准备](source-url-path-first-live-plan-168.md)/[说明](source-url-path-first-live-168/README.md)已限定验收/176879ms/16 Sol EOF/once0；generalRendering/doc/extremepath/samepath跨host/真实Sources3未知。

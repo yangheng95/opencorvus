@@ -1,0 +1,21 @@
+{
+  "targetState": "dead_or_reused",
+  "host": {
+    "pid": 75336,
+    "processInstanceID": "win32:639270431372939825",
+    "occurrenceID": "aa4454d3-3c3f-417c-a277-782fe5170cde"
+  },
+  "target": {
+    "pid": 43856,
+    "processInstanceID": "win32:639270431380936479",
+    "occurrenceID": "bb488a84-acee-4b79-8898-ef158414f9cc"
+  },
+  "occurrence": "subagent-markdown-live-147-01-423b4368-9a22-4ae9-a393-6f809c41247b",
+  "authPresent": false,
+  "modelsPresent": false,
+  "port": 18096,
+  "case": 147,
+  "observedAtUtc": "2026-10-08T11:01:50.9140951Z",
+  "hostState": "dead_or_reused",
+  "listenerCount": 0
+}

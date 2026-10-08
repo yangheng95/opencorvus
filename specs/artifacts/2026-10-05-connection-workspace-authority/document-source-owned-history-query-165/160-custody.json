@@ -1,0 +1,68 @@
+{
+  "case": 160,
+  "run": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-file-focus-live-160-01",
+  "e": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\sources-file-focus-live-160\\live-01",
+  "occurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+  "taskID": "tsk_g00VXRybX300WIjs1vDo",
+  "projectID": "prj_h4jW34TAsAK72cmvPz10",
+  "selection": {
+    "occurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+    "taskID": "tsk_g00VXRybX300WIjs1vDo",
+    "projectID": "prj_h4jW34TAsAK72cmvPz10",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-file-focus-live-160-01\\project",
+    "productPillar": "work",
+    "requestID": "1e499ba0-2771-435b-a43d-621f7e7b634e",
+    "requestSentAt": "2026-10-08T09:51:27.5704754Z",
+    "acceptedObservedAt": "2026-10-08T09:51:32.2225229Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXRybX300WIjs1vDo",
+    "projectID": "prj_h4jW34TAsAK72cmvPz10",
+    "rootSessionID": "ses_-zUSY1OLAzzB3l7bzIEe",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXRybfR00wNH2zVUxU",
+    "openedAt": 1791453091589
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXRybX300WIjs1vDo",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXRybfR00wNH2zVUxU",
+    "openedAt": 1791453091589,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXRz55c00zLtE53SGp",
+    "terminalAt": 1791453203404
+  },
+  "host": {
+    "pid": 77184,
+    "processInstanceID": "win32:639270498520126717",
+    "occurrenceID": "8602b045-1a9d-4acf-a1e5-c0489d5f7c33"
+  },
+  "target": {
+    "pid": 44544,
+    "processInstanceID": "win32:639270498527862835",
+    "occurrenceID": "41b1e75a-d61f-450e-84fc-38be09cfc7de"
+  },
+  "fresh": {
+    "targetState": "dead_or_reused",
+    "host": {
+      "pid": 77184,
+      "processInstanceID": "win32:639270498520126717",
+      "occurrenceID": "8602b045-1a9d-4acf-a1e5-c0489d5f7c33"
+    },
+    "target": {
+      "pid": 44544,
+      "processInstanceID": "win32:639270498527862835",
+      "occurrenceID": "41b1e75a-d61f-450e-84fc-38be09cfc7de"
+    },
+    "occurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+    "authPresent": false,
+    "modelsPresent": false,
+    "port": 18101,
+    "case": 160,
+    "observedAtUtc": "2026-10-08T11:01:56.7657834Z",
+    "hostState": "dead_or_reused",
+    "listenerCount": 0
+  },
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true
+}
