@@ -1,0 +1,27 @@
+{
+  "port": 18129,
+  "occurrence": "subagent-open-audit-209-01-44375536-5eca-41c6-984a-660016bb7795",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\subagent-open-audit-209-01\\evidence",
+    "subagent-open-audit-209-01-44375536-5eca-41c6-984a-660016bb7795",
+    "1791496726470",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18129",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\subagent-open-audit-209-01\\startup.json",
+    "--startup-occurrence",
+    "subagent-open-audit-209-01-44375536-5eca-41c6-984a-660016bb7795",
+    "--log-level",
+    "INFO"
+  ],
+  "credentialStaging": "None"
+}

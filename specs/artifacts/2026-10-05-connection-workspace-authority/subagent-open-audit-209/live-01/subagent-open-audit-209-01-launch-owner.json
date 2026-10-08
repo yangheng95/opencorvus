@@ -1,0 +1,35 @@
+{
+  "observedProcessChain": [
+    {
+      "pid": 13680,
+      "processInstanceID": "win32:639270926273309065",
+      "occurrenceID": "b5ad6f90-9245-4338-b5ef-341b854ee897"
+    }
+  ],
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\subagent-open-audit-209-01\\runtime",
+  "host": {
+    "pid": 76764,
+    "processInstanceID": "win32:639270926265480404",
+    "occurrenceID": "89b182ab-dd0c-400b-bedc-ec1d13ac2e2e"
+  },
+  "authorityStaging": "None; no model Task requested",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\subagent-open-audit-209-01",
+  "evidencePrefix": "subagent-open-audit-209-01",
+  "port": 18129,
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\subagent-open-audit-209\\live-01",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\subagent-open-audit-209-01\\evidence",
+  "nativeTarget": {
+    "pid": 13680,
+    "processInstanceID": "win32:639270926273309065",
+    "occurrenceID": "b5ad6f90-9245-4338-b5ef-341b854ee897"
+  },
+  "owner": {
+    "processInstanceID": "win32:639270926273309065",
+    "ProcessId": 13680
+  },
+  "occurrence": "subagent-open-audit-209-01-44375536-5eca-41c6-984a-660016bb7795",
+  "targetBirthAtMs": 1791495827330,
+  "nativeDeadlineAt": 1791496726470
+}

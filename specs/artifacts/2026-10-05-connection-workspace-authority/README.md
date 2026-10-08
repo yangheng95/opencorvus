@@ -493,3 +493,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [208 Sources来源身份](source-reading-audit-208/README.md) / [实施前Recall](source-reading-audit-plan-208.md)：网页来源完整标题下直接呈现规范URL host；实际三份来源浅色/深色、键盘完整Tooltip及真实W3C目标页人工复核，最终asset200、原父工具90185/native/pair自然0。主卡Open未显侧栏的观察保留、根因未知；未验多来源/file/document/snippet矩阵。
 
+- [209 主卡Open实际调查](subagent-open-audit-209/README.md) / [Recall](subagent-open-investigation-209.md)：屏幕外定位点击仍在tail/Dock0；真实滚轮后两张屏幕内卡片pointer和tester Enter正确打开。工具内部时序未知，未加推测产品补丁；原父工具53393/native/pair自然0，其他页面未操作。后续当前Host真实Sol单Chat流式验收。
+

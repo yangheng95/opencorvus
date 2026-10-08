@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sub-agent Open observation209](records/2026-10/2026-10-09-subagent-open-investigation-209.md) and [real evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-open-audit-209/README.md): screen-outside locator observation reproduced, actual visible pointer/keyboard opening qualified; tool event chronology remains unknown, no speculative product change, native scope naturally closed.
+
 - [Visible web-source identity208](records/2026-10/2026-10-09-visible-source-host-208.md) and [real page evidence](artifacts/2026-10-05-connection-workspace-authority/source-reading-audit-208/README.md): canonical URL host visible beneath expanded titles; genuine light/dark Sources, keyboard Tooltip and real destination tab reviewed, native scope naturally closed; card Open observation remains unclassified.
 
 - [Sub-agent reading continuity206/207](records/2026-10/2026-10-09-subagent-reading-position-206-207.md) and [actual evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-reading-position-206/README.md): canonical scoped viewport handoff and layout-aware restoration; genuine Sources top, middle, All agents and Dock reopening visually reviewed; original failed scenes retained and both native scopes naturally closed.
