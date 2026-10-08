@@ -1,0 +1,23 @@
+{
+  "occurrence": "sources-keyboard-live-139-01-ec14e012-2985-413e-a4f5-c7a6bfbea7c7",
+  "outcome": "settled",
+  "host": {
+    "pid": 66824,
+    "processInstanceID": "win32:639270389812219423",
+    "occurrenceID": "bdf32a36-8cf8-4386-be82-0412a84aeb73"
+  },
+  "target": {
+    "pid": 76164,
+    "processInstanceID": "win32:639270389820730208",
+    "occurrenceID": "68d97649-d06b-4298-8b2b-506569180f47"
+  },
+  "observedAtUtc": "2026-10-08T06:56:06.314Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

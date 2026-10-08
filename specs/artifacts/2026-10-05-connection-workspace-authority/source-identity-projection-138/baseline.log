@@ -1,0 +1,106 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\transport-protocol\test\source-message-parts.test.ts:
+(pass) conversation source message parts > projects every persisted source family as renderable message content and compact activity [0.84ms]
+ 97 |   test("preserves distinct legal long URL identities and source IDs", () => {
+ 98 |     const prefix = `https://example.com/resource?value=${"a".repeat(2200)}`
+ 99 |     const urls = [`${prefix}&record=one`, `${prefix}&record=two`]
+100 |     const ids = [`source-${"x".repeat(180)}-one`, `source-${"x".repeat(180)}-two`]
+101 |     const projected = urls.map((url, index) => projectConversationAgentActivityPart({ id: `part-${index}`, messageID: "message", orderKey: `order-${index}`, type: "source-url", sourceId: ids[index], url, title: "Web source" }))
+102 |     expect(projected).toEqual(urls.map((url, index) => ({ id: `part-${index}`, messageID: "message", orderKey: `order-${index}`, type: "source-url", sourceId: ids[index], url, title: "Web source" })))
+                            ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "id": "part-0",
+      "messageID": "message",
+      "orderKey": "order-0",
+-     "sourceId": "source-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-one",
++     "sourceId": "source-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+      "title": "Web source",
+      "type": "source-url",
+-     "url": "https://example.com/resource?value=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (1857 bytes truncated) ...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&record=one",
++     "url": "https://example.com/resource?value=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (1857 bytes truncated) ...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...",
+    },
+    {
+      "id": "part-1",
+      "messageID": "message",
+      "orderKey": "order-1",
+-     "sourceId": "source-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-two",
++     "sourceId": "source-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+      "title": "Web source",
+      "type": "source-url",
+-     "url": "https://example.com/resource?value=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (1857 bytes truncated) ...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&record=two",
++     "url": "https://example.com/resource?value=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... (1857 bytes truncated) ...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...",
+    },
+  ]
+
+- Expected  - 4
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\transport-protocol\test\source-message-parts.test.ts:102:23)
+(fail) preserves distinct legal long URL identities and source IDs [0.76ms]
+103 |     expect(new Set(projected.map((part) => part?.type === "source-url" ? part.url : "")).size).toBe(2)
+104 |   })
+105 | 
+106 |   test("preserves native file path whitespace and long identity with exact range", () => {
+107 |     const input = { id: "file-part", messageID: "message", orderKey: "order", type: "source-file", sourceId: `file-${"f".repeat(180)}`, path: `C:/project/folder  with  spaces/${"directory/".repeat(120)}source.ts`, title: "source.ts", range: { startLine: 170, endLine: 200 } }
+108 |     expect(projectConversationAgentActivityPart(input)).toEqual(input)
+                                                              ^
+error: expect(received).toEqual(expected)
+
+  {
+    "id": "file-part",
+    "messageID": "message",
+    "orderKey": "order",
+-   "path": "C:/project/folder  with  spaces/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/source.ts",
++   "path": "C:/project/folder with spaces/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/directory/d...",
+    "range": {
+      "endLine": 200,
+      "startLine": 170,
+    },
+-   "sourceId": "file-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
++   "sourceId": "file-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff...",
+    "title": "source.ts",
+    "type": "source-file",
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\transport-protocol\test\source-message-parts.test.ts:108:57)
+(fail) preserves native file path whitespace and long identity with exact range [4.52ms]
+108 |     expect(projectConversationAgentActivityPart(input)).toEqual(input)
+109 |   })
+110 | 
+111 |   test("preserves document source identity and descriptor metadata", () => {
+112 |     const input = { id: "document-part", messageID: "message", orderKey: "order", type: "source-document", sourceId: `document-${"d".repeat(180)}`, mediaType: `application/vnd.example.${"m".repeat(170)}`, title: "Document source", filename: `reference  ${"long-name-".repeat(30)}.pdf` }
+113 |     expect(projectConversationAgentActivityPart(input)).toEqual(input)
+                                                              ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "filename": "reference  long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-.pdf",
++   "filename": "reference long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-name-long-na...",
+    "id": "document-part",
+-   "mediaType": "application/vnd.example.mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
++   "mediaType": "application/vnd.example.mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm...",
+    "messageID": "message",
+    "orderKey": "order",
+-   "sourceId": "document-dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
++   "sourceId": "document-dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd...",
+    "title": "Document source",
+    "type": "source-document",
+  }
+
+- Expected  - 3
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\transport-protocol\test\source-message-parts.test.ts:113:57)
+(fail) preserves document source identity and descriptor metadata [0.37ms]
+
+ 1 pass
+ 3 fail
+ 4 expect() calls
+Ran 4 tests across 1 file. [1103.00ms]

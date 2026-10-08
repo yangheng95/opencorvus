@@ -756,13 +756,6 @@ updates to an existing child. Native wheel movement over a card belongs to the
 outer transcript. Manual history navigation keeps the existing follow/pause
 contract, and full child history remains in the selected Agent transcript.
 
-Compact child activity and full Source Parts preserve the same canonical
-sourceId, URL, native file path and document media/filename descriptors without
-text truncation or whitespace rewriting. Only presentation titles remain bounded
-in the shared transport projector; item-count and ordinary text/Tool bounds stay
-unchanged. Full Source rendering/navigation still uses the current transcript
-owner, and compact data qualification does not imply a live long-URL UI pass.
-
 ## Shared visual primitives
 
 The existing design-language tokens own geometry, typography and neutral

@@ -756,13 +756,6 @@ updates to an existing child. Native wheel movement over a card belongs to the
 outer transcript. Manual history navigation keeps the existing follow/pause
 contract, and full child history remains in the selected Agent transcript.
 
-Compact child activity and full Source Parts preserve the same canonical
-sourceId, URL, native file path and document media/filename descriptors without
-text truncation or whitespace rewriting. Only presentation titles remain bounded
-in the shared transport projector; item-count and ordinary text/Tool bounds stay
-unchanged. Full Source rendering/navigation still uses the current transcript
-owner, and compact data qualification does not imply a live long-URL UI pass.
-
 ## Shared visual primitives
 
 The existing design-language tokens own geometry, typography and neutral
@@ -1952,3 +1945,9 @@ LogViewer reads the current backend event envelope and preserves nested subject 
 Loaded logs have one local literal, case-insensitive query through the shared search primitive. The existing level-qualified aggregation depends only on original sources/level; query filters those records without re-parsing them, and empty/whitespace query returns that base result. The same matching result supplies list, Copy and no-match feedback, so Copy includes all loaded matches. Query covers header/message/structured fields/raw, is retired on close and is not persisted or sent to a backend. Search explicitly covers loaded logs; server tail remains bounded to the current fetch, not full-file history. Clear search and Clear logs keep distinct semantics; source read failures remain visible.
 
 Support ZIP exports exact retained raw files, canonical-time formatted records and original subject details. Historical timestamp/ts fields are diagnostic content rather than alternate clocks. Logging is diagnostic presentation; these records do not synthesize conversation participants or replace durable activity/occurrence timestamps.
+Compact child activity and full Source Parts preserve the same canonical
+sourceId, URL, native file path and document media/filename descriptors without
+text truncation or whitespace rewriting. Only presentation titles remain bounded
+in the shared transport projector; item-count and ordinary text/Tool bounds stay
+unchanged. Full Source rendering/navigation still uses the current transcript
+owner, and compact data qualification does not imply a live long-URL UI pass.

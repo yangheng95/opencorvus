@@ -1,0 +1,16 @@
+{
+  "extends": "../packages/transport-protocol/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "types": [
+      "bun"
+    ],
+    "typeRoots": [
+      "../packages/opencorvus/node_modules/@types"
+    ]
+  },
+  "include": [
+    "../packages/transport-protocol/src/**/*.ts",
+    "../packages/transport-protocol/test/source-message-parts.test.ts"
+  ]
+}

@@ -1,0 +1,134 @@
+diff --git a/packages/transport-protocol/src/index.ts b/packages/transport-protocol/src/index.ts
+index c27f08ce..30a78f1e 100644
+--- a/packages/transport-protocol/src/index.ts
++++ b/packages/transport-protocol/src/index.ts
+@@ -747,6 +747,10 @@ function boundedConversationAgentActivityValue(value: unknown, depth = 0): unkno
+   return result
+ }
+ 
++function conversationSourceIdentityText(value: unknown): string {
++  return typeof value === "string" && value.trim().length > 0 ? value : ""
++}
++
+ /** Project one visible persisted part into the compact child-progress
+  * contract. Transcript-only parts (reasoning, interactions, boundaries, and
+  * control markers) intentionally return null. */
+@@ -799,18 +803,18 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
+       : null
+   }
+   if (part.type === "source-url") {
+-    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+-    const url = compactConversationAgentActivityText(part.url, 2048)
++    const sourceId = conversationSourceIdentityText(part.sourceId)
++    const url = conversationSourceIdentityText(part.url)
+     const title = compactConversationAgentActivityText(part.title, 240)
+     return sourceId && /^https?:\/\//i.test(url)
+       ? { ...base, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
+       : null
+   }
+   if (part.type === "source-document") {
+-    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+-    const mediaType = compactConversationAgentActivityText(part.mediaType, 160)
++    const sourceId = conversationSourceIdentityText(part.sourceId)
++    const mediaType = conversationSourceIdentityText(part.mediaType)
+     const title = compactConversationAgentActivityText(part.title, 240)
+-    const filename = compactConversationAgentActivityText(part.filename, 240)
++    const filename = conversationSourceIdentityText(part.filename)
+     return sourceId && mediaType && title
+       ? {
+           ...base,
+@@ -823,8 +827,8 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
+       : null
+   }
+   if (part.type === "source-file") {
+-    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+-    const path = compactConversationAgentActivityText(part.path, 1024)
++    const sourceId = conversationSourceIdentityText(part.sourceId)
++    const path = conversationSourceIdentityText(part.path)
+     const title = compactConversationAgentActivityText(part.title, 240)
+     const rawRange = part.range && typeof part.range === "object" ? (part.range as Record<string, unknown>) : undefined
+     const startLine = typeof rawRange?.startLine === "number" ? rawRange.startLine : undefined
+diff --git a/packages/transport-protocol/test/source-message-parts.test.ts b/packages/transport-protocol/test/source-message-parts.test.ts
+index dcd197a8..22d68c4b 100644
+--- a/packages/transport-protocol/test/source-message-parts.test.ts
++++ b/packages/transport-protocol/test/source-message-parts.test.ts
+@@ -92,4 +92,61 @@ describe("conversation source message parts", () => {
+       },
+     ])
+   })
++
++  test("preserves distinct legal long URL identities and source IDs", () => {
++    const prefix = `https://example.com/resource?value=${"a".repeat(2200)}`
++    const urls = [`${prefix}&record=one`, `${prefix}&record=two`]
++    const ids = [`source-${"x".repeat(180)}-one`, `source-${"x".repeat(180)}-two`]
++    const projected = urls.map((url, index) =>
++      projectConversationAgentActivityPart({
++        id: `part-${index}`,
++        messageID: "message",
++        orderKey: `order-${index}`,
++        type: "source-url",
++        sourceId: ids[index],
++        url,
++        title: "Web source",
++      }),
++    )
++    expect(projected).toEqual(
++      urls.map((url, index) => ({
++        id: `part-${index}`,
++        messageID: "message",
++        orderKey: `order-${index}`,
++        type: "source-url",
++        sourceId: ids[index],
++        url,
++        title: "Web source",
++      })),
++    )
++    expect(new Set(projected.map((part) => (part?.type === "source-url" ? part.url : ""))).size).toBe(2)
++  })
++
++  test("preserves native file path whitespace and long identity with exact range", () => {
++    const input = {
++      id: "file-part",
++      messageID: "message",
++      orderKey: "order",
++      type: "source-file" as const,
++      sourceId: `file-${"f".repeat(180)}`,
++      path: `C:/project/folder  with  spaces/${"directory/".repeat(120)}source.ts`,
++      title: "source.ts",
++      range: { startLine: 170, endLine: 200 },
++    }
++    expect(projectConversationAgentActivityPart(input)).toEqual(input)
++  })
++
++  test("preserves document source identity and descriptor metadata", () => {
++    const input = {
++      id: "document-part",
++      messageID: "message",
++      orderKey: "order",
++      type: "source-document" as const,
++      sourceId: `document-${"d".repeat(180)}`,
++      mediaType: `application/vnd.example.${"m".repeat(170)}`,
++      title: "Document source",
++      filename: `reference  ${"long-name-".repeat(30)}.pdf`,
++    }
++    expect(projectConversationAgentActivityPart(input)).toEqual(input)
++  })
+ })
+diff --git a/specs/current/architecture/07-panel.md b/specs/current/architecture/07-panel.md
+index 8c96acdd..28f789c4 100644
+--- a/specs/current/architecture/07-panel.md
++++ b/specs/current/architecture/07-panel.md
+@@ -756,6 +756,13 @@ updates to an existing child. Native wheel movement over a card belongs to the
+ outer transcript. Manual history navigation keeps the existing follow/pause
+ contract, and full child history remains in the selected Agent transcript.
+ 
++Compact child activity and full Source Parts preserve the same canonical
++sourceId, URL, native file path and document media/filename descriptors without
++text truncation or whitespace rewriting. Only presentation titles remain bounded
++in the shared transport projector; item-count and ordinary text/Tool bounds stay
++unchanged. Full Source rendering/navigation still uses the current transcript
++owner, and compact data qualification does not imply a live long-URL UI pass.
++
+ ## Shared visual primitives
+ 
+ The existing design-language tokens own geometry, typography and neutral

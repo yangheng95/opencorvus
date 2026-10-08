@@ -1,0 +1,17 @@
+#138 local data qualification — frozen
+
+One current shared projector preserves typed nonblank sourceId/url/path/mediaType/filename exactly; display title240 and existing text/tool/item-count limits unchanged. No new cache/schema/protocol/fallback or runtime source. Pure test inputs are lawful data only, not synthesized persisted Message/Source or E2E.
+
+Baseline exact source-message-parts file:1pass3fail4expects exit1, retained. Final same file:4pass0fail5expects exit0, covers short original source families, distinct legal long URL tails/longsourceIDs, long native path repeatedspaces+range, document typed descriptor metadata. Configured transport typecheck0; explicit transportsrc+actualtest types0; backend+overlay consumer typecheck0. First explicit test type failure (literal widening) saved and corrected with true literal input types, no weaker assertion.
+
+Full before/final snapshots/diff and raw logs retained. Current07-panel states identity/display separation. No real long URL native/browser/UI/Provider/database run, live href breakage or full shared runtime matrix claimed. Root original137/full Source views remain separate; compact progress currently may not render URL links. Root owns specs indices/docs/Git/future genuine acceptance. Stop source here.
+
+Root review final format: three new cases moved into existing conversation source message parts describe, formatted by repository Prettier. Identity contract moved from unrelated Support ZIP end to single Main child-progress boundary before Shared visual primitives. Prior state preserved in source-test.before-format.ts/panel.before-move.md. Exact final file4pass5expects; final-formatted-test.log0. Semantic source unchanged, consumer typechecks not unnecessarily repeated.
+
+## Recall, source authority and delivery boundary
+
+User Sources fidelity/readability remains priority. [138binding plan](../source-identity-projection-plan-138.md) follows [137investigation](../sources-document-tooltip-investigation-137.md), with Root135/136normaldeliveryb292af18/push83879terminal0/freshsame/allownedscopesclosed. Root admitted narrow data identity preservation only; sourcefullhref damage/UIgeometry is NOT proved by compact truncation. Original130/134before failures/125causeUNKNOWN/active128norearm remain preserved. This evidence-document update reads frozen owner report/plans only, no runtime/source/test/helper/DB/UI/native/Provider/Git/check run or delegation except docs:check.
+
+[Actual complete diff](full-final.diff), [baseline](baseline.log), [final](final.log), [configured transport types](transport-types.log), [explicit final types](explicit-test-types-final.log), [backend](backend-types.log) and [Overlay](overlay-types.log) retain responsible-owner outputs. Baseline1pass3fail4expect then final4pass5expect and types0 qualify one shared projector's exact nonblank semantic fields sourceId/url/path/mediaType/filename. Title240/ordinary display/tool previews/item24 remain current bounded policy. No free-text parser/cache/newSource/protocol or current fullSourcehref defect inference.
+
+[Fresh139prepared plan](../sources-keyboard-live-plan-139.md)/[inputs](../sources-keyboard-live-139/README.md) await138build/Rootfiniteadmission. Datafixture longURL/path/document tests are not genuine longURL/native/browser/persistedSource or keyboardTooltip acceptance. No Memory requirement, fabricated source-document, forcedthreeSourcegroup or programmaticfocus will qualify139.138commit/push/fresh139runtime are pendingRootreview and not claimed in this report.

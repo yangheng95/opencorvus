@@ -303,3 +303,12 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Sources137 remaining document/URL/Tooltip investigation](../../artifacts/2026-10-05-connection-workspace-authority/sources-document-tooltip-investigation-137.md): proposal-only source audit, genuine document/longURL/Tooltip coverage unknown; no fix/afterpass claimed.
 
 
+
+- [Sources138 identity plan](../../artifacts/2026-10-05-connection-workspace-authority/source-identity-projection-plan-138.md) and [evidence](../../artifacts/2026-10-05-connection-workspace-authority/source-identity-projection-138/README.md): one projector preserves exactsemanticfields/displayboundsunchanged; baseline1/3fail→local4tests5expect/types0, genuinehref/longURL/UInotqualified.
+
+- [Genuine keyboard139 prepared plan](../../artifacts/2026-10-05-connection-workspace-authority/sources-keyboard-live-plan-139.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/sources-keyboard-live-139/README.md): actual127threeURLrequest copied,18093WorkBaseSol24bounds; actualTaskdone169952ms/18SolEOF/FIRSTcombinedonce0/fullclosure; RootstableintroTooltip/nativekeyboard/W3Cnavigation+narrowgeometryqualified, initialanomaly/longURL/documentunknown, noMemory.
+
+- [Source identity138/139 record](2026-10-08-source-identity.md): exactlocaldata versus RootscopedgenuineSourceskeyboardqualification/remaininglimits.
+
+
+

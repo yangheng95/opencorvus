@@ -747,10 +747,6 @@ function boundedConversationAgentActivityValue(value: unknown, depth = 0): unkno
   return result
 }
 
-function conversationSourceIdentityText(value: unknown): string {
-  return typeof value === "string" && value.trim().length > 0 ? value : ""
-}
-
 /** Project one visible persisted part into the compact child-progress
  * contract. Transcript-only parts (reasoning, interactions, boundaries, and
  * control markers) intentionally return null. */
@@ -803,18 +799,18 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
       : null
   }
   if (part.type === "source-url") {
-    const sourceId = conversationSourceIdentityText(part.sourceId)
-    const url = conversationSourceIdentityText(part.url)
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const url = compactConversationAgentActivityText(part.url, 2048)
     const title = compactConversationAgentActivityText(part.title, 240)
     return sourceId && /^https?:\/\//i.test(url)
       ? { ...base, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
       : null
   }
   if (part.type === "source-document") {
-    const sourceId = conversationSourceIdentityText(part.sourceId)
-    const mediaType = conversationSourceIdentityText(part.mediaType)
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const mediaType = compactConversationAgentActivityText(part.mediaType, 160)
     const title = compactConversationAgentActivityText(part.title, 240)
-    const filename = conversationSourceIdentityText(part.filename)
+    const filename = compactConversationAgentActivityText(part.filename, 240)
     return sourceId && mediaType && title
       ? {
           ...base,
@@ -827,8 +823,8 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
       : null
   }
   if (part.type === "source-file") {
-    const sourceId = conversationSourceIdentityText(part.sourceId)
-    const path = conversationSourceIdentityText(part.path)
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const path = compactConversationAgentActivityText(part.path, 1024)
     const title = compactConversationAgentActivityText(part.title, 240)
     const rawRange = part.range && typeof part.range === "object" ? (part.range as Record<string, unknown>) : undefined
     const startLine = typeof rawRange?.startLine === "number" ? rawRange.startLine : undefined

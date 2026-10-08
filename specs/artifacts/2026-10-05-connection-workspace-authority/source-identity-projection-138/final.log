@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+packages\transport-protocol\test\source-message-parts.test.ts:
+(pass) conversation source message parts > projects every persisted source family as renderable message content and compact activity [0.66ms]
+(pass) preserves distinct legal long URL identities and source IDs [0.23ms]
+(pass) preserves native file path whitespace and long identity with exact range [0.06ms]
+(pass) preserves document source identity and descriptor metadata [0.06ms]
+
+ 4 pass
+ 0 fail
+ 5 expect() calls
+Ran 4 tests across 1 file. [1067.00ms]
