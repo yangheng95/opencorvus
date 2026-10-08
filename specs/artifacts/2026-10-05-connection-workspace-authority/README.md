@@ -487,3 +487,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [204 原生运行器截止](native-history-deadline-204/README.md)：唯一ProcessFacade控制期限/显式前台子树策略，6项真实功能检查通过，实际Host截止1与自然7完整结算。普通Sol新Host与子侧栏真实截图仍待验，单 agent继续。
 
+- [205 完整历史准入](child-history-readiness-205/README.md) / [205 真实子侧栏](child-sources-history-205/README.md) / [206 阅读位置方案](subagent-reading-position-plan-206.md)：完整90表逐行一致副本、当前正常serve/自然0；浅色/深色真实Sources与键盘身份人工复核。返回正文24段/3标题/height2908保持，但top0/followfalse变2330.666748/followtrue，位置修复仍待实施。
+

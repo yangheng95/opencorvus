@@ -2831,3 +2831,5 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [204 原生运行器截止](artifacts/2026-10-05-connection-workspace-authority/native-history-deadline-204/README.md)：修复长驻Host没有实际截止控制，沿用唯一ProcessFacade/原生监督器；6项聚焦功能测试及真实截止/自然退出结算。普通Sol新Host与子侧栏视觉待验，单 agent继续。
 
+- [205 完整真实历史](artifacts/2026-10-05-connection-workspace-authority/child-history-readiness-205/README.md) / [205 子侧栏视觉](artifacts/2026-10-05-connection-workspace-authority/child-sources-history-205/README.md) / [206 阅读位置根因](artifacts/2026-10-05-connection-workspace-authority/subagent-reading-position-plan-206.md)：真实90表逐行一致复制与正常serve/自然0，实际浅色/深色Sources和键盘身份复核；正文返回完整但阅读位置/follow丢失，继续修复。
+

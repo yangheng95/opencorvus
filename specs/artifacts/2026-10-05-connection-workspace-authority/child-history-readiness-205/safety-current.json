@@ -1,0 +1,123 @@
+{
+  "observedAtUtc": "2026-10-08T20:14:27.542Z",
+  "memory": [
+    {
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "kind": "project_context",
+      "status": "idle",
+      "organizerLeaseExpiresAt": null
+    },
+    {
+      "project_id": "prj_hVAc7t3PtYTtTTJZWWvx",
+      "kind": "project_context",
+      "status": "idle",
+      "organizerLeaseExpiresAt": null
+    }
+  ],
+  "messages": [
+    {
+      "role": "assistant",
+      "rows": 15,
+      "completed": 15
+    },
+    {
+      "role": "user",
+      "rows": 7,
+      "completed": 0
+    }
+  ],
+  "controls": [
+    {
+      "id": "sctl_hHhx5u3022hac0NqcK7",
+      "session_id": "ses_hCXtaZtUsxlBDPJGPORp",
+      "kind": "consumed",
+      "time_created": 1791449668930
+    }
+  ],
+  "permissions": [
+    {
+      "id": "per_g0VXRkTJo010lh5QdJ33",
+      "attempt_id": "per_hiFyBY6A3uGUYtRBlbKB",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hiFyBY6A3uGUYtRBlbKB"
+    },
+    {
+      "id": "per_g0VXRkUzq01F6Lj6hosf",
+      "attempt_id": "per_hnVWUNdgTqd0ObVWd7GK",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hnVWUNdgTqd0ObVWd7GK"
+    },
+    {
+      "id": "per_g0VXRkWuZ00vQfazPXvU",
+      "attempt_id": "per_hZeGfgbH7Lw4G5bdXI50",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hZeGfgbH7Lw4G5bdXI50"
+    },
+    {
+      "id": "per_g0VXRkYAf00QQbeBqaP8",
+      "attempt_id": "per_hibUomHbNcAARnadtm30",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hibUomHbNcAARnadtm30"
+    },
+    {
+      "id": "per_g0VXRklHf001CS8ZXvxt",
+      "attempt_id": "per_hTQUHCwWSQiMoLSXaQgF",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hTQUHCwWSQiMoLSXaQgF"
+    },
+    {
+      "id": "per_g0VXRkr1I00hLyULM2uy",
+      "attempt_id": "per_htCx6RlbhxNagIdAATW3",
+      "terminal": "execution_succeeded",
+      "result_id": "per_htCx6RlbhxNagIdAATW3"
+    },
+    {
+      "id": "per_g0VXRlCUw00ecwdJeR2y",
+      "attempt_id": "per_hGycisKFWlmG150Ae8Vo",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hGycisKFWlmG150Ae8Vo"
+    },
+    {
+      "id": "per_g0VXRlIzH00DRXIs5g50",
+      "attempt_id": "per_hnpYdgNf8KWuYuYSWQQC",
+      "terminal": "execution_succeeded",
+      "result_id": "per_hnpYdgNf8KWuYuYSWQQC"
+    }
+  ],
+  "leases": [
+    {
+      "id": "act_g0VXRkF3G00oXeV8wUOH",
+      "target": "runtime_process",
+      "target_id": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35",
+      "owner_occurrence_id": "{\"pid\":63112,\"processInstanceID\":\"win32:639270464606887343\",\"occurrenceID\":\"ef6866b5-d536-4c92-a1f1-ca385fbc6f35\"}",
+      "expires_at": 9007199254740991
+    }
+  ],
+  "ingresses": [
+    {
+      "id": "art_hbzNs5iRQE31VNkuiEpD",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "disposition": "resolved"
+    },
+    {
+      "id": "art_hxPr2eO4VzuwPb2E06z2",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "disposition": "resolved"
+    },
+    {
+      "id": "art_h1z2OytdL7BFX1LcH1oM",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "disposition": "terminal_inapplicable"
+    }
+  ],
+  "capacity": [
+    {
+      "slot": 0,
+      "expires_at": 1791449923361
+    },
+    {
+      "slot": 1,
+      "expires_at": 1791449825561
+    }
+  ]
+}

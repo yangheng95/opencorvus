@@ -1,0 +1,25 @@
+{
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/child-sources-history-205-01",
+  "observedAtUtc": "2026-10-08T20:16:12.5144439Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "caseLabel": "child-sources-history-205-01",
+  "sourceOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "projectID": "prj_honTzv1SylD1sTwgEqBC",
+  "scope": "Full original runtime normal serve; exact original canonical projects remain; no provider, Task rearm, hidden messages or recovery disabling",
+  "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+  "sourceProject": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+  "rootSessionID": "ses_-zUSYFdRdzzk2frR62zX",
+  "readinessEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-history-readiness-205",
+  "casePort": 18125,
+  "caseEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-sources-history-205/live-01",
+  "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/live-01",
+  "startupQualified": true,
+  "conditions": [
+    "fresh whole source closure",
+    "current Task/dispatch/frontier classifiers",
+    "all two projects current effective readonly configuration",
+    "no terminal write/physical cleanup candidates",
+    "all copied rows must next compare exactly"
+  ]
+}

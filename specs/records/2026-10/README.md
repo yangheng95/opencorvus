@@ -385,3 +385,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [2026-10-09 原生运行器截止](2026-10-09-native-history-deadline-204.md)：修正Host无运行期限的根因，现有ProcessFacade接管；6正向真实测试/类型通过，实际截止1和自然7原生结算保留。子侧栏视觉仍待验。
 
+- [2026-10-09 子侧栏 Sources 与位置](2026-10-09-child-sources-history-205-206.md)：完整真实历史正常serve与浅/深色Sources人工复核，原生/父工具自然0；发现切换返回阅读位置丢失，206根因已落盘、修复待实施。
+

@@ -1,0 +1,37 @@
+param([Parameter(Mandatory=$true)][string]$ManifestPath)
+$ErrorActionPreference='Stop'
+$historyManifestPath205=[IO.Path]::GetFullPath($ManifestPath)
+$historyManifest205=Get-Content -Raw -LiteralPath $historyManifestPath205 | ConvertFrom-Json -AsHashtable -DateKind String
+if(!$historyManifest205.startupQualified){throw 'Current whole-source startup admission required'}
+foreach($key205 in @('sourceRun','sourceEvidence','sourceProject','caseRun','caseEvidence','readinessEvidence')){if(![IO.Path]::IsPathFullyQualified($historyManifest205[$key205])){throw 'Absolute history custody paths required'}}
+$historySource205=[IO.Path]::GetFullPath($historyManifest205.sourceRun)
+$historyCopy205=[IO.Path]::GetFullPath($historyManifest205.caseRun)
+$historyEvidence205=[IO.Path]::GetFullPath($historyManifest205.caseEvidence)
+$historyOwner205=Get-Content -Raw -LiteralPath (Join-Path $historySource205 'launch-owner.json') | ConvertFrom-Json -AsHashtable -DateKind String
+if($historyOwner205.occurrence -cne $historyManifest205.sourceOccurrence -or [IO.Path]::GetFullPath($historyOwner205.project) -ne [IO.Path]::GetFullPath($historyManifest205.sourceProject) -or [IO.Path]::GetFullPath($historyOwner205.runRoot) -ne $historySource205 -or [IO.Path]::GetFullPath($historyOwner205.settlementEvidenceRoot) -ne [IO.Path]::GetFullPath($historyManifest205.sourceEvidence)){throw 'Original history owner binding mismatch'}
+if(Test-Path -LiteralPath $historyCopy205){throw 'Preserve prior history copy occurrence'}
+if(Test-Path -LiteralPath $historyEvidence205){throw 'Preserve prior history evidence occurrence'}
+. (Join-Path $PSScriptRoot 'live-sol-launch.ps1') -FunctionsOnly
+$historyStates205=@(@{expected=$historyOwner205.host;state=(Get-OwnedNativeState $historyOwner205.host)},@{expected=$historyOwner205.nativeTarget;state=(Get-OwnedNativeState $historyOwner205.nativeTarget)})
+if(@($historyStates205 | Where-Object state -ne 'dead_or_reused').Count -or @(Get-NetTCPConnection -State Listen -ErrorAction Stop | Where-Object {$_.LocalPort -in @($historyOwner205.port,$historyManifest205.casePort)}).Count){throw 'Original/new history native or port not closed'}
+foreach($name205 in @('auth.json','models.json')){if(Test-Path -LiteralPath (Join-Path $historySource205 ('runtime/data/'+$name205))){throw 'Original source credential pair retained'}}
+$historySettled205=Get-Content -Raw -LiteralPath (Join-Path $historyManifest205.sourceEvidence 'native-host-settled.json') | ConvertFrom-Json -AsHashtable -DateKind String
+$historyPhysical205=Get-Content -Raw -LiteralPath (Join-Path $historyManifest205.sourceEvidence ($historyOwner205.evidencePrefix+'-physical-terminal-and-pair-cleanup.json')) | ConvertFrom-Json -AsHashtable -DateKind String
+if($historySettled205.occurrence -cne $historyOwner205.occurrence -or $historySettled205.outcome -cne 'settled' -or !$historySettled205.physicalCompletion -or !$historySettled205.outputDrainComplete -or !$historySettled205.requestCleanupComplete -or $historyPhysical205.occurrence -cne $historyOwner205.occurrence -or !$historyPhysical205.physicalCompletion -or !$historyPhysical205.pairedCleanupComplete){throw 'Original history whole closure required'}
+foreach($kind205 in @('host','target')){$expected205=if($kind205 -eq 'host'){$historyOwner205.host}else{$historyOwner205.nativeTarget};foreach($field205 in @('pid','processInstanceID','occurrenceID')){if($historySettled205[$kind205][$field205] -cne $expected205[$field205]){throw 'Original history native receipt identity mismatch'}}}
+$historyReadiness205=Get-Content -Raw -LiteralPath (Join-Path $historyManifest205.readinessEvidence 'result-startup.json') | ConvertFrom-Json -AsHashtable -DateKind String
+foreach($entry205 in $historyReadiness205.runtimeInventory){$actual205=Get-Item -LiteralPath $entry205.path -Force -ErrorAction Stop;if($actual205.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Source runtime link refused'}}
+[IO.Directory]::CreateDirectory($historyCopy205) | Out-Null
+[IO.Directory]::CreateDirectory($historyEvidence205) | Out-Null
+Copy-Item -LiteralPath (Join-Path $historySource205 'runtime') -Destination (Join-Path $historyCopy205 'runtime') -Recurse -ErrorAction Stop
+$historyCompareCode205=@"
+import fs from 'node:fs';import path from 'node:path';import {Database} from 'bun:sqlite';
+const manifest=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));const source=new Database(path.join(manifest.sourceRun,'runtime/data/opencorvus.db'),{readonly:true});const clone=new Database(path.join(manifest.caseRun,'runtime/data/opencorvus.db'),{readonly:true});
+const quote=s=>'"'+s.replaceAll('"','""')+'"';try{source.exec('BEGIN');clone.exec('BEGIN');const tables=source.query("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all().map(r=>r.name);const clonedTables=clone.query("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name").all().map(r=>r.name);if(JSON.stringify(tables)!==JSON.stringify(clonedTables))throw Error('Complete copied table identities differ');const rows=[];for(const table of tables){const left=source.query('SELECT * FROM '+quote(table)).all().map(v=>JSON.stringify(v)).sort();const right=clone.query('SELECT * FROM '+quote(table)).all().map(v=>JSON.stringify(v)).sort();if(left.length!==right.length||left.some((row,i)=>row!==right[i]))throw Error('Actual copied rows differ in '+table);rows.push({table,rows:left.length,fullRowContent:'equal'});}const task=clone.query('SELECT id,project_id,session_id,request_id FROM engine_task WHERE id=?').get(manifest.taskID);if(!task||task.project_id!==manifest.projectID||task.session_id!==manifest.rootSessionID||task.request_id!==manifest.requestID)throw Error('Actual selected history identity mismatch');console.log(JSON.stringify({access:'Both complete readonly transactions; direct all stored row-content equality, no hashes',tableRows:rows,task}));}finally{source.exec('ROLLBACK');clone.exec('ROLLBACK');source.close();clone.close();}
+"@
+$historyCompared205=& 'C:/Users/hengu/.bun/bin/bun.exe' -e $historyCompareCode205 $historyManifestPath205
+if($LASTEXITCODE -ne 0){throw 'Complete copied history comparison failed; clone retained for diagnosis'}
+$historyRows205=$historyCompared205 | ConvertFrom-Json -AsHashtable -DateKind String
+foreach($name205 in @('auth.json','models.json')){if(Test-Path -LiteralPath (Join-Path $historyCopy205 ('runtime/data/'+$name205))){throw 'Copied credentialless pair required'}}
+Write-OwnedLaunchFact (Join-Path $historyEvidence205 ($historyManifest205.caseLabel+'-history-copy.json')) @{observedAtUtc=[DateTime]::UtcNow.ToString('o');manifest=$historyManifestPath205;source=$historySource205;clone=$historyCopy205;project=$historyManifest205.sourceProject;sourceOccurrence=$historyOwner205.occurrence;sourceNativeStates=$historyStates205;port=$historyManifest205.casePort;completeRows=$historyRows205;credentialStaging='None; original source/runtime/project retained';startupQualified=$true}
+@{copied=$true;tables=$historyRows205.tableRows.Count;taskID=$historyRows205.task.id;run=$historyCopy205;port=$historyManifest205.casePort}|ConvertTo-Json

@@ -1,0 +1,40 @@
+{
+  "occurrence": "child-sources-history-205-01-b3f2749a-e55f-41ce-89aa-a8a6c59f9193",
+  "outcome": "ready",
+  "host": {
+    "pid": 73168,
+    "processInstanceID": "win32:639270874967916575",
+    "occurrenceID": "1d081586-39a9-402f-87c1-ca8574a10d2c"
+  },
+  "parent": {
+    "pid": 72760,
+    "processInstanceID": "win32:639270874950356079",
+    "occurrenceID": "e290c999-65d6-4286-97f4-698550515c20"
+  },
+  "target": {
+    "pid": 72092,
+    "processInstanceID": "win32:639270874975623594",
+    "occurrenceID": "4f791d74-e24d-4dce-9cf3-fb7e3281d427"
+  },
+  "targetBirthAtMs": 1791490697562,
+  "deadlineAt": 1791491596710,
+  "observedAtUtc": "2026-10-08T20:18:17.606Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18125",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-sources-history-205-01\\startup.json",
+    "--startup-occurrence",
+    "child-sources-history-205-01-b3f2749a-e55f-41ce-89aa-a8a6c59f9193",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

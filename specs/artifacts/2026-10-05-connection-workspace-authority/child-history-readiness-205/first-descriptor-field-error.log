@@ -1,0 +1,11 @@
+50 |   const tasks=sqlite.query("SELECT id,project_id,session_id,request_id FROM engine_task ORDER BY id").all() as any[]
+51 |   const lifecycle=tasks.map(t=>{const p=taskLifecycleProjectionInTransaction(db,t.id);return {taskID:p.taskID,status:p.status,epoch:p.epoch,openedEventID:p.openedEventID,terminalEventID:p.terminalEventID}})
+52 |   const descriptorRows=sqlite.query("SELECT task_id,session_id,json_extract(payload,'$.dispatch_id') AS dispatch_id FROM worker_turn_descriptor ORDER BY id").all() as any[]
+53 |   // Current durable descriptor contains the dispatch's exact persisted identity.
+54 |   const descriptors=descriptorRows.map(r=>({taskID:r.task_id,sessionID:r.session_id,dispatchID:r.dispatch_id}))
+55 |   if(descriptors.some(d=>typeof d.dispatchID!=="string"||!d.dispatchID)) throw Error("Actual dispatch descriptor identity field requires inspection")
+                                                                                    ^
+error: Actual dispatch descriptor identity field requires inspection
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\child-history-readiness-205.ts:55:80
+
+Bun v1.3.14 (Windows x64)
