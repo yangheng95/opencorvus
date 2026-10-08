@@ -1,0 +1,35 @@
+diff --git a/packages/overlay/src/components/FileEditorPane.tsx b/packages/overlay/src/components/FileEditorPane.tsx
+index 71ede77e..15ebdf85 100644
+--- a/packages/overlay/src/components/FileEditorPane.tsx
++++ b/packages/overlay/src/components/FileEditorPane.tsx
+@@ -372,7 +372,7 @@ export function FileEditorPane() {
+             when={!loading()}
+             fallback={
+               <div class="file-editor-empty">
+-                <p>{t("diff.loading")}</p>
++                <p>{t("common.loading")}</p>
+               </div>
+             }
+           >
+diff --git a/packages/overlay/src/components/ui/CodeEditor.tsx b/packages/overlay/src/components/ui/CodeEditor.tsx
+index b3ff1ccc..78fca17e 100644
+--- a/packages/overlay/src/components/ui/CodeEditor.tsx
++++ b/packages/overlay/src/components/ui/CodeEditor.tsx
+@@ -146,14 +146,14 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
+     const next = local.value
+     const editor = view
+     if (!editor) return
+-    const current = editor.state.doc.toString()
+-    if (next === current) return
++    const nextText = editor.state.toText(next)
++    if (editor.state.doc.eq(nextText)) return
+     applyingExternalValue = true
+     editor.dispatch({
+       changes: {
+         from: 0,
+         to: editor.state.doc.length,
+-        insert: next,
++        insert: nextText,
+       },
+     })
+     applyingExternalValue = false

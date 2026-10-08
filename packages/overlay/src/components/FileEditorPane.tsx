@@ -372,7 +372,7 @@ export function FileEditorPane() {
             when={!loading()}
             fallback={
               <div class="file-editor-empty">
-                <p>{t("diff.loading")}</p>
+                <p>{t("common.loading")}</p>
               </div>
             }
           >

@@ -286,3 +286,20 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Local file Sources130 record](2026-10-08-source-file-local.md): actualdata versus initialUI/checkertoolchainfailures and closedcustody.
 
 
+
+- [Source range133 observation proposal](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-observation-plan-133.md): Root temporary metadata diagnosis admitted, rootcauseUNKNOWN;131initialfailure notfixed and diagnosticnotdelivery.
+
+- [Fresh range134 prepared plan](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-live-plan-134.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-live-134/README.md): actualTaskcompleted109273ms/16SolEOF/firstfileoracle0/fullclosure; firstPanelrangeUI failedtwice, sameLoadedrepeat success notfix;135hasRoot136scopedafterqualification, originalbefore remains.
+
+
+
+- [Range135 canonical text repair](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-repair-plan-135.md): actual134mixedCRLF canonicalequality/no-opreplacement causeproved; RoottoText/doc.eq/insertrepair and133diagnosticremoval have genuine136initial/reopen/repeat rangequalification, no universalUIpass.
+
+- [Fresh range136 after plan](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-after-plan-136.md) and [inputs](../../artifacts/2026-10-05-connection-workspace-authority/source-file-range-after-136/README.md): actual18092Taskdone105181ms/17SolEOF/firstfileoracle0/fullclosure, Rootwide initial/reopen/repeat+narrowPanel170 qualified; Tooltip/document/fullmatrixUNMET, original130/134failures preserved.
+
+- [Source range134/135/136 record](2026-10-08-source-file-range.md): Rootactualbefore/causalnormalizationrepair preparation andheldafter, visual ownership/limits explicit.
+
+
+- [Sources137 remaining document/URL/Tooltip investigation](../../artifacts/2026-10-05-connection-workspace-authority/sources-document-tooltip-investigation-137.md): proposal-only source audit, genuine document/longURL/Tooltip coverage unknown; no fix/afterpass claimed.
+
+

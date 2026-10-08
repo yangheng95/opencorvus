@@ -1,0 +1,40 @@
+{
+  "port": 18092,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-after-136-01\\project",
+  "observedAt": "2026-10-08T06:17:33.2805433Z",
+  "occurrence": "source-file-range-after-136-01-3ce4c435-f54c-418d-be75-f0eb3e526640",
+  "sourceHead": "d5e7c936ed2aef0ef1d01f45f6f7eac3bfe138fc",
+  "evidencePrefix": "source-file-range-after-136-01",
+  "evidenceCase": 13601,
+  "files": [
+    {
+      "originalPath": "D:\\myhexin-local\\opencorvus\\README.md",
+      "targetLength": 8429,
+      "originalLength": 8429,
+      "sourceDiff": "",
+      "targetPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-after-136-01\\project\\references\\README.md",
+      "directByteEquality": true
+    },
+    {
+      "originalPath": "D:\\myhexin-local\\opencorvus\\specs\\current\\architecture\\07-panel.md",
+      "targetLength": 141723,
+      "originalLength": 141723,
+      "sourceDiff": "",
+      "targetPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-after-136-01\\project\\references\\07-panel.md",
+      "directByteEquality": true
+    },
+    {
+      "originalPath": "D:\\myhexin-local\\opencorvus\\packages\\overlay\\src\\components\\SourceParts.tsx",
+      "targetLength": 7897,
+      "originalLength": 7897,
+      "sourceDiff": "",
+      "targetPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-after-136-01\\project\\references\\SourceParts.tsx",
+      "directByteEquality": true
+    }
+  ],
+  "nativeTarget": {
+    "pid": 48148,
+    "processInstanceID": "win32:639270370238627598",
+    "occurrenceID": "abf5b438-613d-4656-8901-6e9e2abad5c8"
+  }
+}

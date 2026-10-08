@@ -1,0 +1,65 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "source-file-range-after-136-01-3ce4c435-f54c-418d-be75-f0eb3e526640",
+    "outcome": "settled",
+    "host": {
+      "pid": 77856,
+      "processInstanceID": "win32:639270370230277212",
+      "occurrenceID": "5690b22b-a83a-4def-81a8-4c2cc5e5667b"
+    },
+    "target": {
+      "pid": 48148,
+      "processInstanceID": "win32:639270370238627598",
+      "occurrenceID": "abf5b438-613d-4656-8901-6e9e2abad5c8"
+    },
+    "observedAtUtc": "2026-10-08T06:23:06.14Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 48148,
+        "processInstanceID": "win32:639270370238627598",
+        "occurrenceID": "abf5b438-613d-4656-8901-6e9e2abad5c8"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 77856,
+        "processInstanceID": "win32:639270370230277212",
+        "occurrenceID": "5690b22b-a83a-4def-81a8-4c2cc5e5667b"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "source-file-range-after-136-01-3ce4c435-f54c-418d-be75-f0eb3e526640",
+  "observedAtUtc": "2026-10-08T06:23:08.6980544Z",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-after-136-01\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2194
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-after-136-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 9155406
+    }
+  ]
+}

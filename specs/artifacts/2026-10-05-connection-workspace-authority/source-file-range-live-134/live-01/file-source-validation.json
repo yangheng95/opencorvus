@@ -1,0 +1,71 @@
+{
+  "taskID": "tsk_g00VXR4M5y00rbs7O5qD",
+  "projectID": "prj_h83w2ku01xMkBavH9ha8",
+  "occurrence": "source-file-range-live-134-01-6359d8fd-2270-4261-b9ff-626656bd5fb7",
+  "tuples": [
+    {
+      "state": "qualified_unique_tuple",
+      "readPartID": "prt_g0VXR4ZYC00LjVOBMla5",
+      "inputPath": "references/README.md",
+      "sourcePartID": "prt_g0VXR4ZeA00i36Qh1Lza",
+      "sourceId": "a0d0e268691d829752000119f336082c9da83eab6997dcdaf9fe096dfb2654a7",
+      "sessionID": "ses_hasfH58Pu0EkvD7QNPwh",
+      "messageID": "msg_g0VXR4YRT00BQKshqXOH",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-live-134-01\\project\\references\\README.md",
+      "range": {
+        "startLine": 1,
+        "endLine": 50
+      },
+      "title": "references\\README.md",
+      "provider": "opencorvus-read",
+      "lines": 50,
+      "totalLines": 138,
+      "truncated": true,
+      "requestOrderKey": "v1:0001791439737936:0000000000000031:0000000000000000:part:prt_g0VXR4ZYC00LjVOBMla5",
+      "sourceOrderKey": "v1:0001791439737975:0000000000000031:0000000000000000:part:prt_g0VXR4ZeA00i36Qh1Lza"
+    },
+    {
+      "state": "qualified_unique_tuple",
+      "readPartID": "prt_g0VXR4ai900xxX8B3vHt",
+      "inputPath": "references/07-panel.md",
+      "sourcePartID": "prt_g0VXR4aoz00XD35Mwe0G",
+      "sourceId": "b1262bab7027dee48be8600c7ff5913e873da49068cdaf1aab047df61af8feae",
+      "sessionID": "ses_hasfH58Pu0EkvD7QNPwh",
+      "messageID": "msg_g0VXR4ZjE000gvorN6p9",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-live-134-01\\project\\references\\07-panel.md",
+      "range": {
+        "startLine": 170,
+        "endLine": 200
+      },
+      "title": "references\\07-panel.md",
+      "provider": "opencorvus-read",
+      "lines": 31,
+      "totalLines": 1947,
+      "truncated": true,
+      "requestOrderKey": "v1:0001791439742414:0000000000000031:0000000000000000:part:prt_g0VXR4ai900xxX8B3vHt",
+      "sourceOrderKey": "v1:0001791439742489:0000000000000031:0000000000000000:part:prt_g0VXR4aoz00XD35Mwe0G"
+    },
+    {
+      "state": "qualified_unique_tuple",
+      "readPartID": "prt_g0VXR4bYQ001SrIRKR06",
+      "inputPath": "references/SourceParts.tsx",
+      "sourcePartID": "prt_g0VXR4beV00hxF2t4pwU",
+      "sourceId": "f5320b355af20907ce23687b0d11658d010768ee1aa4e9ecb641da9aa3a8872a",
+      "sessionID": "ses_hasfH58Pu0EkvD7QNPwh",
+      "messageID": "msg_g0VXR4avH00drUypPvyk",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-file-range-live-134-01\\project\\references\\SourceParts.tsx",
+      "range": {
+        "startLine": 70,
+        "endLine": 105
+      },
+      "title": "references\\SourceParts.tsx",
+      "provider": "opencorvus-read",
+      "lines": 36,
+      "totalLines": 200,
+      "truncated": true,
+      "requestOrderKey": "v1:0001791439745655:0000000000000031:0000000000000000:part:prt_g0VXR4bYQ001SrIRKR06",
+      "sourceOrderKey": "v1:0001791439745683:0000000000000031:0000000000000000:part:prt_g0VXR4beV00hxF2t4pwU"
+    }
+  ],
+  "boundary": "Actual completed Read output/page metadata and canonical persisted Source; causal identity is unknown if several producers match"
+}
