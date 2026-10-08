@@ -1,0 +1,31 @@
+# 191 Diagnostic settlement arbitration
+
+## Recall
+
+The user requires continuous autonomous product investigation, specifically Sources and Rendering, with one agent only. Current delivered HEAD is 0ba7d252; start status contains only five owned Bun FFI files from run190. Read190, skill benchmark-debug-template, sole launch/shutdown/observer/wrapper, DATA contracts124/180, production ProcessSupervisor Windows settlement and Server.stop. No UI tests, other agents, user process control, releases, credential disclosure or old-run rearming. This change concerns the isolated manual qualification tool, not production scheduling. Fixed original admission limits stay unchanged; skill inactivity guidance does not override the admitted run budget.
+
+## Observed failure and depth
+
+190 target birth1791475321508 sets fixed deadline16:12:01.508Z. Root won immutable settlement-owner at16:11:58.1902923Z, public shutdown admission16:12:00.1742925Z, actual production Handle.settled/output/request receipt16:12:00.537Z with terminal0. Physical Host/Target/port/pair receipt16:12:03.2216774Z. Watch wrote fixed-preparation-maximum at16:12:04.2970877Z and original exec44643 exited1. All20 actual Sol streams ended EOF. Retain original failure; these are distinct physical custody and qualification facts.
+
+Direct trigger: Watch checks physical receipt only before expensive native observations. Manual owner can finish during those observations. Watch then publishes its own stop-reason outside the existing immutable settlement-owner arbitration and joins a settlement already won by Root. Final launcher treats that losing observer's reason as fatal. The stale observation window, rather than the model or production terminal, is the root. Existing one-owner shutdown prevents duplicate public stop/cleanup but did not own supervision-trigger publication.
+
+## Shared audit and exclusions
+
+Both Task and NativeService share Watch and shutdown; preparation maximum, exact wrapper failure, Task completion maximum, original-root exit and supervisor error all enter this same trigger path. Manual caller, deadline observer and error caller may overlap. Only shutdown currently owns one immutable per-run settlement-owner and join/error/physical receipts. Identity is pinned by run root, evidence root, prefix and occurrence, including original native Host/Target birth. Each run has separate paths, so serial/parallel projects use the same mechanism with separate ownership. Restarted settlement callers join that original owner, and failed owner keeps error/pair evidence. First wrapper failure remains independently fatal at final qualification; original Task lifecycle identity/epoch/deadline validation remains independently required.
+
+Production Task/Mission/Session scheduling and ingress are not changed: this observer only reads their already persisted Task completion, and service190 created ordinary Session messages. Server.stop already returns a shared stopOperation; production ProcessSupervisor.settled waits physical exit and output drains, then request-directory cleanup.190 actual fulfilled receipt predates the original cap and matches that implementation. No production scheduling defect is established by this diagnostic false verdict. Full scheduling behavior is not newly qualified by this evidence.
+
+## Single implementation change
+
+Store the complete supervision proposal in the winning immutable settlement-owner record. Watch supplies its proposed fact to shutdown; a losing caller joins the canonical owner and publishes no competing stop reason. Validate proposal occurrence/PID before attempting owner admission. Error supervision uses the same path. Final qualification reads the canonical owner reason; remove current supervision-settlement-trigger publication/consumption. Existing historical trigger records remain untouched evidence. This keeps stop admission and reason atomic even if the winner crashes immediately after publishing ownership. Keep immutable original failure checks, fixed Task/preparation budgets, shutdown timeout, actual terminal and pair gates. Add a positive NativeService budget contract using native settled timestamp and original target birth+600000; late physical completion must still return OWNED_NATIVE_COMPLETION_BUDGET_INVALID even if a manual caller won before the cap. Task completion continues its existing lifecycle deadline contract, including completed-service settlement.
+
+Implementation review192: the first candidate stored the trigger in a separate winner-only record and passed fresh192 actual launcher0. Review found the claim-to-trigger crash gap and redundant reason authority; final191 removes that intermediate path. Preserve192 executed helper copies, qualify final current implementation in fresh193.
+
+No interface to production code or Provider, UI renderer, cache, model selection or user flows changes. Existing historical archives are evidence copies only. Current helper remains the sole executable implementation; freeze its exact changed copies under this record. Preserve190 launch verdict1; never rerun its oracle or write qualified-surface retroactively.
+
+## Acceptance and risks
+
+Before edit save exact current helper copies. DATA positive contracts cover both existing qualification kinds, native settled inside cap, native settled after cap typed error, malformed timestamp typed error and existing Task deadline outputs. These are diagnostic contracts, not UI or E2E qualification. Use a fresh NativeService occurrence/current real /ui, actual Sol preflight and genuine short Sources request, screenshot/manual review, native shutdown, original launcher0, all EOF, Host/Target/parent/port/pair closure. Audit winner trigger semantics against actual archived190 timing without rewriting190. Parallel last-clock interleavings remain limited unless physically captured; final timestamp contract protects a late manual settle.
+
+Archive190 screenshot scope: first guide14656chars/168blocks completed; no Rendering captured. Wheel return top2070 does not prove row disposal/reentry. Second planned input UNSENT. Generic child Dock flicker remains UNMET. New192 cannot declare it fixed. Update all three spec indices/month record, docs:check, scoped Git commit, fetch/merge/review outgoing and normal push. Keep goal active and continue product work.

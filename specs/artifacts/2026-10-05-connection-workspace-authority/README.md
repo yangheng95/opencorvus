@@ -471,3 +471,6 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [182 Side Chat真实错误](source-side-chat-live-182/README.md) / [183共享投影修复](side-chat-part-projection-plan-183.md) / [184限定after](source-side-chat-after-184/README.md) / [185短场景](side-chat-final-185/README.md)：复用display分类，真实history和Source回复合格；184原maximum1/offlineEnd保留，185actual0/6SolEOF/native+pairclosed；generalRendering仍未知。
 
 - [186原观察](markdown-panel-return-186/README.md) / [187打开意图](side-chat-open-intent-plan-187.md) / [188真实重开](side-chat-open-after-188/README.md) / [189真实断连](side-chat-lookup-error-189/README.md)：普通打开保留同IDs/草稿，明确New新IDs；查询失败有同lookup重试。实际4/4/3SolEOF与launcher0/native+pairclosed；genericRendering未达成。
+
+- [190 长 Markdown](markdown-live-return-190/README.md) / [191 结算竞态](settlement-arbitration-191/README.md) / [192 Sources](settlement-sources-192/README.md) / [193 最终运行器](settlement-final-193/README.md)：190原1保留，192/193实际0、6/2SolEOF和native+pair闭合；单owner原因/固定预算DATA11，3889chars/192px摘要键盘阅读；genericRendering/offscreen reentry未达成。
+

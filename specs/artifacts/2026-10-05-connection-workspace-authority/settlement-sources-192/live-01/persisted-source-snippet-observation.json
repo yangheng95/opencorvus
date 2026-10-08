@@ -1,0 +1,37 @@
+{
+  "observedAtUtc": "2026-10-08T16:28:37.039Z",
+  "occurrence": "settlement-sources-192-01-ff906452-a59d-47e8-8042-b14bd2a2215f",
+  "sessionID": "ses_hKpl2P4VlTmw8ApuSmHZ",
+  "access": "readonly exact closed ordinary Session BEGIN/ROLLBACK",
+  "sources": [
+    {
+      "partID": "prt_g0VXTYyZa005imBlDCwv",
+      "title": "ARIA: button role - MDN Web Docs - Mozilla",
+      "snippetLength": 3889,
+      "snippetStart": "The `button` role is for clickable elements that trigger a response when activated by the user. Adding `role=\"button\"` tells the screen reader the element is a button, but does not provide other typical button functionality such as click events and keyboard handling. You can add these yourself, but you should generally use ` ` or ` ` with `type=\"button\"` instead.\n...\n```\n<div id=\"saveChanges\" tabindex=\"0\" role=\"button\" aria-pressed=\"false\">Save</div>\n...\nNote: If using `role=\"button\"` instead of",
+      "provider": "exa"
+    },
+    {
+      "partID": "prt_g0VXTYyZf00tO4ZbkvQj",
+      "title": "WAI-ARIA basics - Learn web development | MDN",
+      "snippetLength": 3021,
+      "snippetStart": "Enhancing keyboard accessibility\n: There are built-in HTML elements that have native keyboard accessibility; when other elements are used along with JavaScript to simulate similar interactions, keyboard accessibility and screen reader reporting suffers as a result. Where this is unavoidable, WAI-ARIA provides a means to allow other elements to receive focus (using `tabindex`).\n...\n: When a series of nested ` ` s along with CSS/JavaScript is used to create a complex UI-feature, or a native contro",
+      "provider": "exa"
+    },
+    {
+      "partID": "prt_g0VXTYyZk00qS94tP3sW",
+      "title": "WAI-ARIA Roles - ARIA | MDN",
+      "snippetLength": 569,
+      "snippetStart": "ARIA: button role\n: The `button` role is for clickable elements that trigger a response when activated by the user. Adding `role=\"button\"` tells the screen reader the element is a button, but does not provide other typical button functionality such as click events and keyboard handling. You can add these yourself, but you should generally use `button` or `input` with `type=\"button\"` instead.\n...\nARIA: tab role\n: The ARIA `tab` role indicates an interactive element inside a `tablist` that, when a",
+      "provider": "exa"
+    },
+    {
+      "partID": "prt_g0VXTZ0WY00lzshbVDgF",
+      "title": "ARIA: button role - ARIA | MDN",
+      "snippetLength": 0,
+      "provider": "opencorvus-webfetch"
+    }
+  ],
+  "tools": [],
+  "boundary": "Persisted Source payload observation only; no UI test or producer upstream capture"
+}

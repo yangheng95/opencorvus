@@ -1,0 +1,22 @@
+{
+  "global": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-live-return-190-01\\runtime\\config\\opencorvus.jsonc",
+    "config": {
+      "model": "openai/gpt-6.1-sol",
+      "small_model": "openai/gpt-6.1-sol",
+      "prompt_profile": {
+        "active": "base"
+      }
+    }
+  },
+  "project": {
+    "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-live-return-190-01\\project\\.opencorvus\\opencorvus.jsonc",
+    "config": {
+      "prompt_profile": {
+        "active": "base"
+      }
+    }
+  },
+  "inlineConfig": "absent",
+  "boundary": "Fresh canonical global Base and selected project profile configuration before first Instance; no environment profile switching"
+}

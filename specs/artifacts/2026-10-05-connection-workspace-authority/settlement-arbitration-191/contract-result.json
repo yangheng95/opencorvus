@@ -1,0 +1,90 @@
+{
+  "cases": 11,
+  "scope": "Decoded DATA contract only; no original qualification rerun or UI test",
+  "records": [
+    {
+      "output": {
+        "code": "NativeService",
+        "providerEOFRequests": 10,
+        "physicalCompletion": true
+      },
+      "case": "physical-inside-cap"
+    },
+    {
+      "output": {
+        "code": "NativeService",
+        "providerEOFRequests": 10,
+        "physicalCompletion": true
+      },
+      "case": "physical-at-cap"
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_NATIVE_COMPLETION_BUDGET_INVALID"
+      },
+      "case": "physical-after-cap"
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_NATIVE_COMPLETION_BUDGET_INVALID"
+      },
+      "case": "physical-time-invalid"
+    },
+    {
+      "output": {
+        "code": "root-manual"
+      },
+      "case": "root-manual",
+      "foreign": false
+    },
+    {
+      "output": {
+        "code": "completed-service-maximum"
+      },
+      "case": "completed-service-maximum",
+      "foreign": false
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_QUALIFICATION_BOUNDARY_REACHED"
+      },
+      "case": "immutable-wrapper-failure",
+      "foreign": false
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_QUALIFICATION_BOUNDARY_REACHED"
+      },
+      "case": "fixed-task-maximum",
+      "foreign": false
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_QUALIFICATION_BOUNDARY_REACHED"
+      },
+      "case": "fixed-preparation-maximum",
+      "foreign": false
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_QUALIFICATION_BOUNDARY_REACHED"
+      },
+      "case": "supervisor-error",
+      "foreign": false
+    },
+    {
+      "output": {
+        "type": "System.IO.InvalidDataException",
+        "code": "OWNED_SETTLEMENT_IDENTITY_INVALID"
+      },
+      "case": "root-manual",
+      "foreign": true
+    }
+  ]
+}

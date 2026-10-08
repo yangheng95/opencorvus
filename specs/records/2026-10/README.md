@@ -369,3 +369,6 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Side Chat display projection](2026-10-08-side-chat-display-projection.md)：修复真实step-start错误；继承历史与Source回复真实合格，184maximum1保留，185actual0，单agent继续。
 
 - [Side Chat opening intent](2026-10-08-side-chat-opening-intent.md)：真实重开历史/草稿、明确New、离线查询retry；保186无效same-history，单agent继续。
+
+- [2026-10-09 长 Markdown、Sources 与结算](2026-10-09-rendering-settlement-190-193.md)：190原失败保留，191修单owner结算原因，192/193实际0/6与2SolEOF/native+pairclosed；Rendering未达成，单agent继续。
+

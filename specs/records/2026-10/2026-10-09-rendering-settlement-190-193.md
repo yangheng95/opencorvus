@@ -1,0 +1,15 @@
+# 2026-10-09 Long Markdown, Sources and diagnostic settlement
+
+## Recall
+
+User requires continuous autonomous iteration, Sources/Rendering investigation and single-agent work. Delivered product0ba7d252 unchanged. Read190/191/192/193 plans and source/contract/production settlement before edits. Skill benchmark-debug-template applies to repairing the actual acceptance loop; original fixed budgets retained, no UI tests or other agents. Full authorized auth+models staged only to own runtime and removed after native closure. No new branch/worktree/release.
+
+[190 long guide](../../artifacts/2026-10-05-connection-workspace-authority/markdown-live-return-190/README.md): genuine14656chars/168blocks completed, no Rendering observed; bounded wheel return did not prove row disposal/reentry, second planned input UNSENT. Original exec44643=1 retained. Native settled0 before original deadline, exact physical/pair complete before losing watcher trigger.20 Sol EOF; custody closed separately from failed qualification.
+
+[191 root analysis](../../artifacts/2026-10-05-connection-workspace-authority/settlement-arbitration-plan-191.md): expensive observer created a stale window, then published its losing stop reason outside shutdown's immutable owner. Final current helper stores supervision proposal atomically in settlement-owner and final qualification reads that single owner. Independent wrapper failure/Task lifecycle checks remain. NativeService settled timestamp must meet original birth+600000 cap; late/invalid time returns typed OWNED_NATIVE_COMPLETION_BUDGET_INVALID. Shared Task/service/manual/deadline/error/restart/isolation paths audited; production ProcessSupervisor/Server.stop source and190 actual settled receipt exclude a proved production scheduler cause. No broader scheduler qualification claimed.
+
+[192 Sources](../../artifacts/2026-10-05-connection-workspace-authority/settlement-sources-192/README.md): genuine3+1 groups,3889char/192px keyboard-readable excerpt,86.125px identity Tooltip, follow=false; original75640=0/6SolEOF/native+pairclosed. Persisted snippet already contains empty inline HTML labels, upstream unknown. Intermediate executed helpers frozen; after review sole final reason moved into owner record.
+
+[193 final runner](../../artifacts/2026-10-05-connection-workspace-authority/settlement-final-193/README.md): current real /ui/preflightOK, original70526=0/2SolEOF/native+pairclosed, exact physical/parent/port evidence. Final DATA11 plus existing4+10 checks0 and shutdown parser valid. Fresh native qualification is distinct from Sources/manual evidence and exact-clock parallel interleaving.
+
+Current executable helpers remain .tmp-product-iteration/live-sol-launch.ps1 and live-sol-shutdown.ps1; evidence snapshots do not establish additional implementations. Original190 failures/raw pixels retained. All own pages/services closed and5 generated192 Bun files path/birth reviewed before private move. docs:check/hooks/commit/push outcomes recorded at delivery. Generic child Dock Rendering and actual offscreen reentry remain UNMET; continue the active goal rather than claiming completion.

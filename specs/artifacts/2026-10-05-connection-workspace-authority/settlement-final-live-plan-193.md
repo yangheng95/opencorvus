@@ -1,0 +1,7 @@
+# 193 Final canonical settlement owner qualification
+
+## Recall
+
+Single agent and current191 final sole helper.192 actual Sources reading passed with the intermediate winner-only trigger; freeze its executed copies. Final191 makes stop reason atomic in the existing settlement-owner record and removes the competing trigger. DATA11 and existing4+10 contracts passed. No product UI change since0ba7d252;192 manual pixels remain product evidence, not final runner qualification.
+
+Fresh Run C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/settlement-final-193-01, port18119/prefix settlement-final-193-01; artifact settlement-final-193/live-01. NativeService6 actual cumulative streamed Sol requests, native birth+600000, existing180000idle, same authorized full auth+models and genuine ordinary Reply with OK preflight. No new Task/squad/subagent or extra model request required. Actual /ui current main-BhY0gyMH.js and preflight reply viewed in own isolated page. Close own page early, current sole public shutdown, actual production whole settlement, final canonical reason, original launcher0/parent/port/pair/allEOF. Exact clock-edge parallel proposal remains limited; DATA typed deadline outputs preserve bounds.193 does not qualify Sources interaction or Rendering; those scopes retain192 and190 limitations. Archive current executed helpers, receipts, output and screenshot, update indices/docs and scoped commit/normal push. Goal remains active.

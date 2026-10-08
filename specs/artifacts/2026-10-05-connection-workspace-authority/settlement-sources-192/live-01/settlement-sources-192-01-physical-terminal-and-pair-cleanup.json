@@ -1,0 +1,65 @@
+{
+  "listeners": null,
+  "occurrence": "settlement-sources-192-01-ff906452-a59d-47e8-8042-b14bd2a2215f",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "copiedLength": 2194,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\settlement-sources-192-01\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "outcome": "removed"
+    },
+    {
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\settlement-sources-192-01\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "outcome": "removed"
+    }
+  ],
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "settlement-sources-192-01-ff906452-a59d-47e8-8042-b14bd2a2215f",
+    "outcome": "settled",
+    "host": {
+      "pid": 4108,
+      "processInstanceID": "win32:639270732602168907",
+      "occurrenceID": "4f8c94cd-38de-43a7-bba3-f7038773e6e2"
+    },
+    "target": {
+      "pid": 66480,
+      "processInstanceID": "win32:639270732610720970",
+      "occurrenceID": "61e174bd-04a0-42b3-8a66-5ccf507f0894"
+    },
+    "observedAtUtc": "2026-10-08T16:24:20.813Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 66480,
+        "processInstanceID": "win32:639270732610720970",
+        "occurrenceID": "61e174bd-04a0-42b3-8a66-5ccf507f0894"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 4108,
+        "processInstanceID": "win32:639270732602168907",
+        "occurrenceID": "4f8c94cd-38de-43a7-bba3-f7038773e6e2"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T16:24:23.5549695Z",
+  "pairedCleanupComplete": true
+}

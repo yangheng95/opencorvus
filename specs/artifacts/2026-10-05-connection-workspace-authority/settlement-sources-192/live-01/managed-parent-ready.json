@@ -1,0 +1,15 @@
+{
+  "pid": 66480,
+  "occurrence": "settlement-sources-192-01-ff906452-a59d-47e8-8042-b14bd2a2215f",
+  "owner": {
+    "pid": 66480,
+    "processInstanceID": "win32:639270732610720970",
+    "occurrenceID": "57d0f420-ac14-4199-823e-cd6dc73a7ee0"
+  },
+  "parent": {
+    "pid": 8348,
+    "processInstanceID": "win32:639270732610151134",
+    "occurrenceID": "f33bfa55-6388-4bb9-8be8-cd57ab9b0ff8"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}
