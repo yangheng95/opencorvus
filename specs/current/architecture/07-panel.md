@@ -727,6 +727,12 @@ condition. A new selected-child transcript projection updates the mounted
 renderer through reactive props; object replacement is not a reason to
 recreate the entire bubble and its streaming Markdown controllers.
 
+The selected Agent transcript uses the existing transcript-run gap token at
+the medium spacing tier. That scoped token controls adjacent message margins
+and quotation-to-tool spacing; the message border and padding still preserve
+the visible boundary. Source groups keep their own count, label, margin and
+chronological placement. Main and Side Chat retain their existing gap defaults.
+
 Both the main Conversation and selected Agent transcript use the same explicit
 content-change follow controller. A canonical transcript revision and the
 controller's one native `ResizeObserver` over its current direct content boxes

@@ -1,0 +1,23 @@
+{
+  "occurrence": "subagent-density-after-163-01-307e004f-d75f-481e-ac28-50a360af5405",
+  "outcome": "settled",
+  "host": {
+    "pid": 77324,
+    "processInstanceID": "win32:639270514665406492",
+    "occurrenceID": "d601e3e2-20b6-456a-8a62-f8d38e12a05b"
+  },
+  "target": {
+    "pid": 50396,
+    "processInstanceID": "win32:639270514673299190",
+    "occurrenceID": "eb112123-b5dd-4535-8f99-1187a52909e8"
+  },
+  "observedAtUtc": "2026-10-08T10:29:10.334Z",
+  "terminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "physicalCompletion": true,
+  "outputDrainComplete": true,
+  "requestCleanupComplete": true,
+  "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+}

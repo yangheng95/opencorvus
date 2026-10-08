@@ -1,0 +1,23 @@
+diff --git a/packages/overlay/src/styles/surfaces/inspector.css b/packages/overlay/src/styles/surfaces/inspector.css
+index 916d3912..ac03c60e 100644
+--- a/packages/overlay/src/styles/surfaces/inspector.css
++++ b/packages/overlay/src/styles/surfaces/inspector.css
+@@ -2117,6 +2117,10 @@
+   width: 100%;
+ }
+ 
++.subagent-conversation-panel__scroll .chat-bubble {
++  --conversation-transcript-run-gap: var(--ui-gap-md);
++}
++
+ .subagent-conversation-panel__scroll .chat-bubble__title {
+   font-size: var(--ui-font-body);
+   font-weight: var(--ui-font-weight-strong);
+@@ -2129,7 +2133,6 @@
+ }
+ 
+ .subagent-conversation-panel__scroll .card-message-run + .card-message-run {
+-  margin-top: var(--ui-gap-xl);
+   padding-top: var(--ui-gap-md);
+   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 66%, transparent);
+ }

@@ -1,0 +1,71 @@
+{
+  "taskID": "tsk_g00VXS5OB300myYO0mkg",
+  "projectID": "prj_h13db3EFayyhYA7nR3II",
+  "occurrence": "subagent-density-after-163-01-307e004f-d75f-481e-ac28-50a360af5405",
+  "tuples": [
+    {
+      "state": "qualified_unique_tuple",
+      "readPartID": "prt_g0VXS5cjY002uDk1SvJv",
+      "inputPath": "references/README.md",
+      "sourcePartID": "prt_g0VXS5cqz00al3LhZnT2",
+      "sourceId": "e9df60e0f8e3e8f28d8e3c273144ce0a88133c3b750a1f971ad07b26ce1a93f0",
+      "sessionID": "ses_hZ2Ihv0uIGdXhFJCwcNU",
+      "messageID": "msg_g0VXS5bQQ00kmXB1yohR",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-density-after-163-01\\project\\references\\README.md",
+      "range": {
+        "startLine": 1,
+        "endLine": 50
+      },
+      "title": "references\\README.md",
+      "provider": "opencorvus-read",
+      "lines": 50,
+      "totalLines": 138,
+      "truncated": true,
+      "requestOrderKey": "v1:0001791454764938:0000000000000031:0000000000000000:part:prt_g0VXS5cjY002uDk1SvJv",
+      "sourceOrderKey": "v1:0001791454764966:0000000000000031:0000000000000000:part:prt_g0VXS5cqz00al3LhZnT2"
+    },
+    {
+      "state": "qualified_unique_tuple",
+      "readPartID": "prt_g0VXS5ddj00rzwHz6QjC",
+      "inputPath": "references/07-panel.md",
+      "sourcePartID": "prt_g0VXS5dkK00oh3YcAS7D",
+      "sourceId": "1569d0cc22c442e4dadea50449b66da54fdbf7a9d9043ea943718f2a7b8f59f7",
+      "sessionID": "ses_hZ2Ihv0uIGdXhFJCwcNU",
+      "messageID": "msg_g0VXS5cxu00Z1ujYk3uN",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-density-after-163-01\\project\\references\\07-panel.md",
+      "range": {
+        "startLine": 170,
+        "endLine": 200
+      },
+      "title": "references\\07-panel.md",
+      "provider": "opencorvus-read",
+      "lines": 31,
+      "totalLines": 1961,
+      "truncated": true,
+      "requestOrderKey": "v1:0001791454768366:0000000000000031:0000000000000000:part:prt_g0VXS5ddj00rzwHz6QjC",
+      "sourceOrderKey": "v1:0001791454768397:0000000000000031:0000000000000000:part:prt_g0VXS5dkK00oh3YcAS7D"
+    },
+    {
+      "state": "qualified_unique_tuple",
+      "readPartID": "prt_g0VXS5ekh00AQW1Do0Ac",
+      "inputPath": "references/SourceParts.tsx",
+      "sourcePartID": "prt_g0VXS5f2M0079boVaHk7",
+      "sourceId": "28a881935bbc4829ed5a9bf1af8e7d209aaa0bfc3704f9192c7b9fb405131779",
+      "sessionID": "ses_hZ2Ihv0uIGdXhFJCwcNU",
+      "messageID": "msg_g0VXS5dpL00NkjrqGRS6",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\subagent-density-after-163-01\\project\\references\\SourceParts.tsx",
+      "range": {
+        "startLine": 70,
+        "endLine": 105
+      },
+      "title": "references\\SourceParts.tsx",
+      "provider": "opencorvus-read",
+      "lines": 36,
+      "totalLines": 220,
+      "truncated": true,
+      "requestOrderKey": "v1:0001791454773327:0000000000000031:0000000000000000:part:prt_g0VXS5ekh00AQW1Do0Ac",
+      "sourceOrderKey": "v1:0001791454773358:0000000000000031:0000000000000000:part:prt_g0VXS5f2M0079boVaHk7"
+    }
+  ],
+  "boundary": "Actual completed Read output/page metadata and canonical persisted Source; causal identity is unknown if several producers match"
+}

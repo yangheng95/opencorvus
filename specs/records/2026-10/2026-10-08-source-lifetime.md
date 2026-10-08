@@ -84,3 +84,15 @@ Root确认159 push37266实际0/fresh75f9 equality；160同产品/main-ChhQkqg3�
 file focus/terminal retention及README1–50、Panel170–200（repeat/narrow activeLine170）、code70–105实际首尾边界限定合格。Right仍firstline、wheel overshot65、首次code105 offscreen保留，Loading帧和cursor0不当loaded/caret证明。text1224/height1282不变，file live growth UNMET，不能借natural-growth文件名宣称通过。
 
 161真实三message IDs的相邻Sources整体26.667px由margin6、next margin12/padding8/border0.666667形成，Tool→Source gap6；这是Root同页真实geometry，无CSS patch/密度修复。document、同组multi-source、Main/SideChat、恢复等未知；156未证明、154/134原失败及连续目标ACTIVE保持。
+
+## 162 实施 / 163 准备 checkpoint
+
+Root确认160 commitfa5c3d81正常push61813实际0/freshsame/outgoing为空。[162 scoped方案](../../artifacts/2026-10-05-connection-workspace-authority/subagent-transcript-density-plan-162.md)已Root准入实施仅inspector CSS token md8与删除dead margin16；Source6/padding/border/Key/focus不改。CSS token检查实际0，但types73073/build93148 pending，真实视觉未资格化。
+
+[163准备](../../artifacts/2026-10-05-connection-workspace-authority/subagent-density-after-163/README.md)保留160原request/profile/三个ranges，manifest未来fresh C paths。18102、Sol24/600000/180000/900000固定，copy/runtime/UI/once/closure HELD等待Root独立准入，不预认current source已经复制。160 file growth UNMET、156未知及所有原失败保持，连续Sources目标ACTIVE。
+
+## 163 当前限定密度验收（上段为历史准备）
+
+Root [163人工记录](../../artifacts/2026-10-05-connection-workspace-authority/subagent-density-after-163/live-01/root-manual-qualification.md)确认types73073/build93148实际0与main-qV471CDZ真实200；111842ms/16 Sol EOF/file sixargs once0，parent76619实际0 joined、50396/77324死亡、18102释放/pair清除/自有131关闭reset。Root宽380/窄280真实seam22.667px较160减少4px，Source6/pad8/border.667/Tool25/count1/三message chronology保留，真实quote→Tool margin8可读。
+
+Tooltip857/focus/terminalfollowfalse、nativeEnd1040/followtrue、Tab reentryfalse及READMEfirstline1限定合格。text1267 unchanged⇒file growth UNMET；完整三endranges由160独立证据保持，非163重验。156未知/全部原失败及未采file-document/multi-source/Main/SideChat/恢复等矩阵保持。此整理无个人UI交互，162仅一个CSS文件由Root交付；连续目标ACTIVE。
