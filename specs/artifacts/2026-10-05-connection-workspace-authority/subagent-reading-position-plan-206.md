@@ -23,3 +23,23 @@
 UI代码修改前继续核对适用定义/公共合同/调用者，落实具体方案并追加到本文件后才编辑。禁止新增/修改/运行UI自动化测试，遇到的相关旧UI测试按仓库规则移除；类型/build不能替代视觉。实际独立页面复验：researcher停在Sources顶部/follow=false→tester→researcher，保持同身份/24段/3标题、Sources展开与顶部/follow=false；另测中间正文位置、首次tester落尾、主动到底后增长跟随、All agents和面板重开，未知项明列。真实源仍原153完整历史，不合成数据或请求。
 
 截图立即/稳定都人工查看，配准真实子侧栏；使用自己的有限原生服务，结束前汇合页面/父工具/native/端口/凭据状态。docs/范围提交/拉取上游合并/审查待推送集合/正常推送。当前仅完成根因调查、尚未实施位置修复；连续目标进行中，单agent继续。
+
+## 2026-10-09 实施前具体收敛
+
+当前HEAD27f6b8c1/origin相同，工作区干净。上一目标回合完成实际页面/失败证据与交付，属于有进展；本轮直接实施。已补读main唯一挂载和ui/Tabs.tsx：TabPanel透传Kobalte Content的forceMount而未给subagent设置，切换tool tab会释放该owner。因此用现有forceMount明确保留子侧栏外层UI owner；inactive时现有requestKey=null/abort仍停止转录加载，不保留隐藏转录DOM。
+
+唯一阅读handoff（交接）状态位于这个SubagentConversationPanel，按现有完整targetKey记录top和following；至多32个最近会话视口，父owner释放即清除。它只保存UI意图/几何，不缓存转录、消息或派生领域状态。滚动owner在scroll/跟随变化/cleanup捕获最新意图，重新挂载从同key恢复，首次访问仍跟随尾部。改成按targetKey keyed（身份键）挂载滚动owner，删除旧session effect无条件到底路径。
+
+共享setupAutoScroll新增必填initialPosition联合合同bottom/position；三当前调用者同时改为明确意图，Main/Side Chat仍bottom。位置恢复由同一现有contentChanged/ResizeObserver/帧调度完成：内容高度不足时保留目标并在增长中恢复，到达即释放；所有属于当前滚动器的wheel/key/touch/pointer和Source阅读输入立即取消待恢复，原程序滚动归属继续有效。无额外计时器/代理owner/兼容缺省路径。恢复帧只处理当前已挂载owner，cleanup后停止。
+
+保存准确修改前差异，补现行07-panel-reactivity，进行overlay类型/build及真实新页面206复核；不创建UI测试。全库准入和旧205自然0记录保留，206用同一个copier/launcher的新fresh副本/端口和新明确清单，不重启或重置205/原153。
+
+首次真实206页面：顶部切换同key top0/followfalse/2908、24段/3标题通过；中段1440和All agents返回也通过。关闭重开却变1040：隐藏使布局先收缩，onCleanup再读取已钳制的位置覆盖最后可见1440。保存逻辑因此明确要求本scope仍active且容器具有可见高度；inactive/列表/目标变化时保留最后真实可见观察，不将隐藏几何写回阅读handoff。原失败截图/事实保留。修正后重新build并在自己的当前页面重新加载新asset复验；同一服务原deadline不延长、不重启。
+
+第二次真实重开仍有890.666687→490.666656位移，故第一归因不足。已读ConversationAgentRail/main实际点击路径，没有子侧栏400px定位写入；workspace.css明确right-dock宽度/flex-basis/max-width存在slow transition（慢速过渡），inspector.css仅followtrue关闭overflow-anchor（浏览器滚动锚定）。恢复第一次可达就释放目标时，pane宽度仍在变化，后续重排/锚定改变了位置。当前修正保留同一恢复目标直到layout owner的宽/高和内容几何连续两帧稳定；已有ResizeObserver同时观察当前right-dock容器，原帧调度处理恢复，不新增计时器或用户输入旁路。position合同必填layoutRoot，由子侧栏规范容器提供；新输入仍立即取消恢复。高度暂不足时只等内容观察，不空转。两次失败与原206自然0保留，新的207独立有限页面再验，不能把前两次样本改写为成功。
+
+## 207 最终观察与交付
+
+最终页面已真实操作并人工查看立即/稳定截图：关闭重开top858.666687/follow=false保持；Sources顶部0、首项展开、24段/3标题、height2908在真实tester往返后保持；All agents中段1440保持；主动向下到尾follow=true。最终脚本main-3EEyiWb9在207原生服务实际请求200，构建51.17s/类型退出0。原父工具20642177/20712435分别退出0，原生产Native exited/0和output/request cleanup均完整，独立精确进程身份死亡、端口/pair闭合；自己的页面19/20已关闭。原153两个Project44/97项lstat元数据保持；只观察元数据，不以摘要替代内容验收。
+
+文档检查345ops/25groups通过，当前实现/场景/失败/限制已落入[证据目录](subagent-reading-position-206/README.md)与月度记录。未增改运行UI自动化测试。流式增长、32项淘汰、冷长内容、触摸、跨连接/目录及恢复过程用户取消仍未知，持续目标未完成；后续单agent。交付创建范围提交、fetch/merge上游、审查完整待推送集合并正常push，禁止通过重新运行覆盖原失败。

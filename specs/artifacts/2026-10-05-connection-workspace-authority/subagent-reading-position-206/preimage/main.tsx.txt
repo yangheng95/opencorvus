@@ -2850,7 +2850,6 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="subagent"
-            forceMount
             class="center-workbench-view"
             id="centerWorkbenchSubagent"
             data-workbench-view="subagent"

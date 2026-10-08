@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sub-agent reading continuity206/207](records/2026-10/2026-10-09-subagent-reading-position-206-207.md) and [actual evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-reading-position-206/README.md): canonical scoped viewport handoff and layout-aware restoration; genuine Sources top, middle, All agents and Dock reopening visually reviewed; original failed scenes retained and both native scopes naturally closed.
+
 - [Reader/helper observation126](records/2026-10/2026-10-08-reader-helper-observation.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/reader-helper-observation-126/README.md): single safe reader cause/helper attempt pipeline; focused local contracts passed, integrated types0 after preserved fixture failure;125 original failure and cause UNKNOWN preserved.
 
 - [Complete conversation identity121](records/2026-10/2026-10-08-conversation-message-identity.md) and [fresh125](artifacts/2026-10-05-connection-workspace-authority/child-message-identity-125/README.md): full real identity window and shared parser; backend12/81/service22/58 and real desktop Sources qualified, original all-EOF oracle failure retained.

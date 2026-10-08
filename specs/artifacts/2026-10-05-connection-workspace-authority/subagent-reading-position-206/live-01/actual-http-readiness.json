@@ -1,0 +1,59 @@
+{
+  "finalUiUri": "http://127.0.0.1:18126/ui/",
+  "uiUri": "http://127.0.0.1:18126/ui",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "child-reading-after-206-01-dce354a2-248d-4757-98f9-114ce478e078",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18126",
+    "pid": 34112
+  },
+  "assetStatus": 200,
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18126,
+      "OwningProcess": 34112
+    }
+  ],
+  "uiStatus": 200,
+  "owner": {
+    "nativeDeadlineAt": 1791493738448,
+    "authorityStaging": "None; no model Task requested",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-reading-after-206-01\\runtime",
+    "observedProcessChain": [
+      {
+        "pid": 34112,
+        "processInstanceID": "win32:639270896393514314",
+        "occurrenceID": "834380ab-9314-4d71-b6b5-f52e2e8cf3ae"
+      }
+    ],
+    "nativeTarget": {
+      "pid": 34112,
+      "processInstanceID": "win32:639270896393514314",
+      "occurrenceID": "834380ab-9314-4d71-b6b5-f52e2e8cf3ae"
+    },
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\subagent-reading-position-206\\live-01",
+    "owner": {
+      "ProcessId": 34112,
+      "processInstanceID": "win32:639270896393514314"
+    },
+    "port": 18126,
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-reading-after-206-01\\evidence",
+    "targetBirthAtMs": 1791492839351,
+    "host": {
+      "pid": 76520,
+      "processInstanceID": "win32:639270896385718650",
+      "occurrenceID": "19d4fd82-d02b-4575-9715-89cd2240a690"
+    },
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "occurrence": "child-reading-after-206-01-dce354a2-248d-4757-98f9-114ce478e078",
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-reading-after-206-01",
+    "evidencePrefix": "child-reading-after-206-01"
+  },
+  "observedAtUtc": "2026-10-08T20:57:03.1412599Z",
+  "asset": "/ui/assets/main-C_J831_7.js",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "scriptSrc": "http://127.0.0.1:18126/ui/assets/main-C_J831_7.js"
+}

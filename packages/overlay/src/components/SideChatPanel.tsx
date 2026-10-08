@@ -111,6 +111,7 @@ export function SideChatPanel(props: {
   const report = (error: unknown) => setError(formatErrorDetails(error))
   onMount(() => {
     follow = setupAutoScroll(scroll, {
+      initialPosition: { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => setTracking(false),
       onAtBottom: () => setTracking(true),

@@ -253,8 +253,25 @@ explicit bottom and new selection/send actions retain their caller-owned
 behavior. Sources reading intent clears stale event attribution and pauses the
 nearest transcript through the existing reading event.
 
+The sub-agent panel owns at most 32 recent reading positions, keyed by the
+canonical target identity including API authority, parent source, session and
+directory. These positions contain only viewport geometry and follow intent;
+transcript data still comes from the existing projection. The outer panel is
+force-mounted to retain this UI state across Dock closure, while its inactive
+request scope aborts loads and retires the transcript scroll owner. Only visible,
+active observations update a remembered position. Parent disposal clears it.
+
+Each shared scroll-controller caller supplies an explicit initial bottom or
+position intent. A restored position remains owned by that controller until
+content reaches it and the Dock/content geometry stabilizes across consecutive
+frames. Its existing resize observer watches the layout root as well as content;
+insufficient content waits for resize rather than spinning frames. Owned reading
+input cancels restoration immediately. A first visit still follows the bottom;
+returning to a paused conversation retains its reading position and pause.
+
 The Right Dock tab strip retains metadata independently of component lifetime.
-When the Dock is open, Kobalte mounts only the selected tab body; closing the
+Except for the sub-agent outer UI owner described above, when the Dock is open,
+Kobalte mounts only the selected tab body; closing the
 Dock, changing selection, or closing a tab disposes the prior component through
 the normal Solid lifecycle. Panel-owned requests, observers, Server-Sent Events,
 native surfaces, and controllers cannot remain active behind an unselected tab.

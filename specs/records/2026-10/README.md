@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sub-agent reading continuity206/207](2026-10-09-subagent-reading-position-206-207.md): scoped viewport intent survives Sources/session/list/Dock return; actual final screenshots reviewed, two intermediate failures retained, both scopes naturally closed.
+
 - [Embedded expert squad search123](2026-10-08-embedded-search-generation.md): complete canonical localized search inventory and actual positive catalog outputs.
 
 - [Readable native Markdown tables122](2026-10-08-native-markdown-table-reading.md): shared intrinsic width/local overflow and native keyboard focus, actual Sources regression and closed scopes.

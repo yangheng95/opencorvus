@@ -52,44 +52,35 @@ function selectedConversationDirectory(): string {
   return String(board.directory || "").trim()
 }
 
-type SubagentReadingPosition = { top: number; following: boolean }
-const MAX_REMEMBERED_READING_POSITIONS = 32
-
 function SubagentConversationScroll(props: {
   conversation: Accessor<SubagentConversationTranscript>
-  active: Accessor<boolean>
-  initialReadingPosition: SubagentReadingPosition | undefined
-  saveReadingPosition: (position: SubagentReadingPosition) => void
+  sessionID: Accessor<string>
   status: Accessor<"pending" | "running" | "idle" | "completed" | "error" | "skipped">
 }) {
   let scrollElement: HTMLDivElement | undefined
   let scrollController: AutoScrollController | undefined
-  const [tracking, setTracking] = createSignal(props.initialReadingPosition?.following ?? true)
+  const [tracking, setTracking] = createSignal(true)
   const card = createMemo(() => projectSubagentConversationCard(props.conversation(), props.status()))
-  const saveReadingPosition = () => {
-    // Hiding the pane can clamp its geometry before Solid retires this owner.
-    // The last visible observation remains the reader's intended position.
-    if (props.active() && scrollElement && scrollElement.clientHeight > 0)
-      props.saveReadingPosition({ top: scrollElement.scrollTop, following: tracking() })
-  }
-  const changeTracking = (value: boolean) => {
-    setTracking(value)
-    saveReadingPosition()
-  }
 
   onMount(() => {
     if (!scrollElement) throw new Error("Sub-agent conversation scroll container is missing")
-    const layoutRoot = scrollElement.closest<HTMLElement>(".right-dock")
-    if (!layoutRoot) throw new Error("Sub-agent conversation requires its right dock layout owner")
     scrollController = setupAutoScroll(scrollElement, {
-      initialPosition: props.initialReadingPosition && !props.initialReadingPosition.following
-        ? { kind: "position", top: props.initialReadingPosition.top, layoutRoot }
-        : { kind: "bottom" },
       isTracking: tracking,
-      onUserScrollUp: () => changeTracking(false),
-      onAtBottom: () => changeTracking(true),
+      onUserScrollUp: () => setTracking(false),
+      onAtBottom: () => setTracking(true),
     })
   })
+
+  createEffect(
+    on(
+      props.sessionID,
+      () => {
+        setTracking(true)
+        scrollController?.scrollToBottom()
+      },
+      { defer: true },
+    ),
+  )
 
   createEffect(
     on(
@@ -102,13 +93,12 @@ function SubagentConversationScroll(props: {
   )
 
   onCleanup(() => {
-    saveReadingPosition()
     scrollController?.cleanup()
     scrollController = undefined
   })
 
   return (
-    <div ref={scrollElement} class="subagent-conversation-panel__scroll" data-ui="subagent-conversation-scroll" onScroll={saveReadingPosition}>
+    <div ref={scrollElement} class="subagent-conversation-panel__scroll" data-ui="subagent-conversation-scroll">
       <Show
         when={card()}
         fallback={<div class="subagent-conversation-panel__empty">{t("subagent.conversation.empty")}</div>}
@@ -125,13 +115,6 @@ export function SubagentConversationPanel(props: {
   onSessionSelect: (sessionID: string) => void
 }) {
   type AgentOption = { sessionID: string; agentID: string }
-  const readingPositions = new Map<string, SubagentReadingPosition>()
-  const saveReadingPosition = (targetKey: string, position: SubagentReadingPosition) => {
-    readingPositions.delete(targetKey)
-    readingPositions.set(targetKey, position)
-    if (readingPositions.size > MAX_REMEMBERED_READING_POSITIONS)
-      readingPositions.delete(readingPositions.keys().next().value!)
-  }
   const records = createMemo(() =>
     conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
   )
@@ -252,7 +235,6 @@ export function SubagentConversationPanel(props: {
     )
   })
   onCleanup(() => {
-    readingPositions.clear()
     stopLiveProjection()
     flushLiveProjection.cancel()
     transcriptRefresh.dispose()
@@ -314,20 +296,13 @@ export function SubagentConversationPanel(props: {
                   }
                 >
                   <Show
-                    when={displayedConversation()?.targetKey}
-                    keyed
+                    when={displayedConversation()}
                     fallback={
                       <div class="subagent-conversation-panel__empty">{t("subagent.conversation.loading")}</div>
                     }
                   >
-                    {(targetKey) => (
-                      <SubagentConversationScroll
-                        conversation={() => displayedConversation()!}
-                        active={() => props.active() && !showAgentList() && requestKey() === targetKey}
-                        initialReadingPosition={readingPositions.get(targetKey)}
-                        saveReadingPosition={(position) => saveReadingPosition(targetKey, position)}
-                        status={status}
-                      />
+                    {(data) => (
+                      <SubagentConversationScroll conversation={data} sessionID={props.sessionID} status={status} />
                     )}
                   </Show>
                 </Show>

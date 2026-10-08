@@ -32,8 +32,8 @@ import { escapeHtml } from "./markdown"
  *   is left alone so the user can read without the viewport jumping.
  * - When tracking is ON and the user manually scrolls away from the bottom,
  *   `onUserScrollUp` is invoked so the caller can flip tracking off.
- * - The caller supplies the initial position: new conversations land at the
- *   bottom; returning readers restore their position as content mounts.
+ * - On initial mount the container snaps to the bottom once, regardless of
+ *   tracking state, so the user lands on the latest content.
  * - `contentChanged` is the only content-growth trigger. Callers wire it to
  *   their data source version. The controller also observes the current direct
  *   content boxes because Markdown, code highlighting, and media can resize
@@ -64,7 +64,6 @@ export function pauseAutoScrollForReading(element: HTMLElement): void {
 }
 
 export interface AutoScrollOptions {
-  initialPosition: { kind: "bottom" } | { kind: "position"; top: number; layoutRoot: HTMLElement }
   isTracking: () => boolean
   onUserScrollUp: () => void
   onAtBottom?: () => void
@@ -85,9 +84,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   let pointerScrollIntent = false
   let inputIntent: { direction: "up" | "down"; expiresAt: number } | null = null
   let touchStartY: number | null = null
-  let restoreTop = opts.initialPosition.kind === "position" ? opts.initialPosition.top : null
-  let restoreGeometry = ""
-  let stableRestoreFrames = 0
   let observedContentElements = new Set<Element>()
 
   const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
@@ -95,7 +91,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   function onReadingIntent(event: Event) {
     // Only the nearest transcript owns this operator intent.
     event.stopPropagation()
-    restoreTop = null
     programScrollTarget = null
     inputIntent = null
     expectedTop = el.scrollTop
@@ -104,10 +99,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function syncObservedContentElements() {
-    const nextElements = new Set<Element>([
-      ...Array.from(el.children),
-      ...(opts.initialPosition.kind === "position" ? [opts.initialPosition.layoutRoot] : []),
-    ])
+    const nextElements = new Set(Array.from(el.children))
     for (const element of observedContentElements) {
       if (!nextElements.has(element)) contentResizeObserver.unobserve(element)
     }
@@ -122,7 +114,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function rememberInputIntent(direction: "up" | "down") {
-    restoreTop = null
     inputIntent = { direction, expiresAt: performance.now() + 250 }
     if (direction === "up") {
       programScrollTarget = null
@@ -147,7 +138,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   function onPointerDown(event: PointerEvent) {
     if (event.target === el) {
-      restoreTop = null
       pointerScrollIntent = true
       inputIntent = null
     }
@@ -158,7 +148,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onTouchStart(event: TouchEvent) {
-    if (ownsTranscriptInput(event.target)) restoreTop = null
     touchStartY = ownsTranscriptInput(event.target) ? event.touches[0]?.clientY ?? null : null
   }
 
@@ -221,24 +210,10 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     expectedTop = el.scrollTop
   }
 
-  function restoreReadingPosition() {
-    if (restoreTop === null) return
-    const availableTop = Math.max(0, el.scrollHeight - el.clientHeight)
-    el.scrollTop = Math.min(restoreTop, availableTop)
-    programScrollTarget = el.scrollTop
-    expectedTop = el.scrollTop
-    if (opts.initialPosition.kind !== "position") return
-    const layout = opts.initialPosition.layoutRoot.getBoundingClientRect()
-    const geometry = `${layout.width}:${layout.height}:${el.clientHeight}:${el.scrollHeight}`
-    stableRestoreFrames = geometry === restoreGeometry ? stableRestoreFrames + 1 : 0
-    restoreGeometry = geometry
-    if (availableTop >= restoreTop && layout.width > 0 && stableRestoreFrames >= 2) restoreTop = null
-  }
-
   function scheduleFollowScroll() {
     if (disposed) return
     syncFollowLockAttribute()
-    if (!opts.isTracking() && restoreTop === null) return
+    if (!opts.isTracking()) return
     // A caller reports content after Solid has replaced or resized the
     // transcript DOM. Browsers may clamp or re-anchor scrollTop immediately
     // but dispatch the resulting scroll event later. Rebase to that current
@@ -254,11 +229,6 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       rafPending = false
       if (disposed) return
       syncFollowLockAttribute()
-      if (restoreTop !== null) {
-        restoreReadingPosition()
-        if (restoreTop !== null && el.scrollHeight - el.clientHeight >= restoreTop) scheduleFollowScroll()
-        return
-      }
       if (!opts.isTracking()) return
       pinToBottom()
       // Post-pin correction frame. Late-painting content — images and
@@ -298,8 +268,9 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   requestAnimationFrame(() => {
     if (disposed) return
     syncFollowLockAttribute()
-    if (opts.initialPosition.kind === "bottom") pinToBottom()
-    else scheduleFollowScroll()
+    el.scrollTop = el.scrollHeight
+    programScrollTarget = el.scrollTop
+    expectedTop = el.scrollTop
   })
 
   return {
@@ -325,14 +296,12 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       scheduleFollowScroll()
     },
     scrollToBottom: () => {
-      restoreTop = null
       syncFollowLockAttribute()
       el.scrollTop = el.scrollHeight
       programScrollTarget = el.scrollTop
       expectedTop = el.scrollTop
     },
     scrollToTop: () => {
-      restoreTop = null
       syncFollowLockAttribute()
       el.scrollTop = 0
       programScrollTarget = el.scrollTop

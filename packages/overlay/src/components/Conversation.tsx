@@ -559,6 +559,7 @@ export function Conversation(props: {
     setHomePromptMount(promptMount)
     setHomeAfterMount(afterMount)
     const c = setupAutoScroll(el, {
+      initialPosition: { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => setTracking(false),
       onAtBottom: () => setTracking(true),
