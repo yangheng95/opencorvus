@@ -1,0 +1,28 @@
+{
+  "nativeSettlement": null,
+  "phase": "supervision-76320-72",
+  "occurrence": "long-keyboard-streaming-212-01-27c40181-3d96-4d42-afab-83da6f71a639",
+  "observedAtUtc": "2026-10-08T22:39:46.5299515Z",
+  "presence": [
+    {
+      "processInstanceID": "win32:639270955483297632",
+      "processID": 37496,
+      "originalOccurrencePresent": true,
+      "state": "exact_live"
+    },
+    {
+      "processInstanceID": "win32:639270955475215639",
+      "processID": 67256,
+      "originalOccurrencePresent": true,
+      "state": "exact_live"
+    }
+  ],
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18132,
+      "OwningProcess": 37496
+    }
+  ]
+}

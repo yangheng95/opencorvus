@@ -114,7 +114,7 @@ export function SideChatPanel(props: {
       initialPosition: { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => setTracking(false),
-      onAtBottom: () => setTracking(true),
+      onFollowRequested: () => setTracking(true),
     })
   })
   onCleanup(() => {

@@ -87,7 +87,7 @@ function SubagentConversationScroll(props: {
         : { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => changeTracking(false),
-      onAtBottom: () => changeTracking(true),
+      onFollowRequested: () => changeTracking(true),
     })
   })
 

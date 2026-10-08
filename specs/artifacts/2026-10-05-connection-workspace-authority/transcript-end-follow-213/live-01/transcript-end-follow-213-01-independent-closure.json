@@ -1,0 +1,28 @@
+{
+  "occurrence": "transcript-end-follow-213-425cfa25-b413-4a0e-aee1-10699e02ab9e",
+  "states": [
+    {
+      "expected": {
+        "pid": 61972,
+        "processInstanceID": "win32:639270967851087611",
+        "occurrenceID": "d7a8959f-57b2-4785-a62c-0e5c60b3a325"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 54756,
+        "processInstanceID": "win32:639270967859369207",
+        "occurrenceID": "3d91b036-44d6-4898-8abf-73f169ca3e0c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "boundary": "Exact OS births and owned port/pair after original63868 returned0; native exited0 and8 streamed200/EOF retained",
+  "observedAtUtc": "2026-10-08T22:58:01.7201176Z",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  }
+}

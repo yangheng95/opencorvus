@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Long212 Recall](long-keyboard-streaming-plan-212.md), [original failure](long-keyboard-streaming-212/README.md), [End213 Recall](transcript-end-follow-plan-213.md) and [actual repair](transcript-end-follow-213/README.md): explicit follow through virtual measurement, genuine same-input long streaming/local Tool/caret manual review; current8 streamed200/EOF/native0, original503/UI failures and remaining matrix retained.
+
 - [Embedded search123 Recall](dynamic-search-generation-plan-123.md), [investigation](dynamic-search-generation-investigation-123.md) and [actual evidence](dynamic-search-generation-123/README.md): all5 embedded reviewed projections restored by the single generator,11 actual data/loopback contracts/types passed; original writer process unknown.
 
 - [Live Tool payload viewport119 Recall](live-tool-payload-viewport-plan-119.md) and [evidence](live-tool-payload-viewport-119/README.md): genuine11901 completed Sources/answer and manual titles/links/Strong; long-live-input viewport after still unmet.

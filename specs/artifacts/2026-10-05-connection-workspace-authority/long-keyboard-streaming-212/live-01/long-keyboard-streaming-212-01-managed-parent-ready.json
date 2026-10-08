@@ -1,0 +1,15 @@
+{
+  "pid": 37496,
+  "occurrence": "long-keyboard-streaming-212-01-27c40181-3d96-4d42-afab-83da6f71a639",
+  "owner": {
+    "pid": 37496,
+    "processInstanceID": "win32:639270955483297632",
+    "occurrenceID": "bf569da3-e6a7-43f2-8046-09785cde4423"
+  },
+  "parent": {
+    "pid": 74236,
+    "processInstanceID": "win32:639270955482852699",
+    "occurrenceID": "4ed2e2d8-f486-4ac6-92b7-ff95ea58d7f7"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

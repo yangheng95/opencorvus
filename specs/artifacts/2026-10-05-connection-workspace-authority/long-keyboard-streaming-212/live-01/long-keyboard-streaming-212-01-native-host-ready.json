@@ -1,0 +1,38 @@
+{
+  "occurrence": "long-keyboard-streaming-212-01-27c40181-3d96-4d42-afab-83da6f71a639",
+  "outcome": "ready",
+  "host": {
+    "pid": 67256,
+    "processInstanceID": "win32:639270955475215639",
+    "occurrenceID": "52d44da7-ff4d-453c-b2ab-a446b78a1fef"
+  },
+  "parent": {
+    "pid": 76320,
+    "processInstanceID": "win32:639270955455634792",
+    "occurrenceID": "4e297518-4897-49c6-8d3e-79fe5efd6c3c"
+  },
+  "target": {
+    "pid": 37496,
+    "processInstanceID": "win32:639270955483297632",
+    "occurrenceID": "f69f1204-1122-4f28-a7f4-a32173b310a2"
+  },
+  "targetBirthAtMs": 1791498748329,
+  "deadlineAt": 1791499347501,
+  "observedAtUtc": "2026-10-08T22:32:28.363Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\long-keyboard-streaming-212-01\\runtime",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\long-keyboard-streaming-212-01\\project",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\long-keyboard-streaming-212-01\\evidence",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\long-keyboard-streaming-212-01\\startup.json",
+    "18132",
+    "long-keyboard-streaming-212-01-27c40181-3d96-4d42-afab-83da6f71a639",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\long-keyboard-streaming-212-01\\task-selection.json",
+    "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\long-keyboard-streaming-212-builtin.json",
+    "12",
+    "NativeService"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

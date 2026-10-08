@@ -67,7 +67,7 @@ export interface AutoScrollOptions {
   initialPosition: { kind: "bottom" } | { kind: "position"; top: number; layoutRoot: HTMLElement }
   isTracking: () => boolean
   onUserScrollUp: () => void
-  onAtBottom?: () => void
+  onFollowRequested: () => void
 }
 
 export interface AutoScrollController {
@@ -142,8 +142,25 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     if (!ownsTranscriptInput(event.target) || event.defaultPrevented || event.altKey || event.metaKey || event.shiftKey) return
     if (event.ctrlKey && event.key !== "Home" && event.key !== "End") return
     if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"], [role="slider"]')) return
+    if (event.key === "End") {
+      if (hasNestedVerticalScrollTarget(event.target)) return
+      rememberInputIntent("down")
+      opts.onFollowRequested()
+      scheduleFollowScroll()
+      return
+    }
     if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") rememberInputIntent("up")
-    else if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === "End") rememberInputIntent("down")
+    else if (event.key === "ArrowDown" || event.key === "PageDown") rememberInputIntent("down")
+  }
+
+  function hasNestedVerticalScrollTarget(target: EventTarget | null): boolean {
+    if (!(target instanceof Element)) return false
+    for (let element: Element | null = target; element && element !== el; element = element.parentElement) {
+      const overflow = getComputedStyle(element).overflowY
+      if ((overflow === "auto" || overflow === "scroll" || overflow === "hidden") && element.scrollHeight > element.clientHeight)
+        return true
+    }
+    return false
   }
 
   function onPointerDown(event: PointerEvent) {
@@ -211,7 +228,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     }
     if (bottomDistance <= BOTTOM_TOLERANCE && delta > PROGRAM_TOLERANCE && (pointerScrollIntent || direction === "down")) {
       inputIntent = null
-      opts.onAtBottom?.()
+      opts.onFollowRequested()
     }
     syncFollowLockAttribute()
   }

@@ -562,7 +562,7 @@ export function Conversation(props: {
       initialPosition: { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => setTracking(false),
-      onAtBottom: () => setTracking(true),
+      onFollowRequested: () => setTracking(true),
     })
     scrollController = c
     syncComposerClearance()

@@ -1,0 +1,201 @@
+{
+  "observedAtUtc": "2026-10-08T22:45:08.143Z",
+  "access": "Readonly original completed occurrence BEGIN/ROLLBACK; metadata and output lengths, no source mutation",
+  "sessionID": "ses_-zUSUvZPHzz4siKsGM2h",
+  "messages": [
+    {
+      "id": "msg_f47d5b78-daf3-420d-a713-395a91195a57",
+      "role": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791498809204
+      }
+    },
+    {
+      "id": "msg_g0VXV4QpY00avzg230eE",
+      "role": "assistant",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791498809429,
+        "completed": 1791498818150
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXV4T6q00lXAvV3t8W",
+      "role": "assistant",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791498818188,
+        "completed": 1791498821350
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXV4TwX00SvZNzv3k9",
+      "role": "assistant",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791498821393,
+        "completed": 1791498951293
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_ecdc7b4a-dd40-423c-ad78-9996d798dc84",
+      "role": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791499040295
+      }
+    },
+    {
+      "id": "msg_g0VXV5Ovn004SewY4eH0",
+      "role": "assistant",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791499040455,
+        "completed": 1791499115855
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_g0VXV4Qlx004PdXtmpLa",
+      "messageID": "msg_f47d5b78-daf3-420d-a713-395a91195a57",
+      "type": "text",
+      "textChars": 432
+    },
+    {
+      "id": "prt_g0VXV4RtR005xF0TB5Qm",
+      "messageID": "msg_g0VXV4QpY00avzg230eE",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXV4SNA00rWCjchj9L",
+      "messageID": "msg_g0VXV4QpY00avzg230eE",
+      "type": "text",
+      "textChars": 64,
+      "time": {
+        "start": 1791498816941,
+        "end": 1791498816941
+      }
+    },
+    {
+      "id": "prt_g0VXV4T5800OiBrm8jLL",
+      "messageID": "msg_g0VXV4QpY00avzg230eE",
+      "type": "source-url",
+      "sourceId": "8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b",
+      "title": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+      "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXV4T5E00M7MGKlS4a",
+      "messageID": "msg_g0VXV4QpY00avzg230eE",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXV4TCJ00EXRBt0yUV",
+      "messageID": "msg_g0VXV4T6q00lXAvV3t8W",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXV4Tur00vfojON6Bd",
+      "messageID": "msg_g0VXV4T6q00lXAvV3t8W",
+      "type": "source-url",
+      "sourceId": "5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295",
+      "title": "Accessibility | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXV4Tuv00FX0lOK7K9",
+      "messageID": "msg_g0VXV4T6q00lXAvV3t8W",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXV4U1l00Pcp8NL65t",
+      "messageID": "msg_g0VXV4TwX00SvZNzv3k9",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXV4Uzc00ffMDJT5JH",
+      "messageID": "msg_g0VXV4TwX00SvZNzv3k9",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791498825428,
+        "end": 1791498825433
+      }
+    },
+    {
+      "id": "prt_g0VXV4Uzk00nOGNw9TKr",
+      "messageID": "msg_g0VXV4TwX00SvZNzv3k9",
+      "type": "text",
+      "textChars": 128,
+      "time": {
+        "start": 1791498827678,
+        "end": 1791498827678
+      }
+    },
+    {
+      "id": "prt_g0VXV4VZx00OJiO8LHOD",
+      "messageID": "msg_g0VXV4TwX00SvZNzv3k9",
+      "type": "text",
+      "textChars": 8124,
+      "time": {
+        "start": 1791498951091,
+        "end": 1791498951091
+      }
+    },
+    {
+      "id": "prt_g0VXV51im00t2nttlc3L",
+      "messageID": "msg_g0VXV4TwX00SvZNzv3k9",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXV5OtD00ApXaixpmd",
+      "messageID": "msg_ecdc7b4a-dd40-423c-ad78-9996d798dc84",
+      "type": "text",
+      "textChars": 214
+    },
+    {
+      "id": "prt_g0VXV5P4s00ZpsHMCBEB",
+      "messageID": "msg_g0VXV5Ovn004SewY4eH0",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXV5PgK00mhAnBkT5q",
+      "messageID": "msg_g0VXV5Ovn004SewY4eH0",
+      "type": "text",
+      "textChars": 4717,
+      "time": {
+        "start": 1791499114898,
+        "end": 1791499114898
+      }
+    },
+    {
+      "id": "prt_g0VXV5iWR006k6anAQnT",
+      "messageID": "msg_g0VXV5Ovn004SewY4eH0",
+      "type": "step-finish"
+    }
+  ]
+}
