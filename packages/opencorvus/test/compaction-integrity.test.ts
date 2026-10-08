@@ -55,8 +55,8 @@ describe("compaction request and continuation contracts", () => {
     )
   })
 
-  test.each(["before-source", "after-source"] as const)(
-    "preserves the initial anchor with an assistant tail %s and repeated continuation compaction",
+  test.each(["before-source", "after-source", "at-source"] as const)(
+    "preserves the initial anchor with a retained tail %s and repeated continuation compaction",
     async (placement) => {
       await using project = await memoryProject()
       await Instance.provide({
@@ -66,13 +66,13 @@ describe("compaction request and continuation contracts", () => {
           const initial = await user(session.id, "Original Task authority")
           await assistant(session.id, initial.id, "Earlier evidence ".repeat(1_000), true)
           let next: Message.User
-          let tail: Message.Assistant
+          let tail: Message.Assistant | Message.User
           if (placement === "before-source") {
             tail = await assistant(session.id, initial.id, "Verified tool result", true)
             next = await user(session.id, "Incremental guidance")
           } else {
             next = await user(session.id, "Incremental guidance")
-            tail = await assistant(session.id, next.id, "Verified tool result", true)
+            tail = placement === "at-source" ? next : await assistant(session.id, next.id, "Verified tool result", true)
           }
           const summary = await assistant(session.id, next.id, "Verified prior work", false, true)
           await Session.publishCompactionCheckpoint({
@@ -91,7 +91,11 @@ describe("compaction request and continuation contracts", () => {
           expect(projected.map((message) => message.info.id)).toEqual([
             initial.id,
             summary.id,
-            ...(placement === "before-source" ? [tail.id, next.id] : [next.id, tail.id]),
+            ...(placement === "before-source"
+              ? [tail.id, next.id]
+              : placement === "at-source"
+                ? [next.id]
+                : [next.id, tail.id]),
           ])
           expect(projected[0]?.parts).toEqual(
             expect.arrayContaining([expect.objectContaining({ type: "text", text: "Original Task authority" })]),

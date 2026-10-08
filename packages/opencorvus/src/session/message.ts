@@ -1582,7 +1582,8 @@ export namespace Message {
           if (summaryIndex < 0) break
           const newer = result.slice(0, summaryIndex)
           const tailIndex = collectedTail ? result.indexOf(collectedTail) : -1
-          const tailBlock = tailIndex > summaryIndex ? result.slice(summaryIndex + 1, tailIndex + 1) : []
+          const tailEnd = collectedTail?.info.id === msg.info.id ? tailIndex : tailIndex + 1
+          const tailBlock = tailIndex > summaryIndex ? result.slice(summaryIndex + 1, tailEnd) : []
           result.splice(0, result.length, ...newer, ...tailBlock, result[summaryIndex]!, msg)
         }
         retain = {
