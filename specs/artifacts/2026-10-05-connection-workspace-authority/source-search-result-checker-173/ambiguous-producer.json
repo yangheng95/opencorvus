@@ -1,0 +1,65 @@
+{
+  "state": "ambiguous_multi_producer_batch",
+  "partID": "prt_fixture_search",
+  "returnedCount": 2,
+  "distinctCount": 2,
+  "memberships": [
+    {
+      "partID": "prt_fixture_a",
+      "identity": "source-url\u0000actual-data-a",
+      "state": "ambiguous_multi_producer_batch",
+      "otherProducers": [
+        "prt_prior_tool"
+      ],
+      "persisted": {
+        "type": "source-url",
+        "sourceId": "actual-data-a",
+        "url": "https://example.test/a",
+        "title": "Data A",
+        "snippet": "Actual fixture snippet",
+        "author": "Fixture author",
+        "publishedAt": "2026-10-08",
+        "provider": "exa",
+        "providerMetadata": {
+          "fixture": true
+        }
+      },
+      "returned": {
+        "type": "source-url",
+        "sourceId": "actual-data-a",
+        "url": "https://example.test/a",
+        "title": "Later candidate",
+        "snippet": "Actual fixture snippet",
+        "author": "Fixture author",
+        "publishedAt": "2026-10-08",
+        "provider": "exa",
+        "providerMetadata": {
+          "fixture": true
+        }
+      },
+      "orderKey": "v1:0000000000000001:0000000000000031:0000000000000000:part:prt_fixture_a"
+    },
+    {
+      "partID": "prt_fixture_b",
+      "identity": "source-url\u0000actual-data-b",
+      "state": "full_payload_membership",
+      "otherProducers": [],
+      "persisted": {
+        "type": "source-url",
+        "sourceId": "actual-data-b",
+        "url": "https://example.test/b",
+        "title": "Data B",
+        "provider": "exa"
+      },
+      "returned": {
+        "type": "source-url",
+        "sourceId": "actual-data-b",
+        "url": "https://example.test/b",
+        "title": "Data B",
+        "provider": "exa"
+      },
+      "orderKey": "v1:0000000000000002:0000000000000031:0000000000000000:part:prt_fixture_b"
+    }
+  ],
+  "boundary": "Same-message payload membership/order, not inferred minting or rendered group count"
+}

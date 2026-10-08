@@ -1,0 +1,30 @@
+$ bun script/run-tests.ts test/session/source-url-payload.test.ts test/session/source-persistence.test.ts
+[1/2] START test/session/source-url-payload.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) source URL payload validation > preserves the complete HTTP source payload for https://example.com/resource?lang=zh#section [9.38ms]
+(pass) source URL payload validation > preserves the complete HTTP source payload for http://localhost:18105/resource [0.21ms]
+(pass) source URL payload validation > preserves the complete HTTP source payload for http://127.0.0.1:18105/resource [0.26ms]
+(pass) source URL payload validation > preserves the complete HTTP source payload for HTTPS://EXAMPLE.COM/resource?lang=zh#section [0.16ms]
+(pass) source URL payload validation > returns the URL format error contract for not-http-url [1.33ms]
+(pass) source URL payload validation > returns the URL format error contract for https:// [0.31ms]
+(pass) source URL payload validation > returns the URL format error contract for ftp://example.com/resource [0.13ms]
+(pass) source URL payload validation > returns the URL format error contract for mailto:source@example.com [0.12ms]
+
+ 8 pass
+ 0 fail
+ 36 expect() calls
+Ran 8 tests across 1 file. [1.57s]
+[1/2] DONE test/session/source-url-payload.test.ts exit=0 duration=2.71s
+[2/2] START test/session/source-persistence.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) message source persistence > persists URL and source-file evidence once with durable timeline identities [2146.82ms]
+
+ 1 pass
+ 0 fail
+ 2 expect() calls
+Ran 1 test across 1 file. [3.46s]
+[2/2] DONE test/session/source-persistence.test.ts exit=0 duration=3.64s

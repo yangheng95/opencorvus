@@ -262,13 +262,7 @@ export namespace Message {
     providerMetadata: z.record(z.string(), z.any()).optional(),
   }
 
-  const HttpSourceUrl = z
-    .string()
-    .url()
-    .refine((value) => {
-      const protocol = new URL(value).protocol
-      return protocol === "http:" || protocol === "https:"
-    }, "source URL must use Hypertext Transfer Protocol Secure or Hypertext Transfer Protocol")
+  const HttpSourceUrl = z.url({ protocol: /^https?$/ })
 
   export const SourceUrlPayload = z
     .object({

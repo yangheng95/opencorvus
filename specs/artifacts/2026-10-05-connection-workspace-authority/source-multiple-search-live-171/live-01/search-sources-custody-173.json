@@ -1,0 +1,67 @@
+{
+  "owner": {
+    "occurrence": "source-multiple-search-live-171-01-5c819f90-e5d9-4496-bbca-c2b0e84cbbd3",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01",
+    "evidencePrefix": "source-multiple-search-live-171-01",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-multiple-search-live-171\\live-01",
+    "port": 18105,
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01\\project",
+    "host": {
+      "pid": 52708,
+      "processInstanceID": "win32:639270573253820228",
+      "occurrenceID": "65c93d5f-42af-48bf-9576-d48e5355d56c"
+    },
+    "target": {
+      "pid": 11840,
+      "processInstanceID": "win32:639270573261373392",
+      "occurrenceID": "8bdc22a2-56fc-4615-abeb-cf256543cbfb"
+    }
+  },
+  "selection": {
+    "occurrence": "source-multiple-search-live-171-01-5c819f90-e5d9-4496-bbca-c2b0e84cbbd3",
+    "taskID": "tsk_g00VXSTw8x00OIn2Cuk3",
+    "projectID": "prj_htAvg8a2Ro8JTpnLUKPA",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01\\project",
+    "productPillar": "work",
+    "requestID": "f6e5d900-92cd-4b53-a2db-ad2421f9d58b",
+    "requestSentAt": "2026-10-08T11:55:55.0605233Z",
+    "acceptedObservedAt": "2026-10-08T11:55:59.5983507Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXSTw8x00OIn2Cuk3",
+    "projectID": "prj_htAvg8a2Ro8JTpnLUKPA",
+    "rootSessionID": "ses_-zUSXW3jXzzAnq0zy6sX",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXSTwH400NbMAdtvDh",
+    "openedAt": 1791460558987
+  },
+  "lifecycle": {
+    "taskID": "tsk_g00VXSTw8x00OIn2Cuk3",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXSTwH400NbMAdtvDh",
+    "openedAt": 1791460558987,
+    "status": "completed",
+    "terminalEventID": "pev_g0VXSUk35009ZOiZYDU3",
+    "terminalAt": 1791460749074
+  },
+  "fresh": {
+    "authPresent": false,
+    "listenerCount": 0,
+    "occurrence": "source-multiple-search-live-171-01-5c819f90-e5d9-4496-bbca-c2b0e84cbbd3",
+    "host": {
+      "pid": 52708,
+      "processInstanceID": "win32:639270573253820228",
+      "occurrenceID": "65c93d5f-42af-48bf-9576-d48e5355d56c"
+    },
+    "target": {
+      "pid": 11840,
+      "processInstanceID": "win32:639270573261373392",
+      "occurrenceID": "8bdc22a2-56fc-4615-abeb-cf256543cbfb"
+    },
+    "hostState": "dead_or_reused",
+    "observedAtUtc": "2026-10-08T12:05:43.4901193Z",
+    "targetState": "dead_or_reused",
+    "modelsPresent": false,
+    "port": 18105
+  }
+}

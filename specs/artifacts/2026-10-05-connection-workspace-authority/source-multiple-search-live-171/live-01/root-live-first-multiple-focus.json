@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-08T11:57:39.092Z",
+  "dock": 380,
+  "focused": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+  "follow": "false",
+  "groups": [
+    {
+      "count": "4",
+      "label": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "leaves": [
+        {
+          "href": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+          "label": "1Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C"
+        },
+        {
+          "href": "https://www.w3.org/TR/WCAG22/",
+          "label": "2Web Content Accessibility Guidelines (WCAG) 2.2"
+        },
+        {
+          "href": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+          "label": "3Understanding Success Criterion 2.4.7: Focus Visible | WAI"
+        },
+        {
+          "href": "https://www.w3.org/WAI/WCAG22/Techniques/failures/F55",
+          "label": "4Technique F55:Failure of Success Criteria 2.1.1, 2.4.7, ..."
+        }
+      ],
+      "open": true
+    },
+    {
+      "count": "3",
+      "label": "Keyboard accessible - MDN Web Docs - Mozilla",
+      "leaves": [],
+      "open": false
+    },
+    {
+      "count": "1",
+      "label": "Keyboard accessible - Accessibility | MDN",
+      "leaves": [],
+      "open": false
+    },
+    {
+      "count": "1",
+      "label": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "leaves": [],
+      "open": false
+    },
+    {
+      "count": "1",
+      "label": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "leaves": [],
+      "open": false
+    },
+    {
+      "count": "1",
+      "label": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "leaves": [],
+      "open": false
+    }
+  ],
+  "height": 2139,
+  "rect": {
+    "bottom": 441.5937728881836,
+    "height": 32.395835876464844,
+    "left": 932,
+    "right": 1260,
+    "top": 409.1979370117187,
+    "width": 328,
+    "x": 932,
+    "y": 409.1979370117187
+  },
+  "scroll": 0,
+  "text": 2529,
+  "tooltip": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3Chttps://www.w3.org/WAI/WCAG22/Understanding/focus-visibleUnderstanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focusexa",
+  "viewport": [
+    1280,
+    720
+  ]
+}

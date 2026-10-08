@@ -1,0 +1,5 @@
+#173 Root current checker and production175 review
+
+Root fullread checker/runner/import graph/current175 diff and actual171 facts. Independent Sol review confirms actual Task-root and decision-orchestrator differ; accepted preterminal75/96/587-char Parts all belong to real orchestrator. Checker proves preterminal text existence, while Root personally reads the final587-char report. Canonical result metadata comes from permission envelope; outcome metadata separately recorded. Exa4/3 groups produce7 matching batch Sources plus5 genuine fetch Sources,12 Parts total; counts are not unique documents or UI inference.
+
+Twenty-four actual Sol streaming200/settledEOF and exhaustedfalse establish no extra rejected25th audit attempt, not spare allowance.175 sole z.url protocol validator and explicit URL-format error contract pass9focused cases; diagnostic generic catch removed. Exact membership/order is qualified, not exclusive Tool minting where SDK identity could coincide. Tooltip883.823px failure and childtext2529 no-growth remain Root171 limitations. No second DB/oracle/UI/model/test/Git operation by reviewer.

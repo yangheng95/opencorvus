@@ -1,0 +1,49 @@
+{
+  "boundary": "fresh isolated local schema probe, not original173 failure or Provider/UI",
+  "input": {
+    "type": "source-url",
+    "sourceId": "validation-175",
+    "url": "not-http-url"
+  },
+  "current": {
+    "thrownType": "TypeError",
+    "message": "\"not-http-url\" cannot be parsed as a URL.",
+    "stack": "TypeError: \"not-http-url\" cannot be parsed as a URL.\n    at URL (unknown)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\session\\message.ts:269:28)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\zod@4.4.3\\node_modules\\zod\\v4\\core\\schemas.js:2217:23)\n    at runChecks (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\zod@4.4.3\\node_modules\\zod\\v4\\core\\schemas.js:48:35)\n    at anonymous (file:///D:/myhexin-local/opencorvus/node_modules/.bun/zod@4.4.3/node_modules/zod/v4/core/doc.js:53:38)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\zod@4.4.3\\node_modules\\zod\\v4\\core\\schemas.js:991:23)\n    at <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\zod@4.4.3\\node_modules\\zod\\v4\\core\\parse.js:33:32)\n    at D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-url-validation-175-probe.ts:8:45"
+  },
+  "builtin": [
+    {
+      "url": "https://example.test/resource?q=1#section",
+      "result": {
+        "success": true,
+        "data": "https://example.test/resource?q=1#section"
+      }
+    },
+    {
+      "url": "http://localhost:18105/resource",
+      "result": {
+        "success": true,
+        "data": "http://localhost:18105/resource"
+      }
+    },
+    {
+      "url": "not-http-url",
+      "result": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"invalid_format\",\n    \"format\": \"url\",\n    \"note\": \"Invalid URL format\",\n    \"path\": [],\n    \"message\": \"Invalid URL\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "url": "ftp://example.test/resource",
+      "result": {
+        "success": false,
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"code\": \"invalid_format\",\n    \"format\": \"url\",\n    \"note\": \"Invalid URL format\",\n    \"path\": [],\n    \"message\": \"Invalid URL\"\n  }\n]"
+        }
+      }
+    }
+  ]
+}

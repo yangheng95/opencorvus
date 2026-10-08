@@ -501,6 +501,9 @@ The complete URL remains available in its tooltip and activation target.
 Redirected URL owns source
 identity and activation independently of the title. Historical source payloads
 retain their original recorded values.
+The shared Message source schema validates HTTP and HTTPS URLs with the native
+URL validator. Malformed and other-protocol inputs produce a URL-format schema
+error; accepted URL strings and source metadata retain their recorded values.
 The Source
 Disclosure's native content box and expanded list are bounded by the actual
 source region. Expanded source labels use that available width and wrap long

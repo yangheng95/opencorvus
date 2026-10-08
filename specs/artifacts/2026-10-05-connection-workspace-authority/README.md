@@ -459,3 +459,7 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [164 document producer](source-document-production-investigation-164.md) / [165 census](document-source-owned-history-query-165/README.md)：7scopes/26Sessions/15URLPart/6filePart/0docPart，仅owned Part统计，document UI未验；[166闭合](source-url-plaintext-live-166/README.md)165307ms/17 Sol EOF/once0，窄collapsed辨识失败保留。
 - [167 collapsed identity](source-url-collapsed-identity-investigation-167.md)：path+query·host在168宽380/窄280同站点collapsed区别限定合格，types/build0；[168准备](source-url-path-first-live-plan-168.md)/[说明](source-url-path-first-live-168/README.md)已限定验收/176879ms/16 Sol EOF/once0；generalRendering/doc/extremepath/samepath跨host/真实Sources3未知。
+
+- [169多Source入口调查](source-multiple-production-investigation-169.md)无修复；[170 offscreen候选](offscreen-markdown-return-investigation-170.md)未实证；[171准备](source-multiple-search-live-171/README.md)runtime HELD。[173 DATA checker方案](source-search-result-checker-proposal-173.md)仅ignored checker/contract runner准入，真实场景未run；[174 history准备](offscreen-return-history-174/README.md)需bindings/deadline/cloneeligible守卫，HELD未adapter。
+
+- [171闭合限定资格](source-multiple-search-live-171/README.md)：190087ms/24 Sol EOF/173原5argsonce0，真实4/3组/12URLParts非不同documents；[175 URLschema合同](source-url-validation-plan-175.md)/[证据说明](source-url-validation-175/README.md)8schema+1persist0，提交待Root；[176长Tooltip调查](source-long-tooltip-investigation-176.md)实际FAIL/HELD，child growth UNMET。

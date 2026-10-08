@@ -1,0 +1,18 @@
+Internal error: directory mismatch for directory "D:\myhexin-local\opencorvus\packages\opencorvus\tsconfig.json", fd 608[handle]. You don't need to do anything, but this indicates a bug.
+22 |  const errors=[]
+23 |  for(const [name,input,rows,code] of [
+24 |   ['schema',{...batch,sources:[{...a,url:'not-http-url'}]},[rowA,rowB],'SEARCH_SOURCE_PAYLOAD_INVALID'],
+25 |   ['order',batch,[{...rowA,orderKey:rowB.orderKey},{...rowB,orderKey:rowA.orderKey}],'SEARCH_DURABLE_SOURCE_ORDER_MISMATCH'],
+26 |   ['metadata',batch,[{...rowA,payload:{...a,title:'Different persisted title'}},rowB],'SEARCH_DURABLE_SOURCE_PAYLOAD_MISMATCH'],
+27 |  ] as const){let caught:unknown;try{qualifyBatch(input,rows,[input])}catch(error){caught=error};assert.ok(caught instanceof SearchSourceQualificationError);assert.equal(caught.code,code);errors.push({name,errorType:caught.name,code:caught.code})}
+                                                                                                            ^
+AssertionError: false == true
+ generatedMessage: true,
+     actual: false,
+   expected: true,
+   operator: "==",
+       code: "ERR_ASSERTION"
+
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\search-sources-173-data-contract.ts:27:104
+
+Bun v1.3.14 (Windows x64)

@@ -1,0 +1,12 @@
+{
+  "extends": "D:/myhexin-local/opencorvus/packages/opencorvus/tsconfig.json",
+  "exclude": [],
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/verify-current-search-sources-173.ts",
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/search-sources-173-data-contract.ts",
+    "D:/myhexin-local/opencorvus/packages/opencorvus/src/**/*.d.ts"
+  ]
+}

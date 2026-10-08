@@ -114,3 +114,15 @@ Root确认162 ba0db1d7 push22669实际0/freshsame/outgoing为空。[164 producer
 Root [168人工记录](../../artifacts/2026-10-05-connection-workspace-authority/source-url-path-first-live-168/live-01/root-manual-qualification.md)确认176879ms/16 Sol EOF/原combined once0+nested0、parent11938实际0 joined、4232/71352及18104/pair退休/134135关闭。types56135/build46762实际0；380/280 collapsed两RFC paths区别/W3C可读，text1022→2829同href/rect/Tooltip/followfalse自然增长、End/reentry/官方Enter限定合格。immediate reentryTooltip undefined不算pass。
 
 166 Root人工末尾更正sole shutdown line89实际archive writer，原launcher错误归因/raw保留，原once不重跑。165 Rootreview支持7scopes/26Session含7roots/15URLPart/6filePart/0docPart，仅授权范围Part统计。generalRendering/doc/extremepath/samepath跨host/真实Sources3及未采矩阵未知，连续目标ACTIVE，本批提交推送不提前宣称。
+
+## 169/170/171/173/174 下一批准备
+
+Root确认167 ebba4f01444ddfe70349523f4329629842be89bf push40381实际0/freshremote相同/outgoing为空/hooks和secret0。169多Source入口调查无修复，170 offscreen候选未实证。171新自然搜索prepared/runtime HELD，不强制结果URLs/count或Source；真实Provider/UI/DB尚未run。
+
+173 Root11:35只准入新的ignored DATA checker和contract runner；InstalledSharp/BusEventinit不是pure import，局部合同不代表真实Provider/UI/DB。174 history计划仍需old122/116 bindings、900deadline、clone all DB eligible work guard，HELD未adapter，不能借原helpers绕guard。原164–168人工/raw不改，连续目标Sol ACTIVE。
+
+## 171–176 本批闭合（前述prepared为历史）
+
+Root [171人工记录](../../artifacts/2026-10-05-connection-workspace-authority/source-multiple-search-live-171/live-01/root-manual-qualification.md)确认190087ms/24 Solstream200EOF/max24未exhaust，22websearch声明/Exa两结果4与3/fullresult→durable/order由173原5argsONCE0；12URLPart含后续webfetch，不推不同documents。parent31619实际0 joined，11840/52708死亡18105/pair退休/136137关闭，freshguard0。
+
+175原custom new URL refine fresh TypeError修为z.urlprotocol，8schema+1persist0/types95817实际0/docs0。173Root11:50 actualdecision-orchestrator/root纠正+metadatafromresult/deletegenericcatch，local7DATA0/types89488实际0。局部与真实UI分开：真实4/3 groups/keys/targets限定合格，长snippet3536 Tooltip883.823>720仍FAIL、childtext2529不增长UNMET，176HELD仅调查。169/170/174未实施候选及doc/generalRendering未验保持；新175未提前claimcommit/push，连续Sol目标ACTIVE。

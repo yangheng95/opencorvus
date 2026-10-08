@@ -1,0 +1,20 @@
+{
+  "authPresent": false,
+  "listenerCount": 0,
+  "occurrence": "source-multiple-search-live-171-01-5c819f90-e5d9-4496-bbca-c2b0e84cbbd3",
+  "host": {
+    "pid": 52708,
+    "processInstanceID": "win32:639270573253820228",
+    "occurrenceID": "65c93d5f-42af-48bf-9576-d48e5355d56c"
+  },
+  "target": {
+    "pid": 11840,
+    "processInstanceID": "win32:639270573261373392",
+    "occurrenceID": "8bdc22a2-56fc-4615-abeb-cf256543cbfb"
+  },
+  "hostState": "dead_or_reused",
+  "observedAtUtc": "2026-10-08T12:05:43.4901193Z",
+  "targetState": "dead_or_reused",
+  "modelsPresent": false,
+  "port": 18105
+}

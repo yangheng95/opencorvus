@@ -1,0 +1,944 @@
+{
+  "access": "readonly BEGIN/ROLLBACK; no bootstrap; nonpure Message schema import",
+  "selection": {
+    "occurrence": "source-multiple-search-live-171-01-5c819f90-e5d9-4496-bbca-c2b0e84cbbd3",
+    "taskID": "tsk_g00VXSTw8x00OIn2Cuk3",
+    "projectID": "prj_htAvg8a2Ro8JTpnLUKPA",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01\\project",
+    "productPillar": "work",
+    "requestID": "f6e5d900-92cd-4b53-a2db-ad2421f9d58b",
+    "requestSentAt": "2026-10-08T11:55:55.0605233Z",
+    "acceptedObservedAt": "2026-10-08T11:55:59.5983507Z"
+  },
+  "task": {
+    "id": "tsk_g00VXSTw8x00OIn2Cuk3",
+    "project_id": "prj_htAvg8a2Ro8JTpnLUKPA",
+    "session_id": "ses_-zUSXW3jXzzAnq0zy6sX",
+    "request_id": "f6e5d900-92cd-4b53-a2db-ad2421f9d58b",
+    "request": "请委托只读研究员查找当前关于网页键盘可访问性的官方指南，比较 W3C/WAI 与 MDN 对键盘操作及焦点可见的建议。用简短中文说明共同点和一个需要注意的区别，引用实际找到的官方来源；不要改文件或另写报告。\n",
+    "product_pillar": "work"
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUSXW3jXzzAnq0zy6sX",
+      "project_id": "prj_htAvg8a2Ro8JTpnLUKPA",
+      "parent_id": null,
+      "kind": "root"
+    },
+    {
+      "id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "project_id": "prj_htAvg8a2Ro8JTpnLUKPA",
+      "parent_id": "ses_-zUSXW3jXzzAnq0zy6sX",
+      "kind": "orchestrator"
+    },
+    {
+      "id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "project_id": "prj_htAvg8a2Ro8JTpnLUKPA",
+      "parent_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "kind": "explore"
+    },
+    {
+      "id": "ses_htaCwoMcecKcn75injAb",
+      "project_id": "prj_htAvg8a2Ro8JTpnLUKPA",
+      "parent_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "kind": "delegated-worker"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_g0VXSTx7v00YUwuX0CCm",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "user"
+    },
+    {
+      "id": "msg_task-root-control_art_hKbXqUL2moji6y7YNzpW_art_hKbXqUL2moji6y7YNzpW",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "user"
+    },
+    {
+      "id": "msg_hb3JJzEoZ6ptknRPiqUI",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSU0rb00IzeZhftTT",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "user"
+    },
+    {
+      "id": "msg_g0VXSU0vg002g523SNfC",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSU2Gk00wmPylQah8",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSU3dk005iwa5raDA",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSU57Z00HsiqjoKXp",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSU67f003OgX1T47R",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSU7L900qUlEbvbyh",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUAB200zgs1fzTf6",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUBYK00PbLo0vSii",
+      "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_task-root-control_art_hlgnp7MiE30oKVg1YirF_art_hlgnp7MiE30oKVg1YirF",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "user"
+    },
+    {
+      "id": "msg_hc1OabwX3E6s0XSr10F2",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUMXl00GX44JNdvV",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "user"
+    },
+    {
+      "id": "msg_g0VXSUMcI00fgJ5eIbvt",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUO7F00YgT3Ov8qm",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUPv4005y6RAoVTm",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUS5C003pCAipt4g",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUTjd00TWdvtaeHv",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUVJD000MAAf1sHa",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUXmP00Mkr03z1yw",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_g0VXSUZM200rWrs2MKan",
+      "session_id": "ses_htaCwoMcecKcn75injAb",
+      "role": "assistant"
+    },
+    {
+      "id": "msg_task-root-control_art_hFzq0LsvvBiEk7X4onpo_art_hFzq0LsvvBiEk7X4onpo",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "user"
+    },
+    {
+      "id": "msg_hIcf4OPAHyrKN36UKqPQ",
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "role": "assistant"
+    }
+  ],
+  "lifecycle": [
+    {
+      "id": "pev_g0VXSTwH400NbMAdtvDh",
+      "type": "task.execution.opened",
+      "seq": 3,
+      "emitted_at": 1791460558987,
+      "epoch": 1
+    },
+    {
+      "id": "pev_g0VXSUk35009ZOiZYDU3",
+      "type": "task.completed",
+      "seq": 61,
+      "emitted_at": 1791460749074,
+      "epoch": 1
+    }
+  ],
+  "promptOwners": [],
+  "searchFacts": [
+    {
+      "partID": "prt_g0VXSU2wS00KI5B5xP2r",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+          "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+          "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+          "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+          "url": "https://www.w3.org/TR/WCAG22/",
+          "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+          "snippet": "- 2.4.11 Focus Not Obscured (Minimum) (AA)\n- 2.4.12 Focus Not Obscured (Enhanced) (AAA)\n- 2.4.13 Focus Appearance (AAA)\n- 2.5.7 Dragging Movements (AA)\n- 2.5.8 Target Size (Minimum) (AA)\n- 3.2.6 Consistent Help (A)\n- 3.3.7 Redundant Entry (A)\n- 3.3.8 Accessible Authentication (Minimum) (AA)\n- 3.3.9 Accessible Authentication (Enhanced) (AAA)\n...\nSuccess Criterion 1.4.13 \n\nContent on Hover or\n...\nSuccess Criterion 2.1.1 \n\nKeyboard\n\nUnderstanding Keyboard | How to Meet Keyboard\n\n(Level A)\n\nAll ... of the content is operable through a keyboard interface without requiring specific timings for individual keystrokes, ... where the underlying function requires ... depends on the path of the user' ... movement and not just the endpoints.\n...\nSuccess Criterion 2.1.3 \n\nKeyboard (No Exception)\n\nUnderstanding Keyboard ( ... Exception) | ... Meet Keyboard (No Exception)\n...\nSuccess Criterion 2.4.7 \n\nFocus Visible\n\nUnderstanding Focus Visible | How to Meet Focus Visible\n\n(Level AA)\n\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\nSuccess Criterion 2.4.8 \n\nLocation\n...\nSuccess Criterion ... .4.11 \n\nFocus Not Obscured (Minimum)\n\nUnderstanding Focus Not Obscured (Minimum) | How to Meet Focus Not Obscured (Minimum)\n\n(Level AA)\n...\nSuccess Criterion 2.4.12 \n\nFocus Not Obscured (Enhanced)\n\nUnderstanding Focus Not Obscured (Enhanced) | How to Meet Focus Not Obscured (Enhanced)\n...\ncreated content.\n\nSuccess Criterion 2.4.13 \n\nFocus Appearance\n\nUnderstanding Focus Appearance | How to Meet Focus Appearance\n\n(Level AAA)\n\nWhen the keyboard focus indicator is visible, an area of the focus indicator meets all the following:\n\n- is at least as large as the area of a 2 CSS pixel thick perimeter of the unfocused component or sub-component, and\n- has a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states.\n\n- The focus indicator is determined by the user agent and cannot be adjusted by the author, or\n- The focus indicator and the indicator's background color are not modified by the author.",
+          "publishedAt": "2024-12-12T00:00:00.000Z",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+          "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+          "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI",
+          "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "5b642dae5e283129130936cb06ce739b8c07043127fe13fbcdcecfc8d37a9b15",
+          "url": "https://www.w3.org/WAI/WCAG22/Techniques/failures/F55",
+          "title": "Technique F55:Failure of Success Criteria 2.1.1, 2.4.7, ...",
+          "snippet": "F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received | WAI | W3C\n\n# Technique F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n...\n- 2.1.1 Keyboard (Failure) \n- 2.4.7 Focus Visible (Failure) \n- 2.4.13 Focus Appearance (Failure) \n- 3.2.1 On Focus (Failure) \n\nThis failure applies to all content that supports script.\n...\nContent that normally receives focus when the content is accessed by keyboard may have this focus removed by scripting. This is sometimes done when designer considers the system focus indicator to be unsightly. However, the system focus indicator is an important part of accessibility for keyboard users. In addition, this practice removes focus from the content entirely, which means that the content can only be operated by a pointing device such as a mouse.\n...\n1. Use the keyboard to verify that you can get to all interactive elements using the keyboard. \n2. Check that when focus is placed on each element, focus remains there until user moves it.\n...\n- If #2 is false then this failure condition applies and content fails the Success Criterion.",
+          "provider": "exa"
+        }
+      ],
+      "query": "2026 site:w3.org WCAG 2.2 keyboard 2.1.1 focus visible 2.4.7",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 4
+          }
+        ],
+        "resultCount": 4,
+        "truncated": false
+      },
+      "outcomeMetadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 4
+          }
+        ],
+        "resultCount": 4,
+        "truncated": false
+      },
+      "resultAttemptID": "per_h9qRpbhBqkTxmaMygalo",
+      "resultEnvelopePresent": true
+    },
+    {
+      "partID": "prt_g0VXSU4NR00cBQQJWN0j",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+          "title": "Keyboard accessible - MDN Web Docs - Mozilla",
+          "snippet": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and control it. This includes users of screen readers, but can also include users who have trouble operating a pointing device such as a mouse or trackball, or whose mouse is not working at the moment, or who prefer to use a keyboard for input whenever possible.\n\n## Focusable elements should have interactive semantics\n\nIf an element can be focused using the keyboard, then it should be interactive; that is, the user should be able to do something to it and produce a change of some kind (for example, activating a link or changing an option).\n...\nMost interactive elements are focusable by default; you can make an element focusable by adding a `tabindex=0` attribute value to it. However, you should only add `tabindex` if you have also made the element interactive, for example, by defining appropriate event handlers keyboard events.\n...\nThe `tabindex` attribute indicates that an element is focusable using the keyboard. A value of zero indicates that the element is part of the default focus order, which is based on the ordering of elements in the HTML document. A positive value puts the element ahead of those in the default ordering; elements with positive values are focused in the order of their `tabindex` values (1, then 2, then 3, etc.).\n...\nIf an element can be clicked with a pointing device, such as a mouse, then it should also be focusable using the keyboard, and the user should be able to do something by interacting with it.\n...\n## Interactive elements must be able to be activated using a keyboard\n\nIf the user can interact with an element using touch or a pointing device, then the element should also support interacting using the keyboard. That is, if you have defined event handlers for touch or click events, you should also define them for keyboard events. The keyboard event handlers should enable effectively the same interaction as the touch or click handlers.\n\n## Interactive elements must be focusable\n\nIf the user can interact with an element (for example, using touch or a pointing device), then it should be focusable using the keyboard. You can make it focusable by adding a `tabindex=0` attribute value to it. That will add the element to the list of elements that can be focused by pressing the Tab key, in the sequence of such elements as defined in the HTML document.\n\n## Focusable element must have focus styling\n\nAny element that can receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes.\n\nStandard focusable elements such as links and input fields are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive.",
+          "publishedAt": "2025-12-17T00:00:00.000Z",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "127b01c278760dcea07e9d94aa246911506f0d25a4f2aa8be43588d06bc83d61",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Operable",
+          "title": "Operable - Accessibility | MDN",
+          "snippet": "## Guideline 2.1 — Keyboard Accessible: Make all functionality available from a keyboard\n\nThis guideline covers the necessity of making core website functionality available via a keyboard in addition to other means (e.g., mouse), so that users that rely on keyboard controls can access them.\n\n| Success criteria | How to conform to the criteria | Practical resource |\n| --- | --- | --- |\n| 2.1.1 Keyboard (A) | All functionality should be accessible using keyboard controls, unless it cannot be done using the keyboard (e.g., freehand drawing). Built-in controls should be used where possible (e.g., tabbing through form controls), and you should only build in custom functionality where needed. | See Use semantic UI controls where possible and Building keyboard accessibility back in |\n| 2.1.2 No keyboard trap (A) | When entering a section of functionality using the keyboard, you should be able to get out of that section again using only the keyboard. For example, if you press Enter/ Return on a focused button to open an options window, you should be able to close that window again and return to the main content using the keyboard. This is very important so that keyboard users do not get trapped on specific sections of your apps. | |\n| 2.1.3 Keyboard — all functionality (AAA) | This is a further step beyond criterion 2.1.1. To achieve AAA conformance, all functionality should be accessible using keyboard controls — with no exceptions. | See Use semantic UI controls where possible and Building keyboard accessibility back in |\n| 2.1.4 Character Key Shortcuts (A) | If a single character key shortcut exists, then at least one of the following is true: single character key shortcuts can be turned off, remapped or are only active when the relevant user interface component is in focus. | Understanding Character Key Shortcuts |\n...\n| 2.4.3 Logical focus order (A) | The \"tabbing order\" of focusable page features (e.g., links, buttons, form inputs) makes logical sense, meaning that the page is still usable by non-sighted/keyboard users. | See Use semantic UI controls where possible for general advice on tabbing to controls. If you need to place elements in an unusual layout, it is better to make sure the source order is sensible, then use CSS features like positioning to handle the layout. |\n...\n| 2.4.7 Visible focus for focusable elements (AA) | When tabbing through focusable elements such as links or form inputs, there should be a visual indicator to show you which element currently has focus. This is usually a dotted or blue outline by default (depending on browser, platform, etc.), but this can be overridden by CSS. | See Use semantic UI controls where possible. |\n...\n| 2.4.11 Focus not obscured (Minimum) (AA) | When a user interface component receives keyboard focus, the component is not entirely hidden due to containing author-created content. Note: If the interface's content can be repositioned by the user, then only the initial position of the user-movable content is considered for testing to conform to this standard. Also, content opened by the user may obscure the component receiving focus. Furthermore, if the user can reveal the focused component without changing keyboard focus, the component with focus is not considered hidden for conformance and testing purposes. | Check out Understanding focus not obscured (Minimum) to learn more about this standard. |\n| 2.4.12 Focus not obscured (Enhanced) (AAA) | Follows the rules as 2.4.11 except when a user interface component receives focus, no part of the component can be hidden by author-created content. If the interface is configurable, only the initial positions of user-movable content are considered for testing and meeting of this standard. | Check out Understanding focus not obscured (Enhanced) (Level AAA) to learn more about this standard. |\n| 2.4.13 Focus appearance (AAA) | When the keyboard focus indicator is visible, the area of the focus indicator meets all the following: Must be at least as large as the area of a `2px` thick perimeter of the unfocused component or sub-component, which includes component's content, border, and background, excluding outer shadows or glow effects. Needs to have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states The exceptions to this are: The focus indicator is determined by the user and cannot be adjusted by the author. The focus indicator and the indicator's background color are not modified by the author. | Check out Understanding focus appearance (Level AAA) to learn more about this standard. |",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "56dc311e981756452eedae830a7ec930f24cc18d039cf121ee7bdb85dd6c3dda",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus",
+          "title": "HTMLElement: focus() method - Web APIs | MDN",
+          "snippet": "The `HTMLElement.focus()` method sets focus on the specified element, if it can be focused. The focused element is the element that will receive keyboard and similar events by default.\n\nBy default the browser will scroll the element into view after focusing it, and it may also provide visible indication of the focused element (typically by displaying a \"focus ring\" around the element). Parameter options are provided to disable the default scrolling and force visible indication on elements.\n...\n`preventScroll` Optional\n: A boolean value indicating whether or not the browser should scroll the document to bring the newly-focused element into view. A value of `false` for `preventScroll` (the default) means that the browser will scroll the element into view after focusing it. If `preventScroll` is set to `true`, no scrolling will occur.\n`focusVisible` Optional \n: A boolean value that should be set to `true` to force, or `false` to prevent visible indication that the element is focused. If the property is not specified, a browser will provide visible indication if it determines that this would improve accessibility for users.\n...\nThe code below adds an event handler to set the focus on the text field when the button is pressed. Note that most browsers will automatically add visible indication (a \"focus ring\") for a focused text field, so the code does not set `focusVisible` to `true`.\n...\nBrowsers do not usually show visible focus indication on button elements when focus is set programmatically, so the effect of selecting the middle button may not be obvious. However provided the `focusVisible` option is supported on your browser, you should see focus changing on the left-most button when the right-most button is selected.\n...\n- If you call `HTMLElement.focus()` from a mousedown event handler, you must call `event.preventDefault()` to keep the focus from leaving the `HTMLElement`\n- Behavior of the focus in relation to different HTML features like `tabindex` or shadow dom, which previously remained under-specified, were updated in October 2019. See the WHATWG blog for more information.",
+          "provider": "exa"
+        }
+      ],
+      "query": "2026 site:developer.mozilla.org Keyboard accessible focusable interactive visible focus",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 3
+          }
+        ],
+        "resultCount": 3,
+        "truncated": false
+      },
+      "outcomeMetadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 3
+          }
+        ],
+        "resultCount": 3,
+        "truncated": false
+      },
+      "resultAttemptID": "per_hdFV8c5pDuLNYrhTPRLt",
+      "resultEnvelopePresent": true
+    }
+  ],
+  "batches": [
+    {
+      "partID": "prt_g0VXSU2wS00KI5B5xP2r",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+          "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+          "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+          "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+          "url": "https://www.w3.org/TR/WCAG22/",
+          "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+          "snippet": "- 2.4.11 Focus Not Obscured (Minimum) (AA)\n- 2.4.12 Focus Not Obscured (Enhanced) (AAA)\n- 2.4.13 Focus Appearance (AAA)\n- 2.5.7 Dragging Movements (AA)\n- 2.5.8 Target Size (Minimum) (AA)\n- 3.2.6 Consistent Help (A)\n- 3.3.7 Redundant Entry (A)\n- 3.3.8 Accessible Authentication (Minimum) (AA)\n- 3.3.9 Accessible Authentication (Enhanced) (AAA)\n...\nSuccess Criterion 1.4.13 \n\nContent on Hover or\n...\nSuccess Criterion 2.1.1 \n\nKeyboard\n\nUnderstanding Keyboard | How to Meet Keyboard\n\n(Level A)\n\nAll ... of the content is operable through a keyboard interface without requiring specific timings for individual keystrokes, ... where the underlying function requires ... depends on the path of the user' ... movement and not just the endpoints.\n...\nSuccess Criterion 2.1.3 \n\nKeyboard (No Exception)\n\nUnderstanding Keyboard ( ... Exception) | ... Meet Keyboard (No Exception)\n...\nSuccess Criterion 2.4.7 \n\nFocus Visible\n\nUnderstanding Focus Visible | How to Meet Focus Visible\n\n(Level AA)\n\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\nSuccess Criterion 2.4.8 \n\nLocation\n...\nSuccess Criterion ... .4.11 \n\nFocus Not Obscured (Minimum)\n\nUnderstanding Focus Not Obscured (Minimum) | How to Meet Focus Not Obscured (Minimum)\n\n(Level AA)\n...\nSuccess Criterion 2.4.12 \n\nFocus Not Obscured (Enhanced)\n\nUnderstanding Focus Not Obscured (Enhanced) | How to Meet Focus Not Obscured (Enhanced)\n...\ncreated content.\n\nSuccess Criterion 2.4.13 \n\nFocus Appearance\n\nUnderstanding Focus Appearance | How to Meet Focus Appearance\n\n(Level AAA)\n\nWhen the keyboard focus indicator is visible, an area of the focus indicator meets all the following:\n\n- is at least as large as the area of a 2 CSS pixel thick perimeter of the unfocused component or sub-component, and\n- has a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states.\n\n- The focus indicator is determined by the user agent and cannot be adjusted by the author, or\n- The focus indicator and the indicator's background color are not modified by the author.",
+          "publishedAt": "2024-12-12T00:00:00.000Z",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+          "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+          "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI",
+          "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "5b642dae5e283129130936cb06ce739b8c07043127fe13fbcdcecfc8d37a9b15",
+          "url": "https://www.w3.org/WAI/WCAG22/Techniques/failures/F55",
+          "title": "Technique F55:Failure of Success Criteria 2.1.1, 2.4.7, ...",
+          "snippet": "F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received | WAI | W3C\n\n# Technique F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n...\n- 2.1.1 Keyboard (Failure) \n- 2.4.7 Focus Visible (Failure) \n- 2.4.13 Focus Appearance (Failure) \n- 3.2.1 On Focus (Failure) \n\nThis failure applies to all content that supports script.\n...\nContent that normally receives focus when the content is accessed by keyboard may have this focus removed by scripting. This is sometimes done when designer considers the system focus indicator to be unsightly. However, the system focus indicator is an important part of accessibility for keyboard users. In addition, this practice removes focus from the content entirely, which means that the content can only be operated by a pointing device such as a mouse.\n...\n1. Use the keyboard to verify that you can get to all interactive elements using the keyboard. \n2. Check that when focus is placed on each element, focus remains there until user moves it.\n...\n- If #2 is false then this failure condition applies and content fails the Success Criterion.",
+          "provider": "exa"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXSU4NR00cBQQJWN0j",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+          "title": "Keyboard accessible - MDN Web Docs - Mozilla",
+          "snippet": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and control it. This includes users of screen readers, but can also include users who have trouble operating a pointing device such as a mouse or trackball, or whose mouse is not working at the moment, or who prefer to use a keyboard for input whenever possible.\n\n## Focusable elements should have interactive semantics\n\nIf an element can be focused using the keyboard, then it should be interactive; that is, the user should be able to do something to it and produce a change of some kind (for example, activating a link or changing an option).\n...\nMost interactive elements are focusable by default; you can make an element focusable by adding a `tabindex=0` attribute value to it. However, you should only add `tabindex` if you have also made the element interactive, for example, by defining appropriate event handlers keyboard events.\n...\nThe `tabindex` attribute indicates that an element is focusable using the keyboard. A value of zero indicates that the element is part of the default focus order, which is based on the ordering of elements in the HTML document. A positive value puts the element ahead of those in the default ordering; elements with positive values are focused in the order of their `tabindex` values (1, then 2, then 3, etc.).\n...\nIf an element can be clicked with a pointing device, such as a mouse, then it should also be focusable using the keyboard, and the user should be able to do something by interacting with it.\n...\n## Interactive elements must be able to be activated using a keyboard\n\nIf the user can interact with an element using touch or a pointing device, then the element should also support interacting using the keyboard. That is, if you have defined event handlers for touch or click events, you should also define them for keyboard events. The keyboard event handlers should enable effectively the same interaction as the touch or click handlers.\n\n## Interactive elements must be focusable\n\nIf the user can interact with an element (for example, using touch or a pointing device), then it should be focusable using the keyboard. You can make it focusable by adding a `tabindex=0` attribute value to it. That will add the element to the list of elements that can be focused by pressing the Tab key, in the sequence of such elements as defined in the HTML document.\n\n## Focusable element must have focus styling\n\nAny element that can receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes.\n\nStandard focusable elements such as links and input fields are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive.",
+          "publishedAt": "2025-12-17T00:00:00.000Z",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "127b01c278760dcea07e9d94aa246911506f0d25a4f2aa8be43588d06bc83d61",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Operable",
+          "title": "Operable - Accessibility | MDN",
+          "snippet": "## Guideline 2.1 — Keyboard Accessible: Make all functionality available from a keyboard\n\nThis guideline covers the necessity of making core website functionality available via a keyboard in addition to other means (e.g., mouse), so that users that rely on keyboard controls can access them.\n\n| Success criteria | How to conform to the criteria | Practical resource |\n| --- | --- | --- |\n| 2.1.1 Keyboard (A) | All functionality should be accessible using keyboard controls, unless it cannot be done using the keyboard (e.g., freehand drawing). Built-in controls should be used where possible (e.g., tabbing through form controls), and you should only build in custom functionality where needed. | See Use semantic UI controls where possible and Building keyboard accessibility back in |\n| 2.1.2 No keyboard trap (A) | When entering a section of functionality using the keyboard, you should be able to get out of that section again using only the keyboard. For example, if you press Enter/ Return on a focused button to open an options window, you should be able to close that window again and return to the main content using the keyboard. This is very important so that keyboard users do not get trapped on specific sections of your apps. | |\n| 2.1.3 Keyboard — all functionality (AAA) | This is a further step beyond criterion 2.1.1. To achieve AAA conformance, all functionality should be accessible using keyboard controls — with no exceptions. | See Use semantic UI controls where possible and Building keyboard accessibility back in |\n| 2.1.4 Character Key Shortcuts (A) | If a single character key shortcut exists, then at least one of the following is true: single character key shortcuts can be turned off, remapped or are only active when the relevant user interface component is in focus. | Understanding Character Key Shortcuts |\n...\n| 2.4.3 Logical focus order (A) | The \"tabbing order\" of focusable page features (e.g., links, buttons, form inputs) makes logical sense, meaning that the page is still usable by non-sighted/keyboard users. | See Use semantic UI controls where possible for general advice on tabbing to controls. If you need to place elements in an unusual layout, it is better to make sure the source order is sensible, then use CSS features like positioning to handle the layout. |\n...\n| 2.4.7 Visible focus for focusable elements (AA) | When tabbing through focusable elements such as links or form inputs, there should be a visual indicator to show you which element currently has focus. This is usually a dotted or blue outline by default (depending on browser, platform, etc.), but this can be overridden by CSS. | See Use semantic UI controls where possible. |\n...\n| 2.4.11 Focus not obscured (Minimum) (AA) | When a user interface component receives keyboard focus, the component is not entirely hidden due to containing author-created content. Note: If the interface's content can be repositioned by the user, then only the initial position of the user-movable content is considered for testing to conform to this standard. Also, content opened by the user may obscure the component receiving focus. Furthermore, if the user can reveal the focused component without changing keyboard focus, the component with focus is not considered hidden for conformance and testing purposes. | Check out Understanding focus not obscured (Minimum) to learn more about this standard. |\n| 2.4.12 Focus not obscured (Enhanced) (AAA) | Follows the rules as 2.4.11 except when a user interface component receives focus, no part of the component can be hidden by author-created content. If the interface is configurable, only the initial positions of user-movable content are considered for testing and meeting of this standard. | Check out Understanding focus not obscured (Enhanced) (Level AAA) to learn more about this standard. |\n| 2.4.13 Focus appearance (AAA) | When the keyboard focus indicator is visible, the area of the focus indicator meets all the following: Must be at least as large as the area of a `2px` thick perimeter of the unfocused component or sub-component, which includes component's content, border, and background, excluding outer shadows or glow effects. Needs to have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states The exceptions to this are: The focus indicator is determined by the user and cannot be adjusted by the author. The focus indicator and the indicator's background color are not modified by the author. | Check out Understanding focus appearance (Level AAA) to learn more about this standard. |",
+          "provider": "exa"
+        },
+        {
+          "type": "source-url",
+          "sourceId": "56dc311e981756452eedae830a7ec930f24cc18d039cf121ee7bdb85dd6c3dda",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus",
+          "title": "HTMLElement: focus() method - Web APIs | MDN",
+          "snippet": "The `HTMLElement.focus()` method sets focus on the specified element, if it can be focused. The focused element is the element that will receive keyboard and similar events by default.\n\nBy default the browser will scroll the element into view after focusing it, and it may also provide visible indication of the focused element (typically by displaying a \"focus ring\" around the element). Parameter options are provided to disable the default scrolling and force visible indication on elements.\n...\n`preventScroll` Optional\n: A boolean value indicating whether or not the browser should scroll the document to bring the newly-focused element into view. A value of `false` for `preventScroll` (the default) means that the browser will scroll the element into view after focusing it. If `preventScroll` is set to `true`, no scrolling will occur.\n`focusVisible` Optional \n: A boolean value that should be set to `true` to force, or `false` to prevent visible indication that the element is focused. If the property is not specified, a browser will provide visible indication if it determines that this would improve accessibility for users.\n...\nThe code below adds an event handler to set the focus on the text field when the button is pressed. Note that most browsers will automatically add visible indication (a \"focus ring\") for a focused text field, so the code does not set `focusVisible` to `true`.\n...\nBrowsers do not usually show visible focus indication on button elements when focus is set programmatically, so the effect of selecting the middle button may not be obvious. However provided the `focusVisible` option is supported on your browser, you should see focus changing on the left-most button when the right-most button is selected.\n...\n- If you call `HTMLElement.focus()` from a mousedown event handler, you must call `event.preventDefault()` to keep the focus from leaving the `HTMLElement`\n- Behavior of the focus in relation to different HTML features like `tabindex` or shadow dom, which previously remained under-specified, were updated in October 2019. See the WHATWG blog for more information.",
+          "provider": "exa"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXSU5kD00P0hlIdSUU",
+      "messageID": "msg_g0VXSU57Z00HsiqjoKXp",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+          "provider": "opencorvus-webfetch",
+          "title": "Keyboard accessible - Accessibility | MDN"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXSU6yd00Ml0uawbCa",
+      "messageID": "msg_g0VXSU67f003OgX1T47R",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+          "url": "https://www.w3.org/TR/WCAG22/",
+          "provider": "opencorvus-webfetch",
+          "title": "Web Content Accessibility Guidelines (WCAG) 2.2"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXSU9sJ00MO7qf3ssD",
+      "messageID": "msg_g0VXSU7L900qUlEbvbyh",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+          "url": "https://www.w3.org/TR/WCAG22/",
+          "provider": "opencorvus-webfetch",
+          "title": "Web Content Accessibility Guidelines (WCAG) 2.2"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXSUBE300IooYCQu3a",
+      "messageID": "msg_g0VXSUAB200zgs1fzTf6",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+          "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+          "provider": "opencorvus-webfetch",
+          "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C"
+        }
+      ]
+    },
+    {
+      "partID": "prt_g0VXSUUsD005SGDA8edj",
+      "messageID": "msg_g0VXSUTjd00TWdvtaeHv",
+      "sessionID": "ses_htaCwoMcecKcn75injAb",
+      "outcome": "completed",
+      "sources": [
+        {
+          "type": "source-url",
+          "sourceId": "53ed4cec33e6d9ae9dd9a1b28ae46a197af8938ff24663928db2197f9cf3b38b",
+          "url": "https://www.w3.org/WAI/WCAG22/Understanding/keyboard",
+          "provider": "opencorvus-webfetch",
+          "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI | W3C"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "partID": "prt_g0VXSU3bv00Iqw3NP3db",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460587692:0000000000000031:0000000000000000:part:prt_g0VXSU3bv00Iqw3NP3db",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+        "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU3c0000XP3UwpA9",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460587696:0000000000000031:0000000000000000:part:prt_g0VXSU3c0000XP3UwpA9",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+        "snippet": "- 2.4.11 Focus Not Obscured (Minimum) (AA)\n- 2.4.12 Focus Not Obscured (Enhanced) (AAA)\n- 2.4.13 Focus Appearance (AAA)\n- 2.5.7 Dragging Movements (AA)\n- 2.5.8 Target Size (Minimum) (AA)\n- 3.2.6 Consistent Help (A)\n- 3.3.7 Redundant Entry (A)\n- 3.3.8 Accessible Authentication (Minimum) (AA)\n- 3.3.9 Accessible Authentication (Enhanced) (AAA)\n...\nSuccess Criterion 1.4.13 \n\nContent on Hover or\n...\nSuccess Criterion 2.1.1 \n\nKeyboard\n\nUnderstanding Keyboard | How to Meet Keyboard\n\n(Level A)\n\nAll ... of the content is operable through a keyboard interface without requiring specific timings for individual keystrokes, ... where the underlying function requires ... depends on the path of the user' ... movement and not just the endpoints.\n...\nSuccess Criterion 2.1.3 \n\nKeyboard (No Exception)\n\nUnderstanding Keyboard ( ... Exception) | ... Meet Keyboard (No Exception)\n...\nSuccess Criterion 2.4.7 \n\nFocus Visible\n\nUnderstanding Focus Visible | How to Meet Focus Visible\n\n(Level AA)\n\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\nSuccess Criterion 2.4.8 \n\nLocation\n...\nSuccess Criterion ... .4.11 \n\nFocus Not Obscured (Minimum)\n\nUnderstanding Focus Not Obscured (Minimum) | How to Meet Focus Not Obscured (Minimum)\n\n(Level AA)\n...\nSuccess Criterion 2.4.12 \n\nFocus Not Obscured (Enhanced)\n\nUnderstanding Focus Not Obscured (Enhanced) | How to Meet Focus Not Obscured (Enhanced)\n...\ncreated content.\n\nSuccess Criterion 2.4.13 \n\nFocus Appearance\n\nUnderstanding Focus Appearance | How to Meet Focus Appearance\n\n(Level AAA)\n\nWhen the keyboard focus indicator is visible, an area of the focus indicator meets all the following:\n\n- is at least as large as the area of a 2 CSS pixel thick perimeter of the unfocused component or sub-component, and\n- has a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states.\n\n- The focus indicator is determined by the user agent and cannot be adjusted by the author, or\n- The focus indicator and the indicator's background color are not modified by the author.",
+        "publishedAt": "2024-12-12T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU3c300du4QRnMTY",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460587699:0000000000000031:0000000000000000:part:prt_g0VXSU3c300du4QRnMTY",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI",
+        "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible. \n\n##\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nindicators are visual information required to identify the ... state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the ... Focus Visible section of Understanding 1.4.11 Non ... text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU3c600Tg5nkvf3r",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460587702:0000000000000031:0000000000000000:part:prt_g0VXSU3c600Tg5nkvf3r",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "5b642dae5e283129130936cb06ce739b8c07043127fe13fbcdcecfc8d37a9b15",
+        "url": "https://www.w3.org/WAI/WCAG22/Techniques/failures/F55",
+        "title": "Technique F55:Failure of Success Criteria 2.1.1, 2.4.7, ...",
+        "snippet": "F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received | WAI | W3C\n\n# Technique F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n...\n- 2.1.1 Keyboard (Failure) \n- 2.4.7 Focus Visible (Failure) \n- 2.4.13 Focus Appearance (Failure) \n- 3.2.1 On Focus (Failure) \n\nThis failure applies to all content that supports script.\n...\nContent that normally receives focus when the content is accessed by keyboard may have this focus removed by scripting. This is sometimes done when designer considers the system focus indicator to be unsightly. However, the system focus indicator is an important part of accessibility for keyboard users. In addition, this practice removes focus from the content entirely, which means that the content can only be operated by a pointing device such as a mouse.\n...\n1. Use the keyboard to verify that you can get to all interactive elements using the keyboard. \n2. Check that when focus is placed on each element, focus remains there until user moves it.\n...\n- If #2 is false then this failure condition applies and content fails the Success Criterion.",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU54q00fUFaRdEnC",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460593328:0000000000000031:0000000000000000:part:prt_g0VXSU54q00fUFaRdEnC",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - MDN Web Docs - Mozilla",
+        "snippet": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and control it. This includes users of screen readers, but can also include users who have trouble operating a pointing device such as a mouse or trackball, or whose mouse is not working at the moment, or who prefer to use a keyboard for input whenever possible.\n\n## Focusable elements should have interactive semantics\n\nIf an element can be focused using the keyboard, then it should be interactive; that is, the user should be able to do something to it and produce a change of some kind (for example, activating a link or changing an option).\n...\nMost interactive elements are focusable by default; you can make an element focusable by adding a `tabindex=0` attribute value to it. However, you should only add `tabindex` if you have also made the element interactive, for example, by defining appropriate event handlers keyboard events.\n...\nThe `tabindex` attribute indicates that an element is focusable using the keyboard. A value of zero indicates that the element is part of the default focus order, which is based on the ordering of elements in the HTML document. A positive value puts the element ahead of those in the default ordering; elements with positive values are focused in the order of their `tabindex` values (1, then 2, then 3, etc.).\n...\nIf an element can be clicked with a pointing device, such as a mouse, then it should also be focusable using the keyboard, and the user should be able to do something by interacting with it.\n...\n## Interactive elements must be able to be activated using a keyboard\n\nIf the user can interact with an element using touch or a pointing device, then the element should also support interacting using the keyboard. That is, if you have defined event handlers for touch or click events, you should also define them for keyboard events. The keyboard event handlers should enable effectively the same interaction as the touch or click handlers.\n\n## Interactive elements must be focusable\n\nIf the user can interact with an element (for example, using touch or a pointing device), then it should be focusable using the keyboard. You can make it focusable by adding a `tabindex=0` attribute value to it. That will add the element to the list of elements that can be focused by pressing the Tab key, in the sequence of such elements as defined in the HTML document.\n\n## Focusable element must have focus styling\n\nAny element that can receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes.\n\nStandard focusable elements such as links and input fields are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive.",
+        "publishedAt": "2025-12-17T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU54t00ZjU447ZOS",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460593331:0000000000000031:0000000000000000:part:prt_g0VXSU54t00ZjU447ZOS",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "127b01c278760dcea07e9d94aa246911506f0d25a4f2aa8be43588d06bc83d61",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Operable",
+        "title": "Operable - Accessibility | MDN",
+        "snippet": "## Guideline 2.1 — Keyboard Accessible: Make all functionality available from a keyboard\n\nThis guideline covers the necessity of making core website functionality available via a keyboard in addition to other means (e.g., mouse), so that users that rely on keyboard controls can access them.\n\n| Success criteria | How to conform to the criteria | Practical resource |\n| --- | --- | --- |\n| 2.1.1 Keyboard (A) | All functionality should be accessible using keyboard controls, unless it cannot be done using the keyboard (e.g., freehand drawing). Built-in controls should be used where possible (e.g., tabbing through form controls), and you should only build in custom functionality where needed. | See Use semantic UI controls where possible and Building keyboard accessibility back in |\n| 2.1.2 No keyboard trap (A) | When entering a section of functionality using the keyboard, you should be able to get out of that section again using only the keyboard. For example, if you press Enter/ Return on a focused button to open an options window, you should be able to close that window again and return to the main content using the keyboard. This is very important so that keyboard users do not get trapped on specific sections of your apps. | |\n| 2.1.3 Keyboard — all functionality (AAA) | This is a further step beyond criterion 2.1.1. To achieve AAA conformance, all functionality should be accessible using keyboard controls — with no exceptions. | See Use semantic UI controls where possible and Building keyboard accessibility back in |\n| 2.1.4 Character Key Shortcuts (A) | If a single character key shortcut exists, then at least one of the following is true: single character key shortcuts can be turned off, remapped or are only active when the relevant user interface component is in focus. | Understanding Character Key Shortcuts |\n...\n| 2.4.3 Logical focus order (A) | The \"tabbing order\" of focusable page features (e.g., links, buttons, form inputs) makes logical sense, meaning that the page is still usable by non-sighted/keyboard users. | See Use semantic UI controls where possible for general advice on tabbing to controls. If you need to place elements in an unusual layout, it is better to make sure the source order is sensible, then use CSS features like positioning to handle the layout. |\n...\n| 2.4.7 Visible focus for focusable elements (AA) | When tabbing through focusable elements such as links or form inputs, there should be a visual indicator to show you which element currently has focus. This is usually a dotted or blue outline by default (depending on browser, platform, etc.), but this can be overridden by CSS. | See Use semantic UI controls where possible. |\n...\n| 2.4.11 Focus not obscured (Minimum) (AA) | When a user interface component receives keyboard focus, the component is not entirely hidden due to containing author-created content. Note: If the interface's content can be repositioned by the user, then only the initial position of the user-movable content is considered for testing to conform to this standard. Also, content opened by the user may obscure the component receiving focus. Furthermore, if the user can reveal the focused component without changing keyboard focus, the component with focus is not considered hidden for conformance and testing purposes. | Check out Understanding focus not obscured (Minimum) to learn more about this standard. |\n| 2.4.12 Focus not obscured (Enhanced) (AAA) | Follows the rules as 2.4.11 except when a user interface component receives focus, no part of the component can be hidden by author-created content. If the interface is configurable, only the initial positions of user-movable content are considered for testing and meeting of this standard. | Check out Understanding focus not obscured (Enhanced) (Level AAA) to learn more about this standard. |\n| 2.4.13 Focus appearance (AAA) | When the keyboard focus indicator is visible, the area of the focus indicator meets all the following: Must be at least as large as the area of a `2px` thick perimeter of the unfocused component or sub-component, which includes component's content, border, and background, excluding outer shadows or glow effects. Needs to have a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states The exceptions to this are: The focus indicator is determined by the user and cannot be adjusted by the author. The focus indicator and the indicator's background color are not modified by the author. | Check out Understanding focus appearance (Level AAA) to learn more about this standard. |",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU54w00CNwF58UQb",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460593334:0000000000000031:0000000000000000:part:prt_g0VXSU54w00CNwF58UQb",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "56dc311e981756452eedae830a7ec930f24cc18d039cf121ee7bdb85dd6c3dda",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus",
+        "title": "HTMLElement: focus() method - Web APIs | MDN",
+        "snippet": "The `HTMLElement.focus()` method sets focus on the specified element, if it can be focused. The focused element is the element that will receive keyboard and similar events by default.\n\nBy default the browser will scroll the element into view after focusing it, and it may also provide visible indication of the focused element (typically by displaying a \"focus ring\" around the element). Parameter options are provided to disable the default scrolling and force visible indication on elements.\n...\n`preventScroll` Optional\n: A boolean value indicating whether or not the browser should scroll the document to bring the newly-focused element into view. A value of `false` for `preventScroll` (the default) means that the browser will scroll the element into view after focusing it. If `preventScroll` is set to `true`, no scrolling will occur.\n`focusVisible` Optional \n: A boolean value that should be set to `true` to force, or `false` to prevent visible indication that the element is focused. If the property is not specified, a browser will provide visible indication if it determines that this would improve accessibility for users.\n...\nThe code below adds an event handler to set the focus on the text field when the button is pressed. Note that most browsers will automatically add visible indication (a \"focus ring\") for a focused text field, so the code does not set `focusVisible` to `true`.\n...\nBrowsers do not usually show visible focus indication on button elements when focus is set programmatically, so the effect of selecting the middle button may not be obvious. However provided the `focusVisible` option is supported on your browser, you should see focus changing on the left-most button when the right-most button is selected.\n...\n- If you call `HTMLElement.focus()` from a mousedown event handler, you must call `event.preventDefault()` to keep the focus from leaving the `HTMLElement`\n- Behavior of the focus in relation to different HTML features like `tabindex` or shadow dom, which previously remained under-specified, were updated in October 2019. See the WHATWG blog for more information.",
+        "provider": "exa"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU65300H66wG0ffk",
+      "messageID": "msg_g0VXSU57Z00HsiqjoKXp",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460597185:0000000000000031:0000000000000000:part:prt_g0VXSU65300H66wG0ffk",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "partID": "prt_g0VXSU7I900JM3puwHzn",
+      "messageID": "msg_g0VXSU67f003OgX1T47R",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460601841:0000000000000031:0000000000000000:part:prt_g0VXSU7I900JM3puwHzn",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "partID": "prt_g0VXSUA6H00eGOF10eON",
+      "messageID": "msg_g0VXSU7L900qUlEbvbyh",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460612637:0000000000000031:0000000000000000:part:prt_g0VXSUA6H00eGOF10eON",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "partID": "prt_g0VXSUBVL00nX06m5ofM",
+      "messageID": "msg_g0VXSUAB200zgs1fzTf6",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460618036:0000000000000031:0000000000000000:part:prt_g0VXSUBVL00nX06m5ofM",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "partID": "prt_g0VXSUVG000GkcDt9uQ3",
+      "messageID": "msg_g0VXSUTjd00TWdvtaeHv",
+      "sessionID": "ses_htaCwoMcecKcn75injAb",
+      "orderKey": "v1:0001791460693964:0000000000000031:0000000000000000:part:prt_g0VXSUVG000GkcDt9uQ3",
+      "payload": {
+        "type": "source-url",
+        "sourceId": "53ed4cec33e6d9ae9dd9a1b28ae46a197af8938ff24663928db2197f9cf3b38b",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/keyboard",
+        "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "texts": [
+    {
+      "partID": "prt_g0VXSTy64002tZSUW9fW",
+      "messageID": "msg_hb3JJzEoZ6ptknRPiqUI",
+      "sessionID": "ses_-zUSXW2uazzvPgB4qVXD",
+      "orderKey": "v1:0001791460566496:0000000000000031:0000000000000000:part:prt_g0VXSTy64002tZSUW9fW",
+      "text": "我会委托只读研究员查阅 W3C/WAI 和 MDN 的官方指南，核对键盘操作与焦点可见的建议，再用简短中文给出比较和来源链接；不会修改文件或另写报告。"
+    },
+    {
+      "partID": "prt_g0VXSU1dA008E00op7iL",
+      "messageID": "msg_g0VXSU0vg002g523SNfC",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460580080:0000000000000031:0000000000000000:part:prt_g0VXSU1dA008E00op7iL",
+      "text": "我会先核对已有检索证据，再搜索并读取 W3C/WAI 与 MDN 官方页面，确认键盘操作和焦点可见的共同建议及要求层级；全程只读，不另写报告。"
+    },
+    {
+      "partID": "prt_g0VXSUCHJ007LVwmEOfJ",
+      "messageID": "msg_g0VXSUBYK00PbLo0vSii",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "orderKey": "v1:0001791460621009:0000000000000031:0000000000000000:part:prt_g0VXSUCHJ007LVwmEOfJ",
+      "text": "已用含 **2026** 的查询搜索，并实际读取官方页面正文，而非仅依据搜索摘要。\n\n**共同点**：两者都强调，网页交互不能只依赖鼠标或触摸，键盘用户也应能完成相应操作；同时应有可见的焦点提示，让用户知道当前操作对象。MDN 给出具体实现建议：使用 `:focus`／`:focus-visible`，可保留浏览器默认焦点样式，自定义组件则需提供相应样式。\n\n**一个需要注意的区别**：WCAG 的成功准则是用于符合性判断的规范性要求，并区分等级；MDN 是面向开发者的实践指导，不能把其建议直接当作 WCAG 条文。例如，键盘操作 **2.1.1 属 A 级**，焦点可见 **2.4.7 属 AA 级**；WAI 的 *Understanding* 页面则明确是非规范性解释，不是新增要求。\n\n### 实际读取的官方来源及关键原文\n\n1. **W3C — [Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/)**  \n   页面标注为 2024-12-12 的 W3C Recommendation。§2.1.1 原文：  \n   > “All functionality of the content is operable through a keyboard interface without requiring specific timings for individual keystrokes…”  \n   该 A 级准则保留底层功能依赖移动路径而非仅端点的例外，不能概括成毫无例外。\n\n2. **W3C/WAI — [Understanding Success Criterion 2.4.7: Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible)**  \n   页面标注更新于 2026-09-06；引述 AA 级准则：  \n   > “Any keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.”  \n   页面同时明确：  \n   > “Informative explanations, not required to meet WCAG”\n\n3. **MDN — [Keyboard accessible](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard)**  \n   页面标注最后修改于 2025-12-17。键盘操作段落要求：  \n   > “The keyboard event handlers should enable effectively the same interaction as the touch or click handlers.”  \n   焦点样式段落指出：  \n   > “Any element that can receive keyboard focus should have visible styling that indicates when the element is focused.”\n\n**措辞提醒**：不要说“所有可聚焦元素都必须可操作”。MDN 对“可聚焦元素应具交互语义”明确列出例外：交互上下文内的 `role=\"document\"` 可通过获得焦点让辅助技术返回浏览模式。\n\n全程只读，未修改文件，也未生成或发布独立报告。"
+    },
+    {
+      "partID": "prt_g0VXSUIq600B5b2AWddY",
+      "messageID": "msg_hc1OabwX3E6s0XSr10F2",
+      "sessionID": "ses_-zUSXW2uazzvPgB4qVXD",
+      "orderKey": "v1:0001791460646230:0000000000000031:0000000000000000:part:prt_g0VXSUIq600B5b2AWddY",
+      "text": "研究员已实际读取双方官方页面：共同点是支持键盘操作，并提供可见的焦点提示。接下来我会请独立核查者确认引用和区别表述，尤其避免把 MDN 的实践建议或 WAI 的解释页当作 WCAG 规范条文。"
+    },
+    {
+      "partID": "prt_g0VXSUNPQ00ves4ukxBk",
+      "messageID": "msg_g0VXSUMcI00fgJ5eIbvt",
+      "sessionID": "ses_htaCwoMcecKcn75injAb",
+      "orderKey": "v1:0001791460663796:0000000000000031:0000000000000000:part:prt_g0VXSUNPQ00ves4ukxBk",
+      "text": "我会先核对研究员实际读取的官方原文和操作记录，再判断这段比较是否准确，以及是否遵守只读、不另写报告的限制。"
+    },
+    {
+      "partID": "prt_g0VXSUaDE005Q3yIQsfw",
+      "messageID": "msg_g0VXSUZM200rWrs2MKan",
+      "sessionID": "ses_htaCwoMcecKcn75injAb",
+      "orderKey": "v1:0001791460713013:0000000000000031:0000000000000000:part:prt_g0VXSUaDE005Q3yIQsfw",
+      "text": "**核查通过，候选答复可接受。** 原始要求中的键盘操作、焦点可见、一个区别及真实官方引用均有依据：\n\n- 研究员确实读取了关键正文：[WCAG 2.2](https://www.w3.org/TR/WCAG22/) 的文本读取收据包含 2.1.1 原文及 A 级标注；[WAI Focus Visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible) 包含 2.4.7、AA 级及非规范性说明；[MDN Keyboard accessible](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard) 包含键盘等效交互、可见焦点、`:focus`／`:focus-visible` 和默认样式建议。\n- “共同强调键盘可操作和焦点可见；WCAG 成功准则用于规范性符合性判断，MDN 偏实现指导，Understanding 非规范性”的概括准确。\n- 完整研究操作记录仅有证据读取、网页搜索和网页读取，没有文件修改或独立报告发布；本次核查也未修改文件或生成报告。\n\n**措辞建议**：不要把键盘支持写成“毫无例外”，2.1.1 对底层功能依赖移动路径的情况保留例外；也不要暗示只有 MDN 提供 CSS 实现建议，WAI 页面同样列有相关技术。候选答复目前没有这两项实质错误，无须强制修正。\n\n读取收据：WCAG `msg_g0VXSU7L900qUlEbvbyh`；WAI `msg_g0VXSUAB200zgs1fzTf6`；MDN `msg_g0VXSU57Z00HsiqjoKXp`，均来自研究员会话 `ses_hr1z2wDm0fI4lBZGJYA9`。"
+    },
+    {
+      "partID": "prt_g0VXSUg7m009V44vC7QA",
+      "messageID": "msg_hIcf4OPAHyrKN36UKqPQ",
+      "sessionID": "ses_-zUSXW2uazzvPgB4qVXD",
+      "orderKey": "v1:0001791460735738:0000000000000031:0000000000000000:part:prt_g0VXSUg7m009V44vC7QA",
+      "text": "已委托只读研究员查阅官方页面，并完成独立核查；未修改文件或另写报告。\n\n**共同点**：W3C/WAI 与 MDN 都强调，网页交互应支持键盘操作，并提供可见的焦点提示，让用户知道当前操作对象。MDN 具体建议保留浏览器默认焦点样式，或用 `:focus`／`:focus-visible` 设置清晰的提示。参见 [WCAG 2.2 键盘准则](https://www.w3.org/TR/WCAG22/#keyboard)、[WAI 焦点可见说明](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible)及 [MDN Keyboard accessible](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard)。\n\n**一个需要注意的区别**：WCAG 成功准则是分等级的规范性要求——键盘操作 **2.1.1 为 A 级**，焦点可见 **2.4.7 为 AA 级**；MDN 则侧重开发实践，不能把其建议直接当作合规条文。另外，WAI 的 *Understanding* 页面本身也是非规范性解释。键盘准则对依赖移动路径的底层功能保留例外，并非毫无例外地要求键盘替代。"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "art_g0VXSUjaw003w2bC6w3m",
+      "payload": {
+        "orchestrator_session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+        "orchestrator_message_id": "msg_hIcf4OPAHyrKN36UKqPQ",
+        "tool_call_id": "call_926642983ffc4b16b4144f74155778c8",
+        "tool_part_id": "prt_g0VXSUiE800pKgP5l0d3",
+        "evidence_locators": [
+          {
+            "source": "session_message",
+            "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+            "message_id": "msg_g0VXSUBYK00PbLo0vSii"
+          },
+          {
+            "source": "session_message",
+            "session_id": "ses_htaCwoMcecKcn75injAb",
+            "message_id": "msg_g0VXSUZM200rWrs2MKan"
+          }
+        ],
+        "deliverable_artifact_locators": [],
+        "worker_artifact_locators": [],
+        "accepted_delivery_slice_revision_ids": [],
+        "workflow_binding": {
+          "kind": "direct",
+          "package_revision": {
+            "scope": "built_in",
+            "project_id": null,
+            "namespace": "builtin",
+            "id": "base",
+            "version": "2026.09.30.1",
+            "package_digest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+          }
+        },
+        "time_recorded": 1791460749074
+      }
+    }
+  ],
+  "terminalTools": [
+    {
+      "id": "prt_g0VXSUiE800pKgP5l0d3",
+      "message_id": "msg_hIcf4OPAHyrKN36UKqPQ",
+      "data": {
+        "type": "tool-request",
+        "callID": "call_926642983ffc4b16b4144f74155778c8",
+        "tool": "manage_task",
+        "input": {
+          "summary": "已委托只读研究员搜索并实际读取W3C/WAI与MDN官方页面，独立核查者检查真实读取收据并确认比较及引用准确。已用简短中文交付共同点（键盘操作、焦点可见）及规范性WCAG与MDN实践指导的区别，附实际官方来源链接，并保留键盘准则的例外及Understanding非规范性说明。研究和核查均仅进行证据读取、搜索和网页读取，未修改文件或另写报告；无未解决的必需项。",
+          "evidence_locators": [
+            {
+              "source": "session_message",
+              "session_id": "ses_hr1z2wDm0fI4lBZGJYA9",
+              "message_id": "msg_g0VXSUBYK00PbLo0vSii"
+            },
+            {
+              "source": "session_message",
+              "session_id": "ses_htaCwoMcecKcn75injAb",
+              "message_id": "msg_g0VXSUZM200rWrs2MKan"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_id": null,
+          "action": "complete_task"
+        },
+        "time": {
+          "start": 1791460743820
+        }
+      },
+      "time_created": 1791460749056,
+      "session_id": "ses_-zUSXW2uazzvPgB4qVXD",
+      "outcome_data": "{\"outcome\":\"completed\",\"resultAttemptID\":\"per_hNmP79YxnF7tj8XkLmi1\",\"title\":\"Task Completed\",\"metadata\":{\"opencorvusToolResultControl\":{\"kind\":\"immediate_park\"}},\"time\":{\"end\":1791460751067}}",
+      "outcome": {
+        "outcome": "completed",
+        "resultAttemptID": "per_hNmP79YxnF7tj8XkLmi1",
+        "title": "Task Completed",
+        "metadata": {
+          "opencorvusToolResultControl": {
+            "kind": "immediate_park"
+          }
+        },
+        "time": {
+          "end": 1791460751067
+        }
+      },
+      "orderKey": "v1:0001791460749056:0000000000000031:0000000000000000:part:prt_g0VXSUiE800pKgP5l0d3"
+    }
+  ],
+  "provider": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "state": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

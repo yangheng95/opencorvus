@@ -1,0 +1,3 @@
+# Offscreen return history174 — HELD
+
+[Recall and custody](../../offscreen-return-history-plan-174.md). Preferred original CLOSED153 Task history is unchanged. Proposed18106 credentialless clone has not been created. Existing copy/native-launch helpers are still strict122/116-bound and require separate Root exact adapter admission; current launcher has no900s cap yet. Original DB schema compatibility, served main-Jtr-pZDg, current parent/worker identity and visible return are unqualified. No model/auth/copy/UI/DB/checker execution. Root owns source custody, finite launch/manual observation/whole closure and delivery.

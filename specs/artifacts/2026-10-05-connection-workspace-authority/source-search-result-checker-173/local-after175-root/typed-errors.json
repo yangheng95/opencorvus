@@ -1,0 +1,17 @@
+[
+  {
+    "name": "schema",
+    "errorType": "SearchSourceQualificationError",
+    "code": "SEARCH_SOURCE_PAYLOAD_INVALID"
+  },
+  {
+    "name": "order",
+    "errorType": "SearchSourceQualificationError",
+    "code": "SEARCH_DURABLE_SOURCE_ORDER_MISMATCH"
+  },
+  {
+    "name": "metadata",
+    "errorType": "SearchSourceQualificationError",
+    "code": "SEARCH_DURABLE_SOURCE_PAYLOAD_MISMATCH"
+  }
+]
