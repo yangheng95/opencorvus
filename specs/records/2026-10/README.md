@@ -372,3 +372,6 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [2026-10-09 长 Markdown、Sources 与结算](2026-10-09-rendering-settlement-190-193.md)：190原失败保留，191修单owner结算原因，192/193实际0/6与2SolEOF/native+pairclosed；Rendering未达成，单agent继续。
 
+
+- [2026-10-09 Markdown 返回失败](2026-10-09-markdown-return-194-195.md)：194真实卸载/返回与完成后Rendering截图、高度坍缩和follow重启；native0/6SolEOF/pairclosed，195根因调查尚待实施。
+

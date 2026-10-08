@@ -1,0 +1,65 @@
+{
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 31372,
+        "processInstanceID": "win32:639270743237708540",
+        "occurrenceID": "c4741507-d065-4f32-a75c-03d514b39707"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 68744,
+        "processInstanceID": "win32:639270743229137863",
+        "occurrenceID": "71975f5a-3dfe-41b0-ac46-3dae5b7789cc"
+      }
+    }
+  ],
+  "nativeSettlement": {
+    "occurrence": "markdown-two-turn-194-01-503cc2cd-2c9e-4415-96c8-76be197dd59d",
+    "outcome": "settled",
+    "host": {
+      "pid": 68744,
+      "processInstanceID": "win32:639270743229137863",
+      "occurrenceID": "71975f5a-3dfe-41b0-ac46-3dae5b7789cc"
+    },
+    "target": {
+      "pid": 31372,
+      "processInstanceID": "win32:639270743237708540",
+      "occurrenceID": "c4741507-d065-4f32-a75c-03d514b39707"
+    },
+    "observedAtUtc": "2026-10-08T16:47:29.418Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "occurrence": "markdown-two-turn-194-01-503cc2cd-2c9e-4415-96c8-76be197dd59d",
+  "listeners": null,
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-two-turn-194-01\\runtime\\data\\auth.json",
+      "copiedLength": 2194,
+      "outcome": "removed"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\markdown-two-turn-194-01\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "outcome": "removed"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T16:47:32.6390309Z"
+}

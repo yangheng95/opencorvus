@@ -474,3 +474,6 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [190 长 Markdown](markdown-live-return-190/README.md) / [191 结算竞态](settlement-arbitration-191/README.md) / [192 Sources](settlement-sources-192/README.md) / [193 最终运行器](settlement-final-193/README.md)：190原1保留，192/193实际0、6/2SolEOF和native+pair闭合；单owner原因/固定预算DATA11，3889chars/192px摘要键盘阅读；genericRendering/offscreen reentry未达成。
 
+
+- [194 真实 Rendering 复现](markdown-two-turn-194/README.md) / [195 根因调查](markdown-return-height-investigation-195.md)：真实同ID卸载/返回，两轮结束后截图Rendering、height14391→835/followtrue；原99384=0/6SolEOF/native+pairclosed。没有renderer补丁，原child Dock仍未验。
+

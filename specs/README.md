@@ -2818,3 +2818,6 @@ The current connection-workspace authority record also includes metadata selecti
 
 - [190 长 Markdown](artifacts/2026-10-05-connection-workspace-authority/markdown-live-return-190/README.md) / [191 结算竞态](artifacts/2026-10-05-connection-workspace-authority/settlement-arbitration-191/README.md) / [192 Sources](artifacts/2026-10-05-connection-workspace-authority/settlement-sources-192/README.md) / [193 最终运行器](artifacts/2026-10-05-connection-workspace-authority/settlement-final-193/README.md)：190原launcher1保留；192/193实际0与6/2SolEOF/native+pair闭合；单owner原因/固定预算DATA11，3889chars/192px摘要人工键盘阅读。genericRendering与offscreen reentry未达成。
 
+
+- [194 真实 Rendering 复现](artifacts/2026-10-05-connection-workspace-authority/markdown-two-turn-194/README.md) / [195 根因调查](artifacts/2026-10-05-connection-workspace-authority/markdown-return-height-investigation-195.md)：两轮6019/9446chars，真实卸载/同ID返回；完成后Rendering截图、height14391→835和follow重启。实际launcher0/6SolEOF/native+pairclosed，UI失败未修，单agent继续。
+

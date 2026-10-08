@@ -1,0 +1,1302 @@
+{
+  "scope": "Owned native server request scalars after canonical Target birth; middleware rows retained separately, not exact physical Worker counts",
+  "afterTargetBirth": "2026-10-08T16:38:43.7700000+00:00",
+  "rows": [
+    {
+      "time": "2026-10-08T16:38:49.651Z",
+      "path": "/global/chat/start",
+      "method": "POST",
+      "line": 13
+    },
+    {
+      "time": "2026-10-08T16:38:52.682Z",
+      "path": "/global/chat/start",
+      "method": "POST",
+      "line": 265
+    },
+    {
+      "time": "2026-10-08T16:38:52.732Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 270
+    },
+    {
+      "time": "2026-10-08T16:38:52.828Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 277
+    },
+    {
+      "time": "2026-10-08T16:38:53.345Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 425
+    },
+    {
+      "time": "2026-10-08T16:38:53.347Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 426
+    },
+    {
+      "time": "2026-10-08T16:38:53.858Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 593
+    },
+    {
+      "time": "2026-10-08T16:38:53.860Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 594
+    },
+    {
+      "time": "2026-10-08T16:38:54.371Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 603
+    },
+    {
+      "time": "2026-10-08T16:38:54.373Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 604
+    },
+    {
+      "time": "2026-10-08T16:38:54.896Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 613
+    },
+    {
+      "time": "2026-10-08T16:38:54.898Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 614
+    },
+    {
+      "time": "2026-10-08T16:38:55.403Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 627
+    },
+    {
+      "time": "2026-10-08T16:38:55.406Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 628
+    },
+    {
+      "time": "2026-10-08T16:38:55.915Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 635
+    },
+    {
+      "time": "2026-10-08T16:38:55.918Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 636
+    },
+    {
+      "time": "2026-10-08T16:38:56.430Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 645
+    },
+    {
+      "time": "2026-10-08T16:38:56.432Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 646
+    },
+    {
+      "time": "2026-10-08T16:38:56.943Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 659
+    },
+    {
+      "time": "2026-10-08T16:38:56.946Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 660
+    },
+    {
+      "time": "2026-10-08T16:38:57.464Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 684
+    },
+    {
+      "time": "2026-10-08T16:38:57.467Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "GET",
+      "line": 685
+    },
+    {
+      "time": "2026-10-08T16:39:06.294Z",
+      "path": "/ui",
+      "method": "GET",
+      "line": 845
+    },
+    {
+      "time": "2026-10-08T16:39:06.295Z",
+      "path": "/ui",
+      "method": "GET",
+      "line": 846
+    },
+    {
+      "time": "2026-10-08T16:39:06.301Z",
+      "path": "/ui/",
+      "method": "GET",
+      "line": 847
+    },
+    {
+      "time": "2026-10-08T16:39:06.303Z",
+      "path": "/ui/",
+      "method": "GET",
+      "line": 848
+    },
+    {
+      "time": "2026-10-08T16:39:06.352Z",
+      "path": "/ui/assets/main-BhY0gyMH.js",
+      "method": "GET",
+      "line": 849
+    },
+    {
+      "time": "2026-10-08T16:39:06.354Z",
+      "path": "/ui/assets/main-BhY0gyMH.js",
+      "method": "GET",
+      "line": 850
+    },
+    {
+      "time": "2026-10-08T16:39:11.321Z",
+      "path": "/ui",
+      "method": "GET",
+      "line": 937
+    },
+    {
+      "time": "2026-10-08T16:39:11.321Z",
+      "path": "/ui",
+      "method": "GET",
+      "line": 938
+    },
+    {
+      "time": "2026-10-08T16:39:11.332Z",
+      "path": "/ui/",
+      "method": "GET",
+      "line": 939
+    },
+    {
+      "time": "2026-10-08T16:39:11.334Z",
+      "path": "/ui/",
+      "method": "GET",
+      "line": 940
+    },
+    {
+      "time": "2026-10-08T16:39:11.357Z",
+      "path": "/ui/assets/main-BhY0gyMH.js",
+      "method": "GET",
+      "line": 941
+    },
+    {
+      "time": "2026-10-08T16:39:11.358Z",
+      "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "method": "GET",
+      "line": 942
+    },
+    {
+      "time": "2026-10-08T16:39:11.358Z",
+      "path": "/ui/assets/main-C7sbbVVj.css",
+      "method": "GET",
+      "line": 943
+    },
+    {
+      "time": "2026-10-08T16:39:11.358Z",
+      "path": "/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+      "method": "GET",
+      "line": 944
+    },
+    {
+      "time": "2026-10-08T16:39:11.367Z",
+      "path": "/ui/assets/main-C7sbbVVj.css",
+      "method": "GET",
+      "line": 945
+    },
+    {
+      "time": "2026-10-08T16:39:11.369Z",
+      "path": "/ui/assets/native-menu-surface-contract-Cz1JyKPl.css",
+      "method": "GET",
+      "line": 946
+    },
+    {
+      "time": "2026-10-08T16:39:11.369Z",
+      "path": "/ui/assets/native-menu-surface-contract-b_vimv-0.js",
+      "method": "GET",
+      "line": 947
+    },
+    {
+      "time": "2026-10-08T16:39:11.369Z",
+      "path": "/ui/assets/main-BhY0gyMH.js",
+      "method": "GET",
+      "line": 948
+    },
+    {
+      "time": "2026-10-08T16:39:11.385Z",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "method": "GET",
+      "line": 949
+    },
+    {
+      "time": "2026-10-08T16:39:11.385Z",
+      "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+      "method": "GET",
+      "line": 950
+    },
+    {
+      "time": "2026-10-08T16:39:11.387Z",
+      "path": "/ui/assets/opencorvus-logo-dark-DzLoBvHF.svg",
+      "method": "GET",
+      "line": 953
+    },
+    {
+      "time": "2026-10-08T16:39:11.387Z",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "method": "GET",
+      "line": 954
+    },
+    {
+      "time": "2026-10-08T16:39:11.419Z",
+      "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "method": "GET",
+      "line": 957
+    },
+    {
+      "time": "2026-10-08T16:39:11.425Z",
+      "path": "/ui/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "method": "GET",
+      "line": 958
+    },
+    {
+      "time": "2026-10-08T16:39:11.524Z",
+      "path": "/ui/i18n/zh-CN.json",
+      "method": "GET",
+      "line": 959
+    },
+    {
+      "time": "2026-10-08T16:39:11.524Z",
+      "path": "/ui/i18n/en-US.json",
+      "method": "GET",
+      "line": 960
+    },
+    {
+      "time": "2026-10-08T16:39:11.525Z",
+      "path": "/ui/i18n/zh-CN.json",
+      "method": "GET",
+      "line": 961
+    },
+    {
+      "time": "2026-10-08T16:39:11.526Z",
+      "path": "/ui/i18n/en-US.json",
+      "method": "GET",
+      "line": 962
+    },
+    {
+      "time": "2026-10-08T16:39:11.705Z",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "method": "GET",
+      "line": 969
+    },
+    {
+      "time": "2026-10-08T16:39:11.708Z",
+      "path": "/ui/assets/opencorvus-logo-light-D2HTuSVO.svg",
+      "method": "GET",
+      "line": 971
+    },
+    {
+      "time": "2026-10-08T16:39:11.722Z",
+      "path": "/global/composer-references",
+      "method": "GET",
+      "line": 972
+    },
+    {
+      "time": "2026-10-08T16:39:11.732Z",
+      "path": "/work-ledger/events",
+      "method": "GET",
+      "line": 975
+    },
+    {
+      "time": "2026-10-08T16:39:11.735Z",
+      "path": "/work-ledger/events",
+      "method": "GET",
+      "line": 976
+    },
+    {
+      "time": "2026-10-08T16:39:11.736Z",
+      "path": "/global/projects/discover",
+      "method": "GET",
+      "line": 977
+    },
+    {
+      "time": "2026-10-08T16:39:11.741Z",
+      "path": "/global/projects/discover",
+      "method": "GET",
+      "line": 978
+    },
+    {
+      "time": "2026-10-08T16:39:11.750Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "line": 984
+    },
+    {
+      "time": "2026-10-08T16:39:11.755Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "line": 985
+    },
+    {
+      "time": "2026-10-08T16:39:11.755Z",
+      "path": "/expert-squad/catalog",
+      "method": "GET",
+      "line": 986
+    },
+    {
+      "time": "2026-10-08T16:39:11.771Z",
+      "path": "/chat/capability",
+      "method": "GET",
+      "line": 1000
+    },
+    {
+      "time": "2026-10-08T16:39:11.772Z",
+      "path": "/expert-squad/search",
+      "method": "GET",
+      "line": 1003
+    },
+    {
+      "time": "2026-10-08T16:39:11.774Z",
+      "path": "/expert-squad/search",
+      "method": "GET",
+      "line": 1004
+    },
+    {
+      "time": "2026-10-08T16:39:11.774Z",
+      "path": "/mission-skill/catalog",
+      "method": "GET",
+      "line": 1005
+    },
+    {
+      "time": "2026-10-08T16:39:11.785Z",
+      "path": "/global/composer-references",
+      "method": "GET",
+      "line": 1008
+    },
+    {
+      "time": "2026-10-08T16:39:11.786Z",
+      "path": "/global/tasks",
+      "method": "GET",
+      "line": 1009
+    },
+    {
+      "time": "2026-10-08T16:39:11.789Z",
+      "path": "/global/tasks",
+      "method": "GET",
+      "line": 1010
+    },
+    {
+      "time": "2026-10-08T16:39:11.790Z",
+      "path": "/mission-skill/catalog",
+      "method": "GET",
+      "line": 1011
+    },
+    {
+      "time": "2026-10-08T16:39:11.791Z",
+      "path": "/path",
+      "method": "GET",
+      "line": 1012
+    },
+    {
+      "time": "2026-10-08T16:39:11.793Z",
+      "path": "/path",
+      "method": "GET",
+      "line": 1022
+    },
+    {
+      "time": "2026-10-08T16:39:11.793Z",
+      "path": "/vcs",
+      "method": "GET",
+      "line": 1023
+    },
+    {
+      "time": "2026-10-08T16:39:11.868Z",
+      "path": "/chat/capability",
+      "method": "GET",
+      "line": 1109
+    },
+    {
+      "time": "2026-10-08T16:39:11.869Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 1110
+    },
+    {
+      "time": "2026-10-08T16:39:11.878Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 1111
+    },
+    {
+      "time": "2026-10-08T16:39:11.879Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 1112
+    },
+    {
+      "time": "2026-10-08T16:39:11.882Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 1113
+    },
+    {
+      "time": "2026-10-08T16:39:12.087Z",
+      "path": "/expert-squad/catalog",
+      "method": "GET",
+      "line": 1119
+    },
+    {
+      "time": "2026-10-08T16:39:12.094Z",
+      "path": "/expert-squad/inspect",
+      "method": "GET",
+      "line": 1120
+    },
+    {
+      "time": "2026-10-08T16:39:12.511Z",
+      "path": "/expert-squad/inspect",
+      "method": "GET",
+      "line": 1220
+    },
+    {
+      "time": "2026-10-08T16:39:13.277Z",
+      "path": "/vcs",
+      "method": "GET",
+      "line": 1237
+    },
+    {
+      "time": "2026-10-08T16:39:13.281Z",
+      "path": "/experimental/project-memory",
+      "method": "GET",
+      "line": 1238
+    },
+    {
+      "time": "2026-10-08T16:39:13.284Z",
+      "path": "/experimental/project-memory",
+      "method": "GET",
+      "line": 1239
+    },
+    {
+      "time": "2026-10-08T16:39:13.284Z",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "line": 1240
+    },
+    {
+      "time": "2026-10-08T16:39:13.286Z",
+      "path": "/mcp",
+      "method": "GET",
+      "line": 1245
+    },
+    {
+      "time": "2026-10-08T16:39:13.287Z",
+      "path": "/config",
+      "method": "GET",
+      "line": 1248
+    },
+    {
+      "time": "2026-10-08T16:39:13.288Z",
+      "path": "/channel",
+      "method": "GET",
+      "line": 1253
+    },
+    {
+      "time": "2026-10-08T16:39:13.295Z",
+      "path": "/mcp",
+      "method": "GET",
+      "line": 1260
+    },
+    {
+      "time": "2026-10-08T16:39:13.295Z",
+      "path": "/config",
+      "method": "GET",
+      "line": 1261
+    },
+    {
+      "time": "2026-10-08T16:39:13.299Z",
+      "path": "/channel",
+      "method": "GET",
+      "line": 1262
+    },
+    {
+      "time": "2026-10-08T16:39:13.433Z",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "line": 1295
+    },
+    {
+      "time": "2026-10-08T16:39:21.671Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "line": 1440
+    },
+    {
+      "time": "2026-10-08T16:39:21.688Z",
+      "path": "/mailbox",
+      "method": "GET",
+      "line": 1441
+    },
+    {
+      "time": "2026-10-08T16:39:21.696Z",
+      "path": "/expert-squad/catalog",
+      "method": "GET",
+      "line": 1442
+    },
+    {
+      "time": "2026-10-08T16:39:21.709Z",
+      "path": "/expert-squad/search",
+      "method": "GET",
+      "line": 1447
+    },
+    {
+      "time": "2026-10-08T16:39:21.710Z",
+      "path": "/expert-squad/search",
+      "method": "GET",
+      "line": 1448
+    },
+    {
+      "time": "2026-10-08T16:39:21.710Z",
+      "path": "/mission-skill/catalog",
+      "method": "GET",
+      "line": 1449
+    },
+    {
+      "time": "2026-10-08T16:39:21.714Z",
+      "path": "/chat/capability",
+      "method": "GET",
+      "line": 1450
+    },
+    {
+      "time": "2026-10-08T16:39:21.723Z",
+      "path": "/mission-skill/catalog",
+      "method": "GET",
+      "line": 1457
+    },
+    {
+      "time": "2026-10-08T16:39:21.724Z",
+      "path": "/coding/chat/session/ses_hUi7QzpFf5qouMD32mKI",
+      "method": "GET",
+      "line": 1460
+    },
+    {
+      "time": "2026-10-08T16:39:21.727Z",
+      "path": "/coding/chat/session/ses_hUi7QzpFf5qouMD32mKI",
+      "method": "GET",
+      "line": 1461
+    },
+    {
+      "time": "2026-10-08T16:39:21.747Z",
+      "path": "/chat/capability",
+      "method": "GET",
+      "line": 1484
+    },
+    {
+      "time": "2026-10-08T16:39:21.761Z",
+      "path": "/config",
+      "method": "GET",
+      "line": 1487
+    },
+    {
+      "time": "2026-10-08T16:39:21.762Z",
+      "path": "/channel",
+      "method": "GET",
+      "line": 1492
+    },
+    {
+      "time": "2026-10-08T16:39:21.763Z",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "line": 1495
+    },
+    {
+      "time": "2026-10-08T16:39:21.764Z",
+      "path": "/mcp",
+      "method": "GET",
+      "line": 1500
+    },
+    {
+      "time": "2026-10-08T16:39:21.769Z",
+      "path": "/config",
+      "method": "GET",
+      "line": 1503
+    },
+    {
+      "time": "2026-10-08T16:39:21.771Z",
+      "path": "/channel",
+      "method": "GET",
+      "line": 1504
+    },
+    {
+      "time": "2026-10-08T16:39:21.772Z",
+      "path": "/mcp",
+      "method": "GET",
+      "line": 1509
+    },
+    {
+      "time": "2026-10-08T16:39:21.773Z",
+      "path": "/path",
+      "method": "GET",
+      "line": 1510
+    },
+    {
+      "time": "2026-10-08T16:39:21.773Z",
+      "path": "/path",
+      "method": "GET",
+      "line": 1511
+    },
+    {
+      "time": "2026-10-08T16:39:21.774Z",
+      "path": "/vcs",
+      "method": "GET",
+      "line": 1512
+    },
+    {
+      "time": "2026-10-08T16:39:21.790Z",
+      "path": "/global/tasks",
+      "method": "GET",
+      "line": 1513
+    },
+    {
+      "time": "2026-10-08T16:39:21.792Z",
+      "path": "/global/tasks",
+      "method": "GET",
+      "line": 1514
+    },
+    {
+      "time": "2026-10-08T16:39:22.139Z",
+      "path": "/expert-squad/catalog",
+      "method": "GET",
+      "line": 1564
+    },
+    {
+      "time": "2026-10-08T16:39:22.147Z",
+      "path": "/expert-squad/inspect",
+      "method": "GET",
+      "line": 1565
+    },
+    {
+      "time": "2026-10-08T16:39:22.156Z",
+      "path": "/expert-squad/inspect",
+      "method": "GET",
+      "line": 1566
+    },
+    {
+      "time": "2026-10-08T16:39:22.219Z",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "line": 1578
+    },
+    {
+      "time": "2026-10-08T16:39:22.300Z",
+      "path": "/vcs",
+      "method": "GET",
+      "line": 1583
+    },
+    {
+      "time": "2026-10-08T16:39:22.313Z",
+      "path": "/experimental/project-memory",
+      "method": "GET",
+      "line": 1584
+    },
+    {
+      "time": "2026-10-08T16:39:22.316Z",
+      "path": "/experimental/project-memory",
+      "method": "GET",
+      "line": 1585
+    },
+    {
+      "time": "2026-10-08T16:39:22.316Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/conversation",
+      "method": "GET",
+      "line": 1586
+    },
+    {
+      "time": "2026-10-08T16:39:22.342Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/conversation",
+      "method": "GET",
+      "line": 1587
+    },
+    {
+      "time": "2026-10-08T16:39:22.386Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/config",
+      "method": "GET",
+      "line": 1588
+    },
+    {
+      "time": "2026-10-08T16:39:22.399Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/config",
+      "method": "GET",
+      "line": 1591
+    },
+    {
+      "time": "2026-10-08T16:39:22.399Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/events",
+      "method": "GET",
+      "line": 1592
+    },
+    {
+      "time": "2026-10-08T16:39:22.415Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/events",
+      "method": "GET",
+      "line": 1593
+    },
+    {
+      "time": "2026-10-08T16:39:22.416Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 1594
+    },
+    {
+      "time": "2026-10-08T16:39:22.423Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 1595
+    },
+    {
+      "time": "2026-10-08T16:39:22.424Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/config",
+      "method": "GET",
+      "line": 1596
+    },
+    {
+      "time": "2026-10-08T16:39:22.432Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/config",
+      "method": "GET",
+      "line": 1599
+    },
+    {
+      "time": "2026-10-08T16:40:15.533Z",
+      "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+      "method": "GET",
+      "line": 2537
+    },
+    {
+      "time": "2026-10-08T16:40:15.542Z",
+      "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+      "method": "GET",
+      "line": 2538
+    },
+    {
+      "time": "2026-10-08T16:40:15.542Z",
+      "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+      "method": "GET",
+      "line": 2539
+    },
+    {
+      "time": "2026-10-08T16:40:15.542Z",
+      "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+      "method": "GET",
+      "line": 2540
+    },
+    {
+      "time": "2026-10-08T16:40:15.557Z",
+      "path": "/ui/assets/noto-sans-sc-119-wght-normal-BfzSEbFz.woff2",
+      "method": "GET",
+      "line": 2541
+    },
+    {
+      "time": "2026-10-08T16:40:15.559Z",
+      "path": "/ui/assets/noto-sans-sc-116-wght-normal-vdFVzbO2.woff2",
+      "method": "GET",
+      "line": 2542
+    },
+    {
+      "time": "2026-10-08T16:40:15.559Z",
+      "path": "/ui/assets/noto-sans-sc-118-wght-normal-BPEb0gM9.woff2",
+      "method": "GET",
+      "line": 2543
+    },
+    {
+      "time": "2026-10-08T16:40:15.562Z",
+      "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+      "method": "GET",
+      "line": 2544
+    },
+    {
+      "time": "2026-10-08T16:40:15.562Z",
+      "path": "/ui/assets/noto-sans-sc-117-wght-normal-Dsz3vkzU.woff2",
+      "method": "GET",
+      "line": 2545
+    },
+    {
+      "time": "2026-10-08T16:40:15.564Z",
+      "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+      "method": "GET",
+      "line": 2546
+    },
+    {
+      "time": "2026-10-08T16:40:15.564Z",
+      "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+      "method": "GET",
+      "line": 2547
+    },
+    {
+      "time": "2026-10-08T16:40:15.568Z",
+      "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+      "method": "GET",
+      "line": 2548
+    },
+    {
+      "time": "2026-10-08T16:40:15.574Z",
+      "path": "/ui/assets/noto-sans-sc-114-wght-normal-CRH9SDZu.woff2",
+      "method": "GET",
+      "line": 2549
+    },
+    {
+      "time": "2026-10-08T16:40:15.577Z",
+      "path": "/ui/assets/noto-sans-sc-113-wght-normal-OgQXOX6x.woff2",
+      "method": "GET",
+      "line": 2550
+    },
+    {
+      "time": "2026-10-08T16:40:15.578Z",
+      "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+      "method": "GET",
+      "line": 2551
+    },
+    {
+      "time": "2026-10-08T16:40:15.579Z",
+      "path": "/ui/assets/noto-sans-sc-115-wght-normal-BN__2iBG.woff2",
+      "method": "GET",
+      "line": 2552
+    },
+    {
+      "time": "2026-10-08T16:40:15.581Z",
+      "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+      "method": "GET",
+      "line": 2553
+    },
+    {
+      "time": "2026-10-08T16:40:15.582Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "POST",
+      "line": 2554
+    },
+    {
+      "time": "2026-10-08T16:40:15.842Z",
+      "path": "/ui/assets/noto-sans-sc-111-wght-normal-ClFr5QXM.woff2",
+      "method": "GET",
+      "line": 2575
+    },
+    {
+      "time": "2026-10-08T16:40:15.842Z",
+      "path": "/ui/assets/noto-sans-sc-110-wght-normal-D2JBr045.woff2",
+      "method": "GET",
+      "line": 2576
+    },
+    {
+      "time": "2026-10-08T16:40:15.842Z",
+      "path": "/ui/assets/noto-sans-sc-112-wght-normal-CiZxJMyY.woff2",
+      "method": "GET",
+      "line": 2577
+    },
+    {
+      "time": "2026-10-08T16:40:16.091Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 2710
+    },
+    {
+      "time": "2026-10-08T16:40:16.096Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 2711
+    },
+    {
+      "time": "2026-10-08T16:40:16.096Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 2712
+    },
+    {
+      "time": "2026-10-08T16:40:16.097Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 2713
+    },
+    {
+      "time": "2026-10-08T16:40:16.645Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 2890
+    },
+    {
+      "time": "2026-10-08T16:40:16.651Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 2891
+    },
+    {
+      "time": "2026-10-08T16:40:16.657Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 2892
+    },
+    {
+      "time": "2026-10-08T16:40:16.659Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 2893
+    },
+    {
+      "time": "2026-10-08T16:40:24.879Z",
+      "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+      "method": "GET",
+      "line": 3108
+    },
+    {
+      "time": "2026-10-08T16:40:24.890Z",
+      "path": "/ui/assets/noto-sans-sc-109-wght-normal-CnjNbNmw.woff2",
+      "method": "GET",
+      "line": 3109
+    },
+    {
+      "time": "2026-10-08T16:40:32.859Z",
+      "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+      "method": "GET",
+      "line": 3505
+    },
+    {
+      "time": "2026-10-08T16:40:32.867Z",
+      "path": "/ui/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2",
+      "method": "GET",
+      "line": 3510
+    },
+    {
+      "time": "2026-10-08T16:40:33.017Z",
+      "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+      "method": "GET",
+      "line": 3527
+    },
+    {
+      "time": "2026-10-08T16:40:33.025Z",
+      "path": "/ui/assets/noto-sans-sc-108-wght-normal-7aXvqIa2.woff2",
+      "method": "GET",
+      "line": 3528
+    },
+    {
+      "time": "2026-10-08T16:40:38.685Z",
+      "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+      "method": "GET",
+      "line": 3883
+    },
+    {
+      "time": "2026-10-08T16:40:38.702Z",
+      "path": "/ui/assets/noto-sans-sc-106-wght-normal-D6uUHw3w.woff2",
+      "method": "GET",
+      "line": 3884
+    },
+    {
+      "time": "2026-10-08T16:40:56.050Z",
+      "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+      "method": "GET",
+      "line": 4926
+    },
+    {
+      "time": "2026-10-08T16:40:56.061Z",
+      "path": "/ui/assets/noto-sans-sc-107-wght-normal-kFQzJDLH.woff2",
+      "method": "GET",
+      "line": 4927
+    },
+    {
+      "time": "2026-10-08T16:41:01.486Z",
+      "path": "/ui/assets/noto-sans-sc-102-wght-normal-C1RtbCZr.woff2",
+      "method": "GET",
+      "line": 5224
+    },
+    {
+      "time": "2026-10-08T16:41:01.494Z",
+      "path": "/ui/assets/noto-sans-sc-102-wght-normal-C1RtbCZr.woff2",
+      "method": "GET",
+      "line": 5225
+    },
+    {
+      "time": "2026-10-08T16:41:06.345Z",
+      "path": "/ui/assets/noto-sans-sc-104-wght-normal-CJT2ioDJ.woff2",
+      "method": "GET",
+      "line": 5486
+    },
+    {
+      "time": "2026-10-08T16:41:06.411Z",
+      "path": "/ui/assets/noto-sans-sc-104-wght-normal-CJT2ioDJ.woff2",
+      "method": "GET",
+      "line": 5507
+    },
+    {
+      "time": "2026-10-08T16:41:41.812Z",
+      "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+      "method": "GET",
+      "line": 7556
+    },
+    {
+      "time": "2026-10-08T16:41:41.834Z",
+      "path": "/ui/assets/noto-sans-sc-105-wght-normal-BFoiJwz2.woff2",
+      "method": "GET",
+      "line": 7557
+    },
+    {
+      "time": "2026-10-08T16:41:56.031Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "POST",
+      "line": 8279
+    },
+    {
+      "time": "2026-10-08T16:41:56.212Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 8291
+    },
+    {
+      "time": "2026-10-08T16:41:56.218Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 8292
+    },
+    {
+      "time": "2026-10-08T16:41:56.219Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 8293
+    },
+    {
+      "time": "2026-10-08T16:41:56.221Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 8294
+    },
+    {
+      "time": "2026-10-08T16:42:25.751Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "POST",
+      "line": 8818
+    },
+    {
+      "time": "2026-10-08T16:42:26.504Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 8959
+    },
+    {
+      "time": "2026-10-08T16:42:26.522Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 8960
+    },
+    {
+      "time": "2026-10-08T16:42:26.522Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 8961
+    },
+    {
+      "time": "2026-10-08T16:42:26.524Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 8962
+    },
+    {
+      "time": "2026-10-08T16:42:27.904Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 9138
+    },
+    {
+      "time": "2026-10-08T16:42:28.029Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 9139
+    },
+    {
+      "time": "2026-10-08T16:42:28.032Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 9140
+    },
+    {
+      "time": "2026-10-08T16:42:28.035Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 9141
+    },
+    {
+      "time": "2026-10-08T16:42:28.427Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 9167
+    },
+    {
+      "time": "2026-10-08T16:42:28.435Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 9168
+    },
+    {
+      "time": "2026-10-08T16:42:28.435Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 9169
+    },
+    {
+      "time": "2026-10-08T16:42:28.436Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 9170
+    },
+    {
+      "time": "2026-10-08T16:43:29.089Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 12649
+    },
+    {
+      "time": "2026-10-08T16:43:29.091Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 12650
+    },
+    {
+      "time": "2026-10-08T16:45:04.941Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 17434
+    },
+    {
+      "time": "2026-10-08T16:45:04.942Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 17435
+    },
+    {
+      "time": "2026-10-08T16:45:05.256Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 17451
+    },
+    {
+      "time": "2026-10-08T16:45:05.257Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 17452
+    },
+    {
+      "time": "2026-10-08T16:45:05.599Z",
+      "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+      "method": "GET",
+      "line": 17485
+    },
+    {
+      "time": "2026-10-08T16:45:05.608Z",
+      "path": "/ui/assets/noto-sans-sc-101-wght-normal-c94LAl5p.woff2",
+      "method": "GET",
+      "line": 17486
+    },
+    {
+      "time": "2026-10-08T16:45:18.375Z",
+      "path": "/ui/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2",
+      "method": "GET",
+      "line": 18172
+    },
+    {
+      "time": "2026-10-08T16:45:18.386Z",
+      "path": "/ui/assets/noto-sans-sc-28-wght-normal-BWPKDbtH.woff2",
+      "method": "GET",
+      "line": 18173
+    },
+    {
+      "time": "2026-10-08T16:46:07.368Z",
+      "path": "/session/ses_hUi7QzpFf5qouMD32mKI/message",
+      "method": "POST",
+      "line": 20674
+    },
+    {
+      "time": "2026-10-08T16:46:07.537Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 20686
+    },
+    {
+      "time": "2026-10-08T16:46:07.540Z",
+      "path": "/work-ledger",
+      "method": "GET",
+      "line": 20687
+    },
+    {
+      "time": "2026-10-08T16:46:07.540Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 20688
+    },
+    {
+      "time": "2026-10-08T16:46:07.541Z",
+      "path": "/mission",
+      "method": "GET",
+      "line": 20689
+    },
+    {
+      "time": "2026-10-08T16:47:14.386Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 21885
+    },
+    {
+      "time": "2026-10-08T16:47:14.388Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 21886
+    },
+    {
+      "time": "2026-10-08T16:47:14.418Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 21887
+    },
+    {
+      "time": "2026-10-08T16:47:14.420Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 21888
+    },
+    {
+      "time": "2026-10-08T16:47:14.630Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 21893
+    },
+    {
+      "time": "2026-10-08T16:47:14.631Z",
+      "path": "/ui/assets/markdown-render.worker-CiakuHWO.js",
+      "method": "GET",
+      "line": 21894
+    },
+    {
+      "time": "2026-10-08T16:47:29.197Z",
+      "path": "/shutdown",
+      "method": "POST",
+      "line": 22149
+    },
+    {
+      "time": "2026-10-08T16:47:29.198Z",
+      "path": "/shutdown",
+      "method": "POST",
+      "line": 22151
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "firstCardPresent": true,
+  "firstRunPresent": true,
+  "observedAt": "2026-10-08T16:43:29.369Z",
+  "runs": [
+    {
+      "blocks": 1,
+      "bottom": 204.8437614440918,
+      "cardID": "user:session:ses_hUi7QzpFf5qouMD32mKI:message:msg_h3YSh5AwttHXBfc30p92",
+      "id": "msg_h3YSh5AwttHXBfc30p92",
+      "textLength": 15,
+      "top": 169.33334350585938
+    },
+    {
+      "blocks": 1,
+      "bottom": 330.3437614440918,
+      "cardID": "assistant:session:ses_hUi7QzpFf5qouMD32mKI:message:msg_g0VXTd9py005hZiHhIDb",
+      "id": "msg_g0VXTd9py005hZiHhIDb",
+      "textLength": 3,
+      "top": 294.8333435058594
+    },
+    {
+      "blocks": 1,
+      "bottom": 502.875,
+      "cardID": "user:session:ses_hUi7QzpFf5qouMD32mKI:message:msg_fb96a6a4-f456-438c-95ec-a07de6b44118",
+      "id": "msg_fb96a6a4-f456-438c-95ec-a07de6b44118",
+      "textLength": 99,
+      "top": 420.34375
+    },
+    {
+      "blocks": 56,
+      "bottom": 6523.0003662109375,
+      "cardID": "assistant:session:ses_hUi7QzpFf5qouMD32mKI:message:msg_g0VXTdVPS00diO5dUYZw",
+      "id": "msg_g0VXTdVPS00diO5dUYZw",
+      "textLength": 6019,
+      "top": 592.8646240234375
+    }
+  ],
+  "scroll": {
+    "clientHeight": 635,
+    "follow": "false",
+    "height": 9090,
+    "top": 0
+  },
+  "states": [],
+  "status": "Running"
+}
