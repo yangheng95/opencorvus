@@ -119,14 +119,6 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   const label = () => sourceLabel(props.source)
   const detail = () => sourceDetail(props.source)
   const icon = () => sourceIcon(props.source)
-  const host = () => {
-    if (props.source.type !== "source-url" || !props.source.url) return ""
-    try {
-      return new URL(props.source.url).host
-    } catch {
-      return ""
-    }
-  }
 
   return (
     <Tooltip.Root openDelay={180} closeDelay={80} placement="top-start" gutter={7} fitViewport>
@@ -144,10 +136,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
               <span class="msg-source-chip__index">{props.index + 1}</span>
             </Show>
             <Icon name={icon()} size="compact" />
-            <span class="msg-source-chip__content">
-              <span class="msg-source-chip__label">{label()}</span>
-              <Show when={host()}>{(value) => <span class="msg-source-chip__host">{value()}</span>}</Show>
-            </span>
+            <span class="msg-source-chip__label">{label()}</span>
           </Tooltip.Trigger>
         </Match>
         <Match when={props.source.type === "source-file" && props.source.path}>

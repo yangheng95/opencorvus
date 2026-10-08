@@ -192,6 +192,13 @@ existing nearest transcript owner, releasing automatic following. Native Tooltip
 and source actions retain their keyboard behavior; an explicit return to the
 bottom can resume following through the existing scroll policy.
 
+An expanded web-source leaf shows its full wrapping title and a secondary host
+derived directly from that same canonical URL, including any port. The URL
+remains the link target and full Tooltip detail; a title/provider is never used
+to infer its host. An unparseable URL has no host presentation. File/document
+leaves retain their existing actions and metadata, and group summaries retain
+their actual title/count and adjacent timeline position.
+
 Every Task and Session hydrate, history page, connection snapshot and live
 Message event passes through the same bounded display-transport projection.
 It omits Reasoning and replaces a completed Tool state above the inline byte

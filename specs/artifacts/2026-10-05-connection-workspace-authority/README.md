@@ -491,3 +491,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [206/207 阅读位置修复与真实页面](subagent-reading-position-206/README.md)：唯一targetKey视口意图、32上限和当前滚动器布局稳定恢复；207实际Sources顶部0/followfalse、All agents中段1440和重开858.666687保持，主动到底重新跟随。206两次重开失败保留；两份完整历史副本、HTTP200最终asset、原父工具/native/pair自然0。流式增长与完整矩阵仍未验，单agent继续。
 
+- [208 Sources来源身份](source-reading-audit-208/README.md) / [实施前Recall](source-reading-audit-plan-208.md)：网页来源完整标题下直接呈现规范URL host；实际三份来源浅色/深色、键盘完整Tooltip及真实W3C目标页人工复核，最终asset200、原父工具90185/native/pair自然0。主卡Open未显侧栏的观察保留、根因未知；未验多来源/file/document/snippet矩阵。
+

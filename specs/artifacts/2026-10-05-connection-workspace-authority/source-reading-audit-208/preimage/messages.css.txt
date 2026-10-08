@@ -1065,22 +1065,6 @@
   text-align: start;
 }
 
-.msg-source-chip__content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--ui-gap-3xs);
-  min-width: 0;
-  text-align: start;
-}
-
-.msg-source-chip__host {
-  color: var(--text-muted);
-  font-size: var(--ui-font-caption);
-  overflow-wrap: anywhere;
-  text-decoration: none;
-}
-
 .msg-source-entry {
   display: contents;
 }

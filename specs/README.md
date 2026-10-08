@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Visible web-source identity208](records/2026-10/2026-10-09-visible-source-host-208.md) and [real page evidence](artifacts/2026-10-05-connection-workspace-authority/source-reading-audit-208/README.md): canonical URL host visible beneath expanded titles; genuine light/dark Sources, keyboard Tooltip and real destination tab reviewed, native scope naturally closed; card Open observation remains unclassified.
+
 - [Sub-agent reading continuity206/207](records/2026-10/2026-10-09-subagent-reading-position-206-207.md) and [actual evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-reading-position-206/README.md): canonical scoped viewport handoff and layout-aware restoration; genuine Sources top, middle, All agents and Dock reopening visually reviewed; original failed scenes retained and both native scopes naturally closed.
 
 - [Reader/helper observation126](records/2026-10/2026-10-08-reader-helper-observation.md) and [evidence](artifacts/2026-10-05-connection-workspace-authority/reader-helper-observation-126/README.md): single safe reader cause/helper attempt pipeline; focused local contracts passed, integrated types0 after preserved fixture failure;125 original failure and cause UNKNOWN preserved.
