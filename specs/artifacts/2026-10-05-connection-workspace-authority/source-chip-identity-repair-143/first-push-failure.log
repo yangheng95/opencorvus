@@ -1,0 +1,56 @@
+$ bun run check:sdk-imports && bun run check:ai-runtime && bun run check:expert-squad-types && bunx turbo run typecheck
+$ bun run ./script/check-sdk-imports.ts
+sdk import check passed (OpenCorvusClient)
+$ bun run ./script/check-ai-runtime.ts
+ai runtime check passed (ai v6, provider v3, provider-utils v4, OpenRouter v2)
+$ bunx tsc -p expert-squads/tsconfig.json
+• turbo 2.9.14
+
+   • Packages in scope: @opencorvus-ai/channel-config, @opencorvus-ai/channel-runtime, @opencorvus-ai/overlay, @opencorvus-ai/plugin, @opencorvus-ai/script, @opencorvus-ai/sdk, @opencorvus-ai/transport-protocol, @opencorvus-ai/util, @opencorvus/web, opencorvus
+   • Running typecheck in 10 packages
+   • Remote caching disabled
+
+@opencorvus-ai/plugin:typecheck: cache hit, replaying logs 6e53066e049f25c1
+@opencorvus-ai/plugin:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-config:typecheck: cache hit, replaying logs 2a5bbd20cb793bf3
+@opencorvus-ai/channel-config:typecheck: $ tsc --noEmit
+@opencorvus-ai/util:typecheck: cache hit, replaying logs 2914170d4ef7a815
+@opencorvus-ai/util:typecheck: $ tsc --noEmit
+opencorvus:typecheck: cache hit, replaying logs e600bb27d751284b
+opencorvus:typecheck: $ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+@opencorvus-ai/overlay:typecheck: cache miss, executing a45aa307548d11bc
+@opencorvus-ai/sdk:typecheck: cache hit, replaying logs a09601e2ff127b1f
+@opencorvus-ai/sdk:typecheck: $ tsc --noEmit
+@opencorvus-ai/channel-runtime:typecheck: cache hit, replaying logs 17a9b2e10a2316a1
+@opencorvus-ai/channel-runtime:typecheck: $ tsgo --noEmit
+@opencorvus-ai/transport-protocol:typecheck: cache hit, replaying logs 3505ec8d8280158d
+@opencorvus-ai/transport-protocol:typecheck: $ tsc --noEmit
+@opencorvus-ai/overlay:typecheck: $ tsc --noEmit
+
+ Tasks:    8 successful, 8 total
+Cached:    7 cached, 8 total
+  Time:    13.626s 
+
+$ bun run ./packages/opencorvus/script/check/routes.ts
+api:routes-check ok — 6 rules and route inventory clean across 34 files
+$ bun run ./packages/opencorvus/script/docs/render-api-md.ts --check
+docs:check ok (345 ops, 25 groups)
+$ bun run --cwd packages/opencorvus check:control-lease-owners
+$ bun run script/check/control-lease-owners.ts
+control lease owner check passed (18 owners, 22 acquire sites, all declared)
+$ bun run ./packages/opencorvus/script/check/architecture-index.ts
+architecture-index ok — 18 current documents indexed, every link live
+$ bun run ./packages/opencorvus/script/check/package-topology.ts
+package-topology ok — 10 workspace packages, no dependency or generation cycle, bun.lock inputs aligned
+$ bun run ./script/check-release-mutation-topology.ts --treeish "2649e93d71de500b390ccd5fa1d67f137e911405"
+release-mutation-topology ok (268a280edea1) — 5 canonical authorities
+$ bun run ./packages/opencorvus/script/check/module-topology.ts --treeish "2649e93d71de500b390ccd5fa1d67f137e911405"
+module-topology ok (treeish:2649e93d71de) — 1138 modules, 5812 runtime edges, retained SCC sizes ; 4 clean imports passed
+[secret-scan] FAIL — 1 hit(s):
+  specs/records/2026-10/2026-10-08-source-lifetime.md:17  [provider-key] Model-provider key (sk-...) → sk-completebefor…
+
+If the match is a deliberate test fixture, append `// secret-scan: ignore` to the line.
+If it is a real secret: revoke it at the issuing service, then remove from source. The string
+also lives in git history — recovery requires `git filter-repo` plus a coordinated force-push.
+husky - pre-push script failed (code 1)
+error: failed to push some refs to 'https://github.com/yangheng95/opencorvus'
