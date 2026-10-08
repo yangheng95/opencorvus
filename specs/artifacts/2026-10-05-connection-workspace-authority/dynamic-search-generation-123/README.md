@@ -1,0 +1,9 @@
+# Embedded search generation123 evidence
+
+[Recall](../dynamic-search-generation-plan-123.md) and [investigation](../dynamic-search-generation-investigation-123.md) bind the one generator and actual canonical inventory. Original generated-before deletion is retained; all5 embedded entries were missing, reviewed website data exists for each. Payload bytes exclude embedded packages legitimately; using that inventory for localized search was the bug.
+
+baseline-checker.log/first snapshots and baseline02-checker.log/corrected tests retain both1pass/9fail original results. Initial mandatory evidence ENV and mirrored generator algorithm were removed before source implementation. Permanent tests now capture normal console data, directly compare reviewed primary/agent strings, verify pure score from actual localization, and query real Hono/Bun loopback catalog with canonical source/pillar identities. They are non-UI domain contracts; no DOM/component/source UI assertion, fake score field or assumed rank.
+
+final-report.md and after-checker.log show11pass/493expectations/2filtered/0fail. All five embedded positive queries and the original payload localization case passed. Existing writer returned0; configured backend and explicit fullproduction+actualgenerator+actualtest types returned0. Full diffs/final snapshots/type inputs/logs are preserved. Root later removed only an extra source EOF blank line; archive still preserves original child freeze. No additional test rerun was needed for that formatting-only change.
+
+Only generator/generated module/existing backend test are product/source owners. Canonical IDs/namespace imports avoid runtime Registry/generated cycles; existing translation bounds/errors remain. Payload generation, installed scope, package bytes/grants, Task lifecycle and models are unchanged. Actual page search/rank and original writing process remain unknown. Root owns final indices/docs and scope commits/push.

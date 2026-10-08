@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Embedded expert squad search123](2026-10-08-embedded-search-generation.md): complete canonical localized search inventory and actual positive catalog outputs.
+
 - [Readable native Markdown tables122](2026-10-08-native-markdown-table-reading.md): shared intrinsic width/local overflow and native keyboard focus, actual Sources regression and closed scopes.
 
 - [Child Sources message spacing120](2026-10-08-child-source-spacing.md): actual child inner inset16→8, real before/after wide/narrow titles and boundaries reviewed, credentialless scopes closed.

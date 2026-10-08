@@ -1,0 +1,16 @@
+{
+  "key": "builtin/dynamic",
+  "actual": null,
+  "expected": {
+    "primary": [
+      "Dynamic 动态团队",
+      "根据当前任务即时描述最小临时 Agent 团队和依赖关系，并立即通过现有 Session 调度执行，不生成永久专家团包。",
+      "用于需要按本轮请求快速生成成员分工和工作流描述的调查、规划、实现、审查与综合任务。"
+    ],
+    "detail": [
+      "Dynamic 通用成员 以独立 Session 承担一个即时生成的规划、调查、分析、审查、验证或综合职责。",
+      "Dynamic 交付成员 以 Build 运行时承担一个即时生成的实现或具体交付职责及其验证。"
+    ]
+  },
+  "pureReviewedFieldScore": 0.9212
+}

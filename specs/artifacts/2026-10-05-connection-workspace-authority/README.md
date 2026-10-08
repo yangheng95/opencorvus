@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Embedded search123 Recall](dynamic-search-generation-plan-123.md), [investigation](dynamic-search-generation-investigation-123.md) and [actual evidence](dynamic-search-generation-123/README.md): all5 embedded reviewed projections restored by the single generator,11 actual data/loopback contracts/types passed; original writer process unknown.
+
 - [Live Tool payload viewport119 Recall](live-tool-payload-viewport-plan-119.md) and [evidence](live-tool-payload-viewport-119/README.md): genuine11901 completed Sources/answer and manual titles/links/Strong; long-live-input viewport after still unmet.
 
 - [Independent large-file11902 plan](live-tool-payload-viewport-119/large-input-live-plan-11902.md): actual original900s failure and partial300-item file retained; Task completion/live viewport unmet, full scope closed.

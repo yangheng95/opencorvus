@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Embedded expert squad search123](records/2026-10/2026-10-08-embedded-search-generation.md) and [Recall](artifacts/2026-10-05-connection-workspace-authority/dynamic-search-generation-plan-123.md): canonical embedded plus payload identities own one reviewed localization projection;11 focused contracts/types passed, original baselines retained.
+
 - [256k compaction window and stable Task anchor](records/2026-10/2026-10-08-compaction-window-and-task-anchor.md): explicit longer-context configuration and shared repeated/incremental checkpoint reconstruction repair; original failed Task remains immutable.
 
 - [Live Tool payload viewport119 Recall](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-plan-119.md): genuine11901 Sources/answer complete; large live-preview viewport after still unmet.

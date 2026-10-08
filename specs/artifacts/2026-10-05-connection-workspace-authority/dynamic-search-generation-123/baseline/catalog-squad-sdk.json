@@ -1,0 +1,45 @@
+{
+  "input": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-idiVwf\\test-74688-63eeGv\\fixtures\\memory-eacXt9",
+    "view": "effective",
+    "query": "生成 Expert Squad",
+    "productPillar": "code",
+    "limit": "20"
+  },
+  "totalCount": 3,
+  "entries": [
+    {
+      "id": "squad-sdk",
+      "built_in": true,
+      "source": {
+        "kind": "built_in"
+      },
+      "product_pillars": [
+        "code",
+        "work"
+      ]
+    },
+    {
+      "id": "dynamic",
+      "built_in": true,
+      "source": {
+        "kind": "built_in"
+      },
+      "product_pillars": [
+        "code",
+        "work"
+      ]
+    },
+    {
+      "id": "research-studio",
+      "built_in": true,
+      "source": {
+        "kind": "built_in"
+      },
+      "product_pillars": [
+        "code",
+        "work"
+      ]
+    }
+  ]
+}

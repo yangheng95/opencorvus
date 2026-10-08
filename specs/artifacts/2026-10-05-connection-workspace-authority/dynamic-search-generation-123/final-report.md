@@ -1,0 +1,11 @@
+#123 final local qualification — source frozen
+
+Only owned production generator and its single generated module changed; existing market-discovery-chain test contains the ten focused positive contracts. Source uses canonical EMBEDDED IDs plus canonical namespace and actual payload identities in one full-key Map/sorted renderer. No builtin/index runtime import, payload discovery modification, fallback, second inventory or cache/config.
+
+Writer: bun run packages/opencorvus/script/generate-expert-squad-search-localization.ts, exit0. Final module contains all five actual reviewed embedded projections. Compared with HEAD, four missing entries are added and Dynamic's old entry remains; compared with preserved generated.before, all five are present. Ordinary source generation, not manual output repair. No other package payload bytes altered.
+
+After exact command from packages/opencorvus: bun test test/expert-squad/market-discovery-chain.test.ts --timeout 60000 -t 'embedded expert squad search|carries a localized projection for every bundled package'. after-checker.log:11pass/0fail/493expects/2filtered,11.86s,exit0. All five actual generated primary/detail contracts, actual-localization-fields scores and real loopback catalog candidate/source/pillar output pass; original payload localization data case passes. Score remains a separate pure production primitive fact, not an invented HTTP field. No top-rank expectation.
+
+Types: root bun x tsc --noEmit -p .tmp-product-iteration/dynamic-search-123-explicit-tsconfig.json exit0. Scope full production, actual generator, actual new test and transitively imported public web translation modules. Configured backend bun run typecheck exit0. Raw logs/config preserved. No frontend build, UI/native history122, Provider/model, credentials or Task execution. Local data/backend qualification does not claim manual page search behavior.
+
+Preserved original firstbaseline and correctedbaseline02 failures, both source/production generated preimages, full-implementation.diff, final generator/module/test snapshots and type input. Existing generated deletion was not restored or hidden. Specific original writer process still UNKNOWN; source-level mismatch and actual corrected behavior are qualified. Root owns final review, docs/index/Git delivery; stop here without commit/push or another scope change.

@@ -4,8 +4,6 @@ import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import { discoverExpertSquadPayloadPackages } from "./generate-expert-squad-payload"
-import { EMBEDDED_EXPERT_SQUAD_IDS } from "../src/expert-squad/builtin/ids"
-import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "../src/expert-squad/id"
 
 // The published website already carries a reviewed Chinese projection of every bundled Expert Squad.
 // Market and catalog discovery are byte-identical English package sources, so a Chinese request scores
@@ -75,17 +73,7 @@ function detailEntries(translation: SquadTranslation): string[] {
 }
 
 export async function renderExpertSquadSearchLocalizationModule(repoRoot: string): Promise<string> {
-  const payloadPackages = await discoverExpertSquadPayloadPackages(repoRoot)
-  const packageIdentities = new Map<string, { namespace: string; id: string }>()
-  for (const pkg of [
-    ...payloadPackages,
-    ...EMBEDDED_EXPERT_SQUAD_IDS.map((id) => ({ namespace: BUILTIN_EXPERT_SQUAD_NAMESPACE, id })),
-  ]) {
-    packageIdentities.set(`${pkg.namespace}/${pkg.id}`, { namespace: pkg.namespace, id: pkg.id })
-  }
-  const packages = [...packageIdentities.values()].sort((a, b) =>
-    `${a.namespace}/${a.id}`.localeCompare(`${b.namespace}/${b.id}`),
-  )
+  const packages = await discoverExpertSquadPayloadPackages(repoRoot)
   const translations = await loadTranslations(repoRoot)
   const blocks: string[] = []
 

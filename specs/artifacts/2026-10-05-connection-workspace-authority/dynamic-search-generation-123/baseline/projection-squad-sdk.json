@@ -1,0 +1,26 @@
+{
+  "key": "builtin/squad-sdk",
+  "actual": null,
+  "expected": {
+    "primary": [
+      "生成 Expert Squad",
+      "以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Expert Squad。",
+      "适用于导入外部异构 Agent 算法，或通过规范 SDK 设计、验证并安装新的 OpenCorvus Expert Squad。"
+    ],
+    "detail": [
+      "生成 Expert Squad 来源分析员 提取源算法、领域边界、参与者、证据流、资源、可移植性约束和验收契约。",
+      "生成 Expert Squad 规划师 发布包边界、优先扁平的 Planner/并行 worker 拓扑、资源闭包和验收分配。",
+      "生成 Expert Squad 导入分析员 检查外部 Squad 的成员、指令、Skill 闭包、MCP 能力、映射证据和可移植性阻塞项。",
+      "生成 Expert Squad 契约审查员 依据来源证据和包不变量，独立验证完整的创作蓝图或导入映射。",
+      "生成 Expert Squad 创作 提取领域算法，设计一份规范的包蓝图，独立验证，再通过 SDK 创作工具将其具体化。",
+      "发布规范包蓝图、并行 worker 分区与验收分配。",
+      "发布源算法和包边界证据。",
+      "发布对准确蓝图的独立正向验证。",
+      "异构 Squad 导入 检查外部 Squad 和预览证据，修复映射，独立验证准确 digest，再执行一次导入。",
+      "发布导入边界、映射责任和验收分配。",
+      "发布所选外部 Squad 的来源、可移植性和映射分析。",
+      "发布对无阻塞预览和准确映射的独立正向验证。"
+    ]
+  },
+  "pureReviewedFieldScore": 0.94
+}

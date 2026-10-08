@@ -1,0 +1,12 @@
+{
+  "extends": "../packages/opencorvus/tsconfig.json",
+  "include": [
+    "../packages/opencorvus/src/**/*.ts",
+    "../packages/opencorvus/script/generate-expert-squad-search-localization.ts",
+    "../packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts"
+  ],
+  "exclude": [
+    "../packages/opencorvus/dist/**/*",
+    "../packages/opencorvus/src/skill/builtin/**/*"
+  ]
+}

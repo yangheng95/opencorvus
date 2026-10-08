@@ -306,7 +306,7 @@ Base 的原始请求、真实修订、权限与适用来源定义交付义务。
 - 用户界面的 Goal 是 versioned Delivery Slice contract，只提供目标、验收、owned paths、priority、kind 和精确需求/契约引用；它没有 execution、status、retry、workspace、`depends_on` 或 readiness ancestry。Task 是唯一 business lifecycle；Session/dispatch 是 physical execution；panel 分别读取 current revision、独立 activity/evidence/review association 与 Task Completion Decision acceptance，禁止合成为 Goal progress 或 lifecycle。ContractGraph 只保存 producer/consumer interface contracts，不能推导调度顺序；未发布项目只有这一种严格结构，不声明协议代际。
 
 专家团开发复用现有 `@opencorvus-ai/sdk`，不建立第二套 manifest schema、package loader 或
-archive 实现。`squad-sdk` 是与 `base`、`advanced`、`research-studio` 同级的第四个 embedded system
+archive 实现。`squad-sdk` 是与其他 canonical embedded 团同级的 embedded system
 package，也是异构算法导入与 SDK 专家团生成的唯一 capability package，显示名称固定为
 `Generate Expert Squads`；干净应用 catalog 无需 payload release 即可选择它。普通 Chat、
 Base 与 Advanced 不再投影 authoring/import Skill 或写入工具。Task 选择 `squad-sdk` 后可参考
@@ -471,10 +471,14 @@ Expert Squad Market 只从严格 bundled declaration 和已安装 package identi
 payload release、folder/ZIP validate/import 是 package provisioning/repair 控制面：它们仍要求精确项目
 directory，但服务端只进入 project identity context，不执行完整 runtime bootstrap。因而旧 manifest 可以继续被
 catalog 严格拒绝，同时用户仍可从 Market 按已安装 scope 显式执行 builtin replacement；catalog、activation、
-export、uninstall 和普通 runtime routes 执行完整 bootstrap，但 bootstrap 只发现四个 embedded 默认团、
+export、uninstall 和普通 runtime routes 执行完整 bootstrap，但 bootstrap 只发现 canonical embedded 团、
 已安装 package 与待恢复的 replacement intent，不安装或协调 repository-hosted payload。这里没有无条件
 自动覆盖、默认受管更新、旧 schema 兼容或 source fallback；显式安装与替换只走
 `ExpertSquadPackageManager` 的严格原子 compare-and-swap 与持久 replacement-intent 恢复实现。
+
+搜索本地化投影复用 `EMBEDDED_EXPERT_SQUAD_IDS`、内置 namespace 与当前 payload 包的完整
+namespace/id 身份，在唯一生成器中合并后读取既有 reviewed 翻译。Payload 字节库存排除 embedded
+包，不代表搜索库存排除它们；生成器不引入第二份嵌入包名单或改变安装与 capability 授权。
 
 Installed Expert Squads 在读取 runtime catalog 前调用 identity-only `POST /expert-squad/repair-bundled`，
 直接替换有当前 bundled namespace/id 来源且 manifest 数字 schema version 低于当前版本的安装，然后依据真实

@@ -1,4 +1,6 @@
 import { describe, expect, test } from "bun:test"
+import fs from "node:fs"
+import path from "node:path"
 import { EMBEDDED_EXPERT_SQUAD_IDS } from "../../src/expert-squad/builtin/ids"
 import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "../../src/expert-squad/id"
 import { scoreDiscoveryFields } from "../../src/capability/fuzzy"
@@ -155,34 +157,44 @@ const embeddedQueries = {
   "squad-sdk": { query: "生成 Expert Squad", pillar: "code" },
 } as const
 
-describe("embedded expert squad search", () => {
-  for (const id of EMBEDDED_EXPERT_SQUAD_IDS) {
-    test(`reviewed projection ${id}`, () => {
-      const key = `${BUILTIN_EXPERT_SQUAD_NAMESPACE}/${id}` as keyof typeof embeddedReviewedTranslations
-      const translation = embeddedReviewedTranslations[key]
-      const actual = expertSquadSearchLocalizations[key]
-      const agent = Object.values(translation.agents)[0]!
-      const detail = `${agent.label} ${"description" in agent ? agent.description : ""}`
-      const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
-        ...actual.primary.map((text) => ({ text, weight: 0.94 })),
-        ...actual.detail.map((text) => ({ text, weight: 0.8 })),
-      ]) : undefined
-      console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
-      expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
-      expect(actual?.detail).toContain(detail)
-      expect(score).toBeGreaterThan(0)
-    })
+function recordEmbeddedSearchFact(name: string, fact: unknown) {
+  const directory = process.env.OPENCORVUS_EMBEDDED_SEARCH_EVIDENCE
+  if (!directory) throw new Error("Owned embedded search evidence directory is required")
+  fs.writeFileSync(path.join(directory, `${name}.json`), JSON.stringify(fact, null, 2) + "\n", { flag: "wx" })
+}
 
-    test(`actual loopback catalog ${id}`, async () => {
-      await using project = await memoryProject()
-      await withMarketRoutes(project.path, async (call) => {
-        const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
-        const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
-        console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
-        const candidate = page.entries.find((entry) => entry.id === id)
-        expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
-        expect(candidate?.product_pillars).toContain(input.productPillar)
-      })
-    }, 60_000)
-  }
-})
+for (const id of EMBEDDED_EXPERT_SQUAD_IDS) {
+  test(`embedded search123 reviewed projection ${id}`, () => {
+    const key = `${BUILTIN_EXPERT_SQUAD_NAMESPACE}/${id}` as keyof typeof embeddedReviewedTranslations
+    const translation = embeddedReviewedTranslations[key]
+    const primary = [translation.label, translation.description, translation.selectorSummary]
+    const detail = [...new Set([
+      ...Object.values(translation.agents).map((agent) => `${agent.label} ${"description" in agent ? agent.description : ""}`.replace(/\s+/gu, " ").trim().slice(0, 240)),
+      ...Object.values(translation.workflows).flatMap((workflow) => [
+        `${workflow.label} ${workflow.description}`.replace(/\s+/gu, " ").trim().slice(0, 240),
+        ...Object.values(workflow.nodes).map((node) => node.replace(/\s+/gu, " ").trim().slice(0, 240)),
+      ]),
+    ].filter(Boolean))].slice(0, 32)
+    const expected = { primary: primary.map((text) => text.replace(/\s+/gu, " ").trim().slice(0, 1000)), detail }
+    const actual = expertSquadSearchLocalizations[key]
+    const score = scoreDiscoveryFields(embeddedQueries[id].query, [
+      ...expected.primary.map((text) => ({ text, weight: 0.94 })),
+      ...expected.detail.map((text) => ({ text, weight: 0.8 })),
+    ])
+    recordEmbeddedSearchFact(`projection-${id}`, { key, actual: actual ?? null, expected, pureReviewedFieldScore: score ?? null })
+    expect(actual).toEqual(expected)
+    expect(score).toBeGreaterThan(0)
+  })
+
+  test(`embedded search123 actual loopback catalog ${id}`, async () => {
+    await using project = await memoryProject()
+    await withMarketRoutes(project.path, async (call) => {
+      const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
+      const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
+      recordEmbeddedSearchFact(`catalog-${id}`, { input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) })
+      const candidate = page.entries.find((entry) => entry.id === id)
+      expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
+      expect(candidate?.product_pillars).toContain(input.productPillar)
+    })
+  }, 60_000)
+}

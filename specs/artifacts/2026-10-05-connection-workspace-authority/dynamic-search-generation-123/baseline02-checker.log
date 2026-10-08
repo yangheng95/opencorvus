@@ -1,0 +1,177 @@
+bun test v1.3.14 (0d9b296a)
+
+test\expert-squad\market-discovery-chain.test.ts:
+{"contract":"embedded reviewed search projection","key":"builtin/dynamic","actual":null,"reviewedPrimary":["Dynamic 动态团队","根据当前任务即时描述最小临时 Agent 团队和依赖关系，并立即通过现有 Session 调度执行，不生成永久专家团包。","用于需要按本轮请求快速生成成员分工和工作流描述的调查、规划、实现、审查与综合任务。"],"reviewedAgentDetail":"Dynamic 通用成员 以独立 Session 承担一个即时生成的规划、调查、分析、审查、验证或综合职责。","actualLocalizationFieldScore":null}
+166 |       const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
+167 |         ...actual.primary.map((text) => ({ text, weight: 0.94 })),
+168 |         ...actual.detail.map((text) => ({ text, weight: 0.8 })),
+169 |       ]) : undefined
+170 |       console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
+171 |       expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
+                                    ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "Dynamic 动态团队",
+-   "根据当前任务即时描述最小临时 Agent 团队和依赖关系，并立即通过现有 Session 调度执行，不生成永久专家团包。",
+-   "用于需要按本轮请求快速生成成员分工和工作流描述的调查、规划、实现、审查与综合任务。",
+- ]
++ undefined
+
+- Expected  - 5
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:171:31)
+(fail) embedded expert squad search > reviewed projection dynamic [0.62ms]
+{"contract":"embedded actual loopback catalog","input":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BkOF6a\\test-71484-VkAcbo\\fixtures\\memory-aSYcP1","view":"effective","query":"动态团队","productPillar":"code","limit":"20"},"totalCount":0,"entries":[]}
+178 |       await withMarketRoutes(project.path, async (call) => {
+179 |         const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
+180 |         const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
+181 |         console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
+182 |         const candidate = page.entries.find((entry) => entry.id === id)
+183 |         expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
+                                ^
+error: expect(received).toMatchObject(expected)
+
+{"contract":"embedded reviewed search projection","key":"builtin/base","actual":null,"reviewedPrimary":["Base","Base 由任务负责人直接完成发现、规划和实际交付，再由独立测试方检查结果；有独立来源调查或研究需要时才委托规划与开发或并行研究。","适用于一个执行责任方完成、独立 Tester 验收的一项完整 Task；真实独立研究可选用并行研究图。"],"reviewedAgentDetail":"Base 研究员 开展以只读为主的代码库调查和相关外部研究，并发布规范的 Base 研究报告。","actualLocalizationFieldScore":null}
+Matcher error: received value must be a non-null object
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:183:27)
+(fail) embedded expert squad search > actual loopback catalog dynamic [1814.93ms]
+166 |       const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
+167 |         ...actual.primary.map((text) => ({ text, weight: 0.94 })),
+168 |         ...actual.detail.map((text) => ({ text, weight: 0.8 })),
+169 |       ]) : undefined
+170 |       console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
+171 |       expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
+                                    ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "Base",
+-   "Base 由任务负责人直接完成发现、规划和实际交付，再由独立测试方检查结果；有独立来源调查或研究需要时才委托规划与开发或并行研究。",
+-   "适用于一个执行责任方完成、独立 Tester 验收的一项完整 Task；真实独立研究可选用并行研究图。",
+- ]
++ undefined
+
+- Expected  - 5
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:171:31)
+(fail) embedded expert squad search > reviewed projection base [0.27ms]
+{"contract":"embedded actual loopback catalog","input":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BkOF6a\\test-71484-VkAcbo\\fixtures\\memory-HxSzaT","view":"effective","query":"独立 Tester","productPillar":"code","limit":"20"},"totalCount":0,"entries":[]}
+178 |       await withMarketRoutes(project.path, async (call) => {
+179 |         const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
+180 |         const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
+181 |         console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
+182 |         const candidate = page.entries.find((entry) => entry.id === id)
+183 |         expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
+                                ^
+error: expect(received).toMatchObject(expected)
+
+Matcher error: received value must be a non-null object
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:183:27)
+(fail) embedded expert squad search > actual loopback catalog base [1541.63ms]
+{"contract":"embedded reviewed search projection","key":"builtin/advanced","actual":null,"reviewedPrimary":["Advanced","内置的高级软件交付团队，保留能力匹配的需求到架构可追溯性，以及执行、测试、界面与独立审查边界。","用于需要从需求到架构可追溯、并行调查与实施证据及独立审查，但没有更窄已安装专家契约的高级软件交付。"],"reviewedAgentDetail":"请求解析员 澄清意图、缺失的输入、范围边界和操作员决策。","actualLocalizationFieldScore":null}
+166 |       const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
+167 |         ...actual.primary.map((text) => ({ text, weight: 0.94 })),
+168 |         ...actual.detail.map((text) => ({ text, weight: 0.8 })),
+169 |       ]) : undefined
+170 |       console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
+171 |       expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
+                                    ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "Advanced",
+-   "内置的高级软件交付团队，保留能力匹配的需求到架构可追溯性，以及执行、测试、界面与独立审查边界。",
+-   "用于需要从需求到架构可追溯、并行调查与实施证据及独立审查，但没有更窄已安装专家契约的高级软件交付。",
+- ]
++ undefined
+
+- Expected  - 5
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:171:31)
+(fail) embedded expert squad search > reviewed projection advanced [0.33ms]
+{"contract":"embedded actual loopback catalog","input":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BkOF6a\\test-71484-VkAcbo\\fixtures\\memory-nhJsRr","view":"effective","query":"高级软件交付","productPillar":"code","limit":"20"},"totalCount":0,"entries":[]}
+178 |       await withMarketRoutes(project.path, async (call) => {
+179 |         const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
+180 |         const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
+181 |         console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
+182 |         const candidate = page.entries.find((entry) => entry.id === id)
+183 |         expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
+                                ^
+error: expect(received).toMatchObject(expected)
+
+{"contract":"embedded reviewed search projection","key":"builtin/research-studio","actual":null,"reviewedPrimary":["研究工作室","一支负责研究规划、持久证据收集、可复现分析、计算后事实核查和模板驱动报告交付的 Squad。","适用于有来源支持的检索、可复现分析、综合和证据驱动的报告交付，不包含软件交付规划工作流。"],"reviewedAgentDetail":"研究工作室规划员 界定问题边界、研究方法、来源层级、比较维度、时效规则和停止条件。","actualLocalizationFieldScore":null}
+Matcher error: received value must be a non-null object
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:183:27)
+(fail) embedded expert squad search > actual loopback catalog advanced [1559.20ms]
+166 |       const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
+167 |         ...actual.primary.map((text) => ({ text, weight: 0.94 })),
+168 |         ...actual.detail.map((text) => ({ text, weight: 0.8 })),
+169 |       ]) : undefined
+170 |       console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
+171 |       expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
+                                    ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "研究工作室",
+-   "一支负责研究规划、持久证据收集、可复现分析、计算后事实核查和模板驱动报告交付的 Squad。",
+-   "适用于有来源支持的检索、可复现分析、综合和证据驱动的报告交付，不包含软件交付规划工作流。",
+- ]
++ undefined
+
+- Expected  - 5
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:171:31)
+(fail) embedded expert squad search > reviewed projection research-studio [0.26ms]
+{"contract":"embedded actual loopback catalog","input":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BkOF6a\\test-71484-VkAcbo\\fixtures\\memory-81Rx57","view":"effective","query":"研究工作室","productPillar":"work","limit":"20"},"totalCount":0,"entries":[]}
+178 |       await withMarketRoutes(project.path, async (call) => {
+179 |         const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
+180 |         const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
+181 |         console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
+182 |         const candidate = page.entries.find((entry) => entry.id === id)
+183 |         expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
+                                ^
+error: expect(received).toMatchObject(expected)
+
+{"contract":"embedded reviewed search projection","key":"builtin/squad-sdk","actual":null,"reviewedPrimary":["生成 Expert Squad","以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Expert Squad。","适用于导入外部异构 Agent 算法，或通过规范 SDK 设计、验证并安装新的 OpenCorvus Expert Squad。"],"reviewedAgentDetail":"生成 Expert Squad 来源分析员 提取源算法、领域边界、参与者、证据流、资源、可移植性约束和验收契约。","actualLocalizationFieldScore":null}
+Matcher error: received value must be a non-null object
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:183:27)
+(fail) embedded expert squad search > actual loopback catalog research-studio [1513.01ms]
+166 |       const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
+167 |         ...actual.primary.map((text) => ({ text, weight: 0.94 })),
+168 |         ...actual.detail.map((text) => ({ text, weight: 0.8 })),
+169 |       ]) : undefined
+170 |       console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
+171 |       expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
+                                    ^
+error: expect(received).toEqual(expected)
+
+- [
+-   "生成 Expert Squad",
+-   "以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Expert Squad。",
+-   "适用于导入外部异构 Agent 算法，或通过规范 SDK 设计、验证并安装新的 OpenCorvus Expert Squad。",
+- ]
++ undefined
+
+- Expected  - 5
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\expert-squad\market-discovery-chain.test.ts:171:31)
+(fail) embedded expert squad search > reviewed projection squad-sdk [0.25ms]
+{"contract":"embedded actual loopback catalog","input":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-BkOF6a\\test-71484-VkAcbo\\fixtures\\memory-5l24Wc","view":"effective","query":"生成 Expert Squad","productPillar":"code","limit":"20"},"totalCount":3,"entries":[{"id":"squad-sdk","built_in":true,"source":{"kind":"built_in"},"product_pillars":["code","work"]},{"id":"dynamic","built_in":true,"source":{"kind":"built_in"},"product_pillars":["code","work"]},{"id":"research-studio","built_in":true,"source":{"kind":"built_in"},"product_pillars":["code","work"]}]}
+(pass) embedded expert squad search > actual loopback catalog squad-sdk [1464.30ms]
+
+ 1 pass
+ 3 filtered out
+ 9 fail
+ 11 expect() calls
+Ran 10 tests across 1 file. [9.85s]

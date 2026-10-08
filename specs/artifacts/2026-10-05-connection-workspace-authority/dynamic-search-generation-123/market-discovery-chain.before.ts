@@ -1,9 +1,4 @@
 import { describe, expect, test } from "bun:test"
-import { EMBEDDED_EXPERT_SQUAD_IDS } from "../../src/expert-squad/builtin/ids"
-import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "../../src/expert-squad/id"
-import { scoreDiscoveryFields } from "../../src/capability/fuzzy"
-import { publicMarketZhTranslations01To35 } from "../../../web/src/content/public-market-zh-01-35"
-import { publicMarketZhTranslations68To99 } from "../../../web/src/content/public-market-zh-68-99"
 import { Hono } from "hono"
 import { memoryProject } from "../fixture/memory"
 import { Instance } from "../../src/project/instance"
@@ -140,49 +135,4 @@ describe("expert squad market discovery chain", () => {
       expect(landing.entries[0]!.id).toBe("frontend-innovate")
     })
   }, 60_000)
-})
-
-
-const embeddedReviewedTranslations = {
-  ...publicMarketZhTranslations01To35,
-  ...publicMarketZhTranslations68To99,
-}
-const embeddedQueries = {
-  advanced: { query: "高级软件交付", pillar: "code" },
-  base: { query: "独立 Tester", pillar: "code" },
-  dynamic: { query: "动态团队", pillar: "code" },
-  "research-studio": { query: "研究工作室", pillar: "work" },
-  "squad-sdk": { query: "生成 Expert Squad", pillar: "code" },
-} as const
-
-describe("embedded expert squad search", () => {
-  for (const id of EMBEDDED_EXPERT_SQUAD_IDS) {
-    test(`reviewed projection ${id}`, () => {
-      const key = `${BUILTIN_EXPERT_SQUAD_NAMESPACE}/${id}` as keyof typeof embeddedReviewedTranslations
-      const translation = embeddedReviewedTranslations[key]
-      const actual = expertSquadSearchLocalizations[key]
-      const agent = Object.values(translation.agents)[0]!
-      const detail = `${agent.label} ${"description" in agent ? agent.description : ""}`
-      const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
-        ...actual.primary.map((text) => ({ text, weight: 0.94 })),
-        ...actual.detail.map((text) => ({ text, weight: 0.8 })),
-      ]) : undefined
-      console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
-      expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
-      expect(actual?.detail).toContain(detail)
-      expect(score).toBeGreaterThan(0)
-    })
-
-    test(`actual loopback catalog ${id}`, async () => {
-      await using project = await memoryProject()
-      await withMarketRoutes(project.path, async (call) => {
-        const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
-        const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
-        console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
-        const candidate = page.entries.find((entry) => entry.id === id)
-        expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
-        expect(candidate?.product_pillars).toContain(input.productPillar)
-      })
-    }, 60_000)
-  }
 })

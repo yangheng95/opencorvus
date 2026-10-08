@@ -1,0 +1,7 @@
+# Corrected baseline02
+
+Permanent tests have no evidence environment gate or fs/path writer. All safe domain observations go to ordinary console.info JSON captured by this raw log. Existing baseline ten JSON receipts remain original provenance. Reviewed primary values are compared directly to the actual three published values; detail expects the actual first agent label/description, without copying generator normalization/dedup/limits. Score uses actual localization fields; absent table produces unknown score and fails the positive projection contract. Catalog has no public score field and remains exact candidate/source/pillar data acceptance.
+
+Command from packages/opencorvus: bun test test/expert-squad/market-discovery-chain.test.ts --timeout 60000 -t 'embedded expert squad search'. Existing bunfig/preload. baseline02-checker.log: exit1,1pass/9fail/11expects,3filtered,9.85s. Five projections undefined, four actual catalog responses have0 candidates, Squad SDK query returns actual squad-sdk/dynamic/research-studio and its target contract passes. No ranking oracle, source/generator change or writer execution. Actual field score remains unknown for five missing projections, not a pass. One preparatory Get-Content command used package-relative path twice and failed; the actual test command/path ran correctly and complete output is retained.
+
+Corrected test frozen in market-discovery-chain.baseline02.ts. Root must review before source release. No after/build/type/UI claims.

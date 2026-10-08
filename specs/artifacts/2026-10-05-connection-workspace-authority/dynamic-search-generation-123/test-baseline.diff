@@ -1,0 +1,75 @@
+diff --git a/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts b/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts
+index 577ae648..6ce1e42b 100644
+--- a/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts
++++ b/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts
+@@ -1,4 +1,11 @@
+ import { describe, expect, test } from "bun:test"
++import fs from "node:fs"
++import path from "node:path"
++import { EMBEDDED_EXPERT_SQUAD_IDS } from "../../src/expert-squad/builtin/ids"
++import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "../../src/expert-squad/id"
++import { scoreDiscoveryFields } from "../../src/capability/fuzzy"
++import { publicMarketZhTranslations01To35 } from "../../../web/src/content/public-market-zh-01-35"
++import { publicMarketZhTranslations68To99 } from "../../../web/src/content/public-market-zh-68-99"
+ import { Hono } from "hono"
+ import { memoryProject } from "../fixture/memory"
+ import { Instance } from "../../src/project/instance"
+@@ -136,3 +143,58 @@ describe("expert squad market discovery chain", () => {
+     })
+   }, 60_000)
+ })
++
++
++const embeddedReviewedTranslations = {
++  ...publicMarketZhTranslations01To35,
++  ...publicMarketZhTranslations68To99,
++}
++const embeddedQueries = {
++  advanced: { query: "高级软件交付", pillar: "code" },
++  base: { query: "独立 Tester", pillar: "code" },
++  dynamic: { query: "动态团队", pillar: "code" },
++  "research-studio": { query: "研究工作室", pillar: "work" },
++  "squad-sdk": { query: "生成 Expert Squad", pillar: "code" },
++} as const
++
++function recordEmbeddedSearchFact(name: string, fact: unknown) {
++  const directory = process.env.OPENCORVUS_EMBEDDED_SEARCH_EVIDENCE
++  if (!directory) throw new Error("Owned embedded search evidence directory is required")
++  fs.writeFileSync(path.join(directory, `${name}.json`), JSON.stringify(fact, null, 2) + "\n", { flag: "wx" })
++}
++
++for (const id of EMBEDDED_EXPERT_SQUAD_IDS) {
++  test(`embedded search123 reviewed projection ${id}`, () => {
++    const key = `${BUILTIN_EXPERT_SQUAD_NAMESPACE}/${id}` as keyof typeof embeddedReviewedTranslations
++    const translation = embeddedReviewedTranslations[key]
++    const primary = [translation.label, translation.description, translation.selectorSummary]
++    const detail = [...new Set([
++      ...Object.values(translation.agents).map((agent) => `${agent.label} ${"description" in agent ? agent.description : ""}`.replace(/\s+/gu, " ").trim().slice(0, 240)),
++      ...Object.values(translation.workflows).flatMap((workflow) => [
++        `${workflow.label} ${workflow.description}`.replace(/\s+/gu, " ").trim().slice(0, 240),
++        ...Object.values(workflow.nodes).map((node) => node.replace(/\s+/gu, " ").trim().slice(0, 240)),
++      ]),
++    ].filter(Boolean))].slice(0, 32)
++    const expected = { primary: primary.map((text) => text.replace(/\s+/gu, " ").trim().slice(0, 1000)), detail }
++    const actual = expertSquadSearchLocalizations[key]
++    const score = scoreDiscoveryFields(embeddedQueries[id].query, [
++      ...expected.primary.map((text) => ({ text, weight: 0.94 })),
++      ...expected.detail.map((text) => ({ text, weight: 0.8 })),
++    ])
++    recordEmbeddedSearchFact(`projection-${id}`, { key, actual: actual ?? null, expected, pureReviewedFieldScore: score ?? null })
++    expect(actual).toEqual(expected)
++    expect(score).toBeGreaterThan(0)
++  })
++
++  test(`embedded search123 actual loopback catalog ${id}`, async () => {
++    await using project = await memoryProject()
++    await withMarketRoutes(project.path, async (call) => {
++      const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
++      const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
++      recordEmbeddedSearchFact(`catalog-${id}`, { input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) })
++      const candidate = page.entries.find((entry) => entry.id === id)
++      expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
++      expect(candidate?.product_pillars).toContain(input.productPillar)
++    })
++  }, 60_000)
++}

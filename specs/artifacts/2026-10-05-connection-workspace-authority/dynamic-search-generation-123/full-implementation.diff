@@ -1,0 +1,148 @@
+diff --git a/packages/opencorvus/generated/expert-squad-search-localization.ts b/packages/opencorvus/generated/expert-squad-search-localization.ts
+index 8fb11337..f8373b01 100644
+--- a/packages/opencorvus/generated/expert-squad-search-localization.ts
++++ b/packages/opencorvus/generated/expert-squad-search-localization.ts
+@@ -16,6 +16,10 @@ export const expertSquadSearchLocalizations: Readonly<Record<string, ExpertSquad
+     primary: ["精算准备金评估", "把未付赔款数据、方法、不确定性、验证与治理证据汇总为合格的精算审查。", "用于边界明确的财产与意外险未付赔款准备金证据审查。"],
+     detail: ["准备金数据与三角表核对分析师 将受控来源记录与增量及累计准备金三角表进行核对。", "准备金方法、假设与诊断分析师 追踪赔付发展、尾部、趋势和预期损失假设，并提供比较诊断。", "准备金不确定性和验证分析师 测试实际与预期、回测、情景、范围和假设敏感证据。", "准备金治理、前滚和披露分析师 追踪期初至本期的变动、账面准备金与指示准备金的差异，以及治理和披露证据。", "精算准备金证据负责人 将四个独立分支合并为一个可审查的证据和未解决的决策登记册。", "精算准备金审查 四个零依赖的准备金证据分支汇聚为一次明确的合格精算审查。", "核对来源记录与准备金三角表证据。", "追踪方法和假设。", "检验不确定性和验证证据。", "追踪治理和披露。", "汇总所有分支，但不选择方法、不确认账面准备金，也不对准备金发表意见。"],
+   },
++  "builtin/advanced": {
++    primary: ["Advanced", "内置的高级软件交付团队，保留能力匹配的需求到架构可追溯性，以及执行、测试、界面与独立审查边界。", "用于需要从需求到架构可追溯、并行调查与实施证据及独立审查，但没有更窄已安装专家契约的高级软件交付。"],
++    detail: ["请求解析员 澄清意图、缺失的输入、范围边界和操作员决策。", "需求工程师 根据当前证据记录可证伪的要求和基本决策。", "解决方案架构师 创建可追溯的界面契约、独立 revision 的 Delivery Slice 和组装责任归属。", "工作负载审核员 评估 Delivery Slice 规模、耦合、遗漏工作、验收覆盖和验证成本，但不承担架构决策权。", "来源调查员 开展以只读为主的代码库调查，并记录有来源依据的证据。", "外部研究调查员 收集持久的多源外部证据并将事实与推论分开。", "接口调查员 捕获界面结构、行为、状态、资产和参考证据。", "界面设计师 根据批准的证据生成可追溯的界面设计和实施合同。", "实施工程师 实现 Architect 契约并产出代码库、命令和 runtime 证据，但不承担审查责任。", "测试工程师 独立执行适用的非 UI 测试，并根据实施证据进行 runtime 检查并报告准确结果。", "视觉审核员 审查真实渲染证据、交互状态和视觉验收覆盖。", "系统完整性审核员 实现证明就绪后，对需求、契约、实现和证据开展不可转交的独立系统审查。", "接口完整性审核员 对已实现的接口行为执行独立的 Task 范围审查并提供证据，而无需交付切片规划图。", "主张核验员 根据可追溯的证据验证重大事实主张并报告不确定性。", "计划交付 完成计划型非界面交付：并行调查意图、需求与存储库，建立精确的需求至架构衔接，并行开展工作量审查与实施，最后并行测试并独立审查系统。", "确认意图、输入和范围，并在不存在任何澄清差距时明确记录。", "根据当前证据记录可证伪的要求和基本决策。", "与意图和需求工作并行地调查存储库结构、调用者、测试和所有权边界。", "将精确意图、RequirementSet 与代码库证据整合为可追溯契约、不可变 Delivery Slice revision 和组装责任归属。", "在没有架构授权的情况下评估切片大小、耦合、省略的工作、验收覆盖率和验证成本。", "与工作量审查并行实施确切的架构师合同，并记录具体存储库和验证证据。", "在存在实施证据后，独立执行适用的非 UI 测试和 runtime 检查。", "在实施和工作量证据存在后，与测试执行同时进行独立的对抗性审查。", "外部研究型计划交付 先解决一个关键外部证据缺口，再形成需求与架构，随后由能力匹配的责任方实施、独立测试并审查非界面交付。", "使用只读代码库工具调查结构、调用者、测试和责任边界。", "使用投影的网页研究能力解决选定且连贯的多来源外部事实缺口。", "在精确意图、代码库证据与外部证据收敛后登记完整、可证伪的需求。", "将已收敛的 RequirementSet 与所选证据绑定为可追溯契约、可观察验收规格、Delivery Slice revision 和组装责任归属。", "使用可执行的投影能力收敛剩余动态值，并实现精确的 Architect 契约。", "实施收敛后，独立重读权威来源并执行适用的非 UI 与 runtime 检查。", "在全部工作收敛后，审计需求覆盖、来源映射、实施、工作量和可执行测试证据。", "证据调查 当调查本身就是 Task 交付，或阻塞一项不交付决策时，完成存储库和外部调查，再核验事实主张；不要把此图作为交付工作流的辅助阶段，后者的调度器可针对具体证据缺口派遣单个调查员。"],
++  },
+   "builtin/advertising-measurement-brand-safety": {
+     primary: ["广告衡量与品牌安全", "核对活动分类、指标契约、事件谱系、投放、可视性、无效流量、品牌安全与适宜性、归因、增量和实验证据，不修改广告平台或作合规结论。", "适用于广告投放衡量、品牌安全和效果声明的证据保障。"],
+     detail: ["品牌安全与适宜性验证分析员 核对属性、内容、语境、分类、供应链与所提供品牌适宜性规则的证据。", "活动分类与指标契约分析员 冻结活动、渠道、创意、受众、事件、指标、分母、窗口和版本定义。", "投放核对与数据质量分析员 核对请求、展示、可视、点击、成本、无效流量、重复和平台差异。", "结果归因与实验分析员 核对转化、归因窗口、对照、增量、实验设计、偏差和不确定性。", "广告衡量与品牌安全审查负责人 整合四条广告证据分支并保留投放、声明、合规和风险接受权限。", "广告衡量与品牌安全合格审查 四条独立的广告衡量与品牌安全证据分支汇聚成一份受控审查资料包。", "核对属性、内容、分类、供应链和品牌适宜性证据。", "冻结活动分类、事件、指标、分母、窗口和版本契约。", "核对投放、可视性、无效流量、成本和跨平台数据质量。", "核对结果、归因、增量、实验、偏差和不确定性。", "整合全部证据，同时保留平台修改、媒体购买、声明和合规权限。"],
+@@ -48,6 +52,10 @@ export const expertSquadSearchLocalizations: Readonly<Record<string, ExpertSquad
+     primary: ["航空维修可靠性", "将飞机配置、维修可靠性和规划证据整合为经授权的适航审查资料包，但不具备维修或放行权限。", "用于边界明确的飞机维修可靠性证据与规划审查。"],
+     detail: ["飞机配置和记录分析师 核对按序列号管理的飞机配置、寿命限制、维修记录和所提供的适用性证据。", "维护可靠性分析师 分析暴露标准化维护事件、重复、移除和分层可靠性证据。", "维护计划和适航分析师 跟踪到期工作、批准的计划修订、延期、依赖性和授权审查需求。", "航空维修可靠性负责人 将配置、可靠性和规划证据整合为供合格人员审查的决策资料包。", "航空维修可靠性审查 三个独立的飞机证据分支汇聚成一个授权审查包。", "核对配置、寿命限制、记录和适用性。", "分析暴露标准化的可靠性证据。", "跟踪应有的工作和合格的适航审查需求。", "整合三个分支，但不作适航或放行决定。"],
+   },
++  "builtin/base": {
++    primary: ["Base", "Base 由任务负责人直接完成发现、规划和实际交付，再由独立测试方检查结果；有独立来源调查或研究需要时才委托规划与开发或并行研究。", "适用于一个执行责任方完成、独立 Tester 验收的一项完整 Task；真实独立研究可选用并行研究图。"],
++    detail: ["Base 研究员 开展以只读为主的代码库调查和相关外部研究，并发布规范的 Base 研究报告。", "Base 规划师 开展有界的独立来源权限调查，或在需要并行研究时规划共享输入与责任，分配独立研究、执行和验证工作。", "Base 开发工程师 完成发现、规划、产品或外部状态交付、自检及适用的真实页面证据。", "Base 测试工程师 在实现结算后，依据原始请求和权威数据独立检查实际结果，记录具体差距与证据。", "执行与独立验证 任务负责人直接完成发现、规划与交付，独立测试方依据原始要求验证实际结果。", "独立重读动态来源，并按每项标准验证已结算结果。", "来源规划、执行与独立验证 通过有界的来源调查明确执行权限和适用约束，执行前提已满足的不可逆操作，再独立核对来源分类与最终结果。", "区分执行权限条件、适用约束与开发方负责的结果语义，在操作前查清可追溯的来源要求。", "依据原始要求核对各项操作的来源分类，完成前提已满足的授权操作，并交付完整的执行回执。", "独立核对来源分类与定位信息，将适用规则和预期结果对应到原始执行回执及目标记录的读取结果。", "规划师、并行 Worker 与验证 一个 Planner 先固定任务分区，研究与实现 worker 随后在同一 frontier 并行工作，再由测试 worker 验证已结算的结果。", "发布完整 Task 分区、共享输入、路径所有权与验收分配。", "执行计划中的只读证据调查分区。", "执行计划中的产品与生成输出分区。", "在实现结算后执行计划中的测试与 checker 分区。"],
++  },
+   "builtin/battery-safety-reliability": {
+     primary: ["电池安全与可靠性", "整合电芯、模块、电池包、运行包络、滥用试验、热失控、蔓延、屏障、故障和可靠性证据，供合格人员审查。", "用于边界明确的电池安全与可靠性证据工作，不具备带电试验、BMS、受损电池处置、应急、运输、认证或放行权限。"],
+     detail: ["电池配置和工作范围分析 核对电芯、模块和电池包谱系、BMS 与保护版本、预期用途和受控运行包络证据。", "电池滥用和热失控证据分析师 重建授权的历史滥用测试条件、仪器、热事件、传播和屏障观察。", "电池可靠性和故障-数据分析师 在开展边界明确的可靠性计算与不确定性审查前，定义可比总体、暴露量、故障和删失数据。", "电池安全可靠性审查负责人 整合配置、滥用与热事件及可靠性分支，同时保留具体应用领域的专业决定权。", "电池安全可靠性审查 三个独立的配置、滥用/热和故障可靠性分支汇聚成一个有界审查包。", "核对电池谱系、保护配置、应用和受控运行包络证据。", "重建已经授权的历史测试条件、测量、热事件和传播证据。", "构建可比总体、暴露量、故障与删失数据及边界明确的可靠性证据。", "整合所有分支并保留不确定性，将安全、试验、运输、认证和放行决定交由有权人员处理。"],
+@@ -404,6 +412,10 @@ export const expertSquadSearchLocalizations: Readonly<Record<string, ExpertSquad
+     primary: ["记录与电子取证运营", "核对事项授权、保留与法律保全、保管人和系统、采集来源、处理、去重、文档家族、检索、审阅、特权标记、生产映射和处置问题，不执行采集、删除或法律判断。", "适用于记录治理与电子取证运营证据的受控整合。"],
+     detail: ["保管人、来源与采集溯源分析员 核对保管人、系统、位置、时间范围、保存、采集批次、哈希与保管链证据。", "处理、去重、检索与审阅分析员 核对处理配置、异常、去重、文档家族、检索式、命中和审阅过程。", "生产、特权与处置分析员 组织特权标记、遮盖、生产集合、编号、例外和处置证据，不作法律认定。", "记录授权、保留与法律保全分析员 冻结事项、记录类别、保留来源、法律保全范围、冲突和批准证据。", "记录与电子取证运营审查负责人 整合四条记录与电子取证分支并路由至记录、法务、隐私和安全负责人。", "记录与电子取证运营合格审查 四条独立的记录与电子取证证据分支汇聚成一份受控审查资料包。", "核对保管人、系统、保存、采集、哈希和保管链证据。", "核对处理、异常、去重、文档家族、检索和审阅证据。", "组织特权标记、遮盖、生产和处置证据，不作法律认定。", "冻结事项授权、记录类别、保留来源、法律保全和冲突证据。", "整合全部证据，同时保留采集、删除、特权、生产和法律决定权限。"],
+   },
++  "builtin/research-studio": {
++    primary: ["研究工作室", "一支负责研究规划、持久证据收集、可复现分析、计算后事实核查和模板驱动报告交付的 Squad。", "适用于有来源支持的检索、可复现分析、综合和证据驱动的报告交付，不包含软件交付规划工作流。"],
++    detail: ["研究工作室规划员 界定问题边界、研究方法、来源层级、比较维度、时效规则和停止条件。", "研究工作室深度研究员 依据已批准研究计划收集持久的多来源证据、引文映射、矛盾和待解问题。", "研究工作室证据分析员 构建主张与证据矩阵，负责可复现计算、规范结果资源、算法验证和事实核查前的分析综合。", "研究工作室事实核查员 依据持久来源核验分析员计算后起关键支撑作用的主张和方法证据，并记录更正、不确定性和逐项结论。", "研究工作室报告撰写员 将已接受的证据、分析和事实核查结论转化为模板驱动的综合报告、归档及真实渲染页面审查证据。", "直接撰写研究报告 依据充分且边界明确的用户材料生成已保存及内联报告，不虚构新的研究主张。", "依据充分且边界明确的既有材料忠实撰写并交付报告。", "经核验的证据综合 分析充分的既有证据，核查关键结论，再撰写已接受的报告。", "从既有证据中形成明确主张、必要时的可复现计算、规范证据资源、比较和局限。", "核验分析员计算后起关键支撑作用的主张和方法证据，并记录更正或未决事项。", "根据已接受的分析与事实核查结论渲染并交付模板驱动的报告，不重新计算相关主张。", "完整的来源支持型研究 规划调查、收集持久证据、开展分析、核验结论并交付已接受的报告。", "定义边界明确的研究章程、来源策略、比较方法和停止条件。", "依据已接受的研究章程收集持久的多来源证据。", "从所收集证据中形成明确主张、可复现计算、规范证据资源、比较和局限。", "根据已接受的证据、分析与事实核查结论渲染并交付模板驱动的报告，不重新计算相关主张。"],
++  },
+   "builtin/review-debug": {
+     primary: ["审查与调试", "通过持久的目录事实和可见的叙事型 Turn 摘要，完成有证据支持的产品审查、根因调试、产品源码修复和独立修复验证。", "适用于现有产品变更审查、可复现缺陷调查、根因调试、产品修复和修复验证。"],
+     detail: ["审查与调试规划师 发布复现边界、因果调查范围、路径所有权和验收分配。", "审查与调试代码审查员 审查变更及完整调用图中的正确性、回归、架构违规和因果线索。", "审查与调试根因调查员 证明从可观察症状经触发条件和数据流到根本设计或实现故障的因果链。", "审查与调试修复实施员 修复已证明的产品根因，移除被取代路径，添加回归测试并验证变更范围。", "有证据支持的审查 确立确切需求、审查目标、差异和调用图证据，再给出有证据支持的代码审查，不暗示已修复产品。", "发布审查目标、证据边界、路径所有权和验收分配。", "依据已确立证据审查变更及周边调用图。", "独立检查潜在因果链与旧路径未根治原因。", "产品调试与修复 复现缺陷、独立审查代码并证明根因、修复产品，再独立验证修复。", "发布复现边界、因果调查范围、路径所有权和验收分配。", "审查受影响调用图及现有变更的正确性和回归风险。", "证明因果链，并说明先前路径为何未能消除缺陷。", "修复已证明的根因并添加聚焦回归覆盖。", "图形产品调试与修复 复现图形缺陷、证明代码与视觉成因、完成修复，并独立核验新的浏览器和代码仓库证据。", "发布图形复现、因果调查、路径所有权和真实页面验收分配。", "审查图形实现调用图和回归风险。", "证明产品数据、事件、渲染或样式的因果链。", "修复已证明的图形产品根因并添加回归覆盖。"],
+@@ -444,6 +456,10 @@ export const expertSquadSearchLocalizations: Readonly<Record<string, ExpertSquad
+     primary: ["运动表现分析", "将训练暴露与负荷、表现测试与可靠性，以及可用性与身心状态证据整合成结合个人情境的表现审查。", "适用于边界明确的运动员表现证据分析，不具备医疗或教练权限。"],
+     detail: ["训练暴露与负荷分析员 核对训练和比赛暴露以及带版本的内部与外部负荷指标。", "表现测试与可靠性分析员 检查方案可比性、测量误差、可靠性和有依据的个体变化。", "可用性与身心状态分析员 映射可用性、自报身心状态、症状、旅行和恢复情境，不作诊断。", "运动表现审查负责人 将暴露、测试和身心状态证据整合成边界明确的假设和合格决策关口。", "运动表现审查 三条独立运动员表现证据分支汇聚成一份审查资料包。", "结合数据质量证据核对暴露以及内部与外部负荷。", "检查测试方案的可比性、可靠性、误差和个体变化。", "映射可用性以及自报的身心状态、症状、旅行和恢复情境。", "将所有分支整合成情境化的表现证据和审查关口。"],
+   },
++  "builtin/squad-sdk": {
++    primary: ["生成 Expert Squad", "以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Expert Squad。", "适用于导入外部异构 Agent 算法，或通过规范 SDK 设计、验证并安装新的 OpenCorvus Expert Squad。"],
++    detail: ["生成 Expert Squad 来源分析员 提取源算法、领域边界、参与者、证据流、资源、可移植性约束和验收契约。", "生成 Expert Squad 规划师 发布包边界、优先扁平的 Planner/并行 worker 拓扑、资源闭包和验收分配。", "生成 Expert Squad 导入分析员 检查外部 Squad 的成员、指令、Skill 闭包、MCP 能力、映射证据和可移植性阻塞项。", "生成 Expert Squad 契约审查员 依据来源证据和包不变量，独立验证完整的创作蓝图或导入映射。", "生成 Expert Squad 创作 提取领域算法，设计一份规范的包蓝图，独立验证，再通过 SDK 创作工具将其具体化。", "发布规范包蓝图、并行 worker 分区与验收分配。", "发布源算法和包边界证据。", "发布对准确蓝图的独立正向验证。", "异构 Squad 导入 检查外部 Squad 和预览证据，修复映射，独立验证准确 digest，再执行一次导入。", "发布导入边界、映射责任和验收分配。", "发布所选外部 Squad 的来源、可移植性和映射分析。", "发布对无阻塞预览和准确映射的独立正向验证。"],
++  },
+   "builtin/student-financial-aid-administration": {
+     primary: ["学生资助管理", "整理带来源版本的学生资助申请、核验、学业、就读成本、资助组合、授予、发放、对账和例外证据，不作资格裁定，也不具备资金划转权限。", "适用于为获授权院校审查准备受控的学生资助管理证据。"],
+     detail: ["学生资助申请人 ISIR 核验分析员 冻结申请人 token、资助年度、FAFSA/ISIR 交易以及所提供的核验与信息冲突证据。", "学生资助学业、就读成本与资助组合分析员 追踪所提供的项目、校历、注册、就读成本、资助需求输入、政策和资助组合计算。", "学生资助授予、发放与对账分析员 核对所提供的资助授予、发起、发放、学生账户和项目资金记录，不划转资金。", "学生资助 SAP、退还、超额资助与例外分析员 为 SAP、退学与资金退还、超额资助和信息冲突问题建立受来源约束的时间线。", "学生资助管理审查负责人 将申请、学业与资助组合、发放和例外证据整合成获授权的学生资助管理审查资料包。", "学生资助管理合格审查 各条独立的专业证据分支汇聚成一项受控的学生资助管理审查。", "冻结申请人 token、资助年度、FAFSA/ISIR 交易以及所提供的核验与信息冲突证据。", "追踪所提供的项目、校历、注册、就读成本、资助需求输入、政策和资助组合计算。", "核对所提供的资助授予、发起、发放、学生账户和项目资金记录，不划转资金。", "为 SAP、退学与资金退还、超额资助和信息冲突问题建立受来源约束的时间线。", "将申请、学业与资助组合、发放和例外证据整合成获授权的学生资助管理审查资料包。"],
+diff --git a/packages/opencorvus/script/generate-expert-squad-search-localization.ts b/packages/opencorvus/script/generate-expert-squad-search-localization.ts
+index b738bc57..98201627 100644
+--- a/packages/opencorvus/script/generate-expert-squad-search-localization.ts
++++ b/packages/opencorvus/script/generate-expert-squad-search-localization.ts
+@@ -4,6 +4,8 @@ import fs from "node:fs"
+ import path from "node:path"
+ import { fileURLToPath, pathToFileURL } from "node:url"
+ import { discoverExpertSquadPayloadPackages } from "./generate-expert-squad-payload"
++import { EMBEDDED_EXPERT_SQUAD_IDS } from "../src/expert-squad/builtin/ids"
++import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "../src/expert-squad/id"
+ 
+ // The published website already carries a reviewed Chinese projection of every bundled Expert Squad.
+ // Market and catalog discovery are byte-identical English package sources, so a Chinese request scores
+@@ -73,7 +75,17 @@ function detailEntries(translation: SquadTranslation): string[] {
+ }
+ 
+ export async function renderExpertSquadSearchLocalizationModule(repoRoot: string): Promise<string> {
+-  const packages = await discoverExpertSquadPayloadPackages(repoRoot)
++  const payloadPackages = await discoverExpertSquadPayloadPackages(repoRoot)
++  const packageIdentities = new Map<string, { namespace: string; id: string }>()
++  for (const pkg of [
++    ...payloadPackages,
++    ...EMBEDDED_EXPERT_SQUAD_IDS.map((id) => ({ namespace: BUILTIN_EXPERT_SQUAD_NAMESPACE, id })),
++  ]) {
++    packageIdentities.set(`${pkg.namespace}/${pkg.id}`, { namespace: pkg.namespace, id: pkg.id })
++  }
++  const packages = [...packageIdentities.values()].sort((a, b) =>
++    `${a.namespace}/${a.id}`.localeCompare(`${b.namespace}/${b.id}`),
++  )
+   const translations = await loadTranslations(repoRoot)
+   const blocks: string[] = []
+ 
+@@ -139,3 +151,4 @@ async function main(): Promise<void> {
+ if (import.meta.main) {
+   await main()
+ }
++
+diff --git a/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts b/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts
+index 577ae648..2dc88f93 100644
+--- a/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts
++++ b/packages/opencorvus/test/expert-squad/market-discovery-chain.test.ts
+@@ -1,4 +1,9 @@
+ import { describe, expect, test } from "bun:test"
++import { EMBEDDED_EXPERT_SQUAD_IDS } from "../../src/expert-squad/builtin/ids"
++import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "../../src/expert-squad/id"
++import { scoreDiscoveryFields } from "../../src/capability/fuzzy"
++import { publicMarketZhTranslations01To35 } from "../../../web/src/content/public-market-zh-01-35"
++import { publicMarketZhTranslations68To99 } from "../../../web/src/content/public-market-zh-68-99"
+ import { Hono } from "hono"
+ import { memoryProject } from "../fixture/memory"
+ import { Instance } from "../../src/project/instance"
+@@ -136,3 +141,48 @@ describe("expert squad market discovery chain", () => {
+     })
+   }, 60_000)
+ })
++
++
++const embeddedReviewedTranslations = {
++  ...publicMarketZhTranslations01To35,
++  ...publicMarketZhTranslations68To99,
++}
++const embeddedQueries = {
++  advanced: { query: "高级软件交付", pillar: "code" },
++  base: { query: "独立 Tester", pillar: "code" },
++  dynamic: { query: "动态团队", pillar: "code" },
++  "research-studio": { query: "研究工作室", pillar: "work" },
++  "squad-sdk": { query: "生成 Expert Squad", pillar: "code" },
++} as const
++
++describe("embedded expert squad search", () => {
++  for (const id of EMBEDDED_EXPERT_SQUAD_IDS) {
++    test(`reviewed projection ${id}`, () => {
++      const key = `${BUILTIN_EXPERT_SQUAD_NAMESPACE}/${id}` as keyof typeof embeddedReviewedTranslations
++      const translation = embeddedReviewedTranslations[key]
++      const actual = expertSquadSearchLocalizations[key]
++      const agent = Object.values(translation.agents)[0]!
++      const detail = `${agent.label} ${"description" in agent ? agent.description : ""}`
++      const score = actual ? scoreDiscoveryFields(embeddedQueries[id].query, [
++        ...actual.primary.map((text) => ({ text, weight: 0.94 })),
++        ...actual.detail.map((text) => ({ text, weight: 0.8 })),
++      ]) : undefined
++      console.info(JSON.stringify({ contract: "embedded reviewed search projection", key, actual: actual ?? null, reviewedPrimary: [translation.label, translation.description, translation.selectorSummary], reviewedAgentDetail: detail, actualLocalizationFieldScore: score ?? null }))
++      expect(actual?.primary).toEqual([translation.label, translation.description, translation.selectorSummary])
++      expect(actual?.detail).toContain(detail)
++      expect(score).toBeGreaterThan(0)
++    })
++
++    test(`actual loopback catalog ${id}`, async () => {
++      await using project = await memoryProject()
++      await withMarketRoutes(project.path, async (call) => {
++        const input = { directory: project.path, view: "effective", query: embeddedQueries[id].query, productPillar: embeddedQueries[id].pillar, limit: "20" }
++        const page = await call(`search?${new URLSearchParams(input)}`) as { entries: Array<{ id: string; built_in: boolean; source: unknown; product_pillars: string[] }>; total_count: number }
++        console.info(JSON.stringify({ contract: "embedded actual loopback catalog", input, totalCount: page.total_count, entries: page.entries.map((entry) => ({ id: entry.id, built_in: entry.built_in, source: entry.source, product_pillars: entry.product_pillars })) }))
++        const candidate = page.entries.find((entry) => entry.id === id)
++        expect(candidate).toMatchObject({ id, built_in: true, source: { kind: "built_in" } })
++        expect(candidate?.product_pillars).toContain(input.productPillar)
++      })
++    }, 60_000)
++  }
++})
