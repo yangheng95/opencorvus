@@ -365,3 +365,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [Source excerpt reading](2026-10-08-source-excerpt-reading.md)：正常Disclosure全文阅读，真实宽窄限定合格；original native closure未达成，单agent持续迭代。
 
 - [Single Chat Sources](2026-10-08-single-chat-sources.md)：真实深色摘要/官方URL/底部跟随，修正诊断scope；保179原launcher1，181实际0，后续只单agent。
+
+- [Side Chat display projection](2026-10-08-side-chat-display-projection.md)：修复真实step-start错误；继承历史与Source回复真实合格，184maximum1保留，185actual0，单agent继续。

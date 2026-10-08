@@ -1,0 +1,105 @@
+{
+  "assetStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18113/ui/",
+  "observedAtUtc": "2026-10-08T14:24:10.6498478Z",
+  "owner": {
+    "observedAtUtc": "2026-10-08T14:23:32.9453916Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\evidence",
+    "evidencePrefix": "side-chat-final-185-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\startup.json",
+    "occurrence": "side-chat-final-185-01-334ef7a9-6bf9-4b78-b410-dc9be59a38a8",
+    "port": 18113,
+    "owner": {
+      "processInstanceID": "win32:639270662122463298",
+      "ProcessId": 78624
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639270662122463298",
+        "ProcessId": 78624
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\task-selection.json",
+    "taskSelectionRequired": false,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\side-chat-final-185\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 24,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\side-chat-final-185\\live-01",
+    "qualificationKind": "NativeService",
+    "host": {
+      "pid": 63204,
+      "processInstanceID": "win32:639270662114459629",
+      "occurrenceID": "530db889-a0dd-4e4f-8b57-5ce449333246"
+    },
+    "nativeTarget": {
+      "pid": 78624,
+      "processInstanceID": "win32:639270662122463298",
+      "occurrenceID": "210fa144-8db7-467d-822f-db29f795f2d1"
+    },
+    "targetBirthAtMs": 1791469412246,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "scriptSrc": "http://127.0.0.1:18113/ui/assets/main-EQ2U4atl.js",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18113,
+      "OwningProcess": 78624
+    }
+  ],
+  "uiStatus": 200,
+  "asset": "/ui/assets/main-EQ2U4atl.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "side-chat-final-185-01-334ef7a9-6bf9-4b78-b410-dc9be59a38a8",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18113",
+    "pid": 78624
+  },
+  "uiUri": "http://127.0.0.1:18113/ui"
+}

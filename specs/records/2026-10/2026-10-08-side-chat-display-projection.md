@@ -1,0 +1,7 @@
+# Side Chat display projection
+
+## Recall
+
+User requires single-agent Sources iteration. [182 actual opening failure](../../artifacts/2026-10-05-connection-workspace-authority/source-side-chat-live-182/README.md) exposes step-start protocol metadata passed directly into CardNode. [183 analysis](../../artifacts/2026-10-05-connection-workspace-authority/side-chat-part-projection-plan-183.md) compares main/child/shared transport contracts: only SideMessage omitted existing isCardBodyMessagePart. Repair reuses that one classifier, retains full transcript/IDs/error/time and all supported Source/tool/interaction content; current07 documents the boundary. UI-only change, no UI automated tests; types46268/build97939actual0.
+
+[184](../../artifacts/2026-10-05-connection-workspace-authority/source-side-chat-after-184/README.md) genuine inherited User/OK and Source3/1 reply display online; inspection reaches original600000 and launcher1. Later End screenshot is offline and explicitly unqualified for live reading. [Short185](../../artifacts/2026-10-05-connection-workspace-authority/side-chat-final-185/README.md) separately qualifies online Source1/new reply, launcher52204actual0/6Solstream200EOF/whole native-drain-request/parent/port/pairclosed. Both original failures preserved. Narrow/alltypes/generalRendering remain unknown. No Task/squad/subagent/user-process/release; continuous goal active, scoped commit/push pending actual observation.

@@ -22,7 +22,7 @@ import { quotedPrompt, type Quotation } from "../services/quotation"
 import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
 import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
-import { assistantMessageErrorReason, conversationMessageHasDisplayContent } from "../utils/message-part"
+import { assistantMessageErrorReason, conversationMessageHasDisplayContent, isCardBodyMessagePart } from "../utils/message-part"
 import { t } from "../utils/i18n"
 import { ConversationCard } from "./ConversationCard"
 import { QuotationSelection } from "./QuotationSelection"
@@ -56,7 +56,7 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
       role: user ? "user" : message.stage,
       stage: user ? "user" : message.stage,
       title: message.agentID,
-      parts: message.parts,
+      parts: message.parts.filter(isCardBodyMessagePart),
       childIDs: [],
       status: errorReason
         ? ("error" as const)

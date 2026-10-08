@@ -1,0 +1,65 @@
+{
+  "nativeSettlement": {
+    "occurrence": "side-chat-final-185-01-334ef7a9-6bf9-4b78-b410-dc9be59a38a8",
+    "outcome": "settled",
+    "host": {
+      "pid": 63204,
+      "processInstanceID": "win32:639270662114459629",
+      "occurrenceID": "530db889-a0dd-4e4f-8b57-5ce449333246"
+    },
+    "target": {
+      "pid": 78624,
+      "processInstanceID": "win32:639270662122463298",
+      "occurrenceID": "210fa144-8db7-467d-822f-db29f795f2d1"
+    },
+    "observedAtUtc": "2026-10-08T14:28:37.709Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\runtime\\data\\auth.json",
+      "copiedLength": 2194,
+      "presentAfter": false,
+      "outcome": "removed"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\side-chat-final-185-01\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "presentAfter": false,
+      "outcome": "removed"
+    }
+  ],
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "observedAtUtc": "2026-10-08T14:28:40.2221859Z",
+  "chain": [
+    {
+      "expected": {
+        "pid": 78624,
+        "processInstanceID": "win32:639270662122463298",
+        "occurrenceID": "210fa144-8db7-467d-822f-db29f795f2d1"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 63204,
+        "processInstanceID": "win32:639270662114459629",
+        "occurrenceID": "530db889-a0dd-4e4f-8b57-5ce449333246"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "physicalCompletion": true,
+  "pairedCleanupComplete": true,
+  "occurrence": "side-chat-final-185-01-334ef7a9-6bf9-4b78-b410-dc9be59a38a8"
+}

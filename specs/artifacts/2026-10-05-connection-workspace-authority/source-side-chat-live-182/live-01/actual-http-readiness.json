@@ -1,0 +1,105 @@
+{
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "observedAtUtc": "2026-10-08T13:56:23.6694840Z",
+  "uiUri": "http://127.0.0.1:18111/ui",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-side-chat-live-182-01-efd7876e-c7ae-4c06-882e-0aa80e77ac9f",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18111",
+    "pid": 72240
+  },
+  "assetStatus": 200,
+  "scriptSrc": "http://127.0.0.1:18111/ui/assets/main-DohwWI7H.js",
+  "owner": {
+    "observedAtUtc": "2026-10-08T13:54:18.3403084Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-live-182-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-live-182-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-live-182-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-live-182-01\\evidence",
+    "evidencePrefix": "source-side-chat-live-182-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-live-182-01\\startup.json",
+    "occurrence": "source-side-chat-live-182-01-efd7876e-c7ae-4c06-882e-0aa80e77ac9f",
+    "port": 18111,
+    "owner": {
+      "processInstanceID": "win32:639270644577216482",
+      "ProcessId": 72240
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639270644577216482",
+        "ProcessId": 72240
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-live-182-01\\task-selection.json",
+    "taskSelectionRequired": false,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-side-chat-live-182\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 24,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-side-chat-live-182\\live-01",
+    "qualificationKind": "NativeService",
+    "host": {
+      "pid": 75984,
+      "processInstanceID": "win32:639270644569107963",
+      "occurrenceID": "dcd85af1-dfea-4861-9724-ec058316cc04"
+    },
+    "nativeTarget": {
+      "pid": 72240,
+      "processInstanceID": "win32:639270644577216482",
+      "occurrenceID": "33b5f88c-43eb-4c9b-9cc3-3d6d3ace8855"
+    },
+    "targetBirthAtMs": 1791467657721,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "asset": "/ui/assets/main-DohwWI7H.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18111,
+      "OwningProcess": 72240
+    }
+  ],
+  "finalUiUri": "http://127.0.0.1:18111/ui/",
+  "uiStatus": 200
+}

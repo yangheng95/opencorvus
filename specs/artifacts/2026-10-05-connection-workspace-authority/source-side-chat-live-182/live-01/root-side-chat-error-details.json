@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-08T13:57:54.061Z",
+  "error": [
+    "Side chat 1Side chat 1Ask about this conversation while the main task keeps working.Side chat needs attentionDetailsError: CardParts unsupported part type: step-start\n    at ske (http://localhost:18111/ui/assets/main-DohwWI7H.js:209:8703)\n    at get fallback (http://localhost:18111/ui/assets/main-DohwWI7H.js:209:9454)\n    at Object.fn (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:15073)\n    at Qt (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:7068)\n    at Y (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:6999)\n    at N (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:3281)\n    at Gs (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:15037)\n    at http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:11518\n    at x (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:5188)\n    at c (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:11512)DismissA little room to exploreAsk a question, or quote a passage from the main conversation.Explain the approachExplore the trade-offsWhat should I verify?Main conversation stays on track",
+    "Side chat needs attentionDetailsError: CardParts unsupported part type: step-start\n    at ske (http://localhost:18111/ui/assets/main-DohwWI7H.js:209:8703)\n    at get fallback (http://localhost:18111/ui/assets/main-DohwWI7H.js:209:9454)\n    at Object.fn (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:15073)\n    at Qt (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:7068)\n    at Y (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:6999)\n    at N (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:3281)\n    at Gs (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:15037)\n    at http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:11518\n    at x (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:5188)\n    at c (http://localhost:18111/ui/assets/native-menu-surface-contract-b_vimv-0.js:1:11512)Dismiss"
+  ],
+  "messageIDs": [
+    "msg_hDczin5gPabJ1tAV4LPJ",
+    "msg_g0VXSxlBL0028B9aG6W1"
+  ],
+  "sidePanel": {
+    "bottom": 720.0000152587891,
+    "height": 635.2000122070312,
+    "left": 900,
+    "right": 1280,
+    "top": 84.80000305175781,
+    "width": 380,
+    "x": 900,
+    "y": 84.80000305175781
+  }
+}

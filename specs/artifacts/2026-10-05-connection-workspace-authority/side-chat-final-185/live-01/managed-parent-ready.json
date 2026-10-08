@@ -1,0 +1,15 @@
+{
+  "pid": 78624,
+  "occurrence": "side-chat-final-185-01-334ef7a9-6bf9-4b78-b410-dc9be59a38a8",
+  "owner": {
+    "pid": 78624,
+    "processInstanceID": "win32:639270662122463298",
+    "occurrenceID": "244eb3f7-8c5b-42ff-93ab-02510a9e2c34"
+  },
+  "parent": {
+    "pid": 67136,
+    "processInstanceID": "win32:639270662122092629",
+    "occurrenceID": "8f638a5c-5281-46a1-bb79-a4d4b874f010"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

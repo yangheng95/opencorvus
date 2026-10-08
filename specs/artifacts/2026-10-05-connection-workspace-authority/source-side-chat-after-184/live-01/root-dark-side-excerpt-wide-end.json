@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-08T14:18:14.249Z",
+  "body": [
+    {
+      "client": 190,
+      "height": 966,
+      "length": 2197,
+      "rect": {
+        "bottom": 561.5375061035156,
+        "height": 192,
+        "left": 928,
+        "right": 1264,
+        "top": 369.5375061035156,
+        "width": 336,
+        "x": 928,
+        "y": 369.5375061035156
+      },
+      "scroll": 775.2000122070312,
+      "tail": " receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes."
+    }
+  ],
+  "dock": {
+    "bottom": 720.0000114440918,
+    "height": 683.2000122070312,
+    "left": 900,
+    "right": 1280,
+    "top": 36.79999923706055,
+    "width": 380,
+    "x": 900,
+    "y": 36.79999923706055
+  },
+  "focus": {
+    "class": "oc-disclosure__content msg-source-excerpt__body",
+    "role": "region"
+  },
+  "parent": {
+    "follow": "false",
+    "top": 252
+  }
+}

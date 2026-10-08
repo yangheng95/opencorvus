@@ -344,6 +344,9 @@ status and exact-occurrence lifecycle events. The main selection, prompt owner
 and transcript remain independent. Side chats are retained and reopenable;
 closing their tab hides the panel rather than deleting audit history.
 Pending questions and permissions render through the existing InteractionCard.
+Side Chat cards project their body parts through the shared conversation display
+contract, as child transcript cards do. Full protocol parts remain in the
+transcript; execution step markers are metadata rather than card body content.
 Replies use the exact Question or Permission endpoint and side-chat directory;
 the side stream owns refresh, so answering does not reload the main Board.
 

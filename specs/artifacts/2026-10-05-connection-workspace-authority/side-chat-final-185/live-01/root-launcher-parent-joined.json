@@ -1,0 +1,12 @@
+{
+  "parentState": "dead_or_reused",
+  "boundary": "Actual write_stdin exit and independent original parent occurrence",
+  "actualExitCode": 0,
+  "parent": {
+    "pid": 51404,
+    "processInstanceID": "win32:639270662093993198",
+    "occurrenceID": "d619782f-49ae-4e3f-8649-450b87bbc5cd"
+  },
+  "owningExec": 52204,
+  "observedAtUtc": "2026-10-08T14:32:06.4756363Z"
+}

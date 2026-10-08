@@ -467,3 +467,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [176 excerpt修复](source-long-tooltip-investigation-176.md) / [177实际人工资格](source-long-excerpt-live-177/README.md) / [178中断恢复](source-native-interruption-investigation-178.md)：3256chars/192px正文nativekeyboard+wheel、约70px身份Tooltip；Task180251ms/last-observed23SolEOF。原wholeclosure与173 oracle UNMET，生产orphan recovery1/1后pairclosed；后续单agent。
 
 - [179单Chat深色](source-single-chat-live-179/README.md) / [180验收scope](source-qualification-surface-180/README.md) / [181实际after](source-single-chat-live-181/README.md)：179原launcher1保留；181真实2197chars/192px/nosnippetSource1/explicitbottomfollowtrue，6SolEOF/launcher0/nativewhole+pairclosed。单agent继续，genericRendering未验。
+
+- [182 Side Chat真实错误](source-side-chat-live-182/README.md) / [183共享投影修复](side-chat-part-projection-plan-183.md) / [184限定after](source-side-chat-after-184/README.md) / [185短场景](side-chat-final-185/README.md)：复用display分类，真实history和Source回复合格；184原maximum1/offlineEnd保留，185actual0/6SolEOF/native+pairclosed；generalRendering仍未知。

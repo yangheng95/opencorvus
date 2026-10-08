@@ -1,0 +1,105 @@
+{
+  "observedAtUtc": "2026-10-08T14:06:53.6815242Z",
+  "uiUri": "http://127.0.0.1:18112/ui",
+  "assetStatus": 200,
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-side-chat-after-184-01-7f6272c7-9367-4997-8fd0-0b17f29447c2",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18112",
+    "pid": 64500
+  },
+  "finalUiUri": "http://127.0.0.1:18112/ui/",
+  "asset": "/ui/assets/main-EQ2U4atl.js",
+  "owner": {
+    "observedAtUtc": "2026-10-08T14:05:50.5872077Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-after-184-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-after-184-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-after-184-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-after-184-01\\evidence",
+    "evidencePrefix": "source-side-chat-after-184-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-after-184-01\\startup.json",
+    "occurrence": "source-side-chat-after-184-01-7f6272c7-9367-4997-8fd0-0b17f29447c2",
+    "port": 18112,
+    "owner": {
+      "processInstanceID": "win32:639270651499142927",
+      "ProcessId": 64500
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639270651499142927",
+        "ProcessId": 64500
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-side-chat-after-184-01\\task-selection.json",
+    "taskSelectionRequired": false,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-side-chat-after-184\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 24,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-side-chat-after-184\\live-01",
+    "qualificationKind": "NativeService",
+    "host": {
+      "pid": 75452,
+      "processInstanceID": "win32:639270651491311600",
+      "occurrenceID": "ff1e409a-8d7a-4a86-a086-d0406ce25604"
+    },
+    "nativeTarget": {
+      "pid": 64500,
+      "processInstanceID": "win32:639270651499142927",
+      "occurrenceID": "3f46053e-b277-442b-843e-522cad7693ce"
+    },
+    "targetBirthAtMs": 1791468349914,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "uiStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "scriptSrc": "http://127.0.0.1:18112/ui/assets/main-EQ2U4atl.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18112,
+      "OwningProcess": 64500
+    }
+  ]
+}
