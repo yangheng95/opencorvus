@@ -1,0 +1,10 @@
+{
+  "pid": 76840,
+  "occurrence": "sources-status-live-118-01-7f77c783-dac6-4ec2-8401-6439ffe2a439",
+  "error": {
+    "name": "Error",
+    "message": "TASK_ACTIVITY_INACTIVITY"
+  },
+  "actionRequired": "parent-owner-public-shutdown-then-physical-exit-and-paired-cleanup",
+  "credentialCleanup": "unverified-parent-owned"
+}

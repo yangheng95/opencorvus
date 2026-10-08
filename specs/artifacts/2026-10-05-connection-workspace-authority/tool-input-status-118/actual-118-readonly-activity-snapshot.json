@@ -1,0 +1,271 @@
+{
+  "observedAt": "2026-10-07T23:55:48.271Z",
+  "access": "concurrent permitted exact118 readonly:true BEGIN/ROLLBACK; no native physical closure assertion",
+  "taskRow": [
+    {
+      "id": "tsk_g00VXPXXKI0050pGND7r",
+      "project_id": "prj_h1gWnkuA5uFDIOx8Icbs",
+      "session_id": "ses_-zUSaSSVzzz5RGjt6IuK",
+      "request_id": "7b385fd8-fb3a-4fc0-bbe9-2a66a6c43794",
+      "time_created": 1791417087894
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ses_-zUSaSSVzzz5RGjt6IuK",
+      "parent_id": null,
+      "project_id": "prj_h1gWnkuA5uFDIOx8Icbs",
+      "kind": "root"
+    },
+    {
+      "id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "parent_id": "ses_-zUSaSSVzzz5RGjt6IuK",
+      "project_id": "prj_h1gWnkuA5uFDIOx8Icbs",
+      "kind": "orchestrator"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_g0VXPXYXk00hiBnr1A1l",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "time_created": 1791417092572,
+      "time_updated": 1791417092579,
+      "role": "user",
+      "parentID": null,
+      "agent": "orchestrator",
+      "finish": null,
+      "completed": null,
+      "errorName": null
+    },
+    {
+      "id": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "time_created": 1791417092574,
+      "time_updated": 1791417092585,
+      "role": "user",
+      "parentID": null,
+      "agent": "orchestrator",
+      "finish": null,
+      "completed": null,
+      "errorName": null
+    },
+    {
+      "id": "msg_hULmN5FLW7JKNba57XRm",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "time_created": 1791417092794,
+      "time_updated": 1791417288776,
+      "role": "assistant",
+      "parentID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "agent": "orchestrator",
+      "finish": "error",
+      "completed": 1791417288773,
+      "errorName": "MessageAbortedError"
+    }
+  ],
+  "requests": [],
+  "events": [
+    {
+      "id": "pev_g0VXPXXV0007DRZmundf",
+      "type": "task.execution.opened",
+      "session_id": "ses_-zUSaSSVzzz5RGjt6IuK",
+      "emitted_at": 1791417087894,
+      "seq": 3,
+      "epoch": 1,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPXXUg00g6cWSDTMi",
+      "type": "artifact.persisted",
+      "session_id": null,
+      "emitted_at": 1791417088538,
+      "seq": 1,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPXXUy003Zk5HMAKd",
+      "type": "artifact.persisted",
+      "session_id": null,
+      "emitted_at": 1791417088556,
+      "seq": 2,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPXXV500iS3kLAjYp",
+      "type": "task.created",
+      "session_id": null,
+      "emitted_at": 1791417088563,
+      "seq": 4,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPXYjx000694zmTA3",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417093328,
+      "seq": 5,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"streaming\"}"
+    },
+    {
+      "id": "pev_g0VXPXYly00LZR0okRU8",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417093454,
+      "seq": 6,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"streaming\"}"
+    },
+    {
+      "id": "pev_g0VXPYLhQ00vDUYK1bKe",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417281528,
+      "seq": 7,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"retry\",\"attempt\":1,\"message\":\"idle: backoff 1120.9565019084953ms; last heartbeat tool-input-delta@2026-10-07T23:51:41.470Z\",\"next\":1791417282627.9565}"
+    },
+    {
+      "id": "pev_g0VXPYM0W00OQdKJbjpM",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417282712,
+      "seq": 8,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"streaming\"}"
+    },
+    {
+      "id": "pev_g0VXPYNa500VUaFXY0bV",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417288761,
+      "seq": 9,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"idle\"}"
+    },
+    {
+      "id": "pev_g0VXPYNal00wYQDYLdQ1",
+      "type": "session.error",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417288803,
+      "seq": 10,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPYNbW00QOdhQ41q0",
+      "type": "artifact.persisted",
+      "session_id": null,
+      "emitted_at": 1791417288849,
+      "seq": 11,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPYNbZ00V6rso8ye7",
+      "type": "task.infrastructure.failed",
+      "session_id": null,
+      "emitted_at": 1791417288853,
+      "seq": 12,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    },
+    {
+      "id": "pev_g0VXPYNc900cvSLDqwzr",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417288888,
+      "seq": 13,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"idle\"}"
+    },
+    {
+      "id": "pev_g0VXPYNdd00zQeQ7s2Qr",
+      "type": "agent.execution.lifecycle",
+      "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+      "emitted_at": 1791417288981,
+      "seq": 14,
+      "epoch": null,
+      "inputMessageID": "msg_task-root-control_art_hxRZLM0zZubfdsamcDs1_art_hxRZLM0zZubfdsamcDs1",
+      "status": "{\"type\":\"terminal\",\"reason\":\"aborted\",\"error\":\"Orchestrator execution signal aborted\"}"
+    },
+    {
+      "id": "pev_g0VXPYNeQ00RxvPdWEf0",
+      "type": "artifact.persisted",
+      "session_id": null,
+      "emitted_at": 1791417289029,
+      "seq": 15,
+      "epoch": null,
+      "inputMessageID": null,
+      "status": null
+    }
+  ],
+  "provider": [
+    {
+      "id": "act_g0VXPXYlR004A4aO2jH6",
+      "assistant_message_id": "msg_hULmN5FLW7JKNba57XRm",
+      "time_created": 1791417093421,
+      "terminalAt": 1791417288746,
+      "outcome": "aborted",
+      "errorClass": "external_abort",
+      "attemptCount": 2
+    }
+  ],
+  "descriptors": [],
+  "owners": [],
+  "artifacts": [
+    {
+      "id": "art_g0VXPXXUj00Dky38k4Ho",
+      "kind": "task_execution_capsule_binding",
+      "time_created": 1791417087894
+    },
+    {
+      "id": "art_g0VXPXXUG00xIhJ8tFLB",
+      "kind": "task_package_revision_binding",
+      "time_created": 1791417087894
+    },
+    {
+      "id": "art_g0VXPYNb900Jd1HGUlYl",
+      "kind": "task-infrastructure-error",
+      "time_created": 1791417288825
+    },
+    {
+      "id": "art_g0VXPYNdx00bqquJg38Z",
+      "kind": "orchestrator-stream-error",
+      "time_created": 1791417289000
+    }
+  ],
+  "ingress": [
+    {
+      "id": "art_hxRZLM0zZubfdsamcDs1",
+      "execution_epoch": 1,
+      "sequence": 1,
+      "source": "task",
+      "source_id": "tsk_g00VXPXXKI0050pGND7r",
+      "time_accepted": 1791417087894
+    },
+    {
+      "id": "art_hqKCLgVr4QySxcyWOrNw",
+      "execution_epoch": 1,
+      "sequence": 2,
+      "source": "engine_artifact",
+      "source_id": "art_g0VXPYNb900Jd1HGUlYl",
+      "time_accepted": 1791417288825
+    }
+  ]
+}

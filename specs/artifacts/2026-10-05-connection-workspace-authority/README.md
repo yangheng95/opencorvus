@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Tool input status118 Recall](tool-input-status-plan-118.md) and [evidence](tool-input-status-118/README.md): separate current pending/running counts; real main preparation display verified, fresh11801 failed before Sources/execution; remaining qualification explicit.
+
 - [Markdown authoring117 Recall](markdown-output-plan-117.md) and [evidence](markdown-output-117/README.md): shared future formatting guidance; fresh11701 failed during input preparation, parser/history unchanged and natural-output qualification unmet.
 
 - [Shared delegated final authority116 Recall](delegated-final-authority-plan-116.md) and [evidence](delegated-final-authority-116/README.md): single physical terminal authority repair with original115 failure and lawful baseline retained; positive matrix and fresh18-request Sources/answer/native qualification passed; original115 remains failed.

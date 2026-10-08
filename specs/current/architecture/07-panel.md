@@ -450,8 +450,10 @@ latest actual Tool name and its summary. One expansion directly exposes all
 results in order; multiple results have static identities rather than nested
 per-Tool toggles. Narrative, sources, files and interactive artifacts retain
 their original positions. Each run exposes every real Tool result and its outcome;
-pending/running activity and earlier errors stay visible independently of the
-latest Tool's identity. Expanded Tools expose their persisted arguments through
+pending argument preparation and running execution have separate status-derived
+counts, independently of the parent stream decoration. Earlier errors stay visible
+independently of the latest Tool's identity. Expanded pending headers and input
+details explain receiving arguments. Expanded Tools expose their persisted arguments through
 a compact payload control, output or structured evidence, and explicit pending,
 running or empty-result information. Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position

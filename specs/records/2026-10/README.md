@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Accurate Tool preparation and execution118](2026-10-08-tool-input-status.md)
+
 - [Future Markdown authoring117](2026-10-08-markdown-output.md)
 
 - [Shared delegated final authority116](2026-10-08-delegated-final-authority.md)

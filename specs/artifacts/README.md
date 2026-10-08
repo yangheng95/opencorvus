@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Tool input status118](2026-10-05-connection-workspace-authority/tool-input-status-118/README.md): real Tool preparation/count pixels, exact source/preimages and failed fresh11801; Sources/final acceptance unmet and physical closure retained.
+
 - [Future Markdown authoring117](2026-10-05-connection-workspace-authority/markdown-output-117/README.md): exact durable116 input/CommonMark contract, source preimage and failed fresh11701; shared activity/draft/recovery audit and physical closure.
 
 - [Shared delegated final authority116](2026-10-05-connection-workspace-authority/delegated-final-authority-116/README.md): retained115 rejection, physical-final repair and actual18-stream Sources/answer/native closure; next output-format issue explicit.

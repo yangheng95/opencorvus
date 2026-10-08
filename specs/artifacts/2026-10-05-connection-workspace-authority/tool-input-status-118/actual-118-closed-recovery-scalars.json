@@ -1,0 +1,45 @@
+{
+  "observedAt": "2026-10-07T23:58:02.152Z",
+  "access": "exact118 closed DB reread after Root closure receipt; readonly:true BEGIN/ROLLBACK no bootstrap",
+  "lifecycle": [
+    {
+      "id": "pev_g0VXPXXV0007DRZmundf",
+      "type": "task.execution.opened",
+      "emitted_at": 1791417087894,
+      "epoch": 1
+    }
+  ],
+  "recovery": [
+    {
+      "id": "art_g0VXPYNb900Jd1HGUlYl",
+      "kind": "task-infrastructure-error",
+      "time_created": 1791417288825,
+      "component": "process-recovery",
+      "operation": "handoff-process-owned-task-execution",
+      "reason": "Server shutdown source=http-client reason=http.shutdown",
+      "context": {
+        "schema_version": 1,
+        "origin": "process_shutdown",
+        "physical_evidence": {
+          "kind": "unmanaged_process_cause_unknown",
+          "reason": "Server shutdown source=http-client reason=http.shutdown"
+        },
+        "affected_subjects": [
+          {
+            "kind": "affected_created_session",
+            "session_id": "ses_-zUSaSRVfzz4mP3ljadS",
+            "session_created_at": 1791417092360
+          }
+        ]
+      }
+    },
+    {
+      "id": "art_g0VXPYNdx00bqquJg38Z",
+      "kind": "orchestrator-stream-error",
+      "time_created": 1791417289000,
+      "reason": "OrchestratorAborted: Server shutdown source=http-client reason=http.shutdown",
+      "errorName": "OrchestratorAborted"
+    }
+  ],
+  "owners": []
+}

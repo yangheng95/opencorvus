@@ -521,6 +521,5 @@ export function toolStatusLabel(status: string): string {
   if (normalized === "completed") return t("task.status.completed")
   if (normalized === "running") return t("common.active")
   if (normalized === "error") return t("common.error")
-  if (normalized === "pending") return t("tool.receiving_input")
   return t("checks.pending")
 }

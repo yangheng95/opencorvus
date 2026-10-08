@@ -203,9 +203,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
   // Identity follows chronology; an earlier pending call must not rename the
   // latest call. Activity and errors still represent every result in the run.
   const latest = () => tools().at(-1)
-  const pendingCount = () => tools().filter((tool) => tool.status === "pending").length
-  const runningCount = () => tools().filter((tool) => tool.status === "running").length
-  const activeCount = () => pendingCount() + runningCount()
+  const activeCount = () => tools().filter((tool) => tool.status === "pending" || tool.status === "running").length
   const errorCount = () => tools().filter((tool) => tool.status === "error").length
   const active = () => Boolean(props.streaming && activeCount() > 0)
   const summary = () =>
@@ -234,11 +232,8 @@ function ExecutionEventRun(props: PartCollectionProps) {
           {(tool) => <ExecutionToolIdentity tool={tool()} />}
         </Show>
         <span class="msg-work-details__status">
-          <Show when={pendingCount()}>
-            <span>{t("tool.group_receiving_input", { count: pendingCount() })}</span>
-          </Show>
-          <Show when={runningCount()}>
-            <span>{t("tool.group_running", { count: runningCount() })}</span>
+          <Show when={activeCount()}>
+            {active() ? t("tool.group_running", { count: activeCount() }) : t("checks.pending")}
           </Show>
           <Show when={errorCount()}>
             <span data-status="error">{t("tool.group_errors", { count: errorCount() })}</span>
