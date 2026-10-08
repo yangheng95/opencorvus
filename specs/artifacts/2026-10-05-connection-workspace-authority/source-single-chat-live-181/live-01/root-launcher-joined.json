@@ -1,0 +1,12 @@
+{
+  "boundary": "Actual write_stdin completion joined; not inferred from missing PID",
+  "observedAtUtc": "2026-10-08T13:44:13.4987492Z",
+  "scope": {
+    "boundary": "Exact native/provider completion only; conversation semantics and UI remain Root-owned",
+    "qualification": "NativeService",
+    "physicalCompletion": true,
+    "providerEOFRequests": 6
+  },
+  "actualExitCode": 0,
+  "owningExec": 38966
+}

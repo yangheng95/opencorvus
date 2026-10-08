@@ -1,0 +1,104 @@
+{
+  "assetStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "uiStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18109/ui/",
+  "scriptSrc": "http://127.0.0.1:18109/ui/assets/main-DohwWI7H.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18109,
+      "OwningProcess": 71256
+    }
+  ],
+  "owner": {
+    "observedAtUtc": "2026-10-08T13:05:46.6576103Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\evidence",
+    "evidencePrefix": "source-single-chat-live-179-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\startup.json",
+    "occurrence": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+    "port": 18109,
+    "owner": {
+      "ProcessId": 71256,
+      "processInstanceID": "win32:639270615460343242"
+    },
+    "observedProcessChain": [
+      {
+        "ProcessId": 71256,
+        "processInstanceID": "win32:639270615460343242"
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\task-selection.json",
+    "taskSelectionRequired": true,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-single-chat-live-179\\live-01\\profile-selection.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 24,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the entire accepted Task, including scheduler, helpers, workers and closure; no per-worker reset",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-single-chat-live-179\\live-01",
+    "host": {
+      "pid": 60880,
+      "processInstanceID": "win32:639270615452567548",
+      "occurrenceID": "a8a5c1b2-ee42-44fc-a792-b7615f456f52"
+    },
+    "nativeTarget": {
+      "pid": 71256,
+      "processInstanceID": "win32:639270615460343242",
+      "occurrenceID": "2d4cadf0-2e14-4995-a829-dfc2d11c380f"
+    },
+    "targetBirthAtMs": 1791464746034,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "asset": "/ui/assets/main-DohwWI7H.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18109",
+    "pid": 71256
+  },
+  "observedAtUtc": "2026-10-08T13:06:41.8312865Z",
+  "uiUri": "http://127.0.0.1:18109/ui"
+}

@@ -1,0 +1,65 @@
+{
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\runtime\\data\\auth.json",
+      "copiedLength": 2194,
+      "outcome": "removed",
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-single-chat-live-179-01\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "occurrence": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+  "nativeSettlement": {
+    "occurrence": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+    "outcome": "settled",
+    "host": {
+      "pid": 60880,
+      "processInstanceID": "win32:639270615452567548",
+      "occurrenceID": "a8a5c1b2-ee42-44fc-a792-b7615f456f52"
+    },
+    "target": {
+      "pid": 71256,
+      "processInstanceID": "win32:639270615460343242",
+      "occurrenceID": "2d4cadf0-2e14-4995-a829-dfc2d11c380f"
+    },
+    "observedAtUtc": "2026-10-08T13:14:48.189Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "chain": [
+    {
+      "expected": {
+        "pid": 71256,
+        "processInstanceID": "win32:639270615460343242",
+        "occurrenceID": "2d4cadf0-2e14-4995-a829-dfc2d11c380f"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 60880,
+        "processInstanceID": "win32:639270615452567548",
+        "occurrenceID": "a8a5c1b2-ee42-44fc-a792-b7615f456f52"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T13:14:50.8508398Z",
+  "physicalCompletion": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true
+}

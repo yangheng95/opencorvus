@@ -1,0 +1,15 @@
+{
+  "pid": 71256,
+  "occurrence": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+  "owner": {
+    "pid": 71256,
+    "processInstanceID": "win32:639270615460343242",
+    "occurrenceID": "bc9d5065-5e4f-4a3b-89f3-9c51ec3463d9"
+  },
+  "parent": {
+    "pid": 78824,
+    "processInstanceID": "win32:639270615459913951",
+    "occurrenceID": "c41947e8-6a1b-43ca-8aae-6b2d44af1df6"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

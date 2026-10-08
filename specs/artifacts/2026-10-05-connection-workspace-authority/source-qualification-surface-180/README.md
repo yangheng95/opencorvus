@@ -1,0 +1,5 @@
+# Diagnostic qualification surface
+
+[Analysis/admission](../source-qualification-surface-plan-180.md). The archived current sole helpers now require explicit Task or NativeService. Both use exact native/output/request/provider completion; Task additionally retains original lifecycle contract, NativeService leaves conversation/UI qualification to Root. No production routing/tool/scheduler change. FunctionsOnly and history --owned-host consumers retain their own existing invocation contract; old ten target arguments are not supported.
+
+Four positive/error decoded-data cases from179/171 pass, original Task10contract passes; these are local contracts, not replayed E2E. Current live-sol-write-preparation.tsconfig typecheck0. Initial ad-hoc root compiler failed to locate Bun types; existing correct configured type root repaired that command before acceptance. [New181 execution](../source-single-chat-live-181/README.md) actual launcher38966exit0/6SolEOF/nativewholeclosed/pairclosed. Original179 launcher53729exit1 unchanged. Frozen helpers are evidence of executed implementation, not an additional launcher.

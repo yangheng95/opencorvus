@@ -1,0 +1,44 @@
+{
+  "presence": [
+    {
+      "processID": 71256,
+      "originalOccurrencePresent": false,
+      "processInstanceID": "win32:639270615460343242",
+      "state": "dead_or_reused"
+    },
+    {
+      "processID": 60880,
+      "originalOccurrencePresent": false,
+      "processInstanceID": "win32:639270615452567548",
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+  "nativeSettlement": {
+    "occurrence": "source-single-chat-live-179-01-804395ea-d9dd-48e0-b15d-e934de909839",
+    "outcome": "settled",
+    "host": {
+      "pid": 60880,
+      "processInstanceID": "win32:639270615452567548",
+      "occurrenceID": "a8a5c1b2-ee42-44fc-a792-b7615f456f52"
+    },
+    "target": {
+      "pid": 71256,
+      "processInstanceID": "win32:639270615460343242",
+      "occurrenceID": "2d4cadf0-2e14-4995-a829-dfc2d11c380f"
+    },
+    "observedAtUtc": "2026-10-08T13:14:48.189Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-08T13:15:06.8755696Z",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "listeners": [],
+  "phase": "root-final-independent"
+}

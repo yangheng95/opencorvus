@@ -465,3 +465,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [171闭合限定资格](source-multiple-search-live-171/README.md)：190087ms/24 Sol EOF/173原5argsonce0，真实4/3组/12URLParts非不同documents；[175 URLschema合同](source-url-validation-plan-175.md)/[证据说明](source-url-validation-175/README.md)8schema+1persist0，提交待Root；[176长Tooltip调查](source-long-tooltip-investigation-176.md)实际FAIL/HELD，child growth UNMET。
 
 - [176 excerpt修复](source-long-tooltip-investigation-176.md) / [177实际人工资格](source-long-excerpt-live-177/README.md) / [178中断恢复](source-native-interruption-investigation-178.md)：3256chars/192px正文nativekeyboard+wheel、约70px身份Tooltip；Task180251ms/last-observed23SolEOF。原wholeclosure与173 oracle UNMET，生产orphan recovery1/1后pairclosed；后续单agent。
+
+- [179单Chat深色](source-single-chat-live-179/README.md) / [180验收scope](source-qualification-surface-180/README.md) / [181实际after](source-single-chat-live-181/README.md)：179原launcher1保留；181真实2197chars/192px/nosnippetSource1/explicitbottomfollowtrue，6SolEOF/launcher0/nativewhole+pairclosed。单agent继续，genericRendering未验。

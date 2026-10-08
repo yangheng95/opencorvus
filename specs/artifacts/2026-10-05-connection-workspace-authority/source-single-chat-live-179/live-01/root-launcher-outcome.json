@@ -1,0 +1,8 @@
+{
+  "observedAtUtc": "2026-10-08T13:46:54.5861557Z",
+  "error": "Task completion receipt missing after physical settlement",
+  "boundary": "Root account of actual write_stdin completion; original Task-only surface was not qualified",
+  "owningExec": 53729,
+  "actualExitCode": 1,
+  "source": ".tmp-product-iteration/live-sol-launch.ps1:292"
+}

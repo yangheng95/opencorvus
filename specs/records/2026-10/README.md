@@ -363,3 +363,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [171闭合限定资格](../../artifacts/2026-10-05-connection-workspace-authority/source-multiple-search-live-171/README.md)：190087ms/24 Sol EOF/173原5argsonce0，真实4/3组/12URLParts非不同documents；[175 URLschema合同](../../artifacts/2026-10-05-connection-workspace-authority/source-url-validation-plan-175.md)/[证据说明](../../artifacts/2026-10-05-connection-workspace-authority/source-url-validation-175/README.md)8schema+1persist0，提交待Root；[176长Tooltip调查](../../artifacts/2026-10-05-connection-workspace-authority/source-long-tooltip-investigation-176.md)实际FAIL/HELD，child growth UNMET。
 
 - [Source excerpt reading](2026-10-08-source-excerpt-reading.md)：正常Disclosure全文阅读，真实宽窄限定合格；original native closure未达成，单agent持续迭代。
+
+- [Single Chat Sources](2026-10-08-single-chat-sources.md)：真实深色摘要/官方URL/底部跟随，修正诊断scope；保179原launcher1，181实际0，后续只单agent。
