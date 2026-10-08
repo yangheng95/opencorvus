@@ -1,0 +1,65 @@
+{
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 7828,
+        "processInstanceID": "win32:639270149369703112",
+        "occurrenceID": "e5868659-81c0-4268-a982-3ecc84cf9f1a"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 46576,
+        "processInstanceID": "win32:639270149359688339",
+        "occurrenceID": "8c575c42-8b2c-4210-8d25-0ca91336de83"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "observedAtUtc": "2026-10-08T00:22:42.5964448Z",
+  "occurrence": "sources-payload-live-119-01-b65aca10-1ec3-4119-9868-7e632bcf0e27",
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "copiedLength": 2194,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-payload-live-119-01\\runtime\\data\\auth.json",
+      "outcome": "removed",
+      "presentAfter": false
+    },
+    {
+      "copiedLength": 9155406,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-payload-live-119-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "sources-payload-live-119-01-b65aca10-1ec3-4119-9868-7e632bcf0e27",
+    "outcome": "settled",
+    "host": {
+      "pid": 46576,
+      "processInstanceID": "win32:639270149359688339",
+      "occurrenceID": "8c575c42-8b2c-4210-8d25-0ca91336de83"
+    },
+    "target": {
+      "pid": 7828,
+      "processInstanceID": "win32:639270149369703112",
+      "occurrenceID": "e5868659-81c0-4268-a982-3ecc84cf9f1a"
+    },
+    "observedAtUtc": "2026-10-08T00:22:39.315Z",
+    "terminal": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production Handle.settled and both output drains; native marker validation precedes request cleanup"
+  }
+}

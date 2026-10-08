@@ -166,7 +166,7 @@
 .msg-tool-payload__toolbar > .msg-tool-payload__label {
   flex: 1;
 }
-.msg-tool-payload[data-expanded="true"] > .msg-tool-payload__content {
+.msg-tool-payload[data-expanded="true"]:not([data-live="true"]) > .msg-tool-payload__content {
   max-height: none;
 }
 .msg-tool-payload__content pre {

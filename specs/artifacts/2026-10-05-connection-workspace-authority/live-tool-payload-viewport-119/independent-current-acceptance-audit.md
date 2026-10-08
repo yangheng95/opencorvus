@@ -1,0 +1,27 @@
+# Independent current acceptance audit119
+
+## Recall and evidence access
+
+Root admits read-only review of completed119 and two new files only. User Sources remains priority. Source117/118 failures and119 large-input viewport unmet condition are preserved. Read original six-argument checker stdout/stderr/exit, child-current-source-facts.json, child-current-final-answer-facts.json, Root wide computed geometry and original physical receipt. No checker rerun, DB bootstrap/query/write, runtime/helper/Provider/UI/Git/test/source changes or delegation occurred. Existing facts explicitly originate from canonical CLOSED DB readonly BEGIN/ROLLBACK; this review consumes those outputs rather than claiming another independent DB execution.
+
+## Exact natural lineage and terminal
+
+Task tsk_g00VXPcOeX00xc3RIaJR, Project prj_hjUXhogDKIn2HxYegVvR, request8c751558-6226-45b4-b22c-b738d55208a1, occurrence sources-payload-live-119-01-b65aca10-1ec3-4119-9868-7e632bcf0e27. Lifecycle opened pev_g0VXPcOo1002DxoF12A5 seq3 to completed pev_g0VXPd0Rr00VTjY8KX0C seq49, both epoch1. Four actual Session kinds are root/orchestrator/explore/delegated-worker; no researcher identity is inferred from a physical request index.
+
+Main actual assistant Message msg_hfWUyhQEEcyrPlRMyfNe belongs to orchestrator ses_-zUSaNaCmzzq7gCXdXkO. Natural Text Part prt_g0VXPcwYe002INK8S7DK created1791418376524, final text time1791418383083, precedes completion Tool prt_g0VXPcyGZ00qvHHF2LDn created1791418388567 and decision art_g0VXPczhX00Csia3mu8T recorded1791418388600. The decision explicitly binds this orchestrator Message/Session, actual Tool call, actual researcher final msg_g0VXPcXUi00tUGObKXhM and independent verifier final msg_g0VXPcpCn00ixZR7t5Sk. Worker reports are distinct actual participants, not copied main delivery.
+
+root-actual-final-content.json copies only that selected Message and original Text Part with their actual metadata. Main body contains three Chinese numbered summaries and all three requested URLs before terminal. It uses natural **label including punctuation.** followed by a space before Han prose, unlike116 invalid punctuation→closing-stars→Han adjacency. No parser execution or rewriting was performed here. Provider phase metadata is commentary; eligibility comes from actual assistant body/lineage/order, not a phase label or model self-report. Root's manual rendered Strong/semantics proof remains separate visual evidence.
+
+## Source identity and real reader result
+
+All three webfetch completed canonical outcomes are from explore Session ses_hk5HVmPn3OFAQ0naypEQ, exactly markdown/timeout120 and requested URLs. Intro Tool prt_g0VXPcTng00c6EavgCdq in msg_g0VXPcSn6003klevdWv7 ended1791418267080; principles prt_g0VXPcUsf00g16m9KShL in msg_g0VXPcU8N00oc2Utuqjn ended1791418270961; MDN prt_g0VXPcVx600mrB6qGkeJ in msg_g0VXPcV9300i479d8mYh ended1791418275965. Each received its actual result envelope and source-url tuple; canonical sourceIDs are respectively8bb78863e84318e2bef75d847d0f60b0e1eae8b7fc1fbdf0ac507804a60da96b, cb990aa86289aadf92cfcd259b42886f9bd56679313f62a15da8b62c2116c679, 5ce08f278697f95f105cc7f34296ee823f8f14dbd21bbd22a00471030fa32295. Titles are Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C; Accessibility Principles | Web Accessibility Initiative (WAI) | W3C; Accessibility | MDN. Three different actual Messages mean three honest Source1 runs. Stored Source facts and received outcome tuples are validated by the original checker, not adjacent URL inference.
+
+Original checker stdout statusqualified, stderrempty and explicit exit status0 agree; an empty log alone is not used as exit proof. Original safe Provider tuples report18 gpt-6.1-sol streaming responses, all200/settled/eof. They qualify model/physical consumption; array order does not assign actor. Root's fixed32 ceiling was not exhausted. Original physical receipt records complete native/output/request settlement and paired cleanup; Root reports launcher99439 exit0 and all own pages closed. No real credentials are read or copied by this audit.
+
+## Actual density data, no CSS assumption
+
+root-three-sources-open-wide.json observed2026-10-08T00:16:54.075Z at1280×720, child380px, followfalse. Actual adjacent run computed marginTop12px, paddingTop16px, border0.8px, scale1 and xl calc(16px *1.000). Source runs occupy real Messages above and retain open=true/count1/full target. Therefore120 must not describe actual spacing as32px purely from two xl declarations. The observed effective margin differs from the inspector declaration's token; exact winning cascade is UNKNOWN in this review and must be resolved before any density source admission.120 remains held; no CSS was proposed or changed here.
+
+## Qualification and unresolved requirements
+
+Root personally qualifies wide1280/child380 and narrow883/child280, three natural Source expansions by pointer/Space/Enter, complete titles/tooltips, actual MDN native URL and main three rendered Strong summaries. This readonly review verifies corresponding provenance/order/source/scalar records, not newly operated pixels.119 did not naturally reach the large pending input size needed for its viewport CSS acceptance, so that visual goal remains UNMET. It does not downgrade117/118 semantic inactivity or prove their upstream cause repaired. Shared restart/retry/concurrent project races, mixed pending/running headers and full child/SideChat phase matrix remain separate unknowns. No further source fix follows from this successful natural run alone.

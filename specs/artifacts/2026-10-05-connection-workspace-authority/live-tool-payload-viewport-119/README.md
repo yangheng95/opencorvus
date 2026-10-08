@@ -1,0 +1,9 @@
+# Live Tool payload viewport119
+
+[Recall and admitted scope](../live-tool-payload-viewport-plan-119.md) bind the genuine11831200px expanded preview and current higher-specificity max-heightnone override. This slice preserves the existing360px content viewport for LIVE expansion; nonlive/completed full expansion remains the existing contract.
+
+The current pending input/Copy is already a12k tail preview.119 preserves those values without adding clipping, trimming, raw rewriting or a new Copy contract. Original117/118 functional failures and upstream cause remain unresolved. The clean stylesheet preimage is retained. Declared build/public-surface/docs returned0; no UI automated tests or fake transcript are admitted.
+
+[Genuine11901](live-01/README.md) completed with18 actual streamed Sol responses and real researcher/tester/threeSources/main summaries. Original Source/reply entry once returned0 after wholeclosure. [Independent audit](independent-current-acceptance-audit.md) and [original selected final content](root-actual-final-content.json) preserve exact authority/chronology. Root's actual1280/child380 and883/child280 Sources/title/tooltip/native-link and correctly rendered prose were personally reviewed. The long live input required for viewport after acceptance did not naturally occur, so that requirement remains UNMET. Pointer child-opening attempt is an unresolved observation; Enter later opened correctly. Sources success does not close117/118 starvation, live cadence, mixed phase or recovery matrices.
+
+[Independent11902 natural large-file plan](large-input-live-plan-11902.md) proposes a different fresh Code artifact task to sample actual input/file/viewport behavior. It is held pending Root execution/checker admission, does not reuse11901 as a retry and does not force a Tool/whitespace sequence. A valid file alone cannot qualify its live viewport.

@@ -455,7 +455,11 @@ counts, independently of the parent stream decoration. Earlier errors stay visib
 independently of the latest Tool's identity. Expanded pending headers and input
 details explain receiving arguments. Expanded Tools expose their persisted arguments through
 a compact payload control, output or structured evidence, and explicit pending,
-running or empty-result information. Trace data uses the code typography role;
+running or empty-result information. Expanded live input keeps the existing bounded
+payload viewport and native internal scrolling; completed/nonlive full expansion
+retains its full-height contract. Existing active tail previews and their Copy
+values retain their current limits, separately from complete persisted arguments.
+Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position
 behind the shared native Disclosure, initially collapsed with the first real
 source's readable identity and an honest count for that chronological source run;

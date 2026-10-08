@@ -1,5 +1,11 @@
 # Specs Storage Index
 
+- [Live Tool payload viewport119 Recall](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-plan-119.md): genuine11901 Sources/answer complete; large live-preview viewport after still unmet.
+
+- [Independent large-file11902 plan](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/large-input-live-plan-11902.md): fresh Code artifact plus actual live-input sampling proposed; original11901 preserved, execution held.
+
+- [Child Sources spacing120 Recall](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-plan-120.md) and [history admission proposal](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120-history-admission-plan.md): closed116 static comparison, exact helper guards and winning cascade require Root admission; source held.
+
 - [Tool input status118 Recall](artifacts/2026-10-05-connection-workspace-authority/tool-input-status-plan-118.md): real preparation labels captured; fresh11801 failed before execution/Sources; remaining phases and upstream cause unresolved.
 
 - [Future Markdown authoring117 Recall](artifacts/2026-10-05-connection-workspace-authority/markdown-output-plan-117.md): actual116 unsupported emphasis boundaries; one shared guidance paragraph, fresh genuine11701 failed during input preparation; upstream cause and output qualification unresolved.

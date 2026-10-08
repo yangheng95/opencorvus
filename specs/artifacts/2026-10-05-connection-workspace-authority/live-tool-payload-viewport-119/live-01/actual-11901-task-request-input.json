@@ -1,0 +1,11 @@
+{
+  "title": "Sources 子会话真实阅读验收119",
+  "request": "请安排 Base 的资料研究员独立阅读下面三个官方网页，区分各页核心观点与它们的共同点；由主负责人根据研究员实际读取的证据，最终在会话中用中文交付三条简短总结，每条附对应原始来源链接。只读，不进行额外搜索，不生成或修改工程文件。\n1. https://www.w3.org/WAI/fundamentals/accessibility-intro/\n2. https://www.w3.org/WAI/fundamentals/accessibility-principles/\n3. https://developer.mozilla.org/en-US/docs/Web/Accessibility\n",
+  "productPillar": "work",
+  "promptProfile": "base",
+  "model": "openai/gpt-6.1-sol",
+  "source": "product-experience-119",
+  "requestID": "8c751558-6226-45b4-b22c-b738d55208a1",
+  "requestSentAt": "2026-10-08T00:10:41.1126476Z",
+  "acceptedObservedAt": "2026-10-08T00:10:46.9250330Z"
+}

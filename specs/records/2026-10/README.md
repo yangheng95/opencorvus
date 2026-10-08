@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Bounded live Tool payload viewport119](2026-10-08-live-tool-payload-viewport.md)
+
 - [Accurate Tool preparation and execution118](2026-10-08-tool-input-status.md)
 
 - [Future Markdown authoring117](2026-10-08-markdown-output.md)

@@ -1,5 +1,11 @@
 # Connection workspace authority investigation
 
+- [Live Tool payload viewport119 Recall](live-tool-payload-viewport-plan-119.md) and [evidence](live-tool-payload-viewport-119/README.md): genuine11901 completed Sources/answer and manual titles/links/Strong; long-live-input viewport after still unmet.
+
+- [Independent large-file11902 plan](live-tool-payload-viewport-119/large-input-live-plan-11902.md): different Code artifact task proposed to sample real long-input viewport; execution/checker held.
+
+- [Child Sources spacing120 Recall](child-source-spacing-plan-120.md) and [history admission](child-source-spacing-120-history-admission-plan.md): closed116 exact-source comparison proposed; helper/CSS/actualbefore held pending Root admission.
+
 - [Tool input status118 Recall](tool-input-status-plan-118.md) and [evidence](tool-input-status-118/README.md): separate current pending/running counts; real main preparation display verified, fresh11801 failed before Sources/execution; remaining qualification explicit.
 
 - [Markdown authoring117 Recall](markdown-output-plan-117.md) and [evidence](markdown-output-117/README.md): shared future formatting guidance; fresh11701 failed during input preparation, parser/history unchanged and natural-output qualification unmet.

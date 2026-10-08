@@ -1,5 +1,11 @@
 # Artifact entry points
 
+- [Live Tool payload viewport119](2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/README.md): one-selector live viewport change; genuine11901 Sources/answer complete while long-input after remains unmet.
+
+- [Independent large-file11902 plan](2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/large-input-live-plan-11902.md): different fresh Code artifact and natural long-input sampling, currently held.
+
+- [Child Sources spacing120 plan](2026-10-05-connection-workspace-authority/child-source-spacing-plan-120.md) and [history admission](2026-10-05-connection-workspace-authority/child-source-spacing-120-history-admission-plan.md): static exact-source and helper/source scope held pending actual geometry/cascade review.
+
 - [Tool input status118](2026-10-05-connection-workspace-authority/tool-input-status-118/README.md): real Tool preparation/count pixels, exact source/preimages and failed fresh11801; Sources/final acceptance unmet and physical closure retained.
 
 - [Future Markdown authoring117](2026-10-05-connection-workspace-authority/markdown-output-117/README.md): exact durable116 input/CommonMark contract, source preimage and failed fresh11701; shared activity/draft/recovery audit and physical closure.

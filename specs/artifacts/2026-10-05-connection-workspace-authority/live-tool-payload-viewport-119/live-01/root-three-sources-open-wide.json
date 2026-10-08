@@ -1,0 +1,121 @@
+{
+  "child": [
+    {
+      "attributes": [
+        [
+          "class",
+          "subagent-conversation-panel__scroll"
+        ],
+        [
+          "data-ui",
+          "subagent-conversation-scroll"
+        ],
+        [
+          "data-follow-lock",
+          "false"
+        ]
+      ],
+      "clientHeight": 576,
+      "clientWidth": 380,
+      "scrollHeight": 2394,
+      "scrollTop": 188.8000030517578
+    }
+  ],
+  "height": 720,
+  "observedAt": "2026-10-08T00:16:54.075Z",
+  "runs": [
+    {
+      "border": "0px",
+      "class": "card-message-run",
+      "height": 24,
+      "id": "msg_g0VXPcSgH00Sz4Sun6Jf",
+      "marginTop": "0px",
+      "paddingTop": "0px",
+      "scale": "1.000",
+      "style": null,
+      "top": -5.200000286102295,
+      "xl": "calc(16px * 1.000)"
+    },
+    {
+      "border": "0.8px",
+      "class": "card-message-run",
+      "height": 202.7375030517578,
+      "id": "msg_g0VXPcSn6003klevdWv7",
+      "marginTop": "12px",
+      "paddingTop": "16px",
+      "scale": "1.000",
+      "style": null,
+      "top": 30.80000114440918,
+      "xl": "calc(16px * 1.000)"
+    },
+    {
+      "border": "0.8px",
+      "class": "card-message-run",
+      "height": 114.20000457763672,
+      "id": "msg_g0VXPcU8N00oc2Utuqjn",
+      "marginTop": "12px",
+      "paddingTop": "16px",
+      "scale": "1.000",
+      "style": null,
+      "top": 245.5375061035156,
+      "xl": "calc(16px * 1.000)"
+    },
+    {
+      "border": "0.8px",
+      "class": "card-message-run",
+      "height": 130.8000030517578,
+      "id": "msg_g0VXPcV9300i479d8mYh",
+      "marginTop": "12px",
+      "paddingTop": "16px",
+      "scale": "1.000",
+      "style": null,
+      "top": 371.7375183105469,
+      "xl": "calc(16px * 1.000)"
+    },
+    {
+      "border": "0.8px",
+      "class": "card-message-run",
+      "height": 1784.7125244140625,
+      "id": "msg_g0VXPcXUi00tUGObKXhM",
+      "marginTop": "12px",
+      "paddingTop": "16px",
+      "scale": "1.000",
+      "style": null,
+      "top": 514.5375366210938,
+      "xl": "calc(16px * 1.000)"
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sources: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C (1)",
+      "links": [
+        {
+          "title": "1Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/"
+        }
+      ],
+      "open": true
+    },
+    {
+      "label": "Sources: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C (1)",
+      "links": [
+        {
+          "title": "1Accessibility Principles | Web Accessibility Initiative (WAI) | W3C",
+          "url": "https://www.w3.org/WAI/fundamentals/accessibility-principles/"
+        }
+      ],
+      "open": true
+    },
+    {
+      "label": "Sources: Accessibility | MDN (1)",
+      "links": [
+        {
+          "title": "1Accessibility | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility"
+        }
+      ],
+      "open": true
+    }
+  ],
+  "width": 1280
+}
