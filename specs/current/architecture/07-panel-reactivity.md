@@ -260,6 +260,12 @@ explicit bottom and new selection/send actions retain their caller-owned
 behavior. Sources reading intent clears stale event attribution and pauses the
 nearest transcript through the existing reading event.
 
+Owned native Home/End navigation includes Ctrl+Home/End. Ctrl+Home releases
+follow before the browser scrolls, and Ctrl+End supplies the existing downward
+intent so reaching the bottom can rearm follow. Editable controls retain their
+caret navigation; other modified shortcuts retain their browser/application
+handling. The controller does not suppress or replace the native key action.
+
 The sub-agent panel owns at most 32 recent reading positions, keyed by the
 canonical target identity including API authority, parent source, session and
 directory. These positions contain only viewport geometry and follow intent;

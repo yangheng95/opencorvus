@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Native Ctrl Home/End211](2026-10-09-transcript-control-home-end-211.md): actual same-owner modifier root cause, Main/child positive key behavior and native textarea caret; original failures retained, native scope naturally0.
+
 - [Current Sol streamed Sources210](2026-10-09-current-sol-streaming-sources-210.md): actual current Host +10 streamed200/EOF, genuine singleChat sources and reading pause/resume/growth/return, original missed windows preserved and native/pair naturally0.
 
 - [Sub-agent Open observation209](2026-10-09-subagent-open-investigation-209.md): screen-outside locator behavior distinguished from actual visible pointer and keyboard activation; original failed evidence retained, native scope naturally closed.

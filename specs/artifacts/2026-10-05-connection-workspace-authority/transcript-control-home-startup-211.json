@@ -1,0 +1,43 @@
+{
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-control-home-211-01",
+  "observedAtUtc": "2026-10-08T22:15:01.7641635Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "caseLabel": "transcript-control-home-211-01",
+  "sourceOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "projectID": "prj_honTzv1SylD1sTwgEqBC",
+  "scope": "Current0af8028a keyboard UI input investigation; backend unchanged since2f63, current205 full safety, fresh native/ports/full rows; no Task or Provider",
+  "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+  "sourceProject": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+  "rootSessionID": "ses_-zUSYFdRdzzk2frR62zX",
+  "readinessEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-history-readiness-205",
+  "casePort": 18131,
+  "caseEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/transcript-control-home-211/live-01",
+  "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/live-01",
+  "startupQualified": true,
+  "conditions": [
+    "fresh whole source closure",
+    "current Task/dispatch/frontier classifiers",
+    "all two projects current effective readonly configuration",
+    "no terminal write/physical cleanup candidates",
+    "all copied rows must next compare exactly"
+  ],
+  "currentSourceClosure": [
+    {
+      "expected": {
+        "pid": 77936,
+        "processInstanceID": "win32:639270464599331036",
+        "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

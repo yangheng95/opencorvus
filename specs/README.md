@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Native Ctrl Home/End211](records/2026-10/2026-10-09-transcript-control-home-end-211.md) and [real before/after](artifacts/2026-10-05-connection-workspace-authority/transcript-control-home-211/README.md): shared modifier recognition fixes native navigation being pulled back or failing to rearm; actual Main/child/caret reviewed, original failures retained, native scope naturally0.
+
 - [Current Sol streamed Sources210](records/2026-10/2026-10-09-current-sol-streaming-sources-210.md) and [actual evidence](artifacts/2026-10-05-connection-workspace-authority/source-streaming-210/README.md): complete paired authority/model admission, actual10 streamed200/settledEOF, genuine singleChat Source reading and pause/resume/growth/return; original missed windows preserved, foreground/native/pair naturally0.
 
 - [Sub-agent Open observation209](records/2026-10/2026-10-09-subagent-open-investigation-209.md) and [real evidence](artifacts/2026-10-05-connection-workspace-authority/subagent-open-audit-209/README.md): screen-outside locator observation reproduced, actual visible pointer/keyboard opening qualified; tool event chronology remains unknown, no speculative product change, native scope naturally closed.

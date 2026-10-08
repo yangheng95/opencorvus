@@ -497,3 +497,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [210 当前Host真实Sol Sources](source-streaming-210/README.md) / [Recall](source-streaming-plan-210.md)：完整auth/models、三重preflight，单Chat两Source/三回合/10实际stream200EOF；实际来源阅读top340保持、恢复跟随4139→4210与最终wheel返回合格。原错过窗口/键组合未响应保留；原父工具4974/foreground/native/pair自然0，非本轮页未操作，singleagent持续。
 
+- [211 Ctrl Home/End修复](transcript-control-home-211/README.md) / [Recall](transcript-control-home-plan-211.md)：真实同焦点CtrlHome被拉尾/End不重跟随，唯一共享modifier guard修复；Main/child首尾与textarea caret0→39人工通过。types/build/最终asset200，原父工具20951/native/pair自然0；更长/SideChat/新补丁流式未验，单agent持续。
+

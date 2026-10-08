@@ -139,8 +139,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onKeyDown(event: KeyboardEvent) {
-    if (!ownsTranscriptInput(event.target) || event.defaultPrevented || event.altKey || event.metaKey || event.shiftKey) return
-    if (event.ctrlKey && event.key !== "Home" && event.key !== "End") return
+    if (!ownsTranscriptInput(event.target) || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
     if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="combobox"], [role="slider"]')) return
     if (event.key === "ArrowUp" || event.key === "PageUp" || event.key === "Home") rememberInputIntent("up")
     else if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === "End") rememberInputIntent("down")
