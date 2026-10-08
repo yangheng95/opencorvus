@@ -112,7 +112,7 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
   )
 }
 
-function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {
+function SourceChip(props: { source: ConversationSourcePart; index: number }) {
   const label = () => sourceLabel(props.source)
   const detail = () => sourceDetail(props.source)
   const icon = () => sourceIcon(props.source)
@@ -126,12 +126,9 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             class="msg-source-chip"
             href={props.source.url}
             data-browser-preview-url={props.source.url}
-            onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
             aria-label={`${t("chat.source_open_web")}: ${label()}`}
           >
-            <Show when={props.showIndex}>
-              <span class="msg-source-chip__index">{props.index + 1}</span>
-            </Show>
+            <span class="msg-source-chip__index">{props.index + 1}</span>
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__label">{label()}</span>
           </Tooltip.Trigger>
@@ -141,28 +138,17 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             as="button"
             type="button"
             class="msg-source-chip"
-            onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
             onClick={() => void openSourceFile(props.source)}
             aria-label={`${t("chat.source_open_file")}: ${detail()}`}
           >
-            <Show when={props.showIndex}>
-              <span class="msg-source-chip__index">{props.index + 1}</span>
-            </Show>
+            <span class="msg-source-chip__index">{props.index + 1}</span>
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__label">{label()}</span>
           </Tooltip.Trigger>
         </Match>
         <Match when={true}>
-          <Tooltip.Trigger
-            as="span"
-            class="msg-source-chip"
-            tabIndex={0}
-            onFocus={(event) => pauseAutoScrollForReading(event.currentTarget)}
-            aria-label={label()}
-          >
-            <Show when={props.showIndex}>
-              <span class="msg-source-chip__index">{props.index + 1}</span>
-            </Show>
+          <Tooltip.Trigger as="span" class="msg-source-chip" tabIndex={0} aria-label={label()}>
+            <span class="msg-source-chip__index">{props.index + 1}</span>
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__label">{label()}</span>
           </Tooltip.Trigger>
@@ -211,7 +197,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
             each={props.sources}
             by={(source) => JSON.stringify([source.type, source.sessionID ?? null, source.messageID ?? null, source.sourceId])}
           >
-            {(source, index) => <SourceChip source={source()} index={index()} showIndex={props.sources.length > 1} />}
+            {(source, index) => <SourceChip source={source()} index={index()} />}
           </Key>
         </Disclosure.Content>
       </Show>

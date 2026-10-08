@@ -58,3 +58,15 @@ Tasktsk_g00VXRPjfX00K3k2f1HP/Projectprj_huLbvRD1EhrxWPiFn1fO/requesta2389138-ffe
 [154 Root人工记录](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-final-154/live-01/root-manual-qualification.md)是当前视觉事实依据。全部149诊断移除，main-Ck2-tcfB.js真实服务；223175ms、20 Sol200EOF、原组合once0/nested0，parent6115实际0 joined，78304/66828死亡、18099释放、pair清除、126/127关闭。152可见主区旧正文保留仅按真实采样有限合格，不宣称一般Rendering或offscreen机制修复。
 
 首次live child native Tab实际focus href却被新正文滚出视口、Tooltip0，是158待处理真实阅读失败；后续wheel/refocus成功独立保留。窄883/dock280完整标题URL Tooltip及native官方Enter合格；名为default-restored的截图仍窄，实际后来default1093x1244。自然主题变暗/mediaDarktrue原因UNKNOWN，不是受控矩阵。157 Sources只读UX和158 focus/follow计划待准入；156仍未证明根因，用户Sol明确要求与连续目标ACTIVE保持。此整理没有个人UI操作，不覆盖150首次失败、153比较或Root人工原件。
+
+## 158 实现 / 159 准备 checkpoint
+
+Root确认152d0035884正常push8009实际0 joined，fresh HEAD/upstream相同、outgoing为空。Root在现158方案准入后仅SourceParts为URL/file/document真实focus复用既有pause，并派生单Source ordinal展示；未改margin或恢复149诊断。当前types/build/真实UI尚未资格化，不能称修复通过。154首次失败与Root人工原件保持，157 margin未证明、156 offscreen线索未知。
+
+[159原方案](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-focus-after-plan-159.md)及[准备说明](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-focus-after-159/README.md)仅prepared。fresh18100、Work/Base/Sol24及600000/180000/900000不变，runtime HELD等待Root独立准入。连续目标ACTIVE及用户Sol要求保持；没有未来Task/Source/closure/once成功声明。
+
+## 159 当前限定验收（准备阶段文字为历史）
+
+Root [159人工记录](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-focus-after-159/live-01/root-manual-qualification.md)确认types65360/build72330实际0及main-ChhQkqg3。167830ms/18 Sol200EOF，parent14106实际0 joined、34280/51368死亡、18100释放、pair清除、128/129关闭；原组合once0/nested0。首次51s Source native focus无需wheel/refocus即followfalse/full Tooltip505；自然text1275→2089、height1070→1807和窄场景仍可读，真实count1无冗余ordinal。Escape保留焦点、native End显式跟随、Tab返回暂停、官方Enter亲看分别合格。
+
+这是Root视觉证据而非本整理者UI交互，154原失败不改。file/document、真实同组多Source、Main/SideChat和未采focus/recovery矩阵未知；157 margin未实现，156未证明，一般Rendering及自然主题改变原因未知。连续目标ACTIVE/Sol要求保持，当前批次push不提前宣称。

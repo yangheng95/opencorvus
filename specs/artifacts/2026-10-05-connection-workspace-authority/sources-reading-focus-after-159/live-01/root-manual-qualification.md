@@ -1,0 +1,31 @@
+#159 Root Sources focus reading qualification
+
+## Recall / final source and actual run
+
+User prioritizes Sources display, continuous iteration and gpt-6.1-sol children.158 changes only SourceParts: all actual URL/file/document trigger focus reuses the existing nearest transcript reading event, and current single-source group omits redundant leaf ordinal. True group count, native action/Tooltip, chronological143 Key and reactive metadata remain. No149 diagnostics, CSS margin, new listener/state/scrollwriter/focus restoration or UI automation tests. Root fullreview plus independent Sol review; configured types65360/build72330 actualterminal0 joined/publicsurface passed, actual HTTP200/main-ChhQkqg3.js asset200. Authorized credentials plus complete catalog separately usable/projected/actual streaming Sol before create.
+
+Task tsk_g00VXRud2R00OXBs7F1T, Project prj_hFoH6j1XjifCYeiDetbh, request ee98d5ad-aa3d-413a-a86e-dc8f66b4dbeb, occurrence sources-reading-focus-after-159-01-e7198ae1-fde0-4e67-8d1d-15415289cd20. Accepted09:35:44.6612545, epoch1 opened pev_g0VXRudAA00pB9yQoMSy/1791452144067, terminal pev_g0VXRvL9v00y2E1sZoTp/1791452311897,167830ms/18 actual streaming Sol HTTP200/settled/EOF.24 cumulative/preparation600000/idle180000/Task and service900000 unchanged. Root first placed create after readiness in the same PowerShell invocation; readiness exits successfully, so that invocation did NOT create a Task. Root then separately invoked the original create helper once with actual preflight. There is one actual original request/accepted Task, no replay or model-budget reset.
+
+## Actual early focus and natural growth
+
+Root own hidden128 at localhost:18100/ui. root-main-first.jpg Running22s and root-live-child-first.jpg Running33s personally show real researcher and three genuine Tool→Source groups. Native Enter on first Sources disclosure, then native Tab at Running51s: root-live-source-first-focus.jpg/facts09:36:36.060 shows actual W3C introduction anchor connected, rect375.53–407.93 inside child viewport, blue focus ring and full title/URL/provider Tooltip505. Child follow-lock false/top0/client577/height1070/textLength1275. No preparatory wheel or re-focus was used to obtain this first live focus success.
+
+No input between that focus and natural-growth capture. At09:37:24.534/Running1m38, genuine subsequent researcher prose has grown textLength2089/height1807, while actual samehref/connected anchor rect and Tooltip505 remain readable at top0/followfalse. root-live-source-natural-growth.jpg personally shows actual second tester grid and unchanged source reading. Same URL/Tooltip ID and positive geometry are qualified facts; they do not assert DOM object equality or a frame-by-frame absence of every possible flash. This is a genuine natural growth reading scene distinct from154 first-focus failure, which remains unchanged.
+
+## Narrow and terminal continuity
+
+Temporary883x886/rightDock280 at09:37:38.721: source anchor wraps full meaningful title, Tooltip505 x446/y338/420x86.125 stays inside viewport with exact full URL/provider. Followfalse/top0; real count1 retained and redundant leafordinal1 omitted. root-live-source-narrow.jpg personally reviewed. No re-focus was needed to preserve this tooltip across this actual resize.
+
+At09:38:50.580 Task Completed2m47, still same focusedhref/connected actual anchor visible431.04–479.64, same Tooltip505 and followfalse/top0. root-source-later-natural-update.jpg personally shows terminal continuity. Actual child three chronologically distinct Source1 groups remain; this is not a fabricated Sources3 aggregate or a same-message multi-source case.
+
+Native Escape at09:39:22.046 closes Tooltip and preserves anchor. Native End at09:39:22.361 deliberately returns child to bottom1536/client711/height2246 and restores followtrue. This is operator movement, not an unsolicited reading jump. Native Shift+Tab reaches expanded heading; Tab re-enters the actual source at09:39:46.096, again pauses followfalse/top0 and shows full Tooltip505. The existing bottom-rearm contract and focus-reading pause both work in these observed scenes; initial mount, pending scroll echoes and every possible focus-atbottom timing are not universally proved.
+
+Escape/Return opens own129 at exact official W3C intro URL. Root personally read heading/summary and viewed root-source-enter-official.jpg, then closed129. Next native Tab from source reaches genuine principles webfetch disclosure, tooltip0; navigation is not trapped. Default reset settles at actual1093x1244, and root-terminal-report.jpg personally shows the actual Chinese three-point final plus all requested links. Ambient Light→Dark/mediaDarktrue appeared again; no controlled theme/cause claim. No website mutation or unrelated user page/process action.
+
+## Limits and remaining work
+
+158 current URL source reading and single-group ordinal presentation are bounded actual-qualified. File/document focus/action, real same-group multi-source ordinal, Main/SideChat focus, source switch/recovery and long-URL cases not naturally present remain UNKNOWN, not inferred from shared code or previous136 file range test.157 CSS margin candidate is not implemented;156 offscreen async-height/follow hypothesis remains unproved. Sampled absence of Rendering pixels is not a global flicker guarantee.154 failed first focus remains evidence for the repair, not retroactively passed.
+
+## Whole closure / original once
+
+Root closed128/129 and reset viewport. Sole public shutdown joined exact foreground Job/output/request; parent14106 actualterminal0 joined. Target34280 birth win32:639270489067370394 and Host51368 birth win32:639270489059480806 independently dead,18100free/copied credentials/catalog removed. Five exact generated files privately preserved after workspace/UTC-birth checks. Final audit selected after whole closure; actual unprefixed mandatory receipts archived before original sixargs Source/reply collector ONCE0, nested original Source checker ONCE0.18 streamed Sol200EOF and three genuine producer/source tuples/final reply-before-terminal qualified. No separate Source rerun, Memory checker, oldTaskrearm or budget extension. Continuous goal remains active; this is one scoped delivery followed by further Sources investigation.

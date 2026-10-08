@@ -183,6 +183,15 @@ runs in place and may not hoist narrative or boundaries across them by splitting
 a whole card into type buckets. Reasoning parts remain runtime evidence but are
 not message-card display content.
 
+Source disclosures retain their actual adjacent Part group and truthful group
+count. Expanded leaves retain canonical type/Session/Message/source identity
+while reading current metadata and index. A single-source group needs no leaf
+ordinal; a larger group keeps its current per-group order. Opening a disclosure
+and focusing its URL/file/document leaf declare reading intent through the
+existing nearest transcript owner, releasing automatic following. Native Tooltip
+and source actions retain their keyboard behavior; an explicit return to the
+bottom can resume following through the existing scroll policy.
+
 Every Task and Session hydrate, history page, connection snapshot and live
 Message event passes through the same bounded display-transport projection.
 It omits Reasoning and replaces a completed Tool state above the inline byte

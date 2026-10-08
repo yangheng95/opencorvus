@@ -347,4 +347,6 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 
 - [153 闭合比较](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/README.md)：225041ms、19 Sol EOF、原 once0；live child 未验收。[154 最终准备](../../artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-final-154/README.md)已实际闭合，限定主区合格、首次live Source阅读失败保留；[156 offscreen 只读线索](../../artifacts/2026-10-05-connection-workspace-authority/offscreen-markdown-measurement-investigation-156.md)未证明根因。
 
-- [157 Sources UX只读调查](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-usability-investigation-157.md)与[158 focus/follow后续计划](../../artifacts/2026-10-05-connection-workspace-authority/source-reading-focus-follow-plan-158.md)：154首次live Source焦点滚出视口失败保留，后续refocus/窄Tooltip/官方Enter成功分开；待准入，连续目标 ACTIVE。
+- [157 Sources UX只读调查](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-usability-investigation-157.md)与[158 focus/follow后续计划](../../artifacts/2026-10-05-connection-workspace-authority/source-reading-focus-follow-plan-158.md)：154首次live Source焦点滚出视口失败保留，后续refocus/窄Tooltip/官方Enter成功分开；158窄SourceParts已按159限定URL阅读场景合格；未采矩阵未知，连续目标 ACTIVE。
+
+- [159 Sources focus闭合](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-focus-after-159/README.md)：167830ms、18 Sol EOF、原once0/nested0；首次focus及自然增长/narrow阅读限定合格，154失败保留，file/document/多Source仍UNKNOWN。

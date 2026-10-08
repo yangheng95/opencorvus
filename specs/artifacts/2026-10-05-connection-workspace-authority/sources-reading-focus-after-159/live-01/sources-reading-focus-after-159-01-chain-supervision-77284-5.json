@@ -1,0 +1,28 @@
+{
+  "occurrence": "sources-reading-focus-after-159-01-e7198ae1-fde0-4e67-8d1d-15415289cd20",
+  "presence": [
+    {
+      "originalOccurrencePresent": true,
+      "processID": 34280,
+      "state": "exact_live",
+      "processInstanceID": "win32:639270489067370394"
+    },
+    {
+      "originalOccurrencePresent": true,
+      "processID": 51368,
+      "state": "exact_live",
+      "processInstanceID": "win32:639270489059480806"
+    }
+  ],
+  "observedAtUtc": "2026-10-08T09:35:33.7341329Z",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "nativeSettlement": null,
+  "phase": "supervision-77284-5",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18100,
+      "OwningProcess": 34280
+    }
+  ]
+}
