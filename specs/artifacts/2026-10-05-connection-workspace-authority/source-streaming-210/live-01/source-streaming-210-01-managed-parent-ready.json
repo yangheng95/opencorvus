@@ -1,0 +1,15 @@
+{
+  "pid": 63180,
+  "occurrence": "source-streaming-210-01-cdbbfad5-7334-40e1-8e56-fe07f55917bd",
+  "owner": {
+    "pid": 63180,
+    "processInstanceID": "win32:639270932443674826",
+    "occurrenceID": "30dd385d-29b9-4523-bf39-4179689246ec"
+  },
+  "parent": {
+    "pid": 77744,
+    "processInstanceID": "win32:639270932443247512",
+    "occurrenceID": "c3acd0ba-c043-49ae-bb0b-eb3946590c60"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

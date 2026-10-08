@@ -1,0 +1,28 @@
+{
+  "occurrence": "source-streaming-210-01-cdbbfad5-7334-40e1-8e56-fe07f55917bd",
+  "listeners": [],
+  "observedAtUtc": "2026-10-08T22:06:36.6597846Z",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "boundary": "Exact OS births and owned port/pair observed after original foreground4974 returned0",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 23596,
+        "processInstanceID": "win32:639270932435949682",
+        "occurrenceID": "bf92313f-9046-4d22-938b-404942f94f7e"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 63180,
+        "processInstanceID": "win32:639270932443674826",
+        "occurrenceID": "f4dc2c86-f58d-4d74-98c4-47f6499516e8"
+      }
+    }
+  ]
+}

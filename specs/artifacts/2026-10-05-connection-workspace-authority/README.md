@@ -495,3 +495,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [209 主卡Open实际调查](subagent-open-audit-209/README.md) / [Recall](subagent-open-investigation-209.md)：屏幕外定位点击仍在tail/Dock0；真实滚轮后两张屏幕内卡片pointer和tester Enter正确打开。工具内部时序未知，未加推测产品补丁；原父工具53393/native/pair自然0，其他页面未操作。后续当前Host真实Sol单Chat流式验收。
 
+- [210 当前Host真实Sol Sources](source-streaming-210/README.md) / [Recall](source-streaming-plan-210.md)：完整auth/models、三重preflight，单Chat两Source/三回合/10实际stream200EOF；实际来源阅读top340保持、恢复跟随4139→4210与最终wheel返回合格。原错过窗口/键组合未响应保留；原父工具4974/foreground/native/pair自然0，非本轮页未操作，singleagent持续。
+

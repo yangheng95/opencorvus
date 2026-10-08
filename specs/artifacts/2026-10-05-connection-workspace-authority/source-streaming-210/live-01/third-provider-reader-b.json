@@ -1,0 +1,72 @@
+{
+  "source": "provider-63180-ad5fbc7a-9b38-4443-99d0-2d4319e6afbb-30.json",
+  "providerObservedAt": "2026-10-08T22:01:29.704Z",
+  "observedAtUtc": "2026-10-08T22:01:35.8993170Z",
+  "requests": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "settled",
+        "receivedAt": 1791496840929,
+        "boundAt": 1791496840932,
+        "chunkCount": 283,
+        "byteCount": 684509,
+        "firstByteReadAt": 1791496840933,
+        "lastByteReadAt": 1791496889617,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUSV55TNzz2cymIYEfk",
+          "streamRequest": {
+            "requestID": "msg_cc47383d-0510-4537-8cc6-04c3b5176f1d",
+            "agentID": "memory",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXUwAZB00AD2ipmxMO",
+            "attempt": 0
+          }
+        },
+        "terminal": {
+          "kind": "eof",
+          "at": 1791496889704
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "response_reader": {
+        "boundary": "provider-source-reader",
+        "state": "reading",
+        "receivedAt": 1791496841602,
+        "boundAt": 1791496841604,
+        "chunkCount": 300,
+        "byteCount": 1003242,
+        "firstByteReadAt": 1791496841605,
+        "lastByteReadAt": 1791496889688,
+        "identityState": "observed",
+        "requestContext": {
+          "sessionID": "ses_-zUSV55TNzz2cymIYEfk",
+          "streamRequest": {
+            "requestID": "msg_cc47383d-0510-4537-8cc6-04c3b5176f1d",
+            "agentID": "chat",
+            "providerID": "openai",
+            "modelID": "gpt-6.1-sol",
+            "apiModelID": "gpt-6.1-sol"
+          },
+          "activity": {
+            "id": "act_g0VXUwAhV00mnXX1VMV9",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0VXUwAZO00KyGmkdbJe"
+          }
+        }
+      }
+    }
+  ]
+}
