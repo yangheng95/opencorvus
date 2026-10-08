@@ -452,3 +452,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [157 Sources UX只读调查](sources-reading-usability-investigation-157.md)与[158 focus/follow后续计划](source-reading-focus-follow-plan-158.md)：154首次live Source焦点滚出视口失败保留，后续refocus/窄Tooltip/官方Enter成功分开；158窄SourceParts已按159限定URL阅读场景合格；未采矩阵未知，连续目标 ACTIVE。
 
 - [159 Sources focus闭合](sources-reading-focus-after-159/README.md)：167830ms、18 Sol EOF、原once0/nested0；首次focus及自然增长/narrow阅读限定合格，154失败保留，file/document/多Source仍UNKNOWN。
+
+- [160 File Sources闭合](sources-file-focus-live-plan-160.md)与[限定资格](sources-file-focus-live-160/README.md)：111815ms/16 Sol EOF/原file once0；focus与实际三range边界合格，file live growth UNMET，首次导航失败保留；[161密度调查](sources-density-investigation-plan-161.md)实际26.667px，无CSS改动。

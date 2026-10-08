@@ -1,0 +1,22 @@
+{
+  "nativeSettlement": null,
+  "occurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+  "phase": "supervision-78108-1",
+  "listeners": [],
+  "observedAtUtc": "2026-10-08T09:50:55.0036608Z",
+  "presence": [
+    {
+      "processInstanceID": "win32:639270498527862835",
+      "processID": 44544,
+      "originalOccurrencePresent": true,
+      "state": "exact_live"
+    },
+    {
+      "processInstanceID": "win32:639270498520126717",
+      "processID": 77184,
+      "originalOccurrencePresent": true,
+      "state": "exact_live"
+    }
+  ],
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference"
+}

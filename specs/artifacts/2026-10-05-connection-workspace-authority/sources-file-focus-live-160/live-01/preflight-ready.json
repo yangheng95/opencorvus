@@ -1,0 +1,21 @@
+{
+  "pid": 44544,
+  "owner": {
+    "pid": 44544,
+    "processInstanceID": "win32:639270498527862835",
+    "occurrenceID": "7495160e-2491-40d9-bf76-54f211845b5c"
+  },
+  "occurrence": "sources-file-focus-live-160-01-9617466a-e5f1-4091-89fc-084e193f3538",
+  "port": 18101,
+  "preflight": {
+    "sessionID": "ses_hyKtj1HR9kw5kkAQT8ug",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "maxRequests": 24,
+  "budgetScope": "preflight-and-entire-formal-task-cumulative-same-process",
+  "nextAction": "root-owned-genuine-cli-task-create",
+  "credentialCleanup": "parent-owned-after-physical-exit"
+}

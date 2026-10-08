@@ -70,3 +70,17 @@ Root确认152d0035884正常push8009实际0 joined，fresh HEAD/upstream相同、
 Root [159人工记录](../../artifacts/2026-10-05-connection-workspace-authority/sources-reading-focus-after-159/live-01/root-manual-qualification.md)确认types65360/build72330实际0及main-ChhQkqg3。167830ms/18 Sol200EOF，parent14106实际0 joined、34280/51368死亡、18100释放、pair清除、128/129关闭；原组合once0/nested0。首次51s Source native focus无需wheel/refocus即followfalse/full Tooltip505；自然text1275→2089、height1070→1807和窄场景仍可读，真实count1无冗余ordinal。Escape保留焦点、native End显式跟随、Tab返回暂停、官方Enter亲看分别合格。
 
 这是Root视觉证据而非本整理者UI交互，154原失败不改。file/document、真实同组多Source、Main/SideChat和未采focus/recovery矩阵未知；157 margin未实现，156未证明，一般Rendering及自然主题改变原因未知。连续目标ACTIVE/Sol要求保持，当前批次push不提前宣称。
+
+## 160/161 新覆盖准备 / 159本地提交
+
+Root确认159本地提交75f9cdc2，normal push parent37266仍hooks中，结果未知，不提前宣称远端已交付。159限定URL视觉资格和154原失败保持。
+
+[160文件focus方案](../../artifacts/2026-10-05-connection-workspace-authority/sources-file-focus-live-plan-160.md)/[说明](../../artifacts/2026-10-05-connection-workspace-authority/sources-file-focus-live-160/README.md)仅prepared：沿136 relativepath/ranges输入，未来manifest absolute paths，未改stage-inputs130在另行Root准入后才复制current真实三文件。18101/Sol24/600000/180000/900000固定，runtime及filefocus/narrow/update矩阵HELD。[161密度方案](../../artifacts/2026-10-05-connection-workspace-authority/sources-density-investigation-plan-161.md)需Root真实DOM geometry，尚无CSS patch，不能把历史XL或截图当current间距事实。连续Sources目标ACTIVE，file/document/真实同组多Source未知。
+
+## 160 当前闭合 / 161实际测量（上段为历史准备）
+
+Root确认159 push37266实际0/fresh75f9 equality；160同产品/main-ChhQkqg3与current三文件真实copies完成，非136历史source内容。以 [160 Root人工记录](../../artifacts/2026-10-05-connection-workspace-authority/sources-file-focus-live-160/live-01/root-manual-qualification.md)为准：111815ms/16 Sol200EOF、原文件六参数once0，parent74807实际0 joined、44544/77184死亡、18101释放/pair清除/自有130关闭reset。
+
+file focus/terminal retention及README1–50、Panel170–200（repeat/narrow activeLine170）、code70–105实际首尾边界限定合格。Right仍firstline、wheel overshot65、首次code105 offscreen保留，Loading帧和cursor0不当loaded/caret证明。text1224/height1282不变，file live growth UNMET，不能借natural-growth文件名宣称通过。
+
+161真实三message IDs的相邻Sources整体26.667px由margin6、next margin12/padding8/border0.666667形成，Tool→Source gap6；这是Root同页真实geometry，无CSS patch/密度修复。document、同组multi-source、Main/SideChat、恢复等未知；156未证明、154/134原失败及连续目标ACTIVE保持。

@@ -1,0 +1,569 @@
+{
+  "gutter": [
+    {
+      "bottom": -2304,
+      "line": "999",
+      "top": -2304
+    },
+    {
+      "bottom": -361.5,
+      "line": "68",
+      "top": -381
+    },
+    {
+      "bottom": -322.5,
+      "line": "69",
+      "top": -361.5
+    },
+    {
+      "bottom": -283.5,
+      "line": "70",
+      "top": -322.5
+    },
+    {
+      "bottom": -264,
+      "line": "71",
+      "top": -283.5
+    },
+    {
+      "bottom": -205.5,
+      "line": "72",
+      "top": -264
+    },
+    {
+      "bottom": -147,
+      "line": "73",
+      "top": -205.5
+    },
+    {
+      "bottom": -127.5,
+      "line": "74",
+      "top": -147
+    },
+    {
+      "bottom": -88.5,
+      "line": "75",
+      "top": -127.5
+    },
+    {
+      "bottom": -69,
+      "line": "76",
+      "top": -88.5
+    },
+    {
+      "bottom": -49.5,
+      "line": "77",
+      "top": -69
+    },
+    {
+      "bottom": -10.5,
+      "line": "78",
+      "top": -49.5
+    },
+    {
+      "bottom": 67.5,
+      "line": "79",
+      "top": -10.5
+    },
+    {
+      "bottom": 87,
+      "line": "80",
+      "top": 67.5
+    },
+    {
+      "bottom": 106.5,
+      "line": "81",
+      "top": 87
+    },
+    {
+      "bottom": 165,
+      "line": "82",
+      "top": 106.5
+    },
+    {
+      "bottom": 204,
+      "line": "83",
+      "top": 165
+    },
+    {
+      "bottom": 223.5,
+      "line": "84",
+      "top": 204
+    },
+    {
+      "bottom": 243,
+      "line": "85",
+      "top": 223.5
+    },
+    {
+      "bottom": 282,
+      "line": "86",
+      "top": 243
+    },
+    {
+      "bottom": 301.5,
+      "line": "87",
+      "top": 282
+    },
+    {
+      "bottom": 340.5,
+      "line": "88",
+      "top": 301.5
+    },
+    {
+      "bottom": 360,
+      "line": "89",
+      "top": 340.5
+    },
+    {
+      "bottom": 379.5,
+      "line": "90",
+      "top": 360
+    },
+    {
+      "bottom": 438,
+      "line": "91",
+      "top": 379.5
+    },
+    {
+      "bottom": 457.5,
+      "line": "92",
+      "top": 438
+    },
+    {
+      "bottom": 477,
+      "line": "93",
+      "top": 457.5
+    },
+    {
+      "bottom": 516,
+      "line": "94",
+      "top": 477
+    },
+    {
+      "bottom": 535.5,
+      "line": "95",
+      "top": 516
+    },
+    {
+      "bottom": 613.5,
+      "line": "96",
+      "top": 535.5
+    },
+    {
+      "bottom": 652.5,
+      "line": "97",
+      "top": 613.5
+    },
+    {
+      "bottom": 691.5,
+      "line": "98",
+      "top": 652.5
+    },
+    {
+      "bottom": 730.5,
+      "line": "99",
+      "top": 691.5
+    },
+    {
+      "bottom": 750,
+      "line": "100",
+      "top": 730.5
+    },
+    {
+      "bottom": 769.5,
+      "line": "101",
+      "top": 750
+    },
+    {
+      "bottom": 789,
+      "line": "102",
+      "top": 769.5
+    },
+    {
+      "bottom": 808.5,
+      "line": "103",
+      "top": 789
+    },
+    {
+      "bottom": 847.5,
+      "line": "104",
+      "top": 808.5
+    },
+    {
+      "bottom": 867,
+      "line": "105",
+      "top": 847.5
+    },
+    {
+      "bottom": 925.5,
+      "line": "106",
+      "top": 867
+    },
+    {
+      "bottom": 964.5,
+      "line": "107",
+      "top": 925.5
+    },
+    {
+      "bottom": 1003.5,
+      "line": "108",
+      "top": 964.5
+    },
+    {
+      "bottom": 1042.5,
+      "line": "109",
+      "top": 1003.5
+    },
+    {
+      "bottom": 1120.5,
+      "line": "110",
+      "top": 1042.5
+    },
+    {
+      "bottom": 1140,
+      "line": "111",
+      "top": 1120.5
+    },
+    {
+      "bottom": 1159.5,
+      "line": "112",
+      "top": 1140
+    },
+    {
+      "bottom": 1179,
+      "line": "113",
+      "top": 1159.5
+    },
+    {
+      "bottom": 1198.5,
+      "line": "114",
+      "top": 1179
+    },
+    {
+      "bottom": 1257,
+      "line": "115",
+      "top": 1198.5
+    },
+    {
+      "bottom": 1296,
+      "line": "116",
+      "top": 1257
+    },
+    {
+      "bottom": 1335,
+      "line": "117",
+      "top": 1296
+    }
+  ],
+  "lines": [
+    {
+      "bottom": -361.5,
+      "class": "cm-line",
+      "text": "",
+      "top": -381
+    },
+    {
+      "bottom": -322.5,
+      "class": "cm-line",
+      "text": "function sourceDetail(source: ConversationSourcePart): string {",
+      "top": -361.5
+    },
+    {
+      "bottom": -283.5,
+      "class": "cm-line cm-activeLine cm-oc-reveal-line",
+      "text": "  if (source.type === \"source-url\") return source.url || \"\"",
+      "top": -322.5
+    },
+    {
+      "bottom": -264,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  if (source.type === \"source-file\") {",
+      "top": -283.5
+    },
+    {
+      "bottom": -205.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    const path = shortRelativePath(source.path || \"\", sourceDirectory())",
+      "top": -264
+    },
+    {
+      "bottom": -147,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    return source.range ? `${path}:${source.range.startLine}-${source.range.endLine}` : path",
+      "top": -205.5
+    },
+    {
+      "bottom": -127.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  }",
+      "top": -147
+    },
+    {
+      "bottom": -88.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  return source.filename || source.mediaType || \"\"",
+      "top": -127.5
+    },
+    {
+      "bottom": -69,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "}",
+      "top": -88.5
+    },
+    {
+      "bottom": -49.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "",
+      "top": -69
+    },
+    {
+      "bottom": -10.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "function sourceIcon(source: ConversationSourcePart): IconName {",
+      "top": -49.5
+    },
+    {
+      "bottom": 67.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  return source.type === \"source-url\" ? \"web-search\" : source.type === \"source-file\" ? \"file-document\" : \"channel-link\"",
+      "top": -10.5
+    },
+    {
+      "bottom": 87,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "}",
+      "top": 67.5
+    },
+    {
+      "bottom": 106.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "",
+      "top": 87
+    },
+    {
+      "bottom": 165,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "async function openSourceFile(source: ConversationSourcePart): Promise<void> {",
+      "top": 106.5
+    },
+    {
+      "bottom": 204,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  const authority = captureApiAuthority()",
+      "top": 165
+    },
+    {
+      "bottom": 223.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  const epoch = boardStore.selectEpoch",
+      "top": 204
+    },
+    {
+      "bottom": 243,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  const directory = sourceDirectory()",
+      "top": 223.5
+    },
+    {
+      "bottom": 282,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  const path = source.path?.trim() || \"\"",
+      "top": 243
+    },
+    {
+      "bottom": 301.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  if (!directory || !path) return",
+      "top": 282
+    },
+    {
+      "bottom": 340.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  const projectPath = relativePathFrom(directory, path)",
+      "top": 301.5
+    },
+    {
+      "bottom": 360,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  try {",
+      "top": 340.5
+    },
+    {
+      "bottom": 379.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    if (projectPath) {",
+      "top": 360
+    },
+    {
+      "bottom": 438,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "      await openFileEditor(projectPath, { directory, authority }, source.range)",
+      "top": 379.5
+    },
+    {
+      "bottom": 457.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "      return",
+      "top": 438
+    },
+    {
+      "bottom": 477,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    }",
+      "top": 457.5
+    },
+    {
+      "bottom": 516,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    await openSourceFileEditor(path, { directory, authority }, source.range)",
+      "top": 477
+    },
+    {
+      "bottom": 535.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  } catch (error) {",
+      "top": 516
+    },
+    {
+      "bottom": 613.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    if (!isApiAuthorityCurrent(authority) || boardStore.selectEpoch !== epoch) return",
+      "top": 535.5
+    },
+    {
+      "bottom": 652.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    if (error instanceof DOMException && error.name === \"AbortError\") return",
+      "top": 613.5
+    },
+    {
+      "bottom": 691.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    AppLog.error(\"source-file\", \"Opening the file source failed\", {",
+      "top": 652.5
+    },
+    {
+      "bottom": 730.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "      error: error instanceof Error ? error.message : String(error),",
+      "top": 691.5
+    },
+    {
+      "bottom": 750,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "    })",
+      "top": 730.5
+    },
+    {
+      "bottom": 769.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  }",
+      "top": 750
+    },
+    {
+      "bottom": 789,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "}",
+      "top": 769.5
+    },
+    {
+      "bottom": 808.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "",
+      "top": 789
+    },
+    {
+      "bottom": 847.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "function SourceTooltipContent(props: { source: ConversationSourcePart }) {",
+      "top": 808.5
+    },
+    {
+      "bottom": 867,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "  return (",
+      "top": 847.5
+    },
+    {
+      "bottom": 925.5,
+      "class": "cm-line",
+      "text": "    <Tooltip.Content class=\"msg-source-tooltip\" data-ui=\"message-source-tooltip\">",
+      "top": 867
+    },
+    {
+      "bottom": 964.5,
+      "class": "cm-line",
+      "text": "      <strong>{sourceLabel(props.source)}</strong>",
+      "top": 925.5
+    },
+    {
+      "bottom": 1003.5,
+      "class": "cm-line",
+      "text": "      <span>{sourceDetail(props.source)}</span>",
+      "top": 964.5
+    },
+    {
+      "bottom": 1042.5,
+      "class": "cm-line",
+      "text": "      <span>{props.source.snippet || \"\"}</span>",
+      "top": 1003.5
+    },
+    {
+      "bottom": 1120.5,
+      "class": "cm-line",
+      "text": "      <span>{[props.source.author, props.source.publishedAt, props.source.provider].filter(Boolean).join(\" · \")}</span>",
+      "top": 1042.5
+    },
+    {
+      "bottom": 1140,
+      "class": "cm-line",
+      "text": "    </Tooltip.Content>",
+      "top": 1120.5
+    },
+    {
+      "bottom": 1159.5,
+      "class": "cm-line",
+      "text": "  )",
+      "top": 1140
+    },
+    {
+      "bottom": 1179,
+      "class": "cm-line",
+      "text": "}",
+      "top": 1159.5
+    },
+    {
+      "bottom": 1198.5,
+      "class": "cm-line",
+      "text": "",
+      "top": 1179
+    },
+    {
+      "bottom": 1257,
+      "class": "cm-line",
+      "text": "function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {",
+      "top": 1198.5
+    },
+    {
+      "bottom": 1296,
+      "class": "cm-line",
+      "text": "  const label = () => sourceLabel(props.source)",
+      "top": 1257
+    },
+    {
+      "bottom": 1335,
+      "class": "cm-line",
+      "text": "  const detail = () => sourceDetail(props.source)",
+      "top": 1296
+    }
+  ],
+  "observedAt": "2026-10-08T10:00:36.877Z",
+  "scroller": [
+    {
+      "client": 573,
+      "height": 6518,
+      "top": 2424.666748046875
+    }
+  ]
+}

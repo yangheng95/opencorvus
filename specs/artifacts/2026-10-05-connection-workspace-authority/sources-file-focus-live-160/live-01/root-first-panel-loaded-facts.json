@@ -1,0 +1,384 @@
+{
+  "cursor": [
+    {
+      "bottom": 415.4896049499512,
+      "height": 17.322917938232422,
+      "left": 967.0833740234376,
+      "right": 967.7500407099724,
+      "top": 398.1666870117187,
+      "width": 0.6666666865348816,
+      "x": 967.0833740234376,
+      "y": 398.1666870117187
+    }
+  ],
+  "filename": "references/07-panel.md",
+  "gutter": [
+    {
+      "bottom": -6732,
+      "line": "9999",
+      "top": -6732
+    },
+    {
+      "bottom": -324,
+      "line": "156",
+      "top": -382.5
+    },
+    {
+      "bottom": -265.5,
+      "line": "157",
+      "top": -324
+    },
+    {
+      "bottom": -207,
+      "line": "158",
+      "top": -265.5
+    },
+    {
+      "bottom": -187.5,
+      "line": "159",
+      "top": -207
+    },
+    {
+      "bottom": -129,
+      "line": "160",
+      "top": -187.5
+    },
+    {
+      "bottom": -70.5,
+      "line": "161",
+      "top": -129
+    },
+    {
+      "bottom": -12,
+      "line": "162",
+      "top": -70.5
+    },
+    {
+      "bottom": 46.5,
+      "line": "163",
+      "top": -12
+    },
+    {
+      "bottom": 105,
+      "line": "164",
+      "top": 46.5
+    },
+    {
+      "bottom": 163.5,
+      "line": "165",
+      "top": 105
+    },
+    {
+      "bottom": 222,
+      "line": "166",
+      "top": 163.5
+    },
+    {
+      "bottom": 280.5,
+      "line": "167",
+      "top": 222
+    },
+    {
+      "bottom": 339,
+      "line": "168",
+      "top": 280.5
+    },
+    {
+      "bottom": 397.5,
+      "line": "169",
+      "top": 339
+    },
+    {
+      "bottom": 456,
+      "line": "170",
+      "top": 397.5
+    },
+    {
+      "bottom": 514.5,
+      "line": "171",
+      "top": 456
+    },
+    {
+      "bottom": 573,
+      "line": "172",
+      "top": 514.5
+    },
+    {
+      "bottom": 612,
+      "line": "173",
+      "top": 573
+    },
+    {
+      "bottom": 631.5,
+      "line": "174",
+      "top": 612
+    },
+    {
+      "bottom": 690,
+      "line": "175",
+      "top": 631.5
+    },
+    {
+      "bottom": 748.5,
+      "line": "176",
+      "top": 690
+    },
+    {
+      "bottom": 807,
+      "line": "177",
+      "top": 748.5
+    },
+    {
+      "bottom": 865.5,
+      "line": "178",
+      "top": 807
+    },
+    {
+      "bottom": 924,
+      "line": "179",
+      "top": 865.5
+    },
+    {
+      "bottom": 982.5,
+      "line": "180",
+      "top": 924
+    },
+    {
+      "bottom": 1041,
+      "line": "181",
+      "top": 982.5
+    },
+    {
+      "bottom": 1080,
+      "line": "182",
+      "top": 1041
+    },
+    {
+      "bottom": 1099.5,
+      "line": "183",
+      "top": 1080
+    },
+    {
+      "bottom": 1119,
+      "line": "184",
+      "top": 1099.5
+    },
+    {
+      "bottom": 1138.5,
+      "line": "185",
+      "top": 1119
+    },
+    {
+      "bottom": 1197,
+      "line": "186",
+      "top": 1138.5
+    },
+    {
+      "bottom": 1255.5,
+      "line": "187",
+      "top": 1197
+    }
+  ],
+  "lines": [
+    {
+      "bottom": -324,
+      "class": "cm-line",
+      "text": "bundles retire only their exact old projected Message before replacement, preserving",
+      "top": -382.5
+    },
+    {
+      "bottom": -265.5,
+      "class": "cm-line",
+      "text": "other Messages and older loaded pages. Real Part removal validates its original",
+      "top": -324
+    },
+    {
+      "bottom": -207,
+      "class": "cm-line",
+      "text": "Session/Message/Part/type before mutation; no new projection owner is introduced.",
+      "top": -265.5
+    },
+    {
+      "bottom": -187.5,
+      "class": "cm-line",
+      "text": "",
+      "top": -207
+    },
+    {
+      "bottom": -129,
+      "class": "cm-line",
+      "text": "Task and Session conversation hydration, child snapshots/deltas and preceding",
+      "top": -187.5
+    },
+    {
+      "bottom": -70.5,
+      "class": "cm-line",
+      "text": "history retain the complete authorized Message identity window. Mission",
+      "top": -129
+    },
+    {
+      "bottom": -12,
+      "class": "cm-line",
+      "text": "conversation uses the same Session readers. `view.sessions.messageIDs` records",
+      "top": -70.5
+    },
+    {
+      "bottom": 46.5,
+      "class": "cm-line",
+      "text": "that window's actual membership; `view.messages` records its display placement.",
+      "top": -12
+    },
+    {
+      "bottom": 105,
+      "class": "cm-line",
+      "text": "Control-only Messages consume the bounded window and advance its canonical",
+      "top": 46.5
+    },
+    {
+      "bottom": 163.5,
+      "class": "cm-line",
+      "text": "history cursor. Reasoning bodies remain omitted by the current transport",
+      "top": 105
+    },
+    {
+      "bottom": 222,
+      "class": "cm-line",
+      "text": "projection. Changed Task Messages replace their own identity bundle; delta",
+      "top": 163.5
+    },
+    {
+      "bottom": 280.5,
+      "class": "cm-line",
+      "text": "removal IDs describe actual deletion or movement out of the addressed Session.",
+      "top": 222
+    },
+    {
+      "bottom": 339,
+      "class": "cm-line",
+      "text": "The child and Side chat parser retains those validated identities so a later",
+      "top": 280.5
+    },
+    {
+      "bottom": 397.5,
+      "class": "cm-line",
+      "text": "pending Part can attach to its real Message without replaying message creation.",
+      "top": 339
+    },
+    {
+      "bottom": 456,
+      "class": "cm-line cm-activeLine cm-oc-reveal-line",
+      "text": "The shared strict message-display predicate is applied when projecting cards",
+      "top": 397.5
+    },
+    {
+      "bottom": 514.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "and Side chat lists. A real assistant error retains its reason and error state;",
+      "top": 456
+    },
+    {
+      "bottom": 573,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "identity-only rows do not create visible message boundaries. Archive and",
+      "top": 514.5
+    },
+    {
+      "bottom": 612,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "turn-artifact consumers retain their existing visible-output contracts.",
+      "top": 573
+    },
+    {
+      "bottom": 631.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "",
+      "top": 612
+    },
+    {
+      "bottom": 690,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "Review selection is exact group/path. Material request identity includes endpoints,",
+      "top": 631.5
+    },
+    {
+      "bottom": 748.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "objects, evidence and receipts in memory; ambiguous shorthand is a precise error.",
+      "top": 690
+    },
+    {
+      "bottom": 807,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "Loading/failure cannot present a previous preview. The existing logical immutable",
+      "top": 748.5
+    },
+    {
+      "bottom": 865.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "read captures one API authority and directory for both sides/all chunks and validates",
+      "top": 807
+    },
+    {
+      "bottom": 924,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "the original authority before returning. Known non-text filtering excludes only",
+      "top": 865.5
+    },
+    {
+      "bottom": 982.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "isText=false; unknown records stay inspectable. Incomplete prose wraps within its",
+      "top": 924
+    },
+    {
+      "bottom": 1041,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "pane; genuine text diffs retain native two-axis scrolling. Status chips remain",
+      "top": 982.5
+    },
+    {
+      "bottom": 1080,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "nonshrinking horizontal metadata in the three existing shared consumers.",
+      "top": 1041
+    },
+    {
+      "bottom": 1099.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "",
+      "top": 1080
+    },
+    {
+      "bottom": 1119,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "## File editor language support",
+      "top": 1099.5
+    },
+    {
+      "bottom": 1138.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "",
+      "top": 1119
+    },
+    {
+      "bottom": 1197,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "Every accepted explicit file-open request advances the existing reveal revision,",
+      "top": 1138.5
+    },
+    {
+      "bottom": 1255.5,
+      "class": "cm-line cm-oc-reveal-line",
+      "text": "including a repeated range-free request for the current resource. The main",
+      "top": 1197
+    }
+  ],
+  "observedAt": "2026-10-08T09:57:35.399Z",
+  "scroller": [
+    {
+      "client": 573,
+      "height": 84362,
+      "top": 6852.66650390625
+    }
+  ]
+}
