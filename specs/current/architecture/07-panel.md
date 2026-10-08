@@ -469,6 +469,10 @@ before the native toggle. The nearest transcript pauses follow-to-bottom while
 its operator reads; native pointer and keyboard behavior, source identity and
 the single expansion store remain authoritative. The explicit bottom control
 resumes following through the same existing scroll owner.
+Child conversation message dividers retain the shared transcript margin and use
+the medium spacing token for their inner top inset. This keeps independent
+Source-bearing messages distinct without repeating a large blank band; the
+Source count and grouping remain attached to their actual chronological run.
 The label uses an actual source title when supplied. Webfetch reads that title only
 from the fetched text/html document using the public HTML parser; an empty title
 remains optional and uses the existing URL preview. Redirected URL owns source

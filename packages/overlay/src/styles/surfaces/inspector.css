@@ -2130,7 +2130,7 @@
 
 .subagent-conversation-panel__scroll .card-message-run + .card-message-run {
   margin-top: var(--ui-gap-xl);
-  padding-top: var(--ui-gap-xl);
+  padding-top: var(--ui-gap-md);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 66%, transparent);
 }
 

@@ -1,0 +1,26 @@
+{
+  "credentialStaging": "None",
+  "port": 18080,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-density-history-120-01\\evidence",
+    "sources-density-history-120-01-de192e82-551d-4702-80ba-4371b233b20a",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18080",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-density-history-120-01\\startup.json",
+    "--startup-occurrence",
+    "sources-density-history-120-01-de192e82-551d-4702-80ba-4371b233b20a",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "sources-density-history-120-01-de192e82-551d-4702-80ba-4371b233b20a"
+}

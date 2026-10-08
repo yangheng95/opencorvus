@@ -1,0 +1,21 @@
+diff --git a/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/preimages/history-ui-native-launch.before-after-release.ps1 b/.tmp-product-iteration/history-ui-native-launch.ps1
+index baf1aceb..be28764a 100644
+--- a/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/preimages/history-ui-native-launch.before-after-release.ps1
++++ b/.tmp-product-iteration/history-ui-native-launch.ps1
+@@ -5,8 +5,10 @@ $caseEvidence46=[IO.Path]::GetFullPath($EvidenceRoot)
+ $casePort46=$Port
+ $casePrefix46=$Prefix
+ $caseLogLevel46='INFO'
+-if($caseRun46 -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-density-history-120-01') -or $caseEvidence46 -ne [IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/before-01') -or $casePort46 -ne 18080 -or $casePrefix46 -ne 'sources-density-history-120-01'){throw 'Only admitted120 prepared clone scope'}
++if($caseRun46 -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-density-history-120-02') -or $caseEvidence46 -ne [IO.Path]::GetFullPath('D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/after-02') -or $casePort46 -ne 18082 -or $casePrefix46 -ne 'sources-density-history-120-02'){throw 'Only admitted120 prepared clone scope'}
+ $copy=Get-Content -Raw -LiteralPath (Join-Path $caseEvidence46 ($casePrefix46+'-history-copy.json'))|ConvertFrom-Json
++if(!$copy.beforeCustody -or $copy.beforeCustody.run -ne 'C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-density-history-120-01' -or $copy.beforeCustody.physical.occurrence -ne $copy.beforeCustody.occurrence -or !$copy.beforeCustody.physical.physicalCompletion -or !$copy.beforeCustody.physical.pairedCleanupComplete -or $copy.beforeCustody.joined.occurrence -ne $copy.beforeCustody.occurrence -or $copy.beforeCustody.joined.exitCode -ne 0){throw 'Actual before120 closure custody required from sole copy guard'}
++foreach($state in $copy.beforeCustody.states){if($state.state -ne 'dead_or_reused'){throw 'Original before120 closure not qualified'}}
+ $original=Get-Content -Raw -LiteralPath 'D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/delegated-final-authority-116/live-01/child-current-source-facts.json'|ConvertFrom-Json
+ if([IO.Path]::GetFullPath($copy.clone) -ne $caseRun46 -or $copy.port -ne $casePort46 -or [IO.Path]::GetFullPath($copy.source) -ne [IO.Path]::GetFullPath('C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/sources-delegated-live-116-01') -or $copy.sourceFacts.task.id -ne $original.taskID -or $copy.sourceFacts.task.project_id -ne $original.projectID -or $copy.sourceFacts.task.request_id -ne $original.requestID -or $copy.rootSessionID -ne $original.task.session_id -or $copy.sourceFacts.epoch -ne 1 -or $copy.sourceFacts.terminalEventID -ne $original.events[-1].id -or $copy.sourceFacts.sources.Count -ne 3){throw 'Actual completed116 copy guard custody required'}
+ foreach($state in $copy.sourceNativeStates){if($state.state -ne 'dead_or_reused'){throw 'Original source not closed'}}
+@@ -60,3 +62,4 @@ if($caseProcess46.ExitCode -ne 0){throw 'Native Host exited nonzero; preserve or
+ Write-OwnedLaunchFact (Join-Path $caseEvidence46 ($casePrefix46+'-launcher-native-joined.json')) @{occurrence=$caseOccurrence46;host=$caseReady46.host;target=$caseReady46.target;settlement=$actualSettlement;exitCode=$caseProcess46.ExitCode;boundary='Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner'}
+ 
+ 
++

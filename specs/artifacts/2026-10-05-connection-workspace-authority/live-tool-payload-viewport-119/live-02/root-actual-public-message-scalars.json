@@ -1,0 +1,176 @@
+{
+  "observedAtUtc": "2026-10-08T01:03:20.8736577Z",
+  "route": "Current session.messages public DTO",
+  "status": 200,
+  "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+  "messages": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "status": null,
+          "type": "text",
+          "rawLength": null,
+          "id": "prt_g0VXPmlVZ00qh4pg6HtO",
+          "tool": null
+        },
+        {
+          "status": null,
+          "type": "text",
+          "rawLength": null,
+          "id": "prt_g0VXPmlVZ01BMbaoLlfX",
+          "tool": null
+        }
+      ],
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "id": "msg_g0VXPmlVZ00NTw0tyUv1"
+    },
+    {
+      "role": "assistant",
+      "parts": [
+        {
+          "status": null,
+          "type": "step-start",
+          "rawLength": null,
+          "id": "prt_g0VXPmlm3000JW7v2XjZ",
+          "tool": null
+        },
+        {
+          "status": null,
+          "type": "text",
+          "rawLength": null,
+          "id": "prt_g0VXPmmFg00VcB01HkVu",
+          "tool": null
+        },
+        {
+          "status": "completed",
+          "type": "tool",
+          "rawLength": null,
+          "id": "prt_g0VXPmmsv00mTPxUkyFn",
+          "tool": "read"
+        },
+        {
+          "status": null,
+          "type": "step-finish",
+          "rawLength": null,
+          "id": "prt_g0VXPmn7w00J3mJrC48q",
+          "tool": null
+        }
+      ],
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "id": "msg_g0VXPmlbb00o9gInwTDA"
+    },
+    {
+      "role": "assistant",
+      "parts": [
+        {
+          "status": null,
+          "type": "step-start",
+          "rawLength": null,
+          "id": "prt_g0VXPmnH400yRQVfZRz1",
+          "tool": null
+        },
+        {
+          "status": "completed",
+          "type": "tool",
+          "rawLength": null,
+          "id": "prt_g0VXPmnjF00rRr2iTo63",
+          "tool": "read_agent_message"
+        },
+        {
+          "status": null,
+          "type": "step-finish",
+          "rawLength": null,
+          "id": "prt_g0VXPmnuY00BRU2hpAlr",
+          "tool": null
+        }
+      ],
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "id": "msg_g0VXPmnAe00IDRylr8BG"
+    },
+    {
+      "role": "assistant",
+      "parts": [
+        {
+          "status": null,
+          "type": "step-start",
+          "rawLength": null,
+          "id": "prt_g0VXPmo3A00WrxwNbxdb",
+          "tool": null
+        },
+        {
+          "status": "completed",
+          "type": "tool",
+          "rawLength": null,
+          "id": "prt_g0VXPmodA00k6RyC0J3v",
+          "tool": "read"
+        },
+        {
+          "status": null,
+          "type": "source-file",
+          "rawLength": null,
+          "id": "prt_g0VXPmomz006Wyl31qnK",
+          "tool": null
+        },
+        {
+          "status": null,
+          "type": "step-finish",
+          "rawLength": null,
+          "id": "prt_g0VXPmono00mjk8T6S4l",
+          "tool": null
+        }
+      ],
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "id": "msg_g0VXPmnwq002MmhL2z3A"
+    },
+    {
+      "role": "assistant",
+      "parts": [
+        {
+          "status": null,
+          "type": "step-start",
+          "rawLength": null,
+          "id": "prt_g0VXPmoxC00EOYs2kZAG",
+          "tool": null
+        },
+        {
+          "status": "completed",
+          "type": "tool",
+          "rawLength": null,
+          "id": "prt_g0VXPmpO700LFUS7IKRS",
+          "tool": "glob"
+        },
+        {
+          "status": null,
+          "type": "step-finish",
+          "rawLength": null,
+          "id": "prt_g0VXPmpbL00ovN82BtdA",
+          "tool": null
+        }
+      ],
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "id": "msg_g0VXPmoqO00udI9GOEw2"
+    },
+    {
+      "role": "assistant",
+      "parts": [
+        {
+          "status": null,
+          "type": "step-start",
+          "rawLength": null,
+          "id": "prt_g0VXPmpjH00AajiahNxj",
+          "tool": null
+        },
+        {
+          "status": null,
+          "type": "reasoning",
+          "rawLength": null,
+          "id": "prt_g0VXPmsfb009EgWMzD5I",
+          "tool": null
+        }
+      ],
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "id": "msg_g0VXPmpdE0024xtIwbXO"
+    }
+  ]
+}

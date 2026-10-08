@@ -1,0 +1,58 @@
+{
+  "uiStatus": 200,
+  "owner": {
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-density-history-120-02\\evidence",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-density-history-120-02\\runtime",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-source-spacing-120\\after-02",
+    "evidencePrefix": "sources-density-history-120-02",
+    "occurrence": "sources-density-history-120-02-05c5c169-03ff-4e71-9e5d-afc9522896fd",
+    "authorityStaging": "None; no model Task requested",
+    "targetBirthAtMs": 1791422986116,
+    "purpose": "Current credentialless completed116 history; no Provider or Task rearm",
+    "nativeTarget": {
+      "pid": 64532,
+      "processInstanceID": "win32:639270197861163383",
+      "occurrenceID": "7119a133-e6bc-4553-bb1e-982a02851f1f"
+    },
+    "observedProcessChain": [
+      {
+        "pid": 64532,
+        "processInstanceID": "win32:639270197861163383",
+        "occurrenceID": "7119a133-e6bc-4553-bb1e-982a02851f1f"
+      }
+    ],
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-density-history-120-02",
+    "host": {
+      "pid": 61964,
+      "processInstanceID": "win32:639270197852732014",
+      "occurrenceID": "21679203-7f06-406a-91f1-d42a5cf00e66"
+    },
+    "owner": {
+      "processInstanceID": "win32:639270197861163383",
+      "ProcessId": 64532
+    },
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\sources-delegated-live-116-01\\project",
+    "port": 18082
+  },
+  "assetStatus": 200,
+  "asset": "/ui/assets/main-DDD2UwoG.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "sources-density-history-120-02-05c5c169-03ff-4e71-9e5d-afc9522896fd",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18082",
+    "pid": 64532
+  },
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18082,
+      "OwningProcess": 64532
+    }
+  ],
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "observedAtUtc": "2026-10-08T01:30:04.8288374Z",
+  "finalUiUri": "http://127.0.0.1:18082/ui/",
+  "scriptSrc": "http://127.0.0.1:18082/ui/assets/main-DDD2UwoG.js",
+  "uiUri": "http://127.0.0.1:18082/ui"
+}

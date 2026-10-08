@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Child Sources message spacing120](2026-10-08-child-source-spacing.md): actual child inner inset16→8, real before/after wide/narrow titles and boundaries reviewed, credentialless scopes closed.
+
 - [256k compaction window and stable Task anchor](2026-10-08-compaction-window-and-task-anchor.md): explicit longer-context configuration and shared incremental/repeated checkpoint repair.
 
 - [Bounded live Tool payload viewport119](2026-10-08-live-tool-payload-viewport.md)

@@ -4,9 +4,13 @@
 
 - [Live Tool payload viewport119 Recall](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-plan-119.md): genuine11901 Sources/answer complete; large live-preview viewport after still unmet.
 
-- [Independent large-file11902 plan](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/large-input-live-plan-11902.md): fresh Code artifact plus actual live-input sampling proposed; original11901 preserved, execution held.
+- [Independent large-file11902 plan](artifacts/2026-10-05-connection-workspace-authority/live-tool-payload-viewport-119/large-input-live-plan-11902.md): original900s failure retained, actual300-item partial file and completed Tool effects; Task completion and live viewport unmet, owned scope closed.
 
-- [Child Sources spacing120 Recall](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-plan-120.md) and [history admission proposal](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120-history-admission-plan.md): closed116 static comparison, exact helper guards and winning cascade require Root admission; source held.
+- [Child Sources spacing120 Recall](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-plan-120.md) and [real evidence](artifacts/2026-10-05-connection-workspace-authority/child-source-spacing-120/README.md): child inner inset16→8, genuine wide/narrow Source titles and boundaries reviewed; both credentialless scopes closed and original canonical equality verified.
+
+- [Child pending identity121 investigation](artifacts/2026-10-05-connection-workspace-authority/child-pending-identity-plan-121.md): shared parser risk identified, actual11902 cause remains unknown; no production change.
+
+- [Narrow evidence table122 investigation](artifacts/2026-10-05-connection-workspace-authority/narrow-evidence-table-plan-122.md): real tester table squeezes columns in280px child; exact layout/root-source change held pending measured geometry.
 
 - [Tool input status118 Recall](artifacts/2026-10-05-connection-workspace-authority/tool-input-status-plan-118.md): real preparation labels captured; fresh11801 failed before execution/Sources; remaining phases and upstream cause unresolved.
 

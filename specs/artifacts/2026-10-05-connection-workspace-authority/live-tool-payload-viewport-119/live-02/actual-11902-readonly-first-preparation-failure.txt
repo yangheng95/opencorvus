@@ -1,0 +1,1 @@
+First readonly query failed ERR_SQLITE_ERROR: no such column time_started. No facts written. Actual PRAGMA and engine.sql.ts show Task lifecycle timestamps belong Protocol Events; query corrected to real engine_task identity fields and protocol_event.type. Node v25.7.0 readOnly BEGIN/ROLLBACK final succeeded.

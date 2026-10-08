@@ -2,9 +2,13 @@
 
 - [Live Tool payload viewport119 Recall](live-tool-payload-viewport-plan-119.md) and [evidence](live-tool-payload-viewport-119/README.md): genuine11901 completed Sources/answer and manual titles/links/Strong; long-live-input viewport after still unmet.
 
-- [Independent large-file11902 plan](live-tool-payload-viewport-119/large-input-live-plan-11902.md): different Code artifact task proposed to sample real long-input viewport; execution/checker held.
+- [Independent large-file11902 plan](live-tool-payload-viewport-119/large-input-live-plan-11902.md): actual original900s failure and partial300-item file retained; Task completion/live viewport unmet, full scope closed.
 
-- [Child Sources spacing120 Recall](child-source-spacing-plan-120.md) and [history admission](child-source-spacing-120-history-admission-plan.md): closed116 exact-source comparison proposed; helper/CSS/actualbefore held pending Root admission.
+- [Child Sources spacing120 Recall](child-source-spacing-plan-120.md) and [real evidence](child-source-spacing-120/README.md): measured child padding16→8; genuine wide/narrow sources and reading reviewed, credentialless before/after closed with canonical equality.
+
+- [Child pending identity121 investigation](child-pending-identity-plan-121.md): shared parser lifetime risk, actual11902 cause still unknown; source held.
+
+- [Narrow evidence table122 investigation](narrow-evidence-table-plan-122.md): actual tester280px columns squeezed; exact current table geometry/source change held.
 
 - [Tool input status118 Recall](tool-input-status-plan-118.md) and [evidence](tool-input-status-118/README.md): separate current pending/running counts; real main preparation display verified, fresh11801 failed before Sources/execution; remaining qualification explicit.
 

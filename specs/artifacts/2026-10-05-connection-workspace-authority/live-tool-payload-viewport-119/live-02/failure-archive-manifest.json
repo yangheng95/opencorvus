@@ -1,0 +1,53 @@
+{
+  "status": "FAILED original TASK_MAXIMUM_DURATION retained; no Task business failure substitution",
+  "root": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/large-input-live-119-02",
+  "occurrence": "large-input-live-119-02-ec9a9d45-924f-455c-aa62-d1d7e5a0e1fa",
+  "files": [
+    {
+      "file": "actual-11902-private-failed.json",
+      "bytes": 316,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "actual-11902-last-observation-safe-scalars.json",
+      "bytes": 2135,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "actual-11902-closed-durable-safe-scalars.json",
+      "bytes": 25299,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "actual-11902-provider-safe-scalars.json",
+      "bytes": 22465,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "actual-11902-file-safe-scalars.json",
+      "bytes": 633,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "actual-11902-activity-log-safe-scalars.json",
+      "bytes": 5921,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "actual-11902-readonly-first-preparation-failure.txt",
+      "bytes": 312,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "large-input-live-119-02-physical-terminal-and-pair-cleanup.json",
+      "bytes": 2246,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    },
+    {
+      "file": "large-input-live-119-02-final-provider-audit.json",
+      "bytes": 384166,
+      "privacy": "safe identity/timing/count/status or existing sanitized audit; no credential/catalog contents/CoT/raw arguments"
+    }
+  ],
+  "execution": "readonly transaction only after existing exact closure receipt; no Source/reply checker"
+}

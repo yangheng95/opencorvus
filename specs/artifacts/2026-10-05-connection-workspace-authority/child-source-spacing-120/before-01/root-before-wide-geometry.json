@@ -1,0 +1,83 @@
+{
+  "observedAt": "2026-10-08T01:25:53.927Z",
+  "rules": [
+    {
+      "margin": "var(--ui-gap-xl)",
+      "padding": "var(--ui-gap-xl)",
+      "selector": ".subagent-conversation-panel__scroll .card-message-run + .card-message-run",
+      "sheet": "http://localhost:18080/ui/assets/main-KyERWKuR.css"
+    },
+    {
+      "margin": "var(--ui-gap-lg)",
+      "padding": "",
+      "selector": ".card-message-run + .card-message-run",
+      "sheet": "http://localhost:18080/ui/assets/main-KyERWKuR.css"
+    },
+    {
+      "margin": "var(--conversation-transcript-run-gap)",
+      "padding": "",
+      "selector": ".chat-bubble .card-message-run + .card-message-run",
+      "sheet": "http://localhost:18080/ui/assets/main-KyERWKuR.css"
+    }
+  ],
+  "runs": [
+    {
+      "borderTop": "0px",
+      "height": 24,
+      "marginTop": "0px",
+      "messageID": "msg_g0VXPESgr00f4hEYBZws",
+      "paddingTop": "0px",
+      "top": 183.33334350585935
+    },
+    {
+      "borderTop": "0.666667px",
+      "height": 170.1979217529297,
+      "marginTop": "12px",
+      "messageID": "msg_g0VXPESm600aU6qInkcH",
+      "paddingTop": "16px",
+      "top": 219.33334350585935
+    },
+    {
+      "borderTop": "0.666667px",
+      "height": 81.66667175292969,
+      "marginTop": "12px",
+      "messageID": "msg_g0VXPEYlh00VK0i5tRwv",
+      "paddingTop": "16px",
+      "top": 401.53125
+    },
+    {
+      "borderTop": "0.666667px",
+      "height": 106.66667175292967,
+      "marginTop": "12px",
+      "messageID": "msg_g0VXPEZln00c3j39PH9D",
+      "paddingTop": "16px",
+      "top": 495.1979370117187
+    },
+    {
+      "borderTop": "0.666667px",
+      "height": 2182.59375,
+      "marginTop": "12px",
+      "messageID": "msg_g0VXPEbhD006HrOAq2dv",
+      "paddingTop": "16px",
+      "top": 613.8646240234375
+    }
+  ],
+  "sourceGroups": [
+    {
+      "label": "Sources: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C (1)",
+      "open": false
+    },
+    {
+      "label": "Sources: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C (1)",
+      "open": false
+    },
+    {
+      "label": "Sources: Accessibility | MDN (1)",
+      "open": false
+    }
+  ],
+  "viewport": [
+    1280,
+    720
+  ]
+}

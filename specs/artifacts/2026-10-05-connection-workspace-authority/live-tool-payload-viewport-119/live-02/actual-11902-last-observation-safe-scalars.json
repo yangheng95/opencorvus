@@ -1,0 +1,70 @@
+{
+  "source": "task-observation-71832-5ddc3ff4-cc99-497c-a623-7f80471af41b-1575.json",
+  "observationKind": "actual-selected-task-scope",
+  "occurrence": "large-input-live-119-02-ec9a9d45-924f-455c-aa62-d1d7e5a0e1fa",
+  "selected": {
+    "occurrence": "large-input-live-119-02-ec9a9d45-924f-455c-aa62-d1d7e5a0e1fa",
+    "taskID": "tsk_g00VXPmfBM00zDIG1XlV",
+    "projectID": "prj_hUFJj8g63Gzb050C9sdo",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\large-input-live-119-02\\project",
+    "productPillar": "code",
+    "requestID": "d1becbeb-edce-4362-9269-28580aa7847e",
+    "requestSentAt": "2026-10-08T00:51:28.3986774Z",
+    "acceptedObservedAt": "2026-10-08T00:51:33.7875183Z"
+  },
+  "pinned": {
+    "taskID": "tsk_g00VXPmfBM00zDIG1XlV",
+    "projectID": "prj_hUFJj8g63Gzb050C9sdo",
+    "rootSessionID": "ses_-zUSaDKevzzwB1pA1jQa",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXPmfLl00fqKeNi6pD",
+    "openedAt": 1791420693012
+  },
+  "observedAt": "2026-10-08T01:06:33.183Z",
+  "inactivityDeadlineMs": 1791421772614,
+  "totalDeadlineMs": 1791421593012,
+  "requests": 21,
+  "lifecycle": {
+    "taskID": "tsk_g00VXPmfBM00zDIG1XlV",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXPmfLl00fqKeNi6pD",
+    "openedAt": 1791420693012,
+    "status": "active"
+  },
+  "ownedPromptSessions": [
+    {
+      "sessionID": "ses_-zUSaDJoGzzAMrk1m7WO",
+      "kind": "orchestrator",
+      "lastActivityMs": 1791420717902
+    },
+    {
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "kind": "build",
+      "lastActivityMs": 1791421591992
+    }
+  ],
+  "sessionActivity": [
+    {
+      "sessionID": "ses_-zUSaDKevzzwB1pA1jQa"
+    },
+    {
+      "sessionID": "ses_-zUSaDJoGzzAMrk1m7WO"
+    },
+    {
+      "sessionID": "ses_hxspPwRQrtoNsdftaFuu",
+      "activity": {
+        "last_activity_at": 1791421592547,
+        "paused": false,
+        "pause_depth": 0,
+        "pause_owners": [],
+        "timed_out": false
+      }
+    }
+  ],
+  "counts": {
+    "sessions": 3,
+    "messages": 21,
+    "toolRequests": 17,
+    "toolOutcomes": 17
+  }
+}

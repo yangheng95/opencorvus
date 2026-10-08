@@ -1,0 +1,30 @@
+{
+  "status": "PREPARATION_HELD",
+  "runRoot": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/large-input-live-119-02",
+  "port": 18081,
+  "numeric": 11902,
+  "prefix": "large-input-live-119-02",
+  "title": "生成无障碍清单与大输入验收11902",
+  "source": "product-experience-11902",
+  "productPillar": "code",
+  "profile": {
+    "kind": "builtin",
+    "id": "base",
+    "namespace": "builtin"
+  },
+  "bounds": {
+    "cumulativeRequests": 32,
+    "nativeMs": 600000,
+    "inactivityMs": 180000,
+    "totalMs": 900000
+  },
+  "candidateAsset": "/ui/assets/main-BM6URc0X.js",
+  "assetQualification": "UNQUALIFIED until actual HTTP readiness resolves HTML script URI and asset200",
+  "requestFile": "request.txt",
+  "requestEncoding": "UTF-8 without BOM, final LF",
+  "requestAuthority": "../large-input-live-plan-11902.md natural request verbatim",
+  "actualTaskID": null,
+  "actualProjectID": null,
+  "actualEpoch": null,
+  "executed": false
+}
