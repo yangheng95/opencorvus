@@ -1,0 +1,48 @@
+Browser tab: 97, Title: "OpenCorvus", URL: "http://localhost:18190/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 35-38, 92-135, 178-196
++									178 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									179 container
++										180 content list
++											181 container
++												182 link w3.org/WAI/fundamentals/accessibility-intro/
++											183 container
++												184 link w3.org/WAI/fundamentals/accessibility-principles/
++											185 container
++												186 link developer.mozilla.org/en-US/docs/Web/Accessibility
++									187 container
++										188 button (collapsed) Secondary Actions: Expand
++										189 button (collapsed) Secondary Actions: Expand
++											190 image
++										191 button (collapsed) Secondary Actions: Expand
++										192 button (collapsed) Secondary Actions: Expand
++											193 image
++										194 button (collapsed) Secondary Actions: Expand
++											195 image
++									196 container
++										197 container
++											198 button
++										199 container
++											200 button (collapsed) Secondary Actions: Expand
++										201 container
++											202 button
++										203 container
++											204 button (collapsed) Secondary Actions: Expand
++								205 container
++									206 text Model configuration unavailable
++									207 text You can still read this conversation. Review the details or choose a model before sending a message.
++									208 button (collapsed) Details, Secondary Actions: Expand
++										209 text Details
++									210 button Retry
++									211 container chatForm
++										212 splitter Description: Drag to resize the message input, Value: 42
++										213 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++										214 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++										215 text Work
++										216 text Task
++										217 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++										218 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++										219 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++											220 text Choose model
++										221 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18190/ui/

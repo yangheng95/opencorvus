@@ -1,0 +1,68 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "task-main-reading-254-live-01-f01bac0e-bc51-43d4-8819-045e9ed51859",
+    "outcome": "settled",
+    "host": {
+      "pid": 64848,
+      "processInstanceID": "win32:639271821350622064",
+      "occurrenceID": "aba593da-3ad9-4558-ae3e-d187bf50a7d4"
+    },
+    "target": {
+      "pid": 68680,
+      "processInstanceID": "win32:639271821357991125",
+      "occurrenceID": "2614bb23-54a1-4a5a-955d-da3e179f5d79"
+    },
+    "observedAtUtc": "2026-10-09T22:37:51.483Z",
+    "deadlineAt": 1791586234964,
+    "terminal": {
+      "occurrenceID": "task-main-reading-254-live-01-f01bac0e-bc51-43d4-8819-045e9ed51859",
+      "pid": 68680,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-live-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent",
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-live-01\\runtime\\data\\models.json",
+      "outcome": "removed",
+      "presentAfter": false,
+      "copiedLength": 2001983
+    }
+  ],
+  "listeners": null,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 68680,
+        "processInstanceID": "win32:639271821357991125",
+        "occurrenceID": "2614bb23-54a1-4a5a-955d-da3e179f5d79"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 64848,
+        "processInstanceID": "win32:639271821350622064",
+        "occurrenceID": "aba593da-3ad9-4558-ae3e-d187bf50a7d4"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "occurrence": "task-main-reading-254-live-01-f01bac0e-bc51-43d4-8819-045e9ed51859",
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-09T22:37:53.8834740Z"
+}

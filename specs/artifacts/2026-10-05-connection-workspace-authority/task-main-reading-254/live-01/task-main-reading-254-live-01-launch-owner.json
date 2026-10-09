@@ -1,0 +1,35 @@
+{
+  "occurrence": "task-main-reading-254-live-01-f01bac0e-bc51-43d4-8819-045e9ed51859",
+  "owner": {
+    "processInstanceID": "win32:639271821357991125",
+    "ProcessId": 68680
+  },
+  "observedProcessChain": [
+    {
+      "pid": 68680,
+      "processInstanceID": "win32:639271821357991125",
+      "occurrenceID": "2614bb23-54a1-4a5a-955d-da3e179f5d79"
+    }
+  ],
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-live-01\\runtime",
+  "nativeTarget": {
+    "pid": 68680,
+    "processInstanceID": "win32:639271821357991125",
+    "occurrenceID": "2614bb23-54a1-4a5a-955d-da3e179f5d79"
+  },
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-live-01",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\task-main-reading-254\\live-01",
+  "evidencePrefix": "task-main-reading-254-live-01",
+  "targetBirthAtMs": 1791585335799,
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-live-01\\evidence",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+  "port": 18188,
+  "host": {
+    "pid": 64848,
+    "processInstanceID": "win32:639271821350622064",
+    "occurrenceID": "aba593da-3ad9-4558-ae3e-d187bf50a7d4"
+  },
+  "nativeDeadlineAt": 1791586234964,
+  "authorityStaging": "None; no model Task requested"
+}

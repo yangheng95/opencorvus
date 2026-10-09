@@ -276,6 +276,9 @@ function VirtualizedConversationCards(props: {
       props.onOpenSubagentConversation(target.sessionID)
     }
     props.onCardScrollRequest(request)
+    // Restoring a message offset needs the real target mounted, without an
+    // outstanding index alignment that can overwrite the reader on resize.
+    if (request.readingRestore) return !!await waitForScrollTargetElement(target.cardID)
     virtualizer.scrollToIndex(index, {
       align: request.block ?? "start",
       smooth: false,
@@ -451,17 +454,24 @@ export function Conversation(props: {
     setMainReadingPosition(owner.key, { ...position, anchor })
   }
   const changeTracking = (following: boolean, explicit = true) => {
-    if (explicit && reader) reader.pending = undefined
+    if (explicit && reader?.pending) {
+      reader.pending = undefined
+      reader.restoring = false
+      setHistoryAnchorPinID(null)
+    }
     setTracking(following)
     rememberReadingPosition()
   }
-  const createReaderController = (position: MainConversationReadingPosition | undefined) => {
+  const createReaderController = (
+    position: MainConversationReadingPosition | undefined,
+    restoration?: { resolveTop?: () => number | null; onRestoreSettled: (restored: boolean) => void },
+  ) => {
     scrollController?.cleanup()
     setTracking(position?.following ?? true)
     const layoutRoot = el.parentElement
     if (!layoutRoot) throw new Error("Main conversation layout owner is missing")
     scrollController = setupAutoScroll(el, {
-      initialPosition: position && !position.following ? { kind: "position", top: position.top, layoutRoot } : { kind: "bottom" },
+      initialPosition: position && !position.following ? { kind: "position", top: position.top, layoutRoot, ...restoration } : { kind: "bottom" },
       isTracking: tracking,
       onUserScrollUp: () => changeTracking(false),
       onFollowRequested: () => changeTracking(true),
@@ -469,6 +479,7 @@ export function Conversation(props: {
   }
   const bindReader = () => {
     if (!mounted) return
+    setHistoryAnchorPinID(null)
     const source = boardStore.selectedSource
     const key = readingKey()
     const position = key ? untrack(() => mainReadingPosition(key)) : undefined
@@ -483,6 +494,14 @@ export function Conversation(props: {
     if (!owner || !position || owner.restoring || !ownsReader(owner) || boardStore.taskSwitching ||
       !ownsConversationHistory(owner.source, owner.authority)) return
     owner.restoring = true
+    let handedToController = false
+    const onRestoreSettled = (restored: boolean) => {
+      if (!ownsReader(owner) || owner.pending !== position) return
+      owner.pending = undefined
+      owner.restoring = false
+      setHistoryAnchorPinID(null)
+      if (restored) rememberReadingPosition()
+    }
     try {
       const anchor = position.anchor
       if (anchor) {
@@ -503,13 +522,23 @@ export function Conversation(props: {
           element = readingAnchorElement(anchor)
         }
         if (!element) throw new Error(`Main reading message ${anchor.messageID} has no visible text anchor`)
-        const top = el.scrollTop + element.getBoundingClientRect().top - el.getBoundingClientRect().top - anchor.offset
-        createReaderController({ ...position, top: Math.max(0, top) })
-      } else createReaderController(position)
-      owner.pending = undefined
+        createReaderController(position, {
+          resolveTop: () => {
+            if (!ownsReader(owner) || owner.pending !== position || el.querySelector('[data-markdown-rendering="true"]')) return null
+            const current = readingAnchorElement(anchor)
+            if (!current || current.getBoundingClientRect().height <= 0) return null
+            return Math.max(0, el.scrollTop + current.getBoundingClientRect().top - el.getBoundingClientRect().top - anchor.offset)
+          },
+          onRestoreSettled,
+        })
+      } else createReaderController(position, { onRestoreSettled })
+      handedToController = true
       scrollController?.contentChanged()
     } finally {
-      owner.restoring = false
+      if (!handedToController) {
+        owner.restoring = false
+        if (ownsReader(owner)) setHistoryAnchorPinID(null)
+      }
     }
   }
   const resumeReadingOnFrame = createAnimationFrameScheduler(() => {
@@ -1016,7 +1045,10 @@ export function Conversation(props: {
         container={el}
         pinnedCardID={historyAnchorPinID}
         onMeasuredContentChanged={() => scrollController?.contentChanged()}
-        onCardScrollRequest={(request) => changeTracking(false, !request.readingRestore)}
+        onCardScrollRequest={(request) => {
+          if (request.readingRestore) setHistoryAnchorPinID(request.cardID)
+          changeTracking(false, !request.readingRestore)
+        }}
         onOpenSubagentConversation={props.onOpenSubagentConversation}
       />
       <ConversationArtifactSummary onContentChanged={() => scrollController?.contentChanged()} />

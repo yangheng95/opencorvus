@@ -1,0 +1,33 @@
+Browser tab: 97, Title: "OpenCorvus", URL: "http://localhost:18190/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 46, 68-91, 136-177, 179-221
++									179 container
++										180 button (expanded) Description: Collapse Anonymous 793365, Secondary Actions: Collapse
++										181 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand
++										182 button New chat for this project
++				183 container chatSection
++					184 container Description: Loading task, ID: taskSwitchProgress
++					185 container
++						186 text Reply with OK.
++						187 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-234-trigger, Secondary Actions: Expand
++						188 container Description: Not running, ID: taskStatus
++							189 text Not running
++						190 button Side chat
++						191 container solidChatHeaderRuntimeActions
++							192 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							193 checkbox Description: Open right dock, Value: 0
++					194 container
++						195 container Description: Conversation, ID: chatScroll
++						196 container chatHomeComposition
++							197 container chatForm
++								198 splitter Description: Drag to resize the message input, Value: 42
++								199 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								200 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								201 text Code
++								202 text Chat
++								203 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
++								204 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								205 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++									206 text Choose model
++								207 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 49 button Reply with OK.

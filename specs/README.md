@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Task主阅读254](records/2026-10/2026-10-10-task-main-reading-254.md)：两轮真实来源返回偏移保留，消息锚点持续恢复后978/明确末尾1302保持，历史Sources标题/域名复核与三次Native0。
+
 - [主阅读返回253](records/2026-10/2026-10-10-main-reading-position-253.md)：来源/正文/明确跟随真实保持，Main唯一状态/消息锚点恢复、7EOF/Native0；共享矩阵待补。
 
 - [真实正文/Sources252](records/2026-10/2026-10-10-text-part-time-live-252.md)：新Sol同Part真实70.384秒/三条来源/7EOF与Native0，主会话返回360→末尾失败保留并继续修复。

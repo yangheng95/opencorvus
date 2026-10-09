@@ -1,0 +1,29 @@
+Browser tab: 97, Title: "OpenCorvus", URL: "http://localhost:18190/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 44-45, 50-54, 59-63, 65
++									91 container
++										92 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++										93 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-175-trigger, Secondary Actions: Expand
++										94 button New chat for this project
++					95 container
++						96 text Store card accessor after 153
++						97 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-234-trigger, Secondary Actions: Expand
++						98 container Completed
++							99 text Completed
++						100 container Description: Not running · 3m 45s, ID: taskStatus
++							101 text 3m 45s
++						102 button Side chat
++						103 container solidChatHeaderRuntimeActions
++							104 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							105 checkbox Description: Open right dock, Value: 0
++							106 text Conversation updates will appear here
++							107 text Store card accessor after 153
++							108 text Completed
++							109 text .../2026-10-08/store-card-accessor-after-153-01/project
++								110 text Work
++								111 text Task
++								112 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+~								56 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+~									57 text Choose model
+~								58 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 68 button Store card accessor after 153 Completed

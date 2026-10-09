@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Task主阅读254](2026-10-10-task-main-reading-254.md)：两轮真实偏移保留，持续锚点恢复后来源978/末尾1302保持，历史Sources标题/域名与三次Native0。
+
 - [主阅读返回253](2026-10-10-main-reading-position-253.md)：Main来源/正文/明确末尾意图保持，消息锚点/授权隔离、真实7EOF/Native0，宽矩阵仍待补。
 
 - [真实正文/Sources252](2026-10-10-text-part-time-live-252.md)：当前新Sol正文时间70.384秒/来源/7EOF与Native0；主阅读返回末尾真实失败保留。

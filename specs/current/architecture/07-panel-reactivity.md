@@ -216,6 +216,18 @@ anchor, text ordinal and viewport offset. Empty, hidden, loading, unhydrated or
 retired owners cannot publish a new position. A returning paused reader uses the
 existing history loader to locate its actual Message and the existing virtualizer
 card-scroll bridge to mount it, then resumes through the same scroll controller.
+The bridge pins the actual item through the existing virtualizer keepMounted
+ownership for reading restoration. It does not start index or DOM alignment for
+that request: an outstanding index alignment can otherwise overwrite the saved
+Message offset on later item measurement. Explicit card jumps still align through
+the same bridge; restoration retires its temporary pin on completion, reader
+movement or source retirement.
+During that restoration the same scroll controller resolves the actual Message
+offset on each correction frame and includes that resolved target in its existing
+geometry stability check. The original TextPart pending signal is exposed on its
+rendered text box so partially committed Markdown is not treated as ready geometry.
+The pending reader and pin retire only when the controller settles or owned input
+or cleanup retires it. Numeric position callers retain their existing behavior.
 Initial sources follow the bottom. Explicit reader movement and Scroll to latest
 retire pending restoration and own the next saved intent. API rotation and a new
 browser lifetime remain new view ownership; this does not persist another

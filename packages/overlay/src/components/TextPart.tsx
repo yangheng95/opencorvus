@@ -23,7 +23,7 @@ export function StreamingMarkdownPart(props: {
   const { frozenHtml, pending, error } = createStreamingTextPartModel(props)
 
   return (
-    <div class={props.className || "msg-text"}>
+    <div class={props.className || "msg-text"} data-markdown-rendering={pending() ? "true" : undefined}>
       <For each={frozenHtml()}>
         {(html) => (
           <div

@@ -1,0 +1,49 @@
+Browser tab: 97, Title: "OpenCorvus", URL: "http://localhost:18190/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 91-176
++								196 container
++									197 text orchestrator
++									198 text 34s
++									199 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++									200 container
++										201 button (collapsed) Description: read_agent_message, Secondary Actions: Expand
++											202 text read_agent_message
++											203 image
++										204 text 根据只读研究员对指定三页正文的实际阅读，并经来源核对，简要总结如下：
++										205 content list
++											206 container
++												207 AXListMarker 1.
++												208 text 网页无障碍是什么——WAI 介绍页侧重定义与受益人群。
++												209 text 网页无障碍是让网站、工具和技术经过适当设计与开发，使残障人士能够感知、理解、导航、交互，并贡献网络内容。它也惠及老年人、暂时性障碍者，以及强光、无法听音频等情境下的用户。核心是消除使用障碍，而不只是增加某项功能。
++												210 text 来源：
++												211 link Description: WAI：Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											212 container
++												213 AXListMarker 2.
++												214 text 基本原则——WAI 原则页将目标拆成四类要求。
++												215 text 可感知
++												216 text ：提供图片文本替代、字幕和足够对比度；
++												217 text 可操作
++												218 text ：支持键盘操作，给予足够时间和清晰导航；
++												219 text 可理解
++												220 text ：内容易懂、界面行为可预测，并帮助用户避免和纠正错误；
++												221 text 健壮
++												222 text ：让不同浏览器及辅助技术能够可靠解释内容与控件。这一页是要求概览，并非完整清单。
++												223 text 来源：
++												224 link Description: WAI：Accessibility Principles, Value: w3.org/WAI/fundamentals/accessibility-principles/
++											225 container
++												226 AXListMarker 3.
++												227 text 开发者如何开始——MDN 侧重开发学习入口，WAI 补充实施时机。
++												228 text 从按用途使用正确的语义 HTML 元素开始，保障键盘操作，为多媒体提供适当文字替代，并避免 CSS、JavaScript 破坏无障碍；复杂动态控件可用 WAI-ARIA 补充语义。WAI 介绍页还强调：从项目一开始纳入无障碍，并在开发过程中持续评估。评估工具能辅助检查，但不能单独判断网站是否符合无障碍指南，仍需具备相关知识的人工评估。
++												229 text 来源：
++												230 link Description: MDN：Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++												231 text 、
++												232 link Description: WAI 介绍页, Value: w3.org/WAI/fundamentals/accessibility-intro/
++										233 text 以上仅依据这三页正文；未继续阅读其链接中的教程或规范，也未修改文件或制作额外报告文件。
++										234 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++											235 text manage_task
++											236 text action=complete_task
++											237 image
++									238 button Copy message
++									239 pop up button (collapsed) Description: View model usage for this turn: 56K Token, Secondary Actions: Expand
++									240 text Oct 8, 04:58 PM
+The focused UI element is 90 container Description: Conversation, ID: chatScroll

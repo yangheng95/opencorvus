@@ -1,0 +1,34 @@
+Browser tab: 96, Title: "OpenCorvus", URL: "http://localhost:18189/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 35-38, 46, 68-200
++									68 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++									69 container
++										70 button (expanded) Description: Collapse Anonymous 793365, Secondary Actions: Collapse
++										71 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand
++										72 button New chat for this project
++				73 container chatSection
++					74 container Description: Loading task, ID: taskSwitchProgress
++					75 container
++						76 text Reply with OK.
++						77 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-234-trigger, Secondary Actions: Expand
++						78 container Description: Not running, ID: taskStatus
++							79 text Not running
++						80 button Side chat
++						81 container solidChatHeaderRuntimeActions
++							82 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							83 checkbox Description: Open right dock, Value: 0
++					84 container
++						85 container Description: Conversation, ID: chatScroll
++						86 container chatHomeComposition
++							87 container chatForm
++								88 splitter Description: Drag to resize the message input, Value: 42
++								89 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								90 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								91 text Code
++								92 text Chat
++								93 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
++								94 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								95 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++									96 text Choose model
++								97 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 49 button Reply with OK.

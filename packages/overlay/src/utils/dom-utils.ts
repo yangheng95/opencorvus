@@ -64,7 +64,13 @@ export function pauseAutoScrollForReading(element: HTMLElement): void {
 }
 
 export interface AutoScrollOptions {
-  initialPosition: { kind: "bottom" } | { kind: "position"; top: number; layoutRoot: HTMLElement }
+  initialPosition: { kind: "bottom" } | {
+    kind: "position"
+    top: number
+    layoutRoot: HTMLElement
+    resolveTop?: () => number | null
+    onRestoreSettled?: (restored: boolean) => void
+  }
   isTracking: () => boolean
   onUserScrollUp: () => void
   onFollowRequested: () => void
@@ -93,6 +99,12 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   const contentResizeObserver = new ResizeObserver(() => scheduleFollowScroll())
 
+  function retirePositionRestore(restored = false) {
+    if (restoreTop === null) return
+    restoreTop = null
+    if (opts.initialPosition.kind === "position") opts.initialPosition.onRestoreSettled?.(restored)
+  }
+
   function onReadingIntent(event: Event) {
     // Only the nearest transcript owns this operator intent.
     event.stopPropagation()
@@ -100,7 +112,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function releaseFollowForReading() {
-    restoreTop = null
+    retirePositionRestore()
     programScrollTarget = null
     inputIntent = null
     expectedTop = el.scrollTop
@@ -131,7 +143,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function rememberInputIntent(direction: "up" | "down") {
-    restoreTop = null
+    retirePositionRestore()
     inputIntent = { direction, expiresAt: performance.now() + 250 }
     if (direction === "up") {
       programScrollTarget = null
@@ -174,7 +186,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   function onPointerDown(event: PointerEvent) {
     if (event.target === el) {
-      restoreTop = null
+      retirePositionRestore()
       pointerScrollIntent = true
       inputIntent = null
     }
@@ -185,7 +197,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function onTouchStart(event: TouchEvent) {
-    if (ownsTranscriptInput(event.target)) restoreTop = null
+    if (ownsTranscriptInput(event.target)) retirePositionRestore()
     touchStartY = ownsTranscriptInput(event.target) ? event.touches[0]?.clientY ?? null : null
   }
 
@@ -250,16 +262,21 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   function restoreReadingPosition() {
     if (restoreTop === null) return
+    if (opts.initialPosition.kind === "position" && opts.initialPosition.resolveTop) {
+      const currentTop = opts.initialPosition.resolveTop()
+      if (currentTop === null) return
+      restoreTop = currentTop
+    }
     const availableTop = Math.max(0, el.scrollHeight - el.clientHeight)
     el.scrollTop = Math.min(restoreTop, availableTop)
     programScrollTarget = el.scrollTop
     expectedTop = el.scrollTop
     if (opts.initialPosition.kind !== "position") return
     const layout = opts.initialPosition.layoutRoot.getBoundingClientRect()
-    const geometry = `${layout.width}:${layout.height}:${el.clientHeight}:${el.scrollHeight}`
+    const geometry = `${layout.width}:${layout.height}:${el.clientHeight}:${el.scrollHeight}:${restoreTop}`
     stableRestoreFrames = geometry === restoreGeometry ? stableRestoreFrames + 1 : 0
     restoreGeometry = geometry
-    if (availableTop >= restoreTop && layout.width > 0 && stableRestoreFrames >= 2) restoreTop = null
+    if (availableTop >= restoreTop && layout.width > 0 && stableRestoreFrames >= 2) retirePositionRestore(true)
   }
 
   function scheduleFollowScroll() {
@@ -334,6 +351,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
     readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
     cleanup: () => {
       disposed = true
+      retirePositionRestore()
       el.removeEventListener("wheel", onWheel)
       el.removeEventListener(TRANSCRIPT_READING_EVENT, onReadingIntent)
       el.removeEventListener("focusin", onFocusIn)
@@ -355,14 +373,14 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
       scheduleFollowScroll()
     },
     scrollToBottom: () => {
-      restoreTop = null
+      retirePositionRestore()
       syncFollowLockAttribute()
       el.scrollTop = el.scrollHeight
       programScrollTarget = el.scrollTop
       expectedTop = el.scrollTop
     },
     scrollToTop: () => {
-      restoreTop = null
+      retirePositionRestore()
       syncFollowLockAttribute()
       el.scrollTop = 0
       programScrollTarget = el.scrollTop

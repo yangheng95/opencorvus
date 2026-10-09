@@ -1,0 +1,102 @@
+Browser tab: 96, Title: "OpenCorvus", URL: "http://localhost:18189/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18189/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 container
+										36 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+										37 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-175-trigger, Secondary Actions: Expand
+										38 button New chat for this project
+									39 container
+										40 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+										41 button Store card accessor after 153 Completed
+											42 text Store card accessor after 153
+											43 container Completed
+												44 text Completed
+										45 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									46 button (expanded) Description: Collapse Anonymous 793365, Secondary Actions: Collapse
+									47 container
+										48 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										49 button Reply with OK.
+										50 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-196-trigger, Secondary Actions: Expand
+								51 container Recents
+									52 text Recents
+									53 container
+										54 container A bounded unit of work with its own progress and result, often created and coordinated by a Mission.
+										55 button Store card accessor after 153 Completed
+											56 text Store card accessor after 153
+											57 container Completed
+												58 text Completed
+										59 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+									60 container
+										61 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										62 button Reply with OK.
+										63 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+						64 container Connection Diagnostics
+							65 container Description: Connection Diagnostics · Online · Port 18189, ID: connBadge
+								66 text Online
+				67 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				68 container chatSection
+					69 container Description: Loading task, ID: taskSwitchProgress
+					70 container
+						71 text Store card accessor after 153
+						72 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-234-trigger, Secondary Actions: Expand
+						73 container Completed
+							74 text Completed
+						75 container Description: Not running · 3m 45s, ID: taskStatus
+							76 text 3m 45s
+						77 button Side chat
+						78 container solidChatHeaderRuntimeActions
+							79 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							80 checkbox Description: Open right dock, Value: 0
+					81 container
+						82 container Description: Conversation, ID: chatScroll
+							83 text Conversation updates will appear here
+							84 text Store card accessor after 153
+							85 text Completed
+							86 text .../2026-10-08/store-card-accessor-after-153-01/project
+						87 container chatHomeComposition
+							88 container chatForm
+								89 splitter Description: Drag to resize the message input, Value: 42
+								90 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								91 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								92 text Work
+								93 text Task
+								94 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+								95 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								96 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+									97 text Choose model
+								98 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+
+The focused UI element is 41 button Store card accessor after 153 Completed

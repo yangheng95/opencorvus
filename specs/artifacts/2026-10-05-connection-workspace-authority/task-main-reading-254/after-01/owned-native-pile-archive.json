@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-09T22:45:34.1078507Z",
+  "targetBirthUtc": "2026-10-09T22:42:05.0796533Z",
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-09T22:42:05.3809277Z",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\task-main-reading-254\\generated-bun-after01\\091d165574530ade.debug.pile"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-09T22:42:05.3605295Z",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\task-main-reading-254\\generated-bun-after01\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-09T22:42:05.3252276Z",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\task-main-reading-254\\generated-bun-after01\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-09T22:42:05.3362274Z",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\task-main-reading-254\\generated-bun-after01\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-09T22:42:05.3987228Z",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\task-main-reading-254\\generated-bun-after01\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "nativeTerminal": {
+    "occurrenceID": "task-main-reading-254-after-01-ea609c85-ee91-4556-a852-7a94841b388a",
+    "pid": 41152,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  }
+}

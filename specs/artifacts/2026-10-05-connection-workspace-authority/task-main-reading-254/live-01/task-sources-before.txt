@@ -1,0 +1,66 @@
+Browser tab: 95, Title: "OpenCorvus", URL: "http://localhost:18188/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 92-122, 136-176
++									197 container
++										198 content list
++											199 container
++												200 link w3.org/WAI/fundamentals/accessibility-intro/
++											201 container
++												202 link w3.org/WAI/fundamentals/accessibility-principles/
++											203 container
++												204 link developer.mozilla.org/en-US/docs/Web/Accessibility
++									205 container
++										206 button (collapsed) Secondary Actions: Expand
++										207 button (collapsed) Secondary Actions: Expand
++											208 image
++										209 button (collapsed) Secondary Actions: Expand
++										210 button (collapsed) Secondary Actions: Expand
++											211 image
++										212 button (collapsed) Secondary Actions: Expand
++											213 image
++									214 container
++										215 text orchestrator
++										216 text 34s
++										217 button (collapsed) Description: Handoff context, Secondary Actions: Expand
++										218 container
++											219 button (collapsed) Description: read_agent_message, Secondary Actions: Expand
++												220 text read_agent_message
++												221 image
++											222 text 根据只读研究员对指定三页正文的实际阅读，并经来源核对，简要总结如下：
++											223 content list
++												224 container
++													225 AXListMarker 1.
++													226 text 网页无障碍是什么——WAI 介绍页侧重定义与受益人群。
++													227 text 网页无障碍是让网站、工具和技术经过适当设计与开发，使残障人士能够感知、理解、导航、交互，并贡献网络内容。它也惠及老年人、暂时性障碍者，以及强光、无法听音频等情境下的用户。核心是消除使用障碍，而不只是增加某项功能。
++													228 text 来源：
++													229 link Description: WAI：Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
++												230 container
++													231 AXListMarker 2.
++													232 text 基本原则——WAI 原则页将目标拆成四类要求。
++													233 text 可感知
++													234 text ：提供图片文本替代、字幕和足够对比度；
++													235 text 可操作
++													236 text ：支持键盘操作，给予足够时间和清晰导航；
++													237 text 可理解
++													238 text ：内容易懂、界面行为可预测，并帮助用户避免和纠正错误；
++													239 text 健壮
++													240 text ：让不同浏览器及辅助技术能够可靠解释内容与控件。这一页是要求概览，并非完整清单。
++													241 text 来源：
++													242 link Description: WAI：Accessibility Principles, Value: w3.org/WAI/fundamentals/accessibility-principles/
++												243 container
++													244 AXListMarker 3.
++													245 text 开发者如何开始——MDN 侧重开发学习入口，WAI 补充实施时机。
++													246 text 从按用途使用正确的语义 HTML 元素开始，保障键盘操作，为多媒体提供适当文字替代，并避免 CSS、JavaScript 破坏无障碍；复杂动态控件可用 WAI-ARIA 补充语义。WAI 介绍页还强调：从项目一开始纳入无障碍，并在开发过程中持续评估。评估工具能辅助检查，但不能单独判断网站是否符合无障碍指南，仍需具备相关知识的人工评估。
++													247 text 来源：
++													248 link Description: MDN：Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
++													249 text 、
++													250 link Description: WAI 介绍页, Value: w3.org/WAI/fundamentals/accessibility-intro/
++											251 text 以上仅依据这三页正文；未继续阅读其链接中的教程或规范，也未修改文件或制作额外报告文件。
++											252 button (collapsed) Description: manage_task · action=complete_task, Secondary Actions: Expand
++												253 text manage_task
++												254 text action=complete_task
++												255 image
++										256 button Copy message
++										257 pop up button (collapsed) Description: View model usage for this turn: 56K Token, Secondary Actions: Expand
++										258 text Oct 8, 04:58 PM
+The focused UI element is 41 button Store card accessor after 153 Completed

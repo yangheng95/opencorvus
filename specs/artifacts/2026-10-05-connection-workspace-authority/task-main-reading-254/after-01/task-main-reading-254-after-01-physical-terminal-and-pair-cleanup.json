@@ -1,0 +1,68 @@
+{
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-after-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\task-main-reading-254-after-01\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "outcome": "removed"
+    }
+  ],
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 41152,
+        "processInstanceID": "win32:639271825250796533",
+        "occurrenceID": "c39cf0f9-112c-44d0-a6c6-d8a8e2c3801a"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 18556,
+        "processInstanceID": "win32:639271825242996565",
+        "occurrenceID": "df66915c-9cdb-4a20-b040-54a459a483bd"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "task-main-reading-254-after-01-ea609c85-ee91-4556-a852-7a94841b388a",
+    "outcome": "settled",
+    "host": {
+      "pid": 18556,
+      "processInstanceID": "win32:639271825242996565",
+      "occurrenceID": "df66915c-9cdb-4a20-b040-54a459a483bd"
+    },
+    "target": {
+      "pid": 41152,
+      "processInstanceID": "win32:639271825250796533",
+      "occurrenceID": "c39cf0f9-112c-44d0-a6c6-d8a8e2c3801a"
+    },
+    "observedAtUtc": "2026-10-09T22:43:57.779Z",
+    "deadlineAt": 1791586624218,
+    "terminal": {
+      "occurrenceID": "task-main-reading-254-after-01-ea609c85-ee91-4556-a852-7a94841b388a",
+      "pid": 41152,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-09T22:44:00.0730333Z",
+  "occurrence": "task-main-reading-254-after-01-ea609c85-ee91-4556-a852-7a94841b388a"
+}
