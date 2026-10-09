@@ -1,15 +1,14 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
-import { ApiError, captureApiAuthority, configure } from "../src/services/api"
+import { captureApiAuthority, configure } from "../src/services/api"
 import { currentProjectConfigRequestOptions, patchConfig, reloadProjectScope, updateConfig } from "../src/services/config"
 import { setPermissionMode } from "../src/services/permission-mode"
-import { applyLocalePreference } from "../src/services/locale-preference"
 import { boardStore, setBoardStore } from "../src/store/board"
 import { appStore, setAppStore } from "../src/store/app"
-import { applySettings, bootstrapOverlaySettings, confirmedPersistedSettingsSnapshot, DEFAULT_SETTINGS, loadSettings, settingsStore, setSettingsStore } from "../src/store/settings"
+import { applySettings, bootstrapOverlaySettings, DEFAULT_SETTINGS, loadSettings, settingsStore, setSettingsStore } from "../src/store/settings"
 import { requestWorkspaceSelection } from "../src/services/workspace"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import { getLocale, setLocale } from "../src/utils/i18n"
+import { setLocale } from "../src/utils/i18n"
 import { installRealOverlayI18n } from "./fixtures/i18n"
 import type { PersistedOverlaySettings } from "../src/services/persisted-overlay-settings"
 
@@ -180,96 +179,6 @@ test("permission tail retires queued A authority and then applies a newly author
     { authority: current, body: { kind: "json", value: { permission_mode: "full_access" } }, directory },
   ])
   expect(appStore.config.permission_mode).toBe("full_access")
-})
-
-test("locale preference completes its current global choice with the stable original project sync", async () => {
-  const authority = captureApiAuthority()
-  expect(await applyLocalePreference("zh-CN")).toBe(true)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale, config: appStore.config.locale }).toEqual({ locale: "zh-CN", persisted: "zh-CN", config: "zh-CN" })
-  expect(requests.map((request) => ({ authority: request.authority, directory: request.query?.directory, body: request.body }))).toEqual([
-    { authority, directory, body: { kind: "json", value: { locale: "zh-CN" } } },
-  ])
-})
-
-test("accepted A locale sync retirement preserves the legitimate global choice and current B projection", async () => {
-  const entered = Promise.withResolvers<void>()
-  const pending = Promise.withResolvers<TransportResponse<unknown>>()
-  reply = () => { entered.resolve(); return pending.promise }
-  const operation = applyLocalePreference("zh-CN")
-  await entered.promise
-  connectB()
-  pending.resolve(ok({ locale: "zh-CN", marker: "accepted-A" }))
-  expect(await operation).toBe(true)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale, config: appStore.config }).toEqual({ locale: "zh-CN", persisted: "zh-CN", config: { marker: "current-B", locale: "en-US", permission_mode: "ask" } })
-})
-
-test("a project leg retired before dispatch leaves global locale persistence current and permits the next B choice", async () => {
-  const first = applyLocalePreference("zh-CN")
-  connectB()
-  expect(await first).toBe(true)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale }).toEqual({ locale: "zh-CN", persisted: "zh-CN" })
-  const authority = captureApiAuthority()
-  expect(await applyLocalePreference("en-US")).toBe(true)
-  expect(requests.map((request) => ({ authority: request.authority, body: request.body }))).toEqual([
-    { authority, body: { kind: "json", value: { locale: "en-US" } } },
-  ])
-})
-
-test("current backend locale failure keeps its exact API error and restores the durable global locale", async () => {
-  reply = async (request) => jsonBody(request).locale === "zh-CN"
-    ? { status: 503, ok: false, headers: {}, body: { error: "owned prompt locale failure" } }
-    : ok({ locale: "en-US" })
-  await expect(applyLocalePreference("zh-CN")).rejects.toBeInstanceOf(ApiError)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale, config: appStore.config.locale }).toEqual({ locale: "en-US", persisted: "en-US", config: "en-US" })
-  expect(requests.map((request) => jsonBody(request))).toEqual([{ locale: "zh-CN" }, { locale: "en-US" }])
-})
-
-test("real local persistence failure after project sync remains the original error and releases the same locale tail", async () => {
-  const failure = new Error("owned local preferences persistence failed")
-  persist = async () => { throw failure }
-  await expect(applyLocalePreference("zh-CN")).rejects.toBe(failure)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale, config: appStore.config.locale }).toEqual({ locale: "en-US", persisted: "en-US", config: "en-US" })
-  persist = async () => {}
-  expect(await applyLocalePreference("zh-CN")).toBe(true)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale }).toEqual({ locale: "zh-CN", persisted: "zh-CN" })
-})
-
-test("the single locale tail retires its old scoped leg and drains the newer global choice", async () => {
-  const entered = Promise.withResolvers<void>()
-  const pending = Promise.withResolvers<TransportResponse<unknown>>()
-  const originalAuthority = captureApiAuthority()
-  reply = (request) => {
-    if (requests.length === 1) { entered.resolve(); return pending.promise }
-    return Promise.resolve(ok(jsonBody(request)))
-  }
-  const first = applyLocalePreference("zh-CN")
-  await entered.promise
-  const second = applyLocalePreference("en-US")
-  connectB()
-  pending.resolve(ok({ locale: "zh-CN", marker: "accepted-A" }))
-  expect(await first).toBe(false)
-  expect(await second).toBe(true)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale }).toEqual({ locale: "en-US", persisted: "en-US" })
-  const currentAuthority = captureApiAuthority()
-  expect(await applyLocalePreference("zh-CN")).toBe(true)
-  expect(requests.map((request) => ({ authority: request.authority, body: request.body }))).toEqual([
-    { authority: originalAuthority, body: { kind: "json", value: { locale: "zh-CN" } } },
-    { authority: currentAuthority, body: { kind: "json", value: { locale: "zh-CN" } } },
-  ])
-})
-
-test("local persistence failure remains observable after an accepted old backend leg retires", async () => {
-  const entered = Promise.withResolvers<void>()
-  const pending = Promise.withResolvers<TransportResponse<unknown>>()
-  reply = () => { entered.resolve(); return pending.promise }
-  const failure = new Error("owned persistence failed after backend retirement")
-  persist = async () => { throw failure }
-  const operation = applyLocalePreference("zh-CN")
-  await entered.promise
-  connectB()
-  pending.resolve(ok({ locale: "zh-CN", marker: "accepted-A" }))
-  await expect(operation).rejects.toBe(failure)
-  expect({ locale: getLocale(), persisted: confirmedPersistedSettingsSnapshot().locale, config: appStore.config.marker }).toEqual({ locale: "en-US", persisted: "en-US", config: "current-B" })
 })
 
 test("retired project reload returns its existing empty outcome while current configuration, issues and directory retain ownership", async () => {

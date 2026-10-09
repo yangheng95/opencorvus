@@ -27,7 +27,6 @@ mock.module("../src/services/config", () => ({
   getSessionConfig: async () => ({}),
   patchSessionConfig: async () => ({}),
   getTaskOperatorModelContext: async () => ({}),
-  syncAgentPromptLocale: async () => {},
   updateConfig: async () => ({}),
   reloadProjectScope: async () => {
     reloadCalls += 1

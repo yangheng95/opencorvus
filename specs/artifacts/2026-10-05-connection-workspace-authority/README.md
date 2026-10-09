@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Client language224 Recall](local-language-plan-224.md), [current readiness](local-language-readiness-224/README.md) and [actual scope](local-language-224/README.md): single client locale persistence, actual Chinese/dark source diagnostics and cold reload, original failures retained.
+
 - [Sources/reload223 Recall](source-reload-plan-223.md), [current readiness](source-reload-readiness-223/README.md), [after readiness](source-reload-readiness-22302/README.md) and [actual scope](source-reload-223/README.md): loaded clean/dirty file failure diagnostics and true same-editor recovery; original Source and failures retained, single agent only.
 
 - [File recovery222 Recall](file-read-recovery-plan-222.md), [first readiness](file-read-recovery-readiness-222/README.md), [fresh scroll readiness](file-read-recovery-readiness-22202/README.md) and [actual result](file-read-recovery-222/README.md): current original diagnostics, bounded error scrolling and true same-source retry after reversible own file restoration; original failures retained.

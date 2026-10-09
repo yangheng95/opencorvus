@@ -11,7 +11,6 @@ import { loadExtensions } from "./extensions"
 import { loadMeta } from "./meta"
 import { activeProjectDirectory, restoreWorkspaceDirectory } from "./project-directory"
 import { boardStore, loadTasks, clearTasksForMissingDirectory } from "../store/board"
-import { sanitizeLocale } from "../utils/i18n"
 import { createSignal } from "solid-js"
 import { AppLog } from "../utils/log"
 
@@ -394,13 +393,6 @@ export async function testNetworkProxy(proxy: NetworkProxyDraft, authority = cap
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ proxy }),
   })
-}
-
-export async function syncAgentPromptLocale(
-  locale: string,
-  options: ConfigRequestOptions = currentProjectConfigRequestOptions(),
-): Promise<void> {
-  await patchConfig({ locale: sanitizeLocale(locale) }, options)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

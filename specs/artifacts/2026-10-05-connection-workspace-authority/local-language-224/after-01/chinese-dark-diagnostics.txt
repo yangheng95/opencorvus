@@ -1,0 +1,19 @@
+无法重新加载此文件。当前内容已保留。
+详细信息
+HTTP GET 404 file/content?path=README.md&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-09%5Cfile-read-recovery-222-before-01%5Cproject
+
+Request ID: 063e16ca-8c42-4b1e-9307-554aec487971
+
+ApiError: API 404 file/content?path=README.md&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-09%5Cfile-read-recovery-222-before-01%5Cproject: File entry not found: README.md
+    at Ae (http://localhost:18151/ui/assets/main-BpMz21_t.js:67:140441)
+    at async hO (http://localhost:18151/ui/assets/main-BpMz21_t.js:226:3236)
+    at async de (http://localhost:18151/ui/assets/main-BpMz21_t.js:226:6040)
+
+response body:
+{
+  "name": "FileNotFoundError",
+  "data": {
+    "path": "README.md",
+    "message": "File entry not found: README.md"
+  }
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Client language224](records/2026-10/2026-10-09-local-language-224.md): client locale persistence and actual Chinese/dark source recovery.
+
 - [Sources and loaded-file reload223](records/2026-10/2026-10-09-source-reload-223.md): current real-source disclosure and reload failure/recovery investigation.
 
 - [File read recovery222](records/2026-10/2026-10-09-file-read-recovery-222.md): concise current failure, complete diagnostics and actual same-source retry recovery.

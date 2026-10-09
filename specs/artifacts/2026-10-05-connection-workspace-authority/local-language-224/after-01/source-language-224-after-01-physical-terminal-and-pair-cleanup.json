@@ -1,0 +1,68 @@
+{
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 73552,
+        "processInstanceID": "win32:639271156700192075",
+        "occurrenceID": "cda083a1-1d26-4aab-87cf-5b0a0eaae1e0"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "expected": {
+        "pid": 66056,
+        "processInstanceID": "win32:639271156692720877",
+        "occurrenceID": "4b800047-cfe4-4c78-8a74-c419a73e89ec"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "physicalCompletion": true,
+  "observedAtUtc": "2026-10-09T04:16:51.8529132Z",
+  "occurrence": "source-language-224-after-01-db5c3e7a-fc9a-4cc8-8a90-fa11cf73eb1a",
+  "nativeSettlement": {
+    "occurrence": "source-language-224-after-01-db5c3e7a-fc9a-4cc8-8a90-fa11cf73eb1a",
+    "outcome": "settled",
+    "host": {
+      "pid": 66056,
+      "processInstanceID": "win32:639271156692720877",
+      "occurrenceID": "4b800047-cfe4-4c78-8a74-c419a73e89ec"
+    },
+    "target": {
+      "pid": 73552,
+      "processInstanceID": "win32:639271156700192075",
+      "occurrenceID": "cda083a1-1d26-4aab-87cf-5b0a0eaae1e0"
+    },
+    "observedAtUtc": "2026-10-09T04:16:49.435Z",
+    "deadlineAt": 1791519769199,
+    "terminal": {
+      "occurrenceID": "source-language-224-after-01-db5c3e7a-fc9a-4cc8-8a90-fa11cf73eb1a",
+      "pid": 73552,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-language-224-after-01\\runtime\\data\\auth.json",
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-language-224-after-01\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "outcome": "removed"
+    }
+  ]
+}

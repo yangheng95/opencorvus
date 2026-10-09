@@ -1,0 +1,40 @@
+bun test v1.3.14 (0d9b296a)
+
+test\locale-preference.test.ts:
+(pass) client locale confirms a complete host document and survives a cold settings read [6.85ms]
+(pass) an offline client confirms its language through the same host writer [0.43ms]
+(pass) host persistence failure returns its original error, restores confirmed language, and releases the locale tail [0.97ms]
+(pass) in-flight language persistence settles before the newer selection becomes the confirmed host document [0.80ms]
+(pass) client language persistence completes across connection and selected-project changes [0.42ms]
+(pass) a failed queued locale write restores the language confirmed by the preceding settings writer [0.66ms]
+
+test\locale-runtime-selection.test.ts:
+(pass) first-open runtime locale selection > maps Chinese runtime locale variants to Chinese [0.07ms]
+(pass) first-open runtime locale selection > maps every other runtime locale to English [0.04ms]
+
+test\project-configuration-ownership.test.ts:
+(pass) admitted transient A/B/A selections advance the shared selection epoch before directory storage changes [2.14ms]
+(pass) stable project config projects and returns its exact accepted response [1.96ms]
+(pass) project ABA preserves a pending PATCH's accepted A return and the current A projection [0.46ms]
+(pass) retained project options keep their captured selection even when passed after A/B/A [0.54ms]
+(pass) a committed reconciliation error preserves its original receipt after project ABA [0.90ms]
+(pass) GET-to-PATCH retains original project request and saved return across UI departure [1.16ms]
+(pass) permission tail retires queued A authority and then applies a newly authored B choice [1.01ms]
+(pass) retired project reload returns its existing empty outcome while current configuration, issues and directory retain ownership [3.71ms]
+(pass) current project reload publishes exact accepted configuration and extension failure issues [2.23ms]
+
+test\settings-save-transaction.test.ts:
+(pass) confirmed connection publication precedes a queued preference snapshot and survives cold read [1.35ms]
+(pass) native failure reports the confirmed A document and a later explicit retry commits B [0.58ms]
+(pass) queued B and C transactions merge the latest unrelated workspace and preference fields [0.49ms]
+(pass) activation failure exposes its durable fact and the queue admits the next explicit transaction [0.66ms]
+(pass) ordinary overrides retain the existing persistence-only action contract [0.23ms]
+(pass) operational admission failure reconciles provisional state before the queued correction commits [0.56ms]
+(pass) structural save admission shares the existing confirmed failure callback and retry contract [0.43ms]
+(pass) an old readable invalid address can be corrected without rewriting historical intent identities [0.74ms]
+(pass) cold load and a later preference save preserve an explicitly empty Basic username [0.52ms]
+
+ 26 pass
+ 0 fail
+ 76 expect() calls
+Ran 26 tests across 4 files. [412.00ms]

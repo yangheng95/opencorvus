@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Client language224](2026-10-09-local-language-224.md): single client locale authority and real source language/appearance validation.
+
 - [Sources and loaded-file reload223](2026-10-09-source-reload-223.md): single-agent actual disclosure and loaded-file error/recovery review.
 
 - [File read recovery222](2026-10-09-file-read-recovery-222.md): complete current read diagnostics and actual recovery on the original Source.
