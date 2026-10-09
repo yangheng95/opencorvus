@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-10-09T23:45:11.052Z",
+  "rows": [
+    {
+      "label": "work · Idle · 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://www.w3.org/WAI/fundamentals/accessibility-principles/ 、https://developer.mozilla.org/en-US/docs/Web/Accessibility 。然后用中文写一份约1800字的产品设计指南，具体解释来源卡片、渐进式文本渲染、运行状态、键盘操作、阅读位置保持和加载反馈各应怎样设计。引用来源，区分资料直接支持的事实与你的设计建议。只读取这些页面，直接在本会话回答。",
+      "status": "idle"
+    },
+    {
+      "label": "work · Idle · 沿用第一轮已经读取的三个来源，不再读取网页。请用中文写约1400字的实际审查手册，重点解释当第一轮已经结束、第二轮正在生成、网络断开重连及重新打开会话时，怎样验证每次输入的身份、状态、可见内容、来源链接、键盘焦点与阅读位置。给出具体可观察步骤、正常结果和仍需调查的情况，区分执行状态与文字完成，直接在本会话回答。",
+      "status": "idle"
+    },
+    {
+      "label": "work · Idle · 继续第三轮：不要读取网页或创建文件。请用中文写约1200字的审查案例，具体描述同一会话先后有三次输入、前两次结束而第三次正在流式生成时，来源区域、输入导航、运行指示和历史重载应怎样保持一致。写清楚怎样区分每次输入与会话汇总，怎样处理迟到的文字更新及无法证明正在执行的历史记录。直接在本会话回答。",
+      "status": "idle"
+    }
+  ],
+  "scrollTop": 300,
+  "status": "Not running"
+}

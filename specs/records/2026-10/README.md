@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [逐输入状态256](2026-10-10-occurrence-status-256.md)：移除重复会话占位与迟到正文伪Running，真实三轮/重开三个idle，来源标题域名可读，11EOF/Native0。
+
 - [真实生成阅读255](2026-10-10-main-live-reading-255.md)：运行中1277.33暂停保持/末尾跟随和暗色来源可读，9EOF/Native0；旧输入活动终态真实失败未修。
 
 - [Task主阅读254](2026-10-10-task-main-reading-254.md)：两轮真实偏移保留，持续锚点恢复后来源978/末尾1302保持，历史Sources标题/域名与三次Native0。

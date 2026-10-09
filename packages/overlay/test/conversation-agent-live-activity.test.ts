@@ -44,11 +44,7 @@ function emitted(type: string, time: number, eventProperties: Record<string, unk
 }
 
 function selectSource(): void {
-  hydrateConversationAgentView(
-    sourceKey,
-    { sessions: [], messages: [], topLevelExecutionIDs: [] },
-    { validated: true },
-  )
+  hydrateConversationAgentView(sourceKey, { sessions: [], messages: [], topLevelExecutionIDs: [] }, { validated: true })
 }
 
 afterEach(() => resetConversationAgentView())
@@ -123,47 +119,72 @@ test("visible Text deltas update the exact child-Agent occurrence before the com
   ])
 })
 
-test("main conversation Text deltas stay outside child-Agent activity", () => {
+test("late visible content preserves the idle lifecycle of its exact input occurrence", () => {
   resetConversationAgentView()
-  selectSource()
-  const mainProperties = {
-    ...properties({}),
-    sessionID: "ses_root",
-    messageID: "msg_root_answer",
-    parentMessageID: "msg_root_input",
-    channel: "main",
-    role: "assistant",
-    author: "orchestrator",
-    agentID: "orchestrator",
-    sessionAgentID: "orchestrator",
-  }
-  applyLiveConversationAgentPartUpdated(
+  hydrateConversationAgentView(
     sourceKey,
-    emitted("message.part.updated", 1_400, {
-      ...mainProperties,
-      part: {
-        id: "prt_root",
-        sessionID: "ses_root",
-        messageID: "msg_root_answer",
-        type: "text",
-        text: "",
-        orderKey: testPartOrderKey("prt_root", 1_400),
+    {
+      topLevelExecutionIDs: [inputMessageID],
+      sessions: [
+        {
+          executionID: inputMessageID,
+          inputMessageID,
+          sessionID,
+          agentID: "researcher",
+          stage: "researcher",
+          orderKey: messageOrderKey,
+          firstMessageTime: 1_000,
+          lastMessageTime: 1_600,
+          lastObservedAt: 1_600,
+          status: "idle",
+          activity: [],
+          messageIDs: [inputMessageID, messageID],
+          placement: "top_level",
+        },
+      ],
+      messages: [],
+    },
+    { validated: true },
+  )
+  applyLiveConversationAgentMessageUpdated(
+    sourceKey,
+    emitted("message.updated", 1_700, {
+      info: {
+        id: messageID,
+        sessionID,
+        parentID: inputMessageID,
+        parentSessionID: "ses_root",
+        role: "assistant",
+        author: "researcher",
+        agentID: "researcher",
+        sessionAgentID: "researcher",
+        channel: "delegated-worker",
+        resolvedRole: "researcher",
+        orderKey: messageOrderKey,
+        time: { created: 1_000, completed: 1_500 },
+        finish: "stop",
       },
     }),
   )
-  applyLiveConversationAgentPartDelta(
+  applyLiveConversationAgentPartUpdated(
     sourceKey,
-    emitted("message.part.delta", 1_500, {
-      ...mainProperties,
-      partID: "prt_root",
-      partType: "text",
-      field: "text",
-      delta: "root output",
-    }),
+    emitted(
+      "message.part.updated",
+      1_800,
+      properties({
+        part: { id: partID, messageID, sessionID, type: "text", text: "Completed findings", orderKey: partOrderKey },
+      }),
+    ),
   )
-  flushLiveConversationAgentPartDeltas()
-
-  expect(conversationAgentRecordForSourceSession(source, "ses_root")).toBeUndefined()
+  expect(
+    conversationAgentRecordsForSource(source).map((record) => ({
+      input: record.inputMessageID,
+      status: record.status,
+    })),
+  ).toEqual([{ input: inputMessageID, status: "idle" }])
+  expect(conversationAgentRecordForSourceSession(source, sessionID)?.activity).toEqual([
+    expect.objectContaining({ id: partID, type: "text", text: "Completed findings" }),
+  ])
 })
 
 test("hydrated child-Agent activity anchors retained Text deltas after reconnect", () => {

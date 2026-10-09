@@ -450,7 +450,8 @@ function liveActivityPartFromCurrentStore(
   if (conversationAgentStore.taskID !== sourceKey) return undefined
   const exactIndex = conversationAgentIndexForOccurrence(conversationAgentStore.records, { sessionID, messageID })
   const fallbackIndex = conversationAgentStore.records.findIndex(
-    (record) => record.sessionID === sessionID &&
+    (record) =>
+      record.sessionID === sessionID &&
       record.activity.some((item) => item.id === partID && item.messageID === messageID),
   )
   const index = exactIndex ?? (fallbackIndex >= 0 ? fallbackIndex : undefined)
@@ -469,7 +470,11 @@ function liveActivityPartFromCurrentStore(
   }
 }
 
-function rememberLiveActivityPart(sourceKey: string, part: Record<string, unknown>, observedAt = 0): string | undefined {
+function rememberLiveActivityPart(
+  sourceKey: string,
+  part: Record<string, unknown>,
+  observedAt = 0,
+): string | undefined {
   const sessionID = String(part.sessionID || "")
   const messageID = String(part.messageID || "")
   const partID = String(part.id || "")
@@ -494,11 +499,8 @@ function forgetLiveActivityPart(sourceKey: string, sessionID: string, messageID:
 
 function forgetLiveActivityMessage(sourceKey: string, sessionID: string, messageID: string): void {
   for (const [key, snapshot] of liveActivityParts) {
-    if (
-      snapshot.sourceKey !== sourceKey ||
-      snapshot.sessionID !== sessionID ||
-      snapshot.messageID !== messageID
-    ) continue
+    if (snapshot.sourceKey !== sourceKey || snapshot.sessionID !== sessionID || snapshot.messageID !== messageID)
+      continue
     liveActivityParts.delete(key)
     pendingLiveActivityPartKeys.delete(key)
   }
@@ -566,10 +568,16 @@ function applyConversationAgentActivityToStore(
   }
   setConversationAgentStore("records", index, (record) => ({
     ...record,
-    status: record.status === "pending" || record.status === "idle" ? "running" : record.status,
     lastObservedAt: Math.max(record.lastObservedAt, observedAt),
     activity: mergeConversationAgentActivity(record.activity, [activity]),
   }))
+}
+
+function recordsForExecutionOccurrence(sourceKey: string, sessionID: string): AgentActivityRecord[] {
+  const records = conversationAgentStore.taskID === sourceKey ? conversationAgentStore.records : []
+  const scoped = records.filter((record) => record.sessionID !== sessionID || !!record.inputMessageID)
+  if (scoped.length !== records.length) setConversationAgentStore("records", scoped)
+  return scoped
 }
 
 function upsertLiveConversationAgentIdentity(
@@ -587,7 +595,7 @@ function upsertLiveConversationAgentIdentity(
   },
 ): void {
   if (conversationAgentStore.taskID !== sourceKey) return
-  const currentRecords = conversationAgentStore.records
+  const currentRecords = recordsForExecutionOccurrence(sourceKey, input.sessionID)
   const index = conversationAgentIndexForOccurrence(currentRecords, {
     sessionID: input.sessionID,
     inputMessageID: input.inputMessageID,
@@ -605,7 +613,7 @@ function upsertLiveConversationAgentIdentity(
       stage: input.stage,
       rawStage: input.rawStage,
       viewSource: "live",
-      status: "running",
+      status: "pending",
       orderKey: input.orderKey,
       startedAt: input.observedAt,
       lastObservedAt: input.observedAt,
@@ -643,10 +651,6 @@ function upsertLiveConversationAgentIdentity(
         : input.orderKey,
     startedAt: Math.min(existing.startedAt, input.observedAt),
     lastObservedAt: Math.max(existing.lastObservedAt, input.observedAt),
-    status:
-      existing.status === "completed" || existing.status === "error" || existing.status === "skipped"
-        ? existing.status
-        : "running",
   }
   if (updated.orderKey === existing.orderKey && updated.parentSessionID === existing.parentSessionID) {
     setConversationAgentStore("records", index, updated)
@@ -1021,6 +1025,11 @@ function mergeHydratedRecordsWithCurrentSource(
     recordWithCurrentProjectionPreservingCanonicalTarget,
   )) {
     if (currentRecord.viewSource !== "live") continue
+    if (
+      !currentRecord.inputMessageID &&
+      [...merged.values()].some((record) => record.sessionID === currentRecord.sessionID && !!record.inputMessageID)
+    )
+      continue
     const hydratedRecord = merged.get(currentRecord.id)
     if (!hydratedRecord) {
       merged.set(currentRecord.id, { ...currentRecord })
@@ -1440,10 +1449,7 @@ export function applyLiveConversationAgentPartUpdated(sourceKeyInput: string, ev
   })
 }
 
-export function applyLiveConversationAgentMessageRemoved(
-  sourceKeyInput: string,
-  event: any,
-): void {
+export function applyLiveConversationAgentMessageRemoved(sourceKeyInput: string, event: any): void {
   const sourceKey = String(sourceKeyInput || "").trim()
   if (!sourceKey) throw new Error("conversation agent live view requires a source key")
   const properties = liveEventProperties(event)
@@ -1482,18 +1488,20 @@ export function applyLiveConversationAgentMessageRemoved(
     return
   }
   const observedAt = liveEventObservedAt(event)
-  setConversationAgentStore("records", (records) => records.map((record) => {
-    if (record.sessionID !== sessionID) return record
-    const ownsMessage = record.messageIDs?.includes(messageID) === true
-    const ownsActivity = record.activity.some((item) => item.messageID === messageID)
-    if (!ownsMessage && !ownsActivity) return record
-    return {
-      ...record,
-      lastObservedAt: observedAt > 0 ? Math.max(record.lastObservedAt, observedAt) : record.lastObservedAt,
-      messageIDs: record.messageIDs?.filter((candidate) => candidate !== messageID),
-      activity: record.activity.filter((item) => item.messageID !== messageID),
-    }
-  }))
+  setConversationAgentStore("records", (records) =>
+    records.map((record) => {
+      if (record.sessionID !== sessionID) return record
+      const ownsMessage = record.messageIDs?.includes(messageID) === true
+      const ownsActivity = record.activity.some((item) => item.messageID === messageID)
+      if (!ownsMessage && !ownsActivity) return record
+      return {
+        ...record,
+        lastObservedAt: observedAt > 0 ? Math.max(record.lastObservedAt, observedAt) : record.lastObservedAt,
+        messageIDs: record.messageIDs?.filter((candidate) => candidate !== messageID),
+        activity: record.activity.filter((item) => item.messageID !== messageID),
+      }
+    }),
+  )
 }
 
 export function applyLiveConversationAgentPartDelta(sourceKeyInput: string, event: any): void {
@@ -1516,7 +1524,8 @@ export function applyLiveConversationAgentPartDelta(sourceKeyInput: string, even
   }
   const key = liveActivityPartKey(sourceKey, sessionID, messageID, partID)
   const snapshot = liveActivityParts.get(key)
-  const initialPart = snapshot?.part ??
+  const initialPart =
+    snapshot?.part ??
     projectedConversationPartSnapshot(sessionID, partID) ??
     liveActivityPartFromCurrentStore(sourceKey, sessionID, messageID, partID)
   if (!initialPart) {
@@ -1641,7 +1650,7 @@ export function applyLiveConversationAgentSessionStatus(sourceKeyInput: string, 
   if (!(observedAt > 0)) {
     throw new Error("conversation agent live view execution lifecycle missing emitted time")
   }
-  const existingRecords = conversationAgentStore.taskID === sourceKey ? conversationAgentStore.records : []
+  const existingRecords = recordsForExecutionOccurrence(sourceKey, sessionID)
   const index = existingRecords.findIndex((record) => record.id === inputMessageID)
   const terminal = status === "completed" || status === "error" || status === "skipped"
   if (index === -1) {

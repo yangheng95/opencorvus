@@ -78,6 +78,21 @@ writer. Board-only control-plane events such as `artifact.persisted` invalidate
 the Board without entering the message tree; hydration replay and the live Task
 stream use the same ownership decision, while events with no declared owner
 still fail explicitly.
+
+Conversation Agent activity is keyed by the accepted input Message within its
+owning Session. Real inputs replace that Session's preparation-only placeholder;
+the same topology is used to identify ordinary Session and Task occurrences.
+Hydration, preceding history pages and Session reconnects read each visible
+input's latest original `agent.execution.lifecycle` through ProtocolStore.
+Task prepared-input identity and durable dispatch facts retain their authority,
+and repeated event identities are applied once in hydration. A historical
+Session streaming/retry fact is replayed only while that exact input still has
+its current process-local execution owner. An accepted input without an admitted
+lifecycle fact remains pending. Message and Part arrival updates content and
+navigation targets; only actual lifecycle facts change execution status, so a
+late body snapshot cannot revive a settled input. A slow same-source hydration
+also retires the replaced preparation placeholder.
+
 Task Message lifecycle has one exact live bridge. Initial hydrate supplies the
 persisted tail; reconnect resumes the bounded Task live sequence in its exact
 process epoch. Replay expiry or an epoch change first replaces the canonical

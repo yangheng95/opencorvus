@@ -1,0 +1,146 @@
+Browser tab: 99, Title: "OpenCorvus", URL: "http://localhost:18192/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18192/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									193 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									72 container
+										73 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										74 button 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+										194 image Running
+										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-222-trigger, Secondary Actions: Expand
+									108 button (expanded) Description: Collapse Anonymous 5bd1a6, Secondary Actions: Collapse
+									36 container
+										37 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										38 button Reply with OK.
+										39 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								41 container Recents
+									42 text Recents
+									195 container
+										196 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										197 button 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+										198 image Running
+										199 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-805-trigger, Secondary Actions: Expand
+									200 container
+										201 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										202 button Reply with OK.
+										203 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-811-trigger, Secondary Actions: Expand
+						47 container Connection Diagnostics
+							48 container Description: Connection Diagnostics · Online · Port 18192, ID: connBadge
+								49 text Online
+				50 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				51 container chatSection
+					52 container Description: Loading task, ID: taskSwitchProgress
+					84 container
+						85 text 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+						86 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+						87 container Description: Running, ID: taskStatus
+							88 text Running
+						89 button Side chat
+						90 container solidChatHeaderRuntimeActions
+							91 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							92 checkbox Description: Open right dock, Value: 0
+					53 container
+						54 container Description: Conversation, ID: chatScroll
+							204 container
+								205 text work
+								206 text 33s
+								207 heading 多轮生成与恢复场景实际审查手册, Value: 1
+									208 text 多轮生成与恢复场景实际审查手册
+								209 container
+									210 text 本手册沿用第一轮已读取的三个来源，不再读取网页。 资料直接支持的原则 包括：信息不能只靠颜色表达；链接目的应明确；键盘焦点可见、顺序合理且不被困住；界面变化应可预测；动态内容应能被辅助技术理解。[1][2][3] 以下身份核对、断网恢复和位置检查步骤均为 设计与审查建议 ，不是来源原文规定的测试流程。
+								211 heading 一、先建立每次输入的核对记录, Value: 2
+									212 text 一、先建立每次输入的核对记录
+								213 text 准备两条容易区分的输入：第一轮“说明来源卡片”，第二轮“说明加载反馈”。分别记录提交时间、输入原文及可观察的消息或请求标识；界面没有标识时，结合测试日志核对，不能仅凭气泡顺序认定身份。
+								214 container
+									215 text 每轮记录六项： 输入身份、执行状态、文字完成状态、可见内容、来源链接、焦点与阅读位置 。身份指这次提交对应的请求，不是账号身份；相同文字再次提交，也应视为不同请求。
+								216 text 必须分开判断：
+								217 content list
+									218 container
+										219 AXListMarker •
+										220 text 执行状态 ：排队、运行、等待、成功、失败、取消；无法获知时记为未知。
+									221 container
+										222 AXListMarker •
+										223 text 文字完成状态 ：尚无正文、部分显示、收到结束标记、完整显示。
+								224 text 文字暂时不增长，不证明执行结束；显示了结束标记，也不证明来源读取等相关执行全部成功。
+								225 heading 二、第一轮结束、第二轮正在生成, Value: 2
+									226 text 二、第一轮结束、第二轮正在生成
+								227 container
+									228 text 步骤 ：确认第一轮结束后保存其正文、状态和来源列表。提交第二轮，观察新增内容归属；随后滚动回第一轮，展开来源，并把键盘焦点停在其链接上。
+								229 container
+									230 text 正常结果 ：第二轮拥有独立身份和运行状态；第一轮正文、来源及结束状态不被第二轮覆盖。第二轮生成的文字只进入第二轮区域。“生成中”明确对应第二轮，而非让整个会话看起来仍未结束。
+								231 container
+									232 text 仍需调查 ：第一轮重新显示“生成中”；第二轮段落进入第一轮；两轮来源混合；旧链接上的焦点因更新消失。记录变化前后画面、时间和请求标识，区分请求归属错误、显示错误与内容被重新生成，不能只靠刷新后恢复就判定通过。
+								233 heading 三、断网与重连：观察连接，不推断后台, Value: 2
+									234 text 三、断网与重连：观察连接，不推断后台
+								235 container
+									236 text 步骤 ：第二轮显示部分正文时断网，记录最后可见段落、执行状态、焦点和阅读位置。等待一段时间后恢复网络，观察补充内容及状态变化；不要立即再次提交，以免混入新请求。
+								237 container
+									238 text 正常结果 ：界面明确提示连接中断或状态暂不可确认，保留已收到文字。断网本身不被当作后台失败。重连后仍对应原请求；若产品无法续接，应明确说明，并让用户选择重试。内容无重复、漏段或错序，来源仍属于对应轮次。
+								239 container
+									240 text 仍需调查 ：离线期间无依据地显示“成功”；重连后自动创建重复请求；正文从头追加；“已完成”旁仍不断新增文字。若无法确认服务端是否继续执行，应记为“执行状态未知”，不要记为失败或成功。也应分别记录“后台已结束，但客户端尚未显示完整”与“正文已完整，但其他执行仍在继续”。
+								241 heading 四、重新打开会话：检查恢复的是哪一次输入, Value: 2
+									242 text 四、重新打开会话：检查恢复的是哪一次输入
+								243 container
+									244 text 步骤 ：分别在第二轮生成中、断网后和生成结束后关闭并重新打开会话。对照先前记录逐轮核对输入、正文、来源和状态；测试同一句输入提交两次，确认两次结果没有合并。
+								245 container
+									246 text 正常结果 ：第一轮仍保持已结束；第二轮恢复为可验证的当前状态，而非机械复用关闭前的“运行中”。历史正文与新补内容边界连续，来源链接指向原对应页面。若恢复信息不完整，应显式说明。
+								247 container
+									248 text 仍需调查 ：重开即重新执行旧请求；不同提交共用一个结果；正文完整却永久显示运行中；来源只剩标题、链接缺失。检查链接时核对目标地址、可访问名称和轮次归属；仅有相同标题不足以证明链接正确。
+								249 heading 五、焦点与阅读位置：分别验证, Value: 2
+									250 text 五、焦点与阅读位置：分别验证
+								251 container
+									252 text 步骤 ：用 Tab 和 Shift+Tab 遍历来源、停止、重试及跳转按钮，执行相应操作。生成中向上阅读旧段落，再断网重连；展开来源后关闭；重开会话后检查恢复位置。
+								253 container
+									254 text 正常结果 ：焦点始终可见，顺序合理，没有键盘陷阱。后台更新不抢走当前焦点；关闭详情返回触发控件。用户回看旧内容时不被强拉到底部，新内容通过可操作提示呈现。阅读位置保持在原段落附近，而非仅保持一个已失效的滚动像素值。
+								255 container
+									256 text 仍需调查 ：焦点返回页面顶部、落在已删除控件或被遮挡；重连把视口拉到最新内容；图片加载使原段落跳走。键盘焦点、视觉阅读位置和屏幕阅读器阅读位置应分别记录，不能因其中一项正常便判定全部通过。
+								257 heading 六、形成审查结论, Value: 2
+									258 text 六、形成审查结论
+								259 text 每个问题保存“操作—预期—实际—所属输入—发生时间—复现条件”。正常路径与异常路径都实际走完后再判定；无法核对身份或执行状态的项目标记为待调查，而非通过。W3C 明确指出，单一工具不能独立判定无障碍，仍需人工评价。[1]
+								260 text **
+						55 container chatHomeComposition
+							58 container chatForm
+								59 splitter Description: Drag to resize the message input, Value: 42
+								60 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								61 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								93 text Work
+								94 text Chat
+								95 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+								67 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								68 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+									69 text openai/gpt-6.1-sol
+								70 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+
+The focused UI element is 70 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt

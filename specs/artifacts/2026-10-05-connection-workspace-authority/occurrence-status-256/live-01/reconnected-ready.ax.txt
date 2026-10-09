@@ -1,0 +1,87 @@
+Browser tab: 99, Title: "OpenCorvus", URL: "http://localhost:18192/ui/".
+1 AXWebArea OpenCorvus, URL: localhost:18192/ui/
+	2 container overlayAppHost
+		3 container titlebar
+			4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		10 container panelBody
+			11 container Description: Chat shortcuts, ID: workspaceNavigation
+				12 container Chat shortcuts
+					13 button Chats
+					14 button Mission Board
+					15 button Scheduled
+					16 button Expert Squads
+					17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					18 button Settings
+				19 button About
+				20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			21 container workspacePageStack
+				22 container leftActivityShell
+					23 container workspaceContextbar
+						24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						25 button Search chats or run a command
+						26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					27 container sidebar
+						28 container workLedgerPanel
+							29 container Chat navigation
+								30 button New chat
+							31 container workLedgerProjectsScroll
+								32 text Projects
+								33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								65 container
+									66 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									67 container
+										68 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										69 button 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+										70 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-184-trigger, Secondary Actions: Expand
+									71 button (expanded) Description: Collapse Anonymous 5bd1a6, Secondary Actions: Collapse
+									72 container
+										73 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										74 button Reply with OK.
+										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-197-trigger, Secondary Actions: Expand
+								76 container Recents
+									77 text Recents
+									78 container
+										79 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										80 button 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+										81 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-203-trigger, Secondary Actions: Expand
+									82 container
+										83 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										84 button Reply with OK.
+										85 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-209-trigger, Secondary Actions: Expand
+						36 container Connection Diagnostics
+							37 container Description: Connection Diagnostics · Online · Port 18192, ID: connBadge
+								38 text Online
+				39 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				40 container chatSection
+					41 container Description: Loading task, ID: taskSwitchProgress
+					42 container
+						43 container Description: Conversation, ID: chatScroll
+						44 container chatHomeComposition
+							45 heading What should we build in project?, Value: 1
+								46 text What should we build in project?
+							47 container chatForm
+								48 splitter Description: Drag to resize the message input, Value: 42
+								49 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+								50 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+								51 pop up button (collapsed) Select product mode Work, ID: select-cl-36-trigger, Secondary Actions: Expand
+									52 text Work
+								53 pop up button (collapsed) Select conversation target Chat, ID: select-cl-40-trigger, Secondary Actions: Expand
+									54 text Chat
+								55 pop up button (collapsed) Description: Skills & squads, Secondary Actions: Expand
+								56 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+								57 pop up button (collapsed) Description: OpenCorvus model Inherit configuration. Click to change., Help: OpenCorvus model: Inherit configuration, Secondary Actions: Expand
+									58 text Inherit configuration
+								59 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+							60 container Suggested chat starters
+								61 button Build a webpage
+								62 button Create an expert squad
+								63 button Fix a bug
+								64 pop up button (collapsed) More, ID: dropdownmenu-cl-125-trigger, Secondary Actions: Expand
+
+The focused UI element is 1 AXWebArea OpenCorvus, URL: localhost:18192/ui/

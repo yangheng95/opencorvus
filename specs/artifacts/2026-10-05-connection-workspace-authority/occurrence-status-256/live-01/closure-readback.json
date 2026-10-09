@@ -1,0 +1,62 @@
+{
+  "states": [
+    {
+      "expected": {
+        "pid": 42388,
+        "processInstanceID": "win32:639271860878511724",
+        "occurrenceID": "e392a372-2682-41ca-9092-2495d85e0dd2"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 75876,
+        "processInstanceID": "win32:639271860886011316",
+        "occurrenceID": "2eafd984-8517-4a0d-87dd-842b144377ed"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "native": {
+    "occurrence": "occurrence-status-256-live-01-04cbcd6b-a92c-4673-8f6d-ad4ee7070f39",
+    "outcome": "settled",
+    "host": {
+      "pid": 42388,
+      "processInstanceID": "win32:639271860878511724",
+      "occurrenceID": "e392a372-2682-41ca-9092-2495d85e0dd2"
+    },
+    "target": {
+      "pid": 75876,
+      "processInstanceID": "win32:639271860886011316",
+      "occurrenceID": "2eafd984-8517-4a0d-87dd-842b144377ed"
+    },
+    "observedAtUtc": "2026-10-09T23:47:01.768Z",
+    "deadlineAt": 1791589887831,
+    "terminal": {
+      "occurrenceID": "occurrence-status-256-live-01-04cbcd6b-a92c-4673-8f6d-ad4ee7070f39",
+      "pid": 75876,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "observedAtUtc": "2026-10-09T23:47:13.5771910Z",
+  "listeners": [],
+  "occurrence": "occurrence-status-256-live-01-04cbcd6b-a92c-4673-8f6d-ad4ee7070f39",
+  "boundary": "Independent actual NativeService physical/output/request birth-port-pair readback; original live-sol foreground already joined. Real service emits owner/startup/preflight receipts, not full-history copy launcher receipts.",
+  "qualificationKind": "NativeService"
+}

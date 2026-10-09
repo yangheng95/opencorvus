@@ -1,0 +1,196 @@
+Browser tab: 99, Title: "OpenCorvus", URL: "http://localhost:18192/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18192/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									193 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									72 container
+										73 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										74 button 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+										194 image Running
+										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-222-trigger, Secondary Actions: Expand
+									108 button (expanded) Description: Collapse Anonymous 5bd1a6, Secondary Actions: Collapse
+									36 container
+										37 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										38 button Reply with OK.
+										39 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								41 container Recents
+									42 text Recents
+									195 container
+										196 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										197 button 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+										198 image Running
+										199 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-2025-trigger, Secondary Actions: Expand
+									200 container
+										201 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										202 button Reply with OK.
+										203 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-2031-trigger, Secondary Actions: Expand
+						47 container Connection Diagnostics
+							48 container Description: Connection Diagnostics · Online · Port 18192, ID: connBadge
+								49 text Online
+				50 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				204 container centerWorkbenchConversation
+					205 container Agent activity
+						206 content list
+							207 container
+								208 button work · Idle · 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://www.w3.org/WAI/fundamentals/accessibility-principles/ 、https://developer.mozilla.org/en-US/docs/Web/Accessibility 。然后用中文写一份约1800字的产品设计指南，具体解释来源卡片、渐进式文本渲染、运行状态、键盘操作、阅读位置保持和加载反馈各应怎样设计。引用来源，区分资料直接支持的事实与你的设计建议。只读取这些页面，直接在本会话回答。
+								209 button work · Idle · 沿用第一轮已经读取的三个来源，不再读取网页。请用中文写约1400字的实际审查手册，重点解释当第一轮已经结束、第二轮正在生成、网络断开重连及重新打开会话时，怎样验证每次输入的身份、状态、可见内容、来源链接、键盘焦点与阅读位置。给出具体可观察步骤、正常结果和仍需调查的情况，区分执行状态与文字完成，直接在本会话回答。
+								210 button work · Running · 继续第三轮：不要读取网页或创建文件。请用中文写约1200字的审查案例，具体描述同一会话先后有三次输入、前两次结束而第三次正在流式生成时，来源区域、输入导航、运行指示和历史重载应怎样保持一致。写清楚怎样区分每次输入与会话汇总，怎样处理迟到的文字更新及无法证明正在执行的历史记录。直接在本会话回答。
+					211 container chatSection
+						212 container Description: Loading task, ID: taskSwitchProgress
+						213 container
+							214 text 请阅读这三个公开页面：https://www.w3.org/WAI/fundamentals/accessibility-intro/ 、https://...
+							215 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-216-trigger, Secondary Actions: Expand
+							216 container Description: Running, ID: taskStatus
+								217 text Running
+							218 button Side chat
+							219 container solidChatHeaderRuntimeActions
+								220 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								221 checkbox Description: Open right dock, Value: 0
+						222 container
+							223 container Description: Conversation, ID: chatScroll
+								224 container
+									225 container
+										226 text work
+										227 text 35s
+										228 heading 多轮生成与恢复场景实际审查手册, Value: 1
+											229 text 多轮生成与恢复场景实际审查手册
+										230 container
+											231 text 本手册沿用第一轮已读取的三个来源，不再读取网页。 资料直接支持的原则 包括：信息不能只靠颜色表达；链接目的应明确；键盘焦点可见、顺序合理且不被困住；界面变化应可预测；动态内容应能被辅助技术理解。[1][2][3] 以下身份核对、断网恢复和位置检查步骤均为 设计与审查建议 ，不是来源原文规定的测试流程。
+										232 heading 一、先建立每次输入的核对记录, Value: 2
+											233 text 一、先建立每次输入的核对记录
+										234 text 准备两条容易区分的输入：第一轮“说明来源卡片”，第二轮“说明加载反馈”。分别记录提交时间、输入原文及可观察的消息或请求标识；界面没有标识时，结合测试日志核对，不能仅凭气泡顺序认定身份。
+										235 container
+											236 text 每轮记录六项： 输入身份、执行状态、文字完成状态、可见内容、来源链接、焦点与阅读位置 。身份指这次提交对应的请求，不是账号身份；相同文字再次提交，也应视为不同请求。
+										237 text 必须分开判断：
+										238 content list
+											239 container
+												240 AXListMarker •
+												241 text 执行状态 ：排队、运行、等待、成功、失败、取消；无法获知时记为未知。
+											242 container
+												243 AXListMarker •
+												244 text 文字完成状态 ：尚无正文、部分显示、收到结束标记、完整显示。
+										245 text 文字暂时不增长，不证明执行结束；显示了结束标记，也不证明来源读取等相关执行全部成功。
+										246 heading 二、第一轮结束、第二轮正在生成, Value: 2
+											247 text 二、第一轮结束、第二轮正在生成
+										248 container
+											249 text 步骤 ：确认第一轮结束后保存其正文、状态和来源列表。提交第二轮，观察新增内容归属；随后滚动回第一轮，展开来源，并把键盘焦点停在其链接上。
+										250 container
+											251 text 正常结果 ：第二轮拥有独立身份和运行状态；第一轮正文、来源及结束状态不被第二轮覆盖。第二轮生成的文字只进入第二轮区域。“生成中”明确对应第二轮，而非让整个会话看起来仍未结束。
+										252 container
+											253 text 仍需调查 ：第一轮重新显示“生成中”；第二轮段落进入第一轮；两轮来源混合；旧链接上的焦点因更新消失。记录变化前后画面、时间和请求标识，区分请求归属错误、显示错误与内容被重新生成，不能只靠刷新后恢复就判定通过。
+										254 heading 三、断网与重连：观察连接，不推断后台, Value: 2
+											255 text 三、断网与重连：观察连接，不推断后台
+										256 container
+											257 text 步骤 ：第二轮显示部分正文时断网，记录最后可见段落、执行状态、焦点和阅读位置。等待一段时间后恢复网络，观察补充内容及状态变化；不要立即再次提交，以免混入新请求。
+										258 container
+											259 text 正常结果 ：界面明确提示连接中断或状态暂不可确认，保留已收到文字。断网本身不被当作后台失败。重连后仍对应原请求；若产品无法续接，应明确说明，并让用户选择重试。内容无重复、漏段或错序，来源仍属于对应轮次。
+										260 container
+											261 text 仍需调查 ：离线期间无依据地显示“成功”；重连后自动创建重复请求；正文从头追加；“已完成”旁仍不断新增文字。若无法确认服务端是否继续执行，应记为“执行状态未知”，不要记为失败或成功。也应分别记录“后台已结束，但客户端尚未显示完整”与“正文已完整，但其他执行仍在继续”。
+										262 heading 四、重新打开会话：检查恢复的是哪一次输入, Value: 2
+											263 text 四、重新打开会话：检查恢复的是哪一次输入
+										264 container
+											265 text 步骤 ：分别在第二轮生成中、断网后和生成结束后关闭并重新打开会话。对照先前记录逐轮核对输入、正文、来源和状态；测试同一句输入提交两次，确认两次结果没有合并。
+										266 container
+											267 text 正常结果 ：第一轮仍保持已结束；第二轮恢复为可验证的当前状态，而非机械复用关闭前的“运行中”。历史正文与新补内容边界连续，来源链接指向原对应页面。若恢复信息不完整，应显式说明。
+										268 container
+											269 text 仍需调查 ：重开即重新执行旧请求；不同提交共用一个结果；正文完整却永久显示运行中；来源只剩标题、链接缺失。检查链接时核对目标地址、可访问名称和轮次归属；仅有相同标题不足以证明链接正确。
+										270 heading 五、焦点与阅读位置：分别验证, Value: 2
+											271 text 五、焦点与阅读位置：分别验证
+										272 container
+											273 text 步骤 ：用 Tab 和 Shift+Tab 遍历来源、停止、重试及跳转按钮，执行相应操作。生成中向上阅读旧段落，再断网重连；展开来源后关闭；重开会话后检查恢复位置。
+										274 container
+											275 text 正常结果 ：焦点始终可见，顺序合理，没有键盘陷阱。后台更新不抢走当前焦点；关闭详情返回触发控件。用户回看旧内容时不被强拉到底部，新内容通过可操作提示呈现。阅读位置保持在原段落附近，而非仅保持一个已失效的滚动像素值。
+										276 container
+											277 text 仍需调查 ：焦点返回页面顶部、落在已删除控件或被遮挡；重连把视口拉到最新内容；图片加载使原段落跳走。键盘焦点、视觉阅读位置和屏幕阅读器阅读位置应分别记录，不能因其中一项正常便判定全部通过。
+										278 heading 六、形成审查结论, Value: 2
+											279 text 六、形成审查结论
+										280 text 每个问题保存“操作—预期—实际—所属输入—发生时间—复现条件”。正常路径与异常路径都实际走完后再判定；无法核对身份或执行状态的项目标记为待调查，而非通过。W3C 明确指出，单一工具不能独立判定无障碍，仍需人工评价。[1]
+										281 container
+											282 text 来源 ：[1]
+											283 link Description: W3C 无障碍介绍, Value: w3.org/WAI/fundamentals/accessibility-intro/
+											284 text ；[2]
+											285 link Description: W3C 无障碍原则, Value: w3.org/WAI/fundamentals/accessibility-principles/
+											286 text ；[3]
+											287 link Description: MDN Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+											288 text 。
+									289 container
+										290 text User
+										291 text 继续第三轮：不要读取网页或创建文件。请用中文写约1200字的审查案例，具体描述同一会话先后有三次输入、前两次结束而第三次正在流式生成时，来源区域、输入导航、运行指示和历史重载应怎样保持一致。写清楚怎样区分每次输入与会话汇总，怎样处理迟到的文字更新及无法证明正在执行的历史记录。直接在本会话回答。
+									292 container
+										293 text work
+										294 text 16s
+										295 heading 三次输入并存时的一致性审查案例, Value: 1
+											296 text 三次输入并存时的一致性审查案例
+										297 container
+											298 text 本案例沿用前两轮资料，不读取网页、不创建文件。W3C 直接支持的原则包括：链接目的明确、界面行为可预测、焦点可见且顺序合理、信息不能仅靠颜色表达。[2] MDN 说明动态内容需要可被辅助技术理解的语义。[3] 以下请求归属、迟到更新与历史恢复规则是 产品审查建议 ，不是这些页面规定的运行协议。
+										299 heading 一、建立三次输入的基准, Value: 2
+											300 text 一、建立三次输入的基准
+										301 text 同一会话依次提交：
+										302 content list
+											303 container
+												304 AXListMarker •
+												305 text 输入甲：“说明来源卡片”，已结束。
+											306 container
+												307 AXListMarker •
+												308 text 输入乙：“说明加载反馈”，已结束。
+											309 container
+												310 AXListMarker •
+												311 text 输入丙：“比较两种方案”，正在流式生成。
+										312 text 记录每次提交的独立标识、输入原文、执行结果、已显示正文及来源列表。即使两次输入文字相同，也不能合并身份。若一次输入发生重试，还应区分其不同执行尝试，防止旧尝试覆盖新结果。
+										313 container
+											314 text 会话汇总不是第四次输入 ：它可以显示“三次输入，两次结束，一次生成中”，但不能拥有或代替某轮正文、来源与执行结果。“结束”还应注明成功、失败或取消，不能全部算作成功。
+										315 heading 二、来源区域随归属变化，不随最新更新乱跳, Value: 2
+											316 text 二、来源区域随归属变化，不随最新更新乱跳
+										317 container
+											318 text 操作 ：丙生成时，通过输入导航切回甲，展开甲的来源；再切到乙，核对链接地址；最后返回丙。
+										319 container
+											320 text 正常结果 ：若来源区域采用“当前输入”模式，标题明确写“输入甲的来源”，内容随用户选择变化。丙后台新增来源不能把区域自动切回丙。若采用“会话全部来源”模式，每条来源需标明被哪些输入引用；相同网址可以合并展示，但不能丢失轮次关联。
+										321 text 丙暂时没有来源时，显示“尚未收到来源”，而不是借用甲乙的卡片填充。来源读取失败、未引用来源与仍在加载应分别表达。
+										322 container
+											323 text 仍需调查 ：正文停在甲而来源显示丙；相同编号在切换后指向另一页面；历史重载后来源标题还在但地址改变。编号相同或
+							324 container chatHomeComposition
+								325 container chatForm
+									326 splitter Description: Drag to resize the message input, Value: 42
+									327 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									328 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									329 text Work
+									330 text Chat
+									331 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									332 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									333 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										334 text openai/gpt-6.1-sol
+									335 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt
+
+The focused UI element is 335 button Description: Stop, Help: Stop generation and halt task execution., ID: btnTaskInterrupt

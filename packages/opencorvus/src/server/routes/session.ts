@@ -138,6 +138,36 @@ export const SessionEventStreamTestHooks: {
   afterConversationSnapshotRead?: (input: { sessionID: string }) => void | Promise<void>
 } = {}
 
+function sessionConversationExecutionEvents(view: ReturnType<typeof projectConversationView>) {
+  const occurrences = new Map<string, { sessionID: string; inputMessageID: string }>()
+  for (const message of view.messages) {
+    occurrences.set(message.inputMessageID, {
+      sessionID: message.sessionID,
+      inputMessageID: message.inputMessageID,
+    })
+  }
+  return [...occurrences.values()]
+    .flatMap(({ sessionID, inputMessageID }) => {
+      const event = ProtocolStore.latestSessionOccurrenceEvent(sessionID, "agent.execution.lifecycle", inputMessageID)
+      if (!event) return []
+      const status = SessionStatus.Info.parse(event.payload?.status)
+      // Historical transport activity is not a surviving prompt owner after
+      // restart. Task-owned execution facts retain their own durable authority.
+      if (
+        event.aggregate === "session" &&
+        SessionStatus.isExecuting(status) &&
+        (SessionStatus.executionOccurrence(sessionID)?.inputMessageID !== inputMessageID ||
+          !SessionStatus.isExecuting(resolveSessionLifecycleSnapshot(sessionID).status))
+      )
+        return []
+      return [event]
+    })
+    .sort(
+      (left, right) =>
+        left.time.emitted - right.time.emitted || left.sequence - right.sequence || left.id.localeCompare(right.id),
+    )
+}
+
 async function sessionConversationTailProjection(session: ActiveProjectSession, tailLimit: number) {
   const sessionID = session.id
   const sessionIDs = await Session.treeInProject({ sessionID, projectID: session.projectID })
@@ -182,6 +212,7 @@ async function sessionConversationTailProjection(session: ActiveProjectSession, 
     history,
     view,
     hydratedAgentSessions,
+    executionEvents: sessionConversationExecutionEvents(view),
   }
 }
 
@@ -877,7 +908,8 @@ export const SessionRoutes = lazy(() =>
       "/status",
       describeRoute({
         summary: "Get session status",
-        description: "Retrieve the current status of sessions in the selected Project, including active, idle, and completed states.",
+        description:
+          "Retrieve the current status of sessions in the selected Project, including active, idle, and completed states.",
         operationId: "session.status",
         responses: {
           200: {
@@ -1048,7 +1080,7 @@ export const SessionRoutes = lazy(() =>
         const session = await getActiveProjectSession(sessionID)
         const tailLimit = query.tail_limit ?? CONVERSATION_TAIL_MESSAGE_LIMIT
         const conversation = await sessionConversationTailProjection(session, tailLimit)
-        const { sessionIDs, transcript, history, view, hydratedAgentSessions } = conversation
+        const { sessionIDs, transcript, history, view, hydratedAgentSessions, executionEvents } = conversation
         const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
         const pendingQuestions = (await Question.list())
@@ -1087,9 +1119,17 @@ export const SessionRoutes = lazy(() =>
           "selectedTaskID" in board && typeof board.selectedTaskID === "string"
             ? taskExecutionProjectionForTask(board.selectedTaskID)
             : undefined
+        const occurrenceEventIDs = new Set(executionEvents.map((event) => event.id))
         const agentView = projectConversationAgentView(
           transcript,
-          executionProjection ? executionProjectionLifecycleEvents(executionProjection) : [],
+          [
+            ...(executionProjection
+              ? executionProjectionLifecycleEvents(executionProjection).filter(
+                  (event) => !occurrenceEventIDs.has(String(event.payload?.eventID)),
+                )
+              : []),
+            ...executionEvents.map(protocolSessionEvent),
+          ],
           hydratedAgentSessions,
           new Map(),
           TodoStore.getBySessionIDs(hydratedAgentSessions.map((entry) => entry.sessionID)),
@@ -1099,7 +1139,7 @@ export const SessionRoutes = lazy(() =>
           board,
           pendingQuestions,
           transcript: projectConversationTransportTranscript(transcript),
-          events: [],
+          events: executionEvents.map(protocolSessionEvent),
           view,
           turnArtifacts,
           agentView,
@@ -1143,10 +1183,11 @@ export const SessionRoutes = lazy(() =>
           sessionID,
           projectID: Instance.project.id,
         })
+        const view = projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions })
         return c.json({
           transcript: projectConversationTransportTranscript(historyWindow.transcript),
-          events: [],
-          view: projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions }),
+          events: sessionConversationExecutionEvents(view).map(protocolSessionEvent),
+          view,
           history,
         })
       },
@@ -1300,18 +1341,13 @@ export const SessionRoutes = lazy(() =>
               }),
             ),
           )
-          const reconnectEvents = [...sessionTreeIDs]
-            .flatMap((treeSessionID) => {
-              const lifecycle = ProtocolStore.latestSessionEvent(treeSessionID, "agent.execution.lifecycle")
-              const status = lifecycle?.payload?.status
-              const terminalLifecycle =
-                status && typeof status === "object" && (status as { type?: unknown }).type === "terminal"
-                  ? lifecycle
-                  : undefined
+          const reconnectEvents = [
+            ...connectionConversation.executionEvents,
+            ...[...sessionTreeIDs].flatMap((treeSessionID) => {
               const error = ProtocolStore.latestSessionEvent(treeSessionID, "session.error")
-              return [terminalLifecycle, error].filter((event) => event !== undefined)
-            })
-            .sort((left, right) => left.time.emitted - right.time.emitted || left.id.localeCompare(right.id))
+              return error ? [error] : []
+            }),
+          ].sort((left, right) => left.time.emitted - right.time.emitted || left.id.localeCompare(right.id))
           for (const event of reconnectEvents) receiveProtocolEvent(event)
           for (const event of pendingQuestionEvents) await writeData(JSON.stringify(event))
           for (const event of pendingPermissionEvents) await writeData(JSON.stringify(event))

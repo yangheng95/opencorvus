@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [逐输入状态256](records/2026-10/2026-10-10-occurrence-status-256.md)：普通会话载入/历史/重连按原生命周期收敛，真实三轮旧idle/新running/结束重开三个idle；Sources复核、11EOF/Native0，宽矩阵仍待。
+
 - [真实生成阅读255](records/2026-10/2026-10-10-main-live-reading-255.md)：运行中暂停往返/末尾跟随/暗色Sources实际通过，9EOF/Native0；发现旧输入Running与重复活动行，继续共享修复。
 
 - [Task主阅读254](records/2026-10/2026-10-10-task-main-reading-254.md)：两轮真实来源返回偏移保留，消息锚点持续恢复后978/明确末尾1302保持，历史Sources标题/域名复核与三次Native0。

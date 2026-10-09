@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [逐输入状态256 Recall](occurrence-status-plan-256.md) / [实际实现与证据](occurrence-status-256/README.md)：hydrate/history/SSE共享生命周期，真实三轮与重开收敛，旧500保留、27数据通过/真实Sources/11EOF/Native0；宽矩阵待验。
+
 - [真实生成阅读255 Recall](main-live-reading-plan-255.md) / [实际运行与新故障](main-live-reading-255/README.md)：运行中阅读/末尾跟随/暗色Sources实际复核，9EOF/Native0；发现旧输入Running/重复汇总行，继续共性调查。
 
 - [Task主阅读254 Recall](task-main-reading-plan-254.md) / [原失败与实际恢复](task-main-reading-254/README.md)：两轮来源偏移保留，持续消息锚点恢复后978/明确末尾1302保持，历史Sources标题/域名与三次Native0；宽矩阵仍待。

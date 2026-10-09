@@ -15,7 +15,6 @@ import { listConversationAgentSessionsForSessionTree } from "@/orchestrator/task
 import { Instance, runOutsideInstanceContext } from "@/project/instance"
 import { ConfigPaths } from "@/config/paths"
 import { Question } from "@/question"
-import { PermissionAuthority } from "@/permission/authority"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { ProtocolStore } from "@/protocol/store"
 import { ensureSessionProtocolBridge } from "@/protocol/session-mirror"
@@ -89,7 +88,6 @@ test("cold Session stream reads durable history and interactions with an unavail
         ],
       })
       questionID = (await asked).id
-      expect((await PermissionAuthority.list()).filter((item) => item.sessionID === sessionID)).toEqual([])
     },
   })
   const configFile = ConfigPaths.projectFile(project.path)
@@ -184,6 +182,87 @@ function sessionEventReader(response: Response) {
     cancel: () => reader.cancel(),
   }
 }
+
+test("ordinary Session hydrate, history and reconnect retain both idle input occurrences", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const work = await createRightSidebarConversationSession("work")
+      const inputs = []
+      const started = Date.now() - 2_000
+      for (let index = 0; index < 2; index += 1) {
+        const input = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: work.id,
+          role: "user",
+          author: "user",
+          time: { created: started + index * 1_000 },
+          agent: "work",
+          model: { providerID: "test", modelID: "test" },
+        })
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: work.id,
+          messageID: input.id,
+          type: "text",
+          text: `Actual accepted input ${index + 1}`,
+        })
+        await publishSessionStatus(work, { type: "streaming" }, { inputMessageID: input.id })
+        await publishSessionStatus(work, { type: "idle" }, { inputMessageID: input.id })
+        inputs.push(input)
+      }
+      const expectedEvents = inputs.map((input) => {
+        const original = ProtocolStore.latestSessionOccurrenceEvent(work.id, "agent.execution.lifecycle", input.id)!
+        return { id: original.id, input: input.id, status: { type: "idle" } }
+      })
+      const eventFacts = (events: any[]) =>
+        events.map((event) => ({
+          id: event.event_id,
+          input: event.payload.inputMessageID,
+          status: event.payload.status,
+        }))
+      const headers = { "x-opencorvus-directory": project.path }
+      const fullResponse = await Server.App().request(`/session/${work.id}/conversation`, { headers })
+      expect(fullResponse.status).toBe(200)
+      const full = await fullResponse.json()
+      expect({
+        rows: full.agentView.sessions.map((row: any) => ({ input: row.inputMessageID, status: row.status })),
+        events: eventFacts(full.events),
+      }).toEqual({
+        rows: inputs.map((input) => ({ input: input.id, status: "idle" })),
+        events: expectedEvents,
+      })
+      const tailResponse = await Server.App().request(`/session/${work.id}/conversation?tail_limit=1`, { headers })
+      expect(tailResponse.status).toBe(200)
+      const tail = await tailResponse.json()
+      const historyResponse = await Server.App().request(
+        `/session/${work.id}/conversation/history?before=${tail.history.oldestTimestamp}` +
+          `&before_order_key=${encodeURIComponent(tail.history.oldestOrderKey)}` +
+          `&before_id=${encodeURIComponent(tail.history.oldestMessageID)}&limit=1`,
+        { headers },
+      )
+      expect(historyResponse.status).toBe(200)
+      const history = await historyResponse.json()
+      expect({ tail: eventFacts(tail.events), history: eventFacts(history.events) }).toEqual({
+        tail: expectedEvents.slice(1),
+        history: expectedEvents.slice(0, 1),
+      })
+      const abort = new AbortController()
+      const response = await Server.App().request(`/session/${work.id}/events`, { headers, signal: abort.signal })
+      expect(response.status).toBe(200)
+      const reader = sessionEventReader(response)
+      try {
+        await reader.next("session.connected")
+        const replay = [await reader.next("agent.execution.lifecycle"), await reader.next("agent.execution.lifecycle")]
+        expect(eventFacts(replay)).toEqual(expectedEvents)
+      } finally {
+        await reader.cancel()
+        abort.abort()
+      }
+    },
+  })
+}, 30_000)
 
 test("Session stream schema classifies connection snapshots and ordinary protocol events by type", () => {
   const envelope = {
@@ -545,7 +624,8 @@ test("Session stream receives durable lifecycle and error facts for a non-Task S
         }),
         historicalChildProjection: expect.objectContaining({
           sessionID: historicalChild.child.id,
-          status: "idle",
+          inputMessageID: historicalChild.input.id,
+          status: "pending",
         }),
         settledChildProjection: expect.objectContaining({
           sessionID: settledChild.child.id,

@@ -111,3 +111,49 @@ test("projects transcript ownership separately from execution lifecycle", () => 
     messages: view.messages,
   })
 })
+
+test("conversation Agent occurrences preserve each durable input lifecycle", () => {
+  const secondInput = {
+    ...transcript[0]!,
+    info: { ...transcript[0]!.info, id: "message_second_input", time: { created: 2_000 } },
+  }
+  const secondAnswer = {
+    ...transcript[1]!,
+    info: {
+      ...transcript[1]!.info,
+      id: "message_second_answer",
+      parentID: "message_second_input",
+      time: { created: 2_100 },
+    },
+  }
+  const lifecycle = (inputID: string, type: string, at: number) => ({
+    type: "agent.execution.lifecycle",
+    emittedAt: at,
+    payload: { sessionID, inputMessageID: inputID, agentID: "architect", channel: "architect", status: { type } },
+  })
+  const view = projectConversationAgentView(
+    [...transcript, secondInput, secondAnswer],
+    [lifecycle(inputMessageID, "idle", 1_900), lifecycle("message_second_input", "streaming", 2_200)],
+    ledgerSessions,
+  )
+  expect(view.topLevelExecutionIDs).toEqual([inputMessageID, "message_second_input"])
+  expect(
+    view.sessions.map((row) => ({ input: row.inputMessageID, status: row.status, messages: row.messageIDs })),
+  ).toEqual([
+    { input: inputMessageID, status: "idle", messages: [inputMessageID, assistantMessageID] },
+    { input: "message_second_input", status: "running", messages: ["message_second_input", "message_second_answer"] },
+  ])
+})
+
+test("an accepted input with visible content retains its pending occurrence until lifecycle arrival", () => {
+  const view = projectConversationAgentView(transcript, [], ledgerSessions)
+  expect(view.topLevelExecutionIDs).toEqual([inputMessageID])
+  expect(view.sessions).toEqual([
+    expect.objectContaining({
+      executionID: inputMessageID,
+      inputMessageID,
+      status: "pending",
+      messageIDs: [inputMessageID, assistantMessageID],
+    }),
+  ])
+})

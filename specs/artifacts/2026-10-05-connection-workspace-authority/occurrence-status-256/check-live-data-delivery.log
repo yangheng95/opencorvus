@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+test\conversation-agent-live-activity.test.ts:
+(pass) visible Text deltas update the exact child-Agent occurrence before the completed Part [8.80ms]
+(pass) late visible content preserves the idle lifecycle of its exact input occurrence [1.15ms]
+(pass) hydrated child-Agent activity anchors retained Text deltas after reconnect [0.62ms]
+(pass) Part removal removes the matching activity from the reused Session occurrence [0.62ms]
+(pass) Message removal clears only Parts owned by the exact child-Agent Message [0.75ms]
+(pass) Message removal clears persisted activity whose owner is outside the Card Tree tail [0.22ms]
+(pass) removing one authoritative input removes only that occurrence from a reused Session [0.37ms]
+(pass) Part removal resolves a bounded-tail occurrence by globally unique Part identity [0.25ms]
+
+ 8 pass
+ 0 fail
+ 10 expect() calls
+Ran 8 tests across 1 file. [319.00ms]

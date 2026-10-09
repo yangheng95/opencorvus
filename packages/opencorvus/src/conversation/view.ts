@@ -324,12 +324,10 @@ function userMessageInputPreview(message: any): ConversationSessionView["inputPr
   return text ? { text, messageID, observedAt, source: "user_message" } : undefined
 }
 
-export function projectConversationView(
-  input: {
-    transcript: any[]
-    ledgerSessions?: ConversationAgentSessionLedgerEntry[]
-  },
-): ConversationView {
+export function projectConversationView(input: {
+  transcript: any[]
+  ledgerSessions?: ConversationAgentSessionLedgerEntry[]
+}): ConversationView {
   const { transcript, ledgerSessions = [] } = input
   const sorted = [...(Array.isArray(transcript) ? transcript : [])].sort(conversationTranscriptMessageOrder)
   const ledgerBySession = new Map<string, ConversationAgentSessionLedgerEntry>()
@@ -586,15 +584,29 @@ export function projectConversationAgentView(
     if (!sessionID || !inputMessageID) {
       throw new Error("projectConversationAgentView: execution lifecycle missing sessionID/inputMessageID")
     }
+    const owner = bySession.get(sessionID)
+    if (!owner) continue
     const execution = ensureExecution({
       sessionID,
       inputMessageID,
       agent: String(payload.agentID || ""),
-      kind: String(payload.kind || ""),
+      kind: executionSessions.get(inputMessageID)?.stage ?? owner.stage,
       preparedAt: lifecycleObservedAt(event),
     })
     if (!execution) continue
     applyLifecycleSession(new Map([[sessionID, execution]]), event)
+  }
+  for (const message of view.messages) {
+    if (executionSessions.has(message.inputMessageID)) continue
+    const owner = bySession.get(message.sessionID)
+    if (!owner) continue
+    ensureExecution({
+      sessionID: message.sessionID,
+      inputMessageID: message.inputMessageID,
+      agent: owner.agentID,
+      kind: owner.stage,
+      preparedAt: message.time,
+    })
   }
   for (const [sessionID, session] of bySession) {
     if (!sessionsWithExecutions.has(sessionID)) executionSessions.set(`precommit:${sessionID}`, session)

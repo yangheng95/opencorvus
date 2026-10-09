@@ -1,0 +1,47 @@
+{
+  "originalForeground": {
+    "session": 12385,
+    "joined": true,
+    "actualExitCode": 0
+  },
+  "backendContracts": {
+    "assertions": 76,
+    "tests": 19,
+    "session": 92081,
+    "actualExitCode": 0
+  },
+  "backendTypes": {
+    "session": 18145,
+    "actualExitCode": 0
+  },
+  "independentClosure": {
+    "actualExitCode": 0
+  },
+  "archive": {
+    "unknownLogRows": 0,
+    "currentLogRows": 13935,
+    "actualExitCode": 0
+  },
+  "overlayData": {
+    "assertions": 10,
+    "tests": 8,
+    "actualExitCode": 0
+  },
+  "overlayTypes": {
+    "session": 15174,
+    "actualExitCode": 0
+  },
+  "overlayBuild": {
+    "session": 26755,
+    "seconds": 56.04,
+    "actualExitCode": 0
+  },
+  "shutdown": {
+    "pageClosed": true,
+    "path": "sole live-sol-shutdown.ps1",
+    "actualExitCode": 0
+  },
+  "actor": "root single agent",
+  "boundary": "Actual returned original tool exit values; data/type/build checks supplementary to saved CUA actual interaction and personally viewed images",
+  "observedAtUtc": "2026-10-09T23:49:02.7691814Z"
+}

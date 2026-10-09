@@ -1,0 +1,51 @@
+bun test v1.3.14 (0d9b296a)
+
+test\server\session-conversation-history.test.ts:
+(pass) session conversation history > cold assistant history advances a bounded real control-only identity window [2757.15ms]
+(pass) session conversation history > cold mission history advances a bounded real control-only identity window [2455.19ms]
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4316.56ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3329.59ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1713.64ms]
+
+test\server\session-event-connection-snapshot.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [1772.11ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [1.45ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [1.08ms]
+(pass) Session stream projects a non-message Session diff through Bus and ProtocolStore [1634.75ms]
+506 |         latestInputMessageID: input.id,
+507 |       })
+508 |       const hydrationResponse = await Server.App().request(`/session/${work.id}/conversation`, {
+509 |         headers: { "x-opencorvus-directory": project.path },
+510 |       })
+511 |       expect(hydrationResponse.status).toBe(200)
+                                             ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 500
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts:511:40)
+(fail) Session stream receives durable lifecycle and error facts for a non-Task Session [1732.77ms]
+662 |         projectID: work.projectID,
+663 |       }).find((entry) => entry.sessionID === work.id)
+664 |       const hydrationResponse = await Server.App().request(`/session/${work.id}/conversation`, {
+665 |         headers: { "x-opencorvus-directory": project.path },
+666 |       })
+667 |       expect(hydrationResponse.status).toBe(200)
+                                             ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 500
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\session-event-connection-snapshot.test.ts:667:40)
+(fail) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2279.27ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [1604.67ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [2606.14ms]
+(pass) session.connected precedes a newer live Part update captured after snapshot read [1595.30ms]
+(pass) two project streams receive their own non-Task child Message and Part events [3015.77ms]
+
+ 13 pass
+ 2 fail
+ 60 expect() calls
+Ran 15 tests across 2 files. [33.09s]

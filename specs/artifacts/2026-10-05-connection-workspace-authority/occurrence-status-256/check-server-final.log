@@ -1,0 +1,31 @@
+bun test v1.3.14 (0d9b296a)
+
+test\conversation-projector-ownership.test.ts:
+(pass) projects transcript ownership separately from execution lifecycle [2.76ms]
+(pass) conversation Agent occurrences preserve each durable input lifecycle [0.57ms]
+(pass) an accepted input with visible content retains its pending occurrence until lifecycle arrival [0.21ms]
+
+test\server\session-conversation-history.test.ts:
+(pass) session conversation history > cold assistant history advances a bounded real control-only identity window [2906.39ms]
+(pass) session conversation history > cold mission history advances a bounded real control-only identity window [2794.19ms]
+(pass) session conversation history > cold persisted tail and preceding page retain real messages while current execution config has a missing model [4445.33ms]
+(pass) session conversation history > cold historical reads reject another real Project's Session with the typed404 contract [3548.40ms]
+(pass) session conversation history > hydrates a bounded persisted tail and pages the preceding messages [1885.61ms]
+
+test\server\session-event-connection-snapshot.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [1747.18ms]
+(pass) ordinary Session hydrate, history and reconnect retain both idle input occurrences [1925.58ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [1.47ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [1.08ms]
+(pass) Session stream projects a non-message Session diff through Bus and ProtocolStore [1726.91ms]
+(pass) Session stream receives durable lifecycle and error facts for a non-Task Session [1881.89ms]
+(pass) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2110.66ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [1606.14ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [2886.42ms]
+(pass) session.connected precedes a newer live Part update captured after snapshot read [1703.91ms]
+(pass) two project streams receive their own non-Task child Message and Part events [3427.49ms]
+
+ 19 pass
+ 0 fail
+ 76 expect() calls
+Ran 19 tests across 3 files. [37.01s]
