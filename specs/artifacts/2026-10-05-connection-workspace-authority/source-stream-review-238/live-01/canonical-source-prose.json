@@ -1,0 +1,387 @@
+{
+  "observedAtUtc": "2026-10-09T13:16:59.762Z",
+  "access": "Actual readonly canonical BEGIN/ROLLBACK after physical closure",
+  "sources": [
+    {
+      "id": "prt_g0VXYcmNP00flUxLjfFz",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "source-url",
+        "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": "focus-visible CSS pseudo-class - MDN Web Docs",
+        "snippet": ":focus-visible CSS pseudo-class - CSS | MDN\n\n# `:focus-visible` CSS pseudo-class\n\n Baseline Widely available \n\nThis feature is well established and works ... many devices and browser versions ... It’s been available across browsers since ... 20\n...\nThe `:focus-visible` pseudo-class applies while an element matches the `:focus` pseudo-class and the UA (User Agent) determines via heuristics that the focus should be made evident on the element. (Many browsers show a \"focus ring\" by default in this case.)\n\nThis selector is useful to provide a different focus indicator based on the user's input modality (mouse vs. keyboard).\n...\nmargin-top\n...\ninput:focus-visible {\n  outline: 2px solid crimson;\n  border-radius: 3px;\n}\n\nselect:focus-visible {\n  border: 2px dashed crimson;\n  border-radius: 3px;\n  outline: none;\n}\n...\n```\n:focus-visible {\n  /* ... */\n}\n...\n## :focus vs :focus-visible\n\nOriginally, user-agent CSS set focus styles based only on the `:focus` pseudo-class, styling most focused elements with a focus ring outline. This meant all elements, including all links and buttons, had a focus ring applied when focused, which many found ugly. Because of the appearance, some authors removed the user-agent outline focus styles. Changing focus style can decrease usability, while removing focus styles makes keyboard navigation inaccessible for sighted users.\n\nBrowsers no longer visibly indicate focus (such as by drawing a \"focus ring\"), around each element when it has focus. Instead, they use a variety of heuristics to provide focus indicators only when it would be most helpful to the user. For instance, when a button is clicked using a pointing device, the focus is generally not visually indicated, but when a text box needing user input has focus, focus is indicated. While focus styles are always required when users are navigating the page with the keyboard or when focus is managed via scripts, focus styles are not required when the user knows where they are putting focus, such as when they use a pointing device such as a mouse or finger to physically set focus on an element, unless that element continues to need user attention.\n\nThe `:focus` pseudo-class always matches the currently-focused element. The `:focus-visible` pseudo-class also matches the focused element, but only if the user needs to be informed where the focus currently is. Because the `:focus-visible` pseudo-class matches the focused element when needed, using the `:focus-visible` (instead of the `:focus` pseudo-class) allows authors to change the appearance of the focus indicator without changing when the focus indicator appears.\n\nWhen the `:focus` pseudo-class is used, it always targets the currently focused element. This means that when a user employs a pointing device, a visible focus ring appears around the focused element, which some consider obtrusive. The `:focus-visible` pseudo-class respects user agents' selective focus indication behavior while still allowing focus indicator customization.\n...\n### Comparing :focus and :focus-visible\n...\npresents three pairs ... `text` input and a button.\n\n- The first pair does not add any custom styles for focus states, and shows the default case.\n- The second pair adds styles using the `:focus` pseudo-class.\n- The third pair adds styles using the `:focus-visible` pseudo-class.\n...\n<input class=\"focus-only\" type=\"text\" value=\":focus\" /><br />\n<button class=\"focus-only\">:focus</button><br />\n\n<input class=\"focus-visible-only\" type=\"text\" value=\":focus-visible\" /><br />\n<button class=\"focus-visible-only\">:focus-visible</button>\n...\n.focus-only:focus {\n  outline: 2px solid black;\n}\n\n.focus-visible-only:focus-visible {\n  outline: 4px dashed darkorange;\n}\n...\nIf you click each element in turn, you will see that when `:focus` is used to style the focus ring, the UA draws the focus ring when the user clicks the button. However, when `:focus-visible` is used to style the focus ring, the UA does not draw the focus ring when the user clicks the button, just like in the default case.\n\nIf you then tab through each element, you will see that in all three cases — default, `:focus`, and `:focus-visible` — the UA draws the focus ring around the button when the user navigates to it with the keyboard.\n\nThis shows how `:focus-visible` enables a designer to follow the browser's logic in determining when a focus ring should be shown.\n\n### Providing a :focus fallback\n\nIf your code has to work in old browser versions that do not support `:focus-visible`, check supports of `:focus-visible` with `@supports` and repeat the same focus styling in it, but inside a `:focus` rule. Note that even if you do not specify anything at all for `:focus`, old browsers will simply display the native outline, which can be enough.\n...\n```\n.button {\n  margin: 10px;\n  border: 2px solid darkgray;\n  border-radius: 4px;\n}\n\n.button:focus-visible {\n  /* Draw the focus when :focus-visible is supported */\n  outline: 3px solid deepskyblue;\n  outline-offset: 3px;\n}\n\n@supports not selector(:focus-visible) {\n  .button.with-fallback:focus {\n    /* Fallback for browsers without :focus-visible support */\n    outline: 3px solid deepskyblue;\n    outline-offset: 3px;\n  }\n}\n\n```",
+        "publishedAt": "2026-09-10T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYcmNV00uGsrFzD6w",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "source-url",
+        "sourceId": "5b3a2f45ea8b03a32a2807a427a238c86dc553f2f375ee026b29754c1a4484d9",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes",
+        "title": "Pseudo-classes - CSS | MDN",
+        "snippet": "`:focus`\n...\n`:focus-visible`\n: Matches when an element has focus and the user agent identifies that the element should be visibly focused.\n...\n- `:first`\n- `:first-child`\n- `:first-of-type`\n- `:focus`\n- `:focus-visible`\n- `:focus-within`\n- `:fullscreen`\n- `:future`",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYcmNZ00ei28bDk1T",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": ":focus-visible - CSS：层叠样式表 | MDN",
+        "snippet": ":focus-visible - CSS：层叠样式表 | MDN\n\n# :focus-visible\n\n 基线 广泛可用 \n\n自 2022年3月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n...\n当元素符合 `:focus` 伪类，且 UA（用户代理）通过启发式方法确定应在元素上显示焦点时，`:focus-visible` 伪类就会适用。（在这种情况下，许多浏览器默认会显示一个“焦点环”。）\n...\nmargin-top: ... em;\n}\n\ninput:focus-visible {\n  outline: 2px solid crimson;\n  border-radius: 3px;\n}\n\nselect:focus-visible {\n  border: 2px dashed crimson;\n  border-radius: 3px;\n  outline: none;\n}\n...\n这个选择器可以有效地根据用户的输入方式（鼠标与键盘）展示不同形式的焦点。\n\n## 语法\n\n```\n:focus-visible {\n  /* ... */\n}\n...\n## :focus 与 :focus-visible\n\n最初，用户代理 CSS 仅根据 `:focus` 伪类设置聚焦样式，为大多数聚焦元素设计焦点环轮廓样式。这意味着所有元素，包括所有链接和按钮，在聚焦时都会应用焦点环，这让很多人觉得很难看。由于这种外观，一些作者删除了用户代理轮廓焦点样式。改变焦点样式会降低可用性，而移除焦点样式则会使视力正常的用户无法使用键盘导航。\n\n当每个元素有焦点时，浏览器不再明显地在其周围显示焦点（例如画一个“焦点环”）。取而代之的是，它们使用各种启发式方法，只在对用户最有帮助的时候提供焦点指示。例如，当使用指向设备点击按钮时，一般不会在视觉上显示焦点，但当需要用户输入的文本框有焦点时，就会显示焦点。当用户使用键盘浏览页面或通过脚本管理焦点时，总是需要焦点样式，但当用户知道他们把焦点放在哪里时，例如当他们使用鼠标或手指等指向设备对元素进行物理设置时，除非该元素继续需要用户关注，否则就不需要焦点样式。\n\n`:focus` 伪类总是与当前焦点元素匹配。`focus-visible` 伪类也会匹配被聚焦的元素，但只有在用户需要知道当前焦点在哪里时才会匹配。由于 `:focus-visible` 伪类会在需要时匹配焦点元素，因此使用 `:focus-visible`（而不是 `:focus` 伪类）可以让作者改变焦点指示器的外观，而无需改变焦点指示器的显示时间。\n\n当使用 `:focus` 伪类时，它总是指向当前聚焦的元素。这意味着，当用户使用指向设备时，聚焦元素周围会出现一个可见的焦点环，有些人认为这很碍眼。`:focus-visible` 伪类尊重用户代理的选择性焦点指示行为，同时还允许对焦点指示器进行自定义。\n...\n### :focus 与 :focus-visible 的对比\n...\n- 第一对没有为焦点状态添加任何自定义样式，显示的是默认情况。\n- 第二对使用 `:focus` 伪类添加样式。\n- 第三对使用 `:focus-visible` 伪类添加样式。\n...\n<input class=\"focus-only\" type=\"text\" value=\":focus\" /><br />\n<button class=\"focus-only\">:focus</button><br />\n\n<input class=\"focus-visible-only\" type=\"text\" value=\":focus-visible\" /><br />\n<button class=\"focus-visible-only\">:focus-visible</button>\n\n```\n...\ninput,\nbutton {\n  margin: 1 ... px;\n...\n.focus-only:focus {\n  outline: 2px solid black;\n}\n\n.focus-visible-only:focus-visible {\n  outline: 4px dashed darkorange;\n}\n...\n如果依次点击每个元素，会发现当使用 `:focus` 来样式化焦点环时，用户界面会在用户点击按钮时绘制焦点环。但是，当使用 `:focus-visible` 来样式化焦点环时，用户界面不会在用户点击按钮时绘制焦点环，就像默认情况一样。\n\n如果用 tab 键浏览每个元素，你会发现在默认、`:focus` 和 `:focus-visible` 三种情况下，当用户用键盘导航到按钮时，用户界面都会在按钮周围绘制焦点环。\n\n这说明了 `:focus-visible` 如何使设计者能够按照浏览器的逻辑来确定何时显示焦点环。\n\n### 提供 :focus 回落\n\n如果你的代码必须在不支持 `:focus-visible` 的旧版本浏览器中运行，请使用 `@supports` 检查 `:focus-visible` 的支持情况，并在其中重复相同的焦点样式，但要放在 `:focus` 规则中。请注意，即使不为 `:focus` 指定任何内容，旧版浏览器也会简单地显示原生的外轮廓线，这就足够了。\n...\n```\n.button {\n  margin: 10px;\n  border: 2px solid darkgray;\n  border-radius: 4px;\n}\n\n.button:focus-visible {\n  /* 当支持 :focus-visible 时，画出焦点 */\n  outline: 3px solid deepskyblue;\n  outline-offset: 3px;\n}\n\n@supports not selector(:focus-visible) {\n  .button.with-fallback:focus {\n    /* 对于不支持 :focus-visible 的浏览器的回落 */\n    outline: 3px solid deepskyblue;\n    outline-offset: 3px;\n  }\n}\n\n```",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYcmNc00dY8XTLW0V",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "source-url",
+        "sourceId": "00c1432902cce7c58dbc4815cb91e589fd90b6f6be113bd31f53f9b426a6fca4",
+        "url": "https://developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": "CSS-Pseudoklasse :focus-visible - MDN Web Docs",
+        "snippet": "CSS-Pseudoklasse :focus-visible - CSS | MDN\n\n# CSS-Pseudoklasse `:focus-visible`\n\n Baseline Weitgehend verfügbar \n\nDiese Funktion ist gut etabliert und funktioniert auf vielen Geräten und in vielen Browserversionen. Sie ist seit März 2022 browserübergreifend verfügbar.\n...\nDie Pseudoklasse `:focus-visible` gilt, während ein Element der Pseudoklasse `:focus` entspricht und der UA (User Agent) anhand von Heuristiken feststellt, dass der Fokus auf dem Element sichtbar gemacht werden sollte. (Viele Browser zeigen in diesem Fall standardmäßig einen „Fokusring“ an.)\n\nDieser Selektor ist nützlich, um abhängig von der Eingabemodalität der Benutzerin bzw. des Benutzers (Maus oder Tastatur) einen anderen Fokusindikator bereitzustellen.\n...\ninput:focus-visible {\n  outline: 2px solid crimson;\n  border-radius: 3px;\n}\n\nselect:focus-visible {\n  border: 2px dashed crimson;\n  border-radius: 3px;\n  outline: none;\n}\n...\n```\n:focus-visible {\n  /* ... */\n}\n...\n## :focus vs. :focus-visible\n\nUrsprünglich legte User-Agent-CSS Fokusstile nur anhand der Pseudoklasse `:focus` fest und gestaltete die meisten fokussierten Elemente mit einer Fokusring-Umrandung. Das bedeutete, dass auf alle Elemente, einschließlich aller Links und Buttons, beim Fokussieren ein Fokusring angewendet wurde, was viele als unschön empfanden. Aufgrund des Erscheinungsbilds entfernten einige Autorinnen und Autoren die Fokusstile für die User-Agent-Umrandung. Das Ändern des Fokusstils kann die Benutzerfreundlichkeit verringern, während das Entfernen von Fokusstilen die Tastaturnavigation für sehende Benutzerinnen und Benutzer unzugänglich macht.\n\nBrowser zeigen den Fokus nicht mehr bei jedem Element sichtbar an, wenn es den Fokus hat, etwa durch das Zeichnen eines „Fokusrings“. Stattdessen verwenden sie verschiedene Heuristiken, um Fokusindikatoren nur dann bereitzustellen, wenn dies für die Benutzerin oder den Benutzer am hilfreichsten wäre. Wenn beispielsweise ein Button mit einem Zeigegerät angeklickt wird, wird der Fokus im Allgemeinen nicht visuell angezeigt. Wenn jedoch ein Textfeld, das Benutzereingaben benötigt, den Fokus hat, wird der Fokus angezeigt. Während Fokusstile immer erforderlich sind, wenn Benutzerinnen und Benutzer mit der Tastatur durch die Seite navigieren oder der Fokus über Skripte verwaltet wird, sind Fokusstile nicht erforderlich, wenn die Benutzerin oder der Benutzer weiß, wohin der Fokus gesetzt wird, etwa wenn ein Zeigegerät wie eine Maus oder ein Finger verwendet wird, um den Fokus physisch auf ein Element zu setzen, es sei denn, dieses Element benötigt weiterhin die Aufmerksamkeit der Benutzerin oder des Benutzers.\n\nDie Pseudoklasse `:focus` entspricht immer dem aktuell fokussierten Element. Die Pseudoklasse `:focus-visible` entspricht ebenfalls dem fokussierten Element, aber nur, wenn die Benutzerin oder der Benutzer darüber informiert werden muss, wo sich der Fokus aktuell befindet. Da die Pseudoklasse `:focus-visible` bei Bedarf dem fokussierten Element entspricht, ermöglicht die Verwendung von `:focus-visible` (anstelle der Pseudoklasse `:focus`) Autorinnen und Autoren, das Erscheinungsbild des Fokusindikators zu ändern, ohne zu ändern, wann der Fokusindikator angezeigt wird.\n\nWenn die Pseudoklasse `:focus` verwendet wird, zielt sie immer auf das aktuell fokussierte Element ab. Das bedeutet, dass beim Verwenden eines Zeigegeräts ein sichtbarer Fokusring um das fokussierte Element erscheint, was manche als aufdringlich empfinden. Die Pseudoklasse `:focus-visible` berücksichtigt das selektive Verhalten von User Agents bei der Fokusanzeige und ermöglicht dennoch die Anpassung des Fokusindikators.\n...\n### Vergleich von :focus und :focus-visible\n...\n- Das erste Paar fügt keine benutzerdefinierten Stile für Fokuszustände hinzu und zeigt den Standardfall.\n- Das zweite Paar fügt Stile mithilfe der Pseudoklasse `:focus` hinzu.\n- Das dritte Paar fügt Stile mithilfe der Pseudoklasse `:focus-visible` hinzu.\n...\n<input class=\"focus-only\" type=\"text\" value=\":focus\" /><br />\n<button class=\"focus-only\">:focus</button><br />\n\n<input class=\"focus-visible-only\" type=\"text\" value=\":focus-visible\" /><br />\n<button class=\"focus-visible-only\">:focus-visible</button>\n...\n.focus-only:focus\n...\n: 2\n...\n.focus-visible-only:focus-visible {\n  outline: 4px dashed darkorange;\n}\n...\nWenn Sie nacheinander auf jedes Element klicken, sehen Sie, dass der UA den Fokusring zeichnet, wenn `:focus` verwendet wird, um den Fokusring zu gestalten, und die Benutzerin oder der Benutzer auf den Button klickt. Wenn jedoch `:focus-visible` verwendet wird, um den Fokusring zu gestalten, zeichnet der UA den Fokusring nicht, wenn die Benutzerin oder der Benutzer auf den Button klickt, genau wie im Standardfall.\n\nWenn Sie anschließend mit der Tabulatortaste durch jedes Element navigieren, sehen Sie, dass der UA in allen drei Fällen — Standard, `:focus` und `:focus-visible` — den Fokusring um den Button zeichnet, wenn die Benutzerin oder der Benutzer mit der Tastatur zu ihm navigiert.\n\nDies zeigt, wie `:focus-visible` Designerinnen und Designern ermöglicht, der Logik des Browsers bei der Bestimmung zu folgen, wann ein Fokusring angezeigt werden sollte.\n\n### Bereitstellen eines :focus-Fallbacks\n\nWenn Ihr Code in alten Browserversionen funktionieren muss, die `:focus-visible` nicht unterstützen, prüfen Sie die Unterstützung von `:focus-visible` mit `@supports` und wiederholen Sie darin dieselbe Fokusgestaltung, jedoch innerhalb einer `:focus`-Regel. Beachten Sie, dass alte Browser einfach die native Umrandung anzeigen, selbst wenn Sie für `:focus` gar nichts angeben, was ausreichend sein kann.\n...\n```\n.button {\n  margin: 10px;\n  border: 2px solid darkgray;\n  border-radius: 4px;\n}\n\n.button:focus-visible {\n  /* Draw the focus when :focus-visible is supported */\n  outline: 3px solid deepskyblue;\n  outline-offset: 3px;\n}\n\n@supports not selector(:focus-visible) {\n  .button.with-fallback:focus {\n    /* Fallback for browsers without :focus-visible support */\n    outline: 3px solid deepskyblue;\n    outline-offset: 3px;\n  }\n}",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYcmNf00fmd24PRla",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "source-url",
+        "sourceId": "4d9a88df77aba93fcf895768ee8d8da107413d6d0fcc6d8c46c17c9c5eb65cac",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus",
+        "title": "focus CSS pseudo-class - MDN Web Docs - Mozilla",
+        "snippet": "The `:focus` CSS pseudo-class represents an element (such as a form input) that has received focus. It is generally triggered when the user clicks or taps on an element or selects it with the keyboard's Tab key.\n...\nNote: This pseudo-class applies only to the focused element itself. Use `:focus-within` if you want to select an element that contains a focused element.\n...\nMake sure the visual focus indicator can be seen by people with low vision. This will also benefit anyone use a screen in a brightly lit space (like outside in the sun). WCAG 2.1 SC 1.4.11 Non-Text Contrast requires that the visual focus indicator be at least 3 to 1.\n\n### `:focus { outline: none; }`\n\nNever just remove the focus outline (visible focus indicator) without replacing it with a focus outline that will pass WCAG 2.1 SC 1.4.11 Non-Text Contrast.\n...\n```\n.red-input:focus {\n  background: yellow;\n  color: red;\n}\n\n.blue-input:focus {\n  background: yellow;\n  color: blue;\n}",
+        "publishedAt": "2026-04-17T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYcnyb00pGbar06Yv",
+      "message_id": "msg_g0VXYcmPc00O9oHuvB5x",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": ":focus-visible - CSS：层叠样式表 | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g04f1UnC5xz3",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "source-url",
+        "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": "focus-visible CSS pseudo-class - MDN Web Docs",
+        "snippet": ":focus-visible CSS pseudo-class - CSS | MDN\n\n# `:focus-visible` CSS pseudo-class\n\n Baseline Widely available \n\nThis feature is well established and works ... many devices and browser versions ... It’s been available across browsers since ... 20\n...\nThe `:focus-visible` pseudo-class applies while an element matches the `:focus` pseudo-class and the UA (User Agent) determines via heuristics that the focus should be made evident on the element. (Many browsers show a \"focus ring\" by default in this case.)\n\nThis selector is useful to provide a different focus indicator based on the user's input modality (mouse vs. keyboard).\n...\nmargin-top\n...\ninput:focus-visible {\n  outline: 2px solid crimson;\n  border-radius: 3px;\n}\n\nselect:focus-visible {\n  border: 2px dashed crimson;\n  border-radius: 3px;\n  outline: none;\n}\n...\n```\n:focus-visible {\n  /* ... */\n}\n...\n## :focus vs :focus-visible\n\nOriginally, user-agent CSS set focus styles based only on the `:focus` pseudo-class, styling most focused elements with a focus ring outline. This meant all elements, including all links and buttons, had a focus ring applied when focused, which many found ugly. Because of the appearance, some authors removed the user-agent outline focus styles. Changing focus style can decrease usability, while removing focus styles makes keyboard navigation inaccessible for sighted users.\n\nBrowsers no longer visibly indicate focus (such as by drawing a \"focus ring\"), around each element when it has focus. Instead, they use a variety of heuristics to provide focus indicators only when it would be most helpful to the user. For instance, when a button is clicked using a pointing device, the focus is generally not visually indicated, but when a text box needing user input has focus, focus is indicated. While focus styles are always required when users are navigating the page with the keyboard or when focus is managed via scripts, focus styles are not required when the user knows where they are putting focus, such as when they use a pointing device such as a mouse or finger to physically set focus on an element, unless that element continues to need user attention.\n\nThe `:focus` pseudo-class always matches the currently-focused element. The `:focus-visible` pseudo-class also matches the focused element, but only if the user needs to be informed where the focus currently is. Because the `:focus-visible` pseudo-class matches the focused element when needed, using the `:focus-visible` (instead of the `:focus` pseudo-class) allows authors to change the appearance of the focus indicator without changing when the focus indicator appears.\n\nWhen the `:focus` pseudo-class is used, it always targets the currently focused element. This means that when a user employs a pointing device, a visible focus ring appears around the focused element, which some consider obtrusive. The `:focus-visible` pseudo-class respects user agents' selective focus indication behavior while still allowing focus indicator customization.\n...\n### Comparing :focus and :focus-visible\n...\npresents three pairs ... `text` input and a button.\n\n- The first pair does not add any custom styles for focus states, and shows the default case.\n- The second pair adds styles using the `:focus` pseudo-class.\n- The third pair adds styles using the `:focus-visible` pseudo-class.\n...\n<input class=\"focus-only\" type=\"text\" value=\":focus\" /><br />\n<button class=\"focus-only\">:focus</button><br />\n\n<input class=\"focus-visible-only\" type=\"text\" value=\":focus-visible\" /><br />\n<button class=\"focus-visible-only\">:focus-visible</button>\n...\n.focus-only:focus {\n  outline: 2px solid black;\n}\n\n.focus-visible-only:focus-visible {\n  outline: 4px dashed darkorange;\n}\n...\nIf you click each element in turn, you will see that when `:focus` is used to style the focus ring, the UA draws the focus ring when the user clicks the button. However, when `:focus-visible` is used to style the focus ring, the UA does not draw the focus ring when the user clicks the button, just like in the default case.\n\nIf you then tab through each element, you will see that in all three cases — default, `:focus`, and `:focus-visible` — the UA draws the focus ring around the button when the user navigates to it with the keyboard.\n\nThis shows how `:focus-visible` enables a designer to follow the browser's logic in determining when a focus ring should be shown.\n\n### Providing a :focus fallback\n\nIf your code has to work in old browser versions that do not support `:focus-visible`, check supports of `:focus-visible` with `@supports` and repeat the same focus styling in it, but inside a `:focus` rule. Note that even if you do not specify anything at all for `:focus`, old browsers will simply display the native outline, which can be enough.\n...\n```\n.button {\n  margin: 10px;\n  border: 2px solid darkgray;\n  border-radius: 4px;\n}\n\n.button:focus-visible {\n  /* Draw the focus when :focus-visible is supported */\n  outline: 3px solid deepskyblue;\n  outline-offset: 3px;\n}\n\n@supports not selector(:focus-visible) {\n  .button.with-fallback:focus {\n    /* Fallback for browsers without :focus-visible support */\n    outline: 3px solid deepskyblue;\n    outline-offset: 3px;\n  }\n}\n\n```",
+        "publishedAt": "2026-09-10T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g052tU9NdH1I",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "source-url",
+        "sourceId": "5b3a2f45ea8b03a32a2807a427a238c86dc553f2f375ee026b29754c1a4484d9",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes",
+        "title": "Pseudo-classes - CSS | MDN",
+        "snippet": "`:focus`\n...\n`:focus-visible`\n: Matches when an element has focus and the user agent identifies that the element should be visibly focused.\n...\n- `:first`\n- `:first-child`\n- `:first-of-type`\n- `:focus`\n- `:focus-visible`\n- `:focus-within`\n- `:fullscreen`\n- `:future`",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g066JFUILI47",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": ":focus-visible - CSS：层叠样式表 | MDN",
+        "snippet": ":focus-visible - CSS：层叠样式表 | MDN\n\n# :focus-visible\n\n 基线 广泛可用 \n\n自 2022年3月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n...\n当元素符合 `:focus` 伪类，且 UA（用户代理）通过启发式方法确定应在元素上显示焦点时，`:focus-visible` 伪类就会适用。（在这种情况下，许多浏览器默认会显示一个“焦点环”。）\n...\nmargin-top: ... em;\n}\n\ninput:focus-visible {\n  outline: 2px solid crimson;\n  border-radius: 3px;\n}\n\nselect:focus-visible {\n  border: 2px dashed crimson;\n  border-radius: 3px;\n  outline: none;\n}\n...\n这个选择器可以有效地根据用户的输入方式（鼠标与键盘）展示不同形式的焦点。\n\n## 语法\n\n```\n:focus-visible {\n  /* ... */\n}\n...\n## :focus 与 :focus-visible\n\n最初，用户代理 CSS 仅根据 `:focus` 伪类设置聚焦样式，为大多数聚焦元素设计焦点环轮廓样式。这意味着所有元素，包括所有链接和按钮，在聚焦时都会应用焦点环，这让很多人觉得很难看。由于这种外观，一些作者删除了用户代理轮廓焦点样式。改变焦点样式会降低可用性，而移除焦点样式则会使视力正常的用户无法使用键盘导航。\n\n当每个元素有焦点时，浏览器不再明显地在其周围显示焦点（例如画一个“焦点环”）。取而代之的是，它们使用各种启发式方法，只在对用户最有帮助的时候提供焦点指示。例如，当使用指向设备点击按钮时，一般不会在视觉上显示焦点，但当需要用户输入的文本框有焦点时，就会显示焦点。当用户使用键盘浏览页面或通过脚本管理焦点时，总是需要焦点样式，但当用户知道他们把焦点放在哪里时，例如当他们使用鼠标或手指等指向设备对元素进行物理设置时，除非该元素继续需要用户关注，否则就不需要焦点样式。\n\n`:focus` 伪类总是与当前焦点元素匹配。`focus-visible` 伪类也会匹配被聚焦的元素，但只有在用户需要知道当前焦点在哪里时才会匹配。由于 `:focus-visible` 伪类会在需要时匹配焦点元素，因此使用 `:focus-visible`（而不是 `:focus` 伪类）可以让作者改变焦点指示器的外观，而无需改变焦点指示器的显示时间。\n\n当使用 `:focus` 伪类时，它总是指向当前聚焦的元素。这意味着，当用户使用指向设备时，聚焦元素周围会出现一个可见的焦点环，有些人认为这很碍眼。`:focus-visible` 伪类尊重用户代理的选择性焦点指示行为，同时还允许对焦点指示器进行自定义。\n...\n### :focus 与 :focus-visible 的对比\n...\n- 第一对没有为焦点状态添加任何自定义样式，显示的是默认情况。\n- 第二对使用 `:focus` 伪类添加样式。\n- 第三对使用 `:focus-visible` 伪类添加样式。\n...\n<input class=\"focus-only\" type=\"text\" value=\":focus\" /><br />\n<button class=\"focus-only\">:focus</button><br />\n\n<input class=\"focus-visible-only\" type=\"text\" value=\":focus-visible\" /><br />\n<button class=\"focus-visible-only\">:focus-visible</button>\n\n```\n...\ninput,\nbutton {\n  margin: 1 ... px;\n...\n.focus-only:focus {\n  outline: 2px solid black;\n}\n\n.focus-visible-only:focus-visible {\n  outline: 4px dashed darkorange;\n}\n...\n如果依次点击每个元素，会发现当使用 `:focus` 来样式化焦点环时，用户界面会在用户点击按钮时绘制焦点环。但是，当使用 `:focus-visible` 来样式化焦点环时，用户界面不会在用户点击按钮时绘制焦点环，就像默认情况一样。\n\n如果用 tab 键浏览每个元素，你会发现在默认、`:focus` 和 `:focus-visible` 三种情况下，当用户用键盘导航到按钮时，用户界面都会在按钮周围绘制焦点环。\n\n这说明了 `:focus-visible` 如何使设计者能够按照浏览器的逻辑来确定何时显示焦点环。\n\n### 提供 :focus 回落\n\n如果你的代码必须在不支持 `:focus-visible` 的旧版本浏览器中运行，请使用 `@supports` 检查 `:focus-visible` 的支持情况，并在其中重复相同的焦点样式，但要放在 `:focus` 规则中。请注意，即使不为 `:focus` 指定任何内容，旧版浏览器也会简单地显示原生的外轮廓线，这就足够了。\n...\n```\n.button {\n  margin: 10px;\n  border: 2px solid darkgray;\n  border-radius: 4px;\n}\n\n.button:focus-visible {\n  /* 当支持 :focus-visible 时，画出焦点 */\n  outline: 3px solid deepskyblue;\n  outline-offset: 3px;\n}\n\n@supports not selector(:focus-visible) {\n  .button.with-fallback:focus {\n    /* 对于不支持 :focus-visible 的浏览器的回落 */\n    outline: 3px solid deepskyblue;\n    outline-offset: 3px;\n  }\n}\n\n```",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g072nGBLLEOi",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "source-url",
+        "sourceId": "00c1432902cce7c58dbc4815cb91e589fd90b6f6be113bd31f53f9b426a6fca4",
+        "url": "https://developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": "CSS-Pseudoklasse :focus-visible - MDN Web Docs",
+        "snippet": "CSS-Pseudoklasse :focus-visible - CSS | MDN\n\n# CSS-Pseudoklasse `:focus-visible`\n\n Baseline Weitgehend verfügbar \n\nDiese Funktion ist gut etabliert und funktioniert auf vielen Geräten und in vielen Browserversionen. Sie ist seit März 2022 browserübergreifend verfügbar.\n...\nDie Pseudoklasse `:focus-visible` gilt, während ein Element der Pseudoklasse `:focus` entspricht und der UA (User Agent) anhand von Heuristiken feststellt, dass der Fokus auf dem Element sichtbar gemacht werden sollte. (Viele Browser zeigen in diesem Fall standardmäßig einen „Fokusring“ an.)\n\nDieser Selektor ist nützlich, um abhängig von der Eingabemodalität der Benutzerin bzw. des Benutzers (Maus oder Tastatur) einen anderen Fokusindikator bereitzustellen.\n...\ninput:focus-visible {\n  outline: 2px solid crimson;\n  border-radius: 3px;\n}\n\nselect:focus-visible {\n  border: 2px dashed crimson;\n  border-radius: 3px;\n  outline: none;\n}\n...\n```\n:focus-visible {\n  /* ... */\n}\n...\n## :focus vs. :focus-visible\n\nUrsprünglich legte User-Agent-CSS Fokusstile nur anhand der Pseudoklasse `:focus` fest und gestaltete die meisten fokussierten Elemente mit einer Fokusring-Umrandung. Das bedeutete, dass auf alle Elemente, einschließlich aller Links und Buttons, beim Fokussieren ein Fokusring angewendet wurde, was viele als unschön empfanden. Aufgrund des Erscheinungsbilds entfernten einige Autorinnen und Autoren die Fokusstile für die User-Agent-Umrandung. Das Ändern des Fokusstils kann die Benutzerfreundlichkeit verringern, während das Entfernen von Fokusstilen die Tastaturnavigation für sehende Benutzerinnen und Benutzer unzugänglich macht.\n\nBrowser zeigen den Fokus nicht mehr bei jedem Element sichtbar an, wenn es den Fokus hat, etwa durch das Zeichnen eines „Fokusrings“. Stattdessen verwenden sie verschiedene Heuristiken, um Fokusindikatoren nur dann bereitzustellen, wenn dies für die Benutzerin oder den Benutzer am hilfreichsten wäre. Wenn beispielsweise ein Button mit einem Zeigegerät angeklickt wird, wird der Fokus im Allgemeinen nicht visuell angezeigt. Wenn jedoch ein Textfeld, das Benutzereingaben benötigt, den Fokus hat, wird der Fokus angezeigt. Während Fokusstile immer erforderlich sind, wenn Benutzerinnen und Benutzer mit der Tastatur durch die Seite navigieren oder der Fokus über Skripte verwaltet wird, sind Fokusstile nicht erforderlich, wenn die Benutzerin oder der Benutzer weiß, wohin der Fokus gesetzt wird, etwa wenn ein Zeigegerät wie eine Maus oder ein Finger verwendet wird, um den Fokus physisch auf ein Element zu setzen, es sei denn, dieses Element benötigt weiterhin die Aufmerksamkeit der Benutzerin oder des Benutzers.\n\nDie Pseudoklasse `:focus` entspricht immer dem aktuell fokussierten Element. Die Pseudoklasse `:focus-visible` entspricht ebenfalls dem fokussierten Element, aber nur, wenn die Benutzerin oder der Benutzer darüber informiert werden muss, wo sich der Fokus aktuell befindet. Da die Pseudoklasse `:focus-visible` bei Bedarf dem fokussierten Element entspricht, ermöglicht die Verwendung von `:focus-visible` (anstelle der Pseudoklasse `:focus`) Autorinnen und Autoren, das Erscheinungsbild des Fokusindikators zu ändern, ohne zu ändern, wann der Fokusindikator angezeigt wird.\n\nWenn die Pseudoklasse `:focus` verwendet wird, zielt sie immer auf das aktuell fokussierte Element ab. Das bedeutet, dass beim Verwenden eines Zeigegeräts ein sichtbarer Fokusring um das fokussierte Element erscheint, was manche als aufdringlich empfinden. Die Pseudoklasse `:focus-visible` berücksichtigt das selektive Verhalten von User Agents bei der Fokusanzeige und ermöglicht dennoch die Anpassung des Fokusindikators.\n...\n### Vergleich von :focus und :focus-visible\n...\n- Das erste Paar fügt keine benutzerdefinierten Stile für Fokuszustände hinzu und zeigt den Standardfall.\n- Das zweite Paar fügt Stile mithilfe der Pseudoklasse `:focus` hinzu.\n- Das dritte Paar fügt Stile mithilfe der Pseudoklasse `:focus-visible` hinzu.\n...\n<input class=\"focus-only\" type=\"text\" value=\":focus\" /><br />\n<button class=\"focus-only\">:focus</button><br />\n\n<input class=\"focus-visible-only\" type=\"text\" value=\":focus-visible\" /><br />\n<button class=\"focus-visible-only\">:focus-visible</button>\n...\n.focus-only:focus\n...\n: 2\n...\n.focus-visible-only:focus-visible {\n  outline: 4px dashed darkorange;\n}\n...\nWenn Sie nacheinander auf jedes Element klicken, sehen Sie, dass der UA den Fokusring zeichnet, wenn `:focus` verwendet wird, um den Fokusring zu gestalten, und die Benutzerin oder der Benutzer auf den Button klickt. Wenn jedoch `:focus-visible` verwendet wird, um den Fokusring zu gestalten, zeichnet der UA den Fokusring nicht, wenn die Benutzerin oder der Benutzer auf den Button klickt, genau wie im Standardfall.\n\nWenn Sie anschließend mit der Tabulatortaste durch jedes Element navigieren, sehen Sie, dass der UA in allen drei Fällen — Standard, `:focus` und `:focus-visible` — den Fokusring um den Button zeichnet, wenn die Benutzerin oder der Benutzer mit der Tastatur zu ihm navigiert.\n\nDies zeigt, wie `:focus-visible` Designerinnen und Designern ermöglicht, der Logik des Browsers bei der Bestimmung zu folgen, wann ein Fokusring angezeigt werden sollte.\n\n### Bereitstellen eines :focus-Fallbacks\n\nWenn Ihr Code in alten Browserversionen funktionieren muss, die `:focus-visible` nicht unterstützen, prüfen Sie die Unterstützung von `:focus-visible` mit `@supports` und wiederholen Sie darin dieselbe Fokusgestaltung, jedoch innerhalb einer `:focus`-Regel. Beachten Sie, dass alte Browser einfach die native Umrandung anzeigen, selbst wenn Sie für `:focus` gar nichts angeben, was ausreichend sein kann.\n...\n```\n.button {\n  margin: 10px;\n  border: 2px solid darkgray;\n  border-radius: 4px;\n}\n\n.button:focus-visible {\n  /* Draw the focus when :focus-visible is supported */\n  outline: 3px solid deepskyblue;\n  outline-offset: 3px;\n}\n\n@supports not selector(:focus-visible) {\n  .button.with-fallback:focus {\n    /* Fallback for browsers without :focus-visible support */\n    outline: 3px solid deepskyblue;\n    outline-offset: 3px;\n  }\n}",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g08yn0s5jh2B",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "source-url",
+        "sourceId": "4d9a88df77aba93fcf895768ee8d8da107413d6d0fcc6d8c46c17c9c5eb65cac",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus",
+        "title": "focus CSS pseudo-class - MDN Web Docs - Mozilla",
+        "snippet": "The `:focus` CSS pseudo-class represents an element (such as a form input) that has received focus. It is generally triggered when the user clicks or taps on an element or selects it with the keyboard's Tab key.\n...\nNote: This pseudo-class applies only to the focused element itself. Use `:focus-within` if you want to select an element that contains a focused element.\n...\nMake sure the visual focus indicator can be seen by people with low vision. This will also benefit anyone use a screen in a brightly lit space (like outside in the sun). WCAG 2.1 SC 1.4.11 Non-Text Contrast requires that the visual focus indicator be at least 3 to 1.\n\n### `:focus { outline: none; }`\n\nNever just remove the focus outline (visible focus indicator) without replacing it with a focus outline that will pass WCAG 2.1 SC 1.4.11 Non-Text Contrast.\n...\n```\n.red-input:focus {\n  background: yellow;\n  color: red;\n}\n\n.blue-input:focus {\n  background: yellow;\n  color: blue;\n}",
+        "publishedAt": "2026-04-17T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g0CxENiC5Oj2",
+      "message_id": "msg_g0VXYdL9g023w1NALWFp",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": ":focus-visible - CSS：层叠样式表 | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "prose": [
+    {
+      "id": "prt_hMemuFoTT45VVgU56xen",
+      "message_id": "msg_hiGSLyOSFkR0v9gd7bT4",
+      "session_id": "ses_hNpdYAoS7AkSWsNbWjpf",
+      "data": {
+        "type": "text",
+        "text": "Reply with OK.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_h8GPwTWLdYqU2aDO8vo4/731715a5eaadc952e77d0cd57db1558cccadaa0141ad47b5aafd305ace6c1647.json",
+          "catalog_snapshot_hash": "731715a5eaadc952e77d0cd57db1558cccadaa0141ad47b5aafd305ace6c1647"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYcaee00TrbL8fgD9",
+      "message_id": "msg_g0VXYcZCy00oMhIHPAvn",
+      "session_id": "ses_hNpdYAoS7AkSWsNbWjpf",
+      "data": {
+        "type": "text",
+        "text": "OK",
+        "time": {
+          "start": 1791551279540,
+          "end": 1791551279540
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_08a3441f16e0d56a016ac8e72f06948191860bf40feae61f1c",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYck6v00eFC0n2BT4",
+      "message_id": "msg_95735f4f-5ec1-4531-885f-6c8015434a22",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "text",
+        "text": "请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释键盘焦点与 Sources 阅读体验的具体建议。区分文档事实与产品评审建议，不把建议说成已经实现的功能。请在当前普通对话中完成，不创建任务、不委托agent、不生成或修改本地文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hbX7wQvlJTJuJSGHqBov/22c65ef036ab6aa263e85e5d4b5ce3bf9341237ad3c6891b7a5011f27c66f114.json",
+          "catalog_snapshot_hash": "22c65ef036ab6aa263e85e5d4b5ce3bf9341237ad3c6891b7a5011f27c66f114"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYclBG00YQWCi72YH",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "text",
+        "text": "我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用八段说明键盘焦点与 Sources 阅读体验的具体建议，明确区分文档事实和产品评审建议。",
+        "time": {
+          "start": 1791551321366,
+          "end": 1791551321366
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_01fffbadd4664aec016ac8e7578070819189d8696754f46d87",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYcpBX00f38DBipXW",
+      "message_id": "msg_g0VXYco0k00RCwVbVxqH",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "data": {
+        "type": "text",
+        "text": "**简短结论**：`:focus-visible` 适合用于 Sources 中交互控件的焦点样式：保留键盘操作所需的明确位置提示，同时尊重浏览器对鼠标等输入方式的判断。它不是“只在按键时显示”的开关，也不能单独解决焦点顺序、跳转和返回定位问题。以下产品建议均为评审建议，不代表已经实现。\n\n**真实来源**：已只读检索并打开核对 [MDN 中文官方文档：`:focus-visible`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible)。重点依据该页的“`:focus` 与 `:focus-visible`”“无障碍”“示例”章节；页面标示最后更新于 2025 年 11 月 4 日。\n\n### 详细说明\n\n**一、文档事实：焦点与焦点可见性不同。** MDN 说明，`:focus-visible` 匹配的前提是元素已经符合 `:focus`，且浏览器通过启发式判断认为应显示焦点提示。因此，“获得焦点”与“显示焦点环”不是同一件事。它只负责匹配状态、允许作者设置外观，不会让普通文本自动可聚焦，也不会改变键盘导航顺序。评审 Sources 时，应分别检查控件能否到达、到达后能否看清位置，而不能只检查有没有这条 CSS。\n\n**二、文档事实：不能把它理解成纯键盘检测。** MDN 举例指出，鼠标点击按钮时通常不显示焦点环，但需要输入的文本框获得焦点时仍会显示；使用键盘导航到按钮时则会显示。这说明判断还涉及元素用途，而不只是最近使用了鼠标还是键盘。产品评审建议：若 Sources 有搜索框、筛选按钮和来源链接，应允许浏览器保留这种差异，不要制定“鼠标点击后一律隐藏焦点”的规则，以免输入位置也失去提示。\n\n**三、产品评审建议：先保证完整的键盘路径。** 若 Sources 包含来源列表与阅读区域，建议按内容和操作逻辑组织焦点顺序，让用户通过 Tab、Shift+Tab 能到达来源链接及实际存在的阅读操作。导航使用链接，执行操作使用按钮，避免只有鼠标点击才能使用的文本或图标。不要为了强调阅读内容而把每段正文都加入 Tab 顺序；否则长文会产生大量无意义停靠点。以上是交互设计建议，并非 MDN 对 Sources 结构的描述。\n\n**四、产品评审建议：区分焦点、选中与悬停。** Sources 中“正在阅读哪篇来源”与“下一次键盘操作作用于哪个控件”是不同状态。建议选中来源使用持续的背景、标记或文字提示，键盘焦点使用清楚的轮廓，悬停采用较轻的反馈。如果三者共用同一种高亮，用户可能误把焦点移动当成来源切换。MDN 提醒，混合输入方式下焦点指示出现和消失可能令人困惑；上述状态区分是针对这一风险提出的产品建议。\n\n**五、文档事实与建议：可见性优先于装饰。** MDN 要求关注低视力用户，并在无障碍章节引用视觉焦点指示器至少 3:1 的对比度要求；它也说明移除焦点样式会妨碍有视力的键盘用户导航。建议 Sources 使用明显轮廓并留出适当间距，而不是仅作细微文字变色。评审时还应检查浅色、深色背景，以及列表边缘和滚动容器中的轮廓是否被裁切。具体颜色、粗细和间距应以实际界面验证为准。\n\n**六、产品评审建议：保护阅读位置与焦点连续性。** 若打开来源会更新阅读区域，建议明确决定焦点是保留在来源入口，还是移到新内容的合理起点，不要在每次内容刷新时无条件抢走焦点。如果存在预览弹层，关闭后建议回到原触发入口；加载更多或更新列表时，也应避免让当前控件消失后焦点无处可寻。这些需要交互逻辑处理，不能由 `:focus-visible` 自动完成。目标是让用户始终知道自己在哪里、接下来能做什么。\n\n**七、文档事实与建议：兼容处理不等于清空默认轮廓。** MDN 标示该特性自 2022 年 3 月起在主流浏览器中广泛可用，并给出用 `@supports not selector(:focus-visible)` 提供 `:focus` 样式的示例；同时说明旧浏览器的原生轮廓也可能足够。建议 Sources 按实际目标环境确定兼容策略，优先保留可用的原生指示，再做定制。不要先全局移除 outline，再假设所有环境都会成功应用新样式。\n\n**八、产品评审建议：以真实操作验收，而非样式存在验收。** 建议完成“进入 Sources—定位来源—打开阅读—返回继续选择”的纯键盘流程，再检查鼠标点击后转用键盘的混合流程。每一步都应确认焦点可辨认、顺序合理、不被遮挡，并按控件语义验证激活方式；如有弹层，再检查关闭与返回位置。此次只核对了 MDN 资料，没有检查 Sources 的实际界面，因此这些是待验证的评审标准，不能据此宣称产品已经实现或通过无障碍验收。",
+        "time": {
+          "start": 1791551377067,
+          "end": 1791551377067
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0c179371651ea321016ac8e766ec6481919064c869e6a5598d",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g00O731yiYww",
+      "message_id": "msg_g0VXYdL9g00LigHzvWS5",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "text",
+        "text": "请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释键盘焦点与 Sources 阅读体验的具体建议。区分文档事实与产品评审建议，不把建议说成已经实现的功能。请在当前普通对话中完成，不创建任务、不委托agent、不生成或修改本地文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hbX7wQvlJTJuJSGHqBov/22c65ef036ab6aa263e85e5d4b5ce3bf9341237ad3c6891b7a5011f27c66f114.json",
+          "catalog_snapshot_hash": "22c65ef036ab6aa263e85e5d4b5ce3bf9341237ad3c6891b7a5011f27c66f114"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g02dcVNxZS0r",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "text",
+        "text": "我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用八段说明键盘焦点与 Sources 阅读体验的具体建议，明确区分文档事实和产品评审建议。",
+        "time": {
+          "start": 1791551321366,
+          "end": 1791551321366
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_01fffbadd4664aec016ac8e7578070819189d8696754f46d87",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g0GvIXEgpXpQ",
+      "message_id": "msg_g0VXYdL9g03e4xrLLLwr",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "text",
+        "text": "**简短结论**：`:focus-visible` 适合用于 Sources 中交互控件的焦点样式：保留键盘操作所需的明确位置提示，同时尊重浏览器对鼠标等输入方式的判断。它不是“只在按键时显示”的开关，也不能单独解决焦点顺序、跳转和返回定位问题。以下产品建议均为评审建议，不代表已经实现。\n\n**真实来源**：已只读检索并打开核对 [MDN 中文官方文档：`:focus-visible`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible)。重点依据该页的“`:focus` 与 `:focus-visible`”“无障碍”“示例”章节；页面标示最后更新于 2025 年 11 月 4 日。\n\n### 详细说明\n\n**一、文档事实：焦点与焦点可见性不同。** MDN 说明，`:focus-visible` 匹配的前提是元素已经符合 `:focus`，且浏览器通过启发式判断认为应显示焦点提示。因此，“获得焦点”与“显示焦点环”不是同一件事。它只负责匹配状态、允许作者设置外观，不会让普通文本自动可聚焦，也不会改变键盘导航顺序。评审 Sources 时，应分别检查控件能否到达、到达后能否看清位置，而不能只检查有没有这条 CSS。\n\n**二、文档事实：不能把它理解成纯键盘检测。** MDN 举例指出，鼠标点击按钮时通常不显示焦点环，但需要输入的文本框获得焦点时仍会显示；使用键盘导航到按钮时则会显示。这说明判断还涉及元素用途，而不只是最近使用了鼠标还是键盘。产品评审建议：若 Sources 有搜索框、筛选按钮和来源链接，应允许浏览器保留这种差异，不要制定“鼠标点击后一律隐藏焦点”的规则，以免输入位置也失去提示。\n\n**三、产品评审建议：先保证完整的键盘路径。** 若 Sources 包含来源列表与阅读区域，建议按内容和操作逻辑组织焦点顺序，让用户通过 Tab、Shift+Tab 能到达来源链接及实际存在的阅读操作。导航使用链接，执行操作使用按钮，避免只有鼠标点击才能使用的文本或图标。不要为了强调阅读内容而把每段正文都加入 Tab 顺序；否则长文会产生大量无意义停靠点。以上是交互设计建议，并非 MDN 对 Sources 结构的描述。\n\n**四、产品评审建议：区分焦点、选中与悬停。** Sources 中“正在阅读哪篇来源”与“下一次键盘操作作用于哪个控件”是不同状态。建议选中来源使用持续的背景、标记或文字提示，键盘焦点使用清楚的轮廓，悬停采用较轻的反馈。如果三者共用同一种高亮，用户可能误把焦点移动当成来源切换。MDN 提醒，混合输入方式下焦点指示出现和消失可能令人困惑；上述状态区分是针对这一风险提出的产品建议。\n\n**五、文档事实与建议：可见性优先于装饰。** MDN 要求关注低视力用户，并在无障碍章节引用视觉焦点指示器至少 3:1 的对比度要求；它也说明移除焦点样式会妨碍有视力的键盘用户导航。建议 Sources 使用明显轮廓并留出适当间距，而不是仅作细微文字变色。评审时还应检查浅色、深色背景，以及列表边缘和滚动容器中的轮廓是否被裁切。具体颜色、粗细和间距应以实际界面验证为准。\n\n**六、产品评审建议：保护阅读位置与焦点连续性。** 若打开来源会更新阅读区域，建议明确决定焦点是保留在来源入口，还是移到新内容的合理起点，不要在每次内容刷新时无条件抢走焦点。如果存在预览弹层，关闭后建议回到原触发入口；加载更多或更新列表时，也应避免让当前控件消失后焦点无处可寻。这些需要交互逻辑处理，不能由 `:focus-visible` 自动完成。目标是让用户始终知道自己在哪里、接下来能做什么。\n\n**七、文档事实与建议：兼容处理不等于清空默认轮廓。** MDN 标示该特性自 2022 年 3 月起在主流浏览器中广泛可用，并给出用 `@supports not selector(:focus-visible)` 提供 `:focus` 样式的示例；同时说明旧浏览器的原生轮廓也可能足够。建议 Sources 按实际目标环境确定兼容策略，优先保留可用的原生指示，再做定制。不要先全局移除 outline，再假设所有环境都会成功应用新样式。\n\n**八、产品评审建议：以真实操作验收，而非样式存在验收。** 建议完成“进入 Sources—定位来源—打开阅读—返回继续选择”的纯键盘流程，再检查鼠标点击后转用键盘的混合流程。每一步都应确认焦点可辨认、顺序合理、不被遮挡，并按控件语义验证激活方式；如有弹层，再检查关闭与返回位置。此次只核对了 MDN 资料，没有检查 Sources 的实际界面，因此这些是待验证的评审标准，不能据此宣称产品已经实现或通过无障碍验收。",
+        "time": {
+          "start": 1791551377067,
+          "end": 1791551377067
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0c179371651ea321016ac8e766ec6481919064c869e6a5598d",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYdeyk00tQ2dd85Xv",
+      "message_id": "msg_91e55e2c-939a-40e1-b9cb-171cdf5d4c67",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "text",
+        "text": "请基于主对话已有的说明，用中文写五条 Sources 键盘阅读体验的人工检查建议，每条约180到220字，明确写出操作步骤、应当观察的现象和失败时的影响。请只整理已有资料，不新增检索、不创建任务、不委托agent、不修改文件；不要声称主对话已经完成实际界面验收。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hbX7wQvlJTJuJSGHqBov/cbd50eefb6bdfb702a211b9bdb1641171da073ae3d83d74ae9a48c2a8b023b35.json",
+          "catalog_snapshot_hash": "cbd50eefb6bdfb702a211b9bdb1641171da073ae3d83d74ae9a48c2a8b023b35"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYdfwx00x5vvDMTDk",
+      "message_id": "msg_g0VXYdf1D00Cckm51tgr",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "data": {
+        "type": "text",
+        "text": "以下五条仅整理已有说明，作为 **Sources 的人工检查建议**；尚未对实际界面执行验收。涉及搜索框、阅读区或弹层的步骤，仅在对应控件实际存在时适用。\n\n1. **检查键盘路径是否完整、顺序是否合理**。操作步骤：进入 Sources 后不使用鼠标，连续按 Tab，记录焦点经过的搜索框、来源链接及操作按钮，再按 Shift+Tab 反向返回。应当观察：焦点顺序与页面内容和操作逻辑一致，所有可用操作均能到达，普通正文不会形成大量无意义的停靠点，也不会困在局部区域。失败影响：用户可能无法打开来源或执行阅读操作，或必须经过过多停靠点才能继续阅读，增加定位负担，并可能被迫改用鼠标。\n\n2. **检查焦点提示是否清楚且完整可见**。操作步骤：用 Tab 逐一聚焦来源链接和按钮，尤其检查列表顶部、底部、滚动容器边缘及不同背景上的控件；若界面支持不同主题，再分别观察。应当观察：焦点轮廓能与周围背景明确区分，不只依靠细微文字变色，也不被容器裁切或其他内容遮挡。失败影响：用户虽然已经移动焦点，却无法确定下一次操作作用于哪个入口；低视力用户尤其容易丢失位置、误开来源，或因无法确认当前目标而反复尝试。\n\n3. **检查焦点、选中与悬停能否区分**。操作步骤：先打开一篇来源，再用 Tab 将焦点移动到另一篇来源的入口，暂不激活；随后把鼠标移到第三个入口，比较三种状态。应当观察：当前阅读来源保留明确的选中提示，键盘焦点能够独立辨认，悬停反馈不会冒充前两者；仅移动焦点不应被误读为已切换内容。失败影响：用户可能把“下一步可操作的位置”当成“正在阅读的来源”，导致引用对象判断错误，或需要不断核对标题才能确认阅读上下文。\n\n4. **检查打开与返回后的焦点连续性**。操作步骤：用键盘激活来源入口，观察阅读内容更新时焦点的位置；若存在预览弹层，再关闭弹层并继续按 Tab；若有加载更多，也检查更新后的停靠位置。应当观察：焦点保留或转移具有清楚的逻辑，不因刷新无条件跳走；弹层关闭后应回到原触发入口，继续导航时位置可预测。失败影响：用户会失去刚才的阅读入口，需要从头寻找；如果焦点落到不可见区域或消失的控件上，后续操作也可能变得难以理解。\n\n5. **检查纯键盘与混合输入流程的一致性**。操作步骤：先纯键盘完成“进入 Sources—定位来源—打开阅读—返回选择”，按控件语义验证激活方式；再用鼠标点击按钮或搜索框，随后改用 Tab 继续导航。应当观察：键盘导航时位置提示清楚；鼠标点击按钮后不出现焦点环并不必然是失败，文本框也不应因鼠标操作而被统一隐藏提示。失败影响：若切换输入方式后焦点难以追踪，用户会误判当前操作对象；若把所有控件强制处理成同一种表现，也可能削弱输入位置提示。",
+        "time": {
+          "start": 1791551565388,
+          "end": 1791551565388
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_08293bdebaa21ffe016ac8e831c03881919fb1125e5168ced7",
+            "phase": "final_answer"
+          }
+        }
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "act_g0VXYcZOR00usLv1G86f",
+      "assistant_message_id": "msg_g0VXYcZCy00oMhIHPAvn",
+      "session_id": "ses_hNpdYAoS7AkSWsNbWjpf",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791551273792,\"completed\":1791551279865},\"parentID\":\"msg_hiGSLyOSFkR0v9gd7bT4\",\"acceptedInputMessageIDs\":[\"msg_hiGSLyOSFkR0v9gd7bT4\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\09\\\\d8e8deba-e805-4dc7-ba67-cd59f2ae6aad\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\09\\\\d8e8deba-e805-4dc7-ba67-cd59f2ae6aad\"},\"cost\":0,\"tokens\":{\"total\":29599,\"input\":29594,\"output\":5,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791551273792:0000000000000030:0000000000000000:message:msg_g0VXYcZCy00oMhIHPAvn\"}"
+    },
+    {
+      "id": "act_g0VXYckIF006cx1nJ6xD",
+      "assistant_message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791551315918,\"completed\":1791551324486},\"parentID\":\"msg_95735f4f-5ec1-4531-885f-6c8015434a22\",\"acceptedInputMessageIDs\":[\"msg_95735f4f-5ec1-4531-885f-6c8015434a22\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":32064,\"input\":31973,\"output\":91,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791551315918:0000000000000030:0000000000000000:message:msg_g0VXYckAQ00LFKu7X7zZ\"}"
+    },
+    {
+      "id": "act_g0VXYcmUB00hvGJ7izy6",
+      "assistant_message_id": "msg_g0VXYcmPc00O9oHuvB5x",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791551324548,\"completed\":1791551330628},\"parentID\":\"msg_95735f4f-5ec1-4531-885f-6c8015434a22\",\"acceptedInputMessageIDs\":[\"msg_95735f4f-5ec1-4531-885f-6c8015434a22\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":36548,\"input\":4759,\"output\":45,\"reasoning\":0,\"cache\":{\"read\":31744,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791551324548:0000000000000030:0000000000000000:message:msg_g0VXYcmPc00O9oHuvB5x\"}"
+    },
+    {
+      "id": "act_g0VXYco5A00WMQjt73Jk",
+      "assistant_message_id": "msg_g0VXYco0k00RCwVbVxqH",
+      "session_id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791551330694,\"completed\":1791551377401},\"parentID\":\"msg_95735f4f-5ec1-4531-885f-6c8015434a22\",\"acceptedInputMessageIDs\":[\"msg_95735f4f-5ec1-4531-885f-6c8015434a22\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":54049,\"input\":29180,\"output\":1282,\"reasoning\":35,\"cache\":{\"read\":23552,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791551330694:0000000000000030:0000000000000000:message:msg_g0VXYco0k00RCwVbVxqH\"}"
+    },
+    {
+      "id": "act_g0VXYdf8P008WZKi7p0c",
+      "assistant_message_id": "msg_g0VXYdf1D00Cckm51tgr",
+      "session_id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791551534455,\"completed\":1791551565645},\"parentID\":\"msg_91e55e2c-939a-40e1-b9cb-171cdf5d4c67\",\"acceptedInputMessageIDs\":[\"msg_91e55e2c-939a-40e1-b9cb-171cdf5d4c67\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-review-238-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":52696,\"input\":51903,\"output\":793,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791551534455:0000000000000030:0000000000000000:message:msg_g0VXYdf1D00Cckm51tgr\"}"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXYclaQ00oYa2qHRl7",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_8fb1406a25e748deb7c5ca693b819c88\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org CSS :focus-visible\",\"numResults\":5},\"time\":{\"start\":1791551321374}}"
+    },
+    {
+      "id": "prt_g0VXYcnLv008wFPK2At1",
+      "message_id": "msg_g0VXYcmPc00O9oHuvB5x",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_f0b0f25dc8e14766b0d9681161938abf\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791551328163}}"
+    },
+    {
+      "id": "prt_g0VXYdL9g038tGqftm4h",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_8fb1406a25e748deb7c5ca693b819c88\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org CSS :focus-visible\",\"numResults\":5},\"time\":{\"start\":1791551321374}}"
+    },
+    {
+      "id": "prt_g0VXYdL9g0BCGOtwK2qX",
+      "message_id": "msg_g0VXYdL9g023w1NALWFp",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_f0b0f25dc8e14766b0d9681161938abf\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791551328163}}"
+    }
+  ],
+  "boundary": "Natural actual producer evidence; full values retained, no fake Source/Part, no Markdown or UI assertions"
+}

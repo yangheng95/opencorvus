@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [真实流式阅读238 Recall](source-stream-review-plan-238.md) / [原完整事实](source-stream-review-238/README.md)：Sources运行→终态保持、Side建议完成但重开actor drift，9次Sol EOF与Native0不能抵消该失败。
+
 - [来源后的失败提示237 Recall](source-failure-visibility-plan-237.md) / [真实前后](source-failure-visibility-237/README.md)：共享正文错误条件修复；真实英文/中文深色Sources阅读、完整原失败历史与Native0閉合，不重置原预算。
 
 - [真实会话阅读236 Recall](source-live-reading-plan-236.md) / [原失败证据](source-live-reading-236/README.md)：真实16条Sources、12次Sol流式200/EOF，第13次请求预算拒绝；最终正文未完成，原foreground1与Native0闭合分别记录。

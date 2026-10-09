@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [真实流式阅读238](2026-10-09-source-stream-review-238.md)：新Sol Sources阅读保持与八段正文；Side重开共享actor校验失败已取得完整真实证据。
+
 - [来源后的失败提示237](2026-10-09-source-failure-visibility-237.md)：已有Sources时正文明确显示错误，真实英文/中文深色与摘要阅读/完整历史闭合。
 
 - [真实会话阅读236](2026-10-09-source-live-reading-236.md)：真实16条Sources已产生，固定12次请求预算耗尽，最终正文与流式视觉验收未达成；原失败和Native物理闭合分别保留。

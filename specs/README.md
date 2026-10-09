@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实流式阅读238](records/2026-10/2026-10-09-source-stream-review-238.md)：真实Sources阅读保持/八段正文完成；Side重开发现actor drift，原失败和9次Sol EOF/Native0分别保留。
+
 - [来源后的失败提示237](records/2026-10/2026-10-09-source-failure-visibility-237.md)：共享正文错误修复，真实Sources尾部英文/中文深色前后实测，完整历史与Native0闭合。
 
 - [真实会话阅读236](records/2026-10/2026-10-09-source-live-reading-236.md)：真实16条Sources已产生，固定12次请求预算耗尽，最终正文与流式视觉验收未达成；保留原失败与完整闭合证据。

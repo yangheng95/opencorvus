@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-10-09T13:16:30.408Z",
+  "scope": "Single root agent; own77/18170 fresh real Sol scope; no UI automated tests",
+  "main": {
+    "manual": "Natural actual search returned five-source group, webfetch and eight-paragraph answer completed. Actual5211-character Source native Tab/End top2266.666748 while Running; same position after full prose/Not running, and native close/reopen preserved it.",
+    "screenshots": [
+      "main-first-progress.jpg",
+      "main-live-source-reading.jpg",
+      "main-source-during-append.jpg",
+      "main-completed-prose.jpg"
+    ]
+  },
+  "side": {
+    "manual": "Actual independent response completed five suggestions with Main stays on track. Reading mid top494.666656, Close panel Return focused Open right dock; genuine current-focus Return reopened the same Side Chat. Reopen visibly lost all user/assistant text and reference history, showed Connecting with session actor drift error. Reopen is FAILED, not a reading-position pass.",
+    "error": "subagent conversation ses_-zUSRMeqOzzMIcHtNUpl message msg_g0VXYdL9g00LigHzvWS5 session actor drift",
+    "screenshots": [
+      "side-reply.jpg",
+      "side-mid-reading.jpg",
+      "side-dock-reopened.jpg",
+      "side-reopen-error-details.jpg"
+    ]
+  },
+  "limits": [
+    "No independent new Side Chat Sources search",
+    "No all-frame or intermediate live prose visual capture",
+    "No Main virtual eviction",
+    "No live member agent/Tauri"
+  ],
+  "closure": "UI closes next; Native/provider closure not yet claimed"
+}

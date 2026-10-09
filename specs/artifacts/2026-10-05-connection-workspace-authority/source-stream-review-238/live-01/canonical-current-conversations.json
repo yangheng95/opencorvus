@@ -1,0 +1,585 @@
+{
+  "observedAtUtc": "2026-10-09T13:16:59.646Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hNpdYAoS7AkSWsNbWjpf",
+      "project_id": "prj_h8GPwTWLdYqU2aDO8vo4",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\data\\projects\\2026\\10\\09\\d8e8deba-e805-4dc7-ba67-cd59f2ae6aad",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"d7624b1e-08fb-4752-bf9a-46548c658b6f\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hiGSLyOSFkR0v9gd7bT4\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "project_id": "prj_hbX7wQvlJTJuJSGHqBov",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    },
+    {
+      "id": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "project_id": "prj_hbX7wQvlJTJuJSGHqBov",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Side chat · 请只读检索 MDN 关于 CSS :focus-visible 的官方资料，先用中文给出简短结论和真实来源，再写八段约1200到1600字的详细说明，解释...",
+      "metadata": "{\"configOverlay\":{},\"sideChat\":{\"sourceSessionID\":\"ses_-zUSRNG7gzzHK6lCxuV4\",\"inheritedMessageIDs\":[\"msg_g0VXYdL9g00LigHzvWS5\",\"msg_g0VXYdL9g01RQGcpObC7\",\"msg_g0VXYdL9g023w1NALWFp\",\"msg_g0VXYdL9g03e4xrLLLwr\"]}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hiGSLyOSFkR0v9gd7bT4",
+      "sessionID": "ses_hNpdYAoS7AkSWsNbWjpf",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791551273408
+      }
+    },
+    {
+      "id": "msg_g0VXYcZCy00oMhIHPAvn",
+      "sessionID": "ses_hNpdYAoS7AkSWsNbWjpf",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551273792,
+        "completed": 1791551279865
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_95735f4f-5ec1-4531-885f-6c8015434a22",
+      "sessionID": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791551315701
+      }
+    },
+    {
+      "id": "msg_g0VXYdL9g00LigHzvWS5",
+      "sessionID": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791551315701
+      }
+    },
+    {
+      "id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "sessionID": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551315918,
+        "completed": 1791551324486
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYdL9g01RQGcpObC7",
+      "sessionID": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551315918,
+        "completed": 1791551324486
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYcmPc00O9oHuvB5x",
+      "sessionID": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551324548,
+        "completed": 1791551330628
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYdL9g023w1NALWFp",
+      "sessionID": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551324548,
+        "completed": 1791551330628
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYco0k00RCwVbVxqH",
+      "sessionID": "ses_-zUSRNG7gzzHK6lCxuV4",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551330694,
+        "completed": 1791551377401
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_g0VXYdL9g03e4xrLLLwr",
+      "sessionID": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551330694,
+        "completed": 1791551377401
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_91e55e2c-939a-40e1-b9cb-171cdf5d4c67",
+      "sessionID": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791551534302
+      }
+    },
+    {
+      "id": "msg_g0VXYdf1D00Cckm51tgr",
+      "sessionID": "ses_-zUSRMeqOzzMIcHtNUpl",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791551534455,
+        "completed": 1791551565645
+      },
+      "finish": "stop"
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hMemuFoTT45VVgU56xen",
+      "messageID": "msg_hiGSLyOSFkR0v9gd7bT4",
+      "type": "text",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXYcZOj0044xmVTK3k",
+      "messageID": "msg_g0VXYcZCy00oMhIHPAvn",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYcaee00TrbL8fgD9",
+      "messageID": "msg_g0VXYcZCy00oMhIHPAvn",
+      "type": "text",
+      "textChars": 2,
+      "time": {
+        "start": 1791551279540,
+        "end": 1791551279540
+      }
+    },
+    {
+      "id": "prt_g0VXYcaly00JQw7FgVPq",
+      "messageID": "msg_g0VXYcZCy00oMhIHPAvn",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYck6v00eFC0n2BT4",
+      "messageID": "msg_95735f4f-5ec1-4531-885f-6c8015434a22",
+      "type": "text",
+      "textChars": 167
+    },
+    {
+      "id": "prt_g0VXYckIT00yaHMpJlfC",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYclBG00YQWCi72YH",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "text",
+      "textChars": 78,
+      "time": {
+        "start": 1791551321366,
+        "end": 1791551321366
+      }
+    },
+    {
+      "id": "prt_g0VXYcmNP00flUxLjfFz",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "source-url",
+      "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+      "title": "focus-visible CSS pseudo-class - MDN Web Docs",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYcmNV00uGsrFzD6w",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "source-url",
+      "sourceId": "5b3a2f45ea8b03a32a2807a427a238c86dc553f2f375ee026b29754c1a4484d9",
+      "title": "Pseudo-classes - CSS | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYcmNZ00ei28bDk1T",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "source-url",
+      "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+      "title": ":focus-visible - CSS：层叠样式表 | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYcmNc00dY8XTLW0V",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "source-url",
+      "sourceId": "00c1432902cce7c58dbc4815cb91e589fd90b6f6be113bd31f53f9b426a6fca4",
+      "title": "CSS-Pseudoklasse :focus-visible - MDN Web Docs",
+      "url": "https://developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYcmNf00fmd24PRla",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "source-url",
+      "sourceId": "4d9a88df77aba93fcf895768ee8d8da107413d6d0fcc6d8c46c17c9c5eb65cac",
+      "title": "focus CSS pseudo-class - MDN Web Docs - Mozilla",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYcmNi00ZaYtxQMzr",
+      "messageID": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYcmUP00QBk75yIo8",
+      "messageID": "msg_g0VXYcmPc00O9oHuvB5x",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYcnyb00pGbar06Yv",
+      "messageID": "msg_g0VXYcmPc00O9oHuvB5x",
+      "type": "source-url",
+      "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+      "title": ":focus-visible - CSS：层叠样式表 | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYcnyf00bqO5TVxvD",
+      "messageID": "msg_g0VXYcmPc00O9oHuvB5x",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYco5Q00ONF7xj72v",
+      "messageID": "msg_g0VXYco0k00RCwVbVxqH",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYcpBP00GrhDmcaM7",
+      "messageID": "msg_g0VXYco0k00RCwVbVxqH",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791551335199,
+        "end": 1791551335204
+      }
+    },
+    {
+      "id": "prt_g0VXYcpBX00f38DBipXW",
+      "messageID": "msg_g0VXYco0k00RCwVbVxqH",
+      "type": "text",
+      "textChars": 2001,
+      "time": {
+        "start": 1791551377067,
+        "end": 1791551377067
+      }
+    },
+    {
+      "id": "prt_g0VXYd09900s2spN7mIf",
+      "messageID": "msg_g0VXYco0k00RCwVbVxqH",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYdL9g00O731yiYww",
+      "messageID": "msg_g0VXYdL9g00LigHzvWS5",
+      "type": "text",
+      "textChars": 167
+    },
+    {
+      "id": "prt_g0VXYdL9g01Cw74Is94Y",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYdL9g02dcVNxZS0r",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "text",
+      "textChars": 78,
+      "time": {
+        "start": 1791551321366,
+        "end": 1791551321366
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g04f1UnC5xz3",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "source-url",
+      "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+      "title": "focus-visible CSS pseudo-class - MDN Web Docs",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYdL9g052tU9NdH1I",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "source-url",
+      "sourceId": "5b3a2f45ea8b03a32a2807a427a238c86dc553f2f375ee026b29754c1a4484d9",
+      "title": "Pseudo-classes - CSS | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/Pseudo-classes",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYdL9g066JFUILI47",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "source-url",
+      "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+      "title": ":focus-visible - CSS：层叠样式表 | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYdL9g072nGBLLEOi",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "source-url",
+      "sourceId": "00c1432902cce7c58dbc4815cb91e589fd90b6f6be113bd31f53f9b426a6fca4",
+      "title": "CSS-Pseudoklasse :focus-visible - MDN Web Docs",
+      "url": "https://developer.mozilla.org/de/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYdL9g08yn0s5jh2B",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "source-url",
+      "sourceId": "4d9a88df77aba93fcf895768ee8d8da107413d6d0fcc6d8c46c17c9c5eb65cac",
+      "title": "focus CSS pseudo-class - MDN Web Docs - Mozilla",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYdL9g09sY2sZ67FB",
+      "messageID": "msg_g0VXYdL9g01RQGcpObC7",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYdL9g0AyzAwwT2fN",
+      "messageID": "msg_g0VXYdL9g023w1NALWFp",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYdL9g0CxENiC5Oj2",
+      "messageID": "msg_g0VXYdL9g023w1NALWFp",
+      "type": "source-url",
+      "sourceId": "f3131a56231d5f929668160018c5daace3a212ee3afce489a3a347c4ba5bf86d",
+      "title": ":focus-visible - CSS：层叠样式表 | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYdL9g0DQi7OxM0Ea",
+      "messageID": "msg_g0VXYdL9g023w1NALWFp",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYdL9g0Ekna18dnQk",
+      "messageID": "msg_g0VXYdL9g03e4xrLLLwr",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYdL9g0F7cCQQ4a0A",
+      "messageID": "msg_g0VXYdL9g03e4xrLLLwr",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791551335199,
+        "end": 1791551335204
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g0GvIXEgpXpQ",
+      "messageID": "msg_g0VXYdL9g03e4xrLLLwr",
+      "type": "text",
+      "textChars": 2001,
+      "time": {
+        "start": 1791551377067,
+        "end": 1791551377067
+      }
+    },
+    {
+      "id": "prt_g0VXYdL9g0HCl8Mz5xXa",
+      "messageID": "msg_g0VXYdL9g03e4xrLLLwr",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYdeyk00tQ2dd85Xv",
+      "messageID": "msg_91e55e2c-939a-40e1-b9cb-171cdf5d4c67",
+      "type": "text",
+      "textChars": 131
+    },
+    {
+      "id": "prt_g0VXYdf8b00Av3PLaH5O",
+      "messageID": "msg_g0VXYdf1D00Cckm51tgr",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYdfwx00x5vvDMTDk",
+      "messageID": "msg_g0VXYdf1D00Cckm51tgr",
+      "type": "text",
+      "textChars": 1138,
+      "time": {
+        "start": 1791551565388,
+        "end": 1791551565388
+      }
+    },
+    {
+      "id": "prt_g0VXYdn6p00e3qrFiE2P",
+      "messageID": "msg_g0VXYdf1D00Cckm51tgr",
+      "type": "step-finish"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXYclaQ00oYa2qHRl7",
+      "message_id": "msg_g0VXYckAQ00LFKu7X7zZ",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_8fb1406a25e748deb7c5ca693b819c88\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org CSS :focus-visible\",\"numResults\":5},\"time\":{\"start\":1791551321374}}"
+    },
+    {
+      "id": "prt_g0VXYcnLv008wFPK2At1",
+      "message_id": "msg_g0VXYcmPc00O9oHuvB5x",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_f0b0f25dc8e14766b0d9681161938abf\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791551328163}}"
+    },
+    {
+      "id": "prt_g0VXYdL9g038tGqftm4h",
+      "message_id": "msg_g0VXYdL9g01RQGcpObC7",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_8fb1406a25e748deb7c5ca693b819c88\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org CSS :focus-visible\",\"numResults\":5},\"time\":{\"start\":1791551321374}}"
+    },
+    {
+      "id": "prt_g0VXYdL9g0BCGOtwK2qX",
+      "message_id": "msg_g0VXYdL9g023w1NALWFp",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_f0b0f25dc8e14766b0d9681161938abf\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Selectors/:focus-visible\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791551328163}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXYclaQ00oYa2qHRl7",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 5
+          }
+        ],
+        "resultCount": 5,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791551324405
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYcnLv008wFPK2At1",
+      "metadata": {
+        "originalBytes": 129384,
+        "shownBytes": 50670,
+        "omittedBytes": 78714,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791551330556
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYdL9g038tGqftm4h",
+      "outputChars": 15882,
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 5
+          }
+        ],
+        "resultCount": 5,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791551324405
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYdL9g0BCGOtwK2qX",
+      "outputChars": 45572,
+      "metadata": {
+        "originalBytes": 129384,
+        "shownBytes": 50670,
+        "omittedBytes": 78714,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791551330556
+      }
+    }
+  ]
+}
