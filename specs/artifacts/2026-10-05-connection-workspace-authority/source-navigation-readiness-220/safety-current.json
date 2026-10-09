@@ -1,0 +1,19 @@
+{
+  "leases": [
+    {
+      "boundary": "Persisted logical process lease occurrence is distinct from NativeReady occurrence; exact physical birth is dead",
+      "state": "dead_or_reused",
+      "lease": {
+        "id": "act_g0VXRkF3G00oXeV8wUOH",
+        "target": "runtime_process",
+        "target_id": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35",
+        "owner_occurrence_id": "{\"pid\":63112,\"processInstanceID\":\"win32:639270464606887343\",\"occurrenceID\":\"ef6866b5-d536-4c92-a1f1-ca385fbc6f35\"}",
+        "time_activated": 1791449668582,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "boundary": "Current Task completed/dispatch empty/actual full readonly configuration and restoration fronts reviewed; no Source project writes or GC candidates",
+  "startupQualified": true,
+  "observedAtUtc": "2026-10-09T01:56:20.8400561Z"
+}

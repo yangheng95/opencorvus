@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Sources navigation220 Recall](source-navigation-plan-220.md), [readiness](source-navigation-readiness-220/README.md) and [actual scope](source-navigation-220/README.md): real source click opens the true target page while preserving the original conversation; current browser transport disproves the candidate, no duplicate navigation added.
+
 - [Child219 Recall](child-tool-sources-plan-219.md), [current readiness](child-tool-readiness-219/README.md), [startup](child-tool-startup-219.json) and [actual scope](child-tool-sources-219/README.md): original child Dock Tool/Sources and return matrix, complete90-table canonical copy, no Task/model rearm.
 
 - [Current Sol218 Recall](current-sol-side-chat-plan-218.md) and [actual scope](current-sol-side-chat-218/README.md): complete auth/catalog pair, actual model/streaming and manual Sources/Side Chat qualification, independent fixed native budget and original failures retained.

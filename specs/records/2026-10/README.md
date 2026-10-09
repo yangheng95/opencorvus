@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources navigation220](2026-10-09-source-navigation-220.md): actual source link activation and conversation reading context.
+
 - [Child Tool Sources219](2026-10-09-child-tool-sources-219.md): original child Dock full Tool/Sources and reading return, current safety frontier and complete canonical history, actual UI/native scope.
 
 - [Current Sol Side Chat218](2026-10-09-current-sol-side-chat-218.md): paired actual provider/model admission, genuine streaming Sources and independent Side Chat; real scope evidence and immutable budget.
