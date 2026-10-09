@@ -1,0 +1,15 @@
+{
+  "pid": 71392,
+  "occurrence": "completion-duration-249-live-01-708e335a-9f5f-4858-98c2-8a59be066fb5",
+  "owner": {
+    "pid": 71392,
+    "processInstanceID": "win32:639271712155449627",
+    "occurrenceID": "a99e0850-bcb8-4de6-9d7e-86c2ceb983c4"
+  },
+  "parent": {
+    "pid": 74316,
+    "processInstanceID": "win32:639271712154976819",
+    "occurrenceID": "68247775-1883-41af-8efd-32fd2d836159"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

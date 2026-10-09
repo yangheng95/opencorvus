@@ -32,6 +32,7 @@ import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { t } from "../utils/i18n"
 import { isSubagentActivityRecord, subagentSessionRecords } from "../utils/subagent-presentation"
+import { isAgentActivityTerminalStatus, type AgentActivityRecord } from "../utils/agent-activity"
 import { ConversationCard } from "./ConversationCard"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
@@ -60,12 +61,23 @@ function SubagentConversationScroll(props: {
   active: Accessor<boolean>
   initialReadingPosition: SubagentReadingPosition | undefined
   saveReadingPosition: (position: SubagentReadingPosition) => void
-  status: Accessor<"pending" | "running" | "idle" | "completed" | "error" | "skipped">
+  activity: Accessor<AgentActivityRecord | undefined>
 }) {
   let scrollElement: HTMLDivElement | undefined
   let scrollController: AutoScrollController | undefined
   const [tracking, setTracking] = createSignal(props.initialReadingPosition?.following ?? true)
-  const card = createMemo(() => projectSubagentConversationCard(props.conversation(), props.status()))
+  const card = createMemo(() => {
+    const activity = props.activity()
+    const conversation = props.conversation()
+    if (!activity || activity.sessionID !== conversation.sessionID) return null
+    const projected = projectSubagentConversationCard(conversation, activity.status)
+    if (!projected) return null
+    return {
+      ...projected,
+      time: activity.startedAt,
+      timeCompleted: isAgentActivityTerminalStatus(activity.status) ? activity.completedAt : undefined,
+    }
+  })
   const saveReadingPosition = () => {
     // Hiding the pane can clamp its geometry before Solid retires this owner.
     // The last visible observation remains the reader's intended position.
@@ -258,7 +270,6 @@ export function SubagentConversationPanel(props: {
     transcriptRefresh.dispose()
     transcriptAbort?.abort()
   })
-  const status = () => selectedRecord()?.status || "pending"
 
   return (
     <section class="subagent-conversation-panel" data-session-id={props.sessionID()}>
@@ -326,7 +337,7 @@ export function SubagentConversationPanel(props: {
                         active={() => props.active() && !showAgentList() && requestKey() === targetKey}
                         initialReadingPosition={readingPositions.get(targetKey)}
                         saveReadingPosition={(position) => saveReadingPosition(targetKey, position)}
-                        status={status}
+                        activity={selectedRecord}
                       />
                     )}
                   </Show>

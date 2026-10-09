@@ -1,0 +1,107 @@
+Browser tab: 91, Title: "OpenCorvus", URL: "http://localhost:18184/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 164
+~											173 text 1m 9s
+~													242 text  的示例。观察现象：读者能够用语言说明关闭时与展开时的内容差异，知道摘要并不等同于全部细节内容。失败影响：若先看样式或复杂示例，可能把视觉高度、三角形方向当成状态定义，忽略实际展开条件；这种误解会让后续观察只关注外观，而不能准确解释组件行为。
++												243 container
++													244 AXListMarker 7.
++													245 text 突出布尔属性的常见误读。
++													246 text  操作建议：阅读属性部分时，将“属性存在即展开”与“关闭须移除属性”连在一起理解，特别留意
++													247 text open="false"
++													248 text  仍会展开的备注。观察现象：读者不再把字符串
++													249 text "false"
++													250 text  当作 HTML 布尔属性的关闭指令，并能区分属性文本与脚本读取的布尔状态。失败影响：如果遗漏这条备注，示例或解释可能出现“设置为 false 即关闭”的错误表达，使使用者对初始状态产生错误预期，也削弱来源阅读的实际价值。
++												251 container
++													252 AXListMarker 8.
++													253 text 把键盘操作纳入阅读路径。
++													254 text  操作建议：在理解交互说明时，同时记录点击操作，以及聚焦后按空格键的操作，不只关注鼠标点击或展开三角形。观察现象：读者能够复述文档明确描述的两种触发方式，理解原生组件的操作并非仅依靠鼠标。失败影响：若阅读提示只讲点击，可能让键盘使用者误以为没有相应操作，也会使后续体验建议偏向单一输入方式；不过文档说明不能替代实际目标环境中的键盘交互检查。
++												255 container
++													256 AXListMarker 9.
++													257 container
++														258 text 按事件发生顺序解释  toggle 。
++													259 text  操作建议：阅读事件部分时，先确认事件在状态变化之后发送，再理解事件监听器中读取
++													260 text open
++													261 text  的意义，并把多次变化可能合并的说明一起保留。观察现象：读者知道监听得到的是变化后的状态，也不会预设每次快速切换都对应一条独立通知。失败影响：若遗漏时序或合并条件，日志数量可能被误当作切换次数，进而把符合文档的事件行为判断为异常，造成不必要的排查或错误结论。
++												262 container
++													263 AXListMarker 10.
++													264 text 将样式示例与状态机制分开阅读。
++													265 text  操作建议：阅读现有 CSS 示例时，把边框、背景、间距及
++													266 text details[open]
++													267 text  选择器视为外观说明，再回到属性部分确认状态来源。观察现象：读者能够区分“用选择器表现展开状态”和“通过属性改变展开状态”，不会把样式规则理解为展开逻辑。失败影响：如果两者混淆，可能误认为去掉背景或三角形就改变了组件状态；外观调整也容易掩盖真正的状态问题，使观察结果难以解释。
++												268 container
++													269 AXListMarker 11.
++													270 text 让短结论与深入阅读各有职责。
++													271 text  操作建议：保留主对话约一百五十字结论作为入口，需要理解某个细节时再回读相应正文，而不在短结论中堆入全部示例、技术概要和页面导航。观察现象：读者可以先获得核心概念，再针对布尔属性或事件时序进行局部核对，减少无关内容干扰。失败影响：若入口过长，重点会被导航和代码淹没；若入口过短且省去关键限制，又可能产生误导，因此应优先保留影响理解的条件，而非追求信息数量。
++												272 container
++													273 AXListMarker 12.
++													274 text 明确建议、示例与验收的边界。
++													275 text  操作建议：在 Side Chat 输出中分别标明“体验建议”和“独立示例”，并说明没有运行示例、操作实际页面或验证产品交付面；需要验收时另行确定目标与观察证据。观察现象：读者能区分已阅读的官方资料、据此提出的改进方向，以及尚未执行的行为检查。失败影响：若把文档核对写成产品通过验收，或把示例代码写成已集成功能，就会制造不存在的完成证据，影响后续判断与交接可信度。
++											276 table
++												277 row
++													278 cell
++														279 text 操作
++													280 cell
++														281 text 预期现象
++													282 cell
++														283 text 失败影响
++												284 row
++													285 cell
++														286 text 区分继承历史与当前新请求
++													287 cell
++														288 text 历史仅提供背景，行动范围由当前请求确定
++													289 cell
++														290 text 重复执行旧要求或误用历史授权
++												291 row
++													292 cell
++														293 text 对照已取得的 MDN 正文核对结论
++													294 cell
++														295 text 默认状态、属性和事件说明均有正文依据
++													296 cell
++														297 text 摘要缺失或概括偏差进入结论
++												298 row
++													299 cell
++														300 text 阅读
++														301 text open="false"
++														302 text  的备注
++													303 cell
++														304 text 明白属性存在仍表示展开
++													305 cell
++														306 text 错误理解初始状态和关闭方式
++												307 row
++													308 cell
++														309 text 连贯阅读
++														310 text toggle
++														311 text  的时序与合并说明
++													312 cell
++														313 text 理解事件之后读取状态，且通知可能合并
++													314 cell
++														315 text 将通知数量误认为切换次数
++												316 row
++													317 cell
++														318 text 分开标注建议、独立示例与实测证据
++													319 cell
++														320 text 不把阅读结果当作产品验收结果
++													321 cell
++														322 text 形成虚假的实现或验收完成声明
++											323 container
++												324 text 独立 JavaScript 示例 ：假定页面已有一个  <details>  元素；仅演示监听  toggle  并读取  open ，未运行或集成。
++											325 container
++												326 text JAVASCRIPT
++												327 button Copy code
++												328 container
++													329 text const  details =  document . querySelector ( "details" );
+
+ if  (!(details  instanceof HTMLDetailsElement )) {
+   throw new Error ( "页面中需要一个 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  () =>  {
+   const  isOpen = details. open ;
+
+   console . log ( "open:" , isOpen);
+   console . log (isOpen ?  "已展开"  :  "已关闭" );
+});
++										330 text entry area (settable) Ask a side question…
+~										158 text Main conversation stays on track
++										331 button (disabled) Send side question
+The focused UI element is 165 container Reference history · 4 messages Quote in main conversation

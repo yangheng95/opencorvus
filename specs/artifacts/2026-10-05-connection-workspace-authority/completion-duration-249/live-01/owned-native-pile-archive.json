@@ -1,0 +1,44 @@
+{
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "nativeTerminal": {
+    "occurrenceID": "completion-duration-249-live-01-708e335a-9f5f-4858-98c2-8a59be066fb5",
+    "pid": 71392,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "observedAtUtc": "2026-10-09T19:40:11.7250040Z",
+  "files": [
+    {
+      "bytes": 47224,
+      "birthUtc": "2026-10-09T19:33:36.5490217Z",
+      "name": "091d165574530ade.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\completion-duration-249\\generated-bun-live01\\091d165574530ade.debug.pile"
+    },
+    {
+      "bytes": 169556,
+      "birthUtc": "2026-10-09T19:33:36.5281756Z",
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\completion-duration-249\\generated-bun-live01\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "bytes": 59902,
+      "birthUtc": "2026-10-09T19:33:36.4920636Z",
+      "name": "7a87559fbb4087c4.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\completion-duration-249\\generated-bun-live01\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "bytes": 88408,
+      "birthUtc": "2026-10-09T19:33:36.5011075Z",
+      "name": "cf86f20c120ce818.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\completion-duration-249\\generated-bun-live01\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "bytes": 43530,
+      "birthUtc": "2026-10-09T19:33:36.5670185Z",
+      "name": "f9ce0c567348c89d.debug.pile",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\completion-duration-249\\generated-bun-live01\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "targetBirthUtc": "2026-10-09T19:33:35.5449627Z"
+}

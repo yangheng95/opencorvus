@@ -309,6 +309,17 @@ explicit bottom and new selection/send actions retain their caller-owned
 behavior. Sources reading intent clears stale event attribution and pauses the
 nearest transcript through the existing reading event.
 
+Side-chat message cards project the same message's created and completed
+timestamps to the shared running/finished duration display. A selected child
+conversation instead projects the current selected activity's started and
+terminal completed timestamps; its visible first message is not the execution
+clock. Its content/identity projection omits clock fields until the caller
+assembles a complete Card from that exact activity. The activity and transcript
+must identify the same Session, and a pending/running/idle activity does not
+expose a prior terminal timestamp as its current completion. Reloading these
+views retains the original persisted times; the renderer does not invent a
+completion time from the current clock.
+
 Owned native Home/End navigation includes Ctrl+Home/End. Ctrl+Home releases
 follow before the browser scrolls. End/Ctrl+End requests following synchronously
 through the caller's existing tracking signal, so the controller's existing

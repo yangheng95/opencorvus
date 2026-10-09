@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [完成耗时249 Recall](completion-duration-plan-249.md) / [真实完成/重开](completion-duration-249/README.md)：Side固定1m9s及原69809ms，子当前执行映射、原TS2741修复与Native0，原子Dock仍待实测。
+
 - [流式 Markdown 248 Recall](streaming-markdown-plan-248.md) / [真实运行帧](streaming-markdown-248/README.md)：唯一parser呈现当前列表、Working第一段/粗体/编号与终态Sources，原Native0；布局变化仍待查。
 
 - [共享正文前缀247 Recall](streaming-prefix-plan-247.md) / [原失败与真实补验](streaming-prefix-247/README.md)：单队列持久前缀修复、31项正向检查、真实运行返回1879字符/open DB2202与两次Native0。

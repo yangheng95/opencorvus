@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [完成耗时249](records/2026-10/2026-10-10-completion-duration-249.md)：完成后固定1m9s/真实69809ms、整Dock重开保持；当前执行时钟映射、原类型失败和未验子Dock范围保留。
+
 - [流式 Markdown 248](records/2026-10/2026-10-10-streaming-markdown-248.md)：生成途中列表直接呈现格式，真实Working首段/编号/粗体与来源，原Native0；终态布局与未验收范围保留。
 
 - [共享正文前缀247](records/2026-10/2026-10-10-streaming-prefix-247.md)：修复运行中关闭侧栏丢前文，31项正向后端检查、真实Sol恢复/持久前缀/空输入及两次Native0。

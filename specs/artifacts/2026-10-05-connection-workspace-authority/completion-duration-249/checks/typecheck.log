@@ -1,0 +1,2 @@
+$ tsc --noEmit
+src/services/subagent-conversation.ts(492,3): error TS2741: Property 'time' is missing in type '{ id: string; kind: "agent"; sessionID: string; agentID: string; messageID: string; stage: string; role: string; status: CardStatus; errorReason: string; title: string; parts: any[]; childIDs: undefined[]; collapsedContextMessageIDs: string[]; orderKey: string; }' but required in type 'CardNode'.

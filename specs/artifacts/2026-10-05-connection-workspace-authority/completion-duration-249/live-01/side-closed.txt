@@ -1,0 +1,56 @@
+Browser tab: 91, Title: "OpenCorvus", URL: "http://localhost:18184/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 82-144, 146-148, 156, 158, 165-175, 209-331
+~				80 container chatSection
+~					81 container Description: Loading task, ID: taskSwitchProgress
++					82 container
++						83 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
++						84 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-208-trigger, Secondary Actions: Expand
++						85 container Description: Not running, ID: taskStatus
++							86 text Not running
++						87 button Side chat
++						88 container solidChatHeaderRuntimeActions
++							89 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							90 checkbox Description: Open right dock, Value: 0
++					91 container
++						92 container Description: Conversation, ID: chatScroll
++							93 container
++								94 container
++									95 text User
++									96 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。
++								97 container
++									98 text work
++									99 text 17s
++									100 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org zh-CN HTML details 元素, Secondary Actions: Expand
++										101 text websearch
++										102 text Web search: site:developer.mozilla.org zh-CN HTML details 元素
++										103 image
++									104 container Sources
++										105 button (collapsed) Description: Sources: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN (3), Help: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN 3, Secondary Actions: Expand
++											106 text <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN
++											107 text 3
++									108 button (collapsed) Description: webfetch · https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html), Secondary Actions: Expand
++										109 text webfetch
++										110 text https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html)
++										111 image
++									112 container Sources
++										113 link Description: Open web source: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++									114 container
++										115 text 经核对， <details>  是 HTML 原生折叠组件，默认关闭，由  <summary>  提供摘要或标签；用户可点击或聚焦后按空格键展开。 open  是布尔属性，存在即展开， open="false"  也不会关闭，须移除该属性。状态改变后触发  toggle  事件，短时间内多次变化可能合并。基础功能已获主流浏览器广泛支持。
++									116 container
++										117 text 来源：
++										118 link Description: MDN 官方中文文档：<details>, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++										119 text 。
++						120 container chatHomeComposition
++							121 container chatForm
++								122 splitter Description: Drag to resize the message input, Value: 42
++								123 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								124 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								125 text Work
++								126 text Chat
++								127 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++								128 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								129 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++									130 text openai/gpt-6.1-sol
++								131 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+The focused UI element is 90 checkbox Description: Open right dock, Value: 0

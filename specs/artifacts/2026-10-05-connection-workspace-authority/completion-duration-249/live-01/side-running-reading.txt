@@ -1,0 +1,37 @@
+Browser tab: 91, Title: "OpenCorvus", URL: "http://localhost:18184/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 176-208
++											210 content list
++												211 container
++													212 AXListMarker 1.
++													213 text 区分参考历史与当前请求。
++													214 text  操作建议：在 Side Chat 阅读入口明确说明，继承消息用于理解背景，只有当前用户新发出的要求构成本次行动范围；阅读时先确认问题，再回看历史。观察现象：读者能够分清“此前要求核对 MDN”与“现在要求提出体验建议”，不会把历史中的工作要求当成待执行命令。失败影响：若两类内容混在一起，可能重复检索、误启动流程，或把旧请求中的权限当作本次授权，破坏当前对话的只读边界。
++												215 container
++													216 AXListMarker 2.
++													217 text 保留来源与结论的对应关系。
++													218 text  操作建议：阅读历史结论时，将其中关于默认关闭、摘要标签、布尔属性和事件的表述，逐项对应到已提供的 MDN 正文段落，而不是只看一个来源名称。观察现象：读者能解释每个关键判断来自正文的哪一部分，并能识别哪些是文档陈述、哪些是助手概括。失败影响：如果只有链接而没有对应关系，来源可能变成装饰；即使链接真实，也无法判断结论是否遗漏条件、改变语义或超出已读资料。
++												219 container
++													220 AXListMarker 3.
++													221 text 把搜索摘要视为定位线索。
++													222 text  操作建议：先用现有搜索结果确认官方域名和目标页面，再优先阅读已取得的完整正文，不直接依赖摘要中被省略的代码标记。观察现象：正文能够清楚显示
++													223 text <details>
++													224 text  与
++													225 text <summary>
++													226 text ，而搜索摘要里的部分元素名称曾出现空白，阅读者可据此辨认信息损失。失败影响：若把摘要当成精确原文，容易混淆组件和标签的职责，甚至误读允许内容或属性说明；后续建议也可能建立在残缺文本之上。
++												227 container
++													228 AXListMarker 4.
++													229 text 让来源入口可辨认且可回查。
++													230 text  操作建议：引用入口采用“MDN 官方中文文档：
++													231 text <details>
++													232 text ”这类明确名称，同时保留主对话已返回的页面地址；阅读前核对域名、语言路径和元素名称。观察现象：读者不必凭泛化的“参考资料”猜测链接内容，返回历史后也能找到同一个页面。失败影响：若只显示模糊标题或被截断的地址，容易打开不相关资料，降低回查效率；但入口存在本身不证明点击、加载或页面定位已经在产品中验证成功。
++												233 container
++													234 AXListMarker 5.
++													235 text 分别呈现更新日期与兼容性信息。
++													236 text  操作建议：在阅读笔记中分开记录中文页面标注的最后更新日期，以及基础特性自二〇二〇年一月起广泛可用的说明，不把两种时间合并理解。观察现象：读者能区分“文档何时更新”和“特性何时达到广泛支持”，同时看到部分功能支持程度可能不同。失败影响：若把页面日期当作兼容性保证，或把基础支持扩大为全部细节一致支持，就会产生过度确定的判断，影响后续选型与阅读预期。
++												237 container
++													238 AXListMarker 6.
++													239 text 先读默认状态，再读展开条件。
++													240 text  操作建议：按“默认关闭—摘要可见—展开后显示细节”的顺序理解正文，再查看已有的简单示例和带
++													241 text open
++													242 text  的示例。观察现象：读者能够用语言说明关闭时与
+The focused UI element is 165 container Reference history · 4 messages Quote in main conversation

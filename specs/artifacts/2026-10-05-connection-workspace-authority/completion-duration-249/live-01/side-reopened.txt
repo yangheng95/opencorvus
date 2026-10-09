@@ -1,0 +1,277 @@
+Browser tab: 91, Title: "OpenCorvus", URL: "http://localhost:18184/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18184/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								59 container
+									60 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									61 container
+										62 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										63 button 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
+										64 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-214-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 8acb94, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								70 container Recents
+									71 text Recents
+									72 container
+										73 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										74 button 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
+										75 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-348-trigger, Secondary Actions: Expand
+									76 container
+										77 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										78 button Reply with OK.
+										79 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-354-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18184, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				80 container workspaceMain
+					81 container chatSection
+						82 container Description: Loading task, ID: taskSwitchProgress
+						83 container
+							84 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
+							85 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-208-trigger, Secondary Actions: Expand
+							86 container Description: Not running, ID: taskStatus
+								87 text Not running
+							88 button Side chat
+							89 container solidChatHeaderRuntimeActions
+								90 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								91 checkbox Description: Close right dock, Value: 1
+						92 container
+							93 container Description: Conversation, ID: chatScroll
+								94 container
+									95 container
+										96 text User
+										97 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。
+									98 container
+										99 text work
+										100 text 17s
+										101 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org zh-CN HTML details 元素, Secondary Actions: Expand
+											102 text websearch
+											103 text Web search: site:developer.mozilla.org zh-CN HTML details 元素
+											104 image
+										105 container Sources
+											106 button (collapsed) Description: Sources: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN (3), Help: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN 3, Secondary Actions: Expand
+												107 text <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN
+												108 text 3
+										109 button (collapsed) Description: webfetch · https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html), Secondary Actions: Expand
+											110 text webfetch
+											111 text https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html)
+											112 image
+										113 container Sources
+											114 link Description: Open web source: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
+										115 container
+											116 text 经核对， <details>  是 HTML 原生折叠组件，默认关闭，由  <summary>  提供摘要或标签；用户可点击或聚焦后按空格键展开。 open  是布尔属性，存在即展开， open="false"  也不会关闭，须移除该属性。状态改变后触发  toggle  事件，短时间内多次变化可能合并。基础功能已获主流浏览器广泛支持。
+										117 container
+											118 text 来源：
+											119 link Description: MDN 官方中文文档：<details>, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
+											120 text 。
+							121 container chatHomeComposition
+								122 container chatForm
+									123 splitter Description: Drag to resize the message input, Value: 42
+									124 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									125 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									126 text Work
+									127 text Chat
+									128 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									129 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									130 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										131 text openai/gpt-6.1-sol
+									132 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+					133 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					134 container Description: Tools panel, ID: rightDock
+						135 container tabs-cl-64
+							136 tab group Open tools
+								137 container
+									138 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
+									139 button Description: Close tab, Help: Close tab (Delete)
+							140 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							141 button Close panel
+							142 container Description: Side chat, ID: centerWorkbenchSideChat
+								143 container Side chat
+									144 pop up button (collapsed) Choose a side chat Side chat 1, ID: select-cl-2474-trigger, Secondary Actions: Expand
+										145 text Side chat 1
+									146 button New side chat
+									147 text Ask about this conversation while the main task keeps working.
+									148 container
+										149 button (collapsed) Reference history · 4 messages, Secondary Actions: Expand
+											150 text Reference history · 4 messages
+										151 container
+											152 text User
+											153 text 只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。
+										154 container
+											155 text chat
+											156 text 1m 9s
+											157 container
+												158 text 以下仅依据主对话已有的 MDN 检索结果、正文及中文结论，提出  Side Chat 参考历史与来源阅读体验建议 ；均为建议而非已实现功能。未新增检索、创建任务、委托 agent 或修改文件，也不代表完成实际产品验收。末尾代码为独立示例。
+											159 content list
+												160 container
+													161 AXListMarker 1.
+													162 text 区分参考历史与当前请求。
+													163 text  操作建议：在 Side Chat 阅读入口明确说明，继承消息用于理解背景，只有当前用户新发出的要求构成本次行动范围；阅读时先确认问题，再回看历史。观察现象：读者能够分清“此前要求核对 MDN”与“现在要求提出体验建议”，不会把历史中的工作要求当成待执行命令。失败影响：若两类内容混在一起，可能重复检索、误启动流程，或把旧请求中的权限当作本次授权，破坏当前对话的只读边界。
+												164 container
+													165 AXListMarker 2.
+													166 text 保留来源与结论的对应关系。
+													167 text  操作建议：阅读历史结论时，将其中关于默认关闭、摘要标签、布尔属性和事件的表述，逐项对应到已提供的 MDN 正文段落，而不是只看一个来源名称。观察现象：读者能解释每个关键判断来自正文的哪一部分，并能识别哪些是文档陈述、哪些是助手概括。失败影响：如果只有链接而没有对应关系，来源可能变成装饰；即使链接真实，也无法判断结论是否遗漏条件、改变语义或超出已读资料。
+												168 container
+													169 AXListMarker 3.
+													170 text 把搜索摘要视为定位线索。
+													171 text  操作建议：先用现有搜索结果确认官方域名和目标页面，再优先阅读已取得的完整正文，不直接依赖摘要中被省略的代码标记。观察现象：正文能够清楚显示
+													172 text <details>
+													173 text  与
+													174 text <summary>
+													175 text ，而搜索摘要里的部分元素名称曾出现空白，阅读者可据此辨认信息损失。失败影响：若把摘要当成精确原文，容易混淆组件和标签的职责，甚至误读允许内容或属性说明；后续建议也可能建立在残缺文本之上。
+												176 container
+													177 AXListMarker 4.
+													178 text 让来源入口可辨认且可回查。
+													179 text  操作建议：引用入口采用“MDN 官方中文文档：
+													180 text <details>
+													181 text ”这类明确名称，同时保留主对话已返回的页面地址；阅读前核对域名、语言路径和元素名称。观察现象：读者不必凭泛化的“参考资料”猜测链接内容，返回历史后也能找到同一个页面。失败影响：若只显示模糊标题或被截断的地址，容易打开不相关资料，降低回查效率；但入口存在本身不证明点击、加载或页面定位已经在产品中验证成功。
+												182 container
+													183 AXListMarker 5.
+													184 text 分别呈现更新日期与兼容性信息。
+													185 text  操作建议：在阅读笔记中分开记录中文页面标注的最后更新日期，以及基础特性自二〇二〇年一月起广泛可用的说明，不把两种时间合并理解。观察现象：读者能区分“文档何时更新”和“特性何时达到广泛支持”，同时看到部分功能支持程度可能不同。失败影响：若把页面日期当作兼容性保证，或把基础支持扩大为全部细节一致支持，就会产生过度确定的判断，影响后续选型与阅读预期。
+												186 container
+													187 AXListMarker 6.
+													188 text 先读默认状态，再读展开条件。
+													189 text  操作建议：按“默认关闭—摘要可见—展开后显示细节”的顺序理解正文，再查看已有的简单示例和带
+													190 text open
+													191 text  的示例。观察现象：读者能够用语言说明关闭时与展开时的内容差异，知道摘要并不等同于全部细节内容。失败影响：若先看样式或复杂示例，可能把视觉高度、三角形方向当成状态定义，忽略实际展开条件；这种误解会让后续观察只关注外观，而不能准确解释组件行为。
+												192 container
+													193 AXListMarker 7.
+													194 text 突出布尔属性的常见误读。
+													195 text  操作建议：阅读属性部分时，将“属性存在即展开”与“关闭须移除属性”连在一起理解，特别留意
+													196 text open="false"
+													197 text  仍会展开的备注。观察现象：读者不再把字符串
+													198 text "false"
+													199 text  当作 HTML 布尔属性的关闭指令，并能区分属性文本与脚本读取的布尔状态。失败影响：如果遗漏这条备注，示例或解释可能出现“设置为 false 即关闭”的错误表达，使使用者对初始状态产生错误预期，也削弱来源阅读的实际价值。
+												200 container
+													201 AXListMarker 8.
+													202 text 把键盘操作纳入阅读路径。
+													203 text  操作建议：在理解交互说明时，同时记录点击操作，以及聚焦后按空格键的操作，不只关注鼠标点击或展开三角形。观察现象：读者能够复述文档明确描述的两种触发方式，理解原生组件的操作并非仅依靠鼠标。失败影响：若阅读提示只讲点击，可能让键盘使用者误以为没有相应操作，也会使后续体验建议偏向单一输入方式；不过文档说明不能替代实际目标环境中的键盘交互检查。
+												204 container
+													205 AXListMarker 9.
+													206 container
+														207 text 按事件发生顺序解释  toggle 。
+													208 text  操作建议：阅读事件部分时，先确认事件在状态变化之后发送，再理解事件监听器中读取
+													209 text open
+													210 text  的意义，并把多次变化可能合并的说明一起保留。观察现象：读者知道监听得到的是变化后的状态，也不会预设每次快速切换都对应一条独立通知。失败影响：若遗漏时序或合并条件，日志数量可能被误当作切换次数，进而把符合文档的事件行为判断为异常，造成不必要的排查或错误结论。
+												211 container
+													212 AXListMarker 10.
+													213 text 将样式示例与状态机制分开阅读。
+													214 text  操作建议：阅读现有 CSS 示例时，把边框、背景、间距及
+													215 text details[open]
+													216 text  选择器视为外观说明，再回到属性部分确认状态来源。观察现象：读者能够区分“用选择器表现展开状态”和“通过属性改变展开状态”，不会把样式规则理解为展开逻辑。失败影响：如果两者混淆，可能误认为去掉背景或三角形就改变了组件状态；外观调整也容易掩盖真正的状态问题，使观察结果难以解释。
+												217 container
+													218 AXListMarker 11.
+													219 text 让短结论与深入阅读各有职责。
+													220 text  操作建议：保留主对话约一百五十字结论作为入口，需要理解某个细节时再回读相应正文，而不在短结论中堆入全部示例、技术概要和页面导航。观察现象：读者可以先获得核心概念，再针对布尔属性或事件时序进行局部核对，减少无关内容干扰。失败影响：若入口过长，重点会被导航和代码淹没；若入口过短且省去关键限制，又可能产生误导，因此应优先保留影响理解的条件，而非追求信息数量。
+												221 container
+													222 AXListMarker 12.
+													223 text 明确建议、示例与验收的边界。
+													224 text  操作建议：在 Side Chat 输出中分别标明“体验建议”和“独立示例”，并说明没有运行示例、操作实际页面或验证产品交付面；需要验收时另行确定目标与观察证据。观察现象：读者能区分已阅读的官方资料、据此提出的改进方向，以及尚未执行的行为检查。失败影响：若把文档核对写成产品通过验收，或把示例代码写成已集成功能，就会制造不存在的完成证据，影响后续判断与交接可信度。
+											225 table
+												226 row
+													227 cell
+														228 text 操作
+													229 cell
+														230 text 预期现象
+													231 cell
+														232 text 失败影响
+												233 row
+													234 cell
+														235 text 区分继承历史与当前新请求
+													236 cell
+														237 text 历史仅提供背景，行动范围由当前请求确定
+													238 cell
+														239 text 重复执行旧要求或误用历史授权
+												240 row
+													241 cell
+														242 text 对照已取得的 MDN 正文核对结论
+													243 cell
+														244 text 默认状态、属性和事件说明均有正文依据
+													245 cell
+														246 text 摘要缺失或概括偏差进入结论
+												247 row
+													248 cell
+														249 text 阅读
+														250 text open="false"
+														251 text  的备注
+													252 cell
+														253 text 明白属性存在仍表示展开
+													254 cell
+														255 text 错误理解初始状态和关闭方式
+												256 row
+													257 cell
+														258 text 连贯阅读
+														259 text toggle
+														260 text  的时序与合并说明
+													261 cell
+														262 text 理解事件之后读取状态，且通知可能合并
+													263 cell
+														264 text 将通知数量误认为切换次数
+												265 row
+													266 cell
+														267 text 分开标注建议、独立示例与实测证据
+													268 cell
+														269 text 不把阅读结果当作产品验收结果
+													270 cell
+														271 text 形成虚假的实现或验收完成声明
+											272 container
+												273 text 独立 JavaScript 示例 ：假定页面已有一个  <details>  元素；仅演示监听  toggle  并读取  open ，未运行或集成。
+											274 container
+												275 text JAVASCRIPT
+												276 button Copy code
+												277 container
+													278 text const  details =  document . querySelector ( "details" );
+
+ if  (!(details  instanceof HTMLDetailsElement )) {
+   throw new Error ( "页面中需要一个 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  () =>  {
+   const  isOpen = details. open ;
+
+   console . log ( "open:" , isOpen);
+   console . log (isOpen ?  "已展开"  :  "已关闭" );
+});
+										279 button Quote in main conversation
+									280 container
+										281 text entry area (settable) Ask a side question…
+										282 text Main conversation stays on track
+										283 button (disabled) Send side question
+
+The focused UI element is 281 text entry area (settable) Ask a side question…

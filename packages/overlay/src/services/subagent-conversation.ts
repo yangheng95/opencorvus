@@ -455,13 +455,13 @@ function delegatedContextMessage(message: SubagentTranscriptMessage): boolean {
   })
 }
 
-/** Project one exact child session into the same continuous card surface used
- * by the main conversation. Message boundaries remain inside the card; the
- * Dock never fragments one session into an unrelated stack of cards. */
+/** Project one exact child session's content and identity. The Dock binds the
+ * selected execution's clock when assembling the complete presentation card.
+ * Message boundaries remain inside that one continuous card. */
 export function projectSubagentConversationCard(
   conversation: SubagentConversationTranscript,
   status: CardNode["status"] = "completed",
-): CardNode | null {
+): Omit<CardNode, "time" | "timeCompleted"> | null {
   const messages = conversation.messages.filter(conversationMessageHasDisplayContent)
   const first = messages[0]
   if (!first) return null
@@ -504,7 +504,6 @@ export function projectSubagentConversationCard(
     childIDs: [],
     collapsedContextMessageIDs: messages.filter(delegatedContextMessage).map((message) => message.messageID),
     orderKey: first.orderKey,
-    time: first.time,
   }
 }
 

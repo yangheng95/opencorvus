@@ -75,6 +75,7 @@ function SideMessage(props: { message: SubagentTranscriptMessage }) {
       errorReason,
       orderKey: message.orderKey,
       time: message.time,
+      timeCompleted: time?.completed,
     }
   })
   return <ConversationCard node={node()} depth={0} collapsible={false} />
