@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Side提交显示244 Recall](side-submitted-draft-plan-244.md) / [真实证据](side-submitted-draft-244/README.md)：精确User Message事实收起重复输入，真实Source/partial/terminal人工复核、9 Sol EOF/Native0。
+
 - [Side真实正文流式243 Recall](side-render-live-plan-243.md) / [原实际阶段](side-render-live-243/README.md)：真实partial与草稿重复占位线索、原固定期限Native1失败完整保留。
 
 - [最新Sources流式242 Recall](source-stream-plan-242.md) / [真实矩阵](source-stream-242/README.md)：新Source8/Side Reference6、阅读位置保持，11次Sol EOF及Native0，未捕全帧范围明示。

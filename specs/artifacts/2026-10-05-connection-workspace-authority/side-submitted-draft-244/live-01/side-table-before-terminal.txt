@@ -1,0 +1,107 @@
+Browser tab: 85, Title: "OpenCorvus", URL: "http://localhost:18178/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 190, 197-202, 204-207, 237, 247-248, 254-304
+~									191 container Reference history · 4 messages Quote in main conversation
++										204 container
++											205 text chat
++											206 container
++												207 text 以下六段是仅基于主对话已有 MDN 资料提出的
++												208 text Side Chat 参考历史阅读体验建议
++												209 text ，不是产品现状描述或实际验收结果；后附表格和 JavaScript 均为独立参考。本次不新增检索、不创建任务、不委托 agent，也不修改文件。 第一，建议把参考历史与当前请求明确分区，并让历史区使用原生
++												210 text <details>
++												211 text ，默认折叠。具体操作是打开侧聊后，先查看当前问题，再按需点击历史区的
++												212 text <summary>
++												213 text ；标题可直接写明“参考历史，不代表当前指令”，避免只用“更多”这种含糊标签。预期观察是折叠时只呈现摘要，展开后才能看到历史正文，读者能够自主决定何时补充背景。若入口不清楚，历史可能被忽略；若边界提示缺失，旧请求、旧审批或旧计划可能被误当成当前授权。这是阅读组织建议，原生折叠能力本身并不能保证系统正确识别指令来源。 第二，建议摘要描述历史的主题与用途，而不是暗示其中工作已经完成。具体操作是在
++												214 text <summary>
++												215 text  中使用“MDN details 资料与此前结论”之类的中性标题，并在展开正文里保留原有请求、结论和来源的区别。阅读时应观察标题是否足以帮助判断“这里有什么”，正文是否能区分用户要求与助手解释，而不必逐句猜测。若摘要写成“验收通过记录”，读者可能把一次资料核对误解为产品测试；若正文混排而不标明性质，又容易把建议当成事实。这类失败会扩大已有证据的含义，因此标题与正文都应只表达参考材料实际支持的内容。 第三，建议把鼠标与键盘作为同一阅读入口的两种操作方式，避免仅靠视觉图标表达展开能力。具体操作是先点击摘要观察正文显示，再通过键盘将焦点移到摘要并按空格，查看能否切换状态；这两种交互都来自已有 MDN 说明。预期观察是操作后正文出现或收起，摘要仍可用于理解所在位置，同时能够看清当前焦点。若只有小三角可辨认而标题不清楚，读者可能不知道入口用途；若键盘操作不能有效切换，部分读者便难以获取历史上下文。焦点是否清晰属于体验建议，不应仅凭元素名称就认定实际界面已经满足要求。 第四，建议严格区分“属性存在”与“字符串看起来像假值”，并据此安排初始阅读状态。具体操作是检查计划使用的标记：希望折叠就省略或移除
++												216 text open
++												217 text ，希望初始展开才添加它，不能用
++												218 text open="false"
++												219 text  表示关闭。预期观察是没有该属性时历史正文默认隐藏，属性存在时正文可见；切换之后再读取元素的
++												220 text open
++												221 text  属性，确认当前布尔状态。若配置人员误把字符串
++												222 text false
++												223 text  当成关闭指令，参考历史会意外展开，挤占当前问题的阅读空间，也可能强化旧内容的视觉存在感。这是依据布尔属性规则提出的配置建议，不表示已经检查任何产品代码或界面。 第五，建议只在确有逐项阅读需求时考虑用相同
++												224 text name
++												225 text  组织多个历史折叠区，而不要把互斥展开当成所有场景的默认答案。具体操作是将两个候选历史区设为同组，先展开第一项，再展开第二项，观察第一项是否随之关闭；已有 MDN 资料说明，同名分组可实现一次只打开一个组件。预期现象有助于减少同时显示的长段正文，但若读者需要对照两段记录，互斥行为也可能迫使其反复切换，增加记忆负担。反之，本想限制展开数量却未正确分组，也会破坏布局预期。分组应服务阅读目的，其实际支持情况不能从本次建议推定为已验证。 第六，建议把状态观察、资料可信度和产品验收分别处理，不让一个事件监听器承担三种证明责任。具体操作是在独立示例中监听
++												226 text toggle
++												227 text ，事件发生后读取
++												228 text open
++												229 text ，记录展开或关闭；阅读正文时另行查看此前已提供的 MDN 来源，核对结论对应的是文档说明，而不是界面执行结果。预期观察是状态变化后得到布尔值；快速连续变化时，按已有资料，事件可能合并，因此不应要求日志逐次对应每个动作。若把日志数量当成点击数量，会误判交互；若把示例运行或来源链接当成产品验收，又会产生证据越界。当前只能给出建议与示例，不能据此宣称交付界面通过验收。
++												230 table
++													231 row
++														232 cell
++															233 text 操作
++														234 cell
++															235 text 预期现象
++														236 cell
++															237 text 失败影响
++													238 row
++														239 cell
++															240 text 默认折叠历史区，点击摘要展开
++														241 cell
++															242 text 折叠时仅见摘要，展开后显示参考正文
++														243 cell
++															244 text 历史占据当前阅读空间，或入口难以发现
++													245 row
++														246 cell
++															247 text 聚焦摘要后按空格
++														248 cell
++															249 text 折叠状态切换，正文显示或隐藏
++														250 cell
++															251 text 键盘读者难以访问参考历史
++													252 row
++														253 cell
++															254 text 移除
++															255 text open
++															256 text ，而非设置
++															257 text open="false"
++														258 cell
++															259 text 正文关闭，
++															260 text open
++															261 text  属性读值为
++															262 text false
++														263 cell
++															264 text 误用布尔属性导致意外展开
++													265 row
++														266 cell
++															267 text 监听
++															268 text toggle
++															269 text  并读取
++															270 text open
++														271 cell
++															272 text 状态变化后取得当前布尔值，快速变化可能合并事件
++														273 cell
++															274 text 将事件数误当操作数，形成错误判断
++												275 text 以下为
++												276 text 独立 JavaScript 示例
++												277 text ：假设页面已有一个
++												278 text <details>
++												279 text  元素，只监听
++												280 text toggle
++												281 text  并读取
++												282 text open
++												283 text ，不改变展开状态，也不代表实际产品验收。
++												284 container
++													285 text JAVASCRIPT
++													286 button Copy code
++												287 container
++													288 text const  details =  document . querySelector ( "details" );
+
+ if  (!details) {
+   throw new Error ( "页面中缺少 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  ( event ) =>  {
+   const  element = event. currentTarget ;
+   const  isOpen = element. open ;
+
+   console . log ( "details.open:" , isOpen);
+});
++											289 button Copy message
++											290 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++											291 text Oct 10, 01:11 AM
++										292 text entry area (settable) Ask a side question…
+~										184 text Main conversation stays on track
++										293 button (disabled) Send side question
+The focused UI element is 191 container Reference history · 4 messages Quote in main conversation

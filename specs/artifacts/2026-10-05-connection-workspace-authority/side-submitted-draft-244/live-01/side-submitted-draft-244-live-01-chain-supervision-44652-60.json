@@ -1,0 +1,48 @@
+{
+  "occurrence": "side-submitted-draft-244-live-01-58db2eb9-cc15-4421-b871-9bcdb1fc9e0b",
+  "observedAtUtc": "2026-10-09T17:12:36.9954243Z",
+  "nativeSettlement": {
+    "occurrence": "side-submitted-draft-244-live-01-58db2eb9-cc15-4421-b871-9bcdb1fc9e0b",
+    "outcome": "settled",
+    "host": {
+      "pid": 16400,
+      "processInstanceID": "win32:639271623913943564",
+      "occurrenceID": "e4db4d30-329a-4b2e-a8ce-55e1a36dbb76"
+    },
+    "target": {
+      "pid": 75016,
+      "processInstanceID": "win32:639271623921635933",
+      "occurrenceID": "116cb7e0-1dda-4787-a144-cb8b44abe6a7"
+    },
+    "observedAtUtc": "2026-10-09T17:12:35.518Z",
+    "deadlineAt": 1791566191379,
+    "terminal": {
+      "occurrenceID": "side-submitted-draft-244-live-01-58db2eb9-cc15-4421-b871-9bcdb1fc9e0b",
+      "pid": 75016,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "presence": [
+    {
+      "originalOccurrencePresent": false,
+      "processInstanceID": "win32:639271623921635933",
+      "processID": 75016,
+      "state": "dead_or_reused"
+    },
+    {
+      "originalOccurrencePresent": false,
+      "processInstanceID": "win32:639271623913943564",
+      "processID": 16400,
+      "state": "dead_or_reused"
+    }
+  ],
+  "phase": "supervision-44652-60",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "listeners": []
+}

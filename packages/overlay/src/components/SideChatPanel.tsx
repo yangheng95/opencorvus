@@ -17,6 +17,7 @@ import {
   type SideChatSource,
 } from "../services/side-chat"
 import {
+  composerDraftStore,
   composerDraftKey,
   composerDraftText,
   composerQuotation,
@@ -117,6 +118,14 @@ export function SideChatPanel(props: {
   const sessionLabel = (item: SideChatSession) =>
     t("side_chat.numbered", { number: sessions().length - sessions().findIndex((entry) => entry.id === item.id) })
   const running = createMemo(() => sending() || active())
+  const submittedDraftAccepted = createMemo(() => {
+    if (!running() || !connected() || error()) return false
+    const draftKey = key()
+    const submission = composerDraftStore.drafts[draftKey]?.submission
+    if (!submission || submission.text !== quotedPrompt(composerDraftText(draftKey).trim(), composerQuotation(draftKey)))
+      return false
+    return messages().some((message) => message.messageID === submission.messageID && message.info.role === "user")
+  })
   const preparing = () => creating() || sessionListState() === "loading"
   const report = (error: unknown) => setError(formatErrorDetails(error))
   const rememberReadingPosition = () => {
@@ -500,33 +509,35 @@ export function SideChatPanel(props: {
             void send()
           }}
         >
-          <Show when={composerQuotation(key())}>
-            {(value) => (
-              <QuotationChip
-                quotation={value()}
-                onRemove={() => {
-                  if (!fileEditorReserved()) setComposerQuotation(key(), undefined)
-                }}
-              />
-            )}
+          <Show when={!submittedDraftAccepted()}>
+            <Show when={composerQuotation(key())}>
+              {(value) => (
+                <QuotationChip
+                  quotation={value()}
+                  onRemove={() => {
+                    if (!fileEditorReserved()) setComposerQuotation(key(), undefined)
+                  }}
+                />
+              )}
+            </Show>
+            <AutoGrowTextarea
+              ref={(element) => (textarea = element)}
+              value={composerDraftText(key())}
+              surface="composer"
+              disabled={sending() || fileEditorReserved()}
+              aria-label={t("side_chat.placeholder")}
+              placeholder={t("side_chat.placeholder")}
+              onInput={(event) => {
+                if (!fileEditorReserved()) setComposerDraft(key(), event.currentTarget.value)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey && !event.isComposing && event.keyCode !== 229) {
+                  event.preventDefault()
+                  void send()
+                }
+              }}
+            />
           </Show>
-          <AutoGrowTextarea
-            ref={(element) => (textarea = element)}
-            value={composerDraftText(key())}
-            surface="composer"
-            disabled={sending() || fileEditorReserved()}
-            aria-label={t("side_chat.placeholder")}
-            placeholder={t("side_chat.placeholder")}
-            onInput={(event) => {
-              if (!fileEditorReserved()) setComposerDraft(key(), event.currentTarget.value)
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.shiftKey && !event.isComposing && event.keyCode !== 229) {
-                event.preventDefault()
-                void send()
-              }
-            }}
-          />
           <div class="side-chat-composer__actions">
             <span role="status" class="side-chat-status" data-connected={connected()} data-running={running()}>
               <span class="side-chat-status__dot" />

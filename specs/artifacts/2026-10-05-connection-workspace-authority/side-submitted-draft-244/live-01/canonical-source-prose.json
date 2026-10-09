@@ -1,0 +1,297 @@
+{
+  "observedAtUtc": "2026-10-09T17:12:57.159Z",
+  "access": "Actual readonly canonical BEGIN/ROLLBACK after physical closure",
+  "sources": [
+    {
+      "id": "prt_g0VXZaom800TpC1eB0YH",
+      "message_id": "msg_g0VXZampO00KItb33Bci",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：详细信息展现元素- HTML（超文本标记语言） | MDN",
+        "snippet": "：详细信息展现元素 - HTML（超文本标记语言） | MDN\n\n# ：详细信息展现元素\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。 \n\n- 查看完整兼容性 \n- 了解更多 \n\nHTML ` ` 元素可创建一个组件，仅在被切换成展开状态时，它才会显示内含的信息。` ` 元素可为该部件提供概要或者标签。\n\n展现组件通常在屏幕上使用一个小三角形，旋转（或扭转）以表示打开/关闭的状态，三角形旁边有一个标签。` ` 元素的内容被用来作为展示小部件的标签。\n...\n一个 ` ` 小组件可以处于两种状态之一。默认的关闭状态只显示三角形和 ` ` 内的标签（如果没有 ` ` 则显示用户代理定义的默认字符串）。\n\n当用户点击小组件或聚焦它然后按空格键时，它就会“扭转”展开，显示出其中的内容。通常使用一个旋转或扭转的三角形来代表打开或关闭小组件，这就是为什么这些小组件有时被称为“旋钮”。\n\n你可以使用 CSS 来设计展示小组件，你可以通过设置/移除 `open` 属性以编程方式打开和关闭该小组件。遗憾的是，目前还没有内置的方法来对打开和关闭之间的过渡进行动画处理。\n\n默认情况下，当关闭时，该小组件的高度只足以显示展开三角形和摘要。当打开时，它就会展开以显示其中包含的细节。\n\n完全符合标准的实现会自动将 CSS `display: list-item` 应用到 ` ` 元素。你可以用它来进一步定制其外观。请参阅自定义展开组件以了解更多细节。\n\n## 属性\n\n此元素包含全局属性。\n\n`open`\n: 这个布尔属性表示细节内容——也就是 ` ` 元素的内容——目前是否可见。默认情况下为 `false`，意味着细节内容是不可见的。\n\n备注：你必须完全删除这个属性来使细节内容隐藏。`open=\"false\"` 使细节内容可见，因为这个属性是布尔值。\n...\n除了 HTML 元素支持的常规事件外，` ` 元素还支持 `toggle` 事件，当 ` ` 元素的状态在打开和关闭之间变化时，该事件会被派发到该元素。该事件是在状态发生变化后发送的，不过如果状态在浏览器派发该事件之前发生了多次变化，那么这些事件就会被合并，从而只发送一个。\n\n你可以为 `toggle` 事件使用一个事件监听器来检测小组件何时改变状态：\n...\n为了使得 ` ` 盒子初始为展开状态，要添加布尔属性 `open`：\n...\n### 自定义外观\n\n现在我们给展现盒子设置一些 CSS 样式，以自定义其外观。\n...\n这个 CSS 创建了一个类似于标签式界面的外观，点击标签可以打开它，显示其内容。\n\n选择器 `details[open]` 可以用来为打开的元素设置样式。\n...\n### 自定义展开组件\n\n展开三角形可以自定义，但并没有得到广泛支持。由于该元素是标准化的，因此在实验性实施阶段，浏览器如何支持此自定义项有所不同，我们不得不暂时使用多种方法。\n\n` ` 元素支持 `list-style` 缩写属性或者完整属性，比如 `list-style-type`，可以使用它们任意改变三角（通常与 `list-style-image` 一起使用）。例如，我们可以使用 `list-style: none` 移除三角形展开图标。\n...\n该 CSS 的外观类似于选项卡界面，在该界面中，激活选项卡将展开并打开它以显示其内容。\n...\n## 技术概要\n\n| 内容分类 | 流式内容、分段内容、交互内容、可感知内容 |\n| --- | --- |\n| 允许的内容 | 一个紧跟流式内容的 ` ` 元素 |\n| 标签省略 | 不允许，开始标签和结束标签都不能省略。 |\n| 允许的父元素 | 任何接受流式内容的元素。 |\n| 隐含的 ARIA 角色 | `group` |\n| 允许的 ARIA 角色 | 没有允许的 `role` |\n| DOM 接口 | `HTMLDetailsElement` |",
+        "publishedAt": "2025-08-06T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZaomE00Z29oCv9l9",
+      "message_id": "msg_g0VXZampO00KItb33Bci",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "data": {
+        "type": "source-url",
+        "sourceId": "97045501c83a79fd39965044aa7493520339b99a31b79b22ecf825024b41b11d",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/summary",
+        "title": "<summary>：摘要展现元素- HTML（超文本标记语言） | MDN",
+        "snippet": "：摘要展现元素 - HTML（超文本标记语言） | MDN\n\n# ：摘要展现元素\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。\n...\nHTML ` ` 元素 指定了 ` ` 元素展开盒子的内容的摘要，标题或图例。点击 ` ` 元素可以切换父元素 ` ` 开启和关闭的状态。\n...\n## 属性\n\n本元素仅包含全局属性。\n...\n` ` 元素的内容可以是任意标题内容、纯文本，或是可以在段落内使用的 HTML 代码。\n\n` ` 元素仅可作为 ` ` 元素的第一个子节点。当用户在 ` ` 元素上点击时，父元素 ` ` 会切换开启和关闭的状态，并会向 ` ` 元素发送 `toggle` 事件，令用户得知这样的状态改变何时发生。\n...\n如果一个 ` ` 元素的第一个子节点不是 ` ` 元素，用户代理会使用一个默认字符串（通常为“详细信息”或“详情”）作为展开盒子的标签内容。\n...\n根据 HTML 规范，` ` 元素的默认样式包括 `display: list-item`。这使得改变或移除显示为标签旁边的展现部件的图标成为可能，默认的图标通常是一个三角形。\n\n你也可以将样式改变为 `display: block` 来移除展开三角形。\n\n参见浏览器兼容性以了解其中的细节，因为并不是所有浏览器支持这个元素的全部功能。\n\n对于基于 Webkit 的浏览器，例如 Safari，可以通过非标准的 CSS 伪元素 `::-webkit-details-marker` 来控制图标显示。要删除展开三角形，请使用 `summary::-webkit-details-marker { display: none }`。\n...\n下面有一些 ` ` ... 用法示例。你可以在 ` ` 元素的文档中找到更多示例\n...\n一个简单的例子显示了在 ` ` 元素中如何使用 ` `\n...\n使用标题元素作为总结\n\n你可以在 ` ` 元素中像这样使用标题元素：\n...\n警告：因为 ` ` 元素的默认角色是 button（它将所有角色从子元素中剥离），这个例子对于使用辅助技术的用户来说是不可行的，例如屏幕阅读器。` ` 的角色将被删除，因此对这些用户来说，不会被视为标题。\n\n### summary 元素中的 HTML\n\n这个示例给 ` ` 元素增加了一些语义，以表明标签的重要性：\n\n```\n<details open>\n  <summary><strong>概况</strong></summary>\n  <ol>\n    <li>手上的现钱：$500.00</li>\n    <li>当前发票：$75.30</li>\n    <li>到期日：5/6 ... 19</li>\n  </ol>\n</details>\n...\n## 技术概要\n\n| 允许的内容 | 短语内容，或标题内容元素之一 |\n| --- | --- |\n| 标签省略 | 否，开始和结束标签都不能省略 |\n| 允许的父元素 | ` ` 元素 |\n| 隐式 ARIA 角色 | `button` |\n| 允许的 ARIA 角色 | 没有允许的 `role` |\n| DOM 接口 | `HTMLElement` |",
+        "publishedAt": "2025-08-06T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZaomH005EscAmyv9",
+      "message_id": "msg_g0VXZampO00KItb33Bci",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "snippet": "HTML details disclosure element - HTML | MDN\n\n# ` ` HTML details disclosure element\n\n Baseline Widely available *\n...\nThe ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n\nNote: You have to remove this attribute entirely to make the details hidden. `open=\"false\"` makes the details visible because this attribute is Boolean.\n`name`\n: This attribute enables multiple ` ` elements to be connected, with only one open at a time. This allows developers to easily create UI features such as accordions without scripting.\n\nThe `name` attribute specifies a group name — give multiple ` ` elements the same `name` value to group them. Only one of the grouped ` ` elements can be open at a time — opening one will cause another to close. If multiple grouped ` ` elements are given the `open` attribute, only the first one in the source order will be rendered open.\n...\n## Usage notes\n\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style the disclosure widget, and you can programmatically open and close the widget by setting/removing its `open` attribute. Unfortunately, at this time, there's no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget is only tall enough to display the disclosure triangle and summary. When open, it expands to display the details contained within.\n\nFully standards-compliant implementations automatically apply the CSS `display: list-item` to the ` ` element. You can use this or the `::marker` pseudo-element to customize the disclosure widget.\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\n### A basic disclosure example\n...\n### Creating an open disclosure box\n\nTo start the ` ` box in its open state, add the Boolean `open` attribute:\n\n```\n<details ... >\n  <summary>System Requirements</summary>\n  <p>\n...\na computer running an operating system ... The computer must have some\n    memory and ideally some kind of long ... An input device as well\n    as some form of output device is recommended.\n  </p>\n</\n...\nwith the same name\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n## Technical summary\n\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLDetailsElement` |",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZaq5j009shZhQlKH",
+      "message_id": "msg_g0VXZaooF00M04o1zSSc",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZavn203TXHqQnsW3",
+      "message_id": "msg_g0VXZavn201FQ4mSWg7Q",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：详细信息展现元素- HTML（超文本标记语言） | MDN",
+        "snippet": "：详细信息展现元素 - HTML（超文本标记语言） | MDN\n\n# ：详细信息展现元素\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。 \n\n- 查看完整兼容性 \n- 了解更多 \n\nHTML ` ` 元素可创建一个组件，仅在被切换成展开状态时，它才会显示内含的信息。` ` 元素可为该部件提供概要或者标签。\n\n展现组件通常在屏幕上使用一个小三角形，旋转（或扭转）以表示打开/关闭的状态，三角形旁边有一个标签。` ` 元素的内容被用来作为展示小部件的标签。\n...\n一个 ` ` 小组件可以处于两种状态之一。默认的关闭状态只显示三角形和 ` ` 内的标签（如果没有 ` ` 则显示用户代理定义的默认字符串）。\n\n当用户点击小组件或聚焦它然后按空格键时，它就会“扭转”展开，显示出其中的内容。通常使用一个旋转或扭转的三角形来代表打开或关闭小组件，这就是为什么这些小组件有时被称为“旋钮”。\n\n你可以使用 CSS 来设计展示小组件，你可以通过设置/移除 `open` 属性以编程方式打开和关闭该小组件。遗憾的是，目前还没有内置的方法来对打开和关闭之间的过渡进行动画处理。\n\n默认情况下，当关闭时，该小组件的高度只足以显示展开三角形和摘要。当打开时，它就会展开以显示其中包含的细节。\n\n完全符合标准的实现会自动将 CSS `display: list-item` 应用到 ` ` 元素。你可以用它来进一步定制其外观。请参阅自定义展开组件以了解更多细节。\n\n## 属性\n\n此元素包含全局属性。\n\n`open`\n: 这个布尔属性表示细节内容——也就是 ` ` 元素的内容——目前是否可见。默认情况下为 `false`，意味着细节内容是不可见的。\n\n备注：你必须完全删除这个属性来使细节内容隐藏。`open=\"false\"` 使细节内容可见，因为这个属性是布尔值。\n...\n除了 HTML 元素支持的常规事件外，` ` 元素还支持 `toggle` 事件，当 ` ` 元素的状态在打开和关闭之间变化时，该事件会被派发到该元素。该事件是在状态发生变化后发送的，不过如果状态在浏览器派发该事件之前发生了多次变化，那么这些事件就会被合并，从而只发送一个。\n\n你可以为 `toggle` 事件使用一个事件监听器来检测小组件何时改变状态：\n...\n为了使得 ` ` 盒子初始为展开状态，要添加布尔属性 `open`：\n...\n### 自定义外观\n\n现在我们给展现盒子设置一些 CSS 样式，以自定义其外观。\n...\n这个 CSS 创建了一个类似于标签式界面的外观，点击标签可以打开它，显示其内容。\n\n选择器 `details[open]` 可以用来为打开的元素设置样式。\n...\n### 自定义展开组件\n\n展开三角形可以自定义，但并没有得到广泛支持。由于该元素是标准化的，因此在实验性实施阶段，浏览器如何支持此自定义项有所不同，我们不得不暂时使用多种方法。\n\n` ` 元素支持 `list-style` 缩写属性或者完整属性，比如 `list-style-type`，可以使用它们任意改变三角（通常与 `list-style-image` 一起使用）。例如，我们可以使用 `list-style: none` 移除三角形展开图标。\n...\n该 CSS 的外观类似于选项卡界面，在该界面中，激活选项卡将展开并打开它以显示其内容。\n...\n## 技术概要\n\n| 内容分类 | 流式内容、分段内容、交互内容、可感知内容 |\n| --- | --- |\n| 允许的内容 | 一个紧跟流式内容的 ` ` 元素 |\n| 标签省略 | 不允许，开始标签和结束标签都不能省略。 |\n| 允许的父元素 | 任何接受流式内容的元素。 |\n| 隐含的 ARIA 角色 | `group` |\n| 允许的 ARIA 角色 | 没有允许的 `role` |\n| DOM 接口 | `HTMLDetailsElement` |",
+        "publishedAt": "2025-08-06T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZavn204i8G6vRUyp",
+      "message_id": "msg_g0VXZavn201FQ4mSWg7Q",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "source-url",
+        "sourceId": "97045501c83a79fd39965044aa7493520339b99a31b79b22ecf825024b41b11d",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/summary",
+        "title": "<summary>：摘要展现元素- HTML（超文本标记语言） | MDN",
+        "snippet": "：摘要展现元素 - HTML（超文本标记语言） | MDN\n\n# ：摘要展现元素\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。\n...\nHTML ` ` 元素 指定了 ` ` 元素展开盒子的内容的摘要，标题或图例。点击 ` ` 元素可以切换父元素 ` ` 开启和关闭的状态。\n...\n## 属性\n\n本元素仅包含全局属性。\n...\n` ` 元素的内容可以是任意标题内容、纯文本，或是可以在段落内使用的 HTML 代码。\n\n` ` 元素仅可作为 ` ` 元素的第一个子节点。当用户在 ` ` 元素上点击时，父元素 ` ` 会切换开启和关闭的状态，并会向 ` ` 元素发送 `toggle` 事件，令用户得知这样的状态改变何时发生。\n...\n如果一个 ` ` 元素的第一个子节点不是 ` ` 元素，用户代理会使用一个默认字符串（通常为“详细信息”或“详情”）作为展开盒子的标签内容。\n...\n根据 HTML 规范，` ` 元素的默认样式包括 `display: list-item`。这使得改变或移除显示为标签旁边的展现部件的图标成为可能，默认的图标通常是一个三角形。\n\n你也可以将样式改变为 `display: block` 来移除展开三角形。\n\n参见浏览器兼容性以了解其中的细节，因为并不是所有浏览器支持这个元素的全部功能。\n\n对于基于 Webkit 的浏览器，例如 Safari，可以通过非标准的 CSS 伪元素 `::-webkit-details-marker` 来控制图标显示。要删除展开三角形，请使用 `summary::-webkit-details-marker { display: none }`。\n...\n下面有一些 ` ` ... 用法示例。你可以在 ` ` 元素的文档中找到更多示例\n...\n一个简单的例子显示了在 ` ` 元素中如何使用 ` `\n...\n使用标题元素作为总结\n\n你可以在 ` ` 元素中像这样使用标题元素：\n...\n警告：因为 ` ` 元素的默认角色是 button（它将所有角色从子元素中剥离），这个例子对于使用辅助技术的用户来说是不可行的，例如屏幕阅读器。` ` 的角色将被删除，因此对这些用户来说，不会被视为标题。\n\n### summary 元素中的 HTML\n\n这个示例给 ` ` 元素增加了一些语义，以表明标签的重要性：\n\n```\n<details open>\n  <summary><strong>概况</strong></summary>\n  <ol>\n    <li>手上的现钱：$500.00</li>\n    <li>当前发票：$75.30</li>\n    <li>到期日：5/6 ... 19</li>\n  </ol>\n</details>\n...\n## 技术概要\n\n| 允许的内容 | 短语内容，或标题内容元素之一 |\n| --- | --- |\n| 标签省略 | 否，开始和结束标签都不能省略 |\n| 允许的父元素 | ` ` 元素 |\n| 隐式 ARIA 角色 | `button` |\n| 允许的 ARIA 角色 | 没有允许的 `role` |\n| DOM 接口 | `HTMLElement` |",
+        "publishedAt": "2025-08-06T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZavn205dYWiQeykh",
+      "message_id": "msg_g0VXZavn201FQ4mSWg7Q",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "snippet": "HTML details disclosure element - HTML | MDN\n\n# ` ` HTML details disclosure element\n\n Baseline Widely available *\n...\nThe ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n\nNote: You have to remove this attribute entirely to make the details hidden. `open=\"false\"` makes the details visible because this attribute is Boolean.\n`name`\n: This attribute enables multiple ` ` elements to be connected, with only one open at a time. This allows developers to easily create UI features such as accordions without scripting.\n\nThe `name` attribute specifies a group name — give multiple ` ` elements the same `name` value to group them. Only one of the grouped ` ` elements can be open at a time — opening one will cause another to close. If multiple grouped ` ` elements are given the `open` attribute, only the first one in the source order will be rendered open.\n...\n## Usage notes\n\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style the disclosure widget, and you can programmatically open and close the widget by setting/removing its `open` attribute. Unfortunately, at this time, there's no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget is only tall enough to display the disclosure triangle and summary. When open, it expands to display the details contained within.\n\nFully standards-compliant implementations automatically apply the CSS `display: list-item` to the ` ` element. You can use this or the `::marker` pseudo-element to customize the disclosure widget.\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\n### A basic disclosure example\n...\n### Creating an open disclosure box\n\nTo start the ` ` box in its open state, add the Boolean `open` attribute:\n\n```\n<details ... >\n  <summary>System Requirements</summary>\n  <p>\n...\na computer running an operating system ... The computer must have some\n    memory and ideally some kind of long ... An input device as well\n    as some form of output device is recommended.\n  </p>\n</\n...\nwith the same name\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n## Technical summary\n\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLDetailsElement` |",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZavn209J1f6FnFf9",
+      "message_id": "msg_g0VXZavn202ayd5ejKiX",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "prose": [
+    {
+      "id": "prt_hzGrlvtLGe3MTKkdTEdf",
+      "message_id": "msg_hK3PbI5taJdyezeA2JeZ",
+      "session_id": "ses_hjA4ltNQqNoI0FfpaD3G",
+      "data": {
+        "type": "text",
+        "text": "Reply with OK.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hkYAAD4SoU4oJqBs9ZVg/50379321c4becff75d301ea95c2ffcfc40d6d2be9ee1207d370474c49e37be7e.json",
+          "catalog_snapshot_hash": "50379321c4becff75d301ea95c2ffcfc40d6d2be9ee1207d370474c49e37be7e"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZah6U00QmsuWAlLL",
+      "message_id": "msg_g0VXZagCn00WvGJJ3iM9",
+      "session_id": "ses_hjA4ltNQqNoI0FfpaD3G",
+      "data": {
+        "type": "text",
+        "text": "OK",
+        "time": {
+          "start": 1791565604098,
+          "end": 1791565604098
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_07d494f4470be342016ac91f23b1a08191bdf63533706f8bf1",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZamm100vkN0DUHpC",
+      "message_id": "msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "data": {
+        "type": "text",
+        "text": "请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hy96zmUsddlU4ygdpOYm/f3aae2c2067b9f68f25b243a66ff8d198f8a751dfa9e382384e8b956cb147ab0.json",
+          "catalog_snapshot_hash": "f3aae2c2067b9f68f25b243a66ff8d198f8a751dfa9e382384e8b956cb147ab0"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZarUu0046opkO8ye",
+      "message_id": "msg_g0VXZaq8A00l411sAhhv",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "data": {
+        "type": "text",
+        "text": "经核对 MDN，`<details>` 是原生折叠展示元素，默认关闭，以首个子元素 `<summary>` 提供标题；点击或聚焦后按空格可展开。`open` 是布尔属性，写成 `open=\"false\"` 仍会展开，关闭须移除属性。状态改变后触发 `toggle` 事件；相同 `name` 可使多个组件互斥展开，无需脚本实现手风琴。\n\n来源：[MDN 官方 `<details>` 文档](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)（页面更新于 2026-10-01）。",
+        "time": {
+          "start": 1791565647822,
+          "end": 1791565647822
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0bb101a87c210f0a016ac91f4ba8948191bad7b4060b0c1100",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZavn2007F1AkLpjb",
+      "message_id": "msg_g0VXZavn200EHceilsd3",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "text",
+        "text": "请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hy96zmUsddlU4ygdpOYm/f3aae2c2067b9f68f25b243a66ff8d198f8a751dfa9e382384e8b956cb147ab0.json",
+          "catalog_snapshot_hash": "f3aae2c2067b9f68f25b243a66ff8d198f8a751dfa9e382384e8b956cb147ab0"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZavn20CBLMwU63e1",
+      "message_id": "msg_g0VXZavn203uC26KY9wO",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "text",
+        "text": "经核对 MDN，`<details>` 是原生折叠展示元素，默认关闭，以首个子元素 `<summary>` 提供标题；点击或聚焦后按空格可展开。`open` 是布尔属性，写成 `open=\"false\"` 仍会展开，关闭须移除属性。状态改变后触发 `toggle` 事件；相同 `name` 可使多个组件互斥展开，无需脚本实现手风琴。\n\n来源：[MDN 官方 `<details>` 文档](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)（页面更新于 2026-10-01）。",
+        "time": {
+          "start": 1791565647822,
+          "end": 1791565647822
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0bb101a87c210f0a016ac91f4ba8948191bad7b4060b0c1100",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZbpEl006ZlPRvAky",
+      "message_id": "msg_8849a734-886c-4c41-8453-df4e7597c16a",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "text",
+        "text": "只基于主对话已有资料，用中文写六段共1200到1500字的 Side Chat 参考历史阅读体验建议，每段有具体操作、观察现象和失败影响。随后给出含4个数据行的 Markdown 表格（表头和分隔符不计），列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议和独立示例，不新增检索、不创建任务、不委托agent、不修改文件，也不声称已完成实际产品验收。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hy96zmUsddlU4ygdpOYm/5d388543ba6673ffc59a92bd235306219d9ec46b03ffeda400d8d87d5c97bd0e.json",
+          "catalog_snapshot_hash": "5d388543ba6673ffc59a92bd235306219d9ec46b03ffeda400d8d87d5c97bd0e"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZbqoU00VppIHgtmZ",
+      "message_id": "msg_g0VXZbpH900CVrmE50ww",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "data": {
+        "type": "text",
+        "text": "以下六段是仅基于主对话已有 MDN 资料提出的 **Side Chat 参考历史阅读体验建议**，不是产品现状描述或实际验收结果；后附表格和 JavaScript 均为独立参考。本次不新增检索、不创建任务、不委托 agent，也不修改文件。\n\n第一，建议把参考历史与当前请求明确分区，并让历史区使用原生 `<details>`，默认折叠。具体操作是打开侧聊后，先查看当前问题，再按需点击历史区的 `<summary>`；标题可直接写明“参考历史，不代表当前指令”，避免只用“更多”这种含糊标签。预期观察是折叠时只呈现摘要，展开后才能看到历史正文，读者能够自主决定何时补充背景。若入口不清楚，历史可能被忽略；若边界提示缺失，旧请求、旧审批或旧计划可能被误当成当前授权。这是阅读组织建议，原生折叠能力本身并不能保证系统正确识别指令来源。\n\n第二，建议摘要描述历史的主题与用途，而不是暗示其中工作已经完成。具体操作是在 `<summary>` 中使用“MDN details 资料与此前结论”之类的中性标题，并在展开正文里保留原有请求、结论和来源的区别。阅读时应观察标题是否足以帮助判断“这里有什么”，正文是否能区分用户要求与助手解释，而不必逐句猜测。若摘要写成“验收通过记录”，读者可能把一次资料核对误解为产品测试；若正文混排而不标明性质，又容易把建议当成事实。这类失败会扩大已有证据的含义，因此标题与正文都应只表达参考材料实际支持的内容。\n\n第三，建议把鼠标与键盘作为同一阅读入口的两种操作方式，避免仅靠视觉图标表达展开能力。具体操作是先点击摘要观察正文显示，再通过键盘将焦点移到摘要并按空格，查看能否切换状态；这两种交互都来自已有 MDN 说明。预期观察是操作后正文出现或收起，摘要仍可用于理解所在位置，同时能够看清当前焦点。若只有小三角可辨认而标题不清楚，读者可能不知道入口用途；若键盘操作不能有效切换，部分读者便难以获取历史上下文。焦点是否清晰属于体验建议，不应仅凭元素名称就认定实际界面已经满足要求。\n\n第四，建议严格区分“属性存在”与“字符串看起来像假值”，并据此安排初始阅读状态。具体操作是检查计划使用的标记：希望折叠就省略或移除 `open`，希望初始展开才添加它，不能用 `open=\"false\"` 表示关闭。预期观察是没有该属性时历史正文默认隐藏，属性存在时正文可见；切换之后再读取元素的 `open` 属性，确认当前布尔状态。若配置人员误把字符串 `false` 当成关闭指令，参考历史会意外展开，挤占当前问题的阅读空间，也可能强化旧内容的视觉存在感。这是依据布尔属性规则提出的配置建议，不表示已经检查任何产品代码或界面。\n\n第五，建议只在确有逐项阅读需求时考虑用相同 `name` 组织多个历史折叠区，而不要把互斥展开当成所有场景的默认答案。具体操作是将两个候选历史区设为同组，先展开第一项，再展开第二项，观察第一项是否随之关闭；已有 MDN 资料说明，同名分组可实现一次只打开一个组件。预期现象有助于减少同时显示的长段正文，但若读者需要对照两段记录，互斥行为也可能迫使其反复切换，增加记忆负担。反之，本想限制展开数量却未正确分组，也会破坏布局预期。分组应服务阅读目的，其实际支持情况不能从本次建议推定为已验证。\n\n第六，建议把状态观察、资料可信度和产品验收分别处理，不让一个事件监听器承担三种证明责任。具体操作是在独立示例中监听 `toggle`，事件发生后读取 `open`，记录展开或关闭；阅读正文时另行查看此前已提供的 MDN 来源，核对结论对应的是文档说明，而不是界面执行结果。预期观察是状态变化后得到布尔值；快速连续变化时，按已有资料，事件可能合并，因此不应要求日志逐次对应每个动作。若把日志数量当成点击数量，会误判交互；若把示例运行或来源链接当成产品验收，又会产生证据越界。当前只能给出建议与示例，不能据此宣称交付界面通过验收。\n\n| 操作 | 预期现象 | 失败影响 |\n|---|---|---|\n| 默认折叠历史区，点击摘要展开 | 折叠时仅见摘要，展开后显示参考正文 | 历史占据当前阅读空间，或入口难以发现 |\n| 聚焦摘要后按空格 | 折叠状态切换，正文显示或隐藏 | 键盘读者难以访问参考历史 |\n| 移除 `open`，而非设置 `open=\"false\"` | 正文关闭，`open` 属性读值为 `false` | 误用布尔属性导致意外展开 |\n| 监听 `toggle` 并读取 `open` | 状态变化后取得当前布尔值，快速变化可能合并事件 | 将事件数误当操作数，形成错误判断 |\n\n以下为 **独立 JavaScript 示例**：假设页面已有一个 `<details>` 元素，只监听 `toggle` 并读取 `open`，不改变展开状态，也不代表实际产品验收。\n\n```javascript\nconst details = document.querySelector(\"details\");\n\nif (!details) {\n  throw new Error(\"页面中缺少 details 元素\");\n}\n\ndetails.addEventListener(\"toggle\", (event) => {\n  const element = event.currentTarget;\n  const isOpen = element.open;\n\n  console.log(\"details.open:\", isOpen);\n});\n```",
+        "time": {
+          "start": 1791565929665,
+          "end": 1791565929665
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0f075ba5134087ad016ac920371d008191815e90442198aae5",
+            "phase": "final_answer"
+          }
+        }
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "act_g0VXZagNh00MfcKn0f0t",
+      "assistant_message_id": "msg_g0VXZagCn00WvGJJ3iM9",
+      "session_id": "ses_hjA4ltNQqNoI0FfpaD3G",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791565600369,\"completed\":1791565604904},\"parentID\":\"msg_hK3PbI5taJdyezeA2JeZ\",\"acceptedInputMessageIDs\":[\"msg_hK3PbI5taJdyezeA2JeZ\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\10\\\\1984363b-b264-4a44-b610-80da1fa4eaf7\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\10\\\\1984363b-b264-4a44-b610-80da1fa4eaf7\"},\"cost\":0,\"tokens\":{\"total\":29607,\"input\":29602,\"output\":5,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791565600369:0000000000000030:0000000000000000:message:msg_g0VXZagCn00WvGJJ3iM9\"}"
+    },
+    {
+      "id": "act_g0VXZamxO00wFUSSM6SB",
+      "assistant_message_id": "msg_g0VXZampO00KItb33Bci",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791565625826,\"completed\":1791565633411},\"parentID\":\"msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc\",\"acceptedInputMessageIDs\":[\"msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":31970,\"input\":31936,\"output\":34,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791565625826:0000000000000030:0000000000000000:message:msg_g0VXZampO00KItb33Bci\"}"
+    },
+    {
+      "id": "act_g0VXZaosc001I5q0cSME",
+      "assistant_message_id": "msg_g0VXZaooF00M04o1zSSc",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791565633443,\"completed\":1791565638432},\"parentID\":\"msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc\",\"acceptedInputMessageIDs\":[\"msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":34951,\"input\":34910,\"output\":41,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791565633443:0000000000000030:0000000000000000:message:msg_g0VXZaooF00M04o1zSSc\"}"
+    },
+    {
+      "id": "act_g0VXZaqCi00Kis7kpUEJ",
+      "assistant_message_id": "msg_g0VXZaq8A00l411sAhhv",
+      "session_id": "ses_-zUSQPDTOzzgt6ettpHA",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791565638522,\"completed\":1791565648051},\"parentID\":\"msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc\",\"acceptedInputMessageIDs\":[\"msg_0f7cae5b-a610-45e4-8bb3-42669ee2a5dc\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":46582,\"input\":11747,\"output\":147,\"reasoning\":0,\"cache\":{\"read\":34688,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791565638522:0000000000000030:0000000000000000:message:msg_g0VXZaq8A00l411sAhhv\"}"
+    },
+    {
+      "id": "act_g0VXZbpPA00En57R2OAR",
+      "assistant_message_id": "msg_g0VXZbpH900CVrmE50ww",
+      "session_id": "ses_-zUSQP4D0zz6plqmrYIy",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791565873563,\"completed\":1791565930695},\"parentID\":\"msg_8849a734-886c-4c41-8453-df4e7597c16a\",\"acceptedInputMessageIDs\":[\"msg_8849a734-886c-4c41-8453-df4e7597c16a\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\side-submitted-draft-244-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":45879,\"input\":44439,\"output\":1392,\"reasoning\":48,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791565873563:0000000000000030:0000000000000000:message:msg_g0VXZbpH900CVrmE50ww\"}"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXZao2G00xB6kwvK4B",
+      "message_id": "msg_g0VXZampO00KItb33Bci",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_e30993b3095e42b8a68d1ffae8a91c46\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org zh-CN HTML details 元素\",\"numResults\":3},\"time\":{\"start\":1791565630468}}"
+    },
+    {
+      "id": "prt_g0VXZapjv00Cqe1L0zXb",
+      "message_id": "msg_g0VXZaooF00M04o1zSSc",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_abacda5fcc6d4c4d96a77512b88f7185\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791565637019}}"
+    },
+    {
+      "id": "prt_g0VXZavn2022l6rQJOk6",
+      "message_id": "msg_g0VXZavn201FQ4mSWg7Q",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_e30993b3095e42b8a68d1ffae8a91c46\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org zh-CN HTML details 元素\",\"numResults\":3},\"time\":{\"start\":1791565630468}}"
+    },
+    {
+      "id": "prt_g0VXZavn208QUrIl5Ots",
+      "message_id": "msg_g0VXZavn202ayd5ejKiX",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_abacda5fcc6d4c4d96a77512b88f7185\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791565637019}}"
+    }
+  ],
+  "boundary": "Natural actual producer evidence; full values retained, no fake Source/Part, no Markdown or UI assertions"
+}

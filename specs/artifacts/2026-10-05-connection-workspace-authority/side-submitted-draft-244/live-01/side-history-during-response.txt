@@ -1,0 +1,36 @@
+Browser tab: 85, Title: "OpenCorvus", URL: "http://localhost:18178/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~										192 button (expanded) Reference history · 4 messages, Secondary Actions: Collapse
++										208 container
++											209 text User
++											210 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。
++										211 container
++											212 text work
++											213 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org zh-CN HTML details 元素, Secondary Actions: Expand
++												214 text websearch
++												215 text Web search: site:developer.mozilla.org zh-CN HTML details 元素
++												216 image
++											217 container Sources
++												218 button (collapsed) Description: Sources: <details>：详细信息展现元素- HTML（超文本标记语言） | MDN (3), Help: <details>：详细信息展现元素- HTML（超文本标记语言） | MDN 3, Secondary Actions: Expand
++													219 text <details>：详细信息展现元素- HTML（超文本标记语言） | MDN
++													220 text 3
++										221 container
++											222 text work
++											223 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details (text/html), Secondary Actions: Expand
++												224 text webfetch
++												225 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details (text/html)
++												226 image
++											227 container Sources
++												228 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++										229 container
++											230 text work
++											231 container
++												232 text 经核对 MDN， <details>  是原生折叠展示元素，默认关闭，以首个子元素  <summary>  提供标题；点击或聚焦后按空格可展开。 open  是布尔属性，写成  open="false"  仍会展开，关闭须移除属性。状态改变后触发  toggle  事件；相同  name  可使多个组件互斥展开，无需脚本实现手风琴。
++											233 container
++												234 text 来源：
++												235 link Description: MDN 官方 <details> 文档, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++												236 text （页面更新于 2026-10-01）。
+~											199 text 31s
++											237 text 第三，建议把鼠标与键盘作为同一阅读入口的两种操作方式，避免仅靠视觉图标表达展开能力。具体操作是先点击摘要观察正文显示，再通过键盘将焦点移到摘要并按空格，查看能否切换状态；这两种交互都来自已有 MDN 说明。预期观察是操作后正文出现或收起，摘要仍可用于理解所在位置，同时能够看清当前焦点。若只有小三角可辨认而标题不清楚，读者可能不知道入口用途；若键盘操作不能有效切换，部分读者便难以获取历史上下文。焦点是否清晰属于体验建议，不应仅凭元素名称就认定实际界面已经满足要求。
+~											202 text 第四，建议严格区分“属性存在”与“字符串看起来像假值”，并据此安排初始阅读状态。具体操作是检查计划使用的标记：希望折叠就省略或移除 `open`，希望初始展开才添加它，不能用 `open="false"` 表示关闭。预期观察是没有该属性时历史正文默认隐藏，属性存在时正文可见；切换之后再读取元素的 `open` 属性，确认当前布尔状态。若配置人员误把字符串 `
+The focused UI element is 192 button (expanded) Reference history · 4 messages, Secondary Actions: Collapse

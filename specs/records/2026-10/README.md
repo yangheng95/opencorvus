@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Side提交显示244](2026-10-10-side-submitted-draft-244.md)：真实消息接受后紧凑运行区、Sources流式阅读及空输入恢复；原生正常闭合。
+
 - [Side真实正文流式243](2026-10-10-side-render-live-243.md)：真实Working partial、accepted草稿重复问题线索；原Native/fore1未当正常验收通过。
 
 - [最新Sources流式242](2026-10-09-source-stream-242.md)：当前239–241修复在新真实Sol Main/Side/继承Source中复核，11EOF与完整Native0闭合。

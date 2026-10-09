@@ -398,6 +398,12 @@ storage, rendering and model input. Side replies can be quoted back into the
 main composer for the user to review and send.
 Side submissions retain their caller-minted Message identity with the scoped
 draft across transport retries and reloads.
+During a connected, healthy running Side response, the unchanged submitted
+draft's quotation and textarea are hidden once that exact caller Message ID is
+present as a real user Message in the current transcript. The existing draft
+store and request identity remain intact; status and Stop stay available.
+Changed or unaccepted drafts, errors and disconnection keep the writing area
+visible. Normal HTTP completion retains its existing exact-draft cleanup.
 
 The shared AutoGrowTextarea owns content height for all writing surfaces. Value
 changes and observed content-width changes use the same measurement and line cap;

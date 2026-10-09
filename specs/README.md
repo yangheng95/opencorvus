@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Side提交显示244](records/2026-10/2026-10-10-side-submitted-draft-244.md)：真实接受后收起重复草稿，阅读区280→466px，Source流式阅读/结束输入恢复与Native0已复核。
+
 - [Side真实正文流式243](records/2026-10/2026-10-10-side-render-live-243.md)：真实partial帧取得、accepted草稿重复占位；原Native固定期限1失败与完整退役分别保留。
 
 - [最新Sources流式242](records/2026-10/2026-10-09-source-stream-242.md)：新Sol真实Sources8/Side引用6与来源位置保持，11stream EOF/Native0；限定帧未扩大为全Rendering。
