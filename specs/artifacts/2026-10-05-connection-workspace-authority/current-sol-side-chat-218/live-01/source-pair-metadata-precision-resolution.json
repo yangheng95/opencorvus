@@ -1,0 +1,45 @@
+{
+  "observedAtUtc": "2026-10-09T01:25:19.6119039Z",
+  "rootCause": "Original JS Date.toISOString metadata has millisecond precision; Windows FileInfo UTC has 100ns precision. Exact DateTime equality compared different projections and returned false despite equal bytes/mtimeMs.",
+  "rows": [
+    {
+      "beforeMtimeMs": 1791374314821,
+      "name": "auth.json",
+      "sourceBefore": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+        "bytes": 2259,
+        "modifiedAt": "2026-10-07T11:58:34.821Z",
+        "createdAt": "2026-10-07T11:58:34.821Z"
+      },
+      "originalFinalObservation": {
+        "modifiedAt": "2026-10-07T11:58:34.8218788Z",
+        "createdAt": "2026-10-07T11:58:34.8218788Z",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\auth.json",
+        "sameObservedLengthAndMtime": false,
+        "bytes": 2259
+      },
+      "sameObservedLengthAndMillisecondMtime": true,
+      "afterMtimeMs": 1791374314821
+    },
+    {
+      "beforeMtimeMs": 1791128890137,
+      "name": "models.json",
+      "sourceBefore": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+        "bytes": 9155406,
+        "modifiedAt": "2026-10-04T15:48:10.137Z",
+        "createdAt": "2026-10-04T15:48:10.134Z"
+      },
+      "originalFinalObservation": {
+        "modifiedAt": "2026-10-04T15:48:10.1379969Z",
+        "createdAt": "2026-10-04T15:48:10.1342288Z",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\data\\models.json",
+        "sameObservedLengthAndMtime": false,
+        "bytes": 9155406
+      },
+      "sameObservedLengthAndMillisecondMtime": true,
+      "afterMtimeMs": 1791128890137
+    }
+  ],
+  "boundary": "Original false receipt preserved; same actual observations compared at the declared shared millisecond precision. Metadata only, no credential contents, hash/functional qualification or source file mutation."
+}

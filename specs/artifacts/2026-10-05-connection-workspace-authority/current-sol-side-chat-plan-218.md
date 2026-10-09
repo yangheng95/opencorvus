@@ -31,3 +31,5 @@
 完整配对preflight usable/projected/actualgpt-6.1-sol，9次真实stream200/settledEOF，原45763=0和Native01:08:50.405Z正常0/full cleanup，在固定1791508175798前。Main真实两Source与4474 raw最终正文，Running Source阅读时capture01:02:17.523实际同finalMessage reader尚未EOF；窗口top250/Source304.4375在aggregate3722→4060/height2984→3200保持。晚Provider pulse已6EOF保留，事后精确时序绑定原snapshot，不重标晚pulse为live。
 
 Side Chat独立root/四reference真实创建，new243 raw回复，引用回Main未发送/删除、关闭重开同SID和Main不改，reference展开到原用户内容。Side采样已completed，中途token视觉未采；对应真实模型57chunks/EOF证明流式调用，不能代替中途视觉。完整配对中文PATCH200、locale=zh-CN/最终Main截图通过；未投影目录原216失败和中文持久化/child/reference完整矩阵仍未达成。详细原截图、Provider、SQLite与独立物理/pair闭合在本轮README。没有新增生产代码或UI自动化测试，目标active。
+
+末尾来源元数据exact DateTime比较false经复核是JS毫秒与Windows100ns投影精度差异，两来源原字节数与mtimeMs相等。新增精度resolution证据保留原false；这是证据工具修正，不能代替credential内容校验/功能验收，也不影响原真实9EOF/native0。无需改应用、原目录或弱化验收。

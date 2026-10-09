@@ -34,4 +34,6 @@
 
 15029当前canonical时间日志/unknown0，按成熟CredentialRedactor内存屏蔽源凭据后归档，原私有日志保持，auth/models内容从未提交。5份本轮FFI（Foreign Function Interface，外部函数接口）文件出生00:59:37.507–578Z，在所有原父/观察终态后核对绝对workspace界限逐文件移入私有忽略目录，[移交记录](live-01/generated-native-observer-custody.json)保留，未递归删除。公共三个检查/父工具日志仅行尾和EOF空白整理，Provider/HTTP/Native原事实不改。
 
+末尾[来源元数据原观察](live-01/source-pair-final-metadata.json)的精确DateTime比较返回false，复核为工具精度问题：JS（JavaScript）Date.toISOString只有毫秒，Windows FileInfo有100ns精度；auth的.821Z与.8218788Z、models的.137Z与.1379969Z是同一次mtime的两种投影。[精度修正观察](live-01/source-pair-metadata-precision-resolution.json)保留原false并在声明的共同毫秒精度比较：两者bytes/mtimeMs均相同。仅文件元数据观察，不作为凭据内容身份、功能门槛或hash验收，未改源文件、原Provider或Native结果。
+
 本轮补齐当前真实模型、Main Sources读流、独立Side Chat创建/答案/引用/重开与完整配对中文Main。子agent Dock真实新流式、Side中途视觉/完整reference Sources/工具、中文持久化和未投影目录语言失败及其他平台等仍未完成；Side Chat不能替代child Dock资格。持续single-agent目标active，不宣称所有问题已修完。
