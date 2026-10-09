@@ -1,0 +1,243 @@
+{
+  "observedAtUtc": "2026-10-09T11:03:43.305Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/source-multiple-search-live-171-01",
+  "task": {
+    "id": "tsk_g00VXSTw8x00OIn2Cuk3",
+    "project_id": "prj_htAvg8a2Ro8JTpnLUKPA",
+    "session_id": "ses_-zUSXW3jXzzAnq0zy6sX",
+    "request_id": "f6e5d900-92cd-4b53-a2db-ad2421f9d58b"
+  },
+  "sources": [
+    {
+      "id": "prt_g0VXSU3bv00Iqw3NP3db",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+      "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+      "provider": "exa",
+      "snippetChars": 3536,
+      "snippetHead": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has ",
+      "snippetTail": "2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus"
+    },
+    {
+      "id": "prt_g0VXSU3c0000XP3UwpA9",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+      "provider": "exa",
+      "snippetChars": 2089,
+      "snippetHead": "- 2.4.11 Focus Not Obscured (Minimum) (AA)\n- 2.4.12 Focus Not Obscured (Enhanced) (AAA)\n- 2.4.13 Foc",
+      "snippetTail": " focus indicator is determined by the user agent and cannot be adjusted by the author, or\n- The focus indicator and the indicator's background color are not modified by the author."
+    },
+    {
+      "id": "prt_g0VXSU3c300du4QRnMTY",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+      "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+      "provider": "exa",
+      "snippetChars": 3536,
+      "snippetHead": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has ",
+      "snippetTail": "2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus"
+    },
+    {
+      "id": "prt_g0VXSU3c600Tg5nkvf3r",
+      "messageID": "msg_g0VXSU2Gk00wmPylQah8",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Technique F55:Failure of Success Criteria 2.1.1, 2.4.7, ...",
+      "url": "https://www.w3.org/WAI/WCAG22/Techniques/failures/F55",
+      "sourceId": "5b642dae5e283129130936cb06ce739b8c07043127fe13fbcdcecfc8d37a9b15",
+      "provider": "exa",
+      "snippetChars": 1217,
+      "snippetHead": "F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus",
+      "snippetTail": "hat when focus is placed on each element, focus remains there until user moves it.\n...\n- If #2 is false then this failure condition applies and content fails the Success Criterion."
+    },
+    {
+      "id": "prt_g0VXSU54q00fUFaRdEnC",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Keyboard accessible - MDN Web Docs - Mozilla",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+      "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+      "provider": "exa",
+      "snippetChars": 2882,
+      "snippetHead": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and c",
+      "snippetTail": "lds are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive."
+    },
+    {
+      "id": "prt_g0VXSU54t00ZjU447ZOS",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Operable - Accessibility | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Operable",
+      "sourceId": "127b01c278760dcea07e9d94aa246911506f0d25a4f2aa8be43588d06bc83d61",
+      "provider": "exa",
+      "snippetChars": 4600,
+      "snippetHead": "## Guideline 2.1 — Keyboard Accessible: Make all functionality available from a keyboard\n\nThis guide",
+      "snippetTail": "The focus indicator and the indicator's background color are not modified by the author. | Check out Understanding focus appearance (Level AAA) to learn more about this standard. |"
+    },
+    {
+      "id": "prt_g0VXSU54w00CNwF58UQb",
+      "messageID": "msg_g0VXSU3dk005iwa5raDA",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "HTMLElement: focus() method - Web APIs | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus",
+      "sourceId": "56dc311e981756452eedae830a7ec930f24cc18d039cf121ee7bdb85dd6c3dda",
+      "provider": "exa",
+      "snippetChars": 2115,
+      "snippetHead": "The `HTMLElement.focus()` method sets focus on the specified element, if it can be focused. The focu",
+      "snippetTail": "elation to different HTML features like `tabindex` or shadow dom, which previously remained under-specified, were updated in October 2019. See the WHATWG blog for more information."
+    },
+    {
+      "id": "prt_g0VXSU65300H66wG0ffk",
+      "messageID": "msg_g0VXSU57Z00HsiqjoKXp",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Keyboard accessible - Accessibility | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+      "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+      "provider": "opencorvus-webfetch",
+      "snippetChars": 0
+    },
+    {
+      "id": "prt_g0VXSU7I900JM3puwHzn",
+      "messageID": "msg_g0VXSU67f003OgX1T47R",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+      "provider": "opencorvus-webfetch",
+      "snippetChars": 0
+    },
+    {
+      "id": "prt_g0VXSUA6H00eGOF10eON",
+      "messageID": "msg_g0VXSU7L900qUlEbvbyh",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+      "provider": "opencorvus-webfetch",
+      "snippetChars": 0
+    },
+    {
+      "id": "prt_g0VXSUBVL00nX06m5ofM",
+      "messageID": "msg_g0VXSUAB200zgs1fzTf6",
+      "sessionID": "ses_hr1z2wDm0fI4lBZGJYA9",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+      "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+      "provider": "opencorvus-webfetch",
+      "snippetChars": 0
+    },
+    {
+      "id": "prt_g0VXSUVG000GkcDt9uQ3",
+      "messageID": "msg_g0VXSUTjd00TWdvtaeHv",
+      "sessionID": "ses_htaCwoMcecKcn75injAb",
+      "rowFields": [
+        "id",
+        "message_id",
+        "time_created",
+        "time_updated",
+        "data",
+        "session_id"
+      ],
+      "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/keyboard",
+      "sourceId": "53ed4cec33e6d9ae9dd9a1b28ae46a197af8938ff24663928db2197f9cf3b38b",
+      "provider": "opencorvus-webfetch",
+      "snippetChars": 0
+    }
+  ],
+  "boundary": "Readonly original stored Source metadata; no UI assertion, no model or DB writes; slicing only diagnostic identity markers, rendered original full text unchanged"
+}

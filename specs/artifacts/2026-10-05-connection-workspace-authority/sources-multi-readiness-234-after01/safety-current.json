@@ -1,0 +1,18 @@
+{
+  "boundary": "Current original171 complete config/schema/Task/frontier manually reviewed before new full copy; no original Task rearm",
+  "startupQualified": true,
+  "leases": [
+    {
+      "lease": {
+        "id": "act_g0VXSTpYF00QCQxJuUw4",
+        "target": "runtime_process",
+        "target_id": "7d79dd77-c648-42b0-ac16-9d780bef06e4",
+        "owner_occurrence_id": "{\"pid\":11840,\"processInstanceID\":\"win32:639270573261373392\",\"occurrenceID\":\"7d79dd77-c648-42b0-ac16-9d780bef06e4\"}",
+        "time_activated": 1791460533646,
+        "expires_at": 9007199254740991
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T11:13:56.1178196Z"
+}

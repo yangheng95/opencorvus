@@ -540,3 +540,4 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 
 - [211 Ctrl Home/End修复](transcript-control-home-211/README.md) / [Recall](transcript-control-home-plan-211.md)：真实同焦点CtrlHome被拉尾/End不重跟随，唯一共享modifier guard修复；Main/child首尾与textarea caret0→39人工通过。types/build/最终asset200，原父工具20951/native/pair自然0；更长/SideChat/新补丁流式未验，单agent持续。
 
+- [多来源与摘要234 Recall](sources-multi-review-plan-234.md) / [实际before/after](sources-multi-review-234/README.md)：正文排版与视口阅读框，真实多Source/长摘要/中文深色/来源目标复核；内滚动丢失和归档次序错误保留。

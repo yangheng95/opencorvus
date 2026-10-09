@@ -1,0 +1,36 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/source-multiple-search-live-171-01",
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "boundary": "Fresh complete original153 source and closed destination; no execution rearm",
+  "readQualified": true,
+  "observedAtUtc": "2026-10-09T11:02:33.8824496Z",
+  "listeners": [],
+  "occurrence": "source-multiple-search-live-171-01-5c819f90-e5d9-4496-bbca-c2b0e84cbbd3",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 52708,
+        "processInstanceID": "win32:639270573253820228",
+        "occurrenceID": "65c93d5f-42af-48bf-9576-d48e5355d56c"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 11840,
+        "processInstanceID": "win32:639270573261373392",
+        "occurrenceID": "8bdc22a2-56fc-4615-abeb-cf256543cbfb"
+      }
+    }
+  ]
+}

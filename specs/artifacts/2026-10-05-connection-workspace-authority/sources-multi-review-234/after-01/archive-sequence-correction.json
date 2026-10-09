@@ -1,0 +1,12 @@
+{
+  "scope": "sources-multi-review-234-after-01",
+  "boundary": "Operator sequencing correction; original receipts preserved",
+  "observedOrder": [
+    "Own UI72/73 closed; sole shutdown; original foreground71607 and Native actual0; physical/output/request complete and independent closure",
+    "PowerShell LASTEXITCODE null was incorrectly treated as a native failure after a PowerShell-only archive helper, exiting the command before starting the planned custody checker",
+    "Missing final-canonical-custody.json read failed; own exact-birth five pile files were then archived by the independently guarded bounded helper",
+    "Root noticed missing custody, ran current-custody.ts as an independent real command, actual0; all13 complete row contents equal, original Task/Project/root/request bound; full project difference reviewed: primary .git directory mtime only"
+  ],
+  "qualificationCorrection": "The original pile-archive qualification text must not be used to claim final custody completed before those moves. The planned custody-before-pile-archive order was not met. Exact birth/path guards and retired native ownership were satisfied; subsequent readonly custody is a separate actual observation, not a retroactive successful sequence.",
+  "followup": "Keep dependent checker invocations sequential as independent commands; do not inspect LASTEXITCODE for a PowerShell-only helper. Preserve original failed observation and do not restart any scope."
+}

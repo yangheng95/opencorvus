@@ -1,0 +1,59 @@
+{
+  "observedAtUtc": "2026-10-09T11:14:26.7429153Z",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "sources-multi-review-234-after-01-b5aba618-6aff-487e-831e-230d9a263379",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18166",
+    "pid": 72708
+  },
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18166,
+      "OwningProcess": 72708
+    }
+  ],
+  "uiUri": "http://127.0.0.1:18166/ui",
+  "asset": "/ui/assets/main-DQNCsjpu.js",
+  "assetStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18166/ui/",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "uiStatus": 200,
+  "scriptSrc": "http://127.0.0.1:18166/ui/assets/main-DQNCsjpu.js",
+  "owner": {
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\sources-multi-review-234-after-01",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01\\project",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\sources-multi-review-234\\after-01",
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "nativeDeadlineAt": 1791545355830,
+    "nativeTarget": {
+      "pid": 72708,
+      "processInstanceID": "win32:639271412566379563",
+      "occurrenceID": "58a3b85f-d6cb-479a-9cb2-bf14b9ab4833"
+    },
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\sources-multi-review-234-after-01\\evidence",
+    "targetBirthAtMs": 1791544456637,
+    "occurrence": "sources-multi-review-234-after-01-b5aba618-6aff-487e-831e-230d9a263379",
+    "evidencePrefix": "sources-multi-review-234-after-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\sources-multi-review-234-after-01\\runtime",
+    "port": 18166,
+    "owner": {
+      "ProcessId": 72708,
+      "processInstanceID": "win32:639271412566379563"
+    },
+    "authorityStaging": "None; no model Task requested",
+    "observedProcessChain": [
+      {
+        "pid": 72708,
+        "processInstanceID": "win32:639271412566379563",
+        "occurrenceID": "58a3b85f-d6cb-479a-9cb2-bf14b9ab4833"
+      }
+    ],
+    "host": {
+      "pid": 77512,
+      "processInstanceID": "win32:639271412559078663",
+      "occurrenceID": "29f0ce2c-ebfe-40db-9672-bb75702407a8"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "startupQualified": true,
+  "leases": [
+    {
+      "state": "dead_or_reused",
+      "lease": {
+        "id": "act_g0VXSTpYF00QCQxJuUw4",
+        "target": "runtime_process",
+        "target_id": "7d79dd77-c648-42b0-ac16-9d780bef06e4",
+        "owner_occurrence_id": "{\"pid\":11840,\"processInstanceID\":\"win32:639270573261373392\",\"occurrenceID\":\"7d79dd77-c648-42b0-ac16-9d780bef06e4\"}",
+        "time_activated": 1791460533646,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "originalTerminal": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "boundary": "Fresh original171 whole config/schema/lifecycle/request/publication/recovery facts manually reviewed; original guard label inherited153 but source/occurrence are exact171",
+  "observedAtUtc": "2026-10-09T11:04:39.7937753Z"
+}

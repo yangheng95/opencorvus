@@ -1,0 +1,35 @@
+{
+  "host": {
+    "pid": 25160,
+    "processInstanceID": "win32:639271406844401454",
+    "occurrenceID": "b018bc37-9d6d-4823-8d33-168e7712db80"
+  },
+  "nativeTarget": {
+    "pid": 71756,
+    "processInstanceID": "win32:639271406851953018",
+    "occurrenceID": "c2d054f5-cadf-4f9b-9461-e4c1e484621e"
+  },
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\sources-multi-review-234-01\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01\\project",
+  "owner": {
+    "processInstanceID": "win32:639271406851953018",
+    "ProcessId": 71756
+  },
+  "authorityStaging": "None; no model Task requested",
+  "targetBirthAtMs": 1791543885195,
+  "occurrence": "sources-multi-review-234-01-764ed8f7-b9c8-4a6d-b163-643a9bfb499c",
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\sources-multi-review-234-01\\evidence",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\sources-multi-review-234-01",
+  "nativeDeadlineAt": 1791544784361,
+  "port": 18165,
+  "evidencePrefix": "sources-multi-review-234-01",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\sources-multi-review-234\\live-01",
+  "observedProcessChain": [
+    {
+      "pid": 71756,
+      "processInstanceID": "win32:639271406851953018",
+      "occurrenceID": "c2d054f5-cadf-4f9b-9461-e4c1e484621e"
+    }
+  ]
+}

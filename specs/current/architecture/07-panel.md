@@ -557,8 +557,13 @@ URL validator. Malformed and other-protocol inputs produce a URL-format schema
 error; accepted URL strings and source metadata retain their recorded values.
 Source snippets belong to a separate native disclosure within the expanded
 source group. Its normal page reading region retains the complete text and
-supports native keyboard and pointer scrolling. The existing conversation UI
-store owns its expansion by canonical source identity. Opening or focusing the
+supports native keyboard and pointer scrolling.
+Its text uses the body typography role, while the excerpt action and source
+metadata keep their caption role. The reading region is capped at forty percent
+of the viewport height rather than a multiple of button height, preserving an
+accessible scroll area as the surrounding source list grows.
+The existing conversation UI store owns its expansion by canonical source
+identity. Opening or focusing the
 reading region pauses transcript following through the shared reading intent.
 The noninteractive source tooltip contains identity, detail and metadata.
 The Source

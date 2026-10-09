@@ -1,0 +1,31 @@
+{
+  "observedAtUtc": "2026-10-09T11:20:40.992Z",
+  "tab": "72",
+  "port": 18166,
+  "asset": "/ui/assets/main-DQNCsjpu.js",
+  "observer": "single root; actual UI actions and personally viewed screenshots",
+  "qualified": [
+    "Actual4/3 grouped Source titles/hosts/ordinals, full3536 and4600 original text remain available.",
+    "Native Tab Source→excerpt summary→Return→Tab reading region works. Font14px/21px leading and287px client reading region observed, compared with12px/18px/191 before.",
+    "Native End reaches real3536-tail and4600-tail; pointer wheel inner scroll1888→1636.",
+    "Chinese Dark actual excerpt body/head and original metadata/actions displayed. Real source leaf native Enter creates73 and loads original MDN URL/title; actual target screenshot reviewed and73closed.",
+    "Whole Dock Close panel Enter focuses header and native Return reopens same child/group and outer reading vicinity."
+  ],
+  "failures": [
+    {
+      "scope": "Inner excerpt position after whole Dock close/reopen",
+      "before": 1636,
+      "after": 0,
+      "evidence": "dock-reopen-reading.json/jpg",
+      "root": "Not yet established; source/excerpt owner lifetime requires next investigation. Outer existing handoff does not prove nested position."
+    }
+  ],
+  "unqualified": [
+    "Source inner close/reopen continuity",
+    "Natural new source growth and single-to-multiple transition",
+    "Document/extreme metadata fields",
+    "Tauri GUI",
+    "Live child Rendering"
+  ],
+  "boundary": "DOM/console diagnostic only, real images manually viewed; no UI automation tests or fake source/message/state; existing original171 checker not rerun; no Provider call"
+}

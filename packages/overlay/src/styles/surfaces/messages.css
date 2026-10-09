@@ -1105,14 +1105,14 @@
 }
 
 .msg-source-excerpt__body {
-  max-height: min(calc(8 * var(--oc-density-chip-height)), 40vh);
+  max-height: 40vh;
   min-width: 0;
   padding: var(--ui-gap-sm) var(--ui-gap-md);
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
   color: var(--text-soft);
-  font-size: var(--ui-font-caption);
+  font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
