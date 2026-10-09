@@ -1,0 +1,59 @@
+{
+  "asset": "/ui/assets/main-DNZgW3vs.js",
+  "uiUri": "http://127.0.0.1:18162/ui",
+  "scriptSrc": "http://127.0.0.1:18162/ui/assets/main-DNZgW3vs.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18162,
+      "OwningProcess": 78016
+    }
+  ],
+  "finalUiUri": "http://127.0.0.1:18162/ui/",
+  "observedAtUtc": "2026-10-09T09:59:33.1867194Z",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "assetStatus": 200,
+  "uiStatus": 200,
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "tool-tab-focus-232-after-02-053eee2a-7045-41c0-80ae-0ac1746ccddf",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18162",
+    "pid": 78016
+  },
+  "owner": {
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-tab-focus-232-after-02",
+    "observedProcessChain": [
+      {
+        "pid": 78016,
+        "processInstanceID": "win32:639271367562082604",
+        "occurrenceID": "f92c7bf0-fb05-492b-aea6-500ee372df9d"
+      }
+    ],
+    "authorityStaging": "None; no model Task requested",
+    "occurrence": "tool-tab-focus-232-after-02-053eee2a-7045-41c0-80ae-0ac1746ccddf",
+    "owner": {
+      "ProcessId": 78016,
+      "processInstanceID": "win32:639271367562082604"
+    },
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-tab-focus-232-after-02\\runtime",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-tab-focus-232-after-02\\evidence",
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\project",
+    "nativeTarget": {
+      "pid": 78016,
+      "processInstanceID": "win32:639271367562082604",
+      "occurrenceID": "f92c7bf0-fb05-492b-aea6-500ee372df9d"
+    },
+    "nativeDeadlineAt": 1791540855373,
+    "evidencePrefix": "tool-tab-focus-232-after-02",
+    "host": {
+      "pid": 10872,
+      "processInstanceID": "win32:639271367554461252",
+      "occurrenceID": "7ebec897-f8cf-466a-8252-5d6e1beb7de6"
+    },
+    "targetBirthAtMs": 1791539956208,
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\tool-tab-focus-232\\after-02",
+    "port": 18162
+  }
+}

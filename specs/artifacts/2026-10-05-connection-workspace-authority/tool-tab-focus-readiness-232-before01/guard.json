@@ -1,0 +1,36 @@
+{
+  "listeners": [],
+  "pair": [
+    {
+      "present": false,
+      "name": "auth.json"
+    },
+    {
+      "present": false,
+      "name": "models.json"
+    }
+  ],
+  "readQualified": true,
+  "boundary": "Fresh complete original source and closed new destination; no execution rearm",
+  "occurrence": "render-stream-231-live-01-ec6f40fd-ecfd-44b5-988b-a41afa354d88",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01",
+  "observedAtUtc": "2026-10-09T09:20:40.0422713Z",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 62996,
+        "processInstanceID": "win32:639271324324936971",
+        "occurrenceID": "4b061d61-76d7-4719-978a-dc8240951e24"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 69788,
+        "processInstanceID": "win32:639271324332603055",
+        "occurrenceID": "687039a2-b2c5-456b-8862-bed472224ee8"
+      }
+    }
+  ]
+}

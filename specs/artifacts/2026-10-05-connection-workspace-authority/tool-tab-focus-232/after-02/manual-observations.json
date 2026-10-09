@@ -1,0 +1,30 @@
+{
+  "observedAt": "2026-10-09T10:06:01.371Z",
+  "screenshotsPersonallyViewed": [
+    "dirty-cancel-focus.jpg",
+    "dirty-reload-cancel-focus.jpg",
+    "dirty-discard-files-focus.jpg",
+    "two-browser-tabs.jpg",
+    "pointer-close-other-browser.jpg",
+    "browser-chinese-dark.jpg",
+    "delete-last-browser-chinese-dark.jpg"
+  ],
+  "actualActions": [
+    "Files explorer ordinary private README; temporary unsaved draft only, no Save",
+    "Delete dirty File→Cancel retained draft and restored original File tab focus",
+    "Reload dirty file→Cancel retained draft and restored Reload from disk button",
+    "Delete dirty File→Discard closed File and focused remaining Files",
+    "Delete last Files→Add; Enter opened add menu",
+    "Two independent Browser tabs; closing inactive first by real pointer focused selected second and retained second address",
+    "Settings Chinese Simplified+Dark retained second address",
+    "Delete last Chinese Browser focused 添加工具; Enter opened real menu and Escape closed it"
+  ],
+  "qualified": "Real current page/manual screenshots and native input, no UI automated tests or injected state",
+  "unqualified": [
+    "changed-focus race during pending success frame",
+    "API authority/resource change while dirty dialog pending",
+    "Tauri GUI",
+    "screen-reader inactive aria-controls",
+    "live child Rendering"
+  ]
+}

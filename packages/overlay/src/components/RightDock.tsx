@@ -5,6 +5,7 @@ import { Button } from "./ui/Button"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
 import { randomUUID } from "../utils/random-id"
+import { createAnimationFrameScheduler } from "../utils/animation-frame"
 
 export type RightDockPanel =
   | "requirements"
@@ -103,7 +104,7 @@ export interface RightDockProps {
   onSelect: (tabID: string) => void
   onOpen: (panel: RightDockPanel) => void
   onNewBrowserTab: (tabID: string) => void
-  onClose: (tabID: string) => void
+  onClose: (tabID: string) => Promise<boolean>
   onCloseDock: () => void
   addMenuOpen: Accessor<boolean>
   onAddMenuOpenChange: (open: boolean) => void
@@ -117,6 +118,9 @@ export interface RightDockProps {
 export function RightDock(props: RightDockProps): JSX.Element {
   let stripEl!: HTMLDivElement
   let moreBtnEl!: HTMLButtonElement
+  let addBtnEl!: HTMLButtonElement
+  let disposed = false
+  let focusReturnOrigin: Element | undefined
   const [hidden, setHidden] = createSignal<Set<string>>(new Set())
 
   const openSet = () => new Set(props.tabs().map((tab) => tab.id))
@@ -190,14 +194,41 @@ export function RightDock(props: RightDockProps): JSX.Element {
     setHidden(next)
   }
 
-  let reflowScheduled = false
-  function scheduleReflow(): void {
-    if (reflowScheduled) return
-    reflowScheduled = true
-    requestAnimationFrame(() => {
-      reflowScheduled = false
-      reflow()
-    })
+  const reflowScheduler = createAnimationFrameScheduler(() => {
+    reflow()
+    const origin = focusReturnOrigin
+    focusReturnOrigin = undefined
+    if (!origin || disposed || !props.open()) return
+    if (document.activeElement !== origin && document.activeElement !== document.body) return
+    if (props.tabs().length === 0) {
+      addBtnEl.focus({ preventScroll: true })
+      return
+    }
+    const selected = Array.from(stripEl.querySelectorAll<HTMLButtonElement>(".right-dock-tab")).find(
+      (tab) => !tab.disabled && tab.dataset.tab === props.active(),
+    )
+    selected?.focus({ preventScroll: true })
+  })
+  const scheduleReflow = reflowScheduler.schedule
+  onCleanup(() => {
+    disposed = true
+    focusReturnOrigin = undefined
+    reflowScheduler.cancel()
+  })
+
+  async function closeTab(tabID: string): Promise<void> {
+    const origin = document.activeElement
+    const closed = await props.onClose(tabID)
+    if (!closed || disposed || !props.open() || props.tabs().some((tab) => tab.id === tabID) || !origin) return
+    focusReturnOrigin = origin
+    scheduleReflow()
+  }
+
+  function handleTabKeyDown(event: KeyboardEvent, tabID: string): void {
+    if (event.key !== "Delete" || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    event.preventDefault()
+    event.stopPropagation()
+    void closeTab(tabID)
   }
 
   createEffect(() => {
@@ -305,7 +336,9 @@ export function RightDock(props: RightDockProps): JSX.Element {
                     data-panel={tab().panel}
                     disabled={!isOpen() || hidden().has(tabID)}
                     aria-label={tabTitle(tab())}
+                    aria-keyshortcuts="Delete"
                     title={tabTitle(tab())}
+                    onKeyDown={(event) => handleTabKeyDown(event, tabID)}
                   >
                     <Icon name={meta().icon} size="medium" />
                     <span class="right-dock-tab__label">{tabTitle(tab())}</span>
@@ -318,12 +351,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
                     data-chrome="icon-action"
                     class="right-dock-tab__close"
                     aria-label={t("right_dock.close_tab")}
-                    title={t("right_dock.close_tab")}
+                    title={t("right_dock.close_tab_shortcut")}
                     onPointerDown={(event) => event.stopPropagation()}
                     onKeyDown={(event) => event.stopPropagation()}
                     onClick={(event) => {
                       event.stopPropagation()
-                      props.onClose(tabID)
+                      void closeTab(tabID)
                     }}
                   >
                     <Icon name="close" size="medium" />
@@ -402,6 +435,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
               tone="neutral"
               data-chrome="icon-action"
               class="right-dock-add"
+              ref={addBtnEl}
               title={t("right_dock.add")}
               aria-label={t("right_dock.add")}
             >

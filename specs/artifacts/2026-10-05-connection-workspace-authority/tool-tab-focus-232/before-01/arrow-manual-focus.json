@@ -1,0 +1,76 @@
+{
+  "active": {
+    "id": "tabs-cl-64-trigger-file",
+    "label": "File",
+    "role": "tab",
+    "tag": "BUTTON"
+  },
+  "tabs": [
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-file",
+      "selected": "false",
+      "text": "File"
+    },
+    {
+      "controls": "centerWorkbenchBrowser-browser:e351628e-8457-4053-9ad8-0d83070a3065",
+      "id": "tabs-cl-64-trigger-browser:e351628e-8457-4053-9ad8-0d83070a3065",
+      "selected": "true",
+      "text": "New tab"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-browser",
+      "selected": "false",
+      "text": "New tab"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-diff",
+      "selected": "false",
+      "text": "Review"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-explorer",
+      "selected": "false",
+      "text": "Files"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-screenshots",
+      "selected": "false",
+      "text": "Screenshots"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-requirements",
+      "selected": "false",
+      "text": "Requirements"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-goals",
+      "selected": "false",
+      "text": "Goals"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-subagent",
+      "selected": "false",
+      "text": "Expert Squad agents"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-side-chat",
+      "selected": "false",
+      "text": "Side chat"
+    },
+    {
+      "controls": null,
+      "id": "tabs-cl-64-trigger-browser:218bcf19-1ca6-4830-848d-e508a69f0928",
+      "selected": "false",
+      "text": "New tab"
+    }
+  ]
+}

@@ -353,7 +353,7 @@ function reportOverlayRuntimeError(scope: string, error: unknown): void {
   })
 }
 
-function runMainAsync(scope: string, action: () => void | Promise<void>): void {
+function runMainAsync(scope: string, action: () => void | Promise<void>): Promise<void> {
   const report = (error: unknown) => {
     if (error instanceof ApiAuthorityChangedError) {
       AppLog.warn(scope, "Operation belongs to a previous connection", {
@@ -366,16 +366,17 @@ function runMainAsync(scope: string, action: () => void | Promise<void>): void {
     reportOverlayRuntimeError(scope, error)
   }
   try {
-    void Promise.resolve(action()).catch((error) => {
+    return Promise.resolve(action()).catch((error) => {
       report(error)
     })
   } catch (error) {
     report(error)
+    return Promise.resolve()
   }
 }
 
-function runUserNavigation(scope: string, action: () => void | Promise<void>): void {
-  runMainAsync(scope, async () => {
+function runUserNavigation(scope: string, action: () => void | Promise<void>): Promise<void> {
+  return runMainAsync(scope, async () => {
     try {
       await action()
     } catch (error) {
@@ -1658,14 +1659,15 @@ function closeCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
   removeCenterWorkbenchTabs((tab) => tab.panel === panel)
 }
 
-function closeRightDockTab(tabID: string): void {
+async function closeRightDockTab(tabID: string): Promise<boolean> {
   const tab = untrack(centerWorkbenchPanels).find((item) => item.id === tabID)
-  if (!tab || tab.panel === "conversation") return
+  if (!tab || tab.panel === "conversation") return false
   if (tab.panel === "file") {
-    runUserNavigation("workspace.close-file", async () => {
-      await closeFileEditor()
+    let closed = false
+    await runUserNavigation("workspace.close-file", async () => {
+      closed = await closeFileEditor()
     })
-    return
+    return closed
   }
   removeCenterWorkbenchTabs((item) => item.id === tabID)
   if (tab.panel === "browser") {
@@ -1675,6 +1677,7 @@ function closeRightDockTab(tabID: string): void {
       return next
     })
   }
+  return true
 }
 
 function getCenterWorkbenchViews(): Record<CenterWorkbenchPanel, HTMLElement | null> {

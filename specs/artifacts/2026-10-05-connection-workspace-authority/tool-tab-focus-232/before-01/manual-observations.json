@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-10-09T09:29:33.618Z",
+  "actions": [
+    "Original231 natural File source opened with Enter",
+    "Real Add tool Browser; entered scoped address draft",
+    "ArrowLeft moved visible focus to File while Browser stayed selected; Enter activated original File body",
+    "ArrowRight and Space returned Browser with original address",
+    "Tab left group for Add tool; ShiftTab returned New tab, not Close button",
+    "Delete on focused New tab left both original tabs open",
+    "Actual Browser close click left File selected but document focus BODY",
+    "Last clean File close left chooser visible but document focus BODY"
+  ],
+  "screenshotsPersonallyViewed": [
+    "browser-and-file.jpg",
+    "arrow-manual-focus.jpg",
+    "file-keyboard-active.jpg",
+    "browser-keyboard-return.jpg",
+    "close-keyboard-focused.jpg",
+    "actual-close-control-focus.jpg",
+    "delete-current-observation.jpg",
+    "browser-close-focus.jpg",
+    "last-file-close-focus.jpg"
+  ],
+  "filenameCaveat": "close-keyboard-focused.jpg is actually Add tool focus; actual-close-control-focus.jpg is New tab after ShiftTab. Names are leads only; actual snapshots/diagnostic values retained.",
+  "confirmed": "Keyboard switching and address retention work; close action loses focus. Delete direct close unavailable in current widget, optional enhancement remains unimplemented.",
+  "limits": [
+    "Tauri GUI",
+    "screen-reader behavior of selected-only aria-controls",
+    "dirty-file cancel and confirmation not yet exercised"
+  ]
+}

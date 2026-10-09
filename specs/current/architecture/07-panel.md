@@ -1673,6 +1673,19 @@ existing overflow menu activates. The active tab remains visible. Its exact
 tab is removed on close; closing Review also clears the legacy diff
 workspace presentation before the canonical tab collection selects the
 preceding remaining tab.
+Focused open tabs expose Delete as a direct close action. The close button and
+keyboard action await the same completed close result, including the existing
+File dirty-draft confirmation; cancellation keeps the tab and its focus owner.
+The File decision's programmatic Dialog restores the initiating visible control
+on cancellation through the primitive close-autofocus hook. It uses the existing
+file resource and connection authority to retire stale focus intent; accepted
+leave decisions hand focus to their destination instead.
+After actual removal, the existing Dock reflow frame restores focus to the
+canonical selected visible tab, or to Add tool when the collection is empty.
+It retains only the initiating element as a short-lived focus intent and respects
+an operator who has already moved focus. Disposing the Dock cancels that frame.
+The same main UI operation reporter exposes its handled completion promise so
+this interaction can observe completion without another close/error path.
 Compression does not change tab density, ordering, selection, close behavior,
 or focus ownership. Open-tab membership preserves insertion order while one
 selected-tab ID independently owns activation, so switching tabs never moves a

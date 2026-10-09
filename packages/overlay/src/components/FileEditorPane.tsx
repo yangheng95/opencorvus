@@ -95,6 +95,11 @@ export function FileEditorPane() {
   const [leaveReason, setLeaveReason] = createSignal<"leave" | "reload">("leave")
   let pendingLeaveDecision: Promise<number | null> | undefined
   let settleLeaveDecision: ((revision: number | null) => void) | undefined
+  let leaveFocus: {
+    element: HTMLElement
+    targetIdentity: string
+    authority: ReturnType<typeof captureApiAuthority>
+  } | undefined
   let decisionRevision = 0
   let loadGeneration = 0
   let draftRevision = 0
@@ -209,6 +214,7 @@ export function FileEditorPane() {
     const settle = settleLeaveDecision
     settleLeaveDecision = undefined
     pendingLeaveDecision = undefined
+    if (allowed) leaveFocus = undefined
     setLeaveDialogOpen(false)
     setLeaveSaving(false)
     settle?.(allowed ? approvedRevision : null)
@@ -219,6 +225,10 @@ export function FileEditorPane() {
     if (!dirty()) return Promise.resolve(draftRevision)
     if (pendingLeaveDecision) return pendingLeaveDecision
     decisionRevision = draftRevision
+    const focused = document.activeElement
+    leaveFocus = focused instanceof HTMLElement
+      ? { element: focused, targetIdentity: activeTargetIdentity, authority: captureApiAuthority() }
+      : undefined
     setLeaveReason(reason)
     setLeaveDialogOpen(true)
     pendingLeaveDecision = new Promise<number | null>((resolve) => {
@@ -238,6 +248,7 @@ export function FileEditorPane() {
     reloadGeneration += 1
     saveGeneration += 1
     unregisterBeforeNavigate()
+    leaveFocus = undefined
     finishLeaveDecision(false)
   })
 
@@ -445,6 +456,15 @@ export function FileEditorPane() {
         open={leaveDialogOpen()}
         title={t("file_editor.unsaved")}
         backdropClose={false}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault()
+          const intent = leaveFocus
+          leaveFocus = undefined
+          if (
+            intent && intent.targetIdentity === activeTargetIdentity && isApiAuthorityCurrent(intent.authority) &&
+            intent.element.isConnected && intent.element.getClientRects().length > 0
+          ) intent.element.focus({ preventScroll: true })
+        }}
         onClose={() => {
           if (!leaveSaving()) finishLeaveDecision(false)
         }}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具标签焦点232](records/2026-10/2026-10-09-tool-tab-focus-232.md)：Delete关闭、成功接续及File确认取消恢复，英文/中文深色真实验证。
+
 - [真实共享文本流式231](records/2026-10/2026-10-09-render-stream-231.md)：单agent新Sol回复、Source与阅读滚动实际验收。
 
 - [原网页来源体验230](records/2026-10/2026-10-09-source-url-experience-230.md)：单条直接引用；原自然网页/文件实际打开，切换、重开及中文深色复核，网页after截止失败保留。

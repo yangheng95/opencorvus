@@ -1,0 +1,26 @@
+{
+  "observedAt": "2026-10-09T09:50:40.063Z",
+  "actualPass": [
+    "Delete Browser→File focus visible",
+    "Delete last clean File→Add tool focus visible; Enter opened same Add menu",
+    "Files explorer normal README editable; actual temporary draft and unchanged disk intent",
+    "Delete dirty File opened existing Unsaved dialog; Cancel preserved File and draft",
+    "Discard closed only File, Files remained"
+  ],
+  "actualFailure": "After Cancel document focus BODY; focus success branch skips false return. Dirty Discard focus current/settled diagnostics retained separately.",
+  "screenshotsPersonallyViewed": [
+    "delete-browser-focus.jpg",
+    "delete-last-file-focus.jpg",
+    "dirty-file-close-dialog.jpg",
+    "dirty-cancel-retained.jpg",
+    "dirty-discard-dialog.jpg",
+    "dirty-discard-files-focus.jpg"
+  ],
+  "intermediate": "First dirty-file-close-dialog image during transition retained; second stable dialog manually viewed.",
+  "unqualified": [
+    "cancel focus return",
+    "dirty-discard focus closure until settled diagnostics inspected",
+    "two Browser/pointer/Chinese dark/changed-focus guard",
+    "Tauri GUI"
+  ]
+}

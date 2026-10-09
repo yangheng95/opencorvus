@@ -1,0 +1,59 @@
+{
+  "finalUiUri": "http://127.0.0.1:18161/ui/",
+  "uiUri": "http://127.0.0.1:18161/ui",
+  "scriptSrc": "http://127.0.0.1:18161/ui/assets/main-CaivO4XR.js",
+  "uiStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "asset": "/ui/assets/main-CaivO4XR.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18161,
+      "OwningProcess": 60452
+    }
+  ],
+  "owner": {
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "nativeDeadlineAt": 1791539944582,
+    "evidencePrefix": "tool-tab-focus-232-after-01",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\tool-tab-focus-232\\after-01",
+    "host": {
+      "pid": 64312,
+      "processInstanceID": "win32:639271358446658140",
+      "occurrenceID": "757a26bc-2680-4710-8cdf-03a86c073dc5"
+    },
+    "nativeTarget": {
+      "pid": 60452,
+      "processInstanceID": "win32:639271358454290273",
+      "occurrenceID": "0ff20fee-5138-4d9f-a02a-57aad4c17c73"
+    },
+    "observedProcessChain": [
+      {
+        "pid": 60452,
+        "processInstanceID": "win32:639271358454290273",
+        "occurrenceID": "0ff20fee-5138-4d9f-a02a-57aad4c17c73"
+      }
+    ],
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-tab-focus-232-after-01\\runtime",
+    "occurrence": "tool-tab-focus-232-after-01-de16fe37-6703-4a6e-9686-2c0db0e26f2b",
+    "targetBirthAtMs": 1791539045429,
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\project",
+    "owner": {
+      "processInstanceID": "win32:639271358454290273",
+      "ProcessId": 60452
+    },
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-tab-focus-232-after-01\\evidence",
+    "authorityStaging": "None; no model Task requested",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-tab-focus-232-after-01",
+    "port": 18161
+  },
+  "assetStatus": 200,
+  "observedAtUtc": "2026-10-09T09:44:23.9064582Z",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "tool-tab-focus-232-after-01-de16fe37-6703-4a6e-9686-2c0db0e26f2b",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18161",
+    "pid": 60452
+  }
+}

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [工具标签焦点232 Recall](tool-tab-focus-plan-232.md) / [真实before/after](tool-tab-focus-232/README.md)：Delete与成功关闭focus、共享File确认取消恢复，原失败/完整自然history和中文深色实测。
+
 - [共享文本真实流式231 Recall](render-stream-plan-231.md) / [实际页面与原事实](render-stream-231/README.md)：新单agentSol自然Source与长分段/表格/代码、阅读/terminal/Enter真页面，5stream EOF与Native/foreground0；限定观察未复现Rendering，不作推测补丁。
 
 - [原网页来源体验230 Recall](source-url-experience-plan-230.md) / [真实网页](source-url-experience-230/README.md) / [共享文件](source-single-file-230/README.md) / [文件准入](source-single-file-readiness-230/README.md)：单条直接引用，原研究员click/Enter/切换/重开/中文深色与文件实测；两个网页after截止失败保留。

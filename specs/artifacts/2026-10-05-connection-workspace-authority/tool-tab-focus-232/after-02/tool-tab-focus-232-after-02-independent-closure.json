@@ -1,0 +1,27 @@
+{
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "observedAtUtc": "2026-10-09T10:07:02.3569146Z",
+  "occurrence": "tool-tab-focus-232-after-02-053eee2a-7045-41c0-80ae-0ac1746ccddf",
+  "listeners": [],
+  "states": [
+    {
+      "expected": {
+        "pid": 10872,
+        "processInstanceID": "win32:639271367554461252",
+        "occurrenceID": "7ebec897-f8cf-466a-8252-5d6e1beb7de6"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 78016,
+        "processInstanceID": "win32:639271367562082604",
+        "occurrenceID": "f92c7bf0-fb05-492b-aea6-500ee372df9d"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}
