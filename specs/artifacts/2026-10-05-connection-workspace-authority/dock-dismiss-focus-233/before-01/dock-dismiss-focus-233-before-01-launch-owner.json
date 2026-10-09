@@ -1,0 +1,35 @@
+{
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-before-01\\evidence",
+  "authorityStaging": "None; no model Task requested",
+  "occurrence": "dock-dismiss-focus-233-before-01-01a1e526-cff7-48cc-b266-2fd2ea6d92f7",
+  "owner": {
+    "processInstanceID": "win32:639271382185035995",
+    "ProcessId": 73920
+  },
+  "host": {
+    "pid": 71572,
+    "processInstanceID": "win32:639271382177388153",
+    "occurrenceID": "e429ef6b-ba3b-4fcd-932e-19677108f037"
+  },
+  "observedProcessChain": [
+    {
+      "pid": 73920,
+      "processInstanceID": "win32:639271382185035995",
+      "occurrenceID": "ba4c6618-4f1c-4ed4-ab85-65ff84aa5198"
+    }
+  ],
+  "targetBirthAtMs": 1791541418503,
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-before-01",
+  "evidencePrefix": "dock-dismiss-focus-233-before-01",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-before-01\\runtime",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\dock-dismiss-focus-233\\before-01",
+  "nativeDeadlineAt": 1791542317661,
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\project",
+  "port": 18163,
+  "nativeTarget": {
+    "pid": 73920,
+    "processInstanceID": "win32:639271382185035995",
+    "occurrenceID": "ba4c6618-4f1c-4ed4-ab85-65ff84aa5198"
+  }
+}

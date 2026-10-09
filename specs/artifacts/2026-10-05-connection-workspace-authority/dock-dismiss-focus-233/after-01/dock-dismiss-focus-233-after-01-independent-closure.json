@@ -1,0 +1,27 @@
+{
+  "occurrence": "dock-dismiss-focus-233-after-01-f81d7df8-4a03-4b2a-ac17-e02ce1aeba22",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 49912,
+        "processInstanceID": "win32:639271396161422606",
+        "occurrenceID": "9fa3ed68-17a7-442d-b496-3ce7895e12f8"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 77260,
+        "processInstanceID": "win32:639271396168795947",
+        "occurrenceID": "418a409b-dbd2-41a0-98da-45d21f8d65f7"
+      }
+    }
+  ],
+  "observedAtUtc": "2026-10-09T10:50:51.6531694Z",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "listeners": []
+}

@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-09T10:50:46.8852294Z",
+  "occurrence": "dock-dismiss-focus-233-after-01-f81d7df8-4a03-4b2a-ac17-e02ce1aeba22",
+  "owner": {
+    "pid": 77260,
+    "processInstanceID": "win32:639271396168795947",
+    "occurrenceID": "418a409b-dbd2-41a0-98da-45d21f8d65f7"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXY431h00oT5iVHTy9"
+  }
+}

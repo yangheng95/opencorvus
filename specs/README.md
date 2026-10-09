@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧栏关闭焦点233](records/2026-10/2026-10-09-dock-dismiss-focus-233.md)：关闭后接续真实header，File显式依赖修复看板回拉；英文/中文深色实测闭合。
+
 - [工具标签焦点232](records/2026-10/2026-10-09-tool-tab-focus-232.md)：Delete关闭、成功接续及File确认取消恢复，英文/中文深色真实验证。
 
 - [真实共享文本流式231](records/2026-10/2026-10-09-render-stream-231.md)：单agent新Sol回复、Source与阅读滚动实际验收。

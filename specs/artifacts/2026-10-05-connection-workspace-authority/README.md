@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [整个侧栏关闭焦点233 Recall](dock-dismiss-focus-plan-233.md) / [实际before/after](dock-dismiss-focus-233/README.md)：可见header接续、File显式依赖修复看板回拉，完整自然history与中文深色实测闭合。
+
 - [工具标签焦点232 Recall](tool-tab-focus-plan-232.md) / [真实before/after](tool-tab-focus-232/README.md)：Delete与成功关闭focus、共享File确认取消恢复，原失败/完整自然history和中文深色实测。
 
 - [共享文本真实流式231 Recall](render-stream-plan-231.md) / [实际页面与原事实](render-stream-231/README.md)：新单agentSol自然Source与长分段/表格/代码、阅读/terminal/Enter真页面，5stream EOF与Native/foreground0；限定观察未复现Rendering，不作推测补丁。

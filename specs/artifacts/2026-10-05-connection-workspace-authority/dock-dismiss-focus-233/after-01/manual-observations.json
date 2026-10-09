@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-10-09T10:50:27.534Z",
+  "observer": "single root; actual UI interactions and personally viewed images",
+  "tab": "70",
+  "port": 18164,
+  "asset": "/ui/assets/main-DzTLjY3N.js",
+  "sourceSession": "ses_-zUSSQjEPzzcHPHmHT48",
+  "facts": [
+    "Natural original README Source Enter opens actual one-line file. Close panel Enter focuses visible header; native current-focus Return reopens it.",
+    "Browser scoped address entered; Close panel pointer focuses header. Native Return retains File and Browser and address.",
+    "Mission Board Enter while File remains open shows actual Board; title owns focus, Dock closed. Chats returns original conversation with Dock closed; same Source Enter explicitly reveals File.",
+    "Direct header Enter closes with same button focus. Settings opens actual General with Search focus; Back to app returns Settings button focus.",
+    "Chinese Dark Close panel Enter focuses 打开右侧面板; native Return reopens original File. File tab Delete selects remaining Browser; new explicit Source returns File; Chinese Mission pointer remains actual Board."
+  ],
+  "diagnosticBoundary": "Read-only DOM/console supplements screenshots; mounted hidden tab targets in file-tab-closed-focus.json are not open-tab membership. No UI test assertions or fake state/messages.",
+  "unqualified": [
+    "Menu portals outside Dock",
+    "Resizer focus races",
+    "Changed connection/resource focus",
+    "Tauri GUI",
+    "Live child-agent Rendering stream",
+    "All-frame flicker analysis"
+  ],
+  "credentials": "No auth/models copied; original 231 stream history retained without new Provider calls"
+}

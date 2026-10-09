@@ -1686,6 +1686,14 @@ It retains only the initiating element as a short-lived focus intent and respect
 an operator who has already moved focus. Disposing the Dock cancels that frame.
 The same main UI operation reporter exposes its handled completion promise so
 this interaction can observe completion without another close/error path.
+Closing the whole Dock restores its focused descendant or resizer to the
+visible conversation header toggle before making the Dock inert. Focus already
+outside the Dock remains with its owner; Settings and Mission Board navigation
+retain their destination focus. File presentation observes only the canonical
+open flag and explicit reveal revision through Solid's `on` utility. Reading the
+current primary surface inside that handler cannot turn a page switch into a
+new file reveal. New and repeated explicit file requests still reveal the File
+tab through the existing opener.
 Compression does not change tab density, ordering, selection, close behavior,
 or focus ownership. Open-tab membership preserves insertion order while one
 selected-tab ID independently owns activation, so switching tabs never moves a

@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "port": 18163,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-before-01\\evidence",
+    "dock-dismiss-focus-233-before-01-01a1e526-cff7-48cc-b266-2fd2ea6d92f7",
+    "1791542317661",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18163",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-before-01\\startup.json",
+    "--startup-occurrence",
+    "dock-dismiss-focus-233-before-01-01a1e526-cff7-48cc-b266-2fd2ea6d92f7",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "dock-dismiss-focus-233-before-01-01a1e526-cff7-48cc-b266-2fd2ea6d92f7"
+}

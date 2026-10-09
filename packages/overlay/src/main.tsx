@@ -85,6 +85,7 @@ import { appStore } from "./store/app"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./services/composer-model"
 import { projectComposerIntent, rememberProjectComposerIntent } from "./services/project-composer-preferences"
 import { rightDockOpen, setRightDockVisible } from "./store/right-dock"
+import { dialogStore } from "./store/dialog"
 import { selectTask, cancelTask, setTaskArchived, renameTask, downloadTaskProjectArchive } from "./services/task"
 import { canComposeChat, stopChatRequest } from "./services/chat"
 import { isTaskInterruptable } from "./store/board"
@@ -2143,6 +2144,18 @@ function OverlayRoot() {
     if (!open && rightDockOverflowMenuOpen()) setRightDockOverflowMenuOpen(false)
     const dock = document.getElementById("rightDock")
     const resizer = document.getElementById("rightDockResizer")
+    const focused = document.activeElement
+    if (
+      !open &&
+      (dock?.contains(focused) || focused === resizer) &&
+      untrack(primaryWorkspaceSurface) === "conversation" &&
+      !untrack(() => dialogStore.config.open)
+    ) {
+      const toggle = document.querySelector<HTMLButtonElement>('[data-ui="chat-header-right-dock-toggle"]')
+      if (toggle?.isConnected && !toggle.disabled && !toggle.closest("[inert]") && toggle.getClientRects().length) {
+        toggle.focus({ preventScroll: true })
+      }
+    }
     if (dock) {
       dock.dataset.open = open ? "true" : "false"
       dock.inert = !open
@@ -2250,15 +2263,15 @@ function OverlayRoot() {
     }
   })
 
-  createEffect(() => {
-    const open = fileWorkbenchOpen()
-    void fileEditorRevealRevision()
-    if (open) {
-      openRightDockPanel("file")
-    } else {
-      removeCenterWorkbenchTabs((tab) => tab.panel === "file")
-    }
-  })
+  createEffect(
+    on([fileWorkbenchOpen, fileEditorRevealRevision], ([open]) => {
+      if (open) {
+        openRightDockPanel("file")
+      } else {
+        removeCenterWorkbenchTabs((tab) => tab.panel === "file")
+      }
+    }),
+  )
 
   createEffect(() => {
     if (!settingsHydrated()) return

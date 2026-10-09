@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-10-09T10:34:32.101Z",
+  "confirmed": [
+    "Source File keyboard Close panel→BODY focus, visible header Open right dock retained",
+    "Browser pointer Close panel→BODY focus; dock actual inert attribute and data-open=false",
+    "Manual header reopen retained original File+Browser records and entered scoped address",
+    "Direct header toggle close retained actual header focus"
+  ],
+  "navigation": "Mission Board locator Enter/click and separately native pointer all left current conversation visible, Mission title rect0, Dock true. Browser error/warn logs empty. Root cause unknown, not classified as scheduler/occlusion failure without durable evidence.",
+  "screenshotsPersonallyViewed": [
+    "keyboard-close-panel.jpg",
+    "pointer-close-panel.jpg",
+    "browser-reopen.jpg",
+    "mission-navigation.jpg",
+    "mission-pointer-navigation.jpg",
+    "mission-native-pointer-navigation.jpg",
+    "settings-navigation.jpg"
+  ],
+  "unqualified": [
+    "Mission navigation completion",
+    "root visibility fix not implemented yet",
+    "Tauri GUI",
+    "live child Rendering"
+  ]
+}

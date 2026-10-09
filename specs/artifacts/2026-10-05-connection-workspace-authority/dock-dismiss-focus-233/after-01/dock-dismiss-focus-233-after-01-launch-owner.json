@@ -1,0 +1,35 @@
+{
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\dock-dismiss-focus-233\\after-01",
+  "owner": {
+    "processInstanceID": "win32:639271396168795947",
+    "ProcessId": 77260
+  },
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\project",
+  "observedProcessChain": [
+    {
+      "pid": 77260,
+      "processInstanceID": "win32:639271396168795947",
+      "occurrenceID": "418a409b-dbd2-41a0-98da-45d21f8d65f7"
+    }
+  ],
+  "nativeTarget": {
+    "pid": 77260,
+    "processInstanceID": "win32:639271396168795947",
+    "occurrenceID": "418a409b-dbd2-41a0-98da-45d21f8d65f7"
+  },
+  "evidencePrefix": "dock-dismiss-focus-233-after-01",
+  "occurrence": "dock-dismiss-focus-233-after-01-f81d7df8-4a03-4b2a-ac17-e02ce1aeba22",
+  "nativeDeadlineAt": 1791543716059,
+  "authorityStaging": "None; no model Task requested",
+  "host": {
+    "pid": 49912,
+    "processInstanceID": "win32:639271396161422606",
+    "occurrenceID": "9fa3ed68-17a7-442d-b496-3ce7895e12f8"
+  },
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-after-01\\runtime",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-after-01\\evidence",
+  "targetBirthAtMs": 1791542816879,
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "port": 18164,
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\dock-dismiss-focus-233-after-01"
+}
