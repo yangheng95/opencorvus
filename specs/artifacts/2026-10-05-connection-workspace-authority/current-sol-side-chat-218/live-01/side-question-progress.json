@@ -1,0 +1,89 @@
+{
+  "active": {
+    "aria": null,
+    "tag": "BODY"
+  },
+  "alerts": [],
+  "asset": [
+    "./assets/main-Bmeb8tJo.js"
+  ],
+  "cards": [
+    {
+      "chars": 341,
+      "id": "user:session:ses_-zUSUKOKEzzUAzc97EnJ:message:msg_5002410e-9941-484d-a4c6-b60e076d5a0e",
+      "kind": "message",
+      "status": "completed"
+    },
+    {
+      "chars": 4060,
+      "id": "assistant:session:ses_-zUSUKOKEzzUAzc97EnJ:message:msg_g0VXVfbuu00tjUDGciBK",
+      "kind": "agent",
+      "status": "completed"
+    },
+    {
+      "chars": 341,
+      "id": "side-message:msg_g0VXVgX4X00PgHD9sD0o",
+      "kind": "agent",
+      "status": "completed"
+    },
+    {
+      "chars": 266,
+      "id": "side-message:msg_g0VXVgX4X01I2n6BMLdw",
+      "kind": "agent",
+      "status": "completed"
+    },
+    {
+      "chars": 102,
+      "id": "side-message:msg_g0VXVgX4X021OMt5oh5c",
+      "kind": "agent",
+      "status": "completed"
+    },
+    {
+      "chars": 3619,
+      "id": "side-message:msg_g0VXVgX4X033TNbrbXDz",
+      "kind": "agent",
+      "status": "completed"
+    },
+    {
+      "chars": 135,
+      "id": "side-message:msg_57d60316-b835-4ca3-937b-10215b64a136",
+      "kind": "agent",
+      "status": "completed"
+    },
+    {
+      "chars": 245,
+      "id": "side-message:msg_g0VXVggen00ycJE1iFmz",
+      "kind": "agent",
+      "status": "completed"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T01:05:53.491Z",
+  "scroll": {
+    "height": 4164,
+    "top": 220,
+    "view": 635
+  },
+  "sources": [
+    {
+      "open": true,
+      "text": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C1",
+      "top": 451.9791870117187
+    },
+    {
+      "open": false,
+      "text": "Accessibility | MDN1",
+      "top": 562.375
+    },
+    {
+      "open": false,
+      "text": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C1",
+      "top": 503.5
+    },
+    {
+      "open": false,
+      "text": "Accessibility | MDN1",
+      "top": 636.8333740234375
+    }
+  ],
+  "status": "Not running"
+}

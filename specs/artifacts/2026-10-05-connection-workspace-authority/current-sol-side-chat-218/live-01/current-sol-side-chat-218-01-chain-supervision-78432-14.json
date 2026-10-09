@@ -1,0 +1,28 @@
+{
+  "phase": "supervision-78432-14",
+  "nativeSettlement": null,
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18139,
+      "OwningProcess": 63012
+    }
+  ],
+  "presence": [
+    {
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processID": 63012,
+      "processInstanceID": "win32:639271043765914395"
+    },
+    {
+      "state": "exact_live",
+      "originalOccurrencePresent": true,
+      "processID": 65200,
+      "processInstanceID": "win32:639271043758135601"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T01:00:58.4033252Z",
+  "occurrence": "current-sol-side-chat-218-01-baa0e379-6d6b-446e-923e-f828e94c3c33"
+}

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Current Sol Side Chat218](2026-10-09-current-sol-side-chat-218.md): paired actual provider/model admission, genuine streaming Sources and independent Side Chat; real scope evidence and immutable budget.
+
 - [Historical Tool read217](2026-10-09-historical-tool-read-217.md): three canonical GET identity readers, cold root/child and project isolation positive contracts, complete historical runtime and real UI scope.
 
 - [Deferred Tool error216](2026-10-09-deferred-tool-error-216.md): common resource accessor and complete-result boundary; actual original failure, fresh full history and current visual/native scope.

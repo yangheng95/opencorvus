@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Current Sol Side Chat218](records/2026-10/2026-10-09-current-sol-side-chat-218.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/current-sol-side-chat-218/README.md): complete paired provider/model admission and current real streaming Sources/Side Chat qualification; original failures and remaining matrix explicit.
+
 - [Historical Tool read217](records/2026-10/2026-10-09-historical-tool-read-217.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/historical-tool-read-217/README.md): canonical message/Part GET identity admission, cold full output and project isolation contracts; current real page qualification recorded in scope.
 
 - [Deferred Tool error216](records/2026-10/2026-10-09-deferred-tool-error-216.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/deferred-tool-error-216/README.md): local resource error ownership and complete-result admission; original whole-card failure retained, current visual and native qualification recorded in scope.

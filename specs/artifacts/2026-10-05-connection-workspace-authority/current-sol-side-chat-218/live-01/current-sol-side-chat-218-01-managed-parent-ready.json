@@ -1,0 +1,15 @@
+{
+  "pid": 63012,
+  "occurrence": "current-sol-side-chat-218-01-baa0e379-6d6b-446e-923e-f828e94c3c33",
+  "owner": {
+    "pid": 63012,
+    "processInstanceID": "win32:639271043765914395",
+    "occurrenceID": "a9666f81-a388-498e-ba00-3ca93c9c5af3"
+  },
+  "parent": {
+    "pid": 44064,
+    "processInstanceID": "win32:639271043765457960",
+    "occurrenceID": "31013a8a-4187-4223-bcd9-40c51c3e9f59"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

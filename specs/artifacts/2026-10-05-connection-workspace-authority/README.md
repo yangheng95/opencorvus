@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Current Sol218 Recall](current-sol-side-chat-plan-218.md) and [actual scope](current-sol-side-chat-218/README.md): complete auth/catalog pair, actual model/streaming and manual Sources/Side Chat qualification, independent fixed native budget and original failures retained.
+
 - [Historical Tool217 Recall](historical-tool-read-plan-217.md), [readiness](historical-tool-readiness-217/README.md), [startup](historical-tool-startup-217.json) and [actual scope](historical-tool-read-217/README.md): three exact historical data GETs use existing Project identity; cold full output/isolation tests and genuine page/native evidence.
 
 - [Deferred Tool216 Recall](deferred-tool-error-plan-216.md), [current readiness](deferred-tool-readiness-216/README.md), [startup](deferred-tool-startup-216.json) and [actual scope](deferred-tool-error-216/README.md): failed-resource accessor root cause, local error ownership and full-result boundary; original whole-card failure retained.

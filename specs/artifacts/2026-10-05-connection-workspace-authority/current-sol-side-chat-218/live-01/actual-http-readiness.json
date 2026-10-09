@@ -1,0 +1,106 @@
+{
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "observedAtUtc": "2026-10-09T01:00:39.7694529Z",
+  "owner": {
+    "observedAtUtc": "2026-10-09T00:59:37.2306537Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\current-sol-side-chat-218-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\current-sol-side-chat-218-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\current-sol-side-chat-218-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\current-sol-side-chat-218-01\\evidence",
+    "evidencePrefix": "current-sol-side-chat-218-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\current-sol-side-chat-218-01\\startup.json",
+    "occurrence": "current-sol-side-chat-218-01-baa0e379-6d6b-446e-923e-f828e94c3c33",
+    "port": 18139,
+    "owner": {
+      "processInstanceID": "win32:639271043765914395",
+      "ProcessId": 63012
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639271043765914395",
+        "ProcessId": 63012
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\current-sol-side-chat-218-01\\task-selection.json",
+    "taskSelectionRequired": false,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\current-sol-side-chat-218-builtin.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 12,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\current-sol-side-chat-218\\live-01",
+    "qualificationKind": "NativeService",
+    "host": {
+      "pid": 65200,
+      "processInstanceID": "win32:639271043758135601",
+      "occurrenceID": "f40eb67a-3c81-4094-9304-0034ff55ddf4"
+    },
+    "nativeTarget": {
+      "pid": 63012,
+      "processInstanceID": "win32:639271043765914395",
+      "occurrenceID": "03ccf29b-ec40-4841-a930-4fc7971f1a2e"
+    },
+    "targetBirthAtMs": 1791507576591,
+    "nativeDeadlineAt": 1791508175798,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "scriptSrc": "http://127.0.0.1:18139/ui/assets/main-Bmeb8tJo.js",
+  "asset": "/ui/assets/main-Bmeb8tJo.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "current-sol-side-chat-218-01-baa0e379-6d6b-446e-923e-f828e94c3c33",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18139",
+    "pid": 63012
+  },
+  "assetStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18139/ui/",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18139,
+      "OwningProcess": 63012
+    }
+  ],
+  "uiStatus": 200,
+  "uiUri": "http://127.0.0.1:18139/ui"
+}

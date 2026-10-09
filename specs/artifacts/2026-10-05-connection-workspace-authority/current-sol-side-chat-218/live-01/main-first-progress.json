@@ -1,0 +1,43 @@
+{
+  "active": {
+    "aria": null,
+    "tag": "BODY"
+  },
+  "alerts": [],
+  "asset": [
+    "./assets/main-Bmeb8tJo.js"
+  ],
+  "cards": [
+    {
+      "chars": 341,
+      "id": "user:session:ses_-zUSUKOKEzzUAzc97EnJ:message:msg_5002410e-9941-484d-a4c6-b60e076d5a0e",
+      "kind": "message",
+      "status": "completed"
+    },
+    {
+      "chars": 1651,
+      "id": "assistant:session:ses_-zUSUKOKEzzUAzc97EnJ:message:msg_g0VXVfbuu00tjUDGciBK",
+      "kind": "agent",
+      "status": "running"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T01:01:45.627Z",
+  "scroll": {
+    "height": 1600,
+    "top": 941.3333129882812,
+    "view": 635
+  },
+  "sources": [
+    {
+      "open": false,
+      "text": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C1",
+      "top": -386.8958435058594
+    },
+    {
+      "open": false,
+      "text": "Accessibility | MDN1",
+      "top": -310.8958435058594
+    }
+  ],
+  "status": "Running"
+}
