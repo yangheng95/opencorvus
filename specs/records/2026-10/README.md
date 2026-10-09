@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Historical Tool read217](2026-10-09-historical-tool-read-217.md): three canonical GET identity readers, cold root/child and project isolation positive contracts, complete historical runtime and real UI scope.
+
 - [Deferred Tool error216](2026-10-09-deferred-tool-error-216.md): common resource accessor and complete-result boundary; actual original failure, fresh full history and current visual/native scope.
 
 - [Focused subtree215](2026-10-09-focused-subtree-coordination-215.md): actual native node/style/cleanup/stack proof, focused-subtree ordered reconciliation repair; genuine Source/Tool/next Tab and caret, fresh native0, original deadline1/payload400 retained.

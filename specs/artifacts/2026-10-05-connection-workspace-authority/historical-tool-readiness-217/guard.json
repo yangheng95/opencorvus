@@ -1,0 +1,25 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01",
+  "states": [
+    {
+      "expected": {
+        "pid": 61972,
+        "processInstanceID": "win32:639270967851087611",
+        "occurrenceID": "d7a8959f-57b2-4785-a62c-0e5c60b3a325"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 54756,
+        "processInstanceID": "win32:639270967859369207",
+        "occurrenceID": "3d91b036-44d6-4898-8abf-73f169ca3e0c"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Fresh217 original213 exact native and original/new port/pair closure; current schema/config/production frontier read next",
+  "observedAtUtc": "2026-10-09T00:40:08.7942442Z",
+  "occurrence": "transcript-end-follow-213-425cfa25-b413-4a0e-aee1-10699e02ab9e",
+  "readQualified": true
+}

@@ -64,6 +64,9 @@ const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
   /^PATCH \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^GET \/session\/[^/]+\/conversation$/,
   /^GET \/session\/[^/]+\/conversation\/history$/,
+  /^GET \/session\/[^/]+\/message$/,
+  /^GET \/session\/[^/]+\/message\/[^/]+$/,
+  /^GET \/session\/[^/]+\/message\/[^/]+\/part\/[^/]+$/,
   /^GET \/session\/[^/]+\/events$/,
   /^GET \/session\/[^/]+\/side-chat$/,
 ]

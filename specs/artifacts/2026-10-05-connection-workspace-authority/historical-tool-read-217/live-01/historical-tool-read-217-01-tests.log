@@ -1,0 +1,30 @@
+$ bun script/run-tests.ts test/project-route-context.test.ts test/server/session-message-part-read.test.ts
+[1/2] START test/project-route-context.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.50ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.12ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.17ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.13ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.19ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.22ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.13ms]
+
+ 7 pass
+ 0 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [1156.00ms]
+[1/2] DONE test/project-route-context.test.ts exit=0 duration=1.99s
+[2/2] START test/server/session-message-part-read.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold assistant root and child message reads return complete persisted tools [12718.15ms]
+(pass) cold mission root and child message reads return complete persisted tools [12395.49ms]
+
+ 2 pass
+ 0 fail
+ 54 expect() calls
+Ran 2 tests across 1 file. [27.52s]
+[2/2] DONE test/server/session-message-part-read.test.ts exit=0 duration=27.71s

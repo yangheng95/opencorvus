@@ -47,6 +47,9 @@ describe("Project route context authority", () => {
     expect({
       tail: projectRouteContextKind("/session/ses_1/conversation", "GET"),
       history: projectRouteContextKind("/session/ses_1/conversation/history", "GET"),
+      messages: projectRouteContextKind("/session/ses_1/message", "GET"),
+      message: projectRouteContextKind("/session/ses_1/message/msg_1", "GET"),
+      part: projectRouteContextKind("/session/ses_1/message/msg_1/part/prt_1", "GET"),
       events: projectRouteContextKind("/session/ses_1/events", "GET"),
       sideHistory: projectRouteContextKind("/session/ses_1/side-chat", "GET"),
       sideCreate: projectRouteContextKind("/session/ses_1/side-chat", "POST"),
@@ -56,6 +59,9 @@ describe("Project route context authority", () => {
     }).toEqual({
       tail: "identity",
       history: "identity",
+      messages: "identity",
+      message: "identity",
+      part: "identity",
       events: "identity",
       sideHistory: "identity",
       sideCreate: "runtime",

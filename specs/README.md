@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Historical Tool read217](records/2026-10/2026-10-09-historical-tool-read-217.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/historical-tool-read-217/README.md): canonical message/Part GET identity admission, cold full output and project isolation contracts; current real page qualification recorded in scope.
+
 - [Deferred Tool error216](records/2026-10/2026-10-09-deferred-tool-error-216.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/deferred-tool-error-216/README.md): local resource error ownership and complete-result admission; original whole-card failure retained, current visual and native qualification recorded in scope.
 
 - [Focused subtree215](records/2026-10/2026-10-09-focused-subtree-coordination-215.md) and [actual evidence](artifacts/2026-10-05-connection-workspace-authority/tool-focus-lifetime-215/README.md): real native stack locates Solid replace/reinsert focus loss, existing patched-dependency repair preserves ordered Source/Tool Tab; fresh21502 native0, original deadline1/Tool400 retained, broader matrix explicit.

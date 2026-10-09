@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Historical Tool217 Recall](historical-tool-read-plan-217.md), [readiness](historical-tool-readiness-217/README.md), [startup](historical-tool-startup-217.json) and [actual scope](historical-tool-read-217/README.md): three exact historical data GETs use existing Project identity; cold full output/isolation tests and genuine page/native evidence.
+
 - [Deferred Tool216 Recall](deferred-tool-error-plan-216.md), [current readiness](deferred-tool-readiness-216/README.md), [startup](deferred-tool-startup-216.json) and [actual scope](deferred-tool-error-216/README.md): failed-resource accessor root cause, local error ownership and full-result boundary; original whole-card failure retained.
 
 - [Tool lifetime215 Recall](tool-focus-lifetime-plan-215.md), [original readiness](tool-focus-readiness-215/README.md), [fresh21502 readiness](tool-focus-readiness-21502/README.md), [first startup](tool-focus-lifetime-startup-215.json), [fresh startup](tool-focus-lifetime-startup-21502.json) and [actual evidence](tool-focus-lifetime-215/README.md): Solid replace/reinsert root cause from real stack, ordered focused-subtree patch and actual Tool Tab; original deadline1/400 retained, fresh21502 native0 and whole history preserved.

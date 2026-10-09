@@ -1,0 +1,47 @@
+{
+  "observedAtUtc": "2026-10-09T00:48:34.383Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01",
+  "facts": [
+    {
+      "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/historical-tool-read-217-01",
+      "completeRows": [
+        {
+          "table": "tool_part_request",
+          "rows": 2,
+          "fullRowContent": "equal"
+        },
+        {
+          "table": "tool_part_progress",
+          "rows": 0,
+          "fullRowContent": "equal"
+        },
+        {
+          "table": "tool_part_outcome",
+          "rows": 2,
+          "fullRowContent": "equal"
+        }
+      ]
+    },
+    {
+      "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/deferred-tool-error-216-01",
+      "completeRows": [
+        {
+          "table": "tool_part_request",
+          "rows": 2,
+          "fullRowContent": "equal"
+        },
+        {
+          "table": "tool_part_progress",
+          "rows": 0,
+          "fullRowContent": "equal"
+        },
+        {
+          "table": "tool_part_outcome",
+          "rows": 2,
+          "fullRowContent": "equal"
+        }
+      ]
+    }
+  ],
+  "boundary": "Actual complete Tool request/progress/outcome row-content equality after both native closures. These joined facts supplement Session/Message/Part/Provider tables; no hash or count-only substitute."
+}

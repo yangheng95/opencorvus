@@ -1,0 +1,45 @@
+{
+  "observedAtUtc": "2026-10-09T00:46:48.806Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/historical-tool-read-217-01",
+  "session": {
+    "id": "ses_-zUSUqRtKzzhTi3AMNfG",
+    "project_id": "prj_htovo7CYS7AkBadnsG46",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "kind": "assistant",
+    "parent_id": null
+  },
+  "completeRows": [
+    {
+      "table": "session",
+      "rows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "message",
+      "rows": 8,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "part",
+      "rows": 21,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "rows": 5,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "rows": 5,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_usage_event",
+      "rows": 8,
+      "fullRowContent": "equal"
+    }
+  ],
+  "boundary": "Actual complete row-content equality after native closure, readonly BEGIN/ROLLBACK; no hashes or count-only evidence"
+}

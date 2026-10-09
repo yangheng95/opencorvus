@@ -1,0 +1,59 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "historical-tool-read-217-01-e33d50c1-1fbe-4971-a638-15130f978779",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18138",
+    "pid": 75984
+  },
+  "assetStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "observedAtUtc": "2026-10-09T00:42:09.0084822Z",
+  "uiStatus": 200,
+  "uiUri": "http://127.0.0.1:18138/ui",
+  "owner": {
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "observedProcessChain": [
+      {
+        "pid": 75984,
+        "processInstanceID": "win32:639271033127338705",
+        "occurrenceID": "182857c9-fb0f-48a4-b4b6-efbd0dac81ea"
+      }
+    ],
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\historical-tool-read-217\\live-01",
+    "evidencePrefix": "historical-tool-read-217-01",
+    "occurrence": "historical-tool-read-217-01-e33d50c1-1fbe-4971-a638-15130f978779",
+    "authorityStaging": "None; no model Task requested",
+    "targetBirthAtMs": 1791506512733,
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\historical-tool-read-217-01",
+    "owner": {
+      "processInstanceID": "win32:639271033127338705",
+      "ProcessId": 75984
+    },
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\historical-tool-read-217-01\\evidence",
+    "nativeTarget": {
+      "pid": 75984,
+      "processInstanceID": "win32:639271033127338705",
+      "occurrenceID": "182857c9-fb0f-48a4-b4b6-efbd0dac81ea"
+    },
+    "host": {
+      "pid": 51840,
+      "processInstanceID": "win32:639271033119724352",
+      "occurrenceID": "66b38e1c-f2b9-4d46-bbb6-1dce5c9b4a1d"
+    },
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\historical-tool-read-217-01\\runtime",
+    "port": 18138,
+    "nativeDeadlineAt": 1791507411874
+  },
+  "finalUiUri": "http://127.0.0.1:18138/ui/",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18138,
+      "OwningProcess": 75984
+    }
+  ],
+  "scriptSrc": "http://127.0.0.1:18138/ui/assets/main-Bmeb8tJo.js",
+  "asset": "/ui/assets/main-Bmeb8tJo.js"
+}

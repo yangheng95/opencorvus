@@ -207,6 +207,10 @@ bytes and a state SHA-256. The canonical Part remains unchanged in persistence.
 Only mounting an expanded Tool body may read that exact project-scoped
 Session/Message/Part; the renderer verifies identity, byte counts and digest and
 keeps a bounded identity/digest cache for collapse/reopen.
+The existing canonical message-list/message/Part GET readers use Project
+identity admission, independently of the current execution-model configuration.
+Their Session lineage and exact parent membership checks remain authoritative;
+config and execution requests continue to validate their required runtime.
 
 A visible interaction owns two chronological positions after resolution: the
 request keeps its creation `orderKey`, while the backend projects a distinct
