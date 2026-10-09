@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [中文深色Sources241](records/2026-10/2026-10-09-source-dark-241.md)：修复外层参考历史重开默认折叠，原摘要可见3107/outer531保持，ChineseDark实测Native0。
+
 - [Side阅读空间240](records/2026-10/2026-10-09-side-composer-240.md)：修复共享输入框布局失效，真实空框199→72px、Sources阅读区增加127px，Native0闭合。
 
 - [Side历史/状态/位置239](records/2026-10/2026-10-09-side-history-owner-239.md)：修复三处Side读取/重开问题，45数据检查与真实Source/位置720/Native0复核，原失败保留。

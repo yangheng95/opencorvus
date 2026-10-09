@@ -379,6 +379,10 @@ transcript parser reconcile reconnects; current activity comes from Session
 status and exact-occurrence lifecycle events. The main selection, prompt owner
 and transcript remain independent. Side chats are retained and reopenable;
 closing their tab hides the panel rather than deleting audit history.
+The reference-history disclosure retains the user's open/closed choice in the
+existing conversation disclosure store, scoped to API authority, source and Side
+Session. Its layout choice survives Dock remounts alongside the reading position;
+opening it pauses the nearest transcript's follow controller for reading.
 Pending questions and permissions render through the existing InteractionCard.
 Side Chat cards project their body parts through the shared conversation display
 contract, as child transcript cards do. Full protocol parts remain in the

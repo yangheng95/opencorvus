@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [中文深色Sources241 Recall](source-dark-plan-241.md) / [真实前后](source-dark-241/README.md)：外层history重开状态修复，实际Source摘要可见3107/outer531保持，原失败与Native0独立保留。
+
 - [Side阅读空间240 Recall](side-composer-plan-240.md) / [真实前后](side-composer-240/README.md)：共享宽度失效重测，空框199→72、阅读区增加127px，原Sources与Native0复核。
 
 - [Side历史/状态/位置239 Recall](side-history-owner-plan-239.md) / [原失败与最后after](side-history-owner-239/README.md)：现逐消息owner、project状态与UI intent修复；原400/位置/deadline失败保留，45数据检查与真实720/Source5/Native0复核。

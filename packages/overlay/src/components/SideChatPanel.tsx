@@ -1,7 +1,12 @@
 import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, untrack } from "solid-js"
 import { apiJson, captureApiAuthority, getServerUrl, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { boardStore } from "../store/board"
-import { sideChatReadingPosition, setSideChatReadingPosition } from "../store/conversation-ui"
+import {
+  conversationDisclosureExpanded,
+  setConversationDisclosureExpanded,
+  sideChatReadingPosition,
+  setSideChatReadingPosition,
+} from "../store/conversation-ui"
 import { fileEditorReserved } from "../services/file-workbench"
 import {
   createSideChat,
@@ -23,7 +28,7 @@ import {
 import { quotedPrompt, type Quotation } from "../services/quotation"
 import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
 import { formatErrorDetails } from "../services/diagnostics"
-import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
+import { pauseAutoScrollForReading, setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { assistantMessageErrorReason, conversationMessageHasDisplayContent, isCardBodyMessagePart } from "../utils/message-part"
 import { t } from "../utils/i18n"
 import { ConversationCard } from "./ConversationCard"
@@ -99,6 +104,8 @@ export function SideChatPanel(props: {
   let follow: AutoScrollController | undefined
   let reader: { key: string; sourceKey: string; sessionID: string; authority: ApiAuthority; epoch: number; controller: AutoScrollController } | undefined
   const sourceKey = () => `${captureApiAuthority().revision}\0${JSON.stringify(props.source)}`
+  const historyKey = () => `side-history:${JSON.stringify([sourceKey(), selected()])}`
+  const historyExpanded = () => conversationDisclosureExpanded(historyKey(), false)
   const session = createMemo(() => sessions().find((item) => item.id === selected()))
   const key = () => composerDraftKey("side-chat", getServerUrl(), props.source?.directory ?? "", selected())
   const inherited = createMemo(() => new Set(session()?.metadata.sideChat.inheritedMessageIDs ?? []))
@@ -394,8 +401,18 @@ export function SideChatPanel(props: {
       <div class="side-chat-panel__scroll" ref={scroll} onScroll={rememberReadingPosition}>
         <QuotationSelection onQuote={quote}>
           <Show when={history().length}>
-            <Disclosure.Root class="side-chat-history">
-              <Disclosure.Trigger>{t("side_chat.history", { count: String(history().length) })}</Disclosure.Trigger>
+            <Disclosure.Root
+              class="side-chat-history"
+              open={historyExpanded()}
+              onOpenChange={(open) => setConversationDisclosureExpanded(historyKey(), open)}
+            >
+              <Disclosure.Trigger
+                onClick={(event) => {
+                  if (!historyExpanded()) pauseAutoScrollForReading(event.currentTarget)
+                }}
+              >
+                {t("side_chat.history", { count: String(history().length) })}
+              </Disclosure.Trigger>
               <Disclosure.Content>
                 <For each={history()}>{(message) => <SideMessage message={message} />}</For>
               </Disclosure.Content>

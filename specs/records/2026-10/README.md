@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [中文深色Sources241](2026-10-09-source-dark-241.md)：外层引用history唯一UI展开状态，wholeDock真实Source可见与位置保持，原失败/Native0保留。
+
 - [Side阅读空间240](2026-10-09-side-composer-240.md)：首次空框/宽度变化重测，真实Sources与输入127px阅读空间改善、Native0。
 
 - [Side历史/状态/位置239](2026-10-09-side-history-owner-239.md)：历史owner、project状态读取及Side位置修复，完整原历史实际720保持、原after失败/最后Native0分开保留。

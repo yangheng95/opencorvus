@@ -1,0 +1,115 @@
+{
+  "observedAtUtc": "2026-10-09T15:15:07.267Z",
+  "statusReads": [
+    {
+      "level": "info",
+      "time": "2026-10-09T15:05:19.884Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5eb98358-89fc-4727-9d78-d111c3770d37",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T15:06:32.977Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "30c53894-b5ee-4688-bf34-92bfbab56fbc",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T15:13:05.475Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "59041d1a-33f8-4fe6-b7c6-1e524fd10a79",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T15:13:44.764Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e2c183bd-7735-4273-a7e8-0043b5d08b90",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T15:14:10.296Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5d933a6b-04a0-44e7-9b25-3cb321f089ac",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    }
+  ],
+  "assets": [
+    {
+      "level": "info",
+      "time": "2026-10-09T15:04:16.526Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "df82b2d4-b03a-4e92-aede-b3e7afc5d834",
+        "method": "GET",
+        "path": "/ui/assets/main-CIEYcG7t.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T15:12:52.124Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0c3a31cf-b3c7-4eb7-93bc-ece7557f8dc2",
+        "method": "GET",
+        "path": "/ui/assets/main-Doi0GY4K.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 6
+      },
+      "message": "request"
+    }
+  ],
+  "logRows": 497,
+  "unknownTimeRows": 0,
+  "boundary": "Actual production request evidence; no UI test assertions"
+}

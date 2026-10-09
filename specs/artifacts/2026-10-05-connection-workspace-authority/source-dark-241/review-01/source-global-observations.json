@@ -1,0 +1,38 @@
+{
+  "observedAtUtc": "2026-10-09T15:17:37.789Z",
+  "observations": [
+    {
+      "before": {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\config",
+        "type": "directory",
+        "mtimeMs": 1791551268970.6533
+      },
+      "after": {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\config",
+        "type": "directory",
+        "mtimeMs": 1791551268970.6533
+      },
+      "attributes": "equal",
+      "sourceAndCloneCurrentFileContent": "directory",
+      "boundary": "Filesystem attributes and current exact file bytes; no before file-content claim or hashes"
+    },
+    {
+      "before": {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\config\\opencorvus.jsonc",
+        "type": "file",
+        "bytes": 173,
+        "mtimeMs": 1791551268964.2273
+      },
+      "after": {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\config\\opencorvus.jsonc",
+        "type": "file",
+        "bytes": 173,
+        "mtimeMs": 1791551268964.2273
+      },
+      "attributes": "equal",
+      "sourceAndCloneCurrentFileContent": "equal",
+      "boundary": "Filesystem attributes and current exact file bytes; no before file-content claim or hashes"
+    }
+  ],
+  "settings": "Browser Settings service stores preferences in own localhost18175 origin localStorage; real reload remained ChineseDark; no backend settings HTTP or source config write"
+}
