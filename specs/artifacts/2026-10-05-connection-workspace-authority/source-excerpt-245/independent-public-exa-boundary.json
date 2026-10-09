@@ -1,0 +1,39 @@
+{
+  "startedAtUtc": "2026-10-09T17:24:12.923Z",
+  "completedAtUtc": "2026-10-09T17:24:14.928Z",
+  "destination": "https://mcp.exa.ai/mcp",
+  "credentialUse": "none",
+  "input": {
+    "query": "site:developer.mozilla.org zh-CN HTML details 元素",
+    "numResults": 3
+  },
+  "status": 200,
+  "mime": "text/event-stream",
+  "receivedBytes": 12054,
+  "resultTextChars": 7815,
+  "parser": "Current production parseExaWebSearchText, unchanged",
+  "results": [
+    {
+      "title": "<details>：详细信息展现元素- HTML（超文本标记语言） | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+      "snippetChars": 1700,
+      "exactSnippetOffsetInRemoteText": 189,
+      "emptyInlineCodeSpans": 13
+    },
+    {
+      "title": "<summary>：摘要展现元素- HTML（超文本标记语言） | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/summary",
+      "snippetChars": 1400,
+      "exactSnippetOffsetInRemoteText": 2083,
+      "emptyInlineCodeSpans": 22
+    },
+    {
+      "title": "<details> HTML details disclosure element - HTML | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+      "snippetChars": 4142,
+      "exactSnippetOffsetInRemoteText": 3673,
+      "emptyInlineCodeSpans": 20
+    }
+  ],
+  "boundary": "One new public remote search response, actual bytes/SSE and current production codec; original 244 remote response was not captured and is not reconstructed. No LLM, UI rendering or Source persistence."
+}

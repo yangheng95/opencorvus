@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Sources摘录调查245](records/2026-10/2026-10-10-source-excerpt-245.md)：原Tool/canonical一致，新真实远端响应已有缺字，当前本地codec忠实保留；不伪造补字。
+
 - [Side提交显示244](records/2026-10/2026-10-10-side-submitted-draft-244.md)：真实接受后收起重复草稿，阅读区280→466px，Source流式阅读/结束输入恢复与Native0已复核。
 
 - [Side真实正文流式243](records/2026-10/2026-10-10-side-render-live-243.md)：真实partial帧取得、accepted草稿重复占位；原Native固定期限1失败与完整退役分别保留。

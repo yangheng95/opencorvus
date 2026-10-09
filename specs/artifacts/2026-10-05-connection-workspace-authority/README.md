@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Sources摘录调查245 Recall](source-excerpt-investigation-245.md) / [真实边界](source-excerpt-245/README.md)：原Tool/canonical一致，新公共远端200/SSE文本已有空位，现parser完整保留。
+
 - [Side提交显示244 Recall](side-submitted-draft-plan-244.md) / [真实证据](side-submitted-draft-244/README.md)：精确User Message事实收起重复输入，真实Source/partial/terminal人工复核、9 Sol EOF/Native0。
 
 - [Side真实正文流式243 Recall](side-render-live-plan-243.md) / [原实际阶段](side-render-live-243/README.md)：真实partial与草稿重复占位线索、原固定期限Native1失败完整保留。

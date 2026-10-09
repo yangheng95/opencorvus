@@ -1,0 +1,48 @@
+{
+  "observedAtUtc": "2026-10-09T17:24:12.920Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-10/side-submitted-draft-244-live-01",
+  "access": "Actual SQLite readonly BEGIN/ROLLBACK and current production completedToolOutcomeOutput resolver",
+  "requestPartID": "prt_g0VXZao2G00xB6kwvK4B",
+  "messageID": "msg_g0VXZampO00KItb33Bci",
+  "tool": "websearch",
+  "input": {
+    "query": "site:developer.mozilla.org zh-CN HTML details 元素",
+    "numResults": 3
+  },
+  "outcome": "completed",
+  "resultAttemptID": "per_hhkMJMOyzNtKVlxW4Hpr",
+  "outputChars": 7730,
+  "sources": [
+    {
+      "partID": "prt_g0VXZaom800TpC1eB0YH",
+      "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+      "title": "<details>：详细信息展现元素- HTML（超文本标记语言） | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+      "provider": "exa",
+      "snippetChars": 1700,
+      "exactSnippetOffsetInActualToolOutput": 170,
+      "emptyInlineCodeSpans": 13
+    },
+    {
+      "partID": "prt_g0VXZaomE00Z29oCv9l9",
+      "sourceId": "97045501c83a79fd39965044aa7493520339b99a31b79b22ecf825024b41b11d",
+      "title": "<summary>：摘要展现元素- HTML（超文本标记语言） | MDN",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/summary",
+      "provider": "exa",
+      "snippetChars": 1400,
+      "exactSnippetOffsetInActualToolOutput": 2040,
+      "emptyInlineCodeSpans": 22
+    },
+    {
+      "partID": "prt_g0VXZaomH005EscAmyv9",
+      "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+      "title": "<details> HTML details disclosure element - HTML | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+      "provider": "exa",
+      "snippetChars": 4142,
+      "exactSnippetOffsetInActualToolOutput": 3588,
+      "emptyInlineCodeSpans": 20
+    }
+  ],
+  "boundary": "Original actual search Tool output and persisted source identity/content correspondence; original remote HTTP response was not archived. Not a UI assertion or full provider-response reconstruction."
+}

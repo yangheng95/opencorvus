@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources摘录调查245](2026-10-10-source-excerpt-245.md)：原事实与一次真实remote边界核对，缺字未被误归为显示层，无生产改动。
+
 - [Side提交显示244](2026-10-10-side-submitted-draft-244.md)：真实消息接受后紧凑运行区、Sources流式阅读及空输入恢复；原生正常闭合。
 
 - [Side真实正文流式243](2026-10-10-side-render-live-243.md)：真实Working partial、accepted草稿重复问题线索；原Native/fore1未当正常验收通过。
