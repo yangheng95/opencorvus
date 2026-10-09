@@ -1,0 +1,22 @@
+{
+  "mode": "Real manual UI actions, screenshot capture and personal visual review; no UI automated tests",
+  "englishSourceFileAndBrowserDraftReturn": "http://localhost:18156/ui/",
+  "firstTabAfterOverflowReturn": "http://localhost:18156/ui/",
+  "secondTabAfterSwitchAndDockReopen": "http://localhost:18156/ui/?view=second",
+  "firstTabAfterOtherClosed": "http://localhost:18156/ui/",
+  "newThirdTabInitialDraft": "",
+  "otherOriginalProjectInitialDraft": "",
+  "chineseDarkFileAndBrowserReturn": "http://localhost:18156/ui/",
+  "actualExternalTargetTab": "56",
+  "externalImmediatelyRetainedDraft": true,
+  "enterUnavailableFeedback": true,
+  "menuEscapeClosed": true,
+  "sourceNaturalFileCount": 1,
+  "newModelCalls": 0,
+  "unqualified": [
+    "Task fixed primary Browser actual UI",
+    "Tauri native-window lifecycle across multiple tabs",
+    "long Source URL matrix"
+  ],
+  "additionalObservation": "Inactive tab aria-controls was observed null while selecting another tab, making the previous locator stale; switched using fresh actual trigger ID. Accessibility linkage needs separate investigation."
+}

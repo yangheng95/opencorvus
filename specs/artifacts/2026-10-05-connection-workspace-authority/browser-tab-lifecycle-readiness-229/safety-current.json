@@ -1,0 +1,18 @@
+{
+  "observedAtUtc": "2026-10-09T07:14:57.1951630Z",
+  "leases": [
+    {
+      "lease": {
+        "id": "act_g0VXW7r0r00LXWboPa27",
+        "target": "runtime_process",
+        "target_id": "2df1aca4-d3ee-4b2f-85af-c6ca46520073",
+        "owner_occurrence_id": "{\"pid\":42324,\"processInstanceID\":\"win32:639271111940174182\",\"occurrenceID\":\"2df1aca4-d3ee-4b2f-85af-c6ca46520073\"}",
+        "time_activated": 1791514401393,
+        "expires_at": 9007199254740991
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Whole source startup and frontier retained for manual review; exact old lease births physically closed; no new Task/model",
+  "startupQualified": true
+}

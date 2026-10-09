@@ -1622,6 +1622,16 @@ that remains over one page position for 1.5 seconds shows the localized
 right-click annotation hint; movement, selection, or another annotation
 surface clears it.
 
+Each open Browser tab retains its single component owner across tool selection
+and Dock visibility changes. The existing tab record controls that lifetime:
+the fixed Task preview is retained only while its exact `browser` tab is open,
+and each operator tab is retained by its own dynamic record. Address editing
+and live-page state remain local to that owner. Inactive evidence reads and
+native actions still follow the existing active/occlusion lifecycle; inactive
+panels remain hidden through the shared selected-tab styling. Explicit tab
+closure and workspace reset dispose the same owner and perform its existing
+resource, controller and native-surface cleanup.
+
 Conversation HTTP(S) links dispatch one explicit navigation command to the
 already mounted fixed Browser panel and reveal that exact tab. The clicked URL
 is normalized and shown as the in-flight address immediately, then the native

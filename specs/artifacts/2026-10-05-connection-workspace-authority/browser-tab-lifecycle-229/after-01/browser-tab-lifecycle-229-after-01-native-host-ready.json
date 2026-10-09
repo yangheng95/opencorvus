@@ -1,0 +1,40 @@
+{
+  "occurrence": "browser-tab-lifecycle-229-after-01-69a42cce-11ee-4f60-a04b-1f34ba74b792",
+  "outcome": "ready",
+  "host": {
+    "pid": 68544,
+    "processInstanceID": "win32:639271269504442220",
+    "occurrenceID": "99103463-1d1e-422f-8eda-5abca876127d"
+  },
+  "parent": {
+    "pid": 65220,
+    "processInstanceID": "win32:639271269487297066",
+    "occurrenceID": "646d78f3-5afe-4901-9a96-d100519a78af"
+  },
+  "target": {
+    "pid": 77376,
+    "processInstanceID": "win32:639271269512375247",
+    "occurrenceID": "13f3e37a-cce4-493d-a36a-cedd7609f180"
+  },
+  "targetBirthAtMs": 1791530151237,
+  "deadlineAt": 1791531050350,
+  "observedAtUtc": "2026-10-09T07:15:51.281Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18156",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-tab-lifecycle-229-after-01\\startup.json",
+    "--startup-occurrence",
+    "browser-tab-lifecycle-229-after-01-69a42cce-11ee-4f60-a04b-1f34ba74b792",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

@@ -110,7 +110,7 @@ export interface RightDockProps {
   overflowMenuOpen: Accessor<boolean>
   onOverflowMenuOpenChange: (open: boolean) => void
   titleForTab?: (tab: RightDockTab) => string | undefined
-  /** Panel view bodies. Kobalte mounts selected bodies and explicitly retained file drafts. */
+  /** Panel bodies. Open browser/file owners and the child transcript survive tool selection changes. */
   children: JSX.Element
 }
 

@@ -1,0 +1,147 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...":
+      - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+    - button "More actions":
+    - button "Collapse Anonymous 66097c" [expanded]:
+      - generic: Anonymous 66097c
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...":
+        - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18156":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+  - status
+  - button "Project actions":
+  - generic "Not running":
+    - generic: Not running
+  - button "Side chat":
+  - button "Environment information":
+  - button "Close right dock" [pressed]:
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md，指定 offset=1、limit=12。依据实际返回的正文用一句中文说明这个文档的标题，引用这份原文件。不要读取其他文件、浏览网页、创建或编辑文件，也不要调用或委托任何agent。
+    - article:
+      - generic: chat
+      - generic "Session ran for 8s (between first message and terminal status)": 8s
+      - button "read · C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md @1+12 (1 lines)":
+        - generic: read
+        - generic: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md @1+12 (1 lines)
+      - group "Sources":
+        - 'generic "Sources: README.md (1)"':
+          - generic: README.md
+          - generic: "1"
+        - 'button "Open source file: README.md"':
+          - generic: README.md
+      - paragraph:
+        - text: 这份文档的标题是“Isolated formal Task resource qualification”（隔离的正式 Task 资源资格认定），见原文件
+        - code: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md:1
+        - text: 。
+  - status:
+    - strong: Model configuration unavailable
+    - generic: You can still read this conversation. Review the details or choose a model before sending a message.
+    - generic "Details":
+      - text: Details
+    - button "Retry"
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Repository-aware coding and software work.":
+    - generic: Code
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model Choose model. Click to change.":
+    - generic "Choose model"
+  - button "Send" [disabled]:
+    - generic: Send
+  - button "Scroll to bottom":
+  - separator "Resize right panel"
+  - complementary "Tools panel":
+    - tablist "Open tools":
+      - tab "New tab" [active] [selected]:
+        - generic: New tab
+      - button "Close tab":
+      - tab "File":
+        - generic: File
+      - button "Close tab":
+    - button "Add tool":
+    - button "Close panel":
+    - tabpanel "New tab":
+      - region "Preview":
+        - button "Go back in the preview browser." [disabled]:
+        - button "Go forward in the preview browser." [disabled]:
+        - button "Reload the current preview page." [disabled]:
+        - textbox "Address bar":
+          - /placeholder: Enter a URL to open in your browser
+          - text: http://localhost:18156/ui/
+        - button "Open the entered address in this preview" [disabled]:
+        - button "Open the entered address in the default browser":
+        - button "More browser actions":
+        - status:
+          - strong: Open pages in your browser
+          - generic: This web interface cannot display interactive pages. Enter an address above and use the external-browser button, or continue in the desktop app.

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [浏览器标签生命周期229](records/2026-10/2026-10-09-browser-tab-lifecycle-229.md)：工具切换丢失草稿的真实寿命调查。
+
 - [浏览器可用性228](records/2026-10/2026-10-09-browser-availability-228.md)：真实空白反馈与复制结果核查。
 - [共用菜单227](records/2026-10/2026-10-09-menu-surface-227.md)：同一菜单renderer和两个互斥宿主呈现。
 - [工作树读取226](records/2026-10/2026-10-09-worktree-reader-226.md)：真实工作树模型耦合调查及精确只读入口修复。

@@ -1,0 +1,35 @@
+{
+  "occurrence": "browser-tab-lifecycle-229-after-01-69a42cce-11ee-4f60-a04b-1f34ba74b792",
+  "authorityStaging": "None; no model Task requested",
+  "evidencePrefix": "browser-tab-lifecycle-229-after-01",
+  "owner": {
+    "ProcessId": 77376,
+    "processInstanceID": "win32:639271269512375247"
+  },
+  "host": {
+    "pid": 68544,
+    "processInstanceID": "win32:639271269504442220",
+    "occurrenceID": "99103463-1d1e-422f-8eda-5abca876127d"
+  },
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-tab-lifecycle-229-after-01",
+  "targetBirthAtMs": 1791530151237,
+  "nativeDeadlineAt": 1791531050350,
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\browser-tab-lifecycle-229\\after-01",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-tab-lifecycle-229-after-01\\runtime",
+  "port": 18156,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+  "purpose": "Current credentialless full original history; no Provider or Task rearm",
+  "observedProcessChain": [
+    {
+      "pid": 77376,
+      "processInstanceID": "win32:639271269512375247",
+      "occurrenceID": "13f3e37a-cce4-493d-a36a-cedd7609f180"
+    }
+  ],
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-tab-lifecycle-229-after-01\\evidence",
+  "nativeTarget": {
+    "pid": 77376,
+    "processInstanceID": "win32:639271269512375247",
+    "occurrenceID": "13f3e37a-cce4-493d-a36a-cedd7609f180"
+  }
+}

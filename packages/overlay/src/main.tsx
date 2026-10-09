@@ -2759,6 +2759,7 @@ function OverlayRoot() {
           </TabPanel>
           <TabPanel
             value="browser"
+            forceMount={centerWorkbenchPanels().some((tab) => tab.id === "browser")}
             class="center-workbench-view"
             id="centerWorkbenchBrowser"
             data-workbench-view="browser"
@@ -2792,6 +2793,7 @@ function OverlayRoot() {
             {(tab) => (
               <TabPanel
                 value={tab.id}
+                forceMount
                 class="center-workbench-view"
                 id={`centerWorkbenchBrowser-${tab.id}`}
                 data-workbench-view="browser"

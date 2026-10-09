@@ -1,0 +1,101 @@
+- banner:
+  - button "收起侧边栏" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "文件":
+      - generic: 文件
+    - menuitem "编辑":
+      - generic: 编辑
+    - menuitem "视图":
+      - generic: 视图
+    - menuitem "帮助":
+      - generic: 帮助
+- main:
+  - navigation "对话快捷入口":
+    - generic "对话快捷入口":
+      - button "对话":
+        - generic: 对话
+      - button "Mission 看板":
+        - generic: Mission 看板
+      - button "定时":
+        - generic: 定时
+      - button "专家团":
+        - generic: 专家团
+      - button "更多":
+        - generic: 更多
+      - button "设置":
+        - generic: 设置
+    - button "关于":
+    - button "OpenCorvus 菜单":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "搜索任务或运行命令":
+  - button "收件箱":
+  - complementary:
+    - generic "对话导航":
+      - button "新对话":
+        - generic: 新对话
+    - generic: 项目
+    - button "整理侧边栏":
+    - button "创建项目":
+    - button "收起 project" [expanded]:
+      - generic: project
+    - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+    - button "只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...":
+      - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+    - button "更多操作":
+    - button "收起 匿名项目 66097c" [expanded]:
+      - generic: 匿名项目 66097c
+    - button "项目操作":
+    - button "为此项目新建 Chat":
+    - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+    - button "Reply with OK." [active]:
+      - generic: Reply with OK.
+    - button "更多操作":
+    - region "最近":
+      - generic: 最近
+      - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+      - button "只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...":
+        - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+      - button "更多操作":
+      - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "更多操作":
+    - generic "连接诊断":
+      - generic "连接诊断 · 在线 · 端口 18156":
+        - generic: 在线
+  - separator "调整左侧面板大小"
+  - generic "正在加载 Task"
+  - generic: Reply with OK.
+  - status
+  - button "项目操作":
+  - generic "非进行中":
+    - generic: 非进行中
+  - button "侧聊":
+  - button "环境信息":
+  - button "打开右侧面板":
+  - generic "对话"
+  - separator "拖拽调整消息输入框大小"
+  - generic "支持拖拽文件 · 拖动上边缘调整输入框大小":
+    - textbox "支持拖拽文件 · 拖动上边缘调整输入框大小":
+      - /placeholder: 补充想法，或继续这项工作…
+  - button
+  - button "添加支持的文件":
+  - generic "面向代码仓库的编程与软件工作。":
+    - generic: Code
+  - generic: Chat
+  - button "查看对话上下文":
+    - generic: 查看对话上下文
+  - button "授权模式，当前为 完全访问":
+    - generic: 完全访问
+  - button "OpenCorvus 模型 选择模型，点击切换":
+    - generic "选择模型"
+  - button "发送" [disabled]:
+    - generic: 发送
+  - complementary:
+    - button:
+    - button:

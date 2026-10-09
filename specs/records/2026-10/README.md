@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [浏览器标签生命周期229](2026-10-09-browser-tab-lifecycle-229.md)：单agent保留仍open的Browser owner，核查关闭及多tab。
+
 - [浏览器可用性228](2026-10-09-browser-availability-228.md)：Web工具真实提示与复制核查。
 - [共用菜单227](2026-10-09-menu-surface-227.md)：单agent修复Web宿主原生桥调用错误。
 - [工作树读取226](2026-10-09-worktree-reader-226.md)：单agent继续实际列表400及相关合同。
