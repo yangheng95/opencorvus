@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [VCS and Sources225](2026-10-09-vcs-source-225.md): current Git facts and source-operation investigation, single agent.
+
 - [Client language224](2026-10-09-local-language-224.md): single client locale authority and real source language/appearance validation.
 
 - [Sources and loaded-file reload223](2026-10-09-source-reload-223.md): single-agent actual disclosure and loaded-file error/recovery review.

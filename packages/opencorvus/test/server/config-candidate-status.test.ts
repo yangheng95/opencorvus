@@ -19,64 +19,20 @@ import { Provider } from "@/provider/provider"
 import { OwnedPromptControllersError } from "@/engine/runtime"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
-test("public VCS 400 metadata binds the two canonical runtime rejection schemas", async () => {
+test("public VCS metadata binds current Git information and directory admission", async () => {
   const spec = await Server.openapi()
-  const response = spec.paths?.["/vcs"]?.get?.responses?.["400"]
-  const candidate = spec.components?.schemas?.ConfigCandidateValidationError
-  const model = spec.components?.schemas?.ProviderModelNotFoundError
-  console.log("candidate96 openapi", JSON.stringify({ response, candidate, model }))
-  expect(response).toEqual({
-    description: "Runtime configuration candidate or model rejected",
-    content: {
-      "application/json": {
-        schema: {
-          anyOf: [
-            { $ref: "#/components/schemas/ConfigCandidateValidationError" },
-            { $ref: "#/components/schemas/ProviderModelNotFoundError" },
-          ],
-        },
-      },
-    },
+  expect(spec.paths?.["/vcs"]?.get?.responses?.["200"]).toMatchObject({
+    content: { "application/json": { schema: { $ref: "#/components/schemas/VcsInfo" } } },
   })
-  expect(candidate).toEqual({
-    type: "object",
-    required: ["name", "data"],
-    properties: {
-      name: { type: "string", const: "ConfigCandidateValidationError" },
-      data: { type: "object", required: ["message"], properties: { message: { type: "string" } } },
-    },
+  expect(spec.paths?.["/vcs"]?.get?.responses?.["400"]).toMatchObject({
+    description: "Project directory required",
+    content: { "application/json": { schema: {
+      type: "object", required: ["name", "data"], properties: { name: { type: "string", const: "DirectoryRequiredError" } },
+    } } },
   })
-  expect(model).toEqual({
-    type: "object",
-    required: ["name", "data"],
-    properties: {
-      name: { type: "string", const: "ProviderModelNotFoundError" },
-      data: {
-        type: "object",
-        required: ["providerID", "modelID"],
-        properties: {
-          providerID: { type: "string" },
-          modelID: { type: "string" },
-          suggestions: { type: "array", items: { type: "string" } },
-        },
-      },
-    },
-  })
-  expect(
-    ConfigCandidateValidationError.Schema.parse(
-      new ConfigCandidateValidationError({ message: "Owned metadata contract" }).toObject(),
-    ),
-  ).toEqual({ name: "ConfigCandidateValidationError", data: { message: "Owned metadata contract" } })
-  expect(
-    Provider.ModelNotFoundError.Schema.parse(
-      new Provider.ModelNotFoundError({ providerID: "missing96", modelID: "model", suggestions: [] }).toObject(),
-    ),
-  ).toEqual({
-    name: "ProviderModelNotFoundError",
-    data: { providerID: "missing96", modelID: "model", suggestions: [] },
-  })
+  expect(ConfigCandidateValidationError.Schema.parse(new ConfigCandidateValidationError({ message: "Owned metadata contract" }).toObject())).toEqual({ name: "ConfigCandidateValidationError", data: { message: "Owned metadata contract" } })
+  expect(Provider.ModelNotFoundError.Schema.parse(new Provider.ModelNotFoundError({ providerID: "missing96", modelID: "model", suggestions: [] }).toObject())).toEqual({ name: "ProviderModelNotFoundError", data: { providerID: "missing96", modelID: "model", suggestions: [] } })
 })
-
 afterEach(async () => {
   await Instance.disposeAll()
   await ExpertSquadRegistry.invalidateAvailable()
@@ -84,7 +40,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-async function cold(directory: string, config: Config.Info) {
+async function cold(directory: string, config: Config.Info, route = "/session/status") {
   const project = await Instance.provideProjectIdentity({ directory, fn: () => ({ ...Instance.project }) })
   const file = ConfigPaths.projectFile(directory)
   await fs.mkdir(path.dirname(file), { recursive: true })
@@ -92,7 +48,7 @@ async function cold(directory: string, config: Config.Info) {
   await Instance.disposeAll()
   Server.resetProjectRoutesAppForTest()
   const result = await runOutsideInstanceContext(async () => {
-    const response = await Server.App().request(`/vcs?directory=${encodeURIComponent(directory)}`, {
+    const response = await Server.App().request(`${route}?directory=${encodeURIComponent(directory)}`, {
       headers: { "x-opencorvus-directory": directory },
     })
     return { status: response.status, headers: Object.fromEntries(response.headers), body: await response.json() }
@@ -190,7 +146,7 @@ test("cold lawful runtime returns its real VCS output", async () => {
   await using project = await memoryProject("candidate96-lawful")
   const branch = await hostGit(["branch", "--show-current"], { cwd: project.path, timeoutProfile: "default" })
   expect(branch.exitCode).toBe(0)
-  const result = await cold(project.path, await configFor(project.path))
+  const result = await cold(project.path, await configFor(project.path), "/vcs")
   expect(result.status).toBe(200)
   expect(result.body).toMatchObject({
     initialized: true,

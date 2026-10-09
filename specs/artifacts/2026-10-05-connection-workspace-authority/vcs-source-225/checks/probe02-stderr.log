@@ -1,0 +1,34 @@
+
+test\server\vcs-read-identity.test.ts:
+23 |     expect((await Vcs.info()).branch).toBe(initial)
+24 |     await git(project.path, ["branch", "-m", "current-reader-225"])
+25 |     const info = await Vcs.info()
+26 |     const branches = await Vcs.branches()
+27 |     console.log("vcs225 physical", JSON.stringify({ initial, info, branches }))
+28 |     expect({ branch: info.branch, branches }).toEqual({
+                                                   ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "branch": "current-reader-225",
++   "branch": "master",
+    "branches": [
+      {
+-       "current": true,
++       "current": false,
+        "name": "current-reader-225",
+      },
+    ],
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\vcs-read-identity.test.ts:28:47)
+(fail) physical branch facts follow a real branch rename in the same identity context [3420.80ms]
+(pass) physical branch facts belong to the selected linked checkout [2822.23ms]
+
+ 1 pass
+ 1 fail
+ 7 expect() calls
+Ran 2 tests across 1 file. [7.40s]

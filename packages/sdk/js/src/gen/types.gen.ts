@@ -727,13 +727,6 @@ export type Config = {
   }
 }
 
-export type ConfigCandidateValidationError = {
-  data: {
-    message: string
-  }
-  name: "ConfigCandidateValidationError"
-}
-
 export type ContextOverflowError = {
   data: {
     message: string
@@ -4286,15 +4279,6 @@ export type ProviderConfig = {
     [key: string]: unknown
   }
   whitelist?: Array<string>
-}
-
-export type ProviderModelNotFoundError = {
-  data: {
-    modelID: string
-    providerID: string
-    suggestions?: Array<string>
-  }
-  name: "ProviderModelNotFoundError"
 }
 
 export type ProviderMonetaryBalanceUsage = {
@@ -38503,9 +38487,14 @@ export type VcsGetData = {
 
 export type VcsGetErrors = {
   /**
-   * Runtime configuration candidate or model rejected
+   * Project directory required
    */
-  400: ConfigCandidateValidationError | ProviderModelNotFoundError
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "DirectoryRequiredError"
+  }
   /**
    * Internal server error
    */
@@ -38577,6 +38566,15 @@ export type VcsBranchesData = {
 }
 
 export type VcsBranchesErrors = {
+  /**
+   * Project directory required
+   */
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "DirectoryRequiredError"
+  }
   /**
    * VCS branch prerequisite is not satisfied
    */
@@ -38701,6 +38699,17 @@ export type VcsDiffData = {
 }
 
 export type VcsDiffErrors = {
+  /**
+   * Invalid diff query or project directory required
+   */
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "DirectoryRequiredError"
+      }
   /**
    * VCS diff prerequisite is not satisfied
    */

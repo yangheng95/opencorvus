@@ -44,7 +44,7 @@ async function cold(directory: string) {
   await ExpertSquadRegistry.invalidateAvailable()
   Server.resetProjectRoutesAppForTest()
   return observe(() => runOutsideInstanceContext(async () => {
-    const response = await Server.App().request(`/vcs?directory=${encodeURIComponent(directory)}`, { headers: { "x-opencorvus-directory": directory } })
+    const response = await Server.App().request(`/session/status?directory=${encodeURIComponent(directory)}`, { headers: { "x-opencorvus-directory": directory } })
     return { status: response.status, headers: Object.fromEntries(response.headers), body: await response.json() }
   }))
 }
@@ -127,7 +127,7 @@ test.skipIf(process.platform !== "win32")("actual exclusive README lock measures
   expect(exitCode).toBe(0)
   expect({ id: recovered.id, namespace: recovered.namespace, version: recovered.version }).toEqual({ id: profile, namespace: "reader97", version: "2026.10.07.1" })
   expect(recoveredCandidate).toEqual({ kind: "value", value: undefined })
-  expect(recoveredHTTP).toMatchObject({ kind: "value", value: { status: 200, body: { initialized: true } } })
+  expect(recoveredHTTP).toMatchObject({ kind: "value", value: { status: 200, body: {} } })
 }, 90000)
 
 test("genuine malformed owned builtin declaration retains current semantic candidate response", async () => {

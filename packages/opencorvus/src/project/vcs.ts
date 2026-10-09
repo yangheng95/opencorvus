@@ -584,7 +584,7 @@ export namespace Vcs {
 
   /**
    * Discard the cached VCS state for the current instance directory.
-   * The next call to `info()` or `branch()` will re-initialize from scratch,
+   * The next call to `init()` or `branch()` will re-initialize from scratch,
    * re-probing `.git` on disk and re-attaching the `.git/HEAD` file watcher.
    * Call this after `git init` completes while active sessions prevent a full
    * `Instance.dispose()`.
@@ -614,7 +614,7 @@ export namespace Vcs {
       .filter(Boolean)
       .map((name) => name.trim())
     if (names.some((name) => !name)) throw new Error("vcs list local branches returned an empty branch name")
-    const current = await branch()
+    const current = await currentBranch()
     return names
       .map((name) => ({ name, current: name === current }))
       .toSorted((left, right) => Number(right.current) - Number(left.current) || left.name.localeCompare(right.name))
@@ -643,6 +643,7 @@ export namespace Vcs {
       })
     }
     await resetState()
+    await init()
     return info()
   }
 
@@ -722,7 +723,7 @@ export namespace Vcs {
     // before any commit; we only report it once a commit exists.
     const head = await hasHead(currentProject().directory)
     const commit = head ? await currentCommit(currentProject().directory) : undefined
-    const rawBranch = await state().then((s) => s.branch())
+    const rawBranch = await currentBranch()
     const branch = commit ? rawBranch : undefined
     const [text, hasRemote] = await Promise.all([
       gitText(

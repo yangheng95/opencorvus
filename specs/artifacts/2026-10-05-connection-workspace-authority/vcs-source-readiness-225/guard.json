@@ -1,0 +1,36 @@
+{
+  "observedAtUtc": "2026-10-09T05:06:14.9861745Z",
+  "states": [
+    {
+      "expected": {
+        "pid": 61364,
+        "processInstanceID": "win32:639271111932751192",
+        "occurrenceID": "46c8b829-81ca-4423-8bb2-c34b7532de40"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 42324,
+        "processInstanceID": "win32:639271111940174182",
+        "occurrenceID": "000ef6d8-7620-47ed-9d6f-a6debf687481"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "readQualified": true,
+  "occurrence": "file-read-recovery-222-before-01-1ffdac29-a1c1-4138-b279-0099143e7595",
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01",
+  "listeners": [],
+  "boundary": "Current full original source closure, no added model/agent/Task scopes"
+}

@@ -108,12 +108,12 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |
 | PATCH | `/project/{projectID}` | Update project Body: `commands`, `icon`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.update` |
-| GET | `/vcs` | Get VCS info Errors: `ConfigCandidateValidationError`, `ProviderModelNotFoundError`, `UnknownError`. | `vcs.get` |
+| GET | `/vcs` | Get VCS info Errors: `DirectoryRequiredError`, `UnknownError`. | `vcs.get` |
 | POST | `/vcs/branch` | Switch local VCS branch Body: `branch`; Errors: `UnknownError`, `VcsPrerequisiteError`. | `vcs.switchBranch` |
-| GET | `/vcs/branches` | List local VCS branches Errors: `UnknownError`, `VcsPrerequisiteError`. | `vcs.branches` |
+| GET | `/vcs/branches` | List local VCS branches Errors: `DirectoryRequiredError`, `UnknownError`, `VcsPrerequisiteError`. | `vcs.branches` |
 | POST | `/vcs/commit` | Commit current VCS changes Body: `message`; Errors: `UnknownError`, `VcsPrerequisiteError`. | `vcs.commit` |
 | POST | `/vcs/commit-message/stream` | Generate a Git commit message with streaming AI Body: `sessionID`, `taskID`; Errors: `UnknownError`. | `vcs.commitMessage.stream` |
-| GET | `/vcs/diff` | Get VCS diff Errors: `UnknownError`, `VcsPrerequisiteError`. | `vcs.diff` |
+| GET | `/vcs/diff` | Get VCS diff Errors: `BadRequestError`, `DirectoryRequiredError`, `UnknownError`, `VcsPrerequisiteError`. | `vcs.diff` |
 | POST | `/vcs/push` | Push current VCS branch Errors: `UnknownError`, `VcsPrerequisiteError`. | `vcs.push` |
 
 ### Task / Orchestrator

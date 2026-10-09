@@ -5,8 +5,6 @@ import { NativeAgentInfoSchema } from "@/agent/native-agent-info"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Global } from "@/global"
 import { Vcs } from "@/project/vcs"
-import { ConfigCandidateValidationError } from "@/config/candidate-validation"
-import { Provider } from "@/provider/provider"
 import { streamCommitMessage } from "@/project/vcs-commit-message"
 import { Instance } from "@/project/instance"
 import { Command } from "@/command"
@@ -20,7 +18,7 @@ import { validator } from "@/server/validator"
 import { streamGlobalSSE, streamProjectSSE } from "../sse"
 import { VcsCommitMessageStreamEvent } from "@opencorvus-ai/transport-protocol"
 import z from "zod"
-import { OwnedPromptControllersResponse, errors, namedErrorResponse } from "../error"
+import { OwnedPromptControllersResponse, errors, namedErrorResponse, badRequestOrNamedErrorResponse } from "../error"
 import { ProjectRoutes } from "./project"
 import { ConfigRoutes } from "./config"
 import { ExperimentalRoutes, resetExperimentalRouteFactoriesForOpenApi } from "./experimental"
@@ -413,14 +411,7 @@ export function AppRoutes(root: Hono) {
               },
             },
           },
-          400: {
-            description: "Runtime configuration candidate or model rejected",
-            content: {
-              "application/json": {
-                schema: resolver(z.union([ConfigCandidateValidationError.Schema, Provider.ModelNotFoundError.Schema])),
-              },
-            },
-          },
+          400: namedErrorResponse("Project directory required", "DirectoryRequiredError"),
           ...errors(500),
         },
       }),
@@ -444,6 +435,7 @@ export function AppRoutes(root: Hono) {
             },
           },
           412: namedErrorResponse("VCS branch prerequisite is not satisfied", "VcsPrerequisiteError"),
+          400: namedErrorResponse("Project directory required", "DirectoryRequiredError"),
           ...errors(500),
         },
       }),
@@ -597,6 +589,7 @@ export function AppRoutes(root: Hono) {
             },
           },
           412: namedErrorResponse("VCS diff prerequisite is not satisfied", "VcsPrerequisiteError"),
+          400: badRequestOrNamedErrorResponse("Invalid diff query or project directory required", "DirectoryRequiredError"),
           ...errors(500),
         },
       }),

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [VCS/Source225 Recall](vcs-source-plan-225.md): current three Git readers, actual branch facts and localized file-source actions.
+
 - [Client language224 Recall](local-language-plan-224.md), [current readiness](local-language-readiness-224/README.md) and [actual scope](local-language-224/README.md): single client locale persistence, actual Chinese/dark source diagnostics and cold reload, original failures retained.
 
 - [Sources/reload223 Recall](source-reload-plan-223.md), [current readiness](source-reload-readiness-223/README.md), [after readiness](source-reload-readiness-22302/README.md) and [actual scope](source-reload-223/README.md): loaded clean/dirty file failure diagnostics and true same-editor recovery; original Source and failures retained, single agent only.

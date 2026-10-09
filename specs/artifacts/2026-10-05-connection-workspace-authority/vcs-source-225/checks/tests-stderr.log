@@ -1,0 +1,158 @@
+
+test\project-route-context.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.71ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.20ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.18ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [3.99ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.13ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.05ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.08ms]
+
+test\expert-squad\builtin-collision-authority.test.ts:
+(pass) lawful unbound builtin Project and global return real materialized scheduler identity [2261.44ms]
+(pass) unbound project SDK-valid builtin collision returns original collision Error [1969.94ms]
+(pass) unbound project malformed builtin collision returns original collision Error [1733.14ms]
+(pass) unbound global SDK-valid builtin collision returns original collision Error [1768.30ms]
+(pass) unbound global malformed builtin collision returns original collision Error [1924.74ms]
+(pass) lawful external Project wins over broken same-ID global and unbound builtin recovers after own collision removal [3268.22ms]
+(pass) explicit global scope keeps global authority when a Project directory is supplied [2535.97ms]
+(pass) nonactive builtin mount collision returns original Error and lawful empty mount validates identity [2287.36ms]
+(pass) actual Task immutable scheduler worker and mount matrix retain original owner after later installed collision [3163.02ms]
+(pass) matching pinned mount does not exempt another colliding builtin mount target [1064.16ms]
+(pass) cold actual config preserves model-first error and builtin collision candidate wrapper [3061.00ms]
+
+test\server\candidate-reader-provenance.test.ts:
+125 |   const recoveredHTTP = await cold(project.path)
+126 |   console.log("reader97 recovered", JSON.stringify({ identity: { id: recovered.id, namespace: recovered.namespace, version: recovered.version }, recoveredCandidate, recoveredHTTP, locked }))
+127 |   expect(exitCode).toBe(0)
+128 |   expect({ id: recovered.id, namespace: recovered.namespace, version: recovered.version }).toEqual({ id: profile, namespace: "reader97", version: "2026.10.07.1" })
+129 |   expect(recoveredCandidate).toEqual({ kind: "value", value: undefined })
+130 |   expect(recoveredHTTP).toMatchObject({ kind: "value", value: { status: 200, body: expect.any(Array) } })
+                              ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "kind": "value",
+    "value": {
+-     "body": Any<Array>,
+-     "status": 200,
++     "body": {
++       "data": {
++         "message": "Internal server error. See x-opencorvus-request-id for diagnostics.",
++       },
++       "name": "UnknownError",
++     },
++     "headers": {
++       "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
++       "content-type": "application/json",
++       "vary": "Origin",
++       "x-opencorvus-request-id": "29a0aacc-2450-489c-b844-08242ad17ec7",
++     },
++     "status": 500,
+    },
+  }
+
+- Expected  - 2
++ Received  + 13
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\candidate-reader-provenance.test.ts:130:25)
+(fail) actual exclusive README lock measures declaration, physical reader and candidate provenance then releases [7927.70ms]
+(pass) genuine malformed owned builtin declaration retains current semantic candidate response [2421.76ms]
+
+test\server\config-candidate-status.test.ts:
+22 | test("public VCS metadata binds current Git information and directory admission", async () => {
+23 |   const spec = await Server.openapi()
+24 |   expect(spec.paths?.["/vcs"]?.get?.responses?.["200"]).toMatchObject({
+25 |     content: { "application/json": { schema: { $ref: "#/components/schemas/VcsInfo" } } },
+26 |   })
+27 |   expect(spec.paths?.["/vcs"]?.get?.responses?.["400"]).toMatchObject({
+                                                             ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "content": {
+      "application/json": {
+        "schema": {
+-         "$ref": "#/components/schemas/DirectoryRequiredError",
++         "properties": {
++           "data": {
++             "additionalProperties": {},
++             "propertyNames": {
++               "type": "string",
++             },
++             "type": "object",
++           },
++           "name": {
++             "const": "DirectoryRequiredError",
++             "type": "string",
++           },
++         },
++         "required": [
++           "name",
++           "data",
++         ],
++         "type": "object",
+        },
+      },
+    },
+    "description": "Project directory required",
+  }
+
+- Expected  - 1
++ Received  + 18
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\config-candidate-status.test.ts:27:57)
+(fail) public VCS metadata binds current Git information and directory admission [518.63ms]
+(pass) cold builtin collision returns canonical candidate validation 400 [2475.89ms]
+(pass) cold lawful external active profile with colliding nonactive builtin mount returns candidate 400 [2540.44ms]
+(pass) cold unavailable explicit model preserves model-first canonical 400 [2562.61ms]
+(pass) cold lawful runtime returns its real VCS output [3526.47ms]
+(pass) shared Hono canonical response ConfigCandidateValidationError [3.01ms]
+(pass) shared Hono canonical response ProviderModelNotFoundError [1.73ms]
+(pass) shared Hono canonical response AuthReadError [1.65ms]
+(pass) shared Hono canonical response DatabaseUnavailableError [1.68ms]
+(pass) shared Hono canonical response OwnedPromptControllersError [1.66ms]
+(pass) shared Hono canonical response Error [6.66ms]
+
+test\server\vcs-read-identity.test.ts:
+(pass) physical branch facts follow a real branch rename in the same identity context [3800.82ms]
+(pass) cold VCS readers return exact independent Git facts with unavailable execution models [10145.15ms]
+(pass) parallel Project VCS readers keep each exact repository branch [4416.21ms]
+(pass) plain directories return explicit VCS state and branch/diff prerequisite errors [263.30ms]
+(pass) Git writes and commit-message streaming retain their execution model error [4056.79ms]
+116 |   await git(project.path, ["branch", "next-current-225"])
+117 |   await Instance.provideProjectIdentity({ directory: project.path, fn: async () => {
+118 |     await Vcs.init()
+119 |     expect((await Vcs.switchBranch("next-current-225")).branch).toBe("next-current-225")
+120 |     expect(await Vcs.branch()).toBe("next-current-225")
+121 |     expect(await Vcs.branches()).toMatchObject([{ name: "next-current-225", current: true }])
+                                       ^
+error: expect(received).toMatchObject(expected)
+
+  [
+    {
+      "current": true,
+      "name": "next-current-225",
+    },
++   {
++     "current": false,
++     "name": "master",
++   },
+  ]
+
+- Expected  - 0
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\vcs-read-identity.test.ts:121:34)
+(fail) branch switching retains the live branch owner before returning current information [3777.85ms]
+(pass) physical branch facts belong to the selected linked checkout [3272.89ms]
+
+3 tests failed:
+(fail) actual exclusive README lock measures declaration, physical reader and candidate provenance then releases [7927.70ms]
+(fail) public VCS metadata binds current Git information and directory admission [518.63ms]
+(fail) branch switching retains the live branch owner before returning current information [3777.85ms]
+
+ 35 pass
+ 3 fail
+ 99 expect() calls
+Ran 38 tests across 5 files. [79.55s]

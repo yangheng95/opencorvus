@@ -1,0 +1,14 @@
+{
+  "pid": 65008,
+  "observedAtUtc": "2026-10-09T04:48:28.7903695Z",
+  "arguments": [
+    "test",
+    "test/server/vcs-read-identity.test.ts",
+    "test/project-route-context.test.ts",
+    "test/server/config-candidate-status.test.ts",
+    "test/server/candidate-reader-provenance.test.ts",
+    "test/expert-squad/builtin-collision-authority.test.ts",
+    "--timeout=90000"
+  ],
+  "birthUtc": "2026-10-09T04:48:28.7727514Z"
+}

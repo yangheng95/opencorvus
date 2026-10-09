@@ -12,6 +12,12 @@ describe("Project route context authority", () => {
       prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
       config: projectRouteContextKind("/session/ses_1/config", "GET"),
       vcs: projectRouteContextKind("/vcs", "GET"),
+      branches: projectRouteContextKind("/vcs/branches", "GET"),
+      diff: projectRouteContextKind("/vcs/diff", "GET"),
+      switchBranch: projectRouteContextKind("/vcs/branch", "POST"),
+      commit: projectRouteContextKind("/vcs/commit", "POST"),
+      push: projectRouteContextKind("/vcs/push", "POST"),
+      commitMessage: projectRouteContextKind("/vcs/commit-message/stream", "POST"),
       channel: projectRouteContextKind("/channel", "GET"),
     }).toEqual({
       search: "identity",
@@ -21,7 +27,13 @@ describe("Project route context authority", () => {
       organize: "runtime",
       prompt: "runtime",
       config: "runtime",
-      vcs: "runtime",
+      vcs: "identity",
+      branches: "identity",
+      diff: "identity",
+      switchBranch: "runtime",
+      commit: "runtime",
+      push: "runtime",
+      commitMessage: "runtime",
       channel: "runtime",
     })
   })

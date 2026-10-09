@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [VCS and Sources225](records/2026-10/2026-10-09-vcs-source-225.md): exact Git-reader authority and actual source-operation experience.
+
 - [Client language224](records/2026-10/2026-10-09-local-language-224.md): client locale persistence and actual Chinese/dark source recovery.
 
 - [Sources and loaded-file reload223](records/2026-10/2026-10-09-source-reload-223.md): current real-source disclosure and reload failure/recovery investigation.

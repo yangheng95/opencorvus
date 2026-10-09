@@ -9,6 +9,14 @@ relative-path and canonical physical-path boundaries, exact absolute-source
 validation, original file errors, content revisions and actual Git/process
 owners. File mutations keep their runtime and write-precondition contracts.
 
+VCS information, local branches and diff GET readers use the same Project
+identity admission independently of executable model bootstrap. Information
+and branch selection query the existing physical Git branch reader for their
+current checkout. Runtime BranchUpdated subscriptions keep their original
+owner/disposal; branch switching explicitly reinitializes that owner after
+reset before returning fresh information. Git mutation and streamed commit
+message execution retain their existing runtime and prerequisite contracts.
+
 File Editor initial read failures retain one current original thrown value
 under the existing target, API authority and load/reload generations. Shared
 Feedback presents a concise localized hint, full original HTTP diagnostics

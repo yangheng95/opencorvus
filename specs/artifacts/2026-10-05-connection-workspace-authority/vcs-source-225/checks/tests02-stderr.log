@@ -1,0 +1,53 @@
+
+test\project-route-context.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.72ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.15ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [3.75ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.17ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.09ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.04ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.07ms]
+
+test\expert-squad\builtin-collision-authority.test.ts:
+(pass) lawful unbound builtin Project and global return real materialized scheduler identity [2220.96ms]
+(pass) unbound project SDK-valid builtin collision returns original collision Error [1895.63ms]
+(pass) unbound project malformed builtin collision returns original collision Error [1818.56ms]
+(pass) unbound global SDK-valid builtin collision returns original collision Error [1875.84ms]
+(pass) unbound global malformed builtin collision returns original collision Error [2371.86ms]
+(pass) lawful external Project wins over broken same-ID global and unbound builtin recovers after own collision removal [4428.16ms]
+(pass) explicit global scope keeps global authority when a Project directory is supplied [2647.89ms]
+(pass) nonactive builtin mount collision returns original Error and lawful empty mount validates identity [2673.06ms]
+(pass) actual Task immutable scheduler worker and mount matrix retain original owner after later installed collision [4030.07ms]
+(pass) matching pinned mount does not exempt another colliding builtin mount target [1405.04ms]
+(pass) cold actual config preserves model-first error and builtin collision candidate wrapper [3755.35ms]
+
+test\server\candidate-reader-provenance.test.ts:
+(pass) actual exclusive README lock measures declaration, physical reader and candidate provenance then releases [6706.62ms]
+(pass) genuine malformed owned builtin declaration retains current semantic candidate response [3608.17ms]
+
+test\server\config-candidate-status.test.ts:
+(pass) public VCS metadata binds current Git information and directory admission [726.61ms]
+(pass) cold builtin collision returns canonical candidate validation 400 [2941.11ms]
+(pass) cold lawful external active profile with colliding nonactive builtin mount returns candidate 400 [3162.50ms]
+(pass) cold unavailable explicit model preserves model-first canonical 400 [3032.56ms]
+(pass) cold lawful runtime returns its real VCS output [4500.07ms]
+(pass) shared Hono canonical response ConfigCandidateValidationError [3.54ms]
+(pass) shared Hono canonical response ProviderModelNotFoundError [2.09ms]
+(pass) shared Hono canonical response AuthReadError [2.20ms]
+(pass) shared Hono canonical response DatabaseUnavailableError [5.36ms]
+(pass) shared Hono canonical response OwnedPromptControllersError [3.07ms]
+(pass) shared Hono canonical response Error [2.27ms]
+
+test\server\vcs-read-identity.test.ts:
+(pass) physical branch facts follow a real branch rename in the same identity context [4112.24ms]
+(pass) cold VCS readers return exact independent Git facts with unavailable execution models [12387.19ms]
+(pass) parallel Project VCS readers keep each exact repository branch [7578.69ms]
+(pass) plain directories return explicit VCS state and branch/diff prerequisite errors [380.67ms]
+(pass) Git writes and commit-message streaming retain their execution model error [4038.99ms]
+(pass) branch switching retains the live branch owner before returning current information [4414.38ms]
+(pass) physical branch facts belong to the selected linked checkout [3626.06ms]
+
+ 38 pass
+ 0 fail
+ 101 expect() calls
+Ran 38 tests across 5 files. [93.19s]

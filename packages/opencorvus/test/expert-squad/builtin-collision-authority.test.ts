@@ -108,7 +108,7 @@ async function coldRequest(directory: string) {
   await Instance.disposeAll()
   Server.resetProjectRoutesAppForTest()
   return runOutsideInstanceContext(async () => {
-    const response = await Server.App().request(`/vcs?directory=${encodeURIComponent(directory)}`, {
+    const response = await Server.App().request(`/session/status?directory=${encodeURIComponent(directory)}`, {
       headers: { "x-opencorvus-directory": directory },
     })
     return { status: response.status, body: await response.json() }

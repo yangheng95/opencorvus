@@ -2184,30 +2184,6 @@
         },
         "type": "object"
       },
-      "ConfigCandidateValidationError": {
-        "properties": {
-          "data": {
-            "properties": {
-              "message": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "message"
-            ],
-            "type": "object"
-          },
-          "name": {
-            "const": "ConfigCandidateValidationError",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "data"
-        ],
-        "type": "object"
-      },
       "ContextOverflowError": {
         "properties": {
           "data": {
@@ -15002,40 +14978,6 @@
             "type": "array"
           }
         },
-        "type": "object"
-      },
-      "ProviderModelNotFoundError": {
-        "properties": {
-          "data": {
-            "properties": {
-              "modelID": {
-                "type": "string"
-              },
-              "providerID": {
-                "type": "string"
-              },
-              "suggestions": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "required": [
-              "providerID",
-              "modelID"
-            ],
-            "type": "object"
-          },
-          "name": {
-            "const": "ProviderModelNotFoundError",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "data"
-        ],
         "type": "object"
       },
       "ProviderMonetaryBalanceUsage": {
@@ -134937,18 +134879,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/ConfigCandidateValidationError"
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
                     },
-                    {
-                      "$ref": "#/components/schemas/ProviderModelNotFoundError"
+                    "name": {
+                      "const": "DirectoryRequiredError",
+                      "type": "string"
                     }
-                  ]
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
                 }
               }
             },
-            "description": "Runtime configuration candidate or model rejected"
+            "description": "Project directory required"
           },
           "500": {
             "content": {
@@ -135090,6 +135042,33 @@
               }
             },
             "description": "Local VCS branches"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "DirectoryRequiredError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Project directory required"
           },
           "412": {
             "content": {
@@ -135395,6 +135374,40 @@
               }
             },
             "description": "VCS diff"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "DirectoryRequiredError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Invalid diff query or project directory required"
           },
           "412": {
             "content": {

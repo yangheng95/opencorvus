@@ -1,0 +1,13 @@
+{
+  "arguments": [
+    "test",
+    "test/server/vcs-read-identity.test.ts",
+    "test/project-route-context.test.ts",
+    "test/server/config-candidate-status.test.ts",
+    "test/server/candidate-reader-provenance.test.ts",
+    "test/expert-squad/builtin-collision-authority.test.ts",
+    "--timeout=90000"
+  ],
+  "birthUtc": "2026-10-09T05:03:43.1499048Z",
+  "pid": 21656
+}

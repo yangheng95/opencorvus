@@ -1,0 +1,43 @@
+
+test\server\candidate-reader-provenance.test.ts:
+128 |   console.log("reader97 command diagnostic", JSON.stringify(commandDiagnostic))
+129 |   console.log("reader97 recovered", JSON.stringify({ identity: { id: recovered.id, namespace: recovered.namespace, version: recovered.version }, recoveredCandidate, recoveredHTTP, locked }))
+130 |   expect(exitCode).toBe(0)
+131 |   expect({ id: recovered.id, namespace: recovered.namespace, version: recovered.version }).toEqual({ id: profile, namespace: "reader97", version: "2026.10.07.1" })
+132 |   expect(recoveredCandidate).toEqual({ kind: "value", value: undefined })
+133 |   expect(recoveredHTTP).toMatchObject({ kind: "value", value: { status: 200, body: expect.any(Array) } })
+                              ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "kind": "value",
+    "value": {
+-     "body": Any<Array>,
+-     "status": 200,
++     "body": {
++       "data": {
++         "message": "Internal server error. See x-opencorvus-request-id for diagnostics.",
++       },
++       "name": "UnknownError",
++     },
++     "headers": {
++       "access-control-expose-headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
++       "content-type": "application/json",
++       "vary": "Origin",
++       "x-opencorvus-request-id": "40cb3bc6-9349-4819-96d4-8fb26dd9c384",
++     },
++     "status": 500,
+    },
+  }
+
+- Expected  - 2
++ Received  + 13
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\candidate-reader-provenance.test.ts:133:25)
+(fail) actual exclusive README lock measures declaration, physical reader and candidate provenance then releases [6359.73ms]
+(pass) genuine malformed owned builtin declaration retains current semantic candidate response [2544.57ms]
+
+ 1 pass
+ 1 fail
+ 8 expect() calls
+Ran 2 tests across 1 file. [11.43s]

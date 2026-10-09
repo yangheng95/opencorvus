@@ -108,12 +108,12 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | DELETE | `/project/current/worktrees` | Delete a current project worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |
 | PATCH | `/project/{projectID}` | Update project 请求体: `commands`, `icon`, `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.update` |
-| GET | `/vcs` | Get VCS info 错误: `ConfigCandidateValidationError`, `ProviderModelNotFoundError`, `UnknownError`. | `vcs.get` |
+| GET | `/vcs` | Get VCS info 错误: `DirectoryRequiredError`, `UnknownError`. | `vcs.get` |
 | POST | `/vcs/branch` | Switch local VCS branch 请求体: `branch`; 错误: `UnknownError`, `VcsPrerequisiteError`. | `vcs.switchBranch` |
-| GET | `/vcs/branches` | List local VCS branches 错误: `UnknownError`, `VcsPrerequisiteError`. | `vcs.branches` |
+| GET | `/vcs/branches` | List local VCS branches 错误: `DirectoryRequiredError`, `UnknownError`, `VcsPrerequisiteError`. | `vcs.branches` |
 | POST | `/vcs/commit` | Commit current VCS changes 请求体: `message`; 错误: `UnknownError`, `VcsPrerequisiteError`. | `vcs.commit` |
 | POST | `/vcs/commit-message/stream` | Generate a Git commit message with streaming AI 请求体: `sessionID`, `taskID`; 错误: `UnknownError`. | `vcs.commitMessage.stream` |
-| GET | `/vcs/diff` | Get VCS diff 错误: `UnknownError`, `VcsPrerequisiteError`. | `vcs.diff` |
+| GET | `/vcs/diff` | Get VCS diff 错误: `BadRequestError`, `DirectoryRequiredError`, `UnknownError`, `VcsPrerequisiteError`. | `vcs.diff` |
 | POST | `/vcs/push` | Push current VCS branch 错误: `UnknownError`, `VcsPrerequisiteError`. | `vcs.push` |
 
 ### Task / Orchestrator
