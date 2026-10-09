@@ -1,0 +1,59 @@
+{
+  "active": {
+    "aria": "webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)",
+    "connected": true,
+    "tag": "BUTTON"
+  },
+  "alerts": [],
+  "cards": [
+    {
+      "chars": 35289,
+      "id": "subagent-transcript:ses_hMlVNrRdOLxQf4XhSds7",
+      "kind": "agent"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T01:40:46.054Z",
+  "payloads": [
+    {
+      "controls": [
+        "Raw",
+        "Expand",
+        ""
+      ],
+      "label": "Input"
+    },
+    {
+      "chars": 32395,
+      "controls": [
+        "Expand",
+        ""
+      ],
+      "label": "Output"
+    }
+  ],
+  "scroll": [
+    {
+      "follow": "false",
+      "height": 3394,
+      "top": 103.33333587646484,
+      "view": 577
+    }
+  ],
+  "sources": [
+    {
+      "open": true,
+      "text": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C1",
+      "top": 236.1979217529297
+    },
+    {
+      "open": false,
+      "text": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C1",
+      "top": 368.4583435058594
+    },
+    {
+      "open": false,
+      "text": "Accessibility | MDN1",
+      "top": 918.125
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "port": 18140,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-tool-sources-219-01\\evidence",
+    "child-tool-sources-219-01-478a040a-c51c-492a-bc71-d564ecee8eba",
+    "1791510633809",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18140",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-tool-sources-219-01\\startup.json",
+    "--startup-occurrence",
+    "child-tool-sources-219-01-478a040a-c51c-492a-bc71-d564ecee8eba",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "child-tool-sources-219-01-478a040a-c51c-492a-bc71-d564ecee8eba"
+}

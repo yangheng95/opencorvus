@@ -1,0 +1,165 @@
+{
+  "observedAtUtc": "2026-10-09T01:33:48.3254467Z",
+  "ingresses": [
+    {
+      "id": "art_hbzNs5iRQE31VNkuiEpD",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "execution_epoch": 1,
+      "sequence": 1,
+      "source": "task",
+      "source_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791449697006,
+      "disposition": {
+        "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+        "ingress_id": "art_hbzNs5iRQE31VNkuiEpD",
+        "execution_epoch": 1,
+        "evidence_ids": [
+          "prt_g0VXRkQq400ayh51ycAy"
+        ],
+        "time_created": 1791449730318,
+        "disposition": "resolved",
+        "decision_occurrence": {
+          "assistant_message_id": "msg_hJ80wqSCeVmefc0AMXXD",
+          "control_message_id": "msg_task-root-control_art_hbzNs5iRQE31VNkuiEpD_art_hbzNs5iRQE31VNkuiEpD",
+          "predecessor_id": "art_hbzNs5iRQE31VNkuiEpD",
+          "activation_id": "act_g0VXRkMas00lJAmbmgq1"
+        }
+      }
+    },
+    {
+      "id": "art_hxPr2eO4VzuwPb2E06z2",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "execution_epoch": 1,
+      "sequence": 2,
+      "source": "protocol_event",
+      "source_id": "pev_g0VXRkjJp00O1hwt2IbF",
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791449784974,
+      "disposition": {
+        "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+        "ingress_id": "art_hxPr2eO4VzuwPb2E06z2",
+        "execution_epoch": 1,
+        "evidence_ids": [
+          "prt_g0VXRknQL00Hs8WcAIY7"
+        ],
+        "time_created": 1791449816339,
+        "disposition": "resolved",
+        "decision_occurrence": {
+          "assistant_message_id": "msg_hFNKrYKVAbRIx3gnTL4E",
+          "control_message_id": "msg_task-root-control_art_hxPr2eO4VzuwPb2E06z2_art_hxPr2eO4VzuwPb2E06z2",
+          "predecessor_id": "art_hxPr2eO4VzuwPb2E06z2",
+          "activation_id": "act_g0VXRkjKy00BtwOOb4KU"
+        }
+      }
+    },
+    {
+      "id": "art_h1z2OytdL7BFX1LcH1oM",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "execution_epoch": 1,
+      "sequence": 3,
+      "source": "protocol_event",
+      "source_id": "pev_g0VXRlAcK00HrTy0HJ76",
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791449889898,
+      "disposition": {
+        "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+        "ingress_id": "art_h1z2OytdL7BFX1LcH1oM",
+        "execution_epoch": 1,
+        "evidence_ids": [
+          "pev_g0VXRlJUn00LNIxnTZ2w"
+        ],
+        "time_created": 1791449924369,
+        "disposition": "terminal_inapplicable"
+      }
+    }
+  ],
+  "permanentRuntimeOwner": {
+    "pid": 63112,
+    "processInstanceID": "win32:639270464606887343",
+    "occurrenceID": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35"
+  },
+  "memoryStatuses": [
+    {
+      "project_id": "prj_hVAc7t3PtYTtTTJZWWvx",
+      "envelope_status": "idle"
+    },
+    {
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "envelope_status": "idle"
+    }
+  ],
+  "assistantCompleted": 15,
+  "permissionResults": 8,
+  "task": {
+    "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+    "status": "completed",
+    "epoch": 1,
+    "openedEventID": "pev_g0VXRkMYy000N2amTfW0",
+    "terminalEventID": "pev_g0VXRlJUn00LNIxnTZ2w"
+  },
+  "ownerBinding": "Same exact PID/birth as freshly OS-observed dead original153 Target; occurrence observation IDs are separate namespaces",
+  "recoveryTableCounts": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "checkpoints": 2,
+  "boundary": "Current readonly full-frontier manual review complete; whole copy identity still required"
+}

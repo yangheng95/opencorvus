@@ -1,0 +1,59 @@
+{
+  "active": {
+    "aria": "webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)",
+    "connected": true,
+    "tag": "BUTTON"
+  },
+  "alerts": [],
+  "cards": [
+    {
+      "chars": 23627,
+      "id": "subagent-transcript:ses_hMlVNrRdOLxQf4XhSds7",
+      "kind": "agent"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T01:39:36.234Z",
+  "payloads": [
+    {
+      "controls": [
+        "Raw",
+        "Expand",
+        ""
+      ],
+      "label": "Input"
+    },
+    {
+      "chars": 20733,
+      "controls": [
+        "Expand",
+        ""
+      ],
+      "label": "Output"
+    }
+  ],
+  "scroll": [
+    {
+      "follow": "false",
+      "height": 3394,
+      "top": 0,
+      "view": 577
+    }
+  ],
+  "sources": [
+    {
+      "open": true,
+      "text": "Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C1",
+      "top": 807.53125
+    },
+    {
+      "open": false,
+      "text": "Accessibility Principles | Web Accessibility Initiative (WAI) | W3C1",
+      "top": 939.7916870117188
+    },
+    {
+      "open": false,
+      "text": "Accessibility | MDN1",
+      "top": 1021.4583740234376
+    }
+  ]
+}

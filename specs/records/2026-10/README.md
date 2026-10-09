@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Child Tool Sources219](2026-10-09-child-tool-sources-219.md): original child Dock full Tool/Sources and reading return, current safety frontier and complete canonical history, actual UI/native scope.
+
 - [Current Sol Side Chat218](2026-10-09-current-sol-side-chat-218.md): paired actual provider/model admission, genuine streaming Sources and independent Side Chat; real scope evidence and immutable budget.
 
 - [Historical Tool read217](2026-10-09-historical-tool-read-217.md): three canonical GET identity readers, cold root/child and project isolation positive contracts, complete historical runtime and real UI scope.

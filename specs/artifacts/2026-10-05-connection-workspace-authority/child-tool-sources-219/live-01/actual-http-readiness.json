@@ -1,0 +1,59 @@
+{
+  "asset": "/ui/assets/main-Bmeb8tJo.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18140,
+      "OwningProcess": 44324
+    }
+  ],
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "scriptSrc": "http://127.0.0.1:18140/ui/assets/main-Bmeb8tJo.js",
+  "owner": {
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-tool-sources-219\\live-01",
+    "port": 18140,
+    "observedProcessChain": [
+      {
+        "pid": 44324,
+        "processInstanceID": "win32:639271065346892819",
+        "occurrenceID": "e5a885f1-4ff7-402f-82e1-2dbaa3fb49ed"
+      }
+    ],
+    "authorityStaging": "None; no model Task requested",
+    "host": {
+      "pid": 77032,
+      "processInstanceID": "win32:639271065338960975",
+      "occurrenceID": "193a683a-faf1-4380-9444-57016f793204"
+    },
+    "nativeTarget": {
+      "pid": 44324,
+      "processInstanceID": "win32:639271065346892819",
+      "occurrenceID": "e5a885f1-4ff7-402f-82e1-2dbaa3fb49ed"
+    },
+    "evidencePrefix": "child-tool-sources-219-01",
+    "owner": {
+      "processInstanceID": "win32:639271065346892819",
+      "ProcessId": 44324
+    },
+    "targetBirthAtMs": 1791509734689,
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-tool-sources-219-01\\runtime",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-tool-sources-219-01",
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "nativeDeadlineAt": 1791510633809,
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\child-tool-sources-219-01\\evidence",
+    "occurrence": "child-tool-sources-219-01-478a040a-c51c-492a-bc71-d564ecee8eba"
+  },
+  "uiStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18140/ui/",
+  "assetStatus": 200,
+  "uiUri": "http://127.0.0.1:18140/ui",
+  "observedAtUtc": "2026-10-09T01:35:51.5415770Z",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "child-tool-sources-219-01-478a040a-c51c-492a-bc71-d564ecee8eba",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18140",
+    "pid": 44324
+  }
+}

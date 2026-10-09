@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Child219 Recall](child-tool-sources-plan-219.md), [current readiness](child-tool-readiness-219/README.md), [startup](child-tool-startup-219.json) and [actual scope](child-tool-sources-219/README.md): original child Dock Tool/Sources and return matrix, complete90-table canonical copy, no Task/model rearm.
+
 - [Current Sol218 Recall](current-sol-side-chat-plan-218.md) and [actual scope](current-sol-side-chat-218/README.md): complete auth/catalog pair, actual model/streaming and manual Sources/Side Chat qualification, independent fixed native budget and original failures retained.
 
 - [Historical Tool217 Recall](historical-tool-read-plan-217.md), [readiness](historical-tool-readiness-217/README.md), [startup](historical-tool-startup-217.json) and [actual scope](historical-tool-read-217/README.md): three exact historical data GETs use existing Project identity; cold full output/isolation tests and genuine page/native evidence.
