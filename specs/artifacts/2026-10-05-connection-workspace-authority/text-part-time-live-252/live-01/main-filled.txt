@@ -1,0 +1,27 @@
+Browser tab: 93, Title: "OpenCorvus", URL: "http://localhost:18186/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 34
++								64 container
++									65 button (expanded) Description: Collapse Anonymous 5dfc35, Secondary Actions: Collapse
++									66 container
++										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										68 button Reply with OK.
++										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
++									70 button (expanded) Description: Collapse project, Secondary Actions: Collapse
++								71 container Recents
++									72 text Recents
++									73 container
++										74 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
++										75 button Reply with OK.
++										76 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-196-trigger, Secondary Actions: Expand
+~								48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea, Value: 请由当前会话独立完成一次只读资料阅读：
+https://www.w3.org/WAI/fundamentals/accessibility-intro/
+https://www.w3.org/WAI/fundamentals/accessibility-principles/
+https://developer.mozilla.org/en-US/docs/Web/Accessibility
+只读取上述三页正文，不继续打开页内其他链接。根据实际读取内容，直接在本聊天中写一份面向新手产品设计师的中文无障碍阅读指南，约2500字。用清晰的小标题、段落和编号列表展开：三个来源各自能帮助解决什么问题、从用户体验如何发现障碍、怎样组织设计评审、怎样记录阅读限制。可穿插短小的Markdown代码例子，但说明示例与来源事实的区别。引用真实来源标题与原链接，不编造出处。不要创建文件或派生其他会话。
+~								58 button Description: Send, Help: Send message (Enter to send, Shift+Enter for newline), ID: chatSend
+The focused UI element is 48 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea, Value: 请由当前会话独立完成一次只读资料阅读：
+https://www.w3.org/WAI/fundamentals/accessibility-intro/
+https://www.w3.org/WAI/fundamentals/accessibility-principles/
+https://developer.mozilla.org/en-US/docs/Web/Accessibility
+只读取上述三页正文，不继续打开页内其他链接。根据实际读取内容，直接在本聊天中写一份面向新手产品设计师的中文无障碍阅读指南，约2500字。用清晰的小标题、段落和编号列表展开：三个来源各自能帮助解决什么问题、从用户体验如何发现障碍、怎样组织设计评审、怎样记录阅读限制。可穿插短小的Markdown代码例子，但说明示例与来源事实的区别。引用真实来源标题与原链接，不编造出处。不要创建文件或派生其他会话。

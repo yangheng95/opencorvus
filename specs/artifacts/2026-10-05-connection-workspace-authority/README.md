@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [真实正文/Sources252 Recall](text-part-time-live-plan-252.md) / [实际时间与返回失败](text-part-time-live-252/README.md)：70.384秒/2405→3681/三条来源、7EOF/Native0；主阅读位置360→末尾仍待修。
+
 - [正文片段时间251 Recall](text-part-time-plan-251.md) / [真实后端检查](text-part-time-251/README.md)：text-end保留原start，24项/108断言与最终5项通过；原失败及工具链修复完整保留。
 
 - [子Dock历史250 Recall](child-dock-review-plan-250.md) / [真实来源与重开](child-dock-review-250/README.md)：完整153历史/current前沿，三条Source/子完成耗时/阅读1008保持，原Native0与保管属性失败均保留。

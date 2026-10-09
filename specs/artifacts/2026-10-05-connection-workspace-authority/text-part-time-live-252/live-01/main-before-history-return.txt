@@ -1,0 +1,244 @@
+Browser tab: 93, Title: "OpenCorvus", URL: "http://localhost:18186/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18186/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								64 container
+									73 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									74 container
+										75 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										76 button 请由当前会话独立完成一次只读资料阅读：
+										77 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 5dfc35, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								71 container Recents
+									72 text Recents
+									95 container
+										96 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										97 button 请由当前会话独立完成一次只读资料阅读：
+										98 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-942-trigger, Secondary Actions: Expand
+									99 container
+										100 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										101 button Reply with OK.
+										102 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-948-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18186, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				39 container chatSection
+					40 container Description: Loading task, ID: taskSwitchProgress
+					86 container
+						87 text 请由当前会话独立完成一次只读资料阅读：
+						88 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						89 container Description: Not running, ID: taskStatus
+							90 text Not running
+						91 button Side chat
+						92 container solidChatHeaderRuntimeActions
+							93 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+							94 checkbox Description: Open right dock, Value: 0
+					41 container
+						42 container Description: Conversation, ID: chatScroll
+							258 container
+								259 container
+									406 text User
+									260 container
+										407 text 请由当前会话独立完成一次只读资料阅读：
+										261 link Description: https://www.w3.org/WAI/fundamentals/accessibility-intro/, Value: w3.org/WAI/fundamentals/accessibility-intro/
+										262 link Description: https://www.w3.org/WAI/fundamentals/accessibility-principles/, Value: w3.org/WAI/fundamentals/accessibility-principles/
+										263 link Description: https://developer.mozilla.org/en-US/docs/Web/Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+										408 text  只读取上述三页正文，不继续打开页内其他链接。根据实际读取内容，直接在本聊天中写一份面向新手产品设计师的中文无障碍阅读指南，约2500字。用清晰的小标题、段落和编号列表展开：三个来源各自能帮助解决什么问题、从用户体验如何发现障碍、怎样组织设计评审、怎样记录阅读限制。可穿插短小的Markdown代码例子，但说明示例与来源事实的区别。引用真实来源标题与原链接，不编造出处。不要创建文件或派生其他会话。
+								264 container
+									265 text work
+									266 text 1m 29s
+									267 container
+										268 text 我会只读取这三个链接的正文，不打开页内其他链接，也不创建文件或派生会话。读完后会在本聊天中写出指南，并明确区分来源事实与设计评审建议。
+										269 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8), Secondary Actions: Expand
+											270 text webfetch
+											271 text https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
+											272 image
+										273 container Sources
+											274 link Description: Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C, Value: w3.org/WAI/fundamentals/accessibility-intro/
+									275 container
+										276 button (collapsed) Description: webfetch · https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8), Secondary Actions: Expand
+											277 text webfetch
+											278 text https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)
+											279 image
+										280 container Sources
+											281 link Description: Open web source: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C, Value: w3.org/WAI/fundamentals/accessibility-principles/
+									282 container
+										283 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html), Secondary Actions: Expand
+											284 text webfetch
+											285 text https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)
+											286 image
+										287 container Sources
+											288 link Description: Open web source: Accessibility | MDN, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+									289 container
+										290 heading 新手产品设计师的无障碍阅读指南, Value: 1
+											291 text 新手产品设计师的无障碍阅读指南
+										292 text 无障碍设计的核心问题不是“界面是否足够漂亮”，而是：
+										293 text 当用户感知信息、理解内容或操作设备的方式不同，他们还能否完成同一项任务？
+										294 text 本指南基于指定三页的实际读取内容。来源事实以页面标题和原链接标明；评审流程与记录模板是据此整理的实践建议，不是来源原文，也不构成完整的合规检查清单。
+										295 heading 一、三个来源分别解决什么问题, Value: 2
+											296 text 一、三个来源分别解决什么问题
+										297 heading 1. 建立认识：Introduction to Web Accessibility, Value: 3
+											298 text 1. 建立认识：Introduction to Web Accessibility
+										299 text W3C WAI 的
+										300 link Description: Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
+										301 text  适合首先阅读，用来回答“无障碍是什么、为什么值得从项目开始就考虑”。 页面将无障碍描述为：网站、工具和技术应使残障人士能够感知、理解、导航、交互，并参与贡献内容。涉及的能力差异不只有视觉或听觉，还包括认知、神经、身体和言语方面。 它也说明，无障碍能帮助暂时受限或处于特定情境的人，例如手臂骨折、忘带眼镜、在强光下使用设备，或不方便收听音频的用户。但不能因此把残障人士的需求降为附带收益。 对设计师，这一页最重要的启发是：
+										302 text 障碍可能来自设计，而不只是来自用户的能力。
+										303 text  页面用图片替代文本、键盘输入和音频文字稿说明，信息或功能不应只依赖一种访问方式。它还强调尽早、持续评估，并指出任何单一工具都不能判定网站是否满足无障碍指南，需要有知识的人参与评价。
+										304 heading 2. 建立框架：Accessibility Principles, Value: 3
+											305 text 2. 建立框架：Accessibility Principles
+										306 text W3C WAI 的
+										307 link Description: Accessibility Principles, Value: w3.org/WAI/fundamentals/accessibility-principles/
+										308 text  帮助回答“具体应该观察哪些问题”。正文围绕四个方向展开：
+										309 content list
+											310 container
+												311 AXListMarker 1.
+												312 text 可感知 ：信息和界面能否通过不同方式获得。
+											313 container
+												314 AXListMarker 2.
+												315 text 可操作 ：导航与功能能否被不同输入方式使用。
+											316 container
+												317 AXListMarker 3.
+												318 text 可理解 ：内容、行为和纠错方式是否容易理解。
+											319 container
+												320 AXListMarker 4.
+												321 text 稳健 ：内容能否被浏览器及辅助技术可靠解释。
+										322 text 页面给出许多可转化为设计问题的例子：不能只用颜色传递信息；键盘焦点应可见且顺序有意义；用户需要足够的操作时间；表单应提供说明、错误信息和修正建议；非标准控件需要可被技术识别的名称、角色和值。 不过，页面明确声明：
+										323 text 这不是所有无障碍要求的完整列表。
+										324 text  因此，它适合组织入门评审，不适合直接当作合规证明。
+										325 heading 3. 连接实现：Accessibility, Value: 3
+											326 text 3. 连接实现：Accessibility
+										327 text MDN 的
+										328 link Description: Accessibility, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+										329 text  更像一张技术学习地图，帮助设计师理解“设计意图需要哪些实现条件”。 本页正文介绍了语义化 HTML、CSS 与 JavaScript、WAI-ARIA、辅助技术、多媒体、移动端和认知无障碍等主题。它指出，正确地为用途选择 HTML 元素能改善大量内容的无障碍性；外观像常见桌面控件的组件，也可能缺少辅助技术所需的语义信息。 阅读时要区分
+										330 text 主题介绍
+										331 text 与
+										332 text 具体教程
+										333 text ：本次只读了此入口页的介绍，没有打开其下属教程，所以不能声称已掌握详细 ARIA 用法或控件实现规则。对新手而言，先学会向研发询问“它在技术上是什么、如何被识别和操作”，比记忆属性名称更重要。
+										334 heading 二、从用户体验中发现障碍, Value: 2
+											335 text 二、从用户体验中发现障碍
+										336 text 不要只检查页面上有哪些元素，而要沿着任务观察：用户如何找到入口、获得信息、执行动作、理解反馈，并从错误中恢复。以下是依据四项原则整理的观察方法。
+										337 heading 1. 检查信息是否只有一种获取方式, Value: 3
+											338 text 1. 检查信息是否只有一种获取方式
+										339 text 问自己：看不到图片、分不清颜色或听不到声音时，关键意思是否仍然存在？ 例如，错误字段只有红色边框，却没有文字说明；图表只靠不同颜色区分系列；教学视频中的关键视觉动作没有相应描述，都可能造成信息缺失。 《Accessibility Principles》特别强调，替代文本应传达图片的目的或功能。例如，搜索按钮的合适名称是“搜索”，而不是“放大镜”。这提醒设计师：描述外观不一定等于提供等价体验。
+										340 heading 2. 检查任务是否依赖某一种动作, Value: 3
+											341 text 2. 检查任务是否依赖某一种动作
+										342 text 尝试不使用鼠标完成核心流程，观察能否进入控件、激活功能、退出弹层，焦点是否可见、顺序是否合理、有无被困住的位置。 同时审视拖动、复杂手势或设备运动是否有其他操作入口。原则页指出，需要精细动作的手势应有替代方式，触控目标应足够大，可见标签应与代码中的对应名称匹配，以支持语音操作。 这些检查的目的不是“体验一下残障”，而是发现界面依赖了哪些假设；短暂模拟不能替代真实用户参与。
+										343 heading 3. 检查用户能否掌控节奏, Value: 3
+											344 text 3. 检查用户能否掌控节奏
+										345 text 留意限时填写、自动滚动、突然出现的打断和会话过期。用户是否能延长时间、暂停内容，或在重新认证后保留已输入的数据？ 动效也不只是审美问题。原则页指出，特定闪烁可能诱发光敏反应，动画和移动内容也可能引起不适。设计时应关注是否必要、是否可关闭，而不是只讨论是否“吸引注意”。
+										346 heading 4. 检查理解与纠错成本, Value: 3
+											347 text 4. 检查理解与纠错成本
+										348 text 看按钮是否准确表达动作，导航位置和同类控件名称是否一致，输入要求是否提前说明。 “输入无效”没有告诉用户哪里错了、怎样改。更有帮助的反馈应指出问题并提供修正方向。涉及重要提交时，还要考虑用户能否检查、纠正或在必要时撤回。以上方向来自原则页，但具体文案仍需结合产品任务设计。
+										349 heading 5. 检查视觉之外的结构, Value: 3
+											350 text 5. 检查视觉之外的结构
+										351 text 字号大不代表技术上就是标题；画得像按钮，也不代表它能被辅助技术识别为按钮。设计师需要与研发确认内容层级、控件名称、状态和阅读顺序。 静态设计稿能暴露部分风险，却不能证明实际键盘行为或辅助技术兼容性。这些必须在可运行界面中验证。
+										352 heading 三、怎样组织一次设计评审, Value: 2
+											353 text 三、怎样组织一次设计评审
+										354 text 以下流程是实践建议，不是三页规定的固定会议制度。
+										355 content list
+											356 container
+												357 AXListMarker 1.
+												358 text 确定任务范围。  选一条完整路径，例如“查找服务—填写信息—提交—查看结果”，并包含错误、超时和返回等状态，避免只评审成功页面。
+											359 container
+												360 AXListMarker 2.
+												361 text 邀请不同职责的人。  设计负责信息与交互，内容人员负责表达，研发确认语义和行为，测试记录证据。在条件允许时，让有相关使用经验的残障用户早期参与；原则页明确支持项目早期及全过程的用户参与。
+											362 container
+												363 AXListMarker 3.
+												364 text 按四项原则提问。  依次讨论“信息能否获得、动作能否完成、意思能否理解、技术能否可靠解释”。同一问题可以涉及多个原则，不必强行只归入一类。
+											365 container
+												366 AXListMarker 4.
+												367 text 把意见写成可验证的问题。  不只写“需要优化无障碍”，而要写明任务、使用条件、实际结果、用户影响和预期行为。
+											368 container
+												369 AXListMarker 5.
+												370 text 确定负责人并复查。  优先处理阻断核心任务、丢失关键信息及可能引起身体反应的问题。修改后重走原场景，不以“设计稿已更新”作为关闭依据。
+										371 text 下面是自拟的 Markdown 记录示例，
+										372 text 并非来源原文，也不是已观察到的产品缺陷
+										373 text ：
+										374 container
+											375 text MARKDOWN
+											376 button Copy code
+										377 container
+											378 text ### 问题：错误原因只用颜色提示 -  任务：提交注册表单
+ -  观察：失败字段变红，但没有文字说明
+ -  影响：无法辨别颜色时，不知道哪里需要修改
+ -  预期：说明错误字段、原因及修正方法
+ -  状态：待实现；待验证键盘与辅助技术体验
+										379 text 评审记录还应区分“已观察的问题”“设计风险”和“尚未测试”。没有测试证据，不应把后两者写成已确认通过。
+										380 heading 四、怎样记录阅读限制, Value: 2
+											381 text 四、怎样记录阅读限制
+										382 text 阅读限制决定结论能说到哪里，不是报告末尾的免责套话。本次限制应记录为：
+										383 content list
+											384 container
+												385 AXListMarker 1.
+												386 text 来源范围 ：仅阅读上述三个英文页面的正文，包括正文中的例子和主题简介；没有打开页内教程、标准、用户故事、视频、翻译或其他链接。
+											387 container
+												388 AXListMarker 2.
+												389 text 读取方式 ：通过网页文本提取阅读，不是对页面视觉呈现、键盘操作或屏幕阅读器表现的实测。
+											390 container
+												391 AXListMarker 3.
+												392 text 时间信息 ：读取日期为 2026 年 10 月 10 日。页面标注的更新日期分别为：WAI 入门页 2026 年 2 月 3 日、原则页 2024 年 7 月 15 日、MDN 页 2025 年 10 月 2 日。这些是页面标注，不等于对所有内容现行性的独立核验。
+											393 container
+												394 AXListMarker 4.
+												395 text 结论边界 ：三页足以支持入门概念和评审方向，但不能据此宣布产品符合某一 WCAG 等级、给出完整成功准则清单，或判断特定地区的法律义务。
+											396 container
+												397 AXListMarker 5.
+												398 text 表达边界 ：本文中文为概括与解释，不是官方译文；评审步骤和模板是实践整理。未读取的下属页面不能列为已核实依据。
+										399 text 新手设计师可以把这次阅读的成果浓缩成一个习惯：
+										400 text 每当依赖颜色、声音、位置、动作或时间传达要求时，都追问用户有没有其他路径。
+										401 text  再把答案落实到可测试的设计与实现，而不是停留在“我们重视无障碍”的声明上。
+									402 button Copy message
+									403 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+									404 pop up button (collapsed) Description: View model usage for this turn: 178K Token, Secondary Actions: Expand
+									405 text Oct 10, 04:51 AM
+						43 container chatHomeComposition
+							245 container solidChatComposer
+								246 container chatForm
+									247 splitter Description: Drag to resize the message input, Value: 42
+									248 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									249 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									250 text Work
+									251 text Chat
+									252 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									253 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									254 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										255 text openai/gpt-6.1-sol
+									256 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+								257 button Scroll to bottom
+
+The focused UI element is 42 container Description: Conversation, ID: chatScroll
