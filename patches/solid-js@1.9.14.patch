@@ -1,0 +1,52 @@
+diff --git a/web/dist/web.js b/web/dist/web.js
+index 2f0b2c1b..f8067420 100644
+--- a/web/dist/web.js
++++ b/web/dist/web.js
+@@ -179,7 +179,7 @@ function reconcileArrays(parentNode, a, b) {
+             if ((t = map.get(a[i])) == null || t !== index + sequence) break;
+             sequence++;
+           }
+-          if (sequence > index - bStart) {
++          if (sequence > index - bStart || a[aStart].contains(a[aStart].ownerDocument.activeElement)) {
+             const node = a[aStart];
+             while (bStart < index) parentNode.insertBefore(b[bStart++], node);
+           } else parentNode.replaceChild(b[bStart++], a[aStart++]);
+diff --git a/web/dist/web.cjs b/web/dist/web.cjs
+index 15ebc3e6..5c57aa15 100644
+--- a/web/dist/web.cjs
++++ b/web/dist/web.cjs
+@@ -180,7 +180,7 @@ function reconcileArrays(parentNode, a, b) {
+             if ((t = map.get(a[i])) == null || t !== index + sequence) break;
+             sequence++;
+           }
+-          if (sequence > index - bStart) {
++          if (sequence > index - bStart || a[aStart].contains(a[aStart].ownerDocument.activeElement)) {
+             const node = a[aStart];
+             while (bStart < index) parentNode.insertBefore(b[bStart++], node);
+           } else parentNode.replaceChild(b[bStart++], a[aStart++]);
+diff --git a/web/dist/dev.js b/web/dist/dev.js
+index 2981df95..69ee3e19 100644
+--- a/web/dist/dev.js
++++ b/web/dist/dev.js
+@@ -179,7 +179,7 @@ function reconcileArrays(parentNode, a, b) {
+             if ((t = map.get(a[i])) == null || t !== index + sequence) break;
+             sequence++;
+           }
+-          if (sequence > index - bStart) {
++          if (sequence > index - bStart || a[aStart].contains(a[aStart].ownerDocument.activeElement)) {
+             const node = a[aStart];
+             while (bStart < index) parentNode.insertBefore(b[bStart++], node);
+           } else parentNode.replaceChild(b[bStart++], a[aStart++]);
+diff --git a/web/dist/dev.cjs b/web/dist/dev.cjs
+index b08190b2..65ae37cc 100644
+--- a/web/dist/dev.cjs
++++ b/web/dist/dev.cjs
+@@ -180,7 +180,7 @@ function reconcileArrays(parentNode, a, b) {
+             if ((t = map.get(a[i])) == null || t !== index + sequence) break;
+             sequence++;
+           }
+-          if (sequence > index - bStart) {
++          if (sequence > index - bStart || a[aStart].contains(a[aStart].ownerDocument.activeElement)) {
+             const node = a[aStart];
+             while (bStart < index) parentNode.insertBefore(b[bStart++], node);
+           } else parentNode.replaceChild(b[bStart++], a[aStart++]);

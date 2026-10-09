@@ -1,0 +1,68 @@
+{
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "tool-focus-lifetime-215-01-2f7558a7-61b2-4ec7-b22a-bce20ed577fb",
+    "outcome": "settled",
+    "host": {
+      "pid": 69652,
+      "processInstanceID": "win32:639270995140462479",
+      "occurrenceID": "effdd9b4-d5f3-455c-b28f-0017ce65f6b5"
+    },
+    "target": {
+      "pid": 54408,
+      "processInstanceID": "win32:639270995148403430",
+      "occurrenceID": "4c2ee234-00cb-49b6-bb2a-d3f66ffa5679"
+    },
+    "observedAtUtc": "2026-10-08T23:53:34.06Z",
+    "deadlineAt": 1791503613949,
+    "terminal": {
+      "occurrenceID": "tool-focus-lifetime-215-01-2f7558a7-61b2-4ec7-b22a-bce20ed577fb",
+      "pid": 54408,
+      "reason": "deadline_exceeded",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "occurrence": "tool-focus-lifetime-215-01-2f7558a7-61b2-4ec7-b22a-bce20ed577fb",
+  "listeners": null,
+  "pairedCleanupComplete": true,
+  "chain": [
+    {
+      "expected": {
+        "pid": 54408,
+        "processInstanceID": "win32:639270995148403430",
+        "occurrenceID": "4c2ee234-00cb-49b6-bb2a-d3f66ffa5679"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 69652,
+        "processInstanceID": "win32:639270995140462479",
+        "occurrenceID": "effdd9b4-d5f3-455c-b28f-0017ce65f6b5"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ],
+  "observedAtUtc": "2026-10-08T23:53:51.4605326Z",
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-01\\runtime\\data\\auth.json",
+      "presentAfter": false
+    },
+    {
+      "outcome": "removed",
+      "copiedLength": 2001983,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-01\\runtime\\data\\models.json",
+      "presentAfter": false
+    }
+  ]
+}

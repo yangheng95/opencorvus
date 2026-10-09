@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-02\\evidence",
+    "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+    "1791505008685",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18136",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-02\\startup.json",
+    "--startup-occurrence",
+    "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+    "--log-level",
+    "INFO"
+  ],
+  "port": 18136,
+  "occurrence": "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88"
+}

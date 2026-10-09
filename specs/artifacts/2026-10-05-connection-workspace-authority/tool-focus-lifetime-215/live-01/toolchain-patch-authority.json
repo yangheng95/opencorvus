@@ -1,0 +1,10 @@
+{
+  "firstCommitCommand": "bun patch --commit node_modules/solid-js",
+  "observedAtUtc": "2026-10-09T00:10:44.9536941Z",
+  "currentSource": "Actual git --no-index pristine Bun package versus Bun prepared package; canonical patch filenames only",
+  "rawLogs": "Private original .tmp-product-iteration build logs preserved; public text copies only trim trailing whitespace",
+  "originalError": "Both original tool handles exited1 EPERM failed renaming patch file to patches dir (copyfile)",
+  "installed": "Normal bun install and frozen install apply root patchedDependencies/lock; package topology and overlay types actual59705=0",
+  "secondCommitCommand": "bun patch --commit node_modules/solid-js --patches-dir .tmp-product-iteration/vendor-patches-215",
+  "preparedPackage": "solid-js@1.9.14"
+}

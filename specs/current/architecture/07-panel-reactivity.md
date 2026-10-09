@@ -354,6 +354,14 @@ physical runtime shutdown cannot extend already completed work.
   inner control identity remains owned by that control's rendering projection.
   No focus migration or global keyboard routing is introduced.
 
+The installed Solid 1.9.14 browser renderer uses the root patched-dependency
+policy for ordered-array prefix reconciliation: an existing subtree containing
+its document's active element stays attached while preceding items are
+inserted. Component identity alone cannot preserve native focus if a retained
+subtree is temporarily removed by a replace/reinsert optimization. The same
+branch applies across its development/production module exports; it does not
+introduce a separate transcript renderer or focus-restoration path.
+
 ## Mailbox Projection
 
 The left-sidebar Mailbox hydrates from the global registered-project `/mailbox`

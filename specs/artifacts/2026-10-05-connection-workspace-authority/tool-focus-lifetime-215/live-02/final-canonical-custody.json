@@ -1,0 +1,42 @@
+{
+  "observedAtUtc": "2026-10-09T00:09:03.591Z",
+  "boundary": "Original/clone full canonical rows after both physical closures; readonly BEGIN/ROLLBACK",
+  "facts": [
+    {
+      "table": "session",
+      "sourceRows": 2,
+      "cloneRows": 2,
+      "fullStoredRows": "equal"
+    },
+    {
+      "table": "message",
+      "sourceRows": 8,
+      "cloneRows": 8,
+      "fullStoredRows": "equal"
+    },
+    {
+      "table": "part",
+      "sourceRows": 21,
+      "cloneRows": 21,
+      "fullStoredRows": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "sourceRows": 5,
+      "cloneRows": 5,
+      "fullStoredRows": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "sourceRows": 5,
+      "cloneRows": 5,
+      "fullStoredRows": "equal"
+    },
+    {
+      "table": "provider_usage_event",
+      "sourceRows": 8,
+      "cloneRows": 8,
+      "fullStoredRows": "equal"
+    }
+  ]
+}

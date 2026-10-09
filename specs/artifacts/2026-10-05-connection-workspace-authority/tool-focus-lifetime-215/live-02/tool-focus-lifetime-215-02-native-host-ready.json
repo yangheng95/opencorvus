@@ -1,0 +1,40 @@
+{
+  "occurrence": "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+  "outcome": "ready",
+  "host": {
+    "pid": 70244,
+    "processInstanceID": "win32:639271009087596951",
+    "occurrenceID": "cfd3500f-5bc0-494b-aacc-eb8cf149cb24"
+  },
+  "parent": {
+    "pid": 7784,
+    "processInstanceID": "win32:639271009071105505",
+    "occurrenceID": "47474ed0-9caa-4cba-94cc-a7ccd798bc40"
+  },
+  "target": {
+    "pid": 68340,
+    "processInstanceID": "win32:639271009095202199",
+    "occurrenceID": "d72aef80-68f5-4062-9467-4d83e6862df0"
+  },
+  "targetBirthAtMs": 1791504109520,
+  "deadlineAt": 1791505008685,
+  "observedAtUtc": "2026-10-09T00:01:49.559Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18136",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-02\\startup.json",
+    "--startup-occurrence",
+    "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

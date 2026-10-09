@@ -1,0 +1,35 @@
+{
+  "boundary": "Original readiness GET and actual browser GET both200; complete raw current Native requests retained",
+  "actual": [
+    {
+      "level": "info",
+      "time": "2026-10-09T00:01:59.66Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e468e7bf-54aa-499d-a638-1a35fc9c15c0",
+        "method": "GET",
+        "path": "/ui/assets/main-BvdfiTpl.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T00:02:05.431Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "29efa9c2-4312-41c7-80c9-c70f842504b7",
+        "method": "GET",
+        "path": "/ui/assets/main-BvdfiTpl.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 9
+      },
+      "message": "request"
+    }
+  ]
+}

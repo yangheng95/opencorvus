@@ -1,0 +1,23 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01",
+  "caseLabel": "tool-focus-lifetime-215-01",
+  "caseEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/tool-focus-lifetime-215/live-01",
+  "projectID": "prj_htovo7CYS7AkBadnsG46",
+  "sourceOccurrence": "transcript-end-follow-213-425cfa25-b413-4a0e-aee1-10699e02ab9e",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/tool-focus-lifetime-215-01",
+  "sourceProject": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01/project",
+  "startupQualified": true,
+  "conditions": [
+    "fresh exact source closure",
+    "current production schema/config/Task/dispatch classifiers",
+    "provider/tool/publication/delivery completed",
+    "both original projects no terminal/cache/task cleanup writes",
+    "fresh whole runtime and all-row comparison next"
+  ],
+  "scope": "Current649bdcee Tool native Tab node lifetime investigation; original full Chat213, no Task/model rearm, current readonly safety classifications",
+  "casePort": 18135,
+  "observedAtUtc": "2026-10-08T23:37:45.1003665Z",
+  "readinessEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/tool-focus-readiness-215",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/transcript-end-follow-213/live-01",
+  "sessionID": "ses_-zUSUqRtKzzhTi3AMNfG"
+}

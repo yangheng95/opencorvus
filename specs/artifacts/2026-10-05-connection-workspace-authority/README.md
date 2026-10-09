@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Tool lifetime215 Recall](tool-focus-lifetime-plan-215.md), [original readiness](tool-focus-readiness-215/README.md), [fresh21502 readiness](tool-focus-readiness-21502/README.md), [first startup](tool-focus-lifetime-startup-215.json), [fresh startup](tool-focus-lifetime-startup-21502.json) and [actual evidence](tool-focus-lifetime-215/README.md): Solid replace/reinsert root cause from real stack, ordered focused-subtree patch and actual Tool Tab; original deadline1/400 retained, fresh21502 native0 and whole history preserved.
+
 - [Keyboard214 Recall](source-keyboard-continuity-plan-214.md), [current readonly admission](source-keyboard-readiness-214/README.md), [startup](source-keyboard-continuity-startup-214.json) and [actual evidence](source-keyboard-continuity-214/README.md): Source End/Home retention and shared native focus reading, original Tool Tab focus failure remains unmet; complete90-table copy and native0 closed, no model rearm.
 
 - [Long212 Recall](long-keyboard-streaming-plan-212.md), [original failure](long-keyboard-streaming-212/README.md), [End213 Recall](transcript-end-follow-plan-213.md) and [actual repair](transcript-end-follow-213/README.md): explicit follow through virtual measurement, genuine same-input long streaming/local Tool/caret manual review; current8 streamed200/EOF/native0, original503/UI failures and remaining matrix retained.

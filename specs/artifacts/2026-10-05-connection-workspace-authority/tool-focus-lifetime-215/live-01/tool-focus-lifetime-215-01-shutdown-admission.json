@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-10-08T23:53:50.2138639Z",
+  "occurrence": "tool-focus-lifetime-215-01-2f7558a7-61b2-4ec7-b22a-bce20ed577fb",
+  "owner": {
+    "pid": 54408,
+    "processInstanceID": "win32:639270995148403430",
+    "occurrenceID": "4c2ee234-00cb-49b6-bb2a-d3f66ffa5679"
+  },
+  "pageClosed": true,
+  "dispatch": false,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "reason": "Original Target occurrence already exited; no shutdown dispatched"
+}

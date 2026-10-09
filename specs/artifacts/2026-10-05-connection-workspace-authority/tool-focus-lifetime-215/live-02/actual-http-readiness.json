@@ -1,0 +1,59 @@
+{
+  "finalUiUri": "http://127.0.0.1:18136/ui/",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18136,
+      "OwningProcess": 68340
+    }
+  ],
+  "scriptSrc": "http://127.0.0.1:18136/ui/assets/main-BvdfiTpl.js",
+  "uiUri": "http://127.0.0.1:18136/ui",
+  "owner": {
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "owner": {
+      "ProcessId": 68340,
+      "processInstanceID": "win32:639271009095202199"
+    },
+    "authorityStaging": "None; no model Task requested",
+    "port": 18136,
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-02\\runtime",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-02",
+    "targetBirthAtMs": 1791504109520,
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\tool-focus-lifetime-215\\live-02",
+    "observedProcessChain": [
+      {
+        "pid": 68340,
+        "processInstanceID": "win32:639271009095202199",
+        "occurrenceID": "d72aef80-68f5-4062-9467-4d83e6862df0"
+      }
+    ],
+    "host": {
+      "pid": 70244,
+      "processInstanceID": "win32:639271009087596951",
+      "occurrenceID": "cfd3500f-5bc0-494b-aacc-eb8cf149cb24"
+    },
+    "nativeTarget": {
+      "pid": 68340,
+      "processInstanceID": "win32:639271009095202199",
+      "occurrenceID": "d72aef80-68f5-4062-9467-4d83e6862df0"
+    },
+    "nativeDeadlineAt": 1791505008685,
+    "evidencePrefix": "tool-focus-lifetime-215-02",
+    "occurrence": "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-02\\evidence"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18136",
+    "pid": 68340
+  },
+  "assetStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "asset": "/ui/assets/main-BvdfiTpl.js",
+  "uiStatus": 200,
+  "observedAtUtc": "2026-10-09T00:01:59.7018919Z"
+}

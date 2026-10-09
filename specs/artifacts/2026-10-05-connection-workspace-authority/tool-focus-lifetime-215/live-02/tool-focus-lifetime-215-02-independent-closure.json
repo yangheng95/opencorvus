@@ -1,0 +1,27 @@
+{
+  "states": [
+    {
+      "expected": {
+        "pid": 70244,
+        "processInstanceID": "win32:639271009087596951",
+        "occurrenceID": "cfd3500f-5bc0-494b-aacc-eb8cf149cb24"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 68340,
+        "processInstanceID": "win32:639271009095202199",
+        "occurrenceID": "d72aef80-68f5-4062-9467-4d83e6862df0"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "listeners": [],
+  "occurrence": "tool-focus-lifetime-215-02-8523c34f-1861-4104-9921-2b8fdedcdf88",
+  "observedAtUtc": "2026-10-09T00:05:13.3585771Z",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  }
+}

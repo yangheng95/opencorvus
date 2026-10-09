@@ -1,0 +1,18 @@
+{
+  "actual": {
+    "level": "info",
+    "time": "2026-10-08T23:53:00.785Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "54034da3-e494-44cf-a8aa-a6e1eddce908",
+      "method": "GET",
+      "path": "/ui/assets/main-BvdfiTpl.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 28
+    },
+    "message": "request"
+  },
+  "boundary": "Actual current Native timestamp-window request after final patch build; no post-closure call"
+}

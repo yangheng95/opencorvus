@@ -1,0 +1,59 @@
+{
+  "asset": "/ui/assets/main-BOwxTyIC.js",
+  "scriptSrc": "http://127.0.0.1:18135/ui/assets/main-BOwxTyIC.js",
+  "observedAtUtc": "2026-10-08T23:38:51.3468482Z",
+  "finalUiUri": "http://127.0.0.1:18135/ui/",
+  "uiUri": "http://127.0.0.1:18135/ui",
+  "uiStatus": 200,
+  "owner": {
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-01\\runtime",
+    "observedProcessChain": [
+      {
+        "pid": 54408,
+        "processInstanceID": "win32:639270995148403430",
+        "occurrenceID": "4c2ee234-00cb-49b6-bb2a-d3f66ffa5679"
+      }
+    ],
+    "nativeTarget": {
+      "pid": 54408,
+      "processInstanceID": "win32:639270995148403430",
+      "occurrenceID": "4c2ee234-00cb-49b6-bb2a-d3f66ffa5679"
+    },
+    "host": {
+      "pid": 69652,
+      "processInstanceID": "win32:639270995140462479",
+      "occurrenceID": "effdd9b4-d5f3-455c-b28f-0017ce65f6b5"
+    },
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-01",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\tool-focus-lifetime-215-01\\evidence",
+    "authorityStaging": "None; no model Task requested",
+    "port": 18135,
+    "targetBirthAtMs": 1791502714840,
+    "evidencePrefix": "tool-focus-lifetime-215-01",
+    "owner": {
+      "processInstanceID": "win32:639270995148403430",
+      "ProcessId": 54408
+    },
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "nativeDeadlineAt": 1791503613949,
+    "occurrence": "tool-focus-lifetime-215-01-2f7558a7-61b2-4ec7-b22a-bce20ed577fb",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\tool-focus-lifetime-215\\live-01"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "tool-focus-lifetime-215-01-2f7558a7-61b2-4ec7-b22a-bce20ed577fb",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18135",
+    "pid": 54408
+  },
+  "assetStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18135,
+      "OwningProcess": 54408
+    }
+  ]
+}
