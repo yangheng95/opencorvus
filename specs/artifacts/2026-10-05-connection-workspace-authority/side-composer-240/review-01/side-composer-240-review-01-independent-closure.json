@@ -1,0 +1,27 @@
+{
+  "listeners": [],
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 5080,
+        "processInstanceID": "win32:639271540697452705",
+        "occurrenceID": "d39ec897-440b-4a59-bbc0-3f730139c51d"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 51404,
+        "processInstanceID": "win32:639271540705380116",
+        "occurrenceID": "7d445725-9579-4227-9017-7cf963a85a1a"
+      }
+    }
+  ],
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "observedAtUtc": "2026-10-09T14:56:05.5398069Z",
+  "occurrence": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113"
+}

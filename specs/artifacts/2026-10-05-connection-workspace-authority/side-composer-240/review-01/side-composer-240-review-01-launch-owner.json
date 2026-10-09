@@ -1,0 +1,35 @@
+{
+  "nativeDeadlineAt": 1791558169672,
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\side-composer-240\\review-01",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\runtime",
+  "authorityStaging": "None; no model Task requested",
+  "observedProcessChain": [
+    {
+      "pid": 51404,
+      "processInstanceID": "win32:639271540705380116",
+      "occurrenceID": "7d445725-9579-4227-9017-7cf963a85a1a"
+    }
+  ],
+  "nativeTarget": {
+    "pid": 51404,
+    "processInstanceID": "win32:639271540705380116",
+    "occurrenceID": "7d445725-9579-4227-9017-7cf963a85a1a"
+  },
+  "targetBirthAtMs": 1791557270538,
+  "purpose": "Current credentialless complete original ordinary Session history; no Provider or Task rearm",
+  "owner": {
+    "processInstanceID": "win32:639271540705380116",
+    "ProcessId": 51404
+  },
+  "occurrence": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+  "port": 18174,
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01",
+  "evidencePrefix": "side-composer-240-review-01",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\evidence",
+  "host": {
+    "pid": 5080,
+    "processInstanceID": "win32:639271540697452705",
+    "occurrenceID": "d39ec897-440b-4a59-bbc0-3f730139c51d"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "occurrence": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+  "outcome": "ready",
+  "host": {
+    "pid": 5080,
+    "processInstanceID": "win32:639271540697452705",
+    "occurrenceID": "d39ec897-440b-4a59-bbc0-3f730139c51d"
+  },
+  "parent": {
+    "pid": 78516,
+    "processInstanceID": "win32:639271540680708547",
+    "occurrenceID": "a0f89279-72fb-4a6a-a9f6-33bef35516ed"
+  },
+  "target": {
+    "pid": 51404,
+    "processInstanceID": "win32:639271540705380116",
+    "occurrenceID": "7d445725-9579-4227-9017-7cf963a85a1a"
+  },
+  "targetBirthAtMs": 1791557270538,
+  "deadlineAt": 1791558169672,
+  "observedAtUtc": "2026-10-09T14:47:50.580Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18174",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\startup.json",
+    "--startup-occurrence",
+    "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}

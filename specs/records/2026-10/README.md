@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Side阅读空间240](2026-10-09-side-composer-240.md)：首次空框/宽度变化重测，真实Sources与输入127px阅读空间改善、Native0。
+
 - [Side历史/状态/位置239](2026-10-09-side-history-owner-239.md)：历史owner、project状态读取及Side位置修复，完整原历史实际720保持、原after失败/最后Native0分开保留。
 
 - [真实流式阅读238](2026-10-09-source-stream-review-238.md)：新Sol Sources阅读保持与八段正文；Side重开共享actor校验失败已取得完整真实证据。

@@ -1,0 +1,68 @@
+{
+  "listeners": null,
+  "observedAtUtc": "2026-10-09T14:55:49.4378581Z",
+  "nativeSettlement": {
+    "occurrence": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+    "outcome": "settled",
+    "host": {
+      "pid": 5080,
+      "processInstanceID": "win32:639271540697452705",
+      "occurrenceID": "d39ec897-440b-4a59-bbc0-3f730139c51d"
+    },
+    "target": {
+      "pid": 51404,
+      "processInstanceID": "win32:639271540705380116",
+      "occurrenceID": "7d445725-9579-4227-9017-7cf963a85a1a"
+    },
+    "observedAtUtc": "2026-10-09T14:55:47.121Z",
+    "deadlineAt": 1791558169672,
+    "terminal": {
+      "occurrenceID": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+      "pid": 51404,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "pairedCleanupComplete": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "outcome": "already_absent"
+    },
+    {
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\runtime\\data\\models.json",
+      "copiedLength": 2001983,
+      "outcome": "removed"
+    }
+  ],
+  "occurrence": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "expected": {
+        "pid": 51404,
+        "processInstanceID": "win32:639271540705380116",
+        "occurrenceID": "7d445725-9579-4227-9017-7cf963a85a1a"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 5080,
+        "processInstanceID": "win32:639271540697452705",
+        "occurrenceID": "d39ec897-440b-4a59-bbc0-3f730139c51d"
+      },
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

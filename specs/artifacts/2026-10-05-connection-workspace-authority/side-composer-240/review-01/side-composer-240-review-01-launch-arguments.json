@@ -1,0 +1,27 @@
+{
+  "occurrence": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\evidence",
+    "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+    "1791558169672",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18174",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-composer-240-review-01\\startup.json",
+    "--startup-occurrence",
+    "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+    "--log-level",
+    "INFO"
+  ],
+  "credentialStaging": "None",
+  "port": 18174
+}

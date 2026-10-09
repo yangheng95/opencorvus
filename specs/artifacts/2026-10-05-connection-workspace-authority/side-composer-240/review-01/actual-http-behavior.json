@@ -1,0 +1,100 @@
+{
+  "observedAtUtc": "2026-10-09T14:56:05.923Z",
+  "statusReads": [
+    {
+      "level": "info",
+      "time": "2026-10-09T14:48:22.808Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f9a0de10-1965-4fb8-98af-7178153bd6c5",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T14:50:12.384Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "a5688ddb-82d8-4487-a03e-34d0705a7492",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T14:53:30.017Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "e2ca3563-f9be-4425-81f3-567967f83460",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T14:54:45.650Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "31f13b24-67f2-4609-a90f-5cb9d1d97d02",
+        "method": "GET",
+        "path": "/session/status",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      },
+      "message": "request"
+    }
+  ],
+  "assets": [
+    {
+      "level": "info",
+      "time": "2026-10-09T14:48:06.010Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "0e7b511a-6037-4050-a789-11bc60623b4f",
+        "method": "GET",
+        "path": "/ui/assets/main-CaWal6Pk.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3
+      },
+      "message": "request"
+    },
+    {
+      "level": "info",
+      "time": "2026-10-09T14:53:11.787Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "5cf21d84-e0c4-4427-8a52-179756872bc6",
+        "method": "GET",
+        "path": "/ui/assets/main-CIEYcG7t.js",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 7
+      },
+      "message": "request"
+    }
+  ],
+  "logRows": 444,
+  "unknownTimeRows": 0,
+  "boundary": "Actual production request evidence; no UI test assertions"
+}

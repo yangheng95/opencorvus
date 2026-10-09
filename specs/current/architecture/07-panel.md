@@ -395,6 +395,13 @@ main composer for the user to review and send.
 Side submissions retain their caller-minted Message identity with the scoped
 draft across transport retries and reloads.
 
+The shared AutoGrowTextarea owns content height for all writing surfaces. Value
+changes and observed content-width changes use the same measurement and line cap;
+connected, nonzero geometry is required. Its observer ignores height-only updates
+and disconnects on disposal. Caller rows and CSS minimum heights keep their
+existing floors, including the main Composer's manual resize floor. Opening or
+resizing a Dock therefore remeasures wrapping without requiring another keystroke.
+
 ## Reference-led navigation and usage
 
 The renderer shell uses its actual viewport width and height as the sole bounds

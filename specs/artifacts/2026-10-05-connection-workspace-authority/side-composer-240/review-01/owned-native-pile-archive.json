@@ -1,0 +1,44 @@
+{
+  "nativeTerminal": {
+    "occurrenceID": "side-composer-240-review-01-86696325-b5c5-453a-877d-59efb1edf113",
+    "pid": 51404,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "observedAtUtc": "2026-10-09T14:57:34.1080927Z",
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "birthUtc": "2026-10-09T14:47:50.8457068Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-composer-240\\generated-bun-review01\\091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "name": "091d165574530ade.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T14:47:50.8205953Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-composer-240\\generated-bun-review01\\69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "name": "69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T14:47:50.7897306Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-composer-240\\generated-bun-review01\\7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "name": "7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T14:47:50.7958445Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-composer-240\\generated-bun-review01\\cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "name": "cf86f20c120ce818.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T14:47:50.8655582Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-composer-240\\generated-bun-review01\\f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "name": "f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "targetBirthUtc": "2026-10-09T14:47:50.5380116Z"
+}

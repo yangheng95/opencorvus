@@ -12,7 +12,7 @@
 // DOM assignment happens only when it differs from the native textarea;
 // native input, including IME composition, already updated the DOM first.
 
-import { createEffect, onMount, splitProps, type JSX } from "solid-js"
+import { createEffect, onCleanup, onMount, splitProps, type JSX } from "solid-js"
 import { autoGrowHeight, DEFAULT_MAX_VISIBLE_LINES } from "./AutoGrowTextareaMetrics"
 import { TextField } from "./TextField"
 
@@ -35,9 +35,12 @@ export interface AutoGrowTextareaProps extends Omit<JSX.TextareaHTMLAttributes<H
 export function AutoGrowTextarea(props: AutoGrowTextareaProps) {
   const [local, rest] = splitProps(props, ["value", "maxLines", "ref", "class", "surface"])
   let el: HTMLTextAreaElement | undefined
+  let disposed = false
+  let width: number | undefined
+  let observer: ResizeObserver | undefined
 
   function resize() {
-    if (!el) return
+    if (disposed || !el?.isConnected || el.getBoundingClientRect().width <= 0) return
     // Reset to auto first so scrollHeight reflects the natural content height
     // rather than the previously-pinned height.
     el.style.height = "auto"
@@ -61,7 +64,21 @@ export function AutoGrowTextarea(props: AutoGrowTextareaProps) {
   })
 
   onMount(() => {
+    observer = new ResizeObserver(([entry]) => {
+      // Mounts and hidden panes can precede their usable layout. Width changes
+      // invalidate wrapping; our own height writes must not trigger another resize.
+      const nextWidth = entry.contentRect.width
+      if (nextWidth === width) return
+      width = nextWidth
+      resize()
+    })
+    observer.observe(el!)
     queueMicrotask(resize)
+  })
+
+  onCleanup(() => {
+    disposed = true
+    observer?.disconnect()
   })
 
   return (
