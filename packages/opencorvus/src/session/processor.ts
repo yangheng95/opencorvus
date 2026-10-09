@@ -1457,8 +1457,10 @@ export namespace SessionProcessor {
                             { text: currentText.text },
                           )
                           currentText.text = textOutput.text
+                          const time = currentText.time
+                          if (!time) throw new Error(`Streaming text Part ${currentText.id} has no start time`)
                           currentText.time = {
-                            start: Date.now(),
+                            ...time,
                             end: Date.now(),
                           }
                           if (value.providerMetadata) currentText.metadata = value.providerMetadata

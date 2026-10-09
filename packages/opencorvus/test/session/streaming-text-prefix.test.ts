@@ -268,6 +268,8 @@ async function withPrefixProcessor<T>(
 function observePrefix(fixture: PrefixFixture, prefix: string) {
   const checkpoint = inactivityReceipt<Message.TextPart>(`Canonical prefix ${fixture.sessionID}`)
   const deltas: string[] = []
+  const starts = new Map<string, number>()
+  const completed: { id: string; time: { start: number; end: number } }[] = []
   const stopDelta = Bus.subscribe(Message.Event.PartDelta, (event) => {
     if (event.properties.sessionID !== fixture.sessionID || event.properties.messageID !== fixture.assistantID) return
     checkpoint.progress()
@@ -277,11 +279,18 @@ function observePrefix(fixture: PrefixFixture, prefix: string) {
     const part = event.properties.part
     if (part.sessionID !== fixture.sessionID || part.messageID !== fixture.assistantID || part.type !== "text") return
     checkpoint.progress()
+    if (part.time) {
+      if (!starts.has(part.id)) starts.set(part.id, part.time.start)
+      if (typeof part.time.end === "number")
+        completed.push({ id: part.id, time: { start: part.time.start, end: part.time.end } })
+    }
     if (part.text === prefix) checkpoint.resolve(part)
   })
   return {
     promise: checkpoint.promise,
     deltas,
+    starts,
+    completed,
     dispose: () => {
       checkpoint.dispose()
       stopPart()
@@ -298,6 +307,8 @@ test("a running HTTP Provider persists its exact prefix for a late Session subsc
     const running = fixture.start()
     try {
       const published = await observed.promise
+      expect(published.time?.start).toEqual(expect.any(Number))
+      const startedAt = published.time!.start
       const persisted = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
       expect({
         phase: fixture.provider.phase(),
@@ -328,6 +339,7 @@ test("a running HTTP Provider persists its exact prefix for a late Session subsc
         expect(restored.parts.find((part: any) => part.id === published.id)).toMatchObject({
           id: published.id,
           text: prefix,
+          time: { start: startedAt },
         })
       } finally {
         abort.abort()
@@ -335,6 +347,13 @@ test("a running HTTP Provider persists its exact prefix for a late Session subsc
       fixture.provider.release()
       expect(await running).toBe("continue")
       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+      const finishedPart = complete.parts.find(
+        (part): part is Message.TextPart => part.id === published.id && part.type === "text",
+      )!
+      const finishedTime = { ...finishedPart.time! }
+      expect(finishedTime.start).toBe(startedAt)
+      expect(finishedTime.end).toBeGreaterThan(startedAt)
+      expect(observed.completed).toContainEqual({ id: published.id, time: finishedTime })
       expect({
         phase: fixture.provider.phase(),
         finish: complete.info.role === "assistant" ? complete.info.finish : "invalid-role",
@@ -343,7 +362,12 @@ test("a running HTTP Provider persists its exact prefix for a late Session subsc
       }).toMatchObject({
         phase: "completed",
         finish: "stop",
-        text: { id: published.id, type: "text", text: prefix + suffix },
+        text: {
+          id: published.id,
+          type: "text",
+          text: prefix + suffix,
+          time: { start: startedAt, end: expect.any(Number) },
+        },
         deltaText: prefix + suffix,
       })
       expect(fixture.provider.requests[0]).toMatchObject({ model: "prefix-checker", stream: true })
@@ -362,11 +386,23 @@ test("natural short completion commits its complete text and stream deltas", asy
       fixture.provider.release()
       expect(await running).toBe("continue")
       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+      const finishedPart = complete.parts.find((part): part is Message.TextPart => part.type === "text")!
+      expect(observed.starts.get(finishedPart.id)).toEqual(expect.any(Number))
+      const finishedTime = { ...finishedPart.time! }
+      expect(finishedTime.start).toBe(observed.starts.get(finishedPart.id)!)
+      expect(finishedTime.end).toBeGreaterThanOrEqual(observed.starts.get(finishedPart.id)!)
+      expect(observed.completed).toContainEqual({ id: finishedPart.id, time: finishedTime })
       expect({
         parts: complete.parts.filter((part) => part.type === "text"),
         deltas: observed.deltas.join(""),
       }).toMatchObject({
-        parts: [{ type: "text", text: "Short 🌐 completed.", time: { end: expect.any(Number) } }],
+        parts: [
+          {
+            type: "text",
+            text: "Short 🌐 completed.",
+            time: { start: observed.starts.get(finishedPart.id), end: expect.any(Number) },
+          },
+        ],
         deltas: "Short 🌐 completed.",
       })
     } finally {
@@ -382,12 +418,21 @@ test("external cancellation finalizes the exact accepted partial text under the 
     try {
       const running = fixture.start()
       const published = await observed.promise
+      expect(published.time?.start).toEqual(expect.any(Number))
+      const startedAt = published.time!.start
       fixture.controller.abort(new DOMException("Owned external cancellation", "AbortError"))
       expect(await running).toBe("stop")
       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+      const finishedPart = complete.parts.find(
+        (part): part is Message.TextPart => part.id === published.id && part.type === "text",
+      )!
+      const finishedTime = { ...finishedPart.time! }
+      expect(finishedTime.start).toBe(startedAt)
+      expect(finishedTime.end).toBeGreaterThan(startedAt)
+      expect(observed.completed).toContainEqual({ id: published.id, time: finishedTime })
       expect({ info: complete.info, text: complete.parts.find((part) => part.id === published.id) }).toMatchObject({
         info: { finish: "error", error: { name: "MessageAbortedError" }, time: { completed: expect.any(Number) } },
-        text: { id: published.id, type: "text", text: prefix, time: { end: expect.any(Number) } },
+        text: { id: published.id, type: "text", text: prefix, time: { start: startedAt, end: expect.any(Number) } },
       })
     } finally {
       observed.dispose()
@@ -408,13 +453,25 @@ test("a real interrupted HTTP attempt recovers to one complete accepted answer",
         fixture.provider.release()
         expect(await running).toBe("continue")
         const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+        const finishedPart = complete.parts.find((part): part is Message.TextPart => part.type === "text")!
+        expect(observed.starts.get(finishedPart.id)).toEqual(expect.any(Number))
+        const finishedTime = { ...finishedPart.time! }
+        expect(finishedTime.start).toBe(observed.starts.get(finishedPart.id)!)
+        expect(finishedTime.end).toBeGreaterThanOrEqual(observed.starts.get(finishedPart.id)!)
+        expect(observed.completed).toContainEqual({ id: finishedPart.id, time: finishedTime })
         expect({
           finish: complete.info.role === "assistant" ? complete.info.finish : "invalid-role",
           parts: complete.parts.filter((part) => part.type === "text"),
           requests: fixture.provider.requests.length,
         }).toMatchObject({
           finish: "stop",
-          parts: [{ type: "text", text: prefix + " Recovered suffix." }],
+          parts: [
+            {
+              type: "text",
+              text: prefix + " Recovered suffix.",
+              time: { start: observed.starts.get(finishedPart.id), end: expect.any(Number) },
+            },
+          ],
           requests: 2,
         })
       } finally {
@@ -434,9 +491,12 @@ test("two concurrent Projects retain their own exact running prefix and final te
     ["Project A 🌐", "Project B 中文"].map((prefix) =>
       withPrefixProcessor(prefix, " complete.", async (fixture) => {
         const observed = observePrefix(fixture, prefix)
+        let running: ReturnType<PrefixFixture["start"]> | undefined
         try {
-          const running = fixture.start()
+          running = fixture.start()
           const published = await observed.promise
+          expect(published.time?.start).toEqual(expect.any(Number))
+          const startedAt = published.time!.start
           readyCount++
           if (readyCount === 2) ready.resolve()
           await ready.promise
@@ -462,19 +522,31 @@ test("two concurrent Projects retain their own exact running prefix and final te
               }),
             )
           expect(outcome).toBe("continue")
+          const finishedPart = complete.parts.find(
+            (part): part is Message.TextPart => part.id === published.id && part.type === "text",
+          )!
+          const finishedTime = { ...finishedPart.time! }
+          expect(finishedTime.start).toBe(startedAt)
+          expect(finishedTime.end).toBeGreaterThan(startedAt)
+          expect(observed.completed).toContainEqual({ id: published.id, time: finishedTime })
           expect(complete.parts.filter((part) => part.type === "text")).toMatchObject([
-            { type: "text", text: prefix + " complete." },
+            { type: "text", text: prefix + " complete.", time: { start: startedAt, end: expect.any(Number) } },
           ])
-          finishedCount++
-          if (finishedCount === 2) finished.resolve()
-          // memoryProject owns global fixture disposal; both processors must
-          // finish before either independent fixture begins that cleanup.
-          await finished.promise
           return { projectID: fixture.projectID, sessionID: fixture.sessionID }
         } finally {
-          observed.dispose()
-          ready.resolve()
-          finished.resolve()
+          // Join both processors before either memoryProject can dispose the
+          // shared instance registry, including when an assertion fails.
+          fixture.provider.release()
+          fixture.controller.abort(new DOMException("Owned concurrent checker complete", "AbortError"))
+          try {
+            if (running) await running
+          } finally {
+            finishedCount++
+            if (finishedCount === 2) finished.resolve()
+            ready.resolve()
+            await finished.promise
+            observed.dispose()
+          }
         }
       }),
     ),

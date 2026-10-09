@@ -1,0 +1,72 @@
+$ bun script/run-tests.ts test/session/streaming-text-prefix.test.ts
+[1/1] START test/session/streaming-text-prefix.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+349 |       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+350 |       const finishedPart = complete.parts.find(
+351 |         (part): part is Message.TextPart => part.id === published.id && part.type === "text",
+352 |       )!
+353 |       const finishedTime = { ...finishedPart.time! }
+354 |       expect(finishedTime.start).toBe(startedAt)
+                                       ^
+error: expect(received).toBe(expected)
+
+Expected: 1791578237339
+Received: 1791578237701
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:354:34)
+(fail) a running HTTP Provider persists its exact prefix for a late Session subscriber and completes the same Part [2478.82ms]
+382 |       expect(await running).toBe("continue")
+383 |       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+384 |       const finishedPart = complete.parts.find((part): part is Message.TextPart => part.type === "text")!
+385 |       expect(observed.starts.get(finishedPart.id)).toEqual(expect.any(Number))
+386 |       const finishedTime = { ...finishedPart.time! }
+387 |       expect(finishedTime.start).toBe(observed.starts.get(finishedPart.id)!)
+                                       ^
+error: expect(received).toBe(expected)
+
+Expected: 1791578239669
+Received: 1791578239673
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:387:34)
+(fail) natural short completion commits its complete text and stream deltas [1949.12ms]
+(pass) external cancellation finalizes the exact accepted partial text under the existing error contract [2235.11ms]
+443 |         expect(await running).toBe("continue")
+444 |         const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+445 |         const finishedPart = complete.parts.find((part): part is Message.TextPart => part.type === "text")!
+446 |         expect(observed.starts.get(finishedPart.id)).toEqual(expect.any(Number))
+447 |         const finishedTime = { ...finishedPart.time! }
+448 |         expect(finishedTime.start).toBe(observed.starts.get(finishedPart.id)!)
+                                         ^
+error: expect(received).toBe(expected)
+
+Expected: 1791578245015
+Received: 1791578245019
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:448:36)
+(fail) a real interrupted HTTP attempt recovers to one complete accepted answer [3116.57ms]
+507 |           expect(outcome).toBe("continue")
+508 |           const finishedPart = complete.parts.find(
+509 |             (part): part is Message.TextPart => part.id === published.id && part.type === "text",
+510 |           )!
+511 |           const finishedTime = { ...finishedPart.time! }
+512 |           expect(finishedTime.start).toBe(startedAt)
+                                           ^
+error: expect(received).toBe(expected)
+
+Expected: 1791578247050
+Received: 1791578247574
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:512:38)
+(fail) two concurrent Projects retain their own exact running prefix and final text [2583.46ms]
+
+ 1 pass
+ 4 fail
+ 26 expect() calls
+Ran 5 tests across 1 file. [14.72s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+[1/1] DONE test/session/streaming-text-prefix.test.ts exit=1 duration=15.46s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+error: script "test" exited with code 1

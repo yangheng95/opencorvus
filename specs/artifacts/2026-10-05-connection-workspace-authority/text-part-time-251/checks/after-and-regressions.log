@@ -1,0 +1,65 @@
+$ bun script/run-tests.ts test/session/streaming-text-prefix.test.ts test/session/processor-producer-boundary.test.ts test/session/processor-llm-activity-retry.test.ts test/session/task-root-multistep-assistant.test.ts
+[1/4] START test/session/streaming-text-prefix.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a running HTTP Provider persists its exact prefix for a late Session subscriber and completes the same Part [2493.55ms]
+(pass) natural short completion commits its complete text and stream deltas [1800.03ms]
+(pass) external cancellation finalizes the exact accepted partial text under the existing error contract [2048.92ms]
+(pass) a real interrupted HTTP attempt recovers to one complete accepted answer [3264.84ms]
+(pass) two concurrent Projects retain their own exact running prefix and final text [2636.53ms]
+
+ 5 pass
+ 0 fail
+ 43 expect() calls
+Ran 5 tests across 1 file. [14.62s]
+[1/4] DONE test/session/streaming-text-prefix.test.ts exit=0 duration=15.35s
+[2/4] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real idle retry scopes pending JSON observations to each actual attempt before external cancellation [2335.09ms]
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [2181.06ms]
+(pass) processor observation records accepted and rejected current event identities in the canonical Task trace [1958.25ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [2050.36ms]
+(pass) an aborted current attempt records its exact pending JSON structure through the canonical Trace owner [2223.04ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [2035.56ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2255.12ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2318.88ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2294.73ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1919.61ms]
+
+ 10 pass
+ 0 fail
+ 39 expect() calls
+Ran 10 tests across 1 file. [23.14s]
+[2/4] DONE test/session/processor-producer-boundary.test.ts exit=0 duration=23.32s
+[3/4] START test/session/processor-llm-activity-retry.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) SessionProcessor semantic LLM activity retry > retries a text start whose committed publication outlives its physical owner [3656.47ms]
+(pass) SessionProcessor semantic LLM activity retry > retries a reasoning start whose committed publication outlives its physical owner [3406.38ms]
+(pass) SessionProcessor semantic LLM activity retry > persists one recovered answer after the observed idle, network, idle sequence [2396.37ms]
+(pass) SessionProcessor semantic LLM activity retry > retries after Tool input chunks that do not mutate the pending draft [3283.29ms]
+(pass) SessionProcessor semantic LLM activity retry > recovers a parked stream after reasoning-end under the Session subscriber set [3137.59ms]
+(pass) SessionProcessor semantic LLM activity retry > an aborted reasoning stream settles its delayed delta publication and durable reasoning part [2700.42ms]
+
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [20.27s]
+[3/4] DONE test/session/processor-llm-activity-retry.test.ts exit=0 duration=20.45s
+[4/4] START test/session/task-root-multistep-assistant.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) one activation completes one assistant Turn containing every streamed Provider step [2019.59ms]
+(pass) one activation retains a clean decision gap for a bounded owned Provider continuation [1734.62ms]
+(pass) a durable Task-root decision settles a tool-finish Provider step [1.22ms]
+
+ 3 pass
+ 0 fail
+ 8 expect() calls
+Ran 3 tests across 1 file. [5.32s]
+[4/4] DONE test/session/task-root-multistep-assistant.test.ts exit=0 duration=5.48s

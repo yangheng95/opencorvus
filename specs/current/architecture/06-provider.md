@@ -515,6 +515,8 @@ CUSTOM_LOADERS["new-provider"] = {
 
 Session processor 通过统一流式调用的 `prepareStep` 在每个 Provider 请求前提交步骤快照与 `step-start`。SDK 只有在该异步准备成功后才能调用 Provider 和执行其工具；步骤消费者只观察 `start-step`，不重复创建事实。所有 Mission、Task Orchestrator 和 Worker 共用此顺序。步骤准备失败或取消会中止请求，重试清理由原 attempt 的持久化记录负责。不能用吞掉回调异常的 telemetry hook 代替该数据完整性边界。
 
+Provider 流式正文 TextPart 的 `time.start` 是该 Part 实际接受 `text-start` 时记录的时间；前缀持久化、正常 `text-end` 与中止闭合都保留这个值，只在实际完成时追加 `time.end`。正常结束时点仍位于前缀队列等待和 `experimental.text.complete` 插件完成之后。重试成功 Part 使用自身尝试的开始事实，不继承失败尝试的时间。持久 Part 和 `PartUpdated` 事件使用同一组数值，没有估算、界面计时来源、历史回填或第二组时钟。用户/控制正文的可选时间定义保持原契约。
+
 ## 相关文档
 
 - [17-code-work-agent-platform.md](17-code-work-agent-platform.md) — 哪些 agent 消费 Provider
