@@ -1,0 +1,107 @@
+Browser tab: 98, Title: "OpenCorvus", URL: "http://localhost:18191/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18191/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					6 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					7 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					8 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			10 container panelBody
+				11 container Description: Chat shortcuts, ID: workspaceNavigation
+					12 container Chat shortcuts
+						13 button Chats
+						14 button Mission Board
+						15 button Scheduled
+						16 button Expert Squads
+						17 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						18 button Settings
+					19 button About
+					20 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				21 container workspacePageStack
+					22 container leftActivityShell
+						23 container workspaceContextbar
+							24 link Description: OpenCorvus homepage, Value: opencorvus.com/
+							25 button Search chats or run a command
+							26 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+						27 container sidebar
+							28 container workLedgerPanel
+								29 container Chat navigation
+									30 button New chat
+								31 container workLedgerProjectsScroll
+									32 text Projects
+									33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+									34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+									35 container
+										36 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+										37 container
+											38 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+											39 button 请由当前会话独立完成一次只读资料阅读：
+											40 image Running
+											41 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+										42 container
+											43 button (expanded) Description: Collapse Anonymous 6ad335, Secondary Actions: Collapse
+											44 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-176-trigger, Secondary Actions: Expand
+											45 button New chat for this project
+										46 container
+											47 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											48 button Reply with OK.
+											49 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+									50 container Recents
+										51 text Recents
+										52 container
+											53 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+											54 button 请由当前会话独立完成一次只读资料阅读：
+											55 image Running
+											56 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-361-trigger, Secondary Actions: Expand
+										57 container
+											58 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+											59 button Reply with OK.
+											60 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-367-trigger, Secondary Actions: Expand
+							61 container Connection Diagnostics
+								62 container Description: Connection Diagnostics · Online · Port 18191, ID: connBadge
+									63 text Online
+					64 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+					65 container chatSection
+						66 container Description: Loading task, ID: taskSwitchProgress
+						67 container
+							68 text Reply with OK.
+							69 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							70 container Description: Not running, ID: taskStatus
+								71 text Not running
+							72 button Side chat
+							73 container solidChatHeaderRuntimeActions
+								74 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								75 checkbox Description: Open right dock, Value: 0
+						76 container
+							77 container Description: Conversation, ID: chatScroll
+								78 container
+									79 container
+										80 text User
+										81 text Reply with OK.
+									82 container
+										83 text chat
+										84 text 3s
+										85 text OK
+							86 container chatHomeComposition
+								87 container chatForm
+									88 splitter Description: Drag to resize the message input, Value: 42
+									89 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									90 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									91 text Code
+									92 text Chat
+									93 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									94 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									95 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										96 text openai/gpt-6.1-sol
+									97 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+		98 container Reply with OK. 2m ago Started Oct 10, 2026, 06:58 AM 978f7055-102d-458c-b847-fe32f56ad335, ID: tooltip-cl-182-content
+			99 text Reply with OK.
+			100 text 2m ago
+			101 text Started
+			102 text Oct 10, 2026, 06:58 AM
+			103 text 978f7055-102d-458c-b847-fe32f56ad335
+
+The focused UI element is 48 button Reply with OK.

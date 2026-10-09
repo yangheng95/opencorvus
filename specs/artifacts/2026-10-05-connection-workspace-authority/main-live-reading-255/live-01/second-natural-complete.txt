@@ -1,0 +1,233 @@
+Browser tab: 98, Title: "OpenCorvus", URL: "http://localhost:18191/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18191/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									486 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									39 container
+										40 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										41 button 请由当前会话独立完成一次只读资料阅读：
+										43 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									44 button (expanded) Description: Collapse Anonymous 6ad335, Secondary Actions: Collapse
+									45 container
+										46 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										47 button Reply with OK.
+										48 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								49 container Recents
+									50 text Recents
+									965 container
+										966 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										967 button 请由当前会话独立完成一次只读资料阅读：
+										968 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-1290-trigger, Secondary Actions: Expand
+									969 container
+										970 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										971 button Reply with OK.
+										972 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-1296-trigger, Secondary Actions: Expand
+						60 container Connection Diagnostics
+							61 container Description: Connection Diagnostics · Online · Port 18191, ID: connBadge
+								62 text Online
+				63 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				497 container centerWorkbenchConversation
+					498 container Agent activity
+						499 content list
+							500 container
+								501 button work · Running · 请由当前会话独立完成一次只读资料阅读： https://www.w3.org/WAI/fundamentals/accessibility-intro/ https://www.w3.org/WAI/fundamentals/accessibility-principles/ https://developer.mozilla.org/en-US/docs/Web/Accessibility 只读取上述三页正文，不继续打开页内其他链接。根据实际读取内容，直接在本聊天中写一份面向新手产品设计师的中文无障碍阅读指南，约4000字，分成六个有内容的部分：三份来源各自的范围与差别、用真实用户体验发现障碍、理解四项基本原则、组织设计评审、安排开发后的人工评估、记录来源与阅读限制。每部分用具体段落和编号列表展开，可穿插简短Markdown代码例子，但清楚区分示例与来源事实，引用真实来源标题和原链接，不编造出处。仅使用当前会话，不创建文件、不委托、不派生其他会话。
+								502 button work · Idle
+								503 button work · Idle · 继续沿用本会话已实际读取的那三份资料，不重新联网读取、不打开新来源、不创建文件或其他会话、不委托。请直接补充一份约2500字的中文设计评审工作指南，依次用完整段落和编号列表解释：如何选择一个真实用户任务、如何区分视觉/键盘/理解障碍、如何讨论发现的问题、如何把发现转成有明确责任人的设计行动、如何安排开发后的人工复核，以及如何在评审记录里诚实区分官方资料事实与团队自己的实践建议。提供两个具体但明确标为虚构示例的评审讨论片段，引用本会话已有的真实来源链接，不编造标准或用户研究结果。
+					504 container chatSection
+						505 container Description: Loading task, ID: taskSwitchProgress
+						506 container
+							507 text 请由当前会话独立完成一次只读资料阅读：
+							508 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							509 container Description: Not running, ID: taskStatus
+								510 text Not running
+							511 button Side chat
+							512 container solidChatHeaderRuntimeActions
+								513 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								514 checkbox Description: Open right dock, Value: 0
+						515 container
+							516 container Description: Conversation, ID: chatScroll
+								973 container
+									974 text work
+									975 text 57s
+									976 heading 无障碍设计评审工作指南, Value: 1
+										977 text 无障碍设计评审工作指南
+									978 container
+										979 text 这份指南沿用本会话已经读取的三页正文，不新增来源。WAI 的两页提供无障碍概念、原则和评估方向；MDN 的《Accessibility》本页提供技术领域的概述与学习入口。以下评审流程、分工和记录方式是 依据这些内容整理的实践建议 ，不是官方规定的会议程序，也不是完整合规检查表。
+									980 heading 一、如何选择一个真实用户任务, Value: 2
+										981 text 一、如何选择一个真实用户任务
+									982 text 评审应从“用户想完成什么”开始，而不是从“这张页面是否好看”开始。真实用户任务指产品实际支持、用户有理由完成的目标；它不意味着团队已经通过访谈证明了任务的重要性。选择依据来自产品需求、业务流程还是已有研究，应分别说明。
+									983 content list
+										984 container
+											985 AXListMarker 1.
+											986 text 把任务写成目标、起点和完成条件。
+											987 text 例如，“从订单详情申请退款，填写原因，确认申请已提交”，比“检查退款页面”更具体。完成条件应体现用户获得的结果，而不只是系统发生了什么：“用户知道申请成功以及下一步”，比“接口返回成功”更适合作为体验检查点。
+										988 container
+											989 AXListMarker 2.
+											990 text 覆盖一条完整路径及必要分支。
+											991 text 从找到入口，到理解说明、填写信息、提交、纠错和确认结果，逐步展开。至少考虑一次输入错误或取消操作，否则评审容易只检查理想状态。WAI《Accessibility Principles》介绍了帮助用户避免、纠正错误，以及必要时复核、更正或撤销提交的要求。
+										992 container
+											993 AXListMarker 3.
+											994 text 区分任务真实性与需求证据强度。
+											995 text 如果尚未研究用户，可以记录“本次选择产品现有关键流程，重要性尚未通过用户研究验证”。不要把设计师设想的使用情境写成真实访谈结论。若有用户参与，应允许其使用熟悉的工具和方式，而不是要求所有人按主持人的操作习惯完成任务。
+									996 container
+										997 text 来源：
+										998 link Description: Accessibility Principles, Value: w3.org/WAI/fundamentals/accessibility-principles/
+										999 text 。
+									1000 heading 二、如何区分视觉、键盘和理解障碍, Value: 2
+										1001 text 二、如何区分视觉、键盘和理解障碍
+									1002 text 这三类可以作为讨论入口，但不能作为互不重叠的诊断标签。一个缺少名称的图标，既可能让视觉用户猜测用途，也可能使辅助技术无法传达其功能。分类的目的，是找出失败机制，而不是给用户贴标签。
+									1003 content list
+										1004 container
+											1005 AXListMarker 1.
+											1006 text 视觉障碍：信息是否依赖特定视觉表现。
+											1007 text 检查是否只用颜色传达错误，文字与背景是否容易区分，放大后信息是否丢失，图像是否有等价信息。来源说明，颜色不应是唯一的信息表达方式，内容应支持放大和不同呈现方式。讨论时应指出具体信息缺口，而不是仅说“颜色不友好”。
+										1008 container
+											1009 AXListMarker 2.
+											1010 text 键盘障碍：不用鼠标能否完成同一任务。
+											1011 text 检查入口是否可达、焦点是否可见、顺序是否有意义，以及是否能操作并离开控件。来源要求鼠标可用的功能也能通过键盘使用，且焦点不能被困住。静态稿可以标注预期路径，但不能证明实际键盘行为已经正确。
+										1012 container
+											1013 AXListMarker 3.
+											1014 text 理解障碍：能否知道含义、后果和修复办法。
+											1015 text 检查标签、术语、说明、错误反馈和操作一致性。“提交失败”没有解释原因，也没有给出下一步；即使清晰可见，仍可能阻断任务。来源强调清晰语言、可预测行为，以及描述性错误信息和纠正建议。
+									1016 container
+										1017 text 可以给同一问题标注多个影响类别，但应共同指向一个可观察的任务后果。以上依据：
+										1018 link Description: Accessibility Principles, Value: w3.org/WAI/fundamentals/accessibility-principles/
+										1019 text 。
+									1020 heading 三、如何讨论发现的问题, Value: 2
+										1021 text 三、如何讨论发现的问题
+									1022 text 有效讨论应从观察事实走向解释和行动，避免一开始就争论颜色、组件或技术方案。主持人可以依次询问：发生了什么？阻断了哪个任务？原因是否已确认？需要什么证据才能判断修复有效？
+									1023 content list
+										1024 container
+											1025 AXListMarker 1.
+											1026 text 先陈述可复现现象。
+											1027 text 写明页面状态、操作方式和结果，例如“按键盘顺序移动时无法到达关闭入口”。如果只有设计稿，就说“稿件未标注关闭操作的键盘方式”，不要写成已经发现的运行缺陷。
+										1028 container
+											1029 AXListMarker 2.
+											1030 text 分别记录事实、原因假设和影响判断。
+											1031 text “错误提示只显示红框”是可检查的现象；“用户可能无法定位错误”是影响判断；“组件未提供错误说明”可能是原因假设。三者不应混写成已证实结论。
+										1032 container
+											1033 AXListMarker 3.
+											1034 text 用任务后果讨论优先级。
+											1035 text 建议优先处理导致无法继续、信息丢失或错误后无法恢复的问题，并记录决策理由。这是团队工作建议，不是从三页中得到的官方严重性分级。
+									1036 text 虚构示例一：申请表单评审讨论片段。以下人物、产品和对话均为虚构，不是用户研究结果。
+									1037 container
+										1038 text 设计师：“当前稿件用红色边框标识日期错误，没有文字说明。”
+										1039 text 测试人员：“我们先记录这是稿件现象。开发后还要检查键盘用户能否找到错误字段。”
+										1040 text 主持人：“它同时涉及颜色依赖和纠错理解。先补充字段旁的错误原因与格式说明，再定义实际页面的复核步骤，不把改稿等同于问题已解决。”
+									1041 heading 四、如何把发现转成有明确责任人的设计行动, Value: 2
+										1042 text 四、如何把发现转成有明确责任人的设计行动
+									1043 text “优化无障碍”不是可执行行动。每条行动需要明确修改对象、预期行为、责任人和完成证据，并区分设计决策与实现验证。
+									1044 content list
+										1045 container
+											1046 AXListMarker 1.
+											1047 text 按问题机制定义行动。
+											1048 text 不写“调整错误样式”，而写“日期格式错误时，显示错误原因和正确格式，使用户能够定位并修正”。前者只规定视觉改动，后者保留了用户目标，也方便检查结果。
+										1049 container
+											1050 AXListMarker 2.
+											1051 text 设定一位推进责任人，同时列出协作者。
+											1052 text 例如，设计师负责明确错误状态和文案，开发者负责实现与控件的关联，测试人员负责复核。多人参与不等于多人共同承担模糊责任；应有人跟进直至验证结束。这个分工是团队建议，不是官方职责规定。
+										1053 container
+											1054 AXListMarker 3.
+											1055 text 把状态拆开记录。
+											1056 text 至少区分“待设计确认”“待实现”“待复核”“已复核”。设计稿补齐，只能证明设计说明完成；代码合并，也不能自动证明用户能完成任务。
+									1057 text 虚构示例二：排序功能评审讨论片段。以下内容是假设性工作场景，不是来源案例。
+									1058 container
+										1059 text 产品负责人：“目前只能拖动项目改变顺序。”
+										1060 text 开发者：“可以增加‘上移’和‘下移’操作，但需要明确边界状态。”
+										1061 text 设计师：“我负责补充入口、名称及首尾项目的状态，周三交付；开发负责人确认实现安排。”
+										1062 text 测试人员：“实现后我会不用鼠标完成排序，并检查顺序变化是否可理解。通过前，记录保持‘待复核’。”
+									1063 text 这一讨论借用了来源中的键盘可操作方向；具体按钮方案和分工属于团队建议。
+									1064 heading 五、如何安排开发后的人工复核, Value: 2
+										1065 text 五、如何安排开发后的人工复核
+									1066 text WAI《Introduction to Web Accessibility》明确指出，评估工具有帮助，但没有单一工具能判定网站满足无障碍指南，需要有知识的人进行评估。因此，复核应回到真实实现和原任务，而不是只看扫描分数。
+									1067 content list
+										1068 container
+											1069 AXListMarker 1.
+											1070 text 绑定被测对象与操作环境。
+											1071 text 记录产品版本、页面、浏览器、操作系统、辅助技术和任务步骤。只测过某条流程，就只报告该范围，不能扩展成整个产品已经无障碍。
+										1072 container
+											1073 AXListMarker 2.
+											1074 text 复现原问题，并检查相关分支。
+											1075 text 对表单重新触发错误，对排序重新执行键盘操作。既检查问题是否消失，也检查新增入口是否造成新的理解或操作障碍。复核应验证任务结果，不只是确认新元素存在。
+										1076 container
+											1077 AXListMarker 3.
+											1078 text 按能力安排人工检查。
+											1079 text 设计师可检查文案、放大后的呈现和信息完整性；熟悉键盘及辅助技术的人应验证实际操作和语义。新手无法完成屏幕阅读器操作时，需要区分工具不熟悉与产品缺陷，不宜直接作结论。
+										1080 container
+											1081 AXListMarker 4.
+											1082 text 保留未通过与未测试项。
+											1083 text 无法完成的步骤应记录现象和下一步，不用“基本通过”掩盖阻断问题。尚未检查的环境写“未测试”，而不是推定兼容。修复后，应再次执行相同任务。
+									1084 container
+										1085 text 来源：
+										1086 link Description: Introduction to Web Accessibility, Value: w3.org/WAI/fundamentals/accessibility-intro/
+										1087 text 。
+									1088 heading 六、如何诚实区分官方事实与团队建议, Value: 2
+										1089 text 六、如何诚实区分官方事实与团队建议
+									1090 text 评审记录应让后来者看出：哪些判断有资料支持，哪些是团队选择，哪些仍需验证。引用能说明原则依据，但不能替代产品证据。
+									1091 content list
+										1092 container
+											1093 AXListMarker 1.
+											1094 text 来源事实注明具体页面。
+											1095 text 例如，“键盘焦点不应被困住”可引用 WAI《Accessibility Principles》；“单一工具不能判定满足指南”可引用 WAI《Introduction to Web Accessibility》。不要为团队自行设定的期限、分工或严重性分级加上“官方要求”。
+										1096 container
+											1097 AXListMarker 2.
+											1098 text 团队建议写明采用理由。
+											1099 text 例如，“本项目采用上移、下移作为拖动之外的操作入口”，是对原则的具体应用，不是官方指定方案。可以说明它解决什么任务问题，以及仍需验证什么。
+										1100 container
+											1101 AXListMarker 3.
+											1102 text 产品结论必须附观察证据。
+											1103 text “已补充键盘路径”是实现说明；“在所记录环境中，不用鼠标完成排序”才是有限范围的复核结果。二者都不能直接推出全面合规。
+										1104 container
+											1105 AXListMarker 4.
+											1106 text 保留本次阅读边界。
+											1107 text MDN
+											1108 link Description: 《Accessibility》, Value: developer.mozilla.org/en-US/docs/Web/Accessibility
+											1109 text  本页简介支持“正确 HTML 和可识别语义很重要”的方向，但本会话未读取其子教程，不能引用它证明具体 ARIA 实现。两份 WAI 页面也是概述，其中原则页明确不是完整要求清单。
+									1110 container
+										1111 text 一份可信的评审记录，最终应能回答四件事： 发现了什么、依据是什么、谁负责行动、什么证据证明行动有效 。不能回答的部分，应诚实保留为待确认，而不是用引用或“已完成”状态补齐。
+							736 container chatHomeComposition
+								954 container chatForm
+									955 splitter Description: Drag to resize the message input, Value: 42
+									956 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									957 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									958 text Work
+									959 text Chat
+									960 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									961 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									962 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										963 text openai/gpt-6.1-sol
+									964 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18191/ui/

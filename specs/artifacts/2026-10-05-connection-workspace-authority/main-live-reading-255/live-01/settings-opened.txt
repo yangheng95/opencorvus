@@ -1,0 +1,93 @@
+Browser tab: 98, Title: "OpenCorvus", URL: "http://localhost:18191/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18191/ui/
+	1 container
+		2 container overlayAppHost
+			3 container titlebar
+				4 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+				5 container Settings navigation
+					6 button Back to OpenCorvus
+				7 menu bar Description: OpenCorvus, ID: menubar-cl-1
+					8 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+					9 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+					10 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+					11 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+			12 container panelBody
+				13 container Description: Chat shortcuts, ID: workspaceNavigation
+					14 container Chat shortcuts
+						15 button Chats
+						16 button Mission Board
+						17 button Scheduled
+						18 button Expert Squads
+						19 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+						20 button Settings
+					21 button About
+					22 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+				23 container Description: General, ID: configDialog
+					24 container tabs-cl-1302
+						25 container configSidebar
+							26 button Back to app
+							27 search text field (settable) Search settings pages...
+							28 tab group
+								29 text Application
+								30 tab (selected, settable, boolean) General, Value: 1, ID: config-tab-general
+								31 tab (selectable, settable, boolean) Appearance, Value: 0, ID: config-tab-appearance
+								32 tab (selectable, settable, boolean) Network, Value: 0, ID: config-tab-network
+								33 tab (selectable, settable, boolean) Usage, Value: 0, ID: config-tab-usage
+								34 text Product
+								35 tab (selectable, settable, boolean) Chat, Value: 0, ID: config-tab-code
+								36 tab (selectable, settable, boolean) Work, Value: 0, ID: config-tab-work
+								37 text Missions & Automation
+								38 tab (selectable, settable, boolean) Mission Card, Value: 0, ID: config-tab-mission-skill
+								39 tab (selectable, settable, boolean) Scheduled tasks, Value: 0, ID: config-tab-scheduled
+								40 text Expert Squads
+								41 tab (selectable, settable, boolean) Squad Market, Value: 0, ID: config-tab-expert-squad-install
+								42 tab (selectable, settable, boolean) Installed Expert Squads, Value: 0, ID: config-tab-expert-squad
+								43 text Shared Resources
+								44 tab (selectable, settable, boolean) Providers, Value: 0, ID: config-tab-providers
+								45 tab (selectable, settable, boolean) Skill Library, Value: 0, ID: config-tab-skill
+								46 tab (selectable, settable, boolean) MCP Connections, Value: 0, ID: config-tab-mcp
+								47 tab (selectable, settable, boolean) Channel, Value: 0, ID: config-tab-channel
+								48 text Context
+								49 tab (selectable, settable, boolean) Memory & Context, Value: 0, ID: config-tab-memory
+								50 text Data
+								51 tab (selectable, settable, boolean) Archive, Value: 0, ID: config-tab-archive
+								52 tab (selectable, settable, boolean) Release notes, Value: 0, ID: config-tab-changelog
+								53 tab (selectable, settable, boolean) About, Value: 0, ID: config-tab-about
+						54 splitter Description: Settings, Value: 230, ID: configResizer
+						55 container configContent
+							56 heading General, Value: 1
+								57 text General
+							58 container Description: General, ID: config-panel-general
+								59 container generalBody
+									60 container
+										61 heading Notifications, Value: 2
+											62 text Notifications
+										63 text Show new agent notices and attention requests in the system notification area.
+										64 container switch-cl-1326
+											65 switch (settable, boolean) Desktop notifications, Value: 1, ID: settings-desktop-notifications
+									66 container
+										67 heading Permissions, Value: 2
+											68 text Permissions
+										69 text Default authorization Tools can change files, run commands and take external actions without asking. Applies to new tasks; running tasks keep their existing mode.
+										70 container Description: Default authorization, ID: group-cl-1331
+											71 checkbox Ask me, Value: 0, ID: group-cl-1331-item-cl-1332
+											72 checkbox Full access, Value: 1, ID: group-cl-1331-item-cl-1333
+										73 button (collapsed) Approvals & history Review this project's saved approvals and recent operations., Secondary Actions: Expand
+											74 text Approvals & history
+											75 text Review this project's saved approvals and recent operations.
+									76 container
+										77 heading Git, Value: 2
+											78 text Git
+										79 text When explicitly opening a non-Git directory, ask before creating a repository. Startup only reads existing state.
+										80 container switch-cl-1337
+											81 switch (settable, boolean) Offer Git initialization, Value: 0, ID: settings-offer-git-init
+									82 container
+										83 heading Diagnostics, Value: 2
+											84 text Diagnostics
+										85 text Export logs Download a ZIP support bundle with every retained raw log, readable formatted copies, and a detailed diagnostic manifest.
+										86 button Export ZIP
+		87 container Settings Settings, ID: tooltip-cl-119-content
+			88 text Settings
+			89 text Settings
+
+The focused UI element is 27 search text field (settable) Search settings pages...

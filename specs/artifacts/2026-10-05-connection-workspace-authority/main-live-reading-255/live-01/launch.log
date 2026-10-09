@@ -1,0 +1,13 @@
+Owned Sol Target PID 76544, Host PID 76860, occurrence main-live-reading-255-live-01-e70dbb93-a186-4e4f-ae81-2055735e7def; native settlement remains required.
+
+physicalCompletion    : True
+boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup
+copiedPair            : {@{presentAfter=False; path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-10\main-live-reading-255-live-01\runtime\data\auth.json; copiedLength=2194; outcome=removed}, @{presentAfter=False; path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-10\main-live-reading-255-live-01\runtime\data\models.json; copiedLength=9155406; outcome=removed}}
+occurrence            : main-live-reading-255-live-01-e70dbb93-a186-4e4f-ae81-2055735e7def
+pairedCleanupComplete : True
+observedAtUtc         : 2026/10/9 23:06:28
+nativeSettlement      : @{occurrence=main-live-reading-255-live-01-e70dbb93-a186-4e4f-ae81-2055735e7def; outcome=settled; host=; target=; observedAtUtc=2026/10/9 23:06:25; deadlineAt=1791587277585; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}
+listeners             :
+chain                 : {@{originalOccurrencePresent=False; expected=; state=dead_or_reused}, @{originalOccurrencePresent=False; expected=; state=dead_or_reused}}
+
+{"providerEOFRequests":9,"qualification":"NativeService","physicalCompletion":true,"boundary":"Exact native/provider completion only; conversation semantics and UI remain Root-owned"}

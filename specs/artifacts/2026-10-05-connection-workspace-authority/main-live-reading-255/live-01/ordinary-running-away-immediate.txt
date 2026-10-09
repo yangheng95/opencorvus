@@ -1,0 +1,22 @@
+Browser tab: 98, Title: "OpenCorvus", URL: "http://localhost:18191/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 65, 104, 113-122, 132-242
++									132 container
++										133 button (expanded) Description: Collapse Anonymous 6ad335, Secondary Actions: Collapse
++										134 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-176-trigger, Secondary Actions: Expand
++										135 button New chat for this project
+~						78 text Reply with OK.
+~						102 container Description: Not running, ID: taskStatus
+~							103 text Not running
++							136 container chatForm
++								137 splitter Description: Drag to resize the message input, Value: 42
++								138 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++								139 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++								140 text Code
++								141 text Chat
++								142 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
++								143 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++								144 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
++									145 text Choose model
++								146 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+The focused UI element is 68 button Reply with OK.

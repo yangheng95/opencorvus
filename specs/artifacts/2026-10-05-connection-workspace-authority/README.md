@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [真实生成阅读255 Recall](main-live-reading-plan-255.md) / [实际运行与新故障](main-live-reading-255/README.md)：运行中阅读/末尾跟随/暗色Sources实际复核，9EOF/Native0；发现旧输入Running/重复汇总行，继续共性调查。
+
 - [Task主阅读254 Recall](task-main-reading-plan-254.md) / [原失败与实际恢复](task-main-reading-254/README.md)：两轮来源偏移保留，持续消息锚点恢复后978/明确末尾1302保持，历史Sources标题/域名与三次Native0；宽矩阵仍待。
 
 - [主阅读返回253 Recall](main-reading-position-plan-253.md) / [实际恢复](main-reading-position-253/README.md)：来源318.67/正文1038.67/明确末尾2550.67真实保持、7EOF/Native0；Task/Mission长历史待补。
