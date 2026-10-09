@@ -4,6 +4,7 @@ export interface ConversationCardScrollRequest {
   cardID: string
   block?: ScrollLogicalPosition
   highlight?: boolean
+  readingRestore?: boolean
 }
 
 export interface ConversationCardScrollEventDetail extends ConversationCardScrollRequest {

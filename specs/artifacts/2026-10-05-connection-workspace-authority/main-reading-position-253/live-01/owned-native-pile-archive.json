@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-09T22:29:40.8981680Z",
+  "nativeTerminal": {
+    "occurrenceID": "main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3",
+    "pid": 71700,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "targetBirthUtc": "2026-10-09T22:09:03.9969666Z",
+  "files": [
+    {
+      "birthUtc": "2026-10-09T22:09:04.8348782Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\main-reading-position-253\\generated-bun-live01\\091d165574530ade.debug.pile",
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224
+    },
+    {
+      "birthUtc": "2026-10-09T22:09:04.8090538Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\main-reading-position-253\\generated-bun-live01\\69cc5fa7b1dcf631.debug.pile",
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556
+    },
+    {
+      "birthUtc": "2026-10-09T22:09:04.7826783Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\main-reading-position-253\\generated-bun-live01\\7a87559fbb4087c4.debug.pile",
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902
+    },
+    {
+      "birthUtc": "2026-10-09T22:09:04.7886864Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\main-reading-position-253\\generated-bun-live01\\cf86f20c120ce818.debug.pile",
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408
+    },
+    {
+      "birthUtc": "2026-10-09T22:09:04.8534684Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\main-reading-position-253\\generated-bun-live01\\f9ce0c567348c89d.debug.pile",
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530
+    }
+  ]
+}

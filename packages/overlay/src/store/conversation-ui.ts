@@ -1,6 +1,9 @@
 import { createStore, reconcile } from "solid-js/store"
 
 export type ConversationReadingPosition = { top: number; following: boolean }
+export type MainConversationReadingPosition = ConversationReadingPosition & {
+  anchor?: { messageID: string; textIndex: number; offset: number }
+}
 
 const [store, setStore] = createStore({
   // Operator-owned presentation state. Runtime card status must never rewrite
@@ -11,6 +14,7 @@ const [store, setStore] = createStore({
   expandedDisclosures: {} as Record<string, boolean>,
   sourceExcerptPositions: {} as Record<string, number>,
   sideChatReadingPositions: {} as Record<string, ConversationReadingPosition>,
+  mainReadingPositions: {} as Record<string, MainConversationReadingPosition>,
 })
 
 export { store as conversationUiStore }
@@ -26,6 +30,8 @@ const STORAGE_PREFIX = "oc_card_expand:"
 const STORAGE_INDEX_KEY = "oc_card_expand_index"
 const MAX_PERSISTED_TASKS = 50
 const MAX_ENTRIES_PER_TASK = 200
+const MAX_MAIN_READERS = 50
+let captureMainReader: (() => void) | undefined
 let activeTaskID = ""
 let saveTimer: any = null
 const SAVE_DEBOUNCE_MS = 400
@@ -212,4 +218,28 @@ export function setSideChatReadingPosition(id: string, position: ConversationRea
   if (!id || !Number.isFinite(position.top)) return
   const entries = Object.entries({ ...store.sideChatReadingPositions, [id]: { top: Math.max(0, position.top), following: position.following } })
   setStore("sideChatReadingPositions", reconcile(Object.fromEntries(entries.slice(-MAX_ENTRIES_PER_TASK)), { merge: false }))
+}
+
+/** One visible main reader supplies its actual intent before projection retirement. */
+export function registerMainReadingCapture(capture: () => void): () => void {
+  captureMainReader = capture
+  return () => {
+    if (captureMainReader === capture) captureMainReader = undefined
+  }
+}
+
+export function captureMainReadingPosition(): void {
+  captureMainReader?.()
+}
+
+export function mainReadingPosition(key: string): MainConversationReadingPosition | undefined {
+  return store.mainReadingPositions[key]
+}
+
+/** Main view memory crosses primary selection, but not its captured API authority. */
+export function setMainReadingPosition(key: string, position: MainConversationReadingPosition): void {
+  if (!key || !Number.isFinite(position.top)) return
+  const entries = Object.entries(store.mainReadingPositions).filter(([id]) => id !== key)
+  entries.push([key, { ...position, top: Math.max(0, position.top) }])
+  setStore("mainReadingPositions", reconcile(Object.fromEntries(entries.slice(-MAX_MAIN_READERS)), { merge: false }))
 }

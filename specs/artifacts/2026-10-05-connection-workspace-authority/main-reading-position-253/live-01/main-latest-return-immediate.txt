@@ -1,0 +1,13 @@
+Browser tab: 94, Title: "OpenCorvus", URL: "http://localhost:18187/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 124
+~										274 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+~										275 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand
++									74 container
++										75 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
++										76 button 请由当前会话独立完成一次只读资料阅读：
++										77 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
++									277 button (expanded) Description: Collapse Anonymous 96e198, Secondary Actions: Collapse
+~						87 text 请由当前会话独立完成一次只读资料阅读：
+~								266 text Work
+The focused UI element is 76 button 请由当前会话独立完成一次只读资料阅读：

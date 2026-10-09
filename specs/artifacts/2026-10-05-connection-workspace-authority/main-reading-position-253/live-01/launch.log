@@ -1,0 +1,13 @@
+Owned Sol Target PID 71700, Host PID 74384, occurrence main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3; native settlement remains required.
+
+physicalCompletion    : True
+listeners             :
+pairedCleanupComplete : True
+boundary              : Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup
+nativeSettlement      : @{occurrence=main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3; outcome=settled; host=; target=; observedAtUtc=2026/10/9 22:14:50; deadlineAt=1791584343200; terminal=; physicalCompletion=True; outputDrainComplete=True; requestCleanupComplete=True; authority=Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup}
+chain                 : {@{state=dead_or_reused; expected=; originalOccurrencePresent=False}, @{state=dead_or_reused; expected=; originalOccurrencePresent=False}}
+occurrence            : main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3
+copiedPair            : {@{path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-10\main-reading-position-253-live-01\runtime\data\auth.json; presentAfter=False; copiedLength=2194; outcome=removed}, @{path=C:\Users\hengu\.codex\opencorvus-product-iteration\2026-10-10\main-reading-position-253-live-01\runtime\data\models.json; presentAfter=False; copiedLength=9155406; outcome=removed}}
+observedAtUtc         : 2026/10/9 22:14:52
+
+{"boundary":"Exact native/provider completion only; conversation semantics and UI remain Root-owned","physicalCompletion":true,"providerEOFRequests":7,"qualification":"NativeService"}

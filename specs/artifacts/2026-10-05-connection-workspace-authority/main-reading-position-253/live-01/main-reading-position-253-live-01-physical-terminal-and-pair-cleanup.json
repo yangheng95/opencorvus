@@ -1,0 +1,69 @@
+{
+  "physicalCompletion": true,
+  "listeners": null,
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "nativeSettlement": {
+    "occurrence": "main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3",
+    "outcome": "settled",
+    "host": {
+      "pid": 74384,
+      "processInstanceID": "win32:639271805432150802",
+      "occurrenceID": "32884550-9acc-4d80-a1f6-c5bdd2cf9c8a"
+    },
+    "target": {
+      "pid": 71700,
+      "processInstanceID": "win32:639271805439969666",
+      "occurrenceID": "4d756fa7-3d76-4b8f-bb93-876f995ef16e"
+    },
+    "observedAtUtc": "2026-10-09T22:14:50.431Z",
+    "deadlineAt": 1791584343200,
+    "terminal": {
+      "occurrenceID": "main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3",
+      "pid": 71700,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 71700,
+        "processInstanceID": "win32:639271805439969666",
+        "occurrenceID": "4d756fa7-3d76-4b8f-bb93-876f995ef16e"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 74384,
+        "processInstanceID": "win32:639271805432150802",
+        "occurrenceID": "32884550-9acc-4d80-a1f6-c5bdd2cf9c8a"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "occurrence": "main-reading-position-253-live-01-148e38a8-6ebf-468b-a919-02e6114a3cd3",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\main-reading-position-253-live-01\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "copiedLength": 2194,
+      "outcome": "removed"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\main-reading-position-253-live-01\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "outcome": "removed"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T22:14:52.7470400Z"
+}

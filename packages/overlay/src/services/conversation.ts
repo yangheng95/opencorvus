@@ -42,6 +42,7 @@ import { AppLog } from "../utils/log"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { conversationEventOwner } from "./event-policy"
 import { conversationHistoryPath } from "./conversation-history-path"
+import { captureMainReadingPosition } from "../store/conversation-ui"
 
 type EventReplay = {
   cursor: number
@@ -104,6 +105,7 @@ function logConversationAsyncError(
 }
 
 export function cancelConversationReplay(): void {
+  captureMainReadingPosition()
   replayEpoch += 1
   historyEpoch += 1
   tailMergeEpoch += 1
@@ -132,6 +134,7 @@ export function retireConversationSource(clear = true): void {
 }
 
 export function resetConversationProjection(options: { scrollIntent?: "preserve" | "bottom"; cause?: string }): void {
+  captureMainReadingPosition()
   batch(() => {
     resetConversationAgentView()
     resetWriter(options)
@@ -865,6 +868,12 @@ export function canLoadOlderConversationHistory(source: BoardSource | null = boa
     historyState.oldestOrderKey !== null &&
     !historyLoading
   )
+}
+
+/** Current loaded history ownership, separate from the next selected source. */
+export function ownsConversationHistory(source: BoardSource, authority: ApiAuthority): boolean {
+  return !!historyAuthority && historyAuthority.revision === authority.revision &&
+    isApiAuthorityCurrent(authority) && sourceMatches(source, historySource)
 }
 
 export function conversationCardContainsMessage(cardID: string, messageID: string): boolean {

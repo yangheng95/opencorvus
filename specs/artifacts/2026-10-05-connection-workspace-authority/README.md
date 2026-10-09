@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [主阅读返回253 Recall](main-reading-position-plan-253.md) / [实际恢复](main-reading-position-253/README.md)：来源318.67/正文1038.67/明确末尾2550.67真实保持、7EOF/Native0；Task/Mission长历史待补。
+
 - [真实正文/Sources252 Recall](text-part-time-live-plan-252.md) / [实际时间与返回失败](text-part-time-live-252/README.md)：70.384秒/2405→3681/三条来源、7EOF/Native0；主阅读位置360→末尾仍待修。
 
 - [正文片段时间251 Recall](text-part-time-plan-251.md) / [真实后端检查](text-part-time-251/README.md)：text-end保留原start，24项/108断言与最终5项通过；原失败及工具链修复完整保留。

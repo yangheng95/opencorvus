@@ -207,6 +207,22 @@ the shared scroll controller, whose intent getter retains the original pending
 top through incomplete layout instead of saving a clamped zero. Explicit reader
 input and a return to the bottom retain the controller's existing semantics.
 
+The primary conversation keeps at most 50 reading positions in that same UI
+store, keyed by captured API authority revision and actual source kind/ID.
+Selection clears transient primary disclosures without clearing this bounded
+view memory. Before replay or projection retirement, its one registered visible
+reader captures the current top/following intent and visible quotation Message
+anchor, text ordinal and viewport offset. Empty, hidden, loading, unhydrated or
+retired owners cannot publish a new position. A returning paused reader uses the
+existing history loader to locate its actual Message and the existing virtualizer
+card-scroll bridge to mount it, then resumes through the same scroll controller.
+Initial sources follow the bottom. Explicit reader movement and Scroll to latest
+retire pending restoration and own the next saved intent. API rotation and a new
+browser lifetime remain new view ownership; this does not persist another
+transcript, alter runtime status or manufacture a reading input event. Ordinary
+Session, Task and Mission main views share this implementation; failed active
+restoration is reported through the existing application diagnostic boundary.
+
 Source disclosures retain their actual adjacent Part group and truthful group
 count. Expanded leaves retain canonical type/Session/Message/source identity
 while reading current metadata and index. A single-source group needs no leaf

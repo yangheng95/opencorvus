@@ -1,8 +1,8 @@
-import { ErrorBoundary, For, Show, createMemo, onMount, onCleanup, createSignal, createEffect, on } from "solid-js"
+import { ErrorBoundary, For, Show, createMemo, onMount, onCleanup, createSignal, createEffect, on, untrack } from "solid-js"
 import { Portal } from "solid-js/web"
 import { Virtualizer, type CustomContainerComponentProps, type VirtualizerHandle } from "virtua/solid"
 import { cardTreeStore, publishedCardTreeVersion } from "../store/card-tree"
-import { boardStore, activeTaskID } from "../store/board"
+import { boardStore, activeTaskID, type BoardSource } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { conversationSessionStore } from "../store/conversation-session"
 import { t } from "../utils/i18n"
@@ -14,10 +14,15 @@ import {
   canLoadOlderConversationHistory,
   loadOlderConversationHistory,
   selectedConversationHasVisibleItems,
+  ownsConversationHistory,
+  conversationCardContainsMessage,
 } from "../services/conversation"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
-import { listenConversationCardScroll, type ConversationCardScrollRequest } from "../services/conversation-scroll"
+import { listenConversationCardScroll, requestConversationCardScroll, type ConversationCardScrollRequest } from "../services/conversation-scroll"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+import { mainReadingPosition, setMainReadingPosition, registerMainReadingCapture, type MainConversationReadingPosition } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { AppLog } from "../utils/log"
 import { Icon } from "./ui/Icon"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Button } from "./ui/Button"
@@ -168,7 +173,7 @@ function VirtualizedConversationCards(props: {
   container: HTMLElement
   pinnedCardID: () => string | null
   onMeasuredContentChanged: () => void
-  onCardScrollRequest: () => void
+  onCardScrollRequest: (request: ConversationCardScrollRequest) => void
   onOpenSubagentConversation: (sessionID: string) => void
 }) {
   let virtualizer: VirtualizerHandle | undefined
@@ -270,7 +275,7 @@ function VirtualizedConversationCards(props: {
     if (target.transcriptTarget && target.sessionID) {
       props.onOpenSubagentConversation(target.sessionID)
     }
-    props.onCardScrollRequest()
+    props.onCardScrollRequest(request)
     virtualizer.scrollToIndex(index, {
       align: request.block ?? "start",
       smooth: false,
@@ -408,6 +413,8 @@ export function Conversation(props: {
 }) {
   const el = props.container
   let scrollController: AutoScrollController | undefined
+  let reader: { key: string; source: BoardSource; authority: ApiAuthority; pending?: MainConversationReadingPosition; restoring: boolean } | undefined
+  let mounted = false
   let historyLoadInFlight = false
   let historyIntentUntil = 0
   let touchStartY: number | null = null
@@ -415,6 +422,111 @@ export function Conversation(props: {
   const hasItems = selectedConversationHasVisibleItems
 
   const [tracking, setTracking] = createSignal(true)
+  const readingKey = () => {
+    const source = boardStore.selectedSource
+    return source ? JSON.stringify([captureApiAuthority().revision, source.kind, source.id]) : ""
+  }
+  const ownsReader = (owner: NonNullable<typeof reader>) => reader === owner &&
+    isApiAuthorityCurrent(owner.authority) && readingKey() === owner.key
+  const readingAnchorElement = (anchor: NonNullable<MainConversationReadingPosition["anchor"]>) =>
+    el.querySelectorAll<HTMLElement>(`[data-quotation-message="${CSS.escape(anchor.messageID)}"]`)[anchor.textIndex]
+  const rememberReadingPosition = () => {
+    const owner = reader
+    if (!owner || !ownsReader(owner) || owner.pending || !scrollController || boardStore.taskSwitching ||
+      !ownsConversationHistory(owner.source, owner.authority) || !hasItems() || !el.isConnected ||
+      el.clientHeight <= 0 || el.closest("[inert], [hidden]")) return
+    const position = scrollController.readingPosition()
+    const viewport = el.getBoundingClientRect()
+    const quotes = Array.from(el.querySelectorAll<HTMLElement>("[data-quotation-message]"))
+    const visible = quotes.find(node => {
+      const rect = node.getBoundingClientRect()
+      return rect.height > 0 && rect.bottom > viewport.top && rect.top < viewport.bottom
+    })
+    const messageID = visible?.dataset.quotationMessage
+    const anchor = visible && messageID ? {
+      messageID,
+      textIndex: quotes.filter(node => node.dataset.quotationMessage === messageID).indexOf(visible),
+      offset: visible.getBoundingClientRect().top - viewport.top,
+    } : undefined
+    setMainReadingPosition(owner.key, { ...position, anchor })
+  }
+  const changeTracking = (following: boolean, explicit = true) => {
+    if (explicit && reader) reader.pending = undefined
+    setTracking(following)
+    rememberReadingPosition()
+  }
+  const createReaderController = (position: MainConversationReadingPosition | undefined) => {
+    scrollController?.cleanup()
+    setTracking(position?.following ?? true)
+    const layoutRoot = el.parentElement
+    if (!layoutRoot) throw new Error("Main conversation layout owner is missing")
+    scrollController = setupAutoScroll(el, {
+      initialPosition: position && !position.following ? { kind: "position", top: position.top, layoutRoot } : { kind: "bottom" },
+      isTracking: tracking,
+      onUserScrollUp: () => changeTracking(false),
+      onFollowRequested: () => changeTracking(true),
+    })
+  }
+  const bindReader = () => {
+    if (!mounted) return
+    const source = boardStore.selectedSource
+    const key = readingKey()
+    const position = key ? untrack(() => mainReadingPosition(key)) : undefined
+    reader = source ? { key, source, authority: captureApiAuthority(), pending: position && !position.following ? position : undefined, restoring: false } : undefined
+    historyIntentUntil = 0
+    createReaderController(position && !position.following ? { ...position, top: position.anchor ? 0 : position.top } : position)
+    resumeReadingOnFrame.schedule()
+  }
+  const resumeReading = async () => {
+    const owner = reader
+    const position = owner?.pending
+    if (!owner || !position || owner.restoring || !ownsReader(owner) || boardStore.taskSwitching ||
+      !ownsConversationHistory(owner.source, owner.authority)) return
+    owner.restoring = true
+    try {
+      const anchor = position.anchor
+      if (anchor) {
+        const targetCard = () => cardTreeStore.order.find(id => conversationCardContainsMessage(id, anchor.messageID))
+        while (ownsReader(owner) && owner.pending === position && !targetCard() && canLoadOlderConversationHistory(owner.source)) {
+          if (!await loadOlderConversationHistory(owner.source, owner.authority)) break
+        }
+        if (!ownsReader(owner) || owner.pending !== position) return
+        const cardID = targetCard()
+        if (!cardID) throw new Error(`Main reading message ${anchor.messageID} is outside current conversation history`)
+        if (!await requestConversationCardScroll({ cardID, block: "start", readingRestore: true }))
+          throw new Error(`Main reading card ${cardID} could not be mounted`)
+        if (!ownsReader(owner) || owner.pending !== position) return
+        let element = readingAnchorElement(anchor)
+        for (let frame = 0; (!element || element.getBoundingClientRect().height <= 0) && frame < CARD_SCROLL_TARGET_MAX_FRAMES; frame++) {
+          await waitForAnimationFrame()
+          if (!ownsReader(owner) || owner.pending !== position) return
+          element = readingAnchorElement(anchor)
+        }
+        if (!element) throw new Error(`Main reading message ${anchor.messageID} has no visible text anchor`)
+        const top = el.scrollTop + element.getBoundingClientRect().top - el.getBoundingClientRect().top - anchor.offset
+        createReaderController({ ...position, top: Math.max(0, top) })
+      } else createReaderController(position)
+      owner.pending = undefined
+      scrollController?.contentChanged()
+    } finally {
+      owner.restoring = false
+    }
+  }
+  const resumeReadingOnFrame = createAnimationFrameScheduler(() => {
+    const owner = reader
+    const position = owner?.pending
+    void resumeReading().catch(error => {
+      if (!owner || !ownsReader(owner) || owner.pending !== position ||
+        (error instanceof DOMException && error.name === "AbortError")) return
+      AppLog.error("conversation", "Main reading position could not be restored", {
+        diagnosticID: `conversation-reading:${owner.key}`,
+        diagnosticTitle: "Reading position could not be restored",
+        diagnosticMessage: "The conversation is available; its saved reading location could not be restored.",
+        diagnosticDetails: renderErrorMessage(error),
+        source: owner.source,
+      })
+    })
+  })
   const [historyAnchorPinID, setHistoryAnchorPinID] = createSignal<string | null>(null)
   const [scrollButtonMount, setScrollButtonMount] = createSignal<HTMLElement | null>(null)
   const [homePromptMount, setHomePromptMount] = createSignal<HTMLElement | null>(null)
@@ -574,13 +686,9 @@ export function Conversation(props: {
     setScrollButtonMount(composerMount)
     setHomePromptMount(promptMount)
     setHomeAfterMount(afterMount)
-    const c = setupAutoScroll(el, {
-      initialPosition: { kind: "bottom" },
-      isTracking: tracking,
-      onUserScrollUp: () => setTracking(false),
-      onFollowRequested: () => setTracking(true),
-    })
-    scrollController = c
+    mounted = true
+    bindReader()
+    const stopReadingCapture = registerMainReadingCapture(rememberReadingPosition)
     syncComposerClearance()
     const composerObserver = new ResizeObserver(composerClearanceOnFrame.schedule)
     composerObserver.observe(composerMount)
@@ -626,6 +734,8 @@ export function Conversation(props: {
       }
     }
     const onHistoryScroll = () => {
+      rememberReadingPosition()
+      if (reader?.pending) return
       if (historyLoadInFlight || el.scrollTop > 96 || !hasHistoryIntent()) return
       const source = boardStore.selectedSource
       if (!canLoadOlderConversationHistory(source)) return
@@ -667,10 +777,17 @@ export function Conversation(props: {
       composerObserver.disconnect()
       composerClearanceOnFrame.cancel()
       el.style.removeProperty("--conversation-composer-block-size")
-      c.cleanup()
+      rememberReadingPosition()
+      mounted = false
+      stopReadingCapture()
+      resumeReadingOnFrame.cancel()
+      reader = undefined
+      scrollController?.cleanup()
       scrollController = undefined
     })
   })
+
+  createEffect(on(readingKey, bindReader, { defer: true }))
 
   createEffect(
     on(
@@ -680,8 +797,7 @@ export function Conversation(props: {
           scrollController?.contentChanged()
           return
         }
-        setTracking(true)
-        scrollController?.scrollToBottom()
+        bindReader()
       },
       { defer: true },
     ),
@@ -692,6 +808,7 @@ export function Conversation(props: {
       publishedCardTreeVersion,
       () => {
         scrollController?.contentChanged()
+        resumeReadingOnFrame.schedule()
       },
       { defer: true },
     ),
@@ -717,8 +834,9 @@ export function Conversation(props: {
   const emptyText = () => t("chat.empty")
   const scrollBottomLabel = () => t("chat.scroll_bottom")
   const scrollToBottom = () => {
-    setTracking(true)
+    changeTracking(true)
     scrollController?.scrollToBottom()
+    rememberReadingPosition()
   }
 
   return (
@@ -898,7 +1016,7 @@ export function Conversation(props: {
         container={el}
         pinnedCardID={historyAnchorPinID}
         onMeasuredContentChanged={() => scrollController?.contentChanged()}
-        onCardScrollRequest={() => setTracking(false)}
+        onCardScrollRequest={(request) => changeTracking(false, !request.readingRestore)}
         onOpenSubagentConversation={props.onOpenSubagentConversation}
       />
       <ConversationArtifactSummary onContentChanged={() => scrollController?.contentChanged()} />
