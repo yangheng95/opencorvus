@@ -1,0 +1,289 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+    - button "Store card accessor after 153 Completed":
+      - generic: Store card accessor after 153
+      - generic "Completed":
+        - generic: Completed
+    - button "More actions":
+    - button "Collapse Anonymous 793365" [expanded]:
+      - generic: Anonymous 793365
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A bounded unit of work with its own progress and result, often created and coordinated by a Mission.":
+      - button "Store card accessor after 153 Completed":
+        - generic: Store card accessor after 153
+        - generic "Completed":
+          - generic: Completed
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18157":
+        - generic: Online
+  - separator "Resize left panel"
+  - complementary "Agent activity":
+    - list:
+      - 'button "orchestrator · Idle · ## Orchestrator Control Occurrence Continue the same unresolved durable ingress from the exact preceding assistant Turn. ## Wake Provenance 这是一条 wake 消息，不是用户发送的新消息。 This is a wake message, not a user-authored message. Current durable wake occurrence=art_hbzNs5iRQE31VNkuiEpD. This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization. On the initial Task wake, the creator''s original request is already in its real participant Message in this Turn. It has no task-root message identity. Read that Message directly."'
+      - button
+      - button
+      - button
+      - button
+  - generic "Loading task"
+  - generic: Store card accessor after 153
+  - status
+  - button "Project actions":
+  - generic "Completed":
+    - generic: Completed
+  - generic "Not running · 3m 45s":
+    - generic: 3m 45s
+  - button "Side chat":
+  - button "Environment information":
+  - button "Close right dock" [active] [pressed]:
+  - generic "Conversation":
+    - article:
+      - generic: orchestrator
+      - generic "Session ran for 34s (between first message and terminal status)": 34s
+      - button "Handoff context":
+        - generic: Handoff context
+      - button "read_agent_message":
+        - generic: read_agent_message
+      - paragraph: 根据只读研究员对指定三页正文的实际阅读，并经来源核对，简要总结如下：
+      - list:
+        - paragraph:
+          - strong: 网页无障碍是什么——WAI 介绍页侧重定义与受益人群。
+          - text: 网页无障碍是让网站、工具和技术经过适当设计与开发，使残障人士能够感知、理解、导航、交互，并贡献网络内容。它也惠及老年人、暂时性障碍者，以及强光、无法听音频等情境下的用户。核心是消除使用障碍，而不只是增加某项功能。
+          - text: 来源：
+          - link "WAI：Introduction to Web Accessibility":
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-intro/
+        - paragraph:
+          - strong: 基本原则——WAI 原则页将目标拆成四类要求。
+          - strong: 可感知
+          - text: ：提供图片文本替代、字幕和足够对比度；
+          - strong: 可操作
+          - text: ：支持键盘操作，给予足够时间和清晰导航；
+          - strong: 可理解
+          - text: ：内容易懂、界面行为可预测，并帮助用户避免和纠正错误；
+          - strong: 健壮
+          - text: ：让不同浏览器及辅助技术能够可靠解释内容与控件。这一页是要求概览，并非完整清单。
+          - text: 来源：
+          - link "WAI：Accessibility Principles":
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-principles/
+        - paragraph:
+          - strong: 开发者如何开始——MDN 侧重开发学习入口，WAI 补充实施时机。
+          - text: 从按用途使用正确的语义 HTML 元素开始，保障键盘操作，为多媒体提供适当文字替代，并避免 CSS、JavaScript 破坏无障碍；复杂动态控件可用 WAI-ARIA 补充语义。WAI 介绍页还强调：从项目一开始纳入无障碍，并在开发过程中持续评估。评估工具能辅助检查，但不能单独判断网站是否符合无障碍指南，仍需具备相关知识的人工评估。
+          - text: 来源：
+          - link "MDN：Accessibility":
+            - /url: https://developer.mozilla.org/en-US/docs/Web/Accessibility
+          - text: 、
+          - link "WAI 介绍页":
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-intro/
+      - paragraph: 以上仅依据这三页正文；未继续阅读其链接中的教程或规范，也未修改文件或制作额外报告文件。
+      - button "manage_task · action=complete_task":
+        - generic: manage_task
+        - generic: action=complete_task
+  - status:
+    - strong: Model configuration unavailable
+    - generic: You can still read this conversation. Review the details or choose a model before sending a message.
+    - generic "Details":
+      - text: Details
+    - button "Retry"
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize":
+      - /placeholder: Add a thought, or keep working…
+  - button
+  - button "Add supported files":
+  - generic "Longer research, office, production, and finished deliverables.":
+    - generic: Work
+  - generic: Task
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access":
+    - generic: Full access
+  - button "OpenCorvus model Choose model. Click to change.":
+    - generic "Choose model"
+  - button "Send" [disabled]:
+    - generic: Send
+  - separator "Resize right panel"
+  - complementary "Tools panel":
+    - tablist "Open tools":
+      - tab "Expert Squad agents" [selected]:
+        - generic: Expert Squad agents
+      - button "Close tab":
+    - button "Add tool":
+    - button "Close panel":
+    - tabpanel "Expert Squad agents":
+      - button "All agents (2)":
+        - text: All agents (2)
+      - button "Expert Squad agents base-researcher":
+        - generic: base-researcher
+      - textbox
+      - listbox:
+        - option
+        - option [selected]: base-researcher
+        - option: base-tester
+      - article:
+        - generic: base-researcher
+        - button "Handoff context":
+          - generic: Handoff context
+        - paragraph: 我会只读取指定三页正文，核对各页的侧重点及可引用的原文锚点，不跟进链接或扩展搜索；随后提供发现和读取限制，供负责人总结。
+        - button "webfetch · https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)":
+          - generic: webfetch
+          - generic: https://www.w3.org/WAI/fundamentals/accessibility-intro/ (text/html; charset=utf-8)
+        - group "Sources":
+          - 'link "Open web source: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C"':
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-intro/
+            - generic: Introduction to Web Accessibility | Web Accessibility Initiative (WAI) | W3C
+            - generic: www.w3.org
+        - button "webfetch · https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)":
+          - generic: webfetch
+          - generic: https://www.w3.org/WAI/fundamentals/accessibility-principles/ (text/html; charset=utf-8)
+        - group "Sources":
+          - 'link "Open web source: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C"':
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-principles/
+            - generic: Accessibility Principles | Web Accessibility Initiative (WAI) | W3C
+            - generic: www.w3.org
+        - button "webfetch · https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)":
+          - generic: webfetch
+          - generic: https://developer.mozilla.org/en-US/docs/Web/Accessibility (text/html)
+        - group "Sources":
+          - 'link "Open web source: Accessibility | MDN"':
+            - /url: https://developer.mozilla.org/en-US/docs/Web/Accessibility
+            - generic: Accessibility | MDN
+            - generic: developer.mozilla.org
+        - button "read_agent_message · Task participant evidence":
+          - generic: read_agent_message
+          - generic: Task participant evidence
+        - paragraph:
+          - text: 已通过
+          - code: webfetch
+          - text: 的 Markdown 正文读取方式成功读取指定三页；三次返回均包含正文，未提示截断。以下是供负责人总结的来源发现，不是最终用户报告。
+        - heading "1. WAI 概念介绍：定义、受益人群与尽早落实" [level=3]
+        - paragraph:
+          - text: 来源：
+          - link "https://www.w3.org/WAI/fundamentals/accessibility-intro/":
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-intro/
+        - list:
+          - paragraph:
+            - strong: 是什么
+            - text: ：在 “What is Web Accessibility” 节，无障碍指网站、工具和技术经过设计与开发，使残障人士可以使用，包括感知、理解、导航、交互及贡献内容。简短原文锚点：
+          - blockquote:
+            - paragraph:
+              - text: “people with disabilities can use them”
+              - text: “perceive, understand, navigate, and interact with the Web”
+          - paragraph:
+            - strong: 基本取向
+            - text: ：重点是消除排斥、提供平等使用机会；也惠及老年人、暂时性障碍者，以及强光、无法听音频等情境下的用户。此页不是四项原则的系统展开。
+          - paragraph:
+            - strong: 开始落实
+            - text: ：“Making Your Website Accessible”“Evaluating Accessibility”“Examples” 各节明确建议从项目一开始纳入无障碍、开发过程中持续评估，并给出图片替代文本、键盘操作、音频文字稿的例子。原文锚点：
+          - blockquote:
+            - paragraph:
+              - text: “incorporate accessibility from the very beginning of projects”
+              - text: “no tool alone can determine if a site meets accessibility guidelines”
+          - paragraph: 因此可以据此强调：工具辅助检查不能替代有知识的人进行评估。
+        - heading "2. WAI 原则：将目标转为四类要求" [level=3]
+        - paragraph:
+          - text: 来源：
+          - link "https://www.w3.org/WAI/fundamentals/accessibility-principles/":
+            - /url: https://www.w3.org/WAI/fundamentals/accessibility-principles/
+        - list:
+          - paragraph:
+            - strong: 是什么／范围
+            - text: ：正文介绍网站、应用、浏览器和其他工具的一部分无障碍要求，也说明内容、用户代理和创作工具需要协同。页面明确限制：
+          - blockquote:
+            - paragraph: “This is not a complete list of all accessibility requirements.”
+          - paragraph:
+            - strong: 基本原则
+            - text: ：正文四个一级章节分别是：
+          - list:
+            - strong: 可感知
+            - text: ：“Perceivable information and user interface”——文本替代、字幕等媒体替代、正确标记内容结构、足够对比度、不仅靠颜色传递信息。
+            - strong: 可操作
+            - text: ：“Operable user interface and navigation”——键盘可访问、无焦点陷阱、足够操作时间、清晰导航及可见焦点，避免危险闪烁。
+            - strong: 可理解
+            - text: ：“Understandable information and user interface”——文字易懂、界面行为可预测、帮助用户避免并纠正错误。
+            - strong: 健壮
+            - text: ：“Robust content and reliable interpretation”——兼容不同浏览器和辅助技术，让内容与控件可以被可靠解释。
+          - paragraph:
+            - strong: 开始落实
+            - text: ：此页提供具体要求示例，例如搜索按钮的文本替代应表达功能而非外形：
+          - blockquote:
+            - paragraph:
+              - text: “‘search’ rather than ‘magnifying lens’”
+              - text: 自定义控件需要：
+              - text: “Providing a name, role, and value for non-standard user interface components”
+          - paragraph: 这些是该页正文中的示例，不是从其链接的技术规范中额外读取的内容。
+        - heading "3. MDN 开发入门：语义 HTML 与学习路径" [level=3]
+        - paragraph:
+          - text: 来源：
+          - link "https://developer.mozilla.org/en-US/docs/Web/Accessibility":
+            - /url: https://developer.mozilla.org/en-US/docs/Web/Accessibility
+        - list:
+          - paragraph:
+            - strong: 是什么
+            - text: ：正文开头从开发角度定义无障碍为让尽可能多的人使用网站，不因身体、认知能力或访问方式而受限。原文锚点：
+          - blockquote:
+            - paragraph: “enabling as many people as possible to use websites”
+          - paragraph:
+            - strong: 基本取向
+            - text: ：此页主要是开发学习与参考入口，不像 WAI 原则页那样系统展开四项原则。正文摘要明确指出键盘无障碍属于最低要求的一部分，也强调辅助技术能识别和使用的语义信息。
+          - paragraph:
+            - strong: 开始落实
+            - text: ：“Beginner’s tutorials” 节自身的介绍文字支持优先按用途使用正确 HTML 元素：
+          - blockquote:
+            - paragraph: “the correct HTML elements are always used for the correct purpose”
+          - paragraph: 同节摘要指出 CSS、JavaScript 使用不当会损害无障碍；WAI-ARIA 可以为复杂动态界面补充语义；多媒体需要适当文字替代，并应考虑移动端。该页列出的入门方向还包括开发工作流、检查工具与辅助技术。
+        - paragraph:
+          - strong: 读取边界
+          - text: ：未跟进任何链接、播放视频或搜索扩展资料；未修改文件或制作额外报告文件。MDN 的教程与指南详情均未读取，以上仅引用该入口页实际包含的介绍文字，不能据此声称已验证教程中的具体实现步骤。网页证据以 URL、章节名称和原文短句定位，没有仓库文件行号。另已读取指定的委托前证据，其工具索引完整但记录数为零；上述结论均来自本次实际网页读取。

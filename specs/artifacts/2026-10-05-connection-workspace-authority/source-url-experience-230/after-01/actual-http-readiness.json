@@ -1,0 +1,59 @@
+{
+  "scriptSrc": "http://127.0.0.1:18157/ui/assets/main-DuXM4N1d.js",
+  "observedAtUtc": "2026-10-09T07:55:25.5917969Z",
+  "owner": {
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "evidencePrefix": "source-url-experience-230-after-01",
+    "observedProcessChain": [
+      {
+        "pid": 50928,
+        "processInstanceID": "win32:639271292951019022",
+        "occurrenceID": "ef0a590d-a393-40c9-8e69-3f52dbd73e8f"
+      }
+    ],
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-url-experience-230-after-01",
+    "host": {
+      "pid": 32964,
+      "processInstanceID": "win32:639271292943529157",
+      "occurrenceID": "e1e96d46-f8ce-4ccf-be82-f5a595a14b0b"
+    },
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-url-experience-230-after-01\\evidence",
+    "nativeTarget": {
+      "pid": 50928,
+      "processInstanceID": "win32:639271292951019022",
+      "occurrenceID": "ef0a590d-a393-40c9-8e69-3f52dbd73e8f"
+    },
+    "occurrence": "source-url-experience-230-after-01-51c1bb83-d0e9-4940-baec-b2ee48fe20d7",
+    "authorityStaging": "None; no model Task requested",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-url-experience-230-after-01\\runtime",
+    "nativeDeadlineAt": 1791533394276,
+    "owner": {
+      "ProcessId": 50928,
+      "processInstanceID": "win32:639271292951019022"
+    },
+    "port": 18157,
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "targetBirthAtMs": 1791532495101,
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-url-experience-230\\after-01"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-url-experience-230-after-01-51c1bb83-d0e9-4940-baec-b2ee48fe20d7",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18157",
+    "pid": 50928
+  },
+  "finalUiUri": "http://127.0.0.1:18157/ui/",
+  "uiStatus": 200,
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18157,
+      "OwningProcess": 50928
+    }
+  ],
+  "uiUri": "http://127.0.0.1:18157/ui",
+  "asset": "/ui/assets/main-DuXM4N1d.js",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "assetStatus": 200
+}

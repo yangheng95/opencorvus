@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-10-09T08:29:57.6753793Z",
+  "occurrence": "source-url-experience-230-after-02-431f6290-1d5e-46cc-b246-96af2e7ca2c5",
+  "owner": {
+    "pid": 61860,
+    "processInstanceID": "win32:639271304934374230",
+    "occurrenceID": "7a4ed7e3-43f0-4e7b-9484-f16cc91ebdd7"
+  },
+  "pageClosed": true,
+  "dispatch": false,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "reason": "Original Target occurrence already exited; no shutdown dispatched"
+}

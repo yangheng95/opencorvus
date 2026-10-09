@@ -1,0 +1,123 @@
+{
+  "memoryStatuses": [
+    {
+      "id": "mem_hE7fR5cuIJGPa0qe1CjE",
+      "project_id": "prj_hVAc7t3PtYTtTTJZWWvx",
+      "kind": "project_context",
+      "source": "reflection",
+      "chunk_id": "mck_hgQdULw0vACdFs1PXDJI",
+      "token_count": 42,
+      "envelope_version": 1,
+      "envelope_status": "idle",
+      "envelope_revision": 1,
+      "organizer_lease_expires_at": null,
+      "availability_generation": 1
+    },
+    {
+      "id": "mem_hAaigbpOcoAXwhd3iFMD",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "kind": "project_context",
+      "source": "reflection",
+      "chunk_id": "mck_hbBB768TFqeaWG3ygRHu",
+      "token_count": 311,
+      "envelope_version": 1,
+      "envelope_status": "idle",
+      "envelope_revision": 1,
+      "organizer_lease_expires_at": null,
+      "availability_generation": 1
+    }
+  ],
+  "ingresses": [
+    {
+      "id": "art_hbzNs5iRQE31VNkuiEpD",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "execution_epoch": 1,
+      "sequence": 1,
+      "source": "task",
+      "source_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791449697006,
+      "disposition": {
+        "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+        "ingress_id": "art_hbzNs5iRQE31VNkuiEpD",
+        "execution_epoch": 1,
+        "evidence_ids": [
+          "prt_g0VXRkQq400ayh51ycAy"
+        ],
+        "time_created": 1791449730318,
+        "disposition": "resolved",
+        "decision_occurrence": {
+          "assistant_message_id": "msg_hJ80wqSCeVmefc0AMXXD",
+          "control_message_id": "msg_task-root-control_art_hbzNs5iRQE31VNkuiEpD_art_hbzNs5iRQE31VNkuiEpD",
+          "predecessor_id": "art_hbzNs5iRQE31VNkuiEpD",
+          "activation_id": "act_g0VXRkMas00lJAmbmgq1"
+        }
+      }
+    },
+    {
+      "id": "art_hxPr2eO4VzuwPb2E06z2",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "execution_epoch": 1,
+      "sequence": 2,
+      "source": "protocol_event",
+      "source_id": "pev_g0VXRkjJp00O1hwt2IbF",
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791449784974,
+      "disposition": {
+        "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+        "ingress_id": "art_hxPr2eO4VzuwPb2E06z2",
+        "execution_epoch": 1,
+        "evidence_ids": [
+          "prt_g0VXRknQL00Hs8WcAIY7"
+        ],
+        "time_created": 1791449816339,
+        "disposition": "resolved",
+        "decision_occurrence": {
+          "assistant_message_id": "msg_hFNKrYKVAbRIx3gnTL4E",
+          "control_message_id": "msg_task-root-control_art_hxPr2eO4VzuwPb2E06z2_art_hxPr2eO4VzuwPb2E06z2",
+          "predecessor_id": "art_hxPr2eO4VzuwPb2E06z2",
+          "activation_id": "act_g0VXRkjKy00BtwOOb4KU"
+        }
+      }
+    },
+    {
+      "id": "art_h1z2OytdL7BFX1LcH1oM",
+      "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+      "project_id": "prj_honTzv1SylD1sTwgEqBC",
+      "execution_epoch": 1,
+      "sequence": 3,
+      "source": "protocol_event",
+      "source_id": "pev_g0VXRlAcK00HrTy0HJ76",
+      "policy_id": "art_hdnmKniuXdpzKqS09pvp",
+      "time_accepted": 1791449889898,
+      "disposition": {
+        "task_id": "tsk_g00VXRkMRi00ID2TqzPU",
+        "ingress_id": "art_h1z2OytdL7BFX1LcH1oM",
+        "execution_epoch": 1,
+        "evidence_ids": [
+          "pev_g0VXRlJUn00LNIxnTZ2w"
+        ],
+        "time_created": 1791449924369,
+        "disposition": "terminal_inapplicable"
+      }
+    }
+  ],
+  "observedAtUtc": "2026-10-09T07:54:50.5291360Z",
+  "startupQualified": true,
+  "boundary": "Fresh complete source reviewed after prior scope closed; completed Task and both dispatches, all requests/publications terminal, memory idle",
+  "leases": [
+    {
+      "lease": {
+        "id": "act_g0VXRkF3G00oXeV8wUOH",
+        "target": "runtime_process",
+        "target_id": "ef6866b5-d536-4c92-a1f1-ca385fbc6f35",
+        "owner_occurrence_id": "{\"pid\":63112,\"processInstanceID\":\"win32:639270464606887343\",\"occurrenceID\":\"ef6866b5-d536-4c92-a1f1-ca385fbc6f35\"}",
+        "time_activated": 1791449668582,
+        "expires_at": 9007199254740991
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

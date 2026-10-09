@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-10-09T08:29:46.855Z",
+  "scope": "source-url-experience-230-after-02",
+  "screenshotsPersonallyViewed": [
+    "tester-return.jpg",
+    "dock-reopen.jpg",
+    "actual-keyboard-target.jpg",
+    "direct-sources-chinese-dark.jpg"
+  ],
+  "actualActions": [
+    "Original researcher to tester and back retained sources reading position",
+    "Close and reopen original right dock retained sources reading position",
+    "Principles source activated with Enter created actual IAB63 at original W3C URL; target viewed and closed",
+    "Settings Chinese Simplified and Dark selected; original source titles and sites visible"
+  ],
+  "intermediate": "direct-sources-english.jpg has transient blank dock, retained and not counted as visual pass",
+  "unqualified": [
+    "all agents return",
+    "same-run multiple sources",
+    "natural snippet or document sources",
+    "Tauri GUI"
+  ]
+}

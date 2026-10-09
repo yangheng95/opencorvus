@@ -1,0 +1,59 @@
+{
+  "owner": {
+    "targetBirthAtMs": 1791531571241,
+    "authorityStaging": "None; no model Task requested",
+    "nativeTarget": {
+      "pid": 73440,
+      "processInstanceID": "win32:639271283712418882",
+      "occurrenceID": "ba9a1bb6-c0b3-48f4-93fc-cc4d068d1ed3"
+    },
+    "occurrence": "source-url-experience-230-before-01-0b7c6797-efe8-45e9-a57e-7cae28dc7857",
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-url-experience-230-before-01\\evidence",
+    "owner": {
+      "processInstanceID": "win32:639271283712418882",
+      "ProcessId": 73440
+    },
+    "observedProcessChain": [
+      {
+        "pid": 73440,
+        "processInstanceID": "win32:639271283712418882",
+        "occurrenceID": "ba9a1bb6-c0b3-48f4-93fc-cc4d068d1ed3"
+      }
+    ],
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-url-experience-230-before-01\\runtime",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-url-experience-230\\before-01",
+    "host": {
+      "pid": 73064,
+      "processInstanceID": "win32:639271283704993268",
+      "occurrenceID": "da1e4f11-83ea-4ab0-8b5e-101532b6d7e2"
+    },
+    "port": 18157,
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-url-experience-230-before-01",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "evidencePrefix": "source-url-experience-230-before-01",
+    "nativeDeadlineAt": 1791532470425
+  },
+  "scriptSrc": "http://127.0.0.1:18157/ui/assets/main-CIkel-bL.js",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "uiUri": "http://127.0.0.1:18157/ui",
+  "finalUiUri": "http://127.0.0.1:18157/ui/",
+  "asset": "/ui/assets/main-CIkel-bL.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-url-experience-230-before-01-0b7c6797-efe8-45e9-a57e-7cae28dc7857",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18157",
+    "pid": 73440
+  },
+  "uiStatus": 200,
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18157,
+      "OwningProcess": 73440
+    }
+  ],
+  "observedAtUtc": "2026-10-09T07:39:49.9257096Z",
+  "assetStatus": 200
+}

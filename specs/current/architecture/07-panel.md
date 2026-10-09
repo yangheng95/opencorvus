@@ -522,12 +522,16 @@ projection data as full results or replacing the surrounding message and Sources
 The shared Feedback primitive presents the localized result-load problem and
 close/reopen retry action; its native Details retains the complete read diagnostic.
 Trace data uses the code typography role;
-the disclosure identity uses caption. Sources keep their chronological position
-behind the shared native Disclosure, initially collapsed with the first real
-source's readable identity and an honest count for that chronological source run;
-operator expansion state and exact source links remain available. Source
-opening activation uses the existing transcript reading-intent notification
-before the native toggle. The nearest transcript pauses follow-to-bottom while
+the disclosure identity uses caption. Sources keep their chronological position.
+A single source is a directly available citation with its complete readable
+identity and existing resource action. Runs with multiple sources use the shared
+native Disclosure, initially collapsed with the first real source's identity and
+an honest count; operator expansion state and exact source links remain available.
+Both presentations use the same identity-keyed source entry renderer. Individual
+excerpt disclosure remains scoped to the real source. Citation identity uses body
+typography; site and index metadata retain caption. Source activation, group
+expansion and excerpt expansion use the existing transcript reading-intent
+notification. The nearest transcript pauses follow-to-bottom while
 its operator reads; native pointer and keyboard behavior, source identity and
 the single expansion store remain authoritative. The explicit bottom control
 resumes following through the same existing scroll owner.

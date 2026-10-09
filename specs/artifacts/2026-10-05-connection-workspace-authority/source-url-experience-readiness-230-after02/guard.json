@@ -1,0 +1,36 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "boundary": "Fresh complete original153 source and closed destination; no execution rearm",
+  "readQualified": true,
+  "listeners": [],
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "observedAtUtc": "2026-10-09T08:13:40.0189938Z",
+  "occurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda",
+  "states": [
+    {
+      "expected": {
+        "pid": 77936,
+        "processInstanceID": "win32:639270464599331036",
+        "occurrenceID": "b601db4e-7f20-4b18-bfad-2830fcd5459b"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 63112,
+        "processInstanceID": "win32:639270464606887343",
+        "occurrenceID": "119969ce-7755-43ea-a60c-fcff27bdab08"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

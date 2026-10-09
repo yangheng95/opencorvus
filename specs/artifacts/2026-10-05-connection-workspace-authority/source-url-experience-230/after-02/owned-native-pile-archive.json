@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "birthUtc": "2026-10-09T08:14:53.7849392Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-url-experience-230\\generated-bun-after02\\091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "name": "091d165574530ade.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T08:14:53.7663166Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-url-experience-230\\generated-bun-after02\\69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "name": "69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T08:14:53.7175625Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-url-experience-230\\generated-bun-after02\\7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "name": "7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T08:14:53.7336780Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-url-experience-230\\generated-bun-after02\\cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "name": "cf86f20c120ce818.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T08:14:53.8146637Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-url-experience-230\\generated-bun-after02\\f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "name": "f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "nativeTerminal": {
+    "occurrenceID": "source-url-experience-230-after-02-431f6290-1d5e-46cc-b246-96af2e7ca2c5",
+    "pid": 61860,
+    "reason": "deadline_exceeded",
+    "exitCode": 1,
+    "signal": null
+  },
+  "targetBirthUtc": "2026-10-09T08:14:53.4374230Z",
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "observedAtUtc": "2026-10-09T08:30:35.5256189Z"
+}

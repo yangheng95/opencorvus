@@ -138,6 +138,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             href={props.source.url}
             data-browser-preview-url={props.source.url}
             aria-label={`${t("chat.source_open_web")}: ${label()}`}
+            onClick={(event) => pauseAutoScrollForReading(event.currentTarget)}
           >
             <Show when={props.showIndex}>
               <span class="msg-source-chip__index">{props.index + 1}</span>
@@ -154,7 +155,10 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             as="button"
             type="button"
             class="msg-source-chip"
-            onClick={() => void openSourceFile(props.source)}
+            onClick={(event) => {
+              pauseAutoScrollForReading(event.currentTarget)
+              void openSourceFile(props.source)
+            }}
             aria-label={`${t("chat.source_open_file")}: ${detail()}`}
           >
             <Show when={props.showIndex}>
@@ -237,39 +241,46 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
     return `sources:${first?.sessionID || ""}:${first?.messageID || ""}:${first?.sourceId || ""}`
   }
   const expanded = () => cardExpanded(key(), false)
+  const entries = () => (
+    <Key each={props.sources} by={sourceIdentity}>
+      {(source, index) => <SourceEntry source={source()} index={index()} showIndex={props.sources.length > 1} />}
+    </Key>
+  )
   return (
-    <Disclosure.Root
-      class="msg-sources"
-      aria-label={t("chat.sources")}
-      data-ui="message-sources"
-      open={expanded()}
-      onOpenChange={(open) => setCardExpanded(key(), open)}
-    >
-      <Disclosure.Trigger
-        class="msg-sources__heading"
-        onClick={(event) => {
-          if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
-        }}
-        aria-label={`${t("chat.sources")}: ${preview()} (${props.sources.length})`}
-        title={preview()}
-        indicatorPosition="end"
-      >
-        <Show when={props.sources[0]}>{(source) => <Icon name={sourceIcon(source())} size="compact" />}</Show>
-        <Show when={preview()} fallback={<span class="msg-sources__preview">{t("chat.sources")}</span>}>
-          <span class="msg-sources__preview">{preview()}</span>
-        </Show>
-        <span class="msg-sources__count">{props.sources.length}</span>
-      </Disclosure.Trigger>
-      <Show when={expanded()}>
-        <Disclosure.Content class="msg-sources__list">
-          <Key
-            each={props.sources}
-            by={sourceIdentity}
+    <Show
+      when={props.sources.length === 1}
+      fallback={
+        <Disclosure.Root
+          class="msg-sources"
+          aria-label={t("chat.sources")}
+          data-ui="message-sources"
+          open={expanded()}
+          onOpenChange={(open) => setCardExpanded(key(), open)}
+        >
+          <Disclosure.Trigger
+            class="msg-sources__heading"
+            onClick={(event) => {
+              if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
+            }}
+            aria-label={`${t("chat.sources")}: ${preview()} (${props.sources.length})`}
+            title={preview()}
+            indicatorPosition="end"
           >
-            {(source, index) => <SourceEntry source={source()} index={index()} showIndex={props.sources.length > 1} />}
-          </Key>
-        </Disclosure.Content>
-      </Show>
-    </Disclosure.Root>
+            <Show when={props.sources[0]}>{(source) => <Icon name={sourceIcon(source())} size="compact" />}</Show>
+            <Show when={preview()} fallback={<span class="msg-sources__preview">{t("chat.sources")}</span>}>
+              <span class="msg-sources__preview">{preview()}</span>
+            </Show>
+            <span class="msg-sources__count">{props.sources.length}</span>
+          </Disclosure.Trigger>
+          <Show when={expanded()}>
+            <Disclosure.Content class="msg-sources__list">{entries()}</Disclosure.Content>
+          </Show>
+        </Disclosure.Root>
+      }
+    >
+      <div class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources">
+        {entries()}
+      </div>
+    </Show>
   )
 }

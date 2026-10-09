@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [原网页来源体验230](records/2026-10/2026-10-09-source-url-experience-230.md)：单条直接引用；原自然网页/文件实际打开，切换、重开及中文深色复核，网页after截止失败保留。
+
 - [浏览器标签生命周期229](records/2026-10/2026-10-09-browser-tab-lifecycle-229.md)：工具切换丢失草稿的真实寿命调查。
 
 - [浏览器可用性228](records/2026-10/2026-10-09-browser-availability-228.md)：真实空白反馈与复制结果核查。
