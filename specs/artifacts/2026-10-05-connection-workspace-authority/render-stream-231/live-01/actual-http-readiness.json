@@ -1,0 +1,106 @@
+{
+  "finalUiUri": "http://127.0.0.1:18159/ui/",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18159,
+      "OwningProcess": 69788
+    }
+  ],
+  "uiStatus": 200,
+  "assetStatus": 200,
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "uiUri": "http://127.0.0.1:18159/ui",
+  "owner": {
+    "observedAtUtc": "2026-10-09T08:47:13.8886971Z",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\runtime",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\evidence",
+    "evidencePrefix": "render-stream-231-live-01",
+    "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\startup.json",
+    "occurrence": "render-stream-231-live-01-ec6f40fd-ecfd-44b5-988b-a41afa354d88",
+    "port": 18159,
+    "owner": {
+      "processInstanceID": "win32:639271324332603055",
+      "ProcessId": 69788
+    },
+    "observedProcessChain": [
+      {
+        "processInstanceID": "win32:639271324332603055",
+        "ProcessId": 69788
+      }
+    ],
+    "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\render-stream-231-live-01\\task-selection.json",
+    "taskSelectionRequired": false,
+    "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\render-stream-231\\builtin.json",
+    "profileSelection": {
+      "kind": "builtin",
+      "id": "base",
+      "namespace": "builtin"
+    },
+    "handleAdmissionMilliseconds": 600000,
+    "environmentNames": [
+      "APPDATA",
+      "ComSpec",
+      "HOME",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "LOCALAPPDATA",
+      "OPENCORVUS_DISABLE_AUTOUPDATE",
+      "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+      "OPENCORVUS_HOME",
+      "OPENCORVUS_TASK_PROCESS_MODE",
+      "PATH",
+      "PATHEXT",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR",
+      "XDG_CACHE_HOME",
+      "XDG_CONFIG_HOME",
+      "XDG_DATA_HOME",
+      "XDG_STATE_HOME"
+    ],
+    "taskProcessMode": "native",
+    "promptProfile": "base",
+    "requestBudget": 12,
+    "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+    "inactivityMilliseconds": 180000,
+    "taskMaximumMilliseconds": 900000,
+    "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+    "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+    "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+    "uiAutomation": "None",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\render-stream-231\\live-01",
+    "qualificationKind": "NativeService",
+    "host": {
+      "pid": 62996,
+      "processInstanceID": "win32:639271324324936971",
+      "occurrenceID": "4b061d61-76d7-4719-978a-dc8240951e24"
+    },
+    "nativeTarget": {
+      "pid": 69788,
+      "processInstanceID": "win32:639271324332603055",
+      "occurrenceID": "687039a2-b2c5-456b-8862-bed472224ee8"
+    },
+    "targetBirthAtMs": 1791535633260,
+    "nativeDeadlineAt": 1791536232479,
+    "preparationMaximumMilliseconds": 600000
+  },
+  "scriptSrc": "http://127.0.0.1:18159/ui/assets/main-DuXM4N1d.js",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "render-stream-231-live-01-ec6f40fd-ecfd-44b5-988b-a41afa354d88",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18159",
+    "pid": 69788
+  },
+  "observedAtUtc": "2026-10-09T08:47:52.2632549Z",
+  "asset": "/ui/assets/main-DuXM4N1d.js"
+}

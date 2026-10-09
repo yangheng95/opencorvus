@@ -1,0 +1,112 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...":
+      - generic: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+    - img "Running":
+    - button "More actions":
+    - button "Collapse Anonymous d1d6e8" [expanded]:
+      - generic: Anonymous d1d6e8
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...":
+        - generic: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+      - img "Running":
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18159":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+  - status
+  - button "Project actions":
+  - generic "Running":
+    - generic: Running
+  - button "Side chat":
+  - button "Environment information":
+  - button "Open right dock":
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md（offset=1，limit=12），然后以原文件真实标题作为开头，输出一份 Sources 阅读体验评审建议，作为普通会话直接回复。请用中文写 12 个有具体建议的小节，每节 100 到 150 字，涵盖来源辨识、链接打开、键盘操作、阅读位置、加载反馈和错误恢复；包含两张各四行的对比表，以及两段只作说明的短代码块。明确建议是你的评审意见，不要把此 README 当作已包含这些功能的证据。最后引用这份原文件。不要读取其他文件、浏览网页、创建或修改文件，不要调用或委托任何 agent。
+    - article:
+      - generic: chat
+      - generic "Session ran for 8s (between first message and terminal status)": 8s
+      - button "read · C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md @1+12 (1 lines)":
+        - generic: read
+        - generic: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md @1+12 (1 lines)
+      - group "Sources":
+        - 'button "Open source file: README.md"':
+          - generic: README.md
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize" [disabled]:
+      - /placeholder: Your message is being processed…
+  - button [disabled]
+  - button "Add supported files" [disabled]:
+  - generic "Repository-aware coding and software work.":
+    - generic: Code
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access" [disabled]:
+    - generic: Full access
+  - button "OpenCorvus model openai/gpt-6.1-sol. Click to change.":
+    - generic "openai/gpt-6.1-sol"
+  - button "Stop":
+    - generic: Stop
+  - button:
+  - button:

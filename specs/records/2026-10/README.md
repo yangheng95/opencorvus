@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [共享文本流式231](2026-10-09-render-stream-231.md)：先真实流式再按证据决定修改。
+
 - [原网页来源体验230](2026-10-09-source-url-experience-230.md)：单agent实现单条直接引用，真实原网页/文件打开与阅读返回，固定截止失败保留。
 
 - [浏览器标签生命周期229](2026-10-09-browser-tab-lifecycle-229.md)：单agent保留仍open的Browser owner，核查关闭及多tab。

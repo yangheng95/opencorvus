@@ -1,0 +1,150 @@
+- banner:
+  - button "Hide sidebar" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "File":
+      - generic: File
+    - menuitem "Edit":
+      - generic: Edit
+    - menuitem "View":
+      - generic: View
+    - menuitem "Help":
+      - generic: Help
+- main:
+  - navigation "Chat shortcuts":
+    - generic "Chat shortcuts":
+      - button "Chats":
+        - generic: Chats
+      - button "Mission Board":
+        - generic: Mission Board
+      - button "Scheduled":
+        - generic: Scheduled
+      - button "Expert Squads":
+        - generic: Expert Squads
+      - button "More":
+        - generic: More
+      - button "Settings":
+        - generic: Settings
+    - button "About":
+    - button "OpenCorvus menu":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "Search chats or run a command":
+  - button "Mailbox":
+  - complementary:
+    - generic "Chat navigation":
+      - button "New chat":
+        - generic: New chat
+    - generic: Projects
+    - button "Organize sidebar":
+    - button "Create project":
+    - button "Collapse project" [expanded]:
+      - generic: project
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...":
+      - generic: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+    - img "Running":
+    - button "More actions":
+    - button "Collapse Anonymous d1d6e8" [expanded]:
+      - generic: Anonymous d1d6e8
+    - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "More actions":
+    - region "Recents":
+      - generic: Recents
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...":
+        - generic: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+      - img "Running":
+      - button "More actions":
+      - generic "A direct conversation for interactive work in one project; it does not coordinate child Tasks.":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "More actions":
+    - generic "Connection Diagnostics":
+      - generic "Connection Diagnostics · Online · Port 18159":
+        - generic: Online
+  - separator "Resize left panel"
+  - generic "Loading task"
+  - generic: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/...
+  - status
+  - button "Project actions":
+  - generic "Running":
+    - generic: Running
+  - button "Side chat":
+  - button "Environment information":
+  - button "Open right dock":
+  - generic "Conversation":
+    - article:
+      - generic: User
+      - paragraph: 请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md（offset=1，limit=12），然后以原文件真实标题作为开头，输出一份 Sources 阅读体验评审建议，作为普通会话直接回复。请用中文写 12 个有具体建议的小节，每节 100 到 150 字，涵盖来源辨识、链接打开、键盘操作、阅读位置、加载反馈和错误恢复；包含两张各四行的对比表，以及两段只作说明的短代码块。明确建议是你的评审意见，不要把此 README 当作已包含这些功能的证据。最后引用这份原文件。不要读取其他文件、浏览网页、创建或修改文件，不要调用或委托任何 agent。
+    - article:
+      - generic: chat
+      - generic "Session ran for 39s (between first message and terminal status)": 39s
+      - button "read · C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md @1+12 (1 lines)":
+        - generic: read
+        - generic: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/render-stream-231-live-01/project/README.md @1+12 (1 lines)
+      - group "Sources":
+        - 'button "Open source file: README.md"':
+          - generic: README.md
+      - heading "Isolated formal Task resource qualification" [level=1]
+      - paragraph:
+        - text: 以下是我对
+        - strong: Sources 阅读体验的评审建议
+        - text: ，不是对现有功能的确认。按指定范围读取的 README 只有上述标题，未提供界面、交互或实现信息；因此，下面的方案均属于评审意见，不能将该文件作为产品已具备这些功能的证据。
+      - heading "1. 来源辨识：让用户先判断，再阅读" [level=2]
+      - paragraph: 建议每条来源同时展示文档标题、来源域名或文件路径、内容类型，并将作者与发布日期作为辅助信息。不要只显示编号或图标，否则用户难以判断可信度与相关性。标题缺失时应明确标注“未提供标题”，避免自动生成的名称被误认为原文标题；完整地址可按需展开查看。
+      - heading "2. 来源层级：区分原文、摘录与评审" [level=2]
+      - paragraph: 建议在阅读区域明确区分原始内容、引用摘录和助手评审，分别使用稳定的标签与视觉层级。摘录应保留可定位的页码或行号，评审则明确标注为意见。不要仅依靠颜色表达区别，也不要把摘要放在原文标题下却不说明性质，避免读者将概括或推断误认成来源中的陈述。
+      - table:
+        - rowgroup:
+          - row "信息类别 易混淆的呈现方式 建议方式":
+            - columnheader "信息类别"
+            - columnheader "易混淆的呈现方式"
+            - columnheader "建议方式"
+        - rowgroup:
+          - row "原文 与摘要连续排列 标注“原文”，保留出处":
+            - cell "原文"
+            - cell "与摘要连续排列"
+            - cell "标注“原文”，保留出处"
+          - row "摘录 只有引号，无定位 附页码、行号或段落":
+            - cell "摘录"
+            - cell "只有引号，无定位"
+            - cell "附页码、行号或段落"
+          - row "摘要 使用原文同样的样式 明确标注“摘要”":
+            - cell "摘要"
+            - cell "使用原文同样的样式"
+            - cell "明确标注“摘要”"
+          - row "评审意见 混入来源正文 独立区域标注“评审意见”":
+            - cell "评审意见"
+            - cell "混入来源正文"
+            - cell "独立区域标注“评审意见”"
+      - heading "3. 链接打开：明确目的地与打开方式" [level=2]
+      - paragraph: 建议点击前就能识别链接将打开外部网页、内部阅读面板还是本地文件，并提供完整地址预览。普通点击采用一致的打开方式，另设清晰的“在浏览器打开”入口。打开失败时保留当前阅读界面，不要用空白页面替换内容；也不要把链接可点击等同于来源已成功读取或验证。
+      - heading "4. 引用跳转：抵达具体内容而非首页" [level=2]
+      - paragraph: 建议引用入口优先跳转至对应段落、页码或行号，而不是只打开来源首页。抵达后短暂突出目标内容，并保留上下文，避免读者只看到孤立句子。若原文更新导致定位失效，应说明“引用位置无法匹配”，允许查看完整来源，但不能悄悄跳到其他段落并表现为定位成功。
+      - heading "5. 键盘操作：建立完整可达的路径" [level=2]
+      - generic: 建议 Sources 列表、展开按钮、原
+  - separator "Drag to resize the message input"
+  - generic "Drag files here · Drag the top edge to resize":
+    - textbox "Drag files here · Drag the top edge to resize" [disabled]:
+      - /placeholder: Your message is being processed…
+  - button [disabled]
+  - button "Add supported files" [disabled]:
+  - generic "Repository-aware coding and software work.":
+    - generic: Code
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "Authorization mode, currently Full access" [disabled]:
+    - generic: Full access
+  - button "OpenCorvus model openai/gpt-6.1-sol. Click to change.":
+    - generic "openai/gpt-6.1-sol"
+  - button "Stop":
+    - generic: Stop
+  - button:
+  - button:

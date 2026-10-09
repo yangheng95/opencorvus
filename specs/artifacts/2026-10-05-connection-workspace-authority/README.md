@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [共享文本真实流式231 Recall](render-stream-plan-231.md) / [实际页面与原事实](render-stream-231/README.md)：新单agentSol自然Source与长分段/表格/代码、阅读/terminal/Enter真页面，5stream EOF与Native/foreground0；限定观察未复现Rendering，不作推测补丁。
+
 - [原网页来源体验230 Recall](source-url-experience-plan-230.md) / [真实网页](source-url-experience-230/README.md) / [共享文件](source-single-file-230/README.md) / [文件准入](source-single-file-readiness-230/README.md)：单条直接引用，原研究员click/Enter/切换/重开/中文深色与文件实测；两个网页after截止失败保留。
 
 - 230原153完整fresh准入：[before01](source-url-experience-readiness-230-before01/README.md)、[after01](source-url-experience-readiness-230-after01/README.md)、[after02](source-url-experience-readiness-230-after02/README.md)。完整当前配置、持久化终态和全部恢复前沿人工审查后才启动。
