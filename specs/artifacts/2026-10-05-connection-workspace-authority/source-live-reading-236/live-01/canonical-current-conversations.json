@@ -1,0 +1,701 @@
+{
+  "observedAtUtc": "2026-10-09T12:26:50.275Z",
+  "access": "Actual current completed canonical SQLite readonly BEGIN/ROLLBACK; metadata and output sizes, no source mutation",
+  "sessions": [
+    {
+      "id": "ses_hlOuXdC4vb60vuS1jylR",
+      "project_id": "prj_h1n2ZzkqpfIn3w1ErUDO",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-live-reading-236-live-01\\runtime\\data\\projects\\2026\\10\\09\\67a29370-b189-4803-a57c-568aacaa13fd",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "Reply with OK.",
+      "metadata": "{\"globalChatStart\":{\"version\":2,\"requestID\":\"916a1eb6-cfd4-473d-b9e6-0cd814b986b3\",\"requestFingerprint\":\"0db01d013cf24c5ea85533cc0ffc391d851694d1b70bc638c9aae892bbe61543\",\"messageID\":\"msg_hc6QLiSUkBQKOICHUQDb\"},\"conversation\":{\"experience\":\"chat\",\"surface\":\"right-sidebar\"},\"configOverlay\":{\"model\":\"openai/gpt-6.1-sol\",\"prompt_profile\":{\"active\":\"base\"}}}"
+    },
+    {
+      "id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "project_id": "prj_hg4TMU2SHTliU3ZGbN7B",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-live-reading-236-live-01\\project",
+      "kind": "assistant",
+      "parent_id": null,
+      "title": "请只读搜索 W3C/WAI 和 MDN 关于键盘操作与可见焦点的官方资料，先用中文写一份简短对比并附真实来源，再写八个有具体建议的 Sources 阅读体...",
+      "metadata": "{\"conversation\":{\"experience\":\"work\",\"surface\":\"right-sidebar\"}}"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_hc6QLiSUkBQKOICHUQDb",
+      "sessionID": "ses_hlOuXdC4vb60vuS1jylR",
+      "role": "user",
+      "author": "user",
+      "agent": "chat",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791548290073
+      }
+    },
+    {
+      "id": "msg_g0VXYQ36k00evaEYBuq1",
+      "sessionID": "ses_hlOuXdC4vb60vuS1jylR",
+      "role": "assistant",
+      "author": "chat",
+      "agent": "chat",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548290462,
+        "completed": 1791548294051
+      },
+      "finish": "stop"
+    },
+    {
+      "id": "msg_85f82128-5fca-470c-9c05-55c059b741cf",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "user",
+      "author": "user",
+      "agent": "work",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "time": {
+        "created": 1791548439128
+      }
+    },
+    {
+      "id": "msg_g0VXYQfqA0060o5oUf29",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548439350,
+        "completed": 1791548447158
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQht800NJKCHnr2i",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548447222,
+        "completed": 1791548452187
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQjCK00wIJzC2E7G",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548452256,
+        "completed": 1791548457544
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQkae006M1dIUzzw",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548457608,
+        "completed": 1791548463784
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQmDR00IX99wgwCv",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548463857,
+        "completed": 1791548470328
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQnv600O3v6PJoo7",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548470408,
+        "completed": 1791548476173
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQpQf00lEm7iE6DB",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548476209,
+        "completed": 1791548482711
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQr8F00DU2rPIsHP",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548482755,
+        "completed": 1791548486877
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQsDK00WUMNQNe4e",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548486914,
+        "completed": 1791548494995
+      },
+      "finish": "tool-calls"
+    },
+    {
+      "id": "msg_g0VXYQuLU00xhAHCpWG3",
+      "sessionID": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "role": "assistant",
+      "author": "work",
+      "agent": "work",
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "time": {
+        "created": 1791548495108,
+        "completed": 1791548495480
+      },
+      "finish": "error",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Error: E2E_REQUEST_BUDGET_EXHAUSTED"
+        }
+      }
+    }
+  ],
+  "parts": [
+    {
+      "id": "prt_hxwNRcL03fGMTD4zb3IF",
+      "messageID": "msg_hc6QLiSUkBQKOICHUQDb",
+      "type": "text",
+      "textChars": 14
+    },
+    {
+      "id": "prt_g0VXYQ3HF00ArkQQTH8Z",
+      "messageID": "msg_g0VXYQ36k00evaEYBuq1",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQ3uf002S4lGbk3A",
+      "messageID": "msg_g0VXYQ36k00evaEYBuq1",
+      "type": "text",
+      "textChars": 2,
+      "time": {
+        "start": 1791548293724,
+        "end": 1791548293724
+      }
+    },
+    {
+      "id": "prt_g0VXYQ41g00nebPohpJI",
+      "messageID": "msg_g0VXYQ36k00evaEYBuq1",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQfma00UXWX9sIE5",
+      "messageID": "msg_85f82128-5fca-470c-9c05-55c059b741cf",
+      "type": "text",
+      "textChars": 165
+    },
+    {
+      "id": "prt_g0VXYQfxf00MIyFIOJgl",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQgeu00t35Cdwcdu",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "text",
+      "textChars": 89,
+      "time": {
+        "start": 1791548444220,
+        "end": 1791548444220
+      }
+    },
+    {
+      "id": "prt_g0VXYQhqi00dbJnn17tc",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "source-url",
+      "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQhqn000OwOCjC3y",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "source-url",
+      "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQhqr008nUMDl0If",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "source-url",
+      "sourceId": "3ef3b2d14cd2cc759e11966654e91ad398945b55d88a17c65f83c55313a7ab3c",
+      "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI",
+      "url": "https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQhqu00wdUvybyvO",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "source-url",
+      "sourceId": "bd29872d737522444fe8644c7bb0fbcd189315dac78fc58d13d770e1359b0bb8",
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQhqx00mJfCqTcEp",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "source-url",
+      "sourceId": "b2f3162ca219c37507a795dee0d25f122ace55884fcadfd5e7dc9a9175c19dd6",
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG21/Understanding/focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQhr100b7G9wzWl9",
+      "messageID": "msg_g0VXYQfqA0060o5oUf29",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQhxy00GJ1tXN94k",
+      "messageID": "msg_g0VXYQht800NJKCHnr2i",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQjA600EsWk9j17N",
+      "messageID": "msg_g0VXYQht800NJKCHnr2i",
+      "type": "source-url",
+      "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+      "title": "Keyboard accessible - MDN Web Docs - Mozilla",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQjA900rPWsyJsek",
+      "messageID": "msg_g0VXYQht800NJKCHnr2i",
+      "type": "source-url",
+      "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+      "title": "focus-visible CSS pseudo-class - MDN Web Docs",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQjAC00Dao9aqAe6",
+      "messageID": "msg_g0VXYQht800NJKCHnr2i",
+      "type": "source-url",
+      "sourceId": "114260335df5c87b1da545dd62ca4b7cc60dc161455b89e6f5c0166b274b5c92",
+      "title": "tabindex HTML global attribute - HTML | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/tabindex",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQjAF00pmDo6tNjQ",
+      "messageID": "msg_g0VXYQht800NJKCHnr2i",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQjGv00mUP2gwIiq",
+      "messageID": "msg_g0VXYQjCK00wIJzC2E7G",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQkYW007MlcXDqAn",
+      "messageID": "msg_g0VXYQjCK00wIJzC2E7G",
+      "type": "source-url",
+      "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+      "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYQkYa00B3LNkncuT",
+      "messageID": "msg_g0VXYQjCK00wIJzC2E7G",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQkfB00H78Mo8Bve",
+      "messageID": "msg_g0VXYQkae006M1dIUzzw",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQmBG00oXfhGey4O",
+      "messageID": "msg_g0VXYQkae006M1dIUzzw",
+      "type": "source-url",
+      "sourceId": "3ef3b2d14cd2cc759e11966654e91ad398945b55d88a17c65f83c55313a7ab3c",
+      "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYQmBJ00DEVKQZYxI",
+      "messageID": "msg_g0VXYQkae006M1dIUzzw",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQmI000TakPZ6ci0",
+      "messageID": "msg_g0VXYQmDR00IX99wgwCv",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQnse00yCg3jlrvP",
+      "messageID": "msg_g0VXYQmDR00IX99wgwCv",
+      "type": "source-url",
+      "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+      "title": "Keyboard accessible - Accessibility | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYQnsi006WA2CRm98",
+      "messageID": "msg_g0VXYQmDR00IX99wgwCv",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQnzx005kU4wtTaP",
+      "messageID": "msg_g0VXYQnv600O3v6PJoo7",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQpLX00C6Oxu6Qfj",
+      "messageID": "msg_g0VXYQnv600O3v6PJoo7",
+      "type": "source-url",
+      "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+      "title": ":focus-visible CSS pseudo-class - CSS | MDN",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYQpPD00bO4f7K83U",
+      "messageID": "msg_g0VXYQnv600O3v6PJoo7",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQpVw00OD7r8z0uj",
+      "messageID": "msg_g0VXYQpQf00lEm7iE6DB",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQqPy00QSjpKpxYv",
+      "messageID": "msg_g0VXYQpQf00lEm7iE6DB",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791548480010,
+        "end": 1791548480016
+      }
+    },
+    {
+      "id": "prt_g0VXYQr6M007D26p2t3V",
+      "messageID": "msg_g0VXYQpQf00lEm7iE6DB",
+      "type": "source-url",
+      "sourceId": "cf780536df2ba38899e840a08d79799009ca1af2994907edb6275a7bad4de27a",
+      "title": "Understanding WCAG 2.2 | WAI",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQr6P00wKv37D9FV",
+      "messageID": "msg_g0VXYQpQf00lEm7iE6DB",
+      "type": "source-url",
+      "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+      "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQr6S00oKI13K2mg",
+      "messageID": "msg_g0VXYQpQf00lEm7iE6DB",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQrDS00L61TIBSXW",
+      "messageID": "msg_g0VXYQr8F00DU2rPIsHP",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQsBm006pJKMGvyt",
+      "messageID": "msg_g0VXYQr8F00DU2rPIsHP",
+      "type": "source-url",
+      "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+      "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "provider": "opencorvus-webfetch"
+    },
+    {
+      "id": "prt_g0VXYQsBp00yY92yADnP",
+      "messageID": "msg_g0VXYQr8F00DU2rPIsHP",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQsId00SyC71oj4K",
+      "messageID": "msg_g0VXYQsDK00WUMNQNe4e",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXYQtcA00OIkbDcktc",
+      "messageID": "msg_g0VXYQsDK00WUMNQNe4e",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791548492298,
+        "end": 1791548492301
+      }
+    },
+    {
+      "id": "prt_g0VXYQuIU002wL6nKezf",
+      "messageID": "msg_g0VXYQsDK00WUMNQNe4e",
+      "type": "source-url",
+      "sourceId": "209176ff7328dc6b5b090ddb83f87737cb8763713312aaa9270c1a78ade66b04",
+      "title": "Understanding Success Criterion 2.1.2: No Keyboard Trap | WAI | W3C",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html",
+      "provider": "exa"
+    },
+    {
+      "id": "prt_g0VXYQuIY005e5STl61w",
+      "messageID": "msg_g0VXYQsDK00WUMNQNe4e",
+      "type": "step-finish"
+    },
+    {
+      "id": "prt_g0VXYQuQc00NzisgvIdp",
+      "messageID": "msg_g0VXYQuLU00xhAHCpWG3",
+      "type": "step-start"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXYQh6n00Dvz0W96Mk",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_17e92dd066964756bc04c400afcb8d7c\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.w3.org WAI WCAG Understanding keyboard focus visible 2.1.1 2.4.7\",\"numResults\":5},\"time\":{\"start\":1791548444225}}"
+    },
+    {
+      "id": "prt_g0VXYQiiL00X7Q4v3d8c",
+      "message_id": "msg_g0VXYQht800NJKCHnr2i",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_a014d806559c4ff7a9cf6c77fcf902f1\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.developer.mozilla.org keyboard accessible focus-visible tabindex accessibility\",\"numResults\":3},\"time\":{\"start\":1791548450397}}"
+    },
+    {
+      "id": "prt_g0VXYQk2n00jo21hrose",
+      "message_id": "msg_g0VXYQjCK00wIJzC2E7G",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_fcbb653434184409a323f6cc08a96ef7\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548455509}}"
+    },
+    {
+      "id": "prt_g0VXYQltE00077Wv6fF8",
+      "message_id": "msg_g0VXYQkae006M1dIUzzw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_92827012d41e4e5c8a8afde43641fb8a\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548462604}}"
+    },
+    {
+      "id": "prt_g0VXYQnSV00GMKx2t6bK",
+      "message_id": "msg_g0VXYQmDR00IX99wgwCv",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_b7645d90f8ee4b61a1656ecf3b37f47d\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548468635}}"
+    },
+    {
+      "id": "prt_g0VXYQp1400uQPZXBrAU",
+      "message_id": "msg_g0VXYQnv600O3v6PJoo7",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_d4fdae1975c04f24923511e513f69920\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548474622}}"
+    },
+    {
+      "id": "prt_g0VXYQqVX00nSfm4MkwE",
+      "message_id": "msg_g0VXYQpQf00lEm7iE6DB",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_649093340529416a98d9488ff23e73ae\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.w3.org/WAI/WCAG22/Understanding \\\"No Keyboard Trap\\\" \\\"Focus Not Obscured (Minimum)\\\"\",\"numResults\":2},\"time\":{\"start\":1791548480355}}"
+    },
+    {
+      "id": "prt_g0VXYQrt800mGYHxoVCU",
+      "message_id": "msg_g0VXYQr8F00DU2rPIsHP",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_c822af0a97284daf873c32b49ccfa623\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/TR/WCAG22/\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548485662}}"
+    },
+    {
+      "id": "prt_g0VXYQtgF00Ki8tfjEvd",
+      "message_id": "msg_g0VXYQsDK00WUMNQNe4e",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_12bee5ca0dba4c7fbcabf8734a9edca5\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html\",\"numResults\":1},\"time\":{\"start\":1791548492551}}"
+    }
+  ],
+  "outcomes": [
+    {
+      "requestPartID": "prt_g0VXYQh6n00Dvz0W96Mk",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 5
+          }
+        ],
+        "resultCount": 5,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548447065
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQiiL00X7Q4v3d8c",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 3
+          }
+        ],
+        "resultCount": 3,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548452112
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQk2n00jo21hrose",
+      "metadata": {
+        "originalBytes": 11013,
+        "shownBytes": 11013,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548457472
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQltE00077Wv6fF8",
+      "metadata": {
+        "originalBytes": 15888,
+        "shownBytes": 15888,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548463718
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQnSV00GMKx2t6bK",
+      "metadata": {
+        "originalBytes": 31213,
+        "shownBytes": 31213,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548470250
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQp1400uQPZXBrAU",
+      "metadata": {
+        "originalBytes": 129238,
+        "shownBytes": 50665,
+        "omittedBytes": 78573,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548475886
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQqVX00nSfm4MkwE",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 2
+          }
+        ],
+        "resultCount": 2,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548482634
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQrt800mGYHxoVCU",
+      "metadata": {
+        "originalBytes": 269785,
+        "shownBytes": 50679,
+        "omittedBytes": 219106,
+        "webfetchOutputClipped": true,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548486813
+      }
+    },
+    {
+      "requestPartID": "prt_g0VXYQtgF00Ki8tfjEvd",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 1
+          }
+        ],
+        "resultCount": 1,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791548494915
+      }
+    }
+  ]
+}

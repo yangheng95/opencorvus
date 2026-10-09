@@ -1,0 +1,44 @@
+{
+  "targetBirthUtc": "2026-10-09T12:18:02.4215441Z",
+  "nativeTerminal": {
+    "occurrenceID": "source-live-reading-236-live-01-0b3fb850-d61d-4cbd-b106-9975bd9c2cf7",
+    "pid": 68708,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "observedAtUtc": "2026-10-09T12:41:41.4870414Z",
+  "files": [
+    {
+      "birthUtc": "2026-10-09T12:18:03.3387728Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-live-reading-236\\generated-bun-live01\\091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "name": "091d165574530ade.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T12:18:03.3069049Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-live-reading-236\\generated-bun-live01\\69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "name": "69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T12:18:03.2752492Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-live-reading-236\\generated-bun-live01\\7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "name": "7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T12:18:03.2812499Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-live-reading-236\\generated-bun-live01\\cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "name": "cf86f20c120ce818.debug.pile"
+    },
+    {
+      "birthUtc": "2026-10-09T12:18:03.3599802Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-live-reading-236\\generated-bun-live01\\f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "name": "f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0."
+}

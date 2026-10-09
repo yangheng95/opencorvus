@@ -1,0 +1,395 @@
+{
+  "observedAtUtc": "2026-10-09T12:26:50.387Z",
+  "access": "Actual readonly canonical BEGIN/ROLLBACK after physical closure",
+  "sources": [
+    {
+      "id": "prt_g0VXYQhqi00dbJnn17tc",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI",
+        "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nmay be situations where ... /pointer users could also benefit from having a ... indicator, even though they did not set focus to an ... using the keyboard. As a best practice, consider still ... for these cases\n...\nFocus indicators are visual information required to identify the focused state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the Relationship with Focus Visible section of Understanding 1.4.11 Non-text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\nindicate when a\n...\n- Element in sequential focus order has visible focus",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQhqn000OwOCjC3y",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "45df88dce2544f79fdef3a9e10e41dd2116dd3feb8b89ce785330d9fc3b5aa8f",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+        "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nmay be situations where ... /pointer users could also benefit from having a ... indicator, even though they did not set focus to an ... using the keyboard. As a best practice, consider still ... for these cases\n...\nFocus indicators are visual information required to identify the focused state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the Relationship with Focus Visible section of Understanding 1.4.11 Non-text Contrast for details and examples.\n\nNew in WCAG 2.2: Keyboard focus indicators can take different forms. While this criterion does not specify what that form is, 2.4.13 Focus Appearance (Level AAA) provides guidance on creating a consistent, visible indicator, dealing with issues such as its size and shape.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, 2.4.13, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11, 2.4.7 and 2.4.13 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\nindicate when a\n...\n- Element in sequential focus order has visible focus",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQhqr008nUMDl0If",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "3ef3b2d14cd2cc759e11966654e91ad398945b55d88a17c65f83c55313a7ab3c",
+        "url": "https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html",
+        "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI",
+        "snippet": "Understanding Success Criterion 2.1.1: Keyboard | WAI | W3C\n...\n## Success Criterion (SC)\n\nAll functionality of the content is operable through a keyboard interface without requiring specific timings for individual keystrokes, except where the underlying function requires input that depends on the path of the user's movement and not just the endpoints. \n\nNote 1\n...\nThe intent of this success criterion is to ensure that, wherever possible, content can be operated through a keyboard or keyboard interface (so an alternate keyboard can be used). When content can be operated through a keyboard or alternate keyboard, it is operable by people with no vision (who cannot use devices such as mice that require eye-hand coordination) as well as by people who must use alternate keyboards or input devices that act as keyboard emulators. Keyboard emulators include speech input software, sip-and-puff software, on-screen keyboards, scanning software and a variety of assistive technologies and alternate keyboards. Individuals with low vision also may have trouble tracking a pointer and find the use of software much easier (or only possible) if they can control it from the keyboard.\n...\nthe keyboard ( ... example, clicking, ... , sizing). However ... there is a ... the keyboard in any known ... requiring an in ... number of keystrokes. Free ... drawing, or watercolor painting require ... . Drawing straight lines, regular geometric shapes, re-sizing windows and ... objects to a location (when the ... location is not relevant) do not require path dependent input.\n...\nFor instance, buttons that have focus can generally be activated using both the Enter key and the Space bar. If a custom button control in a web application instead only reacts to Enter (or even a completely custom key or key combination), this still satisfies the requirements of this success criterion.\n...\nThis success criterion does not require that every visible control that can be activated using a mouse or touchscreen must also be focusable and actionable using the keyboard. The normative requirement is only that there must be a way for keyboard interface users to perform the same, or comparable, actions and to operate the content. Generally, the easiest way to achieve this is to provide controls that can be operated with all possible input devices; however, if a web application implements a separate mode of operation for keyboard interface users, it will not fail the success criterion. However, authors are advised to consider how users will discover any keyboard equivalents which are available.\n...\n- G202: Ensuring keyboard control for all functionality\n- Ensuring keyboard control using one of the following techniques: \n\n- H91: Using HTML form controls and links\n- PDF3: Ensuring correct tab and reading order in PDF documents\n- PDF11: Providing links and link text using the Link annotation and the /Link structure element in PDF documents\n- PDF23: Providing interactive form controls in PDF documents\n- G90: Providing keyboard-triggered event handlers using one of the following techniques: \n\n- SCR20: Using both keyboard and other device-specific functions\n- SCR35: Making actions keyboard accessible by using the onclick event of anchors and buttons\n- SCR2: Using redundant keyboard and mouse event handlers\n...\n### Failures\n\n The following are common mistakes that are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F54: Failure of Success Criterion 2.1.1 due to using only pointing-device-specific event handlers (including gesture) for a function\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, and 3.2.1 due to using script to remove focus when focus is received\n- F42: Failure of Success Criteria 1.3.1, 2.1.1, 2.1.3, or 4.1.2 when emulating links",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQhqu00wdUvybyvO",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "bd29872d737522444fe8644c7bb0fbcd189315dac78fc58d13d770e1359b0bb8",
+        "url": "https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+        "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nThere may be situations where mouse/pointer users could also benefit from having a visible focus indicator, even though they did not set focus to an element using the keyboard. As a best practice, consider still providing an explicit focus indicator for these cases.\n\nFocus indicators are visual information required to identify the focused state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the Relationship with Focus Visible section of Understanding 1.4.11 Non-text Contrast for details and examples.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are ... are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11 and 2.4.7 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQhqx00mJfCqTcEp",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b2f3162ca219c37507a795dee0d25f122ace55884fcadfd5e7dc9a9175c19dd6",
+        "url": "https://www.w3.org/WAI/WCAG21/Understanding/focus-visible",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+        "snippet": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C\n...\n: Users know which element has keyboard focus.\n...\n: Ensure each item receiving focus has a visible indicator.\n...\n: Without a focus indicator, sighted keyboard users cannot operate the page.\n...\nAny keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.\n...\nThe purpose of this success criterion is to help a person know which element has the keyboard focus. \n\n“Mode of operation” accounts for user agents which may not always show a focus indicator, or only show the focus indicator when the keyboard is used. User agents may optimize when the focus indicator is shown, such as only showing it when a keyboard is used. Authors are responsible for providing at least one mode of operation where the focus is visible. In most cases there is only one mode of operation so this success criterion applies. The focus indicator must not be time limited: when the keyboard focus is shown, it must remain visible.\n...\nThere may be situations where mouse/pointer users could also benefit from having a visible focus indicator, even though they did not set focus to an element using the keyboard. As a best practice, consider still providing an explicit focus indicator for these cases.\n\nFocus indicators are visual information required to identify the focused state of a user interface component. As generally focus indication is provided using non-text content (for instance, using borders/outlines), that means that they are also subject to Success Criterion 1.4.11 Non-text Contrast (Level AA). See the Relationship with Focus Visible section of Understanding 1.4.11 Non-text Contrast for details and examples.\n...\n- This success criterion helps anyone who relies on the keyboard to operate the page, by letting them visually determine the component on which keyboard operations will interact at any point in time. \n- People with attention limitations, short term memory limitations, or limitations in executive processes benefit by being able to discover where the focus is located.\n...\n- When text fields receive focus, a vertical bar is displayed in the field, indicating that the user can insert text, OR all of the text is highlighted, indicating that the user can type over the text. \n- When a user interface control receives focus, a visible border is displayed around it.\n...\n- G149: Using user interface components that are highlighted by the user agent when they receive focus\n- C15: Using CSS to change the presentation of a user interface component when it receives focus\n- G165: Using the default focus indicator for the platform so that high visibility default focus indicators will carry over\n- G195: Using an author-supplied, visible focus indicator\n- C40: Creating a two-color focus indicator to ensure sufficient contrast with all components\n- C45: Using CSS :focus-visible to provide keyboard focus indication\n- SCR31: Using script to change the background color or border of the element with focus\n\n### Failures\n\n The following are ... are considered failures of this success criterion by the Accessibility Guidelines Working Group. \n\n- F55: Failure of Success Criteria 2.1.1, 2.4.7, and 3.2.1 due to using script to remove focus when focus is received\n- F78: Failure of Success Criterion 1.4.11 and 2.4.7 due to styling element outlines and borders in a way that removes or renders non-visible the visual focus indicator\n...\n- Element in sequential focus order has visible focus",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQjA600EsWk9j17N",
+      "message_id": "msg_g0VXYQht800NJKCHnr2i",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - MDN Web Docs - Mozilla",
+        "snippet": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and control it. This includes users of screen readers, but can also include users who have trouble operating a pointing device such as a mouse or trackball, or whose mouse is not working at the moment, or who prefer to use a keyboard for input whenever possible.\n...\nIf an element can be focused using the keyboard, then it should be interactive; that is, the user should be able to do something to it and produce a change of some kind (for example, activating a link or changing an option).\n...\nMost interactive elements are focusable by default; you can make an element focusable by adding a `tabindex=0` attribute value to it. However, you should only add `tabindex` if you have also made the element interactive, for example, by defining appropriate event handlers keyboard events.\n\n## Avoid using `tabindex` attribute greater than zero\n\nThe `tabindex` attribute indicates that an element is focusable using the keyboard. A value of zero indicates that the element is part of the default focus order, which is based on the ordering of elements in the HTML document. A positive value puts the element ahead of those in the default ordering; elements with positive values are focused in the order of their `tabindex` values (1, then 2, then 3, etc.).\n...\n## Interactive elements must be focusable\n\nIf the user can interact with an element (for example, using touch or a pointing device), then it should be focusable using the keyboard. You can make it focusable by adding a `tabindex=0` attribute value to it. That will add the element to the list of elements that can be focused by pressing the Tab key, in the sequence of such elements as defined in the HTML document.\n\n## Focusable element must have focus styling\n\nAny element that can receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes.\n\nStandard focusable elements such as links and input fields are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive.",
+        "publishedAt": "2025-12-17T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQjA900rPWsyJsek",
+      "message_id": "msg_g0VXYQht800NJKCHnr2i",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": "focus-visible CSS pseudo-class - MDN Web Docs",
+        "snippet": "The `:focus-visible` pseudo-class applies while an element matches the `:focus` pseudo-class and the UA (User Agent) determines via heuristics that the focus should be made evident on the element. (Many browsers show a \"focus ring\" by default in this case.)\n\nThis selector is useful to provide a different focus indicator based on the user's input modality (mouse vs. keyboard).\n...\nOriginally, user-agent CSS set focus styles based only on the `:focus` pseudo-class, styling most focused elements with a focus ring outline. This meant all elements, including all links and buttons, had a focus ring applied when focused, which many found ugly. Because of the appearance, some authors removed the user-agent outline focus styles. Changing focus style can decrease usability, while removing focus styles makes keyboard navigation inaccessible for sighted users.\n\nBrowsers no longer visibly indicate focus (such as by drawing a \"focus ring\"), around each element when it has focus. Instead, they use a variety of heuristics to provide focus indicators only when it would be most helpful to the user. For instance, when a button is clicked using a pointing device, the focus is generally not visually indicated, but when a text box needing user input has focus, focus is indicated. While focus styles are always required when users are navigating the page with the keyboard or when focus is managed via scripts, focus styles are not required when the user knows where they are putting focus, such as when they use a pointing device such as a mouse or finger to physically set focus on an element, unless that element continues to need user attention.\n\nThe `:focus` pseudo-class always matches the currently-focused element. The `:focus-visible` pseudo-class also matches the focused element, but only if the user needs to be informed where the focus currently is. Because the `:focus-visible` pseudo-class matches the focused element when needed, using the `:focus-visible` (instead of the `:focus` pseudo-class) allows authors to change the appearance of the focus indicator without changing when the focus indicator appears.\n\nWhen the `:focus` pseudo-class is used, it always targets the currently focused element. This means that when a user employs a pointing device, a visible focus ring appears around the focused element, which some consider obtrusive. The `:focus-visible` pseudo-class respects user agents' selective focus indication behavior while still allowing focus indicator customization.\n...\nMake sure the visual focus indicator can be seen by people with low vision. This will also benefit anyone use a screen in a brightly lit space (like outside in the sun). WCAG 2.1 SC 1.4.11 Non-Text Contrast requires that the visual focus indicator be at least 3 to 1.\n...\nIf you click each element in turn, you will see that when `:focus` is used to style the focus ring, the UA draws the focus ring when the user clicks the button. However, when `:focus-visible` is used to style the focus ring, the UA does not draw the focus ring when the user clicks the button, just like in the default case.\n\nIf you then tab through each element, you will see that in all three cases — default, `:focus`, and `:focus-visible` — the UA draws the focus ring around the button when the user navigates to it with the keyboard.\n\nThis shows how `:focus-visible` enables a designer to follow the browser's logic in determining when a focus ring should be shown.\n...\nIf your code has to work in old browser versions that do not support `:focus-visible`, check supports of `:focus-visible` with `@supports` and repeat the same focus styling in it, but inside a `:focus` rule. Note that even if you do not specify anything at all for `:focus`, old browsers will simply display the native outline, which can be enough.\n...\n@supports not selector(: ... -visible)\n...\n.button.with\n...\n:focus-visible support\n...\noutline: 3px ... ;",
+        "publishedAt": "2026-09-10T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQjAC00Dao9aqAe6",
+      "message_id": "msg_g0VXYQht800NJKCHnr2i",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "114260335df5c87b1da545dd62ca4b7cc60dc161455b89e6f5c0166b274b5c92",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/tabindex",
+        "title": "tabindex HTML global attribute - HTML | MDN",
+        "snippet": "The `tabindex` global attribute allows developers to make HTML elements focusable, allow or prevent them from being sequentially focusable (usually with the Tab key, hence the name) and determine their relative ordering for sequential focus navigation.\n...\nNote: If an HTML element renders and has `tabindex` attribute with any valid integer value, the element can be focused with JavaScript (by calling the `focus()` method) or visually by clicking with the mouse. The particular `tabindex` value controls whether the element is `tabbable` (i.e., reachable via sequential keyboard navigation, usually with the Tab key).\n\n- A negative value (the exact negative value doesn't actually matter, usually `tabindex=\"-1\"`) means that the element is not reachable via sequential keyboard navigation.\n\nNote: `tabindex=\"-1\"` may be useful for elements that should not be navigated to directly using the Tab key, but need to have keyboard focus set to them. Examples include an off-screen modal window that should be focused when it comes into view, or a form submission error message that should be immediately focused when an errant form is submitted.\n- `tabindex=\"0\"` means that the element should be focusable in sequential keyboard navigation, after any positive `tabindex` values. The focus navigation order of these elements is defined by their order in the document source.\n- A positive value means the element should be focusable in sequential keyboard navigation, with its order defined by the value of the number. That is, `tabindex=\"4\"` is focused before `tabindex=\"5\"` and `tabindex=\"0\"`, but after `tabindex=\"3\"`. If multiple elements share the same positive `tabindex` value, their order relative to each other follows their position in the document source. The maximum value for `tabindex` is 32767.\n- If the `tabindex` attribute is included with no value set, whether the element is focusable is determined by the user agent.\n\nWarning: You are recommended to only use `0` and `-1` as `tabindex` values. Avoid using `tabindex` values greater than `0` and CSS properties that can change the order of focusable HTML elements (Ordering flex items). Doing so makes it difficult for people who rely on using keyboard for navigation or assistive technology to navigate and operate page content. Instead, write the document with the elements in a logical sequence.\n\nSome focusable HTML elements have a ... `tabindex` value of `0` ... user agent. These elements are an ` ... attribute, ` ... attribute to these ... negative value will remove\n...\n## Accessibility concerns\n\nAvoid using the `tabindex` attribute in conjunction with non- interactive content to make something intended to be interactive focusable by keyboard input. An example of this would be using a ` ` element to describe a button, instead of the ` ` element.\n\nInteractive components authored using non-interactive elements are not listed in the accessibility tree. This prevents assistive technology from being able to navigate to and manipulate those components. The content should be semantically described using interactive elements (` `, ` `, ` `, ` `, ` `, ` `, etc.) instead. These elements have built-in roles and states that communicate status to the accessibility that would otherwise have to be managed by ARIA.",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQkYW007MlcXDqAn",
+      "message_id": "msg_g0VXYQjCK00wIJzC2E7G",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "8c5af7fd39c2233a490477759ec623927ca1fa0d6ac719ab7138efd91753df9c",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html",
+        "title": "Understanding Success Criterion 2.4.7: Focus Visible | WAI | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXYQmBG00oXfhGey4O",
+      "message_id": "msg_g0VXYQkae006M1dIUzzw",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "3ef3b2d14cd2cc759e11966654e91ad398945b55d88a17c65f83c55313a7ab3c",
+        "url": "https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html",
+        "title": "Understanding Success Criterion 2.1.1: Keyboard | WAI | W3C",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXYQnse00yCg3jlrvP",
+      "message_id": "msg_g0VXYQmDR00IX99wgwCv",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXYQpLX00C6Oxu6Qfj",
+      "message_id": "msg_g0VXYQnv600O3v6PJoo7",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "3259a63203b592c05b51b735fbf599e4f35ef1dac7d18dcdd5a768cbcd40cf9b",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible",
+        "title": ":focus-visible CSS pseudo-class - CSS | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXYQr6M007D26p2t3V",
+      "message_id": "msg_g0VXYQpQf00lEm7iE6DB",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "cf780536df2ba38899e840a08d79799009ca1af2994907edb6275a7bad4de27a",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/",
+        "title": "Understanding WCAG 2.2 | WAI",
+        "snippet": "- 2.1.1 Keyboard\n- 2.1.2 No Keyboard Trap\n- 2.1.3 Keyboard (No Exception)\n- 2.1.4 Character Key Shortcuts\n...\n- 2.4.1 Bypass Blocks\n- 2.4.2 Page Titled\n- 2.4.3 Focus Order\n- 2.4.4 Link Purpose (In Context)\n- 2.4.5 Multiple Ways\n- 2.4.6 Headings and Labels\n- 2.4.7 Focus Visible\n- 2.4.8 Location\n- 2.4.9 Link Purpose (Link Only)\n- 2.4.10 Section Headings\n- 2.4.11 Focus Not Obscured (Minimum)\n- 2.4.12 Focus Not Obscured (Enhanced)\n- 2.4.13 Focus Appearance",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQr6P00wKv37D9FV",
+      "message_id": "msg_g0VXYQpQf00lEm7iE6DB",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+        "snippet": "- 2.4.11 Focus Not Ob ... ured (Minimum) (AA)\n- 2.4.12 Focus Not Obscured (Enhanced) (AAA)\n- 2.4.13 Focus Appearance (AAA)\n- 2.5.7 Dragging Movements (AA)\n- 2.5.8 Target Size (Minimum) (AA)\n- 3.2.6 Consistent Help (A)\n- 3.3.7 Redundant Entry (A)\n- 3.3.8 Accessible Authentication (Minimum) (AA)\n- 3.3.9 Accessible Authentication (Enhanced) (AAA)\n...\nNo Keyboard\n...\n(Level A)\n\nIf keyboard focus can be moved to a component of the page using a keyboard interface, then focus can be moved away from that component using only a keyboard interface, and, if it requires more than unmodified arrow or tab keys or other standard exit methods, the user is advised of the method for moving focus away. \n\nSince any content that does not meet this success criterion can interfere with a user's ability to use the whole page, all content on the web page (whether it is used to meet other success criteria or not) must meet this success criterion. See Conformance Requirement 5: Non-Interference. \n\nSuccess\n...\ncovered under Success Criterion\n...\nSuccess Criterion 2.4.11 \n\nFocus Not Obscured (Minimum)\n\nUnderstanding Focus Not Obscured (Minimum) | How to Meet Focus Not Obscured (Minimum)\n\n(Level AA)\n\nWhen a user interface component receives keyboard focus, the component is not entirely hidden due to author-created content.\n\nNote 1\n\nWhere content in a configurable interface can be repositioned by the user, then only the initial positions of user-movable content are considered for testing and conformance of this success criterion.\n\nNote 2\n\nContent opened by the user may obscure the component receiving focus. If the user can reveal the focused component without advancing the keyboard focus, the component with focus is not considered visually hidden due to author-created content.\n\nSuccess Criterion 2.4.12 \n\nFocus Not Obscured (Enhanced)\n...\nObscured ... Enhanced) | How to Meet Focus ... Obscured (Enhanced)",
+        "author": "Alastair Campbell ( Nomensa",
+        "publishedAt": "2024-12-12T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXYQsBm006pJKMGvyt",
+      "message_id": "msg_g0VXYQr8F00DU2rPIsHP",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f1f564f4d8cf5454ddaadb71eec035dcc0c7aa887c33f8ca3e426d220aee992a",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "title": "Web Content Accessibility Guidelines (WCAG) 2.2",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXYQuIU002wL6nKezf",
+      "message_id": "msg_g0VXYQsDK00WUMNQNe4e",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "source-url",
+        "sourceId": "209176ff7328dc6b5b090ddb83f87737cb8763713312aaa9270c1a78ade66b04",
+        "url": "https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html",
+        "title": "Understanding Success Criterion 2.1.2: No Keyboard Trap | WAI | W3C",
+        "snippet": "Understanding Success Criterion 2.1.2: No Keyboard Trap | WAI | W3C\n...\n: Keyboard users don't get stuck.\n...\n: Ensure users always know how to navigate away from components.\n...\n: People who rely on the keyboard often have no other means to navigate.\n\n## Success Criterion (SC)\n\nIf keyboard focus can be moved to a component of the page using a keyboard interface, then focus can be moved away from that component using only a keyboard interface, and, if it requires more than unmodified arrow or tab keys or other standard exit methods, the user is advised of the method for moving focus away. \n\nNote\n\nSince any content that does not meet this success criterion can interfere with a user's ability to use the whole page, all content on the web page (whether it is used to meet other success criteria or not) must meet this success criterion. See Conformance Requirement 5: Non-Interference.\n...\nThe intent of this success criterion is to ensure that content does not \"trap\" keyboard focus within subsections of content on a web page. This is a common problem when multiple formats are combined within a page and rendered using plug-ins or embedded applications, or when custom components and widgets are not implemented with keyboard users in mind.\n\nThere may be times when it's appropriate for a web page to restrict focus to a subsection of the content – for example, when the user is inside a modal dialog or popover. This does not fail the requirements of this criterion, as long as the user knows how to \"untrap\" the focus and leave that component.\n\nKeyboard focus is not considered trapped when the user can navigate away from a component using only a keyboard interface, and if it only requires unmodified arrow or Tab keys or other \"standard exit methods\". This specification does not define what constitutes a \"standard exit method\" – this is dependent on the user's hardware, user agent, and operating system, and as such will require some interpretation from authors and auditors. Generally, in most environments with a physical keyboard, pressing the Esc key is a commonly used \"standard exit method\", but other platform-specific methods may be available.\n\nIf untrapping focus requires a different method (rather than unmodified arrow keys, the Tab key, or other \"standard exit methods\"), content can still pass this criterion provided that the user is advised how they can untrap focus using their keyboard interface.\n...\n- People who rely on a keyboard or keyboard interface to use the web including people who are blind and people with physical disabilities.\n...\n: A web application opens a dialog box. At the bottom of the dialog are two buttons, \"Cancel\" and \"OK\". When the dialog is open, focus is trapped within the dialog – tabbing from the last control in the dialog takes focus to the first control in the dialog (though, depending on implementation, the focus cycle might still include user agent controls). The dialog is dismissed by activating the \"Cancel\" button, the \"OK\" button, or the Esc key.\n...\nediting area of a rich text editor receives focus, Tab / Shift+Tab are used to set the indentation of the current line being edited. When the editing area receives focus, an instruction appears, letting users know that they can use Alt+F10 / Option+F10 to move focus back out of the area and to the editor toolbar.\n...\n- G21: Ensuring that users are not trapped in content\n...\n- F10: Failure of Success Criterion 2.1.2 and Conformance Requirement 5 due to combining multiple content formats in a way that traps users inside one format type\n...\n## Test Rules\n\n The following are Test Rules for certain aspects of this Success Criterion. It is not necessary to use these particular Test Rules to check for conformance with WCAG, but they are defined and approved test methods. For information on using Test Rules, see Understanding Test Rules for WCAG Success Criteria. \n\n- Focusable element has no keyboard trap",
+        "provider": "exa"
+      }
+    }
+  ],
+  "prose": [
+    {
+      "id": "prt_hxwNRcL03fGMTD4zb3IF",
+      "message_id": "msg_hc6QLiSUkBQKOICHUQDb",
+      "session_id": "ses_hlOuXdC4vb60vuS1jylR",
+      "data": {
+        "type": "text",
+        "text": "Reply with OK.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_h1n2ZzkqpfIn3w1ErUDO/8b9309bb04c9c97f739d956a819336d3a32867bc8ebe6350480b0a3ceb7ad892.json",
+          "catalog_snapshot_hash": "8b9309bb04c9c97f739d956a819336d3a32867bc8ebe6350480b0a3ceb7ad892"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYQ3uf002S4lGbk3A",
+      "message_id": "msg_g0VXYQ36k00evaEYBuq1",
+      "session_id": "ses_hlOuXdC4vb60vuS1jylR",
+      "data": {
+        "type": "text",
+        "text": "OK",
+        "time": {
+          "start": 1791548293724,
+          "end": 1791548293724
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0a4033c83eba2569016ac8db85459c819197266ed3b7794e4b",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYQfma00UXWX9sIE5",
+      "message_id": "msg_85f82128-5fca-470c-9c05-55c059b741cf",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "text",
+        "text": "请只读搜索 W3C/WAI 和 MDN 关于键盘操作与可见焦点的官方资料，先用中文写一份简短对比并附真实来源，再写八个有具体建议的 Sources 阅读体验小节，每节约80到120字。区分原文要求和你的产品评审意见，不把建议当作现有产品已实现的功能。请在当前普通对话中直接完成，不创建任务、不委托agent、不生成或修改本地文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hg4TMU2SHTliU3ZGbN7B/90412e88c38cca075b4eefcc5983c0e43ee0b023c3f15d6ae15fabba4ba83549.json",
+          "catalog_snapshot_hash": "90412e88c38cca075b4eefcc5983c0e43ee0b023c3f15d6ae15fabba4ba83549"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXYQgeu00t35Cdwcdu",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "data": {
+        "type": "text",
+        "text": "我会只读检索 W3C/WAI 与 MDN 官方资料，先核对键盘操作和可见焦点的要求，再用中文给出简短对比及八个 Sources 阅读体验建议小节，明确区分原文要求与产品评审意见。",
+        "time": {
+          "start": 1791548444220,
+          "end": 1791548444220
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0483596958dd3a90016ac8dc1a37bc8191a8c2c79023f41b8e",
+            "phase": "commentary"
+          }
+        }
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "act_g0VXYQ3Gv00Lyw64KqPC",
+      "assistant_message_id": "msg_g0VXYQ36k00evaEYBuq1",
+      "session_id": "ses_hlOuXdC4vb60vuS1jylR",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791548290462,\"completed\":1791548294051},\"parentID\":\"msg_hc6QLiSUkBQKOICHUQDb\",\"acceptedInputMessageIDs\":[\"msg_hc6QLiSUkBQKOICHUQDb\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\09\\\\67a29370-b189-4803-a57c-568aacaa13fd\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\09\\\\67a29370-b189-4803-a57c-568aacaa13fd\"},\"cost\":0,\"tokens\":{\"total\":29587,\"input\":29582,\"output\":5,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791548290462:0000000000000030:0000000000000000:message:msg_g0VXYQ36k00evaEYBuq1\"}"
+    },
+    {
+      "id": "act_g0VXYQfxS00U7MzSGR0M",
+      "assistant_message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548439350,\"completed\":1791548447158},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":32096,\"input\":31982,\"output\":114,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548439350:0000000000000030:0000000000000000:message:msg_g0VXYQfqA0060o5oUf29\"}"
+    },
+    {
+      "id": "act_g0VXYQhxk00HC78dIgpz",
+      "assistant_message_id": "msg_g0VXYQht800NJKCHnr2i",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548447222,\"completed\":1791548452187},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":36126,\"input\":4221,\"output\":33,\"reasoning\":0,\"cache\":{\"read\":31872,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548447222:0000000000000030:0000000000000000:message:msg_g0VXYQht800NJKCHnr2i\"}"
+    },
+    {
+      "id": "act_g0VXYQjGh00mQd0vlRqw",
+      "assistant_message_id": "msg_g0VXYQjCK00wIJzC2E7G",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548452256,\"completed\":1791548457544},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":38529,\"input\":14934,\"output\":43,\"reasoning\":0,\"cache\":{\"read\":23552,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548452256:0000000000000030:0000000000000000:message:msg_g0VXYQjCK00wIJzC2E7G\"}"
+    },
+    {
+      "id": "act_g0VXYQkez00DmwFvR1Sj",
+      "assistant_message_id": "msg_g0VXYQkae006M1dIUzzw",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548457608,\"completed\":1791548463784},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":41257,\"input\":2943,\"output\":42,\"reasoning\":0,\"cache\":{\"read\":38272,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548457608:0000000000000030:0000000000000000:message:msg_g0VXYQkae006M1dIUzzw\"}"
+    },
+    {
+      "id": "act_g0VXYQmHo00vWq5nZyTh",
+      "assistant_message_id": "msg_g0VXYQmDR00IX99wgwCv",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548463857,\"completed\":1791548470328},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":44926,\"input\":3792,\"output\":46,\"reasoning\":0,\"cache\":{\"read\":41088,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548463857:0000000000000030:0000000000000000:message:msg_g0VXYQmDR00IX99wgwCv\"}"
+    },
+    {
+      "id": "act_g0VXYQnzk00p7ppXj7py",
+      "assistant_message_id": "msg_g0VXYQnv600O3v6PJoo7",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548470408,\"completed\":1791548476173},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":53766,\"input\":9051,\"output\":43,\"reasoning\":0,\"cache\":{\"read\":44672,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548470408:0000000000000030:0000000000000000:message:msg_g0VXYQnv600O3v6PJoo7\"}"
+    },
+    {
+      "id": "act_g0VXYQpVi00g0PV6I7GW",
+      "assistant_message_id": "msg_g0VXYQpQf00lEm7iE6DB",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548476209,\"completed\":1791548482711},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":68755,\"input\":15183,\"output\":51,\"reasoning\":17,\"cache\":{\"read\":53504,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548476209:0000000000000030:0000000000000000:message:msg_g0VXYQpQf00lEm7iE6DB\"}"
+    },
+    {
+      "id": "act_g0VXYQrDF00nGwKOzIkc",
+      "assistant_message_id": "msg_g0VXYQr8F00DU2rPIsHP",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548482755,\"completed\":1791548486877},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":69549,\"input\":1032,\"output\":37,\"reasoning\":0,\"cache\":{\"read\":68480,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548482755:0000000000000030:0000000000000000:message:msg_g0VXYQr8F00DU2rPIsHP\"}"
+    },
+    {
+      "id": "act_g0VXYQsIR00xj9zPemsA",
+      "assistant_message_id": "msg_g0VXYQsDK00WUMNQNe4e",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548486914,\"completed\":1791548494995},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":82223,\"input\":12756,\"output\":42,\"reasoning\":49,\"cache\":{\"read\":69376,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791548486914:0000000000000030:0000000000000000:message:msg_g0VXYQsDK00WUMNQNe4e\"}"
+    },
+    {
+      "id": "act_g0VXYQuQJ00p1zKrNgh3",
+      "assistant_message_id": "msg_g0VXYQuLU00xhAHCpWG3",
+      "session_id": "ses_-zUSRZKRGzzQ1VCVbesX",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791548495108,\"completed\":1791548495480},\"error\":{\"name\":\"UnknownError\",\"data\":{\"message\":\"Error: E2E_REQUEST_BUDGET_EXHAUSTED\"}},\"failureOccurrence\":{\"session_id\":\"ses_-zUSRZKRGzzQ1VCVbesX\",\"assistant_message_id\":\"msg_g0VXYQuLU00xhAHCpWG3\",\"error_name\":\"UnknownError\"},\"parentID\":\"msg_85f82128-5fca-470c-9c05-55c059b741cf\",\"acceptedInputMessageIDs\":[\"msg_85f82128-5fca-470c-9c05-55c059b741cf\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-live-reading-236-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":0,\"input\":0,\"output\":0,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"finish\":\"error\",\"orderKey\":\"v1:0001791548495108:0000000000000030:0000000000000000:message:msg_g0VXYQuLU00xhAHCpWG3\"}"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXYQh6n00Dvz0W96Mk",
+      "message_id": "msg_g0VXYQfqA0060o5oUf29",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_17e92dd066964756bc04c400afcb8d7c\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.w3.org WAI WCAG Understanding keyboard focus visible 2.1.1 2.4.7\",\"numResults\":5},\"time\":{\"start\":1791548444225}}"
+    },
+    {
+      "id": "prt_g0VXYQiiL00X7Q4v3d8c",
+      "message_id": "msg_g0VXYQht800NJKCHnr2i",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_a014d806559c4ff7a9cf6c77fcf902f1\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.developer.mozilla.org keyboard accessible focus-visible tabindex accessibility\",\"numResults\":3},\"time\":{\"start\":1791548450397}}"
+    },
+    {
+      "id": "prt_g0VXYQk2n00jo21hrose",
+      "message_id": "msg_g0VXYQjCK00wIJzC2E7G",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_fcbb653434184409a323f6cc08a96ef7\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548455509}}"
+    },
+    {
+      "id": "prt_g0VXYQltE00077Wv6fF8",
+      "message_id": "msg_g0VXYQkae006M1dIUzzw",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_92827012d41e4e5c8a8afde43641fb8a\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548462604}}"
+    },
+    {
+      "id": "prt_g0VXYQnSV00GMKx2t6bK",
+      "message_id": "msg_g0VXYQmDR00IX99wgwCv",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_b7645d90f8ee4b61a1656ecf3b37f47d\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548468635}}"
+    },
+    {
+      "id": "prt_g0VXYQp1400uQPZXBrAU",
+      "message_id": "msg_g0VXYQnv600O3v6PJoo7",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_d4fdae1975c04f24923511e513f69920\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548474622}}"
+    },
+    {
+      "id": "prt_g0VXYQqVX00nSfm4MkwE",
+      "message_id": "msg_g0VXYQpQf00lEm7iE6DB",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_649093340529416a98d9488ff23e73ae\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.w3.org/WAI/WCAG22/Understanding \\\"No Keyboard Trap\\\" \\\"Focus Not Obscured (Minimum)\\\"\",\"numResults\":2},\"time\":{\"start\":1791548480355}}"
+    },
+    {
+      "id": "prt_g0VXYQrt800mGYHxoVCU",
+      "message_id": "msg_g0VXYQr8F00DU2rPIsHP",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_c822af0a97284daf873c32b49ccfa623\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://www.w3.org/TR/WCAG22/\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791548485662}}"
+    },
+    {
+      "id": "prt_g0VXYQtgF00Ki8tfjEvd",
+      "message_id": "msg_g0VXYQsDK00WUMNQNe4e",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_12bee5ca0dba4c7fbcabf8734a9edca5\",\"tool\":\"websearch\",\"input\":{\"query\":\"site.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html\",\"numResults\":1},\"time\":{\"start\":1791548492551}}"
+    }
+  ],
+  "boundary": "Natural actual producer evidence; full values retained, no fake Source/Part, no Markdown or UI assertions"
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实会话阅读236](records/2026-10/2026-10-09-source-live-reading-236.md)：真实16条Sources已产生，固定12次请求预算耗尽，最终正文与流式视觉验收未达成；保留原失败与完整闭合证据。
+
 - [摘要阅读位置235](records/2026-10/2026-10-09-source-excerpt-position-235.md)：shared阅读位置修复，excerpt/group/whole Dock及成员往返1636保持，中文深色实测闭合。
 
 - [侧栏关闭焦点233](records/2026-10/2026-10-09-dock-dismiss-focus-233.md)：关闭后接续真实header，File显式依赖修复看板回拉；英文/中文深色实测闭合。

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [真实会话阅读236 Recall](source-live-reading-plan-236.md) / [原失败证据](source-live-reading-236/README.md)：真实16条Sources、12次Sol流式200/EOF，第13次请求预算拒绝；最终正文未完成，原foreground1与Native0闭合分别记录。
+
 - [摘要阅读位置235 Recall](source-excerpt-position-plan-235.md) / [实际after](source-excerpt-position-235/README.md)：excerpt/group/whole Dock重开与成员往返1636保持，独立Source新Home及中文深色实测；完整历史/Native0闭合。
 
 - [整个侧栏关闭焦点233 Recall](dock-dismiss-focus-plan-233.md) / [实际before/after](dock-dismiss-focus-233/README.md)：可见header接续、File显式依赖修复看板回拉，完整自然history与中文深色实测闭合。

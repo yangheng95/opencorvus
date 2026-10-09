@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [真实会话阅读236](2026-10-09-source-live-reading-236.md)：真实16条Sources已产生，固定12次请求预算耗尽，最终正文与流式视觉验收未达成；原失败和Native物理闭合分别保留。
+
 - [摘要阅读位置235](2026-10-09-source-excerpt-position-235.md)：内摘要位置唯一UI state/owner修复，折叠重开/成员切换/中文深色实际保持。
 
 - [侧栏关闭焦点233](2026-10-09-dock-dismiss-focus-233.md)：关闭焦点与File观察依赖根因修复，真实before失败/after键盘鼠标及中文深色闭合。
