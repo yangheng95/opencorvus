@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Side真实正文流式243](records/2026-10/2026-10-10-side-render-live-243.md)：真实partial帧取得、accepted草稿重复占位；原Native固定期限1失败与完整退役分别保留。
+
 - [最新Sources流式242](records/2026-10/2026-10-09-source-stream-242.md)：新Sol真实Sources8/Side引用6与来源位置保持，11stream EOF/Native0；限定帧未扩大为全Rendering。
 
 - [中文深色Sources241](records/2026-10/2026-10-09-source-dark-241.md)：修复外层参考历史重开默认折叠，原摘要可见3107/outer531保持，ChineseDark实测Native0。

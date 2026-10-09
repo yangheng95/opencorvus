@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Side真实正文流式243 Recall](side-render-live-plan-243.md) / [原实际阶段](side-render-live-243/README.md)：真实partial与草稿重复占位线索、原固定期限Native1失败完整保留。
+
 - [最新Sources流式242 Recall](source-stream-plan-242.md) / [真实矩阵](source-stream-242/README.md)：新Source8/Side Reference6、阅读位置保持，11次Sol EOF及Native0，未捕全帧范围明示。
 
 - [中文深色Sources241 Recall](source-dark-plan-241.md) / [真实前后](source-dark-241/README.md)：外层history重开状态修复，实际Source摘要可见3107/outer531保持，原失败与Native0独立保留。

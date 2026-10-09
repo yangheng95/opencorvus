@@ -1,0 +1,54 @@
+Browser tab: 84, Title: "OpenCorvus", URL: "http://localhost:18177/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 237, 240, 303
+~							36 container Description: Connection Diagnostics · Offline, ID: connBadge
+~								37 text Offline
+~									150 text entry area (disabled) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+~									151 pop up button (disabled, collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+~									154 pop up button (collapsed) Description: View conversation context, Secondary Actions: Expand
+~									155 pop up button (disabled, collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+~									158 button (disabled) Description: Send, Help: Composer unavailable. Check the connection and current view., ID: chatSend
++									305 container
++										306 text Side chat needs attention
++										307 button (collapsed) Details, Secondary Actions: Expand
++											308 text Details
++										309 button Dismiss
++											310 container
++												311 text 在独立演示中监听  toggle ，读取  details.open ，并对照历史内容的可见性。预期读数表达当前展开状态，而不是依赖图标方向猜测。若视觉提示与状态不一致，读者可能误判历史是否收起。需要注意，这种读数只描述组件状态，不能说明用户是否读过内容，也不能证明参考历史的组织方式已经合格。
++											312 heading 七、避免把事件次数当阅读记录, Value: 3
++												313 text 七、避免把事件次数当阅读记录
++											314 container
++												315 text 快速连续展开、收起时，应考虑 MDN 所述的事件合并：浏览器派发前若发生多次状态变化，可能只发送一个  toggle 。因此，回调次数不宜直接解释成点击次数或阅读次数。若忽略这一点，可能误报交互丢失，或夸大历史阅读情况。用于观察时应关注回调中的当前  open ，而非推断完整操作过程。
++											316 heading 八、对照视觉层次并限定结论, Value: 3
++												317 text 八、对照视觉层次并限定结论
++											318 container
++												319 text 分别查看关闭与展开状态，观察摘要、历史正文和当前问题是否容易区分。已有资料说明可用 CSS 定制组件，并用  details[open]  设置展开样式，但不保证某种样式适合 Side Chat。若层次模糊，读者可能混淆背景与当前内容。以上都是建议检查，未新增检索、未修改产品，也未完成实际产品验收。
++											320 container
++												321 text 以下是约十二行的 独立 JavaScript 示例，没有修改产品 。假设演示页面已有原生  <details> ；代码仅监听  toggle  并读取  open ，不改变状态。
++											322 container
++												323 text JAVASCRIPT
++												324 button Copy code
++												325 container
++													326 text const  details =  document . querySelector ( "details" );
+
+ if  (!(details  instanceof HTMLDetailsElement )) {
+   throw new Error ( "示例页面需要一个原生 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  () =>  {
+   const  isOpen = details. open ;
+   console . log (
+     "当前 details.open：" , isOpen
+  );
+});
++										327 button Copy message
++										328 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++										329 text Oct 10, 12:18 AM
+~										183 text entry area (settable) Ask a side question…
+~										184 text Connecting…
++										330 button (disabled) Send side question
++		331 container
++			332 text OpenCorvus backend is unreachable — live data is unavailable.
++			333 button Set up, Help: Connection Diagnostics
++			334 button Reload, Help: Reload the overlay to re-establish the connection.
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18177/ui/

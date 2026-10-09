@@ -1,0 +1,20 @@
+{
+  "supervision": {
+    "preparationDeadlineMs": 1791562829680,
+    "pinned": null,
+    "firstFailedPath": null,
+    "totalDeadlineMs": null,
+    "pid": 38092,
+    "observedAtUtc": "2026-10-09T16:20:31.4227481Z",
+    "reason": "fixed-preparation-maximum",
+    "boundary": "Winning immutable settlement owner publishes this stop request; actual physical settlement remains distinct",
+    "occurrence": "side-render-live-243-live-01-c5596f2b-a0dc-4c5e-bdc9-01053b3cc6f5"
+  },
+  "admittedAt": "2026-10-09T16:20:31.4586216Z",
+  "evidencePrefix": "side-render-live-243-live-01",
+  "ownerPID": 77448,
+  "reason": "fixed-preparation-maximum",
+  "occurrence": "side-render-live-243-live-01-c5596f2b-a0dc-4c5e-bdc9-01053b3cc6f5",
+  "evidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\side-render-live-243\\live-01",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\side-render-live-243-live-01"
+}

@@ -1,0 +1,200 @@
+{
+  "requestCount": 11,
+  "qualification": "Original Native/fore1 remains failed; Provider EOF and per-frame chronology reported separately",
+  "requests": [
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562247507,
+      "firstByteReadAt": 1791562239925,
+      "readerState": "settled",
+      "messageID": null,
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_hH0sYupSqem8EVO95zmV",
+      "role": "memory",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562242865,
+      "firstByteReadAt": 1791562241106,
+      "readerState": "settled",
+      "messageID": "msg_g0VXZMZQx00GoHnGaV7Q",
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_hH0sYupSqem8EVO95zmV",
+      "role": "chat",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562272872,
+      "firstByteReadAt": 1791562267186,
+      "readerState": "settled",
+      "messageID": null,
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQdJQJzzYMOe3jTM6",
+      "role": "memory",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562270756,
+      "firstByteReadAt": 1791562268200,
+      "readerState": "settled",
+      "messageID": "msg_g0VXZMgqL00mGwgTtvU7",
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQdJQJzzYMOe3jTM6",
+      "role": "work",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562283315,
+      "firstByteReadAt": 1791562277861,
+      "readerState": "settled",
+      "messageID": "msg_g0VXZMjLz004T9efD3DY",
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQdJQJzzYMOe3jTM6",
+      "role": "work",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562292779,
+      "firstByteReadAt": 1791562285900,
+      "readerState": "settled",
+      "messageID": "msg_g0VXZMlKx001vgO1UgEz",
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQdJQJzzYMOe3jTM6",
+      "role": "work",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562338911,
+      "firstByteReadAt": 1791562333662,
+      "readerState": "settled",
+      "messageID": null,
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQd2BwzzZFB371NBg",
+      "role": "memory",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562512552,
+      "firstByteReadAt": 1791562492438,
+      "readerState": "settled",
+      "messageID": null,
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQd2BwzzZFB371NBg",
+      "role": "memory",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562552884,
+      "firstByteReadAt": 1791562494410,
+      "readerState": "settled",
+      "messageID": "msg_g0VXZNdPR00YlNYH63cl",
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQd2BwzzZFB371NBg",
+      "role": "chat",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562763847,
+      "firstByteReadAt": 1791562733233,
+      "readerState": "settled",
+      "messageID": null,
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQd2BwzzZFB371NBg",
+      "role": "memory",
+      "terminal": "eof"
+    },
+    {
+      "status": 200,
+      "lastByteReadAt": 1791562776070,
+      "firstByteReadAt": 1791562734470,
+      "readerState": "settled",
+      "messageID": "msg_g0VXZOe2U00F8f8RlClF",
+      "streaming": true,
+      "model": "gpt-6.1-sol",
+      "sessionID": "ses_-zUSQd2BwzzZFB371NBg",
+      "role": "chat",
+      "terminal": "eof"
+    }
+  ],
+  "exhausted": false,
+  "budget": 12,
+  "observedAtUtc": "2026-10-09T16:36:06.7334463Z",
+  "frames": [
+    {
+      "name": "main-source-ready.jpg",
+      "createdAtUtc": "2026-10-09T16:12:11.3508528Z",
+      "lastWriteAtUtc": "2026-10-09T16:12:11.3518564Z"
+    },
+    {
+      "name": "side-body-early.jpg",
+      "createdAtUtc": "2026-10-09T16:15:59.3134183Z",
+      "lastWriteAtUtc": "2026-10-09T16:15:59.3134183Z"
+    },
+    {
+      "name": "side-followup-accepted.jpg",
+      "createdAtUtc": "2026-10-09T16:18:52.3465010Z",
+      "lastWriteAtUtc": "2026-10-09T16:18:52.3465010Z"
+    },
+    {
+      "name": "side-followup-partial.jpg",
+      "createdAtUtc": "2026-10-09T16:19:23.5133639Z",
+      "lastWriteAtUtc": "2026-10-09T16:19:23.5133639Z"
+    },
+    {
+      "name": "side-followup-reading-during-stream.jpg",
+      "createdAtUtc": "2026-10-09T16:20:46.7958091Z",
+      "lastWriteAtUtc": "2026-10-09T16:20:46.7958091Z"
+    },
+    {
+      "name": "side-request-accepted.jpg",
+      "createdAtUtc": "2026-10-09T16:14:51.5488077Z",
+      "lastWriteAtUtc": "2026-10-09T16:14:51.5488077Z"
+    }
+  ],
+  "native": {
+    "occurrence": "side-render-live-243-live-01-c5596f2b-a0dc-4c5e-bdc9-01053b3cc6f5",
+    "outcome": "settled",
+    "host": {
+      "pid": 74124,
+      "processInstanceID": "win32:639271590288774318",
+      "occurrenceID": "0ed5607a-d343-4e4f-8d37-c2ff352c05a6"
+    },
+    "target": {
+      "pid": 38092,
+      "processInstanceID": "win32:639271590296808576",
+      "occurrenceID": "86d45fb0-ef62-4cfa-a3c6-d0ca46a7cb11"
+    },
+    "observedAtUtc": "2026-10-09T16:20:28.945Z",
+    "deadlineAt": 1791562828824,
+    "terminal": {
+      "occurrenceID": "side-render-live-243-live-01-c5596f2b-a0dc-4c5e-bdc9-01053b3cc6f5",
+      "pid": 38092,
+      "reason": "deadline_exceeded",
+      "exitCode": 1,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

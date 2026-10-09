@@ -1,0 +1,70 @@
+Browser tab: 84, Title: "OpenCorvus", URL: "http://localhost:18177/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++										238 container
++											239 text chat
++											240 text 31s
++											241 table
++												242 row
++													243 cell
++														244 text 操作
++													245 cell
++														246 text 预期现象
++													247 cell
++														248 text 失败影响
++												249 row
++													250 cell
++														251 text 先阅读摘要，再展开参考历史
++													252 cell
++														253 text 摘要能说明历史主题与参考性质，展开后内容与摘要对应
++													254 cell
++														255 text 反复展开寻找材料，或把历史误认为当前要求
++												256 row
++													257 cell
++														258 text 点击摘要，并另行聚焦后按空格键
++													259 cell
++														260 text 两种操作都能切换展开状态，关闭时保留摘要
++													261 cell
++														262 text 入口难以使用，或键盘读者无法访问历史
++												263 row
++													264 cell
++														265 text 核对
++														266 text open
++														267 text  属性与内容可见性
++													268 cell
++														269 text 属性存在时展开，不存在时关闭；
++														270 text open="false"
++														271 text  仍表示展开
++													272 cell
++														273 text 初始状态与预期不符，历史干扰当前问题阅读
++												274 row
++													275 cell
++														276 text 监听
++														277 text toggle
++														278 text ，读取
++														279 text open
++														280 text  并对照显示状态
++													281 cell
++														282 text 状态变化后能读取当前状态，快速变化可能合并事件
++													283 cell
++														284 text 误判展开状态，或把事件次数误当作操作次数
++											285 heading 一、先判断历史是否值得展开, Value: 3
++												286 text 一、先判断历史是否值得展开
++											287 text 阅读时先查看摘要，再决定是否展开参考历史。建议摘要说明材料主题及其参考性质，使读者不必先打开全文才能判断相关性。展开后应核对内容是否符合摘要。若入口只写“更多”，读者可能反复试探；若摘要像当前指令，则可能误把旧要求当成新任务。这是建议检查的现象，不是已确认的产品行为。
++											288 heading 二、区分参考材料与当前请求, Value: 3
++												289 text 二、区分参考材料与当前请求
++											290 text 展开历史后，先辨认它讨论的问题，再回到当前请求，判断哪些信息仍然适用。应观察历史内容是否容易识别为背景，而非正在执行的要求。原生折叠能控制内容显示，但不能自动区分指令来源。若缺少清晰表达，读者可能沿用过时范围，或忽略当前限制；因此应把来源辨认与展开操作分别考虑。
++											291 heading 三、检查点击展开与收起, Value: 3
++												292 text 三、检查点击展开与收起
++											293 text 用鼠标点击摘要打开历史，阅读一段后再次点击收起，观察正文是否随状态显示或隐藏，摘要是否保留。MDN 描述了这一原生交互，可作为检查依据。若入口难以辨认，读者可能不知道历史可展开；若收起后仍难以返回当前问题，则折叠没有有效减轻阅读负担。这里只提出观察方法，未进行产品操作。
++											294 heading 四、检查键盘阅读路径, Value: 3
++												295 text 四、检查键盘阅读路径
++											296 text 让摘要获得键盘焦点，再按空格键，观察是否能够展开或收起历史，并与点击结果比较。MDN 明确描述了聚焦后按空格键的操作。对参考历史而言，这能帮助检查键盘读者是否也能访问补充内容。若只有鼠标路径可用，键盘阅读可能中断；但仅核对这一操作，不能据此宣布全部无障碍要求已经满足。
++											297 heading 五、核对初始关闭状态, Value: 3
++												298 text 五、核对初始关闭状态
++											299 container
++												300 text 进入阅读场景时，先观察参考历史是否按预期关闭，再核对相关示例中的  open  属性。MDN 说明该属性是布尔属性， open="false"  仍会展开，关闭需要移除属性。若误把字符串“false”理解成关闭，旧材料可能提前占据阅读空间，让当前问题不易定位。这是属性语义检查，不表示已经查看产品实现。
++											301 heading 六、用状态读数辅助判断, Value: 3
++												302 text 六、用状态读数辅助判断
++											303 text 在独立演示中监听 `toggle`，读取 `details.open`，并对照历史内容
++										304 button Quote in main conversation
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18177/ui/

@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-09T16:42:58.1066160Z",
+  "targetBirthUtc": "2026-10-09T16:10:29.6808576Z",
+  "files": [
+    {
+      "bytes": 47224,
+      "name": "091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-09T16:10:30.5593037Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-render-live-243\\generated-bun-live01\\091d165574530ade.debug.pile"
+    },
+    {
+      "bytes": 169556,
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-09T16:10:30.5452543Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-render-live-243\\generated-bun-live01\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "bytes": 59902,
+      "name": "7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-09T16:10:30.5116431Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-render-live-243\\generated-bun-live01\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "bytes": 88408,
+      "name": "cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-09T16:10:30.5196450Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-render-live-243\\generated-bun-live01\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "bytes": 43530,
+      "name": "f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-09T16:10:30.5755720Z",
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-render-live-243\\generated-bun-live01\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "nativeTerminal": {
+    "occurrenceID": "side-render-live-243-live-01-c5596f2b-a0dc-4c5e-bdc9-01053b3cc6f5",
+    "pid": 38092,
+    "reason": "deadline_exceeded",
+    "exitCode": 1,
+    "signal": null
+  },
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0."
+}

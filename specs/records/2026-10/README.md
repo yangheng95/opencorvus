@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Side真实正文流式243](2026-10-10-side-render-live-243.md)：真实Working partial、accepted草稿重复问题线索；原Native/fore1未当正常验收通过。
+
 - [最新Sources流式242](2026-10-09-source-stream-242.md)：当前239–241修复在新真实Sol Main/Side/继承Source中复核，11EOF与完整Native0闭合。
 
 - [中文深色Sources241](2026-10-09-source-dark-241.md)：外层引用history唯一UI展开状态，wholeDock真实Source可见与位置保持，原失败/Native0保留。
