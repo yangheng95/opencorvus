@@ -1,5 +1,6 @@
 # Connection workspace authority investigation
 
+- [浏览器可用性228 Recall](browser-availability-plan-228.md) / [真实验收](browser-availability-228/README.md) / [首轮准入](browser-availability-readiness-228/README.md) / [二轮准入](browser-availability-readiness-228-after02/README.md)：真实能力提示、Enter反馈、外部动作保留输入；复制三通道一致，切换工具草稿丢失待修。
 - [共用菜单227 Recall](menu-surface-plan-227.md)：三个调用者的单renderer/owner与宿主呈现。
 - [工作树读取226 Recall](worktree-reader-plan-226.md)：精确读取authority、真实Git列表与后续环境问题。
 - [VCS/Source225 Recall](vcs-source-plan-225.md): current three Git readers, actual branch facts and localized file-source actions.

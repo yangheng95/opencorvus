@@ -1,0 +1,59 @@
+{
+  "uiUri": "http://127.0.0.1:18155/ui",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "owner": {
+    "nativeDeadlineAt": 1791529119936,
+    "nativeTarget": {
+      "pid": 61364,
+      "processInstanceID": "win32:639271250207766972",
+      "occurrenceID": "c1bf56cd-b9f0-43b8-a619-d2e6727e112e"
+    },
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-availability-228-after-01",
+    "port": 18155,
+    "owner": {
+      "processInstanceID": "win32:639271250207766972",
+      "ProcessId": 61364
+    },
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "observedProcessChain": [
+      {
+        "pid": 61364,
+        "processInstanceID": "win32:639271250207766972",
+        "occurrenceID": "c1bf56cd-b9f0-43b8-a619-d2e6727e112e"
+      }
+    ],
+    "host": {
+      "pid": 74448,
+      "processInstanceID": "win32:639271250200099359",
+      "occurrenceID": "ec88d048-32f5-4f74-83c0-b9127a86aa2b"
+    },
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-availability-228-after-01\\runtime",
+    "authorityStaging": "None; no model Task requested",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-availability-228-after-01\\evidence",
+    "targetBirthAtMs": 1791528220776,
+    "occurrence": "browser-availability-228-after-01-1b7ca538-3b5f-4eab-8987-59e90fac3bc7",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\browser-availability-228\\after-01",
+    "evidencePrefix": "browser-availability-228-after-01"
+  },
+  "asset": "/ui/assets/main-DlNguJ-3.js",
+  "scriptSrc": "http://127.0.0.1:18155/ui/assets/main-DlNguJ-3.js",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18155,
+      "OwningProcess": 61364
+    }
+  ],
+  "finalUiUri": "http://127.0.0.1:18155/ui/",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "browser-availability-228-after-01-1b7ca538-3b5f-4eab-8987-59e90fac3bc7",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18155",
+    "pid": 61364
+  },
+  "uiStatus": 200,
+  "observedAtUtc": "2026-10-09T06:43:50.8117595Z",
+  "assetStatus": 200
+}

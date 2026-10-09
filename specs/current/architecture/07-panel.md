@@ -1595,7 +1595,16 @@ The trailing arrow is a separate operating-system `open-url` action:
 it opens a nonblank normalized address in the computer's default browser
 application without retargeting the embedded WebView.
 
-The Browser page meets its stage without a decorative host frame or inset. Its
+The Browser page meets its stage without a decorative host frame or inset.
+The ordinary Web UI explains its existing capability when embedded navigation
+is unavailable: an empty stage presents the external-browser action, and the
+address placeholder describes that available action. Canonical target/evidence
+loading, saved evidence and real errors keep their existing priority. Desktop
+empty tabs retain their native new-tab presentation. Enter continues to request
+embedded navigation and reports its real unavailable result; an external page
+opens only through the separate explicit operator action. The external action
+keeps its normalized address as the current edited draft; it does not retarget
+the embedded surface or reset the draft from an unrelated empty target. Its
 context menu, stationary-pointer annotation hint, Document Object Model (DOM)
 hit-testing, selection outline, and comment panel are one injected guest
 interaction runtime inside the child WebView. Right-click `Annotate node` and

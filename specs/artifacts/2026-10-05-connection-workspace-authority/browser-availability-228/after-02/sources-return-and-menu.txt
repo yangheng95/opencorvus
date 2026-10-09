@@ -1,0 +1,146 @@
+- banner:
+  - button "收起侧边栏" [expanded]:
+  - menubar "OpenCorvus":
+    - menuitem "文件":
+      - generic: 文件
+    - menuitem "编辑":
+      - generic: 编辑
+    - menuitem "视图":
+      - generic: 视图
+    - menuitem "帮助":
+      - generic: 帮助
+- main:
+  - navigation "对话快捷入口":
+    - generic "对话快捷入口":
+      - button "对话":
+        - generic: 对话
+      - button "Mission 看板":
+        - generic: Mission 看板
+      - button "定时":
+        - generic: 定时
+      - button "专家团":
+        - generic: 专家团
+      - button "更多":
+        - generic: 更多
+      - button "设置":
+        - generic: 设置
+    - button "关于":
+    - button "OpenCorvus 菜单":
+      - generic: OC
+      - generic: OpenCorvus
+      - generic: v0.1.23
+  - link "OpenCorvus homepage":
+    - /url: https://opencorvus.com/
+    - generic: OpenCorvus
+  - button "搜索任务或运行命令":
+  - button "收件箱":
+  - complementary:
+    - generic "对话导航":
+      - button "新对话":
+        - generic: 新对话
+    - generic: 项目
+    - button "整理侧边栏":
+    - button "创建项目":
+    - button "收起 project" [expanded]:
+      - generic: project
+    - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+    - button "只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...":
+      - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+    - button "更多操作":
+    - button "收起 匿名项目 66097c" [expanded]:
+      - generic: 匿名项目 66097c
+    - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+    - button "Reply with OK.":
+      - generic: Reply with OK.
+    - button "更多操作":
+    - region "最近":
+      - generic: 最近
+      - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+      - button "只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...":
+        - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+      - button "更多操作":
+      - generic "在单个项目中直接进行交互式工作的对话；不会协调下级 Task。":
+      - button "Reply with OK.":
+        - generic: Reply with OK.
+      - button "更多操作":
+    - generic "连接诊断":
+      - generic "连接诊断 · 在线 · 端口 18155":
+        - generic: 在线
+  - separator "调整左侧面板大小"
+  - generic "正在加载 Task"
+  - generic: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/...
+  - status
+  - button "项目操作":
+  - generic "非进行中":
+    - generic: 非进行中
+  - button "侧聊":
+  - button "环境信息":
+  - button "关闭右侧面板" [pressed]:
+  - generic "对话":
+    - article:
+      - generic: 用户
+      - paragraph: 只读查看一个现存文件：请只使用 read 工具读取 C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md，指定 offset=1、limit=12。依据实际返回的正文用一句中文说明这个文档的标题，引用这份原文件。不要读取其他文件、浏览网页、创建或编辑文件，也不要调用或委托任何agent。
+    - article:
+      - generic: chat
+      - generic "会话耗时 8 秒（从首条消息到终态）": 8 秒
+      - button "read · C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md @1+12 (1 lines)":
+        - generic: read
+        - generic: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md @1+12 (1 lines)
+      - group "来源":
+        - 'generic "来源: README.md (1)"':
+          - generic: README.md
+          - generic: "1"
+        - 'button "打开来源文件: README.md"':
+          - generic: README.md
+      - paragraph:
+        - text: 这份文档的标题是“Isolated formal Task resource qualification”（隔离的正式 Task 资源资格认定），见原文件
+        - code: C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/file-read-recovery-222-before-01/project/README.md:1
+        - text: 。
+  - status:
+    - strong: 模型配置暂不可用
+    - generic: 你仍可阅读这段对话。请查看详情或选择模型后再发送消息。
+    - generic "详细信息":
+      - text: 详细信息
+    - button "重试"
+  - separator "拖拽调整消息输入框大小"
+  - generic "支持拖拽文件 · 拖动上边缘调整输入框大小":
+    - textbox "支持拖拽文件 · 拖动上边缘调整输入框大小":
+      - /placeholder: 补充想法，或继续这项工作…
+  - button
+  - button "添加支持的文件":
+  - generic "面向代码仓库的编程与软件工作。":
+    - generic: Code
+  - generic: Chat
+  - button "Base":
+    - generic: Base
+  - button "授权模式，当前为 完全访问":
+    - generic: 完全访问
+  - button "OpenCorvus 模型 选择模型，点击切换":
+    - generic "选择模型"
+  - button "发送" [disabled]:
+    - generic: 发送
+  - button "滚动到底部":
+  - separator "调整右侧面板大小"
+  - complementary "工具面板":
+    - tablist "已打开的工具":
+      - tab "新标签页" [selected]:
+        - generic: 新标签页
+      - button "关闭标签页":
+      - tab "文件":
+        - generic: 文件
+      - button "关闭标签页":
+    - button "添加工具":
+    - button "关闭面板":
+    - tabpanel "新标签页":
+      - region "预览":
+        - button "在预览浏览器中后退。" [disabled]:
+        - button "在预览浏览器中前进。" [disabled]:
+        - button "刷新当前预览网页。" [disabled]:
+        - textbox "地址栏":
+          - /placeholder: 输入网址，在外部浏览器中打开
+        - button "在当前预览中打开输入的地址" [disabled]:
+        - button "在默认浏览器中打开输入的地址" [disabled]:
+        - button "更多浏览器操作" [active]:
+        - status:
+          - strong: 在浏览器中打开网页
+          - generic: 网页界面无法内嵌交互式网页。请输入上方地址并点击外部浏览器按钮，或在桌面应用中继续浏览。

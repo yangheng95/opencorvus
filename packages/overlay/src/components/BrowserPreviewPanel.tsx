@@ -45,6 +45,7 @@ import { Icon } from "./ui/Icon"
 import { PreviewableImage } from "./ImagePreview"
 import { Button } from "./ui/Button"
 import { TextField } from "./ui/TextField"
+import { Feedback } from "./ui/Feedback"
 import { randomUUID } from "../utils/random-id"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 
@@ -478,6 +479,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     | { kind: "native-error"; error: string }
     | { kind: "evidence"; evidence: BrowserPreviewRenderedEvidence }
     | { kind: "native-preview"; scope: BrowserPreviewNativeScope }
+    | { kind: "unavailable" }
     | { kind: "empty" }
   const stageView = createMemo<BrowserPreviewStageView>(() => {
     const loadError = currentTargetError()
@@ -494,6 +496,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     if (scope) return { kind: "native-preview", scope }
     const evidence = evidenceForDisplay()
     if (evidence) return { kind: "evidence", evidence }
+    if (!browserPreviewNativeSurfaceAvailable()) return { kind: "unavailable" }
     return { kind: "empty" }
   })
   // Only the discriminant is needed to pick the branch. Driving each <Match>
@@ -1278,8 +1281,8 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     setAddressSubmitError("")
     try {
       const url = normalizeBrowserPreviewNativeUrl(raw)
+      setAddressDirty(true)
       setAddressDraft(url)
-      setAddressDirty(false)
       setAddressExternalOpening(true)
       if (!(await nativeOpen(url))) throw new Error(t("browser_preview.address.external_open_failed"))
     } catch (error) {
@@ -1703,9 +1706,14 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
                 autocomplete="off"
                 autocapitalize="off"
                 disabled={!addressInputAvailable()}
-                placeholder={t("browser_preview.address.placeholder")}
+                placeholder={t(addressNavigationSupported() ? "browser_preview.address.placeholder" : "browser_preview.address.external_placeholder")}
                 aria-label={t("browser_preview.address.label")}
                 value={addressDraft()}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter" || event.isComposing || addressNavigationSupported()) return
+                  event.preventDefault()
+                  event.currentTarget.form?.requestSubmit()
+                }}
                 onInput={(event) => {
                   setAddressDirty(true)
                   setAddressDraft(event.currentTarget.value)
@@ -1822,6 +1830,15 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
               <Show when={targetUrl()}>{(url) => <code>{url()}</code>}</Show>
               <code>{nativePreviewError()}</code>
             </div>
+          </Match>
+          <Match when={stageKind() === "unavailable"}>
+            <Feedback
+              class="browser-preview-availability"
+              title={t("browser_preview.empty.unavailable_title")}
+              data-ui="browser-preview-unavailable"
+            >
+              {t("browser_preview.empty.unavailable_body")}
+            </Feedback>
           </Match>
           <Match when={stageKind() === "evidence"}>
             <Show when={evidenceForDisplay()}>

@@ -1,0 +1,27 @@
+{
+  "occurrence": "browser-availability-228-after-01-1b7ca538-3b5f-4eab-8987-59e90fac3bc7",
+  "port": 18155,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-availability-228-after-01\\evidence",
+    "browser-availability-228-after-01-1b7ca538-3b5f-4eab-8987-59e90fac3bc7",
+    "1791529119936",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18155",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\browser-availability-228-after-01\\startup.json",
+    "--startup-occurrence",
+    "browser-availability-228-after-01-1b7ca538-3b5f-4eab-8987-59e90fac3bc7",
+    "--log-level",
+    "INFO"
+  ],
+  "credentialStaging": "None"
+}

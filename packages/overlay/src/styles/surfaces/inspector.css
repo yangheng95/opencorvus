@@ -210,7 +210,8 @@
   background: var(--chat-canvas);
 }
 
-.browser-preview-stage > .browser-preview-empty {
+.browser-preview-stage > .browser-preview-empty,
+.browser-preview-stage > .browser-preview-availability {
   margin: auto;
 }
 
@@ -585,8 +586,12 @@
   color: var(--text);
 }
 
-.browser-preview-empty {
+.browser-preview-empty,
+.browser-preview-availability {
   width: min(calc(420px * var(--ui-scale)), calc(100% - calc(32px * var(--ui-scale))));
+}
+
+.browser-preview-empty {
   display: grid;
   justify-items: center;
   gap: var(--ui-gap-md);
