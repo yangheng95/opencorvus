@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [摘要阅读位置235](2026-10-09-source-excerpt-position-235.md)：内摘要位置唯一UI state/owner修复，折叠重开/成员切换/中文深色实际保持。
+
 - [侧栏关闭焦点233](2026-10-09-dock-dismiss-focus-233.md)：关闭焦点与File观察依赖根因修复，真实before失败/after键盘鼠标及中文深色闭合。
 
 - [工具标签焦点232](2026-10-09-tool-tab-focus-232.md)：单agent修复关闭与确认焦点，新增Delete，原失败和真实多标签/中文深色复核保留。

@@ -565,6 +565,15 @@ accessible scroll area as the surrounding source list grows.
 The existing conversation UI store owns its expansion by canonical source
 identity. Opening or focusing the
 reading region pauses transcript following through the shared reading intent.
+The same conversation UI store retains the excerpt's last visible scroll
+position across reader remounts, with the existing per-selection entry bound.
+Position keys include the current API authority revision and canonical source
+identity; primary selection clears these transient positions. The reader uses
+the shared animation-frame scheduler after visible geometry is ready, retires
+its observer on completion or disposal, and lets new native reading input
+cancel a pending restore. Hidden geometry and stale connection/selection owners
+cannot overwrite the last observed position. Excerpt text remains the canonical
+source text and has no parallel content cache.
 The noninteractive source tooltip contains identity, detail and metadata.
 The Source
 Disclosure's native content box and expanded list are bounded by the actual

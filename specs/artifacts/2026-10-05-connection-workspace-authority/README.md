@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [摘要阅读位置235 Recall](source-excerpt-position-plan-235.md) / [实际after](source-excerpt-position-235/README.md)：excerpt/group/whole Dock重开与成员往返1636保持，独立Source新Home及中文深色实测；完整历史/Native0闭合。
+
 - [整个侧栏关闭焦点233 Recall](dock-dismiss-focus-plan-233.md) / [实际before/after](dock-dismiss-focus-233/README.md)：可见header接续、File显式依赖修复看板回拉，完整自然history与中文深色实测闭合。
 
 - [工具标签焦点232 Recall](tool-tab-focus-plan-232.md) / [真实before/after](tool-tab-focus-232/README.md)：Delete与成功关闭focus、共享File确认取消恢复，原失败/完整自然history和中文深色实测。

@@ -1,0 +1,59 @@
+{
+  "assetStatus": 200,
+  "asset": "/ui/assets/main-CcagVDdu.js",
+  "scriptSrc": "http://127.0.0.1:18167/ui/assets/main-CcagVDdu.js",
+  "observedAtUtc": "2026-10-09T11:48:12.7955911Z",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-excerpt-position-235-after-01-39f76360-3c82-43fb-8d1a-8ed66666fb0b",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18167",
+    "pid": 74396
+  },
+  "uiStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18167/ui/",
+  "uiUri": "http://127.0.0.1:18167/ui",
+  "owner": {
+    "observedProcessChain": [
+      {
+        "pid": 74396,
+        "processInstanceID": "win32:639271432827857521",
+        "occurrenceID": "e240539d-ae8c-4674-879c-2f73acf5b44c"
+      }
+    ],
+    "nativeTarget": {
+      "pid": 74396,
+      "processInstanceID": "win32:639271432827857521",
+      "occurrenceID": "e240539d-ae8c-4674-879c-2f73acf5b44c"
+    },
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-excerpt-position-235-after-01",
+    "nativeDeadlineAt": 1791547381876,
+    "targetBirthAtMs": 1791546482785,
+    "authorityStaging": "None; no model Task requested",
+    "evidencePrefix": "source-excerpt-position-235-after-01",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\source-multiple-search-live-171-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-excerpt-position-235-after-01\\evidence",
+    "host": {
+      "pid": 33736,
+      "processInstanceID": "win32:639271432819664664",
+      "occurrenceID": "41541a7a-9f5a-492e-9351-141ead75f0f0"
+    },
+    "occurrence": "source-excerpt-position-235-after-01-39f76360-3c82-43fb-8d1a-8ed66666fb0b",
+    "port": 18167,
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-excerpt-position-235\\after-01",
+    "owner": {
+      "ProcessId": 74396,
+      "processInstanceID": "win32:639271432827857521"
+    },
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-excerpt-position-235-after-01\\runtime"
+  },
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18167,
+      "OwningProcess": 74396
+    }
+  ]
+}

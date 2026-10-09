@@ -7,6 +7,7 @@ const [store, setStore] = createStore({
   /** Task-scoped operator disclosures that must survive conversation tree
    * replacement without becoming persisted message data. */
   expandedDisclosures: {} as Record<string, boolean>,
+  sourceExcerptPositions: {} as Record<string, number>,
 })
 
 export { store as conversationUiStore }
@@ -136,6 +137,7 @@ export function loadConversationUiStateForTask(taskID: string): void {
   const persisted = loadFromStorage(taskID)
   setStore("expandedCards", reconcile(persisted, { merge: false }))
   setStore("expandedDisclosures", reconcile({}, { merge: false }))
+  setStore("sourceExcerptPositions", reconcile({}, { merge: false }))
 }
 
 export function clearConversationUiState(): void {
@@ -149,6 +151,7 @@ export function clearConversationUiState(): void {
   activeTaskID = ""
   setStore("expandedCards", reconcile({}, { merge: false }))
   setStore("expandedDisclosures", reconcile({}, { merge: false }))
+  setStore("sourceExcerptPositions", reconcile({}, { merge: false }))
 }
 
 /** Read the effective expanded state for a card. */
@@ -183,4 +186,15 @@ export function conversationDisclosureExpanded(id: string, defaultVal = false): 
 export function setConversationDisclosureExpanded(id: string, value: boolean): void {
   if (!id) return
   setStore("expandedDisclosures", id, value)
+}
+
+/** Session-local reading intent; primary selection clears it with the other UI state. */
+export function sourceExcerptReadingTop(id: string): number | undefined {
+  return store.sourceExcerptPositions[id]
+}
+
+export function setSourceExcerptReadingTop(id: string, top: number): void {
+  if (!id || !Number.isFinite(top)) return
+  const entries = Object.entries({ ...store.sourceExcerptPositions, [id]: Math.max(0, top) })
+  setStore("sourceExcerptPositions", reconcile(Object.fromEntries(entries.slice(-MAX_ENTRIES_PER_TASK)), { merge: false }))
 }

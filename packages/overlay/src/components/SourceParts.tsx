@@ -1,5 +1,5 @@
 import { Key } from "@solid-primitives/keyed"
-import { Match, Show, Switch } from "solid-js"
+import { Match, Show, Switch, onCleanup, onMount, untrack } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
@@ -7,10 +7,16 @@ import { t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
 import { Tooltip } from "./ui/Tooltip"
 import { Disclosure } from "./ui/Disclosure"
-import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
+import {
+  cardExpanded,
+  setCardExpanded,
+  sourceExcerptReadingTop,
+  setSourceExcerptReadingTop,
+} from "../store/conversation-ui"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { AppLog } from "../utils/log"
 import { pauseAutoScrollForReading } from "../utils/dom-utils"
+import { createAnimationFrameScheduler } from "../utils/animation-frame"
 
 export type ConversationSourcePart = {
   type: "source-url" | "source-document" | "source-file"
@@ -195,6 +201,70 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   )
 }
 
+function SourceExcerptBody(props: { source: ConversationSourcePart }) {
+  const authority = untrack(captureApiAuthority)
+  const epoch = untrack(() => boardStore.selectEpoch)
+  const identity = sourceIdentity(props.source)
+  const readingKey = JSON.stringify([authority.revision, identity])
+  let body: HTMLDivElement | undefined
+  let pendingTop = untrack(() => sourceExcerptReadingTop(readingKey))
+  let resizeObserver: ResizeObserver | undefined
+  const current = () =>
+    isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch && sourceIdentity(props.source) === identity
+  const visible = () => body?.isConnected && body.clientHeight > 0 && !body.closest("[inert], [hidden]")
+  const saveReadingPosition = () => {
+    if (pendingTop === undefined && current() && visible() && body) setSourceExcerptReadingTop(readingKey, body.scrollTop)
+  }
+  const finishRestore = () => {
+    pendingTop = undefined
+    resizeObserver?.disconnect()
+    resizeObserver = undefined
+  }
+  const restore = createAnimationFrameScheduler(() => {
+    if (!current()) {
+      finishRestore()
+      return
+    }
+    if (pendingTop === undefined || !visible() || !body) return
+    const top = pendingTop
+    finishRestore()
+    body.scrollTop = top
+    saveReadingPosition()
+  })
+  const cancelRestoreForReading = () => {
+    restore.cancel()
+    finishRestore()
+    saveReadingPosition()
+  }
+  onMount(() => {
+    if (pendingTop === undefined || !body) return
+    resizeObserver = new ResizeObserver(() => restore.schedule())
+    resizeObserver.observe(body)
+    restore.schedule()
+  })
+  onCleanup(() => {
+    restore.cancel()
+    resizeObserver?.disconnect()
+  })
+  return (
+    <Disclosure.Content
+      ref={(element) => { body = element }}
+      class="msg-source-excerpt__body"
+      role="region"
+      aria-label={`${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`}
+      tabIndex={0}
+      onScroll={saveReadingPosition}
+      onWheel={cancelRestoreForReading}
+      onPointerDown={cancelRestoreForReading}
+      onKeyDown={(event) => {
+        if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) cancelRestoreForReading()
+      }}
+    >
+      {props.source.snippet}
+    </Disclosure.Content>
+  )
+}
+
 function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean }) {
   const excerptKey = () => `source-excerpt:${sourceIdentity(props.source)}`
   const expanded = () => cardExpanded(excerptKey(), false)
@@ -219,14 +289,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             {t("chat.source_excerpt")}
           </Disclosure.Trigger>
           <Show when={expanded()}>
-            <Disclosure.Content
-              class="msg-source-excerpt__body"
-              role="region"
-              aria-label={excerptLabel()}
-              tabIndex={0}
-            >
-              {props.source.snippet}
-            </Disclosure.Content>
+            <SourceExcerptBody source={props.source} />
           </Show>
         </Disclosure.Root>
       </Show>

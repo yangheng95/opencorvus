@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [摘要阅读位置235](records/2026-10/2026-10-09-source-excerpt-position-235.md)：shared阅读位置修复，excerpt/group/whole Dock及成员往返1636保持，中文深色实测闭合。
+
 - [侧栏关闭焦点233](records/2026-10/2026-10-09-dock-dismiss-focus-233.md)：关闭后接续真实header，File显式依赖修复看板回拉；英文/中文深色实测闭合。
 
 - [工具标签焦点232](records/2026-10/2026-10-09-tool-tab-focus-232.md)：Delete关闭、成功接续及File确认取消恢复，英文/中文深色真实验证。
