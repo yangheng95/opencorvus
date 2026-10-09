@@ -71,6 +71,7 @@ export interface AutoScrollOptions {
 }
 
 export interface AutoScrollController {
+  readingPosition: () => { top: number; following: boolean }
   cleanup: () => void
   contentChanged: () => void
   scrollToBottom: () => void
@@ -330,6 +331,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   })
 
   return {
+    readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
     cleanup: () => {
       disposed = true
       el.removeEventListener("wheel", onWheel)

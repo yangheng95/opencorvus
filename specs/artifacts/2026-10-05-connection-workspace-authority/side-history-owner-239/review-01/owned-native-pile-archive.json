@@ -1,0 +1,44 @@
+{
+  "nativeTerminal": {
+    "occurrenceID": "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+    "pid": 10884,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "targetBirthUtc": "2026-10-09T13:37:32.9745412Z",
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-history-owner-239\\generated-bun-review01\\091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-09T13:37:33.3319016Z"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-history-owner-239\\generated-bun-review01\\69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-09T13:37:33.3092106Z"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-history-owner-239\\generated-bun-review01\\7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-09T13:37:33.2645237Z"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-history-owner-239\\generated-bun-review01\\cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-09T13:37:33.2714908Z"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\side-history-owner-239\\generated-bun-review01\\f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-09T13:37:33.3571209Z"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T13:46:00.8763502Z"
+}

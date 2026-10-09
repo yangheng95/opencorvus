@@ -1,0 +1,68 @@
+{
+  "occurrence": "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+  "copiedPair": [
+    {
+      "presentAfter": false,
+      "outcome": "already_absent",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-history-owner-239-review-01\\runtime\\data\\auth.json"
+    },
+    {
+      "copiedLength": 2001983,
+      "presentAfter": false,
+      "outcome": "removed",
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-history-owner-239-review-01\\runtime\\data\\models.json"
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "pairedCleanupComplete": true,
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+    "outcome": "settled",
+    "host": {
+      "pid": 49556,
+      "processInstanceID": "win32:639271498521722142",
+      "occurrenceID": "72c54652-1d1b-4765-8acd-1d6ad13b44cc"
+    },
+    "target": {
+      "pid": 10884,
+      "processInstanceID": "win32:639271498529745412",
+      "occurrenceID": "3bc07939-58a4-4155-a717-4cd471d75113"
+    },
+    "observedAtUtc": "2026-10-09T13:45:55.494Z",
+    "deadlineAt": 1791553952127,
+    "terminal": {
+      "occurrenceID": "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+      "pid": 10884,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "observedAtUtc": "2026-10-09T13:45:57.8534203Z",
+  "physicalCompletion": true,
+  "chain": [
+    {
+      "expected": {
+        "pid": 10884,
+        "processInstanceID": "win32:639271498529745412",
+        "occurrenceID": "3bc07939-58a4-4155-a717-4cd471d75113"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    },
+    {
+      "expected": {
+        "pid": 49556,
+        "processInstanceID": "win32:639271498521722142",
+        "occurrenceID": "72c54652-1d1b-4765-8acd-1d6ad13b44cc"
+      },
+      "state": "dead_or_reused",
+      "originalOccurrencePresent": false
+    }
+  ]
+}

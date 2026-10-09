@@ -4,6 +4,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import { ConfigPaths } from "../../src/config/paths"
 import { Session } from "../../src/session"
+import { SessionStatus } from "../../src/session/status"
 import { Identifier } from "../../src/id/id"
 import { Server } from "../../src/server/server"
 import { SideChatIdentity, sideChatInstructions } from "../../src/chat/side-chat-identity"
@@ -11,13 +12,14 @@ import { EffectiveConfig } from "../../src/config/effective"
 import { ensureMissionSession } from "../../src/mission/session"
 import { LLM } from "../../src/session/llm"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { parseSubagentConversation } from "../../../overlay/src/services/subagent-conversation"
 
 afterEach(async () => {
   Server.resetProjectRoutesAppForTest()
   await resetMemoryDatabase()
 })
 
-async function input(sessionID: string, text: string) {
+async function input(sessionID: string, text: string, actor = "chat") {
   const id = Identifier.ascending("message")
   await Session.persistMessage({
     info: {
@@ -25,7 +27,7 @@ async function input(sessionID: string, text: string) {
       sessionID,
       role: "user",
       author: "user",
-      agent: "chat",
+      agent: actor,
       model: { providerID: "test", modelID: "side-chat" },
       time: { created: Date.now() },
     },
@@ -34,15 +36,15 @@ async function input(sessionID: string, text: string) {
   return id
 }
 
-async function reply(sessionID: string, parentID: string, text: string, completed = true) {
+async function reply(sessionID: string, parentID: string, text: string, completed = true, actor = "chat") {
   const id = Identifier.ascending("message")
   await Session.persistMessage({
     info: {
       id,
       sessionID,
       role: "assistant",
-      author: "chat",
-      agent: "chat",
+      author: actor,
+      agent: actor,
       parentID,
       acceptedInputMessageIDs: [parentID],
       providerID: "test",
@@ -59,6 +61,59 @@ async function reply(sessionID: string, parentID: string, text: string, complete
 }
 
 describe("source-scoped side conversations", () => {
+  test("cold status reads retain each Project's exact terminal map with an unavailable model", async () => {
+    await using first = await memoryProject("side-status-first")
+    await using second = await memoryProject("side-status-second")
+    const saved: { directory: string; sessionID: string; status: SessionStatus.Info }[] = []
+    try {
+      for (const [project, reason] of [[first, "completed"], [second, "aborted"]] as const) {
+        const sessionID = await Instance.provide({ directory: project.path, fn: async () => {
+          const session = await Session.create({ kind: "assistant", title: `Status ${reason}` })
+          const messageID = await input(session.id, "Accepted status input")
+          SessionStatus.beginExecutionOccurrence(session.id, messageID)
+          await SessionStatus.set(session.id, { type: "terminal", reason }, { inputMessageID: messageID })
+          return session.id
+        } })
+        saved.push({ directory: project.path, sessionID, status: { type: "terminal", reason } })
+        const configFile = ConfigPaths.projectFile(project.path)
+        await fs.mkdir(path.dirname(configFile), { recursive: true })
+        await fs.writeFile(configFile, JSON.stringify({ model: "missing-status-provider/missing-status-model" }))
+      }
+      await Instance.disposeAll()
+      Server.resetProjectRoutesAppForTest()
+      for (const record of saved) {
+        const response = await runOutsideInstanceContext(() => Server.App().request("/session/status", { headers: { "x-opencorvus-directory": record.directory } }))
+        expect({ status: response.status, body: await response.json() }).toEqual({ status: 200, body: { [record.sessionID]: record.status } })
+      }
+    } finally {
+      for (const record of saved) SessionStatus.release(record.sessionID)
+    }
+  })
+  test("side history reads preserve Work reference owners and a later Chat reply through the shared parser", async () => {
+    await using project = await memoryProject("side-history-message-owner")
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const source = await Session.create({ kind: "assistant", title: "Work reference source" })
+        const sourceInput = await input(source.id, "Original Work question", "work")
+        await reply(source.id, sourceInput, "Original Work answer", true, "work")
+        const side = await Session.fork({ sessionID: source.id, purpose: "side-chat" })
+        const sideInput = await input(side.id, "Independent Chat question")
+        await reply(side.id, sideInput, "Independent Chat answer")
+        const response = await Server.App().request(`/session/${side.id}/conversation`, { headers: { "x-opencorvus-directory": project.path } })
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        const parsed = parseSubagentConversation({ source: { kind: "session", id: side.id }, sessionID: side.id, directory: project.path }, body)
+        expect(parsed.messages.map((message) => ({ participant: message.agentID, owner: message.info.sessionAgentID, text: message.parts.find((part) => part.type === "text")?.text }))).toEqual([
+          { participant: "work", owner: "work", text: "Original Work question" },
+          { participant: "work", owner: "work", text: "Original Work answer" },
+          { participant: "chat", owner: "chat", text: "Independent Chat question" },
+          { participant: "chat", owner: "chat", text: "Independent Chat answer" },
+        ])
+        expect(body.view.sessions.map((session: any) => ({ id: session.sessionID, actor: session.agentID }))).toEqual([{ id: side.id, actor: "chat" }])
+      },
+    })
+  })
   test("cold side-history list retains persisted references with missing current model and exact Project authority", async () => {
     await using project = await memoryProject("cold-side-history")
     await using other = await memoryProject("cold-side-history-other")

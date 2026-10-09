@@ -1,0 +1,132 @@
+{
+  "observedAtUtc": "2026-10-09T13:57:23.8473548Z",
+  "physical": {
+    "listeners": null,
+    "occurrence": "source-stream-review-238-live-01-a25a8a92-bfb8-446f-94af-fb329df15a73",
+    "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+    "physicalCompletion": true,
+    "nativeSettlement": {
+      "occurrence": "source-stream-review-238-live-01-a25a8a92-bfb8-446f-94af-fb329df15a73",
+      "outcome": "settled",
+      "host": {
+        "pid": 70116,
+        "processInstanceID": "win32:639271480646558443",
+        "occurrenceID": "109f3db0-1e44-4be9-b2c1-1f88f2773aeb"
+      },
+      "target": {
+        "pid": 71204,
+        "processInstanceID": "win32:639271480654391445",
+        "occurrenceID": "398a87e2-c344-44c5-b2a9-9afb6008bf88"
+      },
+      "observedAtUtc": "2026-10-09T13:16:46.54Z",
+      "deadlineAt": 1791551864640,
+      "terminal": {
+        "occurrenceID": "source-stream-review-238-live-01-a25a8a92-bfb8-446f-94af-fb329df15a73",
+        "pid": 71204,
+        "reason": "exited",
+        "exitCode": 0,
+        "signal": null
+      },
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+    },
+    "observedAtUtc": "2026-10-09T13:16:48.6932627Z",
+    "pairedCleanupComplete": true,
+    "chain": [
+      {
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 71204,
+          "processInstanceID": "win32:639271480654391445",
+          "occurrenceID": "398a87e2-c344-44c5-b2a9-9afb6008bf88"
+        }
+      },
+      {
+        "state": "dead_or_reused",
+        "originalOccurrencePresent": false,
+        "expected": {
+          "pid": 70116,
+          "processInstanceID": "win32:639271480646558443",
+          "occurrenceID": "109f3db0-1e44-4be9-b2c1-1f88f2773aeb"
+        }
+      }
+    ],
+    "copiedPair": [
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\data\\auth.json",
+        "presentAfter": false,
+        "copiedLength": 2194,
+        "outcome": "removed"
+      },
+      {
+        "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\runtime\\data\\models.json",
+        "presentAfter": false,
+        "copiedLength": 9155406,
+        "outcome": "removed"
+      }
+    ]
+  },
+  "occurrence": "source-stream-review-238-live-01-a25a8a92-bfb8-446f-94af-fb329df15a73",
+  "states": [
+    {
+      "expected": {
+        "pid": 70116,
+        "processInstanceID": "win32:639271480646558443",
+        "occurrenceID": "109f3db0-1e44-4be9-b2c1-1f88f2773aeb"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 71204,
+        "processInstanceID": "win32:639271480654391445",
+        "occurrenceID": "398a87e2-c344-44c5-b2a9-9afb6008bf88"
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "readQualified": true,
+  "native": {
+    "occurrence": "source-stream-review-238-live-01-a25a8a92-bfb8-446f-94af-fb329df15a73",
+    "outcome": "settled",
+    "host": {
+      "pid": 70116,
+      "processInstanceID": "win32:639271480646558443",
+      "occurrenceID": "109f3db0-1e44-4be9-b2c1-1f88f2773aeb"
+    },
+    "target": {
+      "pid": 71204,
+      "processInstanceID": "win32:639271480654391445",
+      "occurrenceID": "398a87e2-c344-44c5-b2a9-9afb6008bf88"
+    },
+    "observedAtUtc": "2026-10-09T13:16:46.540Z",
+    "deadlineAt": 1791551864640,
+    "terminal": {
+      "occurrenceID": "source-stream-review-238-live-01-a25a8a92-bfb8-446f-94af-fb329df15a73",
+      "pid": 71204,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/source-stream-review-238-live-01",
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ],
+  "listeners": [],
+  "boundary": "Actual238 UI reopen failure retained; only complete history readonly startup review, no Provider/Task rearm"
+}

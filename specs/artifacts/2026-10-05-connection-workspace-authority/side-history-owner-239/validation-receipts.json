@@ -1,0 +1,37 @@
+{
+  "types": {
+    "backendInitial": 7143,
+    "exitCode": 0,
+    "backendAfterServiceMove": 81631,
+    "overlayOriginal": 11881,
+    "overlayFinal": 99926
+  },
+  "sdk": {
+    "exitCode": 0,
+    "changes": "Only selected Project status description in OpenAPI and SDK generated comment",
+    "session": 66266
+  },
+  "build": {
+    "finalSession": 93616,
+    "exitCode": 0,
+    "seconds": 49.81
+  },
+  "boundary": "Summarizes actual tool results, not reconstructed raw logs, not UI acceptance. Current source and full original runtime evidence remain authoritative",
+  "native": {
+    "review03": "Original fore6100/Native41636 actual0,14:20:27 before14:32:54",
+    "review02": "deadline_exceeded1 retained; post-deadline frames not online qualification",
+    "review01": "exit0, secondary status400 retained"
+  },
+  "dataContracts": {
+    "scope": "Pure transport/HTTP data contracts; no DOM/component/UI automated tests",
+    "routeAndRuntimeCandidate": 18,
+    "forkAndProjectStatus": 2,
+    "parser": 25
+  },
+  "checks": {
+    "architecture": "actual0,18 current documents",
+    "routes": "First source layer/OpenAPI check failed and preserved in tool output; production service repair plus original routes checker rerun actual0",
+    "docs": "actual0, 345 operations25 groups"
+  },
+  "observedAtUtc": "2026-10-09T14:35:17.7290958Z"
+}

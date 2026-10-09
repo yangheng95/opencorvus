@@ -75,6 +75,7 @@ test("actual control-only owner accepts pending Part without message replay", ()
         {
           messageID: visible.id,
           sessionID: target.sessionID,
+          sessionAgentID: visible.sessionAgentID,
           agentID: "build-agent",
           stage: "build",
           time: 100,
@@ -186,7 +187,7 @@ test("actual control-only owner accepts pending Part without message replay", ()
         sessions: [{ sessionID: target.sessionID, agentID: "build-agent", messageIDs: [control.id] }],
       },
     }),
-  ).toThrow(`subagent conversation child-session message control-message session actor drift`)
+  ).toThrow(`subagent conversation child-session message control-message missing session actor identity`)
 })
 
 function orderKey(time: number, id: string): string {
@@ -253,6 +254,7 @@ function payload() {
         {
           messageID: "message-late",
           sessionID: "child-session",
+          sessionAgentID: "build-agent",
           agentID: "build-agent",
           stage: "build",
           time: 200,
@@ -261,6 +263,7 @@ function payload() {
         {
           messageID: "message-early",
           sessionID: "child-session",
+          sessionAgentID: "build-agent",
           agentID: "build-agent",
           stage: "build",
           time: 100,
@@ -282,6 +285,36 @@ function payload() {
 afterEach(() => {
   __setHostTransportForTest(undefined)
   configure({ serverUrl: "http://127.0.0.1:7878", password: "" })
+})
+
+test("historical Work references retain their own actor beside current Chat replies", () => {
+  const data = payload()
+  const earlier = data.transcript[1]!.info
+  Object.assign(earlier, { agentID: "work", sessionAgentID: "work", author: "user", channel: "work", originSource: "" })
+  Object.assign(data.view.messages[1]!, { agentID: "work", sessionAgentID: "work", stage: "user" })
+  Object.assign(data.transcript[0]!.info, { agentID: "chat", sessionAgentID: "chat", author: "chat", channel: "chat" })
+  Object.assign(data.view.messages[0]!, { agentID: "chat", sessionAgentID: "chat", stage: "chat" })
+  data.view.sessions[0]!.agentID = "chat"
+  const result = parseSubagentConversation({ source: { kind: "session", id: "child-session" }, sessionID: "child-session", directory: "/repo" }, data)
+  expect(result.messages.map((message) => ({ id: message.messageID, participant: message.agentID, owner: message.info.sessionAgentID, text: message.parts[0]?.text }))).toEqual([
+    { id: "message-early", participant: "work", owner: "work", text: "Starting" },
+    { id: "message-late", participant: "chat", owner: "chat", text: "Done" },
+  ])
+})
+
+test("visible message owner drift produces the precise view identity error", () => {
+  const data = payload()
+  data.view.messages[0]!.sessionAgentID = "foreign-owner"
+  expect(() => parseSubagentConversation({ source: { kind: "session", id: "child-session" }, sessionID: "child-session", directory: "/repo" }, data))
+    .toThrow("subagent conversation child-session message message-late view identity drift")
+})
+
+test("helper participant retains its execution owner in message metadata", () => {
+  const data = payload()
+  Object.assign(data.transcript[0]!.info, { agentID: "memory", author: "memory", channel: "memory" })
+  Object.assign(data.view.messages[0]!, { agentID: "memory", stage: "memory" })
+  const result = parseSubagentConversation({ source: { kind: "session", id: "child-session" }, sessionID: "child-session", directory: "/repo" }, data)
+  expect(result.messages[1]).toMatchObject({ agentID: "memory", stage: "memory", info: { sessionAgentID: "build-agent" }, parts: [{ text: "Done" }] })
 })
 
 test("canonical child metadata and Part ownership retain precise admission errors", () => {

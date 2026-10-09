@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Side历史/状态/位置239](records/2026-10/2026-10-09-side-history-owner-239.md)：修复三处Side读取/重开问题，45数据检查与真实Source/位置720/Native0复核，原失败保留。
+
 - [真实流式阅读238](records/2026-10/2026-10-09-source-stream-review-238.md)：真实Sources阅读保持/八段正文完成；Side重开发现actor drift，原失败和9次Sol EOF/Native0分别保留。
 
 - [来源后的失败提示237](records/2026-10/2026-10-09-source-failure-visibility-237.md)：共享正文错误修复，真实Sources尾部英文/中文深色前后实测，完整历史与Native0闭合。

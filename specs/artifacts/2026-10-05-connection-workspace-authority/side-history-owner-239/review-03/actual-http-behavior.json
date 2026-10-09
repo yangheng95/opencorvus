@@ -1,0 +1,37 @@
+{
+  "observedAtUtc": "2026-10-09T14:22:49.191Z",
+  "statusReads": [
+    {
+      "time": "2026-10-09T14:18:37.105Z",
+      "requestID": "1601d7d7-fb1c-42b3-ab31-aa2e45f6f024",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-09T14:19:11.249Z",
+      "requestID": "72a7e820-2fe1-493f-a942-a8c4596f7b8e",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    }
+  ],
+  "assets": [
+    {
+      "time": "2026-10-09T14:18:21.155Z",
+      "requestID": "c9cab81a-9bc7-47b2-a934-8f9d8b788770",
+      "method": "GET",
+      "path": "/ui/assets/main-CaWal6Pk.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 2
+    }
+  ],
+  "logRows": 229,
+  "unknownTimeRows": 0,
+  "boundary": "Actual production completed request evidence, not UI assertions"
+}

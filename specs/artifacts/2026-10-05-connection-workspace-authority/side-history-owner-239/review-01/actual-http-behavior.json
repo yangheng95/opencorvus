@@ -1,0 +1,28 @@
+{
+  "observedAtUtc": "2026-10-09T14:22:49.186Z",
+  "statusReads": [
+    {
+      "time": "2026-10-09T13:39:31.983Z",
+      "requestID": "8532eb7a-400c-424d-87de-cbeb380cf91b",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 400,
+      "duration": 14
+    }
+  ],
+  "assets": [
+    {
+      "time": "2026-10-09T13:39:16.752Z",
+      "requestID": "c41203b8-dc40-44dd-83d7-d48db6b34f37",
+      "method": "GET",
+      "path": "/ui/assets/main-BsFv_2HJ.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 8
+    }
+  ],
+  "logRows": 286,
+  "unknownTimeRows": 0,
+  "boundary": "Actual production completed request evidence, not UI assertions"
+}

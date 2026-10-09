@@ -582,7 +582,7 @@ export function parseSubagentConversation(
     transcriptByMessageID.set(messageID, message)
   }
 
-  const membership = new Map<string, { sessionID: string; agentID: string }>()
+  const membership = new Map<string, { sessionID: string }>()
   for (const raw of requireArray(view.sessions, `subagent conversation ${sessionID} view.sessions`)) {
     const session = requireObject(raw, `subagent conversation ${sessionID} session`)
     if (!session.sessionID || !session.agentID)
@@ -590,7 +590,7 @@ export function parseSubagentConversation(
     for (const id of requireArray(session.messageIDs, `subagent conversation ${sessionID} session.messageIDs`)) {
       if (typeof id !== "string" || !id || membership.has(id))
         throw new Error(`subagent conversation ${sessionID} invalid message membership ${id}`)
-      membership.set(id, { sessionID: String(session.sessionID), agentID: String(session.agentID) })
+      membership.set(id, { sessionID: String(session.sessionID) })
     }
   }
   const messages: SubagentTranscriptMessage[] = []
@@ -598,8 +598,8 @@ export function parseSubagentConversation(
     const owner = membership.get(messageID)
     if (!owner || owner.sessionID !== String(message.info.sessionID || ""))
       throw new Error(`subagent conversation ${sessionID} message ${messageID} session identity drift`)
-    if (String(message.info.sessionAgentID || "") !== owner.agentID)
-      throw new Error(`subagent conversation ${sessionID} message ${messageID} session actor drift`)
+    if (!String(message.info.sessionAgentID || "").trim())
+      throw new Error(`subagent conversation ${sessionID} message ${messageID} missing session actor identity`)
     const parts = requireArray(message.parts, `subagent conversation ${sessionID} message ${messageID} parts`)
     for (const part of parts) {
       if (!part?.id || part.messageID !== messageID || part.sessionID !== owner.sessionID)
@@ -623,6 +623,7 @@ export function parseSubagentConversation(
     const actual = liveMessageFromInfo(String(original.info.sessionID || ""), messageID, original.info, original.parts)
     if (
       meta.sessionID !== actual.sessionID ||
+      meta.sessionAgentID !== String(original.info.sessionAgentID) ||
       meta.agentID !== actual.agentID ||
       meta.stage !== actual.stage ||
       meta.time !== actual.time ||

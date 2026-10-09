@@ -150,6 +150,15 @@ The card carries the exact projected `agentID` for agent turns. `stage` and
 dynamic identity. User messages remain user cards even when they belong to a
 projected worker session.
 
+Snapshot hydration validates each visible message's execution owner against
+that same message's `view.messages.sessionAgentID`, beside its participant,
+Session, ordering and Part ownership. The aggregate `view.sessions.agentID`
+describes the current projected Session actor and cannot replace historical
+message ownership: a Side Chat keeps original Work references before its own
+Chat replies. Control-only transcript rows retain their required owner and
+Session/Part checks even when they have no visible message metadata. HTTP reads
+and ordered Session connection snapshots use this one admission parser.
+
 Other stable identities are:
 
 - `integrity:session:<sessionID>` for a live integrity review stream;
@@ -190,6 +199,14 @@ body is collapsed. Main conversation, Side Chat and member transcripts use
 the same bubble renderer and the same projected `CardNode.errorReason`; this
 presentation does not create a Message/Part or a second lifecycle source.
 
+Side Chat's visible reader retains its top/following intent in the existing
+conversation UI owner, keyed by applied authority, source and Side Session.
+Primary selection clears that bounded intent; hidden geometry and retired
+selection/authority owners cannot write it. The selected reader restores through
+the shared scroll controller, whose intent getter retains the original pending
+top through incomplete layout instead of saving a clamped zero. Explicit reader
+input and a return to the bottom retain the controller's existing semantics.
+
 Source disclosures retain their actual adjacent Part group and truthful group
 count. Expanded leaves retain canonical type/Session/Message/source identity
 while reading current metadata and index. A single-source group needs no leaf
@@ -223,6 +240,12 @@ The existing canonical message-list/message/Part GET readers use Project
 identity admission, independently of the current execution-model configuration.
 Their Session lineage and exact parent membership checks remain authoritative;
 config and execution requests continue to validate their required runtime.
+
+The project-scoped `GET /session/status` read uses that same Project identity
+admission independently of execution-model availability. Its existing process
+status facts are projected through durable, visible Session membership in the
+selected Project; internal process-wide status observations retain their own
+scope. Reading status does not initialize a Provider or change an execution.
 
 A visible interaction owns two chronological positions after resolution: the
 request keeps its creation `orderKey`, while the backend projects a distinct

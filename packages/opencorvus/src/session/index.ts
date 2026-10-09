@@ -1047,6 +1047,18 @@ export namespace Session {
     },
   )
 
+  export function statusInProject(projectID: string): Record<string, SessionStatusLifecycle.Info> {
+    const statuses = SessionStatusLifecycle.list()
+    const ids = Object.keys(statuses)
+    if (ids.length === 0) return {}
+    const sessions = Database.use((db) =>
+      db.select({ id: SessionTable.id }).from(SessionTable)
+        .where(and(eq(SessionTable.project_id, projectID), inArray(SessionTable.id, ids)))
+        .all().filter((session) => !deletedInTransaction(db, session.id)),
+    )
+    return Object.fromEntries(sessions.map((session) => [session.id, statuses[session.id]!]))
+  }
+
   export function* list(input?: {
     directory?: string
     roots?: boolean

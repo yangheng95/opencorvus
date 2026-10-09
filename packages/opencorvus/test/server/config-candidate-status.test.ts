@@ -40,7 +40,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-async function cold(directory: string, config: Config.Info, route = "/session/status") {
+async function cold(directory: string, config: Config.Info, route = "/project/current") {
   const project = await Instance.provideProjectIdentity({ directory, fn: () => ({ ...Instance.project }) })
   const file = ConfigPaths.projectFile(directory)
   await fs.mkdir(path.dirname(file), { recursive: true })

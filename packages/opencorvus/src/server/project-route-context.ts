@@ -7,6 +7,7 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /file/content",
   "GET /file/source-content",
   "GET /file/status",
+  "GET /session/status",
   "GET /vcs",
   "GET /vcs/branches",
   "GET /vcs/diff",

@@ -1,0 +1,27 @@
+{
+  "occurrence": "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+  "credentialStaging": "None",
+  "port": 18171,
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-history-owner-239-review-01\\evidence",
+    "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+    "1791553952127",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18171",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-stream-review-238-live-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\side-history-owner-239-review-01\\startup.json",
+    "--startup-occurrence",
+    "side-history-owner-239-review-01-be4d3608-482f-4d92-824f-33e5722f77dd",
+    "--log-level",
+    "INFO"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "observedAtUtc": "2026-10-09T14:22:49.189Z",
+  "statusReads": [
+    {
+      "time": "2026-10-09T14:00:12.173Z",
+      "requestID": "fa84566b-b1e9-4182-acd2-69569287f69b",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-10-09T14:02:24.595Z",
+      "requestID": "ea387cb4-648f-4354-b0d4-afc0b00f273f",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-09T14:12:05.361Z",
+      "requestID": "ab54ae9d-4412-4d06-978f-915ceed17187",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 0
+    },
+    {
+      "time": "2026-10-09T14:12:16.621Z",
+      "requestID": "3bc4a469-a3b9-410e-91fb-d3edd0c6d12e",
+      "method": "GET",
+      "path": "/session/status",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    }
+  ],
+  "assets": [
+    {
+      "time": "2026-10-09T13:59:59.510Z",
+      "requestID": "185dc77d-ccda-4bd3-a78d-bf0f3d85a6ec",
+      "method": "GET",
+      "path": "/ui/assets/main-BsFv_2HJ.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 7
+    },
+    {
+      "time": "2026-10-09T14:11:50.371Z",
+      "requestID": "10419ad2-be3b-4a41-9666-63fdd7218b35",
+      "method": "GET",
+      "path": "/ui/assets/main-CaWal6Pk.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 6
+    }
+  ],
+  "logRows": 524,
+  "unknownTimeRows": 0,
+  "boundary": "Actual production completed request evidence, not UI assertions"
+}

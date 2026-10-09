@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Side历史/状态/位置239 Recall](side-history-owner-plan-239.md) / [原失败与最后after](side-history-owner-239/README.md)：现逐消息owner、project状态与UI intent修复；原400/位置/deadline失败保留，45数据检查与真实720/Source5/Native0复核。
+
 - [真实流式阅读238 Recall](source-stream-review-plan-238.md) / [原完整事实](source-stream-review-238/README.md)：Sources运行→终态保持、Side建议完成但重开actor drift，9次Sol EOF与Native0不能抵消该失败。
 
 - [来源后的失败提示237 Recall](source-failure-visibility-plan-237.md) / [真实前后](source-failure-visibility-237/README.md)：共享正文错误条件修复；真实英文/中文深色Sources阅读、完整原失败历史与Native0閉合，不重置原预算。

@@ -1,5 +1,7 @@
 import { createStore, reconcile } from "solid-js/store"
 
+export type ConversationReadingPosition = { top: number; following: boolean }
+
 const [store, setStore] = createStore({
   // Operator-owned presentation state. Runtime card status must never rewrite
   // an explicit expand/collapse choice.
@@ -8,6 +10,7 @@ const [store, setStore] = createStore({
    * replacement without becoming persisted message data. */
   expandedDisclosures: {} as Record<string, boolean>,
   sourceExcerptPositions: {} as Record<string, number>,
+  sideChatReadingPositions: {} as Record<string, ConversationReadingPosition>,
 })
 
 export { store as conversationUiStore }
@@ -138,6 +141,7 @@ export function loadConversationUiStateForTask(taskID: string): void {
   setStore("expandedCards", reconcile(persisted, { merge: false }))
   setStore("expandedDisclosures", reconcile({}, { merge: false }))
   setStore("sourceExcerptPositions", reconcile({}, { merge: false }))
+  setStore("sideChatReadingPositions", reconcile({}, { merge: false }))
 }
 
 export function clearConversationUiState(): void {
@@ -152,6 +156,7 @@ export function clearConversationUiState(): void {
   setStore("expandedCards", reconcile({}, { merge: false }))
   setStore("expandedDisclosures", reconcile({}, { merge: false }))
   setStore("sourceExcerptPositions", reconcile({}, { merge: false }))
+  setStore("sideChatReadingPositions", reconcile({}, { merge: false }))
 }
 
 /** Read the effective expanded state for a card. */
@@ -197,4 +202,14 @@ export function setSourceExcerptReadingTop(id: string, top: number): void {
   if (!id || !Number.isFinite(top)) return
   const entries = Object.entries({ ...store.sourceExcerptPositions, [id]: Math.max(0, top) })
   setStore("sourceExcerptPositions", reconcile(Object.fromEntries(entries.slice(-MAX_ENTRIES_PER_TASK)), { merge: false }))
+}
+
+export function sideChatReadingPosition(id: string): ConversationReadingPosition | undefined {
+  return store.sideChatReadingPositions[id]
+}
+
+export function setSideChatReadingPosition(id: string, position: ConversationReadingPosition): void {
+  if (!id || !Number.isFinite(position.top)) return
+  const entries = Object.entries({ ...store.sideChatReadingPositions, [id]: { top: Math.max(0, position.top), following: position.following } })
+  setStore("sideChatReadingPositions", reconcile(Object.fromEntries(entries.slice(-MAX_ENTRIES_PER_TASK)), { merge: false }))
 }

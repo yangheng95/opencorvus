@@ -1,5 +1,7 @@
-import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
-import { apiJson, captureApiAuthority, getServerUrl, isApiAuthorityCurrent } from "../services/api"
+import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, untrack } from "solid-js"
+import { apiJson, captureApiAuthority, getServerUrl, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+import { boardStore } from "../store/board"
+import { sideChatReadingPosition, setSideChatReadingPosition } from "../store/conversation-ui"
 import { fileEditorReserved } from "../services/file-workbench"
 import {
   createSideChat,
@@ -95,6 +97,7 @@ export function SideChatPanel(props: {
   let scroll!: HTMLDivElement
   let textarea: HTMLTextAreaElement | undefined
   let follow: AutoScrollController | undefined
+  let reader: { key: string; sourceKey: string; sessionID: string; authority: ApiAuthority; epoch: number; controller: AutoScrollController } | undefined
   const sourceKey = () => `${captureApiAuthority().revision}\0${JSON.stringify(props.source)}`
   const session = createMemo(() => sessions().find((item) => item.id === selected()))
   const key = () => composerDraftKey("side-chat", getServerUrl(), props.source?.directory ?? "", selected())
@@ -109,17 +112,14 @@ export function SideChatPanel(props: {
   const running = createMemo(() => sending() || active())
   const preparing = () => creating() || sessionListState() === "loading"
   const report = (error: unknown) => setError(formatErrorDetails(error))
-  onMount(() => {
-    follow = setupAutoScroll(scroll, {
-      initialPosition: { kind: "bottom" },
-      isTracking: tracking,
-      onUserScrollUp: () => setTracking(false),
-      onFollowRequested: () => setTracking(true),
-    })
-  })
+  const rememberReadingPosition = () => {
+    const owner = reader
+    if (!owner || !isApiAuthorityCurrent(owner.authority) || boardStore.selectEpoch !== owner.epoch || selected() !== owner.sessionID || sourceKey() !== owner.sourceKey) return
+    if (!scroll?.isConnected || scroll.clientHeight <= 0 || scroll.closest("[inert], [hidden]")) return
+    setSideChatReadingPosition(owner.key, owner.controller.readingPosition())
+  }
   onCleanup(() => {
     generation++
-    follow?.cleanup()
   })
   async function loadSessions() {
     const current = ++generation
@@ -210,12 +210,30 @@ export function SideChatPanel(props: {
         setActive(false)
         setInteractions([])
         setStopping(false)
-        setTracking(true)
         const source = props.source
         if (!source || !selected()) return
         const authority = captureApiAuthority()
         const current = generation
         const sessionID = selected()
+        const readingSource = sourceKey()
+        const readingKey = JSON.stringify([readingSource, sessionID])
+        const position = untrack(() => sideChatReadingPosition(readingKey))
+        setTracking(position?.following ?? true)
+        const layoutRoot = scroll.closest<HTMLElement>(".right-dock")
+        if (!layoutRoot) throw new Error("Side Chat requires its right dock layout owner")
+        const controller = setupAutoScroll(scroll, {
+          initialPosition: position && !position.following ? { kind: "position", top: position.top, layoutRoot } : { kind: "bottom" },
+          isTracking: tracking,
+          onUserScrollUp: () => { setTracking(false); rememberReadingPosition() },
+          onFollowRequested: () => { setTracking(true); rememberReadingPosition() },
+        })
+        follow = controller
+        reader = { key: readingKey, sourceKey: readingSource, sessionID, authority, epoch: boardStore.selectEpoch, controller }
+        onCleanup(() => {
+          if (reader?.controller === controller) reader = undefined
+          controller.cleanup()
+          if (follow === controller) follow = undefined
+        })
         const owns = () => current === generation && selected() === sessionID && isApiAuthorityCurrent(authority)
         const dispose = connectSideChat(
           { ...source, sessionID, authority },
@@ -373,7 +391,7 @@ export function SideChatPanel(props: {
           {t("side_chat.failed")}
         </Feedback>
       </Show>
-      <div class="side-chat-panel__scroll" ref={scroll}>
+      <div class="side-chat-panel__scroll" ref={scroll} onScroll={rememberReadingPosition}>
         <QuotationSelection onQuote={quote}>
           <Show when={history().length}>
             <Disclosure.Root class="side-chat-history">

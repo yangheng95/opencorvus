@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Side历史/状态/位置239](2026-10-09-side-history-owner-239.md)：历史owner、project状态读取及Side位置修复，完整原历史实际720保持、原after失败/最后Native0分开保留。
+
 - [真实流式阅读238](2026-10-09-source-stream-review-238.md)：新Sol Sources阅读保持与八段正文；Side重开共享actor校验失败已取得完整真实证据。
 
 - [来源后的失败提示237](2026-10-09-source-failure-visibility-237.md)：已有Sources时正文明确显示错误，真实英文/中文深色与摘要阅读/完整历史闭合。

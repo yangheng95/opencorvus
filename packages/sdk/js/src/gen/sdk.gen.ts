@@ -12169,7 +12169,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Get session status
    *
-   * Retrieve the current status of all sessions, including active, idle, and completed states.
+   * Retrieve the current status of sessions in the selected Project, including active, idle, and completed states.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters?: {

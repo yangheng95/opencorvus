@@ -877,7 +877,7 @@ export const SessionRoutes = lazy(() =>
       "/status",
       describeRoute({
         summary: "Get session status",
-        description: "Retrieve the current status of all sessions, including active, idle, and completed states.",
+        description: "Retrieve the current status of sessions in the selected Project, including active, idle, and completed states.",
         operationId: "session.status",
         responses: {
           200: {
@@ -888,7 +888,7 @@ export const SessionRoutes = lazy(() =>
         },
       }),
       async (c) => {
-        return c.json(SessionStatus.list())
+        return c.json(Session.statusInProject(Instance.project.id))
       },
     )
     .get(

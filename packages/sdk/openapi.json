@@ -96762,7 +96762,7 @@
     },
     "/session/status": {
       "get": {
-        "description": "Retrieve the current status of all sessions, including active, idle, and completed states.",
+        "description": "Retrieve the current status of sessions in the selected Project, including active, idle, and completed states.",
         "operationId": "session.status",
         "parameters": [
           {
