@@ -1,0 +1,64 @@
+Browser tab: 87, Title: "OpenCorvus", URL: "http://localhost:18180/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 122-192, 194-196, 204, 206, 212-225
+~				120 container chatSection
+~					121 container Description: Loading task, ID: taskSwitchProgress
++					122 container
++						123 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
++						124 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
++						125 container Description: Not running, ID: taskStatus
++							126 text Not running
++						127 button Side chat
++						128 container solidChatHeaderRuntimeActions
++							129 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
++							130 checkbox Description: Open right dock, Value: 0
++					131 container
++						132 container Description: Conversation, ID: chatScroll
++							133 container
++								134 container
++									135 text User
++									136 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。
++								137 container
++									138 text work
++									139 text 17s
++									140 button (collapsed) Secondary Actions: Expand, Description: websearch · Web search: site:developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details details HTML element
++										141 text websearch
++										142 text Web search: site:developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details details HTML element
++										143 image
++									144 container Sources
++										145 button (expanded) Description: Sources: <details> HTML details disclosure element - HTML | MDN (2), Help: <details> HTML details disclosure element - HTML | MDN 2, Secondary Actions: Collapse
++											146 text <details> HTML details disclosure element - HTML | MDN
++											147 text 2
++										148 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++										149 button (collapsed) Description: Source excerpt: <details> HTML details disclosure element - HTML | MDN, Help: Source excerpt, Secondary Actions: Expand
++											150 text Source excerpt
++										151 link Description: Open web source: Contributors, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details/contributors.txt
++										152 button (collapsed) Description: Source excerpt: Contributors, Help: Source excerpt, Secondary Actions: Expand
++											153 text Source excerpt
++									154 button (collapsed) Description: webfetch · https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details (text/html), Secondary Actions: Expand
++										155 text webfetch
++										156 text https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details (text/html)
++										157 image
++									158 container Sources
++										159 link Description: Open web source: <details> HTML details disclosure element - HTML | MDN, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++									160 container
++										161 text 经核对 MDN 官方文档， <details>  是原生可展开、折叠的信息组件，以  <summary>  提供标题，默认关闭，可通过点击或聚焦后按空格切换。 open  是布尔属性，即使写成  open="false"  仍会展开，关闭须移除属性。多个元素使用相同  name  可实现互斥展开，无需脚本；状态变化后触发  toggle  事件。
++									162 container
++										163 text 来源：
++										164 link Description: MDN：<details> 元素, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++										165 text （页面更新于 2026-10-01）。
++						166 container chatHomeComposition
++							167 container solidChatComposer
++								168 container chatForm
++									169 splitter Description: Drag to resize the message input, Value: 42
++									170 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
++									171 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
++									172 text Work
++									173 text Chat
++									174 pop up button (collapsed) Description: Base, Secondary Actions: Expand
++									175 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
++									176 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
++										177 text openai/gpt-6.1-sol
++									178 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
++								179 button Scroll to bottom
+The focused UI element is 130 checkbox Description: Open right dock, Value: 0

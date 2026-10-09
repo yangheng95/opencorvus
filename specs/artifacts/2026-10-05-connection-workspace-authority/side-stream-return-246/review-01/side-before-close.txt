@@ -1,0 +1,23 @@
+Browser tab: 87, Title: "OpenCorvus", URL: "http://localhost:18180/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 207-211
++									213 container
++										214 button (collapsed) Reference history · 4 messages, Secondary Actions: Expand
++											215 text Reference history · 4 messages
++										216 container
++											217 text User
++											218 text 只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。
++										219 container
++											220 text chat
++											221 text 25s
++											222 container
++												223 text 以下仅基于主对话现有的 MDN 检索与正文阅读资料，提出  Side Chat 参考历史与来源阅读体验建议 ，并附独立代码示例。未新增检索、创建任务、委托 agent 或修改文件，也不代表完成实际产品验收。
++											224 text 1. **先区分参考历史与当前请求。** 具体操作是进入 Side Chat 后，先确认哪些消息来自主对话，再把当前用户要求作为本次回答的范围；建议将历史内容与新请求在视觉上分开。观察时，应能看出 MDN 检索和结论属于已有参考，而不是等待继续执行的工作。若两者混在一起，读者可能把旧请求理解成新的授权，造成重复检索或无关操作，也会误以为侧边对话已经承接主任务。这里描述的是阅读建议，不是对现有界面分隔效果的实测判断。
+
+2. **让简短结论成为阅读入口。** 具体操作是先阅读已有中文结论，确认它解释了原生折叠组件、默认关闭、布尔属性和状态事件，再按需要查看来源正文。建议不要把检索返回的整页内容放在摘要之前，以免短问题被导航信息淹没。观察现象应是读者不用先浏览大量链接，就能知道元素的基本用途和主要注意事项。若入口只有原始资料，阅读成本会明显增加；若只有结论却没有来源，读者又无法判断表述依据。摘要与原文应互补，而不是相互替代。
+
+3. **保留可核验的具体来源链接。** 具体操作是沿用主对话已经返回并读取的 MDN 元素页面链接，不另找替代地址，也不把链接简化成网站首页。建议链接文字直接标明 MDN 与 `<details>`，让读者在打开前知道目标是什么。观察时，链接名称应与引用内容对应，而不是只显示含义模糊的“详情”或“参考”。若来源指向首页、其他元素或未经读取的页面，核对路径就会中断，结论虽然可能正确，却失去本次已有证据的支撑。此处不声称重新打开过链接。
+
+4. **按问题定位正文，而非顺序读完整页。** 具体操作是根据疑问选择已有正文中的属性、使用说明、事件或技术摘要部分；例如核对默认展开看 `open`，核对状态通知看事件说明。建议把这些阅读方向写成简短提示，不复制
++										225 button Quote in main conversation
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18180/ui/

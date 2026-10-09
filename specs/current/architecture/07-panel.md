@@ -403,7 +403,10 @@ draft's quotation and textarea are hidden once that exact caller Message ID is
 present as a real user Message in the current transcript. The existing draft
 store and request identity remain intact; status and Stop stay available.
 Changed or unaccepted drafts, errors and disconnection keep the writing area
-visible. Normal HTTP completion retains its existing exact-draft cleanup.
+visible. Successful HTTP completion clears only the unchanged draft carrying
+that request's exact submitted Message identity under the same API authority.
+This request-owned cleanup survives Side panel disposal; component status and
+error updates retain their current view ownership.
 
 The shared AutoGrowTextarea owns content height for all writing surfaces. Value
 changes and observed content-width changes use the same measurement and line cap;

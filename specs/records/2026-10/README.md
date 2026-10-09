@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Side运行返回246](2026-10-10-side-stream-return-246.md)：两次实际prefix丢失和open DB0；请求归属草稿清理已修/真实after空输入，shared backend待修。
+
 - [Sources摘录调查245](2026-10-10-source-excerpt-245.md)：原事实与一次真实remote边界核对，缺字未被误归为显示层，无生产改动。
 
 - [Side提交显示244](2026-10-10-side-submitted-draft-244.md)：真实消息接受后紧凑运行区、Sources流式阅读及空输入恢复；原生正常闭合。

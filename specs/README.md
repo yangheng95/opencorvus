@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Side运行返回246](records/2026-10/2026-10-10-side-stream-return-246.md)：两次真实prefix丢失与共同恢复横审；原请求归属草稿清理已修并实跑，backend前缀仍待修。
+
 - [Sources摘录调查245](records/2026-10/2026-10-10-source-excerpt-245.md)：原Tool/canonical一致，新真实远端响应已有缺字，当前本地codec忠实保留；不伪造补字。
 
 - [Side提交显示244](records/2026-10/2026-10-10-side-submitted-draft-244.md)：真实接受后收起重复草稿，阅读区280→466px，Source流式阅读/结束输入恢复与Native0已复核。

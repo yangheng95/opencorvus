@@ -1,0 +1,15 @@
+{
+  "pid": 55744,
+  "occurrence": "side-stream-return-246-live-01-b60ee32c-7f36-4ae5-bfc7-f33e4c715bae",
+  "owner": {
+    "pid": 55744,
+    "processInstanceID": "win32:639271638262482825",
+    "occurrenceID": "b6a3344b-f708-4c42-a9e6-336a43b3c4b6"
+  },
+  "parent": {
+    "pid": 77276,
+    "processInstanceID": "win32:639271638261996546",
+    "occurrenceID": "28eeda46-4f26-48e0-86ba-49beac5071d6"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

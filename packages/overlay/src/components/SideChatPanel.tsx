@@ -315,7 +315,11 @@ export function SideChatPanel(props: {
           parts: [{ type: "text", text: submission.text }],
         }),
       })
-      if (owns() && quotedPrompt(composerDraftText(draftKey).trim(), composerQuotation(draftKey)) === submission.text)
+      if (
+        isApiAuthorityCurrent(authority) &&
+        composerDraftStore.drafts[draftKey]?.submission?.messageID === submission.messageID &&
+        quotedPrompt(composerDraftText(draftKey).trim(), composerQuotation(draftKey)) === submission.text
+      )
         clearComposerDraft(draftKey)
     } catch (error) {
       if (owns()) report(error)

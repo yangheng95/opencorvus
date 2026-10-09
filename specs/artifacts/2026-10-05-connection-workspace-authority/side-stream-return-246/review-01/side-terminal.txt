@@ -1,0 +1,162 @@
+Browser tab: 87, Title: "OpenCorvus", URL: "http://localhost:18180/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 238-372
+~									203 container Reference history · 4 messages Quote in main conversation
++										376 container
++											377 text chat
++											378 container
++												379 text 以下仅基于主对话现有的 MDN 检索与正文阅读资料，提出
++												380 text Side Chat 参考历史与来源阅读体验建议
++												381 text ，并附独立代码示例。未新增检索、创建任务、委托 agent 或修改文件，也不代表完成实际产品验收。
++												382 content list
++													383 container
++														384 AXListMarker 1.
++														385 text 先区分参考历史与当前请求。
++														386 text  具体操作是进入 Side Chat 后，先确认哪些消息来自主对话，再把当前用户要求作为本次回答的范围；建议将历史内容与新请求在视觉上分开。观察时，应能看出 MDN 检索和结论属于已有参考，而不是等待继续执行的工作。若两者混在一起，读者可能把旧请求理解成新的授权，造成重复检索或无关操作，也会误以为侧边对话已经承接主任务。这里描述的是阅读建议，不是对现有界面分隔效果的实测判断。
++													387 container
++														388 AXListMarker 2.
++														389 text 让简短结论成为阅读入口。
++														390 text  具体操作是先阅读已有中文结论，确认它解释了原生折叠组件、默认关闭、布尔属性和状态事件，再按需要查看来源正文。建议不要把检索返回的整页内容放在摘要之前，以免短问题被导航信息淹没。观察现象应是读者不用先浏览大量链接，就能知道元素的基本用途和主要注意事项。若入口只有原始资料，阅读成本会明显增加；若只有结论却没有来源，读者又无法判断表述依据。摘要与原文应互补，而不是相互替代。
++													391 container
++														392 AXListMarker 3.
++														393 text 保留可核验的具体来源链接。
++														394 text  具体操作是沿用主对话已经返回并读取的 MDN 元素页面链接，不另找替代地址，也不把链接简化成网站首页。建议链接文字直接标明 MDN 与
++														395 text <details>
++														396 text ，让读者在打开前知道目标是什么。观察时，链接名称应与引用内容对应，而不是只显示含义模糊的“详情”或“参考”。若来源指向首页、其他元素或未经读取的页面，核对路径就会中断，结论虽然可能正确，却失去本次已有证据的支撑。此处不声称重新打开过链接。
++													397 container
++														398 AXListMarker 4.
++														399 text 按问题定位正文，而非顺序读完整页。
++														400 text  具体操作是根据疑问选择已有正文中的属性、使用说明、事件或技术摘要部分；例如核对默认展开看
++														401 text open
++														402 text ，核对状态通知看事件说明。建议把这些阅读方向写成简短提示，不复制整页导航。观察现象应是每个问题都能对应到明确的正文主题，读者无需在大量站点菜单中寻找答案。若只给一个长页面而没有定位思路，容易把无关导航当成资料重点，或因为篇幅过长放弃核对，进而遗漏布尔属性等关键细节。
++													403 container
++														404 AXListMarker 5.
++														405 text 专门突出布尔属性的易错点。
++														406 text  具体操作是阅读
++														407 text open
++														408 text  说明时，将“属性存在即展开”与
++														409 text open="false"
++														410 text  仍然展开放在一起理解，不把字符串内容当作真假开关。建议在参考历史中保留这条提醒，避免它被一般用途说明覆盖。观察现象应是读者能清楚区分移除属性与修改属性值，并知道默认关闭来自属性缺省。若误把
++														411 text "false"
++														412 text  当成关闭指令，实际内容仍会显示，排查时也可能错误归因于浏览器或样式。这里只解释现有文档结论，没有运行验证案例。
++													413 container
++														414 AXListMarker 6.
++														415 text 把标题与详情内容分别理解。
++														416 text  具体操作是查看已有基础示例，先辨认
++														417 text <summary>
++														418 text  提供的标题，再辨认其后的正文内容；阅读技术摘要时，也注意它们的排列关系。建议说明两者各自承担的作用，不把整个组件笼统称为一个按钮。观察现象应是读者理解关闭时主要呈现标题，展开时显示更多内容，并能据此组织自己的标记。若标题和正文的角色混淆，可能写出结构含混的内容，也会使后续关于点击、聚焦和状态变化的解释难以对应。建议不等于对任何产品结构的检查结果。
++													419 container
++														420 AXListMarker 7.
++														421 text 区分交互描述与真实操作证据。
++														422 text  具体操作是将主对话中的点击和聚焦后按空格说明，标注为来自 MDN 的行为描述；若未来需要检查产品，应另行记录目标页面、具体输入与观察结果。建议在当前参考讨论中避免写成“已确认键盘操作正常”。观察现象应是读者知道文档介绍了什么，同时明白本次没有进行浏览器交互测试。若省略这层区分，资料核对就容易被误读为功能验收，尤其会让可访问操作、焦点表现和实际页面行为获得没有证据支持的肯定结论。
++													423 container
++														424 AXListMarker 8.
++														425 text 谨慎呈现同名分组能力。
++														426 text  具体操作是阅读
++														427 text name
++														428 text  属性说明时，明确它用于连接多个
++														429 text <details>
++														430 text ，使同组元素互斥展开；不要把这种效果描述为所有折叠组件自动具有。建议同时保留文档关于部分能力支持程度可能不同的提示，而不凭现有材料补充具体浏览器版本。观察现象应是读者能区分单个组件与命名分组的行为。若省略分组条件，可能误以为任意多个元素都只能打开一个；若夸大支持范围，则可能把文档能力错误推广为所有运行环境的保证。
++													431 container
++														432 AXListMarker 9.
++														433 text 准确说明事件与状态的关系。
++														434 text  具体操作是阅读已有事件段落，确认
++														435 text toggle
++														436 text  在开闭状态改变之后发送，再将监听器读取的
++														437 text open
++														438 text  理解为当前状态。建议避免把该事件解释成单纯的点击事件，因为文档说明的核心是状态变化。观察现象应是读者能够说明监听什么、读取什么，以及两者为何对应。若把事件和输入动作混为一谈，后续代码可能错误依赖鼠标操作，或将状态变化次数直接等同于事件次数；现有文档还提示，短时间内的多次变化可能合并为一次通知。
++													439 container
++														440 AXListMarker 10.
++														441 text 把页面更新时间放在合适的位置。
++														442 text  具体操作是保留主对话已经读取到的页面更新日期，并将它作为来源背景，而不是答案正确性的独立证明。建议日期紧邻来源，既便于读者判断资料时间，也不抢占结论的阅读重点。观察现象应是读者知道该页面记录了何时修改，同时仍然通过正文核对具体说法。若把日期当成“最新且适用于一切环境”的保证，就会掩盖资料范围与实际环境之间的差异；若完全隐藏日期，则不利于以后辨认这次引用对应的资料背景。
++													443 container
++														444 AXListMarker 11.
++														445 text 让代码示例与引用结论保持独立。
++														446 text  具体操作是将下方 JavaScript 明确标成演示，只展示获取元素、监听
++														447 text toggle
++														448 text  和读取
++														449 text open
++														450 text ，不加入展开控制、分组管理或界面更新逻辑。建议说明它假定页面中存在目标元素，也不声称它来自 MDN 原文。观察现象应是读者能一眼分辨官方资料摘要与本次独立示例，知道示例只覆盖一个很小的使用点。若混淆两者，可能把自写代码误认为官方推荐实现，或误以为示例已经在某个实际页面运行，并完成兼容性与功能验证。
++													451 container
++														452 AXListMarker 12.
++														453 text 用清楚的边界结束参考讨论。
++														454 text  具体操作是读完建议后，分别确认资料核对、体验建议和独立示例的性质，不把它们合并成完成报告。建议保留本次只基于已有资料、没有新检索或文件修改的声明，并避免使用“验收通过”等结论。观察现象应是读者能够复述哪些信息有主对话来源，哪些只是未来可采用的阅读方式。若边界不清，建议表格和代码的完整外观可能造成已执行检查的错觉，进而让真正需要观察的界面问题被遗漏。本次没有实际产品验收结果。
++												455 table
++													456 row
++														457 cell
++															458 text 操作
++														459 cell
++															460 text 预期现象
++														461 cell
++															462 text 失败影响
++													463 row
++														464 cell
++															465 text 区分参考历史与当前请求
++														466 cell
++															467 text 读者明确旧资料与新指令的边界
++														468 cell
++															469 text 重复执行旧请求，误判授权范围
++													470 row
++														471 cell
++															472 text 先读结论，再按问题查看正文
++														473 cell
++															474 text 快速理解用途，并定位依据
++														475 cell
++															476 text 导航噪声遮蔽重点，增加核对成本
++													477 row
++														478 cell
++															479 text 核对
++															480 text open
++															481 text  的布尔属性说明
++														482 cell
++															483 text 知道关闭需要移除属性
++														484 cell
++															485 text 误用
++															486 text open="false"
++															487 text ，内容仍展开
++													488 row
++														489 cell
++															490 text 将交互说明标为文档描述
++														491 cell
++															492 text 不把资料阅读误当实际测试
++														493 cell
++															494 text 对产品行为作出无证据的验收判断
++													495 row
++														496 cell
++															497 text 将示例与官方来源分开标注
++														498 cell
++															499 text 明确代码是独立演示
++														500 cell
++															501 text 误认为官方代码或已验证实现
++												502 text 已有来源
++												503 text ：
++												504 link Description: MDN：<details> 元素, Value: developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details
++												505 text ，主对话已读取正文；页面标注更新于 2026-10-01。本次未重新检索。
++												506 text 独立 JavaScript 示例
++												507 text ：假定页面已有一个
++												508 text <details>
++												509 text ；仅演示监听
++												510 text toggle
++												511 text  并读取
++												512 text open
++												513 text ，未实际运行。
++												514 container
++													515 text JAVASCRIPT
++													516 button Copy code
++												517 container
++													518 text const  details =  document . querySelector ( "details" );
+
+ if  (!details) {
+   throw new Error ( "页面中不存在 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  () =>  {
+   const  isOpen = details. open ;
+
+   console . log ( "当前 open 属性：" , isOpen);
+   console . log (isOpen ?  "已展开"  :  "已折叠" );
+});
++											519 button Copy message
++											520 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++											521 text Oct 10, 01:47 AM
+The focused UI element is 203 container Reference history · 4 messages Quote in main conversation

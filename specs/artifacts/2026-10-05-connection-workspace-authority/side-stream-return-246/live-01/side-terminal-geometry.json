@@ -1,0 +1,34 @@
+{
+  "clientHeight": 280,
+  "composerText": "Main conversation stays on track",
+  "observedAt": "2026-10-09T17:34:03.795Z",
+  "scrollHeight": 4030,
+  "scrollTop": 3749.333251953125,
+  "textarea": "只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。",
+  "texts": [
+    {
+      "frozenBlocks": 1,
+      "messageID": "msg_g0VXZgvNo00xWLYyKjqe",
+      "sessionID": "ses_-zUSQJ4cEzzxLa01OalU",
+      "textChars": 95
+    },
+    {
+      "frozenBlocks": 2,
+      "messageID": "msg_g0VXZgvNo03MoTbtnTWJ",
+      "sessionID": "ses_-zUSQJ4cEzzxLa01OalU",
+      "textChars": 208
+    },
+    {
+      "frozenBlocks": 1,
+      "messageID": "msg_86218757-e66d-4b14-9105-5f1a416bb0f4",
+      "sessionID": "ses_-zUSQJ4cEzzxLa01OalU",
+      "textChars": 234
+    },
+    {
+      "frozenBlocks": 5,
+      "messageID": "msg_g0VXZh0of00oJsVyHddM",
+      "sessionID": "ses_-zUSQJ4cEzzxLa01OalU",
+      "textChars": 3149
+    }
+  ]
+}

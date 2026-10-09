@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Side运行返回246 Recall](side-stream-return-plan-246.md) / [原与after事实](side-stream-return-246/README.md)：shared prefix恢复真实失败保留，草稿请求归属修复/真实after空输入/两Native0。
+
 - [Sources摘录调查245 Recall](source-excerpt-investigation-245.md) / [真实边界](source-excerpt-245/README.md)：原Tool/canonical一致，新公共远端200/SSE文本已有空位，现parser完整保留。
 
 - [Side提交显示244 Recall](side-submitted-draft-plan-244.md) / [真实证据](side-submitted-draft-244/README.md)：精确User Message事实收起重复输入，真实Source/partial/terminal人工复核、9 Sol EOF/Native0。

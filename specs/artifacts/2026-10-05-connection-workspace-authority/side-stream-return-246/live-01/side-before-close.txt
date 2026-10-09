@@ -1,0 +1,21 @@
+Browser tab: 86, Title: "OpenCorvus", URL: "http://localhost:18179/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 185-189
++									191 container
++										192 button (collapsed) Reference history · 4 messages, Secondary Actions: Expand
++											193 text Reference history · 4 messages
++										194 container
++											195 text User
++											196 text 只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。
++										197 container
++											198 text chat
++											199 text 21s
++											200 container
++												201 text 以下仅基于主对话已有的 MDN 检索结果、正文读取结果及中文结论，提出  Side Chat 参考历史与来源阅读体验建议 。各段中的预期现象与失败影响均为建议性描述，不表示已观察到实际产品行为；末尾代码是独立示例。本次不新增检索、不创建任务、不委托 agent、不修改文件，也不声称完成实际产品验收。
++											202 text 1. **先区分参考历史与当前请求。** 具体操作是进入侧对话后，先阅读历史区域的边界提示，再确认当前用户消息要求的输出范围；建议将继承内容标为“参考历史”，不要与新消息采用完全相同的视觉层级。预期观察现象是读者能明确辨认哪些内容解释背景，哪些内容正在要求执行，并知道主对话仍独立继续。失败影响是旧请求可能被误当成新授权，导致重复检索、重复回答或错误恢复先前工作，尤其容易遗漏当前请求明确提出的只读限制。
+
+2. **把只读约束放在阅读入口。** 具体操作是在查看来源之前，先核对主对话原始要求中的“不创建任务、不委托、不生成或修改文件”，并建议在参考历史附近保留简短的范围说明，而不是只依赖读者翻阅长消息。预期观察现象是读者能够判断现有资料足以支持什么，也能区分阅读建议与执行动作。失败影响是“改善体验”可能被误解为已经获得实现权限，进而触发不必要的工具操作，或者让建议文字看起来像已经完成了界面改造。
+
+3. **按证据形成顺序阅读历史。** 具体操作是先看用户问题，再看搜索返回的候选页面，随后阅读实际获取的 MDN 正文，最后对照中文结论；建议为这几类内容提供清晰的标题或顺序提示，而不把全部
++										203 button Quote in main conversation
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18179/ui/
