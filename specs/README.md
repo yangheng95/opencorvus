@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [最新Sources流式242](records/2026-10/2026-10-09-source-stream-242.md)：新Sol真实Sources8/Side引用6与来源位置保持，11stream EOF/Native0；限定帧未扩大为全Rendering。
+
 - [中文深色Sources241](records/2026-10/2026-10-09-source-dark-241.md)：修复外层参考历史重开默认折叠，原摘要可见3107/outer531保持，ChineseDark实测Native0。
 
 - [Side阅读空间240](records/2026-10/2026-10-09-side-composer-240.md)：修复共享输入框布局失效，真实空框199→72px、Sources阅读区增加127px，Native0闭合。

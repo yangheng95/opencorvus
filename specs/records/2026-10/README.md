@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [最新Sources流式242](2026-10-09-source-stream-242.md)：当前239–241修复在新真实Sol Main/Side/继承Source中复核，11EOF与完整Native0闭合。
+
 - [中文深色Sources241](2026-10-09-source-dark-241.md)：外层引用history唯一UI展开状态，wholeDock真实Source可见与位置保持，原失败/Native0保留。
 
 - [Side阅读空间240](2026-10-09-side-composer-240.md)：首次空框/宽度变化重测，真实Sources与输入127px阅读空间改善、Native0。

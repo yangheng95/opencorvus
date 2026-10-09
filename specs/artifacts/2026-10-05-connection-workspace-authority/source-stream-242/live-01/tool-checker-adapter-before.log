@@ -1,0 +1,21 @@
+23 | 	}
+24 | 	prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
+25 | 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper);
+26 | 	}
+27 | 	prepareOneTimeQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
+28 | 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper, false, true);
+                                            ^
+SQLiteError: no such table: permission_execution_result
+      errno: 1,
+ byteOffset: -1,
+
+      at prepare (bun:sqlite:345:37)
+      at prepareOneTimeQuery (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\bun-sqlite\session.cjs:28:40)
+      at _prepare (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\sqlite-core\query-builders\select.cjs:560:71)
+      at get (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+13586c8ac9862723\node_modules\drizzle-orm\sqlite-core\query-builders\select.cjs:589:15)
+      at completedToolOutcomeOutput (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\tool-outcome-facts.ts:26:6)
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\source-stream-242\tool-outcomes.ts:4:531)
+      at map (1:11)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\source-stream-242\tool-outcomes.ts:4:316
+
+Bun v1.3.14 (Windows x64)

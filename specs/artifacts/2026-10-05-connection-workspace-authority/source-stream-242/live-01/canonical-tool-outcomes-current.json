@@ -1,0 +1,191 @@
+{
+  "observedAtUtc": "2026-10-09T15:49:20.560Z",
+  "access": "Actual complete original readonly BEGIN/ROLLBACK; production completedToolOutcomeOutput resolves durable Permission result and same typed outcome discriminator",
+  "observations": [
+    {
+      "id": "prt_h69Rgqhao8gm6enx6aaE",
+      "requestPartID": "prt_g0VXZBq3J000lOvtQn3v",
+      "messageID": "msg_g0VXZBoMP003dJwZQcqd",
+      "sessionID": "ses_-zUSQoBu0zzFbp1z0ler",
+      "tool": "websearch",
+      "outcome": "completed",
+      "resultAttemptID": "per_hd3hG4Ht9XFWq4OINRUR",
+      "outputChars": 13843,
+      "outputType": "string",
+      "title": "Web search: site:developer.mozilla.org HTML details element summary keyboard accessibility",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 5
+          }
+        ],
+        "resultCount": 5,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559682766
+      }
+    },
+    {
+      "id": "prt_hlfx5zALoV4wnqLBzgtj",
+      "requestPartID": "prt_g0VXZBsiF00yIOZkkN4M",
+      "messageID": "msg_g0VXZBqnu00XVTWb7AoK",
+      "sessionID": "ses_-zUSQoBu0zzFbp1z0ler",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "resultAttemptID": "per_hnK2VfeENXzqxBLBqA1M",
+      "outputChars": 38273,
+      "outputType": "string",
+      "title": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details (text/html)",
+      "metadata": {
+        "originalBytes": 38308,
+        "shownBytes": 38308,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559691685
+      }
+    },
+    {
+      "id": "prt_hCAOa9doSeEBtkBCRxvw",
+      "requestPartID": "prt_g0VXZBuR800x9H0775JJ",
+      "messageID": "msg_g0VXZBtA200U7cv1n1bu",
+      "sessionID": "ses_-zUSQoBu0zzFbp1z0ler",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "resultAttemptID": "per_hkXk4ISflSaHkIqlNNQh",
+      "outputChars": 38530,
+      "outputType": "string",
+      "title": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary (text/html)",
+      "metadata": {
+        "originalBytes": 38561,
+        "shownBytes": 38561,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559698115
+      }
+    },
+    {
+      "id": "prt_h1shzyP0TJp7Lr3WaV6d",
+      "requestPartID": "prt_g0VXZBwKQ006Nq2gzMpx",
+      "messageID": "msg_g0VXZBuyD006r6ruYeZx",
+      "sessionID": "ses_-zUSQoBu0zzFbp1z0ler",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "resultAttemptID": "per_hA3IaBEy5mYkl48SL1SI",
+      "outputChars": 31190,
+      "outputType": "string",
+      "title": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard (text/html)",
+      "metadata": {
+        "originalBytes": 31213,
+        "shownBytes": 31213,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559706120
+      }
+    },
+    {
+      "id": "prt_h3UUzcQXmWaRtaJXDMMt",
+      "requestPartID": "prt_g0VXZCaPP03tOWdnF5U7",
+      "messageID": "msg_g0VXZCaPP005DyfTwUQ2",
+      "sessionID": "ses_-zUSQnPafzzkC6SwhL78",
+      "tool": "websearch",
+      "outcome": "completed",
+      "resultAttemptID": null,
+      "outputChars": 13843,
+      "outputType": "string",
+      "title": "Web search: site:developer.mozilla.org HTML details element summary keyboard accessibility",
+      "metadata": {
+        "provider": "exa",
+        "attempts": [
+          {
+            "provider": "exa",
+            "resultCount": 5
+          }
+        ],
+        "resultCount": 5,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559682766
+      }
+    },
+    {
+      "id": "prt_h4A1AaEUZEsstbT23FzG",
+      "requestPartID": "prt_g0VXZCaPP0B933agMRaD",
+      "messageID": "msg_g0VXZCaPP01xY4YL9dRy",
+      "sessionID": "ses_-zUSQnPafzzkC6SwhL78",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "resultAttemptID": null,
+      "outputChars": 38273,
+      "outputType": "string",
+      "title": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details (text/html)",
+      "metadata": {
+        "originalBytes": 38308,
+        "shownBytes": 38308,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559691685
+      }
+    },
+    {
+      "id": "prt_h71oDPezkTeGkbx7tM2r",
+      "requestPartID": "prt_g0VXZCaPP0FXS3yy2H0T",
+      "messageID": "msg_g0VXZCaPP02Am8R0JXWU",
+      "sessionID": "ses_-zUSQnPafzzkC6SwhL78",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "resultAttemptID": null,
+      "outputChars": 38530,
+      "outputType": "string",
+      "title": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary (text/html)",
+      "metadata": {
+        "originalBytes": 38561,
+        "shownBytes": 38561,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559698115
+      }
+    },
+    {
+      "id": "prt_hQHmTl5FwldSM5ssHacS",
+      "requestPartID": "prt_g0VXZCaPP0JcMlN5hImM",
+      "messageID": "msg_g0VXZCaPP03FWZrSgSd8",
+      "sessionID": "ses_-zUSQnPafzzkC6SwhL78",
+      "tool": "webfetch",
+      "outcome": "completed",
+      "resultAttemptID": null,
+      "outputChars": 31190,
+      "outputType": "string",
+      "title": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard (text/html)",
+      "metadata": {
+        "originalBytes": 31213,
+        "shownBytes": 31213,
+        "webfetchOutputClipped": false,
+        "webfetchEmbeddedAttachmentCount": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1791559706120
+      }
+    }
+  ],
+  "scope": "8 persisted outcomes include inherited copies; positive completed/string output observations, no UI assertions"
+}

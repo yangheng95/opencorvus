@@ -1,0 +1,3 @@
+# 242原归档检查器按当前Tool契约重跑
+
+旧live-01/canonical-current-conversations.json将真实outcome误读为status，也没有解析resultAttemptID。当前同一archive助手直接使用production completedToolOutcomeOutput及现drizzle({client:sqlite})，对原已闭合DB readonly重跑actual0，保留旧原件。新canonical-current-conversations.json八个Tool outcome均completed，原四个Permission deferred输出与继承四个inline输出的实际长度13843/38273/38530/31190；身份和实值来自原数据库，输出正文保留私有，不复制算法。此阶段没有新Provider/Native/UI执行，不能当作额外E2E。

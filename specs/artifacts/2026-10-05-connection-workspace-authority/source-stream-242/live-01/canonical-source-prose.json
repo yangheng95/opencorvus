@@ -1,0 +1,469 @@
+{
+  "observedAtUtc": "2026-10-09T15:37:23.246Z",
+  "access": "Actual readonly canonical BEGIN/ROLLBACK after physical closure",
+  "sources": [
+    {
+      "id": "prt_g0VXZBqlg00j2wudDblP",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+        "title": "<summary> HTML disclosure summary element - HTML | MDN",
+        "snippet": "The ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n\nThe content of the ` ` provides the accessible description for the ` `.\n...\nPer the HTML specification, the default style for ` ` elements includes `display: list-item`. This makes it possible to change or remove the icon displayed as the disclosure widget next to the label from the default, which is typically a triangle.\n...\nFor WebKit-based browsers, such as Safari, it is possible to control the icon display through the non-standard CSS pseudo-element `::-webkit-details-marker`. To remove the disclosure triangle, use `summary::-webkit-details-marker { display: none }`.\n...\nWarning: The role assigned to the ` ` element varies across browsers. Some still assign it a default `button` role, which removes all roles from its children. This inconsistency can cause issues for users of assistive technologies such as screen readers (` ` in the previous example will have its role removed and will not be treated as a heading for these users). You should test your ` ` implementation on multiple platforms to ensure there's consistent accessibility support.\n...\n| Content categories | none |\n| --- | --- |\n| Permitted content | Phrasing content, optionally intermixed with Heading content |\n| Tag omission | None; both the start tag and the end tag are mandatory. |\n| Permitted parents | The ` ` element. |\n| Implicit ARIA role | No corresponding role |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLElement` |",
+        "publishedAt": "2026-04-24T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZBqlk00KJzMGv7Z4",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - MDN Web Docs",
+        "snippet": "The ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n\nNote: You have to remove this attribute entirely to make the details hidden. `open=\"false\"` makes the details visible because this attribute is Boolean.\n...\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style the disclosure widget, and you can programmatically open and close the widget by setting/removing its `open` attribute. Unfortunately, at this time, there's no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget is only tall enough to display the disclosure triangle and summary. When open, it expands to display the details contained within.\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\n` attribute:\n...\n<details name=\"requirements\">\n  <summary>Job Requirements</summary>\n  <p>\n    Requires knowledge of HTML, CSS, JavaScript, accessibility, web performance,\n    privacy, security, and internationalization, as well as a dislike of\n    broccoli.\n  </p>\n</details>\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLDetailsElement` |",
+        "publishedAt": "2026-10-01T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZBqlo00lzIRshNZc",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f69cb68a47c58baf5bb0f71363fc1dc4b42be2e3b2e9434c655451c9bf996767",
+        "url": "https://developer.mozilla.org/en-US/blog/html-details-exclusive-accordions/",
+        "title": "Exclusive accordions using the HTML details element",
+        "snippet": "The `name` attribute of the ` ` element is soon to be supported across all major browsers. Firefox 130 should also have support, enabling most engines to handle common UI accordion patterns using only ` ` elements. This is good news for developers who have been writing custom handling for these cases from scratch. Let's explore what the attribute allows you to do with some quick examples.\n...\nIf you're unfamiliar with ` `, it's an element that creates a 'disclosure widget' in which information is visible only when the widget is toggled to an \"open\" state. You should include in it a ` ` element, which is used for the text describing the disclosure. If you omit the ` `, a browser-specific string like \"Details\" will be used by default. Click the two elements below to toggle them between open and closed states and notice the missing ` ` in the first one:\n...\nSince an accordion is a series of expandable sections that allow users to show or hide content, a series of ` ` elements can be used to create an accordion-like interface. With the use of the `name` attribute, as we'll see later, these elements can closely mimic the behavior of common accordions, in which only one section can be open at a time, with other sections automatically closing when a new one is expanded.\n...\nfit into your pages because some ... styling can go a long way to create interactive accordions using only HTML and CSS.\n...\nA common use case for accordions is that only one of them should be open at any one time. The addition of the `name` attribute lets you connect multiple ` ` elements and make an accordion exclusive, so only one ` ` element with the same name can be open at any time, and the browser toggles all others with the same name to a \"closed\" state. It's quite nice to be able to include this when you want to group multiple ` ` elements and ensure exclusivity:\n...\nAn FAQ is a good use case for these types of exclusive accordions where the visitor can focus on one topic at a time:\n...\nWith more support landing for this feature in more stable browsers, it's a good indicator that the web platform is providing better functionality for features that web developers have had to write themselves. If you're looking for a polyfill, there's a great post by Bramus, which includes a polyfill for browsers that don't support this yet.",
+        "publishedAt": "2024-08-05T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZBqlr00lAHFeJ1ii",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "7e2bd67bf4070a6e71c9c2c7e2b831fa3246c34f941b366c4b6aaa0c5e38ade4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement",
+        "title": "HTMLDetailsElement - Web APIs | MDN",
+        "snippet": "The `HTMLDetailsElement` interface provides special properties (beyond the regular `HTMLElement` interface it also has available to it by inheritance) for manipulating ` ` elements.\n...\n`HTMLDetailsElement.name`\n: A string reflecting the `name` HTML attribute, which allows you to create a group of mutually-exclusive ` ` elements. Opening one of the named ` ` elements of this group causes other elements of the group to close.\n`HTMLDetailsElement.open`\n: A boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) is to be shown to the user.\n...\nThis example uses the `HTMLElement` `toggle` event to add and remove chapters from a log aside as they are opened and closed.\n...\n```\n<section id=\"summaries\">\n  <p>Chapter summaries:</p>\n  <details id=\"ch1\">\n    <summary>Chapter I</summary>\n    Philosophy reproves Boethius for the foolishness of his complaints against\n    Fortune. Her very nature is caprice.\n  </details>\n  <details id=\"ch2\">\n    <summary>Chapter II</summary>\n    Philosophy in Fortune's name replies to Boethius' reproaches, and proves\n    that the gifts of Fortune are hers to give and to take away.\n  </details>\n  <details id=\"ch3\">\n    <summary>Chapter III</summary>\n    Boethius falls back upon his present sense of misery. Philosophy reminds him\n    of the brilliancy of his former fortunes.\n  </details>\n</section>\n<aside id=\"log\">\n  <p>Open chapters:</p>\n  <div data-id=\"ch1\" hidden>I</div>\n  <div data-id=\"ch2\" hidden>II</div>\n  <div data-id=\"ch3\" hidden>III</div>\n</aside>\n...\n```\nfunction logItem(e) {\n  console.log(e);\n  const item = document.querySelector(`[data-id=${e.target.id}]`);\n  item.toggleAttribute(\"hidden\");\n}\n\nconst chapters = document.querySelectorAll(\"details\");\nchapters.forEach((chapter) => {\n  chapter.addEventListener(\"toggle\", logItem);\n});",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZBqlu000fWZmjXO8",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - Accessibility | MDN",
+        "snippet": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and control it. This includes users of screen readers, but can also include users who have trouble operating a pointing device such as a mouse or trackball, or whose mouse is not working at the moment, or who prefer to use a keyboard for input whenever possible.\n\n## Focusable elements should have interactive semantics\n\nIf an element can be focused using the keyboard, then it should be interactive; that is, the user should be able to do something to it and produce a change of some kind (for example, activating a link or changing an option).\n...\nMost interactive elements are focusable by default; you can make an element focusable by adding a `tabindex=0` attribute value to it. However, you should only add `tabindex` if you have also made the element interactive, for example, by defining appropriate event handlers keyboard events.\n...\nThe `tabindex` attribute indicates that an element is focusable using the keyboard. A value of zero indicates that the element is part of the default focus order, which is based on the ordering of elements in the HTML document. A positive value puts the element ahead of those in the default ordering; elements with positive values are focused in the order of their `tabindex` values (1, then 2, then 3, etc.).\n\nThis creates confusion for keyboard-only users when the focus order differs from the logical order of the page. A better strategy is to structure the HTML document so that focusable elements are in a logical order, without the need to re-order them with positive `tabindex` values.\n\n## Clickable elements must be focusable and should have interactive semantics\n\nIf an element can be clicked with a pointing device, such as a mouse, then it should also be focusable using the keyboard, and the user should be able to do something by interacting with it.\n\nAn element is clickable if it has an `onclick` event handler defined. You can make it focusable by adding a `tabindex=0` attribute value to it. You can make it operable with the keyboard by defining an `onkeydown` event handler; in most cases, the action taken by event handler should be the same for both types of events.\n\n## Interactive elements must be able to be activated using a keyboard\n\nIf the user can interact with an element using touch or a pointing device, then the element should also support interacting using the keyboard. That is, if you have defined event handlers for touch or click events, you should also define them for keyboard events. The keyboard event handlers should enable effectively the same interaction as the touch or click handlers.\n\n## Interactive elements must be focusable\n\nIf the user can interact with an element (for example, using touch or a pointing device), then it should be focusable using the keyboard. You can make it focusable by adding a `tabindex=0` attribute value to it. That will add the element to the list of elements that can be focused by pressing the Tab key, in the sequence of such elements as defined in the HTML document.\n\n## Focusable element must have focus styling\n\nAny element that can receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes.\n\nStandard focusable elements such as links and input fields are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive.\n\nIf you create your own focusable components, be sure that you also define focus styling for them",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZBt5V00eWCZ71fnH",
+      "message_id": "msg_g0VXZBqnu00XVTWb7AoK",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZBulD00fC5Cjy4h9",
+      "message_id": "msg_g0VXZBtA200U7cv1n1bu",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+        "title": "<summary> HTML disclosure summary element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZBwqK00hkpd9HJhB",
+      "message_id": "msg_g0VXZBuyD006r6ruYeZx",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP04A2RFhpPsw",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+        "title": "<summary> HTML disclosure summary element - HTML | MDN",
+        "snippet": "The ` ` HTML element specifies a summary, caption, or legend for a ` ` element's disclosure box. Clicking the ` ` element toggles the state of the parent ` ` element open and closed.\n...\n```\n<details>\n  <summary>\n    I have keys but no doors. I have space but no room. You can enter but can't\n    leave. What am I?\n  </summary>\n  A keyboard.\n</details>\n...\nA ` ` element may only be used as the first child of a ` ` element. When the user clicks on the summary, the parent ` ` element is toggled open or closed, and then a `toggle` event is sent to the ` ` element, which can be used to let you know when this state change occurs.\n\nThe content of the ` ` provides the accessible description for the ` `.\n...\nPer the HTML specification, the default style for ` ` elements includes `display: list-item`. This makes it possible to change or remove the icon displayed as the disclosure widget next to the label from the default, which is typically a triangle.\n...\nFor WebKit-based browsers, such as Safari, it is possible to control the icon display through the non-standard CSS pseudo-element `::-webkit-details-marker`. To remove the disclosure triangle, use `summary::-webkit-details-marker { display: none }`.\n...\nWarning: The role assigned to the ` ` element varies across browsers. Some still assign it a default `button` role, which removes all roles from its children. This inconsistency can cause issues for users of assistive technologies such as screen readers (` ` in the previous example will have its role removed and will not be treated as a heading for these users). You should test your ` ` implementation on multiple platforms to ensure there's consistent accessibility support.\n...\n| Content categories | none |\n| --- | --- |\n| Permitted content | Phrasing content, optionally intermixed with Heading content |\n| Tag omission | None; both the start tag and the end tag are mandatory. |\n| Permitted parents | The ` ` element. |\n| Implicit ARIA role | No corresponding role |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLElement` |",
+        "publishedAt": "2026-04-24T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP05KWRHEyOH3",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - MDN Web Docs",
+        "snippet": "The ` ` HTML element creates a disclosure widget in which information is visible only when the widget is toggled into an open state. A summary or label must be provided using the ` ` element.\n\nA disclosure widget is typically presented onscreen using a small triangle that rotates (or twists) to indicate open/closed state, with a label next to the triangle. The contents of the ` ` element are used as the label for the disclosure widget. The contents of the ` ` provide the accessible description for the ` `.\n...\n`open`\n: This Boolean attribute indicates whether the details — that is, the contents of the ` ` element — are currently visible. The details are shown when this attribute exists, or hidden when this attribute is absent. By default this attribute is absent which means the details are not visible.\n\nNote: You have to remove this attribute entirely to make the details hidden. `open=\"false\"` makes the details visible because this attribute is Boolean.\n...\nA ` ` widget can be in one of two states. The default closed state displays only the triangle and the label inside ` ` (or a user agent-defined default string if no ` `).\n\nWhen the user clicks on the widget or focuses it then presses the space bar, it \"twists\" open, revealing its contents. The common use of a triangle which rotates or twists around to represent opening or closing the widget is why these are sometimes called \"twisty\".\n\nYou can use CSS to style the disclosure widget, and you can programmatically open and close the widget by setting/removing its `open` attribute. Unfortunately, at this time, there's no built-in way to animate the transition between open and closed.\n\nBy default when closed, the widget is only tall enough to display the disclosure triangle and summary. When open, it expands to display the details contained within.\n...\nIn addition to the usual events supported by HTML elements, the ` ` element supports the `toggle` event, which is dispatched to the ` ` element whenever its state changes between open and closed. It is sent after the state is changed, although if the state changes multiple times before the browser can dispatch the event, the events are coalesced so that only one is sent.\n...\n` attribute:\n...\n<details name=\"requirements\">\n  <summary>Job Requirements</summary>\n  <p>\n    Requires knowledge of HTML, CSS, JavaScript, accessibility, web performance,\n    privacy, security, and internationalization, as well as a dislike of\n    broccoli.\n  </p>\n</details>\n...\nNote: In browsers that don't support the `:open` pseudo-class, you can use the attribute selector `details[open]` to style the ` ` element when it is in the open state.\n...\n| Content categories | Flow content, sectioning root, interactive content, palpable content. |\n| --- | --- |\n| Permitted content | One ` ` element followed by flow content. |\n| Tag omission | None, both the starting and ending tag are mandatory. |\n| Permitted parents | Any element that accepts flow content. |\n| Implicit ARIA role | `group` |\n| Permitted ARIA roles | No `role` permitted |\n| DOM interface | `HTMLDetailsElement` |",
+        "publishedAt": "2026-10-01T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP06GfcIt4ov1",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "f69cb68a47c58baf5bb0f71363fc1dc4b42be2e3b2e9434c655451c9bf996767",
+        "url": "https://developer.mozilla.org/en-US/blog/html-details-exclusive-accordions/",
+        "title": "Exclusive accordions using the HTML details element",
+        "snippet": "The `name` attribute of the ` ` element is soon to be supported across all major browsers. Firefox 130 should also have support, enabling most engines to handle common UI accordion patterns using only ` ` elements. This is good news for developers who have been writing custom handling for these cases from scratch. Let's explore what the attribute allows you to do with some quick examples.\n...\nIf you're unfamiliar with ` `, it's an element that creates a 'disclosure widget' in which information is visible only when the widget is toggled to an \"open\" state. You should include in it a ` ` element, which is used for the text describing the disclosure. If you omit the ` `, a browser-specific string like \"Details\" will be used by default. Click the two elements below to toggle them between open and closed states and notice the missing ` ` in the first one:\n...\nSince an accordion is a series of expandable sections that allow users to show or hide content, a series of ` ` elements can be used to create an accordion-like interface. With the use of the `name` attribute, as we'll see later, these elements can closely mimic the behavior of common accordions, in which only one section can be open at a time, with other sections automatically closing when a new one is expanded.\n...\nfit into your pages because some ... styling can go a long way to create interactive accordions using only HTML and CSS.\n...\nA common use case for accordions is that only one of them should be open at any one time. The addition of the `name` attribute lets you connect multiple ` ` elements and make an accordion exclusive, so only one ` ` element with the same name can be open at any time, and the browser toggles all others with the same name to a \"closed\" state. It's quite nice to be able to include this when you want to group multiple ` ` elements and ensure exclusivity:\n...\nAn FAQ is a good use case for these types of exclusive accordions where the visitor can focus on one topic at a time:\n...\nWith more support landing for this feature in more stable browsers, it's a good indicator that the web platform is providing better functionality for features that web developers have had to write themselves. If you're looking for a polyfill, there's a great post by Bramus, which includes a polyfill for browsers that don't support this yet.",
+        "publishedAt": "2024-08-05T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP07vMHu1PPVa",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "7e2bd67bf4070a6e71c9c2c7e2b831fa3246c34f941b366c4b6aaa0c5e38ade4",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement",
+        "title": "HTMLDetailsElement - Web APIs | MDN",
+        "snippet": "The `HTMLDetailsElement` interface provides special properties (beyond the regular `HTMLElement` interface it also has available to it by inheritance) for manipulating ` ` elements.\n...\n`HTMLDetailsElement.name`\n: A string reflecting the `name` HTML attribute, which allows you to create a group of mutually-exclusive ` ` elements. Opening one of the named ` ` elements of this group causes other elements of the group to close.\n`HTMLDetailsElement.open`\n: A boolean value reflecting the `open` HTML attribute, indicating whether or not the element's contents (not counting the ` `) is to be shown to the user.\n...\nThis example uses the `HTMLElement` `toggle` event to add and remove chapters from a log aside as they are opened and closed.\n...\n```\n<section id=\"summaries\">\n  <p>Chapter summaries:</p>\n  <details id=\"ch1\">\n    <summary>Chapter I</summary>\n    Philosophy reproves Boethius for the foolishness of his complaints against\n    Fortune. Her very nature is caprice.\n  </details>\n  <details id=\"ch2\">\n    <summary>Chapter II</summary>\n    Philosophy in Fortune's name replies to Boethius' reproaches, and proves\n    that the gifts of Fortune are hers to give and to take away.\n  </details>\n  <details id=\"ch3\">\n    <summary>Chapter III</summary>\n    Boethius falls back upon his present sense of misery. Philosophy reminds him\n    of the brilliancy of his former fortunes.\n  </details>\n</section>\n<aside id=\"log\">\n  <p>Open chapters:</p>\n  <div data-id=\"ch1\" hidden>I</div>\n  <div data-id=\"ch2\" hidden>II</div>\n  <div data-id=\"ch3\" hidden>III</div>\n</aside>\n...\n```\nfunction logItem(e) {\n  console.log(e);\n  const item = document.querySelector(`[data-id=${e.target.id}]`);\n  item.toggleAttribute(\"hidden\");\n}\n\nconst chapters = document.querySelectorAll(\"details\");\nchapters.forEach((chapter) => {\n  chapter.addEventListener(\"toggle\", logItem);\n});",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP08o3fniK76E",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - Accessibility | MDN",
+        "snippet": "To be fully accessible, a web page must be operable by someone using only a keyboard to access and control it. This includes users of screen readers, but can also include users who have trouble operating a pointing device such as a mouse or trackball, or whose mouse is not working at the moment, or who prefer to use a keyboard for input whenever possible.\n\n## Focusable elements should have interactive semantics\n\nIf an element can be focused using the keyboard, then it should be interactive; that is, the user should be able to do something to it and produce a change of some kind (for example, activating a link or changing an option).\n...\nMost interactive elements are focusable by default; you can make an element focusable by adding a `tabindex=0` attribute value to it. However, you should only add `tabindex` if you have also made the element interactive, for example, by defining appropriate event handlers keyboard events.\n...\nThe `tabindex` attribute indicates that an element is focusable using the keyboard. A value of zero indicates that the element is part of the default focus order, which is based on the ordering of elements in the HTML document. A positive value puts the element ahead of those in the default ordering; elements with positive values are focused in the order of their `tabindex` values (1, then 2, then 3, etc.).\n\nThis creates confusion for keyboard-only users when the focus order differs from the logical order of the page. A better strategy is to structure the HTML document so that focusable elements are in a logical order, without the need to re-order them with positive `tabindex` values.\n\n## Clickable elements must be focusable and should have interactive semantics\n\nIf an element can be clicked with a pointing device, such as a mouse, then it should also be focusable using the keyboard, and the user should be able to do something by interacting with it.\n\nAn element is clickable if it has an `onclick` event handler defined. You can make it focusable by adding a `tabindex=0` attribute value to it. You can make it operable with the keyboard by defining an `onkeydown` event handler; in most cases, the action taken by event handler should be the same for both types of events.\n\n## Interactive elements must be able to be activated using a keyboard\n\nIf the user can interact with an element using touch or a pointing device, then the element should also support interacting using the keyboard. That is, if you have defined event handlers for touch or click events, you should also define them for keyboard events. The keyboard event handlers should enable effectively the same interaction as the touch or click handlers.\n\n## Interactive elements must be focusable\n\nIf the user can interact with an element (for example, using touch or a pointing device), then it should be focusable using the keyboard. You can make it focusable by adding a `tabindex=0` attribute value to it. That will add the element to the list of elements that can be focused by pressing the Tab key, in the sequence of such elements as defined in the HTML document.\n\n## Focusable element must have focus styling\n\nAny element that can receive keyboard focus should have visible styling that indicates when the element is focused. You can do this with the `:focus` and `:focus-visible` CSS pseudo-classes.\n\nStandard focusable elements such as links and input fields are given special styling by the browser by default, so you might not need to specify focus styling for such elements, unless you want the focus styling to be more distinctive.\n\nIf you create your own focusable components, be sure that you also define focus styling for them",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP0C8PbJXVlLK",
+      "message_id": "msg_g0VXZCaPP01xY4YL9dRy",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ac5922550411f615f47639cb0dea643f12723ace929d3db79ba363a4de5298a6",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details> HTML details disclosure element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP0GYSDSbomcs",
+      "message_id": "msg_g0VXZCaPP02Am8R0JXWU",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "ff4c319d3058ede764d2b6ea04be1500d3f7446a18b8fe0c4c9ea6738c240393",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary",
+        "title": "<summary> HTML disclosure summary element - HTML | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP0KJepoQIA2x",
+      "message_id": "msg_g0VXZCaPP03FWZrSgSd8",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "source-url",
+        "sourceId": "e9c5e2e45f5e6069340bed1ea5e178a8134f6a7a280dc9df791980ffffbbe667",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard",
+        "title": "Keyboard accessible - Accessibility | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "prose": [
+    {
+      "id": "prt_h24tQq5cvpqHYz765oCD",
+      "message_id": "msg_hxrYUeIh183B8AnXz9r8",
+      "session_id": "ses_hO5M4YfNUp7lLxMLWajw",
+      "data": {
+        "type": "text",
+        "text": "Reply with OK.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hfe8p5ACQ6jPZJHzFQoT/3b5051505540ab78a1eaffa64836e0eebdde1d07811577984c68a8dc1106c912.json",
+          "catalog_snapshot_hash": "3b5051505540ab78a1eaffa64836e0eebdde1d07811577984c68a8dc1106c912"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZBZhr00m4vmUNfBT",
+      "message_id": "msg_g0VXZBYcN00gmmNUy80z",
+      "session_id": "ses_hO5M4YfNUp7lLxMLWajw",
+      "data": {
+        "type": "text",
+        "text": "OK",
+        "time": {
+          "start": 1791559617392,
+          "end": 1791559617392
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_01638f40adc7fad9016ac907c0eeb081919c24d9a2cb384731",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZBoJ800mJX37I3c8",
+      "message_id": "msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "text",
+        "text": "请只读检索 MDN 关于 HTML details 元素的官方资料，先用中文给出简短结论和真实来源，再写六段约800到1000字的说明，解释原生披露控件、键盘阅读和 Side Chat 参考历史的产品体验建议。区分文档事实与产品建议，不把建议说成已经实现的功能。请在当前普通对话完成，不创建任务、不委托agent、不生成或修改本地文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hdj8HmWlICBLzwP8tBJK/a5b6f920475829a5e270e6fe712517db27ea0543616069cc030cccd8a88cfc4b.json",
+          "catalog_snapshot_hash": "a5b6f920475829a5e270e6fe712517db27ea0543616069cc030cccd8a88cfc4b"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZBpPu00QaIkKcVUf",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "text",
+        "text": "我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用六段中文说明区分文档事实与 Side Chat 参考历史的产品建议；不会创建任务、委托或修改本地文件。",
+        "time": {
+          "start": 1791559680014,
+          "end": 1791559680014
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0ffae31d30b5b883016ac907fd69bc81919d6fb0f1820ef03a",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZByIk00CZKnIzam9",
+      "message_id": "msg_g0VXZBwsQ00AI3VoyYvQ",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "data": {
+        "type": "text",
+        "text": "**简短结论**：`<details>` 配合 `<summary>` 提供浏览器原生的展开／收起控件，支持聚焦后按空格操作。它适合作为 Side Chat 参考历史的折叠容器，但历史保存、来源核验与阅读位置恢复并非元素自带能力；以下相关内容均为产品建议，不代表已经实现。\n\n**真实来源**（已只读核对 MDN 官方正文）：\n1. [MDN：`<details>` 元素](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)——展开状态、键盘操作、分组与事件；页面更新于 2026 年 10 月 1 日。\n2. [MDN：`<summary>` 元素](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary)——标签结构、默认样式与辅助技术差异。\n3. [MDN：键盘可访问性](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard)——焦点顺序、键盘激活与可见焦点。\n\n### 六段说明\n\n**一、原生披露控件的含义（文档事实）**：MDN 将 `<details>` 定义为披露控件，详细内容仅在展开时显示；关闭时通常保留三角标记和摘要标签。`<summary>` 应作为它的第一个子元素，提供有意义的名称。浏览器负责基本展开与收起，因此不必仅为折叠行为编写脚本。它不是完整的历史管理组件，也不会自动记录来源、保存阅读进度或判断材料可信度。依据来源 1、2。\n\n**二、状态和分组（文档事实）**：`open` 是布尔属性，存在即展开，移除才关闭，写成 `open=\"false\"` 仍会展开。多个控件使用相同 `name` 时组成互斥组，打开一个会关闭另一个。状态变化后会触发 `toggle`，但短时间的多次变化可能合并为一次事件。因此，可监听它同步界面状态，却不能直接把事件次数当作完整点击记录；持久化历史仍需另行设计。依据来源 1。\n\n**三、键盘阅读路径（事实与建议）**：MDN 明确说明，控件获得焦点后按空格可以展开；键盘指南要求交互元素可聚焦、可激活且具有可见焦点，并建议避免正值 `tabindex`。对 Side Chat，建议按逻辑顺序排列摘要、来源链接和操作按钮，让用户用 Tab 移动、展开后继续访问链接。正文阅读不等于逐段 Tab 导航，不宜把每段静态文字都设成焦点站点。依据来源 1、3。\n\n**四、原生不等于免测（文档事实与建议）**：MDN 提醒，不同浏览器赋予 `<summary>` 的角色可能不同；某些实现会使其内部标题失去标题语义，影响屏幕阅读器导航。因此，建议采用简洁明确的摘要，并在实际目标浏览器或 WebView 中检查名称、展开状态和阅读顺序。自定义样式也应保留明显的焦点与折叠提示，不能仅因采用原生元素就宣称可访问性已经合格。依据来源 2、3。\n\n**五、参考历史的信息层级（产品建议）**：建议把关键结论和直接支撑它的来源留在消息正文，将重复记录、较长摘录和补充材料放进折叠区。摘要可写“参考历史：3 个来源”，展开后展示标题、真实链接、检索时间及对应消息，并区分“已读取正文”和“仅见搜索摘要”。这样既减少聊天阅读负担，也方便追溯证据；这些信息组织方式不是 MDN 规定，也不是 `<details>` 自动提供的功能。\n\n**六、连续阅读与验收（产品建议）**：参考历史常需要跨条目比较，建议默认允许多个区块同时展开，而非一律使用互斥 `name`。新消息到来时不宜自动收起旧资料、抢走焦点或强制滚动；如需恢复展开状态，应另行实现并验证。验收可检查纯键盘展开、访问来源、返回聊天及更新后继续阅读的完整路径。折叠仅改变展示，不应被当作删除历史、权限控制或隐私保护。",
+        "time": {
+          "start": 1791559749083,
+          "end": 1791559749083
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_03881a2ac0901cd8016ac9081f90ec8191ac64aa0d78c32a4a",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP00RJ3JhHNaN",
+      "message_id": "msg_g0VXZCaPO00hF3ER21NK",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "text",
+        "text": "请只读检索 MDN 关于 HTML details 元素的官方资料，先用中文给出简短结论和真实来源，再写六段约800到1000字的说明，解释原生披露控件、键盘阅读和 Side Chat 参考历史的产品体验建议。区分文档事实与产品建议，不把建议说成已经实现的功能。请在当前普通对话完成，不创建任务、不委托agent、不生成或修改本地文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hdj8HmWlICBLzwP8tBJK/a5b6f920475829a5e270e6fe712517db27ea0543616069cc030cccd8a88cfc4b.json",
+          "catalog_snapshot_hash": "a5b6f920475829a5e270e6fe712517db27ea0543616069cc030cccd8a88cfc4b"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP020GWqaboL0",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "text",
+        "text": "我会只读检索并核对 MDN 官方资料，先给出简短结论和真实来源，再用六段中文说明区分文档事实与 Side Chat 参考历史的产品建议；不会创建任务、委托或修改本地文件。",
+        "time": {
+          "start": 1791559680014,
+          "end": 1791559680014
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0ffae31d30b5b883016ac907fd69bc81919d6fb0f1820ef03a",
+            "phase": "commentary"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZCaPP0NJcroT45vB",
+      "message_id": "msg_g0VXZCaPP04vNA6dfzVA",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "text",
+        "text": "**简短结论**：`<details>` 配合 `<summary>` 提供浏览器原生的展开／收起控件，支持聚焦后按空格操作。它适合作为 Side Chat 参考历史的折叠容器，但历史保存、来源核验与阅读位置恢复并非元素自带能力；以下相关内容均为产品建议，不代表已经实现。\n\n**真实来源**（已只读核对 MDN 官方正文）：\n1. [MDN：`<details>` 元素](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)——展开状态、键盘操作、分组与事件；页面更新于 2026 年 10 月 1 日。\n2. [MDN：`<summary>` 元素](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary)——标签结构、默认样式与辅助技术差异。\n3. [MDN：键盘可访问性](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard)——焦点顺序、键盘激活与可见焦点。\n\n### 六段说明\n\n**一、原生披露控件的含义（文档事实）**：MDN 将 `<details>` 定义为披露控件，详细内容仅在展开时显示；关闭时通常保留三角标记和摘要标签。`<summary>` 应作为它的第一个子元素，提供有意义的名称。浏览器负责基本展开与收起，因此不必仅为折叠行为编写脚本。它不是完整的历史管理组件，也不会自动记录来源、保存阅读进度或判断材料可信度。依据来源 1、2。\n\n**二、状态和分组（文档事实）**：`open` 是布尔属性，存在即展开，移除才关闭，写成 `open=\"false\"` 仍会展开。多个控件使用相同 `name` 时组成互斥组，打开一个会关闭另一个。状态变化后会触发 `toggle`，但短时间的多次变化可能合并为一次事件。因此，可监听它同步界面状态，却不能直接把事件次数当作完整点击记录；持久化历史仍需另行设计。依据来源 1。\n\n**三、键盘阅读路径（事实与建议）**：MDN 明确说明，控件获得焦点后按空格可以展开；键盘指南要求交互元素可聚焦、可激活且具有可见焦点，并建议避免正值 `tabindex`。对 Side Chat，建议按逻辑顺序排列摘要、来源链接和操作按钮，让用户用 Tab 移动、展开后继续访问链接。正文阅读不等于逐段 Tab 导航，不宜把每段静态文字都设成焦点站点。依据来源 1、3。\n\n**四、原生不等于免测（文档事实与建议）**：MDN 提醒，不同浏览器赋予 `<summary>` 的角色可能不同；某些实现会使其内部标题失去标题语义，影响屏幕阅读器导航。因此，建议采用简洁明确的摘要，并在实际目标浏览器或 WebView 中检查名称、展开状态和阅读顺序。自定义样式也应保留明显的焦点与折叠提示，不能仅因采用原生元素就宣称可访问性已经合格。依据来源 2、3。\n\n**五、参考历史的信息层级（产品建议）**：建议把关键结论和直接支撑它的来源留在消息正文，将重复记录、较长摘录和补充材料放进折叠区。摘要可写“参考历史：3 个来源”，展开后展示标题、真实链接、检索时间及对应消息，并区分“已读取正文”和“仅见搜索摘要”。这样既减少聊天阅读负担，也方便追溯证据；这些信息组织方式不是 MDN 规定，也不是 `<details>` 自动提供的功能。\n\n**六、连续阅读与验收（产品建议）**：参考历史常需要跨条目比较，建议默认允许多个区块同时展开，而非一律使用互斥 `name`。新消息到来时不宜自动收起旧资料、抢走焦点或强制滚动；如需恢复展开状态，应另行实现并验证。验收可检查纯键盘展开、访问来源、返回聊天及更新后继续阅读的完整路径。折叠仅改变展示，不应被当作删除历史、权限控制或隐私保护。",
+        "time": {
+          "start": 1791559749083,
+          "end": 1791559749083
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_03881a2ac0901cd8016ac9081f90ec8191ac64aa0d78c32a4a",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZCeFP00n7oxZN2yY",
+      "message_id": "msg_1c73e62f-b7a0-490a-9edd-b14985ba09a7",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "text",
+        "text": "请只基于主对话已有资料，用中文写四段约600到800字的 Side Chat 参考历史阅读评审建议，每段给出具体操作步骤、应观察的现象和失败影响。不要新增检索，不创建任务、不委托agent、不修改文件；不要声称产品已完成实际验收。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hdj8HmWlICBLzwP8tBJK/c9058b6eb9aa9bfab096a25d22a73e3a8096d4fdf9ec3b35115229c75b4c9299.json",
+          "catalog_snapshot_hash": "c9058b6eb9aa9bfab096a25d22a73e3a8096d4fdf9ec3b35115229c75b4c9299"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZCfcS00k3B50JZeu",
+      "message_id": "msg_g0VXZCeI400qr3ZAGWgB",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "data": {
+        "type": "text",
+        "text": "**一、评审摘要与证据层级**：先阅读消息中的结论和直接来源，再找到参考历史入口，记录摘要是否说明材料类型与数量；随后展开，逐条查看标题、链接、检索时间和对应消息，并核对是否区分“已读取正文”与“仅见搜索摘要”。应观察到：收起时仍能理解结论和主要依据，展开后能追溯补充材料，标签不会暗示未经核验的来源已经被确认。若关键证据全部藏在折叠区，或来源状态混为一谈，读者就难以判断结论的支撑程度，也可能把搜索片段误当成完整文档证据。这是评审建议，不是现有界面已符合要求的断言。\n\n**二、评审纯键盘阅读路径**：不使用鼠标，从聊天输入区域开始按 Tab，依次寻找参考历史摘要、展开后的来源链接和操作按钮；摘要获得焦点后按空格展开，再继续导航，并尝试反向返回。应观察到：焦点始终可见，移动顺序与内容逻辑一致，展开操作可以完成，且静态正文不会被逐段塞进 Tab 顺序。还应区分“移动到可操作元素”和“阅读正文”，不能用 Tab 能否遍历所有文字来判断阅读能力。若焦点不可见、顺序跳跃或按钮只能点击，键盘用户可能无法访问证据，或难以回到原先的阅读位置。\n\n**三、评审折叠状态与跨来源比较**：依次展开两条参考历史，比较其中材料，再收起一条，观察另一条是否保持展开；同时检查摘要名称和展开、收起提示是否明确。如评审环境具备屏幕阅读器，再检查摘要名称、状态及正文阅读顺序，不预设摘要内的标题一定保留标题语义。应观察到：比较过程不被意外关闭打断，视觉与辅助技术提供的信息足够清晰。若采用互斥展开却没有明确的阅读理由，用户会反复切换；若只剩模糊图标或辅助技术无法辨识状态，就会增加定位成本。原生元素并不替代这些检查。\n\n**四、评审消息更新后的连续阅读**：先展开较早的参考历史，把焦点留在来源链接附近，并记下当前可见段落；随后在可控条件下让新消息出现，检查旧区块、焦点和滚动位置，再返回当前聊天内容。若设计包含状态恢复，再离开并返回，核对是否按约定恢复，而非假定原生控件会自动保存。应观察到：更新不擅自收起材料、不抢焦点、不强制滚走；折叠也不被描述为删除或隐私保护。失败会导致阅读中断、重复定位甚至误解历史保留方式。以上均为待执行的评审步骤，不代表产品已经完成实际验收。",
+        "time": {
+          "start": 1791559908779,
+          "end": 1791559908779
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0cb9a4f21da7fc84016ac908c5fa54819182b50ff097ceea92",
+            "phase": "final_answer"
+          }
+        }
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "act_g0VXZBYnE00TWypBpR1m",
+      "assistant_message_id": "msg_g0VXZBYcN00gmmNUy80z",
+      "session_id": "ses_hO5M4YfNUp7lLxMLWajw",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791559613003,\"completed\":1791559617871},\"parentID\":\"msg_hxrYUeIh183B8AnXz9r8\",\"acceptedInputMessageIDs\":[\"msg_hxrYUeIh183B8AnXz9r8\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\09\\\\0da2cd5e-81f2-4107-b3de-693f72446961\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\09\\\\0da2cd5e-81f2-4107-b3de-693f72446961\"},\"cost\":0,\"tokens\":{\"total\":29599,\"input\":29594,\"output\":5,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791559613003:0000000000000030:0000000000000000:message:msg_g0VXZBYcN00gmmNUy80z\"}"
+    },
+    {
+      "id": "act_g0VXZBoUc00NChHoWXi5",
+      "assistant_message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791559673517,\"completed\":1791559682873},\"parentID\":\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\",\"acceptedInputMessageIDs\":[\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":32070,\"input\":31973,\"output\":97,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791559673517:0000000000000030:0000000000000000:message:msg_g0VXZBoMP003dJwZQcqd\"}"
+    },
+    {
+      "id": "act_g0VXZBqsF00t1RQYzpX8",
+      "assistant_message_id": "msg_g0VXZBqnu00XVTWb7AoK",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791559682910,\"completed\":1791559691937},\"parentID\":\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\",\"acceptedInputMessageIDs\":[\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":35148,\"input\":3362,\"output\":42,\"reasoning\":0,\"cache\":{\"read\":31744,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791559682910:0000000000000030:0000000000000000:message:msg_g0VXZBqnu00XVTWb7AoK\"}"
+    },
+    {
+      "id": "act_g0VXZBtEz00OJadxeGZs",
+      "assistant_message_id": "msg_g0VXZBtA200U7cv1n1bu",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791559691970,\"completed\":1791559698862},\"parentID\":\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\",\"acceptedInputMessageIDs\":[\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":46891,\"input\":23297,\"output\":42,\"reasoning\":0,\"cache\":{\"read\":23552,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791559691970:0000000000000030:0000000000000000:message:msg_g0VXZBtA200U7cv1n1bu\"}"
+    },
+    {
+      "id": "act_g0VXZBv2j00wkYn33pjz",
+      "assistant_message_id": "msg_g0VXZBuyD006r6ruYeZx",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791559698925,\"completed\":1791559706187},\"parentID\":\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\",\"acceptedInputMessageIDs\":[\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":58616,\"input\":11850,\"output\":46,\"reasoning\":0,\"cache\":{\"read\":46720,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791559698925:0000000000000030:0000000000000000:message:msg_g0VXZBuyD006r6ruYeZx\"}"
+    },
+    {
+      "id": "act_g0VXZBwwr00mDNbnktvi",
+      "assistant_message_id": "msg_g0VXZBwsQ00AI3VoyYvQ",
+      "session_id": "ses_-zUSQoBu0zzFbp1z0ler",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791559706254,\"completed\":1791559750598},\"parentID\":\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\",\"acceptedInputMessageIDs\":[\"msg_f4e8ab7a-0182-4e9e-ae65-68b1a9b136e8\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":68421,\"input\":9045,\"output\":1008,\"reasoning\":0,\"cache\":{\"read\":58368,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791559706254:0000000000000030:0000000000000000:message:msg_g0VXZBwsQ00AI3VoyYvQ\"}"
+    },
+    {
+      "id": "act_g0VXZCePa00UUPHBzz7d",
+      "assistant_message_id": "msg_g0VXZCeI400qr3ZAGWgB",
+      "session_id": "ses_-zUSQnPafzzkC6SwhL78",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791559873136,\"completed\":1791559910956},\"parentID\":\"msg_1c73e62f-b7a0-490a-9edd-b14985ba09a7\",\"acceptedInputMessageIDs\":[\"msg_1c73e62f-b7a0-490a-9edd-b14985ba09a7\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-09\\\\source-stream-242-live-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":66990,\"input\":66324,\"output\":666,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791559873136:0000000000000030:0000000000000000:message:msg_g0VXZCeI400qr3ZAGWgB\"}"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXZBq3J000lOvtQn3v",
+      "message_id": "msg_g0VXZBoMP003dJwZQcqd",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_25f7b58f7bb540d6bc0ce1f59987868d\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org HTML details element summary keyboard accessibility\",\"numResults\":5},\"time\":{\"start\":1791559680021}}"
+    },
+    {
+      "id": "prt_g0VXZBsiF00yIOZkkN4M",
+      "message_id": "msg_g0VXZBqnu00XVTWb7AoK",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_87d982040c9b4d73806b27502e79f9d9\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791559690247}}"
+    },
+    {
+      "id": "prt_g0VXZBuR800x9H0775JJ",
+      "message_id": "msg_g0VXZBtA200U7cv1n1bu",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_979bd4cdba214b57960e7beb23d140a3\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791559696874}}"
+    },
+    {
+      "id": "prt_g0VXZBwKQ006Nq2gzMpx",
+      "message_id": "msg_g0VXZBuyD006r6ruYeZx",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_091b70f7e64f4f2584765c040bc54c57\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791559704146}}"
+    },
+    {
+      "id": "prt_g0VXZCaPP03tOWdnF5U7",
+      "message_id": "msg_g0VXZCaPP005DyfTwUQ2",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_25f7b58f7bb540d6bc0ce1f59987868d\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org HTML details element summary keyboard accessibility\",\"numResults\":5},\"time\":{\"start\":1791559680021}}"
+    },
+    {
+      "id": "prt_g0VXZCaPP0B933agMRaD",
+      "message_id": "msg_g0VXZCaPP01xY4YL9dRy",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_87d982040c9b4d73806b27502e79f9d9\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791559690247}}"
+    },
+    {
+      "id": "prt_g0VXZCaPP0FXS3yy2H0T",
+      "message_id": "msg_g0VXZCaPP02Am8R0JXWU",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_979bd4cdba214b57960e7beb23d140a3\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791559696874}}"
+    },
+    {
+      "id": "prt_g0VXZCaPP0JcMlN5hImM",
+      "message_id": "msg_g0VXZCaPP03FWZrSgSd8",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_091b70f7e64f4f2584765c040bc54c57\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Keyboard\",\"format\":\"markdown\",\"timeout\":60},\"time\":{\"start\":1791559704146}}"
+    }
+  ],
+  "boundary": "Natural actual producer evidence; full values retained, no fake Source/Part, no Markdown or UI assertions"
+}

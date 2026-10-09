@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [最新Sources流式242 Recall](source-stream-plan-242.md) / [真实矩阵](source-stream-242/README.md)：新Source8/Side Reference6、阅读位置保持，11次Sol EOF及Native0，未捕全帧范围明示。
+
 - [中文深色Sources241 Recall](source-dark-plan-241.md) / [真实前后](source-dark-241/README.md)：外层history重开状态修复，实际Source摘要可见3107/outer531保持，原失败与Native0独立保留。
 
 - [Side阅读空间240 Recall](side-composer-plan-240.md) / [真实前后](side-composer-240/README.md)：共享宽度失效重测，空框199→72、阅读区增加127px，原Sources与Native0复核。
