@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [File read recovery222](2026-10-09-file-read-recovery-222.md): complete current read diagnostics and actual recovery on the original Source.
+
 - [File Sources221](2026-10-09-source-files-221.md): visible canonical file identities and real opening with authorized current model.
 
 - [Sources navigation220](2026-10-09-source-navigation-220.md): actual source link activation and conversation reading context.

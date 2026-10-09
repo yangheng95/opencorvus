@@ -309,6 +309,14 @@ code .file-link:focus-visible {
   flex-direction: column;
 }
 
+.file-editor-load-feedback {
+  margin: var(--ui-gap-lg);
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .file-editor-code {
   display: flex;
   flex-direction: column;

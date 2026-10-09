@@ -1,0 +1,15 @@
+{
+  "pid": 42324,
+  "occurrence": "file-read-recovery-222-before-01-1ffdac29-a1c1-4138-b279-0099143e7595",
+  "owner": {
+    "pid": 42324,
+    "processInstanceID": "win32:639271111940174182",
+    "occurrenceID": "2df1aca4-d3ee-4b2f-85af-c6ca46520073"
+  },
+  "parent": {
+    "pid": 74072,
+    "processInstanceID": "win32:639271111939754142",
+    "occurrenceID": "ad3a88e7-480b-4e42-a2f0-eff6d32ef071"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

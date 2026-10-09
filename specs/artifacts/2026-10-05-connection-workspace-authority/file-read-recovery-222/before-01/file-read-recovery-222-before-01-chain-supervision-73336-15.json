@@ -1,0 +1,28 @@
+{
+  "occurrence": "file-read-recovery-222-before-01-1ffdac29-a1c1-4138-b279-0099143e7595",
+  "observedAtUtc": "2026-10-09T02:54:41.6451951Z",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18146,
+      "OwningProcess": 42324
+    }
+  ],
+  "nativeSettlement": null,
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "phase": "supervision-73336-15",
+  "presence": [
+    {
+      "processInstanceID": "win32:639271111940174182",
+      "originalOccurrencePresent": true,
+      "state": "exact_live",
+      "processID": 42324
+    },
+    {
+      "processInstanceID": "win32:639271111932751192",
+      "originalOccurrencePresent": true,
+      "state": "exact_live",
+      "processID": 61364
+    }
+  ]
+}

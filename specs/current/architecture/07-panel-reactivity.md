@@ -199,6 +199,7 @@ to infer its host. An unparseable URL has no host presentation. An expanded
 file-source leaf shows its existing title/range and a secondary path/range
 from the same canonical source. The existing selected directory makes an
 in-project path relative; an external path retains its absolute identity.
+An identical title/range and path/range needs only one visible line.
 Tooltip, accessible name and file navigation use those same facts. Document
 leaves retain their existing actions and metadata, and group summaries retain
 their actual title/count and adjacent timeline position.

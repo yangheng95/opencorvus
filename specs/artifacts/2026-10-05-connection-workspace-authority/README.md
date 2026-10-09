@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [File recovery222 Recall](file-read-recovery-plan-222.md), [first readiness](file-read-recovery-readiness-222/README.md), [fresh scroll readiness](file-read-recovery-readiness-22202/README.md) and [actual result](file-read-recovery-222/README.md): current original diagnostics, bounded error scrolling and true same-source retry after reversible own file restoration; original failures retained.
+
 - [File Sources221 Recall](source-files-plan-221.md), [first readiness](source-files-readiness-221/README.md), [fresh corrected readiness](source-files-readiness-22102/README.md) and [actual scope](source-files-221/README.md): visible canonical file paths, six model-independent file readers and actual opening/range/keyboard with real Sol/source custody; original400 retained.
 
 - [Sources navigation220 Recall](source-navigation-plan-220.md), [readiness](source-navigation-readiness-220/README.md) and [actual scope](source-navigation-220/README.md): real source click opens the true target page while preserving the original conversation; current browser transport disproves the candidate, no duplicate navigation added.

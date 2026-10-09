@@ -9,6 +9,14 @@ relative-path and canonical physical-path boundaries, exact absolute-source
 validation, original file errors, content revisions and actual Git/process
 owners. File mutations keep their runtime and write-precondition contracts.
 
+File Editor initial read failures retain one current original thrown value
+under the existing target, API authority and load/reload generations. Shared
+Feedback presents a concise localized hint, full original HTTP diagnostics
+and explicit Retry through the existing reload operation. A repeated retry
+failure replaces that record; success or target retirement clears it. Loaded
+draft reload failures keep the original draft/leave safeguards and footer
+ownership. No automatic retry loop or parallel file loader is introduced.
+
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer
 derives interactivity from ready at the same dispatch, attachment, mention and

@@ -1,0 +1,489 @@
+{
+  "pid": 42324,
+  "owner": {
+    "pid": 42324,
+    "processInstanceID": "win32:639271111940174182",
+    "occurrenceID": "2df1aca4-d3ee-4b2f-85af-c6ca46520073"
+  },
+  "model": "openai/gpt-6.1-sol",
+  "credential": "available",
+  "catalog": "projected",
+  "pairedModels": true,
+  "executionStarted": false,
+  "admission": {
+    "projectID": "prj_hoXouhmxBR2ds8WCh8Si",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "packageRevision": {
+      "scope": "built_in",
+      "projectID": null,
+      "namespace": "builtin",
+      "id": "base",
+      "version": "2026.09.30.1",
+      "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+    },
+    "processMode": "native",
+    "matrix": [
+      {
+        "kind": "projected-worker",
+        "agentID": "base-researcher",
+        "baseRole": "explore",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "base-planner",
+        "baseRole": "delegated-worker",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "base-developer",
+        "baseRole": "build",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "base-tester",
+        "baseRole": "delegated-worker",
+        "capabilityOwner": "package",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "projected-worker",
+        "agentID": "universal-build",
+        "baseRole": "build",
+        "capabilityOwner": "platform",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol",
+        "intendedProviderID": "openai",
+        "intendedModelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "host",
+        "agentID": "orchestrator",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "compaction",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "title",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "summary",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "helper",
+        "agentID": "memory",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "coding",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "chat",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "work",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "control",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      {
+        "kind": "primary",
+        "agentID": "mission",
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      }
+    ],
+    "workerGrants": [
+      {
+        "identity": {
+          "agentID": "base-researcher",
+          "baseRole": "explore",
+          "sessionKind": "explore",
+          "dispatchAdapterID": "explore",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "33de4f0fc92820f86d54bada82c3f1df9e900533aa8c458bd3fd5ff1157307b4"
+        },
+        "packageRevision": {
+          "scope": "built_in",
+          "projectID": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "builtInToolIDs": [
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "capability_search",
+          "glob",
+          "memory",
+          "panel_query_task",
+          "publish_interactive_artifact",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "search_code",
+          "send_mailbox_message",
+          "external_code_search",
+          "webfetch",
+          "websearch"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "base-planner",
+          "baseRole": "delegated-worker",
+          "sessionKind": "delegated-worker",
+          "dispatchAdapterID": "delegated_worker",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "87eabae7417020188521b2834fea6baaf003c32be3590473ea5ddc6925fbba11"
+        },
+        "packageRevision": {
+          "scope": "built_in",
+          "projectID": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "builtInToolIDs": [
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "publish_interactive_artifact",
+          "read_agent_message",
+          "bash",
+          "capability_search",
+          "external_code_search",
+          "glob",
+          "read",
+          "search_code",
+          "skill",
+          "webfetch",
+          "websearch"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "base-developer",
+          "baseRole": "build",
+          "sessionKind": "build",
+          "dispatchAdapterID": "build",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "2df8cb316379cf53b501117b620976fa691c0810a7a45f731125cfd883c3e3e4"
+        },
+        "packageRevision": {
+          "scope": "built_in",
+          "projectID": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "builtInToolIDs": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "browser_preview_capture",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "mission_state",
+          "planner",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "schedule",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "base-tester",
+          "baseRole": "delegated-worker",
+          "sessionKind": "delegated-worker",
+          "dispatchAdapterID": "delegated_worker",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "54c9dd175d8176a6561c64b14862cca46d3a8a8dd46384256b0cfc6867c592fe"
+        },
+        "packageRevision": {
+          "scope": "built_in",
+          "projectID": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "builtInToolIDs": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "defaultTools": []
+      },
+      {
+        "identity": {
+          "agentID": "universal-build",
+          "baseRole": "build",
+          "sessionKind": "build",
+          "dispatchAdapterID": "build",
+          "runtimeTemplateABIVersion": 1,
+          "dispatchAdapterABIVersion": 1,
+          "projectionHash": "6c45ffb59bb9abb6e4ba534c9eb16d9abaadb5a3f70c068f673d4bbe326f3215"
+        },
+        "packageRevision": {
+          "scope": "built_in",
+          "projectID": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.09.30.1",
+          "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+        },
+        "builtInToolIDs": [
+          "apply_patch",
+          "artifact_publish",
+          "artifact_read",
+          "artifact_search",
+          "artifact_select",
+          "artifact_snapshot",
+          "bash",
+          "browser_preview",
+          "browser_preview_capture",
+          "capability_search",
+          "edit",
+          "external_code_search",
+          "glob",
+          "memory",
+          "mission_state",
+          "planner",
+          "publish_interactive_artifact",
+          "question",
+          "read",
+          "read_agent_message",
+          "request_orchestrator_decision",
+          "schedule",
+          "search_code",
+          "send_mailbox_message",
+          "skill",
+          "todo",
+          "webfetch",
+          "websearch",
+          "write"
+        ],
+        "defaultTools": []
+      }
+    ],
+    "schedulerGrants": {
+      "identity": {
+        "agentID": "orchestrator",
+        "baseRole": "orchestrator",
+        "sessionKind": "orchestrator",
+        "projectionHash": "25ad6de814379c3e16553c2b757bf68936cb3e4397a468fa35b80c89b008ca66"
+      },
+      "packageRevision": {
+        "scope": "built_in",
+        "projectID": null,
+        "namespace": "builtin",
+        "id": "base",
+        "version": "2026.09.30.1",
+        "packageDigest": "7d2f78ad14bb9f879cda94e815e6df8127fda74ab2533de65bd78580bec72445"
+      },
+      "builtInToolIDs": [
+        "artifact_read",
+        "artifact_search",
+        "artifact_select",
+        "artifact_snapshot",
+        "cancel_subagent",
+        "capability_search",
+        "evolve_expert_squad_from_feedback",
+        "no_action",
+        "publish_interactive_artifact",
+        "question",
+        "read_agent_message",
+        "read_context",
+        "read_task_message",
+        "respond_agent_coordination",
+        "scheduler_message",
+        "skill",
+        "wait",
+        "apply_patch",
+        "bash",
+        "browser_preview",
+        "browser_preview_capture",
+        "dispatch_agent",
+        "edit",
+        "external_code_search",
+        "glob",
+        "manage_task",
+        "read",
+        "search_code",
+        "todo",
+        "webfetch",
+        "websearch",
+        "write"
+      ],
+      "virtualWorkflows": {
+        "execution-verification": {
+          "label": "Execution and Independent Verification",
+          "description": "The Task owner produces directly; the independent Tester compares the actual result with original authority.",
+          "nodes": {
+            "base-tester": {
+              "agent_id": "base-tester",
+              "description": "Independently rereads dynamic sources and verifies the settled result criterion by criterion.",
+              "depends_on": []
+            }
+          }
+        },
+        "source-planned-execution-verification": {
+          "label": "Source Planning, Execution, and Independent Verification",
+          "description": "Classify traceable source authority and applicable constraints through a bounded minimal-anchor worklist, execute each irreversible mutation whose real prerequisites are resolved, then independently verify the classification and settled outcome.",
+          "nodes": {
+            "base-planner": {
+              "agent_id": "base-planner",
+              "description": "Separates execution-authority conditions, applicable constraints, and Developer-owned outcome semantics and destination execution dependencies; resolves traceable source obligations through a bounded minimal-anchor worklist before mutation.",
+              "depends_on": []
+            },
+            "base-developer": {
+              "agent_id": "base-developer",
+              "description": "Reconciles per-operation source classes with original authority, owns destination discovery for operations whose real prerequisites are resolved, performs the authorized mutation, and hands off the complete Host-recorded receipt.",
+              "depends_on": [
+                "base-planner"
+              ]
+            },
+            "base-tester": {
+              "agent_id": "base-tester",
+              "description": "Independently checks source classifications and coordinates against original authority, then maps applicable rules and outcome semantics to the raw mutation receipt and any correct same-record destination read.",
+              "depends_on": [
+                "base-developer"
+              ]
+            }
+          }
+        },
+        "planner-parallel-delivery": {
+          "label": "Planner, Parallel Workers, and Verification",
+          "description": "Publish one bounded Task plan, run the research and implementation partitions in the same dependency-ready frontier, then verify the settled result.",
+          "nodes": {
+            "base-planner": {
+              "agent_id": "base-planner",
+              "description": "Publishes the complete Task-element inventory, stable acceptance criteria, shared inputs, owned paths, and acceptance allocation.",
+              "depends_on": []
+            },
+            "base-researcher": {
+              "agent_id": "base-researcher",
+              "description": "Executes the plan's evidence and repository research partition.",
+              "depends_on": [
+                "base-planner"
+              ]
+            },
+            "base-developer": {
+              "agent_id": "base-developer",
+              "description": "Executes the plan's implementation partition and its implementation-owned checks.",
+              "depends_on": [
+                "base-planner"
+              ]
+            },
+            "base-tester": {
+              "agent_id": "base-tester",
+              "description": "Executes every planned acceptance criterion against the settled result and records criterion-by-criterion evidence.",
+              "depends_on": [
+                "base-developer"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "providerAPIModel": "gpt-6.1-sol",
+    "boundary": "Available actual registry identities and intended configuration; no prediction of dispatch or request origin"
+  }
+}

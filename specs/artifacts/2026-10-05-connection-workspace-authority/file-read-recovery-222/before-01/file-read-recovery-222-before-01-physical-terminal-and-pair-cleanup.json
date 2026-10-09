@@ -1,0 +1,69 @@
+{
+  "physicalCompletion": true,
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\auth.json",
+      "presentAfter": false,
+      "copiedLength": 2194,
+      "outcome": "removed"
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\models.json",
+      "presentAfter": false,
+      "copiedLength": 9155406,
+      "outcome": "removed"
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup",
+  "observedAtUtc": "2026-10-09T02:57:53.3041460Z",
+  "occurrence": "file-read-recovery-222-before-01-1ffdac29-a1c1-4138-b279-0099143e7595",
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 42324,
+        "processInstanceID": "win32:639271111940174182",
+        "occurrenceID": "000ef6d8-7620-47ed-9d6f-a6debf687481"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 61364,
+        "processInstanceID": "win32:639271111932751192",
+        "occurrenceID": "46c8b829-81ca-4423-8bb2-c34b7532de40"
+      }
+    }
+  ],
+  "listeners": null,
+  "nativeSettlement": {
+    "occurrence": "file-read-recovery-222-before-01-1ffdac29-a1c1-4138-b279-0099143e7595",
+    "outcome": "settled",
+    "host": {
+      "pid": 61364,
+      "processInstanceID": "win32:639271111932751192",
+      "occurrenceID": "46c8b829-81ca-4423-8bb2-c34b7532de40"
+    },
+    "target": {
+      "pid": 42324,
+      "processInstanceID": "win32:639271111940174182",
+      "occurrenceID": "000ef6d8-7620-47ed-9d6f-a6debf687481"
+    },
+    "observedAtUtc": "2026-10-09T02:57:50.968Z",
+    "deadlineAt": 1791514993260,
+    "terminal": {
+      "occurrenceID": "file-read-recovery-222-before-01-1ffdac29-a1c1-4138-b279-0099143e7595",
+      "pid": 42324,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  }
+}

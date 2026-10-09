@@ -12,6 +12,7 @@ import {
 } from "../services/file-workbench"
 import { projectScopedPath } from "../services/project-directory"
 import { t } from "../utils/i18n"
+import { formatErrorDetails } from "../utils/error-details"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -88,7 +89,7 @@ export function FileEditorPane() {
   const [saving, setSaving] = createSignal(false)
   const [reloading, setReloading] = createSignal(false)
   const [error, setError] = createSignal("")
-  const [loadError, setLoadError] = createSignal("")
+  const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
   const [leaveReason, setLeaveReason] = createSignal<"leave" | "reload">("leave")
@@ -120,7 +121,6 @@ export function FileEditorPane() {
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
   const path = createMemo(() => target()?.path ?? "")
-  const contentLoadError = createMemo(() => loadError())
   const textContent = createMemo(() => canEdit(content()))
   const writable = createMemo(() => textContent() && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
@@ -152,14 +152,14 @@ export function FileEditorPane() {
       finishLeaveDecision(false)
       if (retainDraft) return
       applyContent(null)
-      setLoadError("")
+      setLoadFailure(null)
       if (!file) return
       setLoading(true)
       const current = () => generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
       void readFileContent(file, authority).then((next) => {
         if (current()) applyContent(next)
       }, (cause) => {
-        if (current()) setLoadError(errorMessage(cause))
+        if (current()) setLoadFailure({ error: cause })
       }).finally(() => {
         if (current()) setLoading(false)
       })
@@ -257,10 +257,13 @@ export function FileEditorPane() {
         setError(t("file_editor.reload_edited"))
         return
       }
-      setLoadError("")
+      setLoadFailure(null)
       applyContent(next)
     } catch (cause) {
-      if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setError(errorMessage(cause))
+      if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
+        if (loadFailure()) setLoadFailure({ error: cause })
+        else setError(errorMessage(cause))
+      }
     } finally {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setReloading(false)
     }
@@ -377,18 +380,29 @@ export function FileEditorPane() {
             }
           >
             <Show
-              when={!contentLoadError()}
+              when={!loadFailure()}
               fallback={
-                <div
-                  class="file-editor-empty"
+                <Feedback
+                  class="file-editor-load-feedback"
                   data-ui="file-editor-load-error"
-                  role="alert"
-                  aria-live="assertive"
-                  aria-atomic="true"
+                  tone="error"
+                  title={t("file_editor.load_failed")}
+                  details={loadFailure() ? formatErrorDetails(loadFailure()!.error) : undefined}
+                  actions={
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      tone="neutral"
+                      disabled={isBusy() || fileEditorReserved()}
+                      onClick={() => void reload()}
+                    >
+                      {reloading() ? t("common.loading") : t("common.retry")}
+                    </Button>
+                  }
                 >
-                  <Icon name="status-failed" size="medium" />
-                  <p>{t("file_editor.load_failed", { message: contentLoadError() })}</p>
-                </div>
+                  {t("file_editor.load_failed_hint")}
+                </Feedback>
               }
             >
               <Show

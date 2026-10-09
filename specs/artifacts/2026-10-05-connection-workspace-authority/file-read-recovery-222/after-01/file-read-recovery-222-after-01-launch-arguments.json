@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "port": 18147,
+  "occurrence": "file-read-recovery-222-after-01-c4625f70-a27d-415e-9ec7-4066cf201cd6",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-after-01\\evidence",
+    "file-read-recovery-222-after-01-c4625f70-a27d-415e-9ec7-4066cf201cd6",
+    "1791516158530",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18147",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-after-01\\startup.json",
+    "--startup-occurrence",
+    "file-read-recovery-222-after-01-c4625f70-a27d-415e-9ec7-4066cf201cd6",
+    "--log-level",
+    "INFO"
+  ]
+}

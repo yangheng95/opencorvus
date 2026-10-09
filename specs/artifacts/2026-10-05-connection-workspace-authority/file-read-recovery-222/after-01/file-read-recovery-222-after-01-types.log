@@ -1,0 +1,3 @@
+$ tsc --noEmit
+src/components/FileEditorPane.tsx(392,22): error TS2322: Type '{ children: string; type: "button"; variant: "outline"; size: "sm"; disabled: boolean; onClick: () => any; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+  Property 'tone' is missing in type '{ children: string; type: "button"; variant: "outline"; size: "sm"; disabled: boolean; onClick: () => any; }' but required in type 'ButtonProps'.

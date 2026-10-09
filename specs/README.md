@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [File read recovery222](records/2026-10/2026-10-09-file-read-recovery-222.md): concise current failure, complete diagnostics and actual same-source retry recovery.
+
 - [File Sources221](records/2026-10/2026-10-09-source-files-221.md): actual same-name file sources, visible path identity and real file opening.
 
 - [Sources navigation220](records/2026-10/2026-10-09-source-navigation-220.md): real source activation and retained conversation reading context.
