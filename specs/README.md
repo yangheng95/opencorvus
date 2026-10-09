@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [子Dock历史250](records/2026-10/2026-10-10-child-dock-review-250.md)：真实三条来源/完成1m1s与1m15s、成员/列表/整Dock阅读1008保持、Native0与原保管失败；实时范围待明确。
+
 - [完成耗时249](records/2026-10/2026-10-10-completion-duration-249.md)：完成后固定1m9s/真实69809ms、整Dock重开保持；当前执行时钟映射、原类型失败和未验子Dock范围保留。
 
 - [流式 Markdown 248](records/2026-10/2026-10-10-streaming-markdown-248.md)：生成途中列表直接呈现格式，真实Working首段/编号/粗体与来源，原Native0；终态布局与未验收范围保留。

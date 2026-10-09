@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-09T20:26:11.6872573Z",
+  "occurrence": "child-dock-review-250-live-01-072bf856-0a60-420b-af6e-c6092815916f",
+  "owner": {
+    "pid": 75080,
+    "processInstanceID": "win32:639271737830108724",
+    "occurrenceID": "4bf3c986-f79d-4106-ae16-b06aa7b45323"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXaOuVC00VOalzWb3f"
+  }
+}

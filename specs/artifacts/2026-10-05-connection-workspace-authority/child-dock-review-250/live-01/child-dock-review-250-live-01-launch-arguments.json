@@ -1,0 +1,27 @@
+{
+  "occurrence": "child-dock-review-250-live-01-072bf856-0a60-420b-af6e-c6092815916f",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\child-dock-review-250-live-01\\evidence",
+    "child-dock-review-250-live-01-072bf856-0a60-420b-af6e-c6092815916f",
+    "1791577882125",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18185",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-08\\store-card-accessor-after-153-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\child-dock-review-250-live-01\\startup.json",
+    "--startup-occurrence",
+    "child-dock-review-250-live-01-072bf856-0a60-420b-af6e-c6092815916f",
+    "--log-level",
+    "INFO"
+  ],
+  "credentialStaging": "None",
+  "port": 18185
+}

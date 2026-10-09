@@ -1,0 +1,11 @@
+Browser tab: 92, Title: "OpenCorvus", URL: "http://localhost:18185/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 207-325
+~								203 container Expert Squad agents
+~									204 text All agents (2)
+~									205 button base-researcher Completed
++										207 text Completed
++									208 button base-tester Completed
++										209 text base-tester
++										210 text Completed
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18185/ui/

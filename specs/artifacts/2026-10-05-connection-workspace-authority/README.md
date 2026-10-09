@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [子Dock历史250 Recall](child-dock-review-plan-250.md) / [真实来源与重开](child-dock-review-250/README.md)：完整153历史/current前沿，三条Source/子完成耗时/阅读1008保持，原Native0与保管属性失败均保留。
+
 - [完成耗时249 Recall](completion-duration-plan-249.md) / [真实完成/重开](completion-duration-249/README.md)：Side固定1m9s及原69809ms，子当前执行映射、原TS2741修复与Native0，原子Dock仍待实测。
 
 - [流式 Markdown 248 Recall](streaming-markdown-plan-248.md) / [真实运行帧](streaming-markdown-248/README.md)：唯一parser呈现当前列表、Working第一段/粗体/编号与终态Sources，原Native0；布局变化仍待查。

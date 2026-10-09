@@ -1,0 +1,13 @@
+25 |   if (task.project_id !== manifest.projectID || task.session_id !== manifest.rootSessionID || task.request_id !== manifest.requestID) throw Error("Actual selected Task identity changed")
+26 |   const session = clone.query("SELECT id, project_id, directory, kind, parent_id FROM session WHERE id=?").get(manifest.rootSessionID) as any
+27 |   if (session.project_id !== manifest.projectID || path.resolve(session.directory) !== path.resolve(manifest.sourceProject)) throw Error("Actual original Project identity changed")
+28 |   const projects = before.projectObservations.map((project: any) => {
+29 |     const after = inventory(project.worktree)
+30 |     if (JSON.stringify(project.inventory) !== JSON.stringify(after)) throw Error(`Original Project properties changed: ${project.id}`)
+                                                                                ^
+error: Original Project properties changed: prj_honTzv1SylD1sTwgEqBC
+      at <anonymous> (D:\myhexin-local\opencorvus\.tmp-product-iteration\child-dock-review-250\final-custody.ts:30:76)
+      at map (1:11)
+      at D:\myhexin-local\opencorvus\.tmp-product-iteration\child-dock-review-250\final-custody.ts:28:47
+
+Bun v1.3.14 (Windows x64)

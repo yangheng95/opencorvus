@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-10-09T20:26:32.1366788Z",
+  "pairPresent": {
+    "auth.json": false,
+    "models.json": false
+  },
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 54144,
+        "processInstanceID": "win32:639271737822356184",
+        "occurrenceID": "d1613763-78a6-446b-b928-9b29736b9c52"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 75080,
+        "processInstanceID": "win32:639271737830108724",
+        "occurrenceID": "4bf3c986-f79d-4106-ae16-b06aa7b45323"
+      }
+    }
+  ],
+  "occurrence": "child-dock-review-250-live-01-072bf856-0a60-420b-af6e-c6092815916f",
+  "listeners": []
+}

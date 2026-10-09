@@ -1,0 +1,18 @@
+{
+  "sourceProject": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01/project",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-10/child-dock-review-250-live-01",
+  "projectID": "prj_honTzv1SylD1sTwgEqBC",
+  "readinessEvidence": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\child-dock-readiness-250",
+  "rootSessionID": "ses_-zUSYFdRdzzk2frR62zX",
+  "requestID": "0f315e79-0af3-438e-b26e-d312f2f3e65e",
+  "caseLabel": "child-dock-review-250-live-01",
+  "startupQualified": true,
+  "observedAtUtc": "2026-10-09T20:15:08.3805851Z",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-08/store-card-accessor-after-153-01",
+  "casePort": 18185,
+  "caseEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/child-dock-review-250/live-01",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/store-card-accessor-after-153/live-01",
+  "taskID": "tsk_g00VXRkMRi00ID2TqzPU",
+  "review": "Root inspected fresh complete current readonly startup/frontier and configurations. Task completed epoch1, both source births dead/18098 and candidate18185 free/pair absent; provider/tool/outbox/delivery settled, all15 assistants closed, permission8/checkpoint2 complete, memory idle, recovery counts0. Sole nonexpiring runtime_process receipt uses MAX_SAFE_INTEGER physical identity; original exact PID instance dead, not an alive execution. Two default builtin MCP declarations, no plugins/channels/commands or pending call, terminalWouldWrite false, no orphan paths/artifact resources. Current whole-history copy, no LLM/agent creation or source modification.",
+  "sourceOccurrence": "store-card-accessor-after-153-01-cfc23954-8fa5-44eb-bdd1-9478adc22fda"
+}

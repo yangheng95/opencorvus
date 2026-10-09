@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [子Dock历史250](2026-10-10-child-dock-review-250.md)：真实来源/完成耗时与整Dock阅读1008保持，Native0、原保管失败及实时范围未验明确保留。
+
 - [完成耗时249](2026-10-10-completion-duration-249.md)：Side终态/整Dock重开固定1m9s、真实69809ms，当前执行时钟映射与原Native0；子场景未扩大通过。
 
 - [流式 Markdown 248](2026-10-10-streaming-markdown-248.md)：生成中列表格式修复/真实Working复测，原Native0；布局及全矩阵未扩大宣称。
