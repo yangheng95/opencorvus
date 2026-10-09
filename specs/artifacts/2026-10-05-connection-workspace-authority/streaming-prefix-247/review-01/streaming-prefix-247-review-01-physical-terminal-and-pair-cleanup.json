@@ -1,0 +1,69 @@
+{
+  "listeners": null,
+  "pairedCleanupComplete": true,
+  "observedAtUtc": "2026-10-09T18:38:08.1935619Z",
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "streaming-prefix-247-review-01-38a13694-f472-4d5c-9cd1-1a96be9f2b70",
+    "outcome": "settled",
+    "host": {
+      "pid": 44676,
+      "processInstanceID": "win32:639271676914199251",
+      "occurrenceID": "4a7487d4-325b-437e-bef6-9bec6b4015eb"
+    },
+    "target": {
+      "pid": 75892,
+      "processInstanceID": "win32:639271676921868278",
+      "occurrenceID": "4f185319-7a7b-4892-a013-046544b6d7c2"
+    },
+    "observedAtUtc": "2026-10-09T18:38:05.995Z",
+    "deadlineAt": 1791571491401,
+    "terminal": {
+      "occurrenceID": "streaming-prefix-247-review-01-38a13694-f472-4d5c-9cd1-1a96be9f2b70",
+      "pid": 75892,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "chain": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 75892,
+        "processInstanceID": "win32:639271676921868278",
+        "occurrenceID": "4f185319-7a7b-4892-a013-046544b6d7c2"
+      },
+      "originalOccurrencePresent": false
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 44676,
+        "processInstanceID": "win32:639271676914199251",
+        "occurrenceID": "4a7487d4-325b-437e-bef6-9bec6b4015eb"
+      },
+      "originalOccurrencePresent": false
+    }
+  ],
+  "occurrence": "streaming-prefix-247-review-01-38a13694-f472-4d5c-9cd1-1a96be9f2b70",
+  "copiedPair": [
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-review-01\\runtime\\data\\auth.json",
+      "copiedLength": 2194,
+      "outcome": "removed",
+      "presentAfter": false
+    },
+    {
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-review-01\\runtime\\data\\models.json",
+      "copiedLength": 9155406,
+      "outcome": "removed",
+      "presentAfter": false
+    }
+  ],
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

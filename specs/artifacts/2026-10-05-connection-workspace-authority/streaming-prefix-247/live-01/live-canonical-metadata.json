@@ -1,0 +1,75 @@
+{
+  "observedAtUtc": "2026-10-09T18:33:20.251Z",
+  "access": "Original running SQLite readonly BEGIN/ROLLBACK, exact Side Message",
+  "message": {
+    "id": "msg_g0VXZvKdk001hjzTYaPE",
+    "session_id": "ses_-zUSQ4jntzz0PCgcr2Pp",
+    "data": {
+      "author": "chat",
+      "role": "assistant",
+      "time": {
+        "created": 1791570522360,
+        "completed": 1791570600252
+      },
+      "parentID": "msg_4f0e7963-fd22-440f-9859-f8400fe8437d",
+      "acceptedInputMessageIDs": [
+        "msg_4f0e7963-fd22-440f-9859-f8400fe8437d"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "chat",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\project",
+        "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\project"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 46910,
+        "input": 44549,
+        "output": 2306,
+        "reasoning": 55,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "billing": {
+        "status": "priced"
+      },
+      "finish": "stop",
+      "orderKey": "v1:0001791570522360:0000000000000030:0000000000000000:message:msg_g0VXZvKdk001hjzTYaPE"
+    }
+  },
+  "parts": [
+    {
+      "id": "prt_g0VXZvKmo00wJwWq7euV",
+      "messageID": "msg_g0VXZvKdk001hjzTYaPE",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXZvLnl00QwBmQkk2K",
+      "messageID": "msg_g0VXZvKdk001hjzTYaPE",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791570526825,
+        "end": 1791570526830
+      }
+    },
+    {
+      "id": "prt_g0VXZvLq9003MzXkUuq5",
+      "messageID": "msg_g0VXZvKdk001hjzTYaPE",
+      "type": "text",
+      "textChars": 3742,
+      "time": {
+        "start": 1791570600031,
+        "end": 1791570600031
+      }
+    },
+    {
+      "id": "prt_g0VXZvetF00CwHCn7PX0",
+      "messageID": "msg_g0VXZvKdk001hjzTYaPE",
+      "type": "step-finish"
+    }
+  ]
+}

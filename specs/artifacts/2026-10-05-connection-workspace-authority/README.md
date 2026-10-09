@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [共享正文前缀247 Recall](streaming-prefix-plan-247.md) / [原失败与真实补验](streaming-prefix-247/README.md)：单队列持久前缀修复、31项正向检查、真实运行返回1879字符/open DB2202与两次Native0。
+
 - [Side运行返回246 Recall](side-stream-return-plan-246.md) / [原与after事实](side-stream-return-246/README.md)：shared prefix恢复真实失败保留，草稿请求归属修复/真实after空输入/两Native0。
 
 - [Sources摘录调查245 Recall](source-excerpt-investigation-245.md) / [真实边界](source-excerpt-245/README.md)：原Tool/canonical一致，新公共远端200/SSE文本已有空位，现parser完整保留。

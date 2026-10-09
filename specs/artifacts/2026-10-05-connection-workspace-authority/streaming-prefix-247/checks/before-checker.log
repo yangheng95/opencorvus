@@ -1,0 +1,24 @@
+$ bun script/run-tests.ts test/session/streaming-text-prefix.test.ts
+[1/1] START test/session/streaming-text-prefix.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+66 | function inactivityReceipt<T>(label: string) {
+67 |   const result = Promise.withResolvers<T>()
+68 |   let timer: ReturnType<typeof setTimeout> | undefined
+69 |   const progress = () => {
+70 |     clearTimeout(timer)
+71 |     timer = setTimeout(() => result.reject(new Error(`${label}: no accepted progress for 1500ms`)), 1500)
+                                                    ^
+error: Canonical prefix: no accepted progress for 1500ms
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:71:48)
+(fail) a running HTTP Provider persists its exact prefix for a late Session subscriber and completes the same Part [3600.90ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [6.05s]
+[1/1] DONE test/session/streaming-text-prefix.test.ts exit=1 duration=6.83s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+error: script "test" exited with code 1

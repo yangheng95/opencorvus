@@ -1,0 +1,45 @@
+Browser tab: 89, Title: "OpenCorvus", URL: "http://localhost:18182/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 247-248, 399-434
+~									246 container Reference history · 4 messages Quote in main conversation
+~											398 button (expanded) Reference history · 4 messages, Secondary Actions: Collapse
++												399 text Reference history · 4 messages
++											400 container
++												401 text User
++												402 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。
++											403 container
++												404 text work
++												405 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org zh-CN HTML details 元素, Secondary Actions: Expand
++													406 text websearch
++													407 text Web search: site:developer.mozilla.org zh-CN HTML details 元素
++													408 image
++												409 container Sources
++													410 button (expanded) Description: Sources: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN (3), Help: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN 3, Secondary Actions: Collapse
++														411 text <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN
++														412 text 3
++													413 link Description: Open web source: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++													414 button (collapsed) Description: Source excerpt: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN, Help: Source excerpt, Secondary Actions: Expand
++														415 text Source excerpt
++													416 link Description: Open web source: HTMLDetailsElement - Web API | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/API/HTMLDetailsElement
++													417 button (collapsed) Description: Source excerpt: HTMLDetailsElement - Web API | MDN, Help: Source excerpt, Secondary Actions: Expand
++														418 text Source excerpt
++													419 link Description: Open web source: <details>：揭露細節元素 - HTML：超文本標記語言 | MDN, Value: developer.mozilla.org/zh-TW/docs/Web/HTML/Reference/Elements/details
++													420 button (collapsed) Description: Source excerpt: <details>：揭露細節元素 - HTML：超文本標記語言 | MDN, Help: Source excerpt, Secondary Actions: Expand
++														421 text Source excerpt
++											422 container
++												423 text work
++												424 button (collapsed) Description: webfetch · https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html), Secondary Actions: Expand
++													425 text webfetch
++													426 text https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html)
++													427 image
++												428 container Sources
++													429 link Description: Open web source: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++											430 container
++												431 text work
++												432 container
++													433 text 经核对 MDN， <details>  是原生折叠信息组件，默认关闭， <summary>  提供摘要或标签；用户可点击或聚焦后按空格键展开，无需脚本实现基本交互。 open  是布尔属性，即使写成  open="false"  也会展开，关闭须移除该属性。状态变化后触发  toggle  事件，短时间内多次变化可能合并。
++												434 container
++													435 text 来源：
++													436 link Description: MDN 官方文档：<details>, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++													437 text 。
+The focused UI element is 246 container Reference history · 4 messages Quote in main conversation

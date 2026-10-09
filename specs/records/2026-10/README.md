@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [共享正文前缀247](2026-10-10-streaming-prefix-247.md)：修复关闭侧栏丢前文，真实运行中重开/持久前缀、31项正向检查与两次Native0；原未合格照片保留。
+
 - [Side运行返回246](2026-10-10-side-stream-return-246.md)：两次实际prefix丢失和open DB0；请求归属草稿清理已修/真实after空输入，shared backend待修。
 
 - [Sources摘录调查245](2026-10-10-source-excerpt-245.md)：原事实与一次真实remote边界核对，缺字未被误归为显示层，无生产改动。

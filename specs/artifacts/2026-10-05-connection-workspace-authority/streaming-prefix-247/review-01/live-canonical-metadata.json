@@ -1,0 +1,64 @@
+{
+  "observedAtUtc": "2026-10-09T18:36:46.906Z",
+  "access": "Original running SQLite readonly BEGIN/ROLLBACK, exact Side Message",
+  "message": {
+    "id": "msg_g0VXZx9p000xAB6TdTEq",
+    "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+    "data": {
+      "author": "chat",
+      "role": "assistant",
+      "time": {
+        "created": 1791570957430
+      },
+      "parentID": "msg_af017532-bce8-4103-b8a3-a9a5c439133d",
+      "acceptedInputMessageIDs": [
+        "msg_af017532-bce8-4103-b8a3-a9a5c439133d"
+      ],
+      "modelID": "gpt-6.1-sol",
+      "providerID": "openai",
+      "agent": "chat",
+      "path": {
+        "cwd": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-review-01\\project",
+        "root": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-review-01\\project"
+      },
+      "cost": 0,
+      "tokens": {
+        "total": 0,
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cache": {
+          "read": 0,
+          "write": 0
+        }
+      },
+      "orderKey": "v1:0001791570957430:0000000000000030:0000000000000000:message:msg_g0VXZx9p000xAB6TdTEq"
+    }
+  },
+  "parts": [
+    {
+      "id": "prt_g0VXZx9xq00a3EQxPM1V",
+      "messageID": "msg_g0VXZx9p000xAB6TdTEq",
+      "type": "step-start"
+    },
+    {
+      "id": "prt_g0VXZxAuz00yktfEHaIQ",
+      "messageID": "msg_g0VXZx9p000xAB6TdTEq",
+      "type": "reasoning",
+      "textChars": 0,
+      "time": {
+        "start": 1791570961645,
+        "end": 1791570961651
+      }
+    },
+    {
+      "id": "prt_g0VXZxAwy00f9cCyK9qi",
+      "messageID": "msg_g0VXZx9p000xAB6TdTEq",
+      "type": "text",
+      "textChars": 2202,
+      "time": {
+        "start": 1791570961768
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+$ bun script/run-tests.ts test/session/streaming-text-prefix.test.ts
+[1/1] START test/session/streaming-text-prefix.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a running HTTP Provider persists its exact prefix for a late Session subscriber and completes the same Part [2450.87ms]
+(pass) natural short completion commits its complete text and stream deltas [1811.06ms]
+(pass) external cancellation finalizes the exact accepted partial text under the existing error contract [2061.60ms]
+50 |           prefixSent.resolve()
+51 |           await release.promise
+52 |           try {
+53 |             if (failFirst && first) {
+54 |               phase = "network-failed"
+55 |               controller.error(new Error("Controlled first HTTP response closed unexpectedly"))
+                                        ^
+error: Controlled first HTTP response closed unexpectedly
+      at start (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:55:36)
+255 |       await observed.promise
+256 |       fixture.provider.release()
+257 |       expect(await running).toBe("continue")
+258 |       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+259 |       expect({ finish: complete.info.role === "assistant" ? complete.info.finish : "invalid-role",
+260 |         parts: complete.parts.filter(part => part.type === "text"), requests: fixture.provider.requests.length }).toMatchObject({
+                                                                                                                        ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "finish": "stop",
++   "finish": "other",
+    "parts": [
+      {
+-       "text": "Network attempt prefix. Recovered suffix.",
++       "id": "prt_g0VXZrd2x00MOXht0FxG",
++       "messageID": "msg_g0VXZrd2E00Qm3A1dn91",
++       "orderKey": "v1:0001791569639803:0000000000000031:0000000000000000:part:prt_g0VXZrd2x00MOXht0FxG",
++       "sessionID": "ses_-zUSQ8MxuzzOcZf9QI9r",
++       "text": "Network attempt prefix.",
++       "time": {
++         "end": 1791569640019,
++         "start": 1791569640019,
++       },
+        "type": "text",
+      },
+    ],
+-   "requests": 2,
++   "requests": 1,
+  }
+
+- Expected  - 3
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:260:115)
+(fail) a real interrupted HTTP attempt recovers to one complete accepted answer [2121.94ms]
+279 |         const persisted = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+280 |         expect({ phase: fixture.provider.phase(), part: persisted.parts.find(part => part.id === published.id) }).toMatchObject({
+281 |           phase: "prefix-held", part: { sessionID: fixture.sessionID, messageID: fixture.assistantID, text: prefix },
+282 |         })
+283 |         fixture.provider.release()
+284 |         expect(await running).toBe("continue")
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: "continue"
+Received: "stop"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:284:31)
+(fail) two concurrent Projects retain their own exact running prefix and final text [2672.47ms]
+
+ 3 pass
+ 2 fail
+ 17 expect() calls
+Ran 5 tests across 1 file. [13.43s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+[1/1] DONE test/session/streaming-text-prefix.test.ts exit=1 duration=14.16s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+error: script "test" exited with code 1

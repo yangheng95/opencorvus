@@ -2461,17 +2461,12 @@ export namespace Session {
     },
   )
 
-  // updatePartDelta is a pure Bus publish. Deltas are ephemeral by contract —
-  // the protocol bridge (task-message-protocol-bridge.ts:bridgeDelta) routes
-  // them through ProtocolStore.dispatchEphemeral with no sequence and no
-  // replay, and every streaming caller (session-hooks, engine/runtime,
-  // session/processor) already maintains an in-memory accumulator and
-  // persists the complete Part via updatePart at each natural boundary
-  // (tool-call, reasoning-end, execution standby). Writing deltas to PartTable
-  // would therefore produce state that is overwritten at the next boundary
-  // and never observed — pure write amplification. Under parallel Session
-  // execution this amplification used to starve the SQLite write lock and
-  // stall the main event loop, which read as "overlay freezing".
+  // Deltas remain ephemeral live transport. The processor owns their content
+  // accumulator and checkpoints full text through the existing Part writer
+  // on its bounded streamed-Part cadence and at natural/failure boundaries.
+  // Canonical prefixes repair late/reconnected readers without a second text
+  // store or a database transaction per token. CLI and ACP consumers retain
+  // their original delta contract; reasoning keeps its own natural boundary.
   const UpdatePartDeltaInput = z.object({
     sessionID: z.string(),
     messageID: z.string(),

@@ -1,0 +1,15 @@
+{
+  "pid": 77100,
+  "occurrence": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+  "owner": {
+    "pid": 77100,
+    "processInstanceID": "win32:639271672160762936",
+    "occurrenceID": "66b783f4-3a66-4703-a412-8933c01ec29d"
+  },
+  "parent": {
+    "pid": 59768,
+    "processInstanceID": "win32:639271672160399520",
+    "occurrenceID": "4bbdc123-7f35-4c7b-bcf2-bbdab53cfa25"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

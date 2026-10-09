@@ -1,0 +1,81 @@
+Browser tab: 89, Title: "OpenCorvus", URL: "http://localhost:18182/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 254, 257, 261
++											333 table
++												334 row
++													335 cell
++														336 text 操作
++													337 cell
++														338 text 预期现象
++													339 cell
++														340 text 失败影响
++												341 row
++													342 cell
++														343 text 分开阅读继承历史与当前请求
++													344 cell
++														345 text 能辨认背景材料和当前执行范围
++													346 cell
++														347 text 将旧安排误当成新授权
++												348 row
++													349 cell
++														350 text 区分搜索候选与已读取正文
++													351 cell
++														352 text 能识别结论的直接证据
++													353 cell
++														354 text 错称其他页面已经核对
++												355 row
++													356 cell
++														357 text 对照
++														358 text open
++														359 text  的存在与缺失
++													360 cell
++														361 text 理解
++														362 text open="false"
++														363 text  仍表示展开
++													364 cell
++														365 text 写法与预期状态相反
++												366 row
++													367 cell
++														368 text 对照
++														369 text toggle
++														370 text  时机及合并说明
++													371 cell
++														372 text 理解状态读取与通知次数的区别
++													373 cell
++														374 text 将合并通知误判为丢失
++												375 row
++													376 cell
++														377 text 分区展示结论、建议和示例
++													378 cell
++														379 text 不把文档说明当作产品实测
++													380 cell
++														381 text 错误宣布验收完成
++											382 container
++												383 text 来源沿用主对话已读取的页面：
++												384 link Description: MDN：<details>——详细信息展现元素, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++												385 text 。
++											386 heading 独立 JavaScript 示例, Value: 3
++												387 text 独立 JavaScript 示例
++											388 container
++												389 text 假定页面已有一个  <details>  元素；以下示例 未执行 ，只演示监听  toggle  并读取  open ，不改变展开状态。
++											390 container
++												391 text JAVASCRIPT
++												392 button Copy code
++												393 container
++													394 text const  details =  document . querySelector ( "details" );
+
+ if  (!details) {
+   throw new Error ( "页面中缺少 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  () =>  {
+   const  isOpen = details. open ;
+   console . log (
+     "details.open:" ,
+    isOpen
+  );
+});
++										395 text entry area (settable) Ask a side question…
+~										260 text Main conversation stays on track
++										396 button (disabled) Send side question
+The focused UI element is 246 container Reference history · 4 messages Quote in main conversation

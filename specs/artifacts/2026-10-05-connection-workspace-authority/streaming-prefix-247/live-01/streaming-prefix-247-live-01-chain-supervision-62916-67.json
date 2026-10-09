@@ -1,0 +1,48 @@
+{
+  "occurrence": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+  "presence": [
+    {
+      "processInstanceID": "win32:639271672160762936",
+      "originalOccurrencePresent": false,
+      "processID": 77100,
+      "state": "dead_or_reused"
+    },
+    {
+      "processInstanceID": "win32:639271672153211762",
+      "originalOccurrencePresent": false,
+      "processID": 49880,
+      "state": "dead_or_reused"
+    }
+  ],
+  "observedAtUtc": "2026-10-09T18:33:41.1727737Z",
+  "boundary": "Exact native Host/Target birth and production foreground Job settlement; no CIM descendant inference",
+  "listeners": [],
+  "nativeSettlement": {
+    "occurrence": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+    "outcome": "settled",
+    "host": {
+      "pid": 49880,
+      "processInstanceID": "win32:639271672153211762",
+      "occurrenceID": "57439946-1b25-43c2-ac8e-e233ec3a90ba"
+    },
+    "target": {
+      "pid": 77100,
+      "processInstanceID": "win32:639271672160762936",
+      "occurrenceID": "f7f6321a-6884-458b-83d1-8b2961faa0ab"
+    },
+    "observedAtUtc": "2026-10-09T18:33:38.951Z",
+    "deadlineAt": 1791571015306,
+    "terminal": {
+      "occurrenceID": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+      "pid": 77100,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "phase": "supervision-62916-67"
+}

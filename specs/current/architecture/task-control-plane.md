@@ -539,6 +539,18 @@ The selected child Session transcript keeps its backend route as the transcript 
 
 Persisted child transcript hydration and live delivery are consecutive phases of that same transcript. The selected Task SSE is the live authority: the dock applies exact selected-Session full-Part snapshots, Part deltas, and removals over its persisted base in process, without polling or opening another stream. A full Part snapshot supersedes earlier deltas for that Part; later deltas append by exact field. The projection is disposed on target change. Its reactive growth feeds the shared conversation scroll owner, which suspends follow only after an operator input produces actual upward movement away from the bottom and restores follow when the viewport returns to the bottom.
 
+The shared Session processor checkpoints its current text accumulator into the
+canonical Part through the existing streamed-Part publication queue. That queue
+uses a 200ms cadence, one publication in flight and one dirty trailing update;
+it also publishes pending Tool input drafts. Existing text deltas remain live
+transport for all consumers, including CLI and ACP. A late or reconnected reader
+hydrates the retained prefix rather than an empty Part, while publication
+backpressure can delay its next checkpoint. Natural text completion joins the
+queue before the final Part write, and failed or cancelled streams retain their
+last accepted partial text before assistant completion. Retry settles the queue
+before retiring the attempt's Parts. No separate text store or per-token
+database writer participates in this contract.
+
 ## Verification authority
 
 The following gates define the maintained control-plane proof:

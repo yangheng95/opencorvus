@@ -1,0 +1,82 @@
+{
+  "observedAtUtc": "2026-10-09T18:26:56.6193915Z",
+  "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01",
+  "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\runtime",
+  "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\project",
+  "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\evidence",
+  "evidencePrefix": "streaming-prefix-247-live-01",
+  "receipt": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\startup.json",
+  "occurrence": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+  "port": 18181,
+  "owner": {
+    "processInstanceID": "win32:639271672160762936",
+    "ProcessId": 77100
+  },
+  "observedProcessChain": [
+    {
+      "processInstanceID": "win32:639271672160762936",
+      "ProcessId": 77100
+    }
+  ],
+  "taskSelectionPath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-10\\streaming-prefix-247-live-01\\task-selection.json",
+  "taskSelectionRequired": false,
+  "profileSelectionPath": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\streaming-prefix-247\\builtin.json",
+  "profileSelection": {
+    "kind": "builtin",
+    "id": "base",
+    "namespace": "builtin"
+  },
+  "handleAdmissionMilliseconds": 600000,
+  "environmentNames": [
+    "APPDATA",
+    "ComSpec",
+    "HOME",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "LANG",
+    "LC_ALL",
+    "LC_CTYPE",
+    "LOCALAPPDATA",
+    "OPENCORVUS_DISABLE_AUTOUPDATE",
+    "OPENCORVUS_DISABLE_EXTERNAL_SKILLS",
+    "OPENCORVUS_HOME",
+    "OPENCORVUS_TASK_PROCESS_MODE",
+    "PATH",
+    "PATHEXT",
+    "SystemRoot",
+    "TEMP",
+    "TMP",
+    "TMPDIR",
+    "USERPROFILE",
+    "WINDIR",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME",
+    "XDG_DATA_HOME",
+    "XDG_STATE_HOME"
+  ],
+  "taskProcessMode": "native",
+  "promptProfile": "base",
+  "requestBudget": 12,
+  "requestBudgetScope": "One same-process audit cumulative across preflight and the selected qualification surface; visual acceptance remains Root-owned",
+  "inactivityMilliseconds": 180000,
+  "taskMaximumMilliseconds": 900000,
+  "taskMaximumScope": "Fixed from actual accepted Task lifecycle openedAt; progress never extends total duration",
+  "sourcePair": "Authorized existing OpenAI entry and its complete adjacent catalog; staging occurs in reviewed wrapper after actual Git baseline",
+  "cleanup": "Parent verifies whole observed process chain and port release then removes both copied data/auth.json and data/models.json, including partial failure",
+  "uiAutomation": "None",
+  "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\streaming-prefix-247\\live-01",
+  "qualificationKind": "NativeService",
+  "host": {
+    "pid": 49880,
+    "processInstanceID": "win32:639271672153211762",
+    "occurrenceID": "57439946-1b25-43c2-ac8e-e233ec3a90ba"
+  },
+  "nativeTarget": {
+    "pid": 77100,
+    "processInstanceID": "win32:639271672160762936",
+    "occurrenceID": "f7f6321a-6884-458b-83d1-8b2961faa0ab"
+  },
+  "targetBirthAtMs": 1791570416076,
+  "nativeDeadlineAt": 1791571015306,
+  "preparationMaximumMilliseconds": 600000
+}

@@ -1,0 +1,5 @@
+$ node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit
+src/session/processor.ts(1651,15): error TS2322: Type '{ end: number; start?: number | undefined; }' is not assignable to type '{ start: number; end?: number | undefined; }'.
+  Types of property 'start' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.

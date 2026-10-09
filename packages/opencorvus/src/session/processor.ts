@@ -667,12 +667,13 @@ export namespace SessionProcessor {
           let currentText: Message.TextPart | undefined
           let currentTextStreamID: string | undefined
           let reasoningMap: Record<string, Message.ReasoningPart> = {}
-          let toolInputFlushTimer: ReturnType<typeof setTimeout> | undefined
-          let toolInputFlushOperation: Promise<void> | undefined
-          let toolInputFlushError: unknown
-          let toolInputDirty = false
-          const flushToolInputs = async (signal: AbortSignal) => {
+          let streamedPartFlushTimer: ReturnType<typeof setTimeout> | undefined
+          let streamedPartFlushOperation: Promise<void> | undefined
+          let streamedPartFlushError: unknown
+          let streamedPartDirty = false
+          const flushStreamedParts = async (signal: AbortSignal) => {
             signal.throwIfAborted()
+            if (currentText) await Session.updatePartWithSignal(signal, currentText)
             for (const callID of Object.keys(toolcalls)) {
               await withToolPartLock(callID, async () => {
                 const part = toolcalls[callID]
@@ -680,34 +681,34 @@ export namespace SessionProcessor {
               })
             }
           }
-          const scheduleToolInputFlush = (signal: AbortSignal) => {
-            toolInputDirty = true
-            if (toolInputFlushTimer || toolInputFlushOperation) return
-            toolInputFlushTimer = setTimeout(() => {
-              toolInputFlushTimer = undefined
-              toolInputDirty = false
-              const operation = flushToolInputs(signal).catch((error) => {
+          const scheduleStreamedPartFlush = (signal: AbortSignal) => {
+            streamedPartDirty = true
+            if (streamedPartFlushTimer || streamedPartFlushOperation) return
+            streamedPartFlushTimer = setTimeout(() => {
+              streamedPartFlushTimer = undefined
+              streamedPartDirty = false
+              const operation = flushStreamedParts(signal).catch((error) => {
                 if (signal.aborted && error === signal.reason) return
-                toolInputFlushError = error
+                streamedPartFlushError = error
               })
-              toolInputFlushOperation = operation
+              streamedPartFlushOperation = operation
               void operation.finally(() => {
-                if (toolInputFlushOperation === operation) toolInputFlushOperation = undefined
-                if (toolInputDirty && toolInputFlushError === undefined && !signal.aborted)
-                  scheduleToolInputFlush(signal)
+                if (streamedPartFlushOperation === operation) streamedPartFlushOperation = undefined
+                if (streamedPartDirty && streamedPartFlushError === undefined && !signal.aborted)
+                  scheduleStreamedPartFlush(signal)
               })
             }, 200)
           }
-          const settleToolInputFlush = async () => {
-            if (toolInputFlushTimer) clearTimeout(toolInputFlushTimer)
-            toolInputFlushTimer = undefined
-            await toolInputFlushOperation
+          const settleStreamedPartFlush = async () => {
+            if (streamedPartFlushTimer) clearTimeout(streamedPartFlushTimer)
+            streamedPartFlushTimer = undefined
+            await streamedPartFlushOperation
             // An in-flight publication may have scheduled its trailing dirty
             // snapshot while we were awaiting it. This attempt now owns closure.
-            if (toolInputFlushTimer) clearTimeout(toolInputFlushTimer)
-            toolInputFlushTimer = undefined
-            toolInputDirty = false
-            if (toolInputFlushError !== undefined) throw toolInputFlushError
+            if (streamedPartFlushTimer) clearTimeout(streamedPartFlushTimer)
+            streamedPartFlushTimer = undefined
+            streamedPartDirty = false
+            if (streamedPartFlushError !== undefined) throw streamedPartFlushError
           }
           const flushReasoningDeltas = async (signal?: AbortSignal) => {
             signal?.throwIfAborted()
@@ -830,7 +831,7 @@ export namespace SessionProcessor {
               const scope = attemptScopes.get(failedAttempt)
               if (!scope) return
               await settleReasoningFlush(false)
-              await settleToolInputFlush()
+              await settleStreamedPartFlush()
               await discardPendingToolInputDrafts("Provider activity retried before validated Tool input")
               const createdPartIDs = [...scope.createdPartIDs]
               if (scope.toolExecutionStarted) {
@@ -1129,7 +1130,7 @@ export namespace SessionProcessor {
                         const match = toolcalls[toolCallID]
                         if (match && match.state.status === "pending") {
                           ;(match.state as any).raw += delta
-                          scheduleToolInputFlush(run.signal)
+                          scheduleStreamedPartFlush(run.signal)
                           const lifecycle = mcpAppCalls.get(toolCallID)
                           if (lifecycle) {
                             const partial = await parsePartialJson((match.state as { raw: string }).raw)
@@ -1427,6 +1428,7 @@ export namespace SessionProcessor {
                         if (currentText && value.id === currentTextStreamID) {
                           currentText.text += value.text
                           if (value.providerMetadata) currentText.metadata = value.providerMetadata
+                          scheduleStreamedPartFlush(run.signal)
                           await Session.updatePartDeltaWithSignal(run.signal, {
                             sessionID: currentText.sessionID,
                             messageID: currentText.messageID,
@@ -1443,6 +1445,7 @@ export namespace SessionProcessor {
 
                       case "text-end":
                         if (currentText && value.id === currentTextStreamID) {
+                          await settleStreamedPartFlush()
                           currentText.text = currentText.text.trimEnd()
                           const textOutput = await Plugin.trigger(
                             "experimental.text.complete",
@@ -1534,7 +1537,7 @@ export namespace SessionProcessor {
                     observation.chunkFinished()
                   }
                 }
-                await settleToolInputFlush()
+                await settleStreamedPartFlush()
               },
               (event: LLMActivityEvent) => {
                 recordProviderActivityEvent(input.assistantMessage.id, event)
@@ -1591,9 +1594,9 @@ export namespace SessionProcessor {
             // attached to the assistant message.
             let original = e instanceof LLMActivityError ? (e.cause ?? e) : e
             try {
-              await settleToolInputFlush()
+              await settleStreamedPartFlush()
             } catch (flushError) {
-              original = new AggregateError([original, flushError], "Provider and Tool input transport failed")
+              original = new AggregateError([original, flushError], "Provider and streamed Part publication failed")
             }
             await Promise.allSettled(
               [...mcpAppCalls].map(([toolCallID, lifecycle]) =>
@@ -1641,6 +1644,16 @@ export namespace SessionProcessor {
             } else {
               SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
             }
+          }
+          if (currentText) {
+            const time = currentText.time
+            if (!time) throw new Error(`Streaming text Part ${currentText.id} has no start time`)
+            await Session.updatePart({
+              ...currentText,
+              time: { ...time, end: Date.now() },
+            })
+            currentText = undefined
+            currentTextStreamID = undefined
           }
           await closeOpenReasoningParts()
           if (snapshot) {

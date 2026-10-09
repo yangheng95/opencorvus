@@ -1,0 +1,15 @@
+[1/1] START test/session/streaming-text-prefix.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a running HTTP Provider persists its exact prefix for a late Session subscriber and completes the same Part [2557.23ms]
+(pass) natural short completion commits its complete text and stream deltas [1926.75ms]
+(pass) external cancellation finalizes the exact accepted partial text under the existing error contract [1944.25ms]
+(pass) a real interrupted HTTP attempt recovers to one complete accepted answer [3043.74ms]
+(pass) two concurrent Projects retain their own exact running prefix and final text [2543.61ms]
+
+ 5 pass
+ 0 fail
+ 19 expect() calls
+Ran 5 tests across 1 file. [14.50s]
+[1/1] DONE test/session/streaming-text-prefix.test.ts exit=0 duration=15.23s

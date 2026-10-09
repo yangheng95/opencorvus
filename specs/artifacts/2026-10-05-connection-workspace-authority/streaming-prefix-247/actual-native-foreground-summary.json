@@ -1,0 +1,296 @@
+{
+  "observedAtUtc": "2026-10-09T18:42:16.354Z",
+  "nativeCases": [
+    {
+      "phase": "live-01",
+      "foreground": {
+        "sessionID": 91189,
+        "actualExit": 0,
+        "authority": "Root joined the original functions.write_stdin session after sole shutdown; tool returned actual exit_code 0."
+      },
+      "native": {
+        "occurrence": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+        "outcome": "settled",
+        "host": {
+          "pid": 49880,
+          "processInstanceID": "win32:639271672153211762",
+          "occurrenceID": "57439946-1b25-43c2-ac8e-e233ec3a90ba"
+        },
+        "target": {
+          "pid": 77100,
+          "processInstanceID": "win32:639271672160762936",
+          "occurrenceID": "f7f6321a-6884-458b-83d1-8b2961faa0ab"
+        },
+        "observedAtUtc": "2026-10-09T18:33:38.951Z",
+        "deadlineAt": 1791571015306,
+        "terminal": {
+          "occurrenceID": "streaming-prefix-247-live-01-45717310-4db9-4789-92dd-ec26b99f7fdf",
+          "pid": 77100,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "fixedMaximumMs": 600000,
+      "ownerTargetBirthAtMs": 1791570416076,
+      "requestBudget": 12,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_hAh8jzQAvUj0VTcMVSFK",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570432747
+          },
+          "lastByteReadAt": 1791570432707
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_hAh8jzQAvUj0VTcMVSFK",
+          "assistantMessageID": "msg_g0VXZuv6700ew9TODlMu",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570427938
+          },
+          "lastByteReadAt": 1791570427748
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4siuzztyb6kc3Rw",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570477654
+          },
+          "lastByteReadAt": 1791570477466
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4siuzztyb6kc3Rw",
+          "assistantMessageID": "msg_g0VXZv7Xo002eEYx7q2R",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570476974
+          },
+          "lastByteReadAt": 1791570476772
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4siuzztyb6kc3Rw",
+          "assistantMessageID": "msg_g0VXZv9P300X7tV7Vc2E",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570483809
+          },
+          "lastByteReadAt": 1791570483353
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4siuzztyb6kc3Rw",
+          "assistantMessageID": "msg_g0VXZvAi7000vOOTKgf5",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570491318
+          },
+          "lastByteReadAt": 1791570491150
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4jntzz0PCgcr2Pp",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570510684
+          },
+          "lastByteReadAt": 1791570510608
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4jntzz0PCgcr2Pp",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570543022
+          },
+          "lastByteReadAt": 1791570542950
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ4jntzz0PCgcr2Pp",
+          "assistantMessageID": "msg_g0VXZvKdk001hjzTYaPE",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570600197
+          },
+          "lastByteReadAt": 1791570600040
+        }
+      ],
+      "sideSessionID": "ses_-zUSQ4jntzz0PCgcr2Pp"
+    },
+    {
+      "phase": "review-01",
+      "foreground": {
+        "sessionID": 42251,
+        "actualExit": 0,
+        "authority": "Root joined the original functions.write_stdin session after sole shutdown; tool returned actual exit_code 0."
+      },
+      "native": {
+        "occurrence": "streaming-prefix-247-review-01-38a13694-f472-4d5c-9cd1-1a96be9f2b70",
+        "outcome": "settled",
+        "host": {
+          "pid": 44676,
+          "processInstanceID": "win32:639271676914199251",
+          "occurrenceID": "4a7487d4-325b-437e-bef6-9bec6b4015eb"
+        },
+        "target": {
+          "pid": 75892,
+          "processInstanceID": "win32:639271676921868278",
+          "occurrenceID": "4f185319-7a7b-4892-a013-046544b6d7c2"
+        },
+        "observedAtUtc": "2026-10-09T18:38:05.995Z",
+        "deadlineAt": 1791571491401,
+        "terminal": {
+          "occurrenceID": "streaming-prefix-247-review-01-38a13694-f472-4d5c-9cd1-1a96be9f2b70",
+          "pid": 75892,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "fixedMaximumMs": 600000,
+      "ownerTargetBirthAtMs": 1791570892186,
+      "requestBudget": 12,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_hi1UlM3bIG030g4tsOf6",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570904104
+          },
+          "lastByteReadAt": 1791570904059
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_hi1UlM3bIG030g4tsOf6",
+          "assistantMessageID": "msg_g0VXZwuqz00KAE44XyIv",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570903326
+          },
+          "lastByteReadAt": 1791570903185
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ30uWzzyuVGJJX76",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570922998
+          },
+          "lastByteReadAt": 1791570922937
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ30uWzzyuVGJJX76",
+          "assistantMessageID": "msg_g0VXZwzMY00L65OCAS66",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570922466
+          },
+          "lastByteReadAt": 1791570922466
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ30uWzzyuVGJJX76",
+          "assistantMessageID": "msg_g0VXZx1JW00KrKym64An",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570929431
+          },
+          "lastByteReadAt": 1791570929301
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ30uWzzyuVGJJX76",
+          "assistantMessageID": "msg_g0VXZx2bL00ESsDLgDHv",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570937521
+          },
+          "lastByteReadAt": 1791570937265
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570943029
+          },
+          "lastByteReadAt": 1791570943003
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791570977523
+          },
+          "lastByteReadAt": 1791570977490
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "sessionID": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+          "assistantMessageID": "msg_g0VXZx9p000xAB6TdTEq",
+          "terminal": {
+            "kind": "eof",
+            "at": 1791571019579
+          },
+          "lastByteReadAt": 1791571019434
+        }
+      ],
+      "sideSessionID": "ses_-zUSQ2vIdzzqzoeGu5Wb"
+    }
+  ],
+  "boundary": "Original receipts preserved in phase directories; live-01 was too late for running remount proof, review-01 supplies actual running remount and SQLite prefix."
+}

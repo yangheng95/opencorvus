@@ -1,0 +1,57 @@
+$ bun script/run-tests.ts test/session/processor-llm-activity-retry.test.ts test/session/processor-producer-boundary.test.ts test/server/session-event-connection-snapshot.test.ts
+[1/3] START test/session/processor-llm-activity-retry.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) SessionProcessor semantic LLM activity retry > retries a text start whose committed publication outlives its physical owner [3550.36ms]
+(pass) SessionProcessor semantic LLM activity retry > retries a reasoning start whose committed publication outlives its physical owner [3218.04ms]
+(pass) SessionProcessor semantic LLM activity retry > persists one recovered answer after the observed idle, network, idle sequence [2435.06ms]
+(pass) SessionProcessor semantic LLM activity retry > retries after Tool input chunks that do not mutate the pending draft [3112.50ms]
+(pass) SessionProcessor semantic LLM activity retry > recovers a parked stream after reasoning-end under the Session subscriber set [3356.72ms]
+(pass) SessionProcessor semantic LLM activity retry > an aborted reasoning stream settles its delayed delta publication and durable reasoning part [2848.28ms]
+
+ 6 pass
+ 0 fail
+ 18 expect() calls
+Ran 6 tests across 1 file. [20.36s]
+[1/3] DONE test/session/processor-llm-activity-retry.test.ts exit=0 duration=21.13s
+[2/3] START test/session/processor-producer-boundary.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) real idle retry scopes pending JSON observations to each actual attempt before external cancellation [2815.91ms]
+(pass) a producer-side committed operation yields unsafe retry when its consumer stalls before tool-call [2154.23ms]
+(pass) processor observation records accepted and rejected current event identities in the canonical Task trace [2016.65ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [1865.09ms]
+(pass) an aborted current attempt records its exact pending JSON structure through the canonical Trace owner [1950.24ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1931.11ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2167.56ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [2368.32ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2276.37ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1774.27ms]
+
+ 10 pass
+ 0 fail
+ 39 expect() calls
+Ran 10 tests across 1 file. [23.00s]
+[2/3] DONE test/session/processor-producer-boundary.test.ts exit=0 duration=23.22s
+[3/3] START test/server/session-event-connection-snapshot.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold Session stream reads durable history and interactions with an unavailable execution model [1989.60ms]
+(pass) Session stream schema classifies connection snapshots and ordinary protocol events by type [1.84ms]
+(pass) Session stream schema reports malformed connection frames as a Zod contract error [1.46ms]
+(pass) Session stream projects a non-message Session diff through Bus and ProtocolStore [1664.60ms]
+(pass) Session stream receives durable lifecycle and error facts for a non-Task Session [1735.47ms]
+(pass) Session reconnect selects the globally newest lifecycle across Session and Task aggregates [2217.71ms]
+(pass) session.connected converges the persisted first Work prompt at the stream cutover [1722.36ms]
+(pass) session.connected publishes a pageable canonical tail after a long disconnect [2798.39ms]
+(pass) session.connected precedes a newer live Part update captured after snapshot read [1624.01ms]
+(pass) two project streams receive their own non-Task child Message and Part events [3186.25ms]
+
+ 10 pass
+ 0 fail
+ 31 expect() calls
+Ran 10 tests across 1 file. [19.20s]
+[3/3] DONE test/server/session-event-connection-snapshot.test.ts exit=0 duration=19.41s

@@ -1,0 +1,295 @@
+{
+  "observedAtUtc": "2026-10-09T18:38:24.784Z",
+  "access": "Actual readonly canonical BEGIN/ROLLBACK after physical closure",
+  "sources": [
+    {
+      "id": "prt_g0VXZx1HC00y9zahddFL",
+      "message_id": "msg_g0VXZwzMY00L65OCAS66",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：详细信息展现元素 - HTML（超文本标记语言） | MDN",
+        "snippet": "：详细信息展现元素 - HTML（超文本标记语言） | MDN\n\n# ：详细信息展现元素\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。 \n\n- 查看完整兼容性 \n- 了解更多 \n\nHTML ` ` 元素可创建一个组件，仅在被切换成展开状态时，它才会显示内含的信息。` ` 元素可为该部件提供概要或者标签。\n\n展现组件通常在屏幕上使用一个小三角形，旋转（或扭转）以表示打开/关闭的状态，三角形旁边有一个标签。` ` 元素的内容被用来作为展示小部件的标签。\n...\n一个 ` ` 小组件可以处于两种状态之一。默认的关闭状态只显示三角形和 ` ` 内的标签（如果没有 ` ` 则显示用户代理定义的默认字符串）。\n\n当用户点击小组件或聚焦它然后按空格键时，它就会“扭转”展开，显示出其中的内容。通常使用一个旋转或扭转的三角形来代表打开或关闭小组件，这就是为什么这些小组件有时被称为“旋钮”。\n\n你可以使用 CSS 来设计展示小组件，你可以通过设置/移除 `open` 属性以编程方式打开和关闭该小组件。遗憾的是，目前还没有内置的方法来对打开和关闭之间的过渡进行动画处理。\n\n默认情况下，当关闭时，该小组件的高度只足以显示展开三角形和摘要。当打开时，它就会展开以显示其中包含的细节。\n\n完全符合标准的实现会自动将 CSS `display: list-item` 应用到 ` ` 元素。你可以用它来进一步定制其外观。请参阅自定义展开组件以了解更多细节。\n\n## 属性\n\n此元素包含全局属性。\n\n`open`\n: 这个布尔属性表示细节内容——也就是 ` ` 元素的内容——目前是否可见。默认情况下为 `false`，意味着细节内容是不可见的。\n\n备注：你必须完全删除这个属性来使细节内容隐藏。`open=\"false\"` 使细节内容可见，因为这个属性是布尔值。\n...\n除了 HTML 元素支持的常规事件外，` ` 元素还支持 `toggle` 事件，当 ` ` 元素的状态在打开和关闭之间变化时，该事件会被派发到该元素。该事件是在状态发生变化后发送的，不过如果状态在浏览器派发该事件之前发生了多次变化，那么这些事件就会被合并，从而只发送一个。\n\n你可以为 `toggle` 事件使用一个事件监听器来检测小组件何时改变状态：\n...\n为了使得 ` ` 盒子初始为展开状态，要添加布尔属性 `open`：\n...\n### 自定义外观\n\n现在我们给展现盒子设置一些 CSS 样式，以自定义其外观。\n...\n这个 CSS 创建了一个类似于标签式界面的外观，点击标签可以打开它，显示其内容。\n\n选择器 `details[open]` 可以用来为打开的元素设置样式。\n...\n### 自定义展开组件\n\n展开三角形可以自定义，但并没有得到广泛支持。由于该元素是标准化的，因此在实验性实施阶段，浏览器如何支持此自定义项有所不同，我们不得不暂时使用多种方法。\n\n` ` 元素支持 `list-style` 缩写属性或者完整属性，比如 `list-style-type`，可以使用它们任意改变三角（通常与 `list-style-image` 一起使用）。例如，我们可以使用 `list-style: none` 移除三角形展开图标。\n...\n该 CSS 的外观类似于选项卡界面，在该界面中，激活选项卡将展开并打开它以显示其内容。\n...\n## 技术概要\n\n| 内容分类 | 流式内容、分段内容、交互内容、可感知内容 |\n| --- | --- |\n| 允许的内容 | 一个紧跟流式内容的 ` ` 元素 |\n| 标签省略 | 不允许，开始标签和结束标签都不能省略。 |\n| 允许的父元素 | 任何接受流式内容的元素。 |\n| 隐含的 ARIA 角色 | `group` |\n| 允许的 ARIA 角色 | 没有允许的 `role` |\n| DOM 接口 | `HTMLDetailsElement` |",
+        "publishedAt": "2025-08-06T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZx1HH00W7G3cHjUg",
+      "message_id": "msg_g0VXZwzMY00L65OCAS66",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "data": {
+        "type": "source-url",
+        "sourceId": "4a3398ab4c263ca0ca2b8cf50fc37d7841ffe08fba9aad869e60652efae75fbe",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDetailsElement",
+        "title": "HTMLDetailsElement - Web API | MDN",
+        "snippet": "HTMLDetailsElement - Web API | MDN\n\n# HTMLDetailsElement\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。 \n\n- 查看完整兼容性 \n- 了解更多 \n\n`HTMLDetailsElement` 接口提供了特殊的属性 (除了常规的 `HTMLElement` 接口之外，它还可以通过继承获得这些属性) 用于操作 ` ` 元素。\n\n## 属性\n\n从其父级 `HTMLElement` 继承属性.\n\n`HTMLDetailsElement.open`\n: 是一个 `Boolean` 反射 `open` HTML 属性，指示是否向用户显示元素的内容 (不包括 ` `)\n...\n没有特定的方法；继承其父方法 `HTMLElement`.",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZx1HK003s92107iP",
+      "message_id": "msg_g0VXZwzMY00L65OCAS66",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "data": {
+        "type": "source-url",
+        "sourceId": "bbdb8f32a8c7bcf260fb73eee4d7433cc71fee516b013b2cfad0df36f926043b",
+        "url": "https://developer.mozilla.org/zh-TW/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：揭露細節元素 - HTML：超文本標記語言 | MDN",
+        "snippet": "：揭露細節元素 - HTML：超文本標記語言 | MDN\n\n# ：揭露細節元素\n\n Baseline Widely available *\n...\navailable across browsers\n...\n` ` HTML 元素創建了一個揭露小部件，在小部件被切換為「開啟」狀態時，信息只有可見。必須使用 ` ` 元素提供摘要或標籤。\n\n通常，揭露小部件在螢幕上以小三角形呈現，該三角形旋轉（或扭曲）以指示開啟/關閉狀態，並帶有三角形旁邊的標籤。` ` 元素的內容用作揭露小部件的標籤。` ` 的內容提供了 ` ` 的無障礙描述。\n...\n` ` 小部件可以處於兩種狀態之一。默認的「關閉」狀態僅顯示三角形和 ` ` 內的標籤（或如果沒有 ` `，則是使用者代理定義的默認字串）。\n\n當用戶點擊小部件或將焦點放在小部件上並按空格鍵時，它會「扭轉」開啟，顯示其內容。常見的使用旋轉或扭曲三角形來表示打開或關閉小部件的用法，這就是為什麼有時被稱為「旋鈕」的原因。\n\n你可以使用 CSS 來設置揭露小部件的樣式，並且可以通過設置/刪除其 `open` 屬性來以編程方式打開和關閉小部件。不幸的是，目前沒有內建的方法來在開啟和關閉之間實現過渡動畫。\n\n默認情況下，在關閉時，小部件的高度僅足以顯示揭露三角形和摘要。打開時，它會展開以顯示其中包含的細節。\n\n完全符合標準的實現會自動將 CSS `display: list-item` 應用於 ` ` 元素。你可以使用這個來進一步自定義其外觀。有關更多詳情，請參閱自定義揭露小部件。\n\n## 屬性\n...\n包括全域屬性。\n\n`open`\n: 此布林屬性指示詳細信息——即 ` ` 元素的內容——目前是否可見。當此屬性存在時，顯示詳細信息，或者當此屬性不存在時，隱藏詳細信息。默認情況下，此屬性不存在，這意味著詳細信息不可見。\n\n備註：你必須完全刪除此屬性才能使詳細信息隱藏。`open=\"false\"` 會使詳細信息可見，因為此屬性是布林型的。\n`name`\n: 此屬性使多個 ` ` 元素連接在一起，一次只能打開一個。這使開發人員可以輕鬆創建 UI 功能，如手風琴，而無需腳本。\n\n`name` 屬性指定一個組名——給多個 ` ` 元素相同的 `name` 值以將它們分組。只能同時打開組中的一個 ` ` 元素——打開一個將導致另一個關閉。如果多個分組的 ` ` 元素都具有 `open` 屬性，則僅在源順序中的第一個元素會呈現為打開狀態。\n...\n除了 HTML 元素支持的常規事件外，` ` 元素還支持 `toggle` 事件，當其狀態在開啟和關閉之間更改時，該事件將分派給 ` ` 元素。它在狀態更改後發送，儘管如果在瀏覽器能夠分派事件之前狀態多次更改，則事件將合併，以便僅發送一次。\n\n你可以使用 `toggle` 事件的事件監聽器來檢測小部件何時更改狀態：\n...\n### 簡單的揭露範例\n...\n### 創建打開的揭露框\n\n要在其打開狀態下開始 ` ` 框，請添加布林值 `open` 屬性：\n\n```\n<details open>\n  <summary>System Requirements</summary>\n  <p>\n    Requires a computer running an operating system. The computer must have some\n    memory and ideally some kind of long-term storage. An input device as well\n    as some form of output device is recommended.\n  </p>\n</details>\n...\n### 自定義外觀\n...\n此 CSS 創建了一個類似標籤界面的外觀，點擊標籤將其展開以顯示其內容。\n\n選擇器 `details[open]` 可用於為打開的元素設置樣式。\n...\n### 自定義揭露小部件\n\n揭露三角形本身可以進行自定義，儘管這種做法得到的廣泛支持並不多。由於在標準化時，瀏覽器支持這種自定義的方式存在差異，因此我們將不得不在一段時間內使用多種方法。\n\n` ` 元素支持 `list-style` 簡寫屬性及其分解屬性，例如 `list-style-type`，用於將揭露三角形更改為你選擇的任何內容（通常使用 `list-style-image`）。例如，我們可以通過設置 `list-style: none` 來刪除揭露小部件圖標。\n...\n此 CSS 創建了一個類似標籤界面的外觀，激活標籤會展開並打開以顯示其內容。\n...\n## 技術摘要\n\n| 內容類別 | 流內容、章節根、互動型內容、捫及內容。 |\n| --- | --- |\n| 允許的內容 一個 ` ` 元素，後面跟著 流內容。 | |\n| 標籤省略 | 不允許，開始和結束標籤都是必須的。 |\n| 允許的父元素 | 任何接受流內容的元素。 |\n| 隱含的 ARIA 角色 | `group` |\n| 允許的 ARIA 角色 | 不允許 `role` |\n| DOM 介面 | `HTMLDetailsElement` |",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZx2ZG00GBFK4POKu",
+      "message_id": "msg_g0VXZx1JW00KrKym64An",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：详细信息展现元素 - HTML（超文本标记语言） | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    },
+    {
+      "id": "prt_g0VXZx4hP03wnL9Yk0Vc",
+      "message_id": "msg_g0VXZx4hP01xybG4LDqQ",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：详细信息展现元素 - HTML（超文本标记语言） | MDN",
+        "snippet": "：详细信息展现元素 - HTML（超文本标记语言） | MDN\n\n# ：详细信息展现元素\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。 \n\n- 查看完整兼容性 \n- 了解更多 \n\nHTML ` ` 元素可创建一个组件，仅在被切换成展开状态时，它才会显示内含的信息。` ` 元素可为该部件提供概要或者标签。\n\n展现组件通常在屏幕上使用一个小三角形，旋转（或扭转）以表示打开/关闭的状态，三角形旁边有一个标签。` ` 元素的内容被用来作为展示小部件的标签。\n...\n一个 ` ` 小组件可以处于两种状态之一。默认的关闭状态只显示三角形和 ` ` 内的标签（如果没有 ` ` 则显示用户代理定义的默认字符串）。\n\n当用户点击小组件或聚焦它然后按空格键时，它就会“扭转”展开，显示出其中的内容。通常使用一个旋转或扭转的三角形来代表打开或关闭小组件，这就是为什么这些小组件有时被称为“旋钮”。\n\n你可以使用 CSS 来设计展示小组件，你可以通过设置/移除 `open` 属性以编程方式打开和关闭该小组件。遗憾的是，目前还没有内置的方法来对打开和关闭之间的过渡进行动画处理。\n\n默认情况下，当关闭时，该小组件的高度只足以显示展开三角形和摘要。当打开时，它就会展开以显示其中包含的细节。\n\n完全符合标准的实现会自动将 CSS `display: list-item` 应用到 ` ` 元素。你可以用它来进一步定制其外观。请参阅自定义展开组件以了解更多细节。\n\n## 属性\n\n此元素包含全局属性。\n\n`open`\n: 这个布尔属性表示细节内容——也就是 ` ` 元素的内容——目前是否可见。默认情况下为 `false`，意味着细节内容是不可见的。\n\n备注：你必须完全删除这个属性来使细节内容隐藏。`open=\"false\"` 使细节内容可见，因为这个属性是布尔值。\n...\n除了 HTML 元素支持的常规事件外，` ` 元素还支持 `toggle` 事件，当 ` ` 元素的状态在打开和关闭之间变化时，该事件会被派发到该元素。该事件是在状态发生变化后发送的，不过如果状态在浏览器派发该事件之前发生了多次变化，那么这些事件就会被合并，从而只发送一个。\n\n你可以为 `toggle` 事件使用一个事件监听器来检测小组件何时改变状态：\n...\n为了使得 ` ` 盒子初始为展开状态，要添加布尔属性 `open`：\n...\n### 自定义外观\n\n现在我们给展现盒子设置一些 CSS 样式，以自定义其外观。\n...\n这个 CSS 创建了一个类似于标签式界面的外观，点击标签可以打开它，显示其内容。\n\n选择器 `details[open]` 可以用来为打开的元素设置样式。\n...\n### 自定义展开组件\n\n展开三角形可以自定义，但并没有得到广泛支持。由于该元素是标准化的，因此在实验性实施阶段，浏览器如何支持此自定义项有所不同，我们不得不暂时使用多种方法。\n\n` ` 元素支持 `list-style` 缩写属性或者完整属性，比如 `list-style-type`，可以使用它们任意改变三角（通常与 `list-style-image` 一起使用）。例如，我们可以使用 `list-style: none` 移除三角形展开图标。\n...\n该 CSS 的外观类似于选项卡界面，在该界面中，激活选项卡将展开并打开它以显示其内容。\n...\n## 技术概要\n\n| 内容分类 | 流式内容、分段内容、交互内容、可感知内容 |\n| --- | --- |\n| 允许的内容 | 一个紧跟流式内容的 ` ` 元素 |\n| 标签省略 | 不允许，开始标签和结束标签都不能省略。 |\n| 允许的父元素 | 任何接受流式内容的元素。 |\n| 隐含的 ARIA 角色 | `group` |\n| 允许的 ARIA 角色 | 没有允许的 `role` |\n| DOM 接口 | `HTMLDetailsElement` |",
+        "publishedAt": "2025-08-06T00:00:00.000Z",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZx4hP04gkLKteRrW",
+      "message_id": "msg_g0VXZx4hP01xybG4LDqQ",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "source-url",
+        "sourceId": "4a3398ab4c263ca0ca2b8cf50fc37d7841ffe08fba9aad869e60652efae75fbe",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDetailsElement",
+        "title": "HTMLDetailsElement - Web API | MDN",
+        "snippet": "HTMLDetailsElement - Web API | MDN\n\n# HTMLDetailsElement\n\n 基线 广泛可用 * \n\n自 2020年1月 起，此特性已在主流浏览器中得到支持，可在大多数设备和浏览器版本中正常使用。\n\n * 此特性的某些部分的支持程度可能有所不同。 \n\n- 查看完整兼容性 \n- 了解更多 \n\n`HTMLDetailsElement` 接口提供了特殊的属性 (除了常规的 `HTMLElement` 接口之外，它还可以通过继承获得这些属性) 用于操作 ` ` 元素。\n\n## 属性\n\n从其父级 `HTMLElement` 继承属性.\n\n`HTMLDetailsElement.open`\n: 是一个 `Boolean` 反射 `open` HTML 属性，指示是否向用户显示元素的内容 (不包括 ` `)\n...\n没有特定的方法；继承其父方法 `HTMLElement`.",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZx4hP056QgMml3Id",
+      "message_id": "msg_g0VXZx4hP01xybG4LDqQ",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "source-url",
+        "sourceId": "bbdb8f32a8c7bcf260fb73eee4d7433cc71fee516b013b2cfad0df36f926043b",
+        "url": "https://developer.mozilla.org/zh-TW/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：揭露細節元素 - HTML：超文本標記語言 | MDN",
+        "snippet": "：揭露細節元素 - HTML：超文本標記語言 | MDN\n\n# ：揭露細節元素\n\n Baseline Widely available *\n...\navailable across browsers\n...\n` ` HTML 元素創建了一個揭露小部件，在小部件被切換為「開啟」狀態時，信息只有可見。必須使用 ` ` 元素提供摘要或標籤。\n\n通常，揭露小部件在螢幕上以小三角形呈現，該三角形旋轉（或扭曲）以指示開啟/關閉狀態，並帶有三角形旁邊的標籤。` ` 元素的內容用作揭露小部件的標籤。` ` 的內容提供了 ` ` 的無障礙描述。\n...\n` ` 小部件可以處於兩種狀態之一。默認的「關閉」狀態僅顯示三角形和 ` ` 內的標籤（或如果沒有 ` `，則是使用者代理定義的默認字串）。\n\n當用戶點擊小部件或將焦點放在小部件上並按空格鍵時，它會「扭轉」開啟，顯示其內容。常見的使用旋轉或扭曲三角形來表示打開或關閉小部件的用法，這就是為什麼有時被稱為「旋鈕」的原因。\n\n你可以使用 CSS 來設置揭露小部件的樣式，並且可以通過設置/刪除其 `open` 屬性來以編程方式打開和關閉小部件。不幸的是，目前沒有內建的方法來在開啟和關閉之間實現過渡動畫。\n\n默認情況下，在關閉時，小部件的高度僅足以顯示揭露三角形和摘要。打開時，它會展開以顯示其中包含的細節。\n\n完全符合標準的實現會自動將 CSS `display: list-item` 應用於 ` ` 元素。你可以使用這個來進一步自定義其外觀。有關更多詳情，請參閱自定義揭露小部件。\n\n## 屬性\n...\n包括全域屬性。\n\n`open`\n: 此布林屬性指示詳細信息——即 ` ` 元素的內容——目前是否可見。當此屬性存在時，顯示詳細信息，或者當此屬性不存在時，隱藏詳細信息。默認情況下，此屬性不存在，這意味著詳細信息不可見。\n\n備註：你必須完全刪除此屬性才能使詳細信息隱藏。`open=\"false\"` 會使詳細信息可見，因為此屬性是布林型的。\n`name`\n: 此屬性使多個 ` ` 元素連接在一起，一次只能打開一個。這使開發人員可以輕鬆創建 UI 功能，如手風琴，而無需腳本。\n\n`name` 屬性指定一個組名——給多個 ` ` 元素相同的 `name` 值以將它們分組。只能同時打開組中的一個 ` ` 元素——打開一個將導致另一個關閉。如果多個分組的 ` ` 元素都具有 `open` 屬性，則僅在源順序中的第一個元素會呈現為打開狀態。\n...\n除了 HTML 元素支持的常規事件外，` ` 元素還支持 `toggle` 事件，當其狀態在開啟和關閉之間更改時，該事件將分派給 ` ` 元素。它在狀態更改後發送，儘管如果在瀏覽器能夠分派事件之前狀態多次更改，則事件將合併，以便僅發送一次。\n\n你可以使用 `toggle` 事件的事件監聽器來檢測小部件何時更改狀態：\n...\n### 簡單的揭露範例\n...\n### 創建打開的揭露框\n\n要在其打開狀態下開始 ` ` 框，請添加布林值 `open` 屬性：\n\n```\n<details open>\n  <summary>System Requirements</summary>\n  <p>\n    Requires a computer running an operating system. The computer must have some\n    memory and ideally some kind of long-term storage. An input device as well\n    as some form of output device is recommended.\n  </p>\n</details>\n...\n### 自定義外觀\n...\n此 CSS 創建了一個類似標籤界面的外觀，點擊標籤將其展開以顯示其內容。\n\n選擇器 `details[open]` 可用於為打開的元素設置樣式。\n...\n### 自定義揭露小部件\n\n揭露三角形本身可以進行自定義，儘管這種做法得到的廣泛支持並不多。由於在標準化時，瀏覽器支持這種自定義的方式存在差異，因此我們將不得不在一段時間內使用多種方法。\n\n` ` 元素支持 `list-style` 簡寫屬性及其分解屬性，例如 `list-style-type`，用於將揭露三角形更改為你選擇的任何內容（通常使用 `list-style-image`）。例如，我們可以通過設置 `list-style: none` 來刪除揭露小部件圖標。\n...\n此 CSS 創建了一個類似標籤界面的外觀，激活標籤會展開並打開以顯示其內容。\n...\n## 技術摘要\n\n| 內容類別 | 流內容、章節根、互動型內容、捫及內容。 |\n| --- | --- |\n| 允許的內容 一個 ` ` 元素，後面跟著 流內容。 | |\n| 標籤省略 | 不允許，開始和結束標籤都是必須的。 |\n| 允許的父元素 | 任何接受流內容的元素。 |\n| 隱含的 ARIA 角色 | `group` |\n| 允許的 ARIA 角色 | 不允許 `role` |\n| DOM 介面 | `HTMLDetailsElement` |",
+        "provider": "exa"
+      }
+    },
+    {
+      "id": "prt_g0VXZx4hP09rX6AUPE3R",
+      "message_id": "msg_g0VXZx4hP02a0v5kgpbQ",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "source-url",
+        "sourceId": "b99885ee578bb8b5fece575e7f0066aa3c800df8e4113a83468e96717572f5c9",
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details",
+        "title": "<details>：详细信息展现元素 - HTML（超文本标记语言） | MDN",
+        "provider": "opencorvus-webfetch"
+      }
+    }
+  ],
+  "prose": [
+    {
+      "id": "prt_hvKWiNq2tJqbVP5ypMwX",
+      "message_id": "msg_hbWW686z8bZjNAY4xM3b",
+      "session_id": "ses_hi1UlM3bIG030g4tsOf6",
+      "data": {
+        "type": "text",
+        "text": "Reply with OK.",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hWlcCNxd03elIm7fFkZP/175d6ac26d213cab0e1a149817e2ae5f279c9930469c2f0894f911a37f587586.json",
+          "catalog_snapshot_hash": "175d6ac26d213cab0e1a149817e2ae5f279c9930469c2f0894f911a37f587586"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZwvfL00CbobnN1P8",
+      "message_id": "msg_g0VXZwuqz00KAE44XyIv",
+      "session_id": "ses_hi1UlM3bIG030g4tsOf6",
+      "data": {
+        "type": "text",
+        "text": "OK",
+        "time": {
+          "start": 1791570903159,
+          "end": 1791570903159
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0ded2927bd6c8ce8016ac933d6e7788191a906be025f7b24a8",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZwzJL00aivx3jiA8",
+      "message_id": "msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "data": {
+        "type": "text",
+        "text": "请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hPXXOhdJBtCIxfFQjK8U/e2e856bb2b61306b31c0254a7aa6cf1d5e8d413bd3d6f467d666b5c901e15e19.json",
+          "catalog_snapshot_hash": "e2e856bb2b61306b31c0254a7aa6cf1d5e8d413bd3d6f467d666b5c901e15e19"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZx3YC003hMcfWqRI",
+      "message_id": "msg_g0VXZx2bL00ESsDLgDHv",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "data": {
+        "type": "text",
+        "text": "经核对 MDN，`<details>` 是原生折叠信息组件，默认关闭，`<summary>` 提供摘要或标签；用户可点击或聚焦后按空格键展开，无需脚本实现基本交互。`open` 是布尔属性，即使写成 `open=\"false\"` 也会展开，关闭须移除该属性。状态变化后触发 `toggle` 事件，短时间内多次变化可能合并。\n\n来源：[MDN 官方文档：`<details>`](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details)。",
+        "time": {
+          "start": 1791570937231,
+          "end": 1791570937231
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_092f6c1134ca01a2016ac933f5334c8191801c4416da04b5b4",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZx4hP00uCoBdRPGC",
+      "message_id": "msg_g0VXZx4hP008jnSysnSc",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "text",
+        "text": "请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hPXXOhdJBtCIxfFQjK8U/e2e856bb2b61306b31c0254a7aa6cf1d5e8d413bd3d6f467d666b5c901e15e19.json",
+          "catalog_snapshot_hash": "e2e856bb2b61306b31c0254a7aa6cf1d5e8d413bd3d6f467d666b5c901e15e19"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZx4hP0ClnwokY9sC",
+      "message_id": "msg_g0VXZx4hP03EmBTVrgtn",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "text",
+        "text": "经核对 MDN，`<details>` 是原生折叠信息组件，默认关闭，`<summary>` 提供摘要或标签；用户可点击或聚焦后按空格键展开，无需脚本实现基本交互。`open` 是布尔属性，即使写成 `open=\"false\"` 也会展开，关闭须移除该属性。状态变化后触发 `toggle` 事件，短时间内多次变化可能合并。\n\n来源：[MDN 官方文档：`<details>`](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details)。",
+        "time": {
+          "start": 1791570937231,
+          "end": 1791570937231
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_092f6c1134ca01a2016ac933f5334c8191801c4416da04b5b4",
+            "phase": "final_answer"
+          }
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZx9mY00AFpffCYKS",
+      "message_id": "msg_af017532-bce8-4103-b8a3-a9a5c439133d",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "text",
+        "text": "只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hPXXOhdJBtCIxfFQjK8U/107775028f8cdcd03684c24bcd52bb0c57f26ff531c95f8bb18188a303ef26ca.json",
+          "catalog_snapshot_hash": "107775028f8cdcd03684c24bcd52bb0c57f26ff531c95f8bb18188a303ef26ca"
+        }
+      }
+    },
+    {
+      "id": "prt_g0VXZxAwy00f9cCyK9qi",
+      "message_id": "msg_g0VXZx9p000xAB6TdTEq",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "data": {
+        "type": "text",
+        "text": "以下是**基于主对话现有资料的阅读体验建议与独立示例**，不是已实现功能或实际产品验收结论。不新增检索、不创建任务、不委托 agent，也不生成或修改文件。\n\n1. **先划清参考历史与当前请求的边界。** 具体操作是进入 Side Chat 后，先阅读当前用户要求，再将继承的主对话内容视为背景证据，不把其中的操作安排当成新的执行指令。观察重点是读者能否清楚区分“以前要求做什么”和“现在需要解释什么”，尤其应辨认只读、篇幅、来源等限制。如果两者混在一起，可能误触发重复检索或其他未获请求的动作，也会让读者误以为主对话工作已在侧栏重新执行。\n\n2. **按照请求、检索、正文核对、结论的顺序阅读。** 具体操作是先确认原请求仅要求约一百五十字中文结论，再查看搜索返回的候选页面、实际读取的中文正文，最后检查简短答复。应观察每项结论是否能对应到已读取资料，而非仅对应搜索摘要。若阅读顺序被打乱，读者可能把候选结果误当作最终依据，也可能将简短结论误解为完整技术说明，忽略它本来受篇幅约束，没有覆盖全部属性与兼容性细节。\n\n3. **把搜索结果与正文证据分开标识。** 具体操作是阅读历史时，将搜索返回的中文元素页、接口页和繁体中文页列为候选资料，将随后实际读取的简体中文元素页列为本次直接依据。观察现象应是读者能够判断哪些页面只出现在结果列表里，哪些正文确实经过核对。若不区分，容易把其他候选页中的信息拼入结论，并错误声称已完成跨语言或跨页面验证，使来源覆盖范围大于现有证据真正支持的范围。\n\n4. **让来源入口指向支持结论的具体页面。** 具体操作是保留主对话已经提供的 MDN 中文 `details` 页面链接，建议读者阅读时核对域名、页面标题及元素名称，而不是只看到“MDN”三个字便停止确认。应观察来源是否直达相关元素文档，以及正文能否找到所引用的属性与事件说明。若来源入口只指向网站首页或无关页面，读者就需要自行再次搜索，容易走到不同内容，增加核对成本，也削弱结论的可追溯性。\n\n5. **优先展示与结论直接相关的正文。** 具体操作是建议阅读界面先突出元素定义、默认关闭状态、`open` 属性和 `toggle` 事件，再允许读者按需展开完整抓取内容。现有读取结果包含大量导航、其他元素列表和页脚，观察时应注意这些内容是否淹没核心说明。若全部文字以同等权重连续展示，读者可能在导航里寻找属性，错过真正证据，甚至把周边链接当成本次已经核对的页面，造成阅读负担和证据范围误判。\n\n6. **将默认状态与摘要标签放在一起理解。** 具体操作是先读默认关闭的描述，再读 `<summary>` 提供摘要或标签的说明，最后对应主对话结论中的折叠组件表述。应观察读者能否区分始终用于提示的摘要与展开后出现的详细内容，并注意资料提到缺少摘要时可能显示浏览器定义的字符串。若只记住“关闭时隐藏内容”，容易误以为整个组件完全不可见，也可能在自行制作示例时漏掉明确标签，影响理解与操作定位。\n\n7. **单独强调布尔属性的存在性语义。** 具体操作是把 `open`、没有 `open` 与 `open=\"false\"` 三种写法作为阅读对照，明确现有正文指出后者仍会展开，关闭需要移除该属性。观察重点是读者是否把属性存在与字符串值真假分开，而非按照普通配置项理解。若这个区别没有被突出，读者可能复制看似关闭的写法，却得到展开状态；随后又错误怀疑浏览器或事件监听器失效，导致排查方向偏离真正原因。\n\n8. **把用户交互说明当作文档描述，而非本次实测。** 具体操作是阅读点击或聚焦后按空格键展开的内容时，明确它来自已读取的 MDN 正文，可以作为日后检查交互的参考步骤。观察现象应是读者知道这些步骤描述了预期行为，而当前对话没有实际页面、浏览器操作记录或键盘测试结果。若省略这层区别，文档中的交互说明容易被转述为“已经测试通过”，进而错误扩大完成范围，掩盖具体产品仍需另行验证的事实。\n\n9. **结合事件触发时机理解状态读取。** 具体操作是先阅读 `toggle` 在状态变化后发送的说明，再对应示例中读取 `details.open` 的做法，不把事件理解为变化前的拦截通知。应观察读者能否解释日志中的布尔值代表读取时的展开状态，而不是用户下一步准备执行的动作。若时机理解错误，可能出现“展开却记录关闭”的概念混乱，并据此编写相反的界面提示或业务判断；这属于使用风险，不代表现有对话已发现产品缺陷。\n\n10. **避免把事件次数等同于状态变化次数。** 具体操作是将正文提到的事件合并说明放在监听示例旁边，建议读者不要用一次日志对应一次变化的方式理解所有情况。观察重点是短时间内多次状态变化可能只发送一个通知，而状态读取仍应围绕当时的 `open` 值解释。若忽略合并机制，读者可能把较少日志误判为监听丢失，或把事件计数当作精确操作统计；因此独立示例应保持简单，不附带未经证据支持的次数保证。\n\n11. **明确更新日期与内容完整性的不同作用。** 具体操作是保留现有正文显示的二〇二五年八月六日更新信息，同时提示读者：该日期只是所读页面的元信息，不证明所有相关功能与浏览器差异都已覆盖。观察时应确认正文属于社区翻译页面，并注意页面自身提示部分特性的支持程度可能不同。若仅凭更新时间便认定内容全面或适用于所有环境，可能把简短概述扩展成兼容性承诺，超出现有资料和主对话实际核对范围。\n\n12. **以范围说明结束阅读，而不是宣布产品验收。** 具体操作是将历史结论、来源链接和下面的独立 JavaScript 示例分区呈现，明确结论来自文档，示例只帮助理解监听与状态读取。应观察读者是否知道本次没有修改文件、运行代码或验证真实界面，也没有证明某个产品符合交互要求。若将建议和示例包装成完成报告，容易造成交付状态误读，让后续人员跳过实际检查；正确的阅读体验应保留证据边界，而非制造已经验收的印象。\n\n### 操作对照建议\n\n| 操作 | 预期现象 | 失败影响 |\n|---|---|---|\n| 分开阅读继承历史与当前请求 | 能辨认背景材料和当前执行范围 | 将旧安排误当成新授权 |\n| 区分搜索候选与已读取正文 | 能识别结论的直接证据 | 错称其他页面已经核对 |\n| 对照 `open` 的存在与缺失 | 理解 `open=\"false\"` 仍表示展开 | 写法与预期状态相反 |\n| 对照 `toggle` 时机及合并说明 | 理解状态读取与通知次数的区别 | 将合并通知误判为丢失 |\n| 分区展示结论、建议和示例 | 不把文档说明当作产品实测 | 错误宣布验收完成 |\n\n来源沿用主对话已读取的页面：[MDN：`<details>`——详细信息展现元素](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details)。\n\n### 独立 JavaScript 示例\n\n假定页面已有一个 `<details>` 元素；以下示例**未执行**，只演示监听 `toggle` 并读取 `open`，不改变展开状态。\n\n```javascript\nconst details = document.querySelector(\"details\");\n\nif (!details) {\n  throw new Error(\"页面中缺少 details 元素\");\n}\n\ndetails.addEventListener(\"toggle\", () => {\n  const isOpen = details.open;\n  console.log(\n    \"details.open:\",\n    isOpen\n  );\n});\n```",
+        "time": {
+          "start": 1791571019397,
+          "end": 1791571019397
+        },
+        "metadata": {
+          "openai": {
+            "itemId": "msg_0866b9736fc04925016ac93411ad0481919f06b95fb6075b29",
+            "phase": "final_answer"
+          }
+        }
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "act_g0VXZwv2900Yo086inqY",
+      "assistant_message_id": "msg_g0VXZwuqz00KAE44XyIv",
+      "session_id": "ses_hi1UlM3bIG030g4tsOf6",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791570899894,\"completed\":1791570903394},\"parentID\":\"msg_hbWW686z8bZjNAY4xM3b\",\"acceptedInputMessageIDs\":[\"msg_hbWW686z8bZjNAY4xM3b\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\10\\\\6b522ed0-f0c3-4a04-aea5-e1d94b527b32\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\runtime\\\\data\\\\projects\\\\2026\\\\10\\\\10\\\\6b522ed0-f0c3-4a04-aea5-e1d94b527b32\"},\"cost\":0,\"tokens\":{\"total\":29611,\"input\":29606,\"output\":5,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791570899894:0000000000000030:0000000000000000:message:msg_g0VXZwuqz00KAE44XyIv\"}"
+    },
+    {
+      "id": "act_g0VXZwzTV00dW0NNBlXo",
+      "assistant_message_id": "msg_g0VXZwzMY00L65OCAS66",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791570917226,\"completed\":1791570924664},\"parentID\":\"msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc\",\"acceptedInputMessageIDs\":[\"msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":32022,\"input\":31988,\"output\":34,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791570917226:0000000000000030:0000000000000000:message:msg_g0VXZwzMY00L65OCAS66\"}"
+    },
+    {
+      "id": "act_g0VXZx1OC00m8hrRUy8n",
+      "assistant_message_id": "msg_g0VXZx1JW00KrKym64An",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791570924726,\"completed\":1791570929612},\"parentID\":\"msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc\",\"acceptedInputMessageIDs\":[\"msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":34922,\"input\":34879,\"output\":43,\"reasoning\":0,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"tool-calls\",\"orderKey\":\"v1:0001791570924726:0000000000000030:0000000000000000:message:msg_g0VXZx1JW00KrKym64An\"}"
+    },
+    {
+      "id": "act_g0VXZx2fn00c0O7LDVJ4",
+      "assistant_message_id": "msg_g0VXZx2bL00ESsDLgDHv",
+      "session_id": "ses_-zUSQ30uWzzyuVGJJX76",
+      "assistant_message": "{\"author\":\"work\",\"role\":\"assistant\",\"time\":{\"created\":1791570929675,\"completed\":1791570937583},\"parentID\":\"msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc\",\"acceptedInputMessageIDs\":[\"msg_fcbc21e0-55d9-4ca7-8e47-402f45b078cc\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"work\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":47126,\"input\":12300,\"output\":138,\"reasoning\":0,\"cache\":{\"read\":34688,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791570929675:0000000000000030:0000000000000000:message:msg_g0VXZx2bL00ESsDLgDHv\"}"
+    },
+    {
+      "id": "act_g0VXZx9xd00YYUn6x3qd",
+      "assistant_message_id": "msg_g0VXZx9p000xAB6TdTEq",
+      "session_id": "ses_-zUSQ2vIdzzqzoeGu5Wb",
+      "assistant_message": "{\"author\":\"chat\",\"role\":\"assistant\",\"time\":{\"created\":1791570957430,\"completed\":1791571019669},\"parentID\":\"msg_af017532-bce8-4103-b8a3-a9a5c439133d\",\"acceptedInputMessageIDs\":[\"msg_af017532-bce8-4103-b8a3-a9a5c439133d\"],\"modelID\":\"gpt-6.1-sol\",\"providerID\":\"openai\",\"agent\":\"chat\",\"path\":{\"cwd\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\",\"root\":\"C:\\\\Users\\\\hengu\\\\.codex\\\\opencorvus-product-iteration\\\\2026-10-10\\\\streaming-prefix-247-review-01\\\\project\"},\"cost\":0,\"tokens\":{\"total\":47054,\"input\":45000,\"output\":1995,\"reasoning\":59,\"cache\":{\"read\":0,\"write\":0}},\"billing\":{\"status\":\"priced\"},\"finish\":\"stop\",\"orderKey\":\"v1:0001791570957430:0000000000000030:0000000000000000:message:msg_g0VXZx9p000xAB6TdTEq\"}"
+    }
+  ],
+  "tools": [
+    {
+      "id": "prt_g0VXZx0Vc0013CTRX9YE",
+      "message_id": "msg_g0VXZwzMY00L65OCAS66",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_n8LXhyQL3hyvsXcnk6zDl8qh\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org zh-CN HTML details 元素\",\"numResults\":3},\"time\":{\"start\":1791570921632}}"
+    },
+    {
+      "id": "prt_g0VXZx2H000xtEZi55KU",
+      "message_id": "msg_g0VXZx1JW00KrKym64An",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_ec75ab4228794c73bcd8b08a7b51e3ee\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791570928414}}"
+    },
+    {
+      "id": "prt_g0VXZx4hP02QCRe5EoOh",
+      "message_id": "msg_g0VXZx4hP01xybG4LDqQ",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_n8LXhyQL3hyvsXcnk6zDl8qh\",\"tool\":\"websearch\",\"input\":{\"query\":\"site:developer.mozilla.org zh-CN HTML details 元素\",\"numResults\":3},\"time\":{\"start\":1791570921632}}"
+    },
+    {
+      "id": "prt_g0VXZx4hP081oyHtG60k",
+      "message_id": "msg_g0VXZx4hP02a0v5kgpbQ",
+      "data": "{\"type\":\"tool-request\",\"callID\":\"call_ec75ab4228794c73bcd8b08a7b51e3ee\",\"tool\":\"webfetch\",\"input\":{\"url\":\"https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details\",\"format\":\"markdown\",\"timeout\":30},\"time\":{\"start\":1791570928414}}"
+    }
+  ],
+  "boundary": "Natural actual producer evidence; full values retained, no fake Source/Part, no Markdown or UI assertions"
+}

@@ -1,0 +1,164 @@
+Browser tab: 89, Title: "OpenCorvus", URL: "http://localhost:18182/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18182/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								59 container
+									60 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									61 container
+										62 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										63 button 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
+										64 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+									65 button (expanded) Description: Collapse Anonymous 527b32, Secondary Actions: Collapse
+									66 container
+										67 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										68 button Reply with OK.
+										69 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-183-trigger, Secondary Actions: Expand
+								70 container Recents
+									71 text Recents
+									170 container
+										171 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										172 button 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
+										173 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-377-trigger, Secondary Actions: Expand
+									174 container
+										175 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										176 button Reply with OK.
+										177 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-383-trigger, Secondary Actions: Expand
+						35 container Connection Diagnostics
+							36 container Description: Connection Diagnostics · Online · Port 18182, ID: connBadge
+								37 text Online
+				38 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				178 container workspaceMain
+					179 container chatSection
+						180 container Description: Loading task, ID: taskSwitchProgress
+						181 container
+							182 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不...
+							183 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+							184 container Description: Not running, ID: taskStatus
+								185 text Not running
+							186 button Side chat
+							187 container solidChatHeaderRuntimeActions
+								188 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								189 checkbox Description: Close right dock, Value: 1
+						190 container
+							191 container Description: Conversation, ID: chatScroll
+								192 container
+									193 container
+										194 text User
+										195 text 请只读检索并核对 MDN 关于 HTML details 元素的官方资料，给出约150字中文结论及真实来源，不扩展长文。在当前普通对话完成，不创建任务、不委托agent、不生成或修改文件。
+									196 container
+										197 text work
+										198 text 20s
+										199 button (collapsed) Description: websearch · Web search: site:developer.mozilla.org zh-CN HTML details 元素, Secondary Actions: Expand
+											200 text websearch
+											201 text Web search: site:developer.mozilla.org zh-CN HTML details 元素
+											202 image
+										203 container Sources
+											204 button (collapsed) Description: Sources: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN (3), Help: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN 3, Secondary Actions: Expand
+												205 text <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN
+												206 text 3
+										207 button (collapsed) Description: webfetch · https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html), Secondary Actions: Expand
+											208 text webfetch
+											209 text https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details (text/html)
+											210 image
+										211 container Sources
+											212 link Description: Open web source: <details>：详细信息展现元素 - HTML（超文本标记语言） | MDN, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
+										213 container
+											214 text 经核对 MDN， <details>  是原生折叠信息组件，默认关闭， <summary>  提供摘要或标签；用户可点击或聚焦后按空格键展开，无需脚本实现基本交互。 open  是布尔属性，即使写成  open="false"  也会展开，关闭须移除该属性。状态变化后触发  toggle  事件，短时间内多次变化可能合并。
+										215 container
+											216 text 来源：
+											217 link Description: MDN 官方文档：<details>, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
+											218 text 。
+							219 container chatHomeComposition
+								220 container chatForm
+									221 splitter Description: Drag to resize the message input, Value: 42
+									222 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+									223 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+									224 text Work
+									225 text Chat
+									226 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+									227 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+									228 pop up button (collapsed) Description: OpenCorvus model openai/gpt-6.1-sol. Click to change., Help: OpenCorvus model: openai/gpt-6.1-sol, Secondary Actions: Expand
+										229 text openai/gpt-6.1-sol
+									230 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend
+					231 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					232 container Description: Tools panel, ID: rightDock
+						233 container tabs-cl-64
+							234 tab group Open tools
+								235 container
+									236 tab (selected, settable, boolean) Description: Side chat, Value: 1, ID: tabs-cl-64-trigger-side-chat
+									237 button Description: Close tab, Help: Close tab (Delete)
+							238 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							239 button Close panel
+							240 container Description: Side chat, ID: centerWorkbenchSideChat
+								241 container Side chat
+									242 pop up button (collapsed) Choose a side chat Side chat 1, ID: select-cl-1649-trigger, Secondary Actions: Expand
+										243 text Side chat 1
+									244 button New side chat
+									245 text Ask about this conversation while the main task keeps working.
+									246 container
+										247 button (collapsed) Reference history · 4 messages, Secondary Actions: Expand
+											248 text Reference history · 4 messages
+										249 container
+											250 text User
+											251 text 只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。
+										252 container
+											253 text chat
+											254 text 42s
+											255 container
+												256 text 以下是 基于主对话现有资料的阅读体验建议与独立示例 ，不是已实现功能或实际产品验收结论。不新增检索、不创建任务、不委托 agent，也不生成或修改文件。
+											257 text 1. **先划清参考历史与当前请求的边界。** 具体操作是进入 Side Chat 后，先阅读当前用户要求，再将继承的主对话内容视为背景证据，不把其中的操作安排当成新的执行指令。观察重点是读者能否清楚区分“以前要求做什么”和“现在需要解释什么”，尤其应辨认只读、篇幅、来源等限制。如果两者混在一起，可能误触发重复检索或其他未获请求的动作，也会让读者误以为主对话工作已在侧栏重新执行。
+
+2. **按照请求、检索、正文核对、结论的顺序阅读。** 具体操作是先确认原请求仅要求约一百五十字中文结论，再查看搜索返回的候选页面、实际读取的中文正文，最后检查简短答复。应观察每项结论是否能对应到已读取资料，而非仅对应搜索摘要。若阅读顺序被打乱，读者可能把候选结果误当作最终依据，也可能将简短结论误解为完整技术说明，忽略它本来受篇幅约束，没有覆盖全部属性与兼容性细节。
+
+3. **把搜索结果与正文证据分开标识。** 具体操作是阅读历史时，将搜索返回的中文元素页、接口页和繁体中文页列为候选资料，将随后实际读取的简体中文元素页列为本次直接依据。观察现象应是读者能够判断哪些页面只出现在结果列表里，哪些正文确实经过核对。若不区分，容易把其他候选页中的信息拼入结论，并错误声称已完成跨语言或跨页面验证，使来源覆盖范围大于现有证据真正支持的范围。
+
+4. **让来源入口指向支持结论的具体页面。** 具体操作是保留主对话已经提供的 MDN 中文 `details` 页面链接，建议读者阅读时核对域名、页面标题及元素名称，而不是只看到“MDN”三个字便停止确认。应观察来源是否直达相关元素文档，以及正文能否找到所引用的属性与事件说明。若来源入口只指向网站首页或无关页面，读者就需要自行再次搜索，容易走到不同内容，增加核对成本，也削弱结论的可追溯性。
+
+5. **优先展示与结论直接相关的正文。** 具体操作是建议阅读界面先突出元素定义、默认关闭状态、`open` 属性和 `toggle` 事件，再允许读者按需展开完整抓取内容。现有读取结果包含大量导航、其他元素列表和页脚，观察时应注意这些内容是否淹没核心说明。若全部文字以同等权重连续展示，读者可能在导航里寻找属性，错过真正证据，甚至把周边链接当成本次已经核对的页面，造成阅读负担和证据范围误判。
+
+6. **将默认状态与摘要标签放在一起理解。** 具体操作是先读默认关闭的描述，再读 `<summary>` 提供摘要或标签的说明，最后对应主对话结论中的折叠组件表述。应观察读者能否区分始终用于提示的摘要与展开后出现的详细内容，并注意资料提到缺少摘要时可能显示浏览器定义的字符串。若只记住“关闭时隐藏内容”，容易误以为整个组件完全不可见，也可能在自行制作示例时漏掉明确标签，影响理解与操作定位。
+
+7. **单独强调布尔属性的存在性语义。** 具体操作是把 `open`、没有 `open` 与 `open="false"` 三种写法作为阅读对照，明确现有正文指出后者仍会展开，关闭需要移除该属性。观察重点是读者是否把属性存在与字符串值真假分开，而非按照普通配置项理解。若这个区别没有被突出，读者可能复制看似关闭的写法，却得到展开状态；随后又错误怀疑浏览器或事件监听器失效，导致排查方向偏离真正原因。
+
+8. **把用户交互说明当作文档描述，而非本次实测。** 具体操作是阅读点击或聚焦后按空格键展开的内容时，明确它来自已读取的 MDN 正文，可以作为日后检查交互的参考步骤。观察现象应是读者知道这些步骤描述了预期行为，而当前对话没有实际页面、浏览器操作记录或键盘测试结果。若省略这层区别，文档中的交互说明容易被转述为“已经测试通过”，进而错误扩大完成范围，掩盖具体产品仍需另行验证的事实。
+
+9. **结合事件触发时机理解状态读取。** 具体操作是先阅读 `toggle` 在状态变化后发送的说明，再对应示例中读取 `details.open` 的做法，不把事件理解为变化前的拦截通知。应观察读者能否解释日志中的布尔值代表读取时的展开状态，而不是用户下一步准备执行的动作。若时机理解错误，可能出现“展开却记录关闭”的概念混乱，并据此编写相反的界面提示或业务判断；这属于使用风险，不代表现有对话已发现产品缺陷。
+
+10. **避免
+										258 button Quote in main conversation
+									259 container
+										260 text Working…
+										261 button Stop side chat
+
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18182/ui/

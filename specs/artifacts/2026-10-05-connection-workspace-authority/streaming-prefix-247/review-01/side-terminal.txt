@@ -1,0 +1,164 @@
+Browser tab: 89, Title: "OpenCorvus", URL: "http://localhost:18182/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 252-253, 255-256, 262-394
++										438 container
++											439 text chat
++											440 container
++												441 text 以下是
++												442 text 基于主对话现有资料的阅读体验建议与独立示例
++												443 text ，不是已实现功能或实际产品验收结论。不新增检索、不创建任务、不委托 agent，也不生成或修改文件。
++												444 content list
++													445 container
++														446 AXListMarker 1.
++														447 text 先划清参考历史与当前请求的边界。
++														448 text  具体操作是进入 Side Chat 后，先阅读当前用户要求，再将继承的主对话内容视为背景证据，不把其中的操作安排当成新的执行指令。观察重点是读者能否清楚区分“以前要求做什么”和“现在需要解释什么”，尤其应辨认只读、篇幅、来源等限制。如果两者混在一起，可能误触发重复检索或其他未获请求的动作，也会让读者误以为主对话工作已在侧栏重新执行。
++													449 container
++														450 AXListMarker 2.
++														451 text 按照请求、检索、正文核对、结论的顺序阅读。
++														452 text  具体操作是先确认原请求仅要求约一百五十字中文结论，再查看搜索返回的候选页面、实际读取的中文正文，最后检查简短答复。应观察每项结论是否能对应到已读取资料，而非仅对应搜索摘要。若阅读顺序被打乱，读者可能把候选结果误当作最终依据，也可能将简短结论误解为完整技术说明，忽略它本来受篇幅约束，没有覆盖全部属性与兼容性细节。
++													453 container
++														454 AXListMarker 3.
++														455 text 把搜索结果与正文证据分开标识。
++														456 text  具体操作是阅读历史时，将搜索返回的中文元素页、接口页和繁体中文页列为候选资料，将随后实际读取的简体中文元素页列为本次直接依据。观察现象应是读者能够判断哪些页面只出现在结果列表里，哪些正文确实经过核对。若不区分，容易把其他候选页中的信息拼入结论，并错误声称已完成跨语言或跨页面验证，使来源覆盖范围大于现有证据真正支持的范围。
++													457 container
++														458 AXListMarker 4.
++														459 text 让来源入口指向支持结论的具体页面。
++														460 text  具体操作是保留主对话已经提供的 MDN 中文
++														461 text details
++														462 text  页面链接，建议读者阅读时核对域名、页面标题及元素名称，而不是只看到“MDN”三个字便停止确认。应观察来源是否直达相关元素文档，以及正文能否找到所引用的属性与事件说明。若来源入口只指向网站首页或无关页面，读者就需要自行再次搜索，容易走到不同内容，增加核对成本，也削弱结论的可追溯性。
++													463 container
++														464 AXListMarker 5.
++														465 text 优先展示与结论直接相关的正文。
++														466 text  具体操作是建议阅读界面先突出元素定义、默认关闭状态、
++														467 text open
++														468 text  属性和
++														469 text toggle
++														470 text  事件，再允许读者按需展开完整抓取内容。现有读取结果包含大量导航、其他元素列表和页脚，观察时应注意这些内容是否淹没核心说明。若全部文字以同等权重连续展示，读者可能在导航里寻找属性，错过真正证据，甚至把周边链接当成本次已经核对的页面，造成阅读负担和证据范围误判。
++													471 container
++														472 AXListMarker 6.
++														473 text 将默认状态与摘要标签放在一起理解。
++														474 text  具体操作是先读默认关闭的描述，再读
++														475 text <summary>
++														476 text  提供摘要或标签的说明，最后对应主对话结论中的折叠组件表述。应观察读者能否区分始终用于提示的摘要与展开后出现的详细内容，并注意资料提到缺少摘要时可能显示浏览器定义的字符串。若只记住“关闭时隐藏内容”，容易误以为整个组件完全不可见，也可能在自行制作示例时漏掉明确标签，影响理解与操作定位。
++													477 container
++														478 AXListMarker 7.
++														479 text 单独强调布尔属性的存在性语义。
++														480 text  具体操作是把
++														481 text open
++														482 text 、没有
++														483 text open
++														484 text  与
++														485 text open="false"
++														486 text  三种写法作为阅读对照，明确现有正文指出后者仍会展开，关闭需要移除该属性。观察重点是读者是否把属性存在与字符串值真假分开，而非按照普通配置项理解。若这个区别没有被突出，读者可能复制看似关闭的写法，却得到展开状态；随后又错误怀疑浏览器或事件监听器失效，导致排查方向偏离真正原因。
++													487 container
++														488 AXListMarker 8.
++														489 text 把用户交互说明当作文档描述，而非本次实测。
++														490 text  具体操作是阅读点击或聚焦后按空格键展开的内容时，明确它来自已读取的 MDN 正文，可以作为日后检查交互的参考步骤。观察现象应是读者知道这些步骤描述了预期行为，而当前对话没有实际页面、浏览器操作记录或键盘测试结果。若省略这层区别，文档中的交互说明容易被转述为“已经测试通过”，进而错误扩大完成范围，掩盖具体产品仍需另行验证的事实。
++													491 container
++														492 AXListMarker 9.
++														493 text 结合事件触发时机理解状态读取。
++														494 text  具体操作是先阅读
++														495 text toggle
++														496 text  在状态变化后发送的说明，再对应示例中读取
++														497 text details.open
++														498 text  的做法，不把事件理解为变化前的拦截通知。应观察读者能否解释日志中的布尔值代表读取时的展开状态，而不是用户下一步准备执行的动作。若时机理解错误，可能出现“展开却记录关闭”的概念混乱，并据此编写相反的界面提示或业务判断；这属于使用风险，不代表现有对话已发现产品缺陷。
++													499 container
++														500 AXListMarker 10.
++														501 text 避免把事件次数等同于状态变化次数。
++														502 text  具体操作是将正文提到的事件合并说明放在监听示例旁边，建议读者不要用一次日志对应一次变化的方式理解所有情况。观察重点是短时间内多次状态变化可能只发送一个通知，而状态读取仍应围绕当时的
++														503 text open
++														504 text  值解释。若忽略合并机制，读者可能把较少日志误判为监听丢失，或把事件计数当作精确操作统计；因此独立示例应保持简单，不附带未经证据支持的次数保证。
++													505 container
++														506 AXListMarker 11.
++														507 text 明确更新日期与内容完整性的不同作用。
++														508 text  具体操作是保留现有正文显示的二〇二五年八月六日更新信息，同时提示读者：该日期只是所读页面的元信息，不证明所有相关功能与浏览器差异都已覆盖。观察时应确认正文属于社区翻译页面，并注意页面自身提示部分特性的支持程度可能不同。若仅凭更新时间便认定内容全面或适用于所有环境，可能把简短概述扩展成兼容性承诺，超出现有资料和主对话实际核对范围。
++													509 container
++														510 AXListMarker 12.
++														511 text 以范围说明结束阅读，而不是宣布产品验收。
++														512 text  具体操作是将历史结论、来源链接和下面的独立 JavaScript 示例分区呈现，明确结论来自文档，示例只帮助理解监听与状态读取。应观察读者是否知道本次没有修改文件、运行代码或验证真实界面，也没有证明某个产品符合交互要求。若将建议和示例包装成完成报告，容易造成交付状态误读，让后续人员跳过实际检查；正确的阅读体验应保留证据边界，而非制造已经验收的印象。
++												513 heading 操作对照建议, Value: 3
++													514 text 操作对照建议
++												515 table
++													516 row
++														517 cell
++															518 text 操作
++														519 cell
++															520 text 预期现象
++														521 cell
++															522 text 失败影响
++													523 row
++														524 cell
++															525 text 分开阅读继承历史与当前请求
++														526 cell
++															527 text 能辨认背景材料和当前执行范围
++														528 cell
++															529 text 将旧安排误当成新授权
++													530 row
++														531 cell
++															532 text 区分搜索候选与已读取正文
++														533 cell
++															534 text 能识别结论的直接证据
++														535 cell
++															536 text 错称其他页面已经核对
++													537 row
++														538 cell
++															539 text 对照
++															540 text open
++															541 text  的存在与缺失
++														542 cell
++															543 text 理解
++															544 text open="false"
++															545 text  仍表示展开
++														546 cell
++															547 text 写法与预期状态相反
++													548 row
++														549 cell
++															550 text 对照
++															551 text toggle
++															552 text  时机及合并说明
++														553 cell
++															554 text 理解状态读取与通知次数的区别
++														555 cell
++															556 text 将合并通知误判为丢失
++													557 row
++														558 cell
++															559 text 分区展示结论、建议和示例
++														560 cell
++															561 text 不把文档说明当作产品实测
++														562 cell
++															563 text 错误宣布验收完成
++												564 text 来源沿用主对话已读取的页面：
++												565 link Description: MDN：<details>——详细信息展现元素, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++												566 text 。
++												567 heading 独立 JavaScript 示例, Value: 3
++													568 text 独立 JavaScript 示例
++												569 text 假定页面已有一个
++												570 text <details>
++												571 text  元素；以下示例
++												572 text 未执行
++												573 text ，只演示监听
++												574 text toggle
++												575 text  并读取
++												576 text open
++												577 text ，不改变展开状态。
++												578 container
++													579 text JAVASCRIPT
++													580 button Copy code
++												581 container
++													582 text const  details =  document . querySelector ( "details" );
+
+ if  (!details) {
+   throw new Error ( "页面中缺少 details 元素" );
+}
+
+details. addEventListener ( "toggle" ,  () =>  {
+   const  isOpen = details. open ;
+   console . log (
+     "details.open:" ,
+    isOpen
+  );
+});
++											583 button Copy message
++											584 button (collapsed) Description: Add guidance, Secondary Actions: Expand
++											585 text Oct 10, 02:35 AM
+The focused UI element is 246 container Reference history · 4 messages Quote in main conversation

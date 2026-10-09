@@ -1,0 +1,78 @@
+$ bun script/run-tests.ts test/session/streaming-text-prefix.test.ts
+[1/1] START test/session/streaming-text-prefix.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) a running HTTP Provider persists its exact prefix for a late Session subscriber and completes the same Part [2516.18ms]
+(pass) natural short completion commits its complete text and stream deltas [1799.93ms]
+(pass) external cancellation finalizes the exact accepted partial text under the existing error contract [1965.99ms]
+50 |           prefixSent.resolve()
+51 |           await release.promise
+52 |           try {
+53 |             if (failFirst && first) {
+54 |               phase = "network-failed"
+55 |               controller.error(new Error("Controlled first HTTP response closed unexpectedly"))
+                                        ^
+error: Controlled first HTTP response closed unexpectedly
+      at start (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:55:36)
+255 |       await observed.promise
+256 |       fixture.provider.release()
+257 |       expect(await running).toBe("continue")
+258 |       const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+259 |       expect({ finish: complete.info.role === "assistant" ? complete.info.finish : "invalid-role",
+260 |         parts: complete.parts.filter(part => part.type === "text"), requests: fixture.provider.requests.length }).toMatchObject({
+                                                                                                                        ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "finish": "stop",
++   "finish": "other",
+    "parts": [
+      {
+-       "text": "Network attempt prefix. Recovered suffix.",
++       "id": "prt_g0VXZsMqg00A9zFnRa3k",
++       "messageID": "msg_g0VXZsMpp00nFwCNoyKY",
++       "orderKey": "v1:0001791569815866:0000000000000031:0000000000000000:part:prt_g0VXZsMqg00A9zFnRa3k",
++       "sessionID": "ses_-zUSQ7dAKzzrz4Kfu5Gm",
++       "text": "Network attempt prefix.",
++       "time": {
++         "end": 1791569816085,
++         "start": 1791569816085,
++       },
+        "type": "text",
+      },
+    ],
+-   "requests": 2,
++   "requests": 1,
+  }
+
+- Expected  - 3
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:260:115)
+(fail) a real interrupted HTTP attempt recovers to one complete accepted answer [2059.78ms]
+Concurrent original processor result {"outcome":"stop","projectID":"prj_hI53T0sXH0DbqSAcZEj5","sessionID":"ses_-zUSQ7cSvzzrsJWTSToS","info":{"orderKey":"v1:0001791569818504:0000000000000030:0000000000000000:message:msg_g0VXZsNXE003JULgQU7k","author":"coding","role":"assistant","time":{"created":1791569818504,"completed":1791569818822},"error":{"name":"UnknownError","data":{"message":"Error: Cannot enter an instance while global instance disposal is in progress"}},"failureOccurrence":{"session_id":"ses_-zUSQ7cSvzzrsJWTSToS","assistant_message_id":"msg_g0VXZsNXE003JULgQU7k","error_name":"UnknownError"},"parentID":"msg_g0VXZsNX900myaN2U5UZ","modelID":"prefix-checker","providerID":"prefix-checker","agent":"coding","path":{"cwd":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-r3WvZb\\test-6316-uRTpb8\\fixtures\\memory-erQiq5","root":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-r3WvZb\\test-6316-uRTpb8\\fixtures\\memory-erQiq5"},"cost":0,"tokens":{"total":0,"input":0,"output":0,"reasoning":0,"cache":{"read":0,"write":0}},"billing":{"status":"unpriced"},"finish":"error","id":"msg_g0VXZsNXE003JULgQU7k","sessionID":"ses_-zUSQ7cSvzzrsJWTSToS"}}
+282 |         })
+283 |         fixture.provider.release()
+284 |         const outcome = await running
+285 |         const complete = await MessageStore.get({ sessionID: fixture.sessionID, messageID: fixture.assistantID })
+286 |         if (outcome !== "continue") console.info("Concurrent original processor result", JSON.stringify({ outcome, projectID: fixture.projectID, sessionID: fixture.sessionID, info: complete.info }))
+287 |         expect(outcome).toBe("continue")
+                              ^
+error: expect(received).toBe(expected)
+
+Expected: "continue"
+Received: "stop"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts:287:25)
+(fail) two concurrent Projects retain their own exact running prefix and final text [2709.80ms]
+
+ 3 pass
+ 2 fail
+ 17 expect() calls
+Ran 5 tests across 1 file. [13.45s]
+[1/1] DONE test/session/streaming-text-prefix.test.ts exit=1 duration=14.18s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\session\streaming-text-prefix.test.ts
+error: script "test" exited with code 1
