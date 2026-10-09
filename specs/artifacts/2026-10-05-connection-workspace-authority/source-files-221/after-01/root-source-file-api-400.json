@@ -1,0 +1,17 @@
+{
+  "alerts": [
+    "Failed to load file: API 400 file/source-content?path=D%3A%5Cmyhexin-local%5Copencorvus%5CREADME.md&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-09%5Csource-files-221-before-01%5Cproject: {\"name\":\"ProviderModelNotFoundError\",\"data\":{\"providerID\":\"openai\",\"modelID\":\"gpt-6.1-sol\",\"suggestions\":[]}}"
+  ],
+  "location": "http://localhost:18144/ui/",
+  "observedAtUtc": "2026-10-09T02:19:37.571Z",
+  "sources": [
+    {
+      "aria": "Open source file: D:\\myhexin-local\\opencorvus\\README.md:1-12",
+      "text": "README.md:1-12D:\\myhexin-local\\opencorvus\\README.md:1-12"
+    },
+    {
+      "aria": "Open source file: D:\\myhexin-local\\opencorvus\\packages\\web\\README.md:1-12",
+      "text": "README.md:1-12D:\\myhexin-local\\opencorvus\\packages\\web\\README.md:1-12"
+    }
+  ]
+}

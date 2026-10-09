@@ -1,0 +1,36 @@
+{
+  "listeners": [],
+  "observedAtUtc": "2026-10-09T02:14:47.9428255Z",
+  "boundary": "Fresh physical source closure before readonly full replay eligibility",
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/source-files-221-before-01",
+  "states": [
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 73852,
+        "processInstanceID": "win32:639271086011852405",
+        "occurrenceID": "c32f59e4-c974-4666-a3fd-957cb232ad3e"
+      }
+    },
+    {
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 75080,
+        "processInstanceID": "win32:639271086019359288",
+        "occurrenceID": "2a3d24fc-1e11-445a-8ae4-b2555e9f3374"
+      }
+    }
+  ],
+  "occurrence": "source-files-221-before-01-357f2d61-8764-4b3d-bda6-a14837139cd6",
+  "readQualified": true,
+  "pair": [
+    {
+      "name": "auth.json",
+      "present": false
+    },
+    {
+      "name": "models.json",
+      "present": false
+    }
+  ]
+}

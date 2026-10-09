@@ -1,0 +1,14 @@
+$ bun script/run-tests.ts ./test/server/file-read-identity.test.ts
+[1/1] START test/server/file-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) cold file readers use exact Project file facts with unavailable execution models [13637.96ms]
+(pass) source readers retain explicit path and missing-file error contracts [2446.17ms]
+(pass) file writes retain the execution model error contract [2272.99ms]
+
+ 3 pass
+ 0 fail
+ 15 expect() calls
+Ran 3 tests across 1 file. [20.67s]
+[1/1] DONE test/server/file-read-identity.test.ts exit=0 duration=21.41s

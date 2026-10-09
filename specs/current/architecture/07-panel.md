@@ -2,6 +2,13 @@
 
 ## Composer availability
 
+Project file listing, content/source-content, file status and text/file search
+GET readers use the existing Project identity admission independently of
+executable model bootstrap. They retain the selected Project directory,
+relative-path and canonical physical-path boundaries, exact absolute-source
+validation, original file errors, content revisions and actual Git/process
+owners. File mutations keep their runtime and write-precondition contracts.
+
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer
 derives interactivity from ready at the same dispatch, attachment, mention and

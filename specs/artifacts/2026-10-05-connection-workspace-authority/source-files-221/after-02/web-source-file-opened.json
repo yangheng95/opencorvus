@@ -1,0 +1,26 @@
+{
+  "alerts": [],
+  "cards": [
+    {
+      "chars": 263,
+      "id": "user:session:ses_-zUSU2jZqzz7zZ7J7DnY:message:msg_0bb2f431-396e-42de-a714-6f3fb51b7f86"
+    },
+    {
+      "chars": 575,
+      "id": "assistant:session:ses_-zUSU2jZqzz7zZ7J7DnY:message:msg_g0VXVxGe000LFEWZuZ4c"
+    }
+  ],
+  "editorVisibleText": "# OpenCorvus Web DocsThis package contains the public OpenCorvus documentation site built with Astro and Starlight.## CommandsRun commands from the repository root:```bashbun run --cwd packages/web devbun run --cwd packages/web buildbun run --cwd packages/web check```## Content- Product documentation lives in `packages/web/src/content/docs/**`.- Editorial articles live in `packages/web/src/content/blog/{root,zh-cn}/**.md`.- API reference pages are generated from live OpenAPI route metadata by `packages/opencorvus/script/docs/render-api-md.ts`.- Shared site configuration lives in `packages/web/config.mjs`.Do not recreate the retired `docs/product/**` tree; public product docs use this package as the single source.The compiled PoC paper is a self-contained static asset at `public/papers/opencorvus-poc.pdf`. Its localized blog research entry uses `OcResearchPaper.astro` and is explicitly marked as work in progress. No LaTeX source or source-branch fetch is part of the website build.",
+  "location": "http://localhost:18145/ui/",
+  "observedAtUtc": "2026-10-09T02:28:55.470Z",
+  "sources": [
+    {
+      "aria": "Open source file: D:\\myhexin-local\\opencorvus\\README.md:1-12",
+      "text": "README.md:1-12D:\\myhexin-local\\opencorvus\\README.md:1-12"
+    },
+    {
+      "aria": "Open source file: D:\\myhexin-local\\opencorvus\\packages\\web\\README.md:1-12",
+      "text": "README.md:1-12D:\\myhexin-local\\opencorvus\\packages\\web\\README.md:1-12"
+    }
+  ]
+}

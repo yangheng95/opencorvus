@@ -1,0 +1,88 @@
+{
+  "projectEntries": [
+    {
+      "id": "prj_hN4Q44HuM8TiMAUuxSNr",
+      "terminalWouldWrite": false,
+      "entries": 44
+    },
+    {
+      "id": "prj_hX2NZvKaLKES4Ahpclxg",
+      "terminalWouldWrite": false,
+      "entries": 63
+    }
+  ],
+  "leases": [
+    {
+      "lease": {
+        "id": "act_g0VXVwyj900cx2Vo2UEG",
+        "target": "runtime_process",
+        "target_id": "b05faf73-6d5a-4179-8eb5-750affc3e9f2",
+        "owner_occurrence_id": "{\"pid\":75080,\"processInstanceID\":\"win32:639271086019359288\",\"occurrenceID\":\"b05faf73-6d5a-4179-8eb5-750affc3e9f2\"}",
+        "time_activated": 1791511809439,
+        "expires_at": 9007199254740991
+      },
+      "state": "dead_or_reused"
+    }
+  ],
+  "boundary": "Current whole source config/GC/restoration eligibility, before source native birth dead, no Task or Provider rearm",
+  "recovery": [
+    {
+      "name": "automation",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire",
+      "rows": 0
+    },
+    {
+      "name": "automation_fire_frontier",
+      "rows": 0
+    },
+    {
+      "name": "event_job",
+      "rows": 0
+    },
+    {
+      "name": "event_job_fire",
+      "rows": 0
+    },
+    {
+      "name": "protocol_inbox",
+      "rows": 0
+    },
+    {
+      "name": "session_prompt_owner",
+      "rows": 0
+    },
+    {
+      "name": "engine_task_wait_registration",
+      "rows": 0
+    },
+    {
+      "name": "engine_interaction_request",
+      "rows": 0
+    },
+    {
+      "name": "engine_build_observation_cleanup",
+      "rows": 0
+    },
+    {
+      "name": "project_directory_admission",
+      "rows": 0
+    },
+    {
+      "name": "project_maintenance_fence",
+      "rows": 0
+    },
+    {
+      "name": "channel_ingress_accepted",
+      "rows": 0
+    },
+    {
+      "name": "workspace_lifecycle_admission",
+      "rows": 0
+    }
+  ],
+  "observedAtUtc": "2026-10-09T02:27:18.2130137Z",
+  "startupQualified": true
+}

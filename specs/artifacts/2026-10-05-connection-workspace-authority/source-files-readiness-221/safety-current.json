@@ -1,0 +1,18 @@
+{
+  "leases": [
+    {
+      "state": "dead_or_reused",
+      "lease": {
+        "id": "act_g0VXVwyj900cx2Vo2UEG",
+        "target": "runtime_process",
+        "target_id": "b05faf73-6d5a-4179-8eb5-750affc3e9f2",
+        "owner_occurrence_id": "{\"pid\":75080,\"processInstanceID\":\"win32:639271086019359288\",\"occurrenceID\":\"b05faf73-6d5a-4179-8eb5-750affc3e9f2\"}",
+        "time_activated": 1791511809439,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "startupQualified": true,
+  "boundary": "Both projects full current readonly config/GC/frontiers; no execution admission or Source directory write candidates",
+  "observedAtUtc": "2026-10-09T02:17:13.8580031Z"
+}

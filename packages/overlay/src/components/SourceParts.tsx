@@ -145,7 +145,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
             <Icon name={icon()} size="compact" />
             <span class="msg-source-chip__content">
               <span class="msg-source-chip__label">{label()}</span>
-              <Show when={host()}>{(value) => <span class="msg-source-chip__host">{value()}</span>}</Show>
+              <Show when={host()}>{(value) => <span class="msg-source-chip__detail">{value()}</span>}</Show>
             </span>
           </Tooltip.Trigger>
         </Match>
@@ -161,7 +161,10 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
               <span class="msg-source-chip__index">{props.index + 1}</span>
             </Show>
             <Icon name={icon()} size="compact" />
-            <span class="msg-source-chip__label">{label()}</span>
+            <span class="msg-source-chip__content">
+              <span class="msg-source-chip__label">{label()}</span>
+              <span class="msg-source-chip__detail">{detail()}</span>
+            </span>
           </Tooltip.Trigger>
         </Match>
         <Match when={true}>

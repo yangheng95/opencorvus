@@ -1,0 +1,60 @@
+$ bun script/run-tests.ts ./test/server/file-read-identity.test.ts
+[1/1] START test/server/file-read-identity.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+45 |       { name: "README.md", path: "README.md", absolute: path.join(directory!, "README.md"), type: "file", ignored: false },
+46 |     ]) })
+47 |     const files = await read(directory!, "/find/file?query=README&dirs=false&type=file")
+48 |     expect(files).toEqual({ status: 200, body: ["README.md"] })
+49 |     const matches = await read(directory!, `/find?${new URLSearchParams({ pattern: content!.trim() })}`)
+50 |     expect(matches).toMatchObject({ status: 200, body: expect.arrayContaining([
+                         ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "body": ExpectArrayContaining {},
++   "body": [
++     {
++       "absolute_offset": 0,
++       "line_number": 1,
++       "lines": {
++         "text":
++ "FileReaderMarker-FIRST
++ "
++ ,
++       },
++       "path": {
++         "text": "README.md",
++       },
++       "submatches": [
++         {
++           "end": 22,
++           "match": {
++             "text": "FileReaderMarker-FIRST",
++           },
++           "start": 0,
++         },
++       ],
++     },
++   ],
+    "status": 200,
+  }
+
+- Expected  - 1
++ Received  + 24
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\file-read-identity.test.ts:50:21)
+(fail) cold file readers use exact Project file facts with unavailable execution models [6750.38ms]
+(pass) source readers retain explicit path and missing-file error contracts [2808.36ms]
+(pass) file writes retain the execution model error contract [2464.88ms]
+
+ 2 pass
+ 1 fail
+ 8 expect() calls
+Ran 3 tests across 1 file. [14.39s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\server\file-read-identity.test.ts
+[1/1] DONE test/server/file-read-identity.test.ts exit=1 duration=15.20s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\server\file-read-identity.test.ts
+error: script "test" exited with code 1

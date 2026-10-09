@@ -1,6 +1,12 @@
 import { normalizedServerRoutePath } from "@opencorvus-ai/transport-protocol"
 
 const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
+  "GET /find",
+  "GET /find/file",
+  "GET /file",
+  "GET /file/content",
+  "GET /file/source-content",
+  "GET /file/status",
   "GET /expert-squad/search",
   "GET /expert-squad/catalog",
   "GET /expert-squad/inventory-status",

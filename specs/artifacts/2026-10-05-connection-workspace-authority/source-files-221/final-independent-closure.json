@@ -1,0 +1,105 @@
+{
+  "scopes": [
+    {
+      "occurrence": "source-files-221-before-01-357f2d61-8764-4b3d-bda6-a14837139cd6",
+      "listeners": [],
+      "label": "before-01",
+      "states": [
+        {
+          "expected": {
+            "pid": 73852,
+            "processInstanceID": "win32:639271086011852405",
+            "occurrenceID": "c32f59e4-c974-4666-a3fd-957cb232ad3e"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "expected": {
+            "pid": 75080,
+            "processInstanceID": "win32:639271086019359288",
+            "occurrenceID": "2a3d24fc-1e11-445a-8ae4-b2555e9f3374"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "pair": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ]
+    },
+    {
+      "occurrence": "source-files-221-after-01-41fe201e-0128-421d-b33b-7670517a469e",
+      "listeners": [],
+      "label": "after-01",
+      "states": [
+        {
+          "expected": {
+            "pid": 77316,
+            "processInstanceID": "win32:639271090383619093",
+            "occurrenceID": "1f39d768-53ef-4865-8d0e-199f54b2f2d1"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "expected": {
+            "pid": 53380,
+            "processInstanceID": "win32:639271090390949760",
+            "occurrenceID": "1098e253-5adc-4675-ad57-86146585144a"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "pair": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ]
+    },
+    {
+      "occurrence": "source-files-221-after-02-3e3f4a59-26d9-4568-8b97-74d5ef002dbc",
+      "listeners": [],
+      "label": "after-02",
+      "states": [
+        {
+          "expected": {
+            "pid": 71500,
+            "processInstanceID": "win32:639271096427273131",
+            "occurrenceID": "eb37ad3c-3235-4223-9442-0d3f7a6780cc"
+          },
+          "state": "dead_or_reused"
+        },
+        {
+          "expected": {
+            "pid": 62268,
+            "processInstanceID": "win32:639271096434600818",
+            "occurrenceID": "84627eba-b295-416f-be70-44a3a29bf7d1"
+          },
+          "state": "dead_or_reused"
+        }
+      ],
+      "pair": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ]
+    }
+  ],
+  "boundary": "Fresh exact native births, all three original port/pair closures after all sources and public native settlements",
+  "observedAtUtc": "2026-10-09T02:35:58.1114228Z"
+}

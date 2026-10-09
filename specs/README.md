@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [File Sources221](records/2026-10/2026-10-09-source-files-221.md): actual same-name file sources, visible path identity and real file opening.
+
 - [Sources navigation220](records/2026-10/2026-10-09-source-navigation-220.md): real source activation and retained conversation reading context.
 
 - [Child Tool Sources219](records/2026-10/2026-10-09-child-tool-sources-219.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/child-tool-sources-219/README.md): current original child Dock Tool/Sources/return inspection with complete canonical history; no Task rearm or model delegation.

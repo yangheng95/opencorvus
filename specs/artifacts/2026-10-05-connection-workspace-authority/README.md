@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [File Sources221 Recall](source-files-plan-221.md), [first readiness](source-files-readiness-221/README.md), [fresh corrected readiness](source-files-readiness-22102/README.md) and [actual scope](source-files-221/README.md): visible canonical file paths, six model-independent file readers and actual opening/range/keyboard with real Sol/source custody; original400 retained.
+
 - [Sources navigation220 Recall](source-navigation-plan-220.md), [readiness](source-navigation-readiness-220/README.md) and [actual scope](source-navigation-220/README.md): real source click opens the true target page while preserving the original conversation; current browser transport disproves the candidate, no duplicate navigation added.
 
 - [Child219 Recall](child-tool-sources-plan-219.md), [current readiness](child-tool-readiness-219/README.md), [startup](child-tool-startup-219.json) and [actual scope](child-tool-sources-219/README.md): original child Dock Tool/Sources and return matrix, complete90-table canonical copy, no Task/model rearm.

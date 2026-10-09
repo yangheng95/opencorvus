@@ -195,7 +195,11 @@ bottom can resume following through the existing scroll policy.
 An expanded web-source leaf shows its full wrapping title and a secondary host
 derived directly from that same canonical URL, including any port. The URL
 remains the link target and full Tooltip detail; a title/provider is never used
-to infer its host. An unparseable URL has no host presentation. File/document
+to infer its host. An unparseable URL has no host presentation. An expanded
+file-source leaf shows its existing title/range and a secondary path/range
+from the same canonical source. The existing selected directory makes an
+in-project path relative; an external path retains its absolute identity.
+Tooltip, accessible name and file navigation use those same facts. Document
 leaves retain their existing actions and metadata, and group summaries retain
 their actual title/count and adjacent timeline position.
 

@@ -1,0 +1,1 @@
+只读完成一次来源对比：请使用 read 工具分别读取 D:/myhexin-local/opencorvus/README.md 和 D:/myhexin-local/opencorvus/packages/web/README.md，两个调用都指定 offset=1、limit=12。只依据实际读取的前12行，用两点简短中文说明这两个同名README分别介绍什么，并分别引用准确的原文件。保留两份资料的区别；不要读取其他文件、搜索网页、创建或编辑文件，不要调用或委托任何agent。

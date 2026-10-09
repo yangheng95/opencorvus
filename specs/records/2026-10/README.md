@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [File Sources221](2026-10-09-source-files-221.md): visible canonical file identities and real opening with authorized current model.
+
 - [Sources navigation220](2026-10-09-source-navigation-220.md): actual source link activation and conversation reading context.
 
 - [Child Tool Sources219](2026-10-09-child-tool-sources-219.md): original child Dock full Tool/Sources and reading return, current safety frontier and complete canonical history, actual UI/native scope.

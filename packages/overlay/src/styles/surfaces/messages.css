@@ -1074,7 +1074,7 @@
   text-align: start;
 }
 
-.msg-source-chip__host {
+.msg-source-chip__detail {
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   overflow-wrap: anywhere;

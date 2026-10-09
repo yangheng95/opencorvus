@@ -1,0 +1,16 @@
+$ bun script/run-tests.ts ./test/server/file-save-conflict.test.ts
+[1/1] START test/server/file-save-conflict.test.ts
+bun test v1.3.14 (0d9b296a) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+[file-save peer] {"readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lGBjLd\\test-37988-OkIuUq\\file-save-first.json","url":"http://127.0.0.1:54216/","pid":78224,"stdinState":"open"}
+[file-save peer] {"readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lGBjLd\\test-37988-OkIuUq\\file-save-second.json","url":"http://127.0.0.1:54217/","pid":40144,"stdinState":"open"}
+[file-save peer] {"readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-lGBjLd\\test-37988-OkIuUq\\file-save-restarted.json","url":"http://127.0.0.1:54223/","pid":54248,"stdinState":"open"}
+[file-save HTTP] {"processes":[78224,40144,54248],"externalSameMtime":"conflict","restart":"saved","symlink":"supported"}
+(pass) real HTTP save uses loaded bytes across external changes, peer processes, restart and path identities [13599.57ms]
+
+ 1 pass
+ 0 fail
+ 32 expect() calls
+Ran 1 test across 1 file. [14.69s]
+[1/1] DONE test/server/file-save-conflict.test.ts exit=0 duration=15.40s
