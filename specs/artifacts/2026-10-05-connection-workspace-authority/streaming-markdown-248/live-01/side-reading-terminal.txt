@@ -1,0 +1,96 @@
+Browser tab: 90, Title: "OpenCorvus", URL: "http://localhost:18183/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 165, 174
+~													244 text  部分时，先确认它描述的是打开与关闭状态变化后的通知，再理解短时间多次变化可能合并。预期现象是，读者不会把一次点击必然对应一次通知当成固定契约，也不会认为通知发生在变化之前。若使用事件次数推算所有中间变化，可能遗漏被合并的过程，形成不准确的记录或判断。建议示例直接读取当前
++													245 text open
++													246 text ，表达通知发生时的状态；不要借这个简例暗示已经完整追踪操作历史，或验证了所有程序控制路径。
++												247 container
++													248 AXListMarker 10.
++													249 text 让样式说明保持在现有证据范围内。
++													250 text  具体操作是阅读正文中的自定义外观示例，理解
++													251 text details[open]
++													252 text  可用于选中展开状态，再留意展开标记定制的支持限定。预期现象是，读者能区分状态选择器与标记外观调整，不把示例中的边框、阴影和尺寸当成元素必须具有的默认效果。若照搬示例外观作为产品要求，可能引入主请求未提出的视觉验收标准。建议将样式内容作为可选阅读材料，明确其说明作用；没有实际渲染证据时，不宣称特定外观在目标界面中已经正确呈现。
++												253 container
++													254 AXListMarker 11.
++													255 text 以可追溯性代替重复堆叠资料。
++													256 text  操作上，建议侧边讨论保留一段简明结论、一条明确来源，以及必要的证据范围说明，而不是重复粘贴整页导航、所有示例和搜索摘要。预期现象是，读者可以快速找到关键事实，需要深入时再沿现有链接阅读。若信息大量重复，重要限定反而容易被淹没，阅读者也难以判断哪些句子是原文、哪些是概括、哪些是建议。适度压缩应删去重复内容，不应删掉布尔属性陷阱、事件合并或支持差异等影响理解的条件，更不能用压缩后的措辞扩大结论。
++												257 container
++													258 AXListMarker 12.
++													259 text 让建议、示例和验收声明各自独立。
++													260 text  具体操作是，在阅读体验建议前说明它们尚未执行，在代码前说明它只演示事件监听与状态读取，在结尾避免使用“产品已通过”等措辞。预期现象是，阅读者能够把文档核对结果与实际界面测试区分开，也知道示例没有自动证明任何项目行为。若把可运行的几行代码视为产品验收证据，可能遗漏元素挂载、事件绑定位置和真实交互环境等条件。建议用明确的范围说明结束讨论：本次完成的是资料基础上的说明，不是部署、修改或实际产品验证。
++											261 table
++												262 row
++													263 cell
++														264 text 操作
++													265 cell
++														266 text 预期现象
++													267 cell
++														268 text 失败影响
++												269 row
++													270 cell
++														271 text 区分继承历史与当前请求
++													272 cell
++														273 text 历史作为背景，当前要求决定输出范围
++													274 cell
++														275 text 重复执行旧请求，偏离侧边讨论边界
++												276 row
++													277 cell
++														278 text 对照已读取的 MDN 正文
++													279 cell
++														280 text 结论对应实际阅读过的内容
++													281 cell
++														282 text 把搜索摘要误报为已核实事实
++												283 row
++													284 cell
++														285 text 核对
++														286 text open
++														287 text  属性的存在性
++													288 cell
++														289 text 理解
++														290 text open="false"
++														291 text  仍会展开
++													292 cell
++														293 text 错误设置关闭状态，产生行为偏差
++												294 row
++													295 cell
++														296 text 理解
++														297 text toggle
++														298 text  后读取
++														299 text open
++													300 cell
++														301 text 获得通知发生时的当前状态
++													302 cell
++														303 text 把事件次数误当完整变化历史
++												304 row
++													305 cell
++														306 text 分离建议、独立示例与验收
++													307 cell
++														308 text 清楚知道哪些内容尚未实际验证
++													309 cell
++														310 text 将文档说明误认为产品通过验收
++											311 container
++												312 text 现有真实来源：
++												313 link Description: MDN《<details>：详细信息展现元素》, Value: developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/details
++												314 text 。以上只使用主对话已有资料，未新增读取。
++											315 container
++												316 text 独立 JavaScript 示例（12 行）：  假设页面已有一个  <details>  元素；仅演示监听  toggle  并读取  open ，不改变展开状态，不代表实际产品验证。
++											317 container
++												318 text JAVASCRIPT
++												319 button Copy code
++												320 container
++													321 text const  details =  document . querySelector ( "details" );
+
+details. addEventListener (
+   "toggle" ,
+   () =>  {
+     const  isOpen = details. open ;
+     console . log (
+       "当前展开状态：" ,
+      isOpen
+    );
+  }
+);
++										322 text entry area (settable) Ask a side question…
+~										159 text Main conversation stays on track
++										323 button (disabled) Send side question
+The focused UI element is 166 container Reference history · 4 messages Quote in main conversation

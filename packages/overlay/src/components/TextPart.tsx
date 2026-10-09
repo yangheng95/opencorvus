@@ -7,7 +7,7 @@ function isStandaloneSourceFileMarkup(html: string): boolean {
   return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
 }
 
-/** Worker-backed Markdown with stable completed blocks and a raw live tail.
+/** Worker-backed Markdown formats every accepted token, including a growing tail.
  * DOM insertion is spread across frames for both streaming and loaded text. */
 
 export function TextPart(props: { text: string; streaming?: boolean; trailing?: JSX.Element }) {
@@ -18,10 +18,9 @@ export function StreamingMarkdownPart(props: {
   text: string
   streaming?: boolean
   className?: string
-  activeTextClassName?: string
   trailing?: JSX.Element
 }) {
-  const { frozenHtml, activeText, pending, error } = createStreamingTextPartModel(props)
+  const { frozenHtml, pending, error } = createStreamingTextPartModel(props)
 
   return (
     <div class={props.className || "msg-text"}>
@@ -35,11 +34,8 @@ export function StreamingMarkdownPart(props: {
           />
         )}
       </For>
-      <Show when={activeText()}>
-        <div class={props.activeTextClassName || "md-active-text"}>{activeText()}</div>
-      </Show>
       {props.trailing}
-      <Show when={pending() && frozenHtml().length === 0 && !activeText()}>
+      <Show when={pending() && frozenHtml().length === 0}>
         <div class="msg-markdown-state" role="status">
           {t("markdown.rendering")}
         </div>

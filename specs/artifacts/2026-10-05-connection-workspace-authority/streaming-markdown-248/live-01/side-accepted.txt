@@ -1,0 +1,11 @@
+Browser tab: 90, Title: "OpenCorvus", URL: "http://localhost:18183/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 150-156, 158, 160
++									160 button (collapsed) Reference history · 4 messages, Secondary Actions: Expand
++										161 text Reference history · 4 messages
++									162 container
++										163 text User
++										164 text 只基于主对话现有资料，用中文写12段共2000到2400汉字的 Side Chat 参考历史与来源阅读体验建议，逐段标明1到12，每段给出具体操作、观察现象和失败影响。随后给出含5个数据行的 Markdown 表格，列为操作、预期现象、失败影响；最后给出约12行 JavaScript 示例，只演示监听 details 的 toggle 并读取 open 属性。明确这些是建议与独立示例，不新增检索、不创建任务、不委托agent、不修改文件，不声称完成实际产品验收。
+~										159 text Working…
++										165 button Stop side chat
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18183/ui/

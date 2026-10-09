@@ -1,0 +1,4 @@
+Browser tab: 90, Title: "OpenCorvus", URL: "http://localhost:18183/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~													244 text  部分时，先确认它描述的是打开与关闭状态变化后的通知，再理解短时间多次变化可能合并。预期现象是，读者不会把一次点击必然对应一次通知当成固定契约，也不会认为通知发生在变化之前。若使用事件次数推算所有中间变化，可能遗漏被合并的过程
+The focused UI element is 166 container Reference history · 4 messages Quote in main conversation

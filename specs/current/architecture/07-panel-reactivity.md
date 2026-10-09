@@ -290,6 +290,16 @@ Streaming output uses current worker replies, and an older revision cannot
 overwrite an immediately restored completed result. Last-subscriber disposal
 retires the worker while completed artifacts remain within the same authority.
 
+Streaming Markdown uses that same lexer/parser for every accepted token,
+including the currently growing final block. A continuous list, table or code
+block does not turn its already accepted content into a plain-text tail. The
+final token bypasses the completed-token cache while it changes; unchanged
+rendered block strings retain their existing presentation identity. Replies
+use the one ordered HTML batch path, with the existing latest-request queue
+and bounded frame mounts. Unmatched Markdown syntax follows the current
+parser's interpretation rather than guessed closing delimiters. Tool raw-input
+previews retain their own existing display limit.
+
 Transcript follow remains owned by each caller's tracking signal. The shared
 controller releases follow on owned upward input before asynchronous resize;
 editable keyboard controls and another nested transcript retain their input.

@@ -26,19 +26,23 @@ async function drain() {
         copyIcon = request.copyIcon
         const tokens = lexMarkdown(request.text)
         const visible = tokens.filter((token) => token.type !== "space")
-        const active = request.streaming ? visible.pop()?.raw || "" : ""
         const context = JSON.stringify([request.locale, request.copyLabel, request.copyIcon, tokens.links])
         let start = 0
         let html: string[] = []
         let sliceStart = performance.now()
-        for (const token of visible) {
+        for (let index = 0; index < visible.length; index++) {
           if (latest.get(request.owner) !== request) break
-          const key = `${context}\u0000${token.raw}`
-          let rendered = cache.get(key)
+          const token = visible[index]
+          // The growing final token uses the same parser without evicting
+          // completed blocks from the cache on every streamed update.
+          const key = !request.streaming || index < visible.length - 1 ? `${context}\u0000${token.raw}` : undefined
+          let rendered = key === undefined ? undefined : cache.get(key)
           if (rendered === undefined) {
             rendered = renderMarkdownToken(token)
-            cache.set(key, rendered)
-            if (cache.size > 512) cache.delete(cache.keys().next().value!)
+            if (key !== undefined) {
+              cache.set(key, rendered)
+              if (cache.size > 512) cache.delete(cache.keys().next().value!)
+            }
           }
           html.push(rendered)
           if (html.length >= 16 || performance.now() - sliceStart >= 8) {
@@ -47,7 +51,6 @@ async function drain() {
               revision: request.revision,
               start,
               html,
-              activeText: active,
               done: false,
             })
             start += html.length
@@ -62,7 +65,6 @@ async function drain() {
             revision: request.revision,
             start,
             html,
-            activeText: active,
             done: true,
           })
           latest.delete(request.owner)
@@ -74,7 +76,6 @@ async function drain() {
             revision: request.revision,
             start: 0,
             html: [],
-            activeText: "",
             done: true,
             error: String(error),
           })

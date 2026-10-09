@@ -961,7 +961,7 @@ body {
   line-height: var(--ui-line-height-reading);
 }
 
-:is(.card__goal-desc-text .msg-text, .card__goal-desc-text .md-frozen-block, .card__goal-desc-text .md-active-text) {
+:is(.card__goal-desc-text .msg-text, .card__goal-desc-text .md-frozen-block) {
   margin: 0;
 }
 

@@ -1,0 +1,15 @@
+{
+  "pid": 47384,
+  "occurrence": "streaming-markdown-248-live-01-d5c27ea2-fc9a-4248-ab46-f0d148267fe4",
+  "owner": {
+    "pid": 47384,
+    "processInstanceID": "win32:639271689366624286",
+    "occurrenceID": "ab63bbbb-3e8d-41b1-a84f-18e4f99ca218"
+  },
+  "parent": {
+    "pid": 45696,
+    "processInstanceID": "win32:639271689366176302",
+    "occurrenceID": "79bbeebd-37c9-4941-bd5d-c6128ed6dd65"
+  },
+  "boundary": "Current native parent occurrence supplied to the established serve lifecycle; no PID-only ownership"
+}

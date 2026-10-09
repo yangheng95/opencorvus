@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [流式 Markdown 248](2026-10-10-streaming-markdown-248.md)：生成中列表格式修复/真实Working复测，原Native0；布局及全矩阵未扩大宣称。
+
 - [共享正文前缀247](2026-10-10-streaming-prefix-247.md)：修复关闭侧栏丢前文，真实运行中重开/持久前缀、31项正向检查与两次Native0；原未合格照片保留。
 
 - [Side运行返回246](2026-10-10-side-stream-return-246.md)：两次实际prefix丢失和open DB0；请求归属草稿清理已修/真实after空输入，shared backend待修。

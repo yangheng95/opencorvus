@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [流式 Markdown 248 Recall](streaming-markdown-plan-248.md) / [真实运行帧](streaming-markdown-248/README.md)：唯一parser呈现当前列表、Working第一段/粗体/编号与终态Sources，原Native0；布局变化仍待查。
+
 - [共享正文前缀247 Recall](streaming-prefix-plan-247.md) / [原失败与真实补验](streaming-prefix-247/README.md)：单队列持久前缀修复、31项正向检查、真实运行返回1879字符/open DB2202与两次Native0。
 
 - [Side运行返回246 Recall](side-stream-return-plan-246.md) / [原与after事实](side-stream-return-246/README.md)：shared prefix恢复真实失败保留，草稿请求归属修复/真实after空输入/两Native0。

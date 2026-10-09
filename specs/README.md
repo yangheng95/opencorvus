@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [流式 Markdown 248](records/2026-10/2026-10-10-streaming-markdown-248.md)：生成途中列表直接呈现格式，真实Working首段/编号/粗体与来源，原Native0；终态布局与未验收范围保留。
+
 - [共享正文前缀247](records/2026-10/2026-10-10-streaming-prefix-247.md)：修复运行中关闭侧栏丢前文，31项正向后端检查、真实Sol恢复/持久前缀/空输入及两次Native0。
 
 - [Side运行返回246](records/2026-10/2026-10-10-side-stream-return-246.md)：两次真实prefix丢失与共同恢复横审；原请求归属草稿清理已修并实跑，backend前缀仍待修。

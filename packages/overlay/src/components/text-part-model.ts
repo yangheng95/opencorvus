@@ -12,10 +12,9 @@ export function visibleStreamingText(text: string, limit = STREAMING_ACTIVE_TEXT
 }
 
 /** Restore finished artifacts before paint; parse/highlight misses off-thread
- * and commit bounded batches. Frozen strings retain their Solid For identity. */
+ * and commit bounded batches. Unchanged HTML retains its Solid For identity. */
 export function createStreamingTextPartModel(props: { text: string; streaming?: boolean }) {
   const [frozenHtml, setFrozenHtml] = createSignal<string[]>([])
-  const [activeText, setActiveText] = createSignal("")
   const [pending, setPending] = createSignal(false)
   const [error, setError] = createSignal("")
   let revision = 0
@@ -69,7 +68,6 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
     }
     target.splice(reply.start, target.length - reply.start, ...reply.html)
     complete = reply.done && reply.revision === revision
-    setActiveText(visibleStreamingText(reply.activeText))
     if (!mountFrame) mountFrame = requestAnimationFrame(mount)
   })
 
@@ -102,7 +100,6 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
       if (!text) {
         target = []
         setFrozenHtml([])
-        setActiveText("")
       }
     })
     try {
@@ -115,7 +112,6 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
         complete = true
         batch(() => {
           setFrozenHtml(target.slice())
-          setActiveText("")
           setError("")
           setPending(false)
         })
@@ -131,5 +127,5 @@ export function createStreamingTextPartModel(props: { text: string; streaming?: 
     cancelAnimationFrame(mountFrame)
     renderer.dispose()
   })
-  return { frozenHtml, activeText, pending, error }
+  return { frozenHtml, pending, error }
 }

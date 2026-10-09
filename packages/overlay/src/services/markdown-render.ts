@@ -17,7 +17,6 @@ export type MarkdownRenderReply = {
   revision: number
   start: number
   html: string[]
-  activeText: string
   done: boolean
   error?: string
 }
@@ -65,7 +64,7 @@ function rendererWorker(): Worker {
     completedResults.clear()
     completedCodeUnits = 0
     for (const [owner, receive] of subscribers) {
-      receive({ owner, revision: -1, start: 0, html: [], activeText: "", done: true, error: workerFailure })
+      receive({ owner, revision: -1, start: 0, html: [], done: true, error: workerFailure })
     }
   }
   return worker
@@ -96,7 +95,7 @@ export function createMarkdownRenderer(receive: (reply: MarkdownRenderReply, req
       try {
         send(next)
       } catch (reason) {
-        receive({ owner, revision: -1, start: 0, html: [], activeText: "", done: true, error: String(reason) }, next)
+        receive({ owner, revision: -1, start: 0, html: [], done: true, error: String(reason) }, next)
       }
     })
   }

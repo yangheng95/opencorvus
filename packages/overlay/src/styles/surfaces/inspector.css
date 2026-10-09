@@ -1109,15 +1109,12 @@
    `.gwg-plan-node-*` and `.gwg-eval-summary` rendered prose. */
 .gwg-objective-text .msg-text,
 .gwg-objective-text .md-frozen-block,
-.gwg-objective-text .md-active-text,
 .gwg-done-definition-text .msg-text,
 .gwg-done-definition-text .md-frozen-block,
-.gwg-done-definition-text .md-active-text,
 .gwg-plan-node-title .msg-text,
 .gwg-plan-node-brief .msg-text,
 .gwg-eval-summary .msg-text,
-.gwg-eval-summary .md-frozen-block,
-.gwg-eval-summary .md-active-text {
+.gwg-eval-summary .md-frozen-block {
   margin: 0;
 }
 

@@ -110,11 +110,6 @@
   line-height: var(--ui-line-height-reading);
 }
 
-.md-active-text {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
 .msg-text ul,
 .msg-text ol,
 .md-content ul,
