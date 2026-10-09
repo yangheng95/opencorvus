@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-09T13:00:27.7704217Z",
+  "qualification": "Own UI closed; original foreground joined with its actual result; Native physical/output/request settled; all checkers/custody/archive observers terminal before bounded exact single-file moves. Native outcome retained, not converted into exit0.",
+  "files": [
+    {
+      "name": "091d165574530ade.debug.pile",
+      "birthUtc": "2026-10-09T12:48:48.4852052Z",
+      "bytes": 47224,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-failure-visibility-237\\generated-bun-review01\\091d165574530ade.debug.pile"
+    },
+    {
+      "name": "69cc5fa7b1dcf631.debug.pile",
+      "birthUtc": "2026-10-09T12:48:48.4602685Z",
+      "bytes": 169556,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-failure-visibility-237\\generated-bun-review01\\69cc5fa7b1dcf631.debug.pile"
+    },
+    {
+      "name": "7a87559fbb4087c4.debug.pile",
+      "birthUtc": "2026-10-09T12:48:48.4318527Z",
+      "bytes": 59902,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-failure-visibility-237\\generated-bun-review01\\7a87559fbb4087c4.debug.pile"
+    },
+    {
+      "name": "cf86f20c120ce818.debug.pile",
+      "birthUtc": "2026-10-09T12:48:48.4413690Z",
+      "bytes": 88408,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-failure-visibility-237\\generated-bun-review01\\cf86f20c120ce818.debug.pile"
+    },
+    {
+      "name": "f9ce0c567348c89d.debug.pile",
+      "birthUtc": "2026-10-09T12:48:48.5036077Z",
+      "bytes": 43530,
+      "destination": "D:\\myhexin-local\\opencorvus\\.tmp-product-iteration\\source-failure-visibility-237\\generated-bun-review01\\f9ce0c567348c89d.debug.pile"
+    }
+  ],
+  "nativeTerminal": {
+    "occurrenceID": "source-failure-visibility-237-review-01-33ed638a-f07c-40ff-a074-e9594e38a6aa",
+    "pid": 44820,
+    "reason": "exited",
+    "exitCode": 0,
+    "signal": null
+  },
+  "targetBirthUtc": "2026-10-09T12:48:48.1708405Z"
+}

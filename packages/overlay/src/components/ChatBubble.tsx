@@ -51,12 +51,13 @@ function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDura
   )
 }
 
-function ChatBubbleEmptyTurnState(props: { node: CardNode; hasVisibleContent: boolean }) {
+function ChatBubbleFailureState(props: { node: CardNode }) {
   const errorReason = () => props.node.errorReason?.trim() || ""
   return (
-    <Show when={!props.hasVisibleContent && props.node.status === "error" && errorReason()}>
+    <Show when={props.node.status === "error" && errorReason()}>
       <div class="msg-tool-error" data-agent-error-card-id={props.node.id} role="alert">
-        {errorReason()}
+        <strong>{t("card.error_reason_title")}</strong>
+        <div>{errorReason()}</div>
       </div>
     </Show>
   )
@@ -70,7 +71,6 @@ function ChatBubbleAgentChildBody(props: {
 }) {
   const visibleChildIDs = createMemo(() => visibleChildIDsForCard(props.child))
   const steerTargetSessionID = createMemo(() => workerSteerTargetSessionID(props.child, props.rootTaskSessionID))
-  const hasVisibleContent = () => props.child.parts.length > 0 || visibleChildIDs().length > 0
 
   return (
     <>
@@ -88,7 +88,6 @@ function ChatBubbleAgentChildBody(props: {
           renderNestedCard={(node, depth) => <Card node={node} depth={depth} />}
         />
       </Show>
-      <ChatBubbleEmptyTurnState node={props.child} hasVisibleContent={hasVisibleContent()} />
       <Show when={visibleChildIDs().length > 0}>
         <div class="chat-bubble__children">
           <For each={visibleChildIDs()}>
@@ -104,6 +103,7 @@ function ChatBubbleAgentChildBody(props: {
           </For>
         </div>
       </Show>
+      <ChatBubbleFailureState node={props.child} />
       <Show when={steerTargetSessionID()}>
         <OperatorSteerBox
           stateKey={steerTargetSessionID()!}
@@ -202,7 +202,6 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
     if (isUser()) return true
     return props.node.status !== "pending" && props.node.status !== "running"
   })
-  const hasVisibleContent = () => props.node.parts.length > 0 || visibleChildIDs().length > 0
 
   const setExpanded = (value: boolean) => {
     if (!collapsible()) return
@@ -323,9 +322,6 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
                 <Show when={props.node.reviewStream}>
                   <ReviewStreamSection reviewStream={props.node.reviewStream!} />
                 </Show>
-                <Show when={!isUser()}>
-                  <ChatBubbleEmptyTurnState node={props.node} hasVisibleContent={hasVisibleContent()} />
-                </Show>
                 <Show when={visibleChildIDs().length > 0}>
                   <div class="chat-bubble__children">
                     <For each={visibleChildIDs()}>
@@ -340,6 +336,9 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
                       )}
                     </For>
                   </div>
+                </Show>
+                <Show when={!isUser()}>
+                  <ChatBubbleFailureState node={props.node} />
                 </Show>
                 <Show when={steerTargetSessionID()}>
                   <OperatorSteerForm controller={steerController} />

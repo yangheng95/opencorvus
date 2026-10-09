@@ -1,0 +1,27 @@
+{
+  "occurrence": "source-failure-visibility-237-review-01-33ed638a-f07c-40ff-a074-e9594e38a6aa",
+  "listeners": [],
+  "observedAtUtc": "2026-10-09T12:56:53.8599755Z",
+  "pairPresent": {
+    "models.json": false,
+    "auth.json": false
+  },
+  "states": [
+    {
+      "expected": {
+        "pid": 22804,
+        "processInstanceID": "win32:639271469274159146",
+        "occurrenceID": "c116963b-8a89-4cdc-9039-a27a81403b2d"
+      },
+      "state": "dead_or_reused"
+    },
+    {
+      "expected": {
+        "pid": 44820,
+        "processInstanceID": "win32:639271469281708405",
+        "occurrenceID": "f598df52-b04c-4035-95c0-9a5a1eb4c6ca"
+      },
+      "state": "dead_or_reused"
+    }
+  ]
+}

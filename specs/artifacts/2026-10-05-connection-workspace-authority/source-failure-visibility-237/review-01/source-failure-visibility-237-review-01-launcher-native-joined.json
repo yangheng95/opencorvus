@@ -1,0 +1,42 @@
+{
+  "settlement": {
+    "occurrence": "source-failure-visibility-237-review-01-33ed638a-f07c-40ff-a074-e9594e38a6aa",
+    "outcome": "settled",
+    "host": {
+      "pid": 22804,
+      "processInstanceID": "win32:639271469274159146",
+      "occurrenceID": "c116963b-8a89-4cdc-9039-a27a81403b2d"
+    },
+    "target": {
+      "pid": 44820,
+      "processInstanceID": "win32:639271469281708405",
+      "occurrenceID": "f598df52-b04c-4035-95c0-9a5a1eb4c6ca"
+    },
+    "observedAtUtc": "2026-10-09T12:56:39.652Z",
+    "deadlineAt": 1791551027312,
+    "terminal": {
+      "occurrenceID": "source-failure-visibility-237-review-01-33ed638a-f07c-40ff-a074-e9594e38a6aa",
+      "pid": 44820,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "host": {
+    "pid": 22804,
+    "processInstanceID": "win32:639271469274159146",
+    "occurrenceID": "c116963b-8a89-4cdc-9039-a27a81403b2d"
+  },
+  "exitCode": 0,
+  "occurrence": "source-failure-visibility-237-review-01-33ed638a-f07c-40ff-a074-e9594e38a6aa",
+  "target": {
+    "pid": 44820,
+    "processInstanceID": "win32:639271469281708405",
+    "occurrenceID": "f598df52-b04c-4035-95c0-9a5a1eb4c6ca"
+  },
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner"
+}

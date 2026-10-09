@@ -1,0 +1,20 @@
+{
+  "cards": [
+    {
+      "bodyError": null,
+      "errorIndicators": 0,
+      "id": "user:session:ses_-zUSRZKRGzzQ1VCVbesX:message:msg_85f82128-5fca-470c-9c05-55c059b741cf",
+      "status": "completed"
+    },
+    {
+      "bodyError": "Error detailsError: E2E_REQUEST_BUDGET_EXHAUSTED",
+      "errorIndicators": 1,
+      "id": "assistant:session:ses_-zUSRZKRGzzQ1VCVbesX:message:msg_g0VXYQfqA0060o5oUf29",
+      "status": "error"
+    }
+  ],
+  "scope": "Readonly diagnostic beside personally reviewed actual after-loaded-tail screenshot; no UI assertion",
+  "scripts": [
+    "http://localhost:18169/ui/assets/main-D6C0wXlu.js"
+  ]
+}

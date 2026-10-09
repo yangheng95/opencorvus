@@ -1,0 +1,5 @@
+# 237 原236完整历史的当前启动审查
+
+guard/result-startup/result-frontier为现只读生产reader输出；原Native physical/output/request已闭合、pid/birth dead_or_reused、18168/18169端口无监听、auth/models副本清理。原Provider预算资格失败没有被改写，只准入完整历史显示。
+
+90表schema无漂移。两个原Project inventory44/63，四个当前terminal profile无wouldWrite；plugin0、channels0、commands0，原browser/computer MCP配置保留。无Task、Mission、dispatch候选与14恢复表；11个assistant完成，Provider/Tool/发布/delivery终态，9个权限成功、两份memory idle。550个当前lease winner仅原runtime_process永久lease未过期，实际pid68708/birth已独立确认dead；两个capacity过期，原preflight wake_reason已consumed。人工逐项核对后才写manifest与完整90表逐行复制检查，普通Session身份独立绑定，不虚构Task或修改路径。

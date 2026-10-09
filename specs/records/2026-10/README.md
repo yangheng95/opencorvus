@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [来源后的失败提示237](2026-10-09-source-failure-visibility-237.md)：已有Sources时正文明确显示错误，真实英文/中文深色与摘要阅读/完整历史闭合。
+
 - [真实会话阅读236](2026-10-09-source-live-reading-236.md)：真实16条Sources已产生，固定12次请求预算耗尽，最终正文与流式视觉验收未达成；原失败和Native物理闭合分别保留。
 
 - [摘要阅读位置235](2026-10-09-source-excerpt-position-235.md)：内摘要位置唯一UI state/owner修复，折叠重开/成员切换/中文深色实际保持。

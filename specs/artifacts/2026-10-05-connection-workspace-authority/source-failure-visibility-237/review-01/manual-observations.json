@@ -1,0 +1,43 @@
+{
+  "observedAtUtc": "2026-10-09T12:56:27.526Z",
+  "scope": "Single root agent; complete actual236 failed ordinary-session history, original budget failure preserved; own isolated UI76/18169",
+  "before": {
+    "qualifiedScreenshot": "before-clean-tail.jpg",
+    "loadedBundle": "main-CcagVDdu.js",
+    "manual": "Source tail had no visible request error; read-only diagnostic showed same actual assistant card status=error and one header indicator"
+  },
+  "after": {
+    "qualifiedScreenshots": [
+      "after-loaded-tail.jpg",
+      "after-source-and-error-bottom.jpg",
+      "after-chinese-dark-clean.jpg",
+      "after-header-native-focus.jpg",
+      "after-five-source-group.jpg"
+    ],
+    "loadedBundle": "main-D6C0wXlu.js",
+    "manual": "Actual original Error: E2E_REQUEST_BUDGET_EXHAUSTED is clear at body tail in English light and Chinese dark. Header tooltip appeared with genuine ShiftTab/Tab keyboard focus; direct locator Return only showed focus initially, retained separately. Real five-source group opened with Return. Sources retain their original full text and adjacent groups."
+  },
+  "excerpt": {
+    "source": "prt_g0VXYQuIU002wL6nKezf",
+    "chars": 3939,
+    "nativeEndTop": 1069.3333740234375,
+    "reopenTop": 1069.3333740234375,
+    "manual": "Native Tab/End reached visible final sentence. Native ShiftTab/Return close and Return reopen retained position. Scroll to bottom showed source end and actual body failure together."
+  },
+  "preliminaryFrames": {
+    "before-tail.jpg": "Immediate initial selection still loading; not qualified before",
+    "before-loaded-tail.jpg": "Loaded with sidebar tooltip; clean before taken separately",
+    "after-tail.jpg": "Immediate reload returned home before selecting same session; not qualified after",
+    "after-header-error.jpg": "Locator Return focused indicator; native keyboard tooltip verified separately"
+  },
+  "limits": [
+    "Main history virtualization",
+    "separate Side Chat failed request",
+    "separate member failure",
+    "empty-output failure new sample",
+    "natural streaming failure and all Rendering frames",
+    "Tauri GUI"
+  ],
+  "uiAutomationTests": "None added, modified or run; diagnostic values are auxiliary to screenshots personally reviewed",
+  "closure": "Own UI closes next; no closure or custody claim before actual checker results"
+}

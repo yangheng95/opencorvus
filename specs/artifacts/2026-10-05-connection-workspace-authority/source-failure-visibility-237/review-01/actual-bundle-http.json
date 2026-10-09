@@ -1,0 +1,24 @@
+{
+  "observedAtUtc": "2026-10-09T12:58:24.557Z",
+  "assets": [
+    {
+      "time": "2026-10-09T12:49:00.614Z",
+      "requestID": "6e9eca3d-f9b6-45df-b3aa-2f008d2ba1e1",
+      "method": "GET",
+      "path": "/ui/assets/main-CcagVDdu.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 6
+    },
+    {
+      "time": "2026-10-09T12:51:57.307Z",
+      "requestID": "4e11f591-e579-47dd-9cfa-8cfd989dd7a8",
+      "method": "GET",
+      "path": "/ui/assets/main-D6C0wXlu.js",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 9
+    }
+  ],
+  "boundary": "Actual production HTTP request-completed logs; same current pages observed in screenshots, no UI assertion"
+}

@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [来源后的失败提示237 Recall](source-failure-visibility-plan-237.md) / [真实前后](source-failure-visibility-237/README.md)：共享正文错误条件修复；真实英文/中文深色Sources阅读、完整原失败历史与Native0閉合，不重置原预算。
+
 - [真实会话阅读236 Recall](source-live-reading-plan-236.md) / [原失败证据](source-live-reading-236/README.md)：真实16条Sources、12次Sol流式200/EOF，第13次请求预算拒绝；最终正文未完成，原foreground1与Native0闭合分别记录。
 
 - [摘要阅读位置235 Recall](source-excerpt-position-plan-235.md) / [实际after](source-excerpt-position-235/README.md)：excerpt/group/whole Dock重开与成员往返1636保持，独立Source新Home及中文深色实测；完整历史/Native0闭合。

@@ -183,6 +183,13 @@ runs in place and may not hoist narrative or boundaries across them by splitting
 a whole card into type buckets. Reasoning parts remain runtime evidence but are
 not message-card display content.
 
+An expanded assistant bubble presents its canonical error reason after its
+parts and children, including turns that already contain Sources, Tool results
+or narrative. The existing header error detail remains available while the
+body is collapsed. Main conversation, Side Chat and member transcripts use
+the same bubble renderer and the same projected `CardNode.errorReason`; this
+presentation does not create a Message/Part or a second lifecycle source.
+
 Source disclosures retain their actual adjacent Part group and truthful group
 count. Expanded leaves retain canonical type/Session/Message/source identity
 while reading current metadata and index. A single-source group needs no leaf
