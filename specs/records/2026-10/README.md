@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Sources and loaded-file reload223](2026-10-09-source-reload-223.md): single-agent actual disclosure and loaded-file error/recovery review.
+
 - [File read recovery222](2026-10-09-file-read-recovery-222.md): complete current read diagnostics and actual recovery on the original Source.
 
 - [File Sources221](2026-10-09-source-files-221.md): visible canonical file identities and real opening with authorized current model.

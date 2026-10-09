@@ -408,10 +408,10 @@ code .file-link:focus-visible {
 
 .file-editor-error {
   flex: 0 0 auto;
-  padding: var(--ui-gap-sm) var(--ui-gap-lg);
-  background: var(--bad-dim);
-  color: var(--bad);
-  font-size: var(--ui-font-body);
+  min-height: 0;
+  max-height: 45%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .pane-resizer {

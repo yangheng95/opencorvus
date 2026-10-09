@@ -1,0 +1,28 @@
+{
+  "observedAtUtc": "2026-10-09T03:36:58.3099101Z",
+  "projectEntries": [
+    {
+      "entries": 63,
+      "id": "prj_hoXouhmxBR2ds8WCh8Si"
+    },
+    {
+      "entries": 44,
+      "id": "prj_htgOO0nNnW4opZ2yjti0"
+    }
+  ],
+  "boundary": "Fresh original config/terminal/Task/Mission/publication/lease/recovery complete review; README restored; canonical native and logical runtime occurrence namespaces retained",
+  "leases": [
+    {
+      "state": "dead_or_reused",
+      "lease": {
+        "id": "act_g0VXW7r0r00LXWboPa27",
+        "target": "runtime_process",
+        "target_id": "2df1aca4-d3ee-4b2f-85af-c6ca46520073",
+        "owner_occurrence_id": "{\"pid\":42324,\"processInstanceID\":\"win32:639271111940174182\",\"occurrenceID\":\"2df1aca4-d3ee-4b2f-85af-c6ca46520073\"}",
+        "time_activated": 1791514401393,
+        "expires_at": 9007199254740991
+      }
+    }
+  ],
+  "startupQualified": true
+}

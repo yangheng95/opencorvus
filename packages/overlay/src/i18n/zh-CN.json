@@ -1709,6 +1709,7 @@
   "file_editor.discard": "放弃",
   "file_editor.unsaved_message": "离开前是否保存对 {{path}} 的更改？",
   "file_editor.reload": "从磁盘重新加载",
+  "file_editor.reload_failed": "无法重新加载此文件。当前内容已保留。",
   "file_editor.discard_reload": "放弃并重新加载",
   "file_editor.reload_unsaved_message": "重新加载磁盘上的 {{path}}？请先保存更改，或放弃更改以读取当前文件。",
   "file_editor.save_conflict": "磁盘上的文件已发生变化。你的编辑仍保留在这里。请重新加载并查看当前版本后再保存。",

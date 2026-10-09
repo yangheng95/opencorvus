@@ -1,0 +1,151 @@
+{
+  "observedAtUtc": "2026-10-09T03:51:54.8696472Z",
+  "scopes": [
+    {
+      "settlement": {
+        "occurrence": "source-reload-223-before-01-b56c68bd-359a-4402-9f78-5b8a284e69c8",
+        "outcome": "settled",
+        "host": {
+          "pid": 76380,
+          "processInstanceID": "win32:639271138223730622",
+          "occurrenceID": "dd23d3f4-a6de-4eb0-9525-86d04da5cdf0"
+        },
+        "target": {
+          "pid": 77796,
+          "processInstanceID": "win32:639271138231377585",
+          "occurrenceID": "c56b5fc3-7f72-468f-81eb-7bd6668d0ea6"
+        },
+        "observedAtUtc": "2026-10-09T03:42:04.487Z",
+        "deadlineAt": 1791517922275,
+        "terminal": {
+          "occurrenceID": "source-reload-223-before-01-b56c68bd-359a-4402-9f78-5b8a284e69c8",
+          "pid": 77796,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "states": [
+        {
+          "independentClosure": "Original PID absent or current process born after actual original fulfilled termination",
+          "expected": {
+            "pid": 76380,
+            "processInstanceID": "win32:639271138223730622",
+            "occurrenceID": "dd23d3f4-a6de-4eb0-9525-86d04da5cdf0"
+          },
+          "expectedBirthUtc": "2026-10-09T03:37:02.3730622Z",
+          "productionError": null,
+          "boundary": "Native unknown_live preserved; independent Windows actual birth proves PID reuse without modifying production observer or touching successor process",
+          "productionObservation": "dead_or_reused",
+          "windowsCim": []
+        },
+        {
+          "independentClosure": "Original PID absent or current process born after actual original fulfilled termination",
+          "expected": {
+            "pid": 77796,
+            "processInstanceID": "win32:639271138231377585",
+            "occurrenceID": "c56b5fc3-7f72-468f-81eb-7bd6668d0ea6"
+          },
+          "expectedBirthUtc": "2026-10-09T03:37:03.1377585Z",
+          "productionError": null,
+          "boundary": "Native unknown_live preserved; independent Windows actual birth proves PID reuse without modifying production observer or touching successor process",
+          "productionObservation": "dead_or_reused",
+          "windowsCim": []
+        }
+      ],
+      "pair": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ],
+      "occurrence": "source-reload-223-before-01-b56c68bd-359a-4402-9f78-5b8a284e69c8",
+      "listeners": []
+    },
+    {
+      "settlement": {
+        "occurrence": "source-reload-223-after-01-9a57aa2d-42ca-4045-9ec9-a594acbffec1",
+        "outcome": "settled",
+        "host": {
+          "pid": 39476,
+          "processInstanceID": "win32:639271142373680146",
+          "occurrenceID": "1c92d52a-2e39-492f-a8d7-c80b027c830b"
+        },
+        "target": {
+          "pid": 66072,
+          "processInstanceID": "win32:639271142381067981",
+          "occurrenceID": "70bb4899-f6fd-434c-8725-7dca522b6201"
+        },
+        "observedAtUtc": "2026-10-09T03:48:48.355Z",
+        "deadlineAt": 1791518337292,
+        "terminal": {
+          "occurrenceID": "source-reload-223-after-01-9a57aa2d-42ca-4045-9ec9-a594acbffec1",
+          "pid": 66072,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "states": [
+        {
+          "independentClosure": "Original PID absent or current process born after actual original fulfilled termination",
+          "expected": {
+            "pid": 39476,
+            "processInstanceID": "win32:639271142373680146",
+            "occurrenceID": "1c92d52a-2e39-492f-a8d7-c80b027c830b"
+          },
+          "expectedBirthUtc": "2026-10-09T03:43:57.3680146Z",
+          "productionError": "Production native occurrence identity is unknown_live; physical closure is unqualified",
+          "boundary": "Native unknown_live preserved; independent Windows actual birth proves PID reuse without modifying production observer or touching successor process",
+          "productionObservation": null,
+          "windowsCim": [
+            {
+              "ProcessId": 39476,
+              "Name": "svchost.exe",
+              "CreationDate": "2026-10-09T11:50:28.608533+08:00",
+              "ParentProcessId": 1236
+            }
+          ]
+        },
+        {
+          "independentClosure": "Original PID absent or current process born after actual original fulfilled termination",
+          "expected": {
+            "pid": 66072,
+            "processInstanceID": "win32:639271142381067981",
+            "occurrenceID": "70bb4899-f6fd-434c-8725-7dca522b6201"
+          },
+          "expectedBirthUtc": "2026-10-09T03:43:58.1067981Z",
+          "productionError": null,
+          "boundary": "Native unknown_live preserved; independent Windows actual birth proves PID reuse without modifying production observer or touching successor process",
+          "productionObservation": "dead_or_reused",
+          "windowsCim": []
+        }
+      ],
+      "pair": [
+        {
+          "name": "auth.json",
+          "present": false
+        },
+        {
+          "name": "models.json",
+          "present": false
+        }
+      ],
+      "occurrence": "source-reload-223-after-01-9a57aa2d-42ca-4045-9ec9-a594acbffec1",
+      "listeners": []
+    }
+  ],
+  "boundary": "Both original native foreground joined0 and full actual settled0; final independent actual Windows birth, port and pair. Protected reused PID observation limitation retained."
+}

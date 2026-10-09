@@ -1710,6 +1710,7 @@
   "file_editor.discard": "Discard",
   "file_editor.unsaved_message": "Save changes to {{path}} before leaving?",
   "file_editor.reload": "Reload from disk",
+  "file_editor.reload_failed": "Could not reload this file. Your current contents are kept here.",
   "file_editor.discard_reload": "Discard and reload",
   "file_editor.reload_unsaved_message": "Reload {{path}} from disk? Save your changes first or discard them to load the current file.",
   "file_editor.save_conflict": "This file changed on disk. Your edits are kept here. Reload from disk to review the current version before saving again.",

@@ -1,0 +1,59 @@
+{
+  "scriptSrc": "http://127.0.0.1:18150/ui/assets/main-BKapQkFd.js",
+  "observedAtUtc": "2026-10-09T03:44:13.5408771Z",
+  "assetStatus": 200,
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-reload-223-after-01-9a57aa2d-42ca-4045-9ec9-a594acbffec1",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18150",
+    "pid": 66072
+  },
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18150,
+      "OwningProcess": 66072
+    }
+  ],
+  "owner": {
+    "nativeTarget": {
+      "pid": 66072,
+      "processInstanceID": "win32:639271142381067981",
+      "occurrenceID": "70bb4899-f6fd-434c-8725-7dca522b6201"
+    },
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-reload-223-after-01\\evidence",
+    "owner": {
+      "ProcessId": 66072,
+      "processInstanceID": "win32:639271142381067981"
+    },
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-reload-223\\after-01",
+    "targetBirthAtMs": 1791517438106,
+    "port": 18150,
+    "host": {
+      "pid": 39476,
+      "processInstanceID": "win32:639271142373680146",
+      "occurrenceID": "1c92d52a-2e39-492f-a8d7-c80b027c830b"
+    },
+    "nativeDeadlineAt": 1791518337292,
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "observedProcessChain": [
+      {
+        "pid": 66072,
+        "processInstanceID": "win32:639271142381067981",
+        "occurrenceID": "70bb4899-f6fd-434c-8725-7dca522b6201"
+      }
+    ],
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "occurrence": "source-reload-223-after-01-9a57aa2d-42ca-4045-9ec9-a594acbffec1",
+    "evidencePrefix": "source-reload-223-after-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-reload-223-after-01\\runtime",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-reload-223-after-01",
+    "authorityStaging": "None; no model Task requested"
+  },
+  "uiStatus": 200,
+  "uiUri": "http://127.0.0.1:18150/ui",
+  "asset": "/ui/assets/main-BKapQkFd.js",
+  "finalUiUri": "http://127.0.0.1:18150/ui/",
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion"
+}

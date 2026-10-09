@@ -14,8 +14,13 @@ under the existing target, API authority and load/reload generations. Shared
 Feedback presents a concise localized hint, full original HTTP diagnostics
 and explicit Retry through the existing reload operation. A repeated retry
 failure replaces that record; success or target retirement clears it. Loaded
-draft reload failures keep the original draft/leave safeguards and footer
-ownership. No automatic retry loop or parallel file loader is introduced.
+draft reload failures keep the original draft/leave safeguards and action-error
+ownership. The single action error retains its original cause beside its current
+message. A failed reload presents a concise hint and complete diagnostics through
+shared Feedback; its bounded native scroll region leaves the loaded editor
+available. The leave dialog reads the same action error. Save conflicts retain
+their existing message and write preconditions. No automatic retry loop or
+parallel file loader is introduced.
 
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer

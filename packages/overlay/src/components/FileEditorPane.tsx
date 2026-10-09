@@ -88,7 +88,7 @@ export function FileEditorPane() {
   const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision"> | null>(null)
   const [saving, setSaving] = createSignal(false)
   const [reloading, setReloading] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [error, setError] = createSignal<{ message: string; cause?: unknown } | null>(null)
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
@@ -130,7 +130,7 @@ export function FileEditorPane() {
 
   const applyContent = (next: FileContent | null) => batch(() => {
     setContent(next)
-    setError("")
+    setError(null)
     draftRevision += 1
     setDraft(canEdit(next) ? next!.content : "")
     setSavedBaseline(canEdit(next) ? { content: next!.content, revision: next!.revision } : null)
@@ -172,7 +172,7 @@ export function FileEditorPane() {
     if (!file || !writable() || !dirty()) return !dirty()
     const expectedRevision = savedBaseline()?.revision
     if (!expectedRevision) {
-      setError(t("file_editor.revision_required"))
+      setError({ message: t("file_editor.revision_required") })
       return false
     }
     const authority = captureApiAuthority()
@@ -180,7 +180,7 @@ export function FileEditorPane() {
     const submittedRevision = draftRevision
     const requestGeneration = ++saveGeneration
     setSaving(true)
-    setError("")
+    setError(null)
     try {
       const next = await writeFileContent(file, submittedDraft, expectedRevision, authority)
       if (requestGeneration !== saveGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return false
@@ -190,7 +190,9 @@ export function FileEditorPane() {
       draftRevision += 1
       return ownsSubmittedDraft
     } catch (err) {
-      if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setError(errorMessage(err))
+      if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
+        setError({ message: errorMessage(err), cause: err })
+      }
       return false
     } finally {
       if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setSaving(false)
@@ -249,12 +251,12 @@ export function FileEditorPane() {
     if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
     const requestedDraftRevision = draftRevision
     setReloading(true)
-    setError("")
+    setError(null)
     try {
       const next = await readFileContent(file, authority)
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
       if (draftRevision !== requestedDraftRevision) {
-        setError(t("file_editor.reload_edited"))
+        setError({ message: t("file_editor.reload_edited") })
         return
       }
       setLoadFailure(null)
@@ -262,7 +264,7 @@ export function FileEditorPane() {
     } catch (cause) {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
         if (loadFailure()) setLoadFailure({ error: cause })
-        else setError(errorMessage(cause))
+        else setError({ message: t("file_editor.reload_failed"), cause })
       }
     } finally {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setReloading(false)
@@ -277,7 +279,7 @@ export function FileEditorPane() {
       await closeFileEditor()
     } catch (cause) {
       if (generation === loadGeneration && isApiAuthorityCurrent(authority) && (!file || ownsFileTarget(file))) {
-        setError(errorMessage(cause))
+        setError({ message: errorMessage(cause), cause })
       }
     }
   }
@@ -427,10 +429,15 @@ export function FileEditorPane() {
             </Show>
           </Show>
         </div>
-        <Show when={error()}>
-          <footer class="file-editor-error" role="alert" aria-live="assertive" aria-atomic="true">
-            {error()}
-          </footer>
+        <Show when={error()}>{(failure) =>
+          <Feedback
+            class="file-editor-error"
+            tone="error"
+            details={formatErrorDetails(failure().cause) || undefined}
+          >
+            {failure().message}
+          </Feedback>
+        }
         </Show>
       </Show>
       <Dialog
@@ -484,8 +491,11 @@ export function FileEditorPane() {
             path: path(),
           })}
         </p>
-        <Show when={error()}>
-          <Feedback tone="error">{error()}</Feedback>
+        <Show when={error()}>{(failure) =>
+          <Feedback tone="error" details={formatErrorDetails(failure().cause) || undefined}>
+            {failure().message}
+          </Feedback>
+        }
         </Show>
       </Dialog>
     </section>

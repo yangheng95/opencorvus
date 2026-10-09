@@ -1,5 +1,7 @@
 # Connection workspace authority investigation
 
+- [Sources/reload223 Recall](source-reload-plan-223.md), [current readiness](source-reload-readiness-223/README.md), [after readiness](source-reload-readiness-22302/README.md) and [actual scope](source-reload-223/README.md): loaded clean/dirty file failure diagnostics and true same-editor recovery; original Source and failures retained, single agent only.
+
 - [File recovery222 Recall](file-read-recovery-plan-222.md), [first readiness](file-read-recovery-readiness-222/README.md), [fresh scroll readiness](file-read-recovery-readiness-22202/README.md) and [actual result](file-read-recovery-222/README.md): current original diagnostics, bounded error scrolling and true same-source retry after reversible own file restoration; original failures retained.
 
 - [File Sources221 Recall](source-files-plan-221.md), [first readiness](source-files-readiness-221/README.md), [fresh corrected readiness](source-files-readiness-22102/README.md) and [actual scope](source-files-221/README.md): visible canonical file paths, six model-independent file readers and actual opening/range/keyboard with real Sol/source custody; original400 retained.

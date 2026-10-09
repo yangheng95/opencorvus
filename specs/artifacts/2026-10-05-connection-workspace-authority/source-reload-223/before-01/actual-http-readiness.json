@@ -1,0 +1,59 @@
+{
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "observedAtUtc": "2026-10-09T03:37:18.0671149Z",
+  "uiUri": "http://127.0.0.1:18149/ui",
+  "assetStatus": 200,
+  "uiStatus": 200,
+  "scriptSrc": "http://127.0.0.1:18149/ui/assets/main-C66LIH6m.js",
+  "asset": "/ui/assets/main-C66LIH6m.js",
+  "owner": {
+    "nativeDeadlineAt": 1791517922275,
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-reload-223-before-01\\evidence",
+    "occurrence": "source-reload-223-before-01-b56c68bd-359a-4402-9f78-5b8a284e69c8",
+    "owner": {
+      "ProcessId": 77796,
+      "processInstanceID": "win32:639271138231377585"
+    },
+    "nativeTarget": {
+      "pid": 77796,
+      "processInstanceID": "win32:639271138231377585",
+      "occurrenceID": "c56b5fc3-7f72-468f-81eb-7bd6668d0ea6"
+    },
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "host": {
+      "pid": 76380,
+      "processInstanceID": "win32:639271138223730622",
+      "occurrenceID": "dd23d3f4-a6de-4eb0-9525-86d04da5cdf0"
+    },
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-reload-223-before-01",
+    "targetBirthAtMs": 1791517023137,
+    "authorityStaging": "None; no model Task requested",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\source-reload-223-before-01\\runtime",
+    "evidencePrefix": "source-reload-223-before-01",
+    "port": 18149,
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\source-reload-223\\before-01",
+    "observedProcessChain": [
+      {
+        "pid": 77796,
+        "processInstanceID": "win32:639271138231377585",
+        "occurrenceID": "c56b5fc3-7f72-468f-81eb-7bd6668d0ea6"
+      }
+    ],
+    "purpose": "Current credentialless full original history; no Provider or Task rearm"
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "source-reload-223-before-01-b56c68bd-359a-4402-9f78-5b8a284e69c8",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18149",
+    "pid": 77796
+  },
+  "finalUiUri": "http://127.0.0.1:18149/ui/",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18149,
+      "OwningProcess": 77796
+    }
+  ]
+}
