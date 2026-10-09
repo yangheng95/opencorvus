@@ -63,7 +63,7 @@ import { currentProjectConfigRequestOptions, patchConfig } from "../services/con
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
-import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/native-menu-surface"
+import { closeCommandMenuSurface, openCommandMenuSurface } from "../services/command-menu-surface"
 import { occludeNativeSurfaces, revealNativeSurfaces } from "../services/native-surface-occlusion"
 import { settingsStore } from "../store/settings"
 import { rightDockOpen } from "../store/right-dock"
@@ -691,17 +691,17 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   createEffect(() => {
-    if (!localMenuOpen()) void closeNativeMenuSurface(localMenuOwner)
+    if (!localMenuOpen()) void closeCommandMenuSurface(localMenuOwner)
   })
 
   createEffect(() => {
-    if (!branchMenuOpen()) void closeNativeMenuSurface(branchMenuOwner)
+    if (!branchMenuOpen()) void closeCommandMenuSurface(branchMenuOwner)
   })
 
   onCleanup(() => {
     disposeCommitMessageStream()
-    void closeNativeMenuSurface(localMenuOwner)
-    void closeNativeMenuSurface(branchMenuOwner)
+    void closeCommandMenuSurface(localMenuOwner)
+    void closeCommandMenuSurface(branchMenuOwner)
   })
 
   async function syncBranches(authority = captureApiAuthority(), selectionEpoch = boardStore.selectEpoch): Promise<void> {
@@ -730,14 +730,14 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const directory = dir().trim()
     const ownsMenu = () => ownsProject(authority, directory, selectionEpoch)
     if (localMenuOpen()) {
-      await closeNativeMenuSurface(localMenuOwner)
+      await closeCommandMenuSurface(localMenuOwner)
       return
     }
 
     setBranchMenuOpen(false)
     setLocalMenuOpen(true)
     try {
-      await openNativeMenuSurface({
+      await openCommandMenuSurface({
         owner: localMenuOwner,
         anchor,
         placement: "right-start",
@@ -800,7 +800,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const directory = dir().trim()
     const ownsMenu = () => ownsProject(authority, directory, selectionEpoch)
     if (branchMenuOpen()) {
-      await closeNativeMenuSurface(branchMenuOwner)
+      await closeCommandMenuSurface(branchMenuOwner)
       return
     }
 
@@ -846,7 +846,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           })
 
     try {
-      await openNativeMenuSurface({
+      await openCommandMenuSurface({
         owner: branchMenuOwner,
         anchor,
         placement: "right-start",

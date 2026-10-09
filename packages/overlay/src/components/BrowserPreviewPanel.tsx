@@ -35,7 +35,7 @@ import type {
   BrowserPreviewNativeSelectionPresentation,
 } from "../services/host-transport"
 import { registerNativeSurfaceOcclusionHooks } from "../services/native-surface-occlusion"
-import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/native-menu-surface"
+import { closeCommandMenuSurface, openCommandMenuSurface } from "../services/command-menu-surface"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { observeAppliedTheme } from "../services/theme"
 import { t } from "../utils/i18n"
@@ -1337,14 +1337,14 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
 
   async function openBrowserMenu(anchor: HTMLElement): Promise<void> {
     if (browserMenuOpen()) {
-      await closeNativeMenuSurface(browserMenuOwner)
+      await closeCommandMenuSurface(browserMenuOwner)
       return
     }
     const nativeActionsAvailable = nativePreviewZoomActive()
     setBrowserMenuError("")
     setBrowserMenuOpen(true)
     try {
-      await openNativeMenuSurface({
+      await openCommandMenuSurface({
         owner: browserMenuOwner,
         anchor,
         groups: [
@@ -1414,7 +1414,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     captureImageAbort?.abort()
     nativePanelDisposed = true
     setBrowserMenuOpen(false)
-    void closeNativeMenuSurface(browserMenuOwner)
+    void closeCommandMenuSurface(browserMenuOwner)
     syncNativePreviewOnFrame.cancel()
     disconnectNativePreviewElement()
     const lease = detachNativeLease()

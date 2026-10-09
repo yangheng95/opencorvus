@@ -1162,8 +1162,9 @@ Its shared DropdownMenu is owned by the mounted Environment content and anchored
 to the whole panel, opening beside it with viewport collision handling. Setup,
 switch folder, add tool, refresh and commit/push keep their existing action owners.
 The menu uses owner-aware native-surface occlusion and releases that owner on
-close/unmount. Local directory and branch menus keep their native surface
-transport. Changes, branch facts, Subagents and actual Task Sources precede
+close/unmount. Local directory and branch menus use the shared command-menu
+owner and renderer; the existing host kind selects either the native window or
+the Web UI Popover presentation. Changes, branch facts, Subagents and actual Task Sources precede
 conditional resource classifications and deliveries; Sources has no decorative
 add action. The panel and command menu use the shared extra-large radius as
 explicitly rounded macro surfaces. Classification title rows retain transparent hover/focus chrome;
@@ -1554,7 +1555,7 @@ The live Browser page is an operating-system child WebView, so Cascading Style
 Sheets (CSS) elevation in host Hypertext Markup Language (HTML) cannot cover it.
 The Browser ellipsis, Right Dock add and overflow controls, and Environment
 Local and branch selectors therefore share one transparent, undecorated Tauri
-WebviewWindow owned by `main`. The owned window is the single styled menu layer
+WebviewWindow owned by `main` on desktop. The owned window is the single styled menu layer
 above the child, measures its rendered content before it is shown, and is
 positioned from the trigger's screen geometry with an explicit bottom-end or
 right-start placement.
@@ -1578,6 +1579,17 @@ current menu model is sent through Tauri's real window event channel; selected
 item identifiers invoke the existing Right Dock, zoom, branch, and
 guest-interaction owners directly. Full-surface Settings and dialogs continue
 to use the shared owner-aware native-surface occlusion lifecycle.
+The ordinary Web UI consumes that same model through the same
+`CommandMenuSurface` renderer and keyboard interactions. Its physical surface
+uses the existing Popover primitive for placement, dismissal and collision
+handling. Its manual HTML popover host stays inside the anchor's DOM ownership
+while the browser top layer prevents ancestor scrolling surfaces from clipping
+the menu. Only the menu content receives pointer input. Host selection is explicit through the existing immutable transport
+kind before presentation begins; a failed native surface never switches hosts.
+One active request and owner cover both mutually exclusive physical surfaces,
+and closing removes the owned presentation before delivering its real action.
+Native window resets remain local to native-menu.html, while both hosts import
+one shared menu card stylesheet.
 Submitting the address field with Enter navigates the live embedded WebView.
 The trailing arrow is a separate operating-system `open-url` action:
 it opens a nonblank normalized address in the computer's default browser

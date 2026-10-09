@@ -1,5 +1,6 @@
 # Connection workspace authority investigation
 
+- [共用菜单227 Recall](menu-surface-plan-227.md)：三个调用者的单renderer/owner与宿主呈现。
 - [工作树读取226 Recall](worktree-reader-plan-226.md)：精确读取authority、真实Git列表与后续环境问题。
 - [VCS/Source225 Recall](vcs-source-plan-225.md): current three Git readers, actual branch facts and localized file-source actions.
 

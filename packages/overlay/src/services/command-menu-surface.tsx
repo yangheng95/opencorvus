@@ -2,6 +2,10 @@ import { LogicalSize, PhysicalPosition, PhysicalSize } from "@tauri-apps/api/dpi
 import { emitTo, listen, type UnlistenFn } from "@tauri-apps/api/event"
 import { currentMonitor, getCurrentWindow } from "@tauri-apps/api/window"
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow"
+import { render } from "solid-js/web"
+import { CommandMenuSurface } from "../components/CommandMenuSurface"
+import { Popover } from "../components/ui/Popover"
+import { getHostTransport } from "./host-transport-runtime"
 import {
   NATIVE_MENU_SURFACE_ACTION_EVENT,
   NATIVE_MENU_SURFACE_DISMISS_EVENT,
@@ -29,7 +33,7 @@ interface NativeMenuAnchor {
   bottom: number
 }
 
-export interface OpenNativeMenuSurfaceOptions {
+export interface OpenCommandMenuSurfaceOptions {
   owner: string
   anchor: HTMLElement
   placement?: "bottom-end" | "right-start"
@@ -41,19 +45,21 @@ export interface OpenNativeMenuSurfaceOptions {
   onError?: (error: unknown) => void
 }
 
-interface ActiveNativeMenuSurface {
+interface ActiveCommandMenuSurface {
   requestID: number
   owner: string
   anchorElement: HTMLElement
   anchor: NativeMenuAnchor
-  placement: NonNullable<OpenNativeMenuSurfaceOptions["placement"]>
-  onAction: OpenNativeMenuSurfaceOptions["onAction"]
-  onDismiss: OpenNativeMenuSurfaceOptions["onDismiss"]
-  onError?: OpenNativeMenuSurfaceOptions["onError"]
+  placement: NonNullable<OpenCommandMenuSurfaceOptions["placement"]>
+  onAction: OpenCommandMenuSurfaceOptions["onAction"]
+  onDismiss: OpenCommandMenuSurfaceOptions["onDismiss"]
+  onError?: OpenCommandMenuSurfaceOptions["onError"]
   resolveOpen: () => void
   rejectOpen: (reason: unknown) => void
   openSettled: boolean
   popup?: WebviewWindow
+  browserHost?: HTMLDivElement
+  disposeBrowser?: () => void
   closeItemID?: string
   closePromise?: Promise<void>
 }
@@ -66,10 +72,11 @@ let resolveReady: (() => void) | undefined
 let rejectReady: ((reason: unknown) => void) | undefined
 let readyWindow: WebviewWindow | undefined
 let nextRequestID = 0
-let activeSurface: ActiveNativeMenuSurface | undefined
+let activeSurface: ActiveCommandMenuSurface | undefined
 let nextWindowGeneration = 0
 let readyGeneration = 0
 let surfaceTransitionTail: Promise<void> = Promise.resolve()
+const MENU_ANCHOR_GUTTER = 6
 
 async function runSurfaceTransition<T>(operation: () => Promise<T> | T): Promise<T> {
   let release!: () => void
@@ -139,15 +146,15 @@ async function hidePopupIfUnowned(popup: WebviewWindow): Promise<void> {
   await popup.hide()
 }
 
-async function closeOwnedSurface(active: ActiveNativeMenuSurface): Promise<void> {
+async function closeOwnedSurface(active: ActiveCommandMenuSurface): Promise<void> {
   await closeOwnedSurfaceWithAction(active)
 }
 
-async function closeOwnedSurfaceWithAction(active: ActiveNativeMenuSurface, itemID?: string): Promise<void> {
+async function closeOwnedSurfaceWithAction(active: ActiveCommandMenuSurface, itemID?: string): Promise<void> {
   if (activeSurface?.requestID !== active.requestID) return
   if (itemID !== undefined) active.closeItemID = itemID
   if (active.closePromise) return active.closePromise
-  const closeAttempt = performOwnedSurfaceClose(active)
+  const closeAttempt = Promise.resolve().then(() => performOwnedSurfaceClose(active))
   active.closePromise = closeAttempt
   try {
     await closeAttempt
@@ -156,8 +163,21 @@ async function closeOwnedSurfaceWithAction(active: ActiveNativeMenuSurface, item
   }
 }
 
-async function performOwnedSurfaceClose(active: ActiveNativeMenuSurface): Promise<void> {
+async function performOwnedSurfaceClose(active: ActiveCommandMenuSurface): Promise<void> {
   if (activeSurface?.requestID !== active.requestID) return
+  if (active.browserHost) {
+    const host = active.browserHost
+    const restoreFocus = host.contains(document.activeElement)
+    const dispose = active.disposeBrowser
+    active.disposeBrowser = undefined
+    host.hidePopover()
+    dispose?.()
+    host.remove()
+    active.browserHost = undefined
+    if (restoreFocus && active.anchorElement.isConnected) active.anchorElement.focus({ preventScroll: true })
+    completeActiveSurface(active.requestID, active.closeItemID)
+    return
+  }
   const popup = active.popup ?? surfaceWindow
   if (!popup) {
     completeActiveSurface(active.requestID, active.closeItemID)
@@ -210,7 +230,7 @@ async function placeMeasuredSurface(measurement: NativeMenuSurfaceMeasured): Pro
   const physicalSize = logicalSize.toPhysical(scaleFactor)
   const popupWidth = Math.ceil(physicalSize.width)
   const popupHeight = Math.ceil(physicalSize.height)
-  const gutter = Math.round(6 * scaleFactor)
+  const gutter = Math.round(MENU_ANCHOR_GUTTER * scaleFactor)
   const anchorLeft = mainInnerPosition.x + Math.round(active.anchor.left * scaleFactor)
   const anchorRight = mainInnerPosition.x + Math.round(active.anchor.right * scaleFactor)
   const anchorTop = mainInnerPosition.y + Math.round(active.anchor.top * scaleFactor)
@@ -381,7 +401,51 @@ async function ensureSurfaceWindow(): Promise<WebviewWindow> {
   }
 }
 
-export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOptions): Promise<void> {
+function showBrowserSurface(active: ActiveCommandMenuSurface, model: NativeMenuSurfaceModel): void {
+  const host = document.createElement("div")
+  const parent = active.anchorElement.parentElement
+  if (!parent) throw new Error("Command menu anchor has no presentation parent")
+  host.className = "command-menu-host"
+  host.popover = "manual"
+  active.browserHost = host
+  parent.append(host)
+  host.showPopover()
+  active.disposeBrowser = render(() => (
+    <Popover.Root
+      open
+      modal={false}
+      placement={active.placement}
+      gutter={MENU_ANCHOR_GUTTER}
+      getAnchorRect={() => active.anchorElement.getBoundingClientRect()}
+      onOpenChange={(open) => { if (!open) void closeOwnedSurface(active) }}
+    >
+      <Popover.Portal mount={host}>
+        <Popover.Content
+          class="command-menu-popup"
+          onOpenAutoFocus={(event) => event.preventDefault()}
+          onCloseAutoFocus={(event) => event.preventDefault()}
+          onInteractOutside={(event) => {
+            const target = event.detail.originalEvent.target
+            if (target instanceof Node && active.anchorElement.contains(target)) event.preventDefault()
+          }}
+        >
+          <CommandMenuSurface
+            model={model}
+            onAction={(itemID) => closeOwnedSurfaceWithAction(active, itemID)}
+            onDismiss={() => closeOwnedSurface(active)}
+            onMeasure={() => {
+              if (activeSurface?.requestID !== active.requestID || active.openSettled) return
+              active.openSettled = true
+              active.resolveOpen()
+            }}
+          />
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  ), host)
+}
+
+export async function openCommandMenuSurface(options: OpenCommandMenuSurfaceOptions): Promise<void> {
   const bounds = options.anchor.getBoundingClientRect()
   const { requestID, presentation } = await runSurfaceTransition(async () => {
     const previous = activeSurface
@@ -412,6 +476,28 @@ export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOption
       presentation: waitForNativeMenuSurfaceReady(openPromise, NATIVE_MENU_SURFACE_READY_TIMEOUT_MS),
     }
   })
+  const model: NativeMenuSurfaceModel = {
+    requestID,
+    ...currentPresentation(),
+    variant: options.variant ?? "standard",
+    ...(options.maxHeight === undefined ? {} : { maxHeight: options.maxHeight }),
+    groups: options.groups,
+  }
+  if (getHostTransport().kind === "browser") {
+    const active = activeSurface
+    if (!active || active.requestID !== requestID) return
+    try {
+      showBrowserSurface(active, model)
+      await presentation
+    } catch (error) {
+      active.disposeBrowser?.()
+      active.browserHost?.remove()
+      failActiveSurface(requestID, error)
+      await presentation.catch(() => undefined)
+      throw error
+    }
+    return
+  }
   let popup: WebviewWindow
   try {
     popup = await ensureSurfaceWindow()
@@ -425,13 +511,6 @@ export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOption
     return
   }
   activeSurface.popup = popup
-  const model: NativeMenuSurfaceModel = {
-    requestID,
-    ...currentPresentation(),
-    variant: options.variant ?? "standard",
-    ...(options.maxHeight === undefined ? {} : { maxHeight: options.maxHeight }),
-    groups: options.groups,
-  }
   try {
     await popup.hide()
     if (!ownsPresentation(requestID, popup)) {
@@ -461,7 +540,7 @@ export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOption
   }
 }
 
-export async function closeNativeMenuSurface(owner: string): Promise<void> {
+export async function closeCommandMenuSurface(owner: string): Promise<void> {
   const active = activeSurface
   if (!active || active.owner !== owner) return
   await closeOwnedSurface(active).catch((error) => {

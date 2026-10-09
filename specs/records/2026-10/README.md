@@ -1,5 +1,6 @@
 # 2026-10 Records
 
+- [共用菜单227](2026-10-09-menu-surface-227.md)：单agent修复Web宿主原生桥调用错误。
 - [工作树读取226](2026-10-09-worktree-reader-226.md)：单agent继续实际列表400及相关合同。
 - [VCS and Sources225](2026-10-09-vcs-source-225.md): current Git facts and source-operation investigation, single agent.
 
