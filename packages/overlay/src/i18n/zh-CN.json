@@ -725,6 +725,8 @@
   "tool.receiving_input": "正在接收参数…",
   "tool.awaiting_result": "执行中 · 等待结果…",
   "tool.empty_result": "已完成 · 未返回输出",
+  "tool.result_load_failed": "无法加载工具结果",
+  "tool.result_load_retry": "关闭并重新展开此工具可重试。你仍可以继续阅读对话。",
   "tool.metadata": "详情",
   "markdown.rendering": "正在渲染…",
   "markdown.render_failed": "Markdown 渲染失败：{{message}}",

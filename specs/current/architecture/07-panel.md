@@ -482,6 +482,14 @@ running or empty-result information. Expanded live input keeps the existing boun
 payload viewport and native internal scrolling; completed/nonlive full expansion
 retains its full-height contract. Existing active tail previews and their Copy
 values retain their current limits, separately from complete persisted arguments.
+Deferred Tool state reads keep failure feedback inside their own disclosure.
+The common Part accessor checks resource loading and error before reading its
+value; the existing completed-state marker is only an identity/status projection.
+The body-ready boundary covers all arguments, structured results and execution
+errors, so a rejected read displays its actual error without presenting bounded
+projection data as full results or replacing the surrounding message and Sources.
+The shared Feedback primitive presents the localized result-load problem and
+close/reopen retry action; its native Details retains the complete read diagnostic.
 Trace data uses the code typography role;
 the disclosure identity uses caption. Sources keep their chronological position
 behind the shared native Disclosure, initially collapsed with the first real

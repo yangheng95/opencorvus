@@ -1,0 +1,23 @@
+{
+  "sourceRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01",
+  "caseLabel": "deferred-tool-error-216-01",
+  "caseEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/deferred-tool-error-216/live-01",
+  "projectID": "prj_htovo7CYS7AkBadnsG46",
+  "sourceOccurrence": "transcript-end-follow-213-425cfa25-b413-4a0e-aee1-10699e02ab9e",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/deferred-tool-error-216-01",
+  "sourceProject": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/transcript-end-follow-213-01/project",
+  "startupQualified": true,
+  "conditions": [
+    "fresh exact source closure",
+    "current production schema/config/Task/dispatch classifiers",
+    "provider/tool/publication/delivery completed",
+    "both original projects no terminal/cache/task cleanup writes",
+    "fresh whole runtime and all-row comparison next"
+  ],
+  "scope": "Current local deferred resource error preserves canonical source213 history; no credential/model transfer or model rearm",
+  "casePort": 18137,
+  "observedAtUtc": "2026-10-09T00:24:29.1039010Z",
+  "readinessEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/deferred-tool-readiness-216",
+  "sourceEvidence": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-05-connection-workspace-authority/transcript-end-follow-213/live-01",
+  "sessionID": "ses_-zUSUqRtKzzhTi3AMNfG"
+}

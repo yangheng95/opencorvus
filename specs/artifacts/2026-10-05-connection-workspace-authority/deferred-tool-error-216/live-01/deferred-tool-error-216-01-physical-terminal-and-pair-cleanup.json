@@ -1,0 +1,68 @@
+{
+  "chain": [
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 41136,
+        "processInstanceID": "win32:639271023095956089",
+        "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+      }
+    },
+    {
+      "originalOccurrencePresent": false,
+      "state": "dead_or_reused",
+      "expected": {
+        "pid": 76196,
+        "processInstanceID": "win32:639271023087290550",
+        "occurrenceID": "3ca0a295-f91a-4102-b242-bd1ef77fc15e"
+      }
+    }
+  ],
+  "pairedCleanupComplete": true,
+  "physicalCompletion": true,
+  "nativeSettlement": {
+    "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+    "outcome": "settled",
+    "host": {
+      "pid": 76196,
+      "processInstanceID": "win32:639271023087290550",
+      "occurrenceID": "3ca0a295-f91a-4102-b242-bd1ef77fc15e"
+    },
+    "target": {
+      "pid": 41136,
+      "processInstanceID": "win32:639271023095956089",
+      "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+    },
+    "observedAtUtc": "2026-10-09T00:30:55.436Z",
+    "deadlineAt": 1791506408642,
+    "terminal": {
+      "occurrenceID": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+      "pid": 41136,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "listeners": null,
+  "copiedPair": [
+    {
+      "outcome": "already_absent",
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\deferred-tool-error-216-01\\runtime\\data\\auth.json"
+    },
+    {
+      "outcome": "removed",
+      "copiedLength": 2001983,
+      "presentAfter": false,
+      "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\deferred-tool-error-216-01\\runtime\\data\\models.json"
+    }
+  ],
+  "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+  "observedAtUtc": "2026-10-09T00:30:58.0961319Z",
+  "boundary": "Production foreground Job/output/request settled, exact Host/Target gone and port released before paired-copy cleanup"
+}

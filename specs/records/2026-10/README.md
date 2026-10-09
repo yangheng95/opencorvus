@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [Deferred Tool error216](2026-10-09-deferred-tool-error-216.md): common resource accessor and complete-result boundary; actual original failure, fresh full history and current visual/native scope.
+
 - [Focused subtree215](2026-10-09-focused-subtree-coordination-215.md): actual native node/style/cleanup/stack proof, focused-subtree ordered reconciliation repair; genuine Source/Tool/next Tab and caret, fresh native0, original deadline1/payload400 retained.
 
 - [Sources keyboard continuity214](2026-10-09-source-keyboard-continuity-214.md): virtual focus retention/shared focus reading, actual same-source native End/Home; Tool Tab lifetime remains open, original events/failures and complete native0/canonical custody retained.

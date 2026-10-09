@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Deferred Tool error216](records/2026-10/2026-10-09-deferred-tool-error-216.md) and [actual scope](artifacts/2026-10-05-connection-workspace-authority/deferred-tool-error-216/README.md): local resource error ownership and complete-result admission; original whole-card failure retained, current visual and native qualification recorded in scope.
+
 - [Focused subtree215](records/2026-10/2026-10-09-focused-subtree-coordination-215.md) and [actual evidence](artifacts/2026-10-05-connection-workspace-authority/tool-focus-lifetime-215/README.md): real native stack locates Solid replace/reinsert focus loss, existing patched-dependency repair preserves ordered Source/Tool Tab; fresh21502 native0, original deadline1/Tool400 retained, broader matrix explicit.
 
 - [Sources keyboard continuity214](records/2026-10/2026-10-09-source-keyboard-continuity-214.md) and [real scope evidence](artifacts/2026-10-05-connection-workspace-authority/source-keyboard-continuity-214/README.md): focused virtual item retention and shared native reading input, actual Source End/Home and caret qualified; Tool Tab focus remains unmet, all original failures retained, whole history/native0 closed.

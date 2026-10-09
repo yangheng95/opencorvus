@@ -22,6 +22,7 @@ import { directoryScopedPath } from "../services/task-path"
 import { PreviewableImage } from "./ImagePreview"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
 import { t, tc } from "../utils/i18n"
 import { ComputerControlSurface } from "./ComputerControlSurface"
 import { ToolPayload } from "./ToolPayload"
@@ -369,7 +370,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     }
   }
   const [persistedPart] = createResource(deferredSource, readDeferredToolPart)
-  const part = () => (!persistedPart.loading && persistedPart()) || props.part
+  const part = () => (!persistedPart.loading && !persistedPart.error && persistedPart()) || props.part
   const state = () => part().state || {}
   const toolName = () => part().tool || "unknown"
   const input = () => state().input || {}
@@ -532,7 +533,13 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           </div>
         </Show>
         <Show when={persistedPart.error}>
-          <div class="msg-tool-error">{String(persistedPart.error?.message || persistedPart.error)}</div>
+          <Feedback
+            tone="error"
+            title={t("tool.result_load_failed")}
+            details={String(persistedPart.error?.message || persistedPart.error)}
+          >
+            {t("tool.result_load_retry")}
+          </Feedback>
         </Show>
         <Show when={bodyReady()}>
           <Show
@@ -552,90 +559,90 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
               <ToolPayload label={t("tool.metadata")} value={toolPayloadText(state().metadata)} collapsed />
             </Show>
           </Show>
-        </Show>
-        <Show
-          when={todoItems() && todoItems()!.length > 0}
-          fallback={
-            <>
-              <Show when={visibleShellCommand()}>
-                {(command) => (
-                  <div class="msg-tool-command">
-                    <span class="msg-tool-command__prompt" aria-hidden="true">
-                      $
-                    </span>
-                    <code>{command()}</code>
-                  </div>
-                )}
-              </Show>
-              <Show when={showStructuredOutput()}>
-                <ToolDiffList items={toolDiffs()!} />
-              </Show>
-              <Show
-                when={hasReadOutputBody()}
-                fallback={
-                  <Show when={codeResult() && !showStructuredOutput() && !FILE_READ_TOOLS.has(key())}>
-                    <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
-                  </Show>
-                }
-              >
-                <section class="msg-tool-payload" aria-label={t("tool.output")}>
-                  <div class="msg-tool-payload__label">{t("tool.output")}</div>
-                  <Show when={codeResult() && !showStructuredOutput()}>
-                    <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
-                  </Show>
-                  <Show when={readView()?.note}>
-                    <div class="msg-read-meta">{readView()!.note}</div>
-                  </Show>
-                  <Show when={readView()?.reminder}>
-                    <section class="msg-read-reminder">
-                      <div class="msg-read-reminder__label">{t("tool.loaded_instructions")}</div>
-                      <div class="msg-read-reminder__body">
-                        <StaticTextPart text={readView()!.reminder!} />
+          <Show
+            when={todoItems() && todoItems()!.length > 0}
+            fallback={
+              <>
+                <Show when={visibleShellCommand()}>
+                  {(command) => (
+                    <div class="msg-tool-command">
+                      <span class="msg-tool-command__prompt" aria-hidden="true">
+                        $
+                      </span>
+                      <code>{command()}</code>
+                    </div>
+                  )}
+                </Show>
+                <Show when={showStructuredOutput()}>
+                  <ToolDiffList items={toolDiffs()!} />
+                </Show>
+                <Show
+                  when={hasReadOutputBody()}
+                  fallback={
+                    <Show when={codeResult() && !showStructuredOutput() && !FILE_READ_TOOLS.has(key())}>
+                      <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
+                    </Show>
+                  }
+                >
+                  <section class="msg-tool-payload" aria-label={t("tool.output")}>
+                    <div class="msg-tool-payload__label">{t("tool.output")}</div>
+                    <Show when={codeResult() && !showStructuredOutput()}>
+                      <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
+                    </Show>
+                    <Show when={readView()?.note}>
+                      <div class="msg-read-meta">{readView()!.note}</div>
+                    </Show>
+                    <Show when={readView()?.reminder}>
+                      <section class="msg-read-reminder">
+                        <div class="msg-read-reminder__label">{t("tool.loaded_instructions")}</div>
+                        <div class="msg-read-reminder__body">
+                          <StaticTextPart text={readView()!.reminder!} />
+                        </div>
+                      </section>
+                    </Show>
+                  </section>
+                </Show>
+                <Show when={browserEvidence()}>
+                  {(evidence) => (
+                    <section class="msg-browser-evidence">
+                      <Show when={evidence().screenshotUrl}>
+                        <BrowserEvidenceImage url={evidence().screenshotUrl} alt={browserEvidenceAlt(evidence())} />
+                      </Show>
+                      <div class="msg-browser-evidence__meta">
+                        <Show when={evidence().title || evidence().url}>
+                          <div class="msg-browser-evidence__title">{evidence().title || evidence().url}</div>
+                        </Show>
+                        <Show when={evidence().url}>
+                          <div class="msg-browser-evidence__url">{evidence().url}</div>
+                        </Show>
+                        <Show when={evidence().viewport || evidence().diagnosticText}>
+                          <div class="msg-browser-evidence__facts">
+                            {[evidence().viewport, evidence().diagnosticText].filter(Boolean).join(" · ")}
+                          </div>
+                        </Show>
                       </div>
                     </section>
-                  </Show>
-                </section>
-              </Show>
-              <Show when={browserEvidence()}>
-                {(evidence) => (
-                  <section class="msg-browser-evidence">
-                    <Show when={evidence().screenshotUrl}>
-                      <BrowserEvidenceImage url={evidence().screenshotUrl} alt={browserEvidenceAlt(evidence())} />
-                    </Show>
-                    <div class="msg-browser-evidence__meta">
-                      <Show when={evidence().title || evidence().url}>
-                        <div class="msg-browser-evidence__title">{evidence().title || evidence().url}</div>
-                      </Show>
-                      <Show when={evidence().url}>
-                        <div class="msg-browser-evidence__url">{evidence().url}</div>
-                      </Show>
-                      <Show when={evidence().viewport || evidence().diagnosticText}>
-                        <div class="msg-browser-evidence__facts">
-                          {[evidence().viewport, evidence().diagnosticText].filter(Boolean).join(" · ")}
-                        </div>
-                      </Show>
-                    </div>
+                  )}
+                </Show>
+                <Show when={computerControl()}>{(identity) => <ComputerControlSurface {...identity()} />}</Show>
+                <Show when={attachments().length > 0}>
+                  <section class="msg-tool-attachments">
+                    <For each={attachments()}>{(attachment) => <FilePart part={attachment} />}</For>
                   </section>
-                )}
-              </Show>
-              <Show when={computerControl()}>{(identity) => <ComputerControlSurface {...identity()} />}</Show>
-              <Show when={attachments().length > 0}>
-                <section class="msg-tool-attachments">
-                  <For each={attachments()}>{(attachment) => <FilePart part={attachment} />}</For>
-                </section>
-              </Show>
-              <Show when={showPlainOutput()}>
-                <ToolPayload label={t("tool.output")} value={output()} />
-              </Show>
-            </>
-          }
-        >
-          <TodoListPart todos={todoItems()!} variant={mode() === "body" ? "card" : "inline"} />
-        </Show>
-        <Show when={status() === "error" && error()}>
-          <div class="msg-tool-error">
-            <StaticTextPart text={error()} />
-          </div>
+                </Show>
+                <Show when={showPlainOutput()}>
+                  <ToolPayload label={t("tool.output")} value={output()} />
+                </Show>
+              </>
+            }
+          >
+            <TodoListPart todos={todoItems()!} variant={mode() === "body" ? "card" : "inline"} />
+          </Show>
+          <Show when={status() === "error" && error()}>
+            <div class="msg-tool-error">
+              <StaticTextPart text={error()} />
+            </div>
+          </Show>
         </Show>
       </Show>
     </>

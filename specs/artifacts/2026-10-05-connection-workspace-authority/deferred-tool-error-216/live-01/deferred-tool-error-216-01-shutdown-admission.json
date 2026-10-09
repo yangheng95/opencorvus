@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-09T00:30:55.2556794Z",
+  "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+  "owner": {
+    "pid": 41136,
+    "processInstanceID": "win32:639271023095956089",
+    "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXVXzmb00mhucbjRfR"
+  }
+}

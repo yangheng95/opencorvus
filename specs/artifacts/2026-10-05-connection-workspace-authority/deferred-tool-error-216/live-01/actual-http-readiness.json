@@ -1,0 +1,59 @@
+{
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "asset": "/ui/assets/main-BzLjCuO6.js",
+  "finalUiUri": "http://127.0.0.1:18137/ui/",
+  "uiUri": "http://127.0.0.1:18137/ui",
+  "scriptSrc": "http://127.0.0.1:18137/ui/assets/main-BzLjCuO6.js",
+  "observedAtUtc": "2026-10-09T00:25:24.7923819Z",
+  "assetStatus": 200,
+  "uiStatus": 200,
+  "owner": {
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\deferred-tool-error-216\\live-01",
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\deferred-tool-error-216-01\\runtime",
+    "authorityStaging": "None; no model Task requested",
+    "port": 18137,
+    "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+    "observedProcessChain": [
+      {
+        "pid": 41136,
+        "processInstanceID": "win32:639271023095956089",
+        "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+      }
+    ],
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\deferred-tool-error-216-01\\evidence",
+    "host": {
+      "pid": 76196,
+      "processInstanceID": "win32:639271023087290550",
+      "occurrenceID": "3ca0a295-f91a-4102-b242-bd1ef77fc15e"
+    },
+    "nativeTarget": {
+      "pid": 41136,
+      "processInstanceID": "win32:639271023095956089",
+      "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+    },
+    "evidencePrefix": "deferred-tool-error-216-01",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\deferred-tool-error-216-01",
+    "targetBirthAtMs": 1791505509595,
+    "owner": {
+      "ProcessId": 41136,
+      "processInstanceID": "win32:639271023095956089"
+    },
+    "nativeDeadlineAt": 1791506408642
+  },
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18137,
+      "OwningProcess": 41136
+    }
+  ],
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18137",
+    "pid": 41136
+  }
+}

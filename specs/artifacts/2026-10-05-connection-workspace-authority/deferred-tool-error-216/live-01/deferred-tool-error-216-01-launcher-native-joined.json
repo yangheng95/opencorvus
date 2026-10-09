@@ -1,0 +1,42 @@
+{
+  "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+  "target": {
+    "pid": 41136,
+    "processInstanceID": "win32:639271023095956089",
+    "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+  },
+  "settlement": {
+    "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+    "outcome": "settled",
+    "host": {
+      "pid": 76196,
+      "processInstanceID": "win32:639271023087290550",
+      "occurrenceID": "3ca0a295-f91a-4102-b242-bd1ef77fc15e"
+    },
+    "target": {
+      "pid": 41136,
+      "processInstanceID": "win32:639271023095956089",
+      "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+    },
+    "observedAtUtc": "2026-10-09T00:30:55.436Z",
+    "deadlineAt": 1791506408642,
+    "terminal": {
+      "occurrenceID": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+      "pid": 41136,
+      "reason": "exited",
+      "exitCode": 0,
+      "signal": null
+    },
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+  },
+  "exitCode": 0,
+  "host": {
+    "pid": 76196,
+    "processInstanceID": "win32:639271023087290550",
+    "occurrenceID": "3ca0a295-f91a-4102-b242-bd1ef77fc15e"
+  },
+  "boundary": "Actual foreground Host exit joined and production Handle.settled/output/request receipt bound; public pair settlement remains sole shutdown owner"
+}

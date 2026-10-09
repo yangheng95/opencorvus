@@ -1,0 +1,40 @@
+{
+  "occurrence": "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+  "outcome": "ready",
+  "host": {
+    "pid": 76196,
+    "processInstanceID": "win32:639271023087290550",
+    "occurrenceID": "3ca0a295-f91a-4102-b242-bd1ef77fc15e"
+  },
+  "parent": {
+    "pid": 76644,
+    "processInstanceID": "win32:639271023068602914",
+    "occurrenceID": "6e29c4a6-e106-4102-8241-c7170a985d16"
+  },
+  "target": {
+    "pid": 41136,
+    "processInstanceID": "win32:639271023095956089",
+    "occurrenceID": "ba115c36-d92e-4811-aaee-39c999644aa3"
+  },
+  "targetBirthAtMs": 1791505509595,
+  "deadlineAt": 1791506408642,
+  "observedAtUtc": "2026-10-09T00:25:09.631Z",
+  "executable": "C:/Users/hengu/.bun/bin/bun.exe",
+  "args": [
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18137",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\transcript-end-follow-213-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\deferred-tool-error-216-01\\startup.json",
+    "--startup-occurrence",
+    "deferred-tool-error-216-01-4d00fd22-ddb0-4418-8536-b855c6d8336a",
+    "--log-level",
+    "INFO"
+  ],
+  "authority": "Production foreground ProcessFacade request controls and ProcessSupervisor Windows Job; no detached transfer"
+}
