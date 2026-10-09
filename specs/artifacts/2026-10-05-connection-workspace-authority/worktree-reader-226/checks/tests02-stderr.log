@@ -1,0 +1,30 @@
+
+test\project-route-context.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.74ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.21ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [4.11ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [0.30ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.13ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.07ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.11ms]
+
+test\server\vcs-read-identity.test.ts:
+(pass) physical branch facts follow a real branch rename in the same identity context [5097.35ms]
+(pass) cold VCS readers return exact independent Git facts with unavailable execution models [10990.25ms]
+(pass) parallel Project VCS readers keep each exact repository branch [4680.67ms]
+(pass) plain directories return explicit VCS state and branch/diff prerequisite errors [306.37ms]
+(pass) Git writes and commit-message streaming retain their execution model error [4393.68ms]
+(pass) branch switching retains the live branch owner before returning current information [4401.37ms]
+(pass) physical branch facts belong to the selected linked checkout [3191.13ms]
+
+test\server\worktree-read-identity.test.ts:
+(pass) cold worktree reader returns actual primary and managed Git facts with unavailable models [4047.26ms]
+(pass) parallel worktree reads preserve exact independent Project directories and branches [3671.99ms]
+(pass) worktree reader reports explicit non-Git and missing-directory admission errors [186.14ms]
+(pass) worktree deletion retains the current execution model error [1934.33ms]
+(pass) public worktree metadata describes the current list and Git prerequisite response [495.18ms]
+
+ 19 pass
+ 0 fail
+ 55 expect() calls
+Ran 19 tests across 3 files. [46.64s]

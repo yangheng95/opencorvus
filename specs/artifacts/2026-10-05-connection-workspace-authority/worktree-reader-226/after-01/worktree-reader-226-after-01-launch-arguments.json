@@ -1,0 +1,27 @@
+{
+  "credentialStaging": "None",
+  "arguments": [
+    "D:/myhexin-local/opencorvus/.tmp-product-iteration/live-sol-cli-owned.ts",
+    "--owned-host",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\worktree-reader-226-after-01\\evidence",
+    "worktree-reader-226-after-01-8a70462b-cce8-4a46-a185-c76081d36c47",
+    "1791524935875",
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "./src/index.ts",
+    "serve",
+    "--hostname",
+    "127.0.0.1",
+    "--port",
+    "18153",
+    "--project-dir",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "--startup-receipt",
+    "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\worktree-reader-226-after-01\\startup.json",
+    "--startup-occurrence",
+    "worktree-reader-226-after-01-8a70462b-cce8-4a46-a185-c76081d36c47",
+    "--log-level",
+    "INFO"
+  ],
+  "occurrence": "worktree-reader-226-after-01-8a70462b-cce8-4a46-a185-c76081d36c47",
+  "port": 18153
+}

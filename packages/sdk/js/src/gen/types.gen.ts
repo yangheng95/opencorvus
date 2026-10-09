@@ -26275,9 +26275,21 @@ export type ProjectCurrentWorktreesData = {
 
 export type ProjectCurrentWorktreesErrors = {
   /**
-   * Bad request
+   * Project directory or Git registry read rejected
    */
-  400: BadRequestError
+  400:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "DirectoryRequiredError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "WorktreeRemoveFailedError"
+      }
   /**
    * Not found
    */
@@ -26294,6 +26306,19 @@ export type ProjectCurrentWorktreesErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Worktrees require a Git project
+   */
+  412: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "WorktreeNotGitError"
+  }
+  /**
+   * Internal server error
+   */
+  500: UnknownError
 }
 
 export type ProjectCurrentWorktreesError = ProjectCurrentWorktreesErrors[keyof ProjectCurrentWorktreesErrors]

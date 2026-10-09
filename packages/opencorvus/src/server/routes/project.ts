@@ -16,7 +16,7 @@ import { WorktreeGC } from "../../worktree/gc"
 import { deleteProject, ProjectDeleteResult } from "../../project/delete"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import z from "zod"
-import { errors, OwnedPromptControllersResponse } from "../error"
+import { errors, namedErrorResponse, OwnedPromptControllersResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { lazy } from "../../util/lazy"
 import { NotFoundError } from "../../storage/db"
@@ -236,7 +236,7 @@ export const ProjectRoutes = lazy(() =>
       "/current/worktrees",
       describeRoute({
         summary: "List current project worktrees",
-        description: "List Git worktrees registered for the current project with Task and Session execution identity.",
+        description: "Read the current project's registered primary and managed Git worktrees with current removal eligibility.",
         operationId: "project.current.worktrees",
         responses: {
           200: {
@@ -247,7 +247,9 @@ export const ProjectRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404),
+          400: namedErrorResponse("Project directory or Git registry read rejected", "DirectoryRequiredError", "WorktreeRemoveFailedError"),
+          412: namedErrorResponse("Worktrees require a Git project", "WorktreeNotGitError"),
+          ...errors(404, 500),
         },
       }),
       async (c) => {

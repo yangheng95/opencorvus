@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [工作树读取226](records/2026-10/2026-10-09-worktree-reader-226.md)：真实工作树模型耦合调查及精确只读入口修复。
 - [VCS and Sources225](records/2026-10/2026-10-09-vcs-source-225.md): exact Git-reader authority and actual source-operation experience.
 
 - [Client language224](records/2026-10/2026-10-09-local-language-224.md): client locale persistence and actual Chinese/dark source recovery.

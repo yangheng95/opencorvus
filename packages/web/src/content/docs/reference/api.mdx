@@ -106,7 +106,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/project/current/init-git` | Initialize git in current directory Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `OwnedPromptControllersError`. | `project.current.initGit` |
 | POST | `/project/current/promote-anonymous` | Convert current anonymous project to a named project Body: `destinationParent`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.promoteAnonymous` |
 | DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
-| GET | `/project/current/worktrees` | List current project worktrees Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |
+| GET | `/project/current/worktrees` | List current project worktrees Errors: `DirectoryRequiredError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`, `WorktreeNotGitError`, `WorktreeRemoveFailedError`. | `project.current.worktrees` |
 | PATCH | `/project/{projectID}` | Update project Body: `commands`, `icon`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.update` |
 | GET | `/vcs` | Get VCS info Errors: `DirectoryRequiredError`, `UnknownError`. | `vcs.get` |
 | POST | `/vcs/branch` | Switch local VCS branch Body: `branch`; Errors: `UnknownError`, `VcsPrerequisiteError`. | `vcs.switchBranch` |

@@ -1,0 +1,1313 @@
+{
+  "observedAtUtc": "2026-10-09T05:36:33.979Z",
+  "sourceRun": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01",
+  "caseRun": "C:/Users/hengu/.codex/opencorvus-product-iteration/2026-10-09/worktree-reader-226-after-01",
+  "session": {
+    "id": "ses_-zUSTrjVszzh1W8zdo6P",
+    "project_id": "prj_hoXouhmxBR2ds8WCh8Si",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "kind": "assistant",
+    "parent_id": null
+  },
+  "completeRows": [
+    {
+      "table": "session",
+      "rows": 2,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "message",
+      "rows": 5,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "part",
+      "rows": 11,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_request",
+      "rows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_progress",
+      "rows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "tool_part_outcome",
+      "rows": 1,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_request",
+      "rows": 3,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_activity_outcome",
+      "rows": 3,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "provider_usage_event",
+      "rows": 5,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_task",
+      "rows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "worker_turn_descriptor",
+      "rows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact",
+      "rows": 0,
+      "fullRowContent": "equal"
+    },
+    {
+      "table": "engine_artifact_version",
+      "rows": 0,
+      "fullRowContent": "equal"
+    }
+  ],
+  "projects": [
+    {
+      "id": "prj_hoXouhmxBR2ds8WCh8Si",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+      "before": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+          "type": "directory",
+          "mtimeMs": 1791519178375.0352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git",
+          "type": "directory",
+          "mtimeMs": 1791522901050.5684
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\COMMIT_EDITMSG",
+          "type": "file",
+          "bytes": 40,
+          "mtimeMs": 1791514394493.2222
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\HEAD",
+          "type": "file",
+          "bytes": 21,
+          "mtimeMs": 1791514394260.216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\config",
+          "type": "file",
+          "bytes": 206,
+          "mtimeMs": 1791514394350.27
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791514394235.9226
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\index",
+          "type": "file",
+          "bytes": 297,
+          "mtimeMs": 1791514445830.021
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791514394245.9517
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\HEAD",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791514394500.9148
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\refs",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791514394529.1475
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\34",
+          "type": "directory",
+          "mtimeMs": 1791514394427.99
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\34\\fb713629ac11020fd44a4449d7b5e1799ae646",
+          "type": "file",
+          "bytes": 62,
+          "mtimeMs": 1791514394422.986
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\35",
+          "type": "directory",
+          "mtimeMs": 1791514394490.2217
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\35\\39e7d5e7cdfb5254fc9114dd5f59cf92c760fa",
+          "type": "file",
+          "bytes": 124,
+          "mtimeMs": 1791514394485.7097
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\42",
+          "type": "directory",
+          "mtimeMs": 1791514394416.9858
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\42\\fdeb2f52db9d1845188ac151e4991bd66f5d92",
+          "type": "file",
+          "bytes": 67,
+          "mtimeMs": 1791514394411.2732
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\9c",
+          "type": "directory",
+          "mtimeMs": 1791514394498.869
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\9c\\53c7addd76f2c2677f739f99a1d2b5d827e8f1",
+          "type": "file",
+          "bytes": 163,
+          "mtimeMs": 1791514394494.2212
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\d6",
+          "type": "directory",
+          "mtimeMs": 1791514394421.9863
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\d6\\e3f6bd7bf1c1af01941aedb4babbdd0a87eafd",
+          "type": "file",
+          "bytes": 32,
+          "mtimeMs": 1791514394417.9878
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791514394261.216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791514394261.216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791514396960.3103
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791514394258.2168
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 41,
+          "mtimeMs": 1791514394500.9148
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791514394258.2168
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791514394366.2732
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791514394365.2715
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791517652433.1372
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791514500475.1135
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791514670827.88
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791514500475.6372
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb",
+          "type": "directory",
+          "mtimeMs": 1791514505105.3318
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\cfaf1441e76ad70f253587d97f6056162ce44fdb8b46b906333444828b39db87.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791514500486.872
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\cfaf1441e76ad70f253587d97f6056162ce44fdb8b46b906333444828b39db87.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791514500487.3896
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791514500742.2043
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791514500742.2043
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hoXouhmxBR2ds8WCh8Si",
+          "type": "directory",
+          "mtimeMs": 1791514509104.6787
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hoXouhmxBR2ds8WCh8Si\\STYw56ZJ.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791514509096.6785
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791514670848.0908
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1404,
+          "mtimeMs": 1791514445358.5176
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\README.md",
+          "type": "file",
+          "bytes": 46,
+          "mtimeMs": 1791514394358.2715
+        }
+      ],
+      "after": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+          "type": "directory",
+          "mtimeMs": 1791519178375.0352
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git",
+          "type": "directory",
+          "mtimeMs": 1791524150448.5183
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\COMMIT_EDITMSG",
+          "type": "file",
+          "bytes": 40,
+          "mtimeMs": 1791514394493.2222
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\HEAD",
+          "type": "file",
+          "bytes": 21,
+          "mtimeMs": 1791514394260.216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\config",
+          "type": "file",
+          "bytes": 206,
+          "mtimeMs": 1791514394350.27
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791514394235.9226
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791514394237.9282
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791514394239.9363
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791514394241.942
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\index",
+          "type": "file",
+          "bytes": 297,
+          "mtimeMs": 1791514445830.021
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791514394243.9465
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791514394245.9517
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\HEAD",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791514394500.9148
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\refs",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\logs\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 211,
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791514394529.1475
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\34",
+          "type": "directory",
+          "mtimeMs": 1791514394427.99
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\34\\fb713629ac11020fd44a4449d7b5e1799ae646",
+          "type": "file",
+          "bytes": 62,
+          "mtimeMs": 1791514394422.986
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\35",
+          "type": "directory",
+          "mtimeMs": 1791514394490.2217
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\35\\39e7d5e7cdfb5254fc9114dd5f59cf92c760fa",
+          "type": "file",
+          "bytes": 124,
+          "mtimeMs": 1791514394485.7097
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\42",
+          "type": "directory",
+          "mtimeMs": 1791514394416.9858
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\42\\fdeb2f52db9d1845188ac151e4991bd66f5d92",
+          "type": "file",
+          "bytes": 67,
+          "mtimeMs": 1791514394411.2732
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\9c",
+          "type": "directory",
+          "mtimeMs": 1791514394498.869
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\9c\\53c7addd76f2c2677f739f99a1d2b5d827e8f1",
+          "type": "file",
+          "bytes": 163,
+          "mtimeMs": 1791514394494.2212
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\d6",
+          "type": "directory",
+          "mtimeMs": 1791514394421.9863
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\d6\\e3f6bd7bf1c1af01941aedb4babbdd0a87eafd",
+          "type": "file",
+          "bytes": 32,
+          "mtimeMs": 1791514394417.9878
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791514394261.216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791514394261.216
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791514396960.3103
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791514394258.2168
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791514394502.92
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs\\heads\\main",
+          "type": "file",
+          "bytes": 41,
+          "mtimeMs": 1791514394500.9148
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791514394258.2168
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791514394366.2732
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791514394365.2715
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791517652433.1372
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791514500475.1135
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791514670827.88
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791514500475.6372
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb",
+          "type": "directory",
+          "mtimeMs": 1791514505105.3318
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\cfaf1441e76ad70f253587d97f6056162ce44fdb8b46b906333444828b39db87.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791514500486.872
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\cfaf1441e76ad70f253587d97f6056162ce44fdb8b46b906333444828b39db87.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791514500487.3896
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791514500742.2043
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791514500742.2043
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hoXouhmxBR2ds8WCh8Si",
+          "type": "directory",
+          "mtimeMs": 1791514509104.6787
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_hoXouhmxBR2ds8WCh8Si\\STYw56ZJ.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791514509096.6785
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791514670848.0908
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1404,
+          "mtimeMs": 1791514445358.5176
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\README.md",
+          "type": "file",
+          "bytes": 46,
+          "mtimeMs": 1791514394358.2715
+        }
+      ],
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "before": {
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git",
+            "type": "directory",
+            "mtimeMs": 1791522901050.5684
+          },
+          "after": {
+            "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project\\.git",
+            "type": "directory",
+            "mtimeMs": 1791524150448.5183
+          }
+        }
+      ],
+      "observedProperties": "explicit changes retained for restoration review",
+      "boundary": "Readonly filesystem attributes, not file-content identity"
+    },
+    {
+      "id": "prj_htgOO0nNnW4opZ2yjti0",
+      "worktree": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c",
+      "before": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c",
+          "type": "directory",
+          "mtimeMs": 1791514401474.8513
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git",
+          "type": "directory",
+          "mtimeMs": 1791514399957.687
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\HEAD",
+          "type": "file",
+          "bytes": 23,
+          "mtimeMs": 1791514399618.0808
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\config",
+          "type": "file",
+          "bytes": 130,
+          "mtimeMs": 1791514399614.8457
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791514399595.8083
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791514399604.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791514399597.8115
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791514399598.2822
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791514399598.2822
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791514399599.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791514399599.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791514399600.34
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791514399600.34
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791514399601.34
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791514399602.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791514399602.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791514399603.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791514399603.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791514399604.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791514399604.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791514399605.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791514399605.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791514399620.0847
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791514399620.0847
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791514399618.0808
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791514399957.687
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791514399617.0762
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791514399617.0762
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791514399617.0762
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791514401013.27
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791514401012.2688
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791514402373.9778
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791514402374.9802
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791514670818.8894
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791514402374.9802
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb",
+          "type": "directory",
+          "mtimeMs": 1791514402506.389
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\36dd57cbdf4b546589cbba09795cdce091cf420ff8411acd796a1e870f347b94.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791514402389.6514
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\36dd57cbdf4b546589cbba09795cdce091cf420ff8411acd796a1e870f347b94.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791514402393.6497
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791514402652.3025
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791514402653.3054
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_htgOO0nNnW4opZ2yjti0",
+          "type": "directory",
+          "mtimeMs": 1791514406484.811
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_htgOO0nNnW4opZ2yjti0\\5mELivMw.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791514406480.8108
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791514670848.0908
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1355,
+          "mtimeMs": 1791514401587.5662
+        }
+      ],
+      "after": [
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c",
+          "type": "directory",
+          "mtimeMs": 1791514401474.8513
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git",
+          "type": "directory",
+          "mtimeMs": 1791514399957.687
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\HEAD",
+          "type": "file",
+          "bytes": 23,
+          "mtimeMs": 1791514399618.0808
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\config",
+          "type": "file",
+          "bytes": 130,
+          "mtimeMs": 1791514399614.8457
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\description",
+          "type": "file",
+          "bytes": 73,
+          "mtimeMs": 1791514399595.8083
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks",
+          "type": "directory",
+          "mtimeMs": 1791514399604.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\applypatch-msg.sample",
+          "type": "file",
+          "bytes": 478,
+          "mtimeMs": 1791514399597.8115
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\commit-msg.sample",
+          "type": "file",
+          "bytes": 896,
+          "mtimeMs": 1791514399598.2822
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\fsmonitor-watchman.sample",
+          "type": "file",
+          "bytes": 4726,
+          "mtimeMs": 1791514399598.2822
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\post-update.sample",
+          "type": "file",
+          "bytes": 189,
+          "mtimeMs": 1791514399599.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-applypatch.sample",
+          "type": "file",
+          "bytes": 424,
+          "mtimeMs": 1791514399599.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-commit.sample",
+          "type": "file",
+          "bytes": 1649,
+          "mtimeMs": 1791514399600.34
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-merge-commit.sample",
+          "type": "file",
+          "bytes": 416,
+          "mtimeMs": 1791514399600.34
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-push.sample",
+          "type": "file",
+          "bytes": 1374,
+          "mtimeMs": 1791514399601.34
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-rebase.sample",
+          "type": "file",
+          "bytes": 4898,
+          "mtimeMs": 1791514399602.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\pre-receive.sample",
+          "type": "file",
+          "bytes": 544,
+          "mtimeMs": 1791514399602.3398
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\prepare-commit-msg.sample",
+          "type": "file",
+          "bytes": 1492,
+          "mtimeMs": 1791514399603.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\push-to-checkout.sample",
+          "type": "file",
+          "bytes": 2783,
+          "mtimeMs": 1791514399603.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\sendemail-validate.sample",
+          "type": "file",
+          "bytes": 2308,
+          "mtimeMs": 1791514399604.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\hooks\\update.sample",
+          "type": "file",
+          "bytes": 3650,
+          "mtimeMs": 1791514399604.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\info",
+          "type": "directory",
+          "mtimeMs": 1791514399605.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\info\\exclude",
+          "type": "file",
+          "bytes": 240,
+          "mtimeMs": 1791514399605.3435
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\objects",
+          "type": "directory",
+          "mtimeMs": 1791514399620.0847
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\objects\\info",
+          "type": "directory",
+          "mtimeMs": 1791514399620.0847
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\objects\\pack",
+          "type": "directory",
+          "mtimeMs": 1791514399618.0808
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\opencorvus",
+          "type": "file",
+          "bytes": 24,
+          "mtimeMs": 1791514399957.687
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\refs",
+          "type": "directory",
+          "mtimeMs": 1791514399617.0762
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\refs\\heads",
+          "type": "directory",
+          "mtimeMs": 1791514399617.0762
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.git\\refs\\tags",
+          "type": "directory",
+          "mtimeMs": 1791514399617.0762
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.gitattributes",
+          "type": "file",
+          "bytes": 150,
+          "mtimeMs": 1791514401013.27
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.gitignore",
+          "type": "file",
+          "bytes": 16,
+          "mtimeMs": 1791514401012.2688
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus",
+          "type": "directory",
+          "mtimeMs": 1791514402373.9778
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r",
+          "type": "directory",
+          "mtimeMs": 1791514402374.9802
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project",
+          "type": "directory",
+          "mtimeMs": 1791514670818.8894
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments",
+          "type": "directory",
+          "mtimeMs": 1791514402374.9802
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb",
+          "type": "directory",
+          "mtimeMs": 1791514402506.389
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\36dd57cbdf4b546589cbba09795cdce091cf420ff8411acd796a1e870f347b94.json",
+          "type": "file",
+          "bytes": 88883,
+          "mtimeMs": 1791514402389.6514
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\attachments\\6c2be64ab9766a34ce746ee7a9daebdb5157b8817924d5b12ae84707e79dc0bb\\36dd57cbdf4b546589cbba09795cdce091cf420ff8411acd796a1e870f347b94.json.metadata.json",
+          "type": "file",
+          "bytes": 286,
+          "mtimeMs": 1791514402393.6497
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache",
+          "type": "directory",
+          "mtimeMs": 1791514402652.3025
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache\\session-diffs",
+          "type": "directory",
+          "mtimeMs": 1791514402653.3054
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_htgOO0nNnW4opZ2yjti0",
+          "type": "directory",
+          "mtimeMs": 1791514406484.811
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\cache\\session-diffs\\prj_htgOO0nNnW4opZ2yjti0\\5mELivMw.json",
+          "type": "file",
+          "bytes": 2,
+          "mtimeMs": 1791514406480.8108
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\.r\\project\\locks",
+          "type": "directory",
+          "mtimeMs": 1791514670848.0908
+        },
+        {
+          "path": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\runtime\\data\\projects\\2026\\10\\09\\46d25fdd-986d-4e59-8afe-77871366097c\\.opencorvus\\opencorvus.jsonc",
+          "type": "file",
+          "bytes": 1355,
+          "mtimeMs": 1791514401587.5662
+        }
+      ],
+      "added": [],
+      "removed": [],
+      "changed": [],
+      "observedProperties": "equal",
+      "boundary": "Readonly filesystem attributes, not file-content identity"
+    }
+  ],
+  "boundary": "Actual complete stored row equality after native closure in readonly BEGIN/ROLLBACK; Tool facts checked independently; no hashes or count-only evidence"
+}

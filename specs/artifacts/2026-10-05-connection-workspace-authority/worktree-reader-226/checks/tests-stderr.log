@@ -1,0 +1,107 @@
+
+test\project-route-context.test.ts:
+(pass) Project route context authority > uses exact identity metadata reads while memory organization and prompt retain runtime [0.69ms]
+(pass) Project route context authority > classifies ordinary conversation title mutations through exact Project identity [0.16ms]
+(pass) Project route context authority > uses Project identity for persisted Session pages and event subscriptions [0.25ms]
+(pass) Project route context authority > classifies persisted deletions independently from live Project discovery [4.31ms]
+(pass) Project route context authority > keeps identity-only configuration and full runtime routes distinct [0.14ms]
+(pass) Project route context authority > provisions obsolete packages through identity-only routes [0.06ms]
+(pass) Project route context authority > gives project-owned routes on globally-served routers the same runtime authority as their siblings [0.07ms]
+
+test\server\vcs-read-identity.test.ts:
+(pass) physical branch facts follow a real branch rename in the same identity context [4031.25ms]
+(pass) cold VCS readers return exact independent Git facts with unavailable execution models [10241.84ms]
+(pass) parallel Project VCS readers keep each exact repository branch [4154.42ms]
+(pass) plain directories return explicit VCS state and branch/diff prerequisite errors [276.53ms]
+(pass) Git writes and commit-message streaming retain their execution model error [4406.10ms]
+(pass) branch switching retains the live branch owner before returning current information [3580.56ms]
+(pass) physical branch facts belong to the selected linked checkout [2983.10ms]
+
+test\server\worktree-read-identity.test.ts:
+43 |   const primary = { name: path.basename(project.path), branch: "primary-reader-226", directory: project.path, status: "primary", removable: false }
+44 |   const child = { name: "managed-reader-226", branch: "managed-reader-226", directory: physicalManaged, status: "managed", removable: true }
+45 |   await Instance.disposeAll()
+46 |   const initial = await read(project.path)
+47 |   console.log("worktree226 primary and managed", JSON.stringify(initial))
+48 |   expect(initial).toEqual({ status: 200, body: [primary, child] })
+                       ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": [
+      {
+        "branch": "primary-reader-226",
+-       "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-VJvBIO\test-68740-wXfGpH\fixtures\memory-ToPm0w",
++       "directory": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-VJvBIO/test-68740-wXfGpH/fixtures/memory-ToPm0w",
+        "name": "memory-ToPm0w",
+        "removable": false,
+        "status": "primary",
+      },
+      {
+        "branch": "managed-reader-226",
+-       "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-VJvBIO\test-68740-wXfGpH\fixtures\memory-ToPm0w\.opencorvus\.r\project\worktrees\managed-reader-226",
++       "directory": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-VJvBIO/test-68740-wXfGpH/fixtures/memory-ToPm0w/.opencorvus/.r/project/worktrees/managed-reader-226",
+        "name": "managed-reader-226",
+        "removable": true,
+        "status": "managed",
+      },
+    ],
+    "status": 200,
+  }
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\worktree-read-identity.test.ts:48:19)
+(fail) cold worktree reader returns actual primary and managed Git facts with unavailable models [2397.04ms]
+59 |   await using first = await memoryProject("worktree-reader-first")
+60 |   await using second = await memoryProject("worktree-reader-second")
+61 |   await configure(first.path, "worktree-first-226")
+62 |   await configure(second.path, "worktree-second-226")
+63 |   await Instance.disposeAll()
+64 |   expect(await Promise.all([read(first.path), read(second.path)])).toEqual([
+                                                                        ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "body": [
+        {
+          "branch": "worktree-first-226",
+-         "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-VJvBIO\test-68740-wXfGpH\fixtures\memory-WiUOEV",
++         "directory": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-VJvBIO/test-68740-wXfGpH/fixtures/memory-WiUOEV",
+          "name": "memory-WiUOEV",
+          "removable": false,
+          "status": "primary",
+        },
+      ],
+      "status": 200,
+    },
+    {
+      "body": [
+        {
+          "branch": "worktree-second-226",
+-         "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-VJvBIO\test-68740-wXfGpH\fixtures\memory-7rN76f",
++         "directory": "C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-VJvBIO/test-68740-wXfGpH/fixtures/memory-7rN76f",
+          "name": "memory-7rN76f",
+          "removable": false,
+          "status": "primary",
+        },
+      ],
+      "status": 200,
+    },
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\worktree-read-identity.test.ts:64:68)
+(fail) parallel worktree reads preserve exact independent Project directories and branches [3825.79ms]
+(pass) worktree reader reports explicit non-Git and missing-directory admission errors [189.66ms]
+(pass) worktree deletion retains the current execution model error [1933.63ms]
+(pass) public worktree metadata describes the current list and Git prerequisite response [493.55ms]
+
+ 17 pass
+ 2 fail
+ 49 expect() calls
+Ran 19 tests across 3 files. [41.23s]

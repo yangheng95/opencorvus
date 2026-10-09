@@ -10,6 +10,7 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /vcs",
   "GET /vcs/branches",
   "GET /vcs/diff",
+  "GET /project/current/worktrees",
   "GET /expert-squad/search",
   "GET /expert-squad/catalog",
   "GET /expert-squad/inventory-status",

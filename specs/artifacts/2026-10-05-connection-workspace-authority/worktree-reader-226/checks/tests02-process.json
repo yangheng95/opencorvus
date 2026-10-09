@@ -1,0 +1,11 @@
+{
+  "pid": 7368,
+  "birthUtc": "2026-10-09T05:32:15.5603399Z",
+  "arguments": [
+    "test",
+    "test/server/worktree-read-identity.test.ts",
+    "test/server/vcs-read-identity.test.ts",
+    "test/project-route-context.test.ts",
+    "--timeout=90000"
+  ]
+}

@@ -1,0 +1,108 @@
+
+test\server\worktree-read-identity.test.ts:
+43 |   const primary = { name: path.basename(project.path), branch: "primary-reader-226", directory: project.path, status: "primary", removable: false }
+44 |   const child = { name: "managed-reader-226", branch: "managed-reader-226", directory: physicalManaged, status: "managed", removable: true }
+45 |   await Instance.disposeAll()
+46 |   const initial = await read(project.path)
+47 |   console.log("worktree226 primary and managed", JSON.stringify(initial))
+48 |   expect(initial).toEqual({ status: 200, body: [primary, child] })
+                       ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "body": [
+-     {
+-       "branch": "primary-reader-226",
+-       "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-dHwoHL\test-29744-X1eD2w\fixtures\memory-Rep3AY",
+-       "name": "memory-Rep3AY",
+-       "removable": false,
+-       "status": "primary",
+-     },
+-     {
+-       "branch": "managed-reader-226",
+-       "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-dHwoHL\test-29744-X1eD2w\fixtures\memory-Rep3AY\.opencorvus\.r\project\worktrees\managed-reader-226",
+-       "name": "managed-reader-226",
+-       "removable": true,
+-       "status": "managed",
++   "body": {
++     "data": {
++       "modelID": "model",
++       "providerID": "missing-worktree-reader",
++       "suggestions": [],
+      },
+-   ],
+-   "status": 200,
++     "name": "ProviderModelNotFoundError",
++   },
++   "status": 400,
+  }
+
+- Expected  - 16
++ Received  + 8
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\worktree-read-identity.test.ts:48:19)
+(fail) cold worktree reader returns actual primary and managed Git facts with unavailable models [2387.40ms]
+59 |   await using first = await memoryProject("worktree-reader-first")
+60 |   await using second = await memoryProject("worktree-reader-second")
+61 |   await configure(first.path, "worktree-first-226")
+62 |   await configure(second.path, "worktree-second-226")
+63 |   await Instance.disposeAll()
+64 |   expect(await Promise.all([read(first.path), read(second.path)])).toEqual([
+                                                                        ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "body": [
+-       {
+-         "branch": "worktree-first-226",
+-         "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-dHwoHL\test-29744-X1eD2w\fixtures\memory-ZBpXHQ",
+-         "name": "memory-ZBpXHQ",
+-         "removable": false,
+-         "status": "primary",
++     "body": {
++       "data": {
++         "modelID": "model",
++         "providerID": "missing-worktree-reader",
++         "suggestions": [],
+        },
+-     ],
+-     "status": 200,
++       "name": "ProviderModelNotFoundError",
++     },
++     "status": 400,
+    },
+    {
+-     "body": [
+-       {
+-         "branch": "worktree-second-226",
+-         "directory": "C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-dHwoHL\test-29744-X1eD2w\fixtures\memory-a9NgEr",
+-         "name": "memory-a9NgEr",
+-         "removable": false,
+-         "status": "primary",
++     "body": {
++       "data": {
++         "modelID": "model",
++         "providerID": "missing-worktree-reader",
++         "suggestions": [],
+        },
+-     ],
+-     "status": 200,
++       "name": "ProviderModelNotFoundError",
++     },
++     "status": 400,
+    },
+  ]
+
+- Expected  - 18
++ Received  + 16
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\server\worktree-read-identity.test.ts:64:68)
+(fail) parallel worktree reads preserve exact independent Project directories and branches [3323.02ms]
+(pass) worktree reader reports explicit non-Git and missing-directory admission errors [719.62ms]
+(pass) worktree deletion retains the current execution model error [1979.98ms]
+
+ 2 pass
+ 2 fail
+ 10 expect() calls
+Ran 4 tests across 1 file. [11.16s]

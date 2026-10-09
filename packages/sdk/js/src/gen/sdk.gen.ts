@@ -10868,7 +10868,7 @@ export class Current extends HeyApiClient {
   /**
    * List current project worktrees
    *
-   * List Git worktrees registered for the current project with Task and Session execution identity.
+   * Read the current project's registered primary and managed Git worktrees with current removal eligibility.
    */
   public worktrees<ThrowOnError extends boolean = false>(
     parameters?: {

@@ -1141,6 +1141,13 @@ through collection-local vertical scrolling. Shorter collections keep their
 natural height. No collection slices its data, adds a synthetic overflow row,
 or transfers overflow ownership to the complete Environment Popover.
 
+The project-scoped `GET /project/current/worktrees` uses the existing Project
+identity context to read the actual Git registry and current removal eligibility.
+Unavailable execution models do not block this read. It retains the strict
+primary/managed projection, explicit non-Git prerequisite error and current
+owned-prompt protection; deletion and cleanup keep their existing runtime
+authority and revalidate their actual ownership at mutation time.
+
 Environment Information, Goals, Requirements, Workspace, and Tools retain one
 aligned title structure. Peer classifications share one compact 32px title-row
 height and a far-edge 16px disclosure or navigation glyph;

@@ -1,0 +1,59 @@
+{
+  "scriptSrc": "http://127.0.0.1:18153/ui/assets/main-BpMz21_t.js",
+  "observedAtUtc": "2026-10-09T05:34:21.1386499Z",
+  "asset": "/ui/assets/main-BpMz21_t.js",
+  "uiUri": "http://127.0.0.1:18153/ui",
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "worktree-reader-226-after-01-8a70462b-cce8-4a46-a185-c76081d36c47",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:18153",
+    "pid": 66132
+  },
+  "owner": {
+    "occurrence": "worktree-reader-226-after-01-8a70462b-cce8-4a46-a185-c76081d36c47",
+    "targetBirthAtMs": 1791524036703,
+    "evidencePrefix": "worktree-reader-226-after-01",
+    "host": {
+      "pid": 68544,
+      "processInstanceID": "win32:639271208359570396",
+      "occurrenceID": "d69c47d3-1ccc-4b7a-b3f0-97a585c2297e"
+    },
+    "observedProcessChain": [
+      {
+        "pid": 66132,
+        "processInstanceID": "win32:639271208367038720",
+        "occurrenceID": "f9e07ebc-aeb5-4f8b-bb16-23dd8707aa91"
+      }
+    ],
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\file-read-recovery-222-before-01\\project",
+    "settlementEvidenceRoot": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-05-connection-workspace-authority\\worktree-reader-226\\after-01",
+    "runRoot": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\worktree-reader-226-after-01",
+    "evidence": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\worktree-reader-226-after-01\\evidence",
+    "authorityStaging": "None; no model Task requested",
+    "owner": {
+      "ProcessId": 66132,
+      "processInstanceID": "win32:639271208367038720"
+    },
+    "runtime": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-09\\worktree-reader-226-after-01\\runtime",
+    "nativeTarget": {
+      "pid": 66132,
+      "processInstanceID": "win32:639271208367038720",
+      "occurrenceID": "f9e07ebc-aeb5-4f8b-bb16-23dd8707aa91"
+    },
+    "port": 18153,
+    "purpose": "Current credentialless full original history; no Provider or Task rearm",
+    "nativeDeadlineAt": 1791524935875
+  },
+  "boundary": "HTTP/native asset admission only; no UI or visual assertion",
+  "assetStatus": 200,
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18153,
+      "OwningProcess": 66132
+    }
+  ],
+  "uiStatus": 200,
+  "finalUiUri": "http://127.0.0.1:18153/ui/"
+}

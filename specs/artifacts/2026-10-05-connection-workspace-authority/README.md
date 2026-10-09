@@ -1,5 +1,6 @@
 # Connection workspace authority investigation
 
+- [工作树读取226 Recall](worktree-reader-plan-226.md)：精确读取authority、真实Git列表与后续环境问题。
 - [VCS/Source225 Recall](vcs-source-plan-225.md): current three Git readers, actual branch facts and localized file-source actions.
 
 - [Client language224 Recall](local-language-plan-224.md), [current readiness](local-language-readiness-224/README.md) and [actual scope](local-language-224/README.md): single client locale persistence, actual Chinese/dark source diagnostics and cold reload, original failures retained.

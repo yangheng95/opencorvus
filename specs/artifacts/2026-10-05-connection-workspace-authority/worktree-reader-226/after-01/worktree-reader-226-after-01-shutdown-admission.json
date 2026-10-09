@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-10-09T05:36:28.9758906Z",
+  "occurrence": "worktree-reader-226-after-01-8a70462b-cce8-4a46-a185-c76081d36c47",
+  "owner": {
+    "pid": 66132,
+    "processInstanceID": "win32:639271208367038720",
+    "occurrenceID": "f9e07ebc-aeb5-4f8b-bb16-23dd8707aa91"
+  },
+  "pageClosed": true,
+  "dispatch": true,
+  "boundary": "Public shutdown admission is distinct from whole native Job/output/request settlement",
+  "status": 200,
+  "body": {
+    "ok": true,
+    "occurrenceID": "cal_g0VXWmvDS00U7xx2wCCP"
+  }
+}
