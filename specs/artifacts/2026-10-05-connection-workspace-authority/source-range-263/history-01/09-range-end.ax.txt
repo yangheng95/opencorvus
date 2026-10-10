@@ -1,0 +1,148 @@
+Browser tab: 109, Title: "OpenCorvus", URL: "http://localhost:18201/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 229-253
+~										155 text entry area Description: Editor, Value:     FileTime.read(ctx.sessionID, filepath)
+
+
+    if (instructions.length > 0) {
+      output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
+    }
+    output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+ *
+ * Returns undefined when the input is a plain file path.
+ */
+function resolveAttachmentPath(raw: string): string | undefined {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  const located = AttachmentStore.nameFromUrl(trimmed)
+  if (located) {
+    const abs = AttachmentStore.resolveAbsolute(located.projectID, located.name)
+    if (!abs) throw new Error(`attachment ${trimmed} not found in project ${located.projectID}`)
+    return abs
+  }
+  const schemeMatch = trimmed.match(/^attachment:(?:\/\/)?(.+)$/i)
+  if (schemeMatch) {
+    const name = schemeMatch[1].replace(/^\/+/, "")
+    if (!name || name.includes("/") || name.includes("\\")) {
++											308 text  *     from references without carrying the project ID.
++											309 text  *
++											310 text  * Returns undefined when the input is a plain file path.
++											311 text  */
++											312 container
++												313 text function resolveAttachmentPath ( raw :  string ):  string  |  undefined  {
++											314 container
++												315 text if  (! raw )  return undefined
++											316 container
++												317 text const trimmed  =  raw . trim ()
++											318 container
++												319 text const located  =  AttachmentStore . nameFromUrl ( trimmed )
++											320 container
++												321 text if  ( located ) {
++											322 container
++												323 text const abs  =  AttachmentStore . resolveAbsolute ( located . projectID ,  located . name )
++											324 container
++												325 text if  (! abs )  throw new Error ( `attachment  ${ trimmed }  not found in project  ${ located . projectID } ` )
++											326 container
++												327 text return abs
++											328 text   }
++											329 container
++												330 text const schemeMatch  =  trimmed . match ( /^attachment:(?:\/\/)?(.+)$/i )
++											331 container
++												332 text if  ( schemeMatch ) {
++											333 container
++												334 text const name  =  schemeMatch [ 1 ]. replace ( /^\/+/ ,  "" )
++											335 container
++												336 text if  (! name  ||  name . includes ( "/" ) ||  name . includes ( "\\" )) {
+The focused UI element is 155 text entry area Description: Editor, Value:     FileTime.read(ctx.sessionID, filepath)
+
+
+    if (instructions.length > 0) {
+      output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
+    }
+    output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+ *     from references without carrying the project ID.
+ *
+ * Returns undefined when the input is a plain file path.
+ */
+function resolveAttachmentPath(raw: string): string | undefined {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  const located = AttachmentStore.nameFromUrl(trimmed)
+  if (located) {
+    const abs = AttachmentStore.resolveAbsolute(located.projectID, located.name)
+    if (!abs) throw new Error(`attachment ${trimmed} not found in project ${located.projectID}`)
+    return abs
+  }
+  const schemeMatch = trimmed.match(/^attachment:(?:\/\/)?(.+)$/i)
+  if (schemeMatch) {
+    const name = schemeMatch[1].replace(/^\/+/, "")
+    if (!name || name.includes("/") || name.includes("\\")) {

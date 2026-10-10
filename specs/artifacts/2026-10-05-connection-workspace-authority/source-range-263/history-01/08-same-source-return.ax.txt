@@ -1,0 +1,199 @@
+Browser tab: 109, Title: "OpenCorvus", URL: "http://localhost:18201/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 232, 246-259, 262, 264, 266, 268-281
+~										155 text entry area Description: Editor, Value:         sources: [fileSource({ path: filepath, title, provider: "opencorvus-read" })],
+      }
+    }
+
+
+    const bytes = await files.readFile(filepath)
+    const isBinary = isBinaryBytes(filepath, bytes)
+    if (isBinary) throw new Error(`Cannot read binary file: ${filepath}`)
+
+
+    const page = readTextFilePageContent(bytes.toString("utf8"), {
+      offset: params.offset,
+      limit: params.limit ?? DEFAULT_READ_LIMIT,
+    })
+    const preview = redactInlinePayloads(page.raw.slice(0, 20).join("\n"))
+
+
+    let output = [`<path>${filepath}</path>`, `<type>file</type>`, "<content>"].join("\n")
+    output += renderTextFilePage(page)
+    output += "\n</content>"
+
+
+    FileTime.read(ctx.sessionID, filepath)
+
+
+    if (instructions.length > 0) {
+      output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
+    }
+    output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs
+~												230 text sources : [ fileSource ({  path :  filepath ,  title ,  provider :  "opencorvus-read"  })],
+~											231 text       }
++											232 text     }
+~												234 text const bytes  =  await files . readFile ( filepath )
+~												236 text const isBinary  =  isBinaryBytes ( filepath ,  bytes )
+~												238 text if  ( isBinary )  throw new Error ( `Cannot read binary file:  ${ filepath } ` )
+~												240 text const page  =  readTextFilePageContent ( bytes . toString ( "utf8" ), {
+~												242 text offset :  params . offset ,
+~												244 text limit :  params . limit  ??  DEFAULT_READ_LIMIT ,
+~											245 text     })
++											246 container
++												247 text const preview  =  redactInlinePayloads ( page . raw . slice ( 0 ,  20 ). join ( "\n" ))
++											248 container
++												249 text let output  = [ `<path> ${ filepath } </path>` ,  `<type>file</type>` ,  "<content>" ]. join ( "\n" )
++											250 container
++												251 text output  +=  renderTextFilePage ( page )
++											252 container
++												253 text output  +=  "\n</content>"
++											254 container
++												255 text FileTime . read ( ctx . sessionID ,  filepath )
++											256 container
++												257 text if  ( instructions . length  >  0 ) {
++											258 container
++												259 text output  +=  `\n\n<system-reminder>\n ${ instructions . map (( i ) =>  i . content ). join ( "\n\n" )} \n</system-reminder>`
+~											260 text     }
+~											261 container
++												262 text output  =  redactInlinePayloads ( output )
+~											263 container
++												264 text return  {
+~											265 container
++												266 text title ,
+~											267 container
++												268 text output ,
++											269 container
++												270 text metadata : {
++											271 container
++												272 text preview ,
++											273 container
++												274 text truncated :  page . truncated ,
++											275 container
++												276 text loaded :  instructions . map (( i ) =>  i . filepath ),
++											277 container
++												278 text lines :  page . lines ,
++											279 container
++												280 text totalLines :  page . totalLines ,
++											281 text       },
+~												283 text sources : [
+~												285 text fileSource ({
++											286 container
++												287 text path :  filepath ,
++											288 container
++												289 text title ,
++											290 container
++												291 text           ...( citedReadRange ( page ) ?? {}),
++											292 container
++												293 text provider :  "opencorvus-read" ,
++											294 text         }),
++											295 text       ],
++											296 text     }
++											297 text   },
++											298 text })
++											299 text /**
++											300 text  * Map an attachment reference to its on-disk filesystem path so the read tool
++											301 text  * can serve files uploaded to the task (images, PDFs, spec documents, …).
++											302 text  *
++											303 text  * Accepted forms:
++											304 text  *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
++											305 text  *     AttachmentStore.write (served by AttachmentRoutes).
++											306 text  *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
++											307 text  *     resolves inside the current project, useful when agents synthesize URLs
+The focused UI element is 155 text entry area Description: Editor, Value:         sources: [fileSource({ path: filepath, title, provider: "opencorvus-read" })],
+      }
+    }
+
+
+    const bytes = await files.readFile(filepath)
+    const isBinary = isBinaryBytes(filepath, bytes)
+    if (isBinary) throw new Error(`Cannot read binary file: ${filepath}`)
+
+
+    const page = readTextFilePageContent(bytes.toString("utf8"), {
+      offset: params.offset,
+      limit: params.limit ?? DEFAULT_READ_LIMIT,
+    })
+    const preview = redactInlinePayloads(page.raw.slice(0, 20).join("\n"))
+
+
+    let output = [`<path>${filepath}</path>`, `<type>file</type>`, "<content>"].join("\n")
+    output += renderTextFilePage(page)
+    output += "\n</content>"
+
+
+    FileTime.read(ctx.sessionID, filepath)
+
+
+    if (instructions.length > 0) {
+      output += `\n\n<system-reminder>\n${instructions.map((i) => i.content).join("\n\n")}\n</system-reminder>`
+    }
+    output = redactInlinePayloads(output)
+
+
+    return {
+      title,
+      output,
+      metadata: {
+        preview,
+        truncated: page.truncated,
+        loaded: instructions.map((i) => i.filepath),
+        lines: page.lines,
+        totalLines: page.totalLines,
+      },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(citedReadRange(page) ?? {}),
+          provider: "opencorvus-read",
+        }),
+      ],
+    }
+  },
+})
+
+
+/**
+ * Map an attachment reference to its on-disk filesystem path so the read tool
+ * can serve files uploaded to the task (images, PDFs, spec documents, …).
+ *
+ * Accepted forms:
+ *   - `/attachment/<projectID>/<sha>.<ext>`  — canonical URL emitted by
+ *     AttachmentStore.write (served by AttachmentRoutes).
+ *   - `attachment://<sha>.<ext>` or `attachment:<sha>.<ext>` — shorthand that
+ *     resolves inside the current project, useful when agents synthesize URLs

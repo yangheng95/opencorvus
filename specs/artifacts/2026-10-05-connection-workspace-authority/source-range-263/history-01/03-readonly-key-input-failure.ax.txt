@@ -1,0 +1,312 @@
+Browser tab: 109, Title: "OpenCorvus", URL: "http://localhost:18201/ui/".
+0 AXWebArea OpenCorvus, URL: localhost:18201/ui/
+	1 container overlayAppHost
+		2 container titlebar
+			3 button (expanded) Description: Hide sidebar, Secondary Actions: Collapse
+			4 menu bar Description: OpenCorvus, ID: menubar-cl-1
+				5 (collapsed) Description: File, ID: menubar-cl-1-menubar-menu-cl-150-trigger, Secondary Actions: Expand
+				6 (collapsed) Description: Edit, ID: menubar-cl-1-menubar-menu-cl-152-trigger, Secondary Actions: Expand
+				7 (collapsed) Description: View, ID: menubar-cl-1-menubar-menu-cl-154-trigger, Secondary Actions: Expand
+				8 (collapsed) Description: Help, ID: menubar-cl-1-menubar-menu-cl-156-trigger, Secondary Actions: Expand
+		9 container panelBody
+			10 container Description: Chat shortcuts, ID: workspaceNavigation
+				11 container Chat shortcuts
+					12 button Chats
+					13 button Mission Board
+					14 button Scheduled
+					15 button Expert Squads
+					16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-116-trigger, Secondary Actions: Expand
+					17 button Settings
+				18 button About
+				19 pop up button (collapsed) Description: OpenCorvus menu, Help: https://github.com/yangheng95/opencorvus, ID: chatVersion, Secondary Actions: Expand
+			20 container workspacePageStack
+				21 container leftActivityShell
+					22 container workspaceContextbar
+						23 link Description: OpenCorvus homepage, Value: opencorvus.com/
+						24 button Search chats or run a command
+						25 button (collapsed) Description: Mailbox, Secondary Actions: Expand
+					26 container sidebar
+						27 container workLedgerPanel
+							28 container Chat navigation
+								29 button New chat
+							30 container workLedgerProjectsScroll
+								31 text Projects
+								32 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-18-trigger, Secondary Actions: Expand
+								33 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-21-trigger, Secondary Actions: Expand
+								34 container
+									35 button (expanded) Description: Collapse project, Secondary Actions: Collapse
+									36 container
+										37 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										38 button 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.t...
+										39 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-182-trigger, Secondary Actions: Expand
+									40 button (expanded) Description: Collapse Anonymous bfe4c4, Secondary Actions: Collapse
+									41 container
+										42 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										43 button Reply with OK.
+										44 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-195-trigger, Secondary Actions: Expand
+								45 container Recents
+									46 text Recents
+									47 container
+										48 container A longer, multi-step conversation for research, analysis, and review-ready interactive deliverables.
+										49 button 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.t...
+										50 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-201-trigger, Secondary Actions: Expand
+									51 container
+										52 container A direct conversation for interactive work in one project; it does not coordinate child Tasks.
+										53 button Reply with OK.
+										54 pop up button (collapsed) Description: More actions, ID: dropdownmenu-cl-207-trigger, Secondary Actions: Expand
+						55 container Connection Diagnostics
+							56 container Description: Connection Diagnostics · Online · Port 18201, ID: connBadge
+								57 text Online
+				58 splitter Description: Resize left panel, Value: 280, ID: leftPaneResizer
+				59 container workspaceMain
+					60 container chatSection
+						61 container Description: Loading task, ID: taskSwitchProgress
+						62 container
+							63 text 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.t...
+							64 pop up button (collapsed) Description: Project actions, ID: dropdownmenu-cl-213-trigger, Secondary Actions: Expand
+							65 container Description: Not running, ID: taskStatus
+								66 text Not running
+							67 button Side chat
+							68 container solidChatHeaderRuntimeActions
+								69 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand
+								70 checkbox Description: Close right dock, Value: 1
+						71 container
+							72 container Description: Conversation, ID: chatScroll
+								73 container
+									74 container
+										75 text User
+										76 text 请只用 read 工具读取 D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts 的两段：offset=27, limit=11；以及 offset=206, limit=19。然后用中文各用一两句话说明两段的作用，并保留两个真实文件来源供点击定位。在当前普通对话直接回答，不创建任务、不委托、不修改文件，不读取其他文件、auth或models。
+									77 container
+										78 text work
+										79 text 17s
+										80 container
+											81 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
+												82 text read
+												83 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
+												84 image
+											85 container Sources
+												86 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+													87 text read.ts:27-37
+													88 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
+										89 container
+											90 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @206+19 (19/262 lines), Secondary Actions: Expand
+												91 text read
+												92 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @206+19 (19/262 lines)
+												93 image
+											94 container Sources
+												95 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224
+													96 text read.ts:206-224
+													97 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224
+										98 content list
+											99 container
+												100 AXListMarker 1.
+												101 text 第 27–37 行
+												102 text ：
+												103 text citedReadRange
+												104 text  决定文件来源是否需要附带行号范围：没有读到内容，或从首行开始且未截断时不附带范围；其余情况返回本次读取的起止行号。 来源：read.ts:27–37
+											105 container
+												106 AXListMarker 2.
+												107 text 第 206–224 行
+												108 text ：这段组装读取结果，返回标题、正文和预览、截断状态、已加载指令文件路径及行数等元数据。它还通过
+												109 text fileSource
+												110 text  添加真实文件来源，并利用
+												111 text citedReadRange
+												112 text  附带适用的定位范围。 来源：read.ts:206–224
+										113 button Copy message
+										114 button (collapsed) Description: Add guidance, Secondary Actions: Expand
+										115 pop up button (collapsed) Description: View model usage for this turn: 97K Token, Secondary Actions: Expand
+										116 text Oct 10, 10:42 AM
+							117 container chatHomeComposition
+								118 container solidChatComposer
+									119 container
+										120 text Model configuration unavailable
+										121 text You can still read this conversation. Review the details or choose a model before sending a message.
+										122 button (collapsed) Details, Secondary Actions: Expand
+											123 text Details
+										124 button Retry
+										125 container chatForm
+											126 splitter Description: Drag to resize the message input, Value: 42
+											127 text entry area (settable) Description: Drag files here · Drag the top edge to resize, ID: chatTextarea
+											128 pop up button (collapsed) Description: Add supported files, ID: dropdownmenu-cl-33-trigger, Secondary Actions: Expand
+											129 text Work
+											130 text Chat
+											131 pop up button (collapsed) Description: Base, Secondary Actions: Expand
+											132 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-46-trigger, Secondary Actions: Expand
+											133 pop up button (collapsed) Description: OpenCorvus model Choose model. Click to change., Help: OpenCorvus model: Choose model, Secondary Actions: Expand
+												134 text Choose model
+											135 button (disabled) Description: Send, Help: Choose a model before sending a message., ID: chatSend
+									136 button Scroll to bottom
+					137 splitter Description: Resize right panel, Value: 50, ID: rightDockResizer
+					138 container Description: Tools panel, ID: rightDock
+						139 container tabs-cl-64
+							140 tab group Open tools
+								141 container
+									142 tab (selected, settable, boolean) Description: File, Value: 1, ID: tabs-cl-64-trigger-file
+									143 button Description: Close tab, Help: Close tab (Delete)
+							144 pop up button (collapsed) Description: Add tool, ID: dropdownmenu-cl-88-trigger, Secondary Actions: Expand
+							145 button Close panel
+							146 container Description: File, ID: centerWorkbenchFile
+								147 container Editor
+									148 container
+										149 text tool/read.ts
+										150 button (disabled) Save, Help: Save (Ctrl/Cmd+S)
+										151 button Reload from disk
+										152 button Close workspace
+									153 container
+										154 text entry area Description: Editor, Value:           if (isMissingPathError(error)) return []
+          throw error
+        })
+
+
+      if (suggestions.length > 0) {
+        throw new Error(`File not found: ${filepath}\n\nDid you mean one of these?\n${suggestions.join("\n")}`)
+      }
+
+
+      throw new Error(`File not found: ${filepath}`)
+    }
+
+
+    if (stat.isDirectory()) {
+      const dirents = await files.readdir(filepath, { withFileTypes: true })
+      const entries = await Promise.all(
+        dirents.map(async (dirent) => {
+          if (dirent.isDirectory()) return dirent.name + "/"
+          if (dirent.isSymbolicLink()) {
+            const target = await files.stat(path.join(filepath, dirent.name)).catch(() => undefined)
+            if (target?.isDirectory()) return dirent.name + "/"
+          }
+          return dirent.name
+        }),
+      )
+      entries.sort((a, b) => a.localeCompare(b))
+
+
+      const limit = params.limit ?? DEFAULT_READ_LIMIT
+      const offset = params.offset ?? 1
+      const start = offset - 1
+      const sliced = entries.slice(start, start + limit)
+      const truncated = start + sliced.length < entries.length
+
+
+      const output = [
+        `<path>${filepath}</path>`,
+        `<type>directory</type>`,
+        `<entries>`,
+        sliced.join("\n"),
+        truncated
+          ? `\n(Showing ${sliced.length} of ${entries.length} entries. Use 'offset' parameter to read beyond entry ${offset + sliced.length})`
+          : `\n(${entries.length} entries)`,
+        `</entries>`,
+      ].join("\n")
+
+
+      return {
+        title,
+        output,
+        metadata: {
+          preview: sliced.slice(0, 20).join("\n"),
+          truncated,
+          loaded: [] as string[],
+          lines: sliced.length,
+          totalLines: entries.length,
+        },
+      }
+    }
+
+
+    const instructions = await InstructionPrompt.resolve(ctx.messages, filepath, ctx.messageID)
+
+
+											198 container
+												199 text if  ( isMissingPathError ( error ))  return  []
+											200 container
+												201 text throw error
+											202 text         })
+											203 container
+												204 text if  ( suggestions . length  >  0 ) {
+											205 container
+												206 text throw new Error ( `File not found:  ${ filepath } \n\nDid you mean one of these?\n ${ suggestions . join ( "\n" )} ` )
+											207 text       }
+											208 container
+												209 text throw new Error ( `File not found:  ${ filepath } ` )
+											210 text     }
+											211 container
+												212 text if  ( stat . isDirectory ()) {
+											213 container
+												214 text const dirents  =  await files . readdir ( filepath , {  withFileTypes :  true  })
+											215 container
+												216 text const entries  =  await Promise . all (
+											217 container
+												218 text dirents . map ( async  ( dirent ) => {
+											219 container
+												220 text if  ( dirent . isDirectory ())  return dirent . name  +  "/"
+											221 container
+												222 text if  ( dirent . isSymbolicLink ()) {
+											223 container
+												224 text const target  =  await files . stat ( path . join ( filepath ,  dirent . name )). catch (() =>  undefined )
+											225 container
+												226 text if  ( target ?. isDirectory ())  return dirent . name  +  "/"
+											227 text           }
+											228 container
+												229 text return dirent . name
+											230 text         }),
+											231 text       )
+											232 container
+												233 text entries . sort (( a ,  b ) =>  a . localeCompare ( b ))
+											234 container
+												235 text const limit  =  params . limit  ??  DEFAULT_READ_LIMIT
+											236 container
+												237 text const offset  =  params . offset  ??  1
+											238 container
+												239 text const start  =  offset  -  1
+											240 container
+												241 text const sliced  =  entries . slice ( start ,  start  +  limit )
+											242 container
+												243 text const truncated  =  start  +  sliced . length  <  entries . length
+											244 container
+												245 text const output  = [
+											246 container
+												247 text `<path> ${ filepath } </path>` ,
+											248 container
+												249 text `<type>directory</type>` ,
+											250 container
+												251 text `<entries>` ,
+											252 container
+												253 text sliced . join ( "\n" ),
+											254 container
+												255 text truncated
+											256 container
+												257 text           ?  `\n(Showing  ${ sliced . length }  of  ${ entries . length }  entries. Use 'offset' parameter to read beyond entry  ${ offset  +  sliced . length } )`
+											258 container
+												259 text           :  `\n( ${ entries . length }  entries)` ,
+											260 container
+												261 text `</entries>` ,
+											262 container
+												263 text       ]. join ( "\n" )
+											264 container
+												265 text return  {
+											266 container
+												267 text title ,
+											268 container
+												269 text output ,
+											270 container
+												271 text metadata : {
+											272 container
+												273 text preview :  sliced . slice ( 0 ,  20 ). join ( "\n" ),
+											274 container
+												275 text truncated ,
+											276 container
+												277 text loaded : []  as string [],
+											278 container
+												279 text lines :  sliced . length ,
+											280 container
+												281 text totalLines :  entries . length ,
+											282 text         },
+											283 text       }
+											284 text     }
+											285 container
+												286 text const instructions  =  await InstructionPrompt . resolve ( ctx . messages ,  filepath ,  ctx . messageID )
+									197 text TypeScript
+
+The focused UI element is 95 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224

@@ -1,0 +1,131 @@
+Browser tab: 109, Title: "OpenCorvus", URL: "http://localhost:18201/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 254-336
++										346 text current match. export function citedReadRange(page: { on line 27.
+~										155 text entry area Description: Editor, Value: import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
+
+function isMissingPathError(error: unknown): boolean {
+  return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+}
+
+
+export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {
+  try {
+    return await read()
+  } catch (error) {
+    if (isMissingPathError(error)) return undefined
+    throw error
+  }
+}
+
+
+export const READ_TOOL_DESCRIPTION = DESCRIPTION
+export const ReadToolParameters = z.object({
+  filePath: z
+    .string()
+    .describe(
+      "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path",
+    ),
+  offset: z.coerce.number().describe("The line number to start reading from (1-indexed)").optional(),
+  limit: z.coerce.number().describe("The maximum number of lines to read (defaults to 2000)").optional(),
++											347 container
++												348 text import  {  DEFAULT_TEXT_FILE_LIMIT ,  isBinaryBytes ,  readTextFilePageContent ,  renderTextFilePage  }  from "./text-file"
++											349 container
++												350 text import  {  executionFiles  }  from "./execution-files"
++											351 container
++												352 text import  {  fileSource  }  from "./source"
++											353 container
++												354 text const DEFAULT_READ_LIMIT  =  DEFAULT_TEXT_FILE_LIMIT
++											355 text /**
++											356 text  * The line range a `read` citation should carry, or undefined when there is no
++											357 text  * narrower place to point at than the file itself.
++											358 text  *
++											359 text  * A citation range is a location, not a receipt for what was loaded. A page
++											360 text  * that covered the whole file would cite lines 1..N, and the overlay would dress
++											361 text  * that up as a jump that always lands on line 1 — indistinguishable from a
++											362 text  * citation that failed to jump at all.
++											363 text  */
++											364 container
++												365 text export function citedReadRange ( page : {
++											366 container
++												367 text offset :  number
++											368 container
++												369 text lines :  number
++											370 container
++												371 text lastReadLine :  number
++											372 container
++												373 text truncated :  boolean
++											374 container
++												375 text }): {  range : {  startLine :  number ;  endLine :  number  } } |  undefined  {
++											376 container
++												377 text if  ( page . lines  <=  0 )  return undefined
++											378 container
++												379 text if  ( page . offset  ===  1  && ! page . truncated )  return undefined
++											380 container
++												381 text return  {  range : {  startLine :  page . offset ,  endLine :  page . lastReadLine  } }
++											382 text }
++											383 container
++												384 text function isMissingPathError ( error :  unknown ):  boolean  {
++											385 container
++												386 text return error instanceof Error  && ( error as NodeJS . ErrnoException ). code  ===  "ENOENT"
++											387 text }
++											388 container
++												389 text export async function taskFileStatOrMissing < T >( read : () =>  Promise < T >):  Promise < T  |  undefined > {
++											390 container
++												391 text try  {
++											392 container
++												393 text return await read ()
++											394 container
++												395 text   }  catch  ( error ) {
++											396 container
++												397 text if  ( isMissingPathError ( error ))  return undefined
++											398 container
++												399 text throw error
++											400 text   }
++											401 text }
++											402 container
++												403 text export const READ_TOOL_DESCRIPTION  =  DESCRIPTION
++											404 container
++												405 text export const ReadToolParameters  =  z . object ({
++											406 container
++												407 text filePath :  z
++											408 container
++												409 text     . string ()
++											410 container
++												411 text     . describe (
++											412 container
++												413 text "A path relative to the current Task directory, or an absolute path when the caller already has that exact native path" ,
++											414 text     ),
++											415 container
++												416 text offset :  z . coerce . number (). describe ( "The line number to start reading from (1-indexed)" ). optional (),
++											417 container
++												418 text limit :  z . coerce . number (). describe ( "The maximum number of lines to read (defaults to 2000)" ). optional (),
+~											338 text field (settable) Description: Find, Value: citedReadRange
+The focused UI element is 338 text field (settable) Description: Find, Value: citedReadRange

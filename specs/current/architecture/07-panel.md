@@ -219,6 +219,10 @@ including a repeated range-free request for the current resource. The main
 workbench consumes that revision to reveal a hidden Dock. Repeated resource
 identity preserves the editor draft and loaded content; line citations also
 retain their existing exact range reveal behavior.
+Read-only CodeEditor content keeps a normal keyboard focus entry through the
+existing read-only compartment's content attributes. It remains non-editable
+at both the state and DOM levels; range reveals can focus the same view, and
+navigation/search commands belong to that editor rather than the page.
 The file pane uses the existing forced tab mount so hiding the Dock or selecting
 another tool retains that single draft owner and its navigation guard. Closing
 the file still clears the canonical target after the guard resolves.

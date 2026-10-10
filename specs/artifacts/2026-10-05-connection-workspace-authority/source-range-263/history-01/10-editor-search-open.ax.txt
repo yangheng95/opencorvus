@@ -1,0 +1,12 @@
+Browser tab: 109, Title: "OpenCorvus", URL: "http://localhost:18201/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++										337 container
++											338 text field (settable) Find
++											339 button next
++											340 button previous
++											341 button all
++											342 checkbox (settable, integer) Description: match case, Value: 0
++											343 checkbox (settable, integer) Description: regexp, Value: 0
++											344 checkbox (settable, integer) Description: by word, Value: 0
++											345 button close
+The focused UI element is 338 text field (settable) Find

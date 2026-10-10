@@ -1,0 +1,147 @@
+Browser tab: 109, Title: "OpenCorvus", URL: "http://localhost:18201/ui/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 77-116, 198-231, 263, 265, 267, 269, 271-282, 284
++									198 container
++										199 text work
++										200 text 17s
++										201 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines), Secondary Actions: Expand
++											202 text read
++											203 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @27+11 (11/262 lines)
++											204 image
++										205 container Sources
++											206 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++												207 text read.ts:27-37
++												208 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:27-37
++										209 button (collapsed) Description: read · D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @206+19 (19/262 lines), Secondary Actions: Expand
++											210 text read
++											211 text D:/myhexin-local/opencorvus/packages/opencorvus/src/tool/read.ts @206+19 (19/262 lines)
++											212 image
++										213 container Sources
++											214 button Open source file: D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224
++												215 text read.ts:206-224
++												216 text D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\read.ts:206-224
++										217 content list
++											218 container
++												219 AXListMarker 1.
++												220 text 第 27–37 行
++												221 text ：
++												222 text citedReadRange
++												223 text  决定文件来源是否需要附带行号范围：没有读到内容，或从首行开始且未截断时不附带范围；其余情况返回本次读取的起止行号。 来源：read.ts:27–37
++											224 container
++												225 AXListMarker 2.
++												226 text 第 206–224 行
++												227 text ：这段组装读取结果，返回标题、正文和预览、截断状态、已加载指令文件路径及行数等元数据。它还通过
++												228 text fileSource
++												229 text  添加真实文件来源，并利用
++												230 text citedReadRange
++												231 text  附带适用的定位范围。 来源：read.ts:206–224
+~										154 text entry area Description: Editor, Value: import z from "zod"
+import * as path from "path"
+import { Tool } from "./tool"
+import { FileTime } from "../file/time"
+import DESCRIPTION from "./read.txt"
+import { Instance } from "../project/instance"
+import { assertExternalDirectory } from "./external-directory"
+import { InstructionPrompt } from "../session/instruction"
+import { Filesystem } from "../util/filesystem"
+import { AttachmentStore } from "../storage/attachment-store"
+import { redactInlinePayloads } from "../util/inline-base64"
+import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
+import { executionFiles } from "./execution-files"
+import { fileSource } from "./source"
+
+
+const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
+
+
+/**
+ * The line range a `read` citation should carry, or undefined when there is no
+ * narrower place to point at than the file itself.
+ *
+ * A citation range is a location, not a receipt for what was loaded. A page
+ * that covered the whole file would cite lines 1..N, and the overlay would dress
+ * that up as a jump that always lands on line 1 — indistinguishable from a
+ * citation that failed to jump at all.
+ */
+export function citedReadRange(page: {
+  offset: number
+  lines: number
+  lastReadLine: number
+  truncated: boolean
+}): { range: { startLine: number; endLine: number } } | undefined {
+  if (page.lines <= 0) return undefined
+  if (page.offset === 1 && !page.truncated) return undefined
+  return { range: { startLine: page.offset, endLine: page.lastReadLine } }
+}
+
+
+function isMissingPathError(error: unknown): boolean {
+  return error instanceof Error && (error as NodeJS.ErrnoException).code === "ENOENT"
+}
+
+
+export async function taskFileStatOrMissing<T>(read: () => Promise<T>): Promise<T | undefined> {
+  try {
+    return await read()
+  } catch (error) {
+    if (isMissingPathError(error)) return undefined
+      const limit = params.limit ?? DEFAULT_READ_LIMIT
+~												233 text import z from "zod"
+~												235 text import * as path from "path"
+~												237 text import  {  Tool  }  from "./tool"
+~												239 text import  {  FileTime  }  from "../file/time"
+~												241 text import DESCRIPTION from "./read.txt"
+~												243 text import  {  Instance  }  from "../project/instance"
+~												245 text import  {  assertExternalDirectory  }  from "./external-directory"
+~												247 text import  {  InstructionPrompt  }  from "../session/instruction"
+~												249 text import  {  Filesystem  }  from "../util/filesystem"
+~												251 text import  {  AttachmentStore  }  from "../storage/attachment-store"
+~												253 text import  {  redactInlinePayloads  }  from "../util/inline-base64"
+~												255 text import  {  DEFAULT_TEXT_FILE_LIMIT ,  isBinaryBytes ,  readTextFilePageContent ,  renderTextFilePage  }  from "./text-file"
+~												257 text import  {  executionFiles  }  from "./execution-files"
+~												259 text import  {  fileSource  }  from "./source"
+~												261 text const DEFAULT_READ_LIMIT  =  DEFAULT_TEXT_FILE_LIMIT
+~											262 text /**
++											263 text  * The line range a `read` citation should carry, or undefined when there is no
+~											264 text  * narrower place to point at than the file itself.
++											265 text  *
+~											266 text  * A citation range is a location, not a receipt for what was loaded. A page
++											267 text  * that covered the whole file would cite lines 1..N, and the overlay would dress
+~											268 text  * that up as a jump that always lands on line 1 — indistinguishable from a
++											269 text  * citation that failed to jump at all.
+~											270 text  */
++											271 container
++												272 text export function citedReadRange ( page : {
++											273 container
++												274 text offset :  number
++											275 container
++												276 text lines :  number
++											277 container
++												278 text lastReadLine :  number
++											279 container
++												280 text truncated :  boolean
++											281 container
++												282 text }): {  range : {  startLine :  number ;  endLine :  number  } } |  undefined  {
+~											283 container
++												284 text if  ( page . lines  <=  0 )  return undefined
+~												286 text if  ( page . offset  ===  1  && ! page . truncated )  return undefined
++											287 container
++												288 text return  {  range : {  startLine :  page . offset ,  endLine :  page . lastReadLine  } }
++											289 text }
++											290 container
++												291 text function isMissingPathError ( error :  unknown ):  boolean  {
++											292 container
++												293 text return error instanceof Error  && ( error as NodeJS . ErrnoException ). code  ===  "ENOENT"
++											294 text }
++											295 container
++												296 text export async function taskFileStatOrMissing < T >( read : () =>  Promise < T >):  Promise < T  |  undefined > {
++											297 container
++												298 text try  {
++											299 container
++												300 text return await read ()
++											301 container
++												302 text   }  catch  ( error ) {
++											303 container
++												304 text if  ( isMissingPathError ( error ))  return undefined
++											305 text       const limit = params.limit ?? DEFAULT_READ_LIMIT
+The focused UI element is 0 AXWebArea OpenCorvus, URL: localhost:18201/ui/
