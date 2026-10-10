@@ -1,0 +1,34 @@
+{
+  "states": [
+    {
+      "expected": {
+        "pid": 37068,
+        "processInstanceID": "win32:639267256465855277",
+        "occurrenceID": "6dfddd84-6479-4557-9ee0-2c1069b1a234"
+      },
+      "state": "dead_or_reused",
+      "persistedRuntimeID": "6dfddd84-6479-4557-9ee0-2c1069b1a234"
+    },
+    {
+      "expected": {
+        "pid": 61600,
+        "processInstanceID": "win32:639269626715801177",
+        "occurrenceID": "a6486659-05e9-44ec-95c1-06a6b3a8779f"
+      },
+      "state": "dead_or_reused",
+      "persistedRuntimeID": "a6486659-05e9-44ec-95c1-06a6b3a8779f"
+    },
+    {
+      "expected": {
+        "pid": 65060,
+        "processInstanceID": "win32:639269710115924004",
+        "occurrenceID": "2d0df548-7029-4523-92a8-f02a8ce896fc"
+      },
+      "state": "dead_or_reused",
+      "persistedRuntimeID": "2d0df548-7029-4523-92a8-f02a8ce896fc"
+    }
+  ],
+  "source": "Exact original production runtime identity from SQLite; OS liveness read only",
+  "boundary": "No source service stopped, restarted or treated as an owned experimental launch; no copied runtime or UI page started",
+  "observedAtUtc": "2026-10-10T09:28:03.5616874Z"
+}

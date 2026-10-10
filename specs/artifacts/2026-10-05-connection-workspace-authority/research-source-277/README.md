@@ -1,0 +1,27 @@
+# 277 原 Research Studio 当前来源调查
+
+[Recall与调查方案](../research-source-plan-277.md)；[既有压缩修复及横向审计](../../../records/2026-10/2026-10-08-compaction-window-and-task-anchor.md)。本轮单agent，只读原数据库，原用户页面/进程均未操作；未创建Task/成员、使用外部模型或启动历史副本。
+
+## 精确原截图身份与当前事实
+
+原附件tsk_g00VXMejke00KwIb9xRv在真实生产数据库中存在，project prj_h5qbWiFVHxI6qXpzkg8E / root ses_-zUSdLG7mzz2z8XPgyML。census.ts使用90表原数据库readonly BEGIN/ROLLBACK，显式同一drizzle client调用当前schema/Task lifecycle/ingress/dispatch recovery/lease owners；不是读取153通用实验任务或根据标题猜任务。
+
+planner ses_hkefueMHhyuPuNBZHeIH有2file来源/11消息；researcher ses_hbLhVnvjgyxCro475ne2有209URL/719消息，66摘录、最长135字符；analyst ses_h0crs8qatiIhgesOsaX1有148file+12URL/432消息，8摘录、最长72字符；orchestrator另有1file来源。372来源payload全部通过当前SourcePayload实际schema解析。研究员209URL仅200不同规范URL，URL数不证明200篇独立论文、更不能代替研究验收。标题字段209都有值，但这不等于已验证发布者标题质量。
+
+真实Provider1305请求和1305终态、Tool1296请求都有终态，1208助手全部完成、508权限执行都有结果，publication/delivery未结算0，dispatchRecoveryCandidates0。Task当前failed/epoch1、19Root ingress有处置。三个历史runtime process虽然保留MAX_SAFE_INTEGER租约，操作系统按PID+出生identity确认均dead_or_reused；两capacity期限已过，不能把持久行直接当成活跃进程。runtime-readback.json是实际OS只读观察，不伪造原实验launcher/caller终态。
+
+## 历史失败与当前已修复路径
+
+error-facts.json保留两真实task-infrastructure-error、五不可变descriptor和三checkpoint。两个execute-detached-worker错误明确CompactionTaskAuthorityError；五descriptor同初始msg_g0VXOG5z200Y9e1QFZk2，而后两checkpoint换成续接msg_g0VXOa4Cv00IijYLHR1I和msg_g0VXP9WUy00HzyFoBHlU。原task.failed是后续编排器显式终态，模型撰写summary只作线索，公共记录不发布完整私有原请求/研究说明。
+
+全仓历史规格已在10月8日对同一任务调查并修复：4dd8f2c2/0784ba8a7经git merge-base确认都是当前HEAD祖先。当前filterCompacted保留已遍历tail并继续找到原anchor，重复同source压缩保留已有checkpoint的初始anchor；旧非法marker没有改写。重跑现有compaction-integrity后端真实checker，原98925 actual0，13pass/77正向断言，含三种tail位置、数据库重新打开和本地真实HTTP流/processor/control/持久checkpoint。它不证明原任务已恢复或外部模型语义、原侧栏视觉合格。
+
+## 原始数据不能直接作为当前服务副本
+
+当前findSchemaDrift首先报告旧engine_dispatch_lineage_initial_workflow_node_idx，SQL定义见error-facts；还可能有其他schema drift，未声称只有此对象。02-data与db.ts当前契约在业务读取前返回SCHEMA_RESET_REQUIRED，不执行旧schema迁移、payload conversion或兼容reader。因此目前没有合格当前历史副本或实际原子侧栏截图；不能删索引、改历史anchor、伪造owned sourceRun或把旧服务呈现当当前版本验收。本轮未重建原数据库。
+
+之前本批按摘要认为该Task没有被定位，已按既有10月8日规格修正，不重复修复旧bug；本批新增的是原物理来源、全部闭合状态、当前schema障碍和原UI资格的准确证据。早期全租约输出过大已改聚合；最终公开checker只输出短事实，不保留无关原配置/原全文/全部58702历史租约。检索时误用Windows literal wildcard或猜schema文件名导致只读命令失败，已采用实际目录和schema-contract定义纠正，不以失败命令作为验收。
+
+后续继续当前合法数据源的Sources和侧栏真实体验；原任务当前全帧Rendering、原209来源布局/阅读/返回仍未达成。goal active，不把13个后端检查代替UI验收。
+
+交付检查：docs345ops/25groups、architecture18docs actual0，公开初轮10文本credential0；当前所有检查器原handle均已结束，未启动NativeService、未产生需保管的新Native文件。按当前分支范围提交、fetch/merge/完整待推送审计和正常push，不宣称完成原UI验收。

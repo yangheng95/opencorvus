@@ -2967,3 +2967,5 @@ The current connection-workspace authority record also includes metadata selecti
 - [多来源与摘要234](records/2026-10/2026-10-09-sources-multi-review-234.md)：真实4/3分组与长摘要改用正文排版；中文深色/键盘末段复核，嵌套阅读位置新失败保留。
 
 - [代码搜索来源276](artifacts/2026-10-05-connection-workspace-authority/source-code-plan-276.md) / [证据](artifacts/2026-10-05-connection-workspace-authority/source-code-276/README.md) / [月记录](records/2026-10/2026-10-10-source-code-276.md)。
+
+- [原Research Studio来源277](artifacts/2026-10-05-connection-workspace-authority/research-source-277/README.md) / [Recall](artifacts/2026-10-05-connection-workspace-authority/research-source-plan-277.md) / [月记录](records/2026-10/2026-10-10-research-source-277.md)。

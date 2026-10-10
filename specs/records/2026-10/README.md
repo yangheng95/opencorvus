@@ -521,3 +521,5 @@ Actual20 fails in private incomplete-CIM observation and correctly stops the rec
 - [多来源与摘要234](2026-10-09-sources-multi-review-234.md)：原171实际4/3来源、3536/4600字摘要正文排版复核；关闭重开内滚动1636→0仍待修复。
 
 - [代码搜索来源276](2026-10-10-source-code-276.md)：当前来源事实与结果数量契约，真实验收见记录。
+
+- [原Research Studio来源277](2026-10-10-research-source-277.md)：精确原Task和372来源事实、原失败/当前既有修复与旧schema阻碍，实际后端13pass，原UI未验。

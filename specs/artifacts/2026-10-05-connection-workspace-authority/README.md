@@ -625,3 +625,5 @@ Next bounded proposals: [Windows directory query](windows-directory-query-author
 - [多来源与摘要234 Recall](sources-multi-review-plan-234.md) / [实际before/after](sources-multi-review-234/README.md)：正文排版与视口阅读框，真实多Source/长摘要/中文深色/来源目标复核；内滚动丢失和归档次序错误保留。
 
 - [代码搜索来源276方案](source-code-plan-276.md) / [真实证据](source-code-276/README.md)：当前正式记录来源投影与numResults契约，单agent实施。
+
+- [原Research Studio来源277](research-source-277/README.md) / [Recall](research-source-plan-277.md)：精确原Task/209URL事实、当前闭合与旧schema障碍；既有压缩修复13项后端复核，原UI未验。

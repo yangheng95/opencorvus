@@ -1,0 +1,128 @@
+{
+  "observedAtUtc": "2026-10-10T09:25:17.573Z",
+  "access": "Original readonly exact infrastructure artifacts, descriptor boundaries and checkpoint identity; terminal model-written explanation is retained only as private source, not asserted as a cause",
+  "taskID": "tsk_g00VXMejke00KwIb9xRv",
+  "workerSessionID": "ses_h0crs8qatiIhgesOsaX1",
+  "failures": [
+    {
+      "id": "art_g0VXPgSvu00eEA2gocdi",
+      "timeCreated": 1791419215958,
+      "component": "dispatch-agent",
+      "operation": "execute-detached-worker",
+      "reason": "Error: Projected agent \"research-studio-analyst\" failed via adapter \"delegated_worker\": CompactionTaskAuthorityError: projected worker compaction anchor does not match persisted Task authority",
+      "errorName": "Error",
+      "sessionID": "ses_h0crs8qatiIhgesOsaX1",
+      "context": {
+        "target": "research-studio-analyst",
+        "dispatchID": "art_hrwZHWMM34lnFvSYSPGR"
+      }
+    },
+    {
+      "id": "art_g0VXPhTSe00A5ICUhiCp",
+      "timeCreated": 1791419456316,
+      "component": "dispatch-agent",
+      "operation": "execute-detached-worker",
+      "reason": "Error: Projected agent \"research-studio-analyst\" failed via adapter \"delegated_worker\": CompactionTaskAuthorityError: projected worker compaction anchor does not match persisted Task authority",
+      "errorName": "Error",
+      "sessionID": "ses_h0crs8qatiIhgesOsaX1",
+      "context": {
+        "target": "research-studio-analyst",
+        "dispatchID": "art_hv4jl0LindnozNXQ5NKA"
+      }
+    }
+  ],
+  "descriptors": [
+    {
+      "id": "wtd_g0VXOG5zp00L8zHXckGQ",
+      "dispatchID": "art_hb9N0aUGHJHvvQaYwA9r",
+      "initialUserMessageID": "msg_g0VXOG5z200Y9e1QFZk2",
+      "initialControlPartIDs": [
+        "prt_g0VXOG5z200hMlyf4S9G",
+        "prt_g0VXOG5z201wcLKcvro5"
+      ]
+    },
+    {
+      "id": "wtd_g0VXOM5t2004zKpb82BV",
+      "dispatchID": "art_h2wS9rUXPuPn3Ww5b4MC",
+      "initialUserMessageID": "msg_g0VXOG5z200Y9e1QFZk2",
+      "initialControlPartIDs": [
+        "prt_g0VXOG5z200hMlyf4S9G",
+        "prt_g0VXOG5z201wcLKcvro5"
+      ]
+    },
+    {
+      "id": "wtd_g0VXOa4Da006vTn5oUPh",
+      "dispatchID": "art_he5WAqCK2exIsjwWI88Q",
+      "initialUserMessageID": "msg_g0VXOG5z200Y9e1QFZk2",
+      "initialControlPartIDs": [
+        "prt_g0VXOG5z200hMlyf4S9G",
+        "prt_g0VXOG5z201wcLKcvro5"
+      ]
+    },
+    {
+      "id": "wtd_g0VXP9X7W000BNJZi4t9",
+      "dispatchID": "art_hrwZHWMM34lnFvSYSPGR",
+      "initialUserMessageID": "msg_g0VXOG5z200Y9e1QFZk2",
+      "initialControlPartIDs": [
+        "prt_g0VXOG5z200hMlyf4S9G",
+        "prt_g0VXOG5z201wcLKcvro5"
+      ]
+    },
+    {
+      "id": "wtd_g0VXPhT7j00jJHdFWyJR",
+      "dispatchID": "art_hv4jl0LindnozNXQ5NKA",
+      "initialUserMessageID": "msg_g0VXOG5z200Y9e1QFZk2",
+      "initialControlPartIDs": [
+        "prt_g0VXOG5z200hMlyf4S9G",
+        "prt_g0VXOG5z201wcLKcvro5"
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "partID": "prt_g0VXP3n9B008BwrozGzf",
+      "summaryMessageID": "msg_g0VXP3TbO0065DHLUDm2",
+      "sourceUserMessageID": "msg_g0VXOa4Cv00IijYLHR1I",
+      "anchorMessageID": "msg_g0VXOG5z200Y9e1QFZk2",
+      "tailStartID": "msg_g0VXOzsmN00Nk2DlIoTC",
+      "completedAt": 1791409998845,
+      "anchorDescriptorID": "wtd_g0VXOG5zp00L8zHXckGQ"
+    },
+    {
+      "partID": "prt_g0VXPDUXM00NI12Y1epM",
+      "summaryMessageID": "msg_g0VXPDCtf00MYAQVxlkl",
+      "sourceUserMessageID": "msg_g0VXP9WUy00HzyFoBHlU",
+      "anchorMessageID": "msg_g0VXOa4Cv00IijYLHR1I",
+      "tailStartID": "msg_g0VXPCy6000m0Jwsz228",
+      "completedAt": 1791412310601,
+      "anchorDescriptorID": "wtd_g0VXOa4Da006vTn5oUPh"
+    },
+    {
+      "partID": "prt_g0VXPgSlz00FbBR4gKzo",
+      "summaryMessageID": "msg_g0VXPg58e00fq1bTN7HG",
+      "sourceUserMessageID": "msg_g0VXP9WUy00HzyFoBHlU",
+      "anchorMessageID": "msg_g0VXP9WUy00HzyFoBHlU",
+      "completedAt": 1791419215329,
+      "anchorDescriptorID": "wtd_g0VXP9X7W000BNJZi4t9"
+    }
+  ],
+  "terminal": {
+    "id": "pev_g0VXPigX300oLaV5z1Kq",
+    "type": "task.failed",
+    "source": "state.task",
+    "emittedAt": 1791419744885,
+    "epoch": 1,
+    "summaryChars": 506,
+    "errorChars": 498
+  },
+  "unexpectedSchemaObject": {
+    "name": "engine_dispatch_lineage_initial_workflow_node_idx",
+    "sql": "CREATE UNIQUE INDEX \"engine_dispatch_lineage_initial_workflow_node_idx\" ON \"engine_artifact\" (\"task_id\", json_extract(\"payload\", '$.workflow_binding.workflow_id'), json_extract(\"payload\", '$.workflow_node_id')) WHERE \"kind\" = 'dispatch_lineage' AND json_extract(\"payload\", '$.workflow_binding.kind') = 'virtual_workflow' AND json_type(\"payload\", '$.continuation_of_dispatch_id') IS NULL AND json_type(\"payload\", '$.coordination_action_id') IS NULL"
+  },
+  "currentRepairRecord": "specs/records/2026-10/2026-10-08-compaction-window-and-task-anchor.md",
+  "currentRepairCommits": [
+    "4dd8f2c2",
+    "0784ba8a7"
+  ],
+  "boundary": "Direct historical failure evidence; current repairs already exist. Bad immutable old markers and old source schema are retained. No new execution, historical rewrite or current original child visual acceptance."
+}
